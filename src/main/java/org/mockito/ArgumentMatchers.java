@@ -41,6 +41,31 @@ import static org.mockito.internal.util.Primitives.defaultValue;
  * verify(mockedList).get(anyInt());
  * </code></pre>
  *
+ * <p>
+ * Since Mockito <code>any(Class)</code> and <code>anyInt</code> family matchers perform a type check, thus they won't
+ * match <code>null</code> arguments. Instead use the <code>isNull</code> matcher.
+ *
+ * <pre class="code"><code class="java">
+ * // stubbing using anyBoolean() argument matcher
+ * when(mock.dryRun(anyBoolean())).thenReturn("state");
+ *
+ * // below the stub won't match, and won't return "state"
+ * mock.dryRun(null);
+ *
+ * // either change the stub
+ * when(mock.dryRun(isNull())).thenReturn("state");
+ * mock.dryRun(null); // ok
+ *
+ * // or fix the code ;)
+ * when(mock.dryRun(anyBoolean())).thenReturn("state");
+ * mock.dryRun(true); // ok
+ *
+ * </code></pre>
+ *
+ * The same apply for verification.
+ * </p>
+ *
+ *
  * Scroll down to see all methods - full list of matchers.
  *
  * <p>
@@ -120,7 +145,10 @@ public class ArgumentMatchers {
      * @see #any()
      * @see #any(Class)
      * @see #notNull()
+     * @see #notNull(Class)
+     * @deprecated This will be removed in Mockito 3.0 (which will be java 8 only)
      */
+    @Deprecated
     public static <T> T anyObject() {
         reportMatcher(Any.ANY);
         return null;
@@ -131,10 +159,16 @@ public class ArgumentMatchers {
      *
      * <p>
      * This matcher will perform a type check with the given type, thus excluding values.
-     *
      * See examples in javadoc for {@link ArgumentMatchers} class.
      *
      * This is an alias of: {@link #isA(Class)}}
+     * </p>
+     *
+     * <p>
+     * Since Mockito 2.0, only allow non-null instance of <code></code>, thus <code>null</code> is not anymore a valid value.
+     * As reference are nullable, the suggested API to <strong>match</strong> <code>null</code>
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
      * </p>
      *
      * <p><strong>Notes : </strong><br/>
@@ -145,12 +179,17 @@ public class ArgumentMatchers {
      * </ul>
      * </p>
      *
+     * @param <T> The accepted type
+     * @param type the class of the accepted type.
      * @return <code>null</code>.
      * @see #any()
      * @see #anyObject()
      * @see #anyVararg()
      * @see #isA(Class)
      * @see #notNull()
+     * @see #notNull(Class)
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static <T> T any(Class<T> type) {
         reportMatcher(new InstanceOf.VarArgAware(type, "<any " + type.getCanonicalName() + ">"));
@@ -165,6 +204,7 @@ public class ArgumentMatchers {
      * @param <T>  the accepted type.
      * @param type the class of the accepted type.
      * @return <code>null</code>.
+     * @see #any(Class)
      */
     public static <T> T isA(Class<T> type) {
         reportMatcher(new InstanceOf(type));
@@ -210,10 +250,21 @@ public class ArgumentMatchers {
 
     /**
      * Any <code>boolean</code> or <strong>non-null</strong> <code>Boolean</code>
+     *
      * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * Since Mockito 2.0, only allow valued <code>Boolean</code>, thus <code>null</code> is not anymore a valid value.
+     * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return <code>false</code>.
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static boolean anyBoolean() {
         reportMatcher(new InstanceOf(Boolean.class, "<any boolean>"));
@@ -223,9 +274,20 @@ public class ArgumentMatchers {
     /**
      * Any <code>byte</code> or <strong>non-null</strong> <code>Byte</code>.
      *
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * <p>
+     * Since Mockito 2.0, only allow valued <code>Byte</code>, thus <code>null</code> is not anymore a valid value.
+     * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return <code>0</code>.
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static byte anyByte() {
         reportMatcher(new InstanceOf(Byte.class, "<any byte>"));
@@ -235,9 +297,20 @@ public class ArgumentMatchers {
     /**
      * Any <code>char</code> or <strong>non-null</strong> <code>Character</code>.
      *
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * <p>
+     * Since Mockito 2.0, only allow valued <code>Character</code>, thus <code>null</code> is not anymore a valid value.
+     * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return <code>0</code>.
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static char anyChar() {
         reportMatcher(new InstanceOf(Character.class, "<any char>"));
@@ -245,11 +318,22 @@ public class ArgumentMatchers {
     }
 
     /**
-     * Any int or <strong>non-null</strong> Integer.
+     * Any int or <strong>non-null</strong> <code>Integer</code>.
+     *
      * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * Since Mockito 2.0, only allow valued <code>Integer</code>, thus <code>null</code> is not anymore a valid value.
+     * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return <code>0</code>.
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static int anyInt() {
         reportMatcher(new InstanceOf(Integer.class, "<any integer>"));
@@ -259,9 +343,20 @@ public class ArgumentMatchers {
     /**
      * Any <code>long</code> or <strong>non-null</strong> <code>Long</code>.
      *
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * <p>
+     * Since Mockito 2.0, only allow valued <code>Long</code>, thus <code>null</code> is not anymore a valid value.
+     * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return <code>0</code>.
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static long anyLong() {
         reportMatcher(new InstanceOf(Long.class, "<any long>"));
@@ -271,9 +366,20 @@ public class ArgumentMatchers {
     /**
      * Any <code>float</code> or <strong>non-null</strong> <code>Float</code>.
      *
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * <p>
+     * Since Mockito 2.0, only allow valued <code>Float</code>, thus <code>null</code> is not anymore a valid value.
+     * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return <code>0</code>.
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static float anyFloat() {
         reportMatcher(new InstanceOf(Float.class, "<any float>"));
@@ -283,9 +389,20 @@ public class ArgumentMatchers {
     /**
      * Any <code>double</code> or <strong>non-null</strong> <code>Double</code>.
      *
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * <p>
+     * Since Mockito 2.0, only allow valued <code>Double</code>, thus <code>null</code> is not anymore a valid value.
+     * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return <code>0</code>.
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static double anyDouble() {
         reportMatcher(new InstanceOf(Double.class, "<any double>"));
@@ -295,9 +412,20 @@ public class ArgumentMatchers {
     /**
      * Any <code>short</code> or <strong>non-null</strong> <code>Short</code>.
      *
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * <p>
+     * Since Mockito 2.0, only allow valued <code>Short</code>, thus <code>null</code> is not anymore a valid value.
+     * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return <code>0</code>.
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static short anyShort() {
         reportMatcher(new InstanceOf(Short.class, "<any short>"));
@@ -308,10 +436,19 @@ public class ArgumentMatchers {
      * Any <strong>non-null</strong> <code>String</code>
      *
      * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * Since Mockito 2.0, only allow non-null <code>String</code>.
+     * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
      * @return empty String ("")
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static String anyString() {
         reportMatcher(new InstanceOf(String.class, "<any string>"));
@@ -321,10 +458,21 @@ public class ArgumentMatchers {
     /**
      * Any <strong>non-null</strong> <code>List</code>.
      *
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * <p>
+     * Since Mockito 2.0, only allow non-null <code>List</code>.
+     * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return empty List.
      * @see #anyListOf(Class)
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static List anyList() {
         reportMatcher(new InstanceOf(List.class, "<any List>"));
@@ -343,12 +491,21 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * Since Mockito 2.0, only allow non-null <code>List</code>.
+     * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
      * @param clazz Type owned by the list to avoid casting
      * @return empty List.
      * @see #anyList()
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static <T> List<T> anyListOf(Class<T> clazz) {
         return anyList();
@@ -357,10 +514,21 @@ public class ArgumentMatchers {
     /**
      * Any <strong>non-null</strong> <code>Set</code>.
      *
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * <p>
+     * Since Mockito 2.0, only allow non-null <code>Set</code>.
+     * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return empty Set
      * @see #anySetOf(Class)
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static Set anySet() {
         reportMatcher(new InstanceOf(Set.class, "<any set>"));
@@ -381,12 +549,21 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * Since Mockito 2.0, only allow non-null <code>Set</code>.
+     * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
      * @param clazz Type owned by the Set to avoid casting
      * @return empty Set
      * @see #anySet()
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static <T> Set<T> anySetOf(Class<T> clazz) {
         return anySet();
@@ -395,10 +572,21 @@ public class ArgumentMatchers {
     /**
      * Any <strong>non-null</strong> <code>Map</code>.
      *
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * <p>
+     * Since Mockito 2.0, only allow non-null <code>Map</code>.
+     * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return empty Map.
      * @see #anyMapOf(Class, Class)
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static Map anyMap() {
         reportMatcher(new InstanceOf(Map.class, "<any map>"));
@@ -419,13 +607,22 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * Since Mockito 2.0, only allow non-null <code>Map</code>.
+     * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
      * @param keyClazz   Type of the map key to avoid casting
      * @param valueClazz Type of the value to avoid casting
      * @return empty Map.
      * @see #anyMap()
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static <K, V> Map<K, V> anyMapOf(Class<K> keyClazz, Class<V> valueClazz) {
         return anyMap();
@@ -433,11 +630,22 @@ public class ArgumentMatchers {
 
     /**
      * Any <strong>non-null</strong> <code>Collection</code>.
+     *
      * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * Since Mockito 2.0, only allow non-null <code>Collection</code>.
+     * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code>
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
      *
      * @return empty Collection.
      * @see #anyCollectionOf(Class)
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static Collection anyCollection() {
         reportMatcher(new InstanceOf(Collection.class, "<any collection>"));
@@ -458,33 +666,53 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * Since Mockito 2.0, only allow non-null <code>Collection</code>.
+     * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code>
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
      * @param clazz Type owned by the collection to avoid casting
      * @return empty Collection.
      * @see #anyCollection()
+     * @see #isNull()
+     * @see #isNull(Class)
      */
     public static <T> Collection<T> anyCollectionOf(Class<T> clazz) {
         return anyCollection();
     }
 
     /**
-     * <code>Object</code> argument that implements the given class.
      * Any <strong>non-null</strong> <code>Iterable</code>.
-    * <p>
-    * See examples in javadoc for {@link ArgumentMatchers} class
-    *
-    +     * @return empty Iterable.
-    +     * @see #anyIterableOf(Class)
-    +     */
+     *
+     * <p>
+     * Since Mockito 2.0, only allow non-null <code>Iterable</code>.
+     * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code>
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
+     * </p>
+     *
+     * @return empty Iterable.
+     * @see #anyIterableOf(Class)
+     * @see #isNull()
+     * @see #isNull(Class)
+     * @since 2.0.0
+     */
     public static Collection anyIterable() {
         reportMatcher(new InstanceOf(Iterable.class, "<any iterable>"));
         return new ArrayList(0);
     }
 
     /**
-     * Any <strong>non-null</strong> <code>Collection</code>.
+     * Any <strong>non-null</strong> <code>Iterable</code>.
      *
      * <p>
      * Generic friendly alias to {@link ArgumentMatchers#anyIterable()}.
@@ -497,12 +725,22 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * See examples in javadoc for {@link ArgumentMatchers} class
+     * Since Mockito 2.0, only allow non-null <code>String</code>.
+     * As strings are nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
+     * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
+     * 1.x.
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
      * @param clazz Type owned by the collection to avoid casting
      * @return empty Iterable.
      * @see #anyIterable()
+     * @see #isNull()
+     * @see #isNull(Class)
+     * @since 2.0.0
      */
     public static <T> Iterable<T> anyIterableOf(Class<T> clazz) {
         return anyIterable();
