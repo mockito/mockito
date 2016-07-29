@@ -12,6 +12,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
@@ -47,8 +48,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
             verify(mock).simpleMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-            assertContains("firstInteraction(", e.getMessage());
-            assertNotContains("differentMockInteraction(", e.getMessage());
+            assertThat(e.getMessage()).contains("firstInteraction(").doesNotContain("differentMockInteraction(");
         }
     }
     

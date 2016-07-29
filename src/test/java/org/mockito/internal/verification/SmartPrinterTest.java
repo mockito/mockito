@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.verification;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -63,7 +65,7 @@ public class SmartPrinterTest extends TestBase {
         SmartPrinter printer = new SmartPrinter(shortie, shortie.getInvocation());
         
         //then
-        assertNotContains("\n", printer.getWanted().toString());
-        assertNotContains("\n", printer.getActual().toString());
+        assertThat(printer.getWanted().toString()).doesNotContain("\n");
+        assertThat(printer.getActual().toString()).doesNotContain("\n");
     }
 }
