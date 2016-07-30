@@ -37,8 +37,4 @@ public class FrameworkUsageValidator extends RunListener {
             notifier.fireTestFailure(new Failure(description, t));
         }
     }
-
-    public boolean isSussessful() {
-        return !failed;
-    }
 }
