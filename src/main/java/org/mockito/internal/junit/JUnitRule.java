@@ -4,7 +4,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.debugging.WarningsCollector;
+import org.mockito.internal.runners.UnnecessaryStubbingsReporter;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.junit.MockitoRule;
 
@@ -23,14 +23,24 @@ public class JUnitRule implements MockitoRule {
 		return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                WarningsCollector c = new WarningsCollector();
+                UnnecessaryStubbingsReporter reporter = new UnnecessaryStubbingsReporter();
+                Mockito.framework().setStubbingListener(reporter);
+                try {
+                    performEvaluation(reporter);
+                } finally {
+                    Mockito.framework().setStubbingListener(null);
+                }
+            }
+
+            private void performEvaluation(UnnecessaryStubbingsReporter reporter) throws Throwable {
                 MockitoAnnotations.initMocks(target);
                 try {
                     base.evaluate();
                 } catch(Throwable t) {
-                    logger.log(c.getWarnings());
+                    logger.log(reporter.printStubbingMismatches());
                     throw t;
                 }
+                logger.log(reporter.printUnusedStubbings());
                 Mockito.validateMockitoUsage();
             }
         };

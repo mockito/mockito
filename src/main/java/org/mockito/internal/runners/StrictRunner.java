@@ -45,7 +45,7 @@ public class StrictRunner implements RunnerImpl {
             //   Otherwise we would report unnecessary stubs even if the user runs just single test from the class
             //2. tests are successful (we don't want to add an extra failure on top of any existing failure, to avoid confusion)
             //TODO JUnit runner should have a specific message explaining to the user how it works.
-            reporter.report(testClass, notifier);
+            reporter.validateUnusedStubs(testClass, notifier);
         }
     }
 

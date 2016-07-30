@@ -15,7 +15,8 @@ import java.util.Set;
 /**
  * Created by sfaber on 5/6/16.
  */
-class UnnecessaryStubbingsReporter implements StubbingListener {
+//TODO package rework, merge internal.junit with internal.runners. Rename this class (it's doing more than reporting unnecessary stubs)
+public class UnnecessaryStubbingsReporter implements StubbingListener {
 
     private final Map<String, Invocation> stubbings = new HashMap<String, Invocation>();
     private final Set<String> used = new HashSet<String>();
@@ -36,7 +37,7 @@ class UnnecessaryStubbingsReporter implements StubbingListener {
         stubbings.remove(location);
     }
 
-    public void report(Class<?> testClass, RunNotifier notifier) {
+    public void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
         if (stubbings.isEmpty()) {
             //perf tweak, bailing out early to avoid extra computation
             return;
@@ -56,5 +57,15 @@ class UnnecessaryStubbingsReporter implements StubbingListener {
         Description unnecessaryStubbings = Description.createTestDescription(testClass, "unnecessary Mockito stubbings");
         notifier.fireTestFailure(new Failure(unnecessaryStubbings,
                 Reporter.formatUnncessaryStubbingException(testClass, stubbings.values())));
+    }
+
+    //TODO SF I'm not completely happy with putting this functionality in this listener.
+    //I'd rather have separate listener which is cleaner and more SRPy
+    public String printStubbingMismatches() {
+        return "";
+    }
+
+    public String printUnusedStubbings() {
+        return "";
     }
 }
