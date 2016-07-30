@@ -4,16 +4,18 @@
  */
 package org.mockito.internal.debugging;
 
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-
-import java.util.LinkedList;
-import java.util.List;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.UnusedStubsFinder;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 import org.mockito.internal.listeners.CollectCreatedMocks;
 import org.mockito.invocation.Invocation;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+
+//TODO SF delete among with all code it uses
 public class WarningsCollector {
    
     private final List<Object> createdMocks;
