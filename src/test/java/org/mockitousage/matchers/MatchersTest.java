@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalMatchers.*;
 import static org.mockito.AdditionalMatchers.eq;
 import static org.mockito.Matchers.eq;
@@ -286,7 +287,7 @@ public class MatchersTest extends TestBase {
             verify(mock).oneArray(aryEq(nullArray));
             fail();
         } catch (WantedButNotInvoked e) {
-            assertContains("oneArray(null)", e.getMessage());
+            assertThat(e).hasMessageContaining("oneArray(null)");
         }
     }
 
@@ -524,7 +525,7 @@ public class MatchersTest extends TestBase {
             verify(mock).oneArg(eq(1.0D, 0.1D));
             fail();
         } catch (WantedButNotInvoked e) {
-            assertContains("eq(1.0, 0.1)", e.getMessage());
+            assertThat(e).hasMessageContaining("eq(1.0, 0.1)");
         }
     }
     

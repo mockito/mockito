@@ -33,9 +33,10 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             //then
-            assertContains("However, there were exactly 2 interactions with this mock", e.getMessage());
-            assertContains("firstInteraction(", e.getMessage());
-            assertContains("secondInteraction(", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("However, there were exactly 2 interactions with this mock")
+                .hasMessageContaining("firstInteraction(")
+                .hasMessageContaining("secondInteraction(");
         }
     }
     
@@ -58,7 +59,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
             verify(mock).simpleMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-            assertContains("there were zero interactions with this mock.", e.getMessage());
+            assertThat(e).hasMessageContaining("there were zero interactions with this mock.");
         }
     }
 

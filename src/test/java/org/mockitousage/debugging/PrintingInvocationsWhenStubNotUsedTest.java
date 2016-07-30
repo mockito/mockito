@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitoutil.TestBase;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
 public class PrintingInvocationsWhenStubNotUsedTest extends TestBase {
@@ -43,13 +44,16 @@ public class PrintingInvocationsWhenStubNotUsedTest extends TestBase {
     public void printInvocations() {
         String log = NewMockito.debug().printInvocations(mock, mockTwo);
         //asking
-        assertContains("giveMeSomeString(\"arg\")", log);
-        assertContains(".businessLogicWithAsking(", log);
+        assertThat(log)
+            .contains("giveMeSomeString(\"arg\")")
+            .contains(".businessLogicWithAsking(");
         //telling
-        assertContains("doSomething(null)", log);
-        assertContains(".businessLogicWithTelling(", log);
+        assertThat(log)
+            .contains("doSomething(null)")
+            .contains(".businessLogicWithTelling(");
         //stubbing
-        assertContains("giveMeSomeString(\"different arg\")", log);
-        assertContains(".performStubbing(", log);
+        assertThat(log)
+            .contains("giveMeSomeString(\"different arg\")")
+            .contains(".performStubbing(");
     }
 }

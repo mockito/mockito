@@ -15,6 +15,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
@@ -37,8 +38,9 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
             verify(mock).simpleMethod();
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertContains("-> at ", e.getMessage());
-            assertContains("misplacedArgumentMatcherHere(", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("-> at ")
+                .hasMessageContaining("misplacedArgumentMatcherHere(");
         }
     }
 
@@ -54,8 +56,9 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
             verify(mock).simpleMethod();
             fail();
         } catch (UnfinishedStubbingException e) {
-            assertContains("-> at ", e.getMessage());
-            assertContains("unfinishedStubbingHere(", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("-> at ")
+                .hasMessageContaining("unfinishedStubbingHere(");
         }
     }
     
@@ -66,7 +69,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
             mock(IMethods.class);
             fail();
         } catch (UnfinishedVerificationException e) {
-            assertContains("unfinishedVerificationHere(", e.getMessage());
+            assertThat(e).hasMessageContaining("unfinishedVerificationHere(");
         }
     }
 

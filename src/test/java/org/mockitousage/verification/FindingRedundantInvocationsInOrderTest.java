@@ -14,6 +14,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 
@@ -42,7 +43,7 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
             inOrder.verifyNoMoreInteractions();
             fail();
         } catch(VerificationInOrderFailure e) {
-            assertContains("No interactions wanted", e.getMessage());
+            assertThat(e).hasMessageContaining("No interactions wanted");
         }
     }
     

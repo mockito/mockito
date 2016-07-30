@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.stubbing.Answer;
@@ -51,8 +53,9 @@ public class ReturnsSmartNullsTest extends TestBase {
 
         Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "get"));
 
-        assertContains("SmartNull returned by", smartNull + "");
-        assertContains("foo.get()", smartNull + "");
+        assertThat(smartNull.toString())
+            .contains("SmartNull returned by")
+            .contains("foo.get()");
     }
 
     @Test
@@ -61,9 +64,10 @@ public class ReturnsSmartNullsTest extends TestBase {
 
         Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
 
-        assertContains("foo.withArgs", smartNull + "");
-        assertContains("oompa", smartNull + "");
-        assertContains("lumpa", smartNull + "");
+        assertThat(smartNull.toString())
+            .contains("foo.withArgs")
+            .contains("oompa")
+            .contains("lumpa");
     }
 
     @Test
@@ -76,8 +80,9 @@ public class ReturnsSmartNullsTest extends TestBase {
             smartNull.get();
             fail();
         } catch (SmartNullPointerException e) {
-            assertContains("oompa", e.getMessage());
-            assertContains("lumpa", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("oompa")
+                .hasMessageContaining("lumpa");
         }
     }
 }

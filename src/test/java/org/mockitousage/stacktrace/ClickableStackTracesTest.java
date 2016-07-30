@@ -12,6 +12,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -34,8 +35,7 @@ public class ClickableStackTracesTest extends TestBase {
             verifyTheMock(1, "not foo");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertContains("callMethodOnMock(", e.getMessage());
-            assertContains("verifyTheMock(", e.getMessage());
+            assertThat(e).hasMessageContaining("callMethodOnMock(").hasMessageContaining("verifyTheMock(");
         }
     }
 }

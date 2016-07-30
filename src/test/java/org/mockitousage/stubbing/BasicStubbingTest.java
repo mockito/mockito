@@ -15,6 +15,7 @@ import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class BasicStubbingTest extends TestBase {
@@ -53,8 +54,8 @@ public class BasicStubbingTest extends TestBase {
         IMethods mockTwo = mock(IMethods.class);
         when(mockTwo.toString()).thenReturn("test");
         
-        assertContains("Mock for IMethods", mock.toString());
-        assertEquals("test", mockTwo.toString());
+        assertThat(mock.toString()).contains("Mock for IMethods");
+        assertThat(mockTwo.toString()).isEqualTo("test");
     }
     
     @Test
@@ -82,7 +83,7 @@ public class BasicStubbingTest extends TestBase {
         IMethods mock = mock(IMethods.class, "mockie");
         IMethods mockTwo = mock(IMethods.class);
         
-        assertContains("Mock for IMethods", "" + mockTwo);
+        assertThat(mockTwo.toString()).contains("Mock for IMethods");
         assertEquals("mockie", "" + mock);
     }
     

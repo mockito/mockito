@@ -20,6 +20,7 @@ import org.mockitoutil.TestBase;
 import java.io.IOException;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("serial")
@@ -78,7 +79,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doThrow(new FooCheckedException()).when(mock).throwsIOException(0);
             fail();
         } catch (Exception e) {
-            assertContains("Checked exception is invalid", e.getMessage());
+            assertThat(e).hasMessageContaining("Checked exception is invalid");
         }
     }
 
@@ -88,8 +89,9 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn("foo").when(mock).voidMethod();
             fail();
         } catch (MockitoException e) {
-            assertContains("void method", e.getMessage());
-            assertContains("cannot", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("void method")
+                .hasMessageContaining("cannot");
         }
     }
 
@@ -99,7 +101,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn("foo").when("foo").toString();
             fail();
         } catch (Exception e) {
-            assertContains("Argument passed to when() is not a mock", e.getMessage());
+            assertThat(e).hasMessageContaining("Argument passed to when() is not a mock");
         }
     }
 
@@ -109,7 +111,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn("foo").when((Object) null).toString();
             fail();
         } catch (Exception e) {
-            assertContains("Argument passed to when() is null", e.getMessage());
+            assertThat(e).hasMessageContaining("Argument passed to when() is null");
         }
     }
 
@@ -205,7 +207,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doNothing().when(mock).simpleMethod();
             fail();
         } catch (MockitoException e) {
-            assertContains("Only void methods can doNothing()", e.getMessage());
+            assertThat(e).hasMessageContaining("Only void methods can doNothing()");
         }
     }
 
@@ -241,10 +243,9 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn("foo").when(mock).booleanObjectReturningMethod();
             fail();
         } catch (Exception e) {
-            assertContains("String cannot be returned by booleanObjectReturningMethod()" +
+            assertThat(e).hasMessageContaining("String cannot be returned by booleanObjectReturningMethod()" +
                     "\n" +
-                    "booleanObjectReturningMethod() should return Boolean",
-                    e.getMessage());
+                    "booleanObjectReturningMethod() should return Boolean");
         }
     }
 
@@ -254,7 +255,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
             doReturn(null).when(mock).intReturningMethod();
             fail();
         } catch (Exception e) {
-            assertContains("null cannot be returned by intReturningMethod", e.getMessage());
+            assertThat(e).hasMessageContaining("null cannot be returned by intReturningMethod");
         }
     }
 

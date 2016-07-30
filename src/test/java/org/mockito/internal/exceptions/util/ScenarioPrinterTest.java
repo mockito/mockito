@@ -12,6 +12,7 @@ import org.mockitoutil.TestBase;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("unchecked")
 public class ScenarioPrinterTest extends TestBase {
@@ -28,8 +29,9 @@ public class ScenarioPrinterTest extends TestBase {
         String out = sp.print((List) asList(verified, unverified));
         
         //then
-        assertContains("1. -> at", out);
-        assertContains("2. [?]-> at", out);
+        assertThat(out)
+            .contains("1. -> at")
+            .contains("2. [?]-> at");
     }
     
     @Test
@@ -41,6 +43,6 @@ public class ScenarioPrinterTest extends TestBase {
         String out = sp.print((List) asList(unverified));
         
         //then
-        assertContains("Actually, above is the only interaction with this mock.", out);
+        assertThat(out).contains("Actually, above is the only interaction with this mock.");
     }
 }
