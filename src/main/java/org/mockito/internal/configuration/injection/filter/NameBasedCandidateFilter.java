@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
-import org.mockito.internal.util.MockUtil;
+import static org.mockito.internal.util.MockUtil.getMockName;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -13,7 +13,6 @@ import java.util.List;
 
 public class NameBasedCandidateFilter implements MockCandidateFilter {
     private final MockCandidateFilter next;
-    private final MockUtil mockUtil = new MockUtil();
 
     public NameBasedCandidateFilter(MockCandidateFilter next) {
         this.next = next;
@@ -41,7 +40,7 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
     private List<Object> selectMatchingName(Collection<Object> mocks, Field candidateFieldToBeInjected) {
         List<Object> mockNameMatches = new ArrayList<Object>();
         for (Object mock : mocks) {
-            if (candidateFieldToBeInjected.getName().equals(mockUtil.getMockName(mock).toString())) {
+            if (candidateFieldToBeInjected.getName().equals(getMockName(mock).toString())) {
                 mockNameMatches.add(mock);
             }
         }
@@ -60,7 +59,7 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
     private boolean anotherCandidateMatchesMockName(final Collection<Object> mocks,
                                                     final Field candidateFieldToBeInjected,
                                                     final List<Field> allRemainingCandidateFields) {
-        String mockName = mockUtil.getMockName(mocks.iterator().next()).toString();
+        String mockName = getMockName(mocks.iterator().next()).toString();
 
         for (Field otherCandidateField : allRemainingCandidateFields) {
             if (!otherCandidateField.equals(candidateFieldToBeInjected)

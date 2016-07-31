@@ -25,17 +25,15 @@ public class StubberImpl implements Stubber {
     private final List<Answer<?>> answers = new LinkedList<Answer<?>>();
 
     public <T> T when(T mock) {
-        MockUtil mockUtil = new MockUtil();
-        
         if (mock == null) {
             throw nullPassedToWhenMethod();
         } 
         
-		if (!mockUtil.isMock(mock)) {
+		if (!MockUtil.isMock(mock)) {
 			throw notAMockPassedToWhenMethod();
 		}
         
-        mockUtil.getMockHandler(mock).setAnswersForStubbing(answers);
+		MockUtil.getMockHandler(mock).setAnswersForStubbing(answers);
         return mock;
     }
 

@@ -7,6 +7,7 @@ package org.mockitousage.annotation;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
+import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
 import java.util.LinkedList;
@@ -26,6 +27,6 @@ public class SpyInjectionTest extends TestBase {
     
     @Test
     public void shouldDoStuff() throws Exception {
-        isMock(hasSpy.spy);
+        MockUtil.isMock(hasSpy.spy);
     }
 }

@@ -23,11 +23,13 @@ public class MockUtil {
 
     private static final MockMaker mockMaker = Plugins.getMockMaker();
 
-    public TypeMockability typeMockabilityOf(Class<?> type) {
+    private MockUtil() {}
+
+    public static TypeMockability typeMockabilityOf(Class<?> type) {
       return mockMaker.isTypeMockable(type);
     }
 
-    public <T> T createMock(MockCreationSettings<T> settings) {
+    public static <T> T createMock(MockCreationSettings<T> settings) {
         MockHandler mockHandler =  createMockHandler(settings);
 
         T mock = mockMaker.createMock(settings, mockHandler);
@@ -40,7 +42,7 @@ public class MockUtil {
         return mock;
     }
 
-    public <T> void resetMock(T mock) {
+    public static <T> void resetMock(T mock) {
         InternalMockHandler oldHandler = (InternalMockHandler) getMockHandler(mock);
         MockCreationSettings settings = oldHandler.getMockSettings();
         MockHandler newHandler = createMockHandler(settings);
@@ -48,7 +50,7 @@ public class MockUtil {
         mockMaker.resetMock(mock, newHandler, settings);
     }
 
-    public <T> InternalMockHandler<T> getMockHandler(T mock) {
+    public static <T> InternalMockHandler<T> getMockHandler(T mock) {
         if (mock == null) {
             throw new NotAMockException("Argument should be a mock, but is null!");
         }
@@ -61,24 +63,24 @@ public class MockUtil {
         }
     }
 
-    public boolean isMock(Object mock) {
+    public static boolean isMock(Object mock) {
         // double check to avoid classes that have the same interfaces, could be great to have a custom mockito field in the proxy instead of relying on instance fields
         return isMockitoMock(mock);
     }
 
-    public boolean isSpy(Object mock) {
+    public static boolean isSpy(Object mock) {
         return isMockitoMock(mock) && getMockSettings(mock).getDefaultAnswer() == Mockito.CALLS_REAL_METHODS;
     }
 
-    private <T> boolean isMockitoMock(T mock) {
+    private static <T> boolean isMockitoMock(T mock) {
         return mock != null && mockMaker.getHandler(mock) != null;
     }
 
-    public MockName getMockName(Object mock) {
+    public static MockName getMockName(Object mock) {
         return getMockHandler(mock).getMockSettings().getMockName();
     }
 
-    public void maybeRedefineMockName(Object mock, String newName) {
+    public static void maybeRedefineMockName(Object mock, String newName) {
         MockName mockName = getMockName(mock);
         //TODO SF hacky...
         MockCreationSettings mockSettings = getMockHandler(mock).getMockSettings();
@@ -87,9 +89,7 @@ public class MockUtil {
         }
     }
 
-    public MockCreationSettings getMockSettings(Object mock) {
+    public static MockCreationSettings getMockSettings(Object mock) {
         return getMockHandler(mock).getMockSettings();
     }
-    
-    
 }

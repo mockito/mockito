@@ -18,10 +18,8 @@ import org.mockito.plugins.MockMaker.TypeMockability;
 @SuppressWarnings("unchecked")
 public class MockCreationValidator {
 
-    private final MockUtil mockUtil = new MockUtil();
-
     public void validateType(Class<?> classToMock) {
-        TypeMockability typeMockability = mockUtil.typeMockabilityOf(classToMock);
+        TypeMockability typeMockability = MockUtil.typeMockabilityOf(classToMock);
         if (!typeMockability.mockable()) {
             throw cannotMockClass(classToMock, typeMockability.nonMockableReason());
         }

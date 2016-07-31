@@ -55,7 +55,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                 try {
                     instance = field.get(testInstance);
                     assertNotInterface(instance, field.getType());
-                    if (new MockUtil().isMock(instance)) {
+                    if (MockUtil.isMock(instance)) {
                         // instance has been spied earlier
                         // for example happens when MockitoAnnotations.initMocks is called two times.
                         Mockito.reset(instance);

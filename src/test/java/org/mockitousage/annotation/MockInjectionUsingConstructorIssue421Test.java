@@ -39,7 +39,7 @@ public class MockInjectionUsingConstructorIssue421Test {
         }
 
         public void checkIfMockIsInjected(){
-            assertThat(new MockUtil().isMock(calculator)).isTrue();
+            assertThat(MockUtil.isMock(calculator)).isTrue();
         }
     }
 

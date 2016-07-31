@@ -30,7 +30,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MockInjectionUsingConstructorTest {
-    private MockUtil mockUtil = new MockUtil();
 
     @Mock private ArticleCalculator calculator;
     @Mock private ArticleDatabase database;
@@ -74,8 +73,8 @@ public class MockInjectionUsingConstructorTest {
 
     @Test
     public void objects_created_with_constructor_initialization_can_be_spied() throws Exception {
-        assertFalse(mockUtil.isMock(articleManager));
-        assertTrue(mockUtil.isMock(spiedArticleManager));
+        assertFalse(MockUtil.isMock(articleManager));
+        assertTrue(MockUtil.isMock(spiedArticleManager));
     }
 
     @Test

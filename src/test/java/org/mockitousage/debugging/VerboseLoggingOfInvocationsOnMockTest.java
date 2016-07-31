@@ -156,7 +156,7 @@ public class VerboseLoggingOfInvocationsOnMockTest {
     }
 
     private String mockName(Object mock) {
-        return new MockUtil().getMockName(mock).toString();
+        return MockUtil.getMockName(mock).toString();
     }
 
     private static class UnrelatedClass {

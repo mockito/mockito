@@ -828,7 +828,7 @@ public class Reporter {
     }
 
     private static MockName safelyGetMockName(Object mock) {
-        return new MockUtil().getMockName(mock);
+        return MockUtil.getMockName(mock);
     }
 
     public static UnnecessaryStubbingException formatUnncessaryStubbingException(Class<?> testClass, Collection<Invocation> unnecessaryStubbings) {
