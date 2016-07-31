@@ -37,7 +37,11 @@ public class JUnitRule implements MockitoRule {
                 try {
                     base.evaluate();
                 } catch(Throwable t) {
-                    logger.log(reporter.printStubbingMismatches());
+                    String hints = reporter.printStubbingMismatches();
+                    if (hints != null) {
+                        //TODO 384 - ugly
+                        logger.log(hints);
+                    }
                     throw t;
                 }
                 logger.log(reporter.printUnusedStubbings());
