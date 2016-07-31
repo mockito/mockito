@@ -204,7 +204,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
         //expect
         assertEquals(
             "[MockitoHint] See javadoc for MockitoHint class.\n" +
-            "[MockitoHint] unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)",
+            "[MockitoHint] 1. unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)",
             filterLineNo(logger.getLoggedInfo()));
     }
 
@@ -219,7 +219,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
 
         assertEquals(
                 "[MockitoHint] See javadoc for MockitoHint class.\n" +
-                "[MockitoHint] unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbing(StubbingWarningsJUnitRuleTest.java:0)",
+                "[MockitoHint] 1. unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbing(StubbingWarningsJUnitRuleTest.java:0)",
                 filterLineNo(logger.getLoggedInfo()));
     }
 

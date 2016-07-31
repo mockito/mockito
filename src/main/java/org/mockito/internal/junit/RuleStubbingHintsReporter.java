@@ -51,8 +51,9 @@ class RuleStubbingHintsReporter implements StubbingListener {
         }
 
         StubbingHint hint = new StubbingHint();
+        int x = 1;
         for (Invocation unused : stubbings) {
-            hint.appendLine("unused ", unused.getLocation());
+            hint.appendLine(x++, ". unused ", unused.getLocation());
         }
         logger.log(hint.toString());
     }
