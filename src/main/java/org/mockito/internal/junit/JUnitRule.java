@@ -13,35 +13,71 @@ import org.mockito.junit.MockitoRule;
 public class JUnitRule implements MockitoRule {
 	
 	private final MockitoLogger logger;
+    private final boolean silent;
 
-	public JUnitRule(MockitoLogger logger) {
+    public JUnitRule(MockitoLogger logger, boolean silent) {
 		this.logger = logger;
-	}
+        this.silent = silent;
+    }
+
 	@Override
 	public Statement apply(final Statement base, FrameworkMethod method, final Object target) {
-		return new Statement() {
-            @Override
-            public void evaluate() throws Throwable {
-                RuleStubbingsReporter reporter = new RuleStubbingsReporter();
-                Mockito.framework().setStubbingListener(reporter);
-                try {
-                    performEvaluation(reporter);
-                } finally {
-                    Mockito.framework().setStubbingListener(null);
-                }
-            }
+        if (silent) {
+            return new SilentStatement(target, base);
+        } else {
+            return new DefaultStatement(target, base);
+        }
+    }
 
-            private void performEvaluation(RuleStubbingsReporter reporter) throws Throwable {
-                MockitoAnnotations.initMocks(target);
-                try {
-                    base.evaluate();
-                } catch(Throwable t) {
-                    reporter.printStubbingMismatches(logger);
-                    throw t;
-                }
-                reporter.printUnusedStubbings(logger);
-                Mockito.validateMockitoUsage();
+    public JUnitRule silent() {
+        return new JUnitRule(logger, true);
+    }
+
+    private class SilentStatement extends Statement {
+        private final Object target;
+        private final Statement base;
+
+        public SilentStatement(Object target, Statement base) {
+            this.target = target;
+            this.base = base;
+        }
+
+        public void evaluate() throws Throwable {
+            MockitoAnnotations.initMocks(target);
+            base.evaluate();
+            Mockito.validateMockitoUsage();
+        }
+    }
+
+    private class DefaultStatement extends Statement {
+        private final Object target;
+        private final Statement base;
+
+        DefaultStatement(Object target, Statement base) {
+            this.target = target;
+            this.base = base;
+        }
+
+        public void evaluate() throws Throwable {
+            RuleStubbingsReporter reporter = new RuleStubbingsReporter();
+            Mockito.framework().setStubbingListener(reporter);
+            try {
+                performEvaluation(reporter);
+            } finally {
+                Mockito.framework().setStubbingListener(null);
             }
-        };
+        }
+
+        private void performEvaluation(RuleStubbingsReporter reporter) throws Throwable {
+            MockitoAnnotations.initMocks(target);
+            try {
+                base.evaluate();
+            } catch(Throwable t) {
+                reporter.printStubbingMismatches(logger);
+                throw t;
+            }
+            reporter.printUnusedStubbings(logger);
+            Mockito.validateMockitoUsage();
+        }
     }
 }
