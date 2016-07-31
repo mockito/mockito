@@ -10,11 +10,10 @@ import org.mockito.listeners.StubbingListener;
 import java.util.*;
 
 /**
- * Created by sfaber on 5/6/16.
+ * Reports unnecessary stubbings
  */
-//TODO 384 package rework, merge internal.junit with internal.runners.
-//TODO 384 make it thread safe so that users don't have to worry
 //TODO 384 create MockitoHint class
+//TODO 384 what if the user uses both: runner and the rule?
 class UnnecessaryStubbingsReporter implements StubbingListener {
 
     private final Map<String, Invocation> stubbings = new LinkedHashMap<String, Invocation>();
@@ -34,13 +33,30 @@ class UnnecessaryStubbingsReporter implements StubbingListener {
     public void usedStubbing(Invocation stubbing, Invocation actual) {
         String location = stubbing.getLocation().toString();
         used.add(location);
+
+        //perf tweak, let's get rid of used stubbing now, less calculation later
+        stubbings.remove(location);
     }
 
     public void stubbingNotFound(Invocation actual) {}
 
     void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
+        if (stubbings.isEmpty()) {
+            //perf tweak, bailing out early to avoid extra computation
+            return;
+        }
+
+        //removing all used stubbings accounting for possible constructor / @Before stubbings
+        // that were used only in specific test methods (e.g. not all test methods)
         for (String u : used) {
-            stubbings.remove(u); //TODO 384 state manipulation
+            //it's awkward to manipulate the state of this object here,
+            // we cannot safely rerun validateUnusedStubs() method.
+            // However, we get good performance and simpler code.
+            stubbings.remove(u);
+        }
+
+        if (stubbings.isEmpty()) {
+            return;
         }
 
         if (stubbings.isEmpty()) {
