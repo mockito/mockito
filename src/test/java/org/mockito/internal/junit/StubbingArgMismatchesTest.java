@@ -1,4 +1,4 @@
-package org.mockito.internal.runners;
+package org.mockito.internal.junit;
 
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
@@ -6,7 +6,8 @@ import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class StubbingArgMismatchesTest extends TestBase {
 
