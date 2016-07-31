@@ -33,6 +33,7 @@ class RuleStubbingsReporter implements StubbingListener {
         for (Invocation i : unstubbedInvocations) {
             for (Invocation stubbing : stubbings) {
                 //method name & mock matches
+                //TODO 384 tighten coverage
                 if (stubbing.getMock() == i.getMock()
                         && stubbing.getMethod().getName().equals(i.getMethod().getName())) {
                     mismatches.add(i, stubbing);
@@ -42,7 +43,15 @@ class RuleStubbingsReporter implements StubbingListener {
         mismatches.log(logger);
     }
 
-    String printUnusedStubbings(MockitoLogger logger) {
-        return "";
+    void printUnusedStubbings(MockitoLogger logger) {
+        if (stubbings.isEmpty()) {
+            return;
+        }
+
+        StringBuilder hint = new StringBuilder("[MockitoHint] See javadoc for MockitoHint class.");
+        for (Invocation unused : stubbings) {
+            hint.append("\n[MockitoHint] unused ").append(unused.getLocation());
+        }
+        logger.log(hint.toString());
     }
 }
