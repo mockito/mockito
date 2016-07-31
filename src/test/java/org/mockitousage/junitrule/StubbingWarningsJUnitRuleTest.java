@@ -124,6 +124,61 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
     }
 
     @Test
+    public void reports_only_mismatching_stubs() throws Throwable {
+        try {
+            //when
+            jUnitRule.apply(new Statement() {
+                public void evaluate() throws Throwable {
+                    IMethods mock = mock(IMethods.class);
+
+                    declareStubbingWithArg(mock, "a"); // <-- used
+                    declareStubbingWithArg(mock, "b"); // <-- unused
+
+                    useStubbingWithArg(mock, "a");
+                    useStubbingWithArg(mock, "d"); // <-- arg mismatch
+
+                    throw new AssertionError("x");
+                }
+            },null, new DummyTestCase()).evaluate();
+
+            //then
+            fail();
+        } catch (AssertionError e) {
+            assertEquals("x", e.getMessage());
+            assertEquals(
+                "[MockitoHint] See javadoc for MockitoHint class.\n" +
+                "[MockitoHint] 1. unused stub  -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)",
+                filterLineNo(logger.getLoggedInfo()));
+        }
+    }
+
+    @Test
+    public void no_mismatch_when_stub_was_used() throws Throwable {
+        try {
+            //when
+            jUnitRule.apply(new Statement() {
+                public void evaluate() throws Throwable {
+                    IMethods mock = mock(IMethods.class);
+
+                    declareStubbingWithArg(mock, "a");
+
+                    useStubbingWithArg(mock, "a");
+                    useStubbingWithArg(mock, "d"); // <-- arg mismatch, but the stub was already used
+
+                    throw new AssertionError("x");
+                }
+            },null, new DummyTestCase()).evaluate();
+
+            //then
+            fail();
+        } catch (AssertionError e) {
+            assertEquals("x", e.getMessage());
+            assertTrue(logger.isEmpty());
+        }
+    }
+
+    @Test
     public void no_stubbing_arg_mismatch_on_pass() throws Throwable {
         //given
         jUnitRule.apply(new Statement() {
@@ -137,15 +192,6 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
         //expect
         assertTrue(logger.getLoggedInfo().isEmpty());
     }
-
-    // arg_mismatches_when_multiple_similar_stubbings
-    // arg_mismatches_reports_unused_stubbings_only_when_multiple_similar_stubbings?
-    // arg_mismatches_reports_unused_stubbings_first_when_multiple_similar_stubbings?
-    // arg_mismatches_reports_stubbings_orderly_when_multiple_similar_stubbings
-    // arg_mismatch_with_multiple_stubbings_and_multiple_invocations
-    // arg_mismatches_when_similar_stubbings_declared_in_same_line
-    // arg_mismatches_when_invocations_triggered_in_same_line
-    // arg_mismatches_when_similar_stubbings_was_used_before
 
     @Test
     @Ignore //work in progress
