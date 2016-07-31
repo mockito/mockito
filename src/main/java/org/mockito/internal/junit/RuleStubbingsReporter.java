@@ -36,7 +36,6 @@ class RuleStubbingsReporter implements StubbingListener {
         for (Invocation i : unstubbedInvocations) {
             for (Invocation stubbing : stubbings) {
                 //method name & mock matches
-                //TODO 384 tighten coverage
                 if (stubbing.getMock() == i.getMock()
                         && stubbing.getMethod().getName().equals(i.getMethod().getName())) {
                     mismatches.add(i, stubbing);
