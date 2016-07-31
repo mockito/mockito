@@ -45,7 +45,7 @@ public class UnnecessaryStubbingsReporter implements StubbingListener {
 
     public void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
         for (String u : used) {
-            stubbings.remove(u);
+            stubbings.remove(u); //TODO 384 state manipulation
         }
 
         if (stubbings.isEmpty()) {
