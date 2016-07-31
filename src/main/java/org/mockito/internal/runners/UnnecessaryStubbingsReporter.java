@@ -13,7 +13,6 @@ import java.util.*;
  * Reports unnecessary stubbings
  */
 //TODO 384 create MockitoHint class
-//TODO 384 what if the user uses both: runner and the rule?
 class UnnecessaryStubbingsReporter implements StubbingListener {
 
     private final Map<String, Invocation> stubbings = new LinkedHashMap<String, Invocation>();
