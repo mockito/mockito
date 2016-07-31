@@ -26,17 +26,16 @@ class StubbingArgMismatches {
             return;
         }
 
-        StringBuilder out = new StringBuilder("[MockitoHint] See javadoc for MockitoHint class.");
+        StubbingHint hint = new StubbingHint();
         //TODO SF it would be nice to make the String look good if x goes multiple digits (padding)
         int x = 1;
         for (Map.Entry<Invocation, Set<Invocation>> m : mismatches.entrySet()) {
-            out.append("\n[MockitoHint] ").append(x++).append(". unused stub  ")
-                    .append(m.getKey().getLocation());
+            hint.appendLine(x++, ". unused stub  ", m.getKey().getLocation());
             for (Invocation invocation : m.getValue()) {
-                out.append("\n[MockitoHint]  - arg mismatch ").append(invocation.getLocation());
+                hint.appendLine(" - arg mismatch ", invocation.getLocation());
             }
         }
 
-        logger.log(out.toString());
+        logger.log(hint.toString());
     }
 }
