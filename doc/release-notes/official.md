@@ -1,3 +1,21 @@
+### 2.0.94-beta (2016-07-31 09:17 UTC)
+
+* Authors: 3
+* Commits: 11
+  * 7: Pascal Schumacher
+  * 2: Brice Dutheil
+  * 2: Marcin Zajączkowski
+* Improvements: 9
+  * made some timeouts in VerificationAfterDelayTest and VerificationWith… [(#523)](https://github.com/mockito/mockito/pull/523)
+  * replace TestBase#assertContains(String sub, String string) with Asser… [(#519)](https://github.com/mockito/mockito/pull/519)
+  * Verify build on Travis also with Java 7 and 8 [(#518)](https://github.com/mockito/mockito/pull/518)
+  * Make ciBuild depends also on subprojects state [(#517)](https://github.com/mockito/mockito/pull/517)
+  * replace TestBase#assertNotContains(String sub, String string) with As… [(#516)](https://github.com/mockito/mockito/pull/516)
+  * refactored AllInvocationsFinder and VerifiableInvocationsFinder to st… [(#515)](https://github.com/mockito/mockito/pull/515)
+  * refactored MockUtil to a static utility class (#426) [(#514)](https://github.com/mockito/mockito/pull/514)
+  * replace TestBase#assertContainsIgnoringCase(String sub, String string… [(#513)](https://github.com/mockito/mockito/pull/513)
+  * fix some raw type warnings in tests [(#512)](https://github.com/mockito/mockito/pull/512)
+
 ### 2.0.93-beta (2016-07-29 16:10 UTC)
 
 * Authors: 1
