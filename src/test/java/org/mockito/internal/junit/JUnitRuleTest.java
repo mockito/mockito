@@ -1,7 +1,6 @@
 package org.mockito.internal.junit;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.model.Statement;
 import org.mockito.InjectMocks;
@@ -71,47 +70,6 @@ public class JUnitRuleTest extends TestBase {
         } catch (RuntimeException e) {
             assertEquals("Boo!", e.getMessage());
         }
-    }
-
-    @Test
-    @Ignore //work in progress
-    public void should_warn_about_stubbing_arg_mismatch_on_failure() throws Throwable {
-        try {
-            jUnitRule.apply(new Statement() {
-                public void evaluate() throws Throwable {
-                    IMethods mock = mock(IMethods.class);
-                    declareUnusedStub(mock);
-                    throw new AssertionError("x");
-                }
-            },null, injectTestCase).evaluate();
-            fail();
-        } catch (AssertionError e) {
-            assertEquals("x", e.getMessage());
-            assertEquals(filterLineNo(logger.getLoggedInfo()),
-                "<TODO>" +
-                "[Mockito]\n" +
-                "[Mockito] Unused stubbing (perhaps can be removed from the test?):\n" +
-                "[Mockito]\n" +
-                "[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:0)"
-            );
-        }
-    }
-
-    @Test
-    @Ignore //work in progress
-    public void warns_about_unused_stubs_when_passed() throws Throwable {
-        jUnitRule.apply(new Statement() {
-            public void evaluate() throws Throwable {
-                IMethods mock = mock(IMethods.class);
-                declareUnusedStub(mock);
-            }
-        },null, injectTestCase).evaluate();
-
-        assertEquals("<TODO>", logger.getLoggedInfo());
-    }
-
-    private static void declareUnusedStub(IMethods mock) {
-        Mockito.when(mock.simpleMethod("foo")).thenReturn("bar");
     }
 
     private static class DummyStatement extends Statement {
