@@ -7,9 +7,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ConfusedSignatureTest {
 
     @Test
-    public void should_work() {
+    public void should_mock_method_which_has_generic_return_type_in_superclass_and_concrete_one_in_interface() {
         Sub mock = Mockito.mock(Sub.class);
-        // The following line results in
+        // The following line resulted in
         // org.mockito.exceptions.misusing.MissingMethodInvocationException:
         // when() requires an argument which has to be 'a method call on a mock'.
         // Presumably confused by the interface/superclass signatures.
