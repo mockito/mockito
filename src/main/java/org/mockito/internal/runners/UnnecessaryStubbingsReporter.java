@@ -7,10 +7,7 @@ import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.StubbingListener;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by sfaber on 5/6/16.
@@ -35,6 +32,9 @@ public class UnnecessaryStubbingsReporter implements StubbingListener {
 
         //perf tweak - attempting an early remove to keep the stubbings collection short
         stubbings.remove(location);
+    }
+
+    public void stubbingNotFound(Invocation actual) {
     }
 
     public void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {

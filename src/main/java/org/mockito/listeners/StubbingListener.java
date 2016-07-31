@@ -26,4 +26,10 @@ public interface StubbingListener {
      * (e.g. in the 'when' section of the test, every clean test has 3 sections: 'given', 'when' and 'then').
      */
     void usedStubbing(Invocation stubbing, Invocation actual);
+
+    /**
+     * Method is called on a mock, but there is no stubbed behavior registered for this invocation.
+     * Mockito will return default answer for given invocation, typically it means a default return value.
+     */
+    void stubbingNotFound(Invocation actual);
 }
