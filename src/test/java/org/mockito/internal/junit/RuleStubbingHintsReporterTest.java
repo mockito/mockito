@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
-public class RuleStubbingsReporterTest extends TestBase {
+public class RuleStubbingHintsReporterTest extends TestBase {
 
     RuleStubbingsReporter reporter = new RuleStubbingsReporter();
     SimpleMockitoLogger logger = new SimpleMockitoLogger();
