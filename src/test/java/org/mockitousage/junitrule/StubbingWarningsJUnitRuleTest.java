@@ -90,7 +90,6 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
         }
     }
 
-    @Ignore //TODO
     @Test
     public void multiple_stubbing_arg_mismatch_on_failure() throws Throwable {
         try {
@@ -116,8 +115,11 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
             assertEquals(filterLineNo(logger.getLoggedInfo()),
                 "[MockitoHint] See javadoc for MockitoHint class.\n" +
                 "[MockitoHint] 1. unused stub  -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                "[MockitoHint]    similar call -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)"
-            );
+                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint] 2. unused stub  -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)"            );
         }
     }
 
