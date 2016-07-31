@@ -27,6 +27,7 @@ class StubbingArgMismatches {
         }
 
         StringBuilder out = new StringBuilder("[MockitoHint] See javadoc for MockitoHint class.");
+        //TODO SF it would be nice to make the String look good if x goes multiple digits (padding)
         int x = 1;
         for (Map.Entry<Invocation, Set<Invocation>> m : mismatches.entrySet()) {
             out.append("\n[MockitoHint] ").append(x++).append(". unused stub  ")
