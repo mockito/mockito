@@ -215,7 +215,6 @@ public class FieldInitializer {
         private final Object testClass;
         private final Field field;
         private final ConstructorArgumentResolver argResolver;
-          private final MockUtil mockUtil = new MockUtil();
         private final Comparator<Constructor<?>> byParameterNumber = new Comparator<Constructor<?>>() {
             public int compare(Constructor<?> constructorA, Constructor<?> constructorB) {
                 int argLengths = constructorB.getParameterTypes().length - constructorA.getParameterTypes().length;
@@ -230,7 +229,7 @@ public class FieldInitializer {
             private int countMockableParams(Constructor<?> constructor) {
                 int constructorMockableParamsSize = 0;
                 for (Class<?> aClass : constructor.getParameterTypes()) {
-                    if(mockUtil.typeMockabilityOf(aClass).mockable()){
+                    if(MockUtil.typeMockabilityOf(aClass).mockable()){
                         constructorMockableParamsSize++;
                     }
                 }

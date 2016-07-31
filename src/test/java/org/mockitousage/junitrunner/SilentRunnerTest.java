@@ -9,12 +9,16 @@ import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
+import org.mockitoutil.JUnitResultAssert;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by sfaber on 4/22/16.
@@ -29,7 +33,7 @@ public class SilentRunnerTest extends TestBase {
                 SomeFeature.class
         );
         //then
-        assertThat(result).isSuccessful();
+        JUnitResultAssert.assertThat(result).isSuccessful();
     }
 
     @Test public void failing_test() {
@@ -38,7 +42,7 @@ public class SilentRunnerTest extends TestBase {
                 SomeFailingFeature.class
         );
         //then
-        assertThat(result).fails(1, TooLittleActualInvocations.class);
+        JUnitResultAssert.assertThat(result).fails(1, TooLittleActualInvocations.class);
     }
 
     @Test public void validates_framework_usage() {
@@ -47,7 +51,7 @@ public class SilentRunnerTest extends TestBase {
                 UsesFrameworkIncorrectly.class
         );
         //then
-        assertThat(result).fails(1, UnfinishedStubbingException.class);
+        JUnitResultAssert.assertThat(result).fails(1, UnfinishedStubbingException.class);
     }
 
     @Test
@@ -56,12 +60,12 @@ public class SilentRunnerTest extends TestBase {
         //when
         Result result = runner.run(HasUnnecessaryStubs.class);
         //then
-        assertThat(result).isSuccessful();
+        JUnitResultAssert.assertThat(result).isSuccessful();
     }
 
     @RunWith(MockitoJUnitRunner.Silent.class)
     public static class SomeFeature {
-        @Mock List list;
+        @Mock List<String> list;
         @Test public void some_behavior() {
             when(list.get(0)).thenReturn("0");
             assertEquals("0", list.get(0));
@@ -70,7 +74,7 @@ public class SilentRunnerTest extends TestBase {
 
     @RunWith(MockitoJUnitRunner.Silent.class)
     public static class SomeFailingFeature {
-        @Mock List list;
+        @Mock List<String> list;
         @Test public void some_failing_behavior() {
             list.clear();
             verify(list, times(2)).clear();
@@ -79,7 +83,7 @@ public class SilentRunnerTest extends TestBase {
 
     @RunWith(MockitoJUnitRunner.Silent.class)
     public static class UsesFrameworkIncorrectly {
-        @Mock List list;
+        @Mock List<?> list;
         @Test public void unfinished_stubbing() {
             when(list.get(0)); //unfinished stubbing
         }

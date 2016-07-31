@@ -5,10 +5,8 @@
 
 package org.mockitoutil;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.runner.Result;
 import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
@@ -26,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.regex.Pattern;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
@@ -68,82 +65,10 @@ public class TestBase {
         return new MockitoCore().getLastInvocation();
     }
 
-    //I'm really tired of matchers, enter the assertor!
-    protected static <T> void assertThat(T o, Assertor<T> a) {
-        a.assertValue(o);
-    }
-
-    protected static <T> void assertThat(T actual, Matcher<? super T> matcher) {
-        org.junit.Assert.assertThat(actual, matcher);
-    }
-    
-    protected static <T> void assertThat(String message, T actual, Matcher<T> m) {
-        org.junit.Assert.assertThat(message, actual, m);
-    }
-    
-    public static <T> Assertor<String> endsWith(final String substring) {
-        return new Assertor<String>() {
-            public void assertValue(String value) {
-                assertTrue("This substring: \n" + substring + 
-                        "\nshould be at the end of:\n" + value
-                        , value.endsWith(substring));
-            }
-        };
-    }
-    
     public static void assertNotEquals(Object expected, Object got) {
         assertFalse(expected.equals(got));
     }
 
-    public static void assertContains(String sub, String string) {
-        assertTrue("\n" +
-                "This substring:[" +
-                sub +
-                "]\n" +
-                "should be inside of:[" +
-                string +
-                "]\n"
-                , string.contains(sub));
-    }
-
-    public static void assertContainsIgnoringCase(String sub, String string) {
-        assertTrue("\n" +
-                "This substring:" +
-                sub +
-                "\n" +
-                "should be inside of:" +
-                string +
-                "\n"
-                , containsIgnoringCase(string, sub));
-    }
-
-    private static boolean containsIgnoringCase(String string, String sub) {
-        int subLength = sub.length();
-        if (string.length() < subLength) {
-            return false;
-        }
-        int i = 0;
-        while(i+subLength <= string.length()) {
-            boolean temp = string.substring(i, i+subLength).equalsIgnoreCase(sub);
-            if (temp) {
-                return true;
-            }
-            i++;
-        }
-        return false;
-    }
-
-    public static void assertNotContains(String sub, String string) {
-        assertFalse("\n" +
-                "This substring:" +
-                sub +
-                "\n" +
-                "should NOT be inside of:" +
-                string +
-                "\n"
-                , string.contains(sub));
-    }
-    
     protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
         Class<?>[] types = new Class<?>[args.length];
         for (int i = 0; i < args.length; i++) {
@@ -164,10 +89,6 @@ public class TestBase {
 
     protected static InvocationMatcher invocationMatcherAt(String location) {
         return new InvocationBuilder().location(location).toInvocationMatcher();
-    }
-
-    protected boolean isMock(Object o) {
-        return new MockUtil().isMock(o);
     }
 
     protected void assertContainsType(final Collection<?> list, final Class<?> clazz) {
@@ -200,12 +121,5 @@ public class TestBase {
      */
     protected String filterLineNo(String stackTrace) {
         return stackTrace.replaceAll("(\\((\\w+\\.java):(\\d)+\\))", "($2:0)");
-    }
-
-    /**
-     * Clean assertions for JUnit's result object
-     */
-    protected JUnitResultAssert assertThat(Result result) {
-        return new JUnitResultAssert(result);
     }
 }

@@ -12,17 +12,19 @@ import org.mockito.invocation.Invocation;
 import java.util.*;
 
 public class AllInvocationsFinder {
-    
+
+    private AllInvocationsFinder() {}
+
     /**
      * gets all invocations from mocks. Invocations are ordered earlier first. 
      * 
      * @param mocks mocks
      * @return invocations
      */
-    public List<Invocation> find(List<?> mocks) {
+    public static List<Invocation> find(List<?> mocks) {
         Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         for (Object mock : mocks) {
-            InternalMockHandler<Object> handler = new MockUtil().getMockHandler(mock);
+            InternalMockHandler<Object> handler = MockUtil.getMockHandler(mock);
             List<Invocation> fromSingleMock = handler.getInvocationContainer().getInvocations();
             invocationsInOrder.addAll(fromSingleMock);
         }

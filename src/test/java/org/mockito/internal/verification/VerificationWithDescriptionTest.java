@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verify;
 public class VerificationWithDescriptionTest {
     
     @Mock 
-    private List mock;
+    private List<?> mock;
     
     @Before
     public void setUp() {

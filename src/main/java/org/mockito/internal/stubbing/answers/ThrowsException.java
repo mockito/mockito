@@ -22,7 +22,7 @@ public class ThrowsException implements Answer<Object>, Serializable {
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        if (new MockUtil().isMock(throwable)) {
+        if (MockUtil.isMock(throwable)) {
             throw throwable;
         }
         Throwable t = throwable.fillInStackTrace();

@@ -17,7 +17,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
-import static org.mockito.Matchers.anyString;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class AtMostXVerificationTest extends TestBase {
@@ -105,7 +105,7 @@ public class AtMostXVerificationTest extends TestBase {
             verifyNoMoreInteractions(mock);
             fail();
         } catch(NoInteractionsWanted e) {
-            assertContains("undesiredInteraction(", e.getMessage());
+            assertThat(e).hasMessageContaining("undesiredInteraction(");
         }
     }
 

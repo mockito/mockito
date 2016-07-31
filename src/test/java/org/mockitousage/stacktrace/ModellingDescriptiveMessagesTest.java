@@ -19,7 +19,6 @@ import org.mockitoutil.TestBase;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
 @Ignore

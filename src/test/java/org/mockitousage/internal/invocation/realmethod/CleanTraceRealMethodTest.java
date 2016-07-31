@@ -4,6 +4,7 @@
  */
 package org.mockitousage.internal.invocation.realmethod;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.internal.invocation.realmethod.CleanTraceRealMethod;
@@ -11,7 +12,7 @@ import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
-import static org.mockitoutil.ExtraMatchers.hasMethodInStackTraceAt;
+import static org.mockitoutil.Conditions.methodInStackTraceAt;
 
 public class CleanTraceRealMethodTest extends TestBase {
 
@@ -42,9 +43,9 @@ public class CleanTraceRealMethodTest extends TestBase {
             fail();
         //then
         } catch (Exception e) {
-            assertThat(e, hasMethodInStackTraceAt(0, "throwSomething"));
-            assertThat(e, hasMethodInStackTraceAt(1, "invoke"));
-            assertThat(e, hasMethodInStackTraceAt(2, "shouldRemoveMockitoInternalsFromStackTraceWhenRealMethodThrows"));
+            Assertions.assertThat(e).has(methodInStackTraceAt(0, "throwSomething"));
+            Assertions.assertThat(e).has(methodInStackTraceAt(1, "invoke"));
+            Assertions.assertThat(e).has(methodInStackTraceAt(2, "shouldRemoveMockitoInternalsFromStackTraceWhenRealMethodThrows"));
         }
     }
 }

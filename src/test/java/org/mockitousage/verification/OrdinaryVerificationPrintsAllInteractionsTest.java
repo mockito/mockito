@@ -12,6 +12,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
@@ -32,9 +33,10 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             //then
-            assertContains("However, there were exactly 2 interactions with this mock", e.getMessage());
-            assertContains("firstInteraction(", e.getMessage());
-            assertContains("secondInteraction(", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("However, there were exactly 2 interactions with this mock")
+                .hasMessageContaining("firstInteraction(")
+                .hasMessageContaining("secondInteraction(");
         }
     }
     
@@ -47,8 +49,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
             verify(mock).simpleMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-            assertContains("firstInteraction(", e.getMessage());
-            assertNotContains("differentMockInteraction(", e.getMessage());
+            assertThat(e.getMessage()).contains("firstInteraction(").doesNotContain("differentMockInteraction(");
         }
     }
     
@@ -58,7 +59,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
             verify(mock).simpleMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-            assertContains("there were zero interactions with this mock.", e.getMessage());
+            assertThat(e).hasMessageContaining("there were zero interactions with this mock.");
         }
     }
 

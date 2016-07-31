@@ -128,7 +128,7 @@ public class CachingMockBytecodeGeneratorTest {
             if (inputArgument.contains("-XX:+DisableExplicitGC")) {
                 return false;
             }
-        };
+        }
         return true;
     }
 

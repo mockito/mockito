@@ -9,11 +9,13 @@ import org.mockito.Mock;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
+import org.mockitoutil.JUnitResultAssert;
 import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 
 /**
  * Created by sfaber on 4/22/16.
@@ -30,7 +32,7 @@ public class StrictRunnerTest extends TestBase {
                 StubbingInTestUsed.class
         );
         //then
-        assertThat(result).isSuccessful();
+        JUnitResultAssert.assertThat(result).isSuccessful();
     }
 
     @Test public void fails_when_stubs_were_not_used() {
@@ -42,7 +44,7 @@ public class StrictRunnerTest extends TestBase {
         Result result = runner.run(tests);
 
         //then
-        assertThat(result).fails(3, UnnecessaryStubbingException.class);
+        JUnitResultAssert.assertThat(result).fails(3, UnnecessaryStubbingException.class);
     }
 
     @Test public void does_not_report_unused_stubs_when_different_failure_is_present() {
@@ -50,7 +52,7 @@ public class StrictRunnerTest extends TestBase {
         Result result = runner.run(WithUnrelatedAssertionFailure.class);
 
         //then
-        assertThat(result).fails(1, MyAssertionError.class);
+        JUnitResultAssert.assertThat(result).fails(1, MyAssertionError.class);
     }
 
     @RunWith(MockitoJUnitRunner.class)

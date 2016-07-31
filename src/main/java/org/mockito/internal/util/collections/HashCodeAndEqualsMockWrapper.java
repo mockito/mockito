@@ -56,9 +56,8 @@ public class HashCodeAndEqualsMockWrapper {
     }
 
     @Override public String toString() {
-        MockUtil mockUtil = new MockUtil();
         return "HashCodeAndEqualsMockWrapper{" +
-                "mockInstance=" + (mockUtil.isMock(mockInstance) ? mockUtil.getMockName(mockInstance) : typeInstanceString()) +
+                "mockInstance=" + (MockUtil.isMock(mockInstance) ? MockUtil.getMockName(mockInstance) : typeInstanceString()) +
                 '}';
     }
 

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
@@ -90,7 +91,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
             verifyNoMoreInteractions(mock);
             fail();
         } catch (NoInteractionsWanted e) {
-            assertContains("list of all invocations", e.getMessage());
+            assertThat(e).hasMessageContaining("list of all invocations");
         }
     }
     
@@ -102,7 +103,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
             verifyNoMoreInteractions(mock);
             fail();
         } catch (NoInteractionsWanted e) {
-            assertNotContains("list of all invocations", e.getMessage());
+            assertThat(e.getMessage()).doesNotContain("list of all invocations");
         }
     }    
     

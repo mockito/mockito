@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static junit.framework.TestCase.*;
-import static org.mockito.Matchers.anyObject;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class SpyingOnRealObjectsTest extends TestBase {
@@ -179,12 +179,12 @@ public class SpyingOnRealObjectsTest extends TestBase {
     
     @Test
     public void shouldSayNiceMessageWhenSpyingOnPrivateClass() throws Exception {
-        List real = Arrays.asList("first", "second");
+        List<String> real = Arrays.asList("first", "second");
         try {
             spy(real);
             fail();
         } catch (MockitoException e) {
-            assertContains("Most likely it is a private class that is not visible by Mockito", e.getMessage());
+            assertThat(e).hasMessageContaining("Most likely it is a private class that is not visible by Mockito");
         }
     }
 }

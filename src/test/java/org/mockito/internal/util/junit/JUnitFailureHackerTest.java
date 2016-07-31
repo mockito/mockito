@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.util.junit;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -40,7 +42,7 @@ public class JUnitFailureHackerTest extends TestBase {
         hacker.appendWarnings(failure, "unused stubbing blah");
         
         //then
-        assertContains("unused stubbing blah", failure.getException().getMessage());        
+        assertThat(failure.getException()).hasMessageContaining("unused stubbing blah");
     }   
     
     @Test

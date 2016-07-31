@@ -65,7 +65,8 @@ class MockBytecodeGenerator {
                               .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
                               .append(MockMethodInterceptor.class,
                                       MockMethodInterceptor.ForHashCode.class,
-                                      MockMethodInterceptor.ForEquals.class).build(), ClassLoadingStrategy.Default.INJECTION)
+                                      MockMethodInterceptor.ForEquals.class).build(),
+                              ClassLoadingStrategy.Default.INJECTION.with(features.mockedType.getProtectionDomain()))
                       .getLoaded();
     }
 

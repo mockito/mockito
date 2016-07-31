@@ -7,6 +7,8 @@ package org.mockito.internal.util;
 import org.mockito.MockingDetails;
 import org.mockito.invocation.Invocation;
 
+import static org.mockito.internal.util.MockUtil.getMockHandler;
+
 import java.util.Collection;
 import java.util.Set;
 
@@ -17,36 +19,34 @@ import java.util.Set;
 public class DefaultMockingDetails implements MockingDetails {
 
     private final Object toInspect;
-    private final MockUtil delegate;
 
-    public DefaultMockingDetails(Object toInspect, MockUtil delegate){
+    public DefaultMockingDetails(Object toInspect){
         this.toInspect = toInspect;
-        this.delegate = delegate;
     }
 
     @Override
     public boolean isMock(){
-        return delegate.isMock(toInspect);
+        return MockUtil.isMock(toInspect);
     }
 
     @Override
     public boolean isSpy(){
-        return delegate.isSpy(toInspect);
+        return MockUtil.isSpy(toInspect);
     }
 
     @Override
     public Collection<Invocation> getInvocations() {
-        return delegate.getMockHandler(toInspect).getInvocationContainer().getInvocations();
+        return getMockHandler(toInspect).getInvocationContainer().getInvocations();
     }
 
     @Override
     public Class<?> getMockedType() {
-        return delegate.getMockHandler(toInspect).getMockSettings().getTypeToMock();
+        return getMockHandler(toInspect).getMockSettings().getTypeToMock();
     }
 
     @Override
     public Set<Class<?>> getExtraInterfaces() {
-        return delegate.getMockHandler(toInspect).getMockSettings().getExtraInterfaces();
+        return getMockHandler(toInspect).getMockSettings().getExtraInterfaces();
     }
 }
 

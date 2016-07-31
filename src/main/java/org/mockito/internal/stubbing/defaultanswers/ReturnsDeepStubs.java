@@ -57,7 +57,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     }
 
     private Object deepStub(InvocationOnMock invocation, GenericMetadataSupport returnTypeGenericMetadata) throws Throwable {
-        InternalMockHandler<Object> handler = new MockUtil().getMockHandler(invocation.getMock());
+        InternalMockHandler<Object> handler = MockUtil.getMockHandler(invocation.getMock());
         InvocationContainerImpl container = (InvocationContainerImpl) handler.getInvocationContainer();
 
         // matches invocation for verification
@@ -86,7 +86,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
      * @return The mock
      */
     private Object newDeepStubMock(GenericMetadataSupport returnTypeGenericMetadata, Object parentMock) {
-        MockCreationSettings parentMockSettings = new MockUtil().getMockSettings(parentMock);
+        MockCreationSettings parentMockSettings = MockUtil.getMockSettings(parentMock);
         return mockitoCore().mock(
                 returnTypeGenericMetadata.rawType(),
                 withSettingsUsing(returnTypeGenericMetadata, parentMockSettings)
@@ -116,7 +116,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     }
 
     protected GenericMetadataSupport actualParameterizedType(Object mock) {
-        CreationSettings mockSettings = (CreationSettings) new MockUtil().getMockHandler(mock).getMockSettings();
+        CreationSettings mockSettings = (CreationSettings) MockUtil.getMockHandler(mock).getMockSettings();
         return GenericMetadataSupport.inferFrom(mockSettings.getTypeToMock());
     }
 

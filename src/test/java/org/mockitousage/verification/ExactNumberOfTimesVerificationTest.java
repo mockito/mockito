@@ -14,6 +14,7 @@ import org.mockitoutil.TestBase;
 import java.util.LinkedList;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
@@ -36,8 +37,9 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             verify(mock, times(100)).clear();
             fail();
         } catch (TooLittleActualInvocations e) {
-            assertContains("Wanted 100 times", e.getMessage());
-            assertContains("was 2", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("Wanted 100 times")
+                .hasMessageContaining("was 2");
         }
     }
 
@@ -51,8 +53,9 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             verify(mock, times(1)).clear();
             fail();
         } catch (TooManyActualInvocations e) {
-            assertContains("Wanted 1 time", e.getMessage());
-            assertContains("was 2 times", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("Wanted 1 time")
+                .hasMessageContaining("was 2 times");
         }
     }
 
@@ -73,7 +76,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             verify(mock, times(0)).clear();
             fail();
         } catch (NeverWantedButInvoked e) {
-            assertContains("Never wanted here", e.getMessage());
+            assertThat(e).hasMessageContaining("Never wanted here");
         }
     }
 

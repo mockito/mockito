@@ -14,6 +14,11 @@ import static org.mockito.internal.exceptions.Reporter.nullPassedToVerify;
 import static org.mockito.internal.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
 import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInOrder;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+import static org.mockito.internal.util.MockUtil.createMock;
+import static org.mockito.internal.util.MockUtil.getMockHandler;
+import static org.mockito.internal.util.MockUtil.isMock;
+import static org.mockito.internal.util.MockUtil.resetMock;
+import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
 
 import java.util.Arrays;
@@ -45,10 +50,8 @@ import org.mockito.verification.VerificationMode;
 @SuppressWarnings("unchecked")
 public class MockitoCore {
 
-    private final MockUtil mockUtil = new MockUtil();
-
     public boolean isTypeMockable(Class<?> typeToMock) {
-        return mockUtil.typeMockabilityOf(typeToMock).mockable();
+        return typeMockabilityOf(typeToMock).mockable();
     }
 
     public <T> T mock(Class<T> typeToMock, MockSettings settings) {
@@ -57,7 +60,7 @@ public class MockitoCore {
         }
         MockSettingsImpl impl = MockSettingsImpl.class.cast(settings);
         MockCreationSettings<T> creationSettings = impl.confirm(typeToMock);
-        T mock = mockUtil.createMock(creationSettings);
+        T mock = createMock(creationSettings);
         mockingProgress().mockingStarted(mock, typeToMock);
         return mock;
     }
@@ -78,7 +81,7 @@ public class MockitoCore {
         if (mock == null) {
             throw nullPassedToVerify();
         }
-        if (!mockUtil.isMock(mock)) {
+        if (!isMock(mock)) {
             throw notAMockPassedToVerify(mock.getClass());
         }
         MockingProgress mockingProgress = mockingProgress();
@@ -94,7 +97,7 @@ public class MockitoCore {
         mockingProgress.resetOngoingStubbing();
 
         for (T m : mocks) {
-            mockUtil.resetMock(m);
+            resetMock(m);
         }
     }
 
@@ -105,7 +108,7 @@ public class MockitoCore {
         mockingProgress.resetOngoingStubbing();
 
         for (T m : mocks) {
-            mockUtil.getMockHandler(m).getInvocationContainer().clearInvocations();
+            getMockHandler(m).getInvocationContainer().clearInvocations();
         }
     }
 
@@ -117,7 +120,7 @@ public class MockitoCore {
                 if (mock == null) {
                     throw nullPassedToVerifyNoMoreInteractions();
                 }
-                InvocationContainer invocations = mockUtil.getMockHandler(mock).getInvocationContainer();
+                InvocationContainer invocations = getMockHandler(mock).getInvocationContainer();
                 VerificationDataImpl data = new VerificationDataImpl(invocations, null);
                 noMoreInteractions().verify(data);
             } catch (NotAMockException e) {
@@ -128,8 +131,7 @@ public class MockitoCore {
 
     public void verifyNoMoreInteractionsInOrder(List<Object> mocks, InOrderContext inOrderContext) {
         mockingProgress().validateState();
-        VerifiableInvocationsFinder finder = new VerifiableInvocationsFinder();
-        VerificationDataInOrder data = new VerificationDataInOrderImpl(inOrderContext, finder.find(mocks), null);
+        VerificationDataInOrder data = new VerificationDataInOrderImpl(inOrderContext, VerifiableInvocationsFinder.find(mocks), null);
         VerificationModeFactory.noMoreInteractions().verifyInOrder(data);
     }
 
@@ -147,7 +149,7 @@ public class MockitoCore {
             if (mock == null) {
                 throw nullPassedWhenCreatingInOrder();
             }
-            if (!mockUtil.isMock(mock)) {
+            if (!isMock(mock)) {
                 throw notAMockPassedWhenCreatingInOrder();
             }
         }
@@ -178,7 +180,7 @@ public class MockitoCore {
 
     public Object[] ignoreStubs(Object... mocks) {
         for (Object m : mocks) {
-            InvocationContainer invocationContainer = new MockUtil().getMockHandler(m).getInvocationContainer();
+            InvocationContainer invocationContainer = getMockHandler(m).getInvocationContainer();
             List<Invocation> ins = invocationContainer.getInvocations();
             for (Invocation in : ins) {
                 if (in.stubInfo() != null) {
@@ -190,6 +192,6 @@ public class MockitoCore {
     }
 
     public MockingDetails mockingDetails(Object toInspect) {
-        return new DefaultMockingDetails(toInspect, new MockUtil());
+        return new DefaultMockingDetails(toInspect);
     }
 }

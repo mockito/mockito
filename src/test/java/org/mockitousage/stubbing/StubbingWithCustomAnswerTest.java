@@ -15,7 +15,6 @@ import java.lang.reflect.Method;
 import java.util.Set;
 
 import static junit.framework.TestCase.*;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class StubbingWithCustomAnswerTest extends TestBase {

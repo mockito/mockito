@@ -2,7 +2,6 @@ package org.mockitoutil;
 
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 
 import java.util.List;
 
@@ -56,5 +55,12 @@ public class JUnitResultAssert {
             out.append(count++).append(". ").append(f.getTrace());
         }
         return out.toString();
+    }
+
+    /**
+     * Clean assertions for JUnit's result object
+     */
+    public static JUnitResultAssert assertThat(Result result) {
+        return new JUnitResultAssert(result);
     }
 }

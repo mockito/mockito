@@ -8,8 +8,6 @@ package org.mockitousage.bugs;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 //see bug 116

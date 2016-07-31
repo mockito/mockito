@@ -15,10 +15,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.mockito.Matchers.anyCollection;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anySet;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
@@ -69,5 +65,15 @@ public class NewMatchersTest extends TestBase {
         assertEquals(null, mock.forSet(null));
 
         verify(mock, times(1)).forSet(anySet());
+    }
+
+    @Test
+    public void shouldAllowAnyIterable() {
+        when(mock.forIterable(anyIterable())).thenReturn("matched");
+
+        assertEquals("matched", mock.forIterable(new HashSet<String>()));
+        assertEquals(null, mock.forIterable(null));
+
+        verify(mock, times(1)).forIterable(anyIterable());
     }
 }

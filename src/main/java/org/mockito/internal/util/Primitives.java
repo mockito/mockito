@@ -42,6 +42,13 @@ public class Primitives {
         return PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.containsKey(type);
     }
 
+    public static boolean isAssignableFromWrapper(Class<?> valueClass, Class<?> referenceType) {
+        if(isPrimitiveOrWrapper(valueClass) && isPrimitiveOrWrapper(referenceType)) {
+            return Primitives.primitiveTypeOf(valueClass).isAssignableFrom(referenceType);
+        }
+        return false;
+    }
+
     /**
      * Returns the boxed default value for a primitive or a primitive wrapper.
      *

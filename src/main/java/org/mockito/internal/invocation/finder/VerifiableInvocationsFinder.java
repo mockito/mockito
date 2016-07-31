@@ -16,8 +16,10 @@ import java.util.List;
  */
 public class VerifiableInvocationsFinder {
 
-    public List<Invocation> find(List<?> mocks) {
-        List<Invocation> invocations = new AllInvocationsFinder().find(mocks);
+    private VerifiableInvocationsFinder() {}
+
+    public static List<Invocation> find(List<?> mocks) {
+        List<Invocation> invocations = AllInvocationsFinder.find(mocks);
         return ListUtil.filter(invocations, new RemoveIgnoredForVerification());
     }
 

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 public class InheritedGenericsPolimorphicCallTest extends TestBase {
 
     protected interface MyIterable<T> extends Iterable<T> {
-        public MyIterator<T> iterator();
+        MyIterator<T> iterator();
     }
 
     protected interface MyIterator<T> extends Iterator<T> {

@@ -1,11 +1,10 @@
 package org.mockito.internal.util;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.exceptions.misusing.FriendlyReminderException;
 import org.mockitoutil.TestBase;
-
-import static org.hamcrest.CoreMatchers.is;
 
 public class TimerTest extends TestBase {
 
@@ -19,7 +18,7 @@ public class TimerTest extends TestBase {
         timer.start();
 
         //then
-        assertThat(timer.isCounting(), is(true));
+        Assertions.assertThat(timer.isCounting()).isTrue();
     }
 
     @Test
@@ -32,7 +31,7 @@ public class TimerTest extends TestBase {
         oneMillisecondPasses();
 
         //then
-        assertThat(timer.isCounting(), is(false));
+        Assertions.assertThat(timer.isCounting()).isFalse();
     }
 
     @Test

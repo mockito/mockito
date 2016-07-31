@@ -14,6 +14,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 public class PluginStackTraceFilteringTest extends TestBase {
@@ -38,8 +39,9 @@ public class PluginStackTraceFilteringTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             String trace = getStackTrace(e);
-            assertContains("verifyMock_x", trace);
-            assertNotContains("verify_excludeMe_x", trace);
+            assertThat(trace)
+                    .contains("verifyMock_x")
+                    .doesNotContain("verify_excludeMe_x");
         }
     }
 
@@ -51,8 +53,9 @@ public class PluginStackTraceFilteringTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             String trace = getStackTrace(e);
-            assertContains("verifyMock_x", trace);
-            assertContains("verify_excludeMe_x", trace);
+            assertThat(trace)
+                    .contains("verifyMock_x")
+                    .contains("verify_excludeMe_x");
         }
     }
 

@@ -8,12 +8,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.mockito.internal.util.MockUtil.isMock;
 
 @SuppressWarnings("unchecked")
 public class SpyAnnotationInitializedInBaseClassTest extends TestBase {
@@ -35,7 +37,7 @@ public class SpyAnnotationInitializedInBaseClassTest extends TestBase {
         //when
         MockitoAnnotations.initMocks(subClass);
         //then
-        assertTrue(isMock(subClass.list));
+        assertTrue(MockUtil.isMock(subClass.list));
     }
 
     @Before

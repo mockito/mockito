@@ -15,7 +15,7 @@ import static org.mockito.internal.util.reflection.Fields.annotatedBy;
 
 public class MockitoBeforeTestNGMethod {
 
-    private final WeakHashMap<Object, Boolean> initializedInstances = new WeakHashMap<>();
+    private final WeakHashMap<Object, Boolean> initializedInstances = new WeakHashMap<Object, Boolean>();
 
     /**
      * Initialize mocks.

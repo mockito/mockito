@@ -1,3 +1,48 @@
+### 2.0.94-beta (2016-07-31 09:17 UTC)
+
+* Authors: 3
+* Commits: 11
+  * 7: Pascal Schumacher
+  * 2: Brice Dutheil
+  * 2: Marcin Zajączkowski
+* Improvements: 9
+  * made some timeouts in VerificationAfterDelayTest and VerificationWith… [(#523)](https://github.com/mockito/mockito/pull/523)
+  * replace TestBase#assertContains(String sub, String string) with Asser… [(#519)](https://github.com/mockito/mockito/pull/519)
+  * Verify build on Travis also with Java 7 and 8 [(#518)](https://github.com/mockito/mockito/pull/518)
+  * Make ciBuild depends also on subprojects state [(#517)](https://github.com/mockito/mockito/pull/517)
+  * replace TestBase#assertNotContains(String sub, String string) with As… [(#516)](https://github.com/mockito/mockito/pull/516)
+  * refactored AllInvocationsFinder and VerifiableInvocationsFinder to st… [(#515)](https://github.com/mockito/mockito/pull/515)
+  * refactored MockUtil to a static utility class (#426) [(#514)](https://github.com/mockito/mockito/pull/514)
+  * replace TestBase#assertContainsIgnoringCase(String sub, String string… [(#513)](https://github.com/mockito/mockito/pull/513)
+  * fix some raw type warnings in tests [(#512)](https://github.com/mockito/mockito/pull/512)
+
+### 2.0.93-beta (2016-07-29 16:10 UTC)
+
+* Authors: 1
+* Commits: 12
+  * 12: Brice Dutheil
+* Improvements: 2
+  * Fixes #194 tweaks any matchers [(#510)](https://github.com/mockito/mockito/pull/510)
+  * Tweaks Matchers.any family matchers behavior [(#194)](https://github.com/mockito/mockito/issues/194)
+
+### 2.0.92-beta (2016-07-29 01:32 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 3: Rafael Winterhalter
+  * 2: thesnowgoose
+  * 1: Hans Joachim Desserud
+* Improvements: 1
+  * Fix some warnings [(#511)](https://github.com/mockito/mockito/pull/511)
+
+### 2.0.91-beta (2016-07-28 01:59 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Mockito.when() fails when method could originate from superclass or interface  [(#508)](https://github.com/mockito/mockito/issues/508)
+
 ### 2.0.90-beta (2016-07-25 18:30 UTC)
 
 * Authors: 3
