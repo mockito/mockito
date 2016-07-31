@@ -20,13 +20,11 @@ import static org.mockito.Mockito.mock;
 
 public class AllInvocationsFinderTest extends TestBase {
     
-    private AllInvocationsFinder finder;
     private IMethods mockTwo;
     private IMethods mockOne;
 
     @Before
     public void setup() {
-        finder = new AllInvocationsFinder();
         mockOne = mock(IMethods.class);
         mockTwo = mock(IMethods.class);
     }
@@ -37,7 +35,7 @@ public class AllInvocationsFinderTest extends TestBase {
         mockTwo.simpleMethod(200);
         mockOne.simpleMethod(300);
         
-        List<Invocation> invocations = finder.find(asList(mockOne, mockTwo));
+        List<Invocation> invocations = AllInvocationsFinder.find(asList(mockOne, mockTwo));
         
         assertEquals(3, invocations.size());
         assertArgumentEquals(100, invocations.get(0));
@@ -49,7 +47,7 @@ public class AllInvocationsFinderTest extends TestBase {
     public void shouldNotCountDuplicatedInteractions() throws Exception {
         mockOne.simpleMethod(100);
 
-        List<Invocation> invocations = finder.find(asList(mockOne, mockOne, mockOne));
+        List<Invocation> invocations = AllInvocationsFinder.find(asList(mockOne, mockOne, mockOne));
 
         assertEquals(1, invocations.size());
     }
