@@ -105,7 +105,7 @@ public class VerificationWithTimeoutTest {
         // then
         verify(mock, timeout(40).atLeast(1)).oneArg('c');
         exception.expect(TooLittleActualInvocations.class);
-        verify(mock, timeout(50).times(3)).oneArg('c');
+        verify(mock, timeout(100).times(3)).oneArg('c');
     }
 
     @Test
@@ -129,7 +129,7 @@ public class VerificationWithTimeoutTest {
         // then
         verify(mock, never()).oneArg('c');
         exception.expect(NoInteractionsWanted.class);
-        verify(mock, timeout(40).only()).oneArg('c');
+        verify(mock, timeout(100).only()).oneArg('c');
     }
 
     /**
@@ -158,7 +158,7 @@ public class VerificationWithTimeoutTest {
         InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).oneArg('x');
         inOrder.verify(mock, never()).oneArg('1');
-        inOrder.verify(mock, timeout(40)).oneArg('1');
+        inOrder.verify(mock, timeout(100)).oneArg('1');
     }
 
     private void callAsyncWithDelay(final IMethods mock, final char value, long delay, TimeUnit unit) {

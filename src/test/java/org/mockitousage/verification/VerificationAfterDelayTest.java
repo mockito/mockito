@@ -67,7 +67,7 @@ public class VerificationAfterDelayTest {
         callAsyncWithDelay(mock, '1', 20, MILLISECONDS);
 
         // then
-        verify(mock, after(50).times(1)).oneArg('1');
+        verify(mock, after(100).times(1)).oneArg('1');
     }
 
     @Test
@@ -88,7 +88,7 @@ public class VerificationAfterDelayTest {
         verify(mock, times(0)).oneArg('1');
 
         exception.expect(MockitoAssertionError.class);
-        verify(mock, after(50).times(2)).oneArg('1');
+        verify(mock, after(100).times(2)).oneArg('1');
     }
 
     @Test
