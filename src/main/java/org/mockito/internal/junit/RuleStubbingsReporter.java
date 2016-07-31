@@ -20,7 +20,9 @@ class RuleStubbingsReporter implements StubbingListener {
         unstubbedInvocations.remove(stubbing);
     }
 
-    public void usedStubbing(Invocation stubbing, Invocation actual) {}
+    public void usedStubbing(Invocation stubbing, Invocation actual) {
+        stubbings.remove(stubbing);
+    }
 
     public void stubbingNotFound(Invocation actual) {
         unstubbedInvocations.add(actual);
