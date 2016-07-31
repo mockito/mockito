@@ -13,7 +13,7 @@ import static org.mockito.Mockito.mock;
 
 public class RuleStubbingHintsReporterTest extends TestBase {
 
-    RuleStubbingsReporter reporter = new RuleStubbingsReporter();
+    RuleStubbingHintsReporter reporter = new RuleStubbingHintsReporter();
     SimpleMockitoLogger logger = new SimpleMockitoLogger();
 
     @Test
