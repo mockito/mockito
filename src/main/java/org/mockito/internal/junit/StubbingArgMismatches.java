@@ -1,4 +1,4 @@
-package org.mockito.internal.runners;
+package org.mockito.internal.junit;
 
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.invocation.Invocation;

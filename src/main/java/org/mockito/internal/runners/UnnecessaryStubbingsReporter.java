@@ -4,11 +4,13 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.internal.exceptions.Reporter;
-import org.mockito.internal.util.MockitoLogger;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.StubbingListener;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by sfaber on 5/6/16.
@@ -16,22 +18,20 @@ import java.util.*;
 //TODO 384 package rework, merge internal.junit with internal.runners. Rename this class (it's doing more than reporting unnecessary stubs)
 //TODO 384 make it thread safe so that users don't have to worry
 //TODO 384 create MockitoHint class
-public class UnnecessaryStubbingsReporter implements StubbingListener {
+class UnnecessaryStubbingsReporter implements StubbingListener {
 
     private final Map<String, Invocation> stubbings = new HashMap<String, Invocation>();
     private final Set<String> used = new HashSet<String>();
-    private final Set<Invocation> unstubbedInvocations = new HashSet<Invocation>();
 
     public void newStubbing(Invocation stubbing) {
         //We compare stubbings by the location of stubbing
-        //so that a stubbing in @Before is considered used when at least one test method uses it
-        //but not necessarily all test methods need to trigger 'using' it
+        //  so that a stubbing in @Before is considered used when at least one test method uses it
+        //  but not necessarily all test methods need to trigger 'using' it.
+        //If we compared stubbings by 'invocation' we would not be able to satisfy this scenario
+        //  because stubbing declared in the same place in code is a different 'invocation' for every test.
+        //The downside of this approach is that it will not work when there are multiple stubbings / invocations
+        //  per line of code. This should be pretty rare in Java, though.
         stubbings.put(stubbing.getLocation().toString(), stubbing);
-
-        //Removing 'fake' unstubbed invocations
-        //'stubbingNotFound' event (that populates unstubbed invocations) is also triggered
-        // during regular stubbing using when(). It's a quirk of when() syntax. See javadoc for stubbingNotFound().
-        unstubbedInvocations.remove(stubbing);
     }
 
     public void usedStubbing(Invocation stubbing, Invocation actual) {
@@ -39,11 +39,9 @@ public class UnnecessaryStubbingsReporter implements StubbingListener {
         used.add(location);
     }
 
-    public void stubbingNotFound(Invocation actual) {
-        unstubbedInvocations.add(actual);
-    }
+    public void stubbingNotFound(Invocation actual) {}
 
-    public void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
+    void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
         for (String u : used) {
             stubbings.remove(u); //TODO 384 state manipulation
         }
@@ -56,25 +54,5 @@ public class UnnecessaryStubbingsReporter implements StubbingListener {
         Description unnecessaryStubbings = Description.createTestDescription(testClass, "unnecessary Mockito stubbings");
         notifier.fireTestFailure(new Failure(unnecessaryStubbings,
                 Reporter.formatUnncessaryStubbingException(testClass, stubbings.values())));
-    }
-
-    //TODO 384 I'm not completely happy with putting this functionality in this listener.
-    //TODO 384  Perhaps add an interfaces for the clients
-    public void printStubbingMismatches(MockitoLogger logger) {
-        StubbingArgMismatches mismatches = new StubbingArgMismatches();
-        for (Invocation i : unstubbedInvocations) {
-            for (Invocation stubbing : stubbings.values()) {
-                //method name & mock matches
-                if (stubbing.getMock() == i.getMock()
-                        && stubbing.getMethod().getName().equals(i.getMethod().getName())) {
-                    mismatches.add(i, stubbing);
-                }
-            }
-        }
-        mismatches.log(logger);
-    }
-
-    public String printUnusedStubbings(MockitoLogger logger) {
-        return "";
     }
 }
