@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * Stubbing listener that is used in JUnit rules and detects stubbing problems.
  */
-class RuleStubbingsReporter implements StubbingListener {
+class RuleStubbingHintsReporter implements StubbingListener {
 
     private final Set<Invocation> unstubbedInvocations = new LinkedHashSet<Invocation>();
     private final Set<Invocation> stubbings = new LinkedHashSet<Invocation>();

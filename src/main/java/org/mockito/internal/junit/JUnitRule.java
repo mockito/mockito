@@ -59,7 +59,7 @@ public class JUnitRule implements MockitoRule {
         }
 
         public void evaluate() throws Throwable {
-            RuleStubbingsReporter reporter = new RuleStubbingsReporter();
+            RuleStubbingHintsReporter reporter = new RuleStubbingHintsReporter();
             Mockito.framework().setStubbingListener(reporter);
             try {
                 performEvaluation(reporter);
@@ -68,7 +68,7 @@ public class JUnitRule implements MockitoRule {
             }
         }
 
-        private void performEvaluation(RuleStubbingsReporter reporter) throws Throwable {
+        private void performEvaluation(RuleStubbingHintsReporter reporter) throws Throwable {
             MockitoAnnotations.initMocks(target);
             try {
                 base.evaluate();
