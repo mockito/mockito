@@ -5,7 +5,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.model.Statement;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.internal.junit.JUnitRule;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockitousage.IMethods;
@@ -13,6 +12,7 @@ import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class StubbingWarningsJUnitRuleTest extends TestBase {
 
@@ -53,6 +53,58 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
                     IMethods mock = mock(IMethods.class);
                     declareStubbingWithArg(mock, "a");
                     useStubbingWithArg(mock, "b");
+                    throw new AssertionError("x");
+                }
+            },null, new DummyTestCase()).evaluate();
+
+            //then
+            fail();
+        } catch (AssertionError e) {
+            assertEquals("x", e.getMessage());
+            assertEquals(
+                "[MockitoHint] See javadoc for MockitoHint class.\n" +
+                "[MockitoHint] 1. unused stub  -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)"
+                , filterLineNo(logger.getLoggedInfo()));
+        }
+    }
+
+    @Test
+    public void no_stubbing_arg_mismatch_when_no_mismatch() throws Throwable {
+        try {
+            //when
+            jUnitRule.apply(new Statement() {
+                public void evaluate() throws Throwable {
+                    IMethods mock = mock(IMethods.class);
+                    declareStubbingWithArg(mock, "a");
+                    useStubbingWithArg(mock, "a");
+                    throw new AssertionError("x");
+                }
+            },null, new DummyTestCase()).evaluate();
+
+            //then
+            fail();
+        } catch (AssertionError e) {
+            assertEquals("x", e.getMessage());
+            assertTrue(logger.isEmpty());
+        }
+    }
+
+    @Ignore //TODO
+    @Test
+    public void multiple_stubbing_arg_mismatch_on_failure() throws Throwable {
+        try {
+            //when
+            jUnitRule.apply(new Statement() {
+                public void evaluate() throws Throwable {
+                    IMethods mock = mock(IMethods.class);
+
+                    declareStubbingWithArg(mock, "a");
+                    declareStubbingWithArg(mock, "b");
+
+                    useStubbingWithArg(mock, "c");
+                    useStubbingWithArg(mock, "d");
+
                     throw new AssertionError("x");
                 }
             },null, new DummyTestCase()).evaluate();
@@ -107,11 +159,11 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
     }
 
     private static void declareStubbingWithArg(IMethods mock, String arg) {
-        Mockito.when(mock.simpleMethod(arg)).thenReturn("bar");
+        when(mock.simpleMethod(arg)).thenReturn("bar");
     }
 
     private static void declareStubbing(IMethods mock) {
-        Mockito.when(mock.simpleMethod("foo")).thenReturn("bar");
+        when(mock.simpleMethod("foo")).thenReturn("bar");
     }
 
     private void useStubbingWithArg(IMethods mock, String arg) {
