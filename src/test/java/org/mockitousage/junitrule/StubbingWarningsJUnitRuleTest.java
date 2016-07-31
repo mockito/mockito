@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class StubbingWarningsJUnitRuleTest extends TestBase {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    private JUnitRule jUnitRule = new JUnitRule(logger);
+    private JUnitRule jUnitRule = new JUnitRule(logger, false);
 
     @After public void after() {
         //so that the validate framework usage exceptions do not collide with the tests here
@@ -221,6 +221,19 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
                 "[MockitoHint] See javadoc for MockitoHint class.\n" +
                 "[MockitoHint] unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbing(StubbingWarningsJUnitRuleTest.java:0)",
                 filterLineNo(logger.getLoggedInfo()));
+    }
+
+    @Test
+    public void no_warnings_when_silent() throws Throwable {
+        jUnitRule = new JUnitRule(logger, false).silent();
+        jUnitRule.apply(new Statement() {
+            public void evaluate() throws Throwable {
+                IMethods mock = mock(IMethods.class);
+                declareStubbing(mock);
+            }
+        },null, new DummyTestCase()).evaluate();
+
+        assertTrue(logger.isEmpty());
     }
 
     private static void declareStubbingWithArg(IMethods mock, String arg) {

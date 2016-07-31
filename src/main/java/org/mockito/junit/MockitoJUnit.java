@@ -17,7 +17,7 @@ public class MockitoJUnit {
      * @return the rule instance
      */
     public static MockitoRule rule() {
-        return new JUnitRule(new ConsoleMockitoLogger());
+        return new JUnitRule(new ConsoleMockitoLogger(), false);
     }
 
     /**

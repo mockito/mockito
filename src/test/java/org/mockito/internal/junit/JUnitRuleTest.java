@@ -18,7 +18,7 @@ import static org.mockito.Mockito.mock;
 public class JUnitRuleTest extends TestBase {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    private JUnitRule jUnitRule = new JUnitRule(logger);
+    private JUnitRule jUnitRule = new JUnitRule(logger, false);
     private InjectTestCase injectTestCase = new InjectTestCase();
 
     @After public void after() {
