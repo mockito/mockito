@@ -122,7 +122,8 @@ task wrapper(type: Wrapper) {
 
 task ciBuild {
     //validate the state of the project
-    dependsOn build, publishToMavenLocal, tasks.idea, tasks.eclipse
+    dependsOn { allprojects*.build }
+    dependsOn publishToMavenLocal, tasks.idea, tasks.eclipse
 }
 
 //Making sure that release task is only invoked after the entire ciBuild validation
