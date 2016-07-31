@@ -6,6 +6,9 @@ import org.mockito.listeners.StubbingListener;
 
 import java.util.*;
 
+/**
+ * Stubbing listener that is used in JUnit rules and detects stubbing problems.
+ */
 class RuleStubbingsReporter implements StubbingListener {
 
     private final Set<Invocation> unstubbedInvocations = new LinkedHashSet<Invocation>();
@@ -48,9 +51,9 @@ class RuleStubbingsReporter implements StubbingListener {
             return;
         }
 
-        StringBuilder hint = new StringBuilder("[MockitoHint] See javadoc for MockitoHint class.");
+        StubbingHint hint = new StubbingHint();
         for (Invocation unused : stubbings) {
-            hint.append("\n[MockitoHint] unused ").append(unused.getLocation());
+            hint.appendLine("unused ", unused.getLocation());
         }
         logger.log(hint.toString());
     }
