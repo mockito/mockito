@@ -48,5 +48,11 @@ public interface MockingProgress {
 
     void setStubbingListener(StubbingListener stubbingListener);
 
+    /**
+     * TODO 384
+     * Stubbing listener is synchronized internally.
+     * This way, users don't have to worry about making the implementations of StubbingListener synchronized
+     * Be cautious how it is used and where to avoid performance impact.
+     */
     StubbingListener getStubbingListener();
 }
