@@ -16,6 +16,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -51,7 +52,7 @@ public class HamcrestMatchersTest extends TestBase {
             verify(mock).simpleMethod(argThat(new ContainsX()));
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertContains("contains 'X'", e.getMessage());
+            assertThat(e).hasMessageContaining("contains 'X'");
         }
     }
 

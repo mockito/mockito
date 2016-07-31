@@ -9,6 +9,7 @@ import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.internal.matchers.Any.ANY;
 
 import java.lang.reflect.Method;
@@ -67,8 +68,8 @@ public class InvocationMatcherTest extends TestBase {
         ArgumentMatcher mTwo = new Equals('x');
         InvocationMatcher equals = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(mTwo));
 
-        assertContains("simpleMethod(notNull())", notNull.toString());
-        assertContains("simpleMethod('x')", equals.toString());
+        assertThat(notNull.toString()).contains("simpleMethod(notNull())");
+        assertThat(equals.toString()).contains("simpleMethod('x')");
     }
 
     @Test

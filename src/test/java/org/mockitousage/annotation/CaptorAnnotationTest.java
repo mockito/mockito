@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import static junit.framework.TestCase.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CaptorAnnotationTest extends TestBase {
 
@@ -94,8 +95,9 @@ public class CaptorAnnotationTest extends TestBase {
             MockitoAnnotations.initMocks(new ToManyAnnotations());
             fail();
         } catch (MockitoException e) {
-            assertContains("missingGenericsField", e.getMessage());
-            assertContains("multiple Mockito annotations", e.getMessage());            
+            assertThat(e)
+                .hasMessageContaining("missingGenericsField")
+                .hasMessageContaining("multiple Mockito annotations");
         }
     }
 

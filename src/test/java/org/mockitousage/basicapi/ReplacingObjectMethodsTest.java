@@ -5,6 +5,8 @@
 
 package org.mockitousage.basicapi;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -30,11 +32,11 @@ public class ReplacingObjectMethodsTest extends TestBase {
         Object mock = Mockito.mock(ObjectMethodsOverridden.class);
         Object otherMock = Mockito.mock(ObjectMethodsOverridden.class);
 
-        Assertions.assertThat(mock).isEqualTo(mock);
-        Assertions.assertThat(mock).isNotEqualTo(otherMock);
-        Assertions.assertThat(mock.hashCode()).isNotEqualTo(otherMock.hashCode());
+        assertThat(mock).isEqualTo(mock);
+        assertThat(mock).isNotEqualTo(otherMock);
+        assertThat(mock.hashCode()).isNotEqualTo(otherMock.hashCode());
 
-        assertContains("Mock for ObjectMethodsOverridden", mock.toString());
+        assertThat(mock.toString()).contains("Mock for ObjectMethodsOverridden");
     }
     
     @Test 
@@ -42,11 +44,11 @@ public class ReplacingObjectMethodsTest extends TestBase {
         Object mock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
         Object otherMock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
 
-        Assertions.assertThat(mock).isEqualTo(mock);
-        Assertions.assertThat(mock).isNotEqualTo(otherMock);
-        Assertions.assertThat(mock.hashCode()).isNotEqualTo(otherMock.hashCode());
+        assertThat(mock).isEqualTo(mock);
+        assertThat(mock).isNotEqualTo(otherMock);
+        assertThat(mock.hashCode()).isNotEqualTo(otherMock.hashCode());
 
-        assertContains("Mock for ObjectMethodsOverriddenSubclass", mock.toString());
+        assertThat(mock.toString()).contains("Mock for ObjectMethodsOverriddenSubclass");
     }
     
     public static class ObjectMethodsOverridden {

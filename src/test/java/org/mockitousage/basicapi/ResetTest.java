@@ -13,6 +13,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class ResetTest extends TestBase {
@@ -66,7 +67,7 @@ public class ResetTest extends TestBase {
         IMethods mockTwo = mock(IMethods.class);
         when(mockTwo.toString()).thenReturn("test");
         reset(mockTwo);
-        assertContains("Mock for IMethods", mockTwo.toString());
+        assertThat(mockTwo.toString()).contains("Mock for IMethods");
     }
 
     @Test
@@ -82,7 +83,7 @@ public class ResetTest extends TestBase {
         IMethods mock = mock(IMethods.class, "mockie");
         IMethods mockTwo = mock(IMethods.class);
         reset(mock);
-        assertContains("Mock for IMethods", "" + mockTwo);
+        assertThat(mockTwo.toString()).contains("Mock for IMethods");
         assertEquals("mockie", "" + mock);
     }
 

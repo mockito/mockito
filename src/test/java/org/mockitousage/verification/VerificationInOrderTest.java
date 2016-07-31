@@ -14,6 +14,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class VerificationInOrderTest extends TestBase {
@@ -59,7 +60,7 @@ public class VerificationInOrderTest extends TestBase {
             inOrder.verify(mockOne, atLeastOnce()).differentMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-            assertContains("differentMethod()", e.getMessage());
+            assertThat(e).hasMessageContaining("differentMethod()");
         }
     }
     

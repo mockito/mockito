@@ -1,5 +1,7 @@
 package org.mockito.internal.creation.instance;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
@@ -43,8 +45,8 @@ public class ConstructorInstantiatorTest extends TestBase {
             new ConstructorInstantiator(null).newInstance(SomeClass2.class);
             fail();
         } catch (InstantiationException e) {
-            assertContains("Unable to create instance of 'SomeClass2'.\n" +
-                    "Please ensure it has 0-arg constructor which invokes cleanly.", e.getMessage());
+            assertThat(e).hasMessageContaining("Unable to create instance of 'SomeClass2'.\n" +
+                    "Please ensure it has 0-arg constructor which invokes cleanly.");
         }
     }
 }

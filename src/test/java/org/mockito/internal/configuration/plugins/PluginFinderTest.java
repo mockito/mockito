@@ -15,6 +15,7 @@ import java.util.Collections;
 
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -106,7 +107,7 @@ public class PluginFinderTest extends TestBase {
             //then
             fail();
         } catch(Exception e) {
-            assertContains("xxx", e.getMessage());
+            assertThat(e).hasMessageContaining("xxx");
             e.getCause().getMessage().equals("Boo!");
         }
     }

@@ -15,6 +15,7 @@ import org.mockitoutil.TestBase;
 import java.util.List;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CaptorAnnotationUnhappyPathTest extends TestBase {
     
@@ -34,8 +35,9 @@ public class CaptorAnnotationUnhappyPathTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             //then
-            assertContains("notACaptorField", e.getMessage());
-            assertContains("wrong type", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("notACaptorField")
+                .hasMessageContaining("wrong type");
         }
     }
 }

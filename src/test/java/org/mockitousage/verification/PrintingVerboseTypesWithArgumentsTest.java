@@ -12,6 +12,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -39,8 +40,9 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             //then
-            assertContains("withLong((Integer) 100);", e.getMessage());
-            assertContains("withLong((Long) 100);", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("withLong((Integer) 100);")
+                .hasMessageContaining("withLong((Long) 100);");
         }
     }
 
@@ -56,8 +58,9 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             //then
-            assertContains("withLongAndInt((Integer) 100, 200)", e.getMessage());
-            assertContains("withLongAndInt((Long) 100, 200)", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("withLongAndInt((Integer) 100, 200)")
+                .hasMessageContaining("withLongAndInt((Long) 100, 200)");
         }
     }
 
@@ -97,8 +100,9 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             //then
-            assertContains("withLongAndInt(100, 200)", e.getMessage());
-            assertContains("withLongAndInt(100, 230)", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("withLongAndInt(100, 200)")
+                .hasMessageContaining("withLongAndInt(100, 230)");
         }
     }
 
@@ -135,7 +139,7 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             //then
-            assertContains("simpleMethod(foo)", e.getMessage());
+            assertThat(e).hasMessageContaining("simpleMethod(foo)");
         }
     }
 }

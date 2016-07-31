@@ -15,6 +15,7 @@ import org.mockitoutil.TestBase;
 import java.util.Observer;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class DetectingMisusedMatchersTest extends TestBase {
@@ -51,7 +52,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
             mock(IMethods.class);
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertContains("Misplaced argument matcher", e.getMessage());
+            assertThat(e).hasMessageContaining("Misplaced argument matcher");
         }
     }
     
@@ -69,9 +70,10 @@ public class DetectingMisusedMatchersTest extends TestBase {
             validateMockitoUsage();
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertContains("DetectingMisusedMatchersTest.misplaced_anyInt_argument_matcher", e.getMessage());
-            assertContains("DetectingMisusedMatchersTest.misplaced_anyObject_argument_matcher", e.getMessage());
-            assertContains("DetectingMisusedMatchersTest.misplaced_anyBoolean_argument_matcher", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("DetectingMisusedMatchersTest.misplaced_anyInt_argument_matcher")
+                .hasMessageContaining("DetectingMisusedMatchersTest.misplaced_anyObject_argument_matcher")
+                .hasMessageContaining("DetectingMisusedMatchersTest.misplaced_anyBoolean_argument_matcher");
         }
     }
    

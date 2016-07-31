@@ -35,8 +35,8 @@ public class SmartPrinterTest extends TestBase {
         SmartPrinter printer = new SmartPrinter(multi, shortie.getInvocation());
         
         //then
-        assertContains("\n", printer.getWanted().toString());
-        assertContains("\n", printer.getActual().toString());
+        assertThat(printer.getWanted().toString()).contains("\n");
+        assertThat(printer.getActual().toString()).contains("\n");
     }
 
     @Test
@@ -45,8 +45,8 @@ public class SmartPrinterTest extends TestBase {
         SmartPrinter printer = new SmartPrinter(shortie, multi.getInvocation());
         
         //then
-        assertContains("\n", printer.getWanted().toString());
-        assertContains("\n", printer.getActual().toString());
+        assertThat(printer.getWanted().toString()).contains("\n");
+        assertThat(printer.getActual().toString()).contains("\n");
     }
 
     @Test
@@ -55,8 +55,8 @@ public class SmartPrinterTest extends TestBase {
         SmartPrinter printer = new SmartPrinter(multi, multi.getInvocation());
         
         //then
-        assertContains("\n", printer.getWanted().toString());
-        assertContains("\n", printer.getActual().toString());
+        assertThat(printer.getWanted().toString()).contains("\n");
+        assertThat(printer.getActual().toString()).contains("\n");
     }
 
     @Test

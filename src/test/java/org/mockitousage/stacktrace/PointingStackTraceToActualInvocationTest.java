@@ -53,7 +53,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
             verify(mock, times(0)).simpleMethod(1);
             fail();
         } catch (NeverWantedButInvoked e) {
-            assertContains("first(", e.getMessage());
+            assertThat(e).hasMessageContaining("first(");
         }
     }   
     

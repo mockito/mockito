@@ -17,6 +17,7 @@ import org.mockitoutil.TestBase;
 import java.util.*;
 
 import static junit.framework.TestCase.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"unchecked", "unused"})
@@ -168,7 +169,7 @@ public class SpyAnnotationTest extends TestBase {
             MockitoAnnotations.initMocks(new WithSpy());
             fail();
         } catch (MockitoException e) {
-            assertContains("@Spy annotation can only initialize inner classes", e.getMessage());
+            assertThat(e).hasMessageContaining("@Spy annotation can only initialize inner classes");
         }
     }
 

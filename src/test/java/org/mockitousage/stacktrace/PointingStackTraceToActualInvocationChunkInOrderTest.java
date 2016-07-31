@@ -16,6 +16,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -61,7 +62,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             inOrder.verify(mock).simpleMethod(999);
             fail();
         } catch (VerificationInOrderFailure e) {
-            assertContains("secondChunk(", e.getMessage());
+            assertThat(e).hasMessageContaining("secondChunk(");
         }
     }
     
@@ -73,7 +74,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             inOrder.verify(mockTwo).simpleMethod(999);
             fail();
         } catch (VerificationInOrderFailure e) {
-            assertContains("thirdChunk(", e.getMessage());
+            assertThat(e).hasMessageContaining("thirdChunk(");
         }
     }
     
@@ -87,7 +88,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             inOrder.verify(mockTwo, times(3)).simpleMethod(999);
             fail();
         } catch (VerificationInOrderFailure e) {
-            assertContains("thirdChunk(", e.getMessage());
+            assertThat(e).hasMessageContaining("thirdChunk(");
         }
     }
     
@@ -99,7 +100,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             inOrder.verify(mockTwo, times(0)).simpleMethod(anyInt());
             fail();
         } catch (VerificationInOrderFailure e) {
-            assertContains("fourthChunk(", e.getMessage());
+            assertThat(e).hasMessageContaining("fourthChunk(");
         }
     }
 }

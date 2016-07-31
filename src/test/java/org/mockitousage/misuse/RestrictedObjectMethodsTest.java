@@ -15,6 +15,7 @@ import org.mockitoutil.TestBase;
 import java.util.List;
 
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 
@@ -33,7 +34,7 @@ public class RestrictedObjectMethodsTest extends TestBase {
             verify(mock).toString();
             fail();
         } catch (MockitoException e) {
-            assertContains("cannot verify", e.getMessage());
+            assertThat(e).hasMessageContaining("cannot verify");
         }
     }
 

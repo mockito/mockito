@@ -91,7 +91,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
             verifyNoMoreInteractions(mock);
             fail();
         } catch (NoInteractionsWanted e) {
-            assertContains("list of all invocations", e.getMessage());
+            assertThat(e).hasMessageContaining("list of all invocations");
         }
     }
     

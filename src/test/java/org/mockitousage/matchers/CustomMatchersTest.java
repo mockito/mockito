@@ -14,6 +14,7 @@ import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -126,7 +127,7 @@ public class CustomMatchersTest extends TestBase {
             verify(mock).simpleMethod(containsTest());
             fail();
         } catch (AssertionError e) {
-            assertContains("<String that contains xxx>", e.getMessage());
+            assertThat(e).hasMessageContaining("<String that contains xxx>");
         }
     }
 
@@ -151,8 +152,9 @@ public class CustomMatchersTest extends TestBase {
                 }}));
             fail();
         } catch (AssertionError e) {
-            assertContains("<custom argument matcher>", e.getMessage());
-            assertContains("foo", e.getMessage());
+            assertThat(e)
+                .hasMessageContaining("<custom argument matcher>")
+                .hasMessageContaining("foo");
         }
     }
 }
