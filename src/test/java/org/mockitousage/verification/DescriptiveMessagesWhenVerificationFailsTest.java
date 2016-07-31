@@ -138,7 +138,9 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).simpleMethod(10);
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e).hasMessageContaining("simpleMethod(10)").hasMessageContaining("simpleMethod()");
+            assertThat(e)
+                .hasMessageContaining("simpleMethod(10)")
+                .hasMessageContaining("simpleMethod()");
         }
     }
 
