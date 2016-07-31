@@ -30,6 +30,13 @@ public interface StubbingListener {
     /**
      * Method is called on a mock, but there is no stubbed behavior registered for this invocation.
      * Mockito will return default answer for given invocation, typically it means a default return value.
+     * <p>
+     * <strong>Warning:</strong> due to the nature of when() style of stubbing,
+     * 'stubbingNotFound' is also triggered during standard stubbing with when().
+     * Example:
+     * <pre>
+     *   when(mock.foo()).thenReturn(1); // <-- 'stubbingNotFound' is triggered for 'mock.foo()'
+     * </pre>
      */
     void stubbingNotFound(Invocation actual);
 }
