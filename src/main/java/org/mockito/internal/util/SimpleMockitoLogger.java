@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.util;
 
+//TODO 384 move to test package
 public class SimpleMockitoLogger implements MockitoLogger {
 
     private final StringBuilder loggedInfo = new StringBuilder();
@@ -14,5 +15,9 @@ public class SimpleMockitoLogger implements MockitoLogger {
 
     public String getLoggedInfo() {
         return loggedInfo.toString();
+    }
+
+    public boolean isEmpty() {
+        return loggedInfo.length() == 0;
     }
 }
