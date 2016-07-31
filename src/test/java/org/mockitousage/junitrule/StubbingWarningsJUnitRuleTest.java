@@ -88,6 +88,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
     // arg_mismatches_reports_unused_stubbings_only_when_multiple_similar_stubbings?
     // arg_mismatches_reports_unused_stubbings_first_when_multiple_similar_stubbings?
     // arg_mismatches_reports_stubbings_orderly_when_multiple_similar_stubbings
+    // arg_mismatch_with_multiple_stubbings_and_multiple_invocations
     // arg_mismatches_when_similar_stubbings_declared_in_same_line
     // arg_mismatches_when_invocations_triggered_in_same_line
     // arg_mismatches_when_similar_stubbings_was_used_before
