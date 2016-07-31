@@ -4,7 +4,7 @@
  */
 package org.mockito;
 
-import org.mockito.internal.DefaultMockitoFramework;
+import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;

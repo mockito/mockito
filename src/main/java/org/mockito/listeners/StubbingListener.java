@@ -7,6 +7,10 @@ import org.mockito.invocation.Invocation;
  * Listener that allows to listen on events related to stubbing.
  * Useful for advanced users, framework integrators.
  * We use it internally to detect unused stubbings with JUnit runners / rules.
+ * For reference, see Mockito source code on how we use this listener.
+ * <p>
+ * Implementations are not required to be thread safe.
+ * Your implementation will be wrapped with a thread safe delegator when you register this listener.
  *
  * @since 2.*
  */
