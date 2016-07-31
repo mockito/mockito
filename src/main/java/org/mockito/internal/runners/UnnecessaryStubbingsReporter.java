@@ -61,29 +61,17 @@ public class UnnecessaryStubbingsReporter implements StubbingListener {
     //TODO 384 I'm not completely happy with putting this functionality in this listener.
     //TODO 384  Perhaps add an interfaces for the clients
     public void printStubbingMismatches(MockitoLogger logger) {
-        Map<Invocation, Invocation> argMismatches = new LinkedHashMap<Invocation, Invocation>();
+        StubbingArgMismatches mismatches = new StubbingArgMismatches();
         for (Invocation i : unstubbedInvocations) {
             for (Invocation stubbing : stubbings.values()) {
                 //method name & mock matches
                 if (stubbing.getMock() == i.getMock()
                         && stubbing.getMethod().getName().equals(i.getMethod().getName())) {
-                    argMismatches.put(i, stubbing);
+                    mismatches.add(i, stubbing);
                 }
             }
         }
-        if (argMismatches.isEmpty()) {
-            return;
-        }
-
-        StringBuilder out = new StringBuilder("[MockitoHint] See javadoc for MockitoHint class.\n");
-        int x = 1;
-        for (Invocation i : argMismatches.keySet()) {
-            out.append("[MockitoHint] ").append(x++).append(". unused stub  ")
-                    .append(argMismatches.get(i).getLocation()).append("\n");
-            out.append("[MockitoHint]    similar call ").append(i.getLocation());
-        }
-
-        logger.log(out.toString());
+        mismatches.log(logger);
     }
 
     public String printUnusedStubbings(MockitoLogger logger) {
