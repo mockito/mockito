@@ -7,21 +7,18 @@ import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.StubbingListener;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by sfaber on 5/6/16.
  */
-//TODO 384 package rework, merge internal.junit with internal.runners. Rename this class (it's doing more than reporting unnecessary stubs)
+//TODO 384 package rework, merge internal.junit with internal.runners.
 //TODO 384 make it thread safe so that users don't have to worry
 //TODO 384 create MockitoHint class
 class UnnecessaryStubbingsReporter implements StubbingListener {
 
-    private final Map<String, Invocation> stubbings = new HashMap<String, Invocation>();
-    private final Set<String> used = new HashSet<String>();
+    private final Map<String, Invocation> stubbings = new LinkedHashMap<String, Invocation>();
+    private final Set<String> used = new LinkedHashSet<String>();
 
     public void newStubbing(Invocation stubbing) {
         //We compare stubbings by the location of stubbing
