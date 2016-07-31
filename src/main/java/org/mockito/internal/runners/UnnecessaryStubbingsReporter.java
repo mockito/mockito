@@ -4,6 +4,7 @@ import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.internal.exceptions.Reporter;
+import org.mockito.internal.util.MockitoLogger;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.StubbingListener;
 
@@ -59,17 +60,7 @@ public class UnnecessaryStubbingsReporter implements StubbingListener {
 
     //TODO 384 I'm not completely happy with putting this functionality in this listener.
     //TODO 384  Perhaps add an interfaces for the clients
-    public String printStubbingMismatches() {
-        // used - invocations that used the stubs
-        // stubbings - all stubbings, INCLUDING used ones
-        // unstubbedInvocations - invocations that did not yield a stubbing
-
-        // iterate unstubbedInvocations: i
-        //   iterate stubbings: s
-        //     if i.isSimilarTo(s) //find 'similar' stubbing
-        //       mismatches.append(i, s) - possible multiple similars
-        // iterate mismatches & print
-
+    public void printStubbingMismatches(MockitoLogger logger) {
         Map<Invocation, Invocation> argMismatches = new LinkedHashMap<Invocation, Invocation>();
         for (Invocation i : unstubbedInvocations) {
             for (Invocation stubbing : stubbings.values()) {
@@ -81,7 +72,7 @@ public class UnnecessaryStubbingsReporter implements StubbingListener {
             }
         }
         if (argMismatches.isEmpty()) {
-            return null;
+            return;
         }
 
         StringBuilder out = new StringBuilder("[MockitoHint] See javadoc for MockitoHint class.\n");
@@ -92,10 +83,10 @@ public class UnnecessaryStubbingsReporter implements StubbingListener {
             out.append("[MockitoHint]    similar call ").append(i.getLocation());
         }
 
-        return out.toString();
+        logger.log(out.toString());
     }
 
-    public String printUnusedStubbings() {
+    public String printUnusedStubbings(MockitoLogger logger) {
         return "";
     }
 }
