@@ -58,6 +58,7 @@ public class RuleStubbingHintsReporterTest extends TestBase {
     public void unused_stubbings() throws Exception {
         //given
         reporter.newStubbing(new InvocationBuilder().toInvocation());
+        reporter.newStubbing(new InvocationBuilder().toInvocation());
 
         //when
         reporter.printUnusedStubbings(logger);
@@ -65,7 +66,8 @@ public class RuleStubbingHintsReporterTest extends TestBase {
         //then
         assertEquals(
             "[MockitoHint] See javadoc for MockitoHint class.\n" +
-            "[MockitoHint] unused -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)",
+            "[MockitoHint] 1. unused -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n" +
+            "[MockitoHint] 2. unused -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)",
                 filterLineNo(logger.getLoggedInfo()));
     }
 
