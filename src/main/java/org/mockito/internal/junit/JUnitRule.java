@@ -25,7 +25,8 @@ public class JUnitRule implements MockitoRule {
         if (silent) {
             return new SilentStatement(target, base);
         } else {
-            return new DefaultStatement(target, base);
+            String testName = target.getClass().getSimpleName() + "." + method.getName();
+            return new DefaultStatement(target, testName, base);
         }
     }
 
@@ -51,15 +52,17 @@ public class JUnitRule implements MockitoRule {
 
     private class DefaultStatement extends Statement {
         private final Object target;
+        private final String testName;
         private final Statement base;
 
-        DefaultStatement(Object target, Statement base) {
+        DefaultStatement(Object target, String testName, Statement base) {
             this.target = target;
+            this.testName = testName;
             this.base = base;
         }
 
         public void evaluate() throws Throwable {
-            RuleStubbingHintsReporter reporter = new RuleStubbingHintsReporter();
+            RuleStubbingHintsReporter reporter = new RuleStubbingHintsReporter(testName);
             Mockito.framework().setStubbingListener(reporter);
             try {
                 performEvaluation(reporter);

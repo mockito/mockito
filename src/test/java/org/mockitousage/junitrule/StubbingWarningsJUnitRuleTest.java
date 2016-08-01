@@ -2,6 +2,7 @@ package org.mockitousage.junitrule;
 
 import org.junit.After;
 import org.junit.Test;
+import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mock;
 import org.mockito.internal.junit.JUnitRule;
@@ -17,6 +18,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
     private JUnitRule jUnitRule = new JUnitRule(logger, false);
+    private FrameworkMethod dummy = mock(FrameworkMethod.class);
 
     @After public void after() {
         //so that the validate framework usage exceptions do not collide with the tests here
@@ -33,7 +35,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
                     declareStubbing(mock);
                     throw new AssertionError("x");
                 }
-            },null, new DummyTestCase()).evaluate();
+            }, dummy, new DummyTestCase()).evaluate();
 
             //then
             fail();
@@ -54,17 +56,17 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
                     useStubbingWithArg(mock, "b");
                     throw new AssertionError("x");
                 }
-            },null, new DummyTestCase()).evaluate();
+            }, dummy, new DummyTestCase()).evaluate();
 
             //then
             fail();
         } catch (AssertionError e) {
             assertEquals("x", e.getMessage());
             assertEquals(
-                "[MockitoHint] See javadoc for MockitoHint class.\n" +
-                "[MockitoHint] 1. unused stub  -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)"
-                , filterLineNo(logger.getLoggedInfo()));
+                "[MockitoHint] DummyTestCase.null (see javadoc for MockitoHint):\n" +
+                "[MockitoHint] 1. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
+                    filterLineNo(logger.getLoggedInfo()));
         }
     }
 
@@ -79,7 +81,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
                     useStubbingWithArg(mock, "a");
                     throw new AssertionError("x");
                 }
-            },null, new DummyTestCase()).evaluate();
+            }, dummy, new DummyTestCase()).evaluate();
 
             //then
             fail();
@@ -97,7 +99,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
                 declareStubbingWithArg(mock, "a");
                 useStubbingWithArg(mock, "a");
             }
-        },null, new DummyTestCase()).evaluate();
+        }, dummy, new DummyTestCase()).evaluate();
 
         assertTrue(logger.isEmpty());
     }
@@ -118,20 +120,21 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
 
                     throw new AssertionError("x");
                 }
-            },null, new DummyTestCase()).evaluate();
+            }, dummy, new DummyTestCase()).evaluate();
 
             //then
             fail();
         } catch (AssertionError e) {
             assertEquals("x", e.getMessage());
-            assertEquals(filterLineNo(logger.getLoggedInfo()),
-                "[MockitoHint] See javadoc for MockitoHint class.\n" +
-                "[MockitoHint] 1. unused stub  -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                "[MockitoHint] 2. unused stub  -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)"            );
+            assertEquals(
+                "[MockitoHint] DummyTestCase.null (see javadoc for MockitoHint):\n" +
+                "[MockitoHint] 1. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint] 2. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
+                    filterLineNo(logger.getLoggedInfo()));
         }
     }
 
@@ -151,17 +154,17 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
 
                     throw new AssertionError("x");
                 }
-            },null, new DummyTestCase()).evaluate();
+            }, dummy, new DummyTestCase()).evaluate();
 
             //then
             fail();
         } catch (AssertionError e) {
             assertEquals("x", e.getMessage());
             assertEquals(
-                "[MockitoHint] See javadoc for MockitoHint class.\n" +
-                "[MockitoHint] 1. unused stub  -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                "[MockitoHint]  - arg mismatch -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)",
-                filterLineNo(logger.getLoggedInfo()));
+                "[MockitoHint] DummyTestCase.null (see javadoc for MockitoHint):\n" +
+                "[MockitoHint] 1. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
+                "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
+                    filterLineNo(logger.getLoggedInfo()));
         }
     }
 
@@ -180,7 +183,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
 
                     throw new AssertionError("x");
                 }
-            },null, new DummyTestCase()).evaluate();
+            }, dummy, new DummyTestCase()).evaluate();
 
             //then
             fail();
@@ -199,13 +202,13 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
                 declareStubbingWithArg(mock, "a");
                 useStubbingWithArg(mock, "b");
             }
-        },null, new DummyTestCase()).evaluate();
+        }, dummy, new DummyTestCase()).evaluate();
 
         //expect
         assertEquals(
-            "[MockitoHint] See javadoc for MockitoHint class.\n" +
-            "[MockitoHint] 1. unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)",
-            filterLineNo(logger.getLoggedInfo()));
+            "[MockitoHint] DummyTestCase.null (see javadoc for MockitoHint):\n" +
+            "[MockitoHint] 1. Unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
+                filterLineNo(logger.getLoggedInfo()));
     }
 
     @Test
@@ -215,11 +218,11 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
                 IMethods mock = mock(IMethods.class);
                 declareStubbing(mock);
             }
-        },null, new DummyTestCase()).evaluate();
+        }, dummy, new DummyTestCase()).evaluate();
 
         assertEquals(
-                "[MockitoHint] See javadoc for MockitoHint class.\n" +
-                "[MockitoHint] 1. unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbing(StubbingWarningsJUnitRuleTest.java:0)",
+            "[MockitoHint] DummyTestCase.null (see javadoc for MockitoHint):\n" +
+            "[MockitoHint] 1. Unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbing(StubbingWarningsJUnitRuleTest.java:0)\n",
                 filterLineNo(logger.getLoggedInfo()));
     }
 
@@ -231,7 +234,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
                 IMethods mock = mock(IMethods.class);
                 declareStubbing(mock);
             }
-        },null, new DummyTestCase()).evaluate();
+        }, dummy, new DummyTestCase()).evaluate();
 
         assertTrue(logger.isEmpty());
     }

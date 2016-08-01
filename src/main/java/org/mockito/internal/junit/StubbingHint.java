@@ -7,8 +7,9 @@ class StubbingHint {
 
     private final StringBuilder hint;
 
-    StubbingHint() {
-        hint = new StringBuilder("[MockitoHint] See javadoc for MockitoHint class.");
+    StubbingHint(String testName) {
+        hint = new StringBuilder("[MockitoHint] ")
+            .append(testName).append(" (see javadoc for MockitoHint):");
     }
 
     void appendLine(Object ... elements) {
@@ -19,6 +20,6 @@ class StubbingHint {
     }
 
     public String toString() {
-        return hint.toString();
+        return hint.toString() + "\n";
     }
 }

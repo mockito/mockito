@@ -13,7 +13,7 @@ import static org.mockito.Mockito.mock;
 
 public class RuleStubbingHintsReporterTest extends TestBase {
 
-    RuleStubbingHintsReporter reporter = new RuleStubbingHintsReporter();
+    RuleStubbingHintsReporter reporter = new RuleStubbingHintsReporter("MyTest.myTestMethod");
     SimpleMockitoLogger logger = new SimpleMockitoLogger();
 
     @Test
@@ -65,9 +65,9 @@ public class RuleStubbingHintsReporterTest extends TestBase {
 
         //then
         assertEquals(
-            "[MockitoHint] See javadoc for MockitoHint class.\n" +
-            "[MockitoHint] 1. unused -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n" +
-            "[MockitoHint] 2. unused -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)",
+            "[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):\n" +
+            "[MockitoHint] 1. Unused -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n" +
+            "[MockitoHint] 2. Unused -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n",
                 filterLineNo(logger.getLoggedInfo()));
     }
 
@@ -110,8 +110,9 @@ public class RuleStubbingHintsReporterTest extends TestBase {
 
         //then
         assertEquals(
-            "[MockitoHint] See javadoc for MockitoHint class.\n" +
-            "[MockitoHint] 1. unused stub  -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n" +
-            "[MockitoHint]  - arg mismatch -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)", logger.getLoggedInfo());
+            "[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):\n" +
+            "[MockitoHint] 1. Unused... -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n" +
+            "[MockitoHint]  ...args ok? -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n",
+                logger.getLoggedInfo());
     }
 }

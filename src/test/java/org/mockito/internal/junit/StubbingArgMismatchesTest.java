@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 public class StubbingArgMismatchesTest extends TestBase {
 
     SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    StubbingArgMismatches mismatches = new StubbingArgMismatches();
+    StubbingArgMismatches mismatches = new StubbingArgMismatches("MyTest.myTestMethod");
 
     @Test
     public void no_op_when_no_mismatches() throws Exception {
@@ -35,50 +35,9 @@ public class StubbingArgMismatchesTest extends TestBase {
 
         //then
         assertEquals(
-                "[MockitoHint] See javadoc for MockitoHint class.\n" +
-                "[MockitoHint] 1. unused stub  -> at B.java\n" +
-                "[MockitoHint]  - arg mismatch -> at A.java", logger.getLoggedInfo());
-    }
-
-    @Test
-    public void logs_multiple_mismatches() throws Exception {
-        //given
-        mismatches.add(
-                new InvocationBuilder().args("a").location("-> at A.java").toInvocation(),
-                new InvocationBuilder().args("b").location("-> at B.java").toInvocation());
-
-        mismatches.add(
-                new InvocationBuilder().method("differentMethod").args("x").location("-> at X.java").toInvocation(),
-                new InvocationBuilder().method("differentMethod").args("y").location("-> at Y.java").toInvocation());
-
-        //when
-        mismatches.log(logger);
-
-        //then
-        assertEquals(
-        "[MockitoHint] See javadoc for MockitoHint class.\n" +
-        "[MockitoHint] 1. unused stub  -> at B.java\n" +
-        "[MockitoHint]  - arg mismatch -> at A.java\n" +
-        "[MockitoHint] 2. unused stub  -> at Y.java\n" +
-        "[MockitoHint]  - arg mismatch -> at X.java", logger.getLoggedInfo());
-    }
-
-    @Test
-    public void multiple_matching_invocations_per_unused_stub() throws Exception {
-        //given
-        Invocation stubbing = new InvocationBuilder().args("a").location("-> at A.java").toInvocation();
-        mismatches.add(new InvocationBuilder().args("x").location("-> at X.java").toInvocation(), stubbing);
-        mismatches.add(new InvocationBuilder().args("y").location("-> at Y.java").toInvocation(), stubbing);
-
-        //when
-        mismatches.log(logger);
-
-        //then
-        assertEquals(
-        "[MockitoHint] See javadoc for MockitoHint class.\n" +
-        "[MockitoHint] 1. unused stub  -> at A.java\n" +
-        "[MockitoHint]  - arg mismatch -> at X.java\n" +
-        "[MockitoHint]  - arg mismatch -> at Y.java", logger.getLoggedInfo());
+            "[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):\n" +
+            "[MockitoHint] 1. Unused... -> at B.java\n" +
+            "[MockitoHint]  ...args ok? -> at A.java\n", logger.getLoggedInfo());
     }
 
     @Test
@@ -97,11 +56,11 @@ public class StubbingArgMismatchesTest extends TestBase {
 
         //then
         assertEquals(
-        "[MockitoHint] See javadoc for MockitoHint class.\n" +
-        "[MockitoHint] 1. unused stub  -> at A.java\n" +
-        "[MockitoHint]  - arg mismatch -> at X.java\n" +
-        "[MockitoHint]  - arg mismatch -> at Y.java\n" +
-        "[MockitoHint] 2. unused stub  -> at M.java\n" +
-        "[MockitoHint]  - arg mismatch -> at N.java", logger.getLoggedInfo());
+            "[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):\n" +
+            "[MockitoHint] 1. Unused... -> at A.java\n" +
+            "[MockitoHint]  ...args ok? -> at X.java\n" +
+            "[MockitoHint]  ...args ok? -> at Y.java\n" +
+            "[MockitoHint] 2. Unused... -> at M.java\n" +
+            "[MockitoHint]  ...args ok? -> at N.java\n", logger.getLoggedInfo());
     }
 }

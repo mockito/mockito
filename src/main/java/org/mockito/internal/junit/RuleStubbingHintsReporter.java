@@ -13,6 +13,11 @@ class RuleStubbingHintsReporter implements StubbingListener {
 
     private final Set<Invocation> unstubbedInvocations = new LinkedHashSet<Invocation>();
     private final Set<Invocation> stubbings = new LinkedHashSet<Invocation>();
+    private final String testName;
+
+    public RuleStubbingHintsReporter(String testName) {
+        this.testName = testName;
+    }
 
     public void newStubbing(Invocation stubbing) {
         stubbings.add(stubbing);
@@ -32,7 +37,7 @@ class RuleStubbingHintsReporter implements StubbingListener {
     }
 
     void printStubbingMismatches(MockitoLogger logger) {
-        StubbingArgMismatches mismatches = new StubbingArgMismatches();
+        StubbingArgMismatches mismatches = new StubbingArgMismatches(testName);
         for (Invocation i : unstubbedInvocations) {
             for (Invocation stubbing : stubbings) {
                 //method name & mock matches
@@ -50,10 +55,10 @@ class RuleStubbingHintsReporter implements StubbingListener {
             return;
         }
 
-        StubbingHint hint = new StubbingHint();
+        StubbingHint hint = new StubbingHint(testName);
         int x = 1;
         for (Invocation unused : stubbings) {
-            hint.appendLine(x++, ". unused ", unused.getLocation());
+            hint.appendLine(x++, ". Unused ", unused.getLocation());
         }
         logger.log(hint.toString());
     }
