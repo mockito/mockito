@@ -1,3 +1,13 @@
+### 2.0.95-beta (2016-08-01 13:48 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Rafael Winterhalter
+  * 1: Hans Joachim Desserud
+* Improvements: 2
+  * Add regression test for #508 [(#525)](https://github.com/mockito/mockito/pull/525)
+  * Mockito.when() fails when method could originate from superclass or interface  [(#508)](https://github.com/mockito/mockito/issues/508)
+
 ### 2.0.94-beta (2016-07-31 09:17 UTC)
 
 * Authors: 3
