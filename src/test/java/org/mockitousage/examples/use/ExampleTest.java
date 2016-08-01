@@ -5,30 +5,26 @@
 
 package org.mockitousage.examples.use;
 
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.mockitoutil.TestBase;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ExampleTest extends TestBase {
-    
+public class ExampleTest {
+
+    @Rule public MockitoRule rule = MockitoJUnit.rule();
+
     @Mock private ArticleCalculator mockCalculator;
     @Mock private ArticleDatabase mockDatabase;
     
-    private ArticleManager articleManager;
-    
-    @Before
-    public void setup() {
-        articleManager = new ArticleManager(mockCalculator, mockDatabase);
-    }
+    @InjectMocks private ArticleManager articleManager;
 
     @Test
     public void managerCountsArticlesAndSavesThemInTheDatabase() {
