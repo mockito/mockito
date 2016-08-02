@@ -1,3 +1,13 @@
+### 2.0.96-beta (2016-08-02 13:27 UTC)
+
+* Authors: 1
+* Commits: 3
+  * 3: Brice Dutheil
+* Improvements: 3
+  * Missing generics info on collection matchers [(#528)](https://github.com/mockito/mockito/pull/528)
+  * Fixes #194 tweaks any matchers [(#510)](https://github.com/mockito/mockito/pull/510)
+  * Tweaks Matchers.any family matchers behavior [(#194)](https://github.com/mockito/mockito/issues/194)
+
 ### 2.0.95-beta (2016-08-01 13:48 UTC)
 
 * Authors: 2
