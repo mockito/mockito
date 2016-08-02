@@ -7,6 +7,7 @@ package org.mockito.internal.handler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
@@ -27,7 +28,6 @@ import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -126,7 +126,7 @@ public class InvocationNotifierHandlerTest {
 
         verify(mockHandler).getInvocationContainer();
         verify(mockHandler).getMockSettings();
-        verify(mockHandler).setAnswersForStubbing(anyList());
+        verify(mockHandler).setAnswersForStubbing(ArgumentMatchers.<Answer<?>>anyList());
     }
 
     private static class CustomListener implements InvocationListener {

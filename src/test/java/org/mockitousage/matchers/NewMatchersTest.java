@@ -29,51 +29,51 @@ public class NewMatchersTest extends TestBase {
 
     @Test
     public void shouldAllowAnyList() {
-        when(mock.forList(anyList())).thenReturn("matched");
+        when(mock.forList(anyListOf(String.class))).thenReturn("matched");
         
         assertEquals("matched", mock.forList(Arrays.asList("x", "y")));
         assertEquals(null, mock.forList(null));
 
-        verify(mock, times(1)).forList(anyList());
+        verify(mock, times(1)).forList(anyListOf(String.class));
     }
     
     @Test
     public void shouldAllowAnyCollection() {
-        when(mock.forCollection(anyCollection())).thenReturn("matched");
+        when(mock.forCollection(anyCollectionOf(String.class))).thenReturn("matched");
         
         assertEquals("matched", mock.forCollection(Arrays.asList("x", "y")));
         assertEquals(null, mock.forCollection(null));
 
-        verify(mock, times(1)).forCollection(anyCollection());
+        verify(mock, times(1)).forCollection(anyCollectionOf(String.class));
     }
     
     @Test
     public void shouldAllowAnyMap() {
-        when(mock.forMap(anyMap())).thenReturn("matched");
+        when(mock.forMap(anyMapOf(String.class, String.class))).thenReturn("matched");
         
         assertEquals("matched", mock.forMap(new HashMap<String, String>()));
         assertEquals(null, mock.forMap(null));
 
-        verify(mock, times(1)).forMap(anyMap());
+        verify(mock, times(1)).forMap(anyMapOf(String.class, String.class));
     }
     
     @Test
     public void shouldAllowAnySet() {
-        when(mock.forSet(anySet())).thenReturn("matched");
+        when(mock.forSet(anySetOf(String.class))).thenReturn("matched");
         
         assertEquals("matched", mock.forSet(new HashSet<String>()));
         assertEquals(null, mock.forSet(null));
 
-        verify(mock, times(1)).forSet(anySet());
+        verify(mock, times(1)).forSet(anySetOf(String.class));
     }
 
     @Test
     public void shouldAllowAnyIterable() {
-        when(mock.forIterable(anyIterable())).thenReturn("matched");
+        when(mock.forIterable(anyIterableOf(String.class))).thenReturn("matched");
 
         assertEquals("matched", mock.forIterable(new HashSet<String>()));
         assertEquals(null, mock.forIterable(null));
 
-        verify(mock, times(1)).forIterable(anyIterable());
+        verify(mock, times(1)).forIterable(anyIterableOf(String.class));
     }
 }
