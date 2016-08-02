@@ -474,9 +474,9 @@ public class ArgumentMatchers {
      * @see #isNull()
      * @see #isNull(Class)
      */
-    public static List anyList() {
+    public static <T> List<T> anyList() {
         reportMatcher(new InstanceOf(List.class, "<any List>"));
-        return new ArrayList(0);
+        return new ArrayList<T>(0);
     }
 
     /**
@@ -532,9 +532,9 @@ public class ArgumentMatchers {
      * @see #isNull()
      * @see #isNull(Class)
      */
-    public static Set anySet() {
+    public static <T> Set<T> anySet() {
         reportMatcher(new InstanceOf(Set.class, "<any set>"));
-        return new HashSet(0);
+        return new HashSet<T>(0);
     }
 
     /**
@@ -592,9 +592,9 @@ public class ArgumentMatchers {
      * @see #isNull()
      * @see #isNull(Class)
      */
-    public static Map anyMap() {
+    public static <K, V> Map<K, V> anyMap() {
         reportMatcher(new InstanceOf(Map.class, "<any map>"));
-        return new HashMap(0);
+        return new HashMap<K, V>(0);
     }
 
     /**
@@ -653,9 +653,9 @@ public class ArgumentMatchers {
      * @see #isNull()
      * @see #isNull(Class)
      */
-    public static Collection anyCollection() {
+    public static <T> Collection<T> anyCollection() {
         reportMatcher(new InstanceOf(Collection.class, "<any collection>"));
-        return new ArrayList(0);
+        return new ArrayList<T>(0);
     }
 
     /**
@@ -714,9 +714,9 @@ public class ArgumentMatchers {
      * @see #isNull(Class)
      * @since 2.0.0
      */
-    public static Collection anyIterable() {
+    public static <T> Iterable<T> anyIterable() {
         reportMatcher(new InstanceOf(Iterable.class, "<any iterable>"));
-        return new ArrayList(0);
+        return new ArrayList<T>(0);
     }
 
     /**
