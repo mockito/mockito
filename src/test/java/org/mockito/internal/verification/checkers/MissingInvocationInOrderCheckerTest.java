@@ -26,10 +26,10 @@ import org.mockitousage.IMethods;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static org.mockito.internal.verification.checkers.MissingInvocationChecker.checkMissingInvocation;
 
 public class MissingInvocationInOrderCheckerTest  {
 
-	private MissingInvocationInOrderChecker checker;
 	private InvocationMatcher wanted;
 	private List<Invocation> invocations;
 
@@ -46,7 +46,6 @@ public class MissingInvocationInOrderCheckerTest  {
     
     @Before
     public void setup() {
-        checker = new MissingInvocationInOrderChecker();
     }                                                                    
 
     @Test
@@ -55,7 +54,7 @@ public class MissingInvocationInOrderCheckerTest  {
     	invocations = asList(buildSimpleMethod().toInvocation());
         wanted = buildSimpleMethod().toInvocationMatcher();
     	
-        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
+        checkMissingInvocation(invocations, wanted, context);
     }
     
     @Test
@@ -67,7 +66,7 @@ public class MissingInvocationInOrderCheckerTest  {
 		exception.expectMessage("Wanted but not invoked:");
 		exception.expectMessage("mock.simpleMethod()");
 
-        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
+        checkMissingInvocation(invocations, wanted, context);
     }
 
     @Test
@@ -82,7 +81,7 @@ public class MissingInvocationInOrderCheckerTest  {
 		exception.expectMessage("Actual invocation has different arguments:");
 		exception.expectMessage("mock.intArgumentMethod(1111);");
     	
-    	checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
+    	checkMissingInvocation(invocations, wanted, context);
         
      }
     
@@ -104,7 +103,7 @@ public class MissingInvocationInOrderCheckerTest  {
 		exception.expectMessage("Wanted anywhere AFTER following interaction:");
 		exception.expectMessage("mock.intArgumentMethod(2222);");
 		
-        checker.check(invocations, wanted, new VerificationModeBuilder().inOrder(), context);
+        checkMissingInvocation(invocations, wanted, context);
     }
     
     private InvocationBuilder buildIntArgMethod() {
