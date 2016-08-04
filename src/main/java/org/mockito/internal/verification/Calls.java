@@ -15,6 +15,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
 import static org.mockito.internal.verification.checkers.NonGreedyNumberOfInvocationsInOrderChecker.check;
+import static org.mockito.internal.verification.checkers.MissingInvocationChecker.checkMissingInvocation;
 
 import java.util.List;
 
@@ -36,9 +37,8 @@ public class Calls implements VerificationMode, VerificationInOrderMode {
     public void verifyInOrder(VerificationDataInOrder data) {
         List<Invocation> allInvocations = data.getAllInvocations();
         InvocationMatcher wanted = data.getWanted();
-        
-        MissingInvocationInOrderChecker missingInvocation = new MissingInvocationInOrderChecker();
-        missingInvocation.check( allInvocations, wanted, this, data.getOrderingContext());
+
+        checkMissingInvocation(allInvocations, wanted,  data.getOrderingContext());
         check( allInvocations, wanted, wantedCount, data.getOrderingContext());
     }    
     
