@@ -1,3 +1,11 @@
+### 2.0.97-beta (2016-08-04 10:21 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Rafael Winterhalter
+  * 1: Christian Schwarz
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.0.96-beta (2016-08-02 13:27 UTC)
 
 * Authors: 1
