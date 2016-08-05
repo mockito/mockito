@@ -1,3 +1,11 @@
+### 2.0.98-beta (2016-08-05 19:25 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: David Xia
+* Improvements: 1
+  * Fix typo in Javadocs [(#532)](https://github.com/mockito/mockito/pull/532)
+
 ### 2.0.97-beta (2016-08-04 10:21 UTC)
 
 * Authors: 2
