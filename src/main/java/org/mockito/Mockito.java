@@ -2201,8 +2201,8 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * Also, you can create InOrder object passing only mocks that are relevant for in-order verification.
      * <p>
-     * <code>InOrder</code> verification is 'greedy'. You will hardly every notice it but
-     * if you want to find out more search for 'greedy' on the Mockito
+     * <code>InOrder</code> verification is 'greedy', but you will hardly ever notice it.
+     * If you want to find out more, search for 'greedy' in the Mockito
      * <a href="http://code.google.com/p/mockito/w/list">wiki pages</a>.
      * <p>
      * As of Mockito 1.8.4 you can verifyNoMoreInvocations() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
