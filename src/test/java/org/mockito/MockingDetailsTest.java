@@ -11,6 +11,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.internal.MockitoCore.mockingDetails;
 
 public class MockingDetailsTest extends TestBase {
     
@@ -29,8 +30,7 @@ public class MockingDetailsTest extends TestBase {
         mockedList.remove(0);
         mockedList.clear();
         
-        MockingDetails mockingDetails = new MockitoCore().mockingDetails(mockedList);
-        Collection<Invocation> invocations = mockingDetails.getInvocations();
+        Collection<Invocation> invocations = mockingDetails(mockedList).getInvocations();
         
         assertNotNull(invocations);
         assertEquals(invocations.size(),3);

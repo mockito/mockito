@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+import static org.mockito.internal.MockitoCore.getLastInvocation;
 
 @SuppressWarnings("unchecked")
 public class AnswersValidatorTest {
@@ -108,7 +109,7 @@ public class AnswersValidatorTest {
         //given
         ArrayList<?> mock = mock(ArrayList.class);
         mock.clear();
-        Invocation invocationOnClass = new MockitoCore().getLastInvocation();
+        Invocation invocationOnClass = getLastInvocation();
         //when
         validator.validate(new CallsRealMethods(), invocationOnClass);
         //then no exception is thrown

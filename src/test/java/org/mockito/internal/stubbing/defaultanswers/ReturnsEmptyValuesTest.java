@@ -14,6 +14,7 @@ import java.util.*;
 
 import static junit.framework.TestCase.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.internal.MockitoCore.getLastInvocation;
 
 public class ReturnsEmptyValuesTest extends TestBase {
 
@@ -65,7 +66,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
         // given
         Date d = mock(Date.class);
         d.compareTo(new Date());
-        Invocation compareTo = this.getLastInvocation();
+        Invocation compareTo = getLastInvocation();
 
         //when
         Object result = values.answer(compareTo);
@@ -79,7 +80,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
         //given
         Date d = mock(Date.class);
         d.compareTo(d);
-        Invocation compareTo = this.getLastInvocation();
+        Invocation compareTo = getLastInvocation();
 
         //when
         Object result = values.answer(compareTo);
@@ -98,7 +99,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
         assertNotNull(optional);
         assertFalse((Boolean) Class.forName("java.util.Optional").getMethod("isPresent").invoke(optional));
 
-        Invocation findAny = this.getLastInvocation();
+        Invocation findAny = getLastInvocation();
 
         //when
         Object result = values.answer(findAny);

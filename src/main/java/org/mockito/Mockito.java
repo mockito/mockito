@@ -1211,8 +1211,6 @@ import org.mockito.junit.*;
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
 
-    static final MockitoCore MOCKITO_CORE = new MockitoCore();
-
     /**
      * The default <code>Answer</code> of every mock <b>if</b> the mock was not stubbed.
      * Typically it just returns some empty value.
@@ -1507,7 +1505,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 1.9.5
      */
     public static MockingDetails mockingDetails(Object toInspect) {
-        return MOCKITO_CORE.mockingDetails(toInspect);
+        return MockitoCore.mockingDetails(toInspect);
     }
 
     /**
@@ -1529,7 +1527,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return mock object
      */
-    public static <T> T mock(Class<T> classToMock, Answer defaultAnswer) {
+    public static <T> T mock(Class<T> classToMock, Answer<?> defaultAnswer) {
         return mock(classToMock, withSettings().defaultAnswer(defaultAnswer));
     }
 
@@ -1557,7 +1555,7 @@ public class Mockito extends ArgumentMatchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
-        return MOCKITO_CORE.mock(classToMock, mockSettings);
+        return MockitoCore.mock(classToMock, mockSettings);
     }
 
     /**
@@ -1640,7 +1638,7 @@ public class Mockito extends ArgumentMatchers {
      * @return a spy of the real object
      */
     public static <T> T spy(T object) {
-        return MOCKITO_CORE.mock((Class<T>) object.getClass(), withSettings()
+        return MockitoCore.mock((Class<T>) object.getClass(), withSettings()
                 .spiedInstance(object)
                 .defaultAnswer(CALLS_REAL_METHODS));
     }
@@ -1674,7 +1672,7 @@ public class Mockito extends ArgumentMatchers {
      */
     @Incubating
     public static <T> T spy(Class<T> classToSpy) {
-        return MOCKITO_CORE.mock(classToSpy, withSettings()
+        return MockitoCore.mock(classToSpy, withSettings()
                 .useConstructor()
                 .defaultAnswer(CALLS_REAL_METHODS));
     }
@@ -1741,7 +1739,7 @@ public class Mockito extends ArgumentMatchers {
      *         <strong>Do not</strong> create a reference to this returned object.
      */
     public static <T> OngoingStubbing<T> when(T methodCall) {
-        return MOCKITO_CORE.when(methodCall);
+        return MockitoCore.when(methodCall);
     }
 
     /**
@@ -1772,7 +1770,7 @@ public class Mockito extends ArgumentMatchers {
      * @return mock object itself
      */
     public static <T> T verify(T mock) {
-        return MOCKITO_CORE.verify(mock, times(1));
+        return MockitoCore.verify(mock, times(1));
     }
 
     /**
@@ -1798,7 +1796,7 @@ public class Mockito extends ArgumentMatchers {
      * @return mock object itself
      */
     public static <T> T verify(T mock, VerificationMode mode) {
-        return MOCKITO_CORE.verify(mock, mode);
+        return MockitoCore.verify(mock, mode);
     }
 
     /**
@@ -1829,7 +1827,7 @@ public class Mockito extends ArgumentMatchers {
      * @param mocks to be reset
      */
     public static <T> void reset(T ... mocks) {
-        MOCKITO_CORE.reset(mocks);
+        MockitoCore.reset(mocks);
     }
 
     /**
@@ -1844,7 +1842,7 @@ public class Mockito extends ArgumentMatchers {
      * @param mocks The mocks to clear the invocations for
      */
     public static <T> void clearInvocations(T ... mocks) {
-        MOCKITO_CORE.clearInvocations(mocks);
+        MockitoCore.clearInvocations(mocks);
     }
 
     /**
@@ -1889,7 +1887,7 @@ public class Mockito extends ArgumentMatchers {
      * @param mocks to be verified
      */
     public static void verifyNoMoreInteractions(Object... mocks) {
-        MOCKITO_CORE.verifyNoMoreInteractions(mocks);
+        MockitoCore.verifyNoMoreInteractions(mocks);
     }
 
     /**
@@ -1908,7 +1906,7 @@ public class Mockito extends ArgumentMatchers {
      * @param mocks to be verified
      */
     public static void verifyZeroInteractions(Object... mocks) {
-        MOCKITO_CORE.verifyNoMoreInteractions(mocks);
+        MockitoCore.verifyNoMoreInteractions(mocks);
     }
 
     /**
@@ -1927,7 +1925,7 @@ public class Mockito extends ArgumentMatchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doThrow(Throwable... toBeThrown) {
-        return MOCKITO_CORE.stubber().doThrow(toBeThrown);
+        return MockitoCore.stubber().doThrow(toBeThrown);
     }
 
     /**
@@ -1949,7 +1947,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 2.0.0
      */
     public static Stubber doThrow(Class<? extends Throwable> toBeThrown) {
-        return MOCKITO_CORE.stubber().doThrow(toBeThrown);
+        return MockitoCore.stubber().doThrow(toBeThrown);
     }
 
     /**
@@ -1975,7 +1973,7 @@ public class Mockito extends ArgumentMatchers {
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation
     @SuppressWarnings ({"unchecked", "varargs"})
     public static Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... toBeThrownNext) {
-        return MOCKITO_CORE.stubber().doThrow(toBeThrown, toBeThrownNext);
+        return MockitoCore.stubber().doThrow(toBeThrown, toBeThrownNext);
     }
 
 
@@ -2011,7 +2009,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 1.9.5
      */
     public static Stubber doCallRealMethod() {
-        return MOCKITO_CORE.stubber().doCallRealMethod();
+        return MockitoCore.stubber().doCallRealMethod();
     }
 
     /**
@@ -2037,7 +2035,7 @@ public class Mockito extends ArgumentMatchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doAnswer(Answer answer) {
-        return MOCKITO_CORE.stubber().doAnswer(answer);
+        return MockitoCore.stubber().doAnswer(answer);
     }
 
     /**
@@ -2079,7 +2077,7 @@ public class Mockito extends ArgumentMatchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doNothing() {
-        return MOCKITO_CORE.stubber().doNothing();
+        return MockitoCore.stubber().doNothing();
     }
 
     /**
@@ -2129,7 +2127,7 @@ public class Mockito extends ArgumentMatchers {
      * @return stubber - to select a method for stubbing
      */
     public static Stubber doReturn(Object toBeReturned) {
-        return MOCKITO_CORE.stubber().doReturn(toBeReturned);
+        return MockitoCore.stubber().doReturn(toBeReturned);
     }
 
     /**
@@ -2183,7 +2181,7 @@ public class Mockito extends ArgumentMatchers {
      */
     @SuppressWarnings({"unchecked", "varargs"})
     public static Stubber doReturn(Object toBeReturned, Object... toBeReturnedNext) {
-        return MOCKITO_CORE.stubber().doReturn(toBeReturned, toBeReturnedNext);
+        return MockitoCore.stubber().doReturn(toBeReturned, toBeReturnedNext);
     }
 
     /**
@@ -2214,7 +2212,7 @@ public class Mockito extends ArgumentMatchers {
      * @return InOrder object to be used to verify in order
      */
     public static InOrder inOrder(Object... mocks) {
-        return MOCKITO_CORE.inOrder(mocks);
+        return MockitoCore.inOrder(mocks);
     }
 
     /**
@@ -2281,7 +2279,7 @@ public class Mockito extends ArgumentMatchers {
      * @return the same mocks that were passed in as parameters
      */
     public static Object[] ignoreStubs(Object... mocks) {
-        return MOCKITO_CORE.ignoreStubs(mocks);
+        return MockitoCore.ignoreStubs(mocks);
     }
 
     /**
@@ -2530,7 +2528,7 @@ public class Mockito extends ArgumentMatchers {
      * See examples in javadoc for {@link Mockito} class
      */
     public static void validateMockitoUsage() {
-        MOCKITO_CORE.validateMockitoUsage();
+        MockitoCore.validateMockitoUsage();
     }
 
     /**

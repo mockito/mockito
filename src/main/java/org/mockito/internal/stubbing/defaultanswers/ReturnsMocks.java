@@ -9,12 +9,14 @@ import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import static org.mockito.internal.MockitoCore.isTypeMockable;
+import static org.mockito.internal.MockitoCore.mock;
+
 import java.io.Serializable;
 
 public class ReturnsMocks implements Answer<Object>, Serializable {
     
     private static final long serialVersionUID = -6755257986994634579L;
-    private final MockitoCore mockitoCore = new MockitoCore();
     private final Answer<Object> delegate = new ReturnsMoreEmptyValues();
     
     public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -27,10 +29,10 @@ public class ReturnsMocks implements Answer<Object>, Serializable {
     }
 
     Object returnValueFor(Class<?> clazz) {
-        if (!mockitoCore.isTypeMockable(clazz)) {
+        if (!isTypeMockable(clazz)) {
             return null;
         }
         
-        return mockitoCore.mock(clazz, new MockSettingsImpl().defaultAnswer(this));
+        return mock(clazz, new MockSettingsImpl().defaultAnswer(this));
     }
 }

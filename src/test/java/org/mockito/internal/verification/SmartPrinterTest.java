@@ -5,6 +5,7 @@
 package org.mockito.internal.verification;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.internal.MockitoCore.getLastInvocation;
 
 import org.junit.Before;
 import org.junit.Test;
