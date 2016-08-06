@@ -7,6 +7,7 @@ package org.mockito.internal.invocation;
 import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+import static org.mockito.internal.MockitoCore.getLastInvocation;
 import static org.mockito.internal.invocation.ArgumentsComparator.argumentsMatch;
 import static org.mockito.internal.matchers.Any.ANY;
 

@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import static org.mockito.Mockito.withSettings;
+import static org.mockito.internal.MockitoCore.isTypeMockable;
 
 /**
  * Returning deep stub implementation.
@@ -49,7 +50,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
                 actualParameterizedType(invocation.getMock()).resolveGenericReturnType(invocation.getMethod());
 
         Class<?> rawType = returnTypeGenericMetadata.rawType();
-        if (!mockitoCore().isTypeMockable(rawType)) {
+        if (!isTypeMockable(rawType)) {
             return delegate().returnValueFor(rawType);
         }
 
@@ -87,7 +88,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
      */
     private Object newDeepStubMock(GenericMetadataSupport returnTypeGenericMetadata, Object parentMock) {
         MockCreationSettings parentMockSettings = MockUtil.getMockSettings(parentMock);
-        return mockitoCore().mock(
+        return MockitoCore.mock(
                 returnTypeGenericMetadata.rawType(),
                 withSettingsUsing(returnTypeGenericMetadata, parentMockSettings)
         );
@@ -152,16 +153,13 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     }
 
 
-    private static MockitoCore mockitoCore() {
-        return LazyHolder.MOCKITO_CORE;
-    }
+    
 
     private static ReturnsEmptyValues delegate() {
         return LazyHolder.DELEGATE;
     }
 
     private static class LazyHolder {
-        private static final MockitoCore MOCKITO_CORE = new MockitoCore();
         private static final ReturnsEmptyValues DELEGATE = new ReturnsEmptyValues();
     }
 }

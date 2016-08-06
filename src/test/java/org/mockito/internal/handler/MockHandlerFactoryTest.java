@@ -16,6 +16,7 @@ import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
+import static org.mockito.internal.MockitoCore.getLastInvocation;
 import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
 
 /**
@@ -33,7 +34,7 @@ public class MockHandlerFactoryTest extends TestBase {
 		InternalMockHandler<?> handler = createMockHandler(settings);
 
         mock.intReturningMethod();
-        Invocation invocation = super.getLastInvocation();
+        Invocation invocation = getLastInvocation();
 
         //when:
         Object result = handler.handle(invocation);
@@ -51,7 +52,7 @@ public class MockHandlerFactoryTest extends TestBase {
         InternalMockHandler<?> handler =  createMockHandler(settings);
 
         mock.intReturningMethod();
-        Invocation invocation = super.getLastInvocation();
+        Invocation invocation = getLastInvocation();
 
         //when:
         Object result = handler.handle(invocation);

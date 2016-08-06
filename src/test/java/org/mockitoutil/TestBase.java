@@ -9,7 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
-import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
@@ -17,7 +16,6 @@ import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
-import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 
 import java.io.ByteArrayOutputStream;
@@ -26,14 +24,12 @@ import java.io.PrintStream;
 import java.util.Collection;
 
 import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.mock;
 
 /**
  * the easiest way to make sure that tests clean up invalid state is to require
  * valid state for all tests.
  */
-@SuppressWarnings("unchecked")
 public class TestBase {
 
     @After
@@ -61,10 +57,6 @@ public class TestBase {
         new StateMaster().reset();
     }
     
-    protected Invocation getLastInvocation() {
-        return new MockitoCore().getLastInvocation();
-    }
-
     public static void assertNotEquals(Object expected, Object got) {
         assertFalse(expected.equals(got));
     }

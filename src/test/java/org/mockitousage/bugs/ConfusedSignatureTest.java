@@ -1,6 +1,7 @@
-package org.mockito;
+package org.mockitousage.bugs;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -10,6 +10,7 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.internal.MockitoCore.getLastInvocation;
 import static org.mockito.internal.matchers.Any.ANY;
 
 import java.lang.reflect.Method;
