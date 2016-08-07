@@ -48,7 +48,7 @@ install:
 script:
   - TRAVIS_MESSAGE="$(git log --format=%B -n 1)"
   - ./gradlew ciBuild
-  - echo "Travis commit message: $TRAVIS_MESSAGE"
+  - echo "Travis commit message is $TRAVIS_MESSAGE"
   - if [[ "$TRAVIS_MESSAGE" != *"[ci skip-release]"* ]] ; then ./gradlew release; fi
 after_success:
   - ./gradlew --stacktrace coverageReport && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
