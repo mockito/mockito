@@ -46,7 +46,9 @@ branches:
 install:
  - true
 script:
-  - ./gradlew ciBuild release
+  - TRAVIS_MESSAGE="$(git log --format=%B -n 1)"
+  - ./gradlew ciBuild
+  - if [[ $TRAVIS_MESSAGE != *"[ci skip-release]"* ]] ; then ./gradlew release; fi
 after_success:
   - ./gradlew --stacktrace coverageReport && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
   - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
