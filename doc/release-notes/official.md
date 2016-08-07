@@ -1,3 +1,11 @@
+### 2.0.99-beta (2016-08-07 06:27 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 1
+  * refactored SuperTypesLastSorter to a static utility class [(#535)](https://github.com/mockito/mockito/pull/535)
+
 ### 2.0.98-beta (2016-08-05 19:25 UTC)
 
 * Authors: 1
