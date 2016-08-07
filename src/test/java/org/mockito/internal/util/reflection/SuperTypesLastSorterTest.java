@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.internal.util.reflection.SuperTypesLastSorter.sortSuperTypesLast;
 
 @SuppressWarnings("unused")
 public class SuperTypesLastSorterTest {
@@ -19,7 +20,7 @@ public class SuperTypesLastSorterTest {
                 return 0;
             }
 
-            List<Field> l = new SuperTypesLastSorter().sort(Arrays.asList(o1, o2));
+            List<Field> l = sortSuperTypesLast(Arrays.asList(o1, o2));
 
             if (l.get(0) == o1) {
                 return -1;
@@ -69,7 +70,7 @@ public class SuperTypesLastSorterTest {
                 field("integerA")
         );
 
-        List<Field> sortedFields = new SuperTypesLastSorter().sort(unsortedFields);
+        List<Field> sortedFields =  sortSuperTypesLast(unsortedFields);
 
         assertThat(sortedFields).containsSequence(
                 field("integerA"),
@@ -124,7 +125,7 @@ public class SuperTypesLastSorterTest {
         Set<List<Field>> results = new HashSet<List<Field>>();
 
         for (Field[] o : initialOrderings) {
-            results.add(new SuperTypesLastSorter().sort(Arrays.asList(o)));
+            results.add(sortSuperTypesLast(Arrays.asList(o)));
         }
 
         assertThat(results).hasSize(1);
