@@ -12,12 +12,12 @@ import static org.junit.Assert.assertTrue;
 public class StubbingArgMismatchesTest extends TestBase {
 
     SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    StubbingArgMismatches mismatches = new StubbingArgMismatches("MyTest.myTestMethod");
+    StubbingArgMismatches mismatches = new StubbingArgMismatches();
 
     @Test
     public void no_op_when_no_mismatches() throws Exception {
         //when
-        mismatches.log(logger);
+        mismatches.format("MyTest.myTestMethod", logger);
 
         //then
         assertTrue(logger.isEmpty());
@@ -31,7 +31,7 @@ public class StubbingArgMismatchesTest extends TestBase {
                 new InvocationBuilder().args("b").location("-> at B.java").toInvocation());
 
         //when
-        mismatches.log(logger);
+        mismatches.format("MyTest.myTestMethod", logger);
 
         //then
         assertEquals(
@@ -52,7 +52,7 @@ public class StubbingArgMismatchesTest extends TestBase {
                 new InvocationBuilder().method("differentMethod").args("m").location("-> at M.java").toInvocation());
 
         //when
-        mismatches.log(logger);
+        mismatches.format("MyTest.myTestMethod", logger);
 
         //then
         assertEquals(

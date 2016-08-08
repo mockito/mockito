@@ -189,7 +189,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
             fail();
         } catch (AssertionError e) {
             assertEquals("x", e.getMessage());
-            assertTrue(logger.isEmpty());
+            assertEquals("", logger.getLoggedInfo());
         }
     }
 

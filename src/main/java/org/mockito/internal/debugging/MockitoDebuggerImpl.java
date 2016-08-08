@@ -48,8 +48,8 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
         return print(out);
     }
 
-    public Collection<Invocation> getInvocations(Object... mocks) {
-        return AllInvocationsFinder.find(asList(mocks));
+    public Collection<Invocation> getInvocations(Iterable<Object> mocks) {
+        return AllInvocationsFinder.find(mocks);
     }
 
     public Collection<Stubbing> getStubbings(Iterable<Object> mocks) {

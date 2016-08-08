@@ -23,7 +23,7 @@ public class AllInvocationsFinder {
      * @param mocks mocks
      * @return invocations
      */
-    public static List<Invocation> find(List<?> mocks) {
+    public static List<Invocation> find(Iterable<?> mocks) {
         Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         for (Object mock : mocks) {
             InternalMockHandler<Object> handler = MockUtil.getMockHandler(mock);

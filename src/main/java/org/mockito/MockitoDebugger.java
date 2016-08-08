@@ -16,7 +16,8 @@ public interface MockitoDebugger {
     String printInvocations(Object ... mocks);
 
     //TODO 384 javadoc
-    Collection<Invocation> getInvocations(Object ... mocks);
+    //TODO 384 inconsistent interface, change to Object ... mocks or iterable throughout
+    Collection<Invocation> getInvocations(Iterable<Object> mocks);
 
     Collection<Stubbing> getStubbings(Iterable<Object> mocks);
 }
