@@ -7,13 +7,10 @@ package org.mockito.internal.debugging;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.UnusedStubsFinder;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
-import org.mockito.internal.listeners.CollectCreatedMocks;
 import org.mockito.invocation.Invocation;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 //TODO 384 delete among with all code it uses
 public class WarningsCollector {
@@ -22,7 +19,6 @@ public class WarningsCollector {
 
     public WarningsCollector() {
         createdMocks = new LinkedList<Object>();
-        mockingProgress().setListener(new CollectCreatedMocks(createdMocks));
     }
 
     public String getWarnings() {

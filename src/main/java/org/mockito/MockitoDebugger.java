@@ -4,10 +4,19 @@
  */
 package org.mockito;
 
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Stubbing;
+
+import java.util.Collection;
+
 public interface MockitoDebugger {
 
     //Prints all interactions with mock. Also prints stubbing information.
     //You can put it in your 'tearDown' method
     String printInvocations(Object ... mocks);
 
+    //TODO 384 javadoc
+    Collection<Invocation> getInvocations(Object ... mocks);
+
+    Collection<Stubbing> getStubbings(Iterable<Object> mocks);
 }

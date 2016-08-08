@@ -1,5 +1,6 @@
 package org.mockito;
 
+import org.mockito.listeners.MockitoListener;
 import org.mockito.listeners.StubbingListener;
 
 /**
@@ -18,4 +19,9 @@ public interface MockitoFramework {
      */
     @Incubating
     void setStubbingListener(StubbingListener listener);
+
+    //TODO 384 javadoc
+    void addListener(MockitoListener listener);
+
+    void removeListener(MockitoListener listener);
 }

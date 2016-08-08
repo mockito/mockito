@@ -8,8 +8,9 @@ package org.mockito.internal.progress;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.listeners.MockCreationListener;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
 
@@ -49,19 +50,6 @@ public class MockingProgressImplTest extends TestBase {
             mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
             fail();
         } catch (MockitoException e) {}
-    }
-
-    @Test
-    public void shouldNotifyListenerWhenMockingStarted() throws Exception {
-        //given
-        MockingStartedListener listener = mock(MockingStartedListener.class);
-        mockingProgress.setListener(listener);
-
-        //when
-        mockingProgress.mockingStarted("foo", List.class);
-
-        //then
-        verify(listener).mockingStarted(eq("foo"), eq(List.class));
     }
 
     @Test

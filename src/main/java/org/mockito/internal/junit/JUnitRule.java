@@ -63,11 +63,11 @@ public class JUnitRule implements MockitoRule {
 
         public void evaluate() throws Throwable {
             RuleStubbingHintsReporter reporter = new RuleStubbingHintsReporter(testName);
-            Mockito.framework().setStubbingListener(reporter);
+            Mockito.framework().addListener(reporter);
             try {
                 performEvaluation(reporter);
             } finally {
-                Mockito.framework().setStubbingListener(null);
+                Mockito.framework().removeListener(reporter);
             }
         }
 

@@ -26,10 +26,12 @@ public class RuleStubbingHintsReporterTest extends TestBase {
         assertTrue(logger.isEmpty());
     }
 
+    //TODO 384 wip
+
     @Test
     public void no_stubbings() throws Exception {
         //given
-        reporter.stubbingNotFound(new InvocationBuilder().toInvocation());
+//        reporter.stubbingNotFound(new InvocationBuilder().toInvocation());
         reporter.printStubbingMismatches(logger);
 
         //when
@@ -44,7 +46,7 @@ public class RuleStubbingHintsReporterTest extends TestBase {
         //given
         Invocation stubbing = new InvocationBuilder().toInvocation();
         reporter.newStubbing(stubbing);
-        reporter.usedStubbing(stubbing, new InvocationBuilder().toInvocation());
+//        reporter.usedStubbing(stubbing, new InvocationBuilder().toInvocation());
 
         //when
         reporter.printUnusedStubbings(logger);
@@ -75,7 +77,7 @@ public class RuleStubbingHintsReporterTest extends TestBase {
     public void no_stubbing_mismatch_when_mock_different() throws Exception {
         //given
         reporter.newStubbing(new InvocationBuilder().arg("a").toInvocation());
-        reporter.stubbingNotFound(new InvocationBuilder().arg("b").toInvocation()); // <-- different mock
+//        reporter.stubbingNotFound(new InvocationBuilder().arg("b").toInvocation()); // <-- different mock
 
         //when
         reporter.printStubbingMismatches(logger);
@@ -89,7 +91,7 @@ public class RuleStubbingHintsReporterTest extends TestBase {
         //given
         IMethods mock = mock(IMethods.class);
         reporter.newStubbing(new InvocationBuilder().mock(mock).arg("a").toInvocation());
-        reporter.stubbingNotFound(new InvocationBuilder().mock(mock).differentMethod().toInvocation());
+//        reporter.stubbingNotFound(new InvocationBuilder().mock(mock).differentMethod().toInvocation());
 
         //when
         reporter.printStubbingMismatches(logger);
@@ -103,7 +105,7 @@ public class RuleStubbingHintsReporterTest extends TestBase {
         //given
         IMethods mock = mock(IMethods.class);
         reporter.newStubbing(new InvocationBuilder().mock(mock).arg("a").toInvocation());
-        reporter.stubbingNotFound(new InvocationBuilder().mock(mock).arg("b").toInvocation());
+//        reporter.stubbingNotFound(new InvocationBuilder().mock(mock).arg("b").toInvocation());
 
         //when
         reporter.printStubbingMismatches(logger);

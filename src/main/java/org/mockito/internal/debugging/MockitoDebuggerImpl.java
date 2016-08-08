@@ -8,7 +8,9 @@ import org.mockito.MockitoDebugger;
 import org.mockito.internal.invocation.UnusedStubsFinder;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Stubbing;
 
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -44,6 +46,14 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
             out += line(" stubbed: " + i.getLocation());
         }
         return print(out);
+    }
+
+    public Collection<Invocation> getInvocations(Object... mocks) {
+        return AllInvocationsFinder.find(asList(mocks));
+    }
+
+    public Collection<Stubbing> getStubbings(Iterable<Object> mocks) {
+        return (Collection) AllInvocationsFinder.findStubbings(mocks);
     }
 
     private String line(String text) {

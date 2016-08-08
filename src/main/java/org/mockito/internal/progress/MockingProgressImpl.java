@@ -11,10 +11,11 @@ import static org.mockito.internal.exceptions.Reporter.unfinishedVerificationExc
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.listeners.MockingProgressListener;
-import org.mockito.internal.listeners.MockingStartedListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
+import org.mockito.listeners.MockCreationListener;
+import org.mockito.listeners.MockitoListener;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.listeners.StubbingListener;
 import org.mockito.verification.VerificationMode;
@@ -28,7 +29,7 @@ public class MockingProgressImpl implements MockingProgress {
     private OngoingStubbing<?> ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
-    private MockingProgressListener listener;
+    private MockitoListener listener;
     private VerificationStrategy verificationStrategy;
 
     public MockingProgressImpl() {
@@ -111,6 +112,18 @@ public class MockingProgressImpl implements MockingProgress {
         stubbingInProgress = null;
         getStubbingListener().newStubbing(invocation);
     }
+
+    /**
+
+     //TODO 384 document thread safety of the listneners
+     //TODO 384 thread safety of all mockito
+
+     use cases:
+        - single threaded execution throughout
+        - single threaded mock creation, stubbing & verification, multi-threaded interaction with mock
+        - thread per test case
+
+     */
     
     public String toString() {
         return  "iOngoingStubbing: " + ongoingStubbing + 
@@ -128,14 +141,15 @@ public class MockingProgressImpl implements MockingProgress {
         return argumentMatcherStorage;
     }
 
-    public void mockingStarted(Object mock, Class<?> classToMock) {
-        if (listener instanceof MockingStartedListener) {
-            ((MockingStartedListener) listener).mockingStarted(mock, classToMock);
+    public void mockingStarted(Object mock, MockCreationSettings settings) {
+        //TODO 384 listeners
+        if (listener instanceof MockCreationListener) {
+            ((MockCreationListener) listener).mockCreated(mock, settings);
         }
         validateMostStuff();
     }
 
-    public void setListener(MockingProgressListener listener) {
+    public void setListener(MockitoListener listener) {
         this.listener = listener;
     }
 
