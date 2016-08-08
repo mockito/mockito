@@ -10,11 +10,10 @@ import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@Ignore
 public class StubbingWarningsMultiThreadingTest extends TestBase {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
@@ -35,15 +34,41 @@ public class StubbingWarningsMultiThreadingTest extends TestBase {
                 when(mock.simpleMethod()).thenReturn("1");
 
                 //when: use the stubbing from a different thread
-                new Thread() {
+                Thread t = new Thread() {
                     public void run() {
                         mock.simpleMethod();
                     }
-                }.join();
+                };
+                t.start();
+                t.join();
             }
         }, dummy, this).evaluate();
 
         //then: there are no stubbing warnings
-        assertTrue(logger.isEmpty());
+        assertEquals("", logger.getLoggedInfo());
+    }
+
+    @Ignore //TODO 384
+    @Test public void unused_stub_from_different_thread() throws Throwable {
+        rule.apply(new Statement() {
+            public void evaluate() throws Throwable {
+                //given: some mock with stubbing
+                final IMethods mock = mock(IMethods.class);
+                when(mock.simpleMethod(1)).thenReturn("1");
+                when(mock.simpleMethod(2)).thenReturn("2");
+
+                //when: use the stubbing from a different thread
+                Thread t = new Thread() {
+                    public void run() {
+                        mock.simpleMethod(1);
+                    }
+                };
+                t.start();
+                t.join();
+            }
+        }, dummy, this).evaluate();
+
+        //then: there are no stubbing warnings
+        assertEquals("", logger.getLoggedInfo());
     }
 }
