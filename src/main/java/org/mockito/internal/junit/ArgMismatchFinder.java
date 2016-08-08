@@ -12,6 +12,9 @@ class ArgMismatchFinder {
     StubbingArgMismatches getStubbingArgMismatches(Iterable<Object> mocks) {
         StubbingArgMismatches mismatches = new StubbingArgMismatches();
         for (Invocation i : Mockito.debug().getInvocations(mocks)) {
+            if (i.stubInfo() != null) {
+                continue; //TODO 384 unit test
+            }
             for (Stubbing stubbing : Mockito.debug().getStubbings(mocks)) {
                 //method name & mock matches
                 if (!stubbing.wasUsed() && stubbing.getInvocation().getMock() == i.getMock()
