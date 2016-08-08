@@ -21,6 +21,8 @@ before_install:
   - sudo hostname "$(hostname | cut -c1-63)"
   - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
   - cat /etc/hosts # optionally check the content *after*
+  - export TRAVIS_COMMIT_MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
+  - echo "$TRAVIS_COMMIT_MESSAGE"
 
 jdk:
   - openjdk6
@@ -46,10 +48,7 @@ branches:
 install:
  - true
 script:
-  - TRAVIS_MESSAGE="$(git log --format=%B -n 1)"
-  - ./gradlew ciBuild
-  - echo "Travis commit message is $TRAVIS_MESSAGE"
-  - if [[ "$TRAVIS_MESSAGE" != *"[ci skip-release]"* ]] ; then ./gradlew release; fi
+  - ./gradlew ciBuild release
 after_success:
   - ./gradlew --stacktrace coverageReport && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
   - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
