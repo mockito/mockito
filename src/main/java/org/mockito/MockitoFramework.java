@@ -5,6 +5,8 @@ import org.mockito.listeners.StubbingListener;
 
 /**
  * Mockito framework settings and lifecycle listeners, for advanced users or for integrating with other frameworks.
+ * <p>
+ * To get <code>MockitoFramework</code> instance use {@link Mockito#framework()}.
  *
  * @since 2.*
  */

@@ -118,8 +118,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     /**
 
-     //TODO 384 document thread safety of the listneners
-     //TODO 384 thread safety of all mockito
+     //TODO SF! thread safety of all mockito
 
      use cases:
         - single threaded execution throughout

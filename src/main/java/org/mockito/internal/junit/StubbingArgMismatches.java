@@ -27,7 +27,7 @@ class StubbingArgMismatches {
         }
 
         StubbingHint hint = new StubbingHint(testName);
-        //TODO 384 it would be nice to make the String look good if x goes multiple digits (padding)
+        //TODO SF! it would be nice to make the String look good if x goes multiple digits (padding)
         int x = 1;
         for (Map.Entry<Invocation, Set<Invocation>> m : mismatches.entrySet()) {
             hint.appendLine(x++, ". Unused... ", m.getKey().getLocation());

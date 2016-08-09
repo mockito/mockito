@@ -1,8 +1,8 @@
 package org.mockito.listeners;
 
 /**
- * Created by sfaber on 8/5/16.
- * //TODO 384 listeners
+ * Marker interface for all types of Mockito listeners.
+ * For more information, see {@link org.mockito.MockitoFramework#addListener(MockitoListener)}.
  */
 public interface MockitoListener {
 }
