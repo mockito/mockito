@@ -3,10 +3,16 @@ package org.mockito.listeners;
 import org.mockito.mock.MockCreationSettings;
 
 /**
- * Created by sfaber on 8/5/16.
- * TODO 384 javadoc
+ * Notified when mock object is created.
+ * For more information on listeners see {@link org.mockito.MockitoFramework#addListener(MockitoListener)}.
  */
 public interface MockCreationListener extends MockitoListener {
 
+    /**
+     * Mock object was just created.
+     *
+     * @param mock created mock object
+     * @param settings the settings used for creation
+     */
     void mockCreated(Object mock, MockCreationSettings settings);
 }

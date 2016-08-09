@@ -7,9 +7,6 @@ import org.junit.runner.notification.RunNotifier;
 import org.mockito.Mockito;
 import org.mockito.internal.runners.util.FailureDetecter;
 
-/**
- * Created by sfaber on 7/22/16.
- */
 public class StrictRunner implements RunnerImpl {
 
     private final Class<?> testClass;
@@ -44,7 +41,7 @@ public class StrictRunner implements RunnerImpl {
             //1. if all tests from given test have ran (filter requested is false)
             //   Otherwise we would report unnecessary stubs even if the user runs just single test from the class
             //2. tests are successful (we don't want to add an extra failure on top of any existing failure, to avoid confusion)
-            //TODO 384 JUnit runner should have a specific message explaining to the user how it works.
+            //TODO SF! JUnit runner should have a specific message explaining to the user how it works.
             reporter.validateUnusedStubs(testClass, notifier);
         }
     }

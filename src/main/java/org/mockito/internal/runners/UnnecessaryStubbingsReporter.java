@@ -12,7 +12,6 @@ import java.util.*;
 /**
  * Reports unnecessary stubbings
  */
-//TODO 384 create MockitoHint class
 class UnnecessaryStubbingsReporter implements StubbingListener {
 
     private final Map<String, Invocation> stubbings = new LinkedHashMap<String, Invocation>();
