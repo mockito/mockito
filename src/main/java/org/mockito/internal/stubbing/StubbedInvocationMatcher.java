@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.invocation.Stubbing;
+import org.mockito.internal.invocation.Stubbing;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")

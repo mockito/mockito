@@ -2581,11 +2581,10 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * Helps debugging failing tests and integrating with mockito
-     * TODO 384 - move to MockitoFramework???
-     * TODO 384 javadoc!!!
+     * TODO SF! move to MockingDetails
      */
-    public static MockitoDebugger debug() {
+    @Deprecated
+    static MockitoDebugger debug() {
         return new MockitoDebuggerImpl();
     }
 

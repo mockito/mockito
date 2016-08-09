@@ -9,7 +9,6 @@ import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
-import org.mockito.invocation.Stubbing;
 
 import java.util.*;
 
@@ -24,6 +23,7 @@ public class AllInvocationsFinder {
      * @return invocations
      */
     public static List<Invocation> find(Iterable<?> mocks) {
+        //TODO 384 use the MockingDetails interface
         Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         for (Object mock : mocks) {
             InternalMockHandler<Object> handler = MockUtil.getMockHandler(mock);
@@ -46,6 +46,7 @@ public class AllInvocationsFinder {
         Set<StubbedInvocationMatcher> stubbings = new TreeSet<StubbedInvocationMatcher>(new SequenceNumberComparator2());
         for (Object mock : mocks) {
             InternalMockHandler<Object> handler = MockUtil.getMockHandler(mock);
+            //TODO 384 use the MockingDetails interface, add getStubbings() method
             List<StubbedInvocationMatcher> fromSingleMock = handler.getInvocationContainer().getStubbedInvocations();
             stubbings.addAll(fromSingleMock);
         }

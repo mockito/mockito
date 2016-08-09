@@ -34,14 +34,12 @@ public interface MockingDetails {
     boolean isSpy();
     
     /**
-     * Provides a collection of methods indicating the invocations of the object
-     * @return collection of Invocation representing the invocations 
-     * for the object.
+     * All method invocations on this mock.
+     * Can be empty - it means there were no interactions with the mock.
      *
      * @since 1.10.0
      */
     Collection<Invocation> getInvocations();
-
 
     /**
      * Returns the type that is mocked. It is the type originally passed to
