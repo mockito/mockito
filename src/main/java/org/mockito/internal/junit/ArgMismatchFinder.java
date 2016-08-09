@@ -13,7 +13,7 @@ class ArgMismatchFinder {
         StubbingArgMismatches mismatches = new StubbingArgMismatches();
         for (Invocation i : AllInvocationsFinder.find(mocks)) {
             if (i.stubInfo() != null) {
-                continue; //TODO 384 unit test
+                continue;
             }
             for (Stubbing stubbing : AllInvocationsFinder.findStubbings(mocks)) {
                 //method name & mock matches
