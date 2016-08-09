@@ -1,3 +1,16 @@
+### 2.0.100-beta (2016-08-09 21:46 UTC)
+
+* Authors: 4
+* Commits: 5
+  * 2: Tim van der Lippe
+  * 1: Christian Schwarz
+  * 1: Marcin Zajączkowski
+  * 1: Tim van der Lippe
+* Improvements: 3
+  * inlined ArrayUtils.isEmpty() in ArgumentsProcessor [(#540)](https://github.com/mockito/mockito/pull/540)
+  * Move release skipping logic to Gradle [(#536)](https://github.com/mockito/mockito/pull/536)
+  * Code cov on releases [(#493)](https://github.com/mockito/mockito/pull/493)
+
 ### 2.0.99-beta (2016-08-07 06:27 UTC)
 
 * Authors: 1
