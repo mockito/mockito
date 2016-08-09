@@ -34,13 +34,11 @@ public class StubbingWarningsMultiThreadingTest extends TestBase {
                 when(mock.simpleMethod()).thenReturn("1");
 
                 //when: use the stubbing from a different thread
-                Thread t = new Thread() {
+                inThread(new Runnable() {
                     public void run() {
                         mock.simpleMethod();
                     }
-                };
-                t.start();
-                t.join();
+                });
             }
         }, dummy, this).evaluate();
 
@@ -48,7 +46,6 @@ public class StubbingWarningsMultiThreadingTest extends TestBase {
         assertEquals("", logger.getLoggedInfo());
     }
 
-    @Ignore //TODO 384
     @Test public void unused_stub_from_different_thread() throws Throwable {
         rule.apply(new Statement() {
             public void evaluate() throws Throwable {
@@ -57,18 +54,25 @@ public class StubbingWarningsMultiThreadingTest extends TestBase {
                 when(mock.simpleMethod(1)).thenReturn("1");
                 when(mock.simpleMethod(2)).thenReturn("2");
 
-                //when: use the stubbing from a different thread
-                Thread t = new Thread() {
+                //when: use one of the stubbing from a different thread
+                inThread(new Runnable() {
                     public void run() {
                         mock.simpleMethod(1);
                     }
-                };
-                t.start();
-                t.join();
+                });
             }
         }, dummy, this).evaluate();
 
-        //then: there are no stubbing warnings
-        assertEquals("", logger.getLoggedInfo());
+        //then
+        assertEquals(
+            "[MockitoHint] StubbingWarningsMultiThreadingTest.null (see javadoc for MockitoHint):\n" +
+            "[MockitoHint] 1. Unused -> at org.mockitousage.junitrule.StubbingWarningsMultiThreadingTest$2.evaluate(StubbingWarningsMultiThreadingTest.java:0)\n",
+                filterLineNo(logger.getLoggedInfo()));
+    }
+
+    private static void inThread(Runnable r) throws InterruptedException {
+        Thread t = new Thread(r);
+        t.start();
+        t.join();
     }
 }
