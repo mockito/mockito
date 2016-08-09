@@ -1,7 +1,6 @@
 package org.mockitousage.junitrunner;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -56,16 +55,15 @@ public class StrictRunnerTest extends TestBase {
         JUnitResultAssert.assertThat(result).fails(1, MyAssertionError.class);
     }
 
-    @Ignore //TODO 384
     @Test public void runner_can_coexists_with_rule() {
         //I don't believe that this scenario is useful
         //I only wish that Mockito does not break awkwardly when both: runner & rule is used
 
         //when
-        Result result = runner.run(WithJUnitRule.class);
+        Result result = runner.run(RunnerAndRule.class);
 
         //then
-        JUnitResultAssert.assertThat(result).isSuccessful();
+        JUnitResultAssert.assertThat(result).fails(1, UnnecessaryStubbingException.class);
     }
 
     @RunWith(MockitoJUnitRunner.class)
@@ -138,10 +136,9 @@ public class StrictRunnerTest extends TestBase {
     }
 
     @RunWith(MockitoJUnitRunner.class)
-    public static class WithJUnitRule {
+    public static class RunnerAndRule {
 
-        public @Rule
-        MockitoRule rule = MockitoJUnit.rule();
+        public @Rule MockitoRule rule = MockitoJUnit.rule();
         IMethods mock = mock(IMethods.class);
 
         @Test public void passing_test() {
