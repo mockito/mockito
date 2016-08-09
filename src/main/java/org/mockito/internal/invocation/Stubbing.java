@@ -3,14 +3,10 @@ package org.mockito.internal.invocation;
 import org.mockito.invocation.Invocation;
 
 /**
- * Created by sfaber on 8/5/16.
- *
- * TODO 384 expose
+ * TODO SF! also javadoc + invocation exposes too much?
  */
 public interface Stubbing {
 
-    //TODO 384 - Invocation exposes too much
-    //TODO 384 javadoc
     Invocation getInvocation();
 
     boolean wasUsed();

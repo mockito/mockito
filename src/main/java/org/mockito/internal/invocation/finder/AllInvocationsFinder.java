@@ -23,7 +23,7 @@ public class AllInvocationsFinder {
      * @return invocations
      */
     public static List<Invocation> find(Iterable<?> mocks) {
-        //TODO 384 use the MockingDetails interface
+        //TODO SF! use the MockingDetails interface
         Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new SequenceNumberComparator());
         for (Object mock : mocks) {
             InternalMockHandler<Object> handler = MockUtil.getMockHandler(mock);
@@ -37,7 +37,7 @@ public class AllInvocationsFinder {
     /**
      * gets all stubbings from mocks. Invocations are ordered earlier first.
      *
-     * TODO 384 javadoc and unit tests
+     * TODO SF! javadoc and unit tests
      *
      * @param mocks mocks
      * @return stubbings
@@ -46,7 +46,7 @@ public class AllInvocationsFinder {
         Set<StubbedInvocationMatcher> stubbings = new TreeSet<StubbedInvocationMatcher>(new SequenceNumberComparator2());
         for (Object mock : mocks) {
             InternalMockHandler<Object> handler = MockUtil.getMockHandler(mock);
-            //TODO 384 use the MockingDetails interface, add getStubbings() method
+            //TODO SF! use the MockingDetails interface, add getStubbings() method
             List<StubbedInvocationMatcher> fromSingleMock = handler.getInvocationContainer().getStubbedInvocations();
             stubbings.addAll(fromSingleMock);
         }
