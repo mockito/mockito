@@ -23,12 +23,14 @@ public interface MockitoFramework {
     /**
      * Adds listener to Mockito.
      * For a list of supported listeners, see the interfaces that extend {@link MockitoListener}.
-     * Depending on the type of listener, some listeners can be thread local.
      * <p>
      * Listeners can be useful for engs that extend Mockito framework.
      * They are used in the implementation of unused stubbings warnings ({@link org.mockito.quality.MockitoHint}).
      * <p>
-     * Make sure you remove the listener when the job is complete, see {@link #removeListener(MockitoListener)}
+     * Make sure you remove the listener when the job is complete, see {@link #removeListener(MockitoListener)}.
+     * Currently the listeners list is thread local so you need to remove listener from the same thread otherwise
+     * remove is ineffectual.
+     * In typical scenarios, it is not a problem, because adding & removing listeners typically happens in the same thread.
      * <p>
      * For usage examples, see Mockito codebase.
      * If you have ideas and feature requests about Mockito listeners API
@@ -41,6 +43,9 @@ public interface MockitoFramework {
 
     /**
      * When you add listener using {@link #addListener(MockitoListener)} make sure to remove it.
+     * Currently the listeners list is thread local so you need to remove listener from the same thread otherwise
+     * remove is ineffectual.
+     * In typical scenarios, it is not a problem, because adding & removing listeners typically happens in the same thread.
      * <p>
      * For usage examples, see Mockito codebase.
      * If you have ideas and feature requests about Mockito listeners API

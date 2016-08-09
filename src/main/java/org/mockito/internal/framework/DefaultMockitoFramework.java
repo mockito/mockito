@@ -2,16 +2,17 @@ package org.mockito.internal.framework;
 
 import org.mockito.MockitoFramework;
 import org.mockito.internal.progress.MockingProgress;
-import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.listeners.StubbingListener;
+
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 public class DefaultMockitoFramework implements MockitoFramework {
 
     //TODO SF!
     public void setStubbingListener(StubbingListener listener) {
-        MockingProgress p = ThreadSafeMockingProgress.mockingProgress();
+        MockingProgress p = mockingProgress();
         if (listener == null) {
             p.setStubbingListener(null);
         } else {
@@ -21,11 +22,11 @@ public class DefaultMockitoFramework implements MockitoFramework {
 
     public void addListener(MockitoListener listener) {
         if (listener instanceof MockCreationListener) {
-            ThreadSafeMockingProgress.mockingProgress().addListener(listener);
+            mockingProgress().addListener(listener);
         }
     }
 
     public void removeListener(MockitoListener listener) {
-        ThreadSafeMockingProgress.mockingProgress().removeListener(listener);
+        mockingProgress().removeListener(listener);
     }
 }
