@@ -21,6 +21,9 @@ import org.mockito.listeners.StubbingListener;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @SuppressWarnings("unchecked")
 public class MockingProgressImpl implements MockingProgress {
     
@@ -29,8 +32,8 @@ public class MockingProgressImpl implements MockingProgress {
     private OngoingStubbing<?> ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
-    private MockitoListener listener;
     private VerificationStrategy verificationStrategy;
+    private final Set<MockitoListener> listeners = new LinkedHashSet<MockitoListener>();
 
     public MockingProgressImpl() {
         this.verificationStrategy = getDefaultVerificationStrategy();
@@ -142,15 +145,20 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void mockingStarted(Object mock, MockCreationSettings settings) {
-        //TODO 384 listeners
-        if (listener instanceof MockCreationListener) {
-            ((MockCreationListener) listener).mockCreated(mock, settings);
+        for (MockitoListener listener : listeners) {
+            if (listener instanceof MockCreationListener) {
+                ((MockCreationListener) listener).mockCreated(mock, settings);
+            }
         }
         validateMostStuff();
     }
 
-    public void setListener(MockitoListener listener) {
-        this.listener = listener;
+    public void addListener(MockitoListener listener) {
+        this.listeners.add(listener);
+    }
+
+    public void removeListener(MockitoListener listener) {
+        this.listeners.remove(listener);
     }
 
     public void setVerificationStrategy(VerificationStrategy strategy) {

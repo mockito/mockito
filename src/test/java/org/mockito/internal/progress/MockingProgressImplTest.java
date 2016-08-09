@@ -9,12 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockito.listeners.MockCreationListener;
-import org.mockito.mock.MockCreationSettings;
 import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
 
 import static junit.framework.TestCase.*;
 import static org.mockito.Matchers.eq;
@@ -55,7 +51,7 @@ public class MockingProgressImplTest extends TestBase {
     @Test
     public void shouldNotifyListenerSafely() throws Exception {
         //when
-        mockingProgress.setListener(null);
+        mockingProgress.addListener(null);
 
         //then no exception is thrown:
         mockingProgress.mockingStarted(null, null);

@@ -7,14 +7,9 @@ import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.listeners.StubbingListener;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 public class DefaultMockitoFramework implements MockitoFramework {
 
-    //TODO 384 kill!
+    //TODO SF!
     public void setStubbingListener(StubbingListener listener) {
         MockingProgress p = ThreadSafeMockingProgress.mockingProgress();
         if (listener == null) {
@@ -24,14 +19,13 @@ public class DefaultMockitoFramework implements MockitoFramework {
         }
     }
 
-    //TODO 384 listeners!
     public void addListener(MockitoListener listener) {
         if (listener instanceof MockCreationListener) {
-            ThreadSafeMockingProgress.mockingProgress().setListener(listener);
+            ThreadSafeMockingProgress.mockingProgress().addListener(listener);
         }
     }
 
     public void removeListener(MockitoListener listener) {
-        ThreadSafeMockingProgress.mockingProgress().setListener(null);
+        ThreadSafeMockingProgress.mockingProgress().removeListener(listener);
     }
 }

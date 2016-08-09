@@ -42,10 +42,9 @@ public interface MockingProgress {
     
     void mockingStarted(Object mock, MockCreationSettings settings);
 
-    /**
-     * TODO 384 - list of listeners and removal
-     */
-    void setListener(MockitoListener listener);
+    void addListener(MockitoListener listener);
+
+    void removeListener(MockitoListener listener);
 
     void setVerificationStrategy(VerificationStrategy strategy);
 
