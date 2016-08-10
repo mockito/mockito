@@ -35,14 +35,12 @@ public class AllInvocationsFinder {
     }
 
     /**
-     * gets all stubbings from mocks. Invocations are ordered earlier first.
-     *
-     * TODO SF! javadoc and unit tests
+     * Gets all stubbings from mocks. Invocations are ordered earlier first.
      *
      * @param mocks mocks
      * @return stubbings
      */
-    public static Set<StubbedInvocationMatcher> findStubbings(Iterable<Object> mocks) {
+    public static Set<StubbedInvocationMatcher> findStubbings(Iterable<?> mocks) {
         Set<StubbedInvocationMatcher> stubbings = new TreeSet<StubbedInvocationMatcher>(new SequenceNumberComparator2());
         for (Object mock : mocks) {
             InternalMockHandler<Object> handler = MockUtil.getMockHandler(mock);
@@ -62,7 +60,7 @@ public class AllInvocationsFinder {
 
     private static final class SequenceNumberComparator2 implements Comparator<StubbedInvocationMatcher> {
         public int compare(StubbedInvocationMatcher o1, StubbedInvocationMatcher o2) {
-            return Integer.valueOf(o1.getInvocation().getSequenceNumber()).compareTo(o2.getInvocation().getSequenceNumber());
+            return new SequenceNumberComparator().compare(o1.getInvocation(), o2.getInvocation());
         }
     }
 }
