@@ -75,7 +75,7 @@ public class Reporter {
                 "    doThrow(exception).when(mock).someVoidMethod();",
                 "Hints:",
                 " 1. missing thenReturn()",
-                " 2. you are trying to stub a final method, you naughty developer!",
+                " 2. you are trying to stub a final method, which is not supported",
                 " 3: you are stubbing the behaviour of another mock inside before 'thenReturn' instruction if completed",
                 ""
         ));
