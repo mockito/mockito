@@ -11,10 +11,11 @@ import org.junit.rules.MethodRule;
  * This rule adds following behavior:
  * <ul>
  *   <li>
- *      Since 2.*, stubbing warnings and hints are printed to System output. They are useful for debugging.
- *      <strong>Please</strong> give us feedback about the stubbing warnings of JUnit rules.
+ *      Since 2.*, stubbing warnings and hints are printed to System output.
+ *      Hints contain clickable links that take you right to the line of code that contains a possible problem.
+ *      <strong>Please</strong> give us feedback about the stubbing warnings of JUnit rules in the issue tracker
+ *      (<a href="https://github.com/mockito/mockito/issues/384">issue 384</a>).
  *      It's a new feature of Mockito 2.*. It aims to help debugging tests.
- *      We want to make sure the feature is useful.
  *      If you wish the previous behavior, see {@link MockitoRule#silent()}.
  *      However, we would really like to know why do you wish to silence the warnings!
  *      See also {@link org.mockito.quality.MockitoHint}.
