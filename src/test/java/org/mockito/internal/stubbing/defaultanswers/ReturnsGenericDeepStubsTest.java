@@ -19,6 +19,8 @@ import static org.mockito.Mockito.mock;
 public class ReturnsGenericDeepStubsTest {
     interface ListOfInteger extends List<Integer> {}
 
+    interface AnotherListOfInteger extends ListOfInteger {}
+
     interface GenericsNest<K extends Comparable<K> & Cloneable> extends Map<K, Set<Number>> {
         Set<Number> remove(Object key); // override with fixed ParameterizedType
         List<? super Number> returningWildcard();
@@ -93,9 +95,11 @@ public class ReturnsGenericDeepStubsTest {
     public void will_return_default_value_on_non_mockable_nested_generic() throws Exception {
         GenericsNest<?> genericsNest = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
         ListOfInteger listOfInteger = mock(ListOfInteger.class, RETURNS_DEEP_STUBS);
+        AnotherListOfInteger anotherListOfInteger = mock(AnotherListOfInteger.class, RETURNS_DEEP_STUBS);
 
         assertThat(genericsNest.returningNonMockableNestedGeneric().keySet().iterator().next()).isNull();
         assertThat(listOfInteger.get(25)).isEqualTo(0);
+        assertThat(anotherListOfInteger.get(25)).isEqualTo(0);
     }
 
     @Test(expected = ClassCastException.class)
