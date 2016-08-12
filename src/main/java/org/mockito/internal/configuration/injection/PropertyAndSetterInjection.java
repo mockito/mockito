@@ -98,7 +98,7 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
                 Throwable realCause = e.getCause().getCause();
                 throw fieldInitialisationThrewException(field, realCause);
             }
-            throw cannotInitializeForInjectMocksAnnotation(field.getName(), e);
+            throw cannotInitializeForInjectMocksAnnotation(field.getName(),e.getMessage());
         }
     }
 

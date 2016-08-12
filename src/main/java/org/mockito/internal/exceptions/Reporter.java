@@ -627,16 +627,14 @@ public class Reporter {
                                          ""), details);
     }
 
-    public static MockitoException cannotInitializeForInjectMocksAnnotation(String fieldName, Exception details) {
-        return new MockitoException(join("Cannot instantiate @InjectMocks field named '" + fieldName + "'.",
+    public static MockitoException cannotInitializeForInjectMocksAnnotation(String fieldName, String causeMessage) {
+        return new MockitoException(join("Cannot instantiate @InjectMocks field named '" + fieldName + "'! Cause: "+causeMessage,
                                          "You haven't provided the instance at field declaration so I tried to construct the instance.",
-                                         "However, I failed because: " + details.getMessage(),
                                          "Examples of correct usage of @InjectMocks:",
                                          "   @InjectMocks Service service = new Service();",
                                          "   @InjectMocks Service service;",
-                                         "   //also, don't forget about MockitoAnnotations.initMocks();",
                                          "   //and... don't forget about some @Mocks for injection :)",
-                                         ""), details);
+                                         ""));
     }
 
     public static MockitoException atMostAndNeverShouldNotBeUsedWithTimeout() {

@@ -6,7 +6,9 @@
 package org.mockitousage.basicapi;
 
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.internal.debugging.LocationImpl;
@@ -16,6 +18,7 @@ import org.mockitoutil.TestBase;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static junit.framework.TestCase.*;
 import static org.assertj.core.api.Assertions.assertThat;

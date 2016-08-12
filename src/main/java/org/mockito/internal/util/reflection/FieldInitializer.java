@@ -7,6 +7,7 @@ package org.mockito.internal.util.reflection;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 
+import static java.lang.reflect.Modifier.isStatic;
 import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 import java.lang.reflect.Constructor;
@@ -68,7 +69,9 @@ public class FieldInitializer {
             checkNotLocal(field);
             checkNotInner(field);
             checkNotInterface(field);
+            checkNotEnum(field);
             checkNotAbstract(field);
+            
         }
         this.fieldOwner = fieldOwner;
         this.field = field;
@@ -100,8 +103,9 @@ public class FieldInitializer {
     }
 
     private void checkNotInner(Field field) {
-        if(field.getType().isMemberClass() && !Modifier.isStatic(field.getType().getModifiers())) {
-            throw new MockitoException("the type '" + field.getType().getSimpleName() + "' is an inner class.");
+        Class<?> type = field.getType();
+        if(type.isMemberClass() && !isStatic(type.getModifiers())) {
+            throw new MockitoException("the type '" + type.getSimpleName() + "' is an inner non static class.");
         }
     }
 
@@ -113,9 +117,16 @@ public class FieldInitializer {
 
     private void checkNotAbstract(Field field) {
         if(Modifier.isAbstract(field.getType().getModifiers())) {
-            throw new MockitoException("the type '" + field.getType().getSimpleName() + " is an abstract class.");
+            throw new MockitoException("the type '" + field.getType().getSimpleName() + "' is an abstract class.");
         }
     }
+    
+    private void checkNotEnum(Field field) {
+        if(field.getType().isEnum()) {
+            throw new MockitoException("the type '" + field.getType().getSimpleName() + "' is an enum.");
+        }
+    }
+
 
     private FieldInitializationReport acquireFieldInstance() throws IllegalAccessException {
         Object fieldInstance = field.get(fieldOwner);
