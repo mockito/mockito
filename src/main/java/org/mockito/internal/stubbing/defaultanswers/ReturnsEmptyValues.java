@@ -8,6 +8,9 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockName;
 import org.mockito.stubbing.Answer;
 
+import static org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod;
+import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -41,13 +44,12 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = 1998191268711234347L;
 
-    private final ObjectMethodsGuru methodsGuru = new ObjectMethodsGuru();
 
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
     public Object answer(InvocationOnMock invocation) {
-        if (methodsGuru.isToString(invocation.getMethod())) {
+        if (isToStringMethod(invocation.getMethod())) {
             Object mock = invocation.getMock();
             MockName name = MockUtil.getMockName(mock);
             if (name.isDefault()) {
@@ -55,7 +57,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             } else {
                 return name.toString();
             }
-        } else if (methodsGuru.isCompareToMethod(invocation.getMethod())) {
+        } else if (isCompareToMethod(invocation.getMethod())) {
             //see issue 184.
             //mocks by default should return 0 if references are the same, otherwise some other value because they are not the same. Hence we return 1 (anything but 0 is good).
             //Only for compareTo() method by the Comparable interface
