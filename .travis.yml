@@ -15,12 +15,13 @@ sudo: true
 
 language: java
 
-# workaround for https://github.com/travis-ci/travis-ci/issues/5227
+# new workaround for https://github.com/travis-ci/travis-ci/issues/5227#issuecomment-165131913
+addons:
+  hosts:
+    - mockito-cd
+  hostname: mockito-cd
+
 before_install:
-  - cat /etc/hosts # optionally check the content *before*
-  - sudo hostname "$(hostname | cut -c1-63)"
-  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts | sudo tee /etc/hosts
-  - cat /etc/hosts # optionally check the content *after*
   - export TRAVIS_COMMIT_MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
   - echo "$TRAVIS_COMMIT_MESSAGE"
 
