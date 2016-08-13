@@ -21,12 +21,20 @@ public class DefaultMockitoFramework implements MockitoFramework {
     }
 
     public void addListener(MockitoListener listener) {
+        assertNotNull(listener);
         if (listener instanceof MockCreationListener) {
             mockingProgress().addListener(listener);
         }
     }
 
     public void removeListener(MockitoListener listener) {
+        assertNotNull(listener);
         mockingProgress().removeListener(listener);
+    }
+
+    private void assertNotNull(MockitoListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("listener cannot be null");
+        }
     }
 }
