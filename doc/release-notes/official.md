@@ -1,3 +1,14 @@
+### 2.0.101-beta (2016-08-13 18:05 UTC)
+
+* Authors: 3
+* Commits: 4
+  * 2: Brice Dutheil
+  * 1: Continuous Delivery Drone
+  * 1: Christian Schwarz
+* Improvements: 2
+  * Uses the hosts addon in order to avoid the buffer overflow affecting … [(#553)](https://github.com/mockito/mockito/pull/553)
+  * refactored ObjectMethodsGuru to a static utility class [(#547)](https://github.com/mockito/mockito/pull/547)
+
 ### 2.0.100-beta (2016-08-09 21:46 UTC)
 
 * Authors: 4
