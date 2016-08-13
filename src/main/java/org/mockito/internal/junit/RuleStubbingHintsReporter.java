@@ -21,7 +21,7 @@ class RuleStubbingHintsReporter implements MockCreationListener {
         return new UnusedStubbingsFinder().getUnusedStubbings(mocks);
     }
 
-    public void mockCreated(Object mock, MockCreationSettings settings) {
+    public void onMockCreated(Object mock, MockCreationSettings settings) {
         mocks.add(mock);
     }
 }

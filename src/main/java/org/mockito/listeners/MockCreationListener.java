@@ -14,5 +14,5 @@ public interface MockCreationListener extends MockitoListener {
      * @param mock created mock object
      * @param settings the settings used for creation
      */
-    void mockCreated(Object mock, MockCreationSettings settings);
+    void onMockCreated(Object mock, MockCreationSettings settings);
 }
