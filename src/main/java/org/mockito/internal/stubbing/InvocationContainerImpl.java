@@ -14,12 +14,12 @@ import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 @SuppressWarnings("unchecked")
 public class InvocationContainerImpl implements InvocationContainer, Serializable {
@@ -82,6 +82,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
                     return s;
                 }
             }
+            mockingProgress().getStubbingListener().stubbingNotFound(invocation);
         }
 
         return null;

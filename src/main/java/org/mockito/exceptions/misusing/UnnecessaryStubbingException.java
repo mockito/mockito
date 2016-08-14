@@ -1,10 +1,27 @@
 package org.mockito.exceptions.misusing;
 
 /**
- * Indicates presence of stubbings in the test class that were never used in the code during test execution.
- * Such stubbings should be removed from the test class to keep the test code clean.
+ * Unnecessary stubs are stubbed method calls that were never realized during test execution, example:
+ * <pre class="code"><code class="java">
+ * //code under test:
+ * ...
+ * String result = translator.translate("one")
+ * ...
  *
- * TODO this javadoc needs to better describe why it is important, what to do to work with it.
+ * //test:
+ * ...
+ * when(translator.translate("one")).thenReturn("jeden"); // <- stubbing realized during code execution
+ * when(translator.translate("two")).thenReturn("dwa"); // <- stubbing never realized
+ * ...
+ * </pre>
+ * Notice that one of the stubbed methods were never realized in the code under test, during test execution.
+ * The stray stubbing might be an oversight of the developer, the artifact of copy-paste
+ * or the effect not understanding the test/code.
+ * Either way, the developer ends up with unnecessary test code.
+ * In order to keep the codebase clean & maintainable it is necessary to remove unnecessary code.
+ * Otherwise tests are harder to read and reason about.
+ * <p>
+ * To find out more about detecting unused stubbings see {@link org.mockito.quality.MockitoHint}.
  */
 public class UnnecessaryStubbingException extends RuntimeException {
     public UnnecessaryStubbingException(String message) {
