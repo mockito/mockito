@@ -116,7 +116,7 @@ public class MockingProgressImpl implements MockingProgress {
         getStubbingListener().newStubbing(invocation);
     }
 
-    /**
+    /*
 
      //TODO 545 thread safety of all mockito
 

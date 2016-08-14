@@ -15,6 +15,10 @@ public class JUnitRule implements MockitoRule {
 	private final MockitoLogger logger;
     private final boolean silent;
 
+    /**
+     * @param logger target for the stubbing warnings
+     * @param silent whether the rule
+     */
     public JUnitRule(MockitoLogger logger, boolean silent) {
 		this.logger = logger;
         this.silent = silent;
