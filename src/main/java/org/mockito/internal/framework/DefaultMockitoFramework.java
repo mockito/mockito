@@ -2,7 +2,6 @@ package org.mockito.internal.framework;
 
 import org.mockito.MockitoFramework;
 import org.mockito.internal.progress.MockingProgress;
-import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.listeners.StubbingListener;
 
