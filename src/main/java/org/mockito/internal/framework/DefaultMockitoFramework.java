@@ -22,9 +22,7 @@ public class DefaultMockitoFramework implements MockitoFramework {
 
     public void addListener(MockitoListener listener) {
         assertNotNull(listener);
-        if (listener instanceof MockCreationListener) {
-            mockingProgress().addListener(listener);
-        }
+        mockingProgress().addListener(listener);
     }
 
     public void removeListener(MockitoListener listener) {
