@@ -1,6 +1,8 @@
 package org.mockito.internal.junit;
 
+import org.junit.After;
 import org.junit.Test;
+import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -12,25 +14,32 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class JUnitRuleTest extends TestBase {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    private JUnitRule jUnitRule = new JUnitRule(logger);
+    private JUnitRule jUnitRule = new JUnitRule(logger, false);
     private InjectTestCase injectTestCase = new InjectTestCase();
+    private FrameworkMethod dummy = mock(FrameworkMethod.class);
+
+    @After public void after() {
+        //so that the validate framework usage exceptions do not collide with the tests here
+        resetState();
+    }
 
     @Test
-    public void shouldInjectIntoTestCase() throws Throwable {
-        jUnitRule.apply(new DummyStatement(),null, injectTestCase).evaluate();
+    public void injects_into_test_case() throws Throwable {
+        jUnitRule.apply(new DummyStatement(), dummy, injectTestCase).evaluate();
         assertNotNull("@Mock mock object created", injectTestCase.getInjected());
         assertNotNull("@InjectMocks object created", injectTestCase.getInjectInto());
         assertNotNull("Mock injected into the object", injectTestCase.getInjectInto().getInjected());
     }
 
     @Test
-    public void shouldRethrowException() throws Throwable {
+    public void rethrows_exception() throws Throwable {
         try {
-            jUnitRule.apply(new ExceptionStatement(), null,injectTestCase).evaluate();
+            jUnitRule.apply(new ExceptionStatement(), dummy, injectTestCase).evaluate();
             fail("Should throw exception");
         } catch (RuntimeException e) {
             assertEquals("Correct message", "Statement exception", e.getMessage());
@@ -38,58 +47,31 @@ public class JUnitRuleTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectUnfinishedStubbing() throws Throwable {
+    public void detects_invalid_mockito_usage_on_success() throws Throwable {
         try {
-            jUnitRule.apply(new UnfinishedStubbingStatement(),null, injectTestCase).evaluate();
+            jUnitRule.apply(new UnfinishedStubbingStatement(), dummy, injectTestCase).evaluate();
             fail("Should detect invalid Mockito usage");
         } catch (UnfinishedStubbingException e) {
         }
     }
 
     @Test
-    public void shouldWarnAboutUnusedStubsWhenFailed() throws Throwable {
+    public void does_not_check_invalid_mockito_usage_on_failure() throws Throwable {
+        //I am not sure that this is the intended behavior
+        //However, it was like that since the beginning of JUnit rule support
+        //Users never questioned this behavior. Hence, let's stick to it unless we have more data
         try {
             jUnitRule.apply(new Statement() {
                 public void evaluate() throws Throwable {
-                    IMethods mock = Mockito.mock(IMethods.class);
-                    declareUnusedStub(mock);
-                    throw new AssertionError("x");
+                    IMethods mock = mock(IMethods.class);
+                    Mockito.when(mock.simpleMethod()); // <--- unfinished stubbing
+                    throw new RuntimeException("Boo!"); // <--- some failure
                 }
-            },null, injectTestCase).evaluate();
+            }, dummy, injectTestCase).evaluate();
             fail();
-        } catch (AssertionError e) {
-            assertEquals("x", e.getMessage());
-            assertEquals(filterLineNo(logger.getLoggedInfo()),
-                "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):\n" +
-                "[Mockito]\n" +
-                "[Mockito] Unused stubbing (perhaps can be removed from the test?):\n" +
-                "[Mockito]\n" +
-                "[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:0)"
-            );
+        } catch (RuntimeException e) {
+            assertEquals("Boo!", e.getMessage());
         }
-    }
-
-    @Test
-    public void can_remove_line_numbers() throws Throwable {
-        assertEquals(
-                "[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:0)",
-                filterLineNo("[Mockito] 1. -> at org.mockito.internal.junit.JUnitRuleTest.declareUnusedStub(JUnitRuleTest.java:82)"));
-    }
-
-    @Test
-    public void shouldNotWarnAboutUnusedStubsWhenPassed() throws Throwable {
-        jUnitRule.apply(new Statement() {
-            public void evaluate() throws Throwable {
-                IMethods mock = Mockito.mock(IMethods.class);
-                declareUnusedStub(mock);
-            }
-        },null, injectTestCase).evaluate();
-
-        assertEquals("", logger.getLoggedInfo());
-    }
-
-    private static void declareUnusedStub(IMethods mock) {
-        Mockito.when(mock.simpleMethod("foo")).thenReturn("bar");
     }
 
     private static class DummyStatement extends Statement {
