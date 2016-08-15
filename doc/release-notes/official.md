@@ -1,3 +1,14 @@
+### 2.0.102-beta (2016-08-15 13:27 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Continuous Delivery Drone
+  * 1: Brice Dutheil
+  * 1: Christian Schwarz
+* Improvements: 2
+  * Fixed #538 changed error message in case initialization for mock injection fails. [(#550)](https://github.com/mockito/mockito/pull/550)
+  * Improve error message when @InjectMocks is uses on an interface or enum field [(#538)](https://github.com/mockito/mockito/issues/538)
+
 ### 2.0.101-beta (2016-08-13 18:05 UTC)
 
 * Authors: 3
