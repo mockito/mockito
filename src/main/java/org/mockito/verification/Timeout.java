@@ -9,6 +9,7 @@ import static org.mockito.internal.exceptions.Reporter.atMostAndNeverShouldNotBe
 import org.mockito.internal.util.Timer;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.VerificationOverTimeImpl;
+import org.mockito.internal.verification.VerificationWrapper;
 
 /**
  * See the javadoc for {@link VerificationWithTimeout}

@@ -1,4 +1,4 @@
-package org.mockito.junit;
+package org.mockito.internal.junit;
 
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
@@ -7,18 +7,19 @@ import org.junit.runners.model.Statement;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.junit.VerificationCollector;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
 
 /**
  * Mockito implementation of VerificationCollector.
  */
-class VerificationCollectorImpl implements VerificationCollector {
+public class VerificationCollectorImpl implements VerificationCollector {
 
     private StringBuilder builder;
     private int numberOfFailures;
 
-    VerificationCollectorImpl() {
+    public VerificationCollectorImpl() {
         this.resetBuilder();
     }
 

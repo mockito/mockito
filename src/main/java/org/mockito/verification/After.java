@@ -2,6 +2,7 @@ package org.mockito.verification;
 
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.VerificationOverTimeImpl;
+import org.mockito.internal.verification.VerificationWrapper;
 
 /**
  * See the javadoc for {@link VerificationAfterDelay}

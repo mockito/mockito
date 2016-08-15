@@ -1,12 +1,10 @@
-package org.mockito.verification;
+package org.mockito.internal.verification;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InOrderImpl;
-import org.mockito.internal.verification.InOrderWrapper;
-import org.mockito.internal.verification.VerificationModeFactory;
-import org.mockito.internal.verification.VerificationOverTimeImpl;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
+import org.mockito.verification.VerificationMode;
 
 public class VerificationWrapperInOrderWrapper implements VerificationMode {
     private final VerificationMode delegate;

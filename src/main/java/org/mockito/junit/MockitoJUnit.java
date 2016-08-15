@@ -1,6 +1,7 @@
 package org.mockito.junit;
 
 import org.mockito.internal.junit.JUnitRule;
+import org.mockito.internal.junit.VerificationCollectorImpl;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 
 /**
