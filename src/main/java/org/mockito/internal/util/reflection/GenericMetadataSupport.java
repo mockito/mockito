@@ -62,6 +62,48 @@ public abstract class GenericMetadataSupport {
      */
     protected Map<TypeVariable, Type> contextualActualTypeParameters = new HashMap<TypeVariable, Type>();
 
+    /**
+     * Registers the type variables for the given type and all of its superclasses and superinterfaces.
+     */
+    protected void registerAllTypeVariables(Type classType) {
+        Queue<Type> typesToRegister = new LinkedList<Type>();
+        Set<Type> registeredTypes = new HashSet<Type>();
+        typesToRegister.add(classType);
+
+        while (!typesToRegister.isEmpty()) {
+            Type typeToRegister = typesToRegister.poll();
+            if (typeToRegister == null || registeredTypes.contains(typeToRegister)) {
+                continue;
+            }
+
+            registerTypeVariablesOn(typeToRegister);
+            registeredTypes.add(typeToRegister);
+
+            Class<?> rawType = extractRawTypeOf(typeToRegister);
+            typesToRegister.add(rawType.getGenericSuperclass());
+            typesToRegister.addAll(Arrays.asList(rawType.getGenericInterfaces()));
+        }
+    }
+
+    protected Class<?> extractRawTypeOf(Type type) {
+        if (type instanceof Class) {
+            return (Class<?>) type;
+        }
+        if (type instanceof ParameterizedType) {
+            return (Class<?>) ((ParameterizedType) type).getRawType();
+        }
+        if (type instanceof BoundedType) {
+            return extractRawTypeOf(((BoundedType) type).firstBound());
+        }
+        if (type instanceof TypeVariable) {
+            /*
+             * If type is a TypeVariable, then it is needed to gather data elsewhere. Usually TypeVariables are declared
+             * on the class definition, such as such as List<E>.
+             */
+            return extractRawTypeOf(contextualActualTypeParameters.get(type));
+        }
+        throw new MockitoException("Raw extraction not supported for : '" + type + "'");
+    }
 
     protected void registerTypeVariablesOn(Type classType) {
         if (!(classType instanceof ParameterizedType)) {
@@ -270,28 +312,8 @@ public abstract class GenericMetadataSupport {
         public FromClassGenericMetadataSupport(Class<?> clazz) {
             this.clazz = clazz;
 
-            for (Class<?> currentExploredClass = clazz;
-                 currentExploredClass != null && currentExploredClass != Object.class;
-                 currentExploredClass = superClassOf(currentExploredClass)) {
-                readActualTypeParametersOnDeclaringClass(currentExploredClass);
-            }
-        }
-
-        private Class superClassOf(Class<?> currentExploredClass) {
-            Type genericSuperclass = currentExploredClass.getGenericSuperclass();
-            if (genericSuperclass instanceof ParameterizedType) {
-                Type rawType = ((ParameterizedType) genericSuperclass).getRawType();
-                return (Class<?>) rawType;
-            }
-            return (Class<?>) genericSuperclass;
-        }
-
-        private void readActualTypeParametersOnDeclaringClass(Class<?> clazz) {
             registerTypeParametersOn(clazz.getTypeParameters());
-            registerTypeVariablesOn(clazz.getGenericSuperclass());
-            for (Type genericInterface : clazz.getGenericInterfaces()) {
-                registerTypeVariablesOn(genericInterface);
-            }
+            registerAllTypeVariables(clazz);
         }
 
         @Override
@@ -321,8 +343,7 @@ public abstract class GenericMetadataSupport {
         }
 
         private void readActualTypeParameters() {
-            registerTypeVariablesOn(parameterizedType.getRawType());
-            registerTypeVariablesOn(parameterizedType);
+            registerAllTypeVariables(parameterizedType);
         }
 
         @Override
@@ -401,26 +422,6 @@ public abstract class GenericMetadataSupport {
                 rawType = extractRawTypeOf(typeVariable);
             }
             return rawType;
-        }
-
-        private Class<?> extractRawTypeOf(Type type) {
-            if (type instanceof Class) {
-                return (Class<?>) type;
-            }
-            if (type instanceof ParameterizedType) {
-                return (Class<?>) ((ParameterizedType) type).getRawType();
-            }
-            if (type instanceof BoundedType) {
-                return extractRawTypeOf(((BoundedType) type).firstBound());
-            }
-            if (type instanceof TypeVariable) {
-                /*
-                 * If type is a TypeVariable, then it is needed to gather data elsewhere. Usually TypeVariables are declared
-                 * on the class definition, such as such as List<E>.
-                 */
-                return extractRawTypeOf(contextualActualTypeParameters.get(type));
-            }
-            throw new MockitoException("Raw extraction not supported for : '" + type + "'");
         }
 
         @Override

@@ -28,6 +28,11 @@ public class GenericMetadataSupportTest {
         E get();
     }
     interface ListOfNumbers extends List<Number> {}
+    interface AnotherListOfNumbers extends ListOfNumbers {}
+
+    abstract class ListOfNumbersImpl implements ListOfNumbers {}
+    abstract class AnotherListOfNumbersImpl extends ListOfNumbersImpl {}
+
     interface ListOfAnyNumbers<N extends Number & Cloneable> extends List<N> {}
 
     interface GenericsNest<K extends Comparable<K> & Cloneable> extends Map<K, Set<Number>> {
@@ -74,6 +79,13 @@ public class GenericMetadataSupportTest {
         assertThat(inferFrom(Map.class).actualTypeArguments().keySet()).hasSize(2).extracting("name").contains("K", "V");
         assertThat(inferFrom(Serializable.class).actualTypeArguments().keySet()).isEmpty();
         assertThat(inferFrom(StringList.class).actualTypeArguments().keySet()).isEmpty();
+    }
+
+    @Test
+    public void can_resolve_type_variables_from_ancestors() throws Exception {
+        Method listGet = List.class.getMethod("get", int.class);
+        assertThat(inferFrom(AnotherListOfNumbers.class).resolveGenericReturnType(listGet).rawType()).isEqualTo(Number.class);
+        assertThat(inferFrom(AnotherListOfNumbersImpl.class).resolveGenericReturnType(listGet).rawType()).isEqualTo(Number.class);
     }
 
     @Test
