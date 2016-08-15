@@ -122,8 +122,7 @@ public class AdditionalAnswers {
      *     <li>Already custom proxied object</li>
      *     <li>Special objects with a finalize method, i.e. to avoid executing it 2 times</li>
      * </ul>
-     * For more details including the use cases reported by users take a look at
-     * <a link="http://code.google.com/p/mockito/issues/detail?id=145">issue 145</a>.
+     *
      * <p>
      * The difference with the regular spy:
      * <ul>

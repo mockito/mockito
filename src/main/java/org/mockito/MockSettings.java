@@ -40,7 +40,6 @@ public interface MockSettings extends Serializable {
 
     /**
      * Specifies extra interfaces the mock should implement. Might be useful for legacy code or some corner cases.
-     * For background, see issue 51 <a href="http://code.google.com/p/mockito/issues/detail?id=51">here</a>
      * <p>
      * This mysterious feature should be used very occasionally.
      * The object under test should know exactly its collaborators & dependencies.

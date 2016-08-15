@@ -674,8 +674,7 @@ import org.mockito.junit.*;
  * <p>
  * The only reason we added <code>reset()</code> method is to
  * make it possible to work with container-injected mocks.
- * See issue 55 (<a href="http://code.google.com/p/mockito/issues/detail?id=55">here</a>)
- * or FAQ (<a href="http://code.google.com/p/mockito/wiki/FAQ">here</a>).
+ * For more information see FAQ (<a href="https://github.com/mockito/mockito/wiki/FAQ">here</a>).
  * <p>
  * <b>Don't harm yourself.</b> <code>reset()</code> in the middle of the test method is a code smell (you're probably testing too much).
  * <pre class="code"><code class="java">
@@ -693,7 +692,7 @@ import org.mockito.junit.*;
  * <h3 id="18">18. <a class="meaningful_link" href="#framework_validation">Troubleshooting & validating framework usage</a> (Since 1.8.0)</h3>
  *
  * First of all, in case of any trouble, I encourage you to read the Mockito FAQ:
- * <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
+ * <a href="https://github.com/mockito/mockito/wiki/FAQ">https://github.com/mockito/mockito/wiki/FAQ</a>
  * <p>
  * In case of questions you may also post to mockito mailing list:
  * <a href="http://groups.google.com/group/mockito">http://groups.google.com/group/mockito</a>
@@ -1812,8 +1811,7 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * The only reason we added <code>reset()</code> method is to
      * make it possible to work with container-injected mocks.
-     * See issue 55 (<a href="http://code.google.com/p/mockito/issues/detail?id=55">here</a>)
-     * or FAQ (<a href="http://code.google.com/p/mockito/wiki/FAQ">here</a>).
+     * For more information see the FAQ (<a href="https://github.com/mockito/mockito/wiki/FAQ">here</a>).
      * <p>
      * <b>Don't harm yourself.</b> <code>reset()</code> in the middle of the test method is a code smell (you're probably testing too much).
      * <pre class="code"><code class="java">
@@ -2202,8 +2200,8 @@ public class Mockito extends ArgumentMatchers {
      * Also, you can create InOrder object passing only mocks that are relevant for in-order verification.
      * <p>
      * <code>InOrder</code> verification is 'greedy', but you will hardly ever notice it.
-     * If you want to find out more, search for 'greedy' in the Mockito
-     * <a href="http://code.google.com/p/mockito/w/list">wiki pages</a>.
+     * If you want to find out more, read
+     * <a href="https://github.com/mockito/mockito/wiki/Greedy-algorithm-of-verfication-InOrder">this wiki page</a>.
      * <p>
      * As of Mockito 1.8.4 you can verifyNoMoreInvocations() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
      * <p>
@@ -2485,7 +2483,7 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: <a href="http://code.google.com/p/mockito/wiki/FAQ">http://code.google.com/p/mockito/wiki/FAQ</a>
+     * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: <a href="https://github.com/mockito/mockito/wiki/FAQ">https://github.com/mockito/mockito/wiki/FAQ</a>
      * <p>
      * In case of questions you may also post to mockito mailing list: <a href="http://groups.google.com/group/mockito">http://groups.google.com/group/mockito</a>
      * <p>
