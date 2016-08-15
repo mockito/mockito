@@ -1,3 +1,18 @@
+### 2.0.103-beta (2016-08-15 15:57 UTC)
+
+* Authors: 5
+* Commits: 5
+  * 1: Continuous Delivery Drone
+  * 1: Jeffrey Falgout
+  * 1: Marcin Zajączkowski
+  * 1: Tim van der Lippe
+  * 1: Tim van der Lippe
+* Improvements: 4
+  * Replace or remove code.google.com links in documentation [(#557)](https://github.com/mockito/mockito/pull/557)
+  * Move Mockito internal classes to internal package [(#556)](https://github.com/mockito/mockito/pull/556)
+  * Fully register a class' ancestry for GenericMetadataSupport. [(#549)](https://github.com/mockito/mockito/pull/549)
+  * DEEP_STUBS tries to mock final class [(#497)](https://github.com/mockito/mockito/issues/497)
+
 ### 2.0.102-beta (2016-08-15 13:27 UTC)
 
 * Authors: 3
