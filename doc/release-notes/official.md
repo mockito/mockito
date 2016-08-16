@@ -1,3 +1,13 @@
+### 2.0.106-beta (2016-08-16 10:26 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Brice Dutheil
+  * 1: Continuous Delivery Drone
+* Improvements: 2
+  * Fixes #554 : Checks.checkNotNull now throws IAE instead of NPE [(#560)](https://github.com/mockito/mockito/pull/560)
+  * Checks.checkNotNull should emit IllegalArgumentException instead of NPE [(#554)](https://github.com/mockito/mockito/issues/554)
+
 ### 2.0.105-beta (2016-08-16 08:27 UTC)
 
 * Authors: 3
