@@ -12,4 +12,5 @@ class NoOpStubbingListener implements StubbingListener {
 
     public void newStubbing(Invocation stubbing) {}
     public void usedStubbing(Invocation stubbing, Invocation actual) {}
+    public void stubbingNotFound(Invocation actual) {}
 }

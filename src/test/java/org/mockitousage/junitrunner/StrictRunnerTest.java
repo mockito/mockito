@@ -1,12 +1,15 @@
 package org.mockitousage.junitrunner;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.JUnitResultAssert;
@@ -17,9 +20,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-/**
- * Created by sfaber on 4/22/16.
- */
 public class StrictRunnerTest extends TestBase {
 
     JUnitCore runner = new JUnitCore();
@@ -53,6 +53,17 @@ public class StrictRunnerTest extends TestBase {
 
         //then
         JUnitResultAssert.assertThat(result).fails(1, MyAssertionError.class);
+    }
+
+    @Test public void runner_can_coexists_with_rule() {
+        //I don't believe that this scenario is useful
+        //I only wish that Mockito does not break awkwardly when both: runner & rule is used
+
+        //when
+        Result result = runner.run(RunnerAndRule.class);
+
+        //then
+        JUnitResultAssert.assertThat(result).fails(1, UnnecessaryStubbingException.class);
     }
 
     @RunWith(MockitoJUnitRunner.class)
@@ -121,6 +132,18 @@ public class StrictRunnerTest extends TestBase {
 
         @Test public void failing_test() {
             throw new MyAssertionError();
+        }
+    }
+
+    @RunWith(MockitoJUnitRunner.class)
+    public static class RunnerAndRule {
+
+        public @Rule MockitoRule rule = MockitoJUnit.rule();
+        IMethods mock = mock(IMethods.class);
+
+        @Test public void passing_test() {
+            when(mock.simpleMethod(1)).thenReturn("1");
+            mock.simpleMethod(2);
         }
     }
 }

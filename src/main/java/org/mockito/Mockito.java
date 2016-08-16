@@ -4,7 +4,7 @@
  */
 package org.mockito;
 
-import org.mockito.internal.DefaultMockitoFramework;
+import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
@@ -2579,7 +2579,7 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * Helps debugging failing tests. Experimental - use at your own risk. We're not sure if this method will stay in public api.
+     * TODO 543 move to MockingDetails
      */
     @Deprecated
     static MockitoDebugger debug() {

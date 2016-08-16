@@ -15,4 +15,8 @@ public class SimpleMockitoLogger implements MockitoLogger {
     public String getLoggedInfo() {
         return loggedInfo.toString();
     }
+
+    public boolean isEmpty() {
+        return loggedInfo.length() == 0;
+    }
 }
