@@ -1,5 +1,5 @@
 # More details on how to configure the Travis build
-# http://docs.travis-ci.com/user/build-configuration/
+# https://docs.travis-ci.com/user/customizing-the-build/
 
 # Speed up build by leversging travis caches
 before_cache:
@@ -10,7 +10,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 # Enabling container based infrastructure hoping it will help the build speed <= this didn't work well, so it's reverted
-# see http://docs.travis-ci.com/user/workers/container-based-infrastructure/
+# see https://docs.travis-ci.com/user/migrating-from-legacy/ and https://docs.travis-ci.com/user/ci-environment
 sudo: true
 
 language: java
