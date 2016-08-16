@@ -1,3 +1,13 @@
+### 2.0.104-beta (2016-08-16 02:45 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Szczepan Faber
+  * 1: Continuous Delivery Drone
+* Improvements: 2
+  * JUnit rules report unused stubs - fixes #384 [(#555)](https://github.com/mockito/mockito/pull/555)
+  * JUnit rule logs warnings about unsued / misused stubs [(#384)](https://github.com/mockito/mockito/issues/384)
+
 ### 2.0.103-beta (2016-08-15 15:57 UTC)
 
 * Authors: 5
