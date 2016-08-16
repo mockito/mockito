@@ -34,7 +34,10 @@ import java.lang.reflect.InvocationTargetException;
  * Do you think it is useful or not? Drop us an email at mockito@googlegroups.com
  * <p>
  * Experimental implementation - will change in future!
+ *
+ * @deprecated as of 2.0.0. Use the new {@link org.mockito.runners.MockitoJUnitRunner.Strict} runner instead.
  */
+@Deprecated
 public class VerboseMockitoJUnitRunner extends Runner implements Filterable {
 
     private final RunnerImpl runner;
