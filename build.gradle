@@ -52,6 +52,10 @@ test {
         exceptionFormat 'full'
         showCauses true
     }
+    //Required for building with older Java version on Travis' container-based infrastructure
+    //to not be killed - exit code 137 - https://github.com/travis-ci/travis-ci/issues/5582
+    //-Xmx512m is enough, but Java 8 build seems to be faster with 768m
+    jvmArgs '-XX:MaxPermSize=256m', '-Xmx768m'
 }
 
 dependencies {
