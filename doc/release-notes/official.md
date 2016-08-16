@@ -1,3 +1,13 @@
+### 2.0.105-beta (2016-08-16 08:27 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Continuous Delivery Drone
+  * 1: Brice Dutheil
+  * 1: Tim van der Lippe
+* Improvements: 1
+  * Deprecate whitebox and corresponding verboserunner and junitfailureha… [(#491)](https://github.com/mockito/mockito/pull/491)
+
 ### 2.0.104-beta (2016-08-16 02:45 UTC)
 
 * Authors: 2
