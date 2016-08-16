@@ -29,22 +29,22 @@ public class MockInjectionTest {
         withoutConstructor = null;
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void should_not_allow_null_on_field() {
         MockInjection.onField((Field) null, this);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void should_not_allow_null_on_fields() {
         MockInjection.onFields((Set<Field>) null, this);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void should_not_allow_null_on_instance_owning_the_field() throws Exception {
         MockInjection.onField(field("withConstructor"), null);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void should_not_allow_null_on_mocks() throws Exception {
         MockInjection.onField(field("withConstructor"), this).withMocks(null);
     }

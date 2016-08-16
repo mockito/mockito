@@ -12,7 +12,7 @@ public class Checks {
 
     public static <T> T checkNotNull(T value, String checkedValue) {
         if(value == null) {
-            throw new NullPointerException(checkedValue + " should not be null");
+            throw new IllegalArgumentException(checkedValue + " should not be null");
         }
         return value;
     }
