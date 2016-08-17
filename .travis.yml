@@ -30,7 +30,7 @@ jdk:
 
 matrix:
   include:
-  - jdk: openjdk7
+  - jdk: oraclejdk7
     env: SKIP_RELEASE=true
   - jdk: oraclejdk8
     env: SKIP_RELEASE=true
