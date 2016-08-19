@@ -11,6 +11,10 @@ import java.util.*;
  * Finds unused stubbings
  */
 public class UnusedStubbingsFinder {
+
+    /**
+     * Gets all unused stubbings for given set of mock objects, in order
+     */
     public UnusedStubbings getUnusedStubbings(Iterable<Object> mocks) {
         Collection<Stubbing> stubbings = (Collection) AllInvocationsFinder.findStubbings(mocks);
 
@@ -23,6 +27,16 @@ public class UnusedStubbingsFinder {
         return new UnusedStubbings(unused);
     }
 
+    /**
+     * Gets unused stubbings per location. This method is less accurate than {@link #getUnusedStubbings(Iterable)}.
+     * It considers that stubbings with the same location (e.g. ClassFile + line number) are the same.
+     * This is not completely accurate because a stubbing declared in a setup or constructor
+     * is created per each test method. Because those are different test methods,
+     * different mocks are created, different 'Invocation' instance is backing the 'Stubbing' instance.
+     * In certain scenarios (detecting unused stubbings by JUnit runner), we need this exact level of accuracy.
+     * Stubbing declared in constructor but realized in % of test methods is considered as 'used' stubbing.
+     * There are high level unit tests that demonstrate this scenario.
+     */
     public Collection<Invocation> getUnusedStubbingsByLocation(Iterable<Object> mocks) {
         Collection<Stubbing> stubbings = (Collection) AllInvocationsFinder.findStubbings(mocks);
 
