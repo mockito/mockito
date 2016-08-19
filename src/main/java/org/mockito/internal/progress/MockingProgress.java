@@ -5,12 +5,10 @@
 
 package org.mockito.internal.progress;
 
-import org.mockito.internal.listeners.MockingProgressListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.listeners.StubbingListener;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
 
@@ -49,13 +47,4 @@ public interface MockingProgress {
     void setVerificationStrategy(VerificationStrategy strategy);
 
     VerificationMode maybeVerifyLazily(VerificationMode mode);
-
-    void setStubbingListener(StubbingListener stubbingListener);
-
-    /**
-     * Stubbing listener is synchronized internally.
-     * This way, users don't have to worry about making the implementations of StubbingListener synchronized
-     * Be cautious how it is used and where to avoid performance impact.
-     */
-    StubbingListener getStubbingListener();
 }

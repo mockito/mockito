@@ -5,9 +5,6 @@
 
 package org.mockito.internal.progress;
 
-import static org.mockito.internal.exceptions.Reporter.unfinishedStubbing;
-import static org.mockito.internal.exceptions.Reporter.unfinishedVerificationException;
-
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.LocationImpl;
@@ -17,12 +14,14 @@ import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.listeners.StubbingListener;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import static org.mockito.internal.exceptions.Reporter.unfinishedStubbing;
+import static org.mockito.internal.exceptions.Reporter.unfinishedVerificationException;
 
 @SuppressWarnings("unchecked")
 public class MockingProgressImpl implements MockingProgress {
@@ -46,8 +45,6 @@ public class MockingProgressImpl implements MockingProgress {
             }
         };
     }
-    private StubbingListener stubbingListener;
-
     public void reportOngoingStubbing(OngoingStubbing iOngoingStubbing) {
         this.ongoingStubbing = iOngoingStubbing;
     }
@@ -113,20 +110,8 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void stubbingCompleted(Invocation invocation) {
         stubbingInProgress = null;
-        getStubbingListener().newStubbing(invocation);
     }
 
-    /*
-
-     //TODO 545 thread safety of all mockito
-
-     use cases:
-        - single threaded execution throughout
-        - single threaded mock creation, stubbing & verification, multi-threaded interaction with mock
-        - thread per test case
-
-     */
-    
     public String toString() {
         return  "iOngoingStubbing: " + ongoingStubbing + 
         ", verificationMode: " + verificationMode +
@@ -168,14 +153,14 @@ public class MockingProgressImpl implements MockingProgress {
         return this.verificationStrategy.maybeVerifyLazily(mode);
     }
 
-    public void setStubbingListener(StubbingListener stubbingListener) {
-        this.stubbingListener = stubbingListener;
-    }
+     /*
 
-    public StubbingListener getStubbingListener() {
-        if (this.stubbingListener == null) {
-            return NoOpStubbingListener.INSTANCE;
-        }
-        return this.stubbingListener;
-    }
+     //TODO 545 thread safety of all mockito
+
+     use cases:
+        - single threaded execution throughout
+        - single threaded mock creation, stubbing & verification, multi-threaded interaction with mock
+        - thread per test case
+
+     */
 }
