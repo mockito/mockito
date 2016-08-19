@@ -81,7 +81,7 @@ public class StrictRunnerTest extends TestBase {
         }
     }
 
-    @RunWith(MockitoJUnitRunner.class)
+    @RunWith(MockitoJUnitRunner.Strict.class) //using Strict to make sure it does the right thing
     public static class StubbingInConstructorUnused {
         IMethods mock = when(mock(IMethods.class).simpleMethod(1)).thenReturn("1").getMock();
         @Test public void dummy() {}
