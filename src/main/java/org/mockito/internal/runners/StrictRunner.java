@@ -42,7 +42,6 @@ public class StrictRunner implements RunnerImpl {
             //1. if all tests from given test have ran (filter requested is false)
             //   Otherwise we would report unnecessary stubs even if the user runs just single test from the class
             //2. tests are successful (we don't want to add an extra failure on top of any existing failure, to avoid confusion)
-            //TODO 401 JUnit runner should have a specific message explaining to the user how it works.
             reporter.validateUnusedStubs(testClass, notifier);
         }
     }

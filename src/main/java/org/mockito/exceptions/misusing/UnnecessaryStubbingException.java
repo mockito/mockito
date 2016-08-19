@@ -1,7 +1,8 @@
 package org.mockito.exceptions.misusing;
 
 /**
- * Unnecessary stubs are stubbed method calls that were never realized during test execution, example:
+ * Unnecessary stubs are stubbed method calls that were never realized during test execution
+ * (see also {@link org.mockito.quality.MockitoHint}), example:
  * <pre class="code"><code class="java">
  * //code under test:
  * ...
