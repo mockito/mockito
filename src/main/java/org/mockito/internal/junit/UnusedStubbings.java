@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * Contains unused stubbings, knows how to format them
  */
-class UnusedStubbings {
+public class UnusedStubbings {
 
     private final Collection<Stubbing> unused;
 
@@ -32,7 +32,7 @@ class UnusedStubbings {
         logger.log(hint.toString());
     }
 
-    int size() {
+    public int size() {
         return unused.size();
     }
 
