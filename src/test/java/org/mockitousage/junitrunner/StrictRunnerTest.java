@@ -55,7 +55,7 @@ public class StrictRunnerTest extends TestBase {
         JUnitResultAssert.assertThat(result).fails(1, MyAssertionError.class);
     }
 
-    @Test public void runner_can_coexists_with_rule() {
+    @Test public void runner_can_coexist_with_rule() {
         //I don't believe that this scenario is useful
         //I only wish that Mockito does not break awkwardly when both: runner & rule is used
 
@@ -64,6 +64,14 @@ public class StrictRunnerTest extends TestBase {
 
         //then
         JUnitResultAssert.assertThat(result).fails(1, UnnecessaryStubbingException.class);
+    }
+
+    @Test public void runner_in_multi_threaded_tests() {
+        //when
+        Result result = runner.run(StubUsedFromDifferentThread.class);
+
+        //then
+        JUnitResultAssert.assertThat(result).isSuccessful();
     }
 
     @RunWith(MockitoJUnitRunner.class)
@@ -144,6 +152,27 @@ public class StrictRunnerTest extends TestBase {
         @Test public void passing_test() {
             when(mock.simpleMethod(1)).thenReturn("1");
             mock.simpleMethod(2);
+        }
+    }
+
+    @RunWith(MockitoJUnitRunner.class)
+    public static class StubUsedFromDifferentThread {
+
+        IMethods mock = mock(IMethods.class);
+
+        @Test public void passing_test() throws Exception {
+            //stubbing is done in main thread:
+            when(mock.simpleMethod(1)).thenReturn("1");
+
+            //stubbing is used in a different thread
+            //stubbing should not be reported as unused by the runner
+            Thread t = new Thread() {
+                public void run() {
+                    mock.simpleMethod(1);
+                }
+            };
+            t.start();
+            t.join();
         }
     }
 }
