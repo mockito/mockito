@@ -8,6 +8,11 @@ buildscript {
         classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.5.2' //rest calls to bintray api
     }
 }
+
+plugins {
+    id 'com.gradle.build-scan' version '1.0'
+}
+
 apply plugin: 'java'
 group = 'org.mockito'
 description = 'Core API and implementation.'
@@ -117,7 +122,7 @@ apply from: 'gradle/release.gradle'
 apply from: "gradle/pom.gradle"
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.4'
+    gradleVersion = '2.14.1'
 }
 
 task ciBuild {
@@ -128,3 +133,9 @@ task ciBuild {
 
 //Making sure that release task is only invoked after the entire ciBuild validation
 release.mustRunAfter ciBuild
+
+//Posting Build scans to https://scans.gradle.com
+buildScan {
+    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+    licenseAgree = 'yes'
+}
