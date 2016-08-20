@@ -22,7 +22,6 @@ import org.mockito.invocation.Invocation;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Collection;
 
 import static org.mockito.Mockito.mock;
 
@@ -30,7 +29,6 @@ import static org.mockito.Mockito.mock;
  * the easiest way to make sure that tests clean up invalid state is to require
  * valid state for all tests.
  */
-@SuppressWarnings("unchecked")
 public class TestBase {
 
     @After
@@ -82,16 +80,6 @@ public class TestBase {
 
     protected static InvocationMatcher invocationMatcherAt(String location) {
         return new InvocationBuilder().location(location).toInvocationMatcher();
-    }
-
-    protected void assertContainsType(final Collection<?> list, final Class<?> clazz) {
-        for (Object o : list) {
-            if (clazz.isAssignableFrom(o.getClass())) {
-                return;
-            }
-        }
-        throw new AssertionError("Input list does not contain any element of type: '" + clazz + "'. " +
-            "Inspected following elements: " + list);
     }
 
     protected String getStackTrace(Throwable e) {
