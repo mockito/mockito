@@ -12,6 +12,7 @@ import java.util.LinkedList;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
@@ -50,7 +51,7 @@ public class LenientCopyToolTest extends TestBase {
     public void shouldShallowCopyBasicFinalField() throws Exception {
         // given
         assertEquals(100, from.finalField);
-        assertNotEquals(100, to.finalField);
+        assertThat(to.finalField).isNotEqualTo(100);
 
         // when
         tool.copyToMock(from, to);
@@ -63,7 +64,7 @@ public class LenientCopyToolTest extends TestBase {
     public void shouldShallowCopyTransientPrivateFields() throws Exception {
         // given
         from.privateTransientField = 1000;
-        assertNotEquals(1000, to.privateTransientField);
+        assertThat(to.privateTransientField).isNotEqualTo(1000);
 
         // when
         tool.copyToMock(from, to);
@@ -93,11 +94,11 @@ public class LenientCopyToolTest extends TestBase {
         from.privateTransientField = 2;
         from.protectedField = 3;
         
-        assertNotEquals(from.defaultField, to.defaultField);
-        assertNotEquals(from.instancePublicField, to.instancePublicField);
-        assertNotEquals(from.privateField, to.privateField);
-        assertNotEquals(from.privateTransientField, to.privateTransientField);
-        assertNotEquals(from.protectedField, to.protectedField);
+        assertThat(to.defaultField).isNotEqualTo(from.defaultField);
+        assertThat(to.instancePublicField).isNotEqualTo(from.instancePublicField);
+        assertThat(to.privateField).isNotEqualTo(from.privateField);
+        assertThat(to.privateTransientField).isNotEqualTo(from.privateTransientField);
+        assertThat(to.protectedField).isNotEqualTo(from.protectedField);
 
         // when
         tool.copyToMock(from, to);
@@ -116,14 +117,12 @@ public class LenientCopyToolTest extends TestBase {
         ((InheritMe) from).privateInherited = "foo";
         ((InheritMe) from).protectedInherited = "bar";
     
-        assertNotEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
-        assertNotEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
+        assertThat(((InheritMe) to).privateInherited).isNotEqualTo(((InheritMe) from).privateInherited);
         
         //when
         tool.copyToMock(from, to);
         
         //then
-        assertEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
         assertEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
     }
     

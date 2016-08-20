@@ -17,7 +17,6 @@ import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.realmethod.RealMethod;
-import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 
 import java.io.ByteArrayOutputStream;
@@ -25,8 +24,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
 
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -63,10 +60,6 @@ public class TestBase {
     
     protected Invocation getLastInvocation() {
         return new MockitoCore().getLastInvocation();
-    }
-
-    public static void assertNotEquals(Object expected, Object got) {
-        assertFalse(expected.equals(got));
     }
 
     protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
