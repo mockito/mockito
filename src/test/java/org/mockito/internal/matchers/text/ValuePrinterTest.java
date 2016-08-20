@@ -3,6 +3,8 @@ package org.mockito.internal.matchers.text;
 
 import org.junit.Test;
 
+import java.util.HashMap;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.internal.matchers.text.ValuePrinter.print;
@@ -14,7 +16,14 @@ public class ValuePrinterTest {
         assertEquals("null", print(null));
         assertEquals("\"str\"", print("str"));
         assertEquals("\"x\ny\"", print("x\ny"));
+        assertEquals("3", print(3));
+        assertEquals("3L", print(3L));
         assertEquals("[1, 2]", print(new int[]{1, 2}));
+        assertEquals("{\"hoge\"=2L}", print(new HashMap<String, Object>() {
+            {
+                put("hoge", 2L);
+            }
+        }));
         assertTrue(print(new UnsafeToString()).contains("UnsafeToString"));
         assertEquals("ToString", print(new ToString()));
         assertEquals("formatted", print(new FormattedText("formatted")));
