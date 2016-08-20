@@ -1,3 +1,15 @@
+### 2.0.107-beta (2016-08-20 15:03 UTC)
+
+* Authors: 3
+* Commits: 5
+  * 2: Pascal Schumacher
+  * 2: Brice Dutheil
+  * 1: Continuous Delivery Drone
+* Improvements: 3
+  * fix some rawtype warnings [(#574)](https://github.com/mockito/mockito/pull/574)
+  * replace TestBase#assertNotEquals with AssertJ #isNotEqualTo [(#573)](https://github.com/mockito/mockito/pull/573)
+  * Make travis use OracleJDK7 instead of OpenJDK7 [(#566)](https://github.com/mockito/mockito/pull/566)
+
 ### 2.0.106-beta (2016-08-16 10:26 UTC)
 
 * Authors: 2
