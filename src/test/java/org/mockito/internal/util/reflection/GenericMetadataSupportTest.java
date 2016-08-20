@@ -199,10 +199,8 @@ public class GenericMetadataSupportTest {
         assertThat(boundedType.interfaceBounds()).contains(Cloneable.class);
     }
 
-
-
-    private Type typeVariableValue(Map<TypeVariable, Type> typeVariables, String typeVariableName) {
-        for (Map.Entry<TypeVariable, Type> typeVariableTypeEntry : typeVariables.entrySet()) {
+    private Type typeVariableValue(Map<TypeVariable<?>, Type> typeVariables, String typeVariableName) {
+        for (Map.Entry<TypeVariable<?>, Type> typeVariableTypeEntry : typeVariables.entrySet()) {
             if (typeVariableTypeEntry.getKey().getName().equals(typeVariableName)) {
                 return typeVariableTypeEntry.getValue();
             }
