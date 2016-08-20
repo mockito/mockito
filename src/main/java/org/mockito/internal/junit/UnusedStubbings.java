@@ -21,7 +21,6 @@ class UnusedStubbings {
             return;
         }
 
-        //TODO 544 it would be nice to make the String look good if x goes multiple digits (padding)
         StubbingHint hint = new StubbingHint(testName);
         int x = 1;
         for (Stubbing candidate : unused) {
