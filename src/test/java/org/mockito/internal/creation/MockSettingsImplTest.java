@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import static junit.framework.TestCase.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MockSettingsImplTest extends TestBase {
 
@@ -96,7 +97,7 @@ public class MockSettingsImplTest extends TestBase {
         mockSettingsImpl.verboseLogging();
 
         //then
-        assertContainsType(mockSettingsImpl.getInvocationListeners(), VerboseMockInvocationLogger.class);
+        assertThat(mockSettingsImpl.getInvocationListeners()).extracting("class").contains(VerboseMockInvocationLogger.class);
     }
 
     @Test
