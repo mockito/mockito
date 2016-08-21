@@ -5,9 +5,9 @@
 package org.mockito;
 
 import org.mockito.invocation.Invocation;
+import org.mockito.mock.MockCreationSettings;
 
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * Provides mocking information.
@@ -36,27 +36,24 @@ public interface MockingDetails {
     /**
      * All method invocations on this mock.
      * Can be empty - it means there were no interactions with the mock.
+     * <p>
+     * This method is useful for framework integrators and for certain edge cases.
      *
      * @since 1.10.0
      */
     Collection<Invocation> getInvocations();
 
     /**
-     * Returns the type that is mocked. It is the type originally passed to
-     * the <code>{@link Mockito#mock(Class)}</code> or <code>{@link Mockito#spy(Class)}</code> function,
-     * or the type referenced by a Mockito annotation.
-     *
-     * @return The mocked type
+     * Returns various mock settings provided when the mock was created, for example:
+     *  mocked class, mock name (if any), any extra interfaces (if any), etc.
+     * See also {@link MockCreationSettings}.
+     * <p>
+     * This method is useful for framework integrators and for certain edge cases.
+     * <p>
+     * If <code>null</code> or non-mock was passed to {@link Mockito#mockingDetails(Object)}
+     * then this method will throw with an appropriate exception.
+     * After all, non-mock objects do not have any mock creation settings.
      * @since 2.0.0
      */
-    Class<?> getMockedType();
-
-    /**
-     * Returns the extra-interfaces of the mock. The interfaces that were configured at the mock creation
-     * with the <code>{@link MockSettings#extraInterfaces(Class[])}</code>.
-     *
-     * @return The extra-interfaces
-     * @since 2.0.0
-     */
-    Set<Class<?>> getExtraInterfaces();
+    MockCreationSettings<?> getMockCreationSettings();
 }

@@ -1,16 +1,17 @@
 package org.mockito.internal.util;
 
+import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockitousage.IMethods;
 
-import java.util.*;
-
+import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mockingDetails;
 
 @SuppressWarnings("unchecked")
 @RunWith(MockitoJUnitRunner.class)
@@ -18,6 +19,7 @@ public class DefaultMockingDetailsTest {
 
     @Mock private Foo foo;
     @Mock private Bar bar;
+    @Mock private IMethods mock;
     @Spy private Gork gork;
 
     @Test
@@ -42,28 +44,51 @@ public class DefaultMockingDetailsTest {
     }
 
     @Test
-    public void should_get_mocked_type() throws Exception {
-        assertEquals(Bar.class, mockingDetails(bar).getMockedType());
-    }
+    public void provides_invocations() {
+        //when
+        mock.simpleMethod(10);
+        mock.otherMethod();
 
-    @Test(expected = NotAMockException.class)
-    public void should_report_when_not_a_mockito_mock_on_getMockedType() throws Exception {
-        mockingDetails("not a mock").getMockedType();
+        //then
+        assertEquals(0, mockingDetails(foo).getInvocations().size());
+        assertEquals("[mock.simpleMethod(10);, mock.otherMethod();]", mockingDetails(mock).getInvocations().toString());
     }
 
     @Test
-    public void should_get_extra_interfaces() throws Exception {
-        Bar loup = mock(Bar.class, withSettings().extraInterfaces(List.class, Observer.class));
-        assertEquals(setOf(Observer.class, List.class), mockingDetails(loup).getExtraInterfaces());
+    public void provides_mock_creation_settings() {
+        //smoke test some creation settings
+        assertEquals(Foo.class, mockingDetails(foo).getMockCreationSettings().getTypeToMock());
+        assertEquals(Bar.class, mockingDetails(bar).getMockCreationSettings().getTypeToMock());
+        assertEquals(0, mockingDetails(mock).getMockCreationSettings().getExtraInterfaces().size());
     }
 
     @Test(expected = NotAMockException.class)
-    public void should_report_when_not_a_mockito_mock_on_getExtraInterfaces() throws Exception {
-        mockingDetails("not a mock").getExtraInterfaces();
+    public void fails_when_getting_creation_settings_for_incorrect_input() {
+        mockingDetails(null).getMockCreationSettings();
     }
 
-    private <T> Set<T> setOf(T... items) {
-        return new HashSet<T>(Arrays.asList(items));
+    @Test
+    public void fails_when_getting_invocations_when_null() {
+        try {
+            //when
+            mockingDetails(null).getInvocations();
+            //then
+            fail();
+        } catch (NotAMockException e) {
+            TestCase.assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is null!", e.getMessage());
+        }
+    }
+
+    @Test
+    public void fails_when_getting_invocations_when_not_mock() {
+        try {
+            //when
+            mockingDetails(new Object()).getInvocations();
+            //then
+            fail();
+        } catch (NotAMockException e) {
+            TestCase.assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
+        }
     }
 
     public class Foo { }
