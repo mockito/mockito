@@ -1,3 +1,15 @@
+### 2.0.108-beta (2016-08-21 15:31 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 4: Szczepan Faber
+  * 1: Continuous Delivery Drone
+  * 1: Pascal Schumacher
+* Improvements: 3
+  * replace TestBase#assertContainsType(final Collection<?> list, final C… [(#572)](https://github.com/mockito/mockito/pull/572)
+  * Improved the public API of MockingDetails [(#569)](https://github.com/mockito/mockito/pull/569)
+  * improve Mockito.mockingDetails API [(#541)](https://github.com/mockito/mockito/issues/541)
+
 ### 2.0.107-beta (2016-08-20 15:03 UTC)
 
 * Authors: 3
