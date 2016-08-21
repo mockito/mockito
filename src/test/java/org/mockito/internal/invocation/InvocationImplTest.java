@@ -56,7 +56,7 @@ public class InvocationImplTest extends TestBase {
     
     @Test
     public void shouldBeACitizenOfHashes() {
-        Map map = new HashMap();
+        Map<Invocation, String> map = new HashMap<Invocation, String>();
         map.put(invocation, "one");
         assertEquals("one", map.get(invocation));
     }

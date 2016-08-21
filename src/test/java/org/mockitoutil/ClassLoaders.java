@@ -202,7 +202,7 @@ public abstract class ClassLoaders {
             this.inMemoryClassObjects = inMemoryClassObjects;
         }
 
-        protected Class findClass(String name) throws ClassNotFoundException {
+        protected Class<?> findClass(String name) throws ClassNotFoundException {
             byte[] classDefinition = inMemoryClassObjects.get(name);
             if (classDefinition != null) {
                 return defineClass(name, classDefinition, 0, classDefinition.length);

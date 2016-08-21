@@ -71,7 +71,7 @@ public class ReturnsGenericDeepStubsTest {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
         Cloneable cloneable_bound_of_typevar_K_referenced_by_typevar_O = (Cloneable) mock.typeVarWithTypeParams();
-        Comparable<?> comparable_bound_of_typevar_K_referenced_by_typevar_O = (Comparable) mock.typeVarWithTypeParams();
+        Comparable<?> comparable_bound_of_typevar_K_referenced_by_typevar_O = (Comparable<?>) mock.typeVarWithTypeParams();
     }
 
     @Test

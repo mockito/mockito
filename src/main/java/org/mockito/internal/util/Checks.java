@@ -17,7 +17,7 @@ public class Checks {
         return value;
     }
 
-    public static <T extends Iterable> T checkItemsNotNull(T iterable, String checkedIterable) {
+    public static <T extends Iterable<?>> T checkItemsNotNull(T iterable, String checkedIterable) {
         checkNotNull(iterable, checkedIterable);
         for (Object item : iterable) {
             checkNotNull(item, "item in " + checkedIterable);
