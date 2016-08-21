@@ -25,8 +25,8 @@ public class MatchersPrinter {
         return ValuePrinter.printValues("(\n    ", ",\n    ", "\n);", args);
     }
 
-    private Iterator applyPrintSettings(List<ArgumentMatcher> matchers, PrintSettings printSettings) {
-        List out = new LinkedList();
+    private Iterator<FormattedText> applyPrintSettings(List<ArgumentMatcher> matchers, PrintSettings printSettings) {
+        List<FormattedText> out = new LinkedList<FormattedText>();
         int i = 0;
         for (final ArgumentMatcher matcher : matchers) {
             if (matcher instanceof ContainsExtraTypeInfo && printSettings.extraTypeInfoFor(i)) {

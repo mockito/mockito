@@ -15,7 +15,7 @@ public class MockNameImpl implements MockName, Serializable {
     private boolean defaultName;
 
     @SuppressWarnings("unchecked")
-    public MockNameImpl(String mockName, Class classToMock) {
+    public MockNameImpl(String mockName, Class<?> classToMock) {
         if (mockName == null) {
             this.mockName = toInstanceName(classToMock);
             this.defaultName = true;

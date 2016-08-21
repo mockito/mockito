@@ -109,8 +109,8 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     
     @Test
     public void shouldVerifyOneMockButFailOnOther() throws Exception {
-        List list = mock(List.class);
-        Map map = mock(Map.class);
+        List<String> list = mock(List.class);
+        Map<String, Integer> map = mock(Map.class);
 
         list.add("one");
         list.add("one");

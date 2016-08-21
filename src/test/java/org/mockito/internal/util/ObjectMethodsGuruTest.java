@@ -20,7 +20,7 @@ public class ObjectMethodsGuruTest extends TestBase {
         int compareTo(HasCompareToButDoesNotImplementComparable other);
     }
 
-    private interface HasCompare extends Comparable {
+    private interface HasCompare extends Comparable<HasCompare> {
         int foo(HasCompare other);
         int compareTo(HasCompare other, String redHerring);
         int compareTo(String redHerring);
