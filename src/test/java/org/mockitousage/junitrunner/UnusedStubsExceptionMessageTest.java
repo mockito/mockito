@@ -13,9 +13,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by sfaber on 4/22/16.
- */
 public class UnusedStubsExceptionMessageTest extends TestBase {
 
     //Moving the code around this class is tricky and may cause the test to fail

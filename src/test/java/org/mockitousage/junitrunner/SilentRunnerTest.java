@@ -20,9 +20,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by sfaber on 4/22/16.
- */
 public class SilentRunnerTest extends TestBase {
 
     JUnitCore runner = new JUnitCore();

@@ -4,9 +4,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by sfaber on 7/22/16.
- */
 public class TestBaseTest extends TestBase {
 
     @Test public void filters_line_no_from_stack_trace() {

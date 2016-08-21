@@ -5,6 +5,7 @@ import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.Mockito;
+import org.mockito.internal.junit.UnnecessaryStubbingsReporter;
 import org.mockito.internal.runners.util.FailureDetecter;
 
 public class StrictRunner implements RunnerImpl {
@@ -27,13 +28,13 @@ public class StrictRunner implements RunnerImpl {
         UnnecessaryStubbingsReporter reporter = new UnnecessaryStubbingsReporter();
         FailureDetecter listener = new FailureDetecter();
 
-        Mockito.framework().setStubbingListener(reporter);
+        Mockito.framework().addListener(reporter);
         try {
             // add listener that detects test failures
             notifier.addListener(listener);
             runner.run(notifier);
         } finally {
-            Mockito.framework().setStubbingListener(null);
+            Mockito.framework().removeListener(reporter);
         }
 
         if (!filterRequested && listener.isSussessful()) {
@@ -41,7 +42,6 @@ public class StrictRunner implements RunnerImpl {
             //1. if all tests from given test have ran (filter requested is false)
             //   Otherwise we would report unnecessary stubs even if the user runs just single test from the class
             //2. tests are successful (we don't want to add an extra failure on top of any existing failure, to avoid confusion)
-            //TODO 401 JUnit runner should have a specific message explaining to the user how it works.
             reporter.validateUnusedStubs(testClass, notifier);
         }
     }
