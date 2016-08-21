@@ -1,3 +1,14 @@
+### 2.0.109-beta (2016-08-21 15:40 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Continuous Delivery Drone
+  * 1: Szczepan Faber
+* Improvements: 3
+  * Bumped Gradle and enabled Build Scans [(#576)](https://github.com/mockito/mockito/pull/576)
+  * Publish Mockito build results to Gradle Build Scans [(#564)](https://github.com/mockito/mockito/issues/564)
+  * improve stubbing warnings formatting [(#544)](https://github.com/mockito/mockito/issues/544)
+
 ### 2.0.108-beta (2016-08-21 15:31 UTC)
 
 * Authors: 3
