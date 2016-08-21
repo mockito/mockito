@@ -1,3 +1,12 @@
+### 2.0.110-beta (2016-08-21 17:59 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Continuous Delivery Drone
+  * 1: Pascal Schumacher
+* Improvements: 1
+  * fix some rawtype warnings [(#579)](https://github.com/mockito/mockito/pull/579)
+
 ### 2.0.109-beta (2016-08-21 15:40 UTC)
 
 * Authors: 2
