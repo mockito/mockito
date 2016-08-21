@@ -1,3 +1,13 @@
+### 2.0.111-beta (2016-08-21 23:48 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Continuous Delivery Drone
+  * 1: Szczepan Faber
+* Improvements: 2
+  * Ensured that MockitoJUnitRunner is thread safe wrt unused stubs detection [(#568)](https://github.com/mockito/mockito/pull/568)
+  * JUnit runner detects unused stubs [(#401)](https://github.com/mockito/mockito/issues/401)
+
 ### 2.0.110-beta (2016-08-21 17:59 UTC)
 
 * Authors: 2
