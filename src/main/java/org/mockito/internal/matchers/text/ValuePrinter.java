@@ -40,7 +40,7 @@ public class ValuePrinter {
         Iterator<? extends Map.Entry<?, ?>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<?, ?> entry = iterator.next();
-            result.append(print(entry.getKey())).append("=").append(print(entry.getValue()));
+            result.append(print(entry.getKey())).append(" = ").append(print(entry.getValue()));
             if (iterator.hasNext()) {
                 result.append(", ");
             }

@@ -3,7 +3,7 @@ package org.mockito.internal.matchers.text;
 
 import org.junit.Test;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,9 +19,15 @@ public class ValuePrinterTest {
         assertEquals("3", print(3));
         assertEquals("3L", print(3L));
         assertEquals("[1, 2]", print(new int[]{1, 2}));
-        assertEquals("{\"hoge\"=2L}", print(new HashMap<String, Object>() {
+        assertEquals("{\"hoge\" = 2L}", print(new LinkedHashMap<String, Object>() {
             {
                 put("hoge", 2L);
+            }
+        }));
+        assertEquals("{\"foo\" = 2L, \"bar\" = 3L}", print(new LinkedHashMap<String, Object>() {
+            {
+                put("foo", 2L);
+                put("bar", 3L);
             }
         }));
         assertTrue(print(new UnsafeToString()).contains("UnsafeToString"));
