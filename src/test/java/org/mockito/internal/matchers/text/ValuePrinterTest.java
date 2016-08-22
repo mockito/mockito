@@ -18,6 +18,8 @@ public class ValuePrinterTest {
         assertEquals("\"x\ny\"", print("x\ny"));
         assertEquals("3", print(3));
         assertEquals("3L", print(3L));
+        assertEquals("3.14d", print(3.14d));
+        assertEquals("3.14f", print(3.14f));
         assertEquals("[1, 2]", print(new int[]{1, 2}));
         assertEquals("{\"hoge\" = 2L}", print(new LinkedHashMap<String, Object>() {
             {

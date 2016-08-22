@@ -24,6 +24,10 @@ public class ValuePrinter {
             return printChar((Character) value);
         } else if (value instanceof Long) {
             return value + "L";
+        } else if (value instanceof Double) {
+            return value + "d";
+        } else if (value instanceof Float) {
+            return value + "f";
         } else if (value instanceof Map) {
             return printMap((Map) value);
         } else if (value.getClass().isArray()) {
