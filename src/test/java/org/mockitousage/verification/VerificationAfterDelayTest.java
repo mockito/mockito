@@ -107,9 +107,8 @@ public class VerificationAfterDelayTest {
         stopWatch.assertElapsedTimeIsMoreThan(100, MILLISECONDS);
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 200)
     public void shouldStopEarlyIfTestIsDefinitelyFailed() throws Exception {
-        // given
         // given
         callAsyncWithDelay(mock, '1', 20, MILLISECONDS);
 
