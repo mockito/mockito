@@ -17,24 +17,34 @@ See the [release notes page](https://github.com/mockito/mockito/blob/master/doc/
 
 ## Versioning
 
-Mockito has an automated release system, which imposed some change on how the version numbers work. While this is similar to [_semver_](http://semver.org/), there's some differences. Let's look at the following versions `1.10.19` and `2.0.5-beta` and `2.0.0` (not yet released). They follow this scheme:
+Mockito has an automated release system, which imposed some change on how the version numbers work.
+They follow this scheme:
 
 ```
-major.minor.build-tag
+major.minor.patch-tag.tagVersion
 ```
 
 | number | meaning                                                                               |
 | ------ | ------------------------------------------------------------------------------------- |
-| major  | major version, with most probably incompatible change in API and behavior             |
-| minor  | minor version, important enough change to bump this number                            |
-| build  | a released build number incremented automatically when a pull request is merged       |
-| tag    | will probably be `-beta` or just nothing (during beta, breaking changes are expected) |
+| major  | major version, backwards incompatible with the previous major version                 |
+| minor  | minor version, backwards compatible with added features                               |
+| patch  | patch version, small bug fixes or stylistic improvements                              |
+| tag    | *optional* beta or RC (release candidate). See below.                                 |
 
 That means:
 
-* `2.0.0` and `2.0.5-beta` are binary incompatible with `1.10.19`.
-* `2.0.5-beta` is the fifth release beta of version `2.0.0`.
-* `2.0.5-beta` is a work in progress, api may change and may not be graduated in version `2.0.0`.
+* `2.0.0` and `2.0.0-beta.5` are binary incompatible with `1.10.19`.
+* `2.0.0-beta.5` is the fifth release beta of version `2.0.0`.
+* `2.0.0-beta.5` could be (but is not necessarily) binary incompatible with version `2.0.0`.
+* `2.0.0-RC.1` is binary compatible with release `2.0.0`.
+
+### Tags
+There are two different tags: beta or RC. Beta indicates that the version is directly generated from the master branch of the git repository.
+Beta releases are automatically published whenever we merge a pull request or push a change to the master branch.
+
+When we deem our master status worthy of a release, we publish a release candidate. The release candidate is scheduled to be officially published
+in the official release a while later. There will be no breaking changes between a release candidate and its equivalent official release.
+The only changes will include bug fixes or small updates. No additional features will be included.
 
 ## Looking for support
 
