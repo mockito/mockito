@@ -52,7 +52,7 @@ task mockitoJavadoc(type: Javadoc) {
           }
         </script>
     """.replaceAll(/\r|\n/, ""))
-//    options.stylesheetFile file("src/javadoc/stylesheet.css")
+    options.stylesheetFile file("src/javadoc/stylesheet.css")
 //    options.addStringOption('top', 'some html')
     if (JavaVersion.current().isJava8Compatible()) {
         options.addStringOption('Xdoclint:none', '-quiet')
