@@ -21,15 +21,19 @@ public class ValuePrinterTest {
         assertEquals("3.14d", print(3.14d));
         assertEquals("3.14f", print(3.14f));
         assertEquals("[1, 2]", print(new int[]{1, 2}));
-        assertEquals("{\"hoge\" = 2L}", print(new LinkedHashMap<String, Object>() {
-            {
-                put("hoge", 2L);
-            }
-        }));
-        assertEquals("{\"foo\" = 2L, \"bar\" = 3L}", print(new LinkedHashMap<String, Object>() {
+        assertEquals("{\"foo\" = 2L}", print(new LinkedHashMap<String, Object>() {
             {
                 put("foo", 2L);
-                put("bar", 3L);
+            }
+        }));
+        assertEquals("{\"byte\" = 0x01, \"short\" = 2, \"int\" = 3, \"long\" = 4L, \"float\" = 2.71f, \"double\" = 3.14d}", print(new LinkedHashMap<String, Object>() {
+            {
+                put("byte", (byte)1);
+                put("short", (short)2);
+                put("int", 3);
+                put("long", 4L);
+                put("float", 2.71f);
+                put("double", 3.14d);
             }
         }));
         assertTrue(print(new UnsafeToString()).contains("UnsafeToString"));

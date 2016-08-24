@@ -28,6 +28,8 @@ public class ValuePrinter {
             return value + "d";
         } else if (value instanceof Float) {
             return value + "f";
+        } else if (value instanceof Byte) {
+            return String.format("0x%02X", (Byte) value);
         } else if (value instanceof Map) {
             return printMap((Map) value);
         } else if (value.getClass().isArray()) {
