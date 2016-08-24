@@ -1,3 +1,14 @@
+### 2.0.0-beta.114 (2016-08-24 13:18 UTC)
+
+* Authors: 3
+* Commits: 5
+  * 3: Brice Dutheil
+  * 1: Tokuhiro Matsuno
+  * 1: Continuous Delivery Drone
+* Improvements: 2
+  * stylesheet-tweaks-for-openjdk6 [(#592)](https://github.com/mockito/mockito/pull/592)
+  * Pretty print primitive and wrappers types in Maps [(#571)](https://github.com/mockito/mockito/pull/571)
+
 ### 2.0.0-beta.113 (2016-08-24 09:29 UTC)
 
 * Authors: 2
