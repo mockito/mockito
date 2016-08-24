@@ -27,7 +27,7 @@ import org.mockito.verification.VerificationMode;
  *
  * @see org.mockito.Mockito#verify(Object)
  * @see org.mockito.Mockito#verify(Object, VerificationMode)
- * @since 2.*
+ * @since 2.0.0
  */
 @Incubating
 public interface VerificationCollector extends TestRule {
@@ -37,7 +37,7 @@ public interface VerificationCollector extends TestRule {
      * throw a MockitoAssertionError containing all messages indicating the failed verifications.
      *
      * @throws MockitoAssertionError If there were failed verifications
-     * @since 2.*
+     * @since 2.0.0
      */
     @Incubating
     void collectAndReport() throws MockitoAssertionError;
@@ -51,7 +51,7 @@ public interface VerificationCollector extends TestRule {
      * still be verified directly.
      *
      * @return this
-     * @since 2.*
+     * @since 2.0.0
      */
     @Incubating
     VerificationCollector assertLazily();

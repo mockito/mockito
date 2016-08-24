@@ -186,7 +186,7 @@ class EqualsBuilder {
      * @param reflectUpToClass  the superclass to reflect up to (inclusive),
      *  may be <code>null</code>
      * @return <code>true</code> if the two Objects have tested equals.
-     * @since 2.0
+     * @since 2.0.0
      */
     public static boolean reflectionEquals(Object lhs, Object rhs, boolean testTransients, Class<?> reflectUpToClass) {
         return reflectionEquals(lhs, rhs, testTransients, reflectUpToClass, null);
@@ -216,7 +216,7 @@ class EqualsBuilder {
      *  may be <code>null</code>
      * @param excludeFields  array of field names to exclude from testing
      * @return <code>true</code> if the two Objects have tested equals.
-     * @since 2.0
+     * @since 2.0.0
      */
     public static boolean reflectionEquals(Object lhs, Object rhs, boolean testTransients, Class<?> reflectUpToClass,
             String[] excludeFields) {
@@ -312,7 +312,7 @@ class EqualsBuilder {
      *
      * @param superEquals  the result of calling <code>super.equals()</code>
      * @return EqualsBuilder - used to chain calls.
-     * @since 2.0
+     * @since 2.0.0
      */
     public EqualsBuilder appendSuper(boolean superEquals) {
         isEquals &= superEquals;

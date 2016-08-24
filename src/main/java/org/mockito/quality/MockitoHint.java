@@ -1,7 +1,7 @@
 package org.mockito.quality;
 
 /**
- * Starting with 2.* of Mockito stubbing hints / warnings are printed to standard output.
+ * Starting with 2.0.0 of Mockito stubbing hints / warnings are printed to standard output.
  * Hints contain clickable links that take you right to the line of code that contains a possible problem.
  * Those are hints - they not necessarily indicate real problems 100% of the time.
  * This way the developer can:
@@ -60,7 +60,7 @@ package org.mockito.quality;
  * <p>
  * Feedback very welcome at <a href="https://github.com/mockito/mockito/issues/384">issue 384</a>.
  *
- * @since 2.*
+ * @since 2.0.0
  */
 public interface MockitoHint {
 }
