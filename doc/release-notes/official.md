@@ -1,3 +1,19 @@
+### 2.0.0-beta.112 (2016-08-24 08:17 UTC)
+
+* Authors: 5
+* Commits: 7
+  * 3: Brice Dutheil
+  * 1: Continuous Delivery Drone
+  * 1: Pascal Schumacher
+  * 1: Rafael Winterhalter
+  * 1: Tim van der Lippe
+* Improvements: 5
+  * Reintroduces javadoc stylesheet [(#589)](https://github.com/mockito/mockito/pull/589)
+  * Update version explanation with bad beta versions [(#588)](https://github.com/mockito/mockito/pull/588)
+  * made some timeouts in VerificationAfterDelayTest and VerificationWith… [(#578)](https://github.com/mockito/mockito/pull/578)
+  * Fix again javadoc stylesheet [(#552)](https://github.com/mockito/mockito/issues/552)
+  * Update version scheme to publish release candidate [(#483)](https://github.com/mockito/mockito/pull/483)
+
 ### 2.0.111-beta (2016-08-21 23:48 UTC)
 
 * Authors: 2
