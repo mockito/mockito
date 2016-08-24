@@ -12,6 +12,8 @@ Tasty mocking framework for unit tests in Java
 
 ![latest 2.x](https://img.shields.io/badge/latest beta-2.x =>-yellow.svg) [ ![Current release](https://api.bintray.com/packages/szczepiq/maven/mockito/images/download.svg) ](https://bintray.com/szczepiq/maven/mockito/_latestVersion) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core)
 
+**Note :** Maven badge may not show the latest versions due to our odd previous beta version scheme, be sure to look for version `2.0.0-beta.<build>`. Bintray version is the most up to date but maven central sync may require a few hours to sync.
+
 ## Current release
 See the [release notes page](https://github.com/mockito/mockito/blob/master/doc/release-notes/official.md) and [latest documentation](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html).
 
