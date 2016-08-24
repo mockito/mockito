@@ -12,12 +12,12 @@ import static org.mockito.internal.invocation.InvocationsFinder.findAllMatchingU
 import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 import static org.mockito.internal.invocation.InvocationsFinder.findPreviousVerifiedInOrder;
 import static org.mockito.internal.invocation.InvocationsFinder.findSimilarInvocation;
+import static org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool.getSuspiciouslyNotMatchingArgsIndexes;
 
 import java.util.List;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.reporting.SmartPrinter;
 import org.mockito.internal.verification.api.InOrderContext;
-import org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool;
 import org.mockito.invocation.Invocation;
 
 public class MissingInvocationChecker {
@@ -37,8 +37,7 @@ public class MissingInvocationChecker {
             throw wantedButNotInvoked(wanted, invocations);
         }
         
-        ArgumentMatchingTool argumentMatchingTool = new ArgumentMatchingTool();
-        Integer[] indexesOfSuspiciousArgs = argumentMatchingTool.getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());
+        Integer[] indexesOfSuspiciousArgs = getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());
         SmartPrinter smartPrinter = new SmartPrinter(wanted, similar, indexesOfSuspiciousArgs);
         throw argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
         

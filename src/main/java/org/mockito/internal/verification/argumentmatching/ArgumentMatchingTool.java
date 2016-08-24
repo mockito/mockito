@@ -13,10 +13,11 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class ArgumentMatchingTool {
 
+    private ArgumentMatchingTool(){}
     /**
      * Suspiciously not matching arguments are those that don't match, the toString() representation is the same but types are different.
      */
-    public Integer[] getSuspiciouslyNotMatchingArgsIndexes(List<ArgumentMatcher> matchers, Object[] arguments) {
+    public static Integer[] getSuspiciouslyNotMatchingArgsIndexes(List<ArgumentMatcher> matchers, Object[] arguments) {
         if (matchers.size() != arguments.length) {
             return new Integer[0];
         }
@@ -35,7 +36,7 @@ public class ArgumentMatchingTool {
         return suspicious.toArray(new Integer[0]);
     }
 
-    private boolean safelyMatches(ArgumentMatcher m, Object arg) {
+    private static boolean safelyMatches(ArgumentMatcher m, Object arg) {
         try {
             return m.matches(arg);
         } catch (Throwable t) {
@@ -43,7 +44,7 @@ public class ArgumentMatchingTool {
         }
     }
 
-    private boolean toStringEquals(ArgumentMatcher m, Object arg) {
+    private static boolean toStringEquals(ArgumentMatcher m, Object arg) {
         return m.toString().equals(arg == null ? "null" : arg.toString());
     }
 }
