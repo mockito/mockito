@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;

@@ -7,9 +7,9 @@ package org.mockito.internal.debugging;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.internal.handler.NotifiedMethodInvocationReport;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.StubInfoImpl;
-import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 

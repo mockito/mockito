@@ -8,7 +8,6 @@ import static org.mockito.internal.exceptions.Reporter.invocationListenerThrewEx
 
 import java.util.List;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.listeners.NotifiedMethodInvocationReport;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
