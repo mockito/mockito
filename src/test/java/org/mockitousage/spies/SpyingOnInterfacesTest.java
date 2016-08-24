@@ -64,7 +64,7 @@ public class SpyingOnInterfacesTest extends TestBase {
 
     @Test
     public void shouldAllowDelegatingToDefaultMethod() throws Exception {
-        assumeTrue(ClassFileVersion.forThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
+        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
 
         Class<?> type = new ByteBuddy()
                 .makeInterface()
@@ -86,7 +86,7 @@ public class SpyingOnInterfacesTest extends TestBase {
 
     @Test
     public void shouldAllowSpyingOnDefaultMethod() throws Exception {
-        assumeTrue(ClassFileVersion.forThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
+        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
 
         Class<?> iFace = new ByteBuddy()
                 .makeInterface()
