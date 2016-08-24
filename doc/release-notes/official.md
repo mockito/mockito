@@ -1,3 +1,12 @@
+### 2.0.0-beta.113 (2016-08-24 09:29 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Continuous Delivery Drone
+  * 1: Christian Schwarz
+* Improvements: 1
+  * removed package org.mockito.internal.listeners [(#590)](https://github.com/mockito/mockito/pull/590)
+
 ### 2.0.0-beta.112 (2016-08-24 08:17 UTC)
 
 * Authors: 5
