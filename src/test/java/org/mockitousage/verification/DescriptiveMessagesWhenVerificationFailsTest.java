@@ -374,7 +374,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             assertThat(e)
                 .hasMessageContaining("iMethods.threeArgumentMethod(12, foo, \"xx\")")
                 .hasMessageContaining("iMethods.arrayMethod([\"a\", \"b\", \"c\"])")
-                .hasMessageContaining("iMethods.forByte(25)");
+                .hasMessageContaining("iMethods.forByte(0x19)");
         }
     }
 

@@ -1,6 +1,7 @@
 package org.mockito.internal.matchers.text;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import static java.lang.String.valueOf;
 
@@ -21,6 +22,16 @@ public class ValuePrinter {
             return "\"" + value + "\"";
         } else if (value instanceof Character) {
             return printChar((Character) value);
+        } else if (value instanceof Long) {
+            return value + "L";
+        } else if (value instanceof Double) {
+            return value + "d";
+        } else if (value instanceof Float) {
+            return value + "f";
+        } else if (value instanceof Byte) {
+            return String.format("0x%02X", (Byte) value);
+        } else if (value instanceof Map) {
+            return printMap((Map) value);
         } else if (value.getClass().isArray()) {
             return printValues("[", ", ", "]", new org.mockito.internal.matchers.text.ArrayIterator(value));
         } else if (value instanceof FormattedText) {
@@ -28,6 +39,19 @@ public class ValuePrinter {
         }
 
         return descriptionOf(value);
+    }
+
+    private static String printMap(Map<?,?> map) {
+        StringBuilder result = new StringBuilder();
+        Iterator<? extends Map.Entry<?, ?>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<?, ?> entry = iterator.next();
+            result.append(print(entry.getKey())).append(" = ").append(print(entry.getValue()));
+            if (iterator.hasNext()) {
+                result.append(", ");
+            }
+        }
+        return "{" + result.toString() + "}";
     }
 
     /**

@@ -42,7 +42,7 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
             //then
             assertThat(e)
                 .hasMessageContaining("withLong((Integer) 100);")
-                .hasMessageContaining("withLong((Long) 100);");
+                .hasMessageContaining("withLong((Long) 100L);");
         }
     }
 
@@ -60,7 +60,7 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
             //then
             assertThat(e)
                 .hasMessageContaining("withLongAndInt((Integer) 100, 200)")
-                .hasMessageContaining("withLongAndInt((Long) 100, 200)");
+                .hasMessageContaining("withLongAndInt((Long) 100L, 200)");
         }
     }
 
@@ -78,7 +78,7 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
             //then
             Assertions.assertThat(e.getMessage())
                       .contains("withLongAndInt(\n" +
-                                        "    (Long) 100,\n" +
+                                        "    (Long) 100L,\n" +
                                         "    200\n" +
                                         ")")
                       .contains("withLongAndInt(\n" +
@@ -101,8 +101,8 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
         } catch (ArgumentsAreDifferent e) {
             //then
             assertThat(e)
-                .hasMessageContaining("withLongAndInt(100, 200)")
-                .hasMessageContaining("withLongAndInt(100, 230)");
+                .hasMessageContaining("withLongAndInt(100L, 200)")
+                .hasMessageContaining("withLongAndInt(100L, 230)");
         }
     }
 
