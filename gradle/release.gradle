@@ -13,6 +13,8 @@ In case the release process from Travis CI fails, please try:
 
 def skipReleaseCommitMessage = '[ci skip-release]'
 
+def customReleaseVersionPattern = /.*\[ci-release ([^\]]+)\].*/
+
 import org.mockito.release.version.*
 
 assert project == rootProject
@@ -62,9 +64,10 @@ task("releaseNeeded") {
         def skipEnvVariable = System.env.SKIP_RELEASE
         def commitMessage = System.env.TRAVIS_COMMIT_MESSAGE
         def skippedByCommitMessage = commitMessage?.contains(skipReleaseCommitMessage)
-        ext.needed = dryRun || (pr == 'false' && branch == 'master' && !comparePublications.publicationsEqual && skipEnvVariable != 'true' && !skippedByCommitMessage)
-        logger.lifecycle("Release needed: {}, branch: {}, pull request: {}, dry run: {}, publications equal: {}, skip env variable: {}, skipped by message: {}.",
-                needed, branch, pr, dryRun, comparePublications.publicationsEqual, skipEnvVariable, skippedByCommitMessage)
+        def customVersion = (commitMessage =~ customReleaseVersionPattern)
+        ext.needed = dryRun || customVersion.matches() || (pr == 'false' && branch == 'master' && !comparePublications.publicationsEqual && skipEnvVariable != 'true' && !skippedByCommitMessage)
+        logger.lifecycle("Release needed: {}, branch: {}, pull request: {}, dry run: {}, publications equal: {}, skip env variable: {}, skipped by message: {}, customVersion: {}.",
+                needed, branch, pr, dryRun, comparePublications.publicationsEqual, skipEnvVariable, skippedByCommitMessage, customVersion.matches())
     }
 }
 
@@ -91,7 +94,8 @@ release {
 }
 
 releaseSteps {
-    String currentVersion = project.version //the version loaded when Gradle build has started
+    def customVersion = (System.env.TRAVIS_COMMIT_MESSAGE =~ customReleaseVersionPattern)
+    String currentVersion = (customVersion.matches() ? customVersion[0][1] : project.version)
     String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER $skipReleaseCommitMessage"
     MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
