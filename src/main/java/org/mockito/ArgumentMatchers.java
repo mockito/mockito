@@ -115,7 +115,7 @@ public class ArgumentMatchers {
      * <strong>Notes : </strong><br/>
      * <ul>
      *     <li>For primitive types use {@link #anyChar()} family or {@link #isA(Class)} or {@link #any(Class)}.</li>
-     *     <li>Since mockito 2.0 {@link #any(Class)} is not anymore an alias of this method.</li>
+     *     <li>Since mockito 2.0.0 {@link #any(Class)} is not anymore an alias of this method.</li>
      * </ul>
      * </p>
      *
@@ -165,7 +165,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null instance of <code></code>, thus <code>null</code> is not anymore a valid value.
+     * Since Mockito 2.0.0, only allow non-null instance of <code></code>, thus <code>null</code> is not anymore a valid value.
      * As reference are nullable, the suggested API to <strong>match</strong> <code>null</code>
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -174,8 +174,8 @@ public class ArgumentMatchers {
      * <p><strong>Notes : </strong><br/>
      * <ul>
      *     <li>For primitive types use {@link #anyChar()} family.</li>
-     *     <li>Since Mockito 2.0 this method will perform a type check thus <code>null</code> values are not authorized.</li>
-     *     <li>Since mockito 2.0 {@link #any()} and {@link #anyObject()} are not anymore aliases of this method.</li>
+     *     <li>Since Mockito 2.0.0 this method will perform a type check thus <code>null</code> values are not authorized.</li>
+     *     <li>Since mockito 2.0.0 {@link #any()} and {@link #anyObject()} are not anymore aliases of this method.</li>
      * </ul>
      * </p>
      *
@@ -240,7 +240,7 @@ public class ArgumentMatchers {
      * @return <code>null</code>.
      * @see #any()
      * @see #any(Class)
-     * @deprecated as of 2.0 use {@link #any()}
+     * @deprecated as of 2.0.0 use {@link #any()}
      */
     @Deprecated
     public static <T> T anyVararg() {
@@ -252,7 +252,7 @@ public class ArgumentMatchers {
      * Any <code>boolean</code> or <strong>non-null</strong> <code>Boolean</code>
      *
      * <p>
-     * Since Mockito 2.0, only allow valued <code>Boolean</code>, thus <code>null</code> is not anymore a valid value.
+     * Since Mockito 2.0.0, only allow valued <code>Boolean</code>, thus <code>null</code> is not anymore a valid value.
      * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -275,7 +275,7 @@ public class ArgumentMatchers {
      * Any <code>byte</code> or <strong>non-null</strong> <code>Byte</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow valued <code>Byte</code>, thus <code>null</code> is not anymore a valid value.
+     * Since Mockito 2.0.0, only allow valued <code>Byte</code>, thus <code>null</code> is not anymore a valid value.
      * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -298,7 +298,7 @@ public class ArgumentMatchers {
      * Any <code>char</code> or <strong>non-null</strong> <code>Character</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow valued <code>Character</code>, thus <code>null</code> is not anymore a valid value.
+     * Since Mockito 2.0.0, only allow valued <code>Character</code>, thus <code>null</code> is not anymore a valid value.
      * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -321,7 +321,7 @@ public class ArgumentMatchers {
      * Any int or <strong>non-null</strong> <code>Integer</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow valued <code>Integer</code>, thus <code>null</code> is not anymore a valid value.
+     * Since Mockito 2.0.0, only allow valued <code>Integer</code>, thus <code>null</code> is not anymore a valid value.
      * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -344,7 +344,7 @@ public class ArgumentMatchers {
      * Any <code>long</code> or <strong>non-null</strong> <code>Long</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow valued <code>Long</code>, thus <code>null</code> is not anymore a valid value.
+     * Since Mockito 2.0.0, only allow valued <code>Long</code>, thus <code>null</code> is not anymore a valid value.
      * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -367,7 +367,7 @@ public class ArgumentMatchers {
      * Any <code>float</code> or <strong>non-null</strong> <code>Float</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow valued <code>Float</code>, thus <code>null</code> is not anymore a valid value.
+     * Since Mockito 2.0.0, only allow valued <code>Float</code>, thus <code>null</code> is not anymore a valid value.
      * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -390,7 +390,7 @@ public class ArgumentMatchers {
      * Any <code>double</code> or <strong>non-null</strong> <code>Double</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow valued <code>Double</code>, thus <code>null</code> is not anymore a valid value.
+     * Since Mockito 2.0.0, only allow valued <code>Double</code>, thus <code>null</code> is not anymore a valid value.
      * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -413,7 +413,7 @@ public class ArgumentMatchers {
      * Any <code>short</code> or <strong>non-null</strong> <code>Short</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow valued <code>Short</code>, thus <code>null</code> is not anymore a valid value.
+     * Since Mockito 2.0.0, only allow valued <code>Short</code>, thus <code>null</code> is not anymore a valid value.
      * As primitive wrappers are nullable, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -436,7 +436,7 @@ public class ArgumentMatchers {
      * Any <strong>non-null</strong> <code>String</code>
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>String</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>String</code>.
      * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -459,7 +459,7 @@ public class ArgumentMatchers {
      * Any <strong>non-null</strong> <code>List</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>List</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>List</code>.
      * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -491,7 +491,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>List</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>List</code>.
      * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -517,7 +517,7 @@ public class ArgumentMatchers {
      * Any <strong>non-null</strong> <code>Set</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>Set</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>Set</code>.
      * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -551,7 +551,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>Set</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>Set</code>.
      * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -577,7 +577,7 @@ public class ArgumentMatchers {
      * Any <strong>non-null</strong> <code>Map</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>Map</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>Map</code>.
      * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -611,7 +611,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>Map</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>Map</code>.
      * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -638,7 +638,7 @@ public class ArgumentMatchers {
      * Any <strong>non-null</strong> <code>Collection</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>Collection</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>Collection</code>.
      * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code>
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -672,7 +672,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>Collection</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>Collection</code>.
      * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code>
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -698,7 +698,7 @@ public class ArgumentMatchers {
      * Any <strong>non-null</strong> <code>Iterable</code>.
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>Iterable</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>Iterable</code>.
      * As this is a nullable reference, the suggested API to <strong>match</strong> <code>null</code>
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -733,7 +733,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * Since Mockito 2.0, only allow non-null <code>String</code>.
+     * Since Mockito 2.0.0, only allow non-null <code>String</code>.
      * As strings are nullable reference, the suggested API to <strong>match</strong> <code>null</code> wrapper
      * would be {@link #isNull()}. We felt this change would make tests harness much safer that it was with Mockito
      * 1.x.
@@ -1120,7 +1120,7 @@ public class ArgumentMatchers {
      * Allows creating custom argument matchers.
      *
      * <p>
-     * This API has changed in 2.0, please read {@link ArgumentMatcher} for rationale and migration guide.
+     * This API has changed in 2.0.0, please read {@link ArgumentMatcher} for rationale and migration guide.
      * <b>NullPointerException</b> auto-unboxing caveat is described below.
      * </p>
      *

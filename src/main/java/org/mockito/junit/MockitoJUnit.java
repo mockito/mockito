@@ -28,7 +28,7 @@ public class MockitoJUnit {
      *
      * @see VerificationCollector
      * @return the rule instance
-     * @since 2.*
+     * @since 2.0.0
      */
     @Incubating
     public static VerificationCollector collector() {

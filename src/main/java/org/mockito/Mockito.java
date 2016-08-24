@@ -30,7 +30,7 @@ import org.mockito.junit.*;
  * <h1>Contents</h1>
  *
  * <b>
- *      <a href="#0">0. Migrating to 2.0</a><br/>
+ *      <a href="#0">0. Migrating to 2.0.0</a><br/>
  *      <a href="#1">1. Let's verify some behaviour! </a><br/>
  *      <a href="#2">2. How about some stubbing? </a><br/>
  *      <a href="#3">3. Argument matchers </a><br/>
@@ -71,19 +71,19 @@ import org.mockito.junit.*;
  *
  * </b>
  *
- * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to 2.0</a></h3>
+ * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to 2.0.0</a></h3>
  *
  * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.0.
  * Mockito follows <a href="http://semver.org/">semantic versioning</a>
  * and contains breaking changes only on major version upgrades.
  * In the lifecycle of a library, breaking changes are necessary
  * to roll out a set of brand new features that alter the existing behavior or even change the API.
- * We hope that you enjoy Mockito 2.0!
+ * We hope that you enjoy Mockito 2.0.0!
  * <p>
  * List of breaking changes:
  * <ul>
  *     <li>Mockito is decoupled from Hamcrest and custom matchers API has changed, see {@link ArgumentMatcher}
- *     for rationale and migration guide</li>.
+ *     for rationale and migration guide.</li>
  *     <li>Stubbing API has been tweaked to avoid unavoidable compilation warnings that appeared on JDK7+ platform.
  *     This will only affect binary compatibility, compilation compatibility remains unaffected.</li>
  * </ul>
@@ -2589,7 +2589,7 @@ public class Mockito extends ArgumentMatchers {
     /**
      * For advanced users or framework integrators. See {@link MockitoFramework} class.
      *
-     * @since 2.*
+     * @since 2.0.0
      */
     @Incubating
     public static MockitoFramework framework() {

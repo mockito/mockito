@@ -238,25 +238,25 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see InOrder#verify(Object)
-         * @since 2.0
+         * @since 2.0.0
          */
         T should(InOrder inOrder);
 
         /**
          * @see InOrder#verify(Object, VerificationMode)
-         * @since 2.0
+         * @since 2.0.0
          */
         T should(InOrder inOrder, VerificationMode mode);
 
         /**
          * @see #verifyZeroInteractions(Object...)
-         * @since 2.0
+         * @since 2.0.0
          */
         void shouldHaveZeroInteractions();
 
         /**
          * @see #verifyNoMoreInteractions(Object...)
-         * @since 2.0
+         * @since 2.0.0
          */
         void shouldHaveNoMoreInteractions();
     }
@@ -287,7 +287,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see InOrder#verify(Object)
-         * @since 2.0
+         * @since 2.0.0
          */
         public T should(InOrder inOrder) {
             return inOrder.verify(mock);
@@ -295,7 +295,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see InOrder#verify(Object, VerificationMode)
-         * @since 2.0
+         * @since 2.0.0
          */
         public T should(InOrder inOrder, VerificationMode mode) {
             return inOrder.verify(mock, mode);
@@ -303,7 +303,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see #verifyZeroInteractions(Object...)
-         * @since 2.0
+         * @since 2.0.0
          */
         public void shouldHaveZeroInteractions() {
             verifyZeroInteractions(mock);
@@ -311,7 +311,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see #verifyNoMoreInteractions(Object...)
-         * @since 2.0
+         * @since 2.0.0
          */
         public void shouldHaveNoMoreInteractions() {
             verifyNoMoreInteractions(mock);
