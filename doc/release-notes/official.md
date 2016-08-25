@@ -1,3 +1,13 @@
+### 2.0.0-beta.117 (2016-08-25 10:00 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Continuous Delivery Drone
+  * 1: Brice Dutheil
+  * 1: Christian Schwarz
+* Improvements: 1
+  * refactored ArgumentMatchingTool to a static utillity class [(#591)](https://github.com/mockito/mockito/pull/591)
+
 ### 2.0.0-beta.116 (2016-08-25 07:01 UTC)
 
 * Authors: 3
