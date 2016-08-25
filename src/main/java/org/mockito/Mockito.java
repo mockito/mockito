@@ -1203,9 +1203,6 @@ import org.mockito.junit.*;
  *         return input1 + input2;
  *     }})).when(mock).execute(anyString(), anyString());
  * </code></pre>
- *
- * TODO rework the documentation, write about hamcrest.
- *
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
@@ -2579,7 +2576,8 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * TODO 543 move to MockingDetails
+     * This API will move soon to a different place.
+     * See <a href="https://github.com/mockito/mockito/issues/577">issue 577</a>.
      */
     @Deprecated
     static MockitoDebugger debug() {
