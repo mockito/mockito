@@ -111,11 +111,11 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOnlyWithTimeout() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 10, MILLISECONDS);
+        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
 
         // then
         verify(mock, never()).oneArg('c');
-        verify(mock, timeout(30).only()).oneArg('c');
+        verify(mock, timeout(100).only()).oneArg('c');
     }
 
     @Test
