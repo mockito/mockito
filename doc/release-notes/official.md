@@ -1,3 +1,14 @@
+### 2.0.0-beta.116 (2016-08-25 07:01 UTC)
+
+* Authors: 3
+* Commits: 4
+  * 2: Szczepan Faber
+  * 1: Continuous Delivery Drone
+  * 1: Brice Dutheil
+* Improvements: 2
+  * Removed TODO and dead code [(#597)](https://github.com/mockito/mockito/pull/597)
+  * Mockito Javadoc has a TODO about hamcrest [(#593)](https://github.com/mockito/mockito/issues/593)
+
 ### 2.0.0-beta.115 (2016-08-24 13:56 UTC)
 
 * Authors: 2
