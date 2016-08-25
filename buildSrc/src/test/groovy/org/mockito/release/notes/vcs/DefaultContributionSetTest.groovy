@@ -49,6 +49,35 @@ class DefaultContributionSetTest extends Specification {
         then:
         c.size() == 1
         c[0].message == "good one"
-        c[0].author == "A"
+        c[0].authorName == "A"
+    }
+
+    def "contributions by same author with different email"() {
+        contributions.add(new GitCommit("john@x", "john", ""))
+        contributions.add(new GitCommit("john@x", "john", ""))
+        contributions.add(new GitCommit("john@y", "john", "")) //same person, different email
+        contributions.add(new GitCommit("x@y", "x", "")) //different person
+
+        expect:
+        contributions.toText() == """* Authors: 2
+* Commits: 4
+  * 3: john
+  * 1: x"""
+    }
+
+    def "contributions sorted by name if number of commits the same"() {
+        contributions.add(new GitCommit("d@d", "d", ""))
+        contributions.add(new GitCommit("d@d", "d", ""))
+        contributions.add(new GitCommit("c@c", "c", ""))
+        contributions.add(new GitCommit("B@B", "B", ""))
+        contributions.add(new GitCommit("a@a", "a", ""))
+
+        expect:
+        contributions.toText() == """* Authors: 4
+* Commits: 5
+  * 2: d
+  * 1: a
+  * 1: B
+  * 1: c"""
     }
 }
