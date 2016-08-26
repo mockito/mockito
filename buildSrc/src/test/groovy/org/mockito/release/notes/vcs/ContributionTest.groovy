@@ -8,8 +8,8 @@ class ContributionTest extends Specification {
         def c = new Contribution(new GitCommit("a@b", "lad", "m1"))
 
         expect:
-        c.author == "lad"
-        c.authorId == "a@b"
+        c.authorName == "lad"
+        c.authorEmail == "a@b"
         c.toText() == "1: lad"
 
         when: c.add(new GitCommit("a@b", "lad", "m2"))
@@ -30,6 +30,16 @@ class ContributionTest extends Specification {
         c3.commits.size() == 3
 
         set as List == [c3, c2, c1]
+    }
+
+    def "sorted by commits and uppercase name"() {
+        def d = new Contribution(new GitCommit("d", "d", "")).add(new GitCommit("d", "d", ""))
+        def c = new Contribution(new GitCommit("c", "c", ""))
+        def b = new Contribution(new GitCommit("B", "B", ""))
+        def a = new Contribution(new GitCommit("a", "a", ""))
+
+        expect:
+        new TreeSet([d, c, b, a]) as List == [d, a, b, c]
     }
 
     def "has String representation"() {

@@ -32,6 +32,7 @@ class GitContributionsProvider implements ContributionsProvider {
                 String email = entryParts[0].trim();
                 String author = entryParts[1].trim();
                 String message = entryParts[2].trim();
+                LOG.info("Loaded commit - email: {}, author: {}, message (trimmed): {}", email, author, message.replaceAll("\n.*", ""));
                 contributions.add(new GitCommit(email, author, message));
             }
         }

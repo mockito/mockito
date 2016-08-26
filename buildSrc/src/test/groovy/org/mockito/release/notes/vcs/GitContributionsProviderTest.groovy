@@ -30,8 +30,8 @@ john@doe@@info@@John R. Doe@@info@@dummy commit
 
         and:
         def commits = c.allCommits as List
-        commits[0].author == "Szczepan Faber"
-        commits[0].authorId == "szczepiq@gmail.com"
+        commits[0].authorName == "Szczepan Faber"
+        commits[0].authorEmail == "szczepiq@gmail.com"
         commits[0].message == "Tidy-up in buildSrc\nnext line"
     }
 

@@ -17,11 +17,11 @@ class GitCommit implements Commit {
         this.tickets = TicketParser.parseTickets(message);
     }
 
-    public String getAuthorId() {
+    public String getAuthorEmail() {
         return email;
     }
 
-    public String getAuthor() {
+    public String getAuthorName() {
         return author;
     }
 
