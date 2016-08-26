@@ -10,9 +10,9 @@ import java.util.Collection;
  */
 public class UnusedStubbings {
 
-    private final Collection<Stubbing> unused;
+    private final Collection<? extends Stubbing> unused;
 
-    UnusedStubbings(Collection<Stubbing> unused) {
+    UnusedStubbings(Collection<? extends Stubbing> unused) {
         this.unused = unused;
     }
 
