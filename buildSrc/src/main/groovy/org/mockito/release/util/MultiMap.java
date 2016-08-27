@@ -2,10 +2,16 @@ package org.mockito.release.util;
 
 import java.util.*;
 
+/**
+ * Basic multi-map that contains multiple values per key
+ */
 public class MultiMap<K, V> {
 
-    Map<K, Collection<V>> data = new LinkedHashMap<K, Collection<V>>();
+    private final Map<K, Collection<V>> data = new LinkedHashMap<K, Collection<V>>();
 
+    /**
+     * If the key does not exist, null is returned
+     */
     public Collection<V> get(K key) {
         return data.get(key);
     }

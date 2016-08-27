@@ -9,7 +9,7 @@ class DefaultImprovementsTest extends Specification {
         new DefaultImprovements([:]).toText() == "* No notable improvements. See the commits for detailed changes."
     }
 
-    def "with improvements"() {
+    def "set of improvements in order"() {
         def is = new DefaultImprovements([bug: "Bugfixes", enhancement: "Enhancements"])
             .add(new Improvement(100, "Fix bug x", "http://issues/100", ["bug"]))
             .add(new Improvement(122, "Javadoc update", "http://url/122", []))
