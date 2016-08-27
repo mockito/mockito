@@ -2,10 +2,13 @@ package org.mockito.internal.junit;
 
 import org.mockito.internal.invocation.Stubbing;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
-import org.mockito.internal.util.collections.ListUtil;
+import org.mockito.internal.stubbing.StubbedInvocationMatcher;
+import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.invocation.Invocation;
 
 import java.util.*;
+
+import static org.mockito.internal.util.collections.ListUtil.filter;
 
 /**
  * Finds unused stubbings
@@ -16,10 +19,10 @@ public class UnusedStubbingsFinder {
      * Gets all unused stubbings for given set of mock objects, in order
      */
     public UnusedStubbings getUnusedStubbings(Iterable<Object> mocks) {
-        Collection<Stubbing> stubbings = (Collection) AllInvocationsFinder.findStubbings(mocks);
+        Set<StubbedInvocationMatcher> stubbings = AllInvocationsFinder.findStubbings(mocks);
 
-        LinkedList<Stubbing> unused = ListUtil.filter(stubbings, new ListUtil.Filter<Stubbing>() {
-            public boolean isOut(Stubbing s) {
+        List<StubbedInvocationMatcher> unused = filter(stubbings, new Filter<StubbedInvocationMatcher>() {
+            public boolean isOut(StubbedInvocationMatcher s) {
                 return s.wasUsed();
             }
         });
@@ -38,7 +41,7 @@ public class UnusedStubbingsFinder {
      * There are high level unit tests that demonstrate this scenario.
      */
     public Collection<Invocation> getUnusedStubbingsByLocation(Iterable<Object> mocks) {
-        Collection<Stubbing> stubbings = (Collection) AllInvocationsFinder.findStubbings(mocks);
+        Set<StubbedInvocationMatcher> stubbings = AllInvocationsFinder.findStubbings(mocks);
 
         //1st pass, collect all the locations of the stubbings that were used
         //note that those are _not_ locations where the stubbings was used
