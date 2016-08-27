@@ -5,7 +5,7 @@ import java.util.List;
 
 class DefaultImprovements implements ImprovementSet {
 
-    private final List<Improvement> improvements = new LinkedList<Improvement>();
+    final List<Improvement> improvements = new LinkedList<Improvement>();
 
     public String toText() {
         if (improvements.isEmpty()) {
