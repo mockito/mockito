@@ -1,3 +1,18 @@
+### 2.0.0-beta.118 (2016-08-27 12:01 UTC)
+
+* Authors: 5
+* Commits: 6
+  * 2: Szczepan Faber
+  * 1: Brice Dutheil
+  * 1: Continuous Delivery Drone
+  * 1: Lukasz Szewc
+  * 1: Pascal Schumacher
+* Improvements: 4
+  * suppressed compiler warning and unchecked collections cast [(#600)](https://github.com/mockito/mockito/pull/600)
+  * Improved release notes generation [(#599)](https://github.com/mockito/mockito/pull/599)
+  * Generated release notes contain unsorted and duplicate committers [(#598)](https://github.com/mockito/mockito/issues/598)
+  * make VerificationWithTimeoutTest#shouldAllowMixingOnlyWithTimeout mor… [(#587)](https://github.com/mockito/mockito/pull/587)
+
 ### 2.0.0-beta.117 (2016-08-25 10:00 UTC)
 
 * Authors: 3
