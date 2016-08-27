@@ -32,11 +32,11 @@ notes {
         'java-9': "Java 9 support",
         'java-8': "Java 8 support",
         'new feature': "New Features",
+        'BDD': 'Behavior-Driven Development support',
         'bug': "Bugfixes",
         'enhancement': "Enhancements",
         'android': "Android support",
-        'docs': 'Documentation',
-        'BDD': 'Behavior-Driven Development support'
+        'docs': 'Documentation'
     ]
 }
 
