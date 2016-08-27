@@ -26,6 +26,17 @@ apply plugin: 'release'
 
 notes {
     notesFile = project.file("doc/release-notes/official.md")
+    labels = [
+        '1.* incompatible': 'Incompatible changes',
+        'java-9': "Java 9 support",
+        'java-8': "Java 8 support",
+        'new feature': "New Features",
+        'bug': "Bugfixes",
+        'enhancement': "Enhancements",
+        'android': "Android support",
+        'docs': 'Documentation',
+        'BDD': 'Behavior-Driven Development support'
+    ]
 }
 
 def dryRun = project.hasProperty('dryRun')

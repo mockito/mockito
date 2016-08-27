@@ -17,6 +17,9 @@ class ReleaseNotesExtension {
     private final File workDir;
     private final String version;
 
+    //TODO SF document the behavior
+    Map labels = new LinkedHashMap<String, String>()
+
     ReleaseNotesExtension(File workDir, String version) {
         this.workDir = workDir
         this.version = version
@@ -49,7 +52,7 @@ class ReleaseNotesExtension {
         def prev = "v" + getPreviousVersion()
         def current = "HEAD"
         LOG.lifecycle("Building notes for revisions: {} -> {}", prev, current)
-        def newContent = builder.buildNotes(version, prev, current)
+        def newContent = builder.buildNotes(version, prev, current, labels)
         newContent
     }
 

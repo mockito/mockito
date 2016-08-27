@@ -2,8 +2,8 @@ package org.mockito.release.notes;
 
 import org.mockito.release.exec.Exec;
 import org.mockito.release.notes.improvements.ImprovementSet;
-import org.mockito.release.notes.improvements.ImprovementsProvider;
 import org.mockito.release.notes.improvements.Improvements;
+import org.mockito.release.notes.improvements.ImprovementsProvider;
 import org.mockito.release.notes.vcs.ContributionSet;
 import org.mockito.release.notes.vcs.ContributionsProvider;
 import org.mockito.release.notes.vcs.Vcs;
@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Date;
+import java.util.Map;
 
 class GitNotesBuilder implements NotesBuilder {
 
@@ -29,14 +30,14 @@ class GitNotesBuilder implements NotesBuilder {
         this.authTokenEnvVar = authTokenEnvVar;
     }
 
-    public String buildNotes(String version, String fromRevision, String toRevision) {
+    public String buildNotes(String version, String fromRevision, String toRevision, Map<String, String> labels) {
         LOG.info("Getting release notes between {} and {}", fromRevision, toRevision);
 
         ContributionsProvider contributionsProvider = Vcs.getGitProvider(Exec.getProcessRunner(workDir));
         ContributionSet contributions = contributionsProvider.getContributionsBetween(fromRevision, toRevision);
 
         ImprovementsProvider improvementsProvider = Improvements.getGitHubProvider(authTokenEnvVar);
-        ImprovementSet improvements = improvementsProvider.getImprovements(contributions);
+        ImprovementSet improvements = improvementsProvider.getImprovements(contributions, labels);
 
         return new NotesPrinter().printNotes(version, new Date(), contributions, improvements);
     }
