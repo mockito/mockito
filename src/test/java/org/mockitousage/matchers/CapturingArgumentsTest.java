@@ -317,12 +317,26 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_null_vararg() {
+    public void should_capture_null_single_argument_in_vararg_method() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
         // when
         mock.varargs(null);
+
+        // then
+        verify(mock).varargs(argumentCaptor.capture());
+        Assertions.assertThat(argumentCaptor.getValue()).isNull();
+    }
+
+    @Test
+    public void should_capture_null_array_in_method_vararg() {
+        // given
+        ArgumentCaptor<String[]> argumentCaptor = ArgumentCaptor.forClass(String[].class);
+
+        // when
+        String[] nullArray = null;
+        mock.varargs(nullArray);
 
         // then
         verify(mock).varargs(argumentCaptor.capture());
