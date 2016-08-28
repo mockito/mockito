@@ -1,21 +1,17 @@
 package org.mockito.release.notes.improvements;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.mockito.release.notes.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.*;
 
 class GitHubTicketFetcher {
 
@@ -70,6 +66,7 @@ class GitHubTicketFetcher {
         return longs;
     }
 
+    //TODO SF we should be able to unit test the code that parsers JSONObjects
     private List<Improvement> wantedImprovements(Collection<Long> tickets, List<JSONObject> issues) {
         if(tickets.isEmpty()) {
             return Collections.emptyList();
@@ -81,7 +78,8 @@ class GitHubTicketFetcher {
             if (tickets.remove(id)) {
                 String issueUrl = (String) issue.get("html_url");
                 String title = (String) issue.get("title");
-                pagedImprovements.add(new Improvement(id, title, issueUrl, new HashSet<String>()));
+                Collection<String> labels = extractLabels(issue);
+                pagedImprovements.add(new Improvement(id, title, issueUrl, labels));
 
                 if (tickets.isEmpty()) {
                     return pagedImprovements;
@@ -91,6 +89,15 @@ class GitHubTicketFetcher {
         return pagedImprovements;
     }
 
+    private static Collection<String> extractLabels(JSONObject issue) {
+        Set<String> out = new HashSet<String>();
+        JSONArray labels = (JSONArray) issue.get("labels");
+        for (Object o : labels.toArray()) {
+            JSONObject label = (JSONObject) o;
+            out.add((String) label.get("name"));
+        }
+        return out;
+    }
 
     private static class GitHubIssues {
         public static final String RELATIVE_LINK_NOT_FOUND = "none";

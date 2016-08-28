@@ -25,7 +25,19 @@ apply plugin: 'release-notes'
 apply plugin: 'release'
 
 notes {
-    notesFile = project.file("doc/release-notes/official.md")
+    notesFile = file("doc/release-notes/official.md")
+    //label captions, in order of importance - this is the order they will appear in the release notes
+    labels = [
+        '1.* incompatible': 'Incompatible changes with previous major version (v1.x)',
+        'java-9': "Java 9 support",
+        'java-8': "Java 8 support",
+        'new feature': "New features",
+        'BDD': 'Behavior-Driven Development support',
+        'bug': "Bugfixes",
+        'enhancement': "Enhancements",
+        'android': "Android support",
+        'docs': 'Documentation'
+    ]
 }
 
 def dryRun = project.hasProperty('dryRun')
