@@ -251,7 +251,7 @@ public abstract class GenericMetadataSupport {
     private GenericMetadataSupport resolveGenericType(Type type, Method method) {
 
         if (type instanceof Class) {
-            return new NotGenericReturnTypeSupport(type);
+            return new NotGenericReturnTypeSupport(this, type);
         }
         if (type instanceof ParameterizedType) {
             return new ParameterizedReturnType(this, method.getTypeParameters(), (ParameterizedType) type);
@@ -494,8 +494,11 @@ public abstract class GenericMetadataSupport {
     private static class NotGenericReturnTypeSupport extends GenericMetadataSupport {
         private final Class<?> returnType;
 
-        public NotGenericReturnTypeSupport(Type genericReturnType) {
+        public NotGenericReturnTypeSupport(GenericMetadataSupport source, Type genericReturnType) {
             returnType = (Class<?>) genericReturnType;
+            this.contextualActualTypeParameters = source.contextualActualTypeParameters;
+
+            registerAllTypeVariables(returnType);
         }
 
         @Override
