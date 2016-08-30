@@ -52,12 +52,18 @@ task mockitoJavadoc(type: Javadoc) {
             from "src/javadoc"
             into "$buildDir/javadoc"
         }
-        logger.lifecycle("Installing sw-precache globally")
-        exec {
-            commandLine "npm", "install", "-g", "sw-precache"
-        }
-        exec {
-            commandLine "sw-precache", "--config=sw-precache-config.json"
+        try {
+            logger.lifecycle("Installing sw-precache globally")
+            exec {
+                commandLine "npm", "install", "-g", "sw-precache"
+            }
+            exec {
+                commandLine "sw-precache", "--config=sw-precache-config.json"
+            }
+            // Even though there is an option ignoreExitValue for exec, exec keeps on throwing exceptions.
+            // Therefore we just have to catch them and continue on with the build.
+        } catch(Exception ignored) {
+            logger.lifecycle("NPM is not installed. Aborting generating service-worker");
         }
     }
 }
