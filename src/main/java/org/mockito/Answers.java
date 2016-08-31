@@ -88,7 +88,7 @@ public enum Answers implements Answer<Object>{
     }
 
     /**
-     * @deprecated as of 2.0. Use the enum-constant directly, instead of this getter. This method will be removed in a future release<br>
+     * @deprecated as of 2.0.0 Use the enum-constant directly, instead of this getter. This method will be removed in a future release<br>
      * E.g. instead of <code>Answers.CALLS_REAL_METHODS.get()</code> use <code>Answers.CALLS_REAL_METHODS</code> .
      */
     @Deprecated
