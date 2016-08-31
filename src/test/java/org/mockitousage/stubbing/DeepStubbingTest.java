@@ -14,6 +14,7 @@ import javax.net.SocketFactory;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.Locale;
 
 import static junit.framework.TestCase.*;
@@ -64,7 +65,15 @@ public class DeepStubbingTest extends TestBase {
     }    
     
     static final class FinalClass {}
-    
+
+    interface First {
+        Second getSecond();
+
+        String getString();
+    }
+
+    interface Second extends List<String> {}
+
     @Test
     public void myTest() throws Exception {
         SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
@@ -309,5 +318,12 @@ public class DeepStubbingTest extends TestBase {
         
         //then
         assertEquals(value, person.getFinalClass());
+    }
+
+    @Test
+    public void deep_stub_does_not_try_to_mock_generic_final_classes() {
+        First first = mock(First.class, RETURNS_DEEP_STUBS);
+        assertNull(first.getString());
+        assertNull(first.getSecond().get(0));
     }
 }
