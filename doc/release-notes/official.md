@@ -1,3 +1,21 @@
+### 2.1.0-beta.119 (2016-08-31 12:29 UTC)
+
+* Authors: 4
+* Commits: 12
+  * 8: Szczepan Faber
+  * 2: Brice Dutheil
+  * 1: Continuous Delivery Drone
+  * 1: Jeffrey Falgout
+* Improvements: 6
+  * Bugfixes: 1
+    * Fixes #497 : RETURNS_DEEP_STUBS may try to mock final classes [(#615)](https://github.com/mockito/mockito/pull/615)
+  * Remaining changes: 5
+    * Fixes #595, going toward 2.1.0 instead of 2.0.0 [(#605)](https://github.com/mockito/mockito/pull/605)
+    * Release notes group improvements by labels [(#604)](https://github.com/mockito/mockito/pull/604)
+    * Release notes group improvements by labels [(#603)](https://github.com/mockito/mockito/issues/603)
+    * Handle beta non-semantic versioning scheme [(#595)](https://github.com/mockito/mockito/issues/595)
+    * DEEP_STUBS tries to mock final class [(#497)](https://github.com/mockito/mockito/issues/497)
+
 ### 2.0.0-beta.118 (2016-08-27 12:01 UTC)
 
 * Authors: 5
