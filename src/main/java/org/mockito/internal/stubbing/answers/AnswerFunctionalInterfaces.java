@@ -2,6 +2,16 @@ package org.mockito.internal.stubbing.answers;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Answer1;
+import org.mockito.stubbing.Answer2;
+import org.mockito.stubbing.Answer3;
+import org.mockito.stubbing.Answer4;
+import org.mockito.stubbing.Answer5;
+import org.mockito.stubbing.VoidAnswer1;
+import org.mockito.stubbing.VoidAnswer2;
+import org.mockito.stubbing.VoidAnswer3;
+import org.mockito.stubbing.VoidAnswer4;
+import org.mockito.stubbing.VoidAnswer5;
 
 /**
  * Functional interfaces to make it easy to implement answers in Java 8
@@ -221,111 +231,5 @@ public class AnswerFunctionalInterfaces {
                 return null;
             }
         };
-    }
-
-
-    /**
-     * One parameter function which returns something
-     * @param <T> return type
-     * @param <A> input parameter 1 type
-     */
-    public interface Answer1<T, A> {
-        T answer(A a);
-    }
-
-    /**
-     * One parameter void function
-     * @param <A> input parameter 1 type
-     */
-    public interface VoidAnswer1<A> {
-        void answer(A a);
-    }
-
-    /**
-     * Two parameter function which returns something
-     * @param <T> return type
-     * @param <A> input parameter 1 type
-     * @param <B> input parameter 2 type
-     */
-    public interface Answer2<T, A, B> {
-        T answer(A a, B b);
-    }
-
-    /**
-     * Two parameter void function
-     * @param <A> input parameter 1 type
-     * @param <B> input parameter 2 type
-     */
-    public interface VoidAnswer2< A, B> {
-        void answer(A a, B b);
-    }
-
-    /**
-     * Three parameter function which returns something
-     * @param <T> return type
-     * @param <A> input parameter 1 type
-     * @param <B> input parameter 2 type
-     * @param <C> input parameter 3 type
-     */
-    public interface Answer3<T, A, B, C> {
-        T answer(A a, B b, C c);
-    }
-
-    /**
-     * Two parameter void function
-     * @param <A> input parameter 1 type
-     * @param <B> input parameter 2 type
-     * @param <C> input parameter 3 type
-     */
-    public interface VoidAnswer3< A, B, C> {
-        void answer(A a, B b, C c);
-    }
-
-    /**
-     * Three parameter function which returns something
-     * @param <T> return type
-     * @param <A> input parameter 1 type
-     * @param <B> input parameter 2 type
-     * @param <C> input parameter 3 type
-     * @param <D> input parameter 4 type
-     */
-    public interface Answer4<T, A, B, C, D> {
-        T answer(A a, B b, C c, D d);
-    }
-
-    /**
-     * Two parameter void function
-     * @param <A> input parameter 1 type
-     * @param <B> input parameter 2 type
-     * @param <C> input parameter 3 type
-     * @param <D> input parameter 4 type
-     */
-    public interface VoidAnswer4<A, B, C, D> {
-        void answer(A a, B b, C c, D d);
-    }
-
-    /**
-     * Three parameter function which returns something
-     * @param <T> return type
-     * @param <A> input parameter 1 type
-     * @param <B> input parameter 2 type
-     * @param <C> input parameter 3 type
-     * @param <D> input parameter 4 type
-     * @param <E> input parameter 5 type
-     */
-    public interface Answer5<T, A, B, C, D, E> {
-        T answer(A a, B b, C c, D d, E e);
-    }
-
-    /**
-     * Two parameter void function
-     * @param <A> input parameter 1 type
-     * @param <B> input parameter 2 type
-     * @param <C> input parameter 3 type
-     * @param <D> input parameter 4 type
-     * @param <E> input parameter 5 type
-     */
-    public interface VoidAnswer5< A, B, C, D, E> {
-        void answer(A a, B b, C c, D d, E e);
     }
 }
