@@ -216,6 +216,7 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.0.0
      */
+    @Incubating
     public static <T, A> Answer<T> answer(Answer1<T, A> answer) {
         return toAnswer(answer);
     }
@@ -228,6 +229,7 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.0.0
      */
+    @Incubating
     public static <A> Answer<Void> answerVoid(VoidAnswer1<A> answer) {
         return toAnswer(answer);
     }
@@ -242,6 +244,7 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.0.0
      */
+    @Incubating
     public static <T, A, B> Answer<T> answer(Answer2<T, A, B> answer) {
         return toAnswer(answer);
     }
@@ -255,6 +258,7 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.0.0
      */
+    @Incubating
     public static <A, B> Answer<Void> answerVoid(VoidAnswer2<A, B> answer) {
         return toAnswer(answer);
     }
@@ -270,6 +274,7 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.0.0
      */
+    @Incubating
     public static <T, A, B, C> Answer<T> answer(Answer3<T, A, B, C> answer) {
         return toAnswer(answer);
     }
@@ -284,6 +289,7 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.0.0
      */
+    @Incubating
     public static <A, B, C> Answer<Void> answerVoid(VoidAnswer3<A, B, C> answer) {
         return toAnswer(answer);
     }
@@ -300,6 +306,7 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.0.0
      */
+    @Incubating
     public static <T, A, B, C, D> Answer<T> answer(Answer4<T, A, B, C, D> answer) {
         return toAnswer(answer);
     }
@@ -315,6 +322,7 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.0.0
      */
+    @Incubating
     public static <A, B, C, D> Answer<Void> answerVoid(VoidAnswer4<A, B, C, D> answer) {
         return toAnswer(answer);
     }
@@ -332,6 +340,7 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.0.0
      */
+    @Incubating
     public static <T, A, B, C, D, E> Answer<T> answer(Answer5<T, A, B, C, D, E> answer) {
         return toAnswer(answer);
     }
@@ -349,6 +358,7 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.0.0
      */
+    @Incubating
     public static <A, B, C, D, E> Answer<Void> answerVoid(VoidAnswer5<A, B, C, D, E> answer) {
         return toAnswer(answer);
     }

@@ -1,5 +1,7 @@
 package org.mockito.stubbing;
 
+import org.mockito.Incubating;
+
 /**
  * Three parameter function which returns something
  *
@@ -9,6 +11,7 @@ package org.mockito.stubbing;
  * @param <C> input parameter 3 type
  * @param <D> input parameter 4 type
  */
+@Incubating
 public interface Answer4<T, A, B, C, D> {
     T answer(A a, B b, C c, D d);
 }

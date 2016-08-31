@@ -1,5 +1,7 @@
 package org.mockito.stubbing;
 
+import org.mockito.Incubating;
+
 /**
  * Two parameter void function
  *
@@ -8,6 +10,7 @@ package org.mockito.stubbing;
  * @param <C> input parameter 3 type
  * @param <D> input parameter 4 type
  */
+@Incubating
 public interface VoidAnswer4<A, B, C, D> {
     void answer(A a, B b, C c, D d);
 }
