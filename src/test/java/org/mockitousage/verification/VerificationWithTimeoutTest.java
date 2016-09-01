@@ -6,7 +6,6 @@
 package org.mockitousage.verification;
 
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.rules.ExpectedException.none;
 import static org.mockito.Mockito.inOrder;
@@ -17,8 +16,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.junit.MockitoJUnit.rule;
 
+import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
@@ -60,14 +60,16 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldVerifyWithTimeout() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20);
+        delayedExecution.recordAsyncCall('c');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, timeout(100)).oneArg('c');
-
         verify(mock, timeout(100).atLeastOnce()).oneArg('c');
         verify(mock, timeout(100).times(1)).oneArg('c');
-
         verify(mock).oneArg('c');
         verify(mock, times(1)).oneArg('c');
     }
@@ -75,11 +77,14 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldFailVerificationWithTimeout() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 30, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 30);
+        delayedExecution.recordAsyncCall('c');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, never()).oneArg('c');
-
         exception.expect(MockitoAssertionError.class);
         verify(mock, timeout(20).atLeastOnce()).oneArg('c');
     }
@@ -87,8 +92,12 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOtherModesWithTimeout() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20);
+        delayedExecution.recordAsyncCall('c');
+        delayedExecution.recordAsyncCall('c');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, timeout(100).atLeast(1)).oneArg('c');
@@ -99,8 +108,12 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOtherModesWithTimeoutAndFail() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20);
+        delayedExecution.recordAsyncCall('c');
+        delayedExecution.recordAsyncCall('c');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, timeout(100).atLeast(1)).oneArg('c');
@@ -111,7 +124,11 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOnlyWithTimeout() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20);
+        delayedExecution.recordAsyncCall('c');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, never()).oneArg('c');
@@ -121,9 +138,13 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOnlyWithTimeoutAndFail() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20);
+        delayedExecution.recordAsyncCall('c');
 
         // when
+        delayedExecution.allAsyncCallsStarted();
+
+        // and when
         mock.oneArg('x');
 
         // then
@@ -137,21 +158,32 @@ public class VerificationWithTimeoutTest {
      * is used.
      */
     @Test
-    public void canIgnoreInvocationsWithJunit() {
+    public void canIgnoreInvocationsWithJunit() throws InterruptedException {
+        // given
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 0);
+        delayedExecution.recordAsyncCall('0');
+        delayedExecution.recordAsyncCall('1');
+        delayedExecution.recordAsyncCall('2');
+
         // when
-        callAsyncWithDelay(mock, '0', 0, MILLISECONDS);
-        callAsyncWithDelay(mock, '1', 0, MILLISECONDS);
-        callAsyncWithDelay(mock, '2', 20, MILLISECONDS);
+        delayedExecution.allAsyncCallsStarted();
 
         // then
+        verify(mock, timeout(50)).oneArg('0');
         verify(mock, timeout(50)).oneArg('1');
         verify(mock, timeout(50)).oneArg('2');
     }
 
     @Test
     public void shouldAllowTimeoutVerificationInOrder() throws Exception {
-        callAsyncWithDelay(mock, '1', 30, MILLISECONDS);
+        // given
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 30);
+        delayedExecution.recordAsyncCall('1');
 
+        // when
+        delayedExecution.allAsyncCallsStarted();
+
+        // and when
         mock.oneArg('x');
 
         // then
@@ -161,13 +193,47 @@ public class VerificationWithTimeoutTest {
         inOrder.verify(mock, timeout(100)).oneArg('1');
     }
 
-    private void callAsyncWithDelay(final IMethods mock, final char value, long delay, TimeUnit unit) {
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                mock.oneArg(value);
+    private static class DelayedExecution {
+        private final ScheduledExecutorService executor;
+        private final IMethods mock;
+        private final int delay;
+        private final ArrayList<Character> invocations = new ArrayList<Character>();
+
+        public DelayedExecution(ScheduledExecutorService executor, IMethods mock, int delay) {
+            this.executor = executor;
+            this.mock = mock;
+            this.delay = delay;
+        }
+
+        public void recordAsyncCall(char c) {
+            invocations.add(c);
+        }
+
+        public void allAsyncCallsStarted() throws InterruptedException {
+            final CountDownLatch countDownLatch = new CountDownLatch(invocations.size());
+            for (final Character invocation : invocations) {
+                executor.execute(runnable(countDownLatch, invocation));
             }
-        };
-        executor.schedule(task, delay, unit);
+            countDownLatch.await();
+        }
+
+        private Runnable runnable(final CountDownLatch countDownLatch, final Character invocation) {
+            return new Runnable() {
+                @Override
+                public void run() {
+                    countDownLatch.countDown();
+                    sleep();
+                    mock.oneArg(invocation.charValue());
+                }
+            };
+        }
+
+        private void sleep() {
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
