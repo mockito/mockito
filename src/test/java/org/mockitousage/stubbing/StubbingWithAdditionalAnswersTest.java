@@ -4,16 +4,38 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalAnswers.answer;
+import static org.mockito.AdditionalAnswers.answerVoid;
+import static org.mockito.AdditionalAnswers.returnsArgAt;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.AdditionalAnswers.returnsLastArg;
+import static org.mockito.AdditionalAnswers.returnsSecondArg;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.anyInt;
+import static org.mockito.BDDMockito.anyObject;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.anyVararg;
+import static org.mockito.BDDMockito.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.mock;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.verify;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer1;
+import org.mockito.stubbing.Answer2;
+import org.mockito.stubbing.Answer3;
+import org.mockito.stubbing.Answer4;
+import org.mockito.stubbing.Answer5;
+import org.mockito.stubbing.VoidAnswer1;
+import org.mockito.stubbing.VoidAnswer2;
+import org.mockito.stubbing.VoidAnswer3;
+import org.mockito.stubbing.VoidAnswer4;
+import org.mockito.stubbing.VoidAnswer5;
 import org.mockitousage.IMethods;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.AdditionalAnswers.*;
-import static org.mockito.BDDMockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StubbingWithAdditionalAnswersTest {
@@ -50,7 +72,7 @@ public class StubbingWithAdditionalAnswersTest {
     @Test
     public void can_return_based_on_strongly_types_one_parameter_function() throws Exception {
         given(iMethods.simpleMethod(anyString()))
-                .will(answer(new AnswerFunctionalInterfaces.Answer1<String, String>() {
+                .will(answer(new Answer1<String, String>() {
                     public String answer(String s) {
                         return s;
                     }
@@ -64,7 +86,7 @@ public class StubbingWithAdditionalAnswersTest {
         final IMethods target = mock(IMethods.class);
 
         given(iMethods.simpleMethod(anyString()))
-                .will(answerVoid(new AnswerFunctionalInterfaces.VoidAnswer1<String>() {
+                .will(answerVoid(new VoidAnswer1<String>() {
                     public void answer(String s) {
                         target.simpleMethod(s);
                     }
@@ -80,7 +102,7 @@ public class StubbingWithAdditionalAnswersTest {
     @Test
     public void can_return_based_on_strongly_typed_two_parameter_function() throws Exception {
         given(iMethods.simpleMethod(anyString(), anyInt()))
-            .will(answer(new AnswerFunctionalInterfaces.Answer2<String, String, Integer>() {
+            .will(answer(new Answer2<String, String, Integer>() {
                 public String answer(String s, Integer i) {
                     return s + "-" + i;
                 }
@@ -94,7 +116,7 @@ public class StubbingWithAdditionalAnswersTest {
         final IMethods target = mock(IMethods.class);
 
         given(iMethods.simpleMethod(anyString(), anyInt()))
-            .will(answerVoid(new AnswerFunctionalInterfaces.VoidAnswer2<String, Integer>() {
+            .will(answerVoid(new VoidAnswer2<String, Integer>() {
                 public void answer(String s, Integer i) {
                     target.simpleMethod(s, i);
                 }
@@ -111,7 +133,7 @@ public class StubbingWithAdditionalAnswersTest {
     public void can_return_based_on_strongly_typed_three_parameter_function() throws Exception {
         final IMethods target = mock(IMethods.class);
         given(iMethods.threeArgumentMethodWithStrings(anyInt(), anyString(), anyString()))
-                .will(answer(new AnswerFunctionalInterfaces.Answer3<String, Integer, String, String>() {
+                .will(answer(new Answer3<String, Integer, String, String>() {
                     public String answer(Integer i, String s1, String s2) {
                         target.threeArgumentMethodWithStrings(i, s1, s2);
                         return "answered";
@@ -127,7 +149,7 @@ public class StubbingWithAdditionalAnswersTest {
         final IMethods target = mock(IMethods.class);
 
         given(iMethods.threeArgumentMethodWithStrings(anyInt(), anyString(), anyString()))
-                .will(answerVoid(new AnswerFunctionalInterfaces.VoidAnswer3<Integer, String, String>() {
+                .will(answerVoid(new VoidAnswer3<Integer, String, String>() {
                     public void answer(Integer i, String s1, String s2) {
                         target.threeArgumentMethodWithStrings(i, s1, s2);
                     }
@@ -144,7 +166,7 @@ public class StubbingWithAdditionalAnswersTest {
         public void can_return_based_on_strongly_typed_four_parameter_function() throws Exception {
         final IMethods target = mock(IMethods.class);
         given(iMethods.fourArgumentMethod(anyInt(), anyString(), anyString(), any(boolean[].class)))
-                .will(answer(new AnswerFunctionalInterfaces.Answer4<String, Integer, String, String, boolean[]>() {
+                .will(answer(new Answer4<String, Integer, String, String, boolean[]>() {
                     public String answer(Integer i, String s1, String s2, boolean[] a) {
                         target.fourArgumentMethod(i, s1, s2, a);
                         return "answered";
@@ -161,7 +183,7 @@ public class StubbingWithAdditionalAnswersTest {
         final IMethods target = mock(IMethods.class);
 
         given(iMethods.fourArgumentMethod(anyInt(), anyString(), anyString(), any(boolean[].class)))
-                .will(answerVoid(new AnswerFunctionalInterfaces.VoidAnswer4<Integer, String, String, boolean[]>() {
+                .will(answerVoid(new VoidAnswer4<Integer, String, String, boolean[]>() {
                     public void answer(Integer i, String s1, String s2, boolean[] a) {
                         target.fourArgumentMethod(i, s1, s2, a);
                     }
@@ -179,7 +201,7 @@ public class StubbingWithAdditionalAnswersTest {
     public void can_return_based_on_strongly_typed_five_parameter_function() throws Exception {
         final IMethods target = mock(IMethods.class);
         given(iMethods.simpleMethod(anyString(), anyInt(), anyInt(), anyInt(), anyInt()))
-                .will(answer(new AnswerFunctionalInterfaces.Answer5<String, String, Integer, Integer, Integer, Integer>() {
+                .will(answer(new Answer5<String, String, Integer, Integer, Integer, Integer>() {
                     public String answer(String s1, Integer i1, Integer i2, Integer i3, Integer i4) {
                         target.simpleMethod(s1, i1, i2, i3, i4);
                         return "answered";
@@ -195,7 +217,7 @@ public class StubbingWithAdditionalAnswersTest {
         final IMethods target = mock(IMethods.class);
 
         given(iMethods.simpleMethod(anyString(), anyInt(), anyInt(), anyInt(), anyInt()))
-                .will(answerVoid(new AnswerFunctionalInterfaces.VoidAnswer5<String, Integer, Integer, Integer, Integer>() {
+                .will(answerVoid(new VoidAnswer5<String, Integer, Integer, Integer, Integer>() {
                     public void  answer(String s1, Integer i1, Integer i2, Integer i3, Integer i4) {
                         target.simpleMethod(s1, i1, i2, i3, i4);
                     }

@@ -336,9 +336,12 @@ public class BDDMockito extends Mockito {
         BDDStubber will(Answer<?> answer);
 
         /**
-         * See original {@link Stubber#doNothing()}
+         * See original {@link Stubber#doNothing()}.
+         *
+         * This method will be removed in version 3.0.0
+         *
          * @since 1.8.0
-         * @deprecated please use {@link #willDoNothing()} instead
+         * @deprecated as of 2.0.0 please use {@link #willDoNothing()} instead
          */
         @Deprecated
         BDDStubber willNothing();
