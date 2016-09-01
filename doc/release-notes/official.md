@@ -1,3 +1,14 @@
+### 2.1.0-beta.120 (2016-09-01 13:05 UTC)
+
+* Authors: 2
+* Commits: 6
+  * 5: Brice Dutheil
+  * 1: Continuous Delivery Drone
+* Improvements: 2
+  * Java 8 support: 2
+    * Moves arity interfaces of java8 helper answers to public API [(#617)](https://github.com/mockito/mockito/pull/617)
+    * AdditionalAnswers.answer family leaks internal classes [(#614)](https://github.com/mockito/mockito/issues/614)
+
 ### 2.1.0-beta.119 (2016-08-31 12:29 UTC)
 
 * Authors: 4
