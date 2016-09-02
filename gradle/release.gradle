@@ -25,7 +25,7 @@ apply plugin: 'release-notes'
 apply plugin: 'release'
 
 notes {
-    notesFile = file("doc/release-notes/official.md")
+    notesFile = file("doc/release-notes/v2.md")
     //label captions, in order of importance - this is the order they will appear in the release notes
     labels = [
         '1.* incompatible': 'Incompatible changes with previous major version (v1.x)',
