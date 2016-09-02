@@ -18,7 +18,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.junit.MockitoJUnit.rule;
 
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
@@ -60,14 +59,16 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldVerifyWithTimeout() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        delayedExecution.recordAsyncCall('c');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, timeout(100)).oneArg('c');
-
         verify(mock, timeout(100).atLeastOnce()).oneArg('c');
         verify(mock, timeout(100).times(1)).oneArg('c');
-
         verify(mock).oneArg('c');
         verify(mock, times(1)).oneArg('c');
     }
@@ -75,11 +76,14 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldFailVerificationWithTimeout() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 30, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 30, MILLISECONDS);
+        delayedExecution.recordAsyncCall('c');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, never()).oneArg('c');
-
         exception.expect(MockitoAssertionError.class);
         verify(mock, timeout(20).atLeastOnce()).oneArg('c');
     }
@@ -87,8 +91,12 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOtherModesWithTimeout() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        delayedExecution.recordAsyncCall('c');
+        delayedExecution.recordAsyncCall('c');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, timeout(100).atLeast(1)).oneArg('c');
@@ -99,8 +107,12 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOtherModesWithTimeoutAndFail() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        delayedExecution.recordAsyncCall('c');
+        delayedExecution.recordAsyncCall('c');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, timeout(100).atLeast(1)).oneArg('c');
@@ -111,7 +123,11 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOnlyWithTimeout() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        delayedExecution.recordAsyncCall('c');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, never()).oneArg('c');
@@ -121,9 +137,13 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOnlyWithTimeoutAndFail() throws Exception {
         // given
-        callAsyncWithDelay(mock, 'c', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        delayedExecution.recordAsyncCall('c');
 
         // when
+        delayedExecution.allAsyncCallsStarted();
+
+        // and when
         mock.oneArg('x');
 
         // then
@@ -137,21 +157,34 @@ public class VerificationWithTimeoutTest {
      * is used.
      */
     @Test
-    public void canIgnoreInvocationsWithJunit() {
+    public void canIgnoreInvocationsWithJunit() throws InterruptedException {
+        // given
+        DelayedExecution delayedExecution = createZeroMillisDelayedExecution();
+        DelayedExecution twentyMillisDelayedExecution = createTwentyMillisDelayedExecution();
+
         // when
-        callAsyncWithDelay(mock, '0', 0, MILLISECONDS);
-        callAsyncWithDelay(mock, '1', 0, MILLISECONDS);
-        callAsyncWithDelay(mock, '2', 20, MILLISECONDS);
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, timeout(50)).oneArg('1');
+
+        // when
+        twentyMillisDelayedExecution.allAsyncCallsStarted();
+
+        // then
         verify(mock, timeout(50)).oneArg('2');
     }
 
     @Test
     public void shouldAllowTimeoutVerificationInOrder() throws Exception {
-        callAsyncWithDelay(mock, '1', 30, MILLISECONDS);
+        // given
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 30, MILLISECONDS);
+        delayedExecution.recordAsyncCall('1');
 
+        // when
+        delayedExecution.allAsyncCallsStarted();
+
+        // and when
         mock.oneArg('x');
 
         // then
@@ -161,13 +194,17 @@ public class VerificationWithTimeoutTest {
         inOrder.verify(mock, timeout(100)).oneArg('1');
     }
 
-    private void callAsyncWithDelay(final IMethods mock, final char value, long delay, TimeUnit unit) {
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                mock.oneArg(value);
-            }
-        };
-        executor.schedule(task, delay, unit);
+    private DelayedExecution createTwentyMillisDelayedExecution() {
+        DelayedExecution twentyMillisDelayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        twentyMillisDelayedExecution.recordAsyncCall('2');
+        return twentyMillisDelayedExecution;
     }
+
+    private DelayedExecution createZeroMillisDelayedExecution() {
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 0, MILLISECONDS);
+        delayedExecution.recordAsyncCall('0');
+        delayedExecution.recordAsyncCall('1');
+        return delayedExecution;
+    }
+
 }

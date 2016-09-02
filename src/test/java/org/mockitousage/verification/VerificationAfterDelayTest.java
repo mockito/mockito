@@ -17,11 +17,8 @@ import static org.mockito.junit.MockitoJUnit.rule;
 import static org.mockitoutil.Stopwatch.createNotStarted;
 
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -64,7 +61,11 @@ public class VerificationAfterDelayTest {
     @Test
     public void shouldVerifyNormallyWithSpecificTimes() throws Exception {
         // given
-        callAsyncWithDelay(mock, '1', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        delayedExecution.recordAsyncCall('1');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, after(100).times(1)).oneArg('1');
@@ -73,7 +74,11 @@ public class VerificationAfterDelayTest {
     @Test
     public void shouldVerifyNormallyWithAtLeast() throws Exception {
         // given
-        callAsyncWithDelay(mock, '1', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        delayedExecution.recordAsyncCall('1');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, after(100).atLeast(1)).oneArg('1');
@@ -82,11 +87,14 @@ public class VerificationAfterDelayTest {
     @Test
     public void shouldFailVerificationWithWrongTimes() throws Exception {
         // given
-        callAsyncWithDelay(mock, '1', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        delayedExecution.recordAsyncCall('1');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, times(0)).oneArg('1');
-
         exception.expect(MockitoAssertionError.class);
         verify(mock, after(100).times(2)).oneArg('1');
     }
@@ -94,23 +102,32 @@ public class VerificationAfterDelayTest {
     @Test
     public void shouldWaitTheFullTimeIfTheTestCouldPass() throws Exception {
         // given
-        callAsyncWithDelay(mock, '1', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        delayedExecution.recordAsyncCall('1');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         stopWatch.start();
 
         try {
             verify(mock, after(100).atLeast(2)).oneArg('1');
+            Assert.fail("Expected behavior was to throw an exception, and never reach this line");
         } catch (MockitoAssertionError ignored) {
         }
 
         stopWatch.assertElapsedTimeIsMoreThan(100, MILLISECONDS);
     }
 
-    @Test(timeout = 200)
+    @Test
     public void shouldStopEarlyIfTestIsDefinitelyFailed() throws Exception {
         // given
-        callAsyncWithDelay(mock, '1', 20, MILLISECONDS);
+        DelayedExecution delayedExecution = new DelayedExecution(executor, mock, 20, MILLISECONDS);
+        delayedExecution.recordAsyncCall('1');
+
+        // when
+        delayedExecution.allAsyncCallsStarted();
 
         // then
         exception.expect(MockitoAssertionError.class);
@@ -174,13 +191,4 @@ public class VerificationAfterDelayTest {
         }
     }
 
-    private void callAsyncWithDelay(final IMethods mock, final char value, long delay, TimeUnit unit) {
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                mock.oneArg(value);
-            }
-        };
-        executor.schedule(task, delay, unit);
-    }
 }
