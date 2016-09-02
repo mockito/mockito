@@ -48,6 +48,11 @@ if (dryRun) {
     gradle.startParameter.taskNames += "rollbackRelease"
 }
 
+def isReleasableBranch(String branch) {
+    // matches 'master', 'release/2.x', 'release/3.x', etc.
+    branch.matches("master|release/.+")
+}
+
 configurations {
     previousSrc
     previousPom
@@ -77,7 +82,7 @@ task("releaseNeeded") {
         def commitMessage = System.env.TRAVIS_COMMIT_MESSAGE
         def skippedByCommitMessage = commitMessage?.contains(skipReleaseCommitMessage)
         def customVersion = (commitMessage =~ customReleaseVersionPattern)
-        ext.needed = dryRun || customVersion.matches() || (pr == 'false' && branch == 'master' && !comparePublications.publicationsEqual && skipEnvVariable != 'true' && !skippedByCommitMessage)
+        ext.needed = dryRun || customVersion.matches() || (pr == 'false' && isReleasableBranch(branch) && !comparePublications.publicationsEqual && skipEnvVariable != 'true' && !skippedByCommitMessage)
         logger.lifecycle("Release needed: {}, branch: {}, pull request: {}, dry run: {}, publications equal: {}, skip env variable: {}, skipped by message: {}, customVersion: {}.",
                 needed, branch, pr, dryRun, comparePublications.publicationsEqual, skipEnvVariable, skippedByCommitMessage, customVersion.matches())
     }
