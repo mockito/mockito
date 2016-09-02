@@ -164,10 +164,14 @@ public class VerificationWithTimeoutTest {
 
         // when
         delayedExecution.allAsyncCallsStarted();
-        twentyMillisDelayedExecution.allAsyncCallsStarted();
 
         // then
         verify(mock, timeout(50)).oneArg('1');
+
+        // when
+        twentyMillisDelayedExecution.allAsyncCallsStarted();
+
+        // then
         verify(mock, timeout(50)).oneArg('2');
     }
 
