@@ -109,7 +109,7 @@ public interface OngoingStubbing<T> {
      * @param throwableType to be thrown on method invocation
      *
      * @return iOngoingStubbing object that allows stubbing consecutive calls
-     * @since 2.0.0
+     * @since 2.1.0
      */
     OngoingStubbing<T> thenThrow(Class<? extends Throwable> throwableType);
 
@@ -142,7 +142,7 @@ public interface OngoingStubbing<T> {
      * @param nextToBeThrown next to be thrown on method invocation
      *
      * @return iOngoingStubbing object that allows stubbing consecutive calls
-     * @since 2.0.0
+     * @since 2.1.0
      */
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation warnings (on call site)
     @SuppressWarnings ({"unchecked", "varargs"})

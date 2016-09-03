@@ -9,7 +9,7 @@ import org.mockito.listeners.MockitoListener;
  * <p>
  * For more info on listeners see {@link #addListener(MockitoListener)}.
  *
- * @since 2.0.0
+ * @since 2.1.0
  */
 @Incubating
 public interface MockitoFramework {

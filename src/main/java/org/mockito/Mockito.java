@@ -30,7 +30,7 @@ import org.mockito.junit.*;
  * <h1>Contents</h1>
  *
  * <b>
- *      <a href="#0">0. Migrating to 2.0.0</a><br/>
+ *      <a href="#0">0. Migrating to 2.1.0</a><br/>
  *      <a href="#1">1. Let's verify some behaviour! </a><br/>
  *      <a href="#2">2. How about some stubbing? </a><br/>
  *      <a href="#3">3. Argument matchers </a><br/>
@@ -65,20 +65,20 @@ import org.mockito.junit.*;
  *      <a href="#32">32. (new) Better generic support with deep stubs (Since 1.10.0)</a></h3><br/>
  *      <a href="#32">33. (new) Mockito JUnit rule (Since 1.10.17)</a><br/>
  *      <a href="#34">34. (new) Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
- *      <a href="#35">35. (new) Custom verification failure message (Since 2.0.0)</a><br/>
- *      <a href="#36">36. (new) Java 8 Lambda Matcher Support (Since 2.0.0)</a><br/>
- *      <a href="#37">37. (new) Java 8 Custom Answer Support (Since 2.0.0)</a><br/>
+ *      <a href="#35">35. (new) Custom verification failure message (Since 2.1.0)</a><br/>
+ *      <a href="#36">36. (new) Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
+ *      <a href="#37">37. (new) Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
  *
  * </b>
  *
- * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to 2.0.0</a></h3>
+ * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to 2.1.0</a></h3>
  *
  * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.0.
  * Mockito follows <a href="http://semver.org/">semantic versioning</a>
  * and contains breaking changes only on major version upgrades.
  * In the lifecycle of a library, breaking changes are necessary
  * to roll out a set of brand new features that alter the existing behavior or even change the API.
- * We hope that you enjoy Mockito 2.0.0!
+ * We hope that you enjoy Mockito 2.1.0!
  * <p>
  * List of breaking changes:
  * <ul>
@@ -1077,7 +1077,7 @@ import org.mockito.junit.*;
  * More information here {@link org.mockito.plugins.PluginSwitch}.
  *
  *
- * <h3 id="35">35. <a class="meaningful_link" href="#BDD_behavior_verification">Custom verification failure message</a> (Since 2.0.0)</h3>
+ * <h3 id="35">35. <a class="meaningful_link" href="#BDD_behavior_verification">Custom verification failure message</a> (Since 2.1.0)</h3>
  * <p>
  * Allows specifying a custom message to be printed if verification fails.
  * <p>
@@ -1092,7 +1092,7 @@ import org.mockito.junit.*;
  * verify(mock, times(2).description("someMethod should be called twice")).someMethod();
  * </code></pre>
  *
- * <h3 id="36">36. <a class="meaningful_link" href="#Java_8_Lambda_Matching">Java 8 Lambda Matcher Support</a> (Since 2.0.0)</h3>
+ * <h3 id="36">36. <a class="meaningful_link" href="#Java_8_Lambda_Matching">Java 8 Lambda Matcher Support</a> (Since 2.1.0)</h3>
  * <p>
  * You can use Java 8 lambda expressions with {@link ArgumentMatcher} to reduce the dependency on {@link ArgumentCaptor}.
  * If you need to verify that the input to a function call on a mock was correct, then you would normally
@@ -1125,7 +1125,7 @@ import org.mockito.junit.*;
  * when(mock.someMethod(argThat(list -> list.size()<3))).willReturn(null);
  * </code></pre>
  *
- * <h3 id="37">37. <a class="meaningful_link" href="#Java_8_Custom_Answers">Java 8 Custom Answer Support</a> (Since 2.0.0)</h3>
+ * <h3 id="37">37. <a class="meaningful_link" href="#Java_8_Custom_Answers">Java 8 Custom Answer Support</a> (Since 2.1.0)</h3>
  * <p>
  * As the {@link Answer} interface has just one method it is already possible to implement it in Java 8 using
  * a lambda expression for very simple situations. The more you need to use the parameters of the method call,
@@ -1941,7 +1941,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @param toBeThrown to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
-     * @since 2.0.0
+     * @since 2.1.0
      */
     public static Stubber doThrow(Class<? extends Throwable> toBeThrown) {
         return MOCKITO_CORE.stubber().doThrow(toBeThrown);
@@ -1965,7 +1965,7 @@ public class Mockito extends ArgumentMatchers {
      * @param toBeThrown to be thrown when the stubbed method is called
      * @param toBeThrownNext next to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
-     * @since 2.0.0
+     * @since 2.1.0
      */
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation
     @SuppressWarnings ({"unchecked", "varargs"})
@@ -2174,7 +2174,7 @@ public class Mockito extends ArgumentMatchers {
      * @param toBeReturned to be returned when the stubbed method is called
      * @param toBeReturnedNext to be returned in consecutive calls when the stubbed method is called
      * @return stubber - to select a method for stubbing
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @SuppressWarnings({"unchecked", "varargs"})
     public static Stubber doReturn(Object toBeReturned, Object... toBeReturnedNext) {
@@ -2569,7 +2569,7 @@ public class Mockito extends ArgumentMatchers {
      * </code></pre>
      * @param description The description to print on failure.
      * @return verification mode
-     * @since 2.0.0
+     * @since 2.1.0
      */
     public static VerificationMode description(String description) {
         return times(1).description(description);
@@ -2587,7 +2587,7 @@ public class Mockito extends ArgumentMatchers {
     /**
      * For advanced users or framework integrators. See {@link MockitoFramework} class.
      *
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static MockitoFramework framework() {

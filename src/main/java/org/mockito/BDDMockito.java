@@ -119,13 +119,13 @@ public class BDDMockito extends Mockito {
 
         /**
          * See original {@link OngoingStubbing#thenThrow(Class)}
-         * @since 2.0.0
+         * @since 2.1.0
          */
         BDDMyOngoingStubbing<T> willThrow(Class<? extends Throwable> throwableType);
 
         /**
          * See original {@link OngoingStubbing#thenThrow(Class, Class[])}
-         * @since 2.0.0
+         * @since 2.1.0
          */
         // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation
         @SuppressWarnings ({"unchecked", "varargs"})
@@ -238,25 +238,25 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see InOrder#verify(Object)
-         * @since 2.0.0
+         * @since 2.1.0
          */
         T should(InOrder inOrder);
 
         /**
          * @see InOrder#verify(Object, VerificationMode)
-         * @since 2.0.0
+         * @since 2.1.0
          */
         T should(InOrder inOrder, VerificationMode mode);
 
         /**
          * @see #verifyZeroInteractions(Object...)
-         * @since 2.0.0
+         * @since 2.1.0
          */
         void shouldHaveZeroInteractions();
 
         /**
          * @see #verifyNoMoreInteractions(Object...)
-         * @since 2.0.0
+         * @since 2.1.0
          */
         void shouldHaveNoMoreInteractions();
     }
@@ -287,7 +287,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see InOrder#verify(Object)
-         * @since 2.0.0
+         * @since 2.1.0
          */
         public T should(InOrder inOrder) {
             return inOrder.verify(mock);
@@ -295,7 +295,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see InOrder#verify(Object, VerificationMode)
-         * @since 2.0.0
+         * @since 2.1.0
          */
         public T should(InOrder inOrder, VerificationMode mode) {
             return inOrder.verify(mock, mode);
@@ -303,7 +303,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see #verifyZeroInteractions(Object...)
-         * @since 2.0.0
+         * @since 2.1.0
          */
         public void shouldHaveZeroInteractions() {
             verifyZeroInteractions(mock);
@@ -311,7 +311,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see #verifyNoMoreInteractions(Object...)
-         * @since 2.0.0
+         * @since 2.1.0
          */
         public void shouldHaveNoMoreInteractions() {
             verifyNoMoreInteractions(mock);
@@ -341,7 +341,7 @@ public class BDDMockito extends Mockito {
          * This method will be removed in version 3.0.0
          *
          * @since 1.8.0
-         * @deprecated as of 2.0.0 please use {@link #willDoNothing()} instead
+         * @deprecated as of 2.1.0 please use {@link #willDoNothing()} instead
          */
         @Deprecated
         BDDStubber willNothing();
@@ -354,13 +354,13 @@ public class BDDMockito extends Mockito {
 
         /**
          * See original {@link Stubber#doReturn(Object)}
-         * @since 2.0.0
+         * @since 2.1.0
          */
         BDDStubber willReturn(Object toBeReturned);
 
         /**
          * See original {@link Stubber#doReturn(Object)}
-         * @since 2.0.0
+         * @since 2.1.0
          */
         @SuppressWarnings({"unchecked", "varargs"})
         BDDStubber willReturn(Object toBeReturned, Object... nextToBeReturned);
@@ -373,13 +373,13 @@ public class BDDMockito extends Mockito {
 
         /**
          * See original {@link Stubber#doThrow(Class)}
-         * @since 2.0.0
+         * @since 2.1.0
          */
         BDDStubber willThrow(Class<? extends Throwable> toBeThrown);
 
         /**
          * See original {@link Stubber#doThrow(Class, Class[])}
-         * @since 2.0.0
+         * @since 2.1.0
          */
         @SuppressWarnings ({"unchecked", "varargs"})
         BDDStubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown);
@@ -456,7 +456,7 @@ public class BDDMockito extends Mockito {
 
     /**
      * see original {@link Mockito#doThrow(Throwable[])}
-     * @since 2.0.0
+     * @since 2.1.0
      */
     public static BDDStubber willThrow(Throwable... toBeThrown) {
         return new BDDStubberImpl(Mockito.doThrow(toBeThrown));
@@ -488,7 +488,7 @@ public class BDDMockito extends Mockito {
 
     /**
      * see original {@link Mockito#doAnswer(Answer)}
-     * @since 2.0.0
+     * @since 2.1.0
      */
     public static BDDStubber will(Answer<?> answer) {
         return new BDDStubberImpl(Mockito.doAnswer(answer));
@@ -512,7 +512,7 @@ public class BDDMockito extends Mockito {
 
     /**
      * see original {@link Mockito#doReturn(Object, Object...)}
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @SuppressWarnings({"unchecked", "varargs"})
     public static BDDStubber willReturn(Object toBeReturned, Object... toBeReturnedNext) {

@@ -53,7 +53,7 @@ public interface MockingDetails {
      * If <code>null</code> or non-mock was passed to {@link Mockito#mockingDetails(Object)}
      * then this method will throw with an appropriate exception.
      * After all, non-mock objects do not have any mock creation settings.
-     * @since 2.0.0
+     * @since 2.1.0
      */
     MockCreationSettings<?> getMockCreationSettings();
 }

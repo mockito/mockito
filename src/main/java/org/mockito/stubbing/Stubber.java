@@ -97,7 +97,7 @@ public interface Stubber {
      * @param toBeThrown exception class to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      *
-     * @since 2.0.0
+     * @since 2.1.0
      */
     Stubber doThrow(Class<? extends Throwable> toBeThrown);
 
@@ -114,7 +114,7 @@ public interface Stubber {
      * @param nextToBeThrown exception class next to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      *
-     * @since 2.0.0
+     * @since 2.1.0
      */
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation
     @SuppressWarnings ({"unchecked", "varargs"})

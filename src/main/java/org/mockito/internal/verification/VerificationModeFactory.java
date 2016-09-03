@@ -42,7 +42,7 @@ public class VerificationModeFactory {
      * @param mode Implementation used for verification
      * @param description The custom failure message
      * @return VerificationMode
-     * @since 2.0.0
+     * @since 2.1.0
      */
     public static VerificationMode description(VerificationMode mode, String description) {
         return new Description(mode, description);
