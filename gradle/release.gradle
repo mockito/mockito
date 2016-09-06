@@ -40,6 +40,10 @@ notes {
     ]
 }
 
+//Hack to avoid publication from Travis CI:
+project.ext.dryRun = true
+//
+
 def dryRun = project.hasProperty('dryRun')
 if (dryRun) {
     //TODO SF lets not use excludedTaskNames to model this
