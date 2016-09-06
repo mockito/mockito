@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
  * Compatible with <b>JUnit 4.4 and higher</b>, this runner adds following behavior:
  * <ul>
  *   <li>
- *       (new since Mockito 2.0.0) Detects unused stubs in the test code.
+ *       (new since Mockito 2.1.0) Detects unused stubs in the test code.
  *       See {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}.
  *       To opt-out from this feature, use {@code}&#064;RunWith(MockitoJUnitRunner.Silent.class){@code}
  *   <li>
@@ -68,7 +68,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
      *
      * See also {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}
      *
-     * @since 2.0.0
+     * @since 2.1.0
      */
     public static class Silent extends MockitoJUnitRunner {
         public Silent(Class<?> klass) throws InvocationTargetException {
@@ -80,7 +80,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
      * Detects unused stubs and reports them as failures. Default behavior.
      * See {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}
      *
-     * @since 2.0.0
+     * @since 2.1.0
      */
     public static class Strict extends MockitoJUnitRunner {
         public Strict(Class<?> klass) throws InvocationTargetException {

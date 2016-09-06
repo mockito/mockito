@@ -2,7 +2,7 @@ package org.mockito;
 
 /**
  * Allows creating customized argument matchers.
- * This API was changed in Mockito 2.0.0 in an effort to decouple Mockito from Hamcrest
+ * This API was changed in Mockito 2.1.0 in an effort to decouple Mockito from Hamcrest
  * and reduce the risk of version incompatibility.
  * Migration guide is included close to the bottom of this javadoc.
  * <p>
@@ -81,7 +81,7 @@ package org.mockito;
  *
  * <p>
  * Read more about other matchers in javadoc for {@link Matchers} class.
- * <h2>2.0.0 migration guide</h2>
+ * <h2>2.1.0 migration guide</h2>
  *
  * All existing custom implementations of <code>ArgumentMatcher</code> will no longer compile.
  * All locations where hamcrest matchers are passed to <code>argThat()</code> will no longer compile.
@@ -104,7 +104,7 @@ package org.mockito;
  * you can choose different option in future (and refactor the code)
  *
  * @param <T> type of argument
- * @since 2.0.0
+ * @since 2.1.0
  */
 public interface ArgumentMatcher<T> {
 

@@ -214,7 +214,7 @@ public class AdditionalAnswers {
      * @param <T> return type
      * @param <A> input parameter type 1
      * @return the answer object to use
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static <T, A> Answer<T> answer(Answer1<T, A> answer) {
@@ -227,7 +227,7 @@ public class AdditionalAnswers {
      * @param answer interface to the answer - a void method
      * @param <A> input parameter type 1
      * @return the answer object to use
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static <A> Answer<Void> answerVoid(VoidAnswer1<A> answer) {
@@ -242,7 +242,7 @@ public class AdditionalAnswers {
      * @param <A> input parameter type 1
      * @param <B> input parameter type 2
      * @return the answer object to use
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static <T, A, B> Answer<T> answer(Answer2<T, A, B> answer) {
@@ -256,7 +256,7 @@ public class AdditionalAnswers {
      * @param <A> input parameter type 1
      * @param <B> input parameter type 2
      * @return the answer object to use
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static <A, B> Answer<Void> answerVoid(VoidAnswer2<A, B> answer) {
@@ -272,7 +272,7 @@ public class AdditionalAnswers {
      * @param <B> input parameter type 2
      * @param <C> input parameter type 3
      * @return the answer object to use
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static <T, A, B, C> Answer<T> answer(Answer3<T, A, B, C> answer) {
@@ -287,7 +287,7 @@ public class AdditionalAnswers {
      * @param <B> input parameter type 2
      * @param <C> input parameter type 3
      * @return the answer object to use
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static <A, B, C> Answer<Void> answerVoid(VoidAnswer3<A, B, C> answer) {
@@ -304,7 +304,7 @@ public class AdditionalAnswers {
      * @param <C> input parameter type 3
      * @param <D> input parameter type 4
      * @return the answer object to use
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static <T, A, B, C, D> Answer<T> answer(Answer4<T, A, B, C, D> answer) {
@@ -320,7 +320,7 @@ public class AdditionalAnswers {
      * @param <C> input parameter type 3
      * @param <D> input parameter type 4
      * @return the answer object to use
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static <A, B, C, D> Answer<Void> answerVoid(VoidAnswer4<A, B, C, D> answer) {
@@ -338,7 +338,7 @@ public class AdditionalAnswers {
      * @param <D> input parameter type 4
      * @param <E> input parameter type 5
      * @return the answer object to use
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static <T, A, B, C, D, E> Answer<T> answer(Answer5<T, A, B, C, D, E> answer) {
@@ -356,7 +356,7 @@ public class AdditionalAnswers {
      * @param <D> input parameter type 4
      * @param <E> input parameter type 5
      * @return the answer object to use
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @Incubating
     public static <A, B, C, D, E> Answer<Void> answerVoid(VoidAnswer5<A, B, C, D, E> answer) {

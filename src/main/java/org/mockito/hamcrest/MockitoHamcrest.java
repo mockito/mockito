@@ -17,7 +17,7 @@ import static org.mockito.internal.util.Primitives.defaultValue;
  * Before implementing or reusing an existing hamcrest matcher please read
  * how to deal with sophisticated argument matching in {@link ArgumentMatcher}.
  * <p/>
- * Mockito 2.0.0 was decoupled from Hamcrest to avoid version incompatibilities
+ * Mockito 2.1.0 was decoupled from Hamcrest to avoid version incompatibilities
  * that have impacted our users in past. Mockito offers a dedicated API to match arguments
  * via {@link ArgumentMatcher}.
  * Hamcrest integration is provided so that users can take advantage of existing Hamcrest matchers.
@@ -39,7 +39,7 @@ import static org.mockito.internal.util.Primitives.defaultValue;
  * Hopefully, the javadoc describes the problem and solution well.
  * If you have an idea how to fix the problem, let us know via the mailing list or the issue tracker.
  *
- * @since 2.0.0
+ * @since 2.1.0
  */
 public class MockitoHamcrest {
 
@@ -50,7 +50,7 @@ public class MockitoHamcrest {
      *
      * @param matcher decides whether argument matches
      * @return <code>null</code> or default value for primitive (0, false, etc.)
-     * @since 2.0.0
+     * @since 2.1.0
      */
     @SuppressWarnings("unchecked")
     public static <T> T argThat(Matcher<T> matcher) {

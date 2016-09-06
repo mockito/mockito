@@ -32,7 +32,7 @@ import org.mockito.stubbing.Answer;
  * return type is not mockable (e.g. final) then ordinary null is returned.
  * <p>
  * ReturnsSmartNulls will be probably the default return values strategy in
- * Mockito 2.0.0
+ * Mockito 2.1.0
  */
 public class ReturnsSmartNulls implements Answer<Object>, Serializable {
 

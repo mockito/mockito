@@ -37,7 +37,7 @@ public interface VerificationMode {
      * Description will be prepended to the assertion error if verification fails.
      * @param description The custom failure message
      * @return VerificationMode
-     * @since 2.0.0
+     * @since 2.1.0
      */
     VerificationMode description(String description);
 }

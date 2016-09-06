@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 
 /**
- * It's likely this implementation will be used by default by every Mockito 2.0.0 mock.
+ * It's likely this implementation will be used by default by every Mockito 2.1.0 mock.
  * <p>
  * Currently <b>used only</b> by {@link Mockito#RETURNS_SMART_NULLS}
  * <p>
