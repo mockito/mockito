@@ -94,11 +94,11 @@ task("releaseNeeded") {
 
 bintrayUpload {
     dependsOn releaseNeeded
-    onlyIf { releaseNeeded.needed && !dryRun }
+    onlyIf { releaseNeeded.needed }
     doFirst {
         logger.lifecycle troubleshootingInfo
         if (dryRun) {
-            logger.lifecycle "Dry-running the release"
+            logger.lifecycle "Dry-running the release! Although 'bintrayUpload' is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
         }
     }
 }
