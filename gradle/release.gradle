@@ -90,7 +90,7 @@ task("releaseNeeded") {
 
 bintrayUpload {
     dependsOn releaseNeeded
-    onlyIf { releaseNeeded.needed }
+    onlyIf { releaseNeeded.needed && !dryRun }
     doFirst {
         logger.lifecycle troubleshootingInfo
         if (dryRun) {
