@@ -1,3 +1,17 @@
+### 2.1.0-beta.121 (2016-09-06 06:13 UTC)
+
+* Authors: 4
+* Commits: 7
+  * 3: Lukasz Szewc
+  * 2: Brice Dutheil
+  * 1: Continuous Delivery Drone
+  * 1: Szczepan Faber
+* Improvements: 4
+  * Updated the javadocs [(#623)](https://github.com/mockito/mockito/pull/623)
+  * Allow build script to release any release parent branch [(#622)](https://github.com/mockito/mockito/pull/622)
+  * Fixes #548 from now on verification happens always call in other thre… [(#619)](https://github.com/mockito/mockito/pull/619)
+  * VerificationWithTimeoutTest is unstable [(#548)](https://github.com/mockito/mockito/issues/548)
+
 ### 2.1.0-beta.120 (2016-09-01 13:05 UTC)
 
 * Authors: 2
