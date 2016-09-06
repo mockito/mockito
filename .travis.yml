@@ -9,9 +9,8 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-# Enabling container based infrastructure hoping it will help the build speed <= this didn't work well, so it's reverted
-# see http://docs.travis-ci.com/user/workers/container-based-infrastructure/
-sudo: true
+# Enable container based infrastructure - https://docs.travis-ci.com/user/ci-environment/
+sudo: false
 
 language: java
 
