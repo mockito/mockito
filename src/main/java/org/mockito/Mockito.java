@@ -73,7 +73,7 @@ import org.mockito.junit.*;
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to 2.1.0</a></h3>
  *
- * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.0.
+ * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.1.0!
  * Mockito follows <a href="http://semver.org/">semantic versioning</a>
  * and contains breaking changes only on major version upgrades.
  * In the lifecycle of a library, breaking changes are necessary
@@ -1233,7 +1233,7 @@ public class Mockito extends ArgumentMatchers {
      * <code>ReturnsSmartNulls</code> first tries to return ordinary return values (see {@link ReturnsMoreEmptyValues})
      * then it tries to return SmartNull. If the return type is final then plain null is returned.
      * <p>
-     * <code>ReturnsSmartNulls</code> will be probably the default return values strategy in Mockito 2.0.
+     * <code>ReturnsSmartNulls</code> will be probably the default return values strategy in Mockito 3.0.0
      * <p>
      * Example:
      * <pre class="code"><code class="java">
