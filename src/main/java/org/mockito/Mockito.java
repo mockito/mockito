@@ -80,7 +80,7 @@ import org.mockito.junit.*;
  * to roll out a set of brand new features that alter the existing behavior or even change the API.
  * We hope that you enjoy Mockito 2.1.0!
  * <p>
- * List of breaking changes:
+ * List of breaking changes: TODO 596
  * <ul>
  *     <li>Mockito is decoupled from Hamcrest and custom matchers API has changed, see {@link ArgumentMatcher}
  *     for rationale and migration guide.</li>
