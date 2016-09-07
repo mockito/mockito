@@ -83,8 +83,8 @@ task("releaseNeeded") {
         def skippedByCommitMessage = commitMessage?.contains(skipReleaseCommitMessage)
         def customVersion = (commitMessage =~ customReleaseVersionPattern)
         ext.needed = dryRun || customVersion.matches() || (pr == 'false' && isReleasableBranch(branch) && !comparePublications.publicationsEqual && skipEnvVariable != 'true' && !skippedByCommitMessage)
-        logger.lifecycle("Release needed: {}, branch: {}, pull request: {}, dry run: {}, publications equal: {}, skip env variable: {}, skipped by message: {}, customVersion: {}.",
-                needed, branch, pr, dryRun, comparePublications.publicationsEqual, skipEnvVariable, skippedByCommitMessage, customVersion.matches())
+        logger.lifecycle("Release needed: {}, releasable branch: {}, pull request: {}, dry run: {}, publications equal: {}, skip env variable: {}, skipped by message: {}, customVersion: {}.",
+                needed, isReleasableBranch(branch), pr, dryRun, comparePublications.publicationsEqual, skipEnvVariable, skippedByCommitMessage, customVersion.matches())
     }
 }
 
