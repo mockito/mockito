@@ -1,3 +1,11 @@
+### 2.1.0-beta.124 (2016-09-07 04:36 UTC)
+
+* Authors: 2
+* Commits: 12
+  * 11: Szczepan Faber
+  * 1: Continuous Delivery Drone
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.1.0-beta.123 (2016-09-06 15:01 UTC)
 
 * Authors: 4
