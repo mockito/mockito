@@ -246,15 +246,16 @@ Heading styles
 ul.blockList ul.blockList li.blockList h3, ul.blockList ul.blockList li.blockList h3 {
     background:#E0E6DF;
     border:1px solid #C0C0C0;
-    width: 110%;
-    margin-left: -1em;
-    padding-left: 1em;
+    width: 100%;
+    margin-left: 0;
+    padding-left: 0;
 }
 div.summary ul.blockList ul.blockList li.blockList h3 {
     background:#E0E6DF;
-    border:0;
-    border:1px solid #C0C0C0;
-    padding-left:5px;
+    border: 0 solid #C0C0C0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
 }
 div.summary ul.blockList ul.blockList ul.blockList li.blockList h3 {
     background:#E0E6DF;
