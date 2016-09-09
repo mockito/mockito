@@ -1,3 +1,26 @@
+### 2.1.0-beta.125 (2016-09-08 03:42 UTC)
+
+* Authors: 4
+* Commits: 24
+  * 15: Szczepan Faber
+  * 5: Continuous Delivery Drone
+  * 3: Brice Dutheil
+  * 1: Divyansh Gupta
+* Improvements: 3
+  * Documentation: 1
+    * Update documentation links in travis config comments [(#558)](https://github.com/mockito/mockito/pull/558)
+  * Remaining changes: 2
+    * Ensured javadocs are correct [(#626)](https://github.com/mockito/mockito/pull/626)
+    * Tweak javadoc [(#625)](https://github.com/mockito/mockito/issues/625)
+
+### 2.1.0-beta.124 (2016-09-07 04:36 UTC)
+
+* Authors: 2
+* Commits: 12
+  * 11: Szczepan Faber
+  * 1: Continuous Delivery Drone
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.1.0-beta.123 (2016-09-06 15:01 UTC)
 
 * Authors: 4

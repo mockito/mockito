@@ -73,14 +73,14 @@ import org.mockito.junit.*;
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to 2.1.0</a></h3>
  *
- * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.0.
+ * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.1.0!
  * Mockito follows <a href="http://semver.org/">semantic versioning</a>
  * and contains breaking changes only on major version upgrades.
  * In the lifecycle of a library, breaking changes are necessary
  * to roll out a set of brand new features that alter the existing behavior or even change the API.
  * We hope that you enjoy Mockito 2.1.0!
  * <p>
- * List of breaking changes:
+ * List of breaking changes: TODO 596
  * <ul>
  *     <li>Mockito is decoupled from Hamcrest and custom matchers API has changed, see {@link ArgumentMatcher}
  *     for rationale and migration guide.</li>
@@ -1233,7 +1233,7 @@ public class Mockito extends ArgumentMatchers {
      * <code>ReturnsSmartNulls</code> first tries to return ordinary return values (see {@link ReturnsMoreEmptyValues})
      * then it tries to return SmartNull. If the return type is final then plain null is returned.
      * <p>
-     * <code>ReturnsSmartNulls</code> will be probably the default return values strategy in Mockito 2.0.
+     * <code>ReturnsSmartNulls</code> will be probably the default return values strategy in Mockito 3.0.0
      * <p>
      * Example:
      * <pre class="code"><code class="java">

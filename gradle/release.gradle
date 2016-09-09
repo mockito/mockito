@@ -83,8 +83,8 @@ task("releaseNeeded") {
         def skippedByCommitMessage = commitMessage?.contains(skipReleaseCommitMessage)
         def customVersion = (commitMessage =~ customReleaseVersionPattern)
         ext.needed = dryRun || customVersion.matches() || (pr == 'false' && isReleasableBranch(branch) && !comparePublications.publicationsEqual && skipEnvVariable != 'true' && !skippedByCommitMessage)
-        logger.lifecycle("Release needed: {}, branch: {}, pull request: {}, dry run: {}, publications equal: {}, skip env variable: {}, skipped by message: {}, customVersion: {}.",
-                needed, branch, pr, dryRun, comparePublications.publicationsEqual, skipEnvVariable, skippedByCommitMessage, customVersion.matches())
+        logger.lifecycle("Release needed: {}, releasable branch: {}, pull request: {}, dry run: {}, publications equal: {}, skip env variable: {}, skipped by message: {}, customVersion: {}.",
+                needed, isReleasableBranch(branch), pr, dryRun, comparePublications.publicationsEqual, skipEnvVariable, skippedByCommitMessage, customVersion.matches())
     }
 }
 
@@ -94,7 +94,7 @@ bintrayUpload {
     doFirst {
         logger.lifecycle troubleshootingInfo
         if (dryRun) {
-            logger.lifecycle "Dry-running the release"
+            logger.lifecycle "Dry-running the release! Although 'bintrayUpload' is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
         }
     }
 }
@@ -118,7 +118,8 @@ releaseSteps {
 
     step("ensure good chunk of recent commits is pulled for release notes automation") {
         //Travis default clone is pretty shallow
-        run "git", "pull", "--depth", "500"
+        //Loading extra 1K commits (1.x -> 2.x had ~700 commits)
+        run "git", "pull", "--depth", "1000"
     }
 
     def gitAuthor
@@ -128,7 +129,8 @@ releaseSteps {
     step("commit updated javadoc into gh-pages branch") { commitUpdatedJavadoc(buildInfo) }
 
     /*
-            Now we'll start operating on master. This introduces a problem - someone might have pushed changes *after* release process has started
+            Now we'll start operating on branch that we want to release.
+            This introduces a problem - someone might have pushed changes *after* release process has started
             What can happen:
              - bintrayUpload will fail saying that the version is already released
              - git push fails saying that the pull is needed
@@ -136,7 +138,7 @@ releaseSteps {
              - see 'TROUBLESHOOTING' section at the top of this file
     */
 
-    step("start operating on master") { run "git", "checkout", "master" }
+    step("start operating on $System.env.TRAVIS_BRANCH") { run "git", "checkout",  System.env.TRAVIS_BRANCH }
 
     step("update release notes") { project.notes.updateReleaseNotes() }
 
@@ -146,11 +148,11 @@ releaseSteps {
     step("create new version tag") { createTag(buildInfo, "v${currentVersion}".toString()) }
             .rollback { run "git", "tag", "-d", "v${currentVersion}".toString()}
 
-    step("commit incremented version on master") { commitIncrementedVersion(currentVersion, buildInfo, project.versionFile) }
+    step("commit incremented version on $System.env.TRAVIS_BRANCH") { commitIncrementedVersion(currentVersion, buildInfo, project.versionFile) }
             .rollback { run "git", "reset", "--hard", "HEAD^" }
 
     step("push changes to all involved branches") {
-        def pushCommandLine = ["git", "push", pushTarget, "master", "gh-pages", "v$currentVersion", "-q"]
+        def pushCommandLine = ["git", "push", pushTarget, System.env.TRAVIS_BRANCH, "gh-pages", "v$currentVersion", "-q"]
         if (dryRun) {
             pushCommandLine << '--dry-run'
         }
