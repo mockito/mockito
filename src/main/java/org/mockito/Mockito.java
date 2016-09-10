@@ -70,7 +70,7 @@ import org.mockito.junit.*;
  *      <a href="#37">37. (new) Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
  * </b>
  *
- * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to Mockito 2</a></h3>
+ * <h3 id="0">0. <a class="meaningful_link" href="#mockito2">Migrating to Mockito 2</a></h3>
  *
  * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.1.0!
  * Mockito follows <a href="http://semver.org/">semantic versioning</a>
