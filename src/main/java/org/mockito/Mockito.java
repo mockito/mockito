@@ -73,11 +73,10 @@ import org.mockito.junit.*;
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2">Migrating to Mockito 2</a></h3>
  *
  * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.1.0!
- * Mockito follows <a href="http://semver.org/">semantic versioning</a>
- * and contains breaking changes only on major version upgrades.
+ * Mockito follows <a href="http://semver.org/">semantic versioning</a> and contains breaking changes only on major version upgrades.
  * In the lifecycle of a library, breaking changes are necessary
  * to roll out a set of brand new features that alter the existing behavior or even change the API.
- * For comprehensive information about the new release including incompatible changes,
+ * For a comprehensive guide on the new release including incompatible changes,
  * see '<a href="https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2">What's new in Mockito 2</a>' wiki page.
  * We hope that you enjoy Mockito 2!
  *
