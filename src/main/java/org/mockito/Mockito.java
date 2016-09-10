@@ -30,7 +30,7 @@ import org.mockito.junit.*;
  * <h1>Contents</h1>
  *
  * <b>
- *      <a href="#0">0. Migrating to 2.1.0</a><br/>
+ *      <a href="#0">0. Migrating to Mockito 2</a><br/>
  *      <a href="#1">1. Let's verify some behaviour! </a><br/>
  *      <a href="#2">2. How about some stubbing? </a><br/>
  *      <a href="#3">3. Argument matchers </a><br/>
@@ -68,35 +68,24 @@ import org.mockito.junit.*;
  *      <a href="#35">35. (new) Custom verification failure message (Since 2.1.0)</a><br/>
  *      <a href="#36">36. (new) Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
  *      <a href="#37">37. (new) Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
- *
  * </b>
  *
- * <h3 id="0">0. <a class="meaningful_link" href="#verification">Migrating to 2.1.0</a></h3>
+ * <h3 id="0">0. <a class="meaningful_link" href="#mockito2">Migrating to Mockito 2</a></h3>
  *
  * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.1.0!
  * Mockito follows <a href="http://semver.org/">semantic versioning</a>
  * and contains breaking changes only on major version upgrades.
  * In the lifecycle of a library, breaking changes are necessary
  * to roll out a set of brand new features that alter the existing behavior or even change the API.
- * We hope that you enjoy Mockito 2.1.0!
- * <p>
- * List of breaking changes: TODO 596
- * <ul>
- *     <li>Mockito is decoupled from Hamcrest and custom matchers API has changed, see {@link ArgumentMatcher}
- *     for rationale and migration guide.</li>
- *     <li>Stubbing API has been tweaked to avoid unavoidable compilation warnings that appeared on JDK7+ platform.
- *     This will only affect binary compatibility, compilation compatibility remains unaffected.</li>
- * </ul>
+ * For comprehensive information about the new release including incompatible changes,
+ * see '<a href="https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2">What's new in Mockito 2</a>' wiki page.
+ * We hope that you enjoy Mockito 2!
  *
- * <p>
+ * <h3 id="1">1. <a class="meaningful_link" href="#verification">Let's verify some behaviour!</a></h3>
+ *
  * The following examples mock a List, because most people are familiar with the interface (such as the
  * <code>add()</code>, <code>get()</code>, <code>clear()</code> methods). <br>
  * In reality, please don't mock the List class. Use a real instance instead.
- *
- *
- *
- *
- * <h3 id="1">1. <a class="meaningful_link" href="#verification">Let's verify some behaviour!</a></h3>
  *
  * <pre class="code"><code class="java">
  * //Let's import Mockito statically so that the code looks clearer
