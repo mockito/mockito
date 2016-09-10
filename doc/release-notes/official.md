@@ -1,3 +1,304 @@
+### 2.1.0-RC.1 (2016-09-10 17:03 UTC)
+
+* Authors: 49
+* Commits: 726
+  * 210: Brice Dutheil
+  * 184: Szczepan Faber
+  * 102: Rafael Winterhalter
+  * 48: Continuous Delivery Drone
+  * 36: Pascal Schumacher
+  * 24: Tim van der Lippe
+  * 20: Christian Schwarz
+  * 15: Lukasz Szewc
+  * 15: rafwin
+  * 8: david
+  * 5: pimterry
+  * 4: Joseph Walton
+  * 4: Marcin Zajączkowski
+  * 3: Hans Joachim Desserud
+  * 3: Michal Kordas
+  * 2: Carlos Aguayo
+  * 2: Clark Brewer
+  * 2: Jan Tarnowski
+  * 2: Jazzepi
+  * 2: Jeffrey Falgout
+  * 2: Krzysztof Wolny
+  * 2: Philipp Jardas
+  * 2: Roland Hauser
+  * 2: thesnowgoose
+  * 2: Urs Metz
+  * 2: Vineet Kumar
+  * 1: alberskib
+  * 1: Alberto Scotto
+  * 1: Andrey
+  * 1: Ariel-isaacm
+  * 1: ashleyfrieze
+  * 1: Bartosz Miller
+  * 1: bruce
+  * 1: Christian Persson
+  * 1: christian.schwarz
+  * 1: David Xia
+  * 1: Divyansh Gupta
+  * 1: Eugene Ivakhno
+  * 1: Evgeny Astafev
+  * 1: fluentfuture
+  * 1: Geoff Schoeman
+  * 1: lloydjm77
+  * 1: Marcin Zajaczkowski
+  * 1: Roi Atalla
+  * 1: Scott Markwell
+  * 1: Shaun Abram
+  * 1: Simen Bekkhus
+  * 1: Tokuhiro Matsuno
+  * 1: Tom Ball
+* Improvements: 239
+  * Incompatible changes with previous major version (v1.x): 13
+    * Fixes #194 tweaks any matchers [(#510)](https://github.com/mockito/mockito/pull/510)
+    * Moves Reporter friendly exception factory to internal package [(#495)](https://github.com/mockito/mockito/pull/495)
+    * Drop support of Runner for <= JUnit4.4 [(#402)](https://github.com/mockito/mockito/issues/402)
+    * JUnit runner detects unused stubs [(#401)](https://github.com/mockito/mockito/issues/401)
+    * Get rid of ReturnValues [(#273)](https://github.com/mockito/mockito/issues/273)
+    * use Gradle built-in osgi plugin [(#249)](https://github.com/mockito/mockito/issues/249)
+    * push cglib into a separate jar [(#248)](https://github.com/mockito/mockito/issues/248)
+    * Rework stubbing api with consecutive vararg to avoid JDK7+ warnings [(#239)](https://github.com/mockito/mockito/pull/239)
+    * Moves responsibility of isTypeMockable to MockMaker [(#238)](https://github.com/mockito/mockito/pull/238)
+    * Tweaks Matchers.any family matchers behavior [(#194)](https://github.com/mockito/mockito/issues/194)
+    * stop depending on hamcrest internally [(#154)](https://github.com/mockito/mockito/issues/154)
+    * stop producing mockito-all [(#153)](https://github.com/mockito/mockito/issues/153)
+    * Argument matcher anyXxx() (i.e. anyString(), anyList()) should not match nulls [(#134)](https://github.com/mockito/mockito/issues/134)
+  * Java 8 support: 5
+    * Moves arity interfaces of java8 helper answers to public API [(#617)](https://github.com/mockito/mockito/pull/617)
+    * AdditionalAnswers.answer family leaks internal classes [(#614)](https://github.com/mockito/mockito/issues/614)
+    * Added default answer for java.util.stream.Stream [(#429)](https://github.com/mockito/mockito/pull/429)
+    * Functional interfaces for Java 8 support in Mockito 2 [(#338)](https://github.com/mockito/mockito/pull/338)
+    * Mock returning java.util.Optional should return Optional.empty() by default (Java 8) [(#191)](https://github.com/mockito/mockito/issues/191)
+  * Behavior-Driven Development support: 6
+    * Add shouldHaveNoMoreInteractions() to BDDMockito [(#314)](https://github.com/mockito/mockito/pull/314)
+    * Add BDD version of verifyNoMoreInteractions() [(#311)](https://github.com/mockito/mockito/issues/311)
+    * Fixes #203 : Introduce BDD InOrder verification [(#222)](https://github.com/mockito/mockito/pull/222)
+    * Fixes #212 : Add shouldHaveZeroInteractions as BDD version of verifyZeroInteractions [(#221)](https://github.com/mockito/mockito/pull/221)
+    * Add BDD version of verifyZeroInteractions() [(#212)](https://github.com/mockito/mockito/issues/212)
+    * Introduce BDD InOrder verification [(#203)](https://github.com/mockito/mockito/issues/203)
+  * Bugfixes: 17
+    * Fixes #497 : RETURNS_DEEP_STUBS may try to mock final classes [(#615)](https://github.com/mockito/mockito/pull/615)
+    * Mockito.when() fails when method could originate from superclass or interface  [(#508)](https://github.com/mockito/mockito/issues/508)
+    * Stubbing with some AdditionalMatchers can NPE with null actuals [(#457)](https://github.com/mockito/mockito/issues/457)
+    * Fixed OSGi metadata generation [(#388)](https://github.com/mockito/mockito/pull/388)
+    * Problem verifying bridge methods [(#304)](https://github.com/mockito/mockito/issues/304)
+    * MockUtil.isMock() no longer checks null [(#243)](https://github.com/mockito/mockito/issues/243)
+    * mockito 2.0.14 fails to mock jetty httpclient [(#233)](https://github.com/mockito/mockito/issues/233)
+    * 2.0.8-beta -> 2.0.9-beta 'Unable to initialize @Spy annotated field [(#220)](https://github.com/mockito/mockito/issues/220)
+    * ArgumentCaptor no longer working for varargs [(#211)](https://github.com/mockito/mockito/pull/211)
+    * Fixes #197 : Blocks ability to use negative value for timeout() and after() method. [(#207)](https://github.com/mockito/mockito/pull/207)
+    * NoJUnitDependenciesTest is failing on Windows machine. [(#206)](https://github.com/mockito/mockito/issues/206)
+    * Better protection against incompatible returned value of default answer, and get safely mock name [(#202)](https://github.com/mockito/mockito/pull/202)
+    * Mockito.after() method accepts negative timeperiods and subsequent verifications always pass [(#197)](https://github.com/mockito/mockito/issues/197)
+    * ArgumentCaptor no longer working for varargs [(#188)](https://github.com/mockito/mockito/issues/188)
+    * java.lang.ClassCastException: java.lang.Class cannot be cast to java.lang.String [(#187)](https://github.com/mockito/mockito/issues/187)
+    * Mockito 1.10.x timeout verification needs JUnit classes (VerifyError, NoClassDefFoundError) [(#152)](https://github.com/mockito/mockito/issues/152)
+    * Deep stubbing with generic responses in the call chain is not working [(#128)](https://github.com/mockito/mockito/issues/128)
+  * Enhancements: 28
+    * make VerificationWithTimeoutTest#shouldAllowMixingOnlyWithTimeout mor… [(#587)](https://github.com/mockito/mockito/pull/587)
+    * Checks.checkNotNull should emit IllegalArgumentException instead of NPE [(#554)](https://github.com/mockito/mockito/issues/554)
+    * Fully register a class ancestry for GenericMetadataSupport [(#549)](https://github.com/mockito/mockito/pull/549)
+    * improve stubbing warnings formatting [(#544)](https://github.com/mockito/mockito/issues/544)
+    * improve Mockito.mockingDetails API [(#541)](https://github.com/mockito/mockito/issues/541)
+    * Improved exception message for wanted but not invoked [(#506)](https://github.com/mockito/mockito/issues/506)
+    * Reference correct types for multiple parent class loader if user class and Mockito are loaded by different loaders (e.g. OSGi) [(#471)](https://github.com/mockito/mockito/pull/471)
+    * Refactored mock cache to be non-blocking. [(#470)](https://github.com/mockito/mockito/pull/470)
+    * update objenesis version to 2.4 [(#447)](https://github.com/mockito/mockito/pull/447)
+    * enable some ignored tests of BridgeMethodsHitAgainTest and DetectingF… [(#442)](https://github.com/mockito/mockito/pull/442)
+    * Clean up issues reported by IntelliJ [(#436)](https://github.com/mockito/mockito/pull/436)
+    * Inorder timeouts [(#424)](https://github.com/mockito/mockito/pull/424)
+    * Fixed #407 Vararg method call on mock object fails [(#412)](https://github.com/mockito/mockito/pull/412)
+    * Lazily verify without calling collector.verify() [(#389)](https://github.com/mockito/mockito/pull/389)
+    * speedup travis build a bit by downloading gradle-bin instead of gradl… [(#371)](https://github.com/mockito/mockito/pull/371)
+    * Issue #345 : Removes previously verified invocations when capturing argument is combined with after and atMost verifiers [(#349)](https://github.com/mockito/mockito/pull/349)
+    * Introduce functional interfaces to improve Java 8 utilisation of Mockito 2 [(#337)](https://github.com/mockito/mockito/issues/337)
+    * Modify StackTraceFilter to not exclude "good" stack trace elements [(#317)](https://github.com/mockito/mockito/pull/317)
+    * Implement VerificationCollector which can collect multiple verifications. [(#287)](https://github.com/mockito/mockito/pull/287)
+    * Add new API method to reset invocations of a mock, while maintaining all existing stubbing [(#286)](https://github.com/mockito/mockito/pull/286)
+    * Upgraded to Byte Buddy 0.6.11 and took improved features in use. [(#242)](https://github.com/mockito/mockito/pull/242)
+    * Test error after upgrading Mockito from 2.0.14-beta to 2.0.15-beta [(#237)](https://github.com/mockito/mockito/issues/237)
+    * nicer textual printing of typed parameters [(#236)](https://github.com/mockito/mockito/issues/236)
+    * Improves InjectMocks behavior when injectee has multiple fields of the same type [(#215)](https://github.com/mockito/mockito/pull/215)
+    * Return empty value for Iterables [(#210)](https://github.com/mockito/mockito/issues/210)
+    * Fixes #200 : ArgumentCaptor.forClass is more friendly with generic types [(#201)](https://github.com/mockito/mockito/pull/201)
+    * ArgumentCaptor.fromClass's return type should match a parameterized type [(#200)](https://github.com/mockito/mockito/issues/200)
+    * Make PropertyAndSetterInjection field sorting consistent [(#176)](https://github.com/mockito/mockito/pull/176)
+  * Documentation: 10
+    * Mockito Javadoc has a TODO about hamcrest [(#593)](https://github.com/mockito/mockito/issues/593)
+    * Reintroduces javadoc stylesheet [(#589)](https://github.com/mockito/mockito/pull/589)
+    * Update version explanation with bad beta versions [(#588)](https://github.com/mockito/mockito/pull/588)
+    * Update documentation links in travis config comments [(#558)](https://github.com/mockito/mockito/pull/558)
+    * Fix again javadoc stylesheet [(#552)](https://github.com/mockito/mockito/issues/552)
+    * Changes to InvocationOnMock API should include version info [(#420)](https://github.com/mockito/mockito/issues/420)
+    * Fixed method name to verifyNoMoreInteractions [(#413)](https://github.com/mockito/mockito/pull/413)
+    * Fixes #312.  Added documentation in OngoingStubbing.thenThrow(). [(#381)](https://github.com/mockito/mockito/pull/381)
+    * Improve the custom argument matching documentation [(#334)](https://github.com/mockito/mockito/issues/334)
+    * ThrowsExceptionClass is urealiable - exception doesn't containt stack trace [(#312)](https://github.com/mockito/mockito/issues/312)
+  * Remaining changes: 160
+    * Fixes #629 - width of some headers in javadoc [(#630)](https://github.com/mockito/mockito/pull/630)
+    * Javadoc CSS width issue [(#629)](https://github.com/mockito/mockito/issues/629)
+    * Fixed javadoc documentation in the main class [(#628)](https://github.com/mockito/mockito/pull/628)
+    * Release procedure for branches and some javadoc [(#627)](https://github.com/mockito/mockito/pull/627)
+    * Ensured javadocs are correct [(#626)](https://github.com/mockito/mockito/pull/626)
+    * Tweak javadoc [(#625)](https://github.com/mockito/mockito/issues/625)
+    * Updated the javadocs [(#623)](https://github.com/mockito/mockito/pull/623)
+    * Allow build script to release any release parent branch [(#622)](https://github.com/mockito/mockito/pull/622)
+    * Fixes #548 from now on verification happens always call in other thre… [(#619)](https://github.com/mockito/mockito/pull/619)
+    * Fixes #595, going toward 2.1.0 instead of 2.0.0 [(#605)](https://github.com/mockito/mockito/pull/605)
+    * Release notes group improvements by labels [(#604)](https://github.com/mockito/mockito/pull/604)
+    * Release notes group improvements by labels [(#603)](https://github.com/mockito/mockito/issues/603)
+    * suppressed compiler warning and unchecked collections cast [(#600)](https://github.com/mockito/mockito/pull/600)
+    * Improved release notes generation [(#599)](https://github.com/mockito/mockito/pull/599)
+    * Generated release notes contain unsorted and duplicate committers [(#598)](https://github.com/mockito/mockito/issues/598)
+    * Removed TODO and dead code [(#597)](https://github.com/mockito/mockito/pull/597)
+    * Handle beta non-semantic versioning scheme [(#595)](https://github.com/mockito/mockito/issues/595)
+    * Make the build script aware of the release branch [(#594)](https://github.com/mockito/mockito/issues/594)
+    * stylesheet-tweaks-for-openjdk6 [(#592)](https://github.com/mockito/mockito/pull/592)
+    * refactored ArgumentMatchingTool to a static utillity class [(#591)](https://github.com/mockito/mockito/pull/591)
+    * removed package org.mockito.internal.listeners [(#590)](https://github.com/mockito/mockito/pull/590)
+    * fix some rawtype warnings [(#579)](https://github.com/mockito/mockito/pull/579)
+    * made some timeouts in VerificationAfterDelayTest and VerificationWith… [(#578)](https://github.com/mockito/mockito/pull/578)
+    * Bumped Gradle and enabled Build Scans [(#576)](https://github.com/mockito/mockito/pull/576)
+    * fix some rawtype warnings [(#574)](https://github.com/mockito/mockito/pull/574)
+    * replace TestBase#assertNotEquals with AssertJ #isNotEqualTo [(#573)](https://github.com/mockito/mockito/pull/573)
+    * replace TestBase#assertContainsType(final Collection<?> list, final C… [(#572)](https://github.com/mockito/mockito/pull/572)
+    * Pretty print primitive and wrappers types in Maps [(#571)](https://github.com/mockito/mockito/pull/571)
+    * Improved the public API of MockingDetails [(#569)](https://github.com/mockito/mockito/pull/569)
+    * Ensured that MockitoJUnitRunner is thread safe wrt unused stubs detection [(#568)](https://github.com/mockito/mockito/pull/568)
+    * Make travis use OracleJDK7 instead of OpenJDK7 [(#566)](https://github.com/mockito/mockito/pull/566)
+    * Publish Mockito build results to Gradle Build Scans [(#564)](https://github.com/mockito/mockito/issues/564)
+    * Fixes #554 : Checks.checkNotNull now throws IAE instead of NPE [(#560)](https://github.com/mockito/mockito/pull/560)
+    * Replace or remove code.google.com links in documentation [(#557)](https://github.com/mockito/mockito/pull/557)
+    * Move Mockito internal classes to internal package [(#556)](https://github.com/mockito/mockito/pull/556)
+    * JUnit rules report unused stubs - fixes #384 [(#555)](https://github.com/mockito/mockito/pull/555)
+    * Uses the hosts addon in order to avoid the buffer overflow affecting … [(#553)](https://github.com/mockito/mockito/pull/553)
+    * Fixed #538 changed error message in case initialization for mock injection fails. [(#550)](https://github.com/mockito/mockito/pull/550)
+    * VerificationWithTimeoutTest is unstable [(#548)](https://github.com/mockito/mockito/issues/548)
+    * refactored ObjectMethodsGuru to a static utility class [(#547)](https://github.com/mockito/mockito/pull/547)
+    * inlined ArrayUtils.isEmpty() in ArgumentsProcessor [(#540)](https://github.com/mockito/mockito/pull/540)
+    * Improve error message when @InjectMocks is uses on an interface or enum field [(#538)](https://github.com/mockito/mockito/issues/538)
+    * Move release skipping logic to Gradle [(#536)](https://github.com/mockito/mockito/pull/536)
+    * refactored SuperTypesLastSorter to a static utility class [(#535)](https://github.com/mockito/mockito/pull/535)
+    * Fix typo in Javadocs [(#532)](https://github.com/mockito/mockito/pull/532)
+    * Missing generics info on collection matchers [(#528)](https://github.com/mockito/mockito/pull/528)
+    * Add regression test for #508 [(#525)](https://github.com/mockito/mockito/pull/525)
+    * made some timeouts in VerificationAfterDelayTest and VerificationWith… [(#523)](https://github.com/mockito/mockito/pull/523)
+    * replace TestBase#assertContains(String sub, String string) with Asser… [(#519)](https://github.com/mockito/mockito/pull/519)
+    * Verify build on Travis also with Java 7 and 8 [(#518)](https://github.com/mockito/mockito/pull/518)
+    * Make ciBuild depends also on subprojects state [(#517)](https://github.com/mockito/mockito/pull/517)
+    * replace TestBase#assertNotContains(String sub, String string) with As… [(#516)](https://github.com/mockito/mockito/pull/516)
+    * refactored AllInvocationsFinder and VerifiableInvocationsFinder to st… [(#515)](https://github.com/mockito/mockito/pull/515)
+    * refactored MockUtil to a static utility class (#426) [(#514)](https://github.com/mockito/mockito/pull/514)
+    * replace TestBase#assertContainsIgnoringCase(String sub, String string… [(#513)](https://github.com/mockito/mockito/pull/513)
+    * fix some raw type warnings in tests [(#512)](https://github.com/mockito/mockito/pull/512)
+    * Fix some warnings [(#511)](https://github.com/mockito/mockito/pull/511)
+    * Improved exception message - fixes issue 506 [(#507)](https://github.com/mockito/mockito/pull/507)
+    * fixed some rawtype warnings [(#504)](https://github.com/mockito/mockito/pull/504)
+    * refactored NonGreedyNumberOfInvocationsInOrderChecker to a static uti… [(#503)](https://github.com/mockito/mockito/pull/503)
+    * refactored ArgumentsComparator to a static utility class (#426) [(#502)](https://github.com/mockito/mockito/pull/502)
+    * refactored TestMethodsFinder to a static utility class (#426) [(#501)](https://github.com/mockito/mockito/pull/501)
+    * remove unused imports [(#498)](https://github.com/mockito/mockito/pull/498)
+    * DEEP_STUBS tries to mock final class [(#497)](https://github.com/mockito/mockito/issues/497)
+    * Renames Matchers to ArgumentMatchers to avoid name clash with Hamcrest Matchers class [(#496)](https://github.com/mockito/mockito/pull/496)
+    * Code cov on releases [(#493)](https://github.com/mockito/mockito/pull/493)
+    * Revert "Remove deprecated method" [(#492)](https://github.com/mockito/mockito/pull/492)
+    * Deprecate whitebox and corresponding verboserunner and junitfailureha… [(#491)](https://github.com/mockito/mockito/pull/491)
+    * Cleanup: removed dead/unnecessary classes [(#486)](https://github.com/mockito/mockito/pull/486)
+    * Update version scheme to publish release candidate [(#483)](https://github.com/mockito/mockito/pull/483)
+    * Exclude mockito internal packages from the Javadoc [(#481)](https://github.com/mockito/mockito/pull/481)
+    * fix grammar of sentence in Mockito javadoc [(#479)](https://github.com/mockito/mockito/pull/479)
+    * refactored ThreadSafeMockingProgress to a singleton [(#476)](https://github.com/mockito/mockito/pull/476)
+    * Typo fix [(#475)](https://github.com/mockito/mockito/pull/475)
+    * fix some rawtype warnings in tests [(#469)](https://github.com/mockito/mockito/pull/469)
+    * add missing since javadoc tags for recently added methods and classes… [(#468)](https://github.com/mockito/mockito/pull/468)
+    * fix some rawtype warnings in tests [(#467)](https://github.com/mockito/mockito/pull/467)
+    * fix some rawtype warnings in tests [(#464)](https://github.com/mockito/mockito/pull/464)
+    * refactored InvocationsFinder to static utility class [(#462)](https://github.com/mockito/mockito/pull/462)
+    * delete disabled test for removed objenesis missing reporting feature [(#460)](https://github.com/mockito/mockito/pull/460)
+    * fix some rawtype warnings in tests [(#459)](https://github.com/mockito/mockito/pull/459)
+    * remove dead code in ClassCacheVersusClassReloadingTest [(#458)](https://github.com/mockito/mockito/pull/458)
+    * fix some rawtype warnings [(#456)](https://github.com/mockito/mockito/pull/456)
+    * activate VerificationWithTimeoutTest#shouldAllowTimeoutVerificationIn… [(#455)](https://github.com/mockito/mockito/pull/455)
+    * Modified JavaDoc for ArgumentMatcher [(#454)](https://github.com/mockito/mockito/pull/454)
+    * javadoc: improve grammar of some sentences [(#452)](https://github.com/mockito/mockito/pull/452)
+    * Refactored Timeout and After concurrent test [(#451)](https://github.com/mockito/mockito/pull/451)
+    * Make tests which test for timeouts with Thread#sleep more lenient. [(#446)](https://github.com/mockito/mockito/pull/446)
+    * Add PARAMETER ElementType to @Mock [(#444)](https://github.com/mockito/mockito/pull/444)
+    * downgrade assertj-core version to 1.7.1 because this version is java … [(#443)](https://github.com/mockito/mockito/pull/443)
+    * delete ignored cglib related tests [(#441)](https://github.com/mockito/mockito/pull/441)
+    * PluginStackTraceFilteringTest failing locally [(#435)](https://github.com/mockito/mockito/issues/435)
+    * Very tiny typo. [(#434)](https://github.com/mockito/mockito/pull/434)
+    * Fixes #426 Refactored InvocationMarker to a static utility class [(#432)](https://github.com/mockito/mockito/pull/432)
+    * Fixes #426 Dropped class HandyReturnValues [(#431)](https://github.com/mockito/mockito/pull/431)
+    * Refactored class Reporter to a static utillity [(#427)](https://github.com/mockito/mockito/pull/427)
+    * BDDMockito: rename willNothing to willDoNothing [(#419)](https://github.com/mockito/mockito/pull/419)
+    * Vararg method call on mock object fails when used org.mockito.AdditionalAnswers#delegatesTo [(#407)](https://github.com/mockito/mockito/issues/407)
+    * Fixes #374 Removed deprecated classes and methods [(#404)](https://github.com/mockito/mockito/pull/404)
+    * Bump JUnit to 4.12 [(#400)](https://github.com/mockito/mockito/issues/400)
+    * Mocking Class that inherits from Abstract class in a different JAR doesn't override methods [(#398)](https://github.com/mockito/mockito/issues/398)
+    * Remove deprecated code [(#386)](https://github.com/mockito/mockito/pull/386)
+    * OSGi metadata is incorrect [(#385)](https://github.com/mockito/mockito/issues/385)
+    * JUnit rule logs warnings about unsued / misused stubs [(#384)](https://github.com/mockito/mockito/issues/384)
+    * correct package declaration of VerificationWithDescriptionTest [(#382)](https://github.com/mockito/mockito/pull/382)
+    * Remove duplication. [(#377)](https://github.com/mockito/mockito/pull/377)
+    * Fix typo in example in javadoc. [(#376)](https://github.com/mockito/mockito/pull/376)
+    * Remove deprecated API from Mockito 2  [(#374)](https://github.com/mockito/mockito/issues/374)
+    * Fixes #365 Simplify the InvocationOnMock-API to get a casted argument [(#373)](https://github.com/mockito/mockito/pull/373)
+    * Travis / CI improvements [(#369)](https://github.com/mockito/mockito/pull/369)
+    * Simplify the InvocationOnMock-API to get a casted argument [(#365)](https://github.com/mockito/mockito/issues/365)
+    * Use the new issue/pr templates [(#361)](https://github.com/mockito/mockito/pull/361)
+    * Show correct location of unwanted interaction with mock when using MockitoJUnitRule [(#344)](https://github.com/mockito/mockito/pull/344)
+    * Fixes #256 :Alternative fix to #259, windows build [(#342)](https://github.com/mockito/mockito/pull/342)
+    * Mockito Hamcrest integration does not handle argument primitive matching well [(#336)](https://github.com/mockito/mockito/issues/336)
+    * Ensure CI build fails when release task breaks [(#333)](https://github.com/mockito/mockito/issues/333)
+    * Move build and release automation logic to Kotlin [(#331)](https://github.com/mockito/mockito/issues/331)
+    * Minor formatting, typo and clarification fixes in README [(#313)](https://github.com/mockito/mockito/pull/313)
+    * Tweaks to the main Mockito javadocs to aid readability [(#309)](https://github.com/mockito/mockito/pull/309)
+    * Eliminate direct dependency on ObjenesisInstantiator [(#306)](https://github.com/mockito/mockito/pull/306)
+    * Refactor some utilities and TODO done [(#301)](https://github.com/mockito/mockito/pull/301)
+    * Update StackOverflow link to Mockito tag [(#296)](https://github.com/mockito/mockito/pull/296)
+    * Removed deprecated ReturnValues and all it's occurrences [(#294)](https://github.com/mockito/mockito/pull/294)
+    * Remove validateSerializable() [(#293)](https://github.com/mockito/mockito/pull/293)
+    * Add optional answer to support mocked Builders [(#288)](https://github.com/mockito/mockito/pull/288)
+    * Correcting public website url in Maven POM [(#281)](https://github.com/mockito/mockito/pull/281)
+    * Reintroduce null check on MockUtil.isMock() [(#280)](https://github.com/mockito/mockito/pull/280)
+    * Issue #268: Added support for generic arrays as return types. [(#270)](https://github.com/mockito/mockito/pull/270)
+    * RETURN_DEEP_STUBS and toArray(T[]) stops working with versions > 1.9.5 [(#268)](https://github.com/mockito/mockito/issues/268)
+    * Ignore Groovy meta methods when instrumenting. [(#266)](https://github.com/mockito/mockito/pull/266)
+    * Fix typo in docs, missing breaklines. [(#264)](https://github.com/mockito/mockito/pull/264)
+    * Fixes #260: Typo in documentation [(#261)](https://github.com/mockito/mockito/pull/261)
+    * Typo in documentation [(#260)](https://github.com/mockito/mockito/issues/260)
+    * Removing new line in bottom script. it seems that javadoc… [(#259)](https://github.com/mockito/mockito/pull/259)
+    * Minify the JS file [(#258)](https://github.com/mockito/mockito/pull/258)
+    * Upgraded to Byte Buddy 0.6.12.  [(#257)](https://github.com/mockito/mockito/pull/257)
+    * task mockitoJavadoc fails when compiling in windows [(#256)](https://github.com/mockito/mockito/issues/256)
+    * [#251] Migrate Fest Assert code to AssertJ [(#252)](https://github.com/mockito/mockito/pull/252)
+    * Unit tests improvements: migrate from legacy FEST Assert code to AssertJ [(#251)](https://github.com/mockito/mockito/issues/251)
+    * no jars in source code [(#250)](https://github.com/mockito/mockito/issues/250)
+    * Serializable check is too harsh [(#245)](https://github.com/mockito/mockito/issues/245)
+    * Replaces cobertura/coveralls by jacoco/codecov [(#241)](https://github.com/mockito/mockito/pull/241)
+    * Fixes coverage reports [(#240)](https://github.com/mockito/mockito/pull/240)
+    * Fixes #220 constructor invoking methods raise NPE [(#235)](https://github.com/mockito/mockito/pull/235)
+    * Cannot instantiate type with public method of a public parent class having a non public types in signature [(#234)](https://github.com/mockito/mockito/pull/234)
+    * Fixes #228: fixed a verify() call example in @Captor javadoc [(#229)](https://github.com/mockito/mockito/pull/229)
+    * @Captor javadoc contains a wrong call example [(#228)](https://github.com/mockito/mockito/issues/228)
+    * [#206] Fix issue related to windows path [(#223)](https://github.com/mockito/mockito/pull/223)
+    * Add .gitattributes to enforce LF [(#219)](https://github.com/mockito/mockito/pull/219)
+    * InjectMocks injects mock into wrong field [(#205)](https://github.com/mockito/mockito/issues/205)
+    * mockito spy lost annotations from the spied instance class [(#204)](https://github.com/mockito/mockito/issues/204)
+    * Fixes typo [(#184)](https://github.com/mockito/mockito/pull/184)
+    * Replace CGLIB by Bytebuddy [(#171)](https://github.com/mockito/mockito/pull/171)
+    * @InjectMocks and @Spy on same field should cause MockitoException [(#169)](https://github.com/mockito/mockito/issues/169)
+    * GitHubIssues fetcher is now aware of GitHub pagination [(#163)](https://github.com/mockito/mockito/pull/163)
+    * Excluded missing transitive dependency of the coveralls gradle plugin to fix failing build. [(#161)](https://github.com/mockito/mockito/pull/161)
+    * Internal Comparator violates its general contract [(#155)](https://github.com/mockito/mockito/issues/155)
+    * Concise way to collect multiple verify failures, ideally with JUnitCollector or  derivative [(#124)](https://github.com/mockito/mockito/issues/124)
+    * Allow convenient spying on abstract classes [(#92)](https://github.com/mockito/mockito/issues/92)
+    * Added custom failure message to Mockito.verify. Issue 482 [(#68)](https://github.com/mockito/mockito/pull/68)
+
 ### 1.10.19 (2014-12-31 17:04 UTC)
 
 * Authors: 4
