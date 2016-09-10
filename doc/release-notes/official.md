@@ -1,3 +1,17 @@
+### 2.1.0-beta.126 (2016-09-10 16:28 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 4: Szczepan Faber
+  * 1: Brice Dutheil
+  * 1: Lukasz Szewc
+* Improvements: 5
+  * Fixes #629 - width of some headers in javadoc [(#630)](https://github.com/mockito/mockito/pull/630)
+  * Javadoc CSS width issue [(#629)](https://github.com/mockito/mockito/issues/629)
+  * Fixed javadoc documentation in the main class [(#628)](https://github.com/mockito/mockito/pull/628)
+  * Release procedure for branches and some javadoc [(#627)](https://github.com/mockito/mockito/pull/627)
+  * Make the build script aware of the release branch [(#594)](https://github.com/mockito/mockito/issues/594)
+
 ### 2.1.0-beta.125 (2016-09-08 03:42 UTC)
 
 * Authors: 4
