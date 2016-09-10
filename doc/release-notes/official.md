@@ -1,5 +1,13 @@
 ### 2.1.0-RC.1 (2016-09-10 17:03 UTC)
 
+# Brand new Mockito 2
+
+Mockito 2: even cleaner tests!!! THANK you for writing great tests with us, your patience waiting for v2, and kudos to fantastic gang of contributors!
+
+We really need help getting 2.1.0 final out! Please try out the release candidate and submit feedback via GitHub issues!
+
+For comprehensive overview of the brand new release see [What's new in Mockito 2](https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2) wiki page.
+
 * Authors: 49
 * Commits: 726
   * 210: Brice Dutheil
