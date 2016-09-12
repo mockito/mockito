@@ -6,6 +6,7 @@ package org.mockito.internal.util.reflection;
 
 import org.junit.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 
@@ -156,7 +157,7 @@ public class FieldInitializerTest {
 
     @Test
     public void can_instantiate_class_with_parameterized_constructor() throws Exception {
-        ConstructorArgumentResolver resolver = given(mock(ConstructorArgumentResolver.class).resolveTypeInstances(any(Class[].class)))
+        ConstructorArgumentResolver resolver = given(mock(ConstructorArgumentResolver.class).resolveTypeInstances(any(Class.class)))
                         .willReturn(new Object[]{null}).getMock();
 
         new FieldInitializer(this, field("noDefaultConstructor"), resolver).initialize();
