@@ -122,7 +122,7 @@ apply from: 'gradle/release.gradle'
 apply from: "gradle/pom.gradle"
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14.1'
+    gradleVersion = '3.0'
 }
 
 task ciBuild {
