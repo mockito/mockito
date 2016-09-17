@@ -9,9 +9,10 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-# Enabling container based infrastructure hoping it will help the build speed <= this didn't work well, so it's reverted
-# see https://docs.travis-ci.com/user/migrating-from-legacy/ and https://docs.travis-ci.com/user/ci-environment
-sudo: true
+# required for oraclejdk9
+sudo: required
+dist: trusty
+group: edge
 
 language: java
 
@@ -27,6 +28,11 @@ before_install:
 
 jdk:
   - oraclejdk8
+  - oraclejdk9
+
+matrix:
+  allow_failures:
+    - jdk: oraclejdk9
 
 matrix:
   include:
