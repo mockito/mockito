@@ -119,7 +119,7 @@ publishing {
 }
 
 apply from: 'gradle/release.gradle'
-apply from: "gradle/pom.gradle"
+apply from: 'gradle/pom.gradle'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '3.0'
