@@ -54,9 +54,7 @@ task mockitoJavadoc(type: Javadoc) {
     """.replaceAll(/\r|\n/, ""))
     options.stylesheetFile file("src/javadoc/stylesheet.css")
 //    options.addStringOption('top', 'some html')
-    if (JavaVersion.current().isJava8Compatible()) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-    }
+    options.addStringOption('Xdoclint:none', '-quiet')
 
     doLast {
         copy {
