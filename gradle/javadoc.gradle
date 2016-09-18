@@ -14,7 +14,7 @@ task mockitoJavadoc(type: Javadoc) {
     title = "Mockito ${project.version} API"
     def javadocJdk6Hack = "jdk6-project-version-insert.min.js"
 
-    options.doclet "org.mockito.javadoc.JavadocExclude"
+    options.doclet "org.mockito.javadoc.JavadocExclude1_${JavaVersion.current().toString()[-1]}"
     options.docletpath = [rootProject.file('./buildSrc/build/classes/main/')]
     options.docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
     options.windowTitle = "Mockito ${project.version} API"
