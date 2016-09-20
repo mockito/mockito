@@ -14,7 +14,7 @@ import java.util.List;
  * All methods except the start method are copied from {@link com.sun.tools.doclets.standard.Standard}.
  * Inspired by https://gist.github.com/benjchristensen/1410681
  */
-public class JavadocExclude1_8 {
+public class JavadocExclude {
 
     public static int optionLength(String var0) {
         return HtmlDoclet.optionLength(var0);
