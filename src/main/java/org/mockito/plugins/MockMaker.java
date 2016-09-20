@@ -7,6 +7,9 @@ package org.mockito.plugins;
 import org.mockito.Incubating;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.mock.SerializableMode;
+
+import java.util.Set;
 
 /**
  * The facility to create mocks.
@@ -70,6 +73,22 @@ public interface MockMaker {
     );
 
     /**
+     * Supplies a mock type for the supplied properties.
+     *
+     * @param mockedType The type of the mock.
+     * @param interfaces The interface types that the mock needs to additionally implement.
+     * @param serializableMode The serializable mode type that the mock must support.
+     * @param <T> Type of the mock to return, actually the <code>settings.getTypeToMock</code>.
+     * @return A type for the supplied mock features.
+     * @since 2.1.0
+     */
+    <T> Class<? extends T> createMockType(
+            Class<T> mockedType,
+            Set<Class<?>> interfaces,
+            SerializableMode serializableMode
+    );
+
+    /**
      * Returns the handler for the {@code mock}. <b>Do not</b> provide your own implementations at this time
      * because the work on the {@link MockHandler} api is not completed.
      * Use the instance provided to you by Mockito at {@link #createMock} or {@link #resetMock}.
@@ -80,6 +99,17 @@ public interface MockMaker {
      * @since 1.9.5
      */
     MockHandler getHandler(Object mock);
+
+    /**
+     * Returns the (primary) type the {@code mock} represents. If the supplied instance is not a mock, {@code null}
+     * is returned.
+     *
+     * @param mock The mock instance.
+     * @return The mock type, i.e. the type that was supplied such that {@code getType(mock(Foo.class)) == Foo.class}.
+     * @since 2.1.0
+     */
+    @Incubating
+    Class<?> getMockedType(Object mock);
 
     /**
      * Replaces the existing handler on {@code mock} with {@code newHandler}.

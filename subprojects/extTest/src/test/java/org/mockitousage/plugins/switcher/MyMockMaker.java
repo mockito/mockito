@@ -1,10 +1,10 @@
 package org.mockitousage.plugins.switcher;
 
-import org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker;
+import org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 
-public class MyMockMaker extends ByteBuddyMockMaker {
+public class MyMockMaker extends SubclassByteBuddyMockMaker {
 
     static ThreadLocal<Object> explosive = new ThreadLocal<Object>();
 

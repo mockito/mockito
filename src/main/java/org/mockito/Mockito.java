@@ -69,6 +69,7 @@ import org.mockito.junit.*;
  *      <a href="#36">36. Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
  *      <a href="#37">37. Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
  *      <a href="#38">38. Meta data and generic type retention (Since 2.1.0)</a><br/>
+ *      <a href="#39">39. Mocking final types, enums and final methods (Since 2.1.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2">Migrating to Mockito 2</a></h3>
@@ -1215,6 +1216,58 @@ import org.mockito.junit.*;
  * <p>
  * When using Java 8, Mockito now also preserves type annotations. This is default behavior and might not hold <a href="#28">if an
  * alternative {@link org.mockito.plugins.MockMaker} is used</a>.
+ *
+ * <h3 id="39">39. <a class="meaningful_link" href="#Mocking_Final">Mocking final types, enums and final methods</a> (Since 2.1.0)</h3>
+ * <p>
+ * Mockito new offers an alternative mock maker which uses the Java instrumentation API for inlining the mocking logic
+ * into existing methods rather than creating a new class to represent a mock. This way, it becomes possible to mock
+ * final types and methods. This mock maker <b>must to be activated explicitly</b> for supporting mocking final types
+ * and methods:
+ *
+ * <p>
+ * This alternative mock maker is <a href="#28">implemented as a plugin</a> which is activated by adding a file
+ * <code>/mockito-extensions/org.mockito.plugins.MockMaker</code> containing the value <code>mockito-inline</code>.
+ * Doing so, Mockito will make a best effort to avoid subclass creation when creating a mock. Other than with the
+ * default mock maker, the following condition holds when using this alternative mock maker:
+ *
+ * <code><pre>
+ * class Foo { }
+ * assert mock(Foo.class).getClass() == Foo.class;
+ * </pre></code>
+ *
+ * <p>
+ * Even when using the new inlining mock maker, mocking classes with any of the following conditions still requires
+ * the creation of a subclass when
+ * <ul>
+ * <li>mocking an abstract class.</li>
+ * <li>mocking a class with ancillary interfaces.</li>
+ * <li>mocking a class while requiring <a href="#20">explicit support for serialization</a>.</li>
+ * </ul>
+ *
+ * <p>
+ * Nevertheless, final methods of such types are mocked when using the inlining mock maker. Mocking final types and enums
+ * does however remain impossible when explicitly requiring serialization support or when adding ancillary interfaces.
+ *
+ * <p>
+ * Important behavioral changes when using inline-mocks:
+ * <ul>
+ * <li>Mockito is capable of mocking package-private methods even if they are defined in different packages than the
+ * mocked type. Mockito voluntarily never mocks package-private methods within <i>java.</i> packages.</li>
+ * <li>Additionally to final types, Mockito can now mock types that are not visible for extension; such types include
+ * private types in a protected package.</li>
+ * <li>Mockito can no longer mock <i>native</i> methods. Inline mocks require byte code manipulation of a method where
+ * native methods do not offer any byte code to manipulate.</li>
+ * <li>Mockito cannot longer strip <i>synchronized</i> modifiers from mocked instances.</li>
+ * </ul>
+ *
+ * <p>
+ * Note that inline mocks require a Java agent to be attached. Mockito will attempt an attachment of a Java agent upon
+ * loading the mock maker for creating inline mocks. Such runtime attachment is only possible when using a JVM that
+ * is part of a JDK or when using a Java 9 VM. When running on a non-JDK VM prior to Java 9, it is however possible to
+ * manually add the <a href="http://bytebuddy.net">Byte Buddy Java agent jar</a> using the <code>-javaagent</code>
+ * parameter upon starting the JVM. Furthermore, the inlining mock maker requires the VM to support class retransformation
+ * (also known as HotSwap). All major VM distributions such as HotSpot (OpenJDK), J9 (IBM/Websphere) or Zing (Azul)
+ * support this feature.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {

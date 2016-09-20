@@ -20,6 +20,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.*;
 
 public class SpyingOnRealObjectsTest extends TestBase {
@@ -181,7 +182,8 @@ public class SpyingOnRealObjectsTest extends TestBase {
     public void shouldSayNiceMessageWhenSpyingOnPrivateClass() throws Exception {
         List<String> real = Arrays.asList("first", "second");
         try {
-            spy(real);
+            List<String> spy = spy(real);
+            assumeTrue("Using inline mocks, it is possible to spy on private types", spy.getClass() != real.getClass());
             fail();
         } catch (MockitoException e) {
             assertThat(e).hasMessageContaining("Most likely it is a private class that is not visible by Mockito");

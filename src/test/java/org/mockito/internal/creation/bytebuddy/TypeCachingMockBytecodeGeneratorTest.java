@@ -2,6 +2,7 @@ package org.mockito.internal.creation.bytebuddy;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.mock.SerializableMode;
 
 import java.lang.management.ManagementFactory;
 import java.lang.ref.WeakReference;
@@ -15,7 +16,7 @@ import static org.mockito.internal.creation.bytebuddy.MockFeatures.withMockFeatu
 import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
 import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
 
-public class CachingMockBytecodeGeneratorTest {
+public class TypeCachingMockBytecodeGeneratorTest {
 
     @Before
     public void ensure_disable_gc_is_activated() throws Exception {
@@ -29,11 +30,11 @@ public class CachingMockBytecodeGeneratorTest {
                 .withClassDefinition("foo.Bar", makeMarkerInterface("foo.Bar"))
                 .build();
 
-        CachingMockBytecodeGenerator cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator(true);
-        Class<?> the_mock_type = cachingMockBytecodeGenerator.get(withMockFeatures(
+        TypeCachingBytecodeGenerator cachingMockBytecodeGenerator = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+        Class<?> the_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
                 classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
                 Collections.<Class<?>>emptySet(),
-                false
+                SerializableMode.NONE
         ));
 
         assertThat(cachingMockBytecodeGenerator.avoidingClassLeakageCache).hasSize(1);
@@ -58,17 +59,17 @@ public class CachingMockBytecodeGeneratorTest {
                 .withClassDefinition("foo.Bar", makeMarkerInterface("foo.Bar"))
                 .build();
 
-        CachingMockBytecodeGenerator cachingMockBytecodeGenerator = new CachingMockBytecodeGenerator(true);
-        Class<?> the_mock_type = cachingMockBytecodeGenerator.get(withMockFeatures(
+        TypeCachingBytecodeGenerator cachingMockBytecodeGenerator = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+        Class<?> the_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
                         classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
                         Collections.<Class<?>>emptySet(),
-                        false
+                        SerializableMode.NONE
                 ));
 
-        Class<?> other_mock_type = cachingMockBytecodeGenerator.get(withMockFeatures(
+        Class<?> other_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
                 classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
                 Collections.<Class<?>>emptySet(),
-                false
+                SerializableMode.NONE
         ));
 
         assertThat(other_mock_type).isSameAs(the_mock_type);
