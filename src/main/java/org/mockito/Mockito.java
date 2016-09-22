@@ -264,7 +264,7 @@ import org.mockito.junit.*;
  *   mockedList.clear();
  * </code></pre>
  *
- * Read more about doThrow|doAnswer family of methods in paragraph 12.
+ * Read more about <code>doThrow()</code>|<code>doAnswer()</code> family of methods in <a href="#12">section 12</a>.
  * <p>
  *
  * <h3 id="6">6. <a class="meaningful_link" href="#in_order_verification">Verification in order</a></h3>
