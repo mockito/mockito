@@ -1,18 +1,17 @@
 package org.mockito.internal.creation.bytebuddy;
 
+import static org.mockito.internal.util.StringJoiner.join;
+import java.lang.reflect.Modifier;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.MockAccess;
 import org.mockito.internal.creation.instance.Instantiator;
+import org.mockito.internal.util.Platform;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
-
-import java.lang.reflect.Modifier;
-
-import static org.mockito.internal.util.StringJoiner.join;
 
 public class ByteBuddyMockMaker implements MockMaker {
 
@@ -37,8 +36,8 @@ public class ByteBuddyMockMaker implements MockMaker {
         } catch (ClassCastException cce) {
             throw new MockitoException(join(
                     "ClassCastException occurred while creating the mockito mock :",
-                    "  class to mock : " + describeClass(mockedProxyType),
-                    "  created class : " + describeClass(settings.getTypeToMock()),
+                    "  class to mock : " + describeClass(settings.getTypeToMock()),
+                    "  created class : " + describeClass(mockedProxyType),
                     "  proxy instance class : " + describeClass(mockInstance),
                     "  instance creation by : " + instantiator.getClass().getSimpleName(),
                     "",
@@ -51,7 +50,11 @@ public class ByteBuddyMockMaker implements MockMaker {
     }
 
     <T> Class<T> createProxyClass(MockFeatures<T> mockFeatures) {
-        return cachingMockBytecodeGenerator.get(mockFeatures);
+        try {
+            return cachingMockBytecodeGenerator.get(mockFeatures);
+        } catch (Exception bytecodeGenerationFailed) {
+            throw prettifyFailure(mockFeatures, bytecodeGenerationFailed);
+        }
     }
 
 
@@ -69,6 +72,27 @@ public class ByteBuddyMockMaker implements MockMaker {
         // This allows us to catch earlier the ClassCastException earlier
         Class<T> typeToMock = settings.getTypeToMock();
         return typeToMock.cast(mock);
+    }
+
+    private RuntimeException prettifyFailure(MockFeatures<?> mockFeatures, Exception generationFailed) {
+        if (Modifier.isPrivate(mockFeatures.mockedType.getModifiers())) {
+            throw new MockitoException(join(
+                    "Mockito cannot mock this class: " + mockFeatures.mockedType + ".",
+                    "Most likely it is a private class that is not visible by Mockito",
+                    ""
+            ), generationFailed);
+        }
+        throw new MockitoException(join(
+                "Mockito cannot mock this class: " + mockFeatures.mockedType,
+                "",
+                "Mockito can only non-private & non-final classes.",
+                "If you're not sure why you're getting this error, please report to the mailing list.",
+                "",
+                Platform.isJava8BelowUpdate45() ? "Java 8 early builds have bugs that were addressed in Java 1.8.0_45, please update your JDK!\n" : "",
+                Platform.describe(),
+                "",
+                "Underlying exception : " + generationFailed
+        ), generationFailed);
     }
 
     private static String describeClass(Class<?> type) {

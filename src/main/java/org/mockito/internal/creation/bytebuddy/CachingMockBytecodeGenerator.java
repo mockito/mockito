@@ -1,12 +1,9 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.exceptions.base.MockitoException;
-
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collections;
@@ -14,8 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import static org.mockito.internal.util.StringJoiner.join;
 
 class CachingMockBytecodeGenerator extends ReferenceQueue<ClassLoader> {
 
@@ -86,39 +81,12 @@ class CachingMockBytecodeGenerator extends ReferenceQueue<ClassLoader> {
                 synchronized (features.mockedType) {
                     generatedMockClass = getMockClass(mockKey);
                     if(generatedMockClass == null) {
-                        generatedMockClass = generate(features);
+                        generatedMockClass = generator.generateMockClass(features);
                         generatedClassCache.put(mockKey, weak ? new WeakReference<Class<?>>(generatedMockClass) : new SoftReference<Class<?>>(generatedMockClass));
                     }
                 }
             }
             return generatedMockClass;
-        }
-
-        private <T> Class<? extends T> generate(MockFeatures<T> mockFeatures) {
-            try {
-                return generator.generateMockClass(mockFeatures);
-            } catch (Exception bytecodeGenerationFailed) {
-                throw prettifyFailure(mockFeatures, bytecodeGenerationFailed);
-            }
-        }
-
-        private RuntimeException prettifyFailure(MockFeatures<?> mockFeatures, Exception generationFailed) {
-            if (Modifier.isPrivate(mockFeatures.mockedType.getModifiers())) {
-                throw new MockitoException(join(
-                        "Mockito cannot mock this class: " + mockFeatures.mockedType + ".",
-                        "Most likely it is a private class that is not visible by Mockito",
-                        ""
-                ), generationFailed);
-            }
-            throw new MockitoException(join(
-                    "Mockito cannot mock this class: " + mockFeatures.mockedType,
-                    "",
-                    "Mockito can only mock visible & non-final classes.",
-                    "If you're not sure why you're getting this error, please report to the mailing list.",
-                    "",
-                    "Underlying exception : " + generationFailed),
-                    generationFailed
-            );
         }
 
         // should be stored as a weak reference
