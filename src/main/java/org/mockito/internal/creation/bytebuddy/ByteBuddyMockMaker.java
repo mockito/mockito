@@ -120,8 +120,7 @@ public class ByteBuddyMockMaker implements MockMaker {
         if (!(handler instanceof InternalMockHandler)) {
             throw new MockitoException(join(
                     "At the moment you cannot provide own implementations of MockHandler.",
-                    "Please see the javadocs for the MockMaker interface.",
-                    ""
+                    "Please see the javadocs for the MockMaker interface."
             ));
         }
         return (InternalMockHandler<?>) handler;
