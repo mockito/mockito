@@ -68,6 +68,7 @@ import org.mockito.junit.*;
  *      <a href="#35">35. Custom verification failure message (Since 2.1.0)</a><br/>
  *      <a href="#36">36. Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
  *      <a href="#37">37. Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
+ *      <a href="#38">38. Meta data and generic type retention (Since 2.1.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2">Migrating to Mockito 2</a></h3>
@@ -1192,6 +1193,28 @@ import org.mockito.junit.*;
  *         return input1 + input2;
  *     }})).when(mock).execute(anyString(), anyString());
  * </code></pre>
+ *
+ * <h3 id="38">38. <a class="meaningful_link" href="#Meta_Data_And_Generics">Meta data and generic type retention</a> (Since 2.1.0)</h3>
+ *
+ * <p>
+ * Mockito now preserves annotations on mocked methods and types as well as generic meta data. Previously, a mock type did not preserve
+ * annotations on types unless they were explicitly inherited and never retained annotations on methods. As a consequence, the following
+ * conditions now hold true:
+ *
+ * <pre class="code"><code class="java">
+ * {@literal @}{@code MyAnnotation
+ *  class Foo {
+ *    List<String> bar() { ... }
+ *  }
+ *
+ *  Class<?> mockType = mock(Foo.class).getClass();
+ *  assert mockType.isAnnotationPresent(MyAnnotation.class);
+ *  assert mockType.getDeclaredMethod("bar").getGenericReturnType() instanceof ParameterizedType;
+ * }</code></pre>
+ *
+ * <p>
+ * When using Java 8, Mockito now also preserves type annotations. This is default behavior and might not hold <a href="#28">if an
+ * alternative {@link org.mockito.plugins.MockMaker} is used</a>.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
