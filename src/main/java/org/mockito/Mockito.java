@@ -65,9 +65,9 @@ import org.mockito.junit.*;
  *      <a href="#32">32. Better generic support with deep stubs (Since 1.10.0)</a></h3><br/>
  *      <a href="#32">33. Mockito JUnit rule (Since 1.10.17)</a><br/>
  *      <a href="#34">34. Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
- *      <a href="#35">35. (new) Custom verification failure message (Since 2.1.0)</a><br/>
- *      <a href="#36">36. (new) Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
- *      <a href="#37">37. (new) Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
+ *      <a href="#35">35. Custom verification failure message (Since 2.1.0)</a><br/>
+ *      <a href="#36">36. Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
+ *      <a href="#37">37. Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2">Migrating to Mockito 2</a></h3>
@@ -948,7 +948,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="29">29. <a class="meaningful_link" href="#BDD_behavior_verification">(new) BDD style verification</a> (Since 1.10.0)</h3>
+ * <h3 id="29">29. <a class="meaningful_link" href="#BDD_behavior_verification">BDD style verification</a> (Since 1.10.0)</h3>
  *
  * Enables Behavior Driven Development (BDD) style verification by starting verification with the BDD <b>then</b> keyword.
  *
@@ -966,7 +966,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes">(new) Spying or mocking abstract classes (Since 1.10.12)</a></h3>
+ * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes">Spying or mocking abstract classes (Since 1.10.12)</a></h3>
  *
  * It is now possible to conveniently spy on abstract classes. Note that overusing spies hints at code design smells (see {@link #spy(Object)}).
  * <p>
@@ -993,7 +993,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="31">31. <a class="meaningful_link" href="#serilization_across_classloader">(new) Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3>
+ * <h3 id="31">31. <a class="meaningful_link" href="#serilization_across_classloader">Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3>
  *
  * Mockito introduces serialization across classloader.
  *
@@ -1013,7 +1013,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="32">32. <a class="meaningful_link" href="#better_generic_support_with_deep_stubs">(new) Better generic support with deep stubs (Since 1.10.0)</a></h3>
+ * <h3 id="32">32. <a class="meaningful_link" href="#better_generic_support_with_deep_stubs">Better generic support with deep stubs (Since 1.10.0)</a></h3>
  *
  * Deep stubbing has been improved to find generic information if available in the class.
  * That means that classes like this can be used without having to mock the behavior.
@@ -1034,7 +1034,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="33">33. <a class="meaningful_link" href="#mockito_junit_rule">(new) Mockito JUnit rule (Since 1.10.17)</a></h3>
+ * <h3 id="33">33. <a class="meaningful_link" href="#mockito_junit_rule">Mockito JUnit rule (Since 1.10.17)</a></h3>
  *
  * Mockito now offers a JUnit rule. Until now in JUnit there were two ways to initialize fields annotated by Mockito annotations
  * such as <code>&#064;{@link Mock}</code>, <code>&#064;{@link Spy}</code>, <code>&#064;{@link InjectMocks}</code>, etc.
@@ -1059,7 +1059,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="34">34. <a class="meaningful_link" href="#plugin_switch">(new) Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a></h3>
+ * <h3 id="34">34. <a class="meaningful_link" href="#plugin_switch">Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a></h3>
  *
  * An incubating feature made it's way in mockito that will allow to toggle a mockito-plugin.
  *
