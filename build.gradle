@@ -55,6 +55,7 @@ test {
     include "**/*Test.class"
     testLogging {
         exceptionFormat 'full'
+        showStandardStreams true
         showCauses true
     }
 }
@@ -133,8 +134,29 @@ task ciBuild {
     dependsOn publishToMavenLocal, tasks.idea, tasks.eclipse
 }
 
+task createTestResources << {
+    def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
+    if (System.env.MOCK_MAKER != null) {
+        logger.info("Using MockMaker ${System.env.MOCK_MAKER}")
+        mockMakerFile.parentFile.mkdirs()
+        mockMakerFile.createNewFile()
+        mockMakerFile.write(System.env.MOCK_MAKER)
+    } else {
+        logger.info("Using default MockMaker")
+    }
+}
+
+task removeTestResources << {
+    def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
+    if (mockMakerFile.exists()){
+        mockMakerFile.delete()
+    }
+}
+
 //Making sure that release task is only invoked after the entire ciBuild validation
 release.mustRunAfter ciBuild
+compileTestJava.dependsOn createTestResources
+compileTestJava.finalizedBy removeTestResources
 
 //Posting Build scans to https://scans.gradle.com
 buildScan {

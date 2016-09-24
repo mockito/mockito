@@ -36,6 +36,9 @@ matrix:
     env: SKIP_RELEASE=true
 
 env:
+  matrix:
+  - MOCK_MAKER=org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker
+  - MOCK_MAKER=mockito-inline
   global:
   - TERM=dumb
   - GRADLE_OPTS="-XX:+UseCompressedOops -Djava.awt.headless=true"
