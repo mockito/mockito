@@ -19,8 +19,9 @@ class GitHubTicketFetcherTest extends Specification {
         when: fetcher.fetchTickets(readOnlyToken, ['109', '108', '99999', '112'], impr)
         then:
         impr.improvements.get(0).labels == ["enhancement"] as Set
-        impr.toText() == """* Improvements: 2
+        impr.toText() == """* Improvements: 3
   * Allow instances of other classes in AdditionalAnswers.delegatesTo [(#112)](https://github.com/mockito/mockito/issues/112)
+  * Improve automated release notes look [(#109)](https://github.com/mockito/mockito/issues/109)
   * Clarify Spy vs Mock CALLS_REAL_METHODS [(#108)](https://github.com/mockito/mockito/issues/108)"""
     }
 }
