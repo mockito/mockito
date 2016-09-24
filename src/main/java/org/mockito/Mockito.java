@@ -59,12 +59,12 @@ import org.mockito.junit.*;
  *      <a href="#26">26. Mocking details (Since 1.9.5)</a><br/>
  *      <a href="#27">27. Delegate calls to real instance (Since 1.9.5)</a><br/>
  *      <a href="#28">28. <code>MockMaker</code> API (Since 1.9.5)</a><br/>
- *      <a href="#29">29. (new) BDD style verification (Since 1.10.0)</a><br/>
- *      <a href="#30">30. (new) Spying or mocking abstract classes (Since 1.10.12)</a><br/>
- *      <a href="#31">31. (new) Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3><br/>
- *      <a href="#32">32. (new) Better generic support with deep stubs (Since 1.10.0)</a></h3><br/>
- *      <a href="#32">33. (new) Mockito JUnit rule (Since 1.10.17)</a><br/>
- *      <a href="#34">34. (new) Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
+ *      <a href="#29">29. BDD style verification (Since 1.10.0)</a><br/>
+ *      <a href="#30">30. Spying or mocking abstract classes (Since 1.10.12)</a><br/>
+ *      <a href="#31">31. Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3><br/>
+ *      <a href="#32">32. Better generic support with deep stubs (Since 1.10.0)</a></h3><br/>
+ *      <a href="#32">33. Mockito JUnit rule (Since 1.10.17)</a><br/>
+ *      <a href="#34">34. Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
  *      <a href="#35">35. (new) Custom verification failure message (Since 2.1.0)</a><br/>
  *      <a href="#36">36. (new) Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
  *      <a href="#37">37. (new) Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
@@ -938,9 +938,10 @@ import org.mockito.junit.*;
  *
  * <h3 id="28">28. <a class="meaningful_link" href="#mock_maker_plugin"><code>MockMaker</code> API</a> (Since 1.9.5)</h3>
  * <p>Driven by requirements and patches from Google Android guys Mockito now offers an extension point
- *   that allows replacing the proxy generation engine. By default, Mockito uses cglib to create dynamic proxies.
+ *   that allows replacing the proxy generation engine. By default, Mockito uses <a href="https://github.com/raphw/byte-buddy">Byte Buddy</a>
+ *   to create dynamic proxies.
  * <p>The extension point is for advanced users that want to extend Mockito. For example, it is now possible
- *   to use Mockito for Android testing with a help of dexmaker.
+ *   to use Mockito for Android testing with a help of <a href="https://github.com/crittercism/dexmaker">dexmaker</a>.
  * <p>For more details, motivations and examples please refer to
  * the docs for {@link org.mockito.plugins.MockMaker}.
  *
