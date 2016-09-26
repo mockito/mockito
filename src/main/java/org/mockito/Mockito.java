@@ -1258,6 +1258,7 @@ import org.mockito.junit.*;
  * <li>Mockito can no longer mock <i>native</i> methods. Inline mocks require byte code manipulation of a method where
  * native methods do not offer any byte code to manipulate.</li>
  * <li>Mockito cannot longer strip <i>synchronized</i> modifiers from mocked instances.</li>
+ * <li>When invoking real methods from a mock or a spy, super method calls within those instances are also mocked.</li>
  * </ul>
  *
  * <p>
@@ -1268,6 +1269,11 @@ import org.mockito.junit.*;
  * parameter upon starting the JVM. Furthermore, the inlining mock maker requires the VM to support class retransformation
  * (also known as HotSwap). All major VM distributions such as HotSpot (OpenJDK), J9 (IBM/Websphere) or Zing (Azul)
  * support this feature.
+ *
+ * <p>
+ * <b>Important</b>: This feature is currently incubating and fully optional. We hope to collect feedback on its usage
+ * before making it first-level functionality where inline mocks are available via the Mockito API without a plugin.
+ * Please help us improve this feature and report problems and experiences to the Mockito team.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
