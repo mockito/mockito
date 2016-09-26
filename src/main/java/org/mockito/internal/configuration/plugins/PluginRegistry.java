@@ -1,6 +1,5 @@
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker;
 import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.PluginSwitch;
@@ -13,7 +12,7 @@ class PluginRegistry {
 
     private final MockMaker mockMaker = new PluginLoader(pluginSwitch)
             .withAlias("mockito-inline", "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker")
-            .loadPlugin(MockMaker.class, "org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker");
+            .loadPlugin(MockMaker.class, "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
 
     private final StackTraceCleanerProvider stackTraceCleanerProvider = new PluginLoader(pluginSwitch)
             .loadPlugin(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
@@ -32,7 +31,7 @@ class PluginRegistry {
     /**
      * Returns the implementation of the mock maker available for the current runtime.
      *
-     * <p>Returns {@link SubclassByteBuddyMockMaker} if no
+     * <p>Returns {@link org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker} if no
      * {@link org.mockito.plugins.MockMaker} extension exists or is visible in the current classpath.</p>
      */
     MockMaker getMockMaker() {
