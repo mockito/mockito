@@ -1,7 +1,5 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import com.blogspot.mydailyjava.weaklockfree.WeakConcurrentMap;
-import com.blogspot.mydailyjava.weaklockfree.WeakConcurrentSet;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.method.MethodDescription;
@@ -10,6 +8,8 @@ import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.utility.RandomString;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.concurrent.WeakConcurrentMap;
+import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
 
 import java.lang.instrument.ClassFileTransformer;
@@ -28,6 +28,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTransformer {
 
+    @SuppressWarnings("unchecked")
     static final Set<Class<?>> EXCLUDES = new HashSet<Class<?>>(Arrays.asList(Class.class,
             Boolean.class,
             Byte.class,

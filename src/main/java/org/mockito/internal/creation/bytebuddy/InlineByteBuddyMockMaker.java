@@ -1,6 +1,5 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import com.blogspot.mydailyjava.weaklockfree.WeakConcurrentMap;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.dynamic.ClassFileLocator;
 import org.mockito.Incubating;
@@ -8,6 +7,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.Instantiator;
+import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
@@ -38,7 +38,7 @@ public class InlineByteBuddyMockMaker implements MockMaker {
         try {
             instrumentation = ByteBuddyAgent.install();
             if (!instrumentation.isRetransformClassesSupported()) {
-                throw new MockitoException("Current VM does not supprt retransformation");
+                throw new MockitoException("Current VM does not support retransformation");
             }
             File boot = File.createTempFile("mockitoboot", "jar");
             boot.deleteOnExit();

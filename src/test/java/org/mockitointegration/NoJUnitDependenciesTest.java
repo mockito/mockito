@@ -1,7 +1,6 @@
 package org.mockitointegration;
 
-import static org.mockitoutil.ClassLoaders.coverageTool;
-import java.util.Set;
+import net.bytebuddy.ByteBuddy;
 import org.hamcrest.Matcher;
 import org.junit.Assume;
 import org.junit.Test;
@@ -9,8 +8,10 @@ import org.mockito.Mockito;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.Objenesis;
-import com.blogspot.mydailyjava.weaklockfree.WeakConcurrentMap;
-import net.bytebuddy.ByteBuddy;
+
+import java.util.Set;
+
+import static org.mockitoutil.ClassLoaders.coverageTool;
 
 public class NoJUnitDependenciesTest {
 
@@ -23,8 +24,7 @@ public class NoJUnitDependenciesTest {
                         Mockito.class,
                         Matcher.class,
                         ByteBuddy.class,
-                        Objenesis.class,
-                        WeakConcurrentMap.class
+                        Objenesis.class
                 )
                 .withCodeSourceUrlOf(coverageTool())
                 .without("junit", "org.junit")

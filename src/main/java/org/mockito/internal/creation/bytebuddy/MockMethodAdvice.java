@@ -1,12 +1,12 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import com.blogspot.mydailyjava.weaklockfree.WeakConcurrentMap;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.implementation.bind.annotation.Argument;
 import net.bytebuddy.implementation.bind.annotation.This;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.SerializableMethod;
+import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
