@@ -108,14 +108,9 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                 origin.setAccessible(true);
             }
             selfCallInfo.set(instance);
-            try {
-                return origin.invoke(instance, arguments);
-            } catch (InvocationTargetException exception) {
-                Throwable cause = exception.getCause();
-                new ConditionalStackTraceFilter().filter(hideRecursiveCall(cause, new Throwable().getStackTrace().length, origin.getDeclaringClass()));
-                throw cause;
-            }
+            return tryInvoke(origin, instance, arguments);
         }
+
     }
 
     private static class SerializableSuperMethodCall implements InterceptedInvocation.SuperMethod {
@@ -151,13 +146,17 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                 throw new MockitoException("Unexpected dispatcher for advice-based super call");
             }
             ((MockMethodAdvice) mockMethodDispatcher).selfCallInfo.set(instance);
-            try {
-                return method.invoke(instance, arguments);
-            } catch (InvocationTargetException exception) {
-                Throwable cause = exception.getCause();
-                new ConditionalStackTraceFilter().filter(hideRecursiveCall(cause, new Throwable().getStackTrace().length, method.getDeclaringClass()));
-                throw cause;
-            }
+            return tryInvoke(method, instance, arguments);
+        }
+    }
+
+    private static Object tryInvoke(Method origin, Object instance, Object[] arguments) throws Throwable {
+        try {
+            return origin.invoke(instance, arguments);
+        } catch (InvocationTargetException exception) {
+            Throwable cause = exception.getCause();
+            new ConditionalStackTraceFilter().filter(hideRecursiveCall(cause, new Throwable().getStackTrace().length, origin.getDeclaringClass()));
+            throw cause;
         }
     }
 
