@@ -55,7 +55,6 @@ test {
     include "**/*Test.class"
     testLogging {
         exceptionFormat 'full'
-        showStandardStreams true
         showCauses true
     }
 }
