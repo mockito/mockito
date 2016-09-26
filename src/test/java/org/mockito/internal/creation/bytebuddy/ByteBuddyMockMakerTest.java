@@ -1,15 +1,14 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import static org.mockito.Mockito.verify;
-import java.util.Collections;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.handler.MockHandlerImpl;
-import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 import org.mockitoutil.TestBase;
+
+import static org.mockito.Mockito.verify;
 
 public class ByteBuddyMockMakerTest extends TestBase {
 
@@ -24,14 +23,14 @@ public class ByteBuddyMockMakerTest extends TestBase {
         CreationSettings<Object> creationSettings = new CreationSettings<Object>();
         MockHandlerImpl<Object> handler = new MockHandlerImpl<Object>(creationSettings);
 
-        mockMaker.createMockType(getClass(), Collections.<Class<?>>emptySet(), SerializableMode.ACROSS_CLASSLOADERS);
+        mockMaker.createMockType(creationSettings);
         mockMaker.createMock(creationSettings, handler);
         mockMaker.getMockedType(this);
         mockMaker.getHandler(this);
         mockMaker.isTypeMockable(Object.class);
         mockMaker.resetMock(this, handler, creationSettings);
 
-        verify(delegate).createMockType(getClass(), Collections.<Class<?>>emptySet(), SerializableMode.ACROSS_CLASSLOADERS);
+        verify(delegate).createMockType(creationSettings);
         verify(delegate).createMock(creationSettings, handler);
         verify(delegate).getMockedType(this);
         verify(delegate).getHandler(this);

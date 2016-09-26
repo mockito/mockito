@@ -10,14 +10,12 @@ import org.mockito.internal.creation.instance.Instantiator;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
-import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
@@ -61,7 +59,7 @@ public class InlineByteBuddyMockMaker implements MockMaker {
 
     @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
-        Class<? extends T> type = bytecodeGenerator.mockClass(mockWithFeaturesFrom(settings));
+        Class<? extends T> type = createMockType(settings);
 
         Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(settings);
         try {
@@ -78,16 +76,12 @@ public class InlineByteBuddyMockMaker implements MockMaker {
     }
 
     @Override
-    public <T> Class<? extends T> createMockType(Class<T> mockedType, Set<Class<?>> interfaces, SerializableMode serializableMode) {
-        return bytecodeGenerator.mockClass(MockFeatures.withMockFeatures(mockedType, interfaces, serializableMode));
-    }
-
-    private static <T> MockFeatures<T> mockWithFeaturesFrom(MockCreationSettings<T> settings) {
-        return MockFeatures.withMockFeatures(
+    public <T> Class<? extends T> createMockType(MockCreationSettings<T> settings) {
+        return bytecodeGenerator.mockClass(MockFeatures.withMockFeatures(
                 settings.getTypeToMock(),
                 settings.getExtraInterfaces(),
                 settings.getSerializableMode()
-        );
+        ));
     }
 
     private static InternalMockHandler<?> asInternalMockHandler(MockHandler handler) {

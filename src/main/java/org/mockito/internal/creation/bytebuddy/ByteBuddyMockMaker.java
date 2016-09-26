@@ -1,10 +1,8 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import java.util.Set;
 import org.mockito.Incubating;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 
 /**
@@ -25,8 +23,8 @@ public class ByteBuddyMockMaker implements MockMaker {
     }
 
     @Override
-    public <T> Class<? extends T> createMockType(Class<T> mockedType, Set<Class<?>> interfaces, SerializableMode serializableMode) {
-        return defaultByteBuddyMockMaker.createMockType(mockedType, interfaces, serializableMode);
+    public <T> Class<? extends T> createMockType(MockCreationSettings<T> creationSettings) {
+        return defaultByteBuddyMockMaker.createMockType(creationSettings);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import static org.mockito.internal.util.StringJoiner.join;
-import java.lang.reflect.Modifier;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.plugins.Plugins;
@@ -9,11 +7,9 @@ import org.mockito.internal.creation.instance.Instantiator;
 import org.mockito.internal.util.Platform;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 
 import java.lang.reflect.Modifier;
-import java.util.Set;
 
 import static org.mockito.internal.util.StringJoiner.join;
 
@@ -27,7 +23,7 @@ public class SubclassByteBuddyMockMaker implements MockMaker {
 
     @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
-        Class<? extends T> mockedProxyType = createProxyClass(mockWithFeaturesFrom(settings));
+        Class<? extends T> mockedProxyType = createMockType(settings);
 
         Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(settings);
         T mockInstance = null;
@@ -54,24 +50,16 @@ public class SubclassByteBuddyMockMaker implements MockMaker {
     }
 
     @Override
-    public <T> Class<? extends T> createMockType(Class<T> mockedType, Set<Class<?>> interfaces, SerializableMode serializableMode) {
-        return cachingMockBytecodeGenerator.mockClass(MockFeatures.withMockFeatures(mockedType, interfaces, serializableMode));
-    }
-
-    <T> Class<? extends T> createProxyClass(MockFeatures<T> mockFeatures) {
+    public <T> Class<? extends T> createMockType(MockCreationSettings<T> settings) {
         try {
-        return cachingMockBytecodeGenerator.mockClass(mockFeatures);
+            return cachingMockBytecodeGenerator.mockClass(MockFeatures.withMockFeatures(
+                    settings.getTypeToMock(),
+                    settings.getExtraInterfaces(),
+                    settings.getSerializableMode()
+            ));
         } catch (Exception bytecodeGenerationFailed) {
-            throw prettifyFailure(mockFeatures, bytecodeGenerationFailed);
+            throw prettifyFailure(settings, bytecodeGenerationFailed);
         }
-    }
-
-    private static <T> MockFeatures<T> mockWithFeaturesFrom(MockCreationSettings<T> settings) {
-        return MockFeatures.withMockFeatures(
-                settings.getTypeToMock(),
-                settings.getExtraInterfaces(),
-                settings.getSerializableMode()
-        );
     }
 
     private static <T> T ensureMockIsAssignableToMockedType(MockCreationSettings<T> settings, T mock) {
@@ -82,16 +70,16 @@ public class SubclassByteBuddyMockMaker implements MockMaker {
         return typeToMock.cast(mock);
     }
 
-    private RuntimeException prettifyFailure(MockFeatures<?> mockFeatures, Exception generationFailed) {
-        if (Modifier.isPrivate(mockFeatures.mockedType.getModifiers())) {
+    private <T> RuntimeException prettifyFailure(MockCreationSettings<T> mockFeatures, Exception generationFailed) {
+        if (Modifier.isPrivate(mockFeatures.getTypeToMock().getModifiers())) {
             throw new MockitoException(join(
-                    "Mockito cannot mock this class: " + mockFeatures.mockedType + ".",
+                    "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
                     "Most likely it is a private class that is not visible by Mockito",
                     ""
             ), generationFailed);
         }
         throw new MockitoException(join(
-                "Mockito cannot mock this class: " + mockFeatures.mockedType,
+                "Mockito cannot mock this class: " + mockFeatures.getTypeToMock(),
                 "",
                 "Mockito can only non-private & non-final classes.",
                 "If you're not sure why you're getting this error, please report to the mailing list.",
