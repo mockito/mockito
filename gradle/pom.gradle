@@ -1,6 +1,6 @@
 publishing.publications.all {
     //TODO github profile?
-    def devs = ["szczepiq:Szczepan Faber", "bric3:Brice Dutheil"]
+    def devs = ['szczepiq:Szczepan Faber', 'bric3:Brice Dutheil', 'raphw:Rafael Winterhalter', 'TimvdLippe:Tim van der Lippe']
 
     pom.withXml {
         def root = asNode()
@@ -16,13 +16,22 @@ publishing.publications.all {
 
         root.appendNode('scm').appendNode('url', 'http://github.com/mockito/mockito')
 
+        def issues = root.appendNode('issueManagement')
+        issues.appendNode('url', 'https://github.com/mockito/mockito/issues')
+        issues.appendNode('system', 'GitHub issues')
+
+        def ci = root.appendNode('ciManagement')
+        ci.appendNode('url', 'https://travis-ci.org/mockito/mockito')
+        ci.appendNode('system', 'TravisCI')
+
         def developers = root.appendNode('developers')
         devs.each {
-            def split = it.split(":")
+            def split = it.split(':')
             assert split.length == 2
             def d = developers.appendNode('developer')
             d.appendNode('id', split[0])
             d.appendNode('name', split[1])
+            d.appendNode('roles').appendNode('role', 'Core developer')
         }
     }
 }
