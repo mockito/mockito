@@ -1,7 +1,6 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.annotation.AnnotationDescription;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.modifier.SynchronizationState;
 import net.bytebuddy.description.modifier.Visibility;
@@ -55,9 +54,6 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                          .name(nameFor(features.mockedType))
                          .ignoreAlso(isGroovyMethod())
                          .annotateType(features.mockedType.getAnnotations())
-                         .annotateType(AnnotationDescription.Builder.ofType(MockedType.class)
-                           .define("type", features.mockedType)
-                           .build())
                          .implement(new ArrayList<Type>(features.interfaces))
                          .method(matcher)
                            .intercept(to(DispatcherDefaultingToRealMethod.class))

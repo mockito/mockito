@@ -108,14 +108,6 @@ public class SubclassByteBuddyMockMaker implements MockMaker {
     }
 
     @Override
-    public Class<?> getMockedType(Object mock) {
-        if (getHandler(mock) == null) {
-            return null;
-        }
-        return mock.getClass().getAnnotation(MockedType.class).type();
-    }
-
-    @Override
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
         ((MockAccess) mock).setMockitoInterceptor(
                 new MockMethodInterceptor(asInternalMockHandler(newHandler), settings)

@@ -33,12 +33,6 @@ public class ByteBuddyMockMaker implements MockMaker {
     }
 
     @Override
-    @Incubating
-    public Class<?> getMockedType(Object mock) {
-        return defaultByteBuddyMockMaker.getMockedType(mock);
-    }
-
-    @Override
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
         defaultByteBuddyMockMaker.resetMock(mock, newHandler, settings);
     }

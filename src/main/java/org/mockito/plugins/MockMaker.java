@@ -93,17 +93,6 @@ public interface MockMaker {
     MockHandler getHandler(Object mock);
 
     /**
-     * Returns the (primary) type the {@code mock} represents. If the supplied instance is not a mock, {@code null}
-     * is returned.
-     *
-     * @param mock The mock instance.
-     * @return The mock type, i.e. the type that was supplied such that {@code getType(mock(Foo.class)) == Foo.class}.
-     * @since 2.1.0
-     */
-    @Incubating
-    Class<?> getMockedType(Object mock);
-
-    /**
      * Replaces the existing handler on {@code mock} with {@code newHandler}.
      *
      * <p>The invocation handler actually store invocations to achieve

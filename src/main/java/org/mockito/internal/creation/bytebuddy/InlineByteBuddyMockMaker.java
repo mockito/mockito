@@ -115,19 +115,6 @@ public class InlineByteBuddyMockMaker implements MockMaker {
     }
 
     @Override
-    public Class<?> getMockedType(Object mock) {
-        if (getHandler(mock) == null) {
-            return null;
-        }
-        MockedType mockedType = mock.getClass().getAnnotation(MockedType.class);
-        if (mockedType == null) {
-            return mock.getClass();
-        } else {
-            return mockedType.type();
-        }
-    }
-
-    @Override
     public TypeMockability isTypeMockable(final Class<?> type) {
         return new TypeMockability() {
             @Override
