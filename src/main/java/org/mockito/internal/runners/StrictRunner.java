@@ -6,7 +6,7 @@ import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.Mockito;
 import org.mockito.internal.junit.UnnecessaryStubbingsReporter;
-import org.mockito.internal.runners.util.FailureDetecter;
+import org.mockito.internal.runners.util.FailureDetector;
 
 public class StrictRunner implements RunnerImpl {
 
@@ -26,7 +26,7 @@ public class StrictRunner implements RunnerImpl {
     public void run(RunNotifier notifier) {
         //TODO need to be able to opt in for full stack trace instead of just relying on the stack trace filter
         UnnecessaryStubbingsReporter reporter = new UnnecessaryStubbingsReporter();
-        FailureDetecter listener = new FailureDetecter();
+        FailureDetector listener = new FailureDetector();
 
         Mockito.framework().addListener(reporter);
         try {
@@ -37,7 +37,7 @@ public class StrictRunner implements RunnerImpl {
             Mockito.framework().removeListener(reporter);
         }
 
-        if (!filterRequested && listener.isSussessful()) {
+        if (!filterRequested && listener.isSuccessful()) {
             //only report when:
             //1. if all tests from given test have ran (filter requested is false)
             //   Otherwise we would report unnecessary stubs even if the user runs just single test from the class

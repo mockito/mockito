@@ -10,7 +10,7 @@ import org.junit.runner.notification.RunListener;
 /**
  * Implementation of JUnit run listener that knows when any of the tests failed
  */
-public class FailureDetecter extends RunListener {
+public class FailureDetector extends RunListener {
 
     private boolean failed;
 
@@ -20,7 +20,7 @@ public class FailureDetecter extends RunListener {
         failed = true;
     }
 
-    public boolean isSussessful() {
+    public boolean isSuccessful() {
         return !failed;
     }
 }
