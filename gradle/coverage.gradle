@@ -17,8 +17,16 @@ task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
         html.destination "${buildDir}/jacocoHtml"
     }
 
+    afterEvaluate {
+      classDirectories = files(classDirectories.files.collect {
+        fileTree(
+          dir: it,
+          exclude: ['**/org/mockito/internal/util/concurrent/**']
+        )
+      })
+    }
+
     doLast {
         println "Jacoco report for client created: file://${reports.xml.destination.toURI().path}"
     }
 }
-
