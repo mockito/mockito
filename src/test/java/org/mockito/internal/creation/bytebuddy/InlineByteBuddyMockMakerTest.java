@@ -1,10 +1,8 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.handler.MockHandlerImpl;
-import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.mock.MockCreationSettings;
 
@@ -34,15 +32,6 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         FinalMethodAbstractType proxy = mockMaker.createMock(settings, new MockHandlerImpl<FinalMethodAbstractType>(settings));
         assertThat(proxy.foo()).isEqualTo("bar");
         assertThat(proxy.bar()).isEqualTo("bar");
-    }
-
-    @Test
-    @Ignore("Endless loop is creating when looking and invoking the super method in MockMethodAdvice.SuperMethodCall#invoke")
-    public void should_create_mock_from_class_with_super_call_to_final_method() throws Exception {
-        MockSettingsImpl<CallingSuperMethodClass> settings = settingsFor(CallingSuperMethodClass.class);
-        settings.defaultAnswer(new CallsRealMethods());
-        CallingSuperMethodClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<CallingSuperMethodClass>(settings));
-        assertThat(proxy.foo()).isEqualTo("bar");
     }
 
     @Test
@@ -88,7 +77,7 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         assertThat(MockMethodAdvice.hideRecursiveCall(throwable, 0, SampleInterface.class)).isSameAs(throwable);
     }
 
-    private static <T> MockSettingsImpl<T> settingsFor(Class<T> type, Class<?>... extraInterfaces) {
+    private static <T> MockCreationSettings<T> settingsFor(Class<T> type, Class<?>... extraInterfaces) {
         MockSettingsImpl<T> mockSettings = new MockSettingsImpl<T>();
         mockSettings.setTypeToMock(type);
         mockSettings.defaultAnswer(new Returns("bar"));
@@ -131,13 +120,6 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     private static class NonFinalMethod {
         public String foo() {
             return "foo";
-        }
-    }
-
-    private static class CallingSuperMethodClass extends NonFinalMethod {
-        @Override
-        public String foo() {
-            return super.foo();
         }
     }
 

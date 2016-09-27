@@ -5,7 +5,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.handler.MockHandlerImpl;
 import org.mockito.internal.stubbing.InvocationContainer;
+import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
@@ -22,7 +24,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockitoutil.ClassLoaders.coverageTool;
-import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
 
 public abstract class AbstractByteBuddyMockMakerTest {
 
@@ -100,6 +101,13 @@ public abstract class AbstractByteBuddyMockMakerTest {
         assertThat(handlerOne).isNotSameAs(handlerTwo);
     }
 
+    @Test
+    public void should_create_mock_from_class_with_super_call_to_final_method() throws Exception {
+        MockCreationSettings<CallingSuperMethodClass> settings = settingsWithSuperCall(CallingSuperMethodClass.class);
+        SampleClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<CallingSuperMethodClass>(settings));
+        assertThat(proxy.foo()).isEqualTo("foo");
+    }
+
     class SomeClass {}
     interface SomeInterface {}
     static class OtherClass {}
@@ -153,6 +161,13 @@ public abstract class AbstractByteBuddyMockMakerTest {
         return mockSettings;
     }
 
+    private static <T> MockCreationSettings<T> settingsWithSuperCall(Class<T> type) {
+        MockSettingsImpl<T> mockSettings = new MockSettingsImpl<T>();
+        mockSettings.setTypeToMock(type);
+        mockSettings.defaultAnswer(new CallsRealMethods());
+        return mockSettings;
+    }
+
     private static MockHandler dummyH() {
         return new DummyMockHandler();
     }
@@ -162,5 +177,18 @@ public abstract class AbstractByteBuddyMockMakerTest {
         public MockCreationSettings<Object> getMockSettings() { return null; }
         public InvocationContainer getInvocationContainer() { return null; }
         public void setAnswersForStubbing(List<Answer<?>> list) { }
+    }
+
+    private static class SampleClass {
+        public String foo() {
+            return "foo";
+        }
+    }
+
+    private static class CallingSuperMethodClass extends SampleClass {
+        @Override
+        public String foo() {
+            return super.foo();
+        }
     }
 }

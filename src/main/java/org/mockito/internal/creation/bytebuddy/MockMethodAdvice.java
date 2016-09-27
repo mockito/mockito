@@ -37,7 +37,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                                      @Advice.Origin Method origin,
                                      @Advice.BoxedArguments Object[] arguments) throws Throwable {
         MockMethodDispatcher dispatcher = MockMethodDispatcher.get(identifier, mock);
-        if (dispatcher == null || !dispatcher.isMocked(mock)) {
+        if (dispatcher == null || !dispatcher.isMocked(mock, origin)) {
             return null;
         } else {
             return dispatcher.handle(mock, origin, arguments);
@@ -76,8 +76,20 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     }
 
     @Override
-    public boolean isMocked(Object instance) {
-        return selfCallInfo.checkSuperCall(instance) && isMock(instance);
+    public boolean isMocked(Object instance, Method origin) {
+        return selfCallInfo.checkSuperCall(instance) && isMock(instance) && isNotOverridden(instance.getClass(), origin);
+    }
+
+    private static boolean isNotOverridden(Class<?> type, Method origin) {
+        Class<?> currentType = type;
+        do {
+            try {
+                return origin.equals(type.getDeclaredMethod(origin.getName(), origin.getParameterTypes()));
+            } catch (NoSuchMethodException ignored) {
+                currentType = currentType.getSuperclass();
+            }
+        } while (currentType != null);
+        return true;
     }
 
     private static class SuperMethodCall implements InterceptedInvocation.SuperMethod {

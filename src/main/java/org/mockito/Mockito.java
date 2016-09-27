@@ -1258,7 +1258,6 @@ import org.mockito.junit.*;
  * <li>Mockito can no longer mock <i>native</i> methods. Inline mocks require byte code manipulation of a method where
  * native methods do not offer any byte code to manipulate.</li>
  * <li>Mockito cannot longer strip <i>synchronized</i> modifiers from mocked instances.</li>
- * <li>When invoking real methods from a mock or a spy, super method calls within those instances are also mocked.</li>
  * </ul>
  *
  * <p>
