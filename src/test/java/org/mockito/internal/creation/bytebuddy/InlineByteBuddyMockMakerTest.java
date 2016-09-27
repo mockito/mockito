@@ -1,14 +1,23 @@
 package org.mockito.internal.creation.bytebuddy;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.handler.MockHandlerImpl;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.MockMaker;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     public InlineByteBuddyMockMakerTest() {
         super(new InlineByteBuddyMockMaker());
@@ -40,6 +49,25 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         FinalMethod proxy = mockMaker.createMock(settings, new MockHandlerImpl<FinalMethod>(settings));
         assertThat(proxy.foo()).isEqualTo("bar");
         assertThat(((SampleInterface) proxy).bar()).isEqualTo("bar");
+    }
+
+    @Test
+    public void should_throw_exception_redefining_unmodifiable_class() {
+        int[] array = new int[5];
+        MockCreationSettings<? extends int[]> settings = settingsFor(array.getClass());
+        expectedException.expect(MockitoException.class);
+        expectedException.expectMessage(new BaseMatcher<String>() {
+            @Override
+            public boolean matches(Object item) {
+                return ((String) item).contains("Could not modify all classes");
+            }
+
+            @Override
+            public void describeTo(Description description) {
+
+            }
+        });
+        mockMaker.createMock(settings, new MockHandlerImpl(settings));
     }
 
     @Test
@@ -75,6 +103,12 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         Throwable throwable = new Throwable();
         throwable.setStackTrace(new StackTraceElement[0]);
         assertThat(MockMethodAdvice.hideRecursiveCall(throwable, 0, SampleInterface.class)).isSameAs(throwable);
+    }
+
+    @Test
+    public void should_provide_reason_for_wrapper_class() {
+        MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(Integer.class);
+        assertThat(mockable.nonMockableReason()).isEqualTo("Cannot mock wrapper types, String.class or Class.class");
     }
 
     private static <T> MockCreationSettings<T> settingsFor(Class<T> type, Class<?>... extraInterfaces) {

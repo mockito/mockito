@@ -14,6 +14,7 @@ task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
     reports {
         xml.enabled true
         html.enabled true
+        html.destination "${buildDir}/jacocoHtml"
     }
 
     doLast {

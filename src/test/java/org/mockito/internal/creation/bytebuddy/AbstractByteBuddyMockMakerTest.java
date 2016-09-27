@@ -2,6 +2,7 @@ package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
 import org.junit.Test;
+import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.creation.MockSettingsImpl;
@@ -9,6 +10,7 @@ import org.mockito.internal.handler.MockHandlerImpl;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
@@ -23,6 +25,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockitoutil.ClassLoaders.coverageTool;
 
 public abstract class AbstractByteBuddyMockMakerTest {
@@ -106,6 +112,22 @@ public abstract class AbstractByteBuddyMockMakerTest {
         MockCreationSettings<CallingSuperMethodClass> settings = settingsWithSuperCall(CallingSuperMethodClass.class);
         SampleClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<CallingSuperMethodClass>(settings));
         assertThat(proxy.foo()).isEqualTo("foo");
+    }
+
+    @Test
+    public void should_reset_mock_and_set_new_handler() throws Throwable {
+        MockCreationSettings<SampleClass> settings = settingsWithSuperCall(SampleClass.class);
+        SampleClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<SampleClass>(settings));
+
+        MockHandler handler = new MockHandlerImpl<SampleClass>(settings);
+        mockMaker.resetMock(proxy, handler, settings);
+        assertThat(mockMaker.getHandler(proxy)).isSameAs(handler);
+    }
+
+    @Test
+    public void is_type_mockable_excludes_primitive_classes() {
+        MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(Integer.class);
+        assertThat(mockable.mockable()).isFalse();
     }
 
     class SomeClass {}
