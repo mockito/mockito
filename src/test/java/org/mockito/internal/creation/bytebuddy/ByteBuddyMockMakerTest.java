@@ -5,7 +5,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.handler.MockHandlerImpl;
-import org.mockito.plugins.MockMaker;
 import org.mockitoutil.TestBase;
 
 import static org.mockito.Mockito.verify;
@@ -16,7 +15,7 @@ public class ByteBuddyMockMakerTest extends TestBase {
     private ByteBuddyMockMaker mockMaker = new ByteBuddyMockMaker();
 
     @Mock
-    private MockMaker delegate;
+    private ClassCreatingMockMaker delegate;
 
     @Test
     public void should_delegate_call() {
