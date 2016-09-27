@@ -6,13 +6,13 @@ package org.mockito.internal.junit;
 
 public class JUnitTool {
 
-    private static final JUnitDetecter detecter = new JUnitDetecter();
+    private static final JUnitDetector detector = new JUnitDetector();
 
     public static boolean hasJUnit() {
-        return detecter.hasJUnit();
+        return detector.hasJUnit();
     }
 
     public static AssertionError createArgumentsAreDifferentException(String message, String wanted, String actual)  {
-        return new FriendlyExceptionMaker(detecter).createArgumentsAreDifferentException(message, wanted, actual);
+        return new FriendlyExceptionMaker(detector).createArgumentsAreDifferentException(message, wanted, actual);
     }
 }

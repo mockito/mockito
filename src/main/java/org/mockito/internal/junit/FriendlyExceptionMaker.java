@@ -8,15 +8,15 @@ import org.mockito.exceptions.verification.ArgumentsAreDifferent;
  */
 class FriendlyExceptionMaker {
 
-    private final JUnitDetecter detecter;
+    private final JUnitDetector detector;
 
-    FriendlyExceptionMaker(JUnitDetecter detecter) {
-        this.detecter = detecter;
+    FriendlyExceptionMaker(JUnitDetector detector) {
+        this.detector = detector;
     }
 
     //TODO SF this can be now unit tested
     public AssertionError createArgumentsAreDifferentException(String message, String wanted, String actual)  {
-        if (!detecter.hasJUnit()) {
+        if (!detector.hasJUnit()) {
             return new ArgumentsAreDifferent(message);
         }
 

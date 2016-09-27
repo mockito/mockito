@@ -1,10 +1,10 @@
 package org.mockito.internal.junit;
 
-class JUnitDetecter {
+class JUnitDetector {
 
     private boolean hasJUnit;
 
-    JUnitDetecter() {
+    JUnitDetector() {
         try {
             Class.forName("junit.framework.ComparisonFailure");
             hasJUnit = true;
