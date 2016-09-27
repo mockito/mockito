@@ -7,13 +7,12 @@ import org.mockito.internal.creation.instance.Instantiator;
 import org.mockito.internal.util.Platform;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.plugins.MockMaker;
 
 import java.lang.reflect.Modifier;
 
 import static org.mockito.internal.util.StringJoiner.join;
 
-public class SubclassByteBuddyMockMaker implements MockMaker {
+public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
 
     private final BytecodeGenerator cachingMockBytecodeGenerator;
 

@@ -70,17 +70,6 @@ public interface MockMaker {
     );
 
     /**
-     * Supplies a mock type for the supplied properties.
-     *
-     * @param settings Mock creation settings like type to mock, extra interfaces and so on.
-     * @param <T> Type of the mock to return, actually the <code>settings.getTypeToMock</code>.
-     * @return A type for the supplied mock features.
-     * @since 2.1.0
-     */
-    @Incubating
-    <T> Class<? extends T> createMockType(MockCreationSettings<T> settings);
-
-    /**
      * Returns the handler for the {@code mock}. <b>Do not</b> provide your own implementations at this time
      * because the work on the {@link MockHandler} api is not completed.
      * Use the instance provided to you by Mockito at {@link #createMock} or {@link #resetMock}.

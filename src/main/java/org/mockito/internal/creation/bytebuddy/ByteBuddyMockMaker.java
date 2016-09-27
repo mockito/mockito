@@ -14,8 +14,8 @@ import org.mockito.plugins.MockMaker;
  *
  * The programmatic API could look like {@code mock(Final.class, withSettings().finalClasses())}.
  */
-public class ByteBuddyMockMaker implements MockMaker {
-    private MockMaker defaultByteBuddyMockMaker = new SubclassByteBuddyMockMaker();
+public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
+    private ClassCreatingMockMaker defaultByteBuddyMockMaker = new SubclassByteBuddyMockMaker();
 
     @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {

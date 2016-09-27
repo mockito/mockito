@@ -24,7 +24,7 @@ import static org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.EX
 import static org.mockito.internal.util.StringJoiner.join;
 
 @Incubating
-public class InlineByteBuddyMockMaker implements MockMaker {
+public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
 
     private final Instrumentation instrumentation;
 

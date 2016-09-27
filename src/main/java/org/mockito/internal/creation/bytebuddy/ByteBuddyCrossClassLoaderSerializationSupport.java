@@ -270,15 +270,23 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
 
             // create the Mockito mock class before it can even be deserialized
 
-            @SuppressWarnings("unchecked")
-            Class<?> proxyClass = Plugins.getMockMaker().createMockType(
-                    new CreationSettings()
-                            .setTypeToMock(typeToMock)
-                            .setExtraInterfaces(extraInterfaces)
-                            .setSerializableMode(SerializableMode.ACROSS_CLASSLOADERS));
+            try {
+                @SuppressWarnings("unchecked")
+                Class<?> proxyClass = ((ClassCreatingMockMaker) Plugins.getMockMaker()).createMockType(
+                        new CreationSettings()
+                                .setTypeToMock(typeToMock)
+                                .setExtraInterfaces(extraInterfaces)
+                                .setSerializableMode(SerializableMode.ACROSS_CLASSLOADERS));
 
-            hackClassNameToMatchNewlyCreatedClass(desc, proxyClass);
-            return proxyClass;
+                hackClassNameToMatchNewlyCreatedClass(desc, proxyClass);
+                return proxyClass;
+            } catch (ClassCastException cce) {
+                throw new MockitoSerializationIssue(join(
+                        "A Byte Buddy-generated mock cannot be deserialized into a non-Byte Buddy generated mock class",
+                        "",
+                        "The mock maker in use was: " + Plugins.getMockMaker().getClass()
+                ), cce);
+            }
         }
 
         /**
