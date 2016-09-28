@@ -29,6 +29,7 @@ public class ByteBuddyMockMakerTest extends TestBase {
         mockMaker.resetMock(this, handler, creationSettings);
 
         verify(delegate).createMock(creationSettings, handler);
+        verify(delegate).createMockType(creationSettings);
         verify(delegate).getHandler(this);
         verify(delegate).isTypeMockable(Object.class);
         verify(delegate).resetMock(this, handler, creationSettings);

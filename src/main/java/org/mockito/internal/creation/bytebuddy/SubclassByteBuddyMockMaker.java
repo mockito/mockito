@@ -12,6 +12,16 @@ import java.lang.reflect.Modifier;
 
 import static org.mockito.internal.util.StringJoiner.join;
 
+/**
+ * Subclass based mock maker.
+ *
+ * This mock maker tries to create a subclass to represent a mock. It uses the given mock settings, that contains
+ * the type to mock, extra interfaces, and serialization support.
+ *
+ * <p>
+ * The type to mock has to be not final and not part of the JDK. THe created mock will implement extra interfaces
+ * if any. And will implement <code>Serializable</code> if this settings is explicitly set.
+ */
 public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
 
     private final BytecodeGenerator cachingMockBytecodeGenerator;

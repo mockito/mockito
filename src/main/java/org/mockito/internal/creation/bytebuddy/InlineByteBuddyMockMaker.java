@@ -10,7 +10,6 @@ import org.mockito.internal.creation.instance.Instantiator;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.plugins.MockMaker;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,6 +22,64 @@ import java.util.jar.JarOutputStream;
 import static org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.EXCLUDES;
 import static org.mockito.internal.util.StringJoiner.join;
 
+/**
+ * Agent and subclass based mock maker.
+ *
+ * This mock maker which uses a combination of the Java instrumentation API and sub-classing rather than creating
+ * a new sub-class to create a mock. This way, it becomes possible to mock final types and methods. This mock
+ * maker <strong>must to be activated explicitly</strong> for supporting mocking final types and methods:
+ *
+ * <p>
+ * This mock maker can be activated by creating the file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
+ * containing the text <code>mockito-inline</code> or <code>org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker</code>.
+ *
+ * <p>
+ * This mock maker will make a best effort to avoid subclass creation when creating a mock. Otherwise it will use the
+ * <code>org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker</code> to create the mock class. That means
+ * that the following condition is true
+ *
+ * <pre class="code"><code class="java">
+ * class Foo { }
+ * assert mock(Foo.class).getClass() == Foo.class;
+ * </pre></code>
+ *
+ * unless any of the following conditions is met, in such case the mock maker <em>fall backs</em> to the
+ * the creation of a subclass.
+ *
+ * <ul>
+ * <li>the type to mock is an abstract class.</li>
+ * <li>the mock is set to require additional interfaces.</li>
+ * <li>the mock is <a href="#20">explicitly set to support serialization</a>.</li>
+ * </ul>
+ *
+ * <p>
+ * Some type of the JDK cannot be mocked, this includes <code>Class</code>, <code>String</code>, and wrapper types.
+ *
+ * <p>
+ * Nevertheless, final methods of such types are mocked when using the inlining mock maker. Mocking final types and enums
+ * does however remain impossible when explicitly requiring serialization support or when adding ancillary interfaces.
+ *
+ * <p>
+ * Important behavioral changes when using inline-mocks:
+ * <ul>
+ *     <li>Mockito is capable of mocking package-private methods even if they are defined in different packages than
+ *     the mocked type. Mockito voluntarily never mocks package-visible methods within <code>java.*</code> packages.</li>
+ *     <li>Additionally to final types, Mockito can now mock types that are not visible for extension; such types
+ *     include private types in a protected package.</li>
+ *     <li>Mockito can no longer mock <code>native</code> methods. Inline mocks require byte code manipulation of a
+ *     method where native methods do not offer any byte code to manipulate.</li>
+ *     <li>Mockito cannot longer strip <code>synchronized</code> modifiers from mocked instances.</li>
+ * </ul>
+ *
+ * <p>
+ * Note that inline mocks require a Java agent to be attached. Mockito will attempt an attachment of a Java agent upon
+ * loading the mock maker for creating inline mocks. Such runtime attachment is only possible when using a JVM that
+ * is part of a JDK or when using a Java 9 VM. When running on a non-JDK VM prior to Java 9, it is however possible to
+ * manually add the <a href="http://bytebuddy.net">Byte Buddy Java agent jar</a> using the <code>-javaagent</code>
+ * parameter upon starting the JVM. Furthermore, the inlining mock maker requires the VM to support class retransformation
+ * (also known as HotSwap). All major VM distributions such as HotSpot (OpenJDK), J9 (IBM/Websphere) or Zing (Azul)
+ * support this feature.
+ */
 @Incubating
 public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
 

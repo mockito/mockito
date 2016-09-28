@@ -4,18 +4,21 @@
  */
 package org.mockito;
 
-import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
+import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.*;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.stubbing.Stubber;
 import org.mockito.verification.*;
-import org.mockito.junit.*;
 
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
@@ -511,9 +514,8 @@ import org.mockito.junit.*;
  * <b>Before the release 1.8</b>, Mockito spies were not real partial mocks.
  * The reason was we thought partial mock is a code smell.
  * At some point we found legitimate use cases for partial mocks
- * (3rd party interfaces, interim refactoring of legacy code, the full article is <a href=
- * "http://monkeyisland.pl/2009/01/13/subclass-and-override-vs-partial-mocking-vs-refactoring"
- * >here</a>)
+ * (3rd party interfaces, interim refactoring of legacy code, the full article is
+ * <a href="http://monkeyisland.pl/2009/01/13/subclass-and-override-vs-partial-mocking-vs-refactoring">here</a>)
  * <p>
  *
  * <pre class="code"><code class="java">
@@ -1218,70 +1220,53 @@ import org.mockito.junit.*;
  * alternative {@link org.mockito.plugins.MockMaker} is used</a>.
  *
  * <h3 id="39">39. <a class="meaningful_link" href="#Mocking_Final">Mocking final types, enums and final methods</a> (Since 2.1.0)</h3>
- * <p>
+ *
  * Mockito now offers an {@link Incubating}, optional support for mocking final classes and methods.
  * This is a fantastic improvement that demonstrates Mockito's everlasting quest for improving testing experience.
  * Our ambition is that Mockito "just works" with final classes and methods.
- * Previously they were considered "unmockable", preventing the user from mocking.
+ * Previously they were considered <em>unmockable</em>, preventing the user from mocking.
  * We already started discussing how to make this feature enabled by default.
  * Currently, the feature is still optional as we wait for more feedback from the community.
  * <p>
  * This feature is turned off by default because it is based on completely different mocking mechanism
  * that requires more feedback from the community.
- * Behind the hood, there is an alternative mock maker which uses the Java instrumentation API for inlining the mocking logic
- * into existing methods rather than creating a new class to represent a mock. This way, it becomes possible to mock
- * final types and methods. This mock maker <b>must to be activated explicitly</b> for supporting mocking final types
- * and methods.
  *
  * <p>
- * This alternative mock maker is <a href="#28">implemented as a plugin</a> which is activated by adding a file
- * <code>/mockito-extensions/org.mockito.plugins.MockMaker</code> containing the value <code>mockito-inline</code>.
- * Doing so, Mockito will make a best effort to avoid subclass creation when creating a mock. Other than with the
- * default mock maker, the following condition holds when using this alternative mock maker:
- *
- * <code><pre>
- * class Foo { }
- * assert mock(Foo.class).getClass() == Foo.class;
- * </pre></code>
+ * This alternative mock maker which uses
+ * a combination of both Java instrumentation API and sub-classing rather than creating a new class to represent
+ * a mock. This way, it becomes possible to mock final types and methods.
  *
  * <p>
- * Even when using the new inlining mock maker, mocking classes with any of the following conditions still requires
- * the creation of a subclass when
+ * This mock maker is <strong>turned off by default</strong> because it is based on completely different mocking mechanism
+ * that requires more feedback from the community. It can be activated explicitly by the mockito extension mechanism,
+ * just create in the classpath a file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
+ * containing the value <code>mockito-inline</code>.
+ *
+ * <p>
+ * Some noteworthy notes about this mock maker:
  * <ul>
- * <li>mocking an abstract class.</li>
- * <li>mocking a class with ancillary interfaces.</li>
- * <li>mocking a class while requiring <a href="#20">explicit support for serialization</a>.</li>
+ *     <li>Mocking final types and enums is incompatible with mock settings like :
+ *     <ul>
+ *         <li>explicitly serialization support <code>withSettings().serializable()</code></li>
+ *         <li>extra-interfaces <code>withSettings().extraInterfaces()</code></li>
+ *     </ul>
+ *     </li>
+ *     <li>Some methods cannot be mocked
+ *         <ul>
+ *              <li>Package-visible methods of <code>java.*</code></li>
+ *              <li><code>native</code> methods</li>
+ *         </ul>
+ *     </li>
+ *     <li>This mock maker has been designed around Java Agent runtime attachment ; this require a compatible JVM,
+ *     that is part of the JDK (or Java 9 VM). When running on a non-JDK VM prior to Java 9, it is however possible to
+ *     manually add the <a href="http://bytebuddy.net">Byte Buddy Java agent jar</a> using the <code>-javaagent</code>
+ *     parameter upon starting the JVM.
+ *     </li>
  * </ul>
  *
  * <p>
- * Nevertheless, final methods of such types are mocked when using the inlining mock maker. Mocking final types and enums
- * does however remain impossible when explicitly requiring serialization support or when adding ancillary interfaces.
- *
- * <p>
- * Important behavioral changes when using inline-mocks:
- * <ul>
- * <li>Mockito is capable of mocking package-private methods even if they are defined in different packages than the
- * mocked type. Mockito voluntarily never mocks package-private methods within <i>java.</i> packages.</li>
- * <li>Additionally to final types, Mockito can now mock types that are not visible for extension; such types include
- * private types in a protected package.</li>
- * <li>Mockito can no longer mock <i>native</i> methods. Inline mocks require byte code manipulation of a method where
- * native methods do not offer any byte code to manipulate.</li>
- * <li>Mockito cannot longer strip <i>synchronized</i> modifiers from mocked instances.</li>
- * </ul>
- *
- * <p>
- * Note that inline mocks require a Java agent to be attached. Mockito will attempt an attachment of a Java agent upon
- * loading the mock maker for creating inline mocks. Such runtime attachment is only possible when using a JVM that
- * is part of a JDK or when using a Java 9 VM. When running on a non-JDK VM prior to Java 9, it is however possible to
- * manually add the <a href="http://bytebuddy.net">Byte Buddy Java agent jar</a> using the <code>-javaagent</code>
- * parameter upon starting the JVM. Furthermore, the inlining mock maker requires the VM to support class retransformation
- * (also known as HotSwap). All major VM distributions such as HotSpot (OpenJDK), J9 (IBM/Websphere) or Zing (Azul)
- * support this feature.
- *
- * <p>
- * <b>Important</b>: This feature is currently incubating and fully optional. We hope to collect feedback on its usage
- * before making it first-level functionality where inline mocks are available via the Mockito API without a plugin.
- * Please help us improve this feature and report problems and experiences to the Mockito team.
+ * If you are interested in more details of this feature please read the javadoc of
+ * <code>org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker</code>
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
