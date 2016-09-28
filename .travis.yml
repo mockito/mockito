@@ -34,6 +34,8 @@ matrix:
     env: SKIP_RELEASE=true MOCK_MAKER=mockito-inline
   - jdk: oraclejdk7
     env: SKIP_RELEASE=true
+  - jdk: oraclejdk7
+    env: SKIP_RELEASE=true MOCK_MAKER=mockito-inline
   - jdk: oraclejdk8
     env: SKIP_RELEASE=true
   - jdk: oraclejdk8
