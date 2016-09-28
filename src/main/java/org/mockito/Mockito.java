@@ -1222,7 +1222,7 @@ import org.mockito.junit.*;
  * Mockito now offers an {@link Incubating}, optional support for mocking final classes and methods.
  * This is a fantastic improvement that demonstrates Mockito's everlasting quest for improving testing experience.
  * Our ambition is that Mockito "just works" with final classes and methods.
- * Previously they were considered considered "unmockable", preventing the user from mocking.
+ * Previously they were considered "unmockable", preventing the user from mocking.
  * We already started discussing how to make this feature enabled by default.
  * Currently, the feature is still optional as we wait for more feedback from the community.
  * <p>
