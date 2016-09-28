@@ -1219,10 +1219,19 @@ import org.mockito.junit.*;
  *
  * <h3 id="39">39. <a class="meaningful_link" href="#Mocking_Final">Mocking final types, enums and final methods</a> (Since 2.1.0)</h3>
  * <p>
- * Mockito new offers an alternative mock maker which uses the Java instrumentation API for inlining the mocking logic
+ * Mockito now offers an {@link Incubating}, optional support for mocking final classes and methods.
+ * This is a fantastic improvement that demonstrates Mockito's everlasting quest for improving testing experience.
+ * Our ambition is that Mockito "just works" with final classes and methods.
+ * Previously they were considered considered "unmockable", preventing the user from mocking.
+ * We already started discussing how to make this feature enabled by default.
+ * Currently, the feature is still optional as we wait for more feedback from the community.
+ * <p>
+ * This feature is turned off by default because it is based on completely different mocking mechanism
+ * that requires more feedback from the community.
+ * Behind the hood, there is an alternative mock maker which uses the Java instrumentation API for inlining the mocking logic
  * into existing methods rather than creating a new class to represent a mock. This way, it becomes possible to mock
  * final types and methods. This mock maker <b>must to be activated explicitly</b> for supporting mocking final types
- * and methods:
+ * and methods.
  *
  * <p>
  * This alternative mock maker is <a href="#28">implemented as a plugin</a> which is activated by adding a file
