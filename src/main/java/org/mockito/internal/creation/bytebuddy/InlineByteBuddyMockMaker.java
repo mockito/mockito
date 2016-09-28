@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Modifier;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
@@ -134,12 +135,58 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
 
     @Override
     public <T> Class<? extends T> createMockType(MockCreationSettings<T> settings) {
-        return bytecodeGenerator.mockClass(MockFeatures.withMockFeatures(
-                settings.getTypeToMock(),
-                settings.getExtraInterfaces(),
-                settings.getSerializableMode()
-        ));
+        try {
+            return bytecodeGenerator.mockClass(MockFeatures.withMockFeatures(
+                    settings.getTypeToMock(),
+                    settings.getExtraInterfaces(),
+                    settings.getSerializableMode()
+            ));
+        } catch (Exception bytecodeGenerationFailed) {
+            throw prettifyFailure(settings, bytecodeGenerationFailed);
+        }
     }
+
+    private <T> RuntimeException prettifyFailure(MockCreationSettings<T> mockFeatures, Exception generationFailed) {
+        if (mockFeatures.getTypeToMock().isArray()) {
+            throw new MockitoException(join(
+                    "Arrays cannot be mocked: " + mockFeatures.getTypeToMock() + ".",
+                    ""
+            ), generationFailed);
+        }
+        if (Modifier.isFinal(mockFeatures.getTypeToMock().getModifiers())) {
+            throw new MockitoException(join(
+                    "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
+                    "Can not mock final classes with the following settings :",
+                    " - explicit serialization (e.g. withSettings().serializable())",
+                    " - extra interfaces (e.g. withSettings().extraInterfaces(...))",
+                    "",
+                    "You are seeing this exception because mockito is configured to create inlined mocks.",
+                    "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",
+                    "",
+                    "Underlying exception : " + generationFailed
+            ), generationFailed);
+        }
+        if (Modifier.isPrivate(mockFeatures.getTypeToMock().getModifiers())) {
+            throw new MockitoException(join(
+                    "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
+                    "Most likely it is a private class that is not visible by Mockito",
+                    "",
+                    "You are seeing this exception because mockito is configured to create inlined mocks.",
+                    "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",
+                    ""
+            ), generationFailed);
+        }
+        throw new MockitoException(join(
+                "Mockito cannot mock this class: " + mockFeatures.getTypeToMock(),
+                "",
+                "You are seeing this exception because mockito is configured to create inlined mocks.",
+                "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",
+                "If you're not sure why you're getting this error, please report to the mailing list.",
+                "",
+                "Underlying exception : " + generationFailed
+        ), generationFailed);
+    }
+
 
     private static InternalMockHandler<?> asInternalMockHandler(MockHandler handler) {
         if (!(handler instanceof InternalMockHandler)) {
@@ -181,6 +228,9 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
 
             @Override
             public String nonMockableReason() {
+                if (mockable()) {
+                    return "";
+                }
                 if (type.isPrimitive()) {
                     return "primitive type";
                 }

@@ -80,6 +80,12 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
     }
 
     private <T> RuntimeException prettifyFailure(MockCreationSettings<T> mockFeatures, Exception generationFailed) {
+        if (mockFeatures.getTypeToMock().isArray()) {
+            throw new MockitoException(join(
+                    "Mockito cannot mock arrays: " + mockFeatures.getTypeToMock() + ".",
+                    ""
+                    ), generationFailed);
+        }
         if (Modifier.isPrivate(mockFeatures.getTypeToMock().getModifiers())) {
             throw new MockitoException(join(
                     "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
@@ -133,12 +139,14 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
 
             @Override
             public String nonMockableReason() {
-                //TODO SF does not seem to have test coverage. What is the expected value when type mockable
+                if(mockable()) {
+                    return "";
+                }
                 if (type.isPrimitive()) {
                     return "primitive type";
                 }
                 if (Modifier.isFinal(type.getModifiers())) {
-                    return "final or anonymous class";
+                    return "final class";
                 }
                 return join("not handled type");
             }

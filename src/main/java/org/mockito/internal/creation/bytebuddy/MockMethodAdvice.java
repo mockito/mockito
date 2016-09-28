@@ -31,6 +31,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         this.identifier = identifier;
     }
 
+    @SuppressWarnings("unused")
     @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
     private static Callable<?> enter(@Identifier String identifier,
                                      @Advice.This Object mock,
@@ -44,6 +45,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         }
     }
 
+    @SuppressWarnings({"unused", "UnusedAssignment"})
     @Advice.OnMethodExit
     private static void exit(@Advice.BoxedReturn(readOnly = false) Object returned,
                              @Advice.Enter Callable<?> mocked) throws Throwable {
@@ -226,6 +228,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     static class ForHashCode {
 
+        @SuppressWarnings("unused")
         @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
         private static boolean enter(@Identifier String id,
                                      @Advice.This Object self) {
@@ -233,6 +236,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             return dispatcher != null && dispatcher.isMock(self);
         }
 
+        @SuppressWarnings({"unused", "UnusedAssignment"})
         @Advice.OnMethodExit
         private static void enter(@Advice.This Object self,
                                   @Advice.Return(readOnly = false) int hashCode,
@@ -245,6 +249,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     static class ForEquals {
 
+        @SuppressWarnings("unused")
         @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
         private static boolean enter(@Identifier String identifier,
                                      @Advice.This Object self) {
@@ -252,6 +257,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             return dispatcher != null && dispatcher.isMock(self);
         }
 
+        @SuppressWarnings({"unused", "UnusedAssignment"})
         @Advice.OnMethodExit
         private static void enter(@Advice.This Object self,
                                   @Advice.Argument(0) Object other,
@@ -265,6 +271,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     public static class ForReadObject {
 
+        @SuppressWarnings("unused")
         public static void doReadObject(@Identifier String identifier,
                                         @This MockAccess thiz,
                                         @Argument(0) ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {

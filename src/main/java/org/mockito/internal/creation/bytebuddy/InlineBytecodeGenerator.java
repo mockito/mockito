@@ -68,34 +68,50 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
     @Override
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
+        boolean subclassingRequired = !features.interfaces.isEmpty()
+                || features.serializableMode != SerializableMode.NONE
+                || Modifier.isAbstract(features.mockedType.getModifiers());
+
+        checkSupportedCombination(subclassingRequired, features);
+
         synchronized (this) {
-            Set<Class<?>> types = new HashSet<Class<?>>();
-            Class<?> type = features.mockedType;
-            do {
-                if (mocked.add(type)) {
-                    types.add(type);
-                    addInterfaces(types, type.getInterfaces());
+            triggerRetransformation(features);
+        }
+
+        return subclassingRequired ?
+                subclassEngine.mockClass(features) :
+                features.mockedType;
+    }
+
+    private <T> void triggerRetransformation(MockFeatures<T> features) {
+        Set<Class<?>> types = new HashSet<Class<?>>();
+        Class<?> type = features.mockedType;
+        do {
+            if (mocked.add(type)) {
+                types.add(type);
+                addInterfaces(types, type.getInterfaces());
+            }
+            type = type.getSuperclass();
+        } while (type != null);
+        if (!types.isEmpty()) {
+            try {
+                instrumentation.retransformClasses(types.toArray(new Class<?>[types.size()]));
+            } catch (UnmodifiableClassException exception) {
+                for (Class<?> failed : types) {
+                    mocked.remove(failed);
                 }
-                type = type.getSuperclass();
-            } while (type != null);
-            if (!types.isEmpty()) {
-                try {
-                    instrumentation.retransformClasses(types.toArray(new Class<?>[types.size()]));
-                } catch (UnmodifiableClassException exception) {
-                    for (Class<?> failed : types) {
-                        mocked.remove(failed);
-                    }
-                    throw new MockitoException("Could not modify all classes " + types, exception);
-                }
+                throw new MockitoException("Could not modify all classes " + types, exception);
             }
         }
-        Class<? extends T> mockedType = features.mockedType;
-        if (!features.interfaces.isEmpty()
-                || features.serializableMode != SerializableMode.NONE
-                || Modifier.isAbstract(features.mockedType.getModifiers())) {
-            mockedType = subclassEngine.mockClass(features);
+    }
+
+    private <T> void checkSupportedCombination(boolean subclassingRequired, MockFeatures<T> features) {
+        if (subclassingRequired
+                && !features.mockedType.isArray()
+                && !features.mockedType.isPrimitive()
+                && Modifier.isFinal(features.mockedType.getModifiers())) {
+            throw new MockitoException("Unsupported settings with this type '" + features.mockedType.getName() + "'");
         }
-        return mockedType;
     }
 
     private void addInterfaces(Set<Class<?>> types, Class<?>[] interfaces) {

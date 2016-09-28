@@ -266,10 +266,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
                 return super.resolveClass(desc);
             }
 
-            // TODO check the class is mockable in the deserialization side
-
             // create the Mockito mock class before it can even be deserialized
-
             try {
                 @SuppressWarnings("unchecked")
                 Class<?> proxyClass = ((ClassCreatingMockMaker) Plugins.getMockMaker()).createMockType(

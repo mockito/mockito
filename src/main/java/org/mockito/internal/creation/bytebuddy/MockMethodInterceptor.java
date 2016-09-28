@@ -61,6 +61,7 @@ public class MockMethodInterceptor implements Serializable {
 
     public static class ForHashCode {
 
+        @SuppressWarnings("unused")
         public static int doIdentityHashCode(@This Object thiz) {
             return System.identityHashCode(thiz);
         }
@@ -68,6 +69,7 @@ public class MockMethodInterceptor implements Serializable {
 
     public static class ForEquals {
 
+        @SuppressWarnings("unused")
         public static boolean doIdentityEquals(@This Object thiz, @Argument(0) Object other) {
             return thiz == other;
         }
@@ -82,6 +84,7 @@ public class MockMethodInterceptor implements Serializable {
 
     public static class DispatcherDefaultingToRealMethod {
 
+        @SuppressWarnings("unused")
         @RuntimeType
         @BindingPriority(BindingPriority.DEFAULT * 2)
         public static Object interceptSuperCallable(@This Object mock,
@@ -100,6 +103,7 @@ public class MockMethodInterceptor implements Serializable {
             );
         }
 
+        @SuppressWarnings("unused")
         @RuntimeType
         public static Object interceptAbstract(@This Object mock,
                                                @FieldValue("mockitoInterceptor") MockMethodInterceptor interceptor,
