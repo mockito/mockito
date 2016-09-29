@@ -14,6 +14,7 @@ import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static org.junit.Assume.assumeFalse;
 import static org.mockito.Mockito.*;
 
 public class InvalidUsageTest extends TestBase {
@@ -77,8 +78,8 @@ public class InvalidUsageTest extends TestBase {
     final class FinalClass {}
     
     @Test(expected=MockitoException.class)
-    public void shouldNotAllowMockingFinalClasses() throws Exception {
-        mock(FinalClass.class); 
+    public void shouldNotAllowMockingFinalClassesIfDisabled() throws Exception {
+        assumeFalse("Inlining mock allows mocking final classes", mock(FinalClass.class).getClass() == FinalClass.class);
     }
     
     @Test(expected=MockitoException.class)

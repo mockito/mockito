@@ -4,18 +4,21 @@
  */
 package org.mockito;
 
-import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
+import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.*;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.stubbing.Stubber;
 import org.mockito.verification.*;
-import org.mockito.junit.*;
 
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
@@ -59,15 +62,17 @@ import org.mockito.junit.*;
  *      <a href="#26">26. Mocking details (Since 1.9.5)</a><br/>
  *      <a href="#27">27. Delegate calls to real instance (Since 1.9.5)</a><br/>
  *      <a href="#28">28. <code>MockMaker</code> API (Since 1.9.5)</a><br/>
- *      <a href="#29">29. (new) BDD style verification (Since 1.10.0)</a><br/>
- *      <a href="#30">30. (new) Spying or mocking abstract classes (Since 1.10.12)</a><br/>
- *      <a href="#31">31. (new) Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3><br/>
- *      <a href="#32">32. (new) Better generic support with deep stubs (Since 1.10.0)</a></h3><br/>
- *      <a href="#32">33. (new) Mockito JUnit rule (Since 1.10.17)</a><br/>
- *      <a href="#34">34. (new) Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
- *      <a href="#35">35. (new) Custom verification failure message (Since 2.1.0)</a><br/>
- *      <a href="#36">36. (new) Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
- *      <a href="#37">37. (new) Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
+ *      <a href="#29">29. BDD style verification (Since 1.10.0)</a><br/>
+ *      <a href="#30">30. Spying or mocking abstract classes (Since 1.10.12)</a><br/>
+ *      <a href="#31">31. Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3><br/>
+ *      <a href="#32">32. Better generic support with deep stubs (Since 1.10.0)</a></h3><br/>
+ *      <a href="#32">33. Mockito JUnit rule (Since 1.10.17)</a><br/>
+ *      <a href="#34">34. Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
+ *      <a href="#35">35. Custom verification failure message (Since 2.1.0)</a><br/>
+ *      <a href="#36">36. Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
+ *      <a href="#37">37. Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
+ *      <a href="#38">38. Meta data and generic type retention (Since 2.1.0)</a><br/>
+ *      <a href="#39">39. Mocking final types, enums and final methods (Since 2.1.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2">Migrating to Mockito 2</a></h3>
@@ -264,7 +269,7 @@ import org.mockito.junit.*;
  *   mockedList.clear();
  * </code></pre>
  *
- * Read more about doThrow|doAnswer family of methods in paragraph 12.
+ * Read more about <code>doThrow()</code>|<code>doAnswer()</code> family of methods in <a href="#12">section 12</a>.
  * <p>
  *
  * <h3 id="6">6. <a class="meaningful_link" href="#in_order_verification">Verification in order</a></h3>
@@ -509,9 +514,8 @@ import org.mockito.junit.*;
  * <b>Before the release 1.8</b>, Mockito spies were not real partial mocks.
  * The reason was we thought partial mock is a code smell.
  * At some point we found legitimate use cases for partial mocks
- * (3rd party interfaces, interim refactoring of legacy code, the full article is <a href=
- * "http://monkeyisland.pl/2009/01/13/subclass-and-override-vs-partial-mocking-vs-refactoring"
- * >here</a>)
+ * (3rd party interfaces, interim refactoring of legacy code, the full article is
+ * <a href="http://monkeyisland.pl/2009/01/13/subclass-and-override-vs-partial-mocking-vs-refactoring">here</a>)
  * <p>
  *
  * <pre class="code"><code class="java">
@@ -938,16 +942,17 @@ import org.mockito.junit.*;
  *
  * <h3 id="28">28. <a class="meaningful_link" href="#mock_maker_plugin"><code>MockMaker</code> API</a> (Since 1.9.5)</h3>
  * <p>Driven by requirements and patches from Google Android guys Mockito now offers an extension point
- *   that allows replacing the proxy generation engine. By default, Mockito uses cglib to create dynamic proxies.
+ *   that allows replacing the proxy generation engine. By default, Mockito uses <a href="https://github.com/raphw/byte-buddy">Byte Buddy</a>
+ *   to create dynamic proxies.
  * <p>The extension point is for advanced users that want to extend Mockito. For example, it is now possible
- *   to use Mockito for Android testing with a help of dexmaker.
+ *   to use Mockito for Android testing with a help of <a href="https://github.com/crittercism/dexmaker">dexmaker</a>.
  * <p>For more details, motivations and examples please refer to
  * the docs for {@link org.mockito.plugins.MockMaker}.
  *
  *
  *
  *
- * <h3 id="29">29. <a class="meaningful_link" href="#BDD_behavior_verification">(new) BDD style verification</a> (Since 1.10.0)</h3>
+ * <h3 id="29">29. <a class="meaningful_link" href="#BDD_behavior_verification">BDD style verification</a> (Since 1.10.0)</h3>
  *
  * Enables Behavior Driven Development (BDD) style verification by starting verification with the BDD <b>then</b> keyword.
  *
@@ -965,7 +970,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes">(new) Spying or mocking abstract classes (Since 1.10.12)</a></h3>
+ * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes">Spying or mocking abstract classes (Since 1.10.12)</a></h3>
  *
  * It is now possible to conveniently spy on abstract classes. Note that overusing spies hints at code design smells (see {@link #spy(Object)}).
  * <p>
@@ -992,7 +997,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="31">31. <a class="meaningful_link" href="#serilization_across_classloader">(new) Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3>
+ * <h3 id="31">31. <a class="meaningful_link" href="#serilization_across_classloader">Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3>
  *
  * Mockito introduces serialization across classloader.
  *
@@ -1012,7 +1017,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="32">32. <a class="meaningful_link" href="#better_generic_support_with_deep_stubs">(new) Better generic support with deep stubs (Since 1.10.0)</a></h3>
+ * <h3 id="32">32. <a class="meaningful_link" href="#better_generic_support_with_deep_stubs">Better generic support with deep stubs (Since 1.10.0)</a></h3>
  *
  * Deep stubbing has been improved to find generic information if available in the class.
  * That means that classes like this can be used without having to mock the behavior.
@@ -1033,7 +1038,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="33">33. <a class="meaningful_link" href="#mockito_junit_rule">(new) Mockito JUnit rule (Since 1.10.17)</a></h3>
+ * <h3 id="33">33. <a class="meaningful_link" href="#mockito_junit_rule">Mockito JUnit rule (Since 1.10.17)</a></h3>
  *
  * Mockito now offers a JUnit rule. Until now in JUnit there were two ways to initialize fields annotated by Mockito annotations
  * such as <code>&#064;{@link Mock}</code>, <code>&#064;{@link Spy}</code>, <code>&#064;{@link InjectMocks}</code>, etc.
@@ -1058,7 +1063,7 @@ import org.mockito.junit.*;
  *
  *
  *
- * <h3 id="34">34. <a class="meaningful_link" href="#plugin_switch">(new) Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a></h3>
+ * <h3 id="34">34. <a class="meaningful_link" href="#plugin_switch">Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a></h3>
  *
  * An incubating feature made it's way in mockito that will allow to toggle a mockito-plugin.
  *
@@ -1191,6 +1196,77 @@ import org.mockito.junit.*;
  *         return input1 + input2;
  *     }})).when(mock).execute(anyString(), anyString());
  * </code></pre>
+ *
+ * <h3 id="38">38. <a class="meaningful_link" href="#Meta_Data_And_Generics">Meta data and generic type retention</a> (Since 2.1.0)</h3>
+ *
+ * <p>
+ * Mockito now preserves annotations on mocked methods and types as well as generic meta data. Previously, a mock type did not preserve
+ * annotations on types unless they were explicitly inherited and never retained annotations on methods. As a consequence, the following
+ * conditions now hold true:
+ *
+ * <pre class="code"><code class="java">
+ * {@literal @}{@code MyAnnotation
+ *  class Foo {
+ *    List<String> bar() { ... }
+ *  }
+ *
+ *  Class<?> mockType = mock(Foo.class).getClass();
+ *  assert mockType.isAnnotationPresent(MyAnnotation.class);
+ *  assert mockType.getDeclaredMethod("bar").getGenericReturnType() instanceof ParameterizedType;
+ * }</code></pre>
+ *
+ * <p>
+ * When using Java 8, Mockito now also preserves type annotations. This is default behavior and might not hold <a href="#28">if an
+ * alternative {@link org.mockito.plugins.MockMaker} is used</a>.
+ *
+ * <h3 id="39">39. <a class="meaningful_link" href="#Mocking_Final">Mocking final types, enums and final methods</a> (Since 2.1.0)</h3>
+ *
+ * Mockito now offers an {@link Incubating}, optional support for mocking final classes and methods.
+ * This is a fantastic improvement that demonstrates Mockito's everlasting quest for improving testing experience.
+ * Our ambition is that Mockito "just works" with final classes and methods.
+ * Previously they were considered <em>unmockable</em>, preventing the user from mocking.
+ * We already started discussing how to make this feature enabled by default.
+ * Currently, the feature is still optional as we wait for more feedback from the community.
+ * <p>
+ * This feature is turned off by default because it is based on completely different mocking mechanism
+ * that requires more feedback from the community.
+ *
+ * <p>
+ * This alternative mock maker which uses
+ * a combination of both Java instrumentation API and sub-classing rather than creating a new class to represent
+ * a mock. This way, it becomes possible to mock final types and methods.
+ *
+ * <p>
+ * This mock maker is <strong>turned off by default</strong> because it is based on completely different mocking mechanism
+ * that requires more feedback from the community. It can be activated explicitly by the mockito extension mechanism,
+ * just create in the classpath a file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
+ * containing the value <code>mock-maker-inline</code>.
+ *
+ * <p>
+ * Some noteworthy notes about this mock maker:
+ * <ul>
+ *     <li>Mocking final types and enums is incompatible with mock settings like :
+ *     <ul>
+ *         <li>explicitly serialization support <code>withSettings().serializable()</code></li>
+ *         <li>extra-interfaces <code>withSettings().extraInterfaces()</code></li>
+ *     </ul>
+ *     </li>
+ *     <li>Some methods cannot be mocked
+ *         <ul>
+ *              <li>Package-visible methods of <code>java.*</code></li>
+ *              <li><code>native</code> methods</li>
+ *         </ul>
+ *     </li>
+ *     <li>This mock maker has been designed around Java Agent runtime attachment ; this require a compatible JVM,
+ *     that is part of the JDK (or Java 9 VM). When running on a non-JDK VM prior to Java 9, it is however possible to
+ *     manually add the <a href="http://bytebuddy.net">Byte Buddy Java agent jar</a> using the <code>-javaagent</code>
+ *     parameter upon starting the JVM.
+ *     </li>
+ * </ul>
+ *
+ * <p>
+ * If you are interested in more details of this feature please read the javadoc of
+ * <code>org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker</code>
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {

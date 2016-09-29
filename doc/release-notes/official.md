@@ -1,3 +1,25 @@
+### 2.1.0-RC.2 (2016-09-29 08:50 UTC)
+
+* Authors: 7
+* Commits: 38
+  * 15: Rafael Winterhalter
+  * 9: Brice Dutheil
+  * 9: Tim van der Lippe
+  * 2: Szczepan Faber
+  * 1: Bruno Krebs
+  * 1: Continuous Delivery Drone
+  * 1: Oliver Gierke
+* Improvements: 6
+  * New features: 1
+    * Added InlineByteBuddyMockMaker which uses the instrumentation API for redefining classes and inlining the mocking logic. [(#648)](https://github.com/mockito/mockito/pull/648)
+  * Enhancements: 1
+    * Improve exception message to hint at upgrading java minor version to latest [(#640)](https://github.com/mockito/mockito/issues/640)
+  * Remaining changes: 4
+    * Renamed FailureDetecter to Failure Detector. [(#654)](https://github.com/mockito/mockito/pull/654)
+    * Typos in FailureDetecter [(#653)](https://github.com/mockito/mockito/issues/653)
+    * A small fix on Mockito javadocs. Adding some styling and an anchor to section 12. [(#647)](https://github.com/mockito/mockito/pull/647)
+    * Fixes #640 Warns user to upgrade if Java 8 version is to low [(#646)](https://github.com/mockito/mockito/pull/646)
+
 ### 2.1.0-RC.1 (2016-09-10 17:03 UTC)
 
 # Brand new Mockito 2

@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import static java.lang.annotation.ElementType.*;
+import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.mock;
 
 public class AnnotationsAreCopiedFromMockedTypeTest {
@@ -21,7 +22,8 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
         AnnotationWithDefaultValue onClassDefaultValue = mock(OnClass.class).getClass().getAnnotation(AnnotationWithDefaultValue.class);
         AnnotationWithCustomValue onClassCustomValue = mock(OnClass.class).getClass().getAnnotation(AnnotationWithCustomValue.class);
 
-        Assertions.assertThat(mock(OnClass.class).getClass()).isNotSameAs(OnClass.class);
+        assumeTrue("Annotation copying does not apply for inline mocks", mock(OnClass.class).getClass() != OnClass.class);
+
         Assertions.assertThat(onClassDefaultValue.value()).isEqualTo("yup");
         Assertions.assertThat(onClassCustomValue.value()).isEqualTo("yay");
     }

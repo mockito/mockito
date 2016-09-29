@@ -16,6 +16,7 @@ import java.util.Observer;
 
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.*;
 
 public class DetectingMisusedMatchersTest extends TestBase {
@@ -80,6 +81,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
     
     @Test
     public void shouldSayUnfinishedVerificationButNotInvalidUseOfMatchers() {
+        assumeTrue("Does not apply for inline mocks", withFinal.getClass() != WithFinal.class);
         verify(withFinal).finalMethod(anyObject());
         try {
             verify(withFinal);

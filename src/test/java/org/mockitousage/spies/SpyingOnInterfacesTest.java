@@ -64,11 +64,10 @@ public class SpyingOnInterfacesTest extends TestBase {
 
     @Test
     public void shouldAllowDelegatingToDefaultMethod() throws Exception {
-        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
+        assumeTrue("Test can only be executed on Java 8 capable VMs", ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
 
         Class<?> type = new ByteBuddy()
                 .makeInterface()
-                .modifiers(Visibility.PUBLIC, TypeManifestation.INTERFACE) // Can be removed in the future, bug in Byte Buddy to not make public by default
                 .defineMethod("foo", String.class, Visibility.PUBLIC)
                 .intercept(FixedValue.value("bar"))
                 .make()
@@ -86,11 +85,10 @@ public class SpyingOnInterfacesTest extends TestBase {
 
     @Test
     public void shouldAllowSpyingOnDefaultMethod() throws Exception {
-        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
+        assumeTrue("Test can only be executed on Java 8 capable VMs", ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
 
         Class<?> iFace = new ByteBuddy()
                 .makeInterface()
-                .modifiers(Visibility.PUBLIC, TypeManifestation.INTERFACE) // Can be removed in the future, bug in Byte Buddy to not make public by default
                 .defineMethod("foo", String.class, Visibility.PUBLIC)
                 .intercept(FixedValue.value("bar"))
                 .make()

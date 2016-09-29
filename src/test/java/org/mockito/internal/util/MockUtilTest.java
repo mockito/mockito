@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.TestBase;
 
 import java.util.ArrayList;
@@ -82,7 +83,9 @@ public class MockUtilTest extends TestBase {
 
     @Test
     public void should_know_if_type_is_mockable() throws Exception {
-        assertFalse(MockUtil.typeMockabilityOf(FinalClass.class).mockable());
+        Assertions.assertThat(MockUtil.typeMockabilityOf(FinalClass.class).mockable())
+                .isEqualTo(Plugins.getMockMaker().isTypeMockable(FinalClass.class).mockable());
+
         assertFalse(MockUtil.typeMockabilityOf(int.class).mockable());
 
         assertTrue(MockUtil.typeMockabilityOf(SomeClass.class).mockable());

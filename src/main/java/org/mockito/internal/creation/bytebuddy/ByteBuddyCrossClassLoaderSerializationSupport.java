@@ -5,36 +5,30 @@
 
 package org.mockito.internal.creation.bytebuddy;
 
-import static org.mockito.internal.creation.bytebuddy.MockFeatures.withMockFeatures;
-import static org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.*;
-import static org.mockito.internal.util.StringJoiner.join;
-import static org.mockito.internal.util.reflection.FieldSetter.setField;
+import org.mockito.Incubating;
+import org.mockito.exceptions.base.MockitoSerializationIssue;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.creation.settings.CreationSettings;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.mock.MockCreationSettings;
+import org.mockito.mock.MockName;
+import org.mockito.mock.SerializableMode;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamClass;
-import java.io.ObjectStreamException;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import org.mockito.Incubating;
-import org.mockito.exceptions.base.MockitoSerializationIssue;
-import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.internal.util.MockUtil;
-import org.mockito.mock.MockCreationSettings;
-import org.mockito.mock.MockName;
+
+import static org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.ForWriteReplace;
+import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 /**
  * This is responsible for serializing a mock, it is enabled if the mock is implementing {@link Serializable}.
  *
  * <p>
- *     The way it works is to enable serialization via the flag {@link MockFeatures#crossClassLoaderSerializable},
+ *     The way it works is to enable serialization with mode {@link SerializableMode#ACROSS_CLASSLOADERS},
  *     if the mock settings is set to be serializable the mock engine will implement the
  *     {@link CrossClassLoaderSerializableMock} marker interface.
  *     This interface defines a the {@link CrossClassLoaderSerializableMock#writeReplace()}
@@ -52,7 +46,7 @@ import org.mockito.mock.MockName;
  *
  * TODO check the class is mockable in the deserialization side
  *
- * @see org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker
+ * @see SubclassByteBuddyMockMaker
  * @see org.mockito.internal.creation.bytebuddy.MockMethodInterceptor
  * @author Brice Dutheil
  * @since 1.10.0
@@ -239,7 +233,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
      * </p>
      * <p/>
      * <p>
-     *     When this marker is found, {@link ByteBuddyMockMaker#createProxyClass(MockFeatures)} methods are being used
+     *     When this marker is found, {@link ByteBuddyMockMaker#createMockType(MockCreationSettings)} methods are being used
      *     to create the mock class.
      * </p>
      */
@@ -272,15 +266,24 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
                 return super.resolveClass(desc);
             }
 
-            // TODO check the class is mockable in the deserialization side
-
             // create the Mockito mock class before it can even be deserialized
+            try {
+                @SuppressWarnings("unchecked")
+                Class<?> proxyClass = ((ClassCreatingMockMaker) Plugins.getMockMaker()).createMockType(
+                        new CreationSettings()
+                                .setTypeToMock(typeToMock)
+                                .setExtraInterfaces(extraInterfaces)
+                                .setSerializableMode(SerializableMode.ACROSS_CLASSLOADERS));
 
-            Class<?> proxyClass = ((ByteBuddyMockMaker) Plugins.getMockMaker())
-                    .createProxyClass(withMockFeatures(typeToMock, extraInterfaces, true));
-
-            hackClassNameToMatchNewlyCreatedClass(desc, proxyClass);
-            return proxyClass;
+                hackClassNameToMatchNewlyCreatedClass(desc, proxyClass);
+                return proxyClass;
+            } catch (ClassCastException cce) {
+                throw new MockitoSerializationIssue(join(
+                        "A Byte Buddy-generated mock cannot be deserialized into a non-Byte Buddy generated mock class",
+                        "",
+                        "The mock maker in use was: " + Plugins.getMockMaker().getClass()
+                ), cce);
+            }
         }
 
         /**

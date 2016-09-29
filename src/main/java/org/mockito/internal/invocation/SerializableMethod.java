@@ -23,7 +23,10 @@ public class SerializableMethod implements Serializable, MockitoMethod {
     private final boolean isVarArgs;
     private final boolean isAbstract;
 
+    private volatile transient Method method;
+
     public SerializableMethod(Method method) {
+        this.method = method;
         declaringClass = method.getDeclaringClass();
         methodName = method.getName();
         parameterTypes = method.getParameterTypes();
@@ -58,8 +61,12 @@ public class SerializableMethod implements Serializable, MockitoMethod {
     }
 
     public Method getJavaMethod() {
+        if (method != null) {
+            return method;
+        }
         try {
-            return declaringClass.getDeclaredMethod(methodName, parameterTypes);
+            method = declaringClass.getDeclaredMethod(methodName, parameterTypes);
+            return method;
         } catch (SecurityException e) {
             String message = String.format(
                     "The method %1$s.%2$s is probably private or protected and cannot be mocked.\n" +

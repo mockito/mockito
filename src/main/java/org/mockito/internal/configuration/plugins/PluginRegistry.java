@@ -7,17 +7,18 @@ import org.mockito.plugins.StackTraceCleanerProvider;
 
 class PluginRegistry {
 
-    private final PluginSwitch pluginSwitch
-            = new PluginLoader(new DefaultPluginSwitch()).loadPlugin(PluginSwitch.class, DefaultPluginSwitch.class.getName());
+    private final PluginSwitch pluginSwitch = new PluginLoader(new DefaultPluginSwitch())
+            .loadPlugin(PluginSwitch.class, DefaultPluginSwitch.class.getName());
 
-    private final MockMaker mockMaker
-            = new PluginLoader(pluginSwitch).loadPlugin(MockMaker.class, "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
+    private final MockMaker mockMaker = new PluginLoader(pluginSwitch)
+            .withAlias("mock-maker-inline", "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker")
+            .loadPlugin(MockMaker.class, "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
 
-    private final StackTraceCleanerProvider stackTraceCleanerProvider
-            = new PluginLoader(pluginSwitch).loadPlugin(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
+    private final StackTraceCleanerProvider stackTraceCleanerProvider = new PluginLoader(pluginSwitch)
+            .loadPlugin(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
 
-    private final InstantiatorProvider instantiatorProvider
-            = new PluginLoader(pluginSwitch).loadPlugin(InstantiatorProvider.class, "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
+    private final InstantiatorProvider instantiatorProvider = new PluginLoader(pluginSwitch)
+            .loadPlugin(InstantiatorProvider.class, "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
 
     /**
      * The implementation of the stack trace cleaner
