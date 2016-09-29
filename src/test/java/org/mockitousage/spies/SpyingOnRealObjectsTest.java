@@ -186,7 +186,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
             assumeTrue("Using inline mocks, it is possible to spy on private types", spy.getClass() != real.getClass());
             fail();
         } catch (MockitoException e) {
-            assertThat(e).hasMessageContaining("Most likely it is a private class that is not visible by Mockito");
+            assertThat(e).hasMessageContaining("Most likely it is due to mocking a private class that is not visible to Mockito");
         }
     }
 }
