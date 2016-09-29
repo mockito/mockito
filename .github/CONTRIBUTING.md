@@ -1,7 +1,8 @@
 - [Contributing to Mockito](#)
-	- [Pull request criteria](#)
-	- [General info](#)
-	- [More on pull requests](#)
+  - [Pull request criteria](#)
+  - [General info](#)
+  - [More on pull requests](#)
+  - [Coding style](#)
 
 **If looking for support**
 
@@ -58,3 +59,115 @@ Things we pay attention in a PR :
 
 
 _If you are unsure about git you can have a look on our [git tips to have a clean history](https://github.com/mockito/mockito/wiki/Using git to prepare your PR to have a clean history)._
+
+
+## Coding style
+
+This section is not about some kind of fruitless tabs vs spaces debate. It's about having the code readable, the project grows and it is not rare to read contributions from many different individuals. Each one of us has a different writing style, we are fine with this. Without enforcing we may be picky about it, however we think that this improves the readability of the code for everyone.
+
+_This includes IntelliJ IDEA instructions, however we are sure there's similar settings in all major IDEs._
+
+But first of all, make sure that : 
+
+* Don't use tabs, only spaces
+* Character encoding is **UTF-8**
+* Line ending character is unix-style **`LF`**
+* New line is added at end of file: `IntelliJ setting > Editor > General > Ensure line feed at file end on save`
+
+### Imports
+
+Imports must be sorted in the following order
+
+1. `import java.*`
+2. `import javax.*`
+3. `import all other imports`
+4. blank line
+5. `import static java.*`
+6. `import static javax.*`
+7. `import static all other imports`
+
+This order can be set in `IntelliJ setting > Editor > Code Style > Java > Imports > Import Layout`
+
+Also make sure that
+* One blank lines before imports.
+* One blank lines after imports.
+* Never import with wildcard `*`
+   * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Class count to use import with '*'` to `100`     
+   * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Names count to use import static with '*'` to `100`     
+
+##### Alignment
+
+We found vertical alignment helping when reading the code, for that reason we want to align vertically chained APIs, parameters, etc. For that reason the spacing characters are spaces.
+
+
+1. For chained calls, when multiple lines make more sense, we want method calls to be aligned
+    vertically with previous dot.
+
+    ```java
+    mock(Foo.class, withSettings().name("bar")
+                                  .serializableMode(ACROSS_CLASSLOADER)
+                                  .verboseLogging().invocationListener(...));
+    ```
+
+    Go to `IntelliJ setting > Editor > Code Style > Java > Wrapping and Braces`
+
+    1. For parameter `Chained method calls` choose : `Do not wrap`
+    2. For sub-parameter `Align when multiline` tick the checkbox
+
+2. When declaring a function with several parameters and when multiple lines make sense,
+    we want to align vertically the method parameters and arguments
+
+    ```java
+    void feature(String key,
+                 RepresentsSomething something) {
+        // ...
+    }
+    ```
+
+    Go to `IntelliJ setting > Editor > Code Style > Java > Wrapping and Braces`
+
+    1. For parameter `Method declaration parameters` choose : `Do not wrap`
+    2. For sub-parameter `Align when multiline` tick the checkbox
+
+3. When using a function with several parameters and when multiple lines make sense,
+    we want to align vertically the method parameters and arguments
+
+    ```java
+    given(mock.action()).willReturn("a very long param",
+                                    "b another very long parameter",
+                                    "c yet another");
+    ```
+
+    Go to `IntelliJ setting > Editor > Code Style > Java > Wrapping and Braces`
+
+    1. For parameter `Method call parameters` choose : `Do not wrap`
+    2. For sub-parameter `Align when multiline` tick the checkbox
+
+4. When declaring an annotation with several parameters and when multiple lines make sense,
+    we want to align vertically the annotation parameters
+
+    ```java
+    @Mock(answer = Answers.RETURNS_DEFAULTS,
+          serializable = true, 
+          extraInterfaces = { List.class, YetAnotherInterface.class })
+    ```
+
+    Go to `IntelliJ setting > Editor > Code Style > Java > Annotation Parameters`
+
+    1. For parameter `Method declaration parameters` choose : `Do not wrap`
+    2. For sub-parameter `Align when multiline` tick the checkbox
+
+4. When declaring a throws list with several exception and when multiple line make sense,
+    we want to align vertically the exceptions parameters
+
+    ```java
+    @Mock(answer = Answers.RETURNS_DEFAULTS,
+          serializable = true, 
+          extraInterfaces = { List.class, YetAnotherInterface.class }) 
+    ```
+
+    Go to `IntelliJ setting > Editor > Code Style > Java > Throws list`
+
+    1. For parameter `Method declaration parameters` choose : `Do not wrap`
+    2. For sub-parameter `Align when multiline` tick the checkbox
+
