@@ -14,7 +14,7 @@ import org.mockito.exceptions.base.MockitoAssertionErrorTest;
 import org.mockito.exceptions.base.MockitoExceptionTest;
 import org.mockito.internal.AllInvocationsFinderTest;
 import org.mockito.internal.InvalidStateDetectionTest;
-import org.mockito.internal.creation.bytebuddy.CachingMockBytecodeGeneratorTest;
+import org.mockito.internal.creation.bytebuddy.TypeCachingMockBytecodeGeneratorTest;
 import org.mockito.internal.handler.MockHandlerImplTest;
 import org.mockito.internal.invocation.InvocationImplTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
@@ -53,16 +53,16 @@ import org.mockitousage.stubbing.StubbingWithThrowablesTest;
 import org.mockitousage.verification.*;
 import org.mockitoutil.TestBase;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 
 public class ThreadsRunAllTestsHalfManualTest extends TestBase {
 
     private static class AllTestsRunner extends Thread {
 
-        private boolean failed;
+        private Set<Class<?>> failed = new HashSet<Class<?>>();
 
         public void run() {
             Result result = JUnitCore.runClasses(
@@ -78,7 +78,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     MissingInvocationCheckerTest.class,
                     NumberOfInvocationsInOrderCheckerTest.class,
                     MissingInvocationInOrderCheckerTest.class,
-                    CachingMockBytecodeGeneratorTest.class,
+                    TypeCachingMockBytecodeGeneratorTest.class,
                     InvocationMatcherTest.class,
                     InvocationsFinderTest.class,
                     InvocationImplTest.class,
@@ -131,12 +131,12 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     System.err.println(failures.size());
                     for (Failure failure : failures) {
                         System.err.println(failure.getTrace());
-                        failed = true;
+                        failed.add(failure.getDescription().getTestClass());
                     }
                 }
         }
 
-        public boolean isFailed() {
+        public Set<Class<?>> getFailed() {
             return failed;
         }
     }
@@ -144,10 +144,10 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
     @Test
     public void shouldRunInMultipleThreads() throws Exception {
         //this test ALWAYS fails if there is a single failing unit
-        assertFalse("Run in multiple thread failed", runInMultipleThreads(3));
+        assertEquals("Run in multiple thread failed for tests", Collections.emptySet(), runInMultipleThreads(3));
     }
 
-    public static boolean runInMultipleThreads(int numberOfThreads) throws Exception {
+    public static Set<Class<?>> runInMultipleThreads(int numberOfThreads) throws Exception {
         List<AllTestsRunner> threads = new LinkedList<AllTestsRunner>();
         for (int i = 1; i <= numberOfThreads; i++) {
             threads.add(new AllTestsRunner());
@@ -157,10 +157,10 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
             t.start();
         }
 
-        boolean failed = false;
+        Set<Class<?>> failed = new HashSet<Class<?>>();
         for (AllTestsRunner t : threads) {
             t.join();
-            failed |= t.isFailed();
+            failed.addAll(t.getFailed());
         }
 
         return failed;
@@ -169,9 +169,9 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
     public static void main(String[] args) throws Exception {
         int numberOfThreads = 20;
         long before = System.currentTimeMillis();
-        runInMultipleThreads(numberOfThreads);
+        Set<Class<?>> failed = runInMultipleThreads(numberOfThreads);
         long after = System.currentTimeMillis();
         long executionTime = (after-before)/1000;
-        System.out.println("Finished tests in " + numberOfThreads + " threads in " + executionTime + " seconds.");
+        System.out.println("Finished tests in " + numberOfThreads + " threads in " + executionTime + " seconds. (" + failed.size() + " tests failed)");
     }
 }

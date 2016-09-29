@@ -11,6 +11,7 @@ import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
+import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.*;
 
 public class DetectingFinalMethodsTest extends TestBase {
@@ -25,7 +26,7 @@ public class DetectingFinalMethodsTest extends TestBase {
 
     @Test
     public void shouldFailWithUnfinishedVerification() {
-        withFinal = mock(WithFinal.class);
+        assumeTrue("Does not apply for inline mocks", withFinal.getClass() != WithFinal.class);
         verify(withFinal).foo();
         try {
             verify(withFinal).foo();
@@ -35,6 +36,7 @@ public class DetectingFinalMethodsTest extends TestBase {
 
     @Test
     public void shouldFailWithUnfinishedStubbing() {
+        assumeTrue("Does not apply for inline mocks", withFinal.getClass() != WithFinal.class);
         withFinal = mock(WithFinal.class);
         try {
             when(withFinal.foo()).thenReturn(null);

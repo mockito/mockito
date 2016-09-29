@@ -5,10 +5,12 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import org.junit.Test;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.*;
+import static org.junit.Assume.assumeFalse;
 
 public class ReturnsMocksTest extends TestBase {
     private ReturnsMocks values = new ReturnsMocks();
@@ -35,7 +37,8 @@ public class ReturnsMocksTest extends TestBase {
     }
 
     @Test
-    public void should_return_null_for_final_class() throws Exception {
+    public void should_return_null_for_final_class_if_unsupported() throws Exception {
+        assumeFalse(Plugins.getMockMaker().isTypeMockable(Baz.class).mockable());
         assertNull(values.returnValueFor(Baz.class));
     }
 

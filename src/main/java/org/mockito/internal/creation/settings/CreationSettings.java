@@ -16,9 +16,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * by Szczepan Faber, created at: 4/9/12
- */
 public class CreationSettings<T> implements MockCreationSettings<T>, Serializable {
     private static final long serialVersionUID = -6789800638070123629L;
 
@@ -92,6 +89,11 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
 
     public boolean isSerializable() {
         return serializableMode != SerializableMode.NONE;
+    }
+
+    public CreationSettings<T> setSerializableMode(SerializableMode serializableMode) {
+        this.serializableMode = serializableMode;
+        return this;
     }
 
     public SerializableMode getSerializableMode() {

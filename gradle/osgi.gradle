@@ -7,21 +7,19 @@ afterEvaluate {
 
             instruction '-versionpolicy', '[${version;==;${@}},${version;+;${@}})'
 
-            name = 'Mockito Mock Library for Java. Core bundle requires Hamcrest-core and Objenesis.'
+            name = 'Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.'
             symbolicName = 'org.mockito.mockito-core'
             version = project.version.replace('-', '.')
 
             instruction 'Export-Package',
-                    '!org.mockito.asm.*',
-                    '!org.mockito.cglib.*',
                     '!org.mockito.internal.*',
                     "org.mockito.*;version=${version}"
 
             instruction 'Import-Package',
-                    'net.bytebuddy.*;version=[1.4.17,2.0)',
+                    'net.bytebuddy.*;version=[1.4.26,2.0)',
                     'junit.*;resolution:=optional',
                     'org.junit.*;resolution:=optional',
-                    'org.hamcrest;version="[1.0,2.0)"',
+                    'org.hamcrest;resolution:=optional',
                     'org.objenesis;version="[2.1,3.0)"',
                     'org.mockito.*'
 

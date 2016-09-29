@@ -4,18 +4,21 @@
  */
 package org.mockito;
 
-import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
+import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.*;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.stubbing.Stubber;
 import org.mockito.verification.*;
-import org.mockito.junit.*;
 
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
@@ -69,6 +72,7 @@ import org.mockito.junit.*;
  *      <a href="#36">36. Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
  *      <a href="#37">37. Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
  *      <a href="#38">38. Meta data and generic type retention (Since 2.1.0)</a><br/>
+ *      <a href="#39">39. Mocking final types, enums and final methods (Since 2.1.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2">Migrating to Mockito 2</a></h3>
@@ -510,9 +514,8 @@ import org.mockito.junit.*;
  * <b>Before the release 1.8</b>, Mockito spies were not real partial mocks.
  * The reason was we thought partial mock is a code smell.
  * At some point we found legitimate use cases for partial mocks
- * (3rd party interfaces, interim refactoring of legacy code, the full article is <a href=
- * "http://monkeyisland.pl/2009/01/13/subclass-and-override-vs-partial-mocking-vs-refactoring"
- * >here</a>)
+ * (3rd party interfaces, interim refactoring of legacy code, the full article is
+ * <a href="http://monkeyisland.pl/2009/01/13/subclass-and-override-vs-partial-mocking-vs-refactoring">here</a>)
  * <p>
  *
  * <pre class="code"><code class="java">
@@ -1215,6 +1218,55 @@ import org.mockito.junit.*;
  * <p>
  * When using Java 8, Mockito now also preserves type annotations. This is default behavior and might not hold <a href="#28">if an
  * alternative {@link org.mockito.plugins.MockMaker} is used</a>.
+ *
+ * <h3 id="39">39. <a class="meaningful_link" href="#Mocking_Final">Mocking final types, enums and final methods</a> (Since 2.1.0)</h3>
+ *
+ * Mockito now offers an {@link Incubating}, optional support for mocking final classes and methods.
+ * This is a fantastic improvement that demonstrates Mockito's everlasting quest for improving testing experience.
+ * Our ambition is that Mockito "just works" with final classes and methods.
+ * Previously they were considered <em>unmockable</em>, preventing the user from mocking.
+ * We already started discussing how to make this feature enabled by default.
+ * Currently, the feature is still optional as we wait for more feedback from the community.
+ * <p>
+ * This feature is turned off by default because it is based on completely different mocking mechanism
+ * that requires more feedback from the community.
+ *
+ * <p>
+ * This alternative mock maker which uses
+ * a combination of both Java instrumentation API and sub-classing rather than creating a new class to represent
+ * a mock. This way, it becomes possible to mock final types and methods.
+ *
+ * <p>
+ * This mock maker is <strong>turned off by default</strong> because it is based on completely different mocking mechanism
+ * that requires more feedback from the community. It can be activated explicitly by the mockito extension mechanism,
+ * just create in the classpath a file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
+ * containing the value <code>mock-maker-inline</code>.
+ *
+ * <p>
+ * Some noteworthy notes about this mock maker:
+ * <ul>
+ *     <li>Mocking final types and enums is incompatible with mock settings like :
+ *     <ul>
+ *         <li>explicitly serialization support <code>withSettings().serializable()</code></li>
+ *         <li>extra-interfaces <code>withSettings().extraInterfaces()</code></li>
+ *     </ul>
+ *     </li>
+ *     <li>Some methods cannot be mocked
+ *         <ul>
+ *              <li>Package-visible methods of <code>java.*</code></li>
+ *              <li><code>native</code> methods</li>
+ *         </ul>
+ *     </li>
+ *     <li>This mock maker has been designed around Java Agent runtime attachment ; this require a compatible JVM,
+ *     that is part of the JDK (or Java 9 VM). When running on a non-JDK VM prior to Java 9, it is however possible to
+ *     manually add the <a href="http://bytebuddy.net">Byte Buddy Java agent jar</a> using the <code>-javaagent</code>
+ *     parameter upon starting the JVM.
+ *     </li>
+ * </ul>
+ *
+ * <p>
+ * If you are interested in more details of this feature please read the javadoc of
+ * <code>org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker</code>
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {

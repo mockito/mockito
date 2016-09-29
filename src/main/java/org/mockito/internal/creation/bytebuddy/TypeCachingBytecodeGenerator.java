@@ -12,22 +12,24 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-class CachingMockBytecodeGenerator extends ReferenceQueue<ClassLoader> {
+class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implements BytecodeGenerator {
 
     private static final ClassLoader BOOT_LOADER = new URLClassLoader(new URL[0], null);
 
     final ConcurrentMap<Key, CachedBytecodeGenerator> avoidingClassLeakageCache = new ConcurrentHashMap<Key, CachedBytecodeGenerator>();
 
-    private final MockBytecodeGenerator mockBytecodeGenerator = new MockBytecodeGenerator();
+    private final BytecodeGenerator bytecodeGenerator;
 
     private final boolean weak;
 
-    public CachingMockBytecodeGenerator(boolean weak) {
+    public TypeCachingBytecodeGenerator(BytecodeGenerator bytecodeGenerator, boolean weak) {
+        this.bytecodeGenerator = bytecodeGenerator;
         this.weak = weak;
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Class<T> get(MockFeatures<T> params) {
+    @Override
+    public <T> Class<T> mockClass(MockFeatures<T> params) {
         cleanUpCachesForObsoleteClassLoaders();
         return (Class<T>) mockCachePerClassLoaderOf(params.mockedType.getClassLoader()).getOrGenerateMockClass(params);
     }
@@ -44,7 +46,7 @@ class CachingMockBytecodeGenerator extends ReferenceQueue<ClassLoader> {
         classLoader = classLoader == null ? BOOT_LOADER : classLoader;
         CachedBytecodeGenerator generator = avoidingClassLeakageCache.get(new LookupKey(classLoader));
         if (generator == null) {
-            CachedBytecodeGenerator newGenerator = new CachedBytecodeGenerator(mockBytecodeGenerator, weak);
+            CachedBytecodeGenerator newGenerator = new CachedBytecodeGenerator(bytecodeGenerator, weak);
             generator = avoidingClassLeakageCache.putIfAbsent(new WeakKey(classLoader, this), newGenerator);
             if (generator == null) {
                 generator = newGenerator;
@@ -57,17 +59,18 @@ class CachingMockBytecodeGenerator extends ReferenceQueue<ClassLoader> {
 
         private ConcurrentHashMap<MockKey, Reference<Class<?>>> generatedClassCache = new ConcurrentHashMap<MockKey, Reference<Class<?>>>();
 
-        private final MockBytecodeGenerator generator;
+        private BytecodeGenerator bytecodeGenerator;
+
         private final boolean weak;
 
-        private CachedBytecodeGenerator(MockBytecodeGenerator generator, boolean weak) {
-            this.generator = generator;
+        private CachedBytecodeGenerator(BytecodeGenerator bytecodeGenerator, boolean weak) {
+            this.bytecodeGenerator = bytecodeGenerator;
             this.weak = weak;
         }
 
         private Class<?> getMockClass(MockKey<?> mockKey) {
             Reference<Class<?>> classReference = generatedClassCache.get(mockKey);
-            if(classReference != null) {
+            if (classReference != null) {
                 return classReference.get();
             } else {
                 return null;
@@ -80,8 +83,8 @@ class CachingMockBytecodeGenerator extends ReferenceQueue<ClassLoader> {
             if (generatedMockClass == null) {
                 synchronized (features.mockedType) {
                     generatedMockClass = getMockClass(mockKey);
-                    if(generatedMockClass == null) {
-                        generatedMockClass = generator.generateMockClass(features);
+                    if (generatedMockClass == null) {
+                        generatedMockClass = bytecodeGenerator.mockClass(features);
                         generatedClassCache.put(mockKey, weak ? new WeakReference<Class<?>>(generatedMockClass) : new SoftReference<Class<?>>(generatedMockClass));
                     }
                 }
@@ -91,7 +94,9 @@ class CachingMockBytecodeGenerator extends ReferenceQueue<ClassLoader> {
 
         // should be stored as a weak reference
         private static class MockKey<T> {
+
             private final String mockedType;
+
             private final Set<String> types;
 
             private MockKey(Class<T> mockedType, Set<Class<?>> interfaces) {
