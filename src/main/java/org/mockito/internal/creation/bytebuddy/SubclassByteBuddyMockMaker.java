@@ -89,12 +89,12 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
         if (Modifier.isPrivate(mockFeatures.getTypeToMock().getModifiers())) {
             throw new MockitoException(join(
                     "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
-                    "Most likely it is a private class that is not visible by Mockito",
+                    "Most likely it is due to mocking a private class that is not visible to Mockito",
                     ""
             ), generationFailed);
         }
         throw new MockitoException(join(
-                "Mockito cannot mock this class: " + mockFeatures.getTypeToMock(),
+                "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
                 "",
                 "Mockito can only non-private & non-final classes.",
                 "If you're not sure why you're getting this error, please report to the mailing list.",
@@ -157,7 +157,7 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
         if (!(handler instanceof InternalMockHandler)) {
             throw new MockitoException(join(
                     "At the moment you cannot provide own implementations of MockHandler.",
-                    "Please see the javadocs for the MockMaker interface.",
+                    "Please refer to the javadocs for the MockMaker interface.",
                     ""
             ));
         }
