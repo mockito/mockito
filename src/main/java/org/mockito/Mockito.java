@@ -1240,7 +1240,7 @@ import org.mockito.verification.*;
  * This mock maker is <strong>turned off by default</strong> because it is based on completely different mocking mechanism
  * that requires more feedback from the community. It can be activated explicitly by the mockito extension mechanism,
  * just create in the classpath a file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
- * containing the value <code>mockmaker-inline</code>.
+ * containing the value <code>mock-maker-inline</code>.
  *
  * <p>
  * Some noteworthy notes about this mock maker:

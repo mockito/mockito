@@ -33,7 +33,7 @@ import static org.mockito.internal.util.StringJoiner.join;
  * <p>
  * <p>
  * This mock maker can be activated by creating the file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
- * containing the text <code>mockmaker-inline</code> or <code>org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker</code>.
+ * containing the text <code>mock-maker-inline</code> or <code>org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker</code>.
  * <p>
  * <p>
  * This mock maker will make a best effort to avoid subclass creation when creating a mock. Otherwise it will use the
