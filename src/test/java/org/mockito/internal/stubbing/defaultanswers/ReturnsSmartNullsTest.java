@@ -4,15 +4,20 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.fail;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class ReturnsSmartNullsTest extends TestBase {
 
@@ -84,5 +89,37 @@ public class ReturnsSmartNullsTest extends TestBase {
                 .hasMessageContaining("oompa")
                 .hasMessageContaining("lumpa");
         }
+    }
+
+    // https://github.com/mockito/mockito/issues/357
+    @Test
+    public void generic_return_type_erasure() throws Throwable {
+        class S<T> {
+            public T f() {
+                return null;
+            }
+        }
+
+        S<Boolean> s = Mockito.mock(S.class, org.mockito.Answers.RETURNS_SMART_NULLS);
+
+        Mockito.when(s.f()).thenReturn(true);
+        assertTrue(s.f());
+    }
+
+    // https://github.com/mockito/mockito/issues/357
+    @Test
+    public void inferred_generic_type() throws Throwable {
+        class F {
+            <T> T g(Iterable<T> xs) {
+                return null;
+            }
+        }
+
+        F f = Mockito.mock(F.class, org.mockito.Answers.RETURNS_SMART_NULLS);
+
+        List<Boolean> xs = Arrays.asList(false);
+
+        Mockito.when(f.g(xs)).thenReturn(true);
+        assertTrue(f.g(xs));
     }
 }
