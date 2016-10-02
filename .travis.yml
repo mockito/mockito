@@ -28,15 +28,14 @@ before_install:
 
 jdk:
   - oraclejdk8
-  - oraclejdk9
-
-matrix:
-  allow_failures:
-    - jdk: oraclejdk9
 
 matrix:
   include:
   - jdk: oraclejdk8
+    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+  - jdk: oraclejdk9
+    env: SKIP_RELEASE=true
+  - jdk: oraclejdk9
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
 
 env:
