@@ -49,6 +49,10 @@ if (dryRun) {
 }
 
 def isReleasableBranch(String branch) {
+    if (!branch) {
+        logger.lifecycle "Branch env variable not found. Assuming release outside Travis CI."
+        return true
+    }
     // matches 'master', 'release/2.x', 'release/3.x', etc.
     branch.matches("master|release/.+")
 }
@@ -82,9 +86,13 @@ task("releaseNeeded") {
         def commitMessage = System.env.TRAVIS_COMMIT_MESSAGE
         def skippedByCommitMessage = commitMessage?.contains(skipReleaseCommitMessage)
         def customVersion = (commitMessage =~ customReleaseVersionPattern)
-        ext.needed = dryRun || customVersion.matches() || (pr == 'false' && isReleasableBranch(branch) && !comparePublications.publicationsEqual && skipEnvVariable != 'true' && !skippedByCommitMessage)
-        logger.lifecycle("Release needed: {}, releasable branch: {}, pull request: {}, dry run: {}, publications equal: {}, skip env variable: {}, skipped by message: {}, customVersion: {}.",
-                needed, isReleasableBranch(branch), pr, dryRun, comparePublications.publicationsEqual, skipEnvVariable, skippedByCommitMessage, customVersion.matches())
+
+        //Useful for testing bintrayUpload task, makes "releaseNeeded" answer "yes"
+        def forceBintrayUpload = project.hasProperty("forceBintrayUpload")
+
+        ext.needed = forceBintrayUpload || dryRun || customVersion.matches() || (pr == 'false' && isReleasableBranch(branch) && !comparePublications.publicationsEqual && skipEnvVariable != 'true' && !skippedByCommitMessage)
+        logger.lifecycle("Release needed: {}, releasable branch: {}, pull request: {}, dry run: {}, force bintray upload: {}, publications equal: {}, skip env variable: {}, skipped by message: {}, customVersion: {}.",
+                needed, isReleasableBranch(branch), pr, dryRun, forceBintrayUpload, comparePublications.publicationsEqual, skipEnvVariable, skippedByCommitMessage, customVersion.matches())
     }
 }
 
