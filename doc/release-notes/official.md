@@ -1,3 +1,11 @@
+### 2.2.0-beta.1 (2016-10-03 12:09 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Continuous Delivery Drone
+  * 1: Tim van der Lippe
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.1.0-RC.2 (2016-09-29 08:50 UTC)
 
 * Authors: 7
