@@ -19,7 +19,11 @@ bintray {
 
     pkg {
         repo = 'maven'
-        //userOrg = 'org.mockito' // an optional organization name when the repo belongs to one of the user's orgs
+
+        userOrg = 'mockito'
+        // so that despite using 'szczepiq' user, the artifact is published
+        // to 'mockito' organization and all members can modify/edit it
+
         name = 'mockito'
         desc = 'Mockito library'
         websiteUrl = 'http://mockito.org'
