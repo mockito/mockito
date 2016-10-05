@@ -38,7 +38,7 @@ That means:
 * `2.0.0-beta.5` could be (but is not necessarily) binary incompatible with version `2.0.0`.
 * `2.0.0-RC.1` is binary compatible with release `2.0.0`.
 
-> **Note :** During the 2.0 beta phase we unleashed beta builds with the following version schemes, like : `2.0.111-beta`, where the _build number_ is placed beore the _tag_. The current scheme reuses the _build number_ and places it behind the _tag_. Hence those versions are to be considered as beta builds that happen either before or after a release candidate, but always before the final release.
+> **Note :** During the 2.0 beta phase we unleashed beta builds with the following version schemes, like : `2.0.111-beta`, where the _build number_ is placed before the _tag_. The current scheme reuses the _build number_ and places it behind the _tag_. Hence those versions are to be considered as beta builds that happen either before or after a release candidate, but always before the final release.
 > 
 > ```
 > 2.0.111-beta < 2.0.0-beta.112 < 2.0.0-RC.1 < 2.0.0-beta.200 < 2.0.0
