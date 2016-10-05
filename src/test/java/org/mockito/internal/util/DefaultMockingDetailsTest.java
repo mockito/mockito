@@ -1,26 +1,34 @@
 package org.mockito.internal.util;
 
 import junit.framework.TestCase;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.internal.invocation.Stubbing;
 import org.mockitousage.IMethods;
+
+import java.util.Collection;
 
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mockingDetails;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unchecked")
-@RunWith(MockitoJUnitRunner.class)
 public class DefaultMockingDetailsTest {
 
     @Mock private Foo foo;
     @Mock private Bar bar;
     @Mock private IMethods mock;
     @Spy private Gork gork;
+
+    @Before public void before() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void should_check_that_a_mock_is_indeed_a_mock() throws Exception {
@@ -89,6 +97,50 @@ public class DefaultMockingDetailsTest {
         } catch (NotAMockException e) {
             TestCase.assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
         }
+    }
+
+    @Test
+    public void fails_when_getting_stubbings_from_non_mock() {
+        try {
+            //when
+            mockingDetails(new Object()).getStubbings();
+            //then
+            fail();
+        } catch (NotAMockException e) {
+            TestCase.assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
+        }
+    }
+
+    @Test
+    public void mock_with_no_stubbings() {
+        assertTrue(mockingDetails(mock).getStubbings().isEmpty());
+    }
+
+    @Test
+    public void provides_stubbings_of_mock() {
+        when(mock.simpleMethod(1)).thenReturn("1");
+        when(mock.otherMethod()).thenReturn("2");
+
+        //when
+        Collection<Stubbing> stubbings = mockingDetails(mock).getStubbings();
+
+        //then
+        assertEquals(2, stubbings.size());
+        assertEquals("[mock.simpleMethod(1); stubbed with: [Returns: 1], mock.otherMethod(); stubbed with: [Returns: 2]]", stubbings.toString());
+    }
+
+    //TODO 542 remove,
+    // let's make it consistent with getInvocations(), e.g. the user can manipulate the stubbings if needed
+    // this way it is 1) consistent 2) more flexible 3) more risky if the user does not know what he is doing :)
+    @Test
+    public void manipulating_stubbings_explicitly_is_safe() {
+        when(mock.simpleMethod(1)).thenReturn("1");
+
+        //when somebody manipulates stubbings directly
+        mockingDetails(mock).getStubbings().clear();
+
+        //then it does not affect stubbings of the mock
+        assertEquals(1, mockingDetails(mock).getStubbings().size());
     }
 
     public class Foo { }
