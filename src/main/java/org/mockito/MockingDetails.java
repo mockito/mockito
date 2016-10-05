@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.internal.invocation.Stubbing;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 
@@ -56,4 +57,9 @@ public interface MockingDetails {
      * @since 2.1.0
      */
     MockCreationSettings<?> getMockCreationSettings();
+
+    /**
+     * TODO 542 javadoc, document what happens when user manipulates the collection, also document this in getInvocations()
+     */
+    Collection<Stubbing> getStubbings();
 }
