@@ -65,7 +65,9 @@ public interface MockingDetails {
 
     /**
      * Returns stubbings declared on this mock object.
-     * <p>
+     * <pre class="code"><code class="java">
+     *   Mockito.mockingDetails(mock).getStubbings()
+     * </code></pre>
      * What is 'stubbing'?
      * Stubbing is your when(x).then(y) declaration, e.g. configuring the mock to behave in a specific way,
      * when specific method with specific arguments is invoked on a mock.
