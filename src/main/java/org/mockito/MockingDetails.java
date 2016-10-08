@@ -39,6 +39,8 @@ public interface MockingDetails {
      * Can be empty - it means there were no interactions with the mock.
      * <p>
      * This method is useful for framework integrators and for certain edge cases.
+     * <p>
+     * Manipulating the collection (e.g. by removing, adding elements) is safe and has no effect on the mock.
      *
      * @since 1.10.0
      */
