@@ -63,6 +63,17 @@ public class DefaultMockingDetailsTest {
     }
 
     @Test
+    public void manipulating_invocations_is_safe() {
+        mock.simpleMethod();
+
+        //when we manipulate the invocations
+        mockingDetails(mock).getInvocations().clear();
+
+        //then we didn't actually changed the invocations
+        assertEquals(1, mockingDetails(mock).getInvocations().size());
+    }
+
+    @Test
     public void provides_mock_creation_settings() {
         //smoke test some creation settings
         assertEquals(Foo.class, mockingDetails(foo).getMockCreationSettings().getTypeToMock());
