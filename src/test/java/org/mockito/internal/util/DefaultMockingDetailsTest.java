@@ -140,9 +140,6 @@ public class DefaultMockingDetailsTest {
         assertEquals("[mock.simpleMethod(1); stubbed with: [Returns: 1], mock.otherMethod(); stubbed with: [Returns: 2]]", stubbings.toString());
     }
 
-    //TODO 542 remove,
-    // let's make it consistent with getInvocations(), e.g. the user can manipulate the stubbings if needed
-    // this way it is 1) consistent 2) more flexible 3) more risky if the user does not know what he is doing :)
     @Test
     public void manipulating_stubbings_explicitly_is_safe() {
         when(mock.simpleMethod(1)).thenReturn("1");

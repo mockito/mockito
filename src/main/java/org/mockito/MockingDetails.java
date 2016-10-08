@@ -7,6 +7,7 @@ package org.mockito;
 import org.mockito.internal.invocation.Stubbing;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.quality.MockitoHint;
 
 import java.util.Collection;
 
@@ -41,6 +42,8 @@ public interface MockingDetails {
      * This method is useful for framework integrators and for certain edge cases.
      * <p>
      * Manipulating the collection (e.g. by removing, adding elements) is safe and has no effect on the mock.
+     * <p>
+     * Throws meaningful exception when object wrapped by MockingDetails is not a mock.
      *
      * @since 1.10.0
      */
@@ -61,7 +64,25 @@ public interface MockingDetails {
     MockCreationSettings<?> getMockCreationSettings();
 
     /**
-     * TODO 542 javadoc, document what happens when user manipulates the collection, also document this in getInvocations()
+     * Returns stubbings declared on this mock object.
+     * <p>
+     * What is 'stubbing'?
+     * Stubbing is your when(x).then(y) declaration, e.g. configuring the mock to behave in a specific way,
+     * when specific method with specific arguments is invoked on a mock.
+     * Typically stubbing is configuring mock to return X when method Y is invoked.
+     * <p>
+     * Why do you need to access stubbings of a mock?
+     * In a normal workflow of creation clean tests, there is no need for this API.
+     * However, it is useful for advanced users, edge cases or framework integrators.
+     * For example, Mockito internally uses this API to report and detect unused stubbings
+     * that should be removed from test. Unused stubbings are dead code that needs to be removed
+     * (see {@link MockitoHint}).
+     * <p>
+     * Manipulating the collection (e.g. by removing, adding elements) is safe and has no effect on the mock.
+     * <p>
+     * This method throws meaningful exception when object wrapped by MockingDetails is not a mock.
+     *
+     * @since 2.2.0
      */
     Collection<Stubbing> getStubbings();
 }
