@@ -156,7 +156,7 @@ public class DefaultMockingDetailsTest {
     }
 
     @Test
-    public void provides_stubbings_of_mock() {
+    public void provides_stubbings_of_mock_in_declaration_order() {
         when(mock.simpleMethod(1)).thenReturn("1");
         when(mock.otherMethod()).thenReturn("2");
 
