@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.misusing.NotAMockException;
@@ -12,11 +13,13 @@ import org.mockitousage.IMethods;
 
 import java.util.Collection;
 
+import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mockingDetails;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings("unchecked")
 public class DefaultMockingDetailsTest {
@@ -44,6 +47,31 @@ public class DefaultMockingDetailsTest {
         assertEquals(false, mockingDetails(foo).isSpy());
         assertEquals(false, mockingDetails(bar).isSpy());
         assertEquals(false, mockingDetails("not a spy").isSpy());
+    }
+
+    @Test
+    public void should_know_spy(){
+        assertTrue(mockingDetails(gork).isMock());
+        assertTrue(mockingDetails(spy( new Gork())).isMock());
+        assertTrue(mockingDetails(spy(Gork.class)).isMock());
+        assertTrue(mockingDetails(mock(Gork.class, withSettings().defaultAnswer(Mockito.CALLS_REAL_METHODS))).isMock());
+    }
+
+    @Test
+    public void should_know_mock(){
+        assertTrue(mockingDetails(foo).isMock());
+        assertTrue(mockingDetails(mock(Foo.class)).isMock());
+        assertFalse(mockingDetails(foo).isSpy());
+        assertFalse(mockingDetails(mock(Foo.class)).isSpy());
+    }
+
+    @Test
+    public void should_handle_non_mocks() {
+        assertFalse(mockingDetails("non mock").isSpy());
+        assertFalse(mockingDetails("non mock").isMock());
+
+        assertFalse(mockingDetails(null).isSpy());
+        assertFalse(mockingDetails(null).isMock());
     }
 
     @Test
