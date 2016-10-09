@@ -13,8 +13,6 @@ In case the release process from Travis CI fails, please try:
 
 def skipReleaseCommitMessage = '[ci skip-release]'
 
-def customReleaseVersionPattern = /.*\[ci-release ([^\]]+)\].*/
-
 import org.mockito.release.version.*
 
 assert project == rootProject
@@ -50,12 +48,8 @@ if (dryRun) {
 }
 
 def isReleasableBranch(String branch) {
-    if (!branch) {
-        logger.lifecycle "Branch env variable not found. Assuming release outside Travis CI."
-        return true
-    }
     // matches 'master', 'release/2.x', 'release/3.x', etc.
-    branch.matches("master|release/.+")
+    branch?.matches("master|release/.+")
 }
 
 configurations {
@@ -86,14 +80,25 @@ task("releaseNeeded") {
         def skipEnvVariable = System.env.SKIP_RELEASE
         def commitMessage = System.env.TRAVIS_COMMIT_MESSAGE
         def skippedByCommitMessage = commitMessage?.contains(skipReleaseCommitMessage)
-        def customVersion = (commitMessage =~ customReleaseVersionPattern)
 
         //Useful for testing bintrayUpload task, makes "releaseNeeded" answer "yes"
         def forceBintrayUpload = project.hasProperty("forceBintrayUpload")
 
-        ext.needed = forceBintrayUpload || dryRun || customVersion.matches() || (pr == 'false' && isReleasableBranch(branch) && !comparePublications.publicationsEqual && skipEnvVariable != 'true' && !skippedByCommitMessage)
-        logger.lifecycle("Release needed: {}, releasable branch: {}, pull request: {}, dry run: {}, force bintray upload: {}, publications equal: {}, skip env variable: {}, skipped by message: {}, customVersion: {}.",
-                needed, isReleasableBranch(branch), pr, dryRun, forceBintrayUpload, comparePublications.publicationsEqual, skipEnvVariable, skippedByCommitMessage, customVersion.matches())
+        if (skippedByCommitMessage || skipEnvVariable) {
+            logger.lifecycle("Release is skipped on request")
+            ext.needed = false //we really don't want the release
+        } else if (forceBintrayUpload || dryRun) {
+            logger.lifecycle("Release will be initiated for testing purposes")
+            ext.needed = true //testing purposes, dry run
+        } else if (pr == 'false' && isReleasableBranch(branch) && !comparePublications.publicationsEqual) {
+            logger.lifecycle("All criteria are met, the release will be initiated")
+            ext.needed = true //standard, continuous delivery scenario
+        }
+
+        logger.lifecycle("Release need evaluation - needed: ${ext.needed}, " +
+                "releasable branch: ${isReleasableBranch(branch)}, pull request: $pr, dry run: $dryRun, " +
+                "force bintray upload: $forceBintrayUpload, publications equal: $comparePublications.publicationsEqual, " +
+                "skip env variable: $skipEnvVariable, skipped by message: $skippedByCommitMessage")
     }
 }
 
@@ -120,9 +125,8 @@ release {
 }
 
 releaseSteps {
-    def customVersion = (System.env.TRAVIS_COMMIT_MESSAGE =~ customReleaseVersionPattern)
-    String currentVersion = (customVersion.matches() ? customVersion[0][1] : project.version)
-    String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER $skipReleaseCommitMessage"
+    String currentVersion = project.version
+    String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER"
     MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
     step("ensure good chunk of recent commits is pulled for release notes automation") {
