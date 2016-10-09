@@ -9,6 +9,11 @@ In case the release process from Travis CI fails, please try:
     preventing version.properties to be bumped.
   3. delete top release notes paragraph(s) so that they are recreated
     - useful for recreating/merging release notes
+
+Testing release locally:
+  (this section of docs is in progress)
+  1. Configure env TRAVIS_BRANCH, GH_TOKEN, MOCKITO_BINTRAY_API_KEY
+  2. run './gradlew release -PdryRun'
 """
 
 def skipReleaseCommitMessage = '[ci skip-release]'
@@ -129,14 +134,10 @@ releaseSteps {
     String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER"
     MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
-    if (!dryRun) {
-        //git pull will fail when testing release from the release branch
-        //the simplest way is to avoid this step in dry run
-        step("ensure good chunk of recent commits is pulled for release notes automation") {
-            //Travis default clone is pretty shallow
-            //Loading extra 1K commits (1.x -> 2.x had ~700 commits)
-            run "git", "pull", "--depth", "1000"
-        }
+    step("ensure good chunk of recent commits is pulled for release notes automation") {
+        //Travis default clone is pretty shallow
+        //Loading extra 1K commits (1.x -> 2.x had ~700 commits)
+        run "git", "pull", "--depth", "1000"
     }
 
     def gitAuthor
