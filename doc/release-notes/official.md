@@ -1,3 +1,22 @@
+### 2.2.0 (2016-10-09 23:52 UTC)
+
+* Authors: 5
+* Commits: 17
+  * 13: Szczepan Faber
+  * 1: Brice Dutheil
+  * 1: Christian Schwarz
+  * 1: Marcin Zajączkowski
+  * 1: mgrafl
+* Improvements: 5
+  * Enhancements: 1
+    * OSGI bundle problem - correct version specification syntax for bytebuddy [(#679)](https://github.com/mockito/mockito/pull/679)
+  * Documentation: 1
+    * Fix typo in README [(#674)](https://github.com/mockito/mockito/pull/674)
+  * Remaining changes: 3
+    * Updated release process so that Mockito can continuously deliver high quality features [(#683)](https://github.com/mockito/mockito/pull/683)
+    * changed stackoverflow link to mockito questions [(#671)](https://github.com/mockito/mockito/pull/671)
+    * Artifacts are now published to 'mockito' org in Bintray [(#670)](https://github.com/mockito/mockito/pull/670)
+
 ### 2.1.0 ( 2016-10-03 12:28 UTC)
 
 # Brand new Mockito 2
