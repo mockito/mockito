@@ -137,7 +137,7 @@ releaseSteps {
     step("ensure good chunk of recent commits is pulled for release notes automation") {
         //Travis default clone is pretty shallow
         //Loading extra 1K commits (1.x -> 2.x had ~700 commits)
-        run "git", "pull", "--depth", "1000"
+        run "git", "pull", "--depth", "1000", "origin", System.env.TRAVIS_BRANCH
     }
 
     def gitAuthor
