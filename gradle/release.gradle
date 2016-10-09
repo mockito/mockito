@@ -98,6 +98,9 @@ task("releaseNeeded") {
         } else if (pr == 'false' && isReleasableBranch(branch) && !comparePublications.publicationsEqual) {
             logger.lifecycle("All criteria are met, the release will be initiated")
             ext.needed = true //standard, continuous delivery scenario
+        } else {
+            logger.lifecycle("Criteria are not met, the release will NOT be initiated")
+            ext.needed = false
         }
 
         logger.lifecycle("Release need evaluation - needed: ${ext.needed}, " +
