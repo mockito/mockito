@@ -41,10 +41,12 @@ bintray {
                sign = true
             }
 
-            mavenCentralSync {
-                user = 'mockito'
-                password = System.env.NEXUS_PWD
-            }
+//          Temporarily disable maven central sync until the release procedure is sorted out
+//
+//            mavenCentralSync {
+//                user = 'mockito'
+//                password = System.env.NEXUS_PWD
+//            }
         }
     }
 }

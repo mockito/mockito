@@ -2642,6 +2642,7 @@ public class Mockito extends ArgumentMatchers {
     /**
      * This API will move soon to a different place.
      * See <a href="https://github.com/mockito/mockito/issues/577">issue 577</a>.
+     * See also <a href="https://github.com/mockito/mockito/issues/542">issue 542</a>.
      */
     @Deprecated
     static MockitoDebugger debug() {
