@@ -1,32 +1,27 @@
-### 2.1.0-RC.2 (2016-09-29 08:50 UTC)
+### 2.2.0 (2016-10-09 23:52 UTC)
 
-* Authors: 7
-* Commits: 38
-  * 15: Rafael Winterhalter
-  * 9: Brice Dutheil
-  * 9: Tim van der Lippe
-  * 2: Szczepan Faber
-  * 1: Bruno Krebs
-  * 1: Continuous Delivery Drone
-  * 1: Oliver Gierke
-* Improvements: 6
-  * New features: 1
-    * Added InlineByteBuddyMockMaker which uses the instrumentation API for redefining classes and inlining the mocking logic. [(#648)](https://github.com/mockito/mockito/pull/648)
+* Authors: 5
+* Commits: 17
+  * 13: Szczepan Faber
+  * 1: Brice Dutheil
+  * 1: Christian Schwarz
+  * 1: Marcin Zajączkowski
+  * 1: mgrafl
+* Improvements: 5
   * Enhancements: 1
-    * Improve exception message to hint at upgrading java minor version to latest [(#640)](https://github.com/mockito/mockito/issues/640)
-  * Remaining changes: 4
-    * Renamed FailureDetecter to Failure Detector. [(#654)](https://github.com/mockito/mockito/pull/654)
-    * Typos in FailureDetecter [(#653)](https://github.com/mockito/mockito/issues/653)
-    * A small fix on Mockito javadocs. Adding some styling and an anchor to section 12. [(#647)](https://github.com/mockito/mockito/pull/647)
-    * Fixes #640 Warns user to upgrade if Java 8 version is to low [(#646)](https://github.com/mockito/mockito/pull/646)
+    * OSGI bundle problem - correct version specification syntax for bytebuddy [(#679)](https://github.com/mockito/mockito/pull/679)
+  * Documentation: 1
+    * Fix typo in README [(#674)](https://github.com/mockito/mockito/pull/674)
+  * Remaining changes: 3
+    * Updated release process so that Mockito can continuously deliver high quality features [(#683)](https://github.com/mockito/mockito/pull/683)
+    * changed stackoverflow link to mockito questions [(#671)](https://github.com/mockito/mockito/pull/671)
+    * Artifacts are now published to 'mockito' org in Bintray [(#670)](https://github.com/mockito/mockito/pull/670)
 
-### 2.1.0-RC.1 (2016-09-10 17:03 UTC)
+### 2.1.0 ( 2016-10-03 12:28 UTC)
 
 # Brand new Mockito 2
 
 Mockito 2: even cleaner tests!!! THANK you for writing great tests with us, your patience waiting for v2, and kudos to fantastic gang of contributors!
-
-We really need help getting 2.1.0 final out! Please try out the release candidate and submit feedback via GitHub issues!
 
 For comprehensive overview of the brand new release see [What's new in Mockito 2](https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2) wiki page.
 
