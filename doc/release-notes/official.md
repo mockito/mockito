@@ -1,3 +1,11 @@
+### 2.2.1 (2016-10-11 15:26 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Continuous Delivery Drone
+  * 1: Rafael Winterhalter
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.2.0 (2016-10-09 23:52 UTC)
 
 * Authors: 5
