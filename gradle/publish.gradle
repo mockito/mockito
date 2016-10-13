@@ -41,12 +41,11 @@ bintray {
                sign = true
             }
 
-//          Temporarily disable maven central sync until the release procedure is sorted out
-//
-//            mavenCentralSync {
-//                user = 'mockito'
-//                password = System.env.NEXUS_PWD
-//            }
+            //Automatically syncs to central repository (https://oss.sonatype.org/)
+            mavenCentralSync {
+                user = 'mockito'
+                password = System.env.NEXUS_PWD
+            }
         }
     }
 }
