@@ -21,7 +21,7 @@ public interface MockingDetails {
     
     /**
      * Informs if the object is a mock. isMock() for null input returns false.
-     * @return true if the object is a mock or a spy.
+     * @return true if the object is a mock or a spy (spy is a different kind of mock, but it is still a mock).
      *
      * @since 1.9.5
      */
