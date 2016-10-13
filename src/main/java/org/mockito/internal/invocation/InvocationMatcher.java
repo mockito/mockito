@@ -141,8 +141,12 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
         for (ArgumentMatcher m : uniqueMatcherSet(indexOfVararg)) {
             if (m instanceof CapturesArguments) {
                 Object rawArgument = invocation.getRawArguments()[indexOfVararg];
-                for (int i = 0; i < Array.getLength(rawArgument); i++) {
-                    ((CapturesArguments) m).captureFrom(Array.get(rawArgument, i));
+                if (rawArgument != null) {
+                    for (int i = 0; i < Array.getLength(rawArgument); i++) {
+                        ((CapturesArguments) m).captureFrom(Array.get(rawArgument, i));
+                    }
+                } else {
+                    ((CapturesArguments) m).captureFrom(null);
                 }
             }
         }
