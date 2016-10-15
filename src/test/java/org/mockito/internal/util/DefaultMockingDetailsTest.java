@@ -34,22 +34,6 @@ public class DefaultMockingDetailsTest {
     }
 
     @Test
-    public void should_check_that_a_mock_is_indeed_a_mock() throws Exception {
-        assertEquals(true, mockingDetails(foo).isMock());
-        assertEquals(true, mockingDetails(bar).isMock());
-        assertEquals(true, mockingDetails(gork).isMock());
-        assertEquals(false, mockingDetails("no a mock").isMock());
-    }
-
-    @Test
-    public void should_check_that_a_spy_is_indeed_a_spy() throws Exception {
-        assertEquals(true, mockingDetails(gork).isSpy());
-        assertEquals(false, mockingDetails(foo).isSpy());
-        assertEquals(false, mockingDetails(bar).isSpy());
-        assertEquals(false, mockingDetails("not a spy").isSpy());
-    }
-
-    @Test
     public void should_know_spy(){
         assertTrue(mockingDetails(gork).isMock());
         assertTrue(mockingDetails(spy( new Gork())).isMock());
