@@ -1,6 +1,6 @@
 package org.mockito.internal.junit;
 
-import org.mockito.internal.invocation.Stubbing;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.invocation.Invocation;

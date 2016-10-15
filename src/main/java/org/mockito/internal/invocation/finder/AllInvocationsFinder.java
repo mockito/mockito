@@ -6,7 +6,7 @@
 package org.mockito.internal.invocation.finder;
 
 import org.mockito.internal.invocation.InvocationComparator;
-import org.mockito.internal.invocation.Stubbing;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.internal.stubbing.StubbingComparator;
 import org.mockito.internal.util.DefaultMockingDetails;
 import org.mockito.invocation.Invocation;

@@ -4,7 +4,7 @@
  */
 package org.mockito;
 
-import org.mockito.internal.invocation.Stubbing;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.MockitoHint;

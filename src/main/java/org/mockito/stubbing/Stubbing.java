@@ -1,4 +1,4 @@
-package org.mockito.internal.invocation;
+package org.mockito.stubbing;
 
 import org.mockito.MockingDetails;
 import org.mockito.invocation.Invocation;

@@ -1,7 +1,7 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.internal.invocation.InvocationComparator;
-import org.mockito.internal.invocation.Stubbing;
+import org.mockito.stubbing.Stubbing;
 
 import java.util.Comparator;
 

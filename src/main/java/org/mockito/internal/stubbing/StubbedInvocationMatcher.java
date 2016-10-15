@@ -5,7 +5,7 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.invocation.Stubbing;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;

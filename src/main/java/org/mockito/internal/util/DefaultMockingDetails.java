@@ -7,7 +7,7 @@ package org.mockito.internal.util;
 import org.mockito.MockingDetails;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.invocation.Stubbing;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.internal.stubbing.StubbingComparator;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;

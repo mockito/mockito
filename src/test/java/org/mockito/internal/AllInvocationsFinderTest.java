@@ -7,7 +7,7 @@ package org.mockito.internal;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.internal.invocation.Stubbing;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
