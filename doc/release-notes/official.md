@@ -18,7 +18,9 @@
 * Commits: 2
   * 1: Continuous Delivery Drone
   * 1: Rafael Winterhalter
-* No notable improvements. See the commits for detailed changes.
+* Improvements: 1
+  * Bugfixes: 1
+    * Enabled mocking interface clone method [(#688)](https://github.com/mockito/mockito/issues/688)
 
 ### 2.2.0 (2016-10-09 23:52 UTC)
 
