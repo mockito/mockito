@@ -7,7 +7,7 @@ import org.mockito.invocation.Invocation;
  * Stubbing declared on the mock object.
  * See detailed description including sample code and use cases see javadoc for {@link MockingDetails#getStubbings()}.
  *
- * @since 2.2.0
+ * @since 2.2.3
  */
 public interface Stubbing {
 
@@ -21,7 +21,7 @@ public interface Stubbing {
      * <p>
      * To understand how this method is useful, see the description at {@link MockingDetails#getStubbings()}.
      *
-     * @since 2.2.0
+     * @since 2.2.3
      */
     Invocation getInvocation();
 
@@ -37,7 +37,7 @@ public interface Stubbing {
      * <p>
      * To understand how this method is useful, see the description at {@link MockingDetails#getStubbings()}.
      *
-     * @since 2.2.0
+     * @since 2.2.3
      */
     boolean wasUsed();
 }

@@ -14,6 +14,7 @@ import java.util.Collection;
 /**
  * Provides mocking information.
  * For example, you can identify whether a particular object is either a mock or a spy.
+ * For examples and more information please refer to the javadoc of the individual methods on this class.
  *
  * @since 1.9.5
  */
@@ -84,7 +85,7 @@ public interface MockingDetails {
      * <p>
      * This method throws meaningful exception when object wrapped by MockingDetails is not a mock.
      *
-     * @since 2.2.0
+     * @since 2.2.3
      */
     Collection<Stubbing> getStubbings();
 }
