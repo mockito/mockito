@@ -7,10 +7,14 @@ package org.mockito.internal.util;
 import org.mockito.MockingDetails;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.InternalMockHandler;
+import org.mockito.stubbing.Stubbing;
+import org.mockito.internal.stubbing.StubbingComparator;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.TreeSet;
 
 import static org.mockito.internal.util.MockUtil.getMockHandler;
 
@@ -44,6 +48,14 @@ public class DefaultMockingDetails implements MockingDetails {
     @Override
     public MockCreationSettings<?> getMockCreationSettings() {
         return mockHandler().getMockSettings();
+    }
+
+    @Override
+    public Collection<Stubbing> getStubbings() {
+        List<? extends Stubbing> stubbings = mockHandler().getInvocationContainer().getStubbedInvocations();
+        TreeSet<Stubbing> out = new TreeSet<Stubbing>(new StubbingComparator());
+        out.addAll(stubbings);
+        return out;
     }
 
     private InternalMockHandler<Object> mockHandler() {

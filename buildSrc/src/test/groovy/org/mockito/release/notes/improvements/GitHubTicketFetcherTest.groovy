@@ -1,11 +1,12 @@
 package org.mockito.release.notes.improvements
 
-import spock.lang.IgnoreIf
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Subject
-import testutil.OfflineChecker
 
-@IgnoreIf({ OfflineChecker.isOffline()})
+//TODO enable when the code is moved to separate library
+//@IgnoreIf({ OfflineChecker.isOffline()})
+@Ignore
 class GitHubTicketFetcherTest extends Specification {
 
     @Subject fetcher = new GitHubTicketFetcher()

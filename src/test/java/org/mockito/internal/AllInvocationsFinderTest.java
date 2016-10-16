@@ -7,7 +7,7 @@ package org.mockito.internal;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.internal.stubbing.StubbedInvocationMatcher;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -79,7 +79,7 @@ public class AllInvocationsFinderTest extends TestBase {
         when(mockTwo.simpleMethod(300)).thenReturn("300");
 
         //when
-        List<StubbedInvocationMatcher> stubbings = new ArrayList<StubbedInvocationMatcher>(findStubbings(asList(mockOne, mockOne, mockTwo)));
+        List<Stubbing> stubbings = new ArrayList<Stubbing>(findStubbings(asList(mockOne, mockOne, mockTwo)));
 
         //then
         assertEquals(3, stubbings.size());
