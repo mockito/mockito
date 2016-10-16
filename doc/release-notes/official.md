@@ -4,10 +4,9 @@
 * Commits: 13
   * 12: Szczepan Faber
   * 1: Continuous Delivery Drone
-* Improvements: 2
-  * New features: 2
-    * New API: Mockito.mockingDetails(mock).getStubbings() [(#691)](https://github.com/mockito/mockito/pull/691)
-    * new API MockingDetails.getStubbings for advanced users and integrations [(#542)](https://github.com/mockito/mockito/issues/542)
+* Improvements: 1
+  * New features: 1
+    * new API MockingDetails.getStubbings() for advanced users and integrations [(#542)](https://github.com/mockito/mockito/issues/542)
 
 ### 2.2.2 (2016-10-16 04:41 UTC)
 
