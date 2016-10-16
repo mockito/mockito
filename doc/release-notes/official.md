@@ -1,3 +1,17 @@
+### 2.2.2 (2016-10-16 04:41 UTC)
+
+* Authors: 3
+* Commits: 5
+  * 2: Brice Dutheil
+  * 2: Szczepan Faber
+  * 1: Continuous Delivery Drone
+* Improvements: 3
+  * Enhancements: 1
+    * Improved the format of arguments in verification failures when describing short and byte values [(#693)](https://github.com/mockito/mockito/pull/693)
+  * Remaining changes: 2
+    * Enabled automated sync to central repository [(#690)](https://github.com/mockito/mockito/pull/690)
+    * Pretty print primitive and wrappers types in Maps [(#571)](https://github.com/mockito/mockito/pull/571)
+
 ### 2.2.1 (2016-10-11 15:26 UTC)
 
 * Authors: 2
