@@ -166,7 +166,7 @@ public class DefaultMockingDetailsTest {
     }
 
     @Test
-    public void shouldDetectUnusedStubbingWhenPrinting() throws Exception {
+    public void prints_invocations() throws Exception {
         //given
         given(mock.simpleMethod("different arg")).willReturn("foo");
         mock.simpleMethod("arg");
@@ -176,6 +176,20 @@ public class DefaultMockingDetailsTest {
 
         //then
         assertThat(log).containsIgnoringCase("unused");
+        assertThat(log).containsIgnoringCase("mock.simpleMethod(\"arg\")");
+        assertThat(log).containsIgnoringCase("mock.simpleMethod(\"different arg\")");
+    }
+
+    @Test
+    public void fails_when_printin_invocations_from_non_mock() {
+        try {
+            //when
+            mockingDetails(new Object()).printInvocations();
+            //then
+            fail();
+        } catch (NotAMockException e) {
+            TestCase.assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
+        }
     }
 
     public class Foo { }
