@@ -7,7 +7,7 @@ package org.mockito.internal.util;
 import org.mockito.MockingDetails;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.debugging.MockitoDebuggerImpl;
+import org.mockito.internal.debugging.InvocationsPrinter;
 import org.mockito.stubbing.Stubbing;
 import org.mockito.internal.stubbing.StubbingComparator;
 import org.mockito.invocation.Invocation;
@@ -62,7 +62,7 @@ public class DefaultMockingDetails implements MockingDetails {
     @Override
     public String printInvocations() {
         assertGoodMock();
-        return new MockitoDebuggerImpl().printInvocations(toInspect);
+        return new InvocationsPrinter().printInvocations(toInspect);
     }
 
     private InternalMockHandler<Object> mockHandler() {
