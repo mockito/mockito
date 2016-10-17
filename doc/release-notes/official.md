@@ -1,3 +1,13 @@
+### 2.2.5 (2016-10-17 16:34 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Christian Schwarz
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Enhancements: 1
+    * Unified logic of argument matching and capturing [(#635)](https://github.com/mockito/mockito/pull/635)
+
 ### 2.2.4 (2016-10-17 15:40 UTC)
 
 * Authors: 1
