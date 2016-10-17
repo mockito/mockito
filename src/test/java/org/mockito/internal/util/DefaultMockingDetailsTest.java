@@ -15,8 +15,10 @@ import java.util.Collection;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
@@ -161,6 +163,19 @@ public class DefaultMockingDetailsTest {
 
         //then it does not affect stubbings of the mock
         assertEquals(1, mockingDetails(mock).getStubbings().size());
+    }
+
+    @Test
+    public void shouldDetectUnusedStubbingWhenPrinting() throws Exception {
+        //given
+        given(mock.simpleMethod("different arg")).willReturn("foo");
+        mock.simpleMethod("arg");
+
+        //when
+        String log = Mockito.mockingDetails(mock).printInvocations();
+
+        //then
+        assertThat(log).containsIgnoringCase("unused");
     }
 
     public class Foo { }
