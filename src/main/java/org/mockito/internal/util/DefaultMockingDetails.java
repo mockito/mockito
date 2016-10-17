@@ -58,6 +58,11 @@ public class DefaultMockingDetails implements MockingDetails {
         return out;
     }
 
+    @Override
+    public String printInvocations() {
+        return null;
+    }
+
     private InternalMockHandler<Object> mockHandler() {
         assertGoodMock();
         return getMockHandler(toInspect);

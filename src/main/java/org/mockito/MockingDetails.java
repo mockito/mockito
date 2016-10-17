@@ -88,4 +88,24 @@ public interface MockingDetails {
      * @since 2.2.3
      */
     Collection<Stubbing> getStubbings();
+
+    /**
+     * Returns printing-friendly list of the invocations that occurred with the mock object.
+     * Additionally, this method prints stubbing information, including unused stubbings.
+     * For more information about unused stubbing detection see {@link MockitoHint}.
+     * <p>
+     * You can use this method for debugging,
+     *  print the output of this method to the console to find out about all interactions with the mock.
+     * <p>
+     * Content that is printed is subject to change as we discover better ways of presenting important mock information.
+     * Don't write code that depends on the output of this method.
+     * If you need to know about interactions and stubbings, use {@link #getStubbings()} and {@link #getInvocations()}.
+     * <p>
+     * This method was moved from the deprecated and semi-hidden type {@link MockitoDebugger}.
+     * <p>
+     * This method throws meaningful exception when object wrapped by MockingDetails is not a mock.
+     *
+     * @since TODO put version
+     */
+    String printInvocations();
 }
