@@ -1,3 +1,14 @@
+### 2.2.4 (2016-10-17 15:40 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* Improvements: 2
+  * Bugfixes: 1
+    * Fails to create mock of inner class hierarchy with type variable from outer class [(#699)](https://github.com/mockito/mockito/issues/699)
+  * Remaining changes: 1
+    * With `mock-maker-inline`, `-parameters` are lost [(#695)](https://github.com/mockito/mockito/issues/695)
+
 ### 2.2.3 (2016-10-16 14:12 UTC)
 
 * Authors: 2
