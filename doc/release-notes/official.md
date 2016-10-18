@@ -1,3 +1,58 @@
+### 2.2.5 (2016-10-17 16:34 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Christian Schwarz
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Enhancements: 1
+    * Unified logic of argument matching and capturing [(#635)](https://github.com/mockito/mockito/pull/635)
+
+### 2.2.4 (2016-10-17 15:40 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* Improvements: 2
+  * Bugfixes: 1
+    * Fails to create mock of inner class hierarchy with type variable from outer class [(#699)](https://github.com/mockito/mockito/issues/699)
+  * Remaining changes: 1
+    * Mocking final classes with Java8 when compiling with -parameters flag [(#695)](https://github.com/mockito/mockito/issues/695)
+
+### 2.2.3 (2016-10-16 14:12 UTC)
+
+* Authors: 2
+* Commits: 13
+  * 12: Szczepan Faber
+  * 1: Continuous Delivery Drone
+* Improvements: 1
+  * New features: 1
+    * new API MockingDetails.getStubbings() for advanced users and integrations [(#542)](https://github.com/mockito/mockito/issues/542)
+
+### 2.2.2 (2016-10-16 04:41 UTC)
+
+* Authors: 3
+* Commits: 5
+  * 2: Brice Dutheil
+  * 2: Szczepan Faber
+  * 1: Continuous Delivery Drone
+* Improvements: 3
+  * Enhancements: 1
+    * Improved the format of arguments in verification failures when describing short and byte values [(#693)](https://github.com/mockito/mockito/pull/693)
+  * Remaining changes: 2
+    * Enabled automated sync to central repository [(#690)](https://github.com/mockito/mockito/pull/690)
+    * Pretty print primitive and wrappers types in Maps [(#571)](https://github.com/mockito/mockito/pull/571)
+
+### 2.2.1 (2016-10-11 15:26 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Continuous Delivery Drone
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Bugfixes: 1
+    * Enabled mocking interface clone method [(#688)](https://github.com/mockito/mockito/issues/688)
+
 ### 2.2.0 (2016-10-09 23:52 UTC)
 
 * Authors: 5

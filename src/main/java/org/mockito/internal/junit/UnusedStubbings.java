@@ -1,7 +1,7 @@
 package org.mockito.internal.junit;
 
 import org.mockito.internal.util.MockitoLogger;
-import org.mockito.internal.invocation.Stubbing;
+import org.mockito.stubbing.Stubbing;
 
 import java.util.Collection;
 

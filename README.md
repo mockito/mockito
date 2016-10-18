@@ -8,7 +8,9 @@ Tasty mocking framework for unit tests in Java
 
 ![build status](https://img.shields.io/badge/build-info =>-yellow.svg) [![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito) [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/mockito/mockito/blob/master/LICENSE)
 
-![latest 2.x](https://img.shields.io/badge/latest-2.x =>-yellow.svg) [ ![Current release](https://api.bintray.com/packages/mockito/maven/mockito/images/download.svg) ](https://bintray.com/mockito/maven/mockito/_latestVersion) [![Maven Central](https://img.shields.io/badge/maven central-2.1.0-green.svg)](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.1.0%7Cjar)
+![latest 2.x](https://img.shields.io/badge/latest-2.x =>-yellow.svg) [ ![latest stable 2.x on bintray](https://img.shields.io/badge/Download-2.2.5-blue.svg) ](https://bintray.com/mockito/maven/mockito/2.2.5/view) [![Maven Central](https://img.shields.io/badge/maven central-2.2.5-green.svg)](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.2.5%7Cjar)
+
+![latest release](https://img.shields.io/badge/latest release-=>-yellow.svg) [ ![Latest release](https://api.bintray.com/packages/mockito/maven/mockito/images/download.svg) ](https://bintray.com/mockito/maven/mockito/_latestVersion) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core)
 
 ## Current release
 See the latest [2.x release notes](https://github.com/mockito/mockito/blob/master/doc/release-notes/official.md) and [latest documentation](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html).

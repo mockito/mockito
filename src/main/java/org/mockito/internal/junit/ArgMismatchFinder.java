@@ -2,7 +2,7 @@ package org.mockito.internal.junit;
 
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 import org.mockito.invocation.Invocation;
-import org.mockito.internal.invocation.Stubbing;
+import org.mockito.stubbing.Stubbing;
 
 /**
  * For given mocks, finds stubbing arg mismatches

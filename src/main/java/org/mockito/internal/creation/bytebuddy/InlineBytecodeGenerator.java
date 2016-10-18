@@ -135,7 +135,10 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             return null;
         } else {
             try {
-                return byteBuddy.redefine(classBeingRedefined, ClassFileLocator.Simple.of(classBeingRedefined.getName(), classfileBuffer))
+                // Note: The VM seems to erase parameter names from the provided class file. We therefore first attempt to read the
+                // class file from the class loader. This might revert transformations applied by previous agents.
+                return byteBuddy.redefine(classBeingRedefined, new ClassFileLocator.Compound(ClassFileLocator.ForClassLoader.of(loader),
+                        ClassFileLocator.Simple.of(classBeingRedefined.getName(), classfileBuffer)))
                         .visit(Advice.withCustomMapping()
                                 .bind(MockMethodAdvice.Identifier.class, identifier)
                                 .to(MockMethodAdvice.class).on(isVirtual()
