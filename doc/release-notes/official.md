@@ -17,7 +17,7 @@
   * Bugfixes: 1
     * Fails to create mock of inner class hierarchy with type variable from outer class [(#699)](https://github.com/mockito/mockito/issues/699)
   * Remaining changes: 1
-    * With `mock-maker-inline`, `-parameters` are lost [(#695)](https://github.com/mockito/mockito/issues/695)
+    * Mocking final classes with Java8 when compiling with -parameters flag [(#695)](https://github.com/mockito/mockito/issues/695)
 
 ### 2.2.3 (2016-10-16 14:12 UTC)
 
