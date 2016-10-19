@@ -105,7 +105,7 @@ public interface MockingDetails {
      * <p>
      * This method throws meaningful exception when object wrapped by MockingDetails is not a mock.
      *
-     * @since 2.2.4
+     * @since 2.2.6
      */
     String printInvocations();
 }
