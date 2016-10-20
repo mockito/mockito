@@ -20,16 +20,16 @@ public class InvocationsPrinter {
             return "No interactions and stubbings found for mock: " + mock;
         }
 
-        String out = "";
+        StringBuilder sb = new StringBuilder();
         int x = 1;
         for(Invocation i:invocations) {
             if (x == 1) {
-                out += line("[Mockito] Interactions of: " + mock);
+                sb.append("[Mockito] Interactions of: ").append(mock).append("\n");
             }
-            out += line(" " + x++ + ". " + i.toString());
-            out += line("  " + i.getLocation());
+            sb.append(" ").append(x++).append(". ").append(i.toString()).append("\n");
+            sb.append("  ").append(i.getLocation()).append("\n");
             if (i.stubInfo() != null) {
-                out += line("   - stubbed " + i.stubInfo().stubbedAt());
+                sb.append("   - stubbed ").append(i.stubInfo().stubbedAt()).append("\n");
             }
         }
 
@@ -40,19 +40,15 @@ public class InvocationsPrinter {
         });
 
         if (unused.isEmpty()) {
-            return out;
+            return sb.toString();
         }
-        out += line("[Mockito] Unused stubbings of: " + mock);
+        sb.append("[Mockito] Unused stubbings of: " + mock).append("\n");
 
         x = 1;
         for(Stubbing s:stubbings) {
-            out += line(" " + x++ + ". " + s.getInvocation().toString());
-            out += line("  - stubbed " + s.getInvocation().getLocation());
+            sb.append(" ").append(x++).append(". ").append(s.getInvocation()).append("\n");
+            sb.append("  - stubbed ").append(s.getInvocation().getLocation()).append("\n");
         }
-        return out;
-    }
-
-    private String line(String text) {
-        return text + "\n";
+        return sb.toString();
     }
 }
