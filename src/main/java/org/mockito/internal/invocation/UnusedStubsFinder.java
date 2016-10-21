@@ -12,6 +12,7 @@ import org.mockito.invocation.Invocation;
 
 import java.util.*;
 
+@Deprecated
 public class UnusedStubsFinder {
 
     /**

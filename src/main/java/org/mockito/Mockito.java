@@ -59,7 +59,7 @@ import org.mockito.verification.*;
  *      <a href="#23">23. Automatic instantiation of <code>&#064;Spies</code>, <code>&#064;InjectMocks</code> and constructor injection goodness (Since 1.9.0)</a><br/>
  *      <a href="#24">24. One-liner stubs (Since 1.9.0)</a><br/>
  *      <a href="#25">25. Verification ignoring stubs (Since 1.9.0)</a><br/>
- *      <a href="#26">26. Mocking details (Improved in 2.2.0)</a><br/>
+ *      <a href="#26">26. Mocking details (Improved in 2.2.x)</a><br/>
  *      <a href="#27">27. Delegate calls to real instance (Since 1.9.5)</a><br/>
  *      <a href="#28">28. <code>MockMaker</code> API (Since 1.9.5)</a><br/>
  *      <a href="#29">29. BDD style verification (Since 1.10.0)</a><br/>
@@ -889,7 +889,7 @@ import org.mockito.verification.*;
  *
  *
  *
- * <h3 id="26">26. <a class="meaningful_link" href="#mocking_details">Mocking details</a> (Improved in 2.2.0)</h3>
+ * <h3 id="26">26. <a class="meaningful_link" href="#mocking_details">Mocking details</a> (Improved in 2.2.x)</h3>
  * <p>
  *
  * Mockito offers API to inspect the details of a mock object.
@@ -901,14 +901,17 @@ import org.mockito.verification.*;
  *   Mockito.mockingDetails(someObject).isSpy();
  *
  *   //Getting details like type to mock or default answer:
- *   MockingDetails details = mockingDetails(someObject)
+ *   MockingDetails details = mockingDetails(mock);
  *   details.getMockCreationSettings().getTypeToMock();
  *   details.getMockCreationSettings().getDefaultAnswer();
  *
  *   //Getting interactions and stubbings of the mock:
- *   MockingDetails details = mockingDetails(someObject)
+ *   MockingDetails details = mockingDetails(mock);
  *   details.getInteractions();
  *   details.getStubbings();
+ *
+ *   //Printing all interactions (including stubbing, unused stubs)
+ *   System.out.println(mockingDetails(mock).printInvocations());
  * </code></pre>
  *
  * For more information see javadoc for {@link MockingDetails}.
@@ -2649,9 +2652,7 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * This API will move soon to a different place.
-     * See <a href="https://github.com/mockito/mockito/issues/577">issue 577</a>.
-     * See also <a href="https://github.com/mockito/mockito/issues/542">issue 542</a>.
+     * @deprecated - please use {@link MockingDetails#printInvocations()}.
      */
     @Deprecated
     static MockitoDebugger debug() {
