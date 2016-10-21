@@ -1,3 +1,13 @@
+### 2.2.6 (2016-10-21 01:04 UTC)
+
+* Authors: 1
+* Commits: 12
+  * 12: Szczepan Faber
+* Improvements: 2
+  * New features: 2
+    * New API: MockingDetails.printInvocations() for debugging mock behavior [(#698)](https://github.com/mockito/mockito/pull/698)
+    * new MockingDetails.printInvocations() API for debugging tests and edge cases [(#543)](https://github.com/mockito/mockito/issues/543)
+
 ### 2.2.5 (2016-10-17 16:34 UTC)
 
 * Authors: 2
