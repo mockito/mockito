@@ -1,3 +1,11 @@
+### 2.2.7 (2016-10-22 09:21 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Gaëtan Muller
+* Improvements: 1
+  * Fixes exception typo [(#705)](https://github.com/mockito/mockito/pull/705)
+
 ### 2.2.6 (2016-10-21 01:04 UTC)
 
 * Authors: 1
