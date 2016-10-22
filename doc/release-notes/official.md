@@ -4,7 +4,7 @@
 * Commits: 1
   * 1: Gaëtan Muller
 * Improvements: 1
-  * Fixes exception typo [(#705)](https://github.com/mockito/mockito/pull/705)
+  * Improved exception message [(#705)](https://github.com/mockito/mockito/pull/705)
 
 ### 2.2.6 (2016-10-21 01:04 UTC)
 
