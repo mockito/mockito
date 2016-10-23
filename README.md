@@ -11,7 +11,7 @@ Tasty mocking framework for unit tests in Java
 ![latest release](https://img.shields.io/badge/latest stable-2.x =>-yellow.svg) [ ![Latest release](https://api.bintray.com/packages/mockito/maven/mockito/images/download.svg) ](https://bintray.com/mockito/maven/mockito/_latestVersion) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core)
 
 ## Current release
-See the [release notes page](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) and [latest documentation](http://mockito.github.io/mockito/docs/current/org/mockito/Mockito.html).
+See the [release notes page](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) and [latest documentation](http://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html) (docs in javadoc.io are available ~24h after release).
 
 ## Older releases
 ![latest 1.x](https://img.shields.io/badge/latest stable-1.x =>-yellow.svg) [ ![latest stable 1.x on bintray](https://img.shields.io/badge/Download-1.10.19-blue.svg)](https://bintray.com/mockito/maven/mockito/1.10.19/view) [ ![latest stable 1.x on maven central](https://img.shields.io/badge/maven central-1.10.19-blue.svg)](http://search.maven.org/#artifactdetails|org.mockito|mockito-core|1.10.19|)
