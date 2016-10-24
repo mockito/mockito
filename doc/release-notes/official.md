@@ -1,3 +1,15 @@
+### 2.2.8 (2016-10-24 11:04 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Brice Dutheil
+  * 1: Szczepan Faber
+* Improvements: 2
+  * Bugfixes: 1
+    * Improve usability of arity Answers with regards to checked exceptions [(#707)](https://github.com/mockito/mockito/issues/707)
+  * Remaining changes: 1
+    * Fixes #707, adds throwable to arity answers, also improved javadoc [(#711)](https://github.com/mockito/mockito/pull/711)
+
 ### 2.2.7 (2016-10-22 09:21 UTC)
 
 * Authors: 1
