@@ -188,7 +188,7 @@ TODO:
 private void commitReleaseNotes(String buildInfo) {
     def notesFile = project.file("doc/release-notes/official.md")
     run "git", "add", "$notesFile" as String
-    run "git", "commit", "-m", '"Update release notes ' + buildInfo + '"', "$notesFile" as String
+    run "git", "commit", "-m", "Update release notes $buildInfo" as String, "$notesFile" as String
 }
 
 private void createTag(String buildInfo, String tag) {
