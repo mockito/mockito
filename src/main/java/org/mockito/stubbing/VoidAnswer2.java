@@ -3,12 +3,34 @@ package org.mockito.stubbing;
 import org.mockito.Incubating;
 
 /**
- * Two parameter void function
+ * Generic interface to be used for configuring mock's answer for a two argument invocation that returns nothing.
  *
- * @param <A> input parameter 1 type
- * @param <B> input parameter 2 type
+ * Answer specifies an action that is executed when you interact with the mock.
+ * <p>
+ * Example of stubbing a mock with this custom answer:
+ *
+ * <pre class="code"><code class="java">
+ * when(mock.someMethod(anyString(), anyInt())).thenAnswer(new Answer&lt;String, Integer&gt;() {
+ *     void answer(String msg, Integer count) {
+ *         throw new Exception(String.format(msg, count));
+ *     }
+ * });
+ *
+ * //Following will raise an exception with the message "boom 3"
+ * mock.someMethod("boom %d", 3);
+ * </code></pre>
+ *
+ * @param <A0> type of the first argument
+ * @param <A1> type of the second argument
+ * @see Answer
  */
 @Incubating
-public interface VoidAnswer2<A, B> {
-    void answer(A a, B b);
+public interface VoidAnswer2<A0, A1> {
+    /**
+     * @param argument0 the first argument.
+     * @param argument1 the second argument.
+     *
+     * @throws Throwable the throwable to be thrown
+     */
+    void answer(A0 argument0, A1 argument1) throws Throwable;
 }
