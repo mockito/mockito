@@ -4,7 +4,7 @@
      alt="Mockito" />
 </a>
 
-Tasty mocking framework for unit tests in Java
+Most popular mocking framework for Java
 
 ![build status](https://img.shields.io/badge/build-info =>-yellow.svg) [![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=release/2.x)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito) [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/mockito/mockito/blob/master/LICENSE)
 
@@ -13,55 +13,28 @@ Tasty mocking framework for unit tests in Java
 ## Current version is 2.x
 Still on Mockito 1.x? See [what's new](https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2) in Mockito 2!
 
-See the [release notes page](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) and [latest documentation](http://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html) (docs in javadoc.io are available ~24h after release).
+Mockito [continously delivers](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview) improvements. See the [latest release notes](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) and [latest documentation](http://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html) (docs in javadoc.io are available ~24h after release).
 
-## Older releases
-![latest 1.x](https://img.shields.io/badge/latest stable-1.x =>-yellow.svg) [ ![latest stable 1.x on bintray](https://img.shields.io/badge/Download-1.10.19-blue.svg)](https://bintray.com/mockito/maven/mockito/1.10.19/view) [ ![latest stable 1.x on maven central](https://img.shields.io/badge/maven central-1.10.19-blue.svg)](http://search.maven.org/#artifactdetails|org.mockito|mockito-core|1.10.19|)
+Older 1.x releases are available in 
+[Central Repository](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C1.10.19%7C)
+, [Bintray](https://bintray.com/mockito/maven/mockito/1.10.19/view)
+and [javadoc.io](http://www.javadoc.io/doc/org.mockito/mockito-core/1.10.19) (documentation).
 
-## Versioning
+## More information
 
-Mockito has an automated release system, which imposed some change on how the version numbers work.
-The versions follow this scheme:
+All you want to know about Mockito is hosted at [The Mockito Site](http://site.mockito.org) which is [Open Source](https://github.com/mockito/mockito.github.io) and likes [pull requests](https://github.com/mockito/mockito.github.io/pulls), too.
 
-```
-major.minor.patch-tag.tagVersion
-```
+Want to contribute? Take a look at the [Contributing Guide](https://github.com/mockito/mockito/blob/master/.github/CONTRIBUTING.md).
 
-| number | meaning                                                                               |
-| ------ | ------------------------------------------------------------------------------------- |
-| major  | major version, backwards incompatible with the previous major version                 |
-| minor  | minor version, backwards compatible with added features                               |
-| patch  | patch version, small bug fixes or stylistic improvements                              |
-| tag    | *optional* beta or RC (release candidate). See below.                                 |
+Enjoy Mockito!
 
-That means:
+## Need help?
 
-* `2.0.0` and `2.0.0-beta.5` are binary incompatible with `1.10.19`.
-* `2.0.0-beta.5` is the fifth release beta of version `2.0.0`.
-* `2.0.0-beta.5` could be (but is not necessarily) binary incompatible with version `2.0.0`.
-* `2.0.0-RC.1` is binary compatible with release `2.0.0`.
-
-> **Note :** During the 2.0 beta phase we unleashed beta builds with the following version schemes, like : `2.0.111-beta`, where the _build number_ is placed before the _tag_. The current scheme reuses the _build number_ and places it behind the _tag_. Hence those versions are to be considered as beta builds that happen either before or after a release candidate, but always before the final release.
-> 
-> ```
-> 2.0.111-beta < 2.0.0-beta.112 < 2.0.0-RC.1 < 2.0.0-beta.200 < 2.0.0
-> ```
-
-
-### Tags
-There are two different tags: beta or RC. Beta indicates that the version is directly generated from the master branch of the git repository.
-Beta releases are automatically published whenever we merge a pull request or push a change to the master branch.
-
-When we deem our master status worthy of a release, we publish a release candidate. The release candidate is scheduled to be officially published
-in the official release a while later. There will be no breaking changes between a release candidate and its equivalent official release.
-The only changes will include bug fixes or small updates. No additional features will be included.
-
-## Looking for support
-
-* Go to the [mockito mailing-list](http://groups.google.com/group/mockito) (moderated)
 * Search / Ask question on [stackoverflow](http://stackoverflow.com/questions/tagged/mockito)
+* Go to the [mockito mailing-list](http://groups.google.com/group/mockito) (moderated)
+* Open a ticket in GitHub [issue tracker](https://github.com/mockito/mockito/issues)
 
-## How to build?
+## How to develop Mockito?
 
 To build locally:
 
@@ -73,11 +46,3 @@ Alternatively generate the importable IDEA metadata files using:
      ./gradlew idea
 
 Then, _open_ the generated *.ipr file in IDEA.
-
-## More information
-
-All you want to know about Mockito is hosted at [The Mockito Site](http://site.mockito.org) which is [Open Source](https://github.com/mockito/mockito.github.io) and likes [pull requests](https://github.com/mockito/mockito.github.io/pulls), too.
-
-Want to contribute? Take a look at the [Contributing Guide](https://github.com/mockito/mockito/blob/master/.github/CONTRIBUTING.md).
-
-Enjoy Mockito!
