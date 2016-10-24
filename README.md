@@ -13,7 +13,7 @@ Most popular mocking framework for Java
 ## Current version is 2.x
 Still on Mockito 1.x? See [what's new](https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2) in Mockito 2!
 
-Mockito [continously delivers](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview) improvements. See the [latest release notes](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) and [latest documentation](http://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html) (docs in javadoc.io are available ~24h after release).
+Mockito [continously delivers](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview) improvements. See the [latest release notes](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) and [latest documentation](http://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html). Docs in javadoc.io are available 24h after release. Read also about [semantic versioning in Mockito](https://github.com/mockito/mockito/wiki/Semantic-Versioning).
 
 Older 1.x releases are available in 
 [Central Repository](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C1.10.19%7C)
