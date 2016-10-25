@@ -147,8 +147,6 @@ releaseSteps {
     step("configure generic git user") { gitAuthor = gitTool.setAuthor("Continuous Delivery Drone", "continuous.delivery.drone@gmail.com") }
     .cleanup { gitAuthor.restoreOriginal() }
 
-    step("commit updated javadoc into gh-pages branch") { commitUpdatedJavadoc(buildInfo) }
-
     /*
             Now we'll start operating on branch that we want to release.
             This introduces a problem - someone might have pushed changes *after* release process has started
@@ -159,21 +157,19 @@ releaseSteps {
              - see 'TROUBLESHOOTING' section at the top of this file
     */
 
-    step("start operating on $System.env.TRAVIS_BRANCH") { run "git", "checkout",  System.env.TRAVIS_BRANCH }
-
     step("update release notes") { project.notes.updateReleaseNotes() }
 
     step("commit release notes") { commitReleaseNotes(buildInfo) }
-            .rollback { run "git", "reset", "--hard", "HEAD^" }
+            .rollback { run "git", "reset", "--hard", "HEAD~1" }
 
     step("create new version tag") { createTag(buildInfo, "v${currentVersion}".toString()) }
             .rollback { run "git", "tag", "-d", "v${currentVersion}".toString()}
 
     step("commit incremented version on $System.env.TRAVIS_BRANCH") { commitIncrementedVersion(currentVersion, buildInfo, project.versionFile) }
-            .rollback { run "git", "reset", "--hard", "HEAD^" }
+            .rollback { run "git", "reset", "--hard", "HEAD~1" }
 
     step("push changes to all involved branches") {
-        def pushCommandLine = ["git", "push", pushTarget, System.env.TRAVIS_BRANCH, "gh-pages", "v$currentVersion", "-q"]
+        def pushCommandLine = ["git", "push", pushTarget, System.env.TRAVIS_BRANCH, "v$currentVersion", "-q"]
         if (dryRun) {
             pushCommandLine << '--dry-run'
         }
@@ -192,7 +188,7 @@ TODO:
 private void commitReleaseNotes(String buildInfo) {
     def notesFile = project.file("doc/release-notes/official.md")
     run "git", "add", "$notesFile" as String
-    run "git", "commit", "-m", '"Update release notes ' + buildInfo + '"', "$notesFile" as String
+    run "git", "commit", "-m", "Update release notes $buildInfo" as String, "$notesFile" as String
 }
 
 private void createTag(String buildInfo, String tag) {
@@ -204,22 +200,6 @@ private void commitIncrementedVersion(String currentVersion, String buildInfo, V
     String nextVersion = versionFile.incrementVersion()
     String message = "Increment version '$currentVersion' -> '$nextVersion' $buildInfo"
     run "git", "commit", "-m", "$message" as String, "version.properties"
-}
-
-private void commitUpdatedJavadoc(String buildInfo) {
-    run "git", "fetch", "origin", "+gh-pages:gh-pages"
-    run "git", "checkout", "gh-pages"
-    run "git", "rm", "-r", "docs/current", "-q"
-    project.copy {
-        from "build/javadoc"
-        into "docs/$project.version"
-    }
-    project.copy {
-        from "build/javadoc"
-        into "docs/current"
-    }
-    run "git", "add", "docs"
-    run "git", "commit", "-m", '"Refresh javadoc ' + buildInfo + '"', "-q"
 }
 
 void run(Object ... args) {
