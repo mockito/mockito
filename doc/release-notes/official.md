@@ -1,3 +1,15 @@
+### 2.2.9 (2016-10-26 14:44 UTC)
+
+* Authors: 2
+* Commits: 6
+  * 5: Szczepan Faber
+  * 1: Rafael Winterhalter
+* Improvements: 2
+  * Bugfixes: 1
+    * Mockito 2 cannot mock kohsuke/github-api classes [(#701)](https://github.com/mockito/mockito/issues/701)
+  * Remaining changes: 1
+    * Simplified release process by hosting javadoc on javadoc.io [(#709)](https://github.com/mockito/mockito/pull/709)
+
 ### 2.2.8 (2016-10-24 11:04 UTC)
 
 * Authors: 1
