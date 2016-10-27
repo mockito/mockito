@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 import org.assertj.core.api.AbstractListAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
+import org.assertj.core.api.ObjectAssert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,10 +19,13 @@ import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
+
+import java.util.List;
 
 public class VarargsTest {
 
@@ -78,7 +82,7 @@ public class VarargsTest {
         Object arg = null;
         mock.varargs(arg);
 
-        verify(mock).varargs(eq(null));
+        verify(mock).varargs(Mockito.<Object>eq(null));
     }
 
     @Test
@@ -86,7 +90,7 @@ public class VarargsTest {
         Object arg = null;
         mock.varargs(arg);
 
-        verify(mock).varargs(isNull());
+        verify(mock).varargs(Mockito.<Object>isNull());
     }
 
     @Test
@@ -94,7 +98,7 @@ public class VarargsTest {
         Object[] argArray = null;
         mock.varargs(argArray);
 
-        verify(mock).varargs(isNull());
+        verify(mock).varargs(Mockito.<Object>isNull());
     }
 
     @Test
@@ -117,21 +121,21 @@ public class VarargsTest {
     public void shouldMatchVarArgs_oneArgsOneAnyMatcher() {
         mock.varargs(1);
 
-        verify(mock).varargs(any()); // any() -> VarargMatcher
+        verify(mock).varargs(Mockito.<Integer>any()); // any() -> VarargMatcher
     }
     
     @Test
     public void shouldMatchVarArgs_twoArgsOneAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(any()); // any() -> VarargMatcher
+        verify(mock).varargs(Mockito.<Integer>any()); // any() -> VarargMatcher
     }
 
     @Test
     public void shouldMatchVarArgs_twoArgsTwoAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(any(), any()); // any() -> VarargMatcher
+        verify(mock).varargs(Mockito.<Integer>any(), Mockito.<Integer>any()); // any() -> VarargMatcher
     }
 
     @Test
@@ -335,7 +339,7 @@ public class VarargsTest {
         Assertions.assertThat(mock.varargsObject(1)).isNull();
     }
 
-    private static <T> AbstractListAssert<?, ?, T> assertThat(ArgumentCaptor<T> captor) {
+    private static <T> AbstractListAssert<?, List<? extends T>, T, ObjectAssert<T>> assertThat(ArgumentCaptor<T> captor) {
         return Assertions.assertThat(captor.getAllValues());
     }
 }
