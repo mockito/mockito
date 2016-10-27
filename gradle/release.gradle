@@ -166,6 +166,7 @@ releaseSteps {
             .rollback { run "git", "tag", "-d", "v${currentVersion}".toString()}
 
     step("commit incremented version on $System.env.TRAVIS_BRANCH") { commitIncrementedVersion(currentVersion, buildInfo, project.versionFile) }
+            //TODO when this step fails don't run the rollback!!!
             .rollback { run "git", "reset", "--hard", "HEAD~1" }
 
     step("push changes to all involved branches") {
