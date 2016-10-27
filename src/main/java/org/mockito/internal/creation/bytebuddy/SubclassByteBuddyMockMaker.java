@@ -96,7 +96,7 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
         throw new MockitoException(join(
                 "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
                 "",
-                "Mockito can only non-private & non-final classes.",
+                "Mockito can only mock non-private & non-final classes.",
                 "If you're not sure why you're getting this error, please report to the mailing list.",
                 "",
                 Platform.isJava8BelowUpdate45() ? "Java 8 early builds have bugs that were addressed in Java 1.8.0_45, please update your JDK!\n" : "",

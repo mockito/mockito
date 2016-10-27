@@ -1,3 +1,41 @@
+### 2.2.9 (2016-10-26 14:44 UTC)
+
+* Authors: 2
+* Commits: 6
+  * 5: Szczepan Faber
+  * 1: Rafael Winterhalter
+* Improvements: 2
+  * Bugfixes: 1
+    * Mockito 2 cannot mock kohsuke/github-api classes [(#701)](https://github.com/mockito/mockito/issues/701)
+  * Remaining changes: 1
+    * Simplified release process by hosting javadoc on javadoc.io [(#709)](https://github.com/mockito/mockito/pull/709)
+
+### 2.2.8 (2016-10-24 11:04 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Bugfixes: 1
+    * Improve usability of arity Answers with regards to checked exceptions [(#707)](https://github.com/mockito/mockito/issues/707)
+
+### 2.2.7 (2016-10-22 09:21 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Gaëtan Muller
+* Improvements: 1
+  * Improved exception message [(#705)](https://github.com/mockito/mockito/pull/705)
+
+### 2.2.6 (2016-10-21 01:04 UTC)
+
+* Authors: 1
+* Commits: 12
+  * 12: Szczepan Faber
+* Improvements: 1
+  * New features: 1
+    * New MockingDetails.printInvocations() API for debugging tests and edge cases [(#543)](https://github.com/mockito/mockito/issues/543)
+
 ### 2.2.5 (2016-10-17 16:34 UTC)
 
 * Authors: 2

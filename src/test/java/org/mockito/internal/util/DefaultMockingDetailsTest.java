@@ -15,8 +15,10 @@ import java.util.Collection;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
@@ -161,6 +163,33 @@ public class DefaultMockingDetailsTest {
 
         //then it does not affect stubbings of the mock
         assertEquals(1, mockingDetails(mock).getStubbings().size());
+    }
+
+    @Test
+    public void prints_invocations() throws Exception {
+        //given
+        given(mock.simpleMethod("different arg")).willReturn("foo");
+        mock.simpleMethod("arg");
+
+        //when
+        String log = Mockito.mockingDetails(mock).printInvocations();
+
+        //then
+        assertThat(log).containsIgnoringCase("unused");
+        assertThat(log).containsIgnoringCase("mock.simpleMethod(\"arg\")");
+        assertThat(log).containsIgnoringCase("mock.simpleMethod(\"different arg\")");
+    }
+
+    @Test
+    public void fails_when_printin_invocations_from_non_mock() {
+        try {
+            //when
+            mockingDetails(new Object()).printInvocations();
+            //then
+            fail();
+        } catch (NotAMockException e) {
+            TestCase.assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
+        }
     }
 
     public class Foo { }
