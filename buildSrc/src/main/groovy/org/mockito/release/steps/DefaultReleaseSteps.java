@@ -33,8 +33,8 @@ class DefaultReleaseSteps implements ReleaseSteps {
             try {
                 step.perform();
             } catch (Throwable t) {
-                rollback(attempted); //TODO SF what if rollback fails?
-                throw new RuntimeException("Release failed at step " + attempted.size() + " (" + step.getDescription() + "). Rollback was performed.", t);
+                throw new RuntimeException("Release failed at step " + attempted.size() + " (" + step.getDescription() + "). " +
+                        "Rollback was not performed for the failed operation. Previous successful operations will be rolled back.", t);
             }
         }
         //TODO SF needs tidy up. I should model better the cleanup VS rollback operation
