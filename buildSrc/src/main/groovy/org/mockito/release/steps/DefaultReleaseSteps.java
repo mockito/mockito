@@ -33,6 +33,10 @@ class DefaultReleaseSteps implements ReleaseSteps {
             try {
                 step.perform();
             } catch (Throwable t) {
+                //Printing stack trace here is not very nice.
+                //However, Gradle swallows the cause of the exception so it's better to have the info than not have it
+                t.printStackTrace();
+
                 throw new RuntimeException("Release failed at step " + attempted.size() + " (" + step.getDescription() + "). " +
                         "Rollback was not performed for the failed operation. Previous successful operations will be rolled back.", t);
             }
