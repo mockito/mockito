@@ -4,6 +4,7 @@
 *.iws
 .idea
 *.eml
+.shelf
 
 # Eclipse
 .classpath
