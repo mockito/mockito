@@ -63,6 +63,8 @@ configurations {
 }
 
 dependencies {
+    //TODO I don't like the fact that the previous version is taken from the release notes document
+    //get it from the version.properties! If there is no previous version in version properties, add it during the version bump
     previousSrc "org.mockito:mockito-core:${project.notes.getPreviousVersion()}:sources@jar"
     previousPom "org.mockito:mockito-core:${project.notes.getPreviousVersion()}@pom"
 }
