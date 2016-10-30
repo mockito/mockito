@@ -19,18 +19,6 @@ public class ReleaseWorkflowPlugin implements Plugin<Project> {
     }
 
     private static void workflow(Project project, final ReleaseWorkflowExtension ext) {
-        //rollbacks only run their main task did not fail
-        if (!project.hasProperty("dryRun")) { //accommodate testing
-            for (int i = 0; i < ext.rollbacks.size(); i++) {
-                final Task step = ext.steps.get(i);
-                ext.rollbacks.get(i).onlyIf(new Spec<Task>() {
-                    public boolean isSatisfiedBy(Task task) {
-                        return step.getState().getFailure() == null;
-                    }
-                });
-            }
-        }
-
         //release steps must be sequential
         for (int i = 1; i < ext.steps.size(); i++) {
             ext.steps.get(i).dependsOn(ext.steps.get(i-1));

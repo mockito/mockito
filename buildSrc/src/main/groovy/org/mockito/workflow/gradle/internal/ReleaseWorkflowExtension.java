@@ -2,6 +2,7 @@ package org.mockito.workflow.gradle.internal;
 
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.specs.Spec;
 import org.mockito.workflow.gradle.ReleaseWorkflow;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
         return step(task, Collections.<String, Task>emptyMap());
     }
 
-    private void addStep(Task task, Task rollback) {
+    private void addStep(final Task task, Task rollback) {
         steps.add(task);
         if (rollback == null) {
             rollback = project.task("noopRollback" + capitalize(task.getName()));
@@ -42,6 +43,16 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
 
         //rollbacks finalize release steps
         task.finalizedBy(rollback);
+
+        //rollbacks only run when their main task did not fail
+        // when main task fails, there is nothing to rollback
+        if (!project.hasProperty("dryRun")) { //accommodate testing
+            rollback.onlyIf(new Spec<Task>() {
+                public boolean isSatisfiedBy(Task t) {
+                    return task.getState().getFailure() == null;
+                }
+            });
+        }
     }
 
     private static String capitalize(String text) {
