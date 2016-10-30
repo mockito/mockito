@@ -47,7 +47,7 @@ class ReleaseWorkflowPluginTest extends Specification {
 //                step init
 //                abortWhen { !init.releaseNeeded }
 
-                step one, [rollback: rollbackOne]
+                step one, [cleanup: rollbackOne]
                 step two
                 step three, [rollback: rollbackThree]
                 step four, [rollback: rollbackFour]
@@ -66,7 +66,7 @@ result.tasks.join("\n") == """:one=SUCCESS
 :four=SUCCESS
 :rollbackFour=SKIPPED
 :rollbackThree=SKIPPED
-:rollbackOne=SKIPPED
+:rollbackOne=SUCCESS
 :release=SUCCESS"""
     }
 
@@ -77,7 +77,7 @@ result.tasks.join("\n") == """:one=SUCCESS
         then:
         result.tasks.join("\n") == """:one=SUCCESS
 :two=SUCCESS
-:rollbackOne=SKIPPED"""
+:rollbackOne=SUCCESS"""
     }
 
     def "fails in the middle"() {

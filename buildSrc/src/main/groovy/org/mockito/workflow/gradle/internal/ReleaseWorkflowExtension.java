@@ -23,7 +23,7 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
     }
 
     public ReleaseWorkflowExtension step(Task task, Map<String, Task> config) {
-        addStep(task, config.get("rollback"));
+        addStep(task, config);
         return this;
     }
 
@@ -31,7 +31,7 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
         return step(task, Collections.<String, Task>emptyMap());
     }
 
-    private void addStep(final Task task, Task rollback) {
+    private void addStep(final Task task, Map<String, Task> config) {
         //populate steps collection
         steps.add(task);
 
@@ -44,8 +44,20 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
         }
         previousStep = task;
 
-        if (rollback == null) {
-            return;
+        if (config.isEmpty()) {
+            return; //no rollback/cleanup configured
+        }
+
+        //TODO allow only one of those
+        Task rollback = config.get("rollback");
+        if (rollback != null) {
+            //rollbacks only run when one of the steps fails, by default we assume they don't fail
+            if (!project.hasProperty("dryRun")) { //accommodate testing
+                rollback.setEnabled(false);
+            }
+        } else {
+            rollback = config.get("cleanup");
+            //cleanups run even if the release is successful
         }
 
         //populate main rollbacks list
@@ -59,11 +71,6 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
             previousRollback.mustRunAfter(rollback);
         }
         previousRollback = rollback;
-
-        //rollbacks only run when one of the steps fails, by default we assume they don't fail
-        if (!project.hasProperty("dryRun")) { //accommodate testing
-            rollback.setEnabled(false);
-        }
 
         //rollbacks finalize release steps
         task.finalizedBy(rollback);
