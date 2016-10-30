@@ -34,6 +34,11 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
             rollback = project.task("noopRollback" + capitalize(task.getName()));
         }
         rollbacks.add(rollback);
+
+        //rollbacks only run when one of the steps fails, by default we assume they don't fail
+        if (!project.hasProperty("dryRun")) { //accommodate testing
+            rollback.setEnabled(false);
+        }
     }
 
     private static String capitalize(String text) {
