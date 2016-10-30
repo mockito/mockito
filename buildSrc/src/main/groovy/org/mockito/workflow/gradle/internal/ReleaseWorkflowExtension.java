@@ -14,6 +14,7 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
 
     final List<Task> steps = new ArrayList<Task>();
     Task previousStep;
+    Task previousRollback;
     final List<Task> rollbacks = new ArrayList<Task>();
     private final Project project;
 
@@ -43,6 +44,11 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
         }
         rollbacks.add(rollback);
 
+        //rollbacks need to have order between themselves
+        if (previousRollback != null) {
+            previousRollback.mustRunAfter(rollback);
+        }
+        previousRollback = rollback;
 
         //rollbacks only run when one of the steps fails, by default we assume they don't fail
         if (!project.hasProperty("dryRun")) { //accommodate testing

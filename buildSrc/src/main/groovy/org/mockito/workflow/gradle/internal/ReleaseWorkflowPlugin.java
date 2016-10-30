@@ -19,16 +19,6 @@ public class ReleaseWorkflowPlugin implements Plugin<Project> {
     }
 
     private static void workflow(Project project, final ReleaseWorkflowExtension ext) {
-        //rollbacks must run after all tasks, if they are scheduled
-        for (Task rollback : ext.rollbacks) {
-            rollback.mustRunAfter(ext.steps);
-        }
-
-        //rollbacks need to have order between themselves
-        for (int i = 0; i < ext.rollbacks.size() - 1; i++) {
-            ext.rollbacks.get(i).mustRunAfter(ext.rollbacks.get(i+1));
-        }
-
         //setup listener, so that the rollbacks are only executed if one of the main tasks fail
         project.getGradle().addListener(new TaskExecutionListener() {
             public void beforeExecute(Task task) {}
