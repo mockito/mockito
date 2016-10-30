@@ -39,6 +39,9 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
         if (!project.hasProperty("dryRun")) { //accommodate testing
             rollback.setEnabled(false);
         }
+
+        //rollbacks finalize release steps
+        task.finalizedBy(rollback);
     }
 
     private static String capitalize(String text) {
