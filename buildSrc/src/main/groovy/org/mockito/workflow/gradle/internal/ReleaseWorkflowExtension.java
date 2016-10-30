@@ -32,6 +32,9 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
     }
 
     private void addStep(final Task task, Task rollback) {
+        //main release task will depend on this step
+        project.getTasks().getByName("release").dependsOn(task);
+
         //release steps must be sequential
         if (previousStep != null) {
             task.dependsOn(previousStep);
