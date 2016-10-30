@@ -13,6 +13,7 @@ dependencies {
         exclude module: "groovy-all"
     }
     testCompile "cglib:cglib-nodep:2.2.2"
+    testCompile gradleTestKit()
 }
 
 test {
