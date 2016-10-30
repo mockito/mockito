@@ -66,7 +66,6 @@ result.tasks.join("\n") == """:one=SUCCESS
 :four=SUCCESS
 :rollbackFour=SKIPPED
 :rollbackThree=SKIPPED
-:noopRollbackTwo=SKIPPED
 :rollbackOne=SKIPPED
 :release=SUCCESS"""
     }
@@ -78,7 +77,6 @@ result.tasks.join("\n") == """:one=SUCCESS
         then:
         result.tasks.join("\n") == """:one=SUCCESS
 :two=SUCCESS
-:noopRollbackTwo=SKIPPED
 :rollbackOne=SKIPPED"""
     }
 
@@ -93,7 +91,6 @@ result.tasks.join("\n") == """:one=SUCCESS
 :two=SUCCESS
 :three=FAILED
 :rollbackThree=SKIPPED
-:noopRollbackTwo=UP_TO_DATE
 :rollbackOne=SUCCESS"""
     }
 
@@ -108,7 +105,6 @@ result.tasks.join("\n") == """:one=SUCCESS
 :four=SUCCESS
 :rollbackFour=SUCCESS
 :rollbackThree=SUCCESS
-:noopRollbackTwo=UP_TO_DATE
 :rollbackOne=SUCCESS
 :release=SUCCESS"""
     }
@@ -128,7 +124,6 @@ result.tasks.join("\n") == """:one=SUCCESS
 :four=FAILED
 :rollbackFour=SKIPPED
 :rollbackThree=FAILED
-:noopRollbackTwo=UP_TO_DATE
 :rollbackOne=SUCCESS"""
     }
 

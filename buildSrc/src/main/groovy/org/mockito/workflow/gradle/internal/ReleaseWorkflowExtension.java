@@ -32,6 +32,9 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
     }
 
     private void addStep(final Task task, Task rollback) {
+        //populate steps collection
+        steps.add(task);
+
         //main release task will depend on this step
         project.getTasks().getByName("release").dependsOn(task);
 
@@ -41,11 +44,15 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
         }
         previousStep = task;
 
-        steps.add(task);
         if (rollback == null) {
-            rollback = project.task("noopRollback" + capitalize(task.getName()));
+            return;
         }
+
+        //populate main rollbacks list
         rollbacks.add(rollback);
+
+        //rollback must run after every main task
+        rollback.mustRunAfter(steps);
 
         //rollbacks need to have order between themselves
         if (previousRollback != null) {
