@@ -113,9 +113,9 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
         public boolean isSatisfiedBy(Task task) {
             try {
                 return allower.call();
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false; //abort execution
+            } catch (Throwable t) {
+                throw new RuntimeException("Unhandled exception thrown when release workflow" +
+                        " attempted to evaluate whether to allow execution of task '" + task.getPath() + "' ", t);
             }
         }
     }

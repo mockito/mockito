@@ -12,11 +12,6 @@ import org.junit.rules.TemporaryFolder
 class ReleaseWorkflowPluginTest extends Specification {
 
     //TODO:
-//  - onlyIf - release prerequisite
-//  - rollback and cleanup
-//  - avoid no-op tasks
-//
-//  rw.dryRun (all rollbacks automatically enabled)
 //  rw.singleStep (no dependencies between steps)
 
     @Rule final TemporaryFolder testProjectDir = new TemporaryFolder()
@@ -142,6 +137,28 @@ result.tasks.join("\n") == """:one=SUCCESS
 :rollbackThree=SKIPPED
 :rollbackOne=SUCCESS
 :release=SUCCESS"""
+    }
+
+    def "failing release workflow predicate"() {
+        buildFile << """
+            task newTask
+            releaseWorkflow.onlyIf { assert false: 'big problem' }
+            releaseWorkflow.step newTask
+        """
+
+        when:
+        def result = fail('release', '-s')
+
+        then:
+        result.tasks.join("\n") == """:one=SUCCESS
+:two=SUCCESS
+:three=SUCCESS
+:four=SUCCESS
+:newTask=FAILED
+:rollbackFour=SUCCESS
+:rollbackThree=SUCCESS
+:rollbackOne=SUCCESS"""
+        result.output.contains('big problem')
     }
 
     private BuildResult pass(String ... args) {
