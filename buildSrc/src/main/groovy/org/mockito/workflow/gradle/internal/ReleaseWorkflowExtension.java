@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 public class ReleaseWorkflowExtension implements ReleaseWorkflow {
 
@@ -17,6 +18,7 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
     Task previousRollback;
     final List<Task> rollbacks = new ArrayList<Task>();
     private final Project project;
+    private final List<Callable<Boolean>> allowers = new ArrayList<Callable<Boolean>>();
 
     public ReleaseWorkflowExtension(Project project) {
         this.project = project;
@@ -31,6 +33,11 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
         return step(task, Collections.<String, Task>emptyMap());
     }
 
+    public ReleaseWorkflowExtension onlyIf(Callable<Boolean> predicate) {
+        allowers.add(predicate);
+        return this;
+    }
+
     private void addStep(final Task task, Map<String, Task> config) {
         //populate steps collection
         steps.add(task);
@@ -43,6 +50,11 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
             task.dependsOn(previousStep);
         }
         previousStep = task;
+
+        //only run task if it was allowed
+        for (final Callable<Boolean> allower : allowers) {
+            task.onlyIf(new SpecAdapter(allower));
+        }
 
         if (config.isEmpty()) {
             return; //no rollback/cleanup configured
@@ -84,9 +96,27 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
                 }
             });
         }
+
+        //only run rollback if it is allowed
+        for (Callable<Boolean> allower : allowers) {
+            rollback.onlyIf(new SpecAdapter(allower));
+        }
     }
 
-    private static String capitalize(String text) {
-        return text.substring(0, 1).toUpperCase() + text.substring(1);
+    private static class SpecAdapter implements Spec<Task> {
+        private final Callable<Boolean> allower;
+
+        SpecAdapter(Callable<Boolean> allower) {
+            this.allower = allower;
+        }
+
+        public boolean isSatisfiedBy(Task task) {
+            try {
+                return allower.call();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false; //abort execution
+            }
+        }
     }
 }

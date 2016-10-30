@@ -43,11 +43,11 @@ class ReleaseWorkflowPluginTest extends Specification {
 
             apply plugin: 'release-workflow'
 
-            releaseWorkflow {
-//                step init
-//                abortWhen { !init.releaseNeeded }
+            ext.releaseNeeded = true
 
+            releaseWorkflow {
                 step one, [cleanup: rollbackOne]
+                onlyIf { project.releaseNeeded }
                 step two
                 step three, [rollback: rollbackThree]
                 step four, [rollback: rollbackFour]
@@ -125,6 +125,23 @@ result.tasks.join("\n") == """:one=SUCCESS
 :rollbackFour=SKIPPED
 :rollbackThree=FAILED
 :rollbackOne=SUCCESS"""
+    }
+
+    def "does not run release if onlyIf predicate is negative"() {
+        buildFile << "releaseNeeded = false"
+
+        when:
+        def result = pass('release')
+
+        then:
+        result.tasks.join("\n") == """:one=SUCCESS
+:two=SKIPPED
+:three=SKIPPED
+:four=SKIPPED
+:rollbackFour=SKIPPED
+:rollbackThree=SKIPPED
+:rollbackOne=SUCCESS
+:release=SUCCESS"""
     }
 
     private BuildResult pass(String ... args) {
