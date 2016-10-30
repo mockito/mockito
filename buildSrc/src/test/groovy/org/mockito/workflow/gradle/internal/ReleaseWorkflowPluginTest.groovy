@@ -161,6 +161,59 @@ result.tasks.join("\n") == """:one=SUCCESS
         result.output.contains('big problem')
     }
 
+    def "executes single release step"() {
+        when:
+        def result = pass('three', '-PsingleStep')
+
+        then:
+        result.tasks.join("\n") == """:three=SUCCESS
+:rollbackThree=SKIPPED"""
+    }
+
+    def "executes selected single release steps"() {
+        when:
+        //passing 'four' first on purpose, the command line sequence needs to be honored
+        def result = pass('four', 'three', '-PsingleStep')
+
+        then:
+        result.tasks.join("\n") == """:four=SUCCESS
+:three=SUCCESS
+:rollbackFour=SKIPPED
+:rollbackThree=SKIPPED"""
+    }
+
+    def "single failing step enables rollback"() {
+        buildFile << "three.doLast { assert false }"
+
+        when:
+        def result = fail('four', 'three', '-PsingleStep')
+
+        then:
+        result.tasks.join("\n") == """:four=SUCCESS
+:three=FAILED
+:rollbackFour=SUCCESS
+:rollbackThree=SKIPPED"""
+    }
+
+    def "executes selected single release steps in dry run"() {
+        when:
+        def result = pass('four', 'three', '-PsingleStep', '-PdryRun')
+
+        then:
+        result.tasks.join("\n") == """:four=SUCCESS
+:three=SUCCESS
+:rollbackFour=SUCCESS
+:rollbackThree=SUCCESS"""
+    }
+
+    def "executes single rollback step"() {
+        when:
+        def result = pass('rollbackFour', '-PsingleStep')
+
+        then:
+        result.tasks.join("\n") == ":rollbackFour=SKIPPED"
+    }
+
     private BuildResult pass(String ... args) {
         GradleRunner.create()
                 .withProjectDir(testProjectDir.root)

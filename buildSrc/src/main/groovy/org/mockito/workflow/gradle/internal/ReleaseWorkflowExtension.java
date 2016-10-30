@@ -47,7 +47,14 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
 
         //release steps must be sequential
         if (previousStep != null) {
-            task.dependsOn(previousStep);
+            if (project.hasProperty("singleStep")) {
+                //special case, release steps do not form any sequence
+                //allowing the user to decide on the sequence from command line
+            } else {
+                //default mode, release steps form a sequence using 'dependsOn'
+                //forcing execution of previous steps
+                task.dependsOn(previousStep);
+            }
         }
         previousStep = task;
 
