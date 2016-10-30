@@ -63,6 +63,8 @@ configurations {
 }
 
 dependencies {
+    //TODO I don't like the fact that the previous version is taken from the release notes document
+    //get it from the version.properties! If there is no previous version in version properties, add it during the version bump
     previousSrc "org.mockito:mockito-core:${project.notes.getPreviousVersion()}:sources@jar"
     previousPom "org.mockito:mockito-core:${project.notes.getPreviousVersion()}@pom"
 }
@@ -166,7 +168,6 @@ releaseSteps {
             .rollback { run "git", "tag", "-d", "v${currentVersion}".toString()}
 
     step("commit incremented version on $System.env.TRAVIS_BRANCH") { commitIncrementedVersion(currentVersion, buildInfo, project.versionFile) }
-            //TODO when this step fails don't run the rollback!!!
             .rollback { run "git", "reset", "--hard", "HEAD~1" }
 
     step("push changes to all involved branches") {
