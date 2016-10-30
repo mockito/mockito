@@ -13,6 +13,7 @@ import java.util.Map;
 public class ReleaseWorkflowExtension implements ReleaseWorkflow {
 
     final List<Task> steps = new ArrayList<Task>();
+    Task previousStep;
     final List<Task> rollbacks = new ArrayList<Task>();
     private final Project project;
 
@@ -30,11 +31,18 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
     }
 
     private void addStep(final Task task, Task rollback) {
+        //release steps must be sequential
+        if (previousStep != null) {
+            task.dependsOn(previousStep);
+        }
+        previousStep = task;
+
         steps.add(task);
         if (rollback == null) {
             rollback = project.task("noopRollback" + capitalize(task.getName()));
         }
         rollbacks.add(rollback);
+
 
         //rollbacks only run when one of the steps fails, by default we assume they don't fail
         if (!project.hasProperty("dryRun")) { //accommodate testing

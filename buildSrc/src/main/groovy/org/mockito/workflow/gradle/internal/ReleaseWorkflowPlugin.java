@@ -19,11 +19,6 @@ public class ReleaseWorkflowPlugin implements Plugin<Project> {
     }
 
     private static void workflow(Project project, final ReleaseWorkflowExtension ext) {
-        //release steps must be sequential
-        for (int i = 1; i < ext.steps.size(); i++) {
-            ext.steps.get(i).dependsOn(ext.steps.get(i-1));
-        }
-
         //rollbacks must run after all tasks, if they are scheduled
         for (Task rollback : ext.rollbacks) {
             rollback.mustRunAfter(ext.steps);
