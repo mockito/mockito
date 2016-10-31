@@ -6,6 +6,8 @@ import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.listeners.VerificationListener;
 import org.mockito.verification.VerificationMode;
+import org.mockito.verification.VerificationSucceededEvent;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -62,10 +64,10 @@ public class VerificationListenerCallBackTest {
 
 
         @Override
-        public void onVerificationSucceeded(Object mock, VerificationMode mode, VerificationData data) {
-            this.mock = mock;
-            this.mode = mode;
-            this.data = data;
+        public void onVerificationSucceeded(VerificationSucceededEvent verificationSucceededEvent) {
+            this.mock = verificationSucceededEvent.getMock();
+            this.mode = verificationSucceededEvent.getMode();
+            this.data = verificationSucceededEvent.getData();
         }
     }
 }

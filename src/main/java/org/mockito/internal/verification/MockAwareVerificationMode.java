@@ -8,6 +8,7 @@ import java.util.Set;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.listeners.VerificationListener;
 import org.mockito.verification.VerificationMode;
+import org.mockito.verification.VerificationSucceededEvent;
 
 public class MockAwareVerificationMode implements VerificationMode {
 
@@ -25,7 +26,7 @@ public class MockAwareVerificationMode implements VerificationMode {
         mode.verify(data);
 
         for (VerificationListener listener : listeners) {
-            listener.onVerificationSucceeded(mock, mode, data);
+            listener.onVerificationSucceeded(new VerificationSucceededEvent(mock, mode, data));
         }
     }
 
