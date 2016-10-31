@@ -10,6 +10,8 @@ import org.mockito.verification.VerificationSucceededEvent;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class VerificationListenerCallBackTest {
@@ -51,17 +53,41 @@ public class VerificationListenerCallBackTest {
         assertThatHasBeenNotified(listener2, foo, never, invocationWanted);
     }
 
+    @Test
+    public void should_not_call_listener_when_verify_throws() {
+        //given
+        RememberingListener listener = new RememberingListener();
+        MockingProgress mockingProgress = ThreadSafeMockingProgress.mockingProgress();
+
+        mockingProgress.addListener(listener);
+
+        //when
+        Foo foo = null;
+        try {
+            verify(foo).doSomething("");
+            fail("Exception expected.");
+        } catch (Exception e) {
+            //then
+            assertThatNoEventsHappened(listener);
+        }
+    }
+
     private void assertThatHasBeenNotified(RememberingListener listener, Object mock, VerificationMode mode, String invocationWanted) {
         assertThat(listener.mock).isEqualTo(mock);
         assertThat(listener.mode).isEqualTo(mode);
         assertThat(listener.data.getWanted().getMethod().getName()).isEqualTo(invocationWanted);
     }
 
+    private void assertThatNoEventsHappened(RememberingListener listener) {
+        assertNull(listener.mock);
+        assertNull(listener.data);
+        assertNull(listener.mode);
+    }
+
     private static class RememberingListener implements VerificationListener {
         Object mock;
         VerificationMode mode;
         VerificationData data;
-
 
         @Override
         public void onVerificationSucceeded(VerificationSucceededEvent verificationSucceededEvent) {
