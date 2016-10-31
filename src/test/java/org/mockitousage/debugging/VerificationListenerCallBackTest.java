@@ -62,7 +62,7 @@ public class VerificationListenerCallBackTest {
 
 
         @Override
-        public void onVerification(Object mock, VerificationMode mode, VerificationData data) {
+        public void onVerificationSucceeded(Object mock, VerificationMode mode, VerificationData data) {
             this.mock = mock;
             this.mode = mode;
             this.data = data;

@@ -25,7 +25,7 @@ public class MockAwareVerificationMode implements VerificationMode {
         mode.verify(data);
 
         for (VerificationListener listener : listeners) {
-            listener.onVerification(mock, mode, data);
+            listener.onVerificationSucceeded(mock, mode, data);
         }
     }
 
