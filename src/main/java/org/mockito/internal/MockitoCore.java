@@ -23,9 +23,11 @@ import static org.mockito.internal.verification.VerificationModeFactory.noMoreIn
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.MockingDetails;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
@@ -41,6 +43,7 @@ import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.listeners.VerificationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
@@ -77,16 +80,25 @@ public class MockitoCore {
     }
 
     public <T> T verify(T mock, VerificationMode mode) {
-        if (mock == null) {
-            throw nullPassedToVerify();
-        }
-        if (!isMock(mock)) {
-            throw notAMockPassedToVerify(mock.getClass());
-        }
         MockingProgress mockingProgress = mockingProgress();
         VerificationMode actualMode = mockingProgress.maybeVerifyLazily(mode);
-        mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, actualMode, mockingProgress.verificationListeners()));
-        return mock;
+
+        Set<VerificationListener> listeners = mockingProgress.verificationListeners();
+        try {
+            if (mock == null) {
+                throw nullPassedToVerify();
+            }
+            if (!isMock(mock)) {
+                throw notAMockPassedToVerify(mock.getClass());
+            }
+            mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, actualMode, listeners));
+            return mock;
+        } catch (MockitoException e) {
+            for (VerificationListener listener : listeners) {
+                listener.onVerificationException(mock, actualMode, e);
+            }
+            throw e;
+        }
     }
 
     public <T> void reset(T... mocks) {

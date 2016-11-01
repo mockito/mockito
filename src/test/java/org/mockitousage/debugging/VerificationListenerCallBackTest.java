@@ -1,6 +1,8 @@
 package org.mockitousage.debugging;
 
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.verification.api.VerificationData;
@@ -68,7 +70,26 @@ public class VerificationListenerCallBackTest {
             fail("Exception expected.");
         } catch (Exception e) {
             //then
-            assertThatNoEventsHappened(listener);
+            assertThat(listener.cause).isInstanceOf(NullInsteadOfMockException.class);
+        }
+    }
+
+    @Test
+    public void wrong_verify_type() {
+        //given
+        RememberingListener listener = new RememberingListener();
+        MockingProgress mockingProgress = ThreadSafeMockingProgress.mockingProgress();
+
+        mockingProgress.addListener(listener);
+
+        Foo foo = mock(Foo.class);
+        //when
+        try {
+            verify(foo).doSomething("");
+            fail("Exception expected.");
+        } catch (Throwable e) {
+            //then
+            assertThat(listener.cause).isInstanceOf(MockitoAssertionError.class);
         }
     }
 
@@ -78,22 +99,25 @@ public class VerificationListenerCallBackTest {
         assertThat(listener.data.getWanted().getMethod().getName()).isEqualTo(invocationWanted);
     }
 
-    private void assertThatNoEventsHappened(RememberingListener listener) {
-        assertNull(listener.mock);
-        assertNull(listener.data);
-        assertNull(listener.mode);
-    }
 
     private static class RememberingListener implements VerificationListener {
         Object mock;
         VerificationMode mode;
         VerificationData data;
+        Throwable cause;
 
         @Override
         public void onVerificationSucceeded(VerificationSucceededEvent verificationSucceededEvent) {
             this.mock = verificationSucceededEvent.getMock();
             this.mode = verificationSucceededEvent.getMode();
             this.data = verificationSucceededEvent.getData();
+        }
+
+        @Override
+        public void onVerificationException(Object mock, VerificationMode actualMode, Throwable failure) {
+            this.mock = mock;
+            this.mode = actualMode;
+            this.cause = failure;
         }
     }
 }
