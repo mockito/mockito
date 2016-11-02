@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mockito.internal.util.ObjectBox;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MatchableInvocation;
 import org.mockitoutil.TestBase;
 
 import java.util.Arrays;
@@ -35,7 +36,7 @@ public class InvocationMarkerTest extends TestBase {
         //given
         Invocation i = new InvocationBuilder().toInvocation();
         final ObjectBox box = new ObjectBox();
-        CapturesArgumentsFromInvocation c = new CapturesArgumentsFromInvocation() {
+        MatchableInvocation c = new InvocationMatcher(i) {
             public void captureArgumentsFrom(Invocation i) {
                 box.put(i);
             }};
