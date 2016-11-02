@@ -7,6 +7,7 @@ package org.mockito.internal.verification;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.MatchableInvocation;
 import org.mockito.verification.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
@@ -35,7 +36,7 @@ public class Calls implements VerificationMode, VerificationInOrderMode {
 
     public void verifyInOrder(VerificationDataInOrder data) {
         List<Invocation> allInvocations = data.getAllInvocations();
-        InvocationMatcher wanted = data.getWanted();
+        MatchableInvocation wanted = data.getWanted();
 
         checkMissingInvocation(allInvocations, wanted,  data.getOrderingContext());
         check( allInvocations, wanted, wantedCount, data.getOrderingContext());

@@ -19,13 +19,14 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.reporting.SmartPrinter;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MatchableInvocation;
 
 public class MissingInvocationChecker {
 
     private MissingInvocationChecker() {
     }
 
-    public static void checkMissingInvocation(List<Invocation> invocations, InvocationMatcher wanted) {
+    public static void checkMissingInvocation(List<Invocation> invocations, MatchableInvocation wanted) {
         List<Invocation> actualInvocations = findInvocations(invocations, wanted);
 
         if (!actualInvocations.isEmpty()){
@@ -43,7 +44,7 @@ public class MissingInvocationChecker {
         
     }
 
-    public static void checkMissingInvocation(List<Invocation> invocations, InvocationMatcher wanted, InOrderContext context) {
+    public static void checkMissingInvocation(List<Invocation> invocations, MatchableInvocation wanted, InOrderContext context) {
         List<Invocation> chunk = findAllMatchingUnverifiedChunks(invocations, wanted, context);
 
         if (!chunk.isEmpty()) {

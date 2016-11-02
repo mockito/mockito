@@ -4,10 +4,10 @@
  */
 package org.mockito.verification;
 
-import java.util.List;
-
-import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MatchableInvocation;
+
+import java.util.List;
 
 /**
  * TODO Javadoc, include use case, @since tags
@@ -22,5 +22,5 @@ public interface VerificationData {
     /**
      * TODO Javadoc, @since tags
      */
-    InvocationMatcher getWanted();
+    MatchableInvocation getWanted();
 }
