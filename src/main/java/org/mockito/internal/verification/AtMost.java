@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.verification.VerificationData;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.verification.VerificationData;
 import org.mockito.verification.VerificationMode;
 
 import static junit.framework.TestCase.assertEquals;

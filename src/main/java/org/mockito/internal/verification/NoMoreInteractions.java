@@ -12,7 +12,7 @@ import static org.mockito.internal.invocation.InvocationsFinder.findFirstUnverif
 
 import java.util.List;
 
-import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.verification.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.invocation.Invocation;
