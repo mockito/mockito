@@ -6,7 +6,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.progress.MockingProgressImpl;
-import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.verification.VerificationData;
 import org.mockito.junit.VerificationCollector;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;

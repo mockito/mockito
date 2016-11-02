@@ -13,7 +13,8 @@ import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 import java.util.List;
 
 import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.invocation.MatchableInvocation;
+import org.mockito.verification.VerificationData;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
@@ -21,7 +22,7 @@ public class Only implements VerificationMode {
 
     @SuppressWarnings("unchecked")
     public void verify(VerificationData data) {
-        InvocationMatcher wantedMatcher = data.getWanted();
+        MatchableInvocation wantedMatcher = data.getWanted();
         List<Invocation> invocations = data.getAllInvocations();
         List<Invocation> chunk = findInvocations(invocations,wantedMatcher);
         if (invocations.size() != 1 && chunk.size() > 0) {            

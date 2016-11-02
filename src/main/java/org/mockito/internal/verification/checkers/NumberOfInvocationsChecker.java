@@ -19,10 +19,11 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.reporting.Discrepancy;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
+import org.mockito.invocation.MatchableInvocation;
 
 public class NumberOfInvocationsChecker {
 
-    public void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+    public void check(List<Invocation> invocations, MatchableInvocation wanted, int wantedCount) {
         List<Invocation> actualInvocations = findInvocations(invocations, wanted);
         
         int actualCount = actualInvocations.size();

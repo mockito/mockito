@@ -6,7 +6,6 @@
 package org.mockito.verification;
 
 import org.mockito.Mockito;
-import org.mockito.internal.verification.api.VerificationData;
 
 /**
  * Allows verifying that certain behavior happened at least once / exact number
