@@ -17,6 +17,7 @@ import static org.mockito.AdditionalMatchers.leq;
 import static org.mockito.AdditionalMatchers.lt;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.AdditionalMatchers.or;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyBoolean;
@@ -39,6 +40,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.notNull;
 import static org.mockito.Mockito.same;
 import static org.mockito.Mockito.startsWith;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static junit.framework.TestCase.assertEquals;
@@ -588,5 +590,14 @@ public class MatchersTest extends TestBase {
         mock.simpleMethod((Object) null);
 
         verify(mock).simpleMethod((Object) same(null));
+    }
+
+    @Test
+    public void nullable_matcher() throws Exception {
+        // imagine a Stream.of(...).map(c -> mock.oneArg(c))...
+        mock.oneArg((Character) null);
+        mock.oneArg(Character.valueOf('€'));
+
+        verify(mock, times(2)).oneArg(nullable(Character.class));
     }
 }
