@@ -31,7 +31,7 @@ public class AtMost implements VerificationMode {
 
     public void verify(VerificationData data) {
         List<Invocation> invocations = data.getAllInvocations();
-        MatchableInvocation wanted = data.getWanted();
+        MatchableInvocation wanted = data.getTarget();
         
         List<Invocation> found = findInvocations(invocations, wanted);
         int foundSize = found.size();

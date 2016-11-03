@@ -10,17 +10,34 @@ import org.mockito.invocation.MatchableInvocation;
 import java.util.List;
 
 /**
- * TODO Javadoc, include use case, @since tags
+ * Data needed to perform verification of interactions.
+ *
+ * @since @since@
  */
-public interface VerificationData {
+public interface VerificationData extends org.mockito.internal.verification.api.VerificationData {
 
     /**
-     * TODO Javadoc, @since tags
+     * All invocations recorded on the mock object that is being verified.
+     * Does not include invocations recorded on other mock objects.
+     *
+     * @since @since@
      */
     List<Invocation> getAllInvocations();
 
     /**
-     * TODO Javadoc, @since tags
+     * The target or wanted invocation.
+     * Below example illustrates what is the 'target' invocation:
+     * <pre class="code"><code class="java">
+     *   mock.foo();   // <- invocation 1
+     *   mock.bar();   // <- invocation 2
+     *
+     *   verify(mock).bar();  // <- target invocation
+     * </code></pre>
+     *
+     * Target invocation can contain argument matchers therefore the returned type is {@link MatchableInvocation}
+     * and not {@link Invocation}.
+     *
+     * @since @since@
      */
-    MatchableInvocation getWanted();
+    MatchableInvocation getTarget();
 }

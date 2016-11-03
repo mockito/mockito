@@ -22,17 +22,17 @@ public class Only implements VerificationMode {
 
     @SuppressWarnings("unchecked")
     public void verify(VerificationData data) {
-        MatchableInvocation wantedMatcher = data.getWanted();
+        MatchableInvocation target = data.getTarget();
         List<Invocation> invocations = data.getAllInvocations();
-        List<Invocation> chunk = findInvocations(invocations,wantedMatcher);
+        List<Invocation> chunk = findInvocations(invocations,target);
         if (invocations.size() != 1 && chunk.size() > 0) {            
             Invocation unverified = findFirstUnverified(invocations);
             throw noMoreInteractionsWanted(unverified, (List) invocations);
         } 
         if (invocations.size() != 1 || chunk.size() == 0) {
-            throw wantedButNotInvoked(wantedMatcher);
+            throw wantedButNotInvoked(target);
         }
-        markVerified(chunk.get(0), wantedMatcher);
+        markVerified(chunk.get(0), target);
     }
 
     public VerificationMode description(String description) {

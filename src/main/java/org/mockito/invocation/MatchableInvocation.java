@@ -5,32 +5,55 @@ import org.mockito.ArgumentMatcher;
 import java.util.List;
 
 /**
- * TODO Javadoc, include use case, @since tags
+ * <code>MatchableInvocation</code> wraps {@link Invocation} instance
+ * and holds argument matchers associated with that invocation.
+ * It is used during verification process:
+ *
+ * <pre class="code"><code class="java">
+ *   mock.foo();   // <- invocation
+ *   verify(mock).bar();  // <- matchable invocation
+ * </code></pre>
+ *
+ * @since @since@
  */
 public interface MatchableInvocation extends DescribedInvocation {
 
     /**
-     * TODO Javadoc, include use case, @since tags
+     * The actual invocation Mockito will match against.
+     *
+     * @since @since@
      */
     Invocation getInvocation();
 
     /**
-     * TODO Javadoc, include use case, @since tags
+     * The argument matchers of this invocation.
+     * When the invocation is declared without argument matchers (e.g. using plain arguments)
+     * Mockito still converts them into {@link ArgumentMatcher} instances
+     * that use 'eq' matching via {@link org.mockito.Mockito#eq(Object)}.
+     *
+     * @since @since@
      */
     List<ArgumentMatcher> getMatchers();
 
     /**
-     * TODO Javadoc, include use case, @since tags
+     * Same method, mock and all arguments match.
+     *
+     * @since @since@
      */
-    boolean matches(Invocation actual);
+    boolean matches(Invocation candidate);
 
     /**
-     * TODO Javadoc, include use case, @since tags
+     * Candidate invocation has the similar method.
+     * 'Similar' means the same method name, same mock, unverified, not overloaded, but not necessarily matching arguments
+     *
+     * @since @since@
      */
     boolean hasSimilarMethod(Invocation candidate);
 
     /**
-     * TODO Javadoc, include use case, @since tags
+     * Returns true if the candidate invocation has the same method (method name and parameter types)
+     *
+     * @since @since@
      */
     boolean hasSameMethod(Invocation candidate);
 
@@ -41,7 +64,7 @@ public interface MatchableInvocation extends DescribedInvocation {
      *
      * @param invocation the invocation to capture the arguments from
      *
-     * TODO @since
+     * @since @since@
      */
     void captureArgumentsFrom(Invocation invocation);
 }

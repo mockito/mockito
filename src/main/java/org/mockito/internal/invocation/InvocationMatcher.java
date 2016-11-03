@@ -73,8 +73,8 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
         return new PrintSettings().print((List) matchers, invocation);
     }
 
-    public boolean matches(Invocation actual) {
-        return invocation.getMock().equals(actual.getMock()) && hasSameMethod(actual) && argumentsMatch(actual);
+    public boolean matches(Invocation candidate) {
+        return invocation.getMock().equals(candidate.getMock()) && hasSameMethod(candidate) && argumentsMatch(candidate);
     }
 
     /**
