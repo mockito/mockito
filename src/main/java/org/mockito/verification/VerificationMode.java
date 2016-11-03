@@ -29,7 +29,10 @@ import org.mockito.Mockito;
  * See examples in javadoc for {@link Mockito#verify(Object, VerificationMode)}
  */
 public interface VerificationMode {
-    
+
+    /**
+     * Performs the verification
+     */
     void verify(VerificationData data);
     
     /**
