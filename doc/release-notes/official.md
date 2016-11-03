@@ -1,3 +1,12 @@
+### 2.2.10 (2016-11-03 13:45 UTC)
+
+* Authors: 2
+* Commits: 11
+  * 9: Szczepan Faber
+  * 2: bric3
+* Improvements: 1
+  * Release automation tidy up [(#723)](https://github.com/mockito/mockito/pull/723)
+
 ### 2.2.9 (2016-10-26 14:44 UTC)
 
 * Authors: 2
