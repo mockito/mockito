@@ -2,13 +2,13 @@ package org.mockitousage.debugging;
 
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.listeners.VerificationListener;
+import org.mockito.verification.VerificationEvent;
 import org.mockito.verification.VerificationMode;
-import org.mockito.verification.VerificationSucceededEvent;
+import org.mockito.internal.verification.VerificationEventImpl;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -107,17 +107,11 @@ public class VerificationListenerCallBackTest {
         Throwable cause;
 
         @Override
-        public void onVerificationSucceeded(VerificationSucceededEvent verificationSucceededEvent) {
-            this.mock = verificationSucceededEvent.getMock();
-            this.mode = verificationSucceededEvent.getMode();
-            this.data = verificationSucceededEvent.getData();
-        }
-
-        @Override
-        public void onVerificationException(Object mock, VerificationMode actualMode, Throwable failure) {
-            this.mock = mock;
-            this.mode = actualMode;
-            this.cause = failure;
+        public void onVerification(VerificationEvent verificationEvent) {
+            this.mock = verificationEvent.getMock();
+            this.mode = verificationEvent.getMode();
+            this.data = verificationEvent.getData();
+            this.cause = verificationEvent.getCause();
         }
     }
 }
