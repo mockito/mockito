@@ -1,7 +1,7 @@
 package org.mockito.internal.verification;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.verification.VerificationData;
+import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
 
 /**

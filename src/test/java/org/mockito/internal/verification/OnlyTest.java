@@ -9,7 +9,7 @@ import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.MatchableInvocation;
-import org.mockito.verification.VerificationData;
+import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
 
 import java.util.Arrays;

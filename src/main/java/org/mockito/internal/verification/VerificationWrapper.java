@@ -1,6 +1,6 @@
 package org.mockito.internal.verification;
 
-import org.mockito.verification.VerificationData;
+import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
 
 public abstract class VerificationWrapper<WrapperType extends VerificationMode> implements VerificationMode {

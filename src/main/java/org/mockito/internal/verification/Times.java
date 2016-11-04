@@ -11,7 +11,7 @@ import java.util.List;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.MatchableInvocation;
-import org.mockito.verification.VerificationData;
+import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.internal.verification.checkers.NumberOfInvocationsChecker;

@@ -8,7 +8,7 @@ package org.mockito.internal.verification;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.MatchableInvocation;
-import org.mockito.verification.VerificationData;
+import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.invocation.Invocation;

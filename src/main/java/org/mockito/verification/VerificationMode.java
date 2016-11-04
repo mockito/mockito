@@ -33,7 +33,7 @@ public interface VerificationMode {
     /**
      * Performs the verification
      */
-    void verify(VerificationData data);
+    void verify(org.mockito.internal.verification.api.VerificationData data);
     
     /**
      * Description will be prepended to the assertion error if verification fails.

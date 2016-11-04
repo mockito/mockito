@@ -9,7 +9,7 @@ import static org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocat
 import static org.mockito.internal.verification.checkers.MissingInvocationChecker.checkMissingInvocation;
 
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.verification.VerificationData;
+import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.verification.VerificationMode;

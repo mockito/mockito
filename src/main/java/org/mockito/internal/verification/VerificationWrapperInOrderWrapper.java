@@ -2,7 +2,7 @@ package org.mockito.internal.verification;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.InOrderImpl;
-import org.mockito.verification.VerificationData;
+import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.verification.VerificationMode;
 
