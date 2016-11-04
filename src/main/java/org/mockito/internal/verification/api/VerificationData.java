@@ -13,7 +13,7 @@ import java.util.List;
  * @deprecated - This internal class leaks from the public API and therefore was deprecated.
  * Please use {@link org.mockito.verification.VerificationData} instead.
  *
- * Deprecated since @since@
+ * Deprecated since 2.2.12
  */
 @Deprecated
 public interface VerificationData {
@@ -27,7 +27,7 @@ public interface VerificationData {
      * @deprecated - This internal method leaks internal class <code>InvocationMatcher</code>.
      * Please use {@link org.mockito.verification.VerificationData#getTarget()} instead.
      *
-     * Deprecated since @since@
+     * Deprecated since 2.2.12
      */
     @Deprecated
     InvocationMatcher getWanted();

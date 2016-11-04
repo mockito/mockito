@@ -14,14 +14,14 @@ import java.util.List;
  *   verify(mock).bar();  // <- matchable invocation
  * </code></pre>
  *
- * @since @since@
+ * @since 2.2.12
  */
 public interface MatchableInvocation extends DescribedInvocation {
 
     /**
      * The actual invocation Mockito will match against.
      *
-     * @since @since@
+     * @since 2.2.12
      */
     Invocation getInvocation();
 
@@ -31,14 +31,14 @@ public interface MatchableInvocation extends DescribedInvocation {
      * Mockito still converts them into {@link ArgumentMatcher} instances
      * that use 'eq' matching via {@link org.mockito.Mockito#eq(Object)}.
      *
-     * @since @since@
+     * @since 2.2.12
      */
     List<ArgumentMatcher> getMatchers();
 
     /**
      * Same method, mock and all arguments match.
      *
-     * @since @since@
+     * @since 2.2.12
      */
     boolean matches(Invocation candidate);
 
@@ -46,14 +46,14 @@ public interface MatchableInvocation extends DescribedInvocation {
      * Candidate invocation has the similar method.
      * 'Similar' means the same method name, same mock, unverified, not overloaded, but not necessarily matching arguments
      *
-     * @since @since@
+     * @since 2.2.12
      */
     boolean hasSimilarMethod(Invocation candidate);
 
     /**
      * Returns true if the candidate invocation has the same method (method name and parameter types)
      *
-     * @since @since@
+     * @since 2.2.12
      */
     boolean hasSameMethod(Invocation candidate);
 
@@ -64,7 +64,7 @@ public interface MatchableInvocation extends DescribedInvocation {
      *
      * @param invocation the invocation to capture the arguments from
      *
-     * @since @since@
+     * @since 2.2.12
      */
     void captureArgumentsFrom(Invocation invocation);
 }

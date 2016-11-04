@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Data needed to perform verification of interactions.
  *
- * @since @since@
+ * @since 2.2.12
  */
 public interface VerificationData extends org.mockito.internal.verification.api.VerificationData {
 
@@ -20,7 +20,7 @@ public interface VerificationData extends org.mockito.internal.verification.api.
      * All invocations recorded on the mock object that is being verified.
      * Does not include invocations recorded on other mock objects.
      *
-     * @since @since@
+     * @since 2.2.12
      */
     List<Invocation> getAllInvocations();
 
@@ -37,7 +37,7 @@ public interface VerificationData extends org.mockito.internal.verification.api.
      * Target invocation can contain argument matchers therefore the returned type is {@link MatchableInvocation}
      * and not {@link Invocation}.
      *
-     * @since @since@
+     * @since 2.2.12
      */
     MatchableInvocation getTarget();
 }
