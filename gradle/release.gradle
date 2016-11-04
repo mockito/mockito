@@ -122,7 +122,6 @@ bintrayUpload {
 
 String currentVersion = project.version
 String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
-MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
 task assertCleanWorkingCopy {
     doLast {
@@ -200,7 +199,7 @@ task pushChanges(type: Exec) {
     description = "Pushes changes to '${System.env.TRAVIS_BRANCH}' branch."
     //!!!Below command _MUST_ be quiet otherwise it exposes GitHub write token!!!
     def mustBeQuiet = "-q"
-    def pushCommandLine = ["git", "push", pushTarget, System.env.TRAVIS_BRANCH, "v$currentVersion", mustBeQuiet]
+    def pushCommandLine = ["git", "push", "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git", System.env.TRAVIS_BRANCH, "v$currentVersion", mustBeQuiet]
     if (dryRun) {
         pushCommandLine << '--dry-run'
     }
@@ -241,14 +240,9 @@ void runWithOutput(Collection<String> args, OutputStream output) {
         if (output) {
             standardOutput = output
         }
-        commandLine args.collect { it instanceof MaskedArg? it.value : it.toString()}
+        commandLine args
     }
     logger.lifecycle("--- Completed!", args)
-}
-
-class MaskedArg {
-    String value
-    String toString() { "<masked>" }
 }
 
 /*
