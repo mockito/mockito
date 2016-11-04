@@ -1,3 +1,23 @@
+### 2.2.11 (2016-11-04 04:51 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 2: bric3
+  * 2: Szczepan Faber
+* Improvements: 1
+  * Enhancements: 1
+    * New nullable(Class<T>) matcher for convenient matching of nullable arguments [(#734)](https://github.com/mockito/mockito/pull/734)
+
+### 2.2.10 (2016-11-04 04:23 UTC)
+
+* Authors: 2
+* Commits: 11
+  * 9: Szczepan Faber
+  * 2: bric3
+* Improvements: 2
+  * Upgrade ByteBuddy to 1.5.3 [(#737)](https://github.com/mockito/mockito/issues/723)
+  * Release automation tidy up [(#723)](https://github.com/mockito/mockito/pull/723)
+
 ### 2.2.9 (2016-10-26 14:44 UTC)
 
 * Authors: 2
