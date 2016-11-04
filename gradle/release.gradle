@@ -159,6 +159,8 @@ releaseSteps {
              - see 'TROUBLESHOOTING' section at the top of this file
     */
 
+    step("start operating on $System.env.TRAVIS_BRANCH") { run "git", "checkout",  System.env.TRAVIS_BRANCH }
+
     step("update release notes") { project.notes.updateReleaseNotes() }
 
     step("commit release notes") { commitReleaseNotes(buildInfo) }
