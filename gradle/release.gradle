@@ -13,8 +13,12 @@ In case the release process from Travis CI fails, please try:
 Testing release locally:
   (this section of docs is in progress)
   1. Configure env TRAVIS_BRANCH, GH_TOKEN, MOCKITO_BINTRAY_API_KEY
-  2. run './gradlew release -PdryRun'
-  3. run './gradlew release -Pe2eTest'
+  2. Dry running: run './gradlew release -PdryRun'
+     - It will leave the working copy clean, the changes/commits made by the release process will be rolled back.
+     - Nothing is pushed/published to GitHub, BinTray
+  3. Testing release: run './gradlew release -PreleaseTest'
+     - It will leave the changes / commits as the release process would do - useful for manual inspection
+     - Nothing is pushed/published to GitHub, BinTray
 """
 
 def skipReleaseCommitMessage = '[ci skip-release]'
@@ -44,10 +48,9 @@ notes {
     ]
 }
 
-ext {
-    dryRun = project.hasProperty('dryRun')
-    e2eTest = project.hasProperty('e2eTest')
-}
+//dryRun project property is interpreted by the release-workflow plugin to enable rollbacks
+//releaseTest does not publish or push but it leaves the commits so that they can be inspected manually
+def releaseTest = project.hasProperty('releaseTest') || project.hasProperty('dryRun')
 
 def isReleasableBranch(String branch) {
     // matches 'master', 'release/2.x', 'release/3.x', etc.
@@ -87,13 +90,10 @@ task("releaseNeeded") {
         def commitMessage = System.env.TRAVIS_COMMIT_MESSAGE
         def skippedByCommitMessage = commitMessage?.contains(skipReleaseCommitMessage)
 
-        //Useful for testing bintrayUpload task, makes "releaseNeeded" answer "yes"
-        def forceBintrayUpload = project.hasProperty("forceBintrayUpload")
-
         if (skippedByCommitMessage || skipEnvVariable) {
             logger.lifecycle("Release is skipped on request")
             ext.needed = false //we really don't want the release
-        } else if (forceBintrayUpload || project.dryRun || project.e2eTest) {
+        } else if (releaseTest) {
             logger.lifecycle("Release will be initiated for testing purposes")
             ext.needed = true //testing purposes, dry run
         } else if (pr == 'false' && isReleasableBranch(branch) && !comparePublications.publicationsEqual) {
@@ -105,8 +105,8 @@ task("releaseNeeded") {
         }
 
         logger.lifecycle("Release need evaluation - needed: ${ext.needed}, " +
-                "releasable branch: ${isReleasableBranch(branch)}, pull request: $pr, dry run: $project.dryRun, " +
-                "force bintray upload: $forceBintrayUpload, publications equal: $comparePublications.publicationsEqual, " +
+                "releasable branch: ${isReleasableBranch(branch)}, pull request: $pr, dry run / test release: $releaseTest, " +
+                "publications equal: $comparePublications.publicationsEqual, " +
                 "skip env variable: $skipEnvVariable, skipped by message: $skippedByCommitMessage")
     }
 }
@@ -114,7 +114,7 @@ task("releaseNeeded") {
 bintrayUpload {
     doFirst {
         logger.lifecycle troubleshootingInfo
-        it.dryRun = project.dryRun || project.e2eTest
+        it.dryRun = releaseTest
         if (it.dryRun) {
             logger.lifecycle "Dry-running the release! Although 'bintrayUpload' is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
         }
@@ -201,7 +201,7 @@ task pushChanges(type: Exec) {
     //!!!Below command _MUST_ be quiet otherwise it exposes GitHub write token!!!
     def mustBeQuiet = "-q"
     def pushCommandLine = ["git", "push", "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git", System.env.TRAVIS_BRANCH, "v$currentVersion", mustBeQuiet]
-    if (project.dryRun || project.e2eTest) {
+    if (releaseTest) {
         pushCommandLine << '--dry-run'
     }
     commandLine pushCommandLine
