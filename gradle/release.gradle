@@ -25,7 +25,7 @@ assert project == rootProject
 apply from: rootProject.file("gradle/publish.gradle")
 
 apply plugin: 'release-notes'
-apply plugin: 'release'
+apply plugin: 'release-workflow'
 
 notes {
     notesFile = file("doc/release-notes/official.md")
@@ -44,13 +44,6 @@ notes {
 }
 
 def dryRun = project.hasProperty('dryRun')
-if (dryRun) {
-    //TODO SF lets not use excludedTaskNames to model this
-    logger.lifecycle "Automatically scheduling 'rollbackRelease' task"
-    //mustRun instead of dependsOn to avoid running 'release' task every time use 'dryRun' property
-    rollbackRelease.mustRunAfter release
-    gradle.startParameter.taskNames += "rollbackRelease"
-}
 
 def isReleasableBranch(String branch) {
     // matches 'master', 'release/2.x', 'release/3.x', etc.
@@ -113,6 +106,8 @@ task("releaseNeeded") {
 }
 
 bintrayUpload {
+    //Technically, below is not needed because release workflow already handles aborting if release is not needed
+    //However, I want to reduce the chance of accidental releases
     dependsOn releaseNeeded
     onlyIf { releaseNeeded.needed }
     doFirst {
@@ -123,97 +118,126 @@ bintrayUpload {
     }
 }
 
-release {
-  dependsOn bintrayUpload, releaseNeeded
-  onlyIf { releaseNeeded.needed }
+String currentVersion = project.version
+String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
+MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
 
-  doFirst {
+task assertCleanWorkingCopy {
+    doLast {
+        String output = run "git", "status", "--porcelain"
+        assert output.trim().isEmpty() : "Working copy not clean. Commit or stash your changes before continuing.\n$output"
+    }
+}
+
+task pullCommits(type: Exec) {
+    description = "Ensures good chunk of recent commits is pulled for release notes automation"
+    //Travis default clone is pretty shallow
+    //Loading extra 1K commits (1.x -> 2.x had ~700 commits)
+    commandLine "git", "pull", "--depth", "1000", "origin", System.env.TRAVIS_BRANCH
+}
+
+task configureGenericGitUser {
+    description = "Configures generic git user for automated commits"
+    doLast {
+        ext.gitAuthor = gitTool.setAuthor("Continuous Delivery Drone", "continuous.delivery.drone@gmail.com")
+    }
+}
+
+task restoreGitUser {
+    //Very useful when releasing from local
+    description = "Restores previous git user in this repo."
+    doLast {
+        configureGenericGitUser.gitAuthor.restoreOriginal()
+    }
+}
+
+task checkOutCommittableBranch(type: Exec) {
+    commandLine = ["git", "checkout",  System.env.TRAVIS_BRANCH]
+}
+
+task commitReleaseNotes {
+    description = "Commits release notes commit by resetting head by one commit (--hard)."
+    doLast {
+        def notesFile = project.file("doc/release-notes/official.md")
+        run "git", "add", "$notesFile" as String
+        run "git", "commit", "-m", "Update release notes $buildInfo" as String, "$notesFile" as String
+    }
+}
+
+task resetReleaseNotes(type: Exec) {
+    description = "Removes release notes commit by resetting head by one commit (--hard)."
+    commandLine "git", "reset", "--hard", "HEAD~1"
+}
+
+task tagNewVersion(type: Exec) {
+    commandLine "git", "tag", "-a", "v${currentVersion}", "-m", "Create tag v${currentVersion} ${buildInfo}"
+}
+
+task removeNewTag(type: Exec) {
+    commandLine "git", "tag", "-d", "v${currentVersion}"
+}
+
+task bumpVersion {
+    description = "Increments version in 'version.properties' and commits to '$System.env.TRAVIS_BRANCH'"
+    doLast {
+        String nextVersion = project.versionFile.incrementVersion()
+        String message = "Increment version '$currentVersion' -> '$nextVersion' $buildInfo"
+        run "git", "commit", "-m", "$message" as String, "version.properties"
+    }
+}
+
+task unbumpVersion(type: Exec) {
+    description = "Unbumps version in 'version.properties' by resetting head by one commit (--hard)."
+    commandLine "git", "reset", "--hard", "HEAD~1"
+}
+
+task pushChanges(type: Exec) {
+    description = "Pushes changes to '${System.env.TRAVIS_BRANCH}' branch."
+    //!!!Below command _MUST_ be quiet otherwise it exposes GitHub write token!!!
+    def mustBeQuiet = "-q"
+    def pushCommandLine = ["git", "push", pushTarget, System.env.TRAVIS_BRANCH, "v$currentVersion", mustBeQuiet]
     if (dryRun) {
-      logger.lifecycle "Dry-running the release"
+        pushCommandLine << '--dry-run'
     }
-  }
+    commandLine pushCommandLine
 }
 
-releaseSteps {
-    String currentVersion = project.version
-    String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
-    MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git")
-
-    step("ensure good chunk of recent commits is pulled for release notes automation") {
-        //Travis default clone is pretty shallow
-        //Loading extra 1K commits (1.x -> 2.x had ~700 commits)
-        run "git", "pull", "--depth", "1000", "origin", System.env.TRAVIS_BRANCH
-    }
-
-    def gitAuthor
-    step("configure generic git user") { gitAuthor = gitTool.setAuthor("Continuous Delivery Drone", "continuous.delivery.drone@gmail.com") }
-    .cleanup { gitAuthor.restoreOriginal() }
-
+releaseWorkflow {
+    step assertCleanWorkingCopy
+    step releaseNeeded
+    onlyIf { releaseNeeded.needed }
+    step bintrayUpload
+    step pullCommits
+    step configureGenericGitUser, [cleanup: restoreGitUser]
     /*
-            Now we'll start operating on branch that we want to release.
-            This introduces a problem - someone might have pushed changes *after* release process has started
-            What can happen:
-             - bintrayUpload will fail saying that the version is already released
-             - git push fails saying that the pull is needed
-            Resolutions:
-             - see 'TROUBLESHOOTING' section at the top of this file
+        Now we'll start operating on branch that we want to release.
+        This introduces a problem - someone might have pushed changes *after* release process has started
+        What can happen:
+         - bintrayUpload will fail saying that the version is already released
+         - git push fails saying that the pull is needed
+        Resolutions:
+         - see 'TROUBLESHOOTING' section at the top of this file
     */
-
-    step("start operating on $System.env.TRAVIS_BRANCH") { run "git", "checkout",  System.env.TRAVIS_BRANCH }
-
-    step("update release notes") { project.notes.updateReleaseNotes() }
-
-    step("commit release notes") { commitReleaseNotes(buildInfo) }
-            .rollback { run "git", "reset", "--hard", "HEAD~1" }
-
-    step("create new version tag") { createTag(buildInfo, "v${currentVersion}".toString()) }
-            .rollback { run "git", "tag", "-d", "v${currentVersion}".toString()}
-
-    step("commit incremented version on $System.env.TRAVIS_BRANCH") { commitIncrementedVersion(currentVersion, buildInfo, project.versionFile) }
-            .rollback { run "git", "reset", "--hard", "HEAD~1" }
-
-    step("push changes to all involved branches") {
-        def pushCommandLine = ["git", "push", pushTarget, System.env.TRAVIS_BRANCH, "v$currentVersion", "-q"]
-        if (dryRun) {
-            pushCommandLine << '--dry-run'
-        }
-        run pushCommandLine
-    }
+    step checkOutCommittableBranch
+    step commitReleaseNotes, [rollback: resetReleaseNotes]
+    step tagNewVersion, [rollback: removeNewTag]
+    step bumpVersion, [rollback: unbumpVersion]
+    step pushChanges
 }
 
-/*
-TODO:
- - declare release steps and then Gradle plugin adds tasks:
-  release, rollbackRelease, releaseStep1, rollbackStep2, releaseSteps1..7
- - improve exception reporting
- - start rolling back from last successful step (e.g. don't rollback the step that failed)
- */
-
-private void commitReleaseNotes(String buildInfo) {
-    def notesFile = project.file("doc/release-notes/official.md")
-    run "git", "add", "$notesFile" as String
-    run "git", "commit", "-m", "Update release notes $buildInfo" as String, "$notesFile" as String
+String run(Object ... args) {
+    return run(args as List)
 }
 
-private void createTag(String buildInfo, String tag) {
-    String tagMessage = "Create tag ${tag} ${buildInfo}"
-    run "git", "tag", "-a", tag, "-m", "$tagMessage" as String
-}
-
-private void commitIncrementedVersion(String currentVersion, String buildInfo, VersionFile versionFile) {
-    String nextVersion = versionFile.incrementVersion()
-    String message = "Increment version '$currentVersion' -> '$nextVersion' $buildInfo"
-    run "git", "commit", "-m", "$message" as String, "version.properties"
-}
-
-void run(Object ... args) {
-    run(args as List)
-}
-
-void run(Collection args) {
+String run(Collection args) {
     logger.lifecycle("--- Executing: {}", args.join(" "))
-    exec { commandLine args.collect { it instanceof MaskedArg? it.value : it.toString()} }
+    def out = new ByteArrayOutputStream()
+    exec {
+        standardOutput = out
+        commandLine args.collect { it instanceof MaskedArg? it.value : it.toString()}
+    }
     logger.lifecycle("--- Completed!", args)
+    return out
 }
 
 class MaskedArg {

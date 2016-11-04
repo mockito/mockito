@@ -39,10 +39,10 @@ bintray {
             }
 
             //Automatically syncs to central repository (https://oss.sonatype.org/)
-            mavenCentralSync {
-                user = System.env.NEXUS_TOKEN_USER
-                password = System.env.NEXUS_TOKEN_PWD
-            }
+//            mavenCentralSync {
+//                user = System.env.NEXUS_TOKEN_USER
+//                password = System.env.NEXUS_TOKEN_PWD
+//            }
         }
     }
 }

@@ -63,19 +63,20 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
             task.onlyIf(new SpecAdapter(allower));
         }
 
-        if (config.isEmpty()) {
+        StepConfiguration stepConfig = new StepConfiguration(config);
+
+        if (stepConfig.isEmpty()) {
             return; //no rollback/cleanup configured
         }
 
-        //TODO allow only one of those
-        Task rollback = config.get("rollback");
+        Task rollback = stepConfig.getRollback();
         if (rollback != null) {
             //rollbacks only run when one of the steps fails, by default we assume they don't fail
             if (!project.hasProperty("dryRun")) { //accommodate testing
                 rollback.setEnabled(false);
             }
         } else {
-            rollback = config.get("cleanup");
+            rollback = stepConfig.getCleanup();
             //cleanups run even if the release is successful
         }
 
