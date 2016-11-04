@@ -97,13 +97,11 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
 
         //rollbacks only run when their main task did not fail
         // when main task fails, there is nothing to rollback
-        if (!project.hasProperty("dryRun")) { //accommodate testing
-            rollback.onlyIf(new Spec<Task>() {
-                public boolean isSatisfiedBy(Task t) {
-                    return task.getState().getFailure() == null;
-                }
-            });
-        }
+        rollback.onlyIf(new Spec<Task>() {
+            public boolean isSatisfiedBy(Task t) {
+                return task.getState().getFailure() == null;
+            }
+        });
 
         //only run rollback if it is allowed
         for (Callable<Boolean> allower : allowers) {

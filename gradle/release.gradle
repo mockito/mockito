@@ -69,6 +69,8 @@ task("comparePublications", type: org.mockito.release.comparison.PublicationsCom
     comparePoms({ configurations.previousPom.singleFile.text }, { generatePomFileForMockitoCorePublication.destination.text })
 }
 
+//TODO if System.env.TRAVIS_BRANCH is empty, just pick up current branch from Git
+
 /*
 Release process should *not* run concurrently.
  */
@@ -124,6 +126,7 @@ MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TO
 
 task assertCleanWorkingCopy {
     doLast {
+        //TODO move to GitTool
         String output = run "git", "status", "--porcelain"
         assert output.trim().isEmpty() : "Working copy not clean. Commit or stash your changes before continuing.\n$output"
     }

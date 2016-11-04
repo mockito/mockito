@@ -102,6 +102,20 @@ class ReleaseWorkflowPluginTest extends GradleSpecification {
 :rollbackOne=SUCCESS"""
     }
 
+    def "rollback does not run if main task fails even with dryRun"() {
+        buildFile << "three.doLast { assert false }"
+
+        when:
+        def result = fail('release', '-PdryRun')
+
+        then:
+        result.tasks.join("\n") == """:one=SUCCESS
+:two=SUCCESS
+:three=FAILED
+:rollbackThree=SKIPPED
+:rollbackOne=SUCCESS"""
+    }
+
     def "does not run release if onlyIf predicate is negative"() {
         buildFile << "releaseNeeded = false"
 

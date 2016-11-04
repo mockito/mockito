@@ -5,6 +5,9 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.execution.TaskExecutionListener;
 import org.gradle.api.tasks.TaskState;
+import org.mockito.release.exec.Exec;
+import org.mockito.release.git.Git;
+import org.mockito.release.git.GitTool;
 
 public class ReleaseWorkflowPlugin implements Plugin<Project> {
     public void apply(final Project project) {
@@ -24,6 +27,9 @@ public class ReleaseWorkflowPlugin implements Plugin<Project> {
                 }
             }
         });
-    }
 
+        //TODO very implicit, it needs to go to some tools for release, for example, "releaseTools.git"
+        GitTool gitTool = Git.gitTool(Exec.getProcessRunner(project.getProjectDir()));
+        project.getExtensions().getExtraProperties().set("gitTool", gitTool);
+    }
 }
