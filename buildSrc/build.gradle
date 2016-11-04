@@ -22,6 +22,9 @@ test {
     }
 }
 
+//This is needed so that buildSrc submodule generates 'iml' file that can be imported to IDEA manually
+//This allows working conveniently with buildSrc module in idea
 if (gradle.parent && gradle.parent.startParameter.taskNames.any { it in ["ideaModule", "idea"] }) {
+    test.enabled = false //so that IDEA files can be generated even if the tests for buildSrc fail
     build.dependsOn ideaModule
 }
