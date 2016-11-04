@@ -5,7 +5,6 @@
 package org.mockito.internal.verification;
 
 import java.util.Set;
-import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.listeners.VerificationListener;
 import org.mockito.verification.VerificationMode;
@@ -30,12 +29,18 @@ public class MockAwareVerificationMode implements VerificationMode {
             for (VerificationListener listener : listeners) {
                 listener.onVerificationSucceeded(new VerificationSucceededEvent(mock, mode, data));
             }
-        } catch (MockitoAssertionError e) {
-            for (VerificationListener listener : listeners) {
-                listener.onVerificationException(mock, mode, e);
-            }
-
+        } catch (RuntimeException e) {
+            notifyExceptionListeners(e);
             throw e;
+        } catch (Error e) {
+            notifyExceptionListeners(e);
+            throw e;
+        }
+    }
+
+    private void notifyExceptionListeners(Throwable e) {
+        for (VerificationListener listener : listeners) {
+            listener.onVerificationException(mock, mode, e);
         }
     }
 
