@@ -56,7 +56,7 @@ public class VerificationListenerCallBackTest {
     }
 
     @Test
-    public void should_not_call_listener_when_verify_throws() {
+    public void should_not_call_listener_when_verify_was_called_incorectly() {
         //given
         RememberingListener listener = new RememberingListener();
         MockingProgress mockingProgress = ThreadSafeMockingProgress.mockingProgress();
@@ -70,7 +70,7 @@ public class VerificationListenerCallBackTest {
             fail("Exception expected.");
         } catch (Exception e) {
             //then
-            assertThat(listener.cause).isInstanceOf(NullInsteadOfMockException.class);
+            assertNull(listener.cause);
         }
     }
 

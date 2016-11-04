@@ -80,25 +80,16 @@ public class MockitoCore {
     }
 
     public <T> T verify(T mock, VerificationMode mode) {
+        if (mock == null) {
+            throw nullPassedToVerify();
+        }
+        if (!isMock(mock)) {
+            throw notAMockPassedToVerify(mock.getClass());
+        }
         MockingProgress mockingProgress = mockingProgress();
         VerificationMode actualMode = mockingProgress.maybeVerifyLazily(mode);
-
-        Set<VerificationListener> listeners = mockingProgress.verificationListeners();
-        try {
-            if (mock == null) {
-                throw nullPassedToVerify();
-            }
-            if (!isMock(mock)) {
-                throw notAMockPassedToVerify(mock.getClass());
-            }
-            mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, actualMode, listeners));
-            return mock;
-        } catch (MockitoException e) {
-            for (VerificationListener listener : listeners) {
-                listener.onVerificationException(mock, actualMode, e);
-            }
-            throw e;
-        }
+        mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, actualMode, mockingProgress.verificationListeners()));
+        return mock;
     }
 
     public <T> void reset(T... mocks) {
