@@ -127,7 +127,9 @@ MaskedArg pushTarget = new MaskedArg(value: "https://szczepiq:${System.env.GH_TO
 task assertCleanWorkingCopy {
     doLast {
         //TODO move to GitTool
-        String output = run "git", "status", "--porcelain"
+        def out = new ByteArrayOutputStream()
+        runWithOutput(["git", "status", "--porcelain"], out)
+        def output = out.toString()
         assert output.trim().isEmpty() : "Working copy not clean. Commit or stash your changes before continuing.\n$output"
     }
 }
@@ -222,25 +224,26 @@ releaseWorkflow {
          - see 'TROUBLESHOOTING' section at the top of this file
     */
     step checkOutCommittableBranch
+    step updateReleaseNotes
     step commitReleaseNotes, [rollback: resetReleaseNotes]
     step tagNewVersion, [rollback: removeNewTag]
     step bumpVersion, [rollback: unbumpVersion]
     step pushChanges
 }
 
-String run(Object ... args) {
-    return run(args as List)
+void run(Object ... args) {
+    runWithOutput(args as List, null)
 }
 
-String run(Collection args) {
+void runWithOutput(Collection<String> args, OutputStream output) {
     logger.lifecycle("--- Executing: {}", args.join(" "))
-    def out = new ByteArrayOutputStream()
     exec {
-        standardOutput = out
+        if (output) {
+            standardOutput = output
+        }
         commandLine args.collect { it instanceof MaskedArg? it.value : it.toString()}
     }
     logger.lifecycle("--- Completed!", args)
-    return out
 }
 
 class MaskedArg {
