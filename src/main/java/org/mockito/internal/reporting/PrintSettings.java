@@ -59,7 +59,7 @@ public class PrintSettings {
         return print(ArgumentsProcessor.argumentsToMatchers(invocation.getArguments()), invocation);
     }
 
-    public String print(MatchableInvocation invocationMatcher) {
-        return print(invocationMatcher.getMatchers(), invocationMatcher.getInvocation());
+    public String print(MatchableInvocation invocation) {
+        return print(invocation.getMatchers(), invocation.getInvocation());
     }
 }
