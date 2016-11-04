@@ -1,31 +1,11 @@
 package org.mockito.workflow.gradle.internal
 
-import org.gradle.testkit.runner.BuildResult
-import spock.lang.Specification
-import org.gradle.testkit.runner.GradleRunner
-import org.junit.Rule
-import org.junit.rules.TemporaryFolder
+import org.mockito.cd.gradle.testing.GradleSpecification
 
-/**
- * Created by sfaber on 10/29/16.
- */
-class ReleaseWorkflowPluginTest extends Specification {
-
-    //TODO:
-//  rw.singleStep (no dependencies between steps)
-
-    @Rule final TemporaryFolder testProjectDir = new TemporaryFolder()
-    File buildFile
+class ReleaseWorkflowPluginTest extends GradleSpecification {
 
     def setup() {
-        buildFile = testProjectDir.newFile('build.gradle')
         buildFile << """
-            buildscript {
-              dependencies {
-                classpath files('/Users/sfaber/mockito/src/out/production/buildSrc')
-              }
-            }
-
             task one << {}
             task two << {}
             task three << {}
@@ -55,7 +35,7 @@ class ReleaseWorkflowPluginTest extends Specification {
         def result = pass('release')
 
         then:
-result.tasks.join("\n") == """:one=SUCCESS
+        result.tasks.join("\n") == """:one=SUCCESS
 :two=SUCCESS
 :three=SUCCESS
 :four=SUCCESS
@@ -212,19 +192,5 @@ result.tasks.join("\n") == """:one=SUCCESS
 
         then:
         result.tasks.join("\n") == ":rollbackFour=SKIPPED"
-    }
-
-    private BuildResult pass(String ... args) {
-        GradleRunner.create()
-                .withProjectDir(testProjectDir.root)
-                .withArguments(args)
-                .build()
-    }
-
-    private BuildResult fail(String ... args) {
-        GradleRunner.create()
-                .withProjectDir(testProjectDir.root)
-                .withArguments(args)
-                .buildAndFail()
     }
 }
