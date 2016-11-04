@@ -1,3 +1,13 @@
+### 2.2.11 (2016-11-04 04:51 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 2: bric3
+  * 2: Szczepan Faber
+* Improvements: 1
+  * Enhancements: 1
+    * New nullable(Class<T>) matcher for convenient matching of nullable arguments [(#734)](https://github.com/mockito/mockito/pull/734)
+
 ### 2.2.10 (2016-11-04 04:23 UTC)
 
 * Authors: 2
