@@ -73,10 +73,21 @@ public class GenericMetadataSupportTest {
 
     @Test
     public void can_get_type_variables_from_Class() throws Exception {
-        assertThat(inferFrom(GenericsNest.class).actualTypeArguments().keySet()).hasSize(1).extracting("name").contains("K");
+        Set<TypeVariable<?>> genericsNestKeySet = inferFrom(GenericsNest.class).actualTypeArguments().keySet();
+        assertThat(genericsNestKeySet.size()).isEqualTo(1);
+        assertThat(genericsNestKeySet.iterator().next().getName()).isEqualTo("K");
         assertThat(inferFrom(ListOfNumbers.class).actualTypeArguments().keySet()).isEmpty();
-        assertThat(inferFrom(ListOfAnyNumbers.class).actualTypeArguments().keySet()).hasSize(1).extracting("name").contains("N");
-        assertThat(inferFrom(Map.class).actualTypeArguments().keySet()).hasSize(2).extracting("name").contains("K", "V");
+
+        Set<TypeVariable<?>> listOfAnyNumbersKeySet = inferFrom(ListOfAnyNumbers.class).actualTypeArguments().keySet();
+        assertThat(listOfAnyNumbersKeySet.size()).isEqualTo(1);
+        assertThat(listOfAnyNumbersKeySet.iterator().next().getName()).isEqualTo("N");
+
+        Set<TypeVariable<?>> mapKeySet = inferFrom(Map.class).actualTypeArguments().keySet();
+        assertThat(mapKeySet.size()).isEqualTo(2);
+        Iterator<TypeVariable<?>> iterator = mapKeySet.iterator();
+        assertThat(iterator.next().getName()).isEqualTo("K");
+        assertThat(iterator.next().getName()).isEqualTo("V");
+
         assertThat(inferFrom(Serializable.class).actualTypeArguments().keySet()).isEmpty();
         assertThat(inferFrom(StringList.class).actualTypeArguments().keySet()).isEmpty();
     }
@@ -90,9 +101,20 @@ public class GenericMetadataSupportTest {
 
     @Test
     public void can_get_type_variables_from_ParameterizedType() throws Exception {
-        assertThat(inferFrom(GenericsNest.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(2).extracting("name").contains("K", "V");
-        assertThat(inferFrom(ListOfAnyNumbers.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(1).extracting("name").contains("E");
-        assertThat(inferFrom(Integer.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).hasSize(1).extracting("name").contains("T");
+        Set<TypeVariable<?>> genericsNestKeySet = inferFrom(GenericsNest.class.getGenericInterfaces()[0]).actualTypeArguments().keySet();
+        assertThat(genericsNestKeySet .size()).isEqualTo(2);
+        Iterator<TypeVariable<?>> genericsNestKeySetIterator = genericsNestKeySet .iterator();
+        assertThat(genericsNestKeySetIterator.next().getName()).isEqualTo("K");
+        assertThat(genericsNestKeySetIterator.next().getName()).isEqualTo("V");
+
+        Set<TypeVariable<?>> listOfAnyNumbersKeySet = inferFrom(ListOfAnyNumbers.class.getGenericInterfaces()[0]).actualTypeArguments().keySet();
+        assertThat(listOfAnyNumbersKeySet.size()).isEqualTo(1);
+        assertThat(listOfAnyNumbersKeySet.iterator().next().getName()).isEqualTo("E");
+
+        Set<TypeVariable<?>> integerKeySet = inferFrom(Integer.class.getGenericInterfaces()[0]).actualTypeArguments().keySet();
+        assertThat(integerKeySet.size()).isEqualTo(1);
+        assertThat(integerKeySet.iterator().next().getName()).isEqualTo("T");
+
         assertThat(inferFrom(StringBuilder.class.getGenericInterfaces()[0]).actualTypeArguments().keySet()).isEmpty();
         assertThat(inferFrom(StringList.class).actualTypeArguments().keySet()).isEmpty();
     }

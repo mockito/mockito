@@ -8,8 +8,10 @@ import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class UnusedStubbingsTest extends TestBase {
@@ -41,10 +43,9 @@ public class UnusedStubbingsTest extends TestBase {
         stubbings.format("MyTest.myTestMethod", logger);
 
         //then
-        assertEquals(
-                "[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):\n" +
-                        "[MockitoHint] 1. Unused -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n" +
-                        "[MockitoHint] 2. Unused -> at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n",
-                filterLineNo(logger.getLoggedInfo()));
+        String[] message = filterLineNo(logger.getLoggedInfo()).split("\n");
+        assertThat(message[0]).isEqualTo("[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):");
+        assertThat(message[1]).matches("\\[MockitoHint\\] 1\\. Unused \\-\\> at [\\w\\.]+\\.reflect\\.NativeMethodAccessorImpl\\.invoke0\\(.*Native Method\\)");
+        assertThat(message[2]).matches("\\[MockitoHint\\] 2\\. Unused \\-\\> at [\\w\\.]+\\.reflect\\.NativeMethodAccessorImpl\\.invoke0\\(.*Native Method\\)");
     }
 }

@@ -1,5 +1,6 @@
 apply plugin: 'idea'
 apply plugin: 'groovy'
+apply plugin: 'java'
 
 repositories { jcenter() }
 
@@ -13,6 +14,10 @@ dependencies {
         exclude module: "groovy-all"
     }
     testCompile "cglib:cglib-nodep:2.2.2"
+}
+
+compileJava {
+    source = 'src/main/doclets' + JavaVersion.current()
 }
 
 test {

@@ -9,9 +9,10 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-# Enabling container based infrastructure hoping it will help the build speed <= this didn't work well, so it's reverted
-# see https://docs.travis-ci.com/user/migrating-from-legacy/ and https://docs.travis-ci.com/user/ci-environment
-sudo: true
+# required for oraclejdk9
+sudo: required
+dist: trusty
+group: edge
 
 language: java
 
@@ -31,6 +32,10 @@ jdk:
 matrix:
   include:
   - jdk: oraclejdk8
+    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+  - jdk: oraclejdk9
+    env: SKIP_RELEASE=true
+  - jdk: oraclejdk9
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
 
 env:
