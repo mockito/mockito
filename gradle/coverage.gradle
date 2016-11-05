@@ -9,7 +9,7 @@ repositories {
 }
 
 jacoco {
-    toolVersion = "0.7.8-20160914.203756-19"
+    toolVersion = "0.7.8-20161102.122531-23"
 }
 
 task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
