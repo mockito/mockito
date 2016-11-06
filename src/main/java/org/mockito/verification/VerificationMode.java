@@ -6,6 +6,7 @@
 package org.mockito.verification;
 
 import org.mockito.Mockito;
+import org.mockito.internal.verification.api.VerificationData;
 
 /**
  * Allows verifying that certain behavior happened at least once / exact number
@@ -33,7 +34,7 @@ public interface VerificationMode {
     /**
      * Performs the verification
      */
-    void verify(org.mockito.internal.verification.api.VerificationData data);
+    void verify(VerificationData data);
     
     /**
      * Description will be prepended to the assertion error if verification fails.

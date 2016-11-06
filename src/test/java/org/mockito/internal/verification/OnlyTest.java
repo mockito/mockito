@@ -35,7 +35,9 @@ public class OnlyTest {
         }
 
         @Override
-        public MatchableInvocation getTarget() { return wanted; }
+        public MatchableInvocation getTarget() {
+            return wanted;
+        }
 
         public InvocationMatcher getWanted() {
             return wanted;
