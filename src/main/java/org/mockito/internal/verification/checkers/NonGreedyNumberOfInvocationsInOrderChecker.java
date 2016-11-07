@@ -16,16 +16,17 @@ import org.mockito.internal.reporting.Discrepancy;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
+import org.mockito.invocation.MatchableInvocation;
 
 public class NonGreedyNumberOfInvocationsInOrderChecker {
 
     private NonGreedyNumberOfInvocationsInOrderChecker() {}
 
-    public static void check(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount, InOrderContext context) {
+    public static void check(List<Invocation> invocations, MatchableInvocation wanted, int wantedCount, InOrderContext context) {
         int actualCount = 0;
         Location lastLocation = null;
         while( actualCount < wantedCount ){
-            Invocation next = findFirstMatchingUnverifiedInvocation( invocations, wanted, context );
+            Invocation next = findFirstMatchingUnverifiedInvocation(invocations, wanted, context );
             if( next == null ){
                 throw tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, lastLocation );
             }

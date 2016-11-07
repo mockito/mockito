@@ -10,6 +10,7 @@ import static org.mockito.internal.verification.checkers.MissingInvocationChecke
 import java.util.List;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.MatchableInvocation;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
@@ -31,10 +32,10 @@ public class Times implements VerificationInOrderMode, VerificationMode {
     
     public void verify(VerificationData data) {
         List<Invocation> invocations = data.getAllInvocations();
-        InvocationMatcher wanted = data.getWanted();
+        MatchableInvocation wanted = data.getTarget();
 
         if (wantedCount > 0) {
-             checkMissingInvocation(data.getAllInvocations(), data.getWanted());
+             checkMissingInvocation(data.getAllInvocations(), data.getTarget());
         }
         NumberOfInvocationsChecker numberOfInvocations = new NumberOfInvocationsChecker();
         numberOfInvocations.check(invocations, wanted, wantedCount);
@@ -42,7 +43,7 @@ public class Times implements VerificationInOrderMode, VerificationMode {
     
     public void verifyInOrder(VerificationDataInOrder data) {
         List<Invocation> allInvocations = data.getAllInvocations();
-        InvocationMatcher wanted = data.getWanted();
+        MatchableInvocation wanted = data.getWanted();
         
         if (wantedCount > 0) {
             checkMissingInvocation(allInvocations, wanted, data.getOrderingContext());
