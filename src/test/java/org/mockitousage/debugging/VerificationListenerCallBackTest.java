@@ -1,5 +1,6 @@
 package org.mockitousage.debugging;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.progress.MockingProgress;
@@ -18,12 +19,19 @@ import static org.mockito.Mockito.*;
 
 public class VerificationListenerCallBackTest {
     public static final String invocationWanted = "doSomething";
+    private RememberingListener listener;
+    private MockingProgress mockingProgress;
+
+    @Before
+    public void setUp() {
+        listener = new RememberingListener();
+        mockingProgress = ThreadSafeMockingProgress.mockingProgress();
+        mockingProgress.addListener(listener);
+    }
 
     @Test
     public void should_call_single_listener_on_verify() {
         //given
-        RememberingListener listener = new RememberingListener();
-        ThreadSafeMockingProgress.mockingProgress().addListener(listener);
         Foo foo = mock(Foo.class);
 
         //when
@@ -37,11 +45,7 @@ public class VerificationListenerCallBackTest {
     @Test
     public void should_call_all_listeners_on_verify() {
         //given
-        RememberingListener listener1 = new RememberingListener();
         RememberingListener listener2 = new RememberingListener();
-
-        MockingProgress mockingProgress = ThreadSafeMockingProgress.mockingProgress();
-        mockingProgress.addListener(listener1);
         mockingProgress.addListener(listener2);
 
         Foo foo = mock(Foo.class);
@@ -51,18 +55,12 @@ public class VerificationListenerCallBackTest {
         verify(foo, never).doSomething("");
 
         //then
-        assertThatHasBeenNotified(listener1, foo, never, invocationWanted);
+        assertThatHasBeenNotified(listener, foo, never, invocationWanted);
         assertThatHasBeenNotified(listener2, foo, never, invocationWanted);
     }
 
     @Test
-    public void should_not_call_listener_when_verify_was_called_incorectly() {
-        //given
-        RememberingListener listener = new RememberingListener();
-        MockingProgress mockingProgress = ThreadSafeMockingProgress.mockingProgress();
-
-        mockingProgress.addListener(listener);
-
+    public void should_not_call_listener_when_verify_was_called_incorrectly() {
         //when
         Foo foo = null;
         try {
@@ -75,13 +73,7 @@ public class VerificationListenerCallBackTest {
     }
 
     @Test
-    public void wrong_verify_type() {
-        //given
-        RememberingListener listener = new RememberingListener();
-        MockingProgress mockingProgress = ThreadSafeMockingProgress.mockingProgress();
-
-        mockingProgress.addListener(listener);
-
+    public void wrong_verification_type() {
         Foo foo = mock(Foo.class);
         //when
         try {
@@ -90,6 +82,19 @@ public class VerificationListenerCallBackTest {
         } catch (Throwable e) {
             //then
             assertThat(listener.cause).isInstanceOf(MockitoAssertionError.class);
+        }
+    }
+
+    @Test
+    public void verification_that_throws_runtime_exception() {
+        Foo foo = mock(Foo.class);
+        //when
+        try {
+            verify(foo, new RuntimeExceptionVerificationMode()).doSomething("");
+            fail("Exception expected.");
+        } catch (Throwable e) {
+            //then
+            assertThat(listener.cause).isInstanceOf(RuntimeException.class);
         }
     }
 
@@ -112,6 +117,18 @@ public class VerificationListenerCallBackTest {
             this.mode = verificationEvent.getMode();
             this.data = verificationEvent.getData();
             this.cause = verificationEvent.getCause();
+        }
+    }
+
+    public static class RuntimeExceptionVerificationMode implements VerificationMode{
+        @Override
+        public void verify(VerificationData data) {
+            throw new RuntimeException();
+        }
+
+        @Override
+        public VerificationMode description(String description) {
+            return null;
         }
     }
 }
