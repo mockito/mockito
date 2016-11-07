@@ -1,8 +1,8 @@
-- [Contributing to Mockito](#)
-  - [Pull request criteria](#)
-  - [General info](#)
-  - [More on pull requests](#)
-  - [Coding style](#)
+- [Contributing to Mockito](#contributing-to-mockito)
+    - [Pull request criteria](#pull-request-criteria)
+    - [General info](#general-info)
+    - [More on pull requests](#more-on-pull-requests)
+    - [Coding style](#coding-style)
 
 **If looking for support**
 
@@ -11,6 +11,10 @@
 * Issues should always have a [Short, Self Contained, Correct (Compilable), Example](http://sscce.org) (same as any question on stackoverflow.com)
 
 # Contributing to Mockito
+
+Which branch : 
+* On mockito 2.x, make your pull request target `release/2.x`
+* On next mockito version make your pull request target `master`
 
 ## Pull request criteria
 

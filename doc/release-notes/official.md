@@ -1,3 +1,12 @@
+### 2.2.12 (2016-11-07 04:29 UTC)
+
+* Authors: 1
+* Commits: 11
+  * 11: Szczepan Faber
+* Improvements: 1
+  * Enhancements: 1
+    * Exposed existing verification API so that it no longer leaks internal API [(#735)](https://github.com/mockito/mockito/pull/735)
+
 ### 2.2.11 (2016-11-04 04:51 UTC)
 
 * Authors: 2
