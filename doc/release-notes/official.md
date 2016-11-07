@@ -1,3 +1,11 @@
+### 2.2.13 (2016-11-07 22:59 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Removes deprecated way of documenting package by package-info.java [(#745)](https://github.com/mockito/mockito/pull/745)
+
 ### 2.2.12 (2016-11-07 04:29 UTC)
 
 * Authors: 1
