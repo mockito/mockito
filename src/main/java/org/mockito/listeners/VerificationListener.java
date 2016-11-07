@@ -9,6 +9,9 @@ import org.mockito.verification.VerificationEvent;
  */
 public interface VerificationListener extends MockitoListener {
     /**
+     * Called after a verification happened.
+     * This includes verifications that fail due to the verification mode failing.
+     *
      * @param verificationEvent the event that occurred.
      */
     void onVerification(VerificationEvent verificationEvent);
