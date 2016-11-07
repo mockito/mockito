@@ -5,6 +5,7 @@ buildscript {
 
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2' //publishing to bintray
+        classpath'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0' // later versions don't work on JDK6
     }
 }
 
@@ -25,6 +26,7 @@ apply from: "gradle/ide.gradle"
 apply from: 'gradle/coverage.gradle'
 apply from: 'gradle/osgi.gradle'
 apply from: 'gradle/gradle-fix.gradle'
+apply from: 'gradle/license.gradle'
 
 allprojects {
     repositories {
