@@ -24,7 +24,7 @@ import static org.mockito.BDDMockito.verify;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer1;
 import org.mockito.stubbing.Answer2;
 import org.mockito.stubbing.Answer3;

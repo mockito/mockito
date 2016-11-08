@@ -4,6 +4,8 @@
  */
 package org.mockito.quality;
 
+import org.mockito.junit.MockitoJUnitRunner;
+
 /**
  * Starting with 2.1.0 of Mockito stubbing hints / warnings are printed to standard output.
  * Hints contain clickable links that take you right to the line of code that contains a possible problem.
@@ -20,7 +22,7 @@ package org.mockito.quality;
  * How to take advantage of the hints? Use one of the JUnit integrations:
  * <ul>
  *     <li>{@link org.mockito.junit.MockitoJUnit#rule()}</li>
- *     <li>{@link org.mockito.runners.MockitoJUnitRunner}</li>
+ *     <li>{@link MockitoJUnitRunner}</li>
  * </ul>
  * Currently, the feature is available with JUnit Rule and JUnit Runner only because
  * they provide necessary hooks (the 'before' and 'after' test events).

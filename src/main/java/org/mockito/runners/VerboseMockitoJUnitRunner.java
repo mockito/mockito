@@ -19,7 +19,7 @@ import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
 
 /**
- * @deprecated as of 2.1.0. Use the {@link org.mockito.runners.MockitoJUnitRunner} runner instead
+ * @deprecated as of 2.1.0. Use the {@link org.mockito.junit.MockitoJUnitRunner} runner instead
  * which contains support for detecting unused stubs.
  * <p>
  * If you still prefer using this runner, tell us why (create ticket in our issue tracker).

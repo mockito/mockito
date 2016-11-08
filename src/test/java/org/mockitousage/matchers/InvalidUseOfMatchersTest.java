@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,8 +31,8 @@ public class InvalidUseOfMatchersTest {
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertThat(e.getMessage())
-                      .contains("3 matchers expected")
-                      .contains("1 recorded");
+                    .contains("3 matchers expected")
+                    .contains("1 recorded");
         }
     }
 
@@ -46,7 +46,7 @@ public class InvalidUseOfMatchersTest {
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertThat(e.getMessage())
-                      .contains("Misplaced argument matcher detected here");
+                    .contains("Misplaced argument matcher detected here");
             e.printStackTrace();
         }
     }
@@ -89,8 +89,8 @@ public class InvalidUseOfMatchersTest {
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertThat(e.getMessage())
-                      .contains("3 matchers expected")
-                      .contains("1 recorded");
+                    .contains("3 matchers expected")
+                    .contains("1 recorded");
         }
     }
 }
