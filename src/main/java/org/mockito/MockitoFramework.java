@@ -39,9 +39,10 @@ public interface MockitoFramework {
      * </code></pre>
      *
      * @param listener to add
+     * @since 2.1.0
      */
     @Incubating
-    void addListener(MockitoListener listener);
+    MockitoFramework addListener(MockitoListener listener);
 
     /**
      * When you add listener using {@link #addListener(MockitoListener)} make sure to remove it.
@@ -54,7 +55,8 @@ public interface MockitoFramework {
      * we are very happy to hear about it via our issue tracker or mailing list.
      *
      * @param listener to remove
+     * @since 2.1.0
      */
     @Incubating
-    void removeListener(MockitoListener listener);
+    MockitoFramework removeListener(MockitoListener listener);
 }
