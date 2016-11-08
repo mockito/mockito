@@ -1,3 +1,13 @@
+### 2.2.15 (2016-11-08 20:43 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Brice Dutheil
+  * 1: Szczepan Faber
+* Improvements: 1
+  * Enhancements: 1
+    * Allow fluent usage of Mockito.framework() listeners methods [(#747)](https://github.com/mockito/mockito/pull/747)
+
 ### 2.2.14 (2016-11-08 20:11 UTC)
 
 * Authors: 1
