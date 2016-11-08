@@ -2,12 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.util.junit;
-
-import org.junit.runner.notification.Failure;
-import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
+package org.mockito.internal.junit.util;
 
 import java.lang.reflect.Field;
+import org.junit.runner.notification.Failure;
+import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
 
 @Deprecated
 public class JUnitFailureHacker {
