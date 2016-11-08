@@ -16,7 +16,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import java.text.ParseException;

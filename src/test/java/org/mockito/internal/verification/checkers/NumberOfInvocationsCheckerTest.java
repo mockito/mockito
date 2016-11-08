@@ -21,7 +21,7 @@ import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 
 import java.util.List;
