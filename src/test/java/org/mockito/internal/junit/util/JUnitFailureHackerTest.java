@@ -2,9 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.util.junit;
-
-import static org.assertj.core.api.Assertions.assertThat;
+package org.mockito.internal.junit.util;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -14,6 +12,7 @@ import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JUnitFailureHackerTest extends TestBase {
     
