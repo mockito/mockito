@@ -7,14 +7,16 @@ import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingPro
 
 public class DefaultMockitoFramework implements MockitoFramework {
 
-    public void addListener(MockitoListener listener) {
+    public MockitoFramework addListener(MockitoListener listener) {
         assertNotNull(listener);
         mockingProgress().addListener(listener);
+        return this;
     }
 
-    public void removeListener(MockitoListener listener) {
+    public MockitoFramework removeListener(MockitoListener listener) {
         assertNotNull(listener);
         mockingProgress().removeListener(listener);
+        return this;
     }
 
     private void assertNotNull(MockitoListener listener) {
