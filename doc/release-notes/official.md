@@ -1,3 +1,11 @@
+### 2.2.14 (2016-11-08 20:11 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Dmitriy Zaitsev
+* Improvements: 1
+  * Add missing copyright headers [(#746)](https://github.com/mockito/mockito/pull/746)
+
 ### 2.2.13 (2016-11-07 22:59 UTC)
 
 * Authors: 1
