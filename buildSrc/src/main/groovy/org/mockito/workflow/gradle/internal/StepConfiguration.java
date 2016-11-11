@@ -21,10 +21,10 @@ class StepConfiguration {
             throw new GradleException("Step configuration can only have one setting either 'rollback' or 'cleanup'. " +
                     "Please refer to the documentation.");
         }
-        String key = config.keySet().iterator().next();
-        if (!(config.get(key) instanceof Task)) {
-            throw new GradleException("Step configuration '" + key + "' must refer to a Gradle task but it is: '" +
-                   config.get(key) + "'. Please refer to the documentation.");
+        Map.Entry<String, Task> entry = config.entrySet().iterator().next();
+        if (!(entry.getValue() instanceof Task)) {
+            throw new GradleException("Step configuration '" + entry.getKey() + "' must refer to a Gradle task but it is: '" +
+                   entry.getValue() + "'. Please refer to the documentation.");
         }
     }
 

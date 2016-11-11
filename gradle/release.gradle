@@ -211,7 +211,7 @@ releaseWorkflow {
     step assertCleanWorkingCopy
     step releaseNeeded
     onlyIf { releaseNeeded.needed }
-    step bintrayUpload
+    step bintrayUpload //TODO make upload task the very last task or very close to push so that the most invasive steps go last
     step pullCommits
     step configureGenericGitUser, [cleanup: restoreGitUser]
     /*

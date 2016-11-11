@@ -15,21 +15,30 @@ public class ReleaseWorkflowPlugin implements Plugin<Project> {
         project.getTasks().create("release");
         final ReleaseWorkflowExtension ext = project.getExtensions().create("releaseWorkflow", ReleaseWorkflowExtension.class, project);
 
-        //setup listener, so that the rollbacks are only executed if one of the main tasks fail
-        project.getGradle().addListener(new TaskExecutionListener() {
-            public void beforeExecute(Task task) {}
-            public void afterExecute(Task task, TaskState taskState) {
-                //when one of the main step tasks fails, enable all rollback tasks
-                if (taskState.getFailure() != null && ext.steps.contains(task)) {
-                    for (Task rollback : ext.rollbacks) {
-                        rollback.setEnabled(true);
-                    }
-                }
-            }
-        });
+        //setup listener, so that the postSteps are only executed if one of the main tasks fail
+        project.getGradle().addListener(new PostStepTaskEnabler(ext));
 
         //TODO very implicit, it needs to go to some tools for release, for example, "releaseTools.git"
         GitTool gitTool = Git.gitTool(Exec.getProcessRunner(project.getProjectDir()));
         project.getExtensions().getExtraProperties().set("gitTool", gitTool);
+    }
+
+    private static class PostStepTaskEnabler implements TaskExecutionListener {
+        private final ReleaseWorkflowExtension ext;
+
+        PostStepTaskEnabler(ReleaseWorkflowExtension ext) {
+            this.ext = ext;
+        }
+
+        public void beforeExecute(Task task) {}
+
+        public void afterExecute(Task task, TaskState taskState) {
+            //when one of the main step tasks fails, enable all rollback tasks
+            if (taskState.getFailure() != null && ext.steps.contains(task)) {
+                for (Task rollback : ext.postSteps) {
+                    rollback.setEnabled(true);
+                }
+            }
+        }
     }
 }

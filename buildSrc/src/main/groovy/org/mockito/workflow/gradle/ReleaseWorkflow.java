@@ -47,6 +47,8 @@ import java.util.concurrent.Callable;
  *  - if one of the steps fails, further steps are not executed
  *  - onlyIf {} predicate can be used to cleanly abort the release process based on predicate
  *
+ * Each step can have one post-step task, either a 'rollback' or 'cleanup'.
+ *
  * Rollback tasks:
  *  - executed only when one the release tasks fails, otherwise they are skipped
  *  - executed in reverse order

@@ -15,8 +15,8 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
 
     final List<Task> steps = new ArrayList<Task>();
     Task previousStep;
-    Task previousRollback;
-    final List<Task> rollbacks = new ArrayList<Task>();
+    Task previousPostStep;
+    final List<Task> postSteps = new ArrayList<Task>();
     private final Project project;
     private final List<Callable<Boolean>> allowers = new ArrayList<Callable<Boolean>>();
 
@@ -69,35 +69,35 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
             return; //no rollback/cleanup configured
         }
 
-        Task rollback = stepConfig.getRollback();
-        if (rollback != null) {
-            //rollbacks only run when one of the steps fails, by default we assume they don't fail
+        Task postStep = stepConfig.getRollback();
+        if (postStep != null) {
+            //postSteps only run when one of the steps fails, by default we assume they don't fail
             if (!project.hasProperty("dryRun")) { //accommodate testing
-                rollback.setEnabled(false);
+                postStep.setEnabled(false);
             }
         } else {
-            rollback = stepConfig.getCleanup();
+            postStep = stepConfig.getCleanup();
             //cleanups run even if the release is successful
         }
 
-        //populate main rollbacks list
-        rollbacks.add(rollback);
+        //populate main postSteps list
+        postSteps.add(postStep);
 
         //rollback must run after every main task
-        rollback.mustRunAfter(steps);
+        postStep.mustRunAfter(steps);
 
-        //rollbacks need to have order between themselves
-        if (previousRollback != null) {
-            previousRollback.mustRunAfter(rollback);
+        //postSteps need to have order between themselves
+        if (previousPostStep != null) {
+            previousPostStep.mustRunAfter(postStep);
         }
-        previousRollback = rollback;
+        previousPostStep = postStep;
 
-        //rollbacks finalize release steps
-        task.finalizedBy(rollback);
+        //postSteps finalize release steps
+        task.finalizedBy(postStep);
 
-        //rollbacks only run when their main task did not fail
+        //postSteps only run when their main task did not fail
         // when main task fails, there is nothing to rollback
-        rollback.onlyIf(new Spec<Task>() {
+        postStep.onlyIf(new Spec<Task>() {
             public boolean isSatisfiedBy(Task t) {
                 return task.getState().getFailure() == null;
             }
@@ -105,7 +105,7 @@ public class ReleaseWorkflowExtension implements ReleaseWorkflow {
 
         //only run rollback if it is allowed
         for (Callable<Boolean> allower : allowers) {
-            rollback.onlyIf(new SpecAdapter(allower));
+            postStep.onlyIf(new SpecAdapter(allower));
         }
     }
 

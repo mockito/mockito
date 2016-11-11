@@ -38,9 +38,9 @@ class GradleSpecification extends Specification {
     BuildResult pass(String... args) {
         try {
             GradleRunner.create()
-                    .withProjectDir(projectDir.root)
-                    .withArguments(args)
-                    .build()
+                .withProjectDir(projectDir.root)
+                .withArguments(args)
+                .build()
         } catch (Exception e) {
             println " ---- build.gradle ---- \n" + buildFile.text + "\n ------------------------"
             throw e
@@ -54,9 +54,9 @@ class GradleSpecification extends Specification {
     BuildResult fail(String... args) {
         try {
             GradleRunner.create()
-                    .withProjectDir(projectDir.root)
-                    .withArguments(args)
-                    .buildAndFail()
+                .withProjectDir(projectDir.root)
+                .withArguments(args)
+                .buildAndFail()
         } catch (Exception e) {
             println " ---- build.gradle ---- \n" + buildFile.text + "\n ------------------------"
             throw e
