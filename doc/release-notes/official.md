@@ -1,3 +1,38 @@
+### 2.2.15 (2016-11-08 20:43 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Brice Dutheil
+  * 1: Szczepan Faber
+* Improvements: 1
+  * Enhancements: 1
+    * Allow fluent usage of Mockito.framework() listeners methods [(#747)](https://github.com/mockito/mockito/pull/747)
+
+### 2.2.14 (2016-11-08 20:11 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Dmitriy Zaitsev
+* Improvements: 1
+  * Add missing copyright headers [(#746)](https://github.com/mockito/mockito/pull/746)
+
+### 2.2.13 (2016-11-07 22:59 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Removes deprecated way of documenting package by package-info.java [(#745)](https://github.com/mockito/mockito/pull/745)
+
+### 2.2.12 (2016-11-07 04:29 UTC)
+
+* Authors: 1
+* Commits: 11
+  * 11: Szczepan Faber
+* Improvements: 1
+  * Enhancements: 1
+    * Exposed existing verification API so that it no longer leaks internal API [(#735)](https://github.com/mockito/mockito/pull/735)
+
 ### 2.2.11 (2016-11-04 04:51 UTC)
 
 * Authors: 2

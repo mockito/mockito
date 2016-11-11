@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.MatchableInvocation;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
 
@@ -31,6 +32,11 @@ public class OnlyTest {
 
         public List<Invocation> getAllInvocations() {
             return Arrays.asList(invocation);
+        }
+
+        @Override
+        public MatchableInvocation getTarget() {
+            return wanted;
         }
 
         public InvocationMatcher getWanted() {
