@@ -7,6 +7,7 @@ package org.mockito.internal.reporting;
 
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MatchableInvocation;
 
 /**
  * Makes sure both wanted and actual are printed consistently (single line or multiline)
@@ -18,7 +19,7 @@ public class SmartPrinter {
     private final String wanted;
     private final String actual;
 
-    public SmartPrinter(InvocationMatcher wanted, Invocation actual, Integer ... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
+    public SmartPrinter(MatchableInvocation wanted, Invocation actual, Integer ... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
         PrintSettings printSettings = new PrintSettings();
         printSettings.setMultiline(wanted.toString().contains("\n") || actual.toString().contains("\n"));
         printSettings.setMatchersToBeDescribedWithExtraTypeInfo(indexesOfMatchersToBeDescribedWithExtraTypeInfo);

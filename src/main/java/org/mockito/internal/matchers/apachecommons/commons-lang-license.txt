@@ -1,3 +1,8 @@
+====
+    Copyright (c) 2016 Mockito contributors
+    This program is made available under the terms of the MIT License.
+====
+
                                  Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/

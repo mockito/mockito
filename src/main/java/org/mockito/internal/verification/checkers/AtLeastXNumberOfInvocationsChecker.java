@@ -19,10 +19,11 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
+import org.mockito.invocation.MatchableInvocation;
 
 public class AtLeastXNumberOfInvocationsChecker {
     
-    public static void checkAtLeastNumberOfInvocations(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount) {
+    public static void checkAtLeastNumberOfInvocations(List<Invocation> invocations, MatchableInvocation wanted, int wantedCount) {
         List<Invocation> actualInvocations = findInvocations(invocations, wanted);
         
         int actualCount = actualInvocations.size();
@@ -44,7 +45,7 @@ public class AtLeastXNumberOfInvocationsChecker {
         }
     }
 
-    public static void checkAtLeastNumberOfInvocations(List<Invocation> invocations, InvocationMatcher wanted, int wantedCount,InOrderContext orderingContext) {
+    public static void checkAtLeastNumberOfInvocations(List<Invocation> invocations, MatchableInvocation wanted, int wantedCount,InOrderContext orderingContext) {
         List<Invocation> chunk = findAllMatchingUnverifiedChunks(invocations, wanted, orderingContext);
 
         int actualCount = chunk.size();

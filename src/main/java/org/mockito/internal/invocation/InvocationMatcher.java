@@ -20,12 +20,13 @@ import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
+import org.mockito.invocation.MatchableInvocation;
 
 /**
  * In addition to all content of the invocation, the invocation matcher contains the argument matchers. Invocation matcher is used during verification and stubbing. In those cases, the user can provide argument matchers instead of 'raw' arguments. Raw arguments are converted to 'equals' matchers anyway.
  */
 @SuppressWarnings("serial")
-public class InvocationMatcher implements DescribedInvocation, CapturesArgumentsFromInvocation, Serializable {
+public class InvocationMatcher implements MatchableInvocation, DescribedInvocation, Serializable {
 
     private final Invocation invocation;
     private final List<ArgumentMatcher<?>> matchers;
@@ -72,8 +73,8 @@ public class InvocationMatcher implements DescribedInvocation, CapturesArguments
         return new PrintSettings().print((List) matchers, invocation);
     }
 
-    public boolean matches(Invocation actual) {
-        return invocation.getMock().equals(actual.getMock()) && hasSameMethod(actual) && argumentsMatch(actual);
+    public boolean matches(Invocation candidate) {
+        return invocation.getMock().equals(candidate.getMock()) && hasSameMethod(candidate) && argumentsMatch(candidate);
     }
 
     /**

@@ -10,6 +10,7 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.matchers.text.MatchersPrinter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MatchableInvocation;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -58,7 +59,7 @@ public class PrintSettings {
         return print(ArgumentsProcessor.argumentsToMatchers(invocation.getArguments()), invocation);
     }
 
-    public String print(InvocationMatcher invocationMatcher) {
-        return print(invocationMatcher.getMatchers(), invocationMatcher.getInvocation());
+    public String print(MatchableInvocation invocation) {
+        return print(invocation.getMatchers(), invocation.getInvocation());
     }
 }
