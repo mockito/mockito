@@ -1,3 +1,16 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        //so that PublicationsComparatorTask can be imported
+        //this entire 'buildscript' section will be removed when the entire release automation is moved to new repo 'mockito-release-tools'
+        classpath project.'dependencies.mockito-release-tools'
+    }
+}
+
+import org.mockito.release.comparison.PublicationsComparatorTask
+
 def troubleshootingInfo = """
 Mockito artifacts are about to be published!
 
@@ -29,8 +42,8 @@ assert project == rootProject
 
 apply from: rootProject.file("gradle/publish.gradle")
 
-apply plugin: 'release-notes'
-apply plugin: 'release-workflow'
+apply plugin: 'org.mockito.release-notes'
+apply plugin: 'org.mockito.release-workflow'
 
 notes {
     notesFile = file("doc/release-notes/official.md")
@@ -69,7 +82,7 @@ dependencies {
     previousPom "org.mockito:mockito-core:${project.notes.getPreviousVersion()}@pom"
 }
 
-task("comparePublications", type: org.mockito.release.comparison.PublicationsComparatorTask) {
+task("comparePublications", type: PublicationsComparatorTask) {
     dependsOn publishToMavenLocal, sourcesJar
 
     compareBinaries({ configurations.previousSrc.singleFile }, { sourcesJar.archivePath })
