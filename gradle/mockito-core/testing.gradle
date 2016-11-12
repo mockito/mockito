@@ -17,5 +17,5 @@ task removeTestResources << {
     }
 }
 
-compileTestJava.dependsOn createTestResources
-compileTestJava.finalizedBy removeTestResources
+test.dependsOn createTestResources
+test.finalizedBy removeTestResources
