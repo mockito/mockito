@@ -1,30 +1,5 @@
-apply plugin: 'idea'
-apply plugin: 'groovy'
-
-repositories { jcenter() }
-
 dependencies {
-    compile gradleApi()
-    //TODO SF use jcabi to edit issues after the release so that they have the milestone attached
-    //compile "com.jcabi:jcabi-github:0.17"
-    compile "com.googlecode.json-simple:json-simple:1.1.1@jar"
+    //needed by JavadocExclude
+    //TODO find out if we really need JavadocExclude. Why don't we just exclude internal packages using Gradle API (Javadoc.exclude)?
     compile files("${System.properties['java.home']}/../lib/tools.jar")
-    testCompile("org.spockframework:spock-core:0.7-groovy-2.0") {
-        exclude module: "groovy-all"
-    }
-    testCompile "cglib:cglib-nodep:2.2.2"
-    testCompile gradleTestKit()
-}
-
-test {
-    testLogging {
-        exceptionFormat = 'full'
-    }
-}
-
-//This is needed so that buildSrc submodule generates 'iml' file that can be imported to IDEA manually
-//This allows working conveniently with buildSrc module in idea
-if (gradle.parent && gradle.parent.startParameter.taskNames.any { it in ["ideaModule", "idea"] }) {
-    test.enabled = false //so that IDEA files can be generated even if the tests for buildSrc fail
-    build.dependsOn ideaModule
 }
