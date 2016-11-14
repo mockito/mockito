@@ -29,6 +29,8 @@ import org.mockito.plugins.MockMaker;
  *     // ...
  * }
  *     </code></pre>
+ *         The user can change the name of the class by setting the system property org.mockito.configuration.className
+ *         to the name of the IMockitoConfiguration implementation.
  *     </li>
  *     <li>
  *         Can load available mockito extensions. Currently Mockito only have one extension point the
@@ -47,7 +49,9 @@ import org.mockito.plugins.MockMaker;
  */
 public class ClassPathLoader {
 
-    public static final String MOCKITO_CONFIGURATION_CLASS_NAME = "org.mockito.configuration.MockitoConfiguration";
+    public static final String MOCKITO_CONFIGURATION_CLASS_NAME_PROPERTY = "org.mockito.configuration.className";
+
+    public static final String DEFAULT_MOCKITO_CONFIGURATION_CLASS_NAME = "org.mockito.configuration.MockitoConfiguration";
 
     /**
      * @return configuration loaded from classpath or null
@@ -55,9 +59,10 @@ public class ClassPathLoader {
     @SuppressWarnings({"unchecked"})
     public IMockitoConfiguration loadConfiguration() {
         // Trying to get config from classpath
+        final String mockitoConfigurationClassName = getMockitoConfigurationClassName();
         Class<?> configClass;
         try {
-            configClass = Class.forName(MOCKITO_CONFIGURATION_CLASS_NAME);
+            configClass = Class.forName(mockitoConfigurationClassName);
         } catch (ClassNotFoundException e) {
             //that's ok, it means there is no global config, using default one.
             return null;
@@ -68,7 +73,11 @@ public class ClassPathLoader {
         } catch (ClassCastException e) {
             throw new MockitoConfigurationException("MockitoConfiguration class must implement " + IMockitoConfiguration.class.getName() + " interface.", e);
         } catch (Exception e) {
-            throw new MockitoConfigurationException("Unable to instantiate " + MOCKITO_CONFIGURATION_CLASS_NAME +" class. Does it have a safe, no-arg constructor?", e);
+            throw new MockitoConfigurationException("Unable to instantiate " + mockitoConfigurationClassName +" class. Does it have a safe, no-arg constructor?", e);
         }
+    }
+
+    private String getMockitoConfigurationClassName() {
+        return System.getProperty(MOCKITO_CONFIGURATION_CLASS_NAME_PROPERTY, DEFAULT_MOCKITO_CONFIGURATION_CLASS_NAME);
     }
 }

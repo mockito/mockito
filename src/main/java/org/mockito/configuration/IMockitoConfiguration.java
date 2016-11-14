@@ -14,7 +14,8 @@ import org.mockito.stubbing.Answer;
  * when you might want to have different 'mocking style' this interface might be helpful. 
  * A reason of configuring Mockito might be if you disagree with the {@link ReturnsEmptyValues} unstubbed mocks return.
  * <p>
- * To configure Mockito create exactly <b>org.mockito.configuration.MockitoConfiguration</b> class that implements this interface.
+ * To configure Mockito create exactly <b>org.mockito.configuration.MockitoConfiguration</b> class that implements this interface. You can also specify another target class by setting the
+ * <b>org.mockito.configuration.className</b> system property.
  * <p>
  * Configuring Mockito is completely <b>optional</b> - nothing happens if there isn't any <b>org.mockito.configuration.MockitoConfiguration</b> on the classpath. 
  * <p>
