@@ -1,3 +1,18 @@
+### 2.2.16 (2016-11-14 11:13 UTC)
+
+* Authors: 3
+* Commits: 35
+  * 33: Szczepan Faber
+  * 1: Brice Dutheil
+  * 1: Continuous Delivery Drone
+* Improvements: 4
+  * Documentation: 1
+    * Improved documentation regarding unused stubbing detection [(#754)](https://github.com/mockito/mockito/pull/754)
+  * Remaining changes: 3
+    * Pushed release automation code into separate GitHub repository [(#751)](https://github.com/mockito/mockito/pull/751)
+    * Added new release workflow for release automation [(#724)](https://github.com/mockito/mockito/pull/724)
+    * DelayedExecution uses now a more precise approach to call a mock async. [(#704)](https://github.com/mockito/mockito/pull/704)
+
 ### 2.2.15 (2016-11-08 20:43 UTC)
 
 * Authors: 2
