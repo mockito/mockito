@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mockito redirect from GitHub Pages</title>
+    <script type="text/javascript">
+      /////////////////////////////////////////////////////////////////////////
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafrex/spa-github-pages
+      // Copyright (c) 2016 Rafael Pedicini, licensed under the MIT License
+      // ----------------------------------------------------------------------
+      // This script takes the current url and converts the path and query
+      // string into just a query string, and then redirects the browser
+      // to the new url with only a query string and hash fragment,
+      // e.g. http://www.foo.tld/one/two?a=b&c=d#qwe, becomes
+      // http://www.foo.tld/?p=/one/two&q=a=b~and~c=d#qwe
+      // Note: this 404.html file must be at least 512 bytes for it to work
+      // with Internet Explorer (it is currently > 512 bytes)
+      /////////////////////////////////////////////////////////////////////////
+      // If you're creating a Project Pages site and NOT using a custom domain,
+      // then set pathPrefix = true. This way the repo name will remain in the path:
+      // https://username.github.io/repo-name/one/two?a=b&c=d#qwe becomes
+      // https://username.github.io/repo-name/?p=/one/two&q=a=b~and~c=d#qwe
+      // Otherwise, leave pathPrefix as false.
+      var pathPrefix = false;
+      var l = window.location;
+      l.replace(
+        'https://javadoc.io/page/org.mockito/mockito-core/' +
+        (l.pathname.split('/')[3] === 'current' ? 'latest' : l.pathname.split('/')[3]) + '/' +
+        l.pathname.split('/').slice(4).join('/')
+      );
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
