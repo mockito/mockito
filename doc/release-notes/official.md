@@ -1,3 +1,11 @@
+### 2.2.17 (2016-11-15 19:05 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Rafael Winterhalter
+* Improvements: 1
+  * "mock-maker-inline" prevents collection of code coverage for spys [(#757)](https://github.com/mockito/mockito/issues/757)
+
 ### 2.2.16 (2016-11-14 11:13 UTC)
 
 * Authors: 3
