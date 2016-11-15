@@ -9,7 +9,7 @@ if(!usingOldIE) {
         "em#mockito-version-header-javadoc7-footer");
 }
 
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && window.location.protocol === 'https') {
     var toast = document.getElementById('sw-toast');
     if (!toast) {
         toast = document.createElement('div');
