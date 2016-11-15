@@ -31,26 +31,15 @@ task mockitoJavadoc(type: Javadoc) {
     options.noNavBar = false
     options.noTree = false
     options.links('http://docs.oracle.com/javase/8/docs/api/')
-    options.header("""<em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
+    options.header("""<script>var l = window.location; if (l.protocol === "http" && l.origin.indexOf("javadoc.io") > -1) { l.protocol = "https"; }</script><em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
     options.footer("""<em id="mockito-version-header-javadoc7-footer"><strong>Mockito ${project.version} API</strong></em>""")
     options.bottom("""
         <script type="text/javascript" src="{@docRoot}/js/${javadocJdk6Hack}"></script>
         <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
         <script type="text/javascript" src="{@docRoot}/js/highlight-8.6-java/highlight.pack.js"></script>
-        <link rel="stylesheet" type="text/css" href="{@docRoot}/js/highlight-8.6-java/styles/obsidian.css"/>
 
-        <script type="text/javascript">
-          var usingOldIE = \$.browser.msie && parseInt(\$.browser.version) < 9;
-          if(!usingOldIE) {
-              \$("head").append("<link rel=\\"shortcut icon\\" href=\\"{@docRoot}/favicon.ico?v=cafebabe\\">");
-              \$("head", window.parent.document).append("<link rel=\\"shortcut icon\\" href=\\"{@docRoot}/favicon.ico?v=cafebabe\\">");
-              hljs.initHighlightingOnLoad();
-              \$("pre.code").css("font-size", "0.9em");
-              injectProjectVersionForJavadocJDK6("Mockito ${project.version} API",
-                                                 "em#mockito-version-header-javadoc7-header",
-                                                 "em#mockito-version-header-javadoc7-footer");
-          }
-        </script>
+        <link rel="stylesheet" type="text/css" href="{@docRoot}/js/highlight-8.6-java/styles/obsidian.css"/>
+        <script type="text/javascript" src="{@docRoot}/js/index.js" async defer></script>
     """.replaceAll(/\r|\n/, ""))
     options.stylesheetFile file("src/javadoc/stylesheet.css")
 //    options.addStringOption('top', 'some html')
@@ -62,6 +51,19 @@ task mockitoJavadoc(type: Javadoc) {
         copy {
             from "src/javadoc"
             into "$buildDir/javadoc"
+        }
+        try {
+            logger.lifecycle("Installing sw-precache globally")
+            exec {
+                commandLine "npm", "install", "-g", "sw-precache"
+            }
+            exec {
+                commandLine "sw-precache", "--config=sw-precache-config.json"
+            }
+            // Even though there is an option ignoreExitValue for exec, exec keeps on throwing exceptions.
+            // Therefore we just have to catch them and continue on with the build.
+        } catch(Exception ignored) {
+            logger.lifecycle("NPM is not installed. Aborting generating service-worker");
         }
     }
 }
