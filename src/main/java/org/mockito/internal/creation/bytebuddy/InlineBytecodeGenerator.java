@@ -5,6 +5,7 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.description.method.MethodDescription;
@@ -185,7 +186,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                                  TypePool typePool,
                                  int writerFlags,
                                  int readerFlags) {
-            return new ParameterAddingClassVisitor(classVisitor, new TypeDescription.ForLoadedType(type));
+            return implementationContext.getClassFileVersion().isAtLeast(ClassFileVersion.JAVA_V8)
+                    ? new ParameterAddingClassVisitor(classVisitor, new TypeDescription.ForLoadedType(type))
+                    : classVisitor;
         }
 
         private static class ParameterAddingClassVisitor extends ClassVisitor {

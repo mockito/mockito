@@ -1,6 +1,7 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.implementation.StubMethod;
@@ -24,6 +25,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assume.assumeTrue;
 
 public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest<InlineByteBuddyMockMaker> {
 
@@ -222,6 +224,8 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void test_parameters_retention() throws Exception {
+        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
+
         Class<?> typeWithParameters = new ByteBuddy()
                 .subclass(Object.class)
                 .defineMethod("foo", void.class, Visibility.PUBLIC)
