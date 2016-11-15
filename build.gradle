@@ -65,7 +65,7 @@ test {
 }
 
 dependencies {
-    compile 'net.bytebuddy:byte-buddy:1.5.3'
+    compile 'net.bytebuddy:byte-buddy:1.5.4'
     compile 'net.bytebuddy:byte-buddy-agent:1.5.3'
 
     provided "junit:junit:4.12", "org.hamcrest:hamcrest-core:1.3"
