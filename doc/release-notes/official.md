@@ -1,3 +1,10 @@
+### 2.2.19 (2016-11-17 08:24 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.2.18 (2016-11-17 05:50 UTC)
 
 * Authors: 3
