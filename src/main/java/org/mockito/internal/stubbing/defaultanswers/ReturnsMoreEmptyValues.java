@@ -5,12 +5,11 @@
 
 package org.mockito.internal.stubbing.defaultanswers;
 
+import java.io.Serializable;
+import java.lang.reflect.Array;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
-import java.lang.reflect.Array;
 
 /**
  * It's likely this implementation will be used by default by every Mockito 3.0.0 mock.
@@ -67,8 +66,8 @@ public class ReturnsMoreEmptyValues implements Answer<Object>, Serializable {
         if (type == String.class) {
             return "";
         }  else if (type.isArray()) {
-            Class<?> componenetType = type.getComponentType();
-            return Array.newInstance(componenetType, 0);
+            Class<?> componentType = type.getComponentType();
+            return Array.newInstance(componentType, 0);
         }
         return null;
     }
