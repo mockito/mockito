@@ -179,7 +179,7 @@ import org.mockito.verification.*;
  * verify(mockedList).get(anyInt());
  *
  * //<b>argument matchers can also be written as Java 8 Lambdas</b>
- * verify(mockedList).add(someString -> someString.length() > 5);
+ * verify(mockedList).add(argThat(someString -> someString.length() > 5));
  *
  * </code></pre>
  *
