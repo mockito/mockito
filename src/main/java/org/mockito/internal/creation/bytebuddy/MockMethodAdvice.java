@@ -7,6 +7,7 @@ package org.mockito.internal.creation.bytebuddy;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.implementation.bind.annotation.Argument;
 import net.bytebuddy.implementation.bind.annotation.This;
+import net.bytebuddy.implementation.bytecode.assign.Assigner;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.SerializableMethod;
@@ -40,7 +41,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     private static Callable<?> enter(@Identifier String identifier,
                                      @Advice.This Object mock,
                                      @Advice.Origin Method origin,
-                                     @Advice.BoxedArguments Object[] arguments) throws Throwable {
+                                     @Advice.AllArguments Object[] arguments) throws Throwable {
         MockMethodDispatcher dispatcher = MockMethodDispatcher.get(identifier, mock);
         if (dispatcher == null || !dispatcher.isMocked(mock, origin)) {
             return null;
@@ -51,7 +52,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     @SuppressWarnings({"unused", "UnusedAssignment"})
     @Advice.OnMethodExit
-    private static void exit(@Advice.BoxedReturn(readOnly = false) Object returned,
+    private static void exit(@Advice.Return(readOnly = false, typing = Assigner.Typing.DYNAMIC) Object returned,
                              @Advice.Enter Callable<?> mocked) throws Throwable {
         if (mocked != null) {
             returned = mocked.call();
