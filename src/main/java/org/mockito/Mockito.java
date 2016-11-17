@@ -16,8 +16,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Answer1;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
+import org.mockito.stubbing.VoidAnswer1;
 import org.mockito.verification.After;
 import org.mockito.verification.Timeout;
 import org.mockito.verification.VerificationAfterDelay;
@@ -1159,9 +1161,9 @@ import org.mockito.verification.VerificationWithTimeout;
  * as Java 8 lambdas. Even in Java 7 and lower these custom answers based on a typed interface can reduce boilerplate.
  * In particular, this approach will make it easier to test functions which use callbacks.
  *
- * The functions answer and answerVoid can be found in {@link AdditionalAnswers} to create the answer object
- * using the interfaces in {@link org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces} support is provided
- * for functions with up to 5 parameters
+ * The methods {@link AdditionalAnswers#answer(Answer1) answer} and {@link AdditionalAnswers#answerVoid(VoidAnswer1) answerVoid}
+ * can be used to create the answer. They rely on the related answer interfaces in {@link org.mockito.stubbing} that
+ * support answers up to 5 parameters.
  *
  * <p>
  * Examples:
@@ -1192,7 +1194,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *     .when(mock).execute(anyString(), any(Callback.class));
  *
  * // Java 7
- * doAnswer(answerVoid(new AnswerFunctionalInterfaces.VoidAnswer2<String, Callback>() {
+ * doAnswer(answerVoid(new VoidAnswer2<String, Callback>() {
  *     public void answer(String operation, Callback callback) {
  *         callback.receive("dummy");
  *     }})).when(mock).execute(anyString(), any(Callback.class));
@@ -1208,7 +1210,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *     .when(mock).execute(anyString(), anyString());
  *
  * // Java 7
- * doAnswer(answer(new AnswerFunctionalInterfaces.Answer2<String, String, String>() {
+ * doAnswer(answer(new Answer2<String, String, String>() {
  *     public String answer(String input1, String input2) {
  *         return input1 + input2;
  *     }})).when(mock).execute(anyString(), anyString());
