@@ -1,3 +1,11 @@
+### 2.2.20 (2016-11-17 18:31 UTC)
+
+* Authors: 1
+* Commits: 4
+  * 4: Brice Dutheil
+* Improvements: 1
+  * Regroup Junit classes in junit packages [(#748)](https://github.com/mockito/mockito/pull/748)
+
 ### 2.2.19 (2016-11-17 08:24 UTC)
 
 * Authors: 1
