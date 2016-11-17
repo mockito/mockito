@@ -1,3 +1,15 @@
+### 2.2.18 (2016-11-17 05:50 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Liam Clark
+  * 1: Szczepan Faber
+  * 1: Tim van der Lippe
+* Improvements: 2
+  * Documentation: 2
+    * Updated the verification documentation to correctly use argThat with Java8 lambdas [(#759)](https://github.com/mockito/mockito/pull/759)
+    * Generate service-worker after generating JavaDoc for offline access [(#602)](https://github.com/mockito/mockito/pull/602)
+
 ### 2.2.17 (2016-11-15 19:05 UTC)
 
 * Authors: 1
