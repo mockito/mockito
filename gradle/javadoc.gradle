@@ -34,7 +34,7 @@ task mockitoJavadoc(type: Javadoc) {
     options.noNavBar = false
     options.noTree = false
     options.links('http://docs.oracle.com/javase/8/docs/api/')
-    options.header("""<script>var l = window.location; if (l.protocol === "http" && l.origin.indexOf("javadoc.io") > -1) { l.protocol = "https"; }</script><em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
+    options.header("""<em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
     options.footer("""<em id="mockito-version-header-javadoc7-footer"><strong>Mockito ${project.version} API</strong></em>""")
     options.bottom("""
         <script type="text/javascript" src="{@docRoot}/js/${javadocJdk6Hack}"></script>
@@ -43,9 +43,15 @@ task mockitoJavadoc(type: Javadoc) {
 
         <link rel="stylesheet" type="text/css" href="{@docRoot}/js/highlight-8.6-java/styles/obsidian.css"/>
         <script type="text/javascript" src="{@docRoot}/js/index.js" async defer></script>
-    """.replaceAll(/\r|\n/, ""))
-    options.stylesheetFile file("src/javadoc/stylesheet.css")
-//    options.addStringOption('top', 'some html')
+    """.replaceAll(/\r|\n|[ ]{8}/, ""))
+    options.stylesheetFile rootProject.file("src/javadoc/stylesheet.css")
+    options.addStringOption('top', """<script type="text/javascript" >
+        var l = window.location; 
+        if (l.protocol === "http" && l.origin.indexOf("javadoc.io") > -1) { 
+            l.protocol = "https"; 
+        }
+        </script>
+    """.replaceAll(/\r|\n|[ ]{8}/, ""))
     if (JavaVersion.current().isJava8Compatible()) {
         options.addStringOption('Xdoclint:none', '-quiet')
     }
