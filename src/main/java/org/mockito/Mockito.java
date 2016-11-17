@@ -9,7 +9,6 @@ import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
-import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -1340,8 +1339,8 @@ public class Mockito extends ArgumentMatchers {
      * This implementation of Answer <b>returns SmartNull instead of null</b>.
      * <code>SmartNull</code> gives nicer exception message than NPE because it points out the line where unstubbed method was called. You just click on the stack trace.
      * <p>
-     * <code>ReturnsSmartNulls</code> first tries to return ordinary return values (see {@link ReturnsMoreEmptyValues})
-     * then it tries to return SmartNull. If the return type is final then plain null is returned.
+     * <code>ReturnsSmartNulls</code> first tries to return ordinary values (zeros, empty collections, empty string, etc.)
+     * then it tries to return SmartNull. If the return type is final then plain <code>null</code> is returned.
      * <p>
      * <code>ReturnsSmartNulls</code> will be probably the default return values strategy in Mockito 3.0.0
      * <p>
@@ -1369,8 +1368,8 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * This implementation can be helpful when working with legacy code.
      * <p>
-     * ReturnsMocks first tries to return ordinary return values (see {@link ReturnsMoreEmptyValues})
-     * then it tries to return mocks. If the return type cannot be mocked (e.g. is final) then plain null is returned.
+     * ReturnsMocks first tries to return ordinary values (zeros, empty collections, empty string, etc.)
+     * then it tries to return mocks. If the return type cannot be mocked (e.g. is final) then plain <code>null</code> is returned.
      * <p>
      */
     public static final Answer<Object> RETURNS_MOCKS = Answers.RETURNS_MOCKS;
