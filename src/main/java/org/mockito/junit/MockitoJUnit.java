@@ -10,7 +10,7 @@ import org.mockito.internal.junit.VerificationCollectorImpl;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 
 /**
- * The JUnit rule can be used instead of {@link org.mockito.runners.MockitoJUnitRunner}. See {@link MockitoRule}.
+ * The JUnit rule can be used instead of {@link MockitoJUnitRunner}. See {@link MockitoRule}.
  *
  * @since 1.10.17
  */

@@ -9,6 +9,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
  * Allows shorthand wrapping of field instances in an spy object.
@@ -86,7 +87,7 @@ import java.lang.annotation.Target;
  * in subclass are only instantiated after super class constructor has returned.
  * It's better to use &#64;Before.
  * <strong>Instead</strong> you can also put initMocks() in your JUnit runner (&#064;RunWith) or use the built-in
- * {@link org.mockito.runners.MockitoJUnitRunner}.
+ * {@link MockitoJUnitRunner}.
  * </p>
  *
  * <p>Note that the spy won't have any annotations of the spied type, because CGLIB won't rewrite them.
@@ -96,7 +97,7 @@ import java.lang.annotation.Target;
  * @see Mock
  * @see InjectMocks
  * @see MockitoAnnotations#initMocks(Object)
- * @see org.mockito.runners.MockitoJUnitRunner
+ * @see MockitoJUnitRunner
  * @since 1.8.3
  */
 @Retention(RUNTIME)

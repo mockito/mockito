@@ -7,7 +7,7 @@ package org.mockito.exceptions.misusing;
 /**
  * This exception indicates presence of unused stubbings.
  * It is highly recommended to remove unused stubbings to keep the codebase clean.
- * You can opt-out from detecting unused stubbings using {@link org.mockito.runners.MockitoJUnitRunner.Silent} or
+ * You can opt-out from detecting unused stubbings using {@link org.mockito.junit.MockitoJUnitRunner.Silent} or
  * {@link org.mockito.junit.MockitoRule#silent()} (when you are using Mockito JUnit rules.
  * For more information about detecting unused stubbings, see {@link org.mockito.quality.MockitoHint}.
  * <p>
@@ -36,7 +36,7 @@ package org.mockito.exceptions.misusing;
  * That default stubbing needs to be used at least once by one of the test methods.
  * <p>
  * To find out more about detecting unused stubbings see {@link org.mockito.quality.MockitoHint}.
- * See javadoc for {@link org.mockito.runners.MockitoJUnitRunner} to find out how Mockito JUnit Runner detects unused stubs.
+ * See javadoc for {@link org.mockito.junit.MockitoJUnitRunner} to find out how Mockito JUnit Runner detects unused stubs.
  * See javadoc for {@link org.mockito.junit.MockitoRule} to understand the behavior or Mockito JUnit Rules.
  */
 public class UnnecessaryStubbingException extends RuntimeException {

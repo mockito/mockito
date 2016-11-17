@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 import org.mockito.internal.util.reflection.FieldInitializer.ParameterizedConstructorInstantiator;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
