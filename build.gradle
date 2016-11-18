@@ -6,7 +6,7 @@ buildscript {
 
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2' //publishing to bintray
-        classpath'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0' // later versions don't work on JDK6
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0' // later versions don't work on JDK6
 
         //Needed so that release notes and release workflow plugin can be applied in separate gradle/*.gradle build files
         classpath project.'dependencies.mockito-release-tools'
@@ -103,7 +103,7 @@ task javadocJar(type: Jar) {
     baseName = 'mockito-core'
     classifier = "javadoc"
     with licenseFiles
-    from mockitoJavadoc
+    from javadoc
 }
 
 task coverageReport(dependsOn: ["test", "mockitoCoverage"]) {}
