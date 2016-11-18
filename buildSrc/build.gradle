@@ -1,0 +1,4 @@
+dependencies {
+    //needed by JavadocExclude doclet
+    compile files("${System.properties['java.home']}/../lib/tools.jar")
+}

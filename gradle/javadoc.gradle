@@ -5,9 +5,6 @@ task mockitoJavadoc(type: Javadoc) {
     description "Creates javadoc html for Mockito API."
     tasks.javadoc.dependsOn it //so that when the user invokes 'javadoc' right things happen
 
-    //exclude internal classes from Javadoc generation
-    exclude "org/mockito/internal/**/*.*"
-
     // For more details on the format
     // see https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
 
@@ -16,6 +13,11 @@ task mockitoJavadoc(type: Javadoc) {
     destinationDir = file("$buildDir/javadoc")
     title = "Mockito ${project.version} API"
     def javadocJdk6Hack = "jdk6-project-version-insert.min.js"
+
+    // In order to exclude the internal classes, we use the doclet instead of Javadoc.exclude API from Gradle
+    // This way, we avoid warnings about unsatisfied links to internal documentation
+    options.doclet "org.mockito.javadoc.JavadocExclude"
+    options.docletpath = [rootProject.file('./buildSrc/build/classes/main/')]
 
     options.docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
     options.windowTitle = "Mockito ${project.version} API"
