@@ -1,3 +1,11 @@
+### 2.2.21 (2016-11-18 08:52 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Mockito 2.2.17 regression: `mock-maker-inline` drops `-parameters` [(#764)](https://github.com/mockito/mockito/issues/764)
+
 ### 2.2.20 (2016-11-17 18:31 UTC)
 
 * Authors: 1
