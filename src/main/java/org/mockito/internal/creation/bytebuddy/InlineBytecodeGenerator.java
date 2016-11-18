@@ -210,8 +210,22 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                     for (ParameterDescription parameterDescription : methodList.getOnly().getParameters()) {
                         methodVisitor.visitParameter(parameterDescription.getName(), parameterDescription.getModifiers());
                     }
+                    return new MethodParameterStrippingMethodVisitor(methodVisitor);
+                } else {
+                    return methodVisitor;
                 }
-                return methodVisitor;
+            }
+        }
+
+        private static class MethodParameterStrippingMethodVisitor extends MethodVisitor {
+
+            public MethodParameterStrippingMethodVisitor(MethodVisitor mv) {
+                super(Opcodes.ASM5, mv);
+            }
+
+            @Override
+            public void visitParameter(String name, int access) {
+                // suppress to avoid additional writing of the parameter if retained.
             }
         }
     }
