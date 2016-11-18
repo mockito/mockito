@@ -14,8 +14,11 @@ task mockitoJavadoc(type: Javadoc) {
     title = "Mockito ${project.version} API"
     def javadocJdk6Hack = "jdk6-project-version-insert.min.js"
 
+    // In order to exclude the internal classes, we use the doclet instead of Javadoc.exclude API from Gradle
+    // This way, we avoid warnings about unsatisfied links to internal documentation
     options.doclet "org.mockito.javadoc.JavadocExclude"
     options.docletpath = [rootProject.file('./buildSrc/build/classes/main/')]
+
     options.docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
     options.windowTitle = "Mockito ${project.version} API"
     options.group("Main package", ["org.mockito"])
@@ -42,12 +45,13 @@ task mockitoJavadoc(type: Javadoc) {
         <script type="text/javascript" src="{@docRoot}/js/index.js" async defer></script>
     """.replaceAll(/\r|\n/, ""))
     options.stylesheetFile file("src/javadoc/stylesheet.css")
-//    options.addStringOption('top', 'some html')
+
     if (JavaVersion.current().isJava8Compatible()) {
         options.addStringOption('Xdoclint:none', '-quiet')
     }
 
     doLast {
+        //copy license files
         copy {
             from "src/javadoc"
             into "$buildDir/javadoc"

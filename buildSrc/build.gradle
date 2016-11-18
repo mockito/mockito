@@ -1,5 +1,4 @@
 dependencies {
-    //needed by JavadocExclude
-    //TODO find out if we really need JavadocExclude. Why don't we just exclude internal packages using Gradle API (Javadoc.exclude)?
+    //needed by JavadocExclude doclet
     compile files("${System.properties['java.home']}/../lib/tools.jar")
 }
