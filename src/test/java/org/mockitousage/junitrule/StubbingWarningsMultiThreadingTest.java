@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 public class StubbingWarningsMultiThreadingTest extends TestBase {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    private JUnitRule rule = new JUnitRule(logger, false);
+    private JUnitRule rule = new JUnitRule(logger, JUnitRule.Strictness.WARN);
     private FrameworkMethod dummy = mock(FrameworkMethod.class);
 
     @After

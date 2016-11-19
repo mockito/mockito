@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 public class StubbingWarningsJUnitRuleTest extends TestBase {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    private JUnitRule jUnitRule = new JUnitRule(logger, false);
+    private JUnitRule jUnitRule = new JUnitRule(logger, JUnitRule.Strictness.WARN);
     private FrameworkMethod dummy = mock(FrameworkMethod.class);
 
     @After public void after() {
@@ -228,7 +228,7 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
 
     @Test
     public void no_warnings_when_silent() throws Throwable {
-        jUnitRule = new JUnitRule(logger, false).silent();
+        jUnitRule = new JUnitRule(logger, JUnitRule.Strictness.WARN).silent();
         jUnitRule.apply(new Statement() {
             public void evaluate() throws Throwable {
                 IMethods mock = mock(IMethods.class);
