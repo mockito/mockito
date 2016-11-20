@@ -44,24 +44,24 @@ public class JUnitRule implements MockitoRule {
                 MockCollector mockCollector = new MockCollector();
                 Mockito.framework().addListener(mockCollector);
 
-                Throwable problem;
+                Throwable testFailure;
                 try {
                     for (MockitoTestListener listener : listeners) {
                         listener.beforeTest(target, method.getName());
                     }
 
-                    problem = evaluateSafely(base);
+                    testFailure = evaluateSafely(base);
                 } finally {
                      Mockito.framework().removeListener(mockCollector);
                 }
 
-                //If the infrastructure fails below, we don't see the original problem, thrown later
+                //If the infrastructure fails below, we don't see the original failure, thrown later
                 for (MockitoTestListener listener : listeners) {
-                    listener.afterTest(mockCollector.mocks, problem);
+                    listener.afterTest(mockCollector.mocks, testFailure);
                 }
 
-                if (problem != null) {
-                    throw problem;
+                if (testFailure != null) {
+                    throw testFailure;
                 }
             }
 
