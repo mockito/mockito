@@ -4,17 +4,6 @@
 
 package org.mockitousage.verification;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static junit.framework.TestCase.assertEquals;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.rules.ExpectedException.none;
-import static org.mockito.Mockito.after;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.junit.MockitoJUnit.rule;
-import static org.mockitoutil.Stopwatch.createNotStarted;
-
-import java.util.concurrent.ScheduledExecutorService;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,12 +16,26 @@ import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
+import org.mockitoutil.RetryRule;
 import org.mockitoutil.Stopwatch;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static junit.framework.TestCase.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.rules.ExpectedException.none;
+import static org.mockito.Mockito.after;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.junit.MockitoJUnit.rule;
+import static org.mockitoutil.Stopwatch.createNotStarted;
 
 public class VerificationAfterDelayTest {
 
     @Rule
     public MockitoRule mockito = rule();
+
+    @Rule
+    public RetryRule retryRule = RetryRule.attempts(4);
 
     @Rule
     public ExpectedException exception = none();
