@@ -35,6 +35,8 @@ artifacts {
     archives sourcesJar
 }
 
+tasks.javadoc.enabled = false
+
 uploadArchives {
     repositories {
         mavenDeployer {

@@ -4,26 +4,36 @@
  */
 package org.mockito.configuration;
 
-import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.stubbing.Answer;
 
 /**
  * Use it to configure Mockito. For now there are not many configuration options but it may change in future.
+ *
  * <p>
- * In most cases you don't really need to configure Mockito. For example in case of working with legacy code, 
+ * In most cases you don't really need to configure Mockito. For example in case of working with legacy code,
  * when you might want to have different 'mocking style' this interface might be helpful. 
- * A reason of configuring Mockito might be if you disagree with the {@link ReturnsEmptyValues} unstubbed mocks return.
+ * A reason of configuring Mockito might be if you disagree with the {@link org.mockito.Answers#RETURNS_DEFAULTS}
+ * unstubbed mocks return.
+ *
  * <p>
- * To configure Mockito create exactly <b>org.mockito.configuration.MockitoConfiguration</b> class that implements this interface.
+ * To configure Mockito create exactly <b>org.mockito.configuration.MockitoConfiguration</b> class
+ * that implements this interface.
+ *
  * <p>
- * Configuring Mockito is completely <b>optional</b> - nothing happens if there isn't any <b>org.mockito.configuration.MockitoConfiguration</b> on the classpath. 
+ * Configuring Mockito is completely <b>optional</b> - nothing happens if there isn't any
+ * <b>org.mockito.configuration.MockitoConfiguration</b> on the classpath.
+ *
  * <p>
- * <b>org.mockito.configuration.MockitoConfiguration</b> must implement IMockitoConfiguration or extend {@link DefaultMockitoConfiguration}
+ * <b>org.mockito.configuration.MockitoConfiguration</b> must implement <code>IMockitoConfiguration</code> or
+ * extend {@link DefaultMockitoConfiguration}
+ *
  * <p>
- * Mockito will store single instance of org.mockito.configuration.MockitoConfiguration per thread (using ThreadLocal). 
+ * Mockito will store single instance of <code>org.mockito.configuration.MockitoConfiguration</code>
+ * per thread (using <code>ThreadLocal</code>).
  * For sanity of your tests, don't make the implementation stateful.
+ *
  * <p>
- * If you have comments on Mockito configuration feature don't hesitate to write to mockito@googlegroups.com
+ * If you have comments on Mockito configuration feature don't hesitate to write to mockito@googlegroups.com.
  */
 public interface IMockitoConfiguration {
 

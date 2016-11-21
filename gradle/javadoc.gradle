@@ -1,9 +1,7 @@
-//vanilla javadoc task does not work for us and it actually fails on java8
-tasks.javadoc.enabled = false
-
-task mockitoJavadoc(type: Javadoc) {
+//It seems the gradle javadoc task works file by file and as such disable some features of javadoc tool
+//such as link to packages, https://groups.google.com/d/msg/gradle-dev/R83dy_6PHMc/bgw0cUTMFAAJ
+javadoc {
     description "Creates javadoc html for Mockito API."
-    tasks.javadoc.dependsOn it //so that when the user invokes 'javadoc' right things happen
 
     // For more details on the format
     // see https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
@@ -14,12 +12,26 @@ task mockitoJavadoc(type: Javadoc) {
     title = "Mockito ${project.version} API"
     def javadocJdk6Hack = "jdk6-project-version-insert.min.js"
 
-    options.doclet "org.mockito.javadoc.JavadocExclude"
-    options.docletpath = [rootProject.file('./buildSrc/build/classes/main/')]
+    // The way *gradle* javadoc task works and due to *gradle exclusion* the log output triggers javadoc warning and
+    // errors on internal classes that are not found, non-exhaustive list :
+    //
+    // * import org.mockito.internal.Internal <- error: package org.mockito.internal does not exists
+    // * import org.mockito.internal.Internal.util <- error: static import only from classes and interfaces
+    // * class Public extends Internal <- cannot find symbol
+    // * warning - Tag @linkplain: reference not found: org.mockito.internal.Internal internal stuff
+    // * warning - Tag @link: reference not found: org.mockito.stubbing
+    //
+    // While there's errors the javadoc is still generated without those symbols or links ;
+    // for this reason the javadoc output is suppressed and can be reactivated with --info option.
+    exclude 'org/mockito/internal'
+    logging.captureStandardError LogLevel.INFO
+    logging.captureStandardOutput LogLevel.INFO // suppress "## warnings" message
+
     options.docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
     options.windowTitle = "Mockito ${project.version} API"
     options.group("Main package", ["org.mockito"])
     options.memberLevel = JavadocMemberLevel.PROTECTED
+    options.outputLevel = JavadocOutputLevel.QUIET
     options.charSet = 'UTF-8'
     options.encoding = 'UTF-8'
     options.docEncoding = 'UTF-8'
@@ -30,8 +42,11 @@ task mockitoJavadoc(type: Javadoc) {
     options.noIndex = false
     options.noNavBar = false
     options.noTree = false
-    options.links('http://docs.oracle.com/javase/8/docs/api/')
-    options.header("""<script>var l = window.location; if (l.protocol === "http" && l.origin.indexOf("javadoc.io") > -1) { l.protocol = "https"; }</script><em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
+    options.links = ['https://docs.oracle.com/javase/6/docs/api/',
+                     'http://junit.org/junit4/javadoc/4.12/',
+                     'http://hamcrest.org/JavaHamcrest/javadoc/1.3/',
+                     'http://testng.org/javadocs/']
+    options.header("""<em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
     options.footer("""<em id="mockito-version-header-javadoc7-footer"><strong>Mockito ${project.version} API</strong></em>""")
     options.bottom("""
         <script type="text/javascript" src="{@docRoot}/js/${javadocJdk6Hack}"></script>
@@ -40,9 +55,15 @@ task mockitoJavadoc(type: Javadoc) {
 
         <link rel="stylesheet" type="text/css" href="{@docRoot}/js/highlight-8.6-java/styles/obsidian.css"/>
         <script type="text/javascript" src="{@docRoot}/js/index.js" async defer></script>
-    """.replaceAll(/\r|\n/, ""))
-    options.stylesheetFile file("src/javadoc/stylesheet.css")
-//    options.addStringOption('top', 'some html')
+    """.replaceAll(/\r|\n|[ ]{8}/, ""))
+    options.stylesheetFile rootProject.file("src/javadoc/stylesheet.css")
+    options.addStringOption('top', """<script type="text/javascript" >
+        var l = window.location; 
+        if (l.protocol === "http" && l.origin.indexOf("javadoc.io") > -1) { 
+            l.protocol = "https"; 
+        }
+        </script>
+    """.replaceAll(/\r|\n|[ ]{8}/, ""))
     if (JavaVersion.current().isJava8Compatible()) {
         options.addStringOption('Xdoclint:none', '-quiet')
     }
