@@ -38,9 +38,8 @@ public class StrictJUnitRuleTest extends TestBase {
     }
 
     @Test public void ok_when_no_stubbings() throws Throwable {
-        run(new Statement() {
-            public void evaluate() throws Throwable {
-                IMethods mock = mock(IMethods.class);
+        run(new MockitoStatement() {
+            public void evaluate(IMethods mock, IMethods mock2) throws Throwable {
                 mock.simpleMethod();
                 Mockito.verify(mock).simpleMethod();
             }
@@ -48,8 +47,8 @@ public class StrictJUnitRuleTest extends TestBase {
     }
 
     @Test public void ok_when_all_stubbings_used() throws Throwable {
-        run(new Statement() {
-            public void evaluate() throws Throwable {
+        run(new MockitoStatement() {
+            public void evaluate(IMethods mock1, IMethods mock2) throws Throwable {
                 IMethods mock = mock(IMethods.class);
                 given(mock.simpleMethod(10)).willReturn("foo");
                 mock.simpleMethod(10);
@@ -58,9 +57,8 @@ public class StrictJUnitRuleTest extends TestBase {
     }
 
     @Test public void ok_when_used_and_mismatched_argument() throws Throwable {
-        run(new Statement() {
-            public void evaluate() throws Throwable {
-                IMethods mock = mock(IMethods.class);
+        run(new MockitoStatement() {
+            public void evaluate(IMethods mock, IMethods mock2) throws Throwable {
                 given(mock.simpleMethod(10)).willReturn("foo");
                 mock.simpleMethod(10);
                 mock.simpleMethod(15);
@@ -71,9 +69,8 @@ public class StrictJUnitRuleTest extends TestBase {
     @Test public void fails_when_unused_stubbings() throws Throwable {
         try {
             //when
-            run(new Statement() {
-                public void evaluate() throws Throwable {
-                    IMethods mock = mock(IMethods.class);
+            run(new MockitoStatement() {
+                public void evaluate(IMethods mock, IMethods mock2) throws Throwable {
                     given(mock.simpleMethod(10)).willReturn("foo");
                     mock.simpleMethod(15);
                 }
@@ -89,9 +86,8 @@ public class StrictJUnitRuleTest extends TestBase {
     @Test public void test_failure_trumps_unused_stubbings() throws Throwable {
         try {
             //when
-            run(new Statement() {
-                public void evaluate() throws Throwable {
-                    IMethods mock = mock(IMethods.class);
+            run(new MockitoStatement() {
+                public void evaluate(IMethods mock, IMethods mock2) throws Throwable {
                     given(mock.simpleMethod(10)).willReturn("foo");
                     mock.simpleMethod(15);
 
@@ -106,12 +102,12 @@ public class StrictJUnitRuleTest extends TestBase {
         }
     }
 
-    @Ignore @Test public void fails_fast_when_mismatched_argument() throws Throwable {
+    //TODO, not yet implemented
+    @Ignore @Test public void fails_fast_when_stubbing_invoked_with_different_argument() throws Throwable {
         try {
             //when
-            run(new Statement() {
-                public void evaluate() throws Throwable {
-                    IMethods mock = mock(IMethods.class);
+            run(new MockitoStatement() {
+                public void evaluate(IMethods mock, IMethods mock2) throws Throwable {
                     given(mock.simpleMethod(10)).willReturn("foo");
                     mock.simpleMethod(15);
 
@@ -126,12 +122,12 @@ public class StrictJUnitRuleTest extends TestBase {
         }
     }
 
+    //TODO, not yet implemented
     @Ignore @Test public void verify_no_more_interactions_ignores_stubs() throws Throwable {
         //when
-        run(new Statement() {
-            public void evaluate() throws Throwable {
+        run(new MockitoStatement() {
+            public void evaluate(IMethods mock, IMethods mock2) throws Throwable {
                 //in test:
-                IMethods mock = mock(IMethods.class);
                 given(mock.simpleMethod(10)).willReturn("foo");
 
                 //in code:
@@ -148,10 +144,8 @@ public class StrictJUnitRuleTest extends TestBase {
     @Test public void unused_stubs_with_multiple_mocks() throws Throwable {
         try {
             //when
-            run(new Statement() {
-                public void evaluate() throws Throwable {
-                    IMethods mock1 = mock(IMethods.class);
-                    IMethods mock2 = mock(IMethods.class);
+            run(new MockitoStatement() {
+                public void evaluate(IMethods mock1, IMethods mock2) throws Throwable {
                     given(mock1.simpleMethod(10)).willReturn("foo");
                     given(mock2.simpleMethod(20)).willReturn("foo");
 
@@ -167,11 +161,20 @@ public class StrictJUnitRuleTest extends TestBase {
         }
     }
 
-    private void run(Statement statement) throws Throwable {
+    private void run(MockitoStatement statement) throws Throwable {
         jUnitRule.apply(statement, dummy, new DummyTestCase()).evaluate();
     }
 
     public static class DummyTestCase {
         @Mock private IMethods mock;
+    }
+
+    abstract class MockitoStatement extends Statement {
+        abstract void evaluate(IMethods mock1, IMethods mock2) throws Throwable;
+
+        @Override
+        public void evaluate() throws Throwable {
+            evaluate(mock(IMethods.class), mock(IMethods.class));
+        }
     }
 }
