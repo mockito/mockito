@@ -1,3 +1,14 @@
+### 2.2.22 (2016-11-21 11:17 UTC)
+
+* Authors: 1
+* Commits: 10
+  * 10: Brice Dutheil
+* Improvements: 2
+  * Documentation: 1
+    * Public javadoc offers links to internal classes [(#762)](https://github.com/mockito/mockito/issues/762)
+  * Remaining changes: 1
+    * Fixes #762 Removes ReturnsEmptyValue javadoc references [(#763)](https://github.com/mockito/mockito/pull/763)
+
 ### 2.2.21 (2016-11-18 08:52 UTC)
 
 * Authors: 1
