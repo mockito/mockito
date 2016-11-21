@@ -5,20 +5,6 @@
 
 package org.mockitousage.verification;
 
-import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.rules.ExpectedException.none;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.junit.MockitoJUnit.rule;
-
-import java.util.concurrent.ScheduledExecutorService;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,6 +17,17 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
+import org.mockitoutil.RetryRule;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.junit.rules.ExpectedException.none;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.junit.MockitoJUnit.rule;
 
 public class VerificationWithTimeoutTest {
 
@@ -38,15 +35,16 @@ public class VerificationWithTimeoutTest {
     public MockitoRule mockito = rule();
 
     @Rule
+    public RetryRule retryRule = RetryRule.attempts(4);
+
+    @Rule
     public ExpectedException exception = none();
 
     @Mock
     private IMethods mock;
 
-    private ScheduledExecutorService executor;
-
     private DelayedExecution delayedExecution;
-    
+
     @Before
     public void setUp() {
         delayedExecution = new DelayedExecution();
@@ -60,7 +58,7 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldVerifyWithTimeout() throws Exception {
         // when
-        delayedExecution.callAsync(30, MILLISECONDS, callMock('c') );
+        delayedExecution.callAsync(30, MILLISECONDS, callMock('c'));
 
         // then
         verify(mock, timeout(100)).oneArg('c');
@@ -73,7 +71,7 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldFailVerificationWithTimeout() throws Exception {
         // when
-        delayedExecution.callAsync(30, MILLISECONDS, callMock('c') );
+        delayedExecution.callAsync(30, MILLISECONDS, callMock('c'));
 
         // then
         verify(mock, never()).oneArg('c');
@@ -84,8 +82,8 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOtherModesWithTimeout() throws Exception {
         // when
-        delayedExecution.callAsync(10, MILLISECONDS, callMock('c') );
-        delayedExecution.callAsync(10, MILLISECONDS, callMock('c') );
+        delayedExecution.callAsync(10, MILLISECONDS, callMock('c'));
+        delayedExecution.callAsync(10, MILLISECONDS, callMock('c'));
 
         // then
         verify(mock, timeout(100).atLeast(1)).oneArg('c');
@@ -96,8 +94,8 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOtherModesWithTimeoutAndFail() throws Exception {
         // when
-        delayedExecution.callAsync(10, MILLISECONDS, callMock('c') );
-        delayedExecution.callAsync(10, MILLISECONDS, callMock('c') );
+        delayedExecution.callAsync(10, MILLISECONDS, callMock('c'));
+        delayedExecution.callAsync(10, MILLISECONDS, callMock('c'));
 
         // then
         verify(mock, timeout(100).atLeast(1)).oneArg('c');
@@ -108,7 +106,7 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOnlyWithTimeout() throws Exception {
         // when
-        delayedExecution.callAsync(30, MILLISECONDS, callMock('c') );
+        delayedExecution.callAsync(30, MILLISECONDS, callMock('c'));
 
         // then
         verify(mock, never()).oneArg('c');
@@ -118,7 +116,7 @@ public class VerificationWithTimeoutTest {
     @Test
     public void shouldAllowMixingOnlyWithTimeoutAndFail() throws Exception {
         // when
-        delayedExecution.callAsync(30, MILLISECONDS, callMock('c') );
+        delayedExecution.callAsync(30, MILLISECONDS, callMock('c'));
 
         // and when
         mock.oneArg('x');
