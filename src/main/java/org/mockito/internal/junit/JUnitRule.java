@@ -9,12 +9,9 @@ import org.junit.runners.model.Statement;
 import org.mockito.Mockito;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.junit.MockitoRule;
-import org.mockito.listeners.MockCreationListener;
-import org.mockito.mock.MockCreationSettings;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Internal implementation.
@@ -53,23 +50,23 @@ public class JUnitRule implements MockitoRule {
 	public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
-                MockCollector mockCollector = new MockCollector();
-                Mockito.framework().addListener(mockCollector);
-
                 Throwable testFailure;
                 try {
                     for (MockitoTestListener listener : listeners) {
+                        Mockito.framework().addListener(listener);
                         listener.beforeTest(target, method.getName());
                     }
-
                     testFailure = evaluateSafely(base);
                 } finally {
-                     Mockito.framework().removeListener(mockCollector);
+                    for (MockitoTestListener listener : listeners) {
+                        //TODO add tests for safety removing listeners that were not added
+                        Mockito.framework().removeListener(listener);
+                    }
                 }
 
                 //If the infrastructure fails below, we don't see the original failure, thrown later
                 for (MockitoTestListener listener : listeners) {
-                    listener.afterTest(mockCollector.mocks, testFailure);
+                    listener.afterTest(testFailure);
                 }
 
                 if (testFailure != null) {
@@ -91,13 +88,4 @@ public class JUnitRule implements MockitoRule {
     public JUnitRule silent() {
         return new JUnitRule(logger, true);
     }
-
-    private static class MockCollector implements MockCreationListener {
-        private final List<Object> mocks = new LinkedList<Object>();
-
-        public void onMockCreated(Object mock, MockCreationSettings settings) {
-            mocks.add(mock);
-        }
-    }
-
 }

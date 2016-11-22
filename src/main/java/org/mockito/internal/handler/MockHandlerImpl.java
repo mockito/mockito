@@ -19,6 +19,7 @@ import org.mockito.internal.stubbing.answers.AnswersValidator;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.listeners.StubbingLookUpListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.verification.VerificationMode;
@@ -86,6 +87,7 @@ public class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
         // look for existing answer for this invocation
         StubbedInvocationMatcher stubbedInvocation = invocationContainerImpl.findAnswerFor(invocation);
+        notifyStubbedAnswerLookUp(invocation, stubbedInvocation);
 
         if (stubbedInvocation != null) {
             stubbedInvocation.captureArgumentsFrom(invocation);
@@ -122,6 +124,13 @@ public class MockHandlerImpl<T> implements InternalMockHandler<T> {
         }
 
         return new VerificationDataImpl(invocationContainerImpl, invocationMatcher);
+    }
+
+    private void notifyStubbedAnswerLookUp(Invocation invocation, StubbedInvocationMatcher exception) {
+        for (StubbingLookUpListener listener : mockSettings.getStubbingLookUpListeners()) {
+            //TODO error handling
+            listener.onStubbingLookUp(invocation, exception);
+        }
     }
 }
 
