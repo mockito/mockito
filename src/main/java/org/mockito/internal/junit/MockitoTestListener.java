@@ -1,10 +1,10 @@
 package org.mockito.internal.junit;
 
-import java.util.Collection;
+import org.mockito.listeners.MockCreationListener;
 
-interface MockitoTestListener {
+interface MockitoTestListener extends MockCreationListener {
 
     void beforeTest(Object testClassInstance, String testMethodName);
 
-    void afterTest(Collection<Object> mocks, Throwable problem);
+    void afterTest(Throwable problem);
 }
