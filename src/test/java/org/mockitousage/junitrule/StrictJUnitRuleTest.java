@@ -72,7 +72,7 @@ public class StrictJUnitRuleTest extends TestBase {
             run(new MockitoStatement() {
                 public void evaluate(IMethods mock, IMethods mock2) throws Throwable {
                     given(mock.simpleMethod(10)).willReturn("foo");
-                    mock.simpleMethod(15);
+                    mock2.simpleMethod(15);
                 }
             });
 
@@ -89,7 +89,7 @@ public class StrictJUnitRuleTest extends TestBase {
             run(new MockitoStatement() {
                 public void evaluate(IMethods mock, IMethods mock2) throws Throwable {
                     given(mock.simpleMethod(10)).willReturn("foo");
-                    mock.simpleMethod(15);
+                    mock.otherMethod();
 
                     throw new AssertionError("x");
                 }
@@ -102,23 +102,25 @@ public class StrictJUnitRuleTest extends TestBase {
         }
     }
 
-    //TODO, not yet implemented
-    @Ignore @Test public void fails_fast_when_stubbing_invoked_with_different_argument() throws Throwable {
+    @Test public void fails_fast_when_stubbing_invoked_with_different_argument() throws Throwable {
         try {
             //when
             run(new MockitoStatement() {
                 public void evaluate(IMethods mock, IMethods mock2) throws Throwable {
+                    //stubbing in the test code:
                     given(mock.simpleMethod(10)).willReturn("foo");
-                    mock.simpleMethod(15);
 
-                    throw new AssertionError("x");
+                    //invocation in the code under test uses different argument and should fail immediately
+                    //this helps with debugging and is essential for Mockito strictness
+                    mock.simpleMethod(15);
                 }
             });
 
             //then
             fail();
         } catch (MockitoAssertionError e) {
-            assertEquals("mismatched arg", e.getMessage());
+            e.printStackTrace();
+            assertThat(e.getMessage()).startsWith("Argument mismatch");
         }
     }
 
