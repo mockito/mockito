@@ -1,8 +1,10 @@
 package org.mockitousage.junitrule;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.junit.JUnitRule;
@@ -12,8 +14,8 @@ import org.mockitoutil.SafeJUnitRule;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.*;
 import static org.mockitoutil.TestBase.filterLineNo;
 
 public class StrictJUnitRuleTest {
@@ -59,16 +61,53 @@ public class StrictJUnitRuleTest {
         throw new AssertionError("x");
     }
 
+    @Test public void why_do_return_syntax_is_useful() throws Throwable {
+        //Trade-off of Mockito strictness documented in test
+
+        //expect
+        rule.expectThrowable(PotentialStubbingProblem.class);
+
+        //when
+        when(mock.simpleMethod(10)).thenReturn("10");
+        when(mock.simpleMethod(20)).thenReturn("20");
+    }
+
     @Test public void fails_fast_when_stubbing_invoked_with_different_argument() throws Throwable {
         //expect
-        rule.expectThrowable(AssertionError.class, "Argument mismatch:\n" +
-                " - stubbing: mock.simpleMethod(10);\n" +
-                " - actual: mock.simpleMethod(15);");
+        rule.expectThrowable(new SafeJUnitRule.ThrowableAssert() {
+            public void doAssert(Throwable throwable) {
+                Assertions.assertThat(throwable).isInstanceOf(PotentialStubbingProblem.class);
+                assertEquals(filterLineNo("\n" +
+                        "Strict JUnit rule detected stubbing argument mismatch.\n" +
+                        "This invocation of 'simpleMethod' method:\n" +
+                        "  mock.simpleMethod(15);\n" +
+                        "  -> at org.mockitousage.junitrule.StrictJUnitRuleTest.fails_fast_when_stubbing_invoked_with_different_argument(StrictJUnitRuleTest.java:0)\n" +
+                        "Has following stubbing(s) with different arguments:\n" +
+                        "  1. mock.simpleMethod(20);\n" +
+                        "    -> at org.mockitousage.junitrule.StrictJUnitRuleTest.fails_fast_when_stubbing_invoked_with_different_argument(StrictJUnitRuleTest.java:0)\n" +
+                        "  2. mock.simpleMethod(30);\n" +
+                        "    -> at org.mockitousage.junitrule.StrictJUnitRuleTest.fails_fast_when_stubbing_invoked_with_different_argument(StrictJUnitRuleTest.java:0)\n" +
+                        "Typically, stubbing argument mismatch indicates user mistake when writing tests.\n" +
+                        "In order to streamline debugging tests Mockito fails early in this scenario.\n" +
+                        "However, there are legit scenarios when this exception generates false negative signal:\n" +
+                        "  - stubbing the same method multiple times using 'given' or 'when' syntax\n" +
+                        "    Please use willReturn/doReturn API for stubbing\n" +
+                        "  - stubbed method is intentionally invoked with different arguments by code under test\n" +
+                        "    Please use 'default' or 'silent' JUnit Rule.\n" +
+                        "For more information see javadoc for PotentialStubbingProblem class."), filterLineNo(throwable.getMessage()));
+            }
+        });
 
-        //when stubbing in the test code:
-        given(mock.simpleMethod(10)).willReturn("foo");
+        //when stubbings in the test code:
+        willReturn("10").given(mock).simpleMethod(10) ;  //used
+        willReturn("20").given(mock).simpleMethod(20) ;  //unused
+        willReturn("30").given(mock).simpleMethod(30) ;  //unused
 
-        //and invocation in the code under test uses different argument and should fail immediately
+        //then
+        mock.otherMethod(); //ok, different method
+        mock.simpleMethod(10); //ok, stubbed with this argument
+
+        //invocation in the code under test uses different argument and should fail immediately
         //this helps with debugging and is essential for Mockito strictness
         mock.simpleMethod(15);
     }
@@ -103,6 +142,8 @@ public class StrictJUnitRuleTest {
         //when test has
         given(mock.simpleMethod(10)).willReturn("foo");
         given(mock2.simpleMethod(20)).willReturn("foo");
+
+        given(mock.otherMethod()).willReturn("foo"); //used and should not be reported
 
         //and code has
         mock.otherMethod();
