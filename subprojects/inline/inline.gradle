@@ -1,0 +1,18 @@
+description = "Mockito preconfigured inline mock maker (intermediate and to be superseeded by automatic usage in a future version)"
+
+ext {
+    artifactName = 'mockito-inline'
+    bintrayAutoPublish = true
+    bintrayRepo = 'maven'
+    mavenCentralSync = false
+}
+
+apply from: "$rootDir/gradle/java-library.gradle"
+
+dependencies {
+    compile project.rootProject
+}
+
+apply from: "$rootDir/gradle/publishable-java-library.gradle"
+
+tasks.javadoc.enabled = false
