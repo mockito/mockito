@@ -835,11 +835,19 @@ public class Reporter {
         for (Invocation u : unnecessaryStubbings) {
             stubbings.append("\n  ").append(count++).append(". ").append(u.getLocation());
         }
+        String heading = (testClass != null)?
+                "Unnecessary stubbings detected in test class: " + testClass.getSimpleName() :
+                "Unnecessary stubbings detected.";
+
         return new UnnecessaryStubbingException(join(
-                "Unnecessary stubbings detected in test class: " + testClass.getSimpleName(),
+                heading,
                 "Clean & maintainable test code requires zero unnecessary code.",
                 "Following stubbings are unnecessary (click to navigate to relevant line of code):" + stubbings,
                 "Please remove unnecessary stubbings or use 'silent' option. More info: javadoc for UnnecessaryStubbingException class."
         ));
+    }
+
+    public static void unncessaryStubbingException(List<Invocation> unused) {
+        throw formatUnncessaryStubbingException(null, unused);
     }
 }

@@ -100,7 +100,7 @@ public class TestBase {
      * into:
      * blah blah (UnusedStubsExceptionMessageTest.java:0)
      */
-    protected String filterLineNo(String stackTrace) {
+    public static String filterLineNo(String stackTrace) {
         return stackTrace.replaceAll("(\\((\\w+\\.java):(\\d)+\\))", "($2:0)");
     }
 }
