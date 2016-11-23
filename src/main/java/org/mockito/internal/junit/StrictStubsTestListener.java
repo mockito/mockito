@@ -21,7 +21,7 @@ class StrictStubsTestListener implements MockitoTestListener {
     private final Map<Object, MockCreationSettings> mocks = new HashMap<Object, MockCreationSettings>();
 
     public void beforeTest(Object testClassInstance, String testMethodName) {
-        //TODO init mocks and validate mockito usage is duplicated in the listeners, refactor or make sure all is tested
+        //TODO strict init mocks and validate mockito usage is duplicated in the listeners, refactor or make sure all is tested
         MockitoAnnotations.initMocks(testClassInstance);
     }
 
@@ -41,7 +41,7 @@ class StrictStubsTestListener implements MockitoTestListener {
 
         //It is not ideal that we modify the state of MockCreationSettings object
         //MockCreationSettings is intended to be an immutable view of the creation settings
-        //TODO we should start passing MockSettings object to the creation listener
+        //In future, we should start passing MockSettings object to the creation listener
         settings.getStubbingLookUpListeners().add(new StubbingLookUpListener() {
             public void onStubbingLookUp(Invocation invocation, MatchableInvocation stubbingFound) {
                 if (stubbingFound == null) {

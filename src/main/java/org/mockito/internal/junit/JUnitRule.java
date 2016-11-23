@@ -26,7 +26,7 @@ public class JUnitRule implements MockitoRule {
      * @param silent whether the rule emits warnings
      */
     public JUnitRule(MockitoLogger logger, boolean silent) {
-        //TODO avoid 2 very similar constructors
+        //TODO strict avoid 2 very similar constructors
 		this(logger, silent? Strictness.SILENT : Strictness.WARN);
     }
 
