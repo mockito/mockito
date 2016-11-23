@@ -47,4 +47,9 @@ public interface MockingProgress {
     void setVerificationStrategy(VerificationStrategy strategy);
 
     VerificationMode maybeVerifyLazily(VerificationMode mode);
+
+    /**
+     * Removes all listeners added via {@link #addListener(MockitoListener)}.
+     */
+    void clearListeners();
 }
