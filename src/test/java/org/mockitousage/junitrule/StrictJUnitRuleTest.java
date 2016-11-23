@@ -3,8 +3,8 @@ package org.mockitousage.junitrule;
 import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runners.model.FrameworkMethod;
 import org.mockito.Mock;
+import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.internal.junit.JUnitRule;
 import org.mockito.junit.MockitoJUnit;
 import org.mockitousage.IMethods;
@@ -13,13 +13,12 @@ import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertNull;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class StrictJUnitRuleTest extends TestBase {
 
     @Rule public SafeJUnitRule rule = new SafeJUnitRule(((JUnitRule) MockitoJUnit.rule()).strictStubs());
-
-    private FrameworkMethod dummy = mock(FrameworkMethod.class);
 
     @Mock IMethods mock;
     @Mock IMethods mock2;
@@ -100,5 +99,13 @@ public class StrictJUnitRuleTest extends TestBase {
 
         //then
         Assertions.assertThat(rule.getReportedThrowable()).hasMessageStartingWith("Unused stubbings");
+    }
+
+    @Test public void rule_validates_mockito_usage() throws Throwable {
+        //expect
+        rule.expectThrowable(UnfinishedVerificationException.class);
+
+        //when test contains unfinished verification
+        verify(mock);
     }
 }
