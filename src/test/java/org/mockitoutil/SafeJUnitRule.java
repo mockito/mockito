@@ -26,11 +26,11 @@ public class SafeJUnitRule implements MethodRule {
         this.testedRule = testedRule;
     }
 
-    public Statement apply(final Statement base, FrameworkMethod method, Object target) {
+    public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
                 try {
-                    base.evaluate();
+                    testedRule.apply(base, method, target).evaluate();
                 } catch (Throwable throwable) {
                     reportedThrowable = throwable;
                     throwableAssert.doAssert(throwable);
