@@ -23,8 +23,17 @@ public class SafeJUnitRuleTest {
         }, mock(FrameworkMethod.class), this).evaluate();
 
         //then
-        assertNull(rule.getReportedThrowable());
         assertTrue(delegate.statementEvaluated);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void regular_failing_test() throws Throwable {
+        //when
+        rule.apply(new Statement() {
+            public void evaluate() throws Throwable {
+                throw new IllegalArgumentException();
+            }
+        }, mock(FrameworkMethod.class), this).evaluate();
     }
 
     @Test public void rule_threw_exception() throws Throwable {
@@ -37,9 +46,6 @@ public class SafeJUnitRuleTest {
                 throw new AssertionError("x");
             }
         }, mock(FrameworkMethod.class), this).evaluate();
-
-        //then
-        assertEquals(rule.getReportedThrowable().getMessage(), "x");
     }
 
     @Test public void expected_exception_but_no_exception() throws Throwable {
