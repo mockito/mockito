@@ -14,6 +14,6 @@ public class DefaultMockitoFrameworkTest extends TestBase {
 
     @Test(expected = IllegalArgumentException.class)
     public void prevents_removing_null_listener() {
-        framework.addListener(null);
+        framework.removeListener(null);
     }
 }
