@@ -8,6 +8,8 @@ import org.junit.runners.model.Statement;
 /**
  * Junit rule for testing exception handling other JUnit rules, like Mockito JUnit rules.
  * Makes it easy to assert on expected exceptions triggered by the rule under test.
+ *
+ * TODO update other tests that validate rule error handling so that they use this class.
  */
 public class SafeJUnitRule implements MethodRule {
 
