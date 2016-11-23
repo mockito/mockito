@@ -52,7 +52,10 @@ class StrictStubsTestListener implements MockitoTestListener {
 
     public void onMockCreated(Object mock, MockCreationSettings settings) {
         this.mocks.put(mock, settings);
-        //TODO hack - modifying state of the listeners collection
+
+        //It is not ideal that we modify the state of MockCreationSettings object
+        //MockCreationSettings is intended to be an immutable view of the creation settings
+        //TODO we should start passing MockSettings object to the creation listener
         settings.getStubbingLookUpListeners().add(new StubbingLookUpListener() {
             public void onStubbingLookUp(Invocation invocation, MatchableInvocation stubbingFound) {
                 if (stubbingFound == null) {
