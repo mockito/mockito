@@ -3,19 +3,20 @@ package org.mockitousage.junitrule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.junit.JUnitRule;
 import org.mockito.junit.MockitoJUnit;
 import org.mockitousage.IMethods;
 import org.mockitoutil.SafeJUnitRule;
-import org.mockitoutil.TestBase;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockitoutil.TestBase.filterLineNo;
 
-public class StrictJUnitRuleTest extends TestBase {
+public class StrictJUnitRuleTest {
 
     @Rule public SafeJUnitRule rule = new SafeJUnitRule(((JUnitRule) MockitoJUnit.rule()).strictStubs());
 
@@ -40,7 +41,7 @@ public class StrictJUnitRuleTest extends TestBase {
 
     @Test public void fails_when_unused_stubbings() throws Throwable {
         //expect
-        rule.expectThrowable(AssertionError.class, "Unused stubbings detected: [mock.simpleMethod(10); stubbed with: [Returns: foo]]");
+        rule.expectThrowable(UnnecessaryStubbingException.class);
 
         //when
         given(mock.simpleMethod(10)).willReturn("foo");
@@ -87,7 +88,17 @@ public class StrictJUnitRuleTest extends TestBase {
 
     @Test public void unused_stubs_with_multiple_mocks() throws Throwable {
         //expect
-        rule.expectThrowable(MockitoAssertionError.class);
+        rule.expectThrowable(new SafeJUnitRule.ThrowableAssert() {
+            public void doAssert(Throwable throwable) {
+                assertEquals(filterLineNo("\n" +
+                        "Unnecessary stubbings detected.\n" +
+                        "Clean & maintainable test code requires zero unnecessary code.\n" +
+                        "Following stubbings are unnecessary (click to navigate to relevant line of code):\n" +
+                        "  1. -> at org.mockitousage.junitrule.StrictJUnitRuleTest.unused_stubs_with_multiple_mocks(StrictJUnitRuleTest.java:0)\n" +
+                        "  2. -> at org.mockitousage.junitrule.StrictJUnitRuleTest.unused_stubs_with_multiple_mocks(StrictJUnitRuleTest.java:0)\n" +
+                        "Please remove unnecessary stubbings or use 'silent' option. More info: javadoc for UnnecessaryStubbingException class."), filterLineNo(throwable.getMessage()));
+            }
+        });
 
         //when test has
         given(mock.simpleMethod(10)).willReturn("foo");
