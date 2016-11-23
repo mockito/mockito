@@ -3,19 +3,17 @@ package org.mockito.internal.junit;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.creation.settings.CreationSettings;
-import org.mockito.internal.invocation.finder.AllInvocationsFinder;
-import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockito.listeners.StubbingLookUpListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Stubbing;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.Mockito.mockingDetails;
-import static org.mockito.internal.util.collections.ListUtil.filter;
 
 /**
  * Test listener implementation that fails when there are unused stubbings
@@ -35,18 +33,8 @@ class StrictStubsTestListener implements MockitoTestListener {
             Mockito.validateMockitoUsage();
 
             //Detect unused stubbings:
-            //TODO, extremely rudimentary, the exception message is awful
-            Set<Stubbing> stubbings = AllInvocationsFinder.findStubbings(mocks.keySet());
-
-            List<Stubbing> unused = filter(stubbings, new ListUtil.Filter<Stubbing>() {
-                public boolean isOut(Stubbing s) {
-                    return s.wasUsed();
-                }
-            });
-
-            if (!unused.isEmpty()) {
-                throw new MockitoAssertionError("Unused stubbings detected: " + unused);
-            }
+            UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks.keySet());
+            unused.reportUnused();
         }
     }
 
