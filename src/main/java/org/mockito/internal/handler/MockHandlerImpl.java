@@ -128,7 +128,7 @@ public class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
     private void notifyStubbedAnswerLookUp(Invocation invocation, StubbedInvocationMatcher exception) {
         for (StubbingLookUpListener listener : mockSettings.getStubbingLookUpListeners()) {
-            //TODO error handling
+            //TODO strict error handling
             listener.onStubbingLookUp(invocation, exception);
         }
     }
