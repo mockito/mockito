@@ -58,7 +58,6 @@ public class JUnitRule implements MockitoRule {
                     testFailure = evaluateSafely(base);
                 } finally {
                     for (MockitoTestListener listener : listeners) {
-                        //TODO add tests for safety removing listeners that were not added
                         Mockito.framework().removeListener(listener);
                     }
                 }
