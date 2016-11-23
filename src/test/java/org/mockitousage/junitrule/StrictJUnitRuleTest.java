@@ -119,7 +119,6 @@ public class StrictJUnitRuleTest extends TestBase {
             //then
             fail();
         } catch (MockitoAssertionError e) {
-            e.printStackTrace();
             assertThat(e.getMessage()).startsWith("Argument mismatch");
         }
     }
