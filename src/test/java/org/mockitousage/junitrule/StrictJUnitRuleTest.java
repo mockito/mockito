@@ -124,8 +124,7 @@ public class StrictJUnitRuleTest extends TestBase {
         }
     }
 
-    //TODO, not yet implemented
-    @Ignore @Test public void verify_no_more_interactions_ignores_stubs() throws Throwable {
+    @Test public void verify_no_more_interactions_ignores_stubs() throws Throwable {
         //when
         run(new MockitoStatement() {
             public void evaluate(IMethods mock, IMethods mock2) throws Throwable {
@@ -133,7 +132,7 @@ public class StrictJUnitRuleTest extends TestBase {
                 given(mock.simpleMethod(10)).willReturn("foo");
 
                 //in code:
-                mock.simpleMethod(10);
+                mock.simpleMethod(10); //implicitly verifies the stubbing
                 mock.otherMethod();
 
                 //in test:

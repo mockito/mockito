@@ -64,6 +64,10 @@ class StrictStubsTestListener implements MockitoTestListener {
                                     "\n - actual: " + invocation);
                         }
                     }
+                } else {
+                    //when strict stubs are in use, every time a stub is realized in the code it is implicitly marked as verified
+                    //this way, the users don't have to repeat themselves to verify stubbed invocations (DRY)
+                    invocation.markVerified();
                 }
             }
         });
