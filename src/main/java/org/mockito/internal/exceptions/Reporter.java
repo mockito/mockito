@@ -850,4 +850,30 @@ public class Reporter {
     public static void unncessaryStubbingException(List<Invocation> unused) {
         throw formatUnncessaryStubbingException(null, unused);
     }
+
+    public static PotentialStubbingProblem potentialStubbingProblemByJUnitRule(Invocation actualInvocation, Collection<Invocation> matchingStubbings) {
+        StringBuilder stubbings = new StringBuilder();
+        int count = 1;
+        for (Invocation s : matchingStubbings) {
+            stubbings.append("  ").append(count++).append(". ").append(s);
+            stubbings.append("\n    ").append(s.getLocation()).append("\n");
+        }
+        stubbings.deleteCharAt(stubbings.length()-1); //remove trailing end of line
+
+        throw new PotentialStubbingProblem(join(
+                "Strict JUnit rule detected stubbing argument mismatch.",
+                "This invocation of '" + actualInvocation.getMethod().getName() + "' method:",
+                "  " + actualInvocation,
+                "  " + actualInvocation.getLocation(),
+                "Has following stubbing(s) with different arguments:",
+                stubbings,
+                "Typically, stubbing argument mismatch indicates user mistake when writing tests.",
+                "In order to streamline debugging tests Mockito fails early in this scenario.",
+                "However, there are legit scenarios when this exception generates false negative signal:",
+                "  - stubbing the same method multiple times using 'given' or 'when' syntax",
+                "    Please use willReturn/doReturn API for stubbing",
+                "  - stubbed method is intentionally invoked with different arguments by code under test",
+                "    Please use 'default' or 'silent' JUnit Rule.",
+                "For more information see javadoc for PotentialStubbingProblem class."));
+    }
 }

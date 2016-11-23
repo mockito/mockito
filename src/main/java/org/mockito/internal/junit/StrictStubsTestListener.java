@@ -2,16 +2,14 @@ package org.mockito.internal.junit;
 
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockito.listeners.StubbingLookUpListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Stubbing;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static org.mockito.Mockito.mockingDetails;
 
@@ -47,13 +45,15 @@ class StrictStubsTestListener implements MockitoTestListener {
         settings.getStubbingLookUpListeners().add(new StubbingLookUpListener() {
             public void onStubbingLookUp(Invocation invocation, MatchableInvocation stubbingFound) {
                 if (stubbingFound == null) {
+                    List<Invocation> matchingStubbings = new LinkedList<Invocation>();
                     Collection<Stubbing> stubbings = mockingDetails(invocation.getMock()).getStubbings();
                     for (Stubbing s : stubbings) {
                         if (!s.wasUsed() && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())) {
-                            //TODO there are multiple stubbings
-                            throw new MockitoAssertionError("Argument mismatch:\n - stubbing: " + s.getInvocation() +
-                                    "\n - actual: " + invocation);
+                            matchingStubbings.add(s.getInvocation());
                         }
+                    }
+                    if (!matchingStubbings.isEmpty()) {
+                        Reporter.potentialStubbingProblemByJUnitRule(invocation, matchingStubbings);
                     }
                 } else {
                     //when strict stubs are in use, every time a stub is realized in the code it is implicitly marked as verified
