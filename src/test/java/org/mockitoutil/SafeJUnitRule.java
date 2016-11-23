@@ -15,9 +15,7 @@ import org.junit.runners.model.Statement;
 public class SafeJUnitRule implements MethodRule {
 
     private final MethodRule testedRule;
-    private Throwable reportedThrowable;
-    private final static ThrowableAssert NO_OP = new ThrowableAssert() { public void doAssert(Throwable throwable) { } };
-    private ThrowableAssert throwableAssert = NO_OP;
+    private ThrowableAssert throwableAssert = null;
 
     /**
      * Wraps rule under test with exception handling so that it is easy to assert on exceptions fired from the tested rule.
@@ -31,12 +29,14 @@ public class SafeJUnitRule implements MethodRule {
             public void evaluate() throws Throwable {
                 try {
                     testedRule.apply(base, method, target).evaluate();
-                } catch (Throwable throwable) {
-                    reportedThrowable = throwable;
-                    throwableAssert.doAssert(throwable);
+                } catch (Throwable t) {
+                    if (throwableAssert == null) {
+                        throw t;
+                    }
+                    throwableAssert.doAssert(t);
                     return;
                 }
-                if (throwableAssert != NO_OP) {
+                if (throwableAssert != null) {
                     //looks like the user expects a throwable but it was not thrown!
                     throw new ExpectedThrowableNotReported("Expected the tested rule to throw an exception but it did not.");
                 }
@@ -89,13 +89,6 @@ public class SafeJUnitRule implements MethodRule {
      */
     public MethodRule getTestedRule() {
         return testedRule;
-    }
-
-    /**
-     * Exception reported by rule under test. Can be null, meaning the tested rule did not emit an exception.
-     */
-    public Throwable getReportedThrowable() {
-        return reportedThrowable;
     }
 
     /**
