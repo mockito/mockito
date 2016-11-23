@@ -1,5 +1,6 @@
 package org.mockitoutil;
 
+import org.assertj.core.api.AbstractThrowableAssert;
 import org.assertj.core.api.Assertions;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
@@ -49,11 +50,24 @@ public class SafeJUnitRule implements MethodRule {
     public void expectThrowable(final Class<? extends Throwable> expected, final String expectedMessage) {
         this.expectThrowable(new ThrowableAssert() {
             public void doAssert(Throwable throwable) {
-                Assertions.assertThat(throwable)
-                        .isInstanceOf(expected)
-                        .hasMessage(expectedMessage);
+                assertThrowable(throwable, expected).hasMessage(expectedMessage);
             }
         });
+    }
+
+    /**
+     * Expects that _after_ the test, the rule will fire specific exception with specific exception message
+     */
+    public void expectThrowable(final Class<? extends Throwable> expected) {
+        this.expectThrowable(new ThrowableAssert() {
+            public void doAssert(Throwable throwable) {
+                assertThrowable(throwable, expected);
+            }
+        });
+    }
+
+    private static AbstractThrowableAssert assertThrowable(Throwable throwable, Class<? extends Throwable> expected) {
+        return Assertions.assertThat(throwable).isInstanceOf(expected);
     }
 
     /**
