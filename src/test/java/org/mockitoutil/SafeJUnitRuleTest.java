@@ -6,14 +6,13 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class SafeJUnitRuleTest {
 
-    SafeJUnitRule rule = new SafeJUnitRule(mock(MethodRule.class));
+    MethodRuleStub delegate = new MethodRuleStub();
+    SafeJUnitRule rule = new SafeJUnitRule(delegate);
 
     @Test public void happy_path_no_exception() throws Throwable {
         //when
@@ -25,6 +24,7 @@ public class SafeJUnitRuleTest {
 
         //then
         assertNull(rule.getReportedThrowable());
+        assertTrue(delegate.statementEvaluated);
     }
 
     @Test public void rule_threw_exception() throws Throwable {
@@ -113,6 +113,18 @@ public class SafeJUnitRuleTest {
             fail();
         } catch (AssertionError throwable) {
             assertEquals(throwable.getMessage(), "x");
+        }
+    }
+
+    private static class MethodRuleStub implements MethodRule {
+        private boolean statementEvaluated;
+        public Statement apply(final Statement base, FrameworkMethod method, Object target) {
+            return new Statement() {
+                public void evaluate() throws Throwable {
+                    statementEvaluated = true;
+                    base.evaluate();
+                }
+            };
         }
     }
 }
