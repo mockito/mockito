@@ -8,6 +8,9 @@ import org.mockito.internal.util.collections.Iterables;
 import org.mockito.plugins.PluginSwitch;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -36,21 +39,33 @@ class PluginLoader {
     /**
      * Scans the classpath for given pluginType. If not found, default class is used.
      */
-    <T> T loadPlugin(Class<T> pluginType, String defaultPluginClassName) {
-        T plugin = loadImpl(pluginType);
-        if (plugin != null) {
-            return plugin;
-        }
-
+    @SuppressWarnings("unchecked")
+    <T> T loadPlugin(final Class<T> pluginType, String defaultPluginClassName) {
         try {
-            // Default implementation. Use our own ClassLoader instead of the context
-            // ClassLoader, as the default implementation is assumed to be part of
-            // Mockito and may not be available via the context ClassLoader.
-            return pluginType.cast(Class.forName(defaultPluginClassName).newInstance());
-        } catch (Exception e) {
-            throw new IllegalStateException("Internal problem occurred, please report it. " +
-                    "Mockito is unable to load the default implementation of class that is a part of Mockito distribution. " +
-                    "Failed to load " + pluginType, e);
+            T plugin = loadImpl(pluginType);
+            if (plugin != null) {
+                return plugin;
+            }
+
+            try {
+                // Default implementation. Use our own ClassLoader instead of the context
+                // ClassLoader, as the default implementation is assumed to be part of
+                // Mockito and may not be available via the context ClassLoader.
+                return pluginType.cast(Class.forName(defaultPluginClassName).newInstance());
+            } catch (Exception e) {
+                throw new IllegalStateException("Internal problem occurred, please report it. " +
+                        "Mockito is unable to load the default implementation of class that is a part of Mockito distribution. " +
+                        "Failed to load " + pluginType, e);
+            }
+        } catch (final Throwable t) {
+            return (T) Proxy.newProxyInstance(pluginType.getClassLoader(),
+                    new Class<?>[]{pluginType},
+                    new InvocationHandler() {
+                        @Override
+                        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                            throw new IllegalStateException("Could not initialize plugin: " + pluginType, t);
+                        }
+                    });
         }
     }
 

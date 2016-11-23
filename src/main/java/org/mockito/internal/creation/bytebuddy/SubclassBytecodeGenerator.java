@@ -9,7 +9,6 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.modifier.SynchronizationState;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.MultipleParentClassLoader;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.FieldAccessor;
@@ -34,6 +33,8 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 
 class SubclassBytecodeGenerator implements BytecodeGenerator {
 
+    private final SubclassLoader loader;
+
     private final ByteBuddy byteBuddy;
     private final Random random;
 
@@ -41,10 +42,19 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private final ElementMatcher<? super MethodDescription> matcher;
 
     public SubclassBytecodeGenerator() {
-        this(null, any());
+        this(new SubclassInjectionLoader());
+    }
+
+    public SubclassBytecodeGenerator(SubclassLoader loader) {
+        this(loader, null, any());
     }
 
     public SubclassBytecodeGenerator(Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
+        this(new SubclassInjectionLoader(), readReplace, matcher);
+    }
+
+    protected SubclassBytecodeGenerator(SubclassLoader loader, Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
+        this.loader = loader;
         this.readReplace = readReplace;
         this.matcher = matcher;
         byteBuddy = new ByteBuddy().with(TypeValidation.DISABLED);
@@ -90,7 +100,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                               .append(MockMethodInterceptor.class,
                                       MockMethodInterceptor.ForHashCode.class,
                                       MockMethodInterceptor.ForEquals.class).build(),
-                              ClassLoadingStrategy.Default.INJECTION.with(features.mockedType.getProtectionDomain()))
+                              loader.getStrategy(features.mockedType))
                       .getLoaded();
     }
 

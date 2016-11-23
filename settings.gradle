@@ -1,3 +1,5 @@
+include 'android'
+include 'inline'
 include 'testng'
 include 'extTest'
 
