@@ -4,7 +4,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
 
 /**
- * TODO, implements MockObjectListener marker?
+ * TODO strict, implements MockObjectListener marker?
  *
  * Listens to attempts to look up stubbing answer for given mocks
  * <p>
