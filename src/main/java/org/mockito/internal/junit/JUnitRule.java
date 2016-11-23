@@ -18,10 +18,9 @@ import java.util.LinkedList;
  */
 public class JUnitRule implements MockitoRule {
 
-    public enum Strictness { SILENT, WARN, STRICT_STUBS }
-	private final MockitoLogger logger;
+    private enum Strictness { SILENT, WARN, STRICT_STUBS;}
+    private final MockitoLogger logger;
     private final Collection<MockitoTestListener> listeners = new LinkedList<MockitoTestListener>();
-
     /**
      * @param logger target for the stubbing warnings
      * @param silent whether the rule emits warnings
@@ -35,7 +34,7 @@ public class JUnitRule implements MockitoRule {
      * @param logger target for the stubbing warnings
      * @param strictness how strict mocking / stubbing is concerned
      */
-    public JUnitRule(MockitoLogger logger, Strictness strictness) {
+    private JUnitRule(MockitoLogger logger, Strictness strictness) {
         this.logger = logger;
         if (strictness == Strictness.SILENT) {
             listeners.add(new SilentTestListener());
@@ -87,5 +86,9 @@ public class JUnitRule implements MockitoRule {
 
     public JUnitRule silent() {
         return new JUnitRule(logger, true);
+    }
+
+    public JUnitRule strictStubs() {
+        return new JUnitRule(logger, Strictness.STRICT_STUBS);
     }
 }

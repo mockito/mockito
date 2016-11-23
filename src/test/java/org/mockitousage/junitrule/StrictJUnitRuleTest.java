@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.junit.JUnitRule;
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.junit.MockitoJUnit;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -22,13 +22,7 @@ import static org.mockito.Mockito.*;
 
 public class StrictJUnitRuleTest extends TestBase {
 
-    private MockitoLogger logger = new MockitoLogger() {
-        public void log(Object what) {
-            throw new AssertionError("This implementation of rule should not warn about anything");
-        }
-    };
-
-    private JUnitRule jUnitRule = new JUnitRule(logger, JUnitRule.Strictness.STRICT_STUBS);
+    private JUnitRule jUnitRule = ((JUnitRule) MockitoJUnit.rule()).strictStubs();
 
     private FrameworkMethod dummy = mock(FrameworkMethod.class);
 
