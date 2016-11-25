@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoRule;
  */
 public class JUnitRule implements MockitoRule {
 
-    private enum Strictness { SILENT, WARN, STRICT_STUBS;}
+    public enum Strictness { SILENT, WARN, STRICT_STUBS;}
     private final MockitoLogger logger;
     private MockitoTestListener listener;
     /**
@@ -33,7 +33,7 @@ public class JUnitRule implements MockitoRule {
      * @param logger target for the stubbing warnings
      * @param strictness how strict mocking / stubbing is concerned
      */
-    private JUnitRule(MockitoLogger logger, Strictness strictness) {
+    public JUnitRule(MockitoLogger logger, Strictness strictness) {
         this.logger = logger;
         if (strictness == Strictness.SILENT) {
             listener = new NoOpTestListener();
