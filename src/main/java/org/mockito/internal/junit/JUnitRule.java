@@ -52,15 +52,14 @@ public class JUnitRule implements MockitoRule {
                 try {
                     //mock initialization could be part of listeners but to avoid duplication I left it here:
                     MockitoAnnotations.initMocks(target);
-
-                    listener.beforeTest(target, method.getName());
                     testFailure = evaluateSafely(base);
                 } finally {
                     Mockito.framework().removeListener(listener);
                 }
 
-                //If the 'afterTest' fails below, we don't see the original failure, thrown later
-                listener.afterTest(testFailure);
+                //If the 'testFinished' fails below, we don't see the original failure, thrown later
+                DefaultTestFinishedEvent event = new DefaultTestFinishedEvent(target, method.getName(), testFailure);
+                listener.testFinished(event);
 
                 if (testFailure != null) {
                     throw testFailure;

@@ -1,7 +1,5 @@
 package org.mockito.internal.junit;
 
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.listeners.StubbingLookUpListener;
 import org.mockito.invocation.Invocation;
@@ -20,10 +18,8 @@ class StrictStubsTestListener implements MockitoTestListener {
 
     private final Map<Object, MockCreationSettings> mocks = new HashMap<Object, MockCreationSettings>();
 
-    public void beforeTest(Object testClassInstance, String testMethodName) {}
-
-    public void afterTest(Throwable testFailure) {
-        if (testFailure == null) {
+    public void testFinished(TestFinishedEvent event) {
+        if (event.getFailure() == null) {
             //Detect unused stubbings:
             UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks.keySet());
             unused.reportUnused();
