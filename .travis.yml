@@ -13,7 +13,11 @@ cache:
 # see https://docs.travis-ci.com/user/migrating-from-legacy/ and https://docs.travis-ci.com/user/ci-environment
 sudo: true
 
-language: java
+language: android
+
+android:
+  components:
+    - android-24
 
 # new workaround for https://github.com/travis-ci/travis-ci/issues/5227#issuecomment-165131913
 addons:
@@ -26,24 +30,12 @@ before_install:
   - echo "$TRAVIS_COMMIT_MESSAGE"
 
 jdk:
-  - openjdk6
-
-matrix:
-  include:
-  - jdk: openjdk6
-    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
-  - jdk: oraclejdk7
-    env: SKIP_RELEASE=true
-  - jdk: oraclejdk7
-    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
-  - jdk: oraclejdk8
-    env: SKIP_RELEASE=true
-  - jdk: oraclejdk8
-    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+  - oraclejdk8
 
 env:
   global:
   - TERM=dumb
+  - SKIP_RELEASE=true
   - GRADLE_OPTS="-XX:+UseCompressedOops -Djava.awt.headless=true"
 
 branches:
