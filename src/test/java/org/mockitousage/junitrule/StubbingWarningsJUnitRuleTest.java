@@ -226,19 +226,6 @@ public class StubbingWarningsJUnitRuleTest extends TestBase {
                 filterLineNo(logger.getLoggedInfo()));
     }
 
-    @Test
-    public void no_warnings_when_silent() throws Throwable {
-        jUnitRule = new JUnitRule(logger, false).silent();
-        jUnitRule.apply(new Statement() {
-            public void evaluate() throws Throwable {
-                IMethods mock = mock(IMethods.class);
-                declareStubbing(mock);
-            }
-        }, dummy, new DummyTestCase()).evaluate();
-
-        assertTrue(logger.isEmpty());
-    }
-
     private static void declareStubbingWithArg(IMethods mock, String arg) {
         when(mock.simpleMethod(arg)).thenReturn("bar");
     }
