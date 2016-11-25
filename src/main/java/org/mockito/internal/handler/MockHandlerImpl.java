@@ -19,7 +19,7 @@ import org.mockito.internal.stubbing.answers.AnswersValidator;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
-import org.mockito.listeners.StubbingLookUpListener;
+import org.mockito.internal.listeners.StubbingLookUpListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.verification.VerificationMode;
@@ -128,7 +128,6 @@ public class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
     private void notifyStubbedAnswerLookUp(Invocation invocation, StubbedInvocationMatcher exception) {
         for (StubbingLookUpListener listener : mockSettings.getStubbingLookUpListeners()) {
-            //TODO strict error handling
             listener.onStubbingLookUp(invocation, exception);
         }
     }
