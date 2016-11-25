@@ -20,16 +20,10 @@ class StrictStubsTestListener implements MockitoTestListener {
 
     private final Map<Object, MockCreationSettings> mocks = new HashMap<Object, MockCreationSettings>();
 
-    public void beforeTest(Object testClassInstance, String testMethodName) {
-        //TODO strict init mocks and validate mockito usage is duplicated in the listeners, refactor or make sure all is tested
-        MockitoAnnotations.initMocks(testClassInstance);
-    }
+    public void beforeTest(Object testClassInstance, String testMethodName) {}
 
     public void afterTest(Throwable testFailure) {
         if (testFailure == null) {
-            //Validate only when there is no test failure to avoid reporting multiple problems
-            Mockito.validateMockitoUsage();
-
             //Detect unused stubbings:
             UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks.keySet());
             unused.reportUnused();
