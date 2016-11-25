@@ -24,7 +24,7 @@ public class MockitoJUnit {
      * @since 1.10.17
      */
     public static MockitoRule rule() {
-        return new JUnitRule(new ConsoleMockitoLogger(), false);
+        return new JUnitRule(new ConsoleMockitoLogger(), JUnitRule.Strictness.WARN);
     }
 
     /**
