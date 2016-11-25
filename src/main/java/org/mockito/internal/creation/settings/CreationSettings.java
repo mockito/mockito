@@ -5,7 +5,7 @@
 package org.mockito.internal.creation.settings;
 
 import org.mockito.listeners.InvocationListener;
-import org.mockito.listeners.StubbingLookUpListener;
+import org.mockito.internal.listeners.StubbingLookUpListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;

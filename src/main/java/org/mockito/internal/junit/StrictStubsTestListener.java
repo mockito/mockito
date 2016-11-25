@@ -3,9 +3,9 @@ package org.mockito.internal.junit;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.exceptions.Reporter;
+import org.mockito.internal.listeners.StubbingLookUpListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
-import org.mockito.listeners.StubbingLookUpListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Stubbing;
 
