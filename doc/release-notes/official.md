@@ -1,3 +1,16 @@
+### 2.2.23 (2016-11-25 14:26 UTC)
+
+* Authors: 3
+* Commits: 5
+  * 2: Brice Dutheil
+  * 2: Christian Schwarz
+  * 1: Felix Dekker
+* Improvements: 4
+  * Replaced ObjectBox with AtomicReference [(#777)](https://github.com/mockito/mockito/pull/777)
+  * InvocationMatcher internal improvements [(#776)](https://github.com/mockito/mockito/pull/776)
+  * Fixes #731 Implements retry rule for flaky tests [(#771)](https://github.com/mockito/mockito/pull/771)
+  * Consider rerunning failed tests [(#731)](https://github.com/mockito/mockito/issues/731)
+
 ### 2.2.22 (2016-11-21 11:17 UTC)
 
 * Authors: 1
