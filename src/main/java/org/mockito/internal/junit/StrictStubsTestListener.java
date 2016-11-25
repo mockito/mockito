@@ -4,6 +4,7 @@ import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.listeners.StubbingLookUpListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
+import org.mockito.listeners.MockCreationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Stubbing;
 
@@ -14,7 +15,7 @@ import static org.mockito.Mockito.mockingDetails;
 /**
  * Test listener implementation that fails when there are unused stubbings
  */
-class StrictStubsTestListener implements MockitoTestListener {
+class StrictStubsTestListener implements MockitoTestListener, MockCreationListener {
 
     private final Map<Object, MockCreationSettings> mocks = new HashMap<Object, MockCreationSettings>();
 

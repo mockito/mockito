@@ -1,12 +1,13 @@
 package org.mockito.internal.junit;
 
 import org.mockito.internal.util.MockitoLogger;
+import org.mockito.listeners.MockCreationListener;
 import org.mockito.mock.MockCreationSettings;
 
 import java.util.LinkedList;
 import java.util.List;
 
-class WarningTestListener implements MockitoTestListener {
+class WarningTestListener implements MockitoTestListener, MockCreationListener {
 
     private final MockitoLogger logger;
     private final List<Object> mocks = new LinkedList<Object>();
