@@ -1,3 +1,11 @@
+### 2.2.24 (2016-11-25 15:08 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 1
+  * Removed private isMockitoMock(..) in MockUtil [(#775)](https://github.com/mockito/mockito/pull/775)
+
 ### 2.2.23 (2016-11-25 14:26 UTC)
 
 * Authors: 3
