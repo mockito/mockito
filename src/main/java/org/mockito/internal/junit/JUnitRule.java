@@ -19,15 +19,7 @@ public class JUnitRule implements MockitoRule {
 
     public enum Strictness { SILENT, WARN, STRICT_STUBS;}
     private final MockitoLogger logger;
-    private MockitoTestListener listener;
-    /**
-     * @param logger target for the stubbing warnings
-     * @param silent whether the rule emits warnings
-     */
-    public JUnitRule(MockitoLogger logger, boolean silent) {
-        //TODO strict avoid 2 very similar constructors
-		this(logger, silent? Strictness.SILENT : Strictness.WARN);
-    }
+    private final MockitoTestListener listener;
 
     /**
      * @param logger target for the stubbing warnings
@@ -35,12 +27,11 @@ public class JUnitRule implements MockitoRule {
      */
     public JUnitRule(MockitoLogger logger, Strictness strictness) {
         this.logger = logger;
-        if (strictness == Strictness.SILENT) {
-            listener = new NoOpTestListener();
-        } else if (strictness == Strictness.WARN) {
-            listener = new WarningTestListener(logger);
-        } else if (strictness == Strictness.STRICT_STUBS) {
-            listener = new StrictStubsTestListener();
+        switch (strictness) {
+            case SILENT: listener = new NoOpTestListener(); break;
+            case WARN: listener = new WarningTestListener(logger); break;
+            case STRICT_STUBS: listener = new StrictStubsTestListener(); break;
+            default: throw new IllegalArgumentException("Illegal argument: " + strictness);
         }
     }
 
