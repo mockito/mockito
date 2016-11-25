@@ -1,7 +1,5 @@
 package org.mockito.internal.junit;
 
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.mock.MockCreationSettings;
 
@@ -19,8 +17,8 @@ class WarningTestListener implements MockitoTestListener {
     }
 
     public void beforeTest(Object testClassInstance, String testMethodName) {
+        //TODO strict - this is not safe, there can be multiple tests starting without finishing (concurrent)
         testName = testClassInstance.getClass().getSimpleName() + "." + testMethodName;
-        MockitoAnnotations.initMocks(testClassInstance);
     }
 
     public void afterTest(Throwable testFailure) {
@@ -29,9 +27,6 @@ class WarningTestListener implements MockitoTestListener {
             //to avoid false negatives. Give hint only when test fails.
             new ArgMismatchFinder().getStubbingArgMismatches(mocks).format(testName, logger);
         } else {
-            //Validate only when there is no test failure to avoid reporting multiple problems
-            Mockito.validateMockitoUsage();
-
             //print unused stubbings only when test succeeds to avoid reporting multiple problems and confusing users
             new UnusedStubbingsFinder().getUnusedStubbings(mocks).format(testName, logger);
         }

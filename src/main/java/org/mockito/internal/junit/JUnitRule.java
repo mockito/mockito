@@ -7,11 +7,9 @@ package org.mockito.internal.junit;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.junit.MockitoRule;
-
-import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  * Internal implementation.
@@ -20,7 +18,7 @@ public class JUnitRule implements MockitoRule {
 
     private enum Strictness { SILENT, WARN, STRICT_STUBS;}
     private final MockitoLogger logger;
-    private final Collection<MockitoTestListener> listeners = new LinkedList<MockitoTestListener>();
+    private MockitoTestListener listener;
     /**
      * @param logger target for the stubbing warnings
      * @param silent whether the rule emits warnings
@@ -37,11 +35,11 @@ public class JUnitRule implements MockitoRule {
     private JUnitRule(MockitoLogger logger, Strictness strictness) {
         this.logger = logger;
         if (strictness == Strictness.SILENT) {
-            listeners.add(new SilentTestListener());
+            listener = new NoOpTestListener();
         } else if (strictness == Strictness.WARN) {
-            listeners.add(new WarningTestListener(logger));
+            listener = new WarningTestListener(logger);
         } else if (strictness == Strictness.STRICT_STUBS) {
-            listeners.add(new StrictStubsTestListener());
+            listener = new StrictStubsTestListener();
         }
     }
 
@@ -49,27 +47,28 @@ public class JUnitRule implements MockitoRule {
 	public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
+                Mockito.framework().addListener(listener);
                 Throwable testFailure;
                 try {
-                    for (MockitoTestListener listener : listeners) {
-                        Mockito.framework().addListener(listener);
-                        listener.beforeTest(target, method.getName());
-                    }
+                    //mock initialization could be part of listeners but to avoid duplication I left it here:
+                    MockitoAnnotations.initMocks(target);
+
+                    listener.beforeTest(target, method.getName());
                     testFailure = evaluateSafely(base);
                 } finally {
-                    for (MockitoTestListener listener : listeners) {
-                        Mockito.framework().removeListener(listener);
-                    }
+                    Mockito.framework().removeListener(listener);
                 }
 
-                //If the infrastructure fails below, we don't see the original failure, thrown later
-                for (MockitoTestListener listener : listeners) {
-                    listener.afterTest(testFailure);
-                }
+                //If the 'afterTest' fails below, we don't see the original failure, thrown later
+                listener.afterTest(testFailure);
 
                 if (testFailure != null) {
                     throw testFailure;
                 }
+
+                //Validate only when there is no test failure to avoid reporting multiple problems
+                //This could be part of the listener but to avoid duplication I left it here:
+                Mockito.validateMockitoUsage();
             }
 
             private Throwable evaluateSafely(Statement base) {
