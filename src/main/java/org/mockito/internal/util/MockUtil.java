@@ -55,7 +55,7 @@ public class MockUtil {
             throw new NotAMockException("Argument should be a mock, but is null!");
         }
 
-        if (isMockitoMock(mock)) {
+        if (isMock(mock)) {
             MockHandler handler = mockMaker.getHandler(mock);
             return (InternalMockHandler) handler;
         } else {
@@ -63,16 +63,11 @@ public class MockUtil {
         }
     }
 
-    public static boolean isMock(Object mock) {
-        // double check to avoid classes that have the same interfaces, could be great to have a custom mockito field in the proxy instead of relying on instance fields
-        return isMockitoMock(mock);
-    }
-
     public static boolean isSpy(Object mock) {
-        return isMockitoMock(mock) && getMockSettings(mock).getDefaultAnswer() == Mockito.CALLS_REAL_METHODS;
+        return isMock(mock) && getMockSettings(mock).getDefaultAnswer() == Mockito.CALLS_REAL_METHODS;
     }
 
-    private static <T> boolean isMockitoMock(T mock) {
+    public static boolean isMock(Object mock) {
         return mock != null && mockMaker.getHandler(mock) != null;
     }
 
