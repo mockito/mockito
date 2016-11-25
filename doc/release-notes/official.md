@@ -1,3 +1,18 @@
+### 2.2.25 (2016-11-25 18:10 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Brice Dutheil
+  * 1: Igor Kostenko
+  * 1: Stephan Schroevers
+* Improvements: 4
+  * Enhancements: 1
+    * Introduce default answers for primitive Optionals/Streams [(#782)](https://github.com/mockito/mockito/pull/782)
+  * Remaining changes: 3
+    * Add default answers for java.util.Optional{Double,Int,Long} and java.util.stream.{Double,Int,Long}Stream [(#781)](https://github.com/mockito/mockito/issues/781)
+    * Fixes #765: Set files encoding to UTF-8 [(#780)](https://github.com/mockito/mockito/pull/780)
+    * Cannot build Mockito on Windows 64b with Java 8  [(#765)](https://github.com/mockito/mockito/issues/765)
+
 ### 2.2.24 (2016-11-25 15:08 UTC)
 
 * Authors: 1
