@@ -55,7 +55,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     public void addAnswer(Answer answer, boolean isConsecutive) {
         Invocation invocation = invocationForStubbing.getInvocation();
-        mockingProgress().stubbingCompleted(invocation);
+        mockingProgress().stubbingCompleted();
         AnswersValidator answersValidator = new AnswersValidator();
         answersValidator.validate(answer, invocation);
 
