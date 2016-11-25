@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 public class StubbingWarningsJUnitRuleTest extends TestBase {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    private JUnitRule jUnitRule = new JUnitRule(logger, false);
+    private JUnitRule jUnitRule = new JUnitRule(logger, JUnitRule.Strictness.WARN);
     private FrameworkMethod dummy = mock(FrameworkMethod.class);
 
     @After public void after() {
