@@ -24,13 +24,13 @@ public class JUnitRuleTest {
 
     @Test
     public void rethrows_exception() throws Throwable {
-        rule.expectThrowable(RuntimeException.class, "foo");
+        rule.expectFailure(RuntimeException.class, "foo");
         throw new RuntimeException("foo");
     }
 
     @Test
     public void detects_invalid_mockito_usage_on_success() throws Throwable {
-        rule.expectThrowable(UnfinishedStubbingException.class);
+        rule.expectFailure(UnfinishedStubbingException.class);
         when(mock.simpleMethod());
     }
 
@@ -39,7 +39,7 @@ public class JUnitRuleTest {
         //This intended behavior is questionable
         //However, it was like that since the beginning of JUnit rule support
         //Users never questioned this behavior. Hence, let's stick to it unless we have more data
-        rule.expectThrowable(RuntimeException.class, "foo");
+        rule.expectFailure(RuntimeException.class, "foo");
 
         Mockito.when(mock.simpleMethod()); // <--- unfinished stubbing
         throw new RuntimeException("foo"); // <--- some failure

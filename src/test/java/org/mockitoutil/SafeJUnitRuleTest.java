@@ -38,7 +38,7 @@ public class SafeJUnitRuleTest {
 
     @Test public void rule_threw_exception() throws Throwable {
         //expect
-        rule.expectThrowable(AssertionError.class, "x");
+        rule.expectFailure(AssertionError.class, "x");
 
         //when
         rule.apply(new Statement() {
@@ -50,7 +50,7 @@ public class SafeJUnitRuleTest {
 
     @Test public void expected_exception_but_no_exception() throws Throwable {
         //expect
-        rule.expectThrowable(AssertionError.class, "x");
+        rule.expectFailure(AssertionError.class, "x");
 
         //when
         try {
@@ -69,7 +69,7 @@ public class SafeJUnitRuleTest {
 
     @Test public void expected_exception_message_did_not_match() throws Throwable {
         //expect
-        rule.expectThrowable(AssertionError.class, "FOO");
+        rule.expectFailure(AssertionError.class, "FOO");
 
         //when
         try {
@@ -86,7 +86,7 @@ public class SafeJUnitRuleTest {
 
     @Test public void expected_exception_type_did_not_match() throws Throwable {
         //expect
-        rule.expectThrowable(AssertionError.class, "x");
+        rule.expectFailure(AssertionError.class, "x");
 
         //when
         try {
@@ -103,8 +103,8 @@ public class SafeJUnitRuleTest {
 
     @Test public void expected_exception_assert_did_not_match() throws Throwable {
         //expect
-        rule.expectThrowable(new SafeJUnitRule.ThrowableAssert() {
-            public void doAssert(Throwable throwable) {
+        rule.expectFailure(new SafeJUnitRule.FailureAssert() {
+            public void doAssert(Throwable t) {
                 throw new AssertionError("x");
             }
         });
