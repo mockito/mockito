@@ -43,7 +43,7 @@ public class StrictJUnitRuleTest {
 
     @Test public void fails_when_unused_stubbings() throws Throwable {
         //expect
-        rule.expectThrowable(UnnecessaryStubbingException.class);
+        rule.expectFailure(UnnecessaryStubbingException.class);
 
         //when
         given(mock.simpleMethod(10)).willReturn("foo");
@@ -52,7 +52,7 @@ public class StrictJUnitRuleTest {
 
     @Test public void test_failure_trumps_unused_stubbings() throws Throwable {
         //expect
-        rule.expectThrowable(AssertionError.class, "x");
+        rule.expectFailure(AssertionError.class, "x");
 
         //when
         given(mock.simpleMethod(10)).willReturn("foo");
@@ -65,7 +65,7 @@ public class StrictJUnitRuleTest {
         //Trade-off of Mockito strictness documented in test
 
         //expect
-        rule.expectThrowable(PotentialStubbingProblem.class);
+        rule.expectFailure(PotentialStubbingProblem.class);
 
         //when
         when(mock.simpleMethod(10)).thenReturn("10");
@@ -74,9 +74,9 @@ public class StrictJUnitRuleTest {
 
     @Test public void fails_fast_when_stubbing_invoked_with_different_argument() throws Throwable {
         //expect
-        rule.expectThrowable(new SafeJUnitRule.ThrowableAssert() {
-            public void doAssert(Throwable throwable) {
-                Assertions.assertThat(throwable).isInstanceOf(PotentialStubbingProblem.class);
+        rule.expectFailure(new SafeJUnitRule.FailureAssert() {
+            public void doAssert(Throwable t) {
+                Assertions.assertThat(t).isInstanceOf(PotentialStubbingProblem.class);
                 assertEquals(filterLineNo("\n" +
                         "Strict JUnit rule detected stubbing argument mismatch.\n" +
                         "This invocation of 'simpleMethod' method:\n" +
@@ -94,7 +94,7 @@ public class StrictJUnitRuleTest {
                         "    Please use willReturn/doReturn API for stubbing\n" +
                         "  - stubbed method is intentionally invoked with different arguments by code under test\n" +
                         "    Please use 'default' or 'silent' JUnit Rule.\n" +
-                        "For more information see javadoc for PotentialStubbingProblem class."), filterLineNo(throwable.getMessage()));
+                        "For more information see javadoc for PotentialStubbingProblem class."), filterLineNo(t.getMessage()));
             }
         });
 
@@ -127,15 +127,15 @@ public class StrictJUnitRuleTest {
 
     @Test public void unused_stubs_with_multiple_mocks() throws Throwable {
         //expect
-        rule.expectThrowable(new SafeJUnitRule.ThrowableAssert() {
-            public void doAssert(Throwable throwable) {
+        rule.expectFailure(new SafeJUnitRule.FailureAssert() {
+            public void doAssert(Throwable t) {
                 assertEquals(filterLineNo("\n" +
                         "Unnecessary stubbings detected.\n" +
                         "Clean & maintainable test code requires zero unnecessary code.\n" +
                         "Following stubbings are unnecessary (click to navigate to relevant line of code):\n" +
                         "  1. -> at org.mockitousage.junitrule.StrictJUnitRuleTest.unused_stubs_with_multiple_mocks(StrictJUnitRuleTest.java:0)\n" +
                         "  2. -> at org.mockitousage.junitrule.StrictJUnitRuleTest.unused_stubs_with_multiple_mocks(StrictJUnitRuleTest.java:0)\n" +
-                        "Please remove unnecessary stubbings or use 'silent' option. More info: javadoc for UnnecessaryStubbingException class."), filterLineNo(throwable.getMessage()));
+                        "Please remove unnecessary stubbings or use 'silent' option. More info: javadoc for UnnecessaryStubbingException class."), filterLineNo(t.getMessage()));
             }
         });
 
@@ -152,7 +152,7 @@ public class StrictJUnitRuleTest {
 
     @Test public void rule_validates_mockito_usage() throws Throwable {
         //expect
-        rule.expectThrowable(UnfinishedVerificationException.class);
+        rule.expectFailure(UnfinishedVerificationException.class);
 
         //when test contains unfinished verification
         verify(mock);
