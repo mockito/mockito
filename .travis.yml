@@ -10,9 +10,9 @@ cache:
     - $HOME/.gradle/wrapper/
 
 # required for oraclejdk9
-sudo: required
+sudo: false
 dist: trusty
-group: edge
+group: beta
 
 language: java
 
