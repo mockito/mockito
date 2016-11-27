@@ -1,6 +1,11 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import org.junit.Assume;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.ClassFileVersion;
+import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.implementation.StubMethod;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
@@ -17,10 +22,14 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.regex.Pattern;
 
+import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assume.assumeTrue;
 
 public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest<InlineByteBuddyMockMaker> {
+
     public InlineByteBuddyMockMakerTest() {
         super(new InlineByteBuddyMockMaker());
     }
@@ -192,7 +201,9 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     @Test
     public void is_type_mockable_allows_anonymous() {
         Observer anonymous = new Observer() {
-            @Override public void update(Observable o, Object arg) { }
+            @Override
+            public void update(Observable o, Object arg) {
+            }
         };
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(anonymous.getClass());
         assertThat(mockable.mockable()).isTrue();
@@ -211,6 +222,28 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(Pattern.class);
         assertThat(mockable.mockable()).isTrue();
         assertThat(mockable.nonMockableReason()).isEqualTo("");
+    }
+
+    @Test
+    public void test_parameters_retention() throws Exception {
+        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
+
+        Class<?> typeWithParameters = new ByteBuddy()
+                .subclass(Object.class)
+                .defineMethod("foo", void.class, Visibility.PUBLIC)
+                .withParameter(String.class, "bar")
+                .intercept(StubMethod.INSTANCE)
+                .make()
+                .load(null)
+                .getLoaded();
+
+        MockCreationSettings<?> settings = settingsFor(typeWithParameters);
+        @SuppressWarnings("unchecked")
+        Object proxy = mockMaker.createMock(settings, new MockHandlerImpl(settings));
+
+        assertThat(proxy.getClass()).isEqualTo(typeWithParameters);
+        assertThat(new TypeDescription.ForLoadedType(typeWithParameters).getDeclaredMethods().filter(named("foo"))
+                .getOnly().getParameters().getOnly().getName()).isEqualTo("bar");
     }
 
     private static <T> MockCreationSettings<T> settingsFor(Class<T> type, Class<?>... extraInterfaces) {
@@ -254,6 +287,7 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     }
 
     private static class NonFinalMethod {
+
         public String foo() {
             return "foo";
         }

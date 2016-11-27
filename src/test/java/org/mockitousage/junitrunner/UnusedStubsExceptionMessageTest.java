@@ -5,7 +5,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.junit.runner.notification.Failure;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -49,7 +49,7 @@ public class UnusedStubsExceptionMessageTest extends TestBase {
                         "Following stubbings are unnecessary (click to navigate to relevant line of code):\n" +
                         "  1. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:0)\n" +
                         "  2. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:0)\n" +
-                        "Please remove unnecessary stubbings. More info: javadoc for UnnecessaryStubbingException class.",
+                        "Please remove unnecessary stubbings or use 'silent' option. More info: javadoc for UnnecessaryStubbingException class.",
                 filterLineNo(failure.getException().getMessage()));
     }
 }

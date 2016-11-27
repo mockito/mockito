@@ -1,11 +1,25 @@
+/*
+ * Copyright (c) 2016 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.Advice;
+import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.method.MethodList;
+import net.bytebuddy.description.method.ParameterDescription;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.Implementation;
+import net.bytebuddy.jar.asm.ClassVisitor;
+import net.bytebuddy.jar.asm.MethodVisitor;
+import net.bytebuddy.jar.asm.Opcodes;
+import net.bytebuddy.matcher.ElementMatchers;
+import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.RandomString;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
@@ -135,10 +149,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             return null;
         } else {
             try {
-                // Note: The VM seems to erase parameter names from the provided class file. We therefore first attempt to read the
-                // class file from the class loader. This might revert transformations applied by previous agents.
-                return byteBuddy.redefine(classBeingRedefined, new ClassFileLocator.Compound(ClassFileLocator.ForClassLoader.of(loader),
-                        ClassFileLocator.Simple.of(classBeingRedefined.getName(), classfileBuffer)))
+                return byteBuddy.redefine(classBeingRedefined, ClassFileLocator.Simple.of(classBeingRedefined.getName(), classfileBuffer))
+                        // Note: The VM erases parameter meta data from the provided class file (bug). We just add this information manually.
+                        .visit(new ParameterWritingVisitorWrapper(classBeingRedefined))
                         .visit(Advice.withCustomMapping()
                                 .bind(MockMethodAdvice.Identifier.class, identifier)
                                 .to(MockMethodAdvice.class).on(isVirtual()
@@ -154,6 +167,65 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                         .getBytes();
             } catch (Throwable throwable) {
                 return null;
+            }
+        }
+    }
+
+    private static class ParameterWritingVisitorWrapper extends AsmVisitorWrapper.AbstractBase {
+
+        private final Class<?> type;
+
+        private ParameterWritingVisitorWrapper(Class<?> type) {
+            this.type = type;
+        }
+
+        @Override
+        public ClassVisitor wrap(TypeDescription instrumentedType,
+                                 ClassVisitor classVisitor,
+                                 Implementation.Context implementationContext,
+                                 TypePool typePool,
+                                 int writerFlags,
+                                 int readerFlags) {
+            return implementationContext.getClassFileVersion().isAtLeast(ClassFileVersion.JAVA_V8)
+                    ? new ParameterAddingClassVisitor(classVisitor, new TypeDescription.ForLoadedType(type))
+                    : classVisitor;
+        }
+
+        private static class ParameterAddingClassVisitor extends ClassVisitor {
+
+            private final TypeDescription typeDescription;
+
+            private ParameterAddingClassVisitor(ClassVisitor cv, TypeDescription typeDescription) {
+                super(Opcodes.ASM5, cv);
+                this.typeDescription = typeDescription;
+            }
+
+            @Override
+            public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+                MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
+                MethodList<?> methodList = typeDescription.getDeclaredMethods().filter((name.equals(MethodDescription.CONSTRUCTOR_INTERNAL_NAME)
+                        ? isConstructor()
+                        : ElementMatchers.<MethodDescription>named(name)).and(hasDescriptor(desc)));
+                if (methodList.size() == 1 && methodList.getOnly().getParameters().hasExplicitMetaData()) {
+                    for (ParameterDescription parameterDescription : methodList.getOnly().getParameters()) {
+                        methodVisitor.visitParameter(parameterDescription.getName(), parameterDescription.getModifiers());
+                    }
+                    return new MethodParameterStrippingMethodVisitor(methodVisitor);
+                } else {
+                    return methodVisitor;
+                }
+            }
+        }
+
+        private static class MethodParameterStrippingMethodVisitor extends MethodVisitor {
+
+            public MethodParameterStrippingMethodVisitor(MethodVisitor mv) {
+                super(Opcodes.ASM5, mv);
+            }
+
+            @Override
+            public void visitParameter(String name, int access) {
+                // suppress to avoid additional writing of the parameter if retained.
             }
         }
     }

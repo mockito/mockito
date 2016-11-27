@@ -6,14 +6,15 @@
 
 Most popular mocking framework for Java
 
-![build status](https://img.shields.io/badge/build-info =>-yellow.svg) [![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito) [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/mockito/mockito/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=master)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito) [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/mockito/mockito/blob/master/LICENSE)
 
-![latest release](https://img.shields.io/badge/latest stable-2.x =>-yellow.svg) [ ![Latest release](https://api.bintray.com/packages/mockito/maven/mockito/images/download.svg) ](https://bintray.com/mockito/maven/mockito/_latestVersion) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core)
+[![latest release](https://img.shields.io/badge/release notes-3.x-yellow.svg)](https://github.com/mockito/mockito/blob/master/doc/release-notes/official.md) [ ![Latest release](https://api.bintray.com/packages/mockito/maven/mockito/images/download.svg)](https://bintray.com/mockito/maven/mockito/_latestVersion) [ ![Maven Central](https://img.shields.io/maven-central/v/org.mockito/mockito-core.svg)](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core) [ ![Javadocs](http://www.javadoc.io/badge/org.mockito/mockito-core.svg?color=red)](http://www.javadoc.io/doc/org.mockito/mockito-core)
+
 
 ## Current version is 2.x
 Still on Mockito 1.x? See [what's new](https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2) in Mockito 2!
 
-Mockito [continously delivers](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview) improvements. See the [latest release notes](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) and [latest documentation](http://javadoc.io/page/org.mockito/mockito-core/2/org/mockito/Mockito.html). Docs in javadoc.io are available 24h after release. Read also about [semantic versioning in Mockito](https://github.com/mockito/mockito/wiki/Semantic-Versioning).
+Mockito [continuously delivers](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview) improvements. See the [latest release notes](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) and [latest documentation](http://javadoc.io/page/org.mockito/mockito-core/2/org/mockito/Mockito.html). Docs in javadoc.io are available 24h after release. Read also about [semantic versioning in Mockito](https://github.com/mockito/mockito/wiki/Semantic-Versioning).
 
 Older 1.x releases are available in
 [Central Repository](http://search.maven.org/#artifactdetails|org.mockito|mockito-core|1.10.19|jar)
