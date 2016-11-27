@@ -1,3 +1,11 @@
+### 2.2.26 (2016-11-27 09:05 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Christian Schwarz
+  * 1: Stephan Schroevers
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.2.25 (2016-11-25 18:10 UTC)
 
 * Authors: 3
