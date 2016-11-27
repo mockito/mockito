@@ -87,4 +87,8 @@ javadoc {
             logger.lifecycle("NPM is not installed. Aborting generating service-worker");
         }
     }
+
+    if (JavaVersion.current().isJava9Compatible()) {
+        enabled = false
+    }
 }
