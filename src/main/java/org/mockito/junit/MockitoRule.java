@@ -5,6 +5,8 @@
 package org.mockito.junit;
 
 import org.junit.rules.MethodRule;
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
+import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 
 /**
  * Since 2.1.0, JUnit rule emits stubbing warnings and hints to System output
@@ -76,4 +78,24 @@ public interface MockitoRule extends MethodRule {
      * @since 2.1.0
      */
     MockitoRule silent();
+
+    /**
+     * Strict stubbing is a new feature introduced in Mockito 2.3.
+     * Rule will increase productivity and debuggability by strictly validating stubs. It adds following behavior:
+     * <ol>
+     *     <li>Test fails early when code under test invokes stubbed method with different arguments (see {@link PotentialStubbingProblem}).</li>
+     *     <li>Test fails when there are any unused stubs declared (see {@link UnnecessaryStubbingException}).</li>
+     *     <li>If you use {@link org.mockito.Mockito#verifyNoMoreInteractions(Object...)} ;}
+     *     you no longer need to explicitly verify stubbed invocations. They are automatically verified.
+     *     This increases DRY-ness ("don't repeat yourself") of the tests making them cleaner and easier to maintain.</li>
+     * </ol>
+     * We are very eager to hear feedback about "strict stubbing" feature, let us know by commenting on GitHub
+     * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
+     * Strict stubbing is an attempt to improve testability and productivity with Mocktio. Tell us what you think!
+     * <p>
+     * This feature is tentatively planned to be turned on by default in Mockito v3.
+     *
+     * @since 2.3.0
+     */
+    MockitoRule strictStubs();
 }
