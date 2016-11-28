@@ -9,6 +9,8 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
+import static java.lang.String.format;
+
 public class RetryRule implements TestRule {
     private final TestRule innerRule;
 
@@ -41,8 +43,9 @@ public class RetryRule implements TestRule {
                         try {
                             base.evaluate();
                         } catch (Throwable throwable) {
-                            if (remainingAttempts > 0) {
-                                throw throwable;
+                            if (remainingAttempts < 0) {
+                                throw new AssertionError(format("Tried this test + %d times and failed", attempts))
+                                        .initCause(throwable);
                             }
                         }
                     }
