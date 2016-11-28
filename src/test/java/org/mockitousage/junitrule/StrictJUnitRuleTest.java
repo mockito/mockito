@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
-import org.mockito.internal.junit.JUnitRule;
 import org.mockito.junit.MockitoJUnit;
 import org.mockitousage.IMethods;
 import org.mockitoutil.SafeJUnitRule;
@@ -20,7 +19,7 @@ import static org.mockitoutil.TestBase.filterLineNo;
 
 public class StrictJUnitRuleTest {
 
-    @Rule public SafeJUnitRule rule = new SafeJUnitRule(((JUnitRule) MockitoJUnit.rule()).strictStubs());
+    @Rule public SafeJUnitRule rule = new SafeJUnitRule(MockitoJUnit.rule().strictStubs());
 
     @Mock IMethods mock;
     @Mock IMethods mock2;

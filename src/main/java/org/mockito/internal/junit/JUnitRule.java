@@ -73,11 +73,11 @@ public class JUnitRule implements MockitoRule {
         };
     }
 
-    public JUnitRule silent() {
+    public MockitoRule silent() {
         return new JUnitRule(logger, Strictness.SILENT);
     }
 
-    public JUnitRule strictStubs() {
+    public MockitoRule strictStubs() {
         return new JUnitRule(logger, Strictness.STRICT_STUBS);
     }
 }
