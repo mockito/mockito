@@ -8,7 +8,6 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.junit.MockitoRule;
 
@@ -39,14 +38,14 @@ public class JUnitRule implements MockitoRule {
 	public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
-                DefaultMockitoFramework.tryAddListner(listener);
+                Mockito.framework().addListener(listener);
                 Throwable testFailure;
                 try {
                     //mock initialization could be part of listeners but to avoid duplication I left it here:
                     MockitoAnnotations.initMocks(target);
                     testFailure = evaluateSafely(base);
                 } finally {
-                    DefaultMockitoFramework.tryRemoveListener(listener);
+                    Mockito.framework().removeListener(listener);
                 }
 
                 //If the 'testFinished' fails below, we don't see the original failure, thrown later
