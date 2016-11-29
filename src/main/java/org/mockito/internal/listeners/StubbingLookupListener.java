@@ -18,7 +18,7 @@ import org.mockito.invocation.MatchableInvocation;
  *  - make the error handling strict
  * so that Mockito provides decent message when listener fails due to poor implementation.
  */
-public interface StubbingLookUpListener {
+public interface StubbingLookupListener {
 
     /**
      * Called by the framework when Mockito looked up an answer for invocation on a mock.
@@ -26,6 +26,6 @@ public interface StubbingLookUpListener {
      * @param invocation the invocation on the mock
      * @param stubbingFound - can be null - it indicates that the invocation was not stubbed.
      */
-    void onStubbingLookUp(Invocation invocation, MatchableInvocation stubbingFound);
+    void onStubbingLookup(Invocation invocation, MatchableInvocation stubbingFound);
 
 }
