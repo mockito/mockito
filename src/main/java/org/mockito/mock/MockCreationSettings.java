@@ -7,7 +7,7 @@ package org.mockito.mock;
 
 import org.mockito.Incubating;
 import org.mockito.listeners.InvocationListener;
-import org.mockito.internal.listeners.StubbingLookUpListener;
+import org.mockito.internal.listeners.StubbingLookupListener;
 import org.mockito.stubbing.Answer;
 
 import java.util.List;
@@ -68,7 +68,7 @@ public interface MockCreationSettings<T> {
     /**
      * The stubbing lookup listeners attached to this mock.
      */
-    List<StubbingLookUpListener> getStubbingLookUpListeners();
+    List<StubbingLookupListener> getStubbingLookupListeners();
 
     /**
      * Informs whether the mock instance should be created via constructor

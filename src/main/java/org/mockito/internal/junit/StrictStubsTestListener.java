@@ -1,7 +1,7 @@
 package org.mockito.internal.junit;
 
 import org.mockito.internal.exceptions.Reporter;
-import org.mockito.internal.listeners.StubbingLookUpListener;
+import org.mockito.internal.listeners.StubbingLookupListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockito.listeners.MockCreationListener;
@@ -33,8 +33,8 @@ class StrictStubsTestListener implements MockitoTestListener, MockCreationListen
         //It is not ideal that we modify the state of MockCreationSettings object
         //MockCreationSettings is intended to be an immutable view of the creation settings
         //In future, we should start passing MockSettings object to the creation listener
-        settings.getStubbingLookUpListeners().add(new StubbingLookUpListener() {
-            public void onStubbingLookUp(Invocation invocation, MatchableInvocation stubbingFound) {
+        settings.getStubbingLookupListeners().add(new StubbingLookupListener() {
+            public void onStubbingLookup(Invocation invocation, MatchableInvocation stubbingFound) {
                 if (stubbingFound == null) {
                     List<Invocation> matchingStubbings = new LinkedList<Invocation>();
                     Collection<Stubbing> stubbings = mockingDetails(invocation.getMock()).getStubbings();
