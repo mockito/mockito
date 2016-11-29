@@ -1,8 +1,5 @@
 package org.mockito.internal.junit;
 
-/**
- * Created by sfaber on 11/24/16.
- */
 public class DefaultTestFinishedEvent implements TestFinishedEvent {
     private final Object testClassInstance;
     private final String testMethodName;
