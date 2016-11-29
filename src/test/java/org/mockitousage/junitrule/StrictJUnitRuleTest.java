@@ -77,23 +77,24 @@ public class StrictJUnitRuleTest {
             public void doAssert(Throwable t) {
                 Assertions.assertThat(t).isInstanceOf(PotentialStubbingProblem.class);
                 assertEquals(filterLineNo("\n" +
-                        "Strict JUnit rule detected stubbing argument mismatch.\n" +
-                        "This invocation of 'simpleMethod' method:\n" +
-                        "  mock.simpleMethod(15);\n" +
-                        "  -> at org.mockitousage.junitrule.StrictJUnitRuleTest.fails_fast_when_stubbing_invoked_with_different_argument(StrictJUnitRuleTest.java:0)\n" +
-                        "Has following stubbing(s) with different arguments:\n" +
-                        "  1. mock.simpleMethod(20);\n" +
-                        "    -> at org.mockitousage.junitrule.StrictJUnitRuleTest.fails_fast_when_stubbing_invoked_with_different_argument(StrictJUnitRuleTest.java:0)\n" +
-                        "  2. mock.simpleMethod(30);\n" +
-                        "    -> at org.mockitousage.junitrule.StrictJUnitRuleTest.fails_fast_when_stubbing_invoked_with_different_argument(StrictJUnitRuleTest.java:0)\n" +
-                        "Typically, stubbing argument mismatch indicates user mistake when writing tests.\n" +
-                        "In order to streamline debugging tests Mockito fails early in this scenario.\n" +
-                        "However, there are legit scenarios when this exception generates false negative signal:\n" +
-                        "  - stubbing the same method multiple times using 'given' or 'when' syntax\n" +
-                        "    Please use willReturn/doReturn API for stubbing\n" +
-                        "  - stubbed method is intentionally invoked with different arguments by code under test\n" +
-                        "    Please use 'default' or 'silent' JUnit Rule.\n" +
-                        "For more information see javadoc for PotentialStubbingProblem class."), filterLineNo(t.getMessage()));
+                    "Strict JUnit rule detected stubbing argument mismatch.\n" +
+                    "This invocation of 'simpleMethod' method:\n" +
+                    "  mock.simpleMethod(15);\n" +
+                    "  -> at org.mockitousage.junitrule.StrictJUnitRuleTest.fails_fast_when_stubbing_invoked_with_different_argument(StrictJUnitRuleTest.java:0)\n" +
+                    "Has following stubbing(s) with different arguments:\n" +
+                    "  1. mock.simpleMethod(20);\n" +
+                    "    -> at org.mockitousage.junitrule.StrictJUnitRuleTest.fails_fast_when_stubbing_invoked_with_different_argument(StrictJUnitRuleTest.java:0)\n" +
+                    "  2. mock.simpleMethod(30);\n" +
+                    "    -> at org.mockitousage.junitrule.StrictJUnitRuleTest.fails_fast_when_stubbing_invoked_with_different_argument(StrictJUnitRuleTest.java:0)\n" +
+                    "Typically, stubbing argument mismatch indicates user mistake when writing tests.\n" +
+                    "In order to streamline debugging tests Mockito fails early in this scenario.\n" +
+                    "However, there are legit scenarios when this exception generates false negative signal:\n" +
+                    "  - stubbing the same method multiple times using 'given().will()' or 'when().then()' API\n" +
+                    "    Please use 'will().given()' or 'doReturn().when()' API for stubbing\n" +
+                    "  - stubbed method is intentionally invoked with different arguments by code under test\n" +
+                    "    Please use 'default' or 'silent' JUnit Rule.\n" +
+                    "For more information see javadoc for PotentialStubbingProblem class."),
+                        filterLineNo(t.getMessage()));
             }
         });
 

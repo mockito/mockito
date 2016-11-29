@@ -871,7 +871,7 @@ public class Reporter {
                 "In order to streamline debugging tests Mockito fails early in this scenario.",
                 "However, there are legit scenarios when this exception generates false negative signal:",
                 "  - stubbing the same method multiple times using 'given().will()' or 'when().then()' API",
-                "    Please usew 'will().given()' or 'doReturn().when()' API for stubbing",
+                "    Please use 'will().given()' or 'doReturn().when()' API for stubbing",
                 "  - stubbed method is intentionally invoked with different arguments by code under test",
                 "    Please use 'default' or 'silent' JUnit Rule.",
                 "For more information see javadoc for PotentialStubbingProblem class."));

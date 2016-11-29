@@ -32,10 +32,11 @@ import org.mockito.exceptions.base.MockitoException;
  * What to do if you fall into use case 3 category? You have 2 options:
  * <ol>
  *  <li>Do you see this exception because you're stubbing the same method multiple times in the test?
- *  In that case, please use {@link Mockito#doReturn(Object)} family of methods for stubbing.
+ *  In that case, please use {@link org.mockito.BDDMockito#willReturn(Object)} or {@link Mockito#doReturn(Object)}
+ *  family of methods for stubbing.
  *  Good looking stubbing via {@link Mockito#when(Object)} has its drawbacks: the framework cannot distinguish between
  *  actual invocation on mock and the stubbing attempt in the test.
- *  Hence the need to use {@link Mockito#doReturn(Object)} for certain edge cases.
+ *  Hence the need to use {@link org.mockito.BDDMockito#willReturn(Object)} or {@link Mockito#doReturn(Object)} for certain edge cases.
  *  </li>
  *  <li>In Mockito 2.x, simply don't use {@link org.mockito.junit.MockitoRule#strictStubs()} for that test.
  * You will lose stubbing strictness but at least you can complete the test.</li>
