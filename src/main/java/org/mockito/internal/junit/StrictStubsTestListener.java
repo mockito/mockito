@@ -36,15 +36,11 @@ class StrictStubsTestListener implements MockitoTestListener, MockCreationListen
         settings.getStubbingLookupListeners().add(new StubbingLookupListener() {
             public void onStubbingLookup(Invocation invocation, MatchableInvocation stubbingFound) {
                 if (stubbingFound == null) {
-                    List<Invocation> matchingStubbings = new LinkedList<Invocation>();
-                    Collection<Stubbing> stubbings = mockingDetails(invocation.getMock()).getStubbings();
-                    for (Stubbing s : stubbings) {
-                        if (!s.wasUsed() && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())) {
-                            matchingStubbings.add(s.getInvocation());
-                        }
-                    }
-                    if (!matchingStubbings.isEmpty()) {
-                        Reporter.potentialStubbingProblemByJUnitRule(invocation, matchingStubbings);
+                    //If stubbing was not found for invocation it means that either the mock invocation was not stubbed or
+                    //we have a stubbing arg mismatch.
+                    List<Invocation> argMismatchStubbings = potentialArgMismatches(invocation);
+                    if (!argMismatchStubbings.isEmpty()) {
+                        Reporter.potentialStubbingProblemByJUnitRule(invocation, argMismatchStubbings);
                     }
                 } else {
                     //when strict stubs are in use, every time a stub is realized in the code it is implicitly marked as verified
@@ -53,5 +49,16 @@ class StrictStubsTestListener implements MockitoTestListener, MockCreationListen
                 }
             }
         });
+    }
+
+    private static List<Invocation> potentialArgMismatches(Invocation invocation) {
+        List<Invocation> matchingStubbings = new LinkedList<Invocation>();
+        Collection<Stubbing> stubbings = mockingDetails(invocation.getMock()).getStubbings();
+        for (Stubbing s : stubbings) {
+            if (!s.wasUsed() && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())) {
+                matchingStubbings.add(s.getInvocation());
+            }
+        }
+        return matchingStubbings;
     }
 }

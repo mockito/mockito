@@ -851,10 +851,11 @@ public class Reporter {
         throw formatUnncessaryStubbingException(null, unused);
     }
 
-    public static PotentialStubbingProblem potentialStubbingProblemByJUnitRule(Invocation actualInvocation, Collection<Invocation> matchingStubbings) {
+    public static PotentialStubbingProblem potentialStubbingProblemByJUnitRule(
+            Invocation actualInvocation, Collection<Invocation> argMismatchStubbings) {
         StringBuilder stubbings = new StringBuilder();
         int count = 1;
-        for (Invocation s : matchingStubbings) {
+        for (Invocation s : argMismatchStubbings) {
             stubbings.append("  ").append(count++).append(". ").append(s);
             stubbings.append("\n    ").append(s.getLocation()).append("\n");
         }
