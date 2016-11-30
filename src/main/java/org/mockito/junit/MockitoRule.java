@@ -5,6 +5,7 @@
 package org.mockito.junit;
 
 import org.junit.rules.MethodRule;
+import org.mockito.Incubating;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 
@@ -81,13 +82,12 @@ public interface MockitoRule extends MethodRule {
 
     /**
      * Strict stubbing is a new feature introduced in Mockito 2.3.
-     * Rule will increase productivity and debuggability by strictly validating stubs. It adds following behavior:
+     * Rule will increase productivity and reduce duplicated test code by strictly validating stubs. It adds following behavior:
      * <ol>
-     *     <li>Test fails early when code under test invokes stubbed method with different arguments (see {@link PotentialStubbingProblem}).</li>
-     *     <li>Test fails when there are any unused stubs declared (see {@link UnnecessaryStubbingException}).</li>
-     *     <li>If you use {@link org.mockito.Mockito#verifyNoMoreInteractions(Object...)} ;}
-     *     you no longer need to explicitly verify stubbed invocations. They are automatically verified.
-     *     This increases DRY-ness ("don't repeat yourself") of the tests making them cleaner and easier to maintain.</li>
+     *     <li>Improved debuggability: the test fails early when code under test invokes stubbed method with different arguments (see {@link PotentialStubbingProblem}).</li>
+     *     <li>Cleaner tests without unnecessary stubbings: the test fails when there are any unused stubs declared (see {@link UnnecessaryStubbingException}).</li>
+     *     <li>Cleaner, more DRY tests ("Don't Repeat Yourself"): If you use {@link org.mockito.Mockito#verifyNoMoreInteractions(Object...)} ;}
+     *     you no longer need to explicitly verify stubbed invocations. They are automatically verified.</li>
      * </ol>
      * We are very eager to hear feedback about "strict stubbing" feature, let us know by commenting on GitHub
      * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
@@ -97,5 +97,6 @@ public interface MockitoRule extends MethodRule {
      *
      * @since 2.3.0
      */
+    @Incubating
     MockitoRule strictStubs();
 }
