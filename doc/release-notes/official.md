@@ -1,3 +1,14 @@
+### 2.2.27 (2016-11-30 12:05 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Christian Schwarz
+  * 1: Marcin Zajączkowski
+  * 1: Szczepan Faber
+* Improvements: 2
+  * Add showing stacktrace in Travis build [(#786)](https://github.com/mockito/mockito/pull/786)
+  * Removed argument from MockingProgress.stubbingCompleted(..) [(#779)](https://github.com/mockito/mockito/pull/779)
+
 ### 2.2.26 (2016-11-27 09:05 UTC)
 
 * Authors: 2
