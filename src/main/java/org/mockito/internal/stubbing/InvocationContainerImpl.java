@@ -53,7 +53,10 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         addAnswer(answer, true);
     }
 
-    public void addAnswer(Answer answer, boolean isConsecutive) {
+    /**
+     * Adds new stubbed answer and returns the invocation matcher the answer was added to.
+     */
+    public StubbedInvocationMatcher addAnswer(Answer answer, boolean isConsecutive) {
         Invocation invocation = invocationForStubbing.getInvocation();
         mockingProgress().stubbingCompleted();
         AnswersValidator answersValidator = new AnswersValidator();
@@ -65,6 +68,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
             } else {
                 stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
             }
+            return stubbed.getFirst();
         }
     }
 
