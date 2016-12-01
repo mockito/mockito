@@ -51,7 +51,16 @@ public class EventBusTest {
 
     @Test
     public void post_singleSubscriberMethod_mustBeInvoked() throws Exception {
-        NumberListener listener = new NumberListener();
+        class Listener {
+            Number lastPostedNumber;
+
+            @Subscribe
+            public void handle(Number n) {
+                lastPostedNumber = n;
+            }
+        }
+        
+        Listener listener = new Listener();
         eventBus.register(listener);
 
         eventBus.post(123);
@@ -110,22 +119,31 @@ public class EventBusTest {
         assertThat(listener.lastPostedNumber1).isNull();
         assertThat(listener.lastPostedNumber2).isEqualTo(123);
     }
-
-    public interface Interface {
-        @Subscribe
-        public void handle(Number n);
-    }
-
-    public class NumberListener {
-        public Number lastPostedNumber;
-
-        @Subscribe
-        public void handle(Number n) {
-            lastPostedNumber = n;
+    
+    @Test
+    public void register_multipleRegistrationOfTheSameListener() throws Exception {
+        
+        class Listener  {
+            int timesCalled;
+            @Subscribe
+            public void consumeEvent(Number n){
+                timesCalled++;
+            }
         }
+        Listener listener = new Listener();
+        eventBus.register(listener);
+        eventBus.register(listener);
+        
+        eventBus.post(123);
+
+        assertThat(listener.timesCalled).isEqualTo(1);
     }
 
-    public static final class ClassWithoutHandlerMethods {
+    
+
+
+    @SuppressWarnings("unused")
+    private static final class ClassWithoutHandlerMethods {
         public int timesCalled = 0;
 
         /** This is no valid handler method cause it lacks the {@link Subscribe} annotation */
