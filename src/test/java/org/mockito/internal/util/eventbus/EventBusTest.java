@@ -139,7 +139,37 @@ public class EventBusTest {
         assertThat(listener.timesCalled).isEqualTo(1);
     }
 
-    
+    @Test
+    public void register_differentInstancesWithSameEqualsHashCode_bothMustBeInvoked() throws Exception {
+        class Listener {
+            Number lastPostedNumber;
+
+            @Subscribe
+            public void handle(Number n) {
+                lastPostedNumber = n;
+            }
+            
+            @Override
+            public int hashCode() {
+                return 1;
+            }
+            
+            @Override
+            public boolean equals(Object obj) {
+                return obj instanceof Listener;
+            }
+        }
+        
+        Listener listener1 = new Listener();
+        Listener listener2 = new Listener();
+        eventBus.register(listener1);
+        eventBus.register(listener2);
+
+        eventBus.post(123);
+
+        assertThat(listener1.lastPostedNumber).isEqualTo(123);
+        assertThat(listener2.lastPostedNumber).isEqualTo(123);
+    }
 
 
     @SuppressWarnings("unused")
@@ -188,7 +218,7 @@ public class EventBusTest {
         }
     }
 
-    public static class MultipleSubscribers {
+    private static class MultipleSubscribers {
 
         public Number lastPostedNumber1, lastPostedNumber2;
         public Integer lastPostInteger;
