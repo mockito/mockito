@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class EventBus {
 
-    private final Set<EventHandler> eventHandlers = new HashSet<EventHandler>();
+    private final Set<Subscriber> eventHandlers = new HashSet<Subscriber>();
 
     public void register(Object listener) {
         checkNotNull(listener, "The listener must not be null!");
@@ -19,18 +19,18 @@ public class EventBus {
     public void post(Object event) {
         checkNotNull(event, "The event must not be null!");
 
-        for (EventHandler eventHandler : eventHandlers) {
+        for (Subscriber eventHandler : eventHandlers) {
             eventHandler.tryHandleEvent(event);
         }
     }
 
-    private static Set<EventHandler> eventHandlerOf(Object listener) {
+    private static Set<Subscriber> eventHandlerOf(Object listener) {
 
-        Set<EventHandler> result = new HashSet<EventHandler>();
+        Set<Subscriber> result = new HashSet<Subscriber>();
         for (Method method : listener.getClass().getMethods()) {
 
             if (isEventHandlerMethod(method)) {
-                result.add(new EventHandler(listener, method));
+                result.add(new Subscriber(listener, method));
             }
         }
 

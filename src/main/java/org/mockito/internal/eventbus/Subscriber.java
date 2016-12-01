@@ -1,16 +1,18 @@
 package org.mockito.internal.eventbus;
 
+import static java.lang.System.identityHashCode;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.mockito.exceptions.base.MockitoException;
 
-final class EventHandler {
+final class Subscriber {
 
     private final Object listenerInstance;
     private final Method listenerMethod;
     private final Class<?> eventType;
 
-    EventHandler(Object listenerInstance, Method listenerMethod) {
+    Subscriber(Object listenerInstance, Method listenerMethod) {
         this.listenerInstance = listenerInstance;
         this.listenerMethod = listenerMethod;
         this.eventType = listenerMethod.getParameterTypes()[0];
@@ -52,32 +54,19 @@ final class EventHandler {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result;
-        result = prime * listenerInstance.hashCode();
-        result = prime * result +  listenerMethod.hashCode();
-        return result;
+        
+        return (31 + identityHashCode(listenerInstance)) * 31 +  listenerMethod.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        EventHandler other = (EventHandler) obj;
-        if (listenerInstance == null) {
-            if (other.listenerInstance != null)
-                return false;
-        } else if (!listenerInstance.equals(other.listenerInstance))
-            return false;
-        if (listenerMethod == null) {
-            if (other.listenerMethod != null)
-                return false;
-        } else if (!listenerMethod.equals(other.listenerMethod))
-            return false;
-        return true;
+        if (obj instanceof Subscriber) {
+            Subscriber that = (Subscriber) obj;
+            // Use == so that different equal instances will still receive events.
+            // We only guard against the case that the same object is registered
+            // multiple times
+            return listenerInstance == that.listenerInstance && listenerMethod.equals(that.listenerMethod);
+          }
+          return false;
     }
 }
