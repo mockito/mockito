@@ -5,7 +5,6 @@
 
 package org.mockito.internal.progress;
 
-import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
@@ -24,7 +23,7 @@ public interface MockingProgress {
 
     void stubbingStarted();
 
-    void stubbingCompleted(Invocation invocation);
+    void stubbingCompleted();
     
     void validateState();
 

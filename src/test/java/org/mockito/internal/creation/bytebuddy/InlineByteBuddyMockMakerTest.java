@@ -1,6 +1,9 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import org.junit.Assume;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.regex.Pattern;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.description.modifier.Visibility;
@@ -17,15 +20,11 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.regex.Pattern;
-
+import static net.bytebuddy.ClassFileVersion.JAVA_V8;
+import static net.bytebuddy.ClassFileVersion.JAVA_V9;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assume.assumeTrue;
 
 public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest<InlineByteBuddyMockMaker> {
@@ -48,7 +47,8 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void should_create_mock_from_final_class_in_the_JDK() throws Exception {
-        Assume.assumeFalse(Double.parseDouble(System.getProperty("java.specification.version")) == 9.0);
+        assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V9)); // Change when ByteBuddy has ASM6 - see #788
+
         MockCreationSettings<Pattern> settings = settingsFor(Pattern.class);
         Pattern proxy = mockMaker.createMock(settings, new MockHandlerImpl<Pattern>(settings));
         assertThat(proxy.pattern()).isEqualTo("bar");
@@ -226,7 +226,8 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void test_parameters_retention() throws Exception {
-        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
+        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(JAVA_V8));
+        assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V9)); // Change when ByteBuddy has ASM6 - see #788
 
         Class<?> typeWithParameters = new ByteBuddy()
                 .subclass(Object.class)
