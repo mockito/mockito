@@ -9,16 +9,15 @@ group = 'org.mockito'
 archivesBaseName = 'mockito-android'
 version = props['mockito.version']
 
-jar {
-    manifest.attributes["Created-By"] = "${System.getProperty("java.version")} (${System.getProperty("java.specification.vendor")})"
-    manifest.attributes["Implementation-Title"] = project.name
-    manifest.attributes["Implementation-Version"] = project.version
+def licenseFiles = copySpec {
+    //mockito license
+    from(".") { include 'LICENSE' }
+}
 
-    from("${rootProject.projectDir}") {
-        include "LICENSE"
-        into "META-INF"
-        expand(copyright: new Date().format("yyyy"), version: project.version)
-    }
+jar {
+    baseName = archivesBaseName
+    from(sourceSets.main.allSource)
+    with licenseFiles
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -32,6 +31,17 @@ artifacts {
 }
 
 tasks.javadoc.enabled = true
+
+publishing {
+    publications {
+        mockitoAndroid(MavenPublication) {
+            from components.java
+            artifactId archivesBaseName
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
 
 uploadArchives {
     repositories {

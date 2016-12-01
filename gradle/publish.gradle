@@ -9,7 +9,7 @@ bintray {
     user = 'szczepiq'
     key = System.env.MOCKITO_BINTRAY_API_KEY
 
-    publications = ['mockitoCore']
+    publications = ['mockitoCore', 'mockitoAndroid']
 
     publish = true
 
