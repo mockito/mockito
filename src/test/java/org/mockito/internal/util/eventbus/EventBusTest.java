@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.internal.eventbus.EventBus;
-import org.mockito.internal.eventbus.Subscribe;
+import org.mockito.internal.util.eventbus.EventBus;
+import org.mockito.internal.util.eventbus.Subscribe;
 
 public class EventBusTest {
 

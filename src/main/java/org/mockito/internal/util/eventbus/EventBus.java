@@ -1,4 +1,4 @@
-package org.mockito.internal.eventbus;
+package org.mockito.internal.util.eventbus;
 
 import static org.mockito.internal.util.Checks.checkNotNull;
 
