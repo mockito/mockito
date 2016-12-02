@@ -4,6 +4,7 @@
  */
 package org.mockito.runners;
 
+import java.lang.reflect.InvocationTargetException;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -13,14 +14,12 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.internal.debugging.WarningsCollector;
+import org.mockito.internal.junit.util.JUnitFailureHacker;
 import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.RunnerImpl;
-import org.mockito.internal.util.junit.JUnitFailureHacker;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
- * @deprecated as of 2.1.0. Use the {@link org.mockito.runners.MockitoJUnitRunner} runner instead
+ * @deprecated as of 2.1.0. Use the {@link org.mockito.junit.MockitoJUnitRunner} runner instead
  * which contains support for detecting unused stubs.
  * <p>
  * If you still prefer using this runner, tell us why (create ticket in our issue tracker).

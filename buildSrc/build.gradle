@@ -1,31 +1,5 @@
-apply plugin: 'idea'
-apply plugin: 'groovy'
-apply plugin: 'java'
-
-repositories { jcenter() }
-
 dependencies {
-    compile gradleApi()
-    //TODO SF use jcabi to edit issues after the release so that they have the milestone attached
-    //compile "com.jcabi:jcabi-github:0.17"
-    compile "com.googlecode.json-simple:json-simple:1.1.1@jar"
+    //needed by JavadocExclude
+    //TODO find out if we really need JavadocExclude. Why don't we just exclude internal packages using Gradle API (Javadoc.exclude)?
     compile files("${System.properties['java.home']}/../lib/tools.jar")
-    testCompile("org.spockframework:spock-core:0.7-groovy-2.0") {
-        exclude module: "groovy-all"
-    }
-    testCompile "cglib:cglib-nodep:2.2.2"
-}
-
-compileJava {
-    source = 'src/main/doclets' + JavaVersion.current()
-}
-
-test {
-    testLogging {
-        exceptionFormat = 'full'
-    }
-}
-
-if (gradle.parent && gradle.parent.startParameter.taskNames.any { it in ["ideaModule", "idea"] }) {
-    build.dependsOn ideaModule
 }

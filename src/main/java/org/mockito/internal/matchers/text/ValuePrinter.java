@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.matchers.text;
 
 import java.util.Iterator;
@@ -10,6 +14,8 @@ import static java.lang.String.valueOf;
  * Inspired on hamcrest. Used for printing arguments in verification errors.
  */
 public class ValuePrinter {
+    
+    private ValuePrinter(){}
 
     /**
      * Prints given value so that it is neatly readable by humans.
@@ -18,25 +24,35 @@ public class ValuePrinter {
     public static String print(Object value) {
         if (value == null) {
             return "null";
-        } else if (value instanceof String) {
-            return "\"" + value + "\"";
-        } else if (value instanceof Character) {
+        }
+        if (value instanceof String) {
+            return '"' + value.toString() + '"';
+        }
+        if (value instanceof Character) {
             return printChar((Character) value);
-        } else if (value instanceof Long) {
+        }
+        if (value instanceof Long) {
             return value + "L";
-        } else if (value instanceof Double) {
+        }
+        if (value instanceof Double) {
             return value + "d";
-        } else if (value instanceof Float) {
+        }
+        if (value instanceof Float) {
             return value + "f";
-        } else if (value instanceof Short) {
+        }
+        if (value instanceof Short) {
             return "(short) " + value;
-        } else if (value instanceof Byte) {
+        }
+        if (value instanceof Byte) {
             return String.format("(byte) 0x%02X", (Byte) value);
-        } else if (value instanceof Map) {
-            return printMap((Map) value);
-        } else if (value.getClass().isArray()) {
-            return printValues("[", ", ", "]", new org.mockito.internal.matchers.text.ArrayIterator(value));
-        } else if (value instanceof FormattedText) {
+        }
+        if (value instanceof Map) {
+            return printMap((Map<?, ?>) value);
+        }
+        if (value.getClass().isArray()) {
+            return printValues("[", ", ", "]", new ArrayIterator(value));
+        }
+        if (value instanceof FormattedText) {
             return (((FormattedText) value).getText());
         }
 
@@ -66,7 +82,7 @@ public class ValuePrinter {
      *
      * @return neatly formatted value list
      */
-    public static String printValues(String start, String separator, String end, Iterator values) {
+    public static String printValues(String start, String separator, String end, Iterator<?> values) {
         if(start == null){
             start = "(";
         }
@@ -75,9 +91,6 @@ public class ValuePrinter {
         }
         if (end == null){
             end = ")";
-        }
-        if (values == null){
-            values = new ArrayIterator(new String[]{""});
         }
 
         StringBuilder sb = new StringBuilder(start);

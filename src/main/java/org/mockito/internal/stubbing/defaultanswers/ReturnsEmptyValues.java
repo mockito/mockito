@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.stubbing.defaultanswers;
 
 import org.mockito.internal.util.JavaEightUtil;
@@ -33,7 +37,10 @@ import java.util.*;
  * Returns zero if references are equals otherwise non-zero for Comparable#compareTo(T other) method (see issue 184)
  * </li>
  * <li>
- * Returns an {@code java.util.Optional#empty() empty Optional} for Optional (see issue 191).
+ * Returns an {@code java.util.Optional#empty() empty Optional} for Optional. Similarly for primitive optional variants.
+ * </li>
+ * <li>
+ * Returns an {@code java.util.stream.Stream#empty() empty Stream} for Stream. Similarly for primitive stream variants.
  * </li>
  * <li>
  * Returns null for everything else
@@ -105,8 +112,20 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return new LinkedHashMap<Object, Object>();
         } else if ("java.util.Optional".equals(type.getName())) {
             return JavaEightUtil.emptyOptional();
+        } else if ("java.util.OptionalDouble".equals(type.getName())) {
+            return JavaEightUtil.emptyOptionalDouble();
+        } else if ("java.util.OptionalInt".equals(type.getName())) {
+            return JavaEightUtil.emptyOptionalInt();
+        } else if ("java.util.OptionalLong".equals(type.getName())) {
+            return JavaEightUtil.emptyOptionalLong();
         } else if ("java.util.stream.Stream".equals(type.getName())) {
             return JavaEightUtil.emptyStream();
+        } else if ("java.util.stream.DoubleStream".equals(type.getName())) {
+            return JavaEightUtil.emptyDoubleStream();
+        } else if ("java.util.stream.IntStream".equals(type.getName())) {
+            return JavaEightUtil.emptyIntStream();
+        } else if ("java.util.stream.LongStream".equals(type.getName())) {
+            return JavaEightUtil.emptyLongStream();
         }
 
         //Let's not care about the rest of collections.

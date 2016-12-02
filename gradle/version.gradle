@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencies {
+        //For importing Version class
+        //this entire 'buildscript' section will be removed when the entire release automation is moved to new repo 'mockito-release-tools'
+        classpath project.'dependencies.mockito-release-tools'
+    }
+}
+
 import org.mockito.release.version.Version
 
 assert project == rootProject

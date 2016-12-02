@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2016 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.exceptions.stacktrace;
 
 /**
@@ -5,14 +9,12 @@ package org.mockito.exceptions.stacktrace;
  * Mockito stack trace filtering mechanism uses this information.
  * <p>
  * Excluding an element will make it not show in the cleaned stack trace.
- * Not-excluding an element does not guarantee it will be shown
- * (e.g. it depends on the implementation of
- * Mockito internal {@link org.mockito.internal.exceptions.stacktrace.StackTraceFilter}).
+ * Not-excluding an element does not guarantee it will be shown (e.g. it depends on the implementation of
+ * {@linkplain org.mockito.internal.exceptions.stacktrace.StackTraceFilter Mockito internal cleaner}).
  * <p>
- * The implementations are required to be thread safe. For example, make them stateless.
+ * The implementations are required to be thread safe ; for example, make them stateless.
  * <p>
- * See the default implementation: {@link org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleaner}.
- *
+ * See also the {@linkplain org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleaner Mockito default implementation}
  */
 public interface StackTraceCleaner {
 

@@ -4,7 +4,6 @@
  */
 package org.mockito;
 
-import static org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces.toAnswer;
 import java.util.Collection;
 import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
 import org.mockito.internal.stubbing.answers.ReturnsElementsOf;
@@ -21,12 +20,14 @@ import org.mockito.stubbing.VoidAnswer3;
 import org.mockito.stubbing.VoidAnswer4;
 import org.mockito.stubbing.VoidAnswer5;
 
+import static org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces.toAnswer;
+
 /**
  * Additional answers provides factory methods for answers.
  *
  * <p>Currently offer answers that can return the parameter of an invocation at a certain position,
- * along with answers that draw on a strongly typed interface from {@link org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces}
- * to provide a neater way to write custom answers that either return a value or are void.
+ * along with answers that draw on a strongly typed interface to provide a neater way to write custom answers
+ * that either return a value or are void (see answer interfaces in {@link org.mockito.stubbing}).
  *
  * <p>See factory methods for more information : {@link #returnsFirstArg}, {@link #returnsSecondArg},
  * {@link #returnsLastArg}, {@link #returnsArgAt}, {@link #answer} and {@link #answerVoid}

@@ -839,7 +839,7 @@ public class Reporter {
                 "Unnecessary stubbings detected in test class: " + testClass.getSimpleName(),
                 "Clean & maintainable test code requires zero unnecessary code.",
                 "Following stubbings are unnecessary (click to navigate to relevant line of code):" + stubbings,
-                "Please remove unnecessary stubbings. More info: javadoc for UnnecessaryStubbingException class."
+                "Please remove unnecessary stubbings or use 'silent' option. More info: javadoc for UnnecessaryStubbingException class."
         ));
     }
 }

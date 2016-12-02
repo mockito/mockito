@@ -1,3 +1,153 @@
+### 2.2.27 (2016-11-30 12:05 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Christian Schwarz
+  * 1: Marcin Zajączkowski
+  * 1: Szczepan Faber
+* Improvements: 2
+  * Add showing stacktrace in Travis build [(#786)](https://github.com/mockito/mockito/pull/786)
+  * Removed argument from MockingProgress.stubbingCompleted(..) [(#779)](https://github.com/mockito/mockito/pull/779)
+
+### 2.2.26 (2016-11-27 09:05 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Christian Schwarz
+  * 1: Stephan Schroevers
+* No notable improvements. See the commits for detailed changes.
+
+### 2.2.25 (2016-11-25 18:10 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Brice Dutheil
+  * 1: Igor Kostenko
+  * 1: Stephan Schroevers
+* Improvements: 4
+  * Enhancements: 1
+    * Introduce default answers for primitive Optionals/Streams [(#782)](https://github.com/mockito/mockito/pull/782)
+  * Remaining changes: 3
+    * Add default answers for java.util.Optional{Double,Int,Long} and java.util.stream.{Double,Int,Long}Stream [(#781)](https://github.com/mockito/mockito/issues/781)
+    * Fixes #765: Set files encoding to UTF-8 [(#780)](https://github.com/mockito/mockito/pull/780)
+    * Cannot build Mockito on Windows 64b with Java 8  [(#765)](https://github.com/mockito/mockito/issues/765)
+
+### 2.2.24 (2016-11-25 15:08 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 1
+  * Removed private isMockitoMock(..) in MockUtil [(#775)](https://github.com/mockito/mockito/pull/775)
+
+### 2.2.23 (2016-11-25 14:26 UTC)
+
+* Authors: 3
+* Commits: 5
+  * 2: Brice Dutheil
+  * 2: Christian Schwarz
+  * 1: Felix Dekker
+* Improvements: 4
+  * Replaced ObjectBox with AtomicReference [(#777)](https://github.com/mockito/mockito/pull/777)
+  * InvocationMatcher internal improvements [(#776)](https://github.com/mockito/mockito/pull/776)
+  * Fixes #731 Implements retry rule for flaky tests [(#771)](https://github.com/mockito/mockito/pull/771)
+  * Consider rerunning failed tests [(#731)](https://github.com/mockito/mockito/issues/731)
+
+### 2.2.22 (2016-11-21 11:17 UTC)
+
+* Authors: 1
+* Commits: 10
+  * 10: Brice Dutheil
+* Improvements: 2
+  * Documentation: 1
+    * Public javadoc offers links to internal classes [(#762)](https://github.com/mockito/mockito/issues/762)
+  * Remaining changes: 1
+    * Fixes #762 Removes ReturnsEmptyValue javadoc references [(#763)](https://github.com/mockito/mockito/pull/763)
+
+### 2.2.21 (2016-11-18 08:52 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Mockito 2.2.17 regression: `mock-maker-inline` drops `-parameters` [(#764)](https://github.com/mockito/mockito/issues/764)
+
+### 2.2.20 (2016-11-17 18:31 UTC)
+
+* Authors: 1
+* Commits: 4
+  * 4: Brice Dutheil
+* Improvements: 1
+  * Regroup Junit classes in junit packages [(#748)](https://github.com/mockito/mockito/pull/748)
+
+### 2.2.19 (2016-11-17 08:24 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* No notable improvements. See the commits for detailed changes.
+
+### 2.2.18 (2016-11-17 05:50 UTC)
+
+* Authors: 3
+* Commits: 3
+  * 1: Liam Clark
+  * 1: Szczepan Faber
+  * 1: Tim van der Lippe
+* Improvements: 2
+  * Documentation: 2
+    * Updated the verification documentation to correctly use argThat with Java8 lambdas [(#759)](https://github.com/mockito/mockito/pull/759)
+    * Generate service-worker after generating JavaDoc for offline access [(#602)](https://github.com/mockito/mockito/pull/602)
+
+### 2.2.17 (2016-11-15 19:05 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Rafael Winterhalter
+* Improvements: 1
+  * "mock-maker-inline" prevents collection of code coverage for spys [(#757)](https://github.com/mockito/mockito/issues/757)
+
+### 2.2.16 (2016-11-14 11:13 UTC)
+
+* Authors: 3
+* Commits: 35
+  * 33: Szczepan Faber
+  * 1: Brice Dutheil
+  * 1: Continuous Delivery Drone
+* Improvements: 4
+  * Documentation: 1
+    * Improved documentation regarding unused stubbing detection [(#754)](https://github.com/mockito/mockito/pull/754)
+  * Remaining changes: 3
+    * Pushed release automation code into separate GitHub repository [(#751)](https://github.com/mockito/mockito/pull/751)
+    * Added new release workflow for release automation [(#724)](https://github.com/mockito/mockito/pull/724)
+    * DelayedExecution uses now a more precise approach to call a mock async. [(#704)](https://github.com/mockito/mockito/pull/704)
+
+### 2.2.15 (2016-11-08 20:43 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Brice Dutheil
+  * 1: Szczepan Faber
+* Improvements: 1
+  * Enhancements: 1
+    * Allow fluent usage of Mockito.framework() listeners methods [(#747)](https://github.com/mockito/mockito/pull/747)
+
+### 2.2.14 (2016-11-08 20:11 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Dmitriy Zaitsev
+* Improvements: 1
+  * Add missing copyright headers [(#746)](https://github.com/mockito/mockito/pull/746)
+
+### 2.2.13 (2016-11-07 22:59 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Removes deprecated way of documenting package by package-info.java [(#745)](https://github.com/mockito/mockito/pull/745)
+
 ### 2.2.12 (2016-11-07 04:29 UTC)
 
 * Authors: 1

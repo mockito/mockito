@@ -89,14 +89,33 @@ public class ReturnsEmptyValuesTest extends TestBase {
     }
 
     @Test
-    public void should_return_empty_optional() throws Exception {
-        Class<?> streamType = getClassOrSkipTest("java.util.stream.Stream");
+    public void should_return_empty_Optional() throws Exception {
+        verify_empty_Optional_is_returned("java.util.stream.Stream", "java.util.Optional");
+    }
+
+    @Test
+    public void should_return_empty_OptionalDouble() throws Exception {
+        verify_empty_Optional_is_returned("java.util.stream.DoubleStream", "java.util.OptionalDouble");
+    }
+
+    @Test
+    public void should_return_empty_OptionalInt() throws Exception {
+        verify_empty_Optional_is_returned("java.util.stream.IntStream", "java.util.OptionalInt");
+    }
+
+    @Test
+    public void should_return_empty_OptionalLong() throws Exception {
+        verify_empty_Optional_is_returned("java.util.stream.LongStream", "java.util.OptionalLong");
+    }
+
+    private void verify_empty_Optional_is_returned(String streamFqcn, String optionalFqcn) throws Exception {
+        Class<?> streamType = getClassOrSkipTest(streamFqcn);
 
         //given
         Object stream = mock(streamType);
         Object optional = streamType.getMethod("findAny").invoke(stream);
         assertNotNull(optional);
-        assertFalse((Boolean) Class.forName("java.util.Optional").getMethod("isPresent").invoke(optional));
+        assertFalse((Boolean) Class.forName(optionalFqcn).getMethod("isPresent").invoke(optional));
 
         Invocation findAny = this.getLastInvocation();
 
@@ -108,16 +127,35 @@ public class ReturnsEmptyValuesTest extends TestBase {
     }
 
     @Test
-    public void should_return_empty_stream() throws Exception {
+    public void should_return_empty_Stream() throws Exception {
+        verify_empty_Stream_is_returned("java.util.stream.Stream");
+    }
+
+    @Test
+    public void should_return_empty_DoubleStream() throws Exception {
+        verify_empty_Stream_is_returned("java.util.stream.DoubleStream");
+    }
+
+    @Test
+    public void should_return_empty_IntStream() throws Exception {
+        verify_empty_Stream_is_returned("java.util.stream.IntStream");
+    }
+
+    @Test
+    public void should_return_empty_LongStream() throws Exception {
+        verify_empty_Stream_is_returned("java.util.stream.LongStream");
+    }
+
+    private void verify_empty_Stream_is_returned(String streamFqcn) throws Exception {
         // given
-        Class<?> streamType = getClassOrSkipTest("java.util.stream.Stream");
+        Class<?> streamType = getClassOrSkipTest(streamFqcn);
 
         // when
         Object stream = values.returnValueFor(streamType);
         long count = (Long) streamType.getMethod("count").invoke(stream);
 
         // then
-        assertEquals("count of empty Stream", 0L, count);
+        assertEquals("count of empty " + streamFqcn, 0L, count);
     }
 
     /**

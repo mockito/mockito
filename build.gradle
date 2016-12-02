@@ -1,10 +1,15 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
 
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2' //publishing to bintray
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0' // later versions don't work on JDK6
+
+        //Needed so that release notes and release workflow plugin can be applied in separate gradle/*.gradle build files
+        classpath project.'dependencies.mockito-release-tools'
     }
 }
 
@@ -25,6 +30,7 @@ apply from: "gradle/ide.gradle"
 apply from: 'gradle/coverage.gradle'
 apply from: 'gradle/osgi.gradle'
 apply from: 'gradle/gradle-fix.gradle'
+apply from: 'gradle/license.gradle'
 
 allprojects {
     repositories {
@@ -33,6 +39,7 @@ allprojects {
     tasks.withType(JavaCompile) {
         //I don't believe those warnings add value given modern IDEs
         options.warnings = false
+        options.encoding = 'UTF-8'
     }
 }
 
@@ -56,11 +63,14 @@ test {
         exceptionFormat 'full'
         showCauses true
     }
+    //Required for building on Travis' container-based infrastructure to not be killed with
+    //'exit code 137' - https://github.com/travis-ci/travis-ci/issues/5582
+    jvmArgs '-Xmx512m'
 }
 
 dependencies {
-    compile 'net.bytebuddy:byte-buddy:1.5.3'
-    compile 'net.bytebuddy:byte-buddy-agent:1.5.3'
+    compile 'net.bytebuddy:byte-buddy:1.5.5'
+    compile 'net.bytebuddy:byte-buddy-agent:1.5.5'
 
     provided "junit:junit:4.12", "org.hamcrest:hamcrest-core:1.3"
     compile "org.objenesis:objenesis:2.4"
@@ -97,7 +107,7 @@ task javadocJar(type: Jar) {
     baseName = 'mockito-core'
     classifier = "javadoc"
     with licenseFiles
-    from mockitoJavadoc
+    from javadoc
 }
 
 task coverageReport(dependsOn: ["test", "mockitoCoverage"]) {}
