@@ -1,3 +1,15 @@
+### 2.2.28 (2016-12-02 13:45 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Brice Dutheil
+  * 1: Szczepan Faber
+* Improvements: 2
+  * Bugfixes: 1
+    * Deep stubs no longer cause unnecessary stubbing exception with JUnit runner [(#795)](https://github.com/mockito/mockito/pull/795)
+  * Remaining changes: 1
+    * Test improvements [(#791)](https://github.com/mockito/mockito/pull/791)
+
 ### 2.2.27 (2016-11-30 12:05 UTC)
 
 * Authors: 3
