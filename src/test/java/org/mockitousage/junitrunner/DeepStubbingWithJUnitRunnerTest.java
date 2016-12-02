@@ -23,7 +23,7 @@ public class DeepStubbingWithJUnitRunnerTest {
 
     public static class SomeClass {
         void someMethod(Root root) {
-            root.getFoo();
+            root.getFoo().getBar();
         }
     }
 
@@ -32,5 +32,10 @@ public class DeepStubbingWithJUnitRunnerTest {
     }
 
     interface Foo {
+        Bar getBar();
+    }
+
+    interface Bar {
+
     }
 }
