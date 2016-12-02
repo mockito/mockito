@@ -68,10 +68,16 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         }
 
         // record deep stub answer
-        return recordDeepStubAnswer(
+        StubbedInvocationMatcher stubbing = recordDeepStubAnswer(
                 newDeepStubMock(returnTypeGenericMetadata, invocation.getMock()),
                 container
         );
+
+        // deep stubbing creates a stubbing and immediately uses it
+        // so the stubbing is actually used by the same invocation
+        stubbing.markStubUsed(stubbing.getInvocation());
+
+        return stubbing.answer(invocation);
     }
 
     /**
@@ -110,9 +116,9 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         return new ReturnsDeepStubsSerializationFallback(returnTypeGenericMetadata);
     }
 
-    private Object recordDeepStubAnswer(final Object mock, InvocationContainerImpl container) {
-        container.addAnswer(new DeeplyStubbedAnswer(mock), false);
-        return mock;
+    private StubbedInvocationMatcher recordDeepStubAnswer(final Object mock, InvocationContainerImpl container) {
+        DeeplyStubbedAnswer answer = new DeeplyStubbedAnswer(mock);
+        return container.addAnswer(answer, false);
     }
 
     protected GenericMetadataSupport actualParameterizedType(Object mock) {
