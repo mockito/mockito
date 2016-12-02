@@ -1,4 +1,4 @@
-package org.mockito.internal.util.eventbus;
+package org.mockito.listeners;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

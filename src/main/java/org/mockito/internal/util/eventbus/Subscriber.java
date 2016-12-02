@@ -6,30 +6,31 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.mockito.exceptions.base.MockitoException;
 
-final class Subscriber {
+public class Subscriber {
 
     private final Object listenerInstance;
     private final Method listenerMethod;
     private final Class<?> eventType;
 
-    Subscriber(Object listenerInstance, Method listenerMethod) {
+    public Subscriber(Object listenerInstance, Method listenerMethod) {
         this.listenerInstance = listenerInstance;
         this.listenerMethod = listenerMethod;
         this.eventType = listenerMethod.getParameterTypes()[0];
     }
 
-    void tryHandleEvent(Object event) {
-        if (!canHandle(event)) {
-            return;
+    public final void tryHandleEvent(Object event) {
+        if (canHandle(event)) {
+            invokeListenerMethod(event);
         }
+    }
 
-        boolean isAccessible = listenerMethod.isAccessible();
+    protected void invokeListenerMethod(Object event) {
+        Boolean initialState = listenerMethod.isAccessible();
         try {
             listenerMethod.setAccessible(true);
-            
         } catch (SecurityException ignore) {
+            initialState = null;// null means the accessibility was not changed
         }
-        
 
         try {
             listenerMethod.invoke(listenerInstance, event);
@@ -40,7 +41,9 @@ final class Subscriber {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         } finally {
-            listenerMethod.setAccessible(isAccessible);
+            if (initialState != null) {
+                listenerMethod.setAccessible(initialState);
+            }
         }
     }
 
@@ -53,20 +56,23 @@ final class Subscriber {
     }
 
     @Override
-    public int hashCode() {
-        
-        return (31 + identityHashCode(listenerInstance)) * 31 +  listenerMethod.hashCode();
+    public final int hashCode() {
+        return (31 + identityHashCode(listenerInstance)) * 31 + listenerMethod.hashCode();
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public final boolean equals(Object obj) {
         if (obj instanceof Subscriber) {
             Subscriber that = (Subscriber) obj;
             // Use == so that different equal instances will still receive events.
             // We only guard against the case that the same object is registered
             // multiple times
             return listenerInstance == that.listenerInstance && listenerMethod.equals(that.listenerMethod);
-          }
-          return false;
+        }
+        return false;
+    }
+
+    public final Object getListener() {
+        return listenerInstance;
     }
 }

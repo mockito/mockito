@@ -1,10 +1,14 @@
 package org.mockito.internal.util.eventbus;
 
 import static org.mockito.internal.util.Checks.checkNotNull;
+import static org.mockito.internal.util.eventbus.compability.ListenerSupport.legacyListenerOf;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
+import org.mockito.listeners.Subscribe;
 
 public class EventBus {
 
@@ -14,7 +18,10 @@ public class EventBus {
         checkNotNull(listener, "The listener must not be null!");
 
         eventHandlers.addAll(eventHandlerOf(listener));
+        eventHandlers.addAll( legacyListenerOf(listener));
     }
+
+    
 
     public void post(Object event) {
         checkNotNull(event, "The event must not be null!");
@@ -22,6 +29,17 @@ public class EventBus {
         for (Subscriber eventHandler : eventHandlers) {
             eventHandler.tryHandleEvent(event);
         }
+    }
+    
+    public void unregister(Object listener) {
+        Collection<Subscriber> toBeRemoved= new LinkedList<Subscriber>();
+        for (Subscriber subscriber : eventHandlers) {
+            if (subscriber.getListener()==listener){
+                toBeRemoved.add(subscriber);
+            }
+        }
+        
+        eventHandlers.removeAll(toBeRemoved);
     }
 
     private static Set<Subscriber> eventHandlerOf(Object listener) {
@@ -34,6 +52,7 @@ public class EventBus {
             }
         }
 
+        
         return result;
     }
 
@@ -55,4 +74,9 @@ public class EventBus {
 
         return true;
     }
+
+    
+
+
+    
 }

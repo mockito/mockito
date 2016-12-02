@@ -1,13 +1,14 @@
 package org.mockito.internal.util.eventbus;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.internal.util.eventbus.EventBus;
-import org.mockito.internal.util.eventbus.Subscribe;
+import org.mockito.listeners.Subscribe;
 
 public class EventBusTest {
 
@@ -86,7 +87,7 @@ public class EventBusTest {
 
         eventBus.post(123);
 
-        assertThat(listener.lastPostInteger).isEqualTo(123);
+        assertThat(listener.lastPostedInteger).isEqualTo(123);
         assertThat(listener.lastPostedNumber1).isEqualTo(123);
         assertThat(listener.lastPostedNumber2).isEqualTo(123);
     }
@@ -98,7 +99,7 @@ public class EventBusTest {
 
         eventBus.post(123L);
 
-        assertThat(listener.lastPostInteger).isNull();//must not be called cause 123L is not an Integer
+        assertThat(listener.lastPostedInteger).isNull();//must not be called cause 123L is not an Integer
         assertThat(listener.lastPostedNumber1).isEqualTo(123L);
         assertThat(listener.lastPostedNumber2).isEqualTo(123L);
     }
@@ -115,7 +116,7 @@ public class EventBusTest {
 
         eventBus.post(123);
 
-        assertThat(listener.lastPostInteger).isEqualTo(123);
+        assertThat(listener.lastPostedInteger).isEqualTo(123);
         assertThat(listener.lastPostedNumber1).isNull();
         assertThat(listener.lastPostedNumber2).isEqualTo(123);
     }
@@ -170,7 +171,44 @@ public class EventBusTest {
         assertThat(listener1.lastPostedNumber).isEqualTo(123);
         assertThat(listener2.lastPostedNumber).isEqualTo(123);
     }
+    
+    @Test
+    public void unregister_null_mustBeIgnored(){
+        eventBus.unregister(null);
+    }
+    
+    @Test
+    public void unregister_notRegisteredInstance_mustBeIgnored(){
+        eventBus.unregister(new MultipleSubscribers());
+    }
 
+    @Test
+    public void unregister_registeredListener_willNotReceiveEventAnyMore() throws Exception {
+        MultipleSubscribers listener=new MultipleSubscribers();
+        eventBus.register(listener);
+        
+        eventBus.unregister(listener);
+        
+        eventBus.post(123);
+        
+        assertThat(listener.lastPostedInteger).isNull();
+    }
+    
+    @Test
+    public void unregister_registeredListener_willNotReceiveEventAnyMoreButOthers() throws Exception {
+        MultipleSubscribers listener1=new MultipleSubscribers();
+        MultipleSubscribers listener2=new MultipleSubscribers();
+        eventBus.register(listener1);
+        eventBus.register(listener2);
+
+        
+        eventBus.unregister(listener1);
+        
+        eventBus.post(123);
+        
+        assertThat(listener1.lastPostedInteger).isNull();
+        assertThat(listener2.lastPostedInteger).isEqualTo(123);
+    }
 
     @SuppressWarnings("unused")
     private static final class ClassWithoutHandlerMethods {
@@ -221,7 +259,7 @@ public class EventBusTest {
     private static class MultipleSubscribers {
 
         public Number lastPostedNumber1, lastPostedNumber2;
-        public Integer lastPostInteger;
+        public Integer lastPostedInteger;
 
         @Subscribe
         public void handle1(Number n) {
@@ -235,8 +273,7 @@ public class EventBusTest {
 
         @Subscribe
         public void handle(Integer n) {
-            lastPostInteger = n;
+            lastPostedInteger = n;
         }
     }
-
 }

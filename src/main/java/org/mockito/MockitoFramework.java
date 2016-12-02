@@ -42,7 +42,7 @@ public interface MockitoFramework {
      * @since 2.1.0
      */
     @Incubating
-    MockitoFramework addListener(MockitoListener listener);
+    MockitoFramework addListener(Object listener);
 
     /**
      * When you add listener using {@link #addListener(MockitoListener)} make sure to remove it.
@@ -58,5 +58,5 @@ public interface MockitoFramework {
      * @since 2.1.0
      */
     @Incubating
-    MockitoFramework removeListener(MockitoListener listener);
+    MockitoFramework removeListener(Object listener);
 }
