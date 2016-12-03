@@ -25,18 +25,18 @@ public class MockAwareVerificationMode implements VerificationMode {
     public void verify(VerificationData data) {
         try {
             mode.verify(data);
-            notifyExceptionListeners(new VerificationEventImpl(mock, mode, data, null));
+            notifyListeners(new VerificationEventImpl(mock, mode, data, null));
         } catch (RuntimeException e) {
-            notifyExceptionListeners(new VerificationEventImpl(mock, mode, data, e));
+            notifyListeners(new VerificationEventImpl(mock, mode, data, e));
             throw e;
         } catch (Error e) {
-            notifyExceptionListeners(new VerificationEventImpl(mock, mode, data, e));
+            notifyListeners(new VerificationEventImpl(mock, mode, data, e));
             throw e;
         }
     }
 
 
-    private void notifyExceptionListeners(VerificationEvent event) {
+    private void notifyListeners(VerificationEvent event) {
         for (VerificationListener listener : listeners) {
             listener.onVerification(event);
         }
