@@ -25,7 +25,7 @@ public interface VerificationEvent {
      * A nullable Throwable if it is null, the verification succeeded,
      * otherwise the throwable contains the cause of why the verification failed.
      *
-     * @return null or the failure.
+     * @return null or the error.
      */
-    Throwable getCause();
+    Throwable getVerificationError();
 }

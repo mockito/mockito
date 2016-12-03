@@ -30,8 +30,7 @@ public class VerificationEventImpl implements VerificationEvent {
         return data;
     }
 
-
-    public Throwable getCause() {
+    public Throwable getVerificationError() {
         return cause;
     }
 }

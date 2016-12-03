@@ -12,21 +12,24 @@ import org.mockito.verification.VerificationEvent;
 import org.mockito.verification.VerificationMode;
 
 
+import java.lang.reflect.Method;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class VerificationListenerCallBackTest {
-    public static final String invocationWanted = "doSomething";
+    public  Method invocationWanted;
     private RememberingListener listener;
     private MockitoFramework mockitoFramework;
 
     @Before
-    public void setUp() {
+    public void setUp() throws NoSuchMethodException {
         listener = new RememberingListener();
         mockitoFramework = Mockito.framework();
         mockitoFramework.addListener(listener);
+        invocationWanted = Foo.class.getDeclaredMethod("doSomething", String.class);
 
     }
 
@@ -118,10 +121,10 @@ public class VerificationListenerCallBackTest {
         }
     }
 
-    private void assertThatHasBeenNotified(RememberingListener listener, Object mock, VerificationMode mode, String invocationWanted) {
+    private void assertThatHasBeenNotified(RememberingListener listener, Object mock, VerificationMode mode, Method invocationWanted) {
         assertThat(listener.mock).isEqualTo(mock);
         assertThat(listener.mode).isEqualTo(mode);
-        assertThat(listener.data.getWanted().getMethod().getName()).isEqualTo(invocationWanted);
+        assertThat(listener.data.getWanted().getMethod()).isEqualTo(invocationWanted);
     }
 
 
@@ -136,7 +139,7 @@ public class VerificationListenerCallBackTest {
             this.mock = verificationEvent.getMock();
             this.mode = verificationEvent.getMode();
             this.data = verificationEvent.getData();
-            this.cause = verificationEvent.getCause();
+            this.cause = verificationEvent.getVerificationError();
         }
     }
 
