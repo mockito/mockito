@@ -3,6 +3,7 @@ package org.mockitousage.junitrule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.quality.Strictness;
 import org.mockito.internal.junit.JUnitRule;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockitousage.IMethods;
@@ -16,7 +17,7 @@ import static org.mockitoutil.TestBase.filterLineNo;
 public class StubbingWarningsMultiThreadingTest {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    @Rule public SafeJUnitRule rule = new SafeJUnitRule(new JUnitRule(logger, JUnitRule.Strictness.WARN));
+    @Rule public SafeJUnitRule rule = new SafeJUnitRule(new JUnitRule(logger, Strictness.WARN));
     @Mock IMethods mock;
 
     @Test public void using_stubbing_from_different_thread() throws Throwable {
