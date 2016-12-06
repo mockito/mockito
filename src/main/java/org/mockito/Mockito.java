@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.quality.Strictness;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
@@ -1286,7 +1287,7 @@ import org.mockito.verification.*;
  *
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
- *     <li>New "strict stubs" behavior of JUnit rules - {@link MockitoRule#strictStubs()}</li>
+ *     <li>New "strict stubs" behavior of JUnit rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
  *     <li>Unnecessary stubbing detection in {@link MockitoJUnitRunner}</li>
  *     <li>Stubbing argument mismatch reporting by JUnit rules, documented in {@link org.mockito.quality.MockitoHint}</li>
  * </ul>
@@ -1304,7 +1305,8 @@ import org.mockito.verification.*;
  * We want Mockito to offer fantastic debuggability while not losing its core mocking style, optimized for
  * intuitiveness, explicitness and clean test code.
  * <p>
- * Help Mockito! Try the new features, give us feedback, join the discussion about Mockito strictness at GitHub <a href="">issue XXX</a>.
+ * Help Mockito! Try the new features, give us feedback, join the discussion about Mockito strictness at GitHub
+ * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {

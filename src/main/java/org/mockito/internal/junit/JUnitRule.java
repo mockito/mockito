@@ -8,6 +8,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.quality.Strictness;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.junit.MockitoRule;
 
@@ -16,7 +17,6 @@ import org.mockito.junit.MockitoRule;
  */
 public class JUnitRule implements MockitoRule {
 
-    public enum Strictness { SILENT, WARN, STRICT_STUBS;}
     private final MockitoLogger logger;
     private final MockitoTestListener listener;
 
@@ -27,7 +27,7 @@ public class JUnitRule implements MockitoRule {
     public JUnitRule(MockitoLogger logger, Strictness strictness) {
         this.logger = logger;
         switch (strictness) {
-            case SILENT: listener = new NoOpTestListener(); break;
+            case LENIENT: listener = new NoOpTestListener(); break;
             case WARN: listener = new WarningTestListener(logger); break;
             case STRICT_STUBS: listener = new StrictStubsTestListener(); break;
             default: throw new IllegalArgumentException("Illegal argument: " + strictness);
@@ -73,10 +73,10 @@ public class JUnitRule implements MockitoRule {
     }
 
     public MockitoRule silent() {
-        return new JUnitRule(logger, Strictness.SILENT);
+        return new JUnitRule(logger, Strictness.LENIENT);
     }
 
-    public MockitoRule strictStubs() {
-        return new JUnitRule(logger, Strictness.STRICT_STUBS);
+    public MockitoRule strictness(Strictness strictness) {
+        return new JUnitRule(logger, strictness);
     }
 }

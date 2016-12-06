@@ -5,6 +5,7 @@
 package org.mockito.junit;
 
 import org.mockito.Incubating;
+import org.mockito.quality.Strictness;
 import org.mockito.internal.junit.JUnitRule;
 import org.mockito.internal.junit.VerificationCollectorImpl;
 import org.mockito.internal.util.ConsoleMockitoLogger;
@@ -24,7 +25,7 @@ public class MockitoJUnit {
      * @since 1.10.17
      */
     public static MockitoRule rule() {
-        return new JUnitRule(new ConsoleMockitoLogger(), JUnitRule.Strictness.WARN);
+        return new JUnitRule(new ConsoleMockitoLogger(), Strictness.WARN);
     }
 
     /**
