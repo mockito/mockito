@@ -5,7 +5,9 @@
 package org.mockito.exceptions.misusing;
 
 import org.mockito.Mockito;
+import org.mockito.quality.Strictness;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.junit.MockitoRule;
 
 /**
  * Strict stubbing is a new feature introduced in Mockito 2.3.
@@ -29,7 +31,7 @@ import org.mockito.exceptions.base.MockitoException;
  * However, it can give false negative signal for 5% of the cases (use case 3).
  * It is a trade-off for better debuggability and productivity of the typical cases.
  * <p>
- * What to do if you fall into use case 3 category? You have 2 options:
+ * What to do if you fall into use case 3? You have 2 options:
  * <ol>
  *  <li>Do you see this exception because you're stubbing the same method multiple times in the test?
  *  In that case, please use {@link org.mockito.BDDMockito#willReturn(Object)} or {@link Mockito#doReturn(Object)}
@@ -38,7 +40,7 @@ import org.mockito.exceptions.base.MockitoException;
  *  actual invocation on mock and the stubbing attempt in the test.
  *  Hence the need to use {@link org.mockito.BDDMockito#willReturn(Object)} or {@link Mockito#doReturn(Object)} for certain edge cases.
  *  </li>
- *  <li>In Mockito 2.x, simply don't use {@link org.mockito.junit.MockitoRule#strictStubs()} for that test.
+ *  <li>In Mockito 2.x, simply don't use {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS} for that test.
  * You will lose stubbing strictness but at least you can complete the test.</li>
  * </ol>
  * <p>

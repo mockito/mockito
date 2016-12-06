@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.quality.Strictness;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
@@ -19,7 +20,7 @@ import static org.mockitoutil.TestBase.filterLineNo;
 
 public class StrictJUnitRuleTest {
 
-    @Rule public SafeJUnitRule rule = new SafeJUnitRule(MockitoJUnit.rule().strictStubs());
+    @Rule public SafeJUnitRule rule = new SafeJUnitRule(MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS));
 
     @Mock IMethods mock;
     @Mock IMethods mock2;

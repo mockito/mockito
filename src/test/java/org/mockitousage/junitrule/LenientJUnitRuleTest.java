@@ -3,6 +3,7 @@ package org.mockitousage.junitrule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.quality.Strictness;
 import org.mockito.internal.junit.JUnitRule;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.junit.MockitoRule;
@@ -10,7 +11,7 @@ import org.mockitousage.IMethods;
 
 import static org.mockito.Mockito.when;
 
-public class SilentJUnitRuleTest {
+public class LenientJUnitRuleTest {
 
     private MockitoLogger explosiveLogger = new MockitoLogger() {
         public void log(Object what) {
@@ -19,7 +20,7 @@ public class SilentJUnitRuleTest {
     };
     @Mock private IMethods mock;
 
-    @Rule public MockitoRule mockitoRule = new JUnitRule(explosiveLogger, JUnitRule.Strictness.SILENT);
+    @Rule public MockitoRule mockitoRule = new JUnitRule(explosiveLogger, Strictness.LENIENT);
 
     @Test public void no_warning_for_unused_stubbing() throws Exception {
         when(mock.simpleMethod(1)).thenReturn("1");
