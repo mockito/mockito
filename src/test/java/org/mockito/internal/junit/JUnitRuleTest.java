@@ -19,7 +19,7 @@ import static org.mockito.Mockito.mock;
 public class JUnitRuleTest extends TestBase {
 
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    private JUnitRule jUnitRule = new JUnitRule(logger, false);
+    private JUnitRule jUnitRule = new JUnitRule(logger, JUnitRule.Strictness.WARN);
     private InjectTestCase injectTestCase = new InjectTestCase();
     private FrameworkMethod dummy = mock(FrameworkMethod.class);
 

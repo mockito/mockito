@@ -76,4 +76,6 @@ public interface MockitoRule extends MethodRule {
      * @since 2.1.0
      */
     MockitoRule silent();
+
+    MockitoRule strict();
 }

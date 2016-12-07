@@ -20,7 +20,7 @@ public class UnusedStubbings {
         this.unused = unused;
     }
 
-    void format(String testName, MockitoLogger logger) {
+    public void format(String testName, MockitoLogger logger) {
         if (unused.isEmpty()) {
             return;
         }
