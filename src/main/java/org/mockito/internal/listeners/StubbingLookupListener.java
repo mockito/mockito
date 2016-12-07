@@ -4,7 +4,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
 
 /**
- * Listens to attempts to look up stubbing answer for given mocks. This class is private for now.
+ * Listens to attempts to look up stubbing answer for given mocks. This class is internal for now.
  * <p>
  * How does it work?
  * When method is called on the mock object, Mockito looks for any answer (stubbing) declared on that mock.
@@ -22,6 +22,8 @@ public interface StubbingLookupListener {
 
     /**
      * Called by the framework when Mockito looked up an answer for invocation on a mock.
+     *
+     * TODO when making this public, we should have an event object instead of 2 arguments in the listener.
      *
      * @param invocation the invocation on the mock
      * @param stubbingFound - can be null - it indicates that the invocation was not stubbed.
