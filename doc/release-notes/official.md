@@ -1,3 +1,14 @@
+### 2.2.29 (2016-12-07 13:17 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 2
+  * Bugfixes: 1
+    * Mockito 2 fails when running on IBM J9 (SR1 FP10) VM [(#801)](https://github.com/mockito/mockito/issues/801)
+  * Enhancements: 1
+    * Adds a warning for IBM J9 VMs if mock generation fails [(#803)](https://github.com/mockito/mockito/pull/803)
+
 ### 2.2.28 (2016-12-02 13:45 UTC)
 
 * Authors: 2
