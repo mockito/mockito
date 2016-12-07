@@ -20,7 +20,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class VerificationListenerCallBackTest {
-    public  Method invocationWanted;
+    private Method invocationWanted;
     private RememberingListener listener;
     private MockitoFramework mockitoFramework;
 
@@ -124,7 +124,7 @@ public class VerificationListenerCallBackTest {
     private void assertThatHasBeenNotified(RememberingListener listener, Object mock, VerificationMode mode, Method invocationWanted) {
         assertThat(listener.mock).isEqualTo(mock);
         assertThat(listener.mode).isEqualTo(mode);
-        assertThat(listener.data.getWanted().getMethod()).isEqualTo(invocationWanted);
+        assertThat(listener.data.getTarget().getInvocation().getMethod()).isEqualTo(invocationWanted);
     }
 
 
