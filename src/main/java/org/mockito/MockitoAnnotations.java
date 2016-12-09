@@ -5,7 +5,7 @@
 
 package org.mockito;
 
-import org.mockito.configuration.AnnotationEngine;
+import org.mockito.plugins.AnnotationEngine;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.junit.MockitoJUnitRunner;

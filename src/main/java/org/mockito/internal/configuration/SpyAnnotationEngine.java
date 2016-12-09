@@ -4,24 +4,23 @@
  */
 package org.mockito.internal.configuration;
 
-import static org.mockito.Mockito.withSettings;
-import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.plugins.AnnotationEngine;
+
+import static org.mockito.Mockito.withSettings;
+import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
 
 /**
  * Process fields annotated with &#64;Spy.
@@ -42,7 +41,7 @@ import org.mockito.internal.util.MockUtil;
  * <p>This engine will fail, if the field is also annotated with incompatible Mockito annotations.
  */
 @SuppressWarnings({"unchecked"})
-public class SpyAnnotationEngine implements AnnotationEngine {
+public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
 
     @Override
     public void process(Class<?> context, Object testInstance) {
