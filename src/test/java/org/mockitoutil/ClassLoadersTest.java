@@ -1,5 +1,7 @@
 package org.mockitoutil;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -106,9 +108,8 @@ public class ClassLoadersTest {
                 .build();
 
         // when
-        Class<?> aClass = null;
         try {
-            aClass = cl.loadClass(AClass.class.getName());
+            cl.loadClass(AClass.class.getName());
             fail();
         } catch (ClassNotFoundException e) {
             // then
@@ -233,12 +234,12 @@ public class ClassLoadersTest {
     @Test
     public void can_list_all_classes_reachable_in_a_classloader() throws Exception {
         ClassLoader classLoader = ClassLoaders.inMemoryClassLoader()
-                .withParent(jdkClassLoader())
-                .withClassDefinition("a.A", SimpleClassGenerator.makeMarkerInterface("a.A"))
-                .withClassDefinition("a.b.B", SimpleClassGenerator.makeMarkerInterface("a.b.B"))
-                .withClassDefinition("c.C", SimpleClassGenerator.makeMarkerInterface("c.C"))
+                                              .withParent(jdkClassLoader())
+                                              .withClassDefinition("a.A", SimpleClassGenerator.makeMarkerInterface("a.A"))
+                                              .withClassDefinition("a.b.B", SimpleClassGenerator.makeMarkerInterface("a.b.B"))
+                                              .withClassDefinition("c.C", SimpleClassGenerator.makeMarkerInterface("c.C"))
 //                .withCodeSourceUrlOf(ClassLoaders.class)
-                .build();
+                                              .build();
 
         assertThat(ClassLoaders.in(classLoader).listOwnedClasses()).containsOnly("a.A", "a.b.B", "c.C");
         assertThat(ClassLoaders.in(classLoader).omit("b", "c").listOwnedClasses()).containsOnly("a.A");
@@ -257,12 +258,83 @@ public class ClassLoadersTest {
         assertThat(currentClassLoader()).isEqualTo(this.getClass().getClassLoader());
     }
 
+    @Test
+    public void can_run_in_given_classloader() throws Exception {
+        // given
+        final ClassLoader cl = isolatedClassLoader()
+                .withCurrentCodeSourceUrls()
+                .withCodeSourceUrlOf(Assertions.class)
+                .withPrivateCopyOf("org.assertj.core")
+                .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
+                .without(AClass.class.getName())
+                .build();
+
+        final AtomicBoolean executed = new AtomicBoolean(false);
+
+        // when
+        ClassLoaders.using(cl).execute(new Runnable() {
+            @Override
+            public void run() {
+                assertThat(this.getClass().getClassLoader()).describedAs("runnable is reloaded in given classloader").isEqualTo(cl);
+                assertThat(Thread.currentThread().getContextClassLoader()).describedAs("Thread context classloader is using given classloader").isEqualTo(cl);
+
+                try {
+                    assertThat(Thread.currentThread()
+                                     .getContextClassLoader()
+                                     .loadClass("java.lang.String"))
+                            .describedAs("can load JDK type")
+                            .isNotNull();
+                    assertThat(Thread.currentThread()
+                                     .getContextClassLoader()
+                                     .loadClass("org.mockitoutil.ClassLoadersTest$ClassUsingInterface1"))
+                            .describedAs("can load classloader types")
+                            .isNotNull();
+                } catch (ClassNotFoundException cnfe) {
+                    Assertions.fail("should not have raised a CNFE", cnfe);
+                }
+                executed.set(true);
+            }
+        });
+
+        // then
+        assertThat(executed.get()).isEqualTo(true);
+    }
+
+
+    @Test
+    public void cannot_load_runnable_in_given_classloader_if_some_type_cant_be_loaded() throws Exception {
+        // given
+        final ClassLoader cl = isolatedClassLoader()
+                .withCurrentCodeSourceUrls()
+                .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
+                .without(AClass.class.getName())
+                .build();
+
+        // when
+        try {
+            ClassLoaders.using(cl).execute(new Runnable() {
+                @Override
+                public void run() {
+                    AClass cant_be_found = new AClass();
+                }
+            });
+            Assertions.fail("should have raised a ClassNotFoundException");
+        } catch (IllegalStateException ise) {
+            // then
+            assertThat(ise).hasCauseInstanceOf(NoClassDefFoundError.class)
+                           .hasMessageContaining("AClass");
+        }
+    }
+
+    @SuppressWarnings("unused")
     static class AClass {
     }
 
+    @SuppressWarnings("unused")
     static class ClassUsingInterface1 implements Interface1 {
     }
 
+    @SuppressWarnings("unused")
     interface Interface1 {
     }
 }
