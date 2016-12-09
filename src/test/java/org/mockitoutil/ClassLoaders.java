@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.*;
 import java.util.*;
 
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
 public abstract class ClassLoaders {
@@ -62,6 +63,7 @@ public abstract class ClassLoaders {
     }
 
     public static class IsolatedURLClassLoaderBuilder extends ClassLoaders {
+        private final ArrayList<String> excludedPrefixes = new ArrayList<String>();
         private final ArrayList<String> privateCopyPrefixes = new ArrayList<String>();
         private final ArrayList<URL> codeSourceUrls = new ArrayList<URL>();
 
@@ -87,27 +89,40 @@ public abstract class ClassLoaders {
             return this;
         }
 
+        public IsolatedURLClassLoaderBuilder without(String... privatePrefixes) {
+            excludedPrefixes.addAll(asList(privatePrefixes));
+            return this;
+        }
+
         public ClassLoader build() {
             return new LocalIsolatedURLClassLoader(
                     jdkClassLoader(),
                     codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
-                    privateCopyPrefixes
+                    privateCopyPrefixes,
+                    excludedPrefixes
             );
         }
     }
 
     static class LocalIsolatedURLClassLoader extends URLClassLoader {
         private final ArrayList<String> privateCopyPrefixes;
+        private final ArrayList<String> excludedPrefixes;
 
-        public LocalIsolatedURLClassLoader(ClassLoader classLoader, URL[] urls, ArrayList<String> privateCopyPrefixes) {
+        LocalIsolatedURLClassLoader(ClassLoader classLoader,
+                                    URL[] urls,
+                                    ArrayList<String> privateCopyPrefixes,
+                                    ArrayList<String> excludedPrefixes) {
             super(urls, classLoader);
             this.privateCopyPrefixes = privateCopyPrefixes;
+            this.excludedPrefixes = excludedPrefixes;
         }
 
         @Override
         public Class<?> findClass(String name) throws ClassNotFoundException {
-            if(classShouldBePrivate(name)) return super.findClass(name);
-            throw new ClassNotFoundException("Can only load classes with prefix : " + privateCopyPrefixes);
+            if(classShouldBePrivate(name) && !classShouldBeExcluded(name)) return super.findClass(name);
+            throw new ClassNotFoundException(format("Can only load classes with prefixes : %s, bu without : %s",
+                                                    privateCopyPrefixes,
+                                                    excludedPrefixes));
         }
 
         private boolean classShouldBePrivate(String name) {
@@ -116,14 +131,21 @@ public abstract class ClassLoaders {
             }
             return false;
         }
+
+        private boolean classShouldBeExcluded(String name) {
+            for (String prefix : excludedPrefixes) {
+                if (name.startsWith(prefix)) return true;
+            }
+            return false;
+        }
     }
 
     public static class ExcludingURLClassLoaderBuilder extends ClassLoaders {
-        private final ArrayList<String> privateCopyPrefixes = new ArrayList<String>();
+        private final ArrayList<String> excludedPrefixes = new ArrayList<String>();
         private final ArrayList<URL> codeSourceUrls = new ArrayList<URL>();
 
         public ExcludingURLClassLoaderBuilder without(String... privatePrefixes) {
-            privateCopyPrefixes.addAll(asList(privatePrefixes));
+            excludedPrefixes.addAll(asList(privatePrefixes));
             return this;
         }
 
@@ -148,27 +170,29 @@ public abstract class ClassLoaders {
             return new LocalExcludingURLClassLoader(
                     jdkClassLoader(),
                     codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
-                    privateCopyPrefixes
+                    excludedPrefixes
             );
         }
     }
 
     static class LocalExcludingURLClassLoader extends URLClassLoader {
-        private final ArrayList<String> privateCopyPrefixes;
+        private final ArrayList<String> excludedPrefixes;
 
-        public LocalExcludingURLClassLoader(ClassLoader classLoader, URL[] urls, ArrayList<String> privateCopyPrefixes) {
+        LocalExcludingURLClassLoader(ClassLoader classLoader,
+                                     URL[] urls,
+                                     ArrayList<String> excludedPrefixes) {
             super(urls, classLoader);
-            this.privateCopyPrefixes = privateCopyPrefixes;
+            this.excludedPrefixes = excludedPrefixes;
         }
 
         @Override
         public Class<?> findClass(String name) throws ClassNotFoundException {
-            if(classShouldBePrivate(name)) throw new ClassNotFoundException("classes with prefix : " + privateCopyPrefixes + " are excluded");
+            if(classShouldBeExcluded(name)) throw new ClassNotFoundException("classes with prefix : " + excludedPrefixes + " are excluded");
             return super.findClass(name);
         }
 
-        private boolean classShouldBePrivate(String name) {
-            for (String prefix : privateCopyPrefixes) {
+        private boolean classShouldBeExcluded(String name) {
+            for (String prefix : excludedPrefixes) {
                 if (name.startsWith(prefix)) return true;
             }
             return false;
@@ -266,7 +290,7 @@ public abstract class ClassLoaders {
         }
     }
 
-    protected URL obtainClassPathOf(String className) {
+    URL obtainClassPathOf(String className) {
         String path = className.replace('.', '/') + ".class";
         String url = ClassLoaders.class.getClassLoader().getResource(path).toExternalForm();
 
@@ -277,7 +301,7 @@ public abstract class ClassLoaders {
         }
     }
 
-    protected List<URL> pathsToURLs(String... codeSourceUrls) {
+    List<URL> pathsToURLs(String... codeSourceUrls) {
         return pathsToURLs(Arrays.asList(codeSourceUrls));
     }
 
@@ -302,7 +326,7 @@ public abstract class ClassLoaders {
         private ClassLoader classLoader;
         private Set<String> qualifiedNameSubstring = new HashSet<String>();
 
-        public ReachableClassesFinder(ClassLoader classLoader) {
+        ReachableClassesFinder(ClassLoader classLoader) {
             this.classLoader = classLoader;
         }
 
@@ -323,7 +347,7 @@ public abstract class ClassLoaders {
                 } else if(uri.getScheme().equalsIgnoreCase(InMemoryClassLoader.SCHEME)) {
                     addFromInMemoryBasedClassLoader(classes, uri);
                 } else {
-                    throw new IllegalArgumentException(String.format("Given ClassLoader '%s' don't have reachable by File or vi ClassLoaders.inMemory", classLoader));
+                    throw new IllegalArgumentException(format("Given ClassLoader '%s' don't have reachable by File or vi ClassLoaders.inMemory", classLoader));
                 }
             }
             return classes;
