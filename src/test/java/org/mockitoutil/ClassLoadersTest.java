@@ -5,11 +5,14 @@ import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockitoutil.ClassLoaders.*;
+import static org.mockitoutil.ClassLoaders.currentClassLoader;
+import static org.mockitoutil.ClassLoaders.excludingClassLoader;
+import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
+import static org.mockitoutil.ClassLoaders.jdkClassLoader;
 
 public class ClassLoadersTest {
 
-    public static final String CLASS_NAME_USING_INTERFACE = "org.mockitoutil.ClassLoadersTest$ClassUsingInterface1";
+    public static final String CLASS_NAME_DEPENDING_ON_INTERFACE = "org.mockitoutil.ClassLoadersTest$ClassUsingInterface1";
     public static final String INTERFACE_NAME = "org.mockitoutil.ClassLoadersTest$Interface1";
 
     @Test(expected = ClassNotFoundException.class)
@@ -27,48 +30,48 @@ public class ClassLoadersTest {
     public void isolated_class_loader_cannot_load_classes_if_no_code_source_path() throws Exception {
         // given
         ClassLoader cl = isolatedClassLoader()
-                .withPrivateCopyOf(CLASS_NAME_USING_INTERFACE)
+                .withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE)
                 .build();
 
         // when
         try {
-            cl.loadClass(CLASS_NAME_USING_INTERFACE);
+            cl.loadClass(CLASS_NAME_DEPENDING_ON_INTERFACE);
             fail();
         } catch (ClassNotFoundException e) {
             // then
-            assertThat(e.getMessage()).contains(CLASS_NAME_USING_INTERFACE);
+            assertThat(e).hasMessageContaining(CLASS_NAME_DEPENDING_ON_INTERFACE);
         }
     }
 
     @Test
-    public void isolated_class_loader_cannot_load_classes_not_matching_the_prefix() throws Exception {
+    public void isolated_class_loader_cannot_load_classes_if_dependent_classes_do_not_match_the_prefixes() throws Exception {
         // given
         ClassLoader cl = isolatedClassLoader()
                 .withCurrentCodeSourceUrls()
-                .withPrivateCopyOf(CLASS_NAME_USING_INTERFACE)
+                .withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE)
                 .build();
 
         // when
         try {
-            cl.loadClass(CLASS_NAME_USING_INTERFACE);
+            cl.loadClass(CLASS_NAME_DEPENDING_ON_INTERFACE);
             fail();
         } catch (NoClassDefFoundError e) {
             // then
-            assertThat(e.getMessage()).contains("org/mockitoutil/ClassLoadersTest$Interface1");
+            assertThat(e).hasMessageContaining("org/mockitoutil/ClassLoadersTest$Interface1");
         }
     }
 
     @Test
-    public void isolated_class_loader_can_load_all_classes_unless_all_classes_mathch_the_prefixes() throws Exception {
+    public void isolated_class_loader_can_load_classes_when_dependent_classes_are_matching_the_prefixes() throws Exception {
         // given
         ClassLoader cl = isolatedClassLoader()
                 .withCurrentCodeSourceUrls()
-                .withPrivateCopyOf(CLASS_NAME_USING_INTERFACE)
+                .withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE)
                 .withPrivateCopyOf(INTERFACE_NAME)
                 .build();
 
         // when
-        Class<?> aClass = cl.loadClass(CLASS_NAME_USING_INTERFACE);
+        Class<?> aClass = cl.loadClass(CLASS_NAME_DEPENDING_ON_INTERFACE);
 
         // then
         assertThat(aClass).isNotNull();
@@ -77,10 +80,48 @@ public class ClassLoadersTest {
     }
 
     @Test
+    public void isolated_class_loader_can_load_classes_isolated_classes_in_isolation() throws Exception {
+        // given
+        ClassLoader cl = isolatedClassLoader()
+                .withCurrentCodeSourceUrls()
+                .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
+                .build();
+
+        // when
+        Class<?> aClass = cl.loadClass(AClass.class.getName());
+
+        // then
+        assertThat(aClass).isNotNull();
+        assertThat(aClass).isNotSameAs(AClass.class);
+        assertThat(aClass.getClassLoader()).isEqualTo(cl);
+    }
+
+    @Test
+    public void isolated_class_loader_cannot_load_classes_if_prefix_excluded() throws Exception {
+        // given
+        ClassLoader cl = isolatedClassLoader()
+                .withCurrentCodeSourceUrls()
+                .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
+                .without(AClass.class.getName())
+                .build();
+
+        // when
+        Class<?> aClass = null;
+        try {
+            aClass = cl.loadClass(AClass.class.getName());
+            fail();
+        } catch (ClassNotFoundException e) {
+            // then
+            assertThat(e).hasMessageContaining("org.mockitoutil")
+                         .hasMessageContaining(AClass.class.getName());
+        }
+    }
+
+    @Test
     public void isolated_class_loader_has_no_parent() throws Exception {
         ClassLoader cl = isolatedClassLoader()
                 .withCurrentCodeSourceUrls()
-                .withPrivateCopyOf(CLASS_NAME_USING_INTERFACE)
+                .withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE)
                 .withPrivateCopyOf(INTERFACE_NAME)
                 .build();
 
@@ -216,6 +257,12 @@ public class ClassLoadersTest {
         assertThat(currentClassLoader()).isEqualTo(this.getClass().getClassLoader());
     }
 
-    static class ClassUsingInterface1 implements Interface1 { }
-    interface Interface1 { }
+    static class AClass {
+    }
+
+    static class ClassUsingInterface1 implements Interface1 {
+    }
+
+    interface Interface1 {
+    }
 }
