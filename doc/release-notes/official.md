@@ -3,10 +3,9 @@
 * Authors: 1
 * Commits: 50
   * 50: Szczepan Faber
-* Improvements: 2
-  * New features: 2
+* Improvements: 1
+  * New features: 1
     * New opt-in stubbing strictness implemented in JUnit rules [(#807)](https://github.com/mockito/mockito/pull/807)
-    * Opt-in stubbing strictness implemented in JUnit rules [(#770)](https://github.com/mockito/mockito/pull/770)
 
 ### 2.2.29 (2016-12-07 13:17 UTC)
 
