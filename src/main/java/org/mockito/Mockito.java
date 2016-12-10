@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.quality.Strictness;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
@@ -77,6 +78,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#37">37. Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
  *      <a href="#38">38. Meta data and generic type retention (Since 2.1.0)</a><br/>
  *      <a href="#39">39. Mocking final types, enums and final methods (Since 2.1.0)</a><br/>
+ *      <a href="#40">40. (**new**) Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2">Migrating to Mockito 2</a></h3>
@@ -1283,6 +1285,32 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>
  * If you are interested in more details of this feature please read the javadoc of
  * <code>org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker</code>
+ *
+ * <h3 id="40">40. <a class="meaningful_link" href="#strict_mockito">
+ *     (**new**) Improved productivity and cleaner tests with "stricter" Mockito</a> (Since 2.+)</h3>
+ *
+ * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
+ * <ul>
+ *     <li>New "strict stubs" behavior of JUnit rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
+ *     <li>Unnecessary stubbing detection in {@link MockitoJUnitRunner}</li>
+ *     <li>Stubbing argument mismatch reporting by JUnit rules, documented in {@link org.mockito.quality.MockitoHint}</li>
+ * </ul>
+ *
+ * Mockito is a "loose" mocking framework by default.
+ * Mocks can be interacted with without setting any expectations beforehand.
+ * This is intentional and it improves the quality of tests by forcing users to be explicit about what they want to stub / verify.
+ * It is also very intuitive, easy to use and blends nicely with "given", "when", "then" template of clean test code.
+ * This is also different from the classic mocking frameworks of the past, they were "strict" by default.
+ * <p>
+ * Being "loose" by default makes Mockito tests harder to debug at times.
+ * There are scenarios where misconfigured stubbing (like using a wrong argument) forces the user to run the test with a debugger.
+ * Ideally, tests failures are immediately obvious and don't require debugger to identify the root cause.
+ * Starting with version 2.1 Mockito has been getting new features that nudge the framework towards "strictness".
+ * We want Mockito to offer fantastic debuggability while not losing its core mocking style, optimized for
+ * intuitiveness, explicitness and clean test code.
+ * <p>
+ * Help Mockito! Try the new features, give us feedback, join the discussion about Mockito strictness at GitHub
+ * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {

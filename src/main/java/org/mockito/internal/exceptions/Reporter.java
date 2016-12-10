@@ -835,11 +835,46 @@ public class Reporter {
         for (Invocation u : unnecessaryStubbings) {
             stubbings.append("\n  ").append(count++).append(". ").append(u.getLocation());
         }
+        String heading = (testClass != null)?
+                "Unnecessary stubbings detected in test class: " + testClass.getSimpleName() :
+                "Unnecessary stubbings detected.";
+
         return new UnnecessaryStubbingException(join(
-                "Unnecessary stubbings detected in test class: " + testClass.getSimpleName(),
+                heading,
                 "Clean & maintainable test code requires zero unnecessary code.",
                 "Following stubbings are unnecessary (click to navigate to relevant line of code):" + stubbings,
                 "Please remove unnecessary stubbings or use 'silent' option. More info: javadoc for UnnecessaryStubbingException class."
         ));
+    }
+
+    public static void unncessaryStubbingException(List<Invocation> unused) {
+        throw formatUnncessaryStubbingException(null, unused);
+    }
+
+    public static PotentialStubbingProblem potentialStubbingProblemByJUnitRule(
+            Invocation actualInvocation, Collection<Invocation> argMismatchStubbings) {
+        StringBuilder stubbings = new StringBuilder();
+        int count = 1;
+        for (Invocation s : argMismatchStubbings) {
+            stubbings.append("  ").append(count++).append(". ").append(s);
+            stubbings.append("\n    ").append(s.getLocation()).append("\n");
+        }
+        stubbings.deleteCharAt(stubbings.length()-1); //remove trailing end of line
+
+        throw new PotentialStubbingProblem(join(
+                "Strict JUnit rule detected stubbing argument mismatch.",
+                "This invocation of '" + actualInvocation.getMethod().getName() + "' method:",
+                "  " + actualInvocation,
+                "  " + actualInvocation.getLocation(),
+                "Has following stubbing(s) with different arguments:",
+                stubbings,
+                "Typically, stubbing argument mismatch indicates user mistake when writing tests.",
+                "In order to streamline debugging tests Mockito fails early in this scenario.",
+                "However, there are legit scenarios when this exception generates false negative signal:",
+                "  - stubbing the same method multiple times using 'given().will()' or 'when().then()' API",
+                "    Please use 'will().given()' or 'doReturn().when()' API for stubbing",
+                "  - stubbed method is intentionally invoked with different arguments by code under test",
+                "    Please use 'default' or 'silent' JUnit Rule.",
+                "For more information see javadoc for PotentialStubbingProblem class."));
     }
 }

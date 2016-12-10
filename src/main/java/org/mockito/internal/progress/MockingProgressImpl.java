@@ -153,6 +153,10 @@ public class MockingProgressImpl implements MockingProgress {
         return this.verificationStrategy.maybeVerifyLazily(mode);
     }
 
+    public void clearListeners() {
+        listeners.clear();
+    }
+
      /*
 
      //TODO 545 thread safety of all mockito

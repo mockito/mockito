@@ -7,6 +7,7 @@ package org.mockito.mock;
 
 import org.mockito.Incubating;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.internal.listeners.StubbingLookupListener;
 import org.mockito.stubbing.Answer;
 
 import java.util.List;
