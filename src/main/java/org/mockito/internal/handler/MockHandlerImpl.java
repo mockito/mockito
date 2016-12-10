@@ -9,6 +9,7 @@ import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingPro
 
 import java.util.List;
 import org.mockito.internal.InternalMockHandler;
+import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.stubbing.InvocationContainer;
@@ -127,7 +128,9 @@ public class MockHandlerImpl<T> implements InternalMockHandler<T> {
     }
 
     private void notifyStubbedAnswerLookup(Invocation invocation, StubbedInvocationMatcher exception) {
-        for (StubbingLookupListener listener : mockSettings.getStubbingLookupListeners()) {
+        //TODO #793 - when completed, we should be able to get rid of the casting below
+        List<StubbingLookupListener> listeners = ((CreationSettings) mockSettings).getStubbingLookupListeners();
+        for (StubbingLookupListener listener : listeners) {
             listener.onStubbingLookup(invocation, exception);
         }
     }

@@ -66,11 +66,6 @@ public interface MockCreationSettings<T> {
     List<InvocationListener> getInvocationListeners();
 
     /**
-     * The stubbing lookup listeners attached to this mock.
-     */
-    List<StubbingLookupListener> getStubbingLookupListeners();
-
-    /**
      * Informs whether the mock instance should be created via constructor
      *
      * @since 1.10.12
