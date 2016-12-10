@@ -1,5 +1,6 @@
 package org.mockito.quality;
 
+import org.mockito.Incubating;
 import org.mockito.junit.MockitoRule;
 
 /**
@@ -9,6 +10,7 @@ import org.mockito.junit.MockitoRule;
  *
  * @since 2.3.0
  */
+@Incubating
 public enum Strictness {
 
     /**
@@ -16,6 +18,7 @@ public enum Strictness {
      *
      * @since 2.3.0
      */
+    @Incubating
     LENIENT,
 
     /**
@@ -25,6 +28,7 @@ public enum Strictness {
      *
      * @since 2.3.0
      */
+    @Incubating
     WARN,
 
     /**
@@ -34,5 +38,6 @@ public enum Strictness {
      *
      * @since 2.3.0
      */
+    @Incubating
     STRICT_STUBS;
 }
