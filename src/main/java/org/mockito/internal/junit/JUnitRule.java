@@ -8,6 +8,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.quality.Strictness;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.junit.MockitoRule;
 
@@ -15,80 +16,67 @@ import org.mockito.junit.MockitoRule;
  * Internal implementation.
  */
 public class JUnitRule implements MockitoRule {
-	
-	private final MockitoLogger logger;
-    private final boolean silent;
+
+    private final MockitoLogger logger;
+    private final MockitoTestListener listener;
 
     /**
      * @param logger target for the stubbing warnings
-     * @param silent whether the rule
+     * @param strictness how strict mocking / stubbing is concerned
      */
-    public JUnitRule(MockitoLogger logger, boolean silent) {
-		this.logger = logger;
-        this.silent = silent;
+    public JUnitRule(MockitoLogger logger, Strictness strictness) {
+        this.logger = logger;
+        switch (strictness) {
+            case LENIENT: listener = new NoOpTestListener(); break;
+            case WARN: listener = new WarningTestListener(logger); break;
+            case STRICT_STUBS: listener = new StrictStubsTestListener(); break;
+            default: throw new IllegalArgumentException("Illegal argument: " + strictness);
+        }
     }
 
 	@Override
-	public Statement apply(final Statement base, FrameworkMethod method, final Object target) {
-        if (silent) {
-            return new SilentStatement(target, base);
-        } else {
-            String testName = target.getClass().getSimpleName() + "." + method.getName();
-            return new DefaultStatement(target, testName, base);
-        }
-    }
+	public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
+        return new Statement() {
+            public void evaluate() throws Throwable {
+                Mockito.framework().addListener(listener);
+                Throwable testFailure;
+                try {
+                    //mock initialization could be part of listeners but to avoid duplication I left it here:
+                    MockitoAnnotations.initMocks(target);
+                    testFailure = evaluateSafely(base);
+                } finally {
+                    Mockito.framework().removeListener(listener);
+                }
 
-    public JUnitRule silent() {
-        return new JUnitRule(logger, true);
-    }
+                //If the 'testFinished' fails below, we don't see the original failure, thrown later
+                DefaultTestFinishedEvent event = new DefaultTestFinishedEvent(target, method.getName(), testFailure);
+                listener.testFinished(event);
 
-    private class SilentStatement extends Statement {
-        private final Object target;
-        private final Statement base;
+                if (testFailure != null) {
+                    throw testFailure;
+                }
 
-        public SilentStatement(Object target, Statement base) {
-            this.target = target;
-            this.base = base;
-        }
-
-        public void evaluate() throws Throwable {
-            MockitoAnnotations.initMocks(target);
-            base.evaluate();
-            Mockito.validateMockitoUsage();
-        }
-    }
-
-    private class DefaultStatement extends Statement {
-        private final Object target;
-        private final String testName;
-        private final Statement base;
-
-        DefaultStatement(Object target, String testName, Statement base) {
-            this.target = target;
-            this.testName = testName;
-            this.base = base;
-        }
-
-        public void evaluate() throws Throwable {
-            RuleStubbingHintsReporter reporter = new RuleStubbingHintsReporter();
-            Mockito.framework().addListener(reporter);
-            try {
-                performEvaluation(reporter);
-            } finally {
-                Mockito.framework().removeListener(reporter);
+                //Validate only when there is no test failure to avoid reporting multiple problems
+                //This could be part of the listener but to avoid duplication I left it here:
+                Mockito.validateMockitoUsage();
             }
-        }
 
-        private void performEvaluation(RuleStubbingHintsReporter reporter) throws Throwable {
-            MockitoAnnotations.initMocks(target);
-            try {
-                base.evaluate();
-            } catch(Throwable t) {
-                reporter.getStubbingArgMismatches().format(testName, logger);
-                throw t;
+            private Throwable evaluateSafely(Statement base) {
+                try {
+                    base.evaluate();
+                    return null;
+                } catch (Throwable throwable) {
+                    return throwable;
+                }
             }
-            reporter.getUnusedStubbings().format(testName, logger);
-            Mockito.validateMockitoUsage();
-        }
+        };
+    }
+
+    public MockitoRule silent() {
+        return new JUnitRule(logger, Strictness.LENIENT);
+    }
+
+    public MockitoRule strictness(Strictness strictness) {
+        return new JUnitRule(logger, strictness);
     }
 }
