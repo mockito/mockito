@@ -1,5 +1,3 @@
-apply from: "$rootDir/gradle/java-library.gradle"
-
 def licenseFiles = copySpec {
     //mockito license
     from(".") { include 'LICENSE' }
@@ -19,7 +17,6 @@ task sourcesJar(type: Jar) {
 }
 
 task javadocJar(type: Jar) {
-    baseName = 'mockito-core'
     classifier = "javadoc"
     with licenseFiles
     from javadoc
@@ -34,9 +31,12 @@ publishing {
     publications {
         mockitoCore(MavenPublication) {
             from components.java
-            //artifactId 'mockito-core'
+            artifactId project.archivesBaseName
             artifact sourcesJar
             artifact javadocJar
         }
     }
 }
+
+//Gradle requires to configure pom after the publication above is configured
+apply from: "$rootDir/gradle/pom.gradle"
