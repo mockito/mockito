@@ -129,7 +129,7 @@ task printReleaseHelp {
 }
 
 allprojects {
-    bintrayUpload {
+    tasks.matching { it.name == 'bintrayUpload' }.all {
         dependsOn printReleaseHelp
         doFirst {
             it.dryRun = releaseTest
@@ -150,6 +150,14 @@ task assertCleanWorkingCopy {
         runWithOutput(["git", "status", "--porcelain"], out)
         def output = out.toString()
         assert output.trim().isEmpty() : "Working copy not clean. Commit or stash your changes before continuing.\n$output"
+    }
+}
+
+task assertEnvVariables {
+    doLast {
+        ['TRAVIS_BRANCH', 'GH_TOKEN', 'MOCKITO_BINTRAY_API_KEY'].each {
+            assert System.env[it]: "Please export '$it' envinronment variable first"
+        }
     }
 }
 
@@ -227,6 +235,7 @@ task pushChanges(type: Exec) {
 }
 
 releaseWorkflow {
+    step assertEnvVariables
     step assertCleanWorkingCopy
     step releaseNeeded
     onlyIf { releaseNeeded.needed }
