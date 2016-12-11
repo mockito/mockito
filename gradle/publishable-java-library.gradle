@@ -1,0 +1,42 @@
+apply from: "$rootDir/gradle/java-library.gradle"
+
+def licenseFiles = copySpec {
+    //mockito license
+    from(".") { include 'LICENSE' }
+}
+
+//TODO why do we still ship the main jar with sources?
+jar {
+    from(sourceSets.main.allSource)
+    with licenseFiles
+
+}
+
+task sourcesJar(type: Jar) {
+    from(sourceSets.main.allSource)
+    classifier = "sources"
+    with licenseFiles
+}
+
+task javadocJar(type: Jar) {
+    baseName = 'mockito-core'
+    classifier = "javadoc"
+    with licenseFiles
+    from javadoc
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mockitoCore(MavenPublication) {
+            from components.java
+            //artifactId 'mockito-core'
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}

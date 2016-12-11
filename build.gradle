@@ -17,20 +17,18 @@ plugins {
     id 'com.gradle.build-scan' version '1.0'
 }
 
-apply plugin: 'java'
-group = 'org.mockito'
+apply from: "gradle/publishable-java-library.gradle"
+
 description = 'Core API and implementation.'
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
 
-apply plugin: 'maven-publish'
+apply from: 'gradle/root/version.gradle'
+apply from: 'gradle/root/ide.gradle'
+apply from: 'gradle/root/coverage.gradle'
+apply from: 'gradle/root/gradle-fix.gradle'
 
-apply from: 'gradle/version.gradle'
-apply from: "gradle/ide.gradle"
-apply from: 'gradle/coverage.gradle'
-apply from: 'gradle/osgi.gradle'
-apply from: 'gradle/gradle-fix.gradle'
-apply from: 'gradle/license.gradle'
+apply from: 'gradle/mockito-core/osgi.gradle'
+apply from: 'gradle/mockito-core/javadoc.gradle'
+apply from: 'gradle/mockito-core/license.gradle'
 
 allprojects {
     repositories {
@@ -44,25 +42,7 @@ allprojects {
 }
 
 configurations {
-    provided
     testUtil //TODO move to separate project
-}
-
-sourceSets {
-    main {
-        compileClasspath = compileClasspath + configurations.provided
-    }
-    test {
-        compileClasspath = compileClasspath + configurations.provided
-    }
-}
-
-test {
-    include "**/*Test.class"
-    testLogging {
-        exceptionFormat 'full'
-        showCauses true
-    }
 }
 
 dependencies {
@@ -81,52 +61,10 @@ dependencies {
     testUtil sourceSets.test.output
 }
 
-def licenseFiles = copySpec {
-    //mockito license
-    from(".") { include 'LICENSE' }
-}
-
-task sourcesJar(type: Jar) {
-    jar {
-        baseName = 'mockito-core'
-        from(sourceSets.main.allSource)
-        with licenseFiles
-
-    }
-    baseName = 'mockito-core'
-    from(sourceSets.main.allSource)
-    classifier = "sources"
-    with licenseFiles
-}
-
-apply from: 'gradle/javadoc.gradle'
-task javadocJar(type: Jar) {
-    baseName = 'mockito-core'
-    classifier = "javadoc"
-    with licenseFiles
-    from javadoc
-}
-
-task coverageReport(dependsOn: ["test", "mockitoCoverage"]) {}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-publishing {
-    publications {
-        mockitoCore(MavenPublication) {
-            from components.java
-            artifactId 'mockito-core'
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-}
+archivesBaseName = 'mockito-core'
 
 apply from: 'gradle/release.gradle'
-apply from: "gradle/pom.gradle"
+apply from: 'gradle/pom.gradle'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14.1'

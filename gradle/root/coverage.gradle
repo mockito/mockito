@@ -30,3 +30,5 @@ task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
         println "Jacoco report for client created: file://${reports.xml.destination.toURI().path}"
     }
 }
+
+task coverageReport(dependsOn: ["test", "mockitoCoverage"]) {}
