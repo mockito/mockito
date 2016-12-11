@@ -5,7 +5,12 @@
 package org.mockito.internal.runners;
 
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.junit.MismatchReportingTestListener;
+import org.mockito.internal.junit.MockitoTestListener;
+import org.mockito.internal.junit.NoOpTestListener;
 import org.mockito.internal.runners.util.RunnerProvider;
+import org.mockito.internal.util.ConsoleMockitoLogger;
+import org.mockito.internal.util.Supplier;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -16,9 +21,34 @@ import static org.mockito.internal.runners.util.TestMethodsFinder.hasTestMethods
  */
 public class RunnerFactory {
 
+    /**
+     * Creates silent runner implementation
+     */
     public RunnerImpl create(Class<?> klass) throws InvocationTargetException {
+        return create(klass, new Supplier<MockitoTestListener>() {
+            public MockitoTestListener get() {
+                return new NoOpTestListener();
+            }
+        });
+    }
+
+    /**
+     * Creates strict runner implementation
+     */
+    public RunnerImpl createStrict(Class<?> klass) throws InvocationTargetException {
+        return create(klass, new Supplier<MockitoTestListener>() {
+            public MockitoTestListener get() {
+                return new MismatchReportingTestListener(new ConsoleMockitoLogger());
+            }
+        });
+    }
+
+    /**
+     * Creates runner implementation with provided listener supplier
+     */
+    public RunnerImpl create(Class<?> klass, Supplier<MockitoTestListener> listenerSupplier) throws InvocationTargetException {
         try {
-            return new RunnerProvider().newInstance("org.mockito.internal.runners.SilentJUnitRunner", klass);
+            return new RunnerProvider().newInstance("org.mockito.internal.runners.SilentJUnitRunner", klass, listenerSupplier);
         } catch (InvocationTargetException e) {
             if (!hasTestMethods(klass)) {
                 throw new MockitoException(

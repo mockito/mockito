@@ -7,35 +7,69 @@ package org.mockito.internal.runners;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
+import org.junit.runner.notification.Failure;
+import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.runners.util.FrameworkUsageValidator;
+import org.mockito.internal.junit.MockitoTestListener;
+import org.mockito.internal.util.Supplier;
 
+//TODO rename to DefaultInternalRunner and the parent to InternalRunner
 public class SilentJUnitRunner implements RunnerImpl {
 
     private final BlockJUnit4ClassRunner runner;
-    private final Class<?> testClass;
 
-    public SilentJUnitRunner(Class<?> testClass) throws InitializationError {
-        this.testClass = testClass;
+    public SilentJUnitRunner(Class<?> testClass, final Supplier<MockitoTestListener> listenerSupplier) throws InitializationError {
         runner = new BlockJUnit4ClassRunner(testClass) {
-            protected Statement withBefores(FrameworkMethod method, Object target,
-                    Statement statement) {
+
+            public Object target;
+            private MockitoTestListener mockitoTestListener;
+
+            protected Statement withBefores(FrameworkMethod method, Object target, Statement statement) {
+                // get new test listener and add add it to the framework
+                mockitoTestListener = listenerSupplier.get();
+                Mockito.framework().addListener(mockitoTestListener);
+
                 // init annotated mocks before tests
                 MockitoAnnotations.initMocks(target);
+                this.target = target;
                 return super.withBefores(method, target, statement);
+            }
+
+            public void run(final RunNotifier notifier) {
+                RunListener listener = new RunListener() {
+                    Throwable failure;
+
+                    public void testFailure(Failure failure) throws Exception {
+                        this.failure = failure.getException();
+                    }
+
+                    public void testFinished(Description description) throws Exception {
+                        super.testFinished(description);
+                        if (mockitoTestListener != null) {
+                            Mockito.framework().removeListener(mockitoTestListener);
+                            mockitoTestListener.testFinished(new DefaultTestFinishedEvent(target, description.getMethodName(), failure));
+                        }
+                        try {
+                            Mockito.validateMockitoUsage();
+                        } catch(Throwable t) {
+                            notifier.fireTestFailure(new Failure(description, t));
+                        }
+                    }
+                };
+
+                notifier.addListener(listener);
+                super.run(notifier);
             }
         };
     }
 
     public void run(final RunNotifier notifier) {
-        FrameworkUsageValidator listener = new FrameworkUsageValidator(notifier);
-        // add listener that validates framework usage at the end of each test
-        notifier.addListener(listener);
         runner.run(notifier);
     }
 
