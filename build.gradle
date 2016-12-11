@@ -17,11 +17,15 @@ plugins {
     id 'com.gradle.build-scan' version '1.0'
 }
 
-apply from: "gradle/publishable-java-library.gradle"
-
-description = 'Core API and implementation.'
+description = 'Mockito mock objects library core API and implementation'
 
 apply from: 'gradle/root/version.gradle'
+
+//Project specific plugins
+apply from: "gradle/java-library.gradle"
+archivesBaseName = 'mockito-core'
+apply from: "gradle/publishable-java-library.gradle"
+
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/coverage.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
@@ -29,6 +33,7 @@ apply from: 'gradle/root/gradle-fix.gradle'
 apply from: 'gradle/mockito-core/osgi.gradle'
 apply from: 'gradle/mockito-core/javadoc.gradle'
 apply from: 'gradle/mockito-core/license.gradle'
+apply from: 'gradle/release.gradle'
 
 allprojects {
     repositories {
@@ -60,11 +65,6 @@ dependencies {
 
     testUtil sourceSets.test.output
 }
-
-archivesBaseName = 'mockito-core'
-
-apply from: 'gradle/release.gradle'
-apply from: 'gradle/pom.gradle'
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14.1'
