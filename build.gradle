@@ -73,7 +73,7 @@ task wrapper(type: Wrapper) {
 task ciBuild {
     //validate the state of the project
     dependsOn { allprojects*.build }
-    dependsOn publishToMavenLocal, tasks.idea, tasks.eclipse
+    dependsOn tasks.idea, tasks.eclipse
 }
 
 task createTestResources << {

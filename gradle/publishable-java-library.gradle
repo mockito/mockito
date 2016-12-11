@@ -40,3 +40,7 @@ publishing {
 
 //Gradle requires to configure pom after the publication above is configured
 apply from: "$rootDir/gradle/pom.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
+
+//so that we flesh out problems with maven publication during the build process
+build.dependsOn publishToMavenLocal

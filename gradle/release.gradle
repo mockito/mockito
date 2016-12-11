@@ -40,8 +40,6 @@ import org.mockito.release.version.*
 
 assert project == rootProject
 
-apply from: rootProject.file("gradle/publish.gradle")
-
 apply plugin: 'org.mockito.release-notes'
 apply plugin: 'org.mockito.release-workflow'
 
@@ -124,12 +122,20 @@ task("releaseNeeded") {
     }
 }
 
-bintrayUpload {
-    doFirst {
+task printReleaseHelp {
+    doLast {
         logger.lifecycle troubleshootingInfo
-        it.dryRun = releaseTest
-        if (it.dryRun) {
-            logger.lifecycle "Dry-running the release! Although 'bintrayUpload' is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
+    }
+}
+
+allprojects {
+    bintrayUpload {
+        dependsOn printReleaseHelp
+        doFirst {
+            it.dryRun = releaseTest
+            if (it.dryRun) {
+                logger.lifecycle "Dry-running the release! Although $path is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
+            }
         }
     }
 }

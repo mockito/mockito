@@ -9,7 +9,7 @@ bintray {
     user = 'szczepiq'
     key = System.env.MOCKITO_BINTRAY_API_KEY
 
-    publications = ['mockitoCore']
+    publications = project.publishing.publications*.name
 
     publish = true
 
@@ -21,7 +21,7 @@ bintray {
         // to 'mockito' organization and all members can modify/edit it
 
         name = 'mockito'
-        desc = 'Mockito library'
+        desc = project.description
         websiteUrl = 'http://mockito.org'
         issueTrackerUrl = 'https://github.com/mockito/mockito/issues'
         vcsUrl = 'https://github.com/mockito/mockito.git'
