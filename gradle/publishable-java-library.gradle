@@ -29,7 +29,7 @@ artifacts {
 
 publishing {
     publications {
-        mockitoCore(MavenPublication) {
+        mainJar(MavenPublication) {
             from components.java
             artifactId project.archivesBaseName
             artifact sourcesJar
