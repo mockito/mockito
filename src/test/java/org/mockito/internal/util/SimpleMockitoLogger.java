@@ -6,7 +6,7 @@ package org.mockito.internal.util;
 
 public class SimpleMockitoLogger implements MockitoLogger {
 
-    private final StringBuilder loggedInfo = new StringBuilder();
+    private StringBuilder loggedInfo = new StringBuilder();
 
     public void log(Object what) {
         loggedInfo.append(what);
@@ -18,5 +18,10 @@ public class SimpleMockitoLogger implements MockitoLogger {
 
     public boolean isEmpty() {
         return loggedInfo.length() == 0;
+    }
+
+    public SimpleMockitoLogger clear() {
+        loggedInfo = new StringBuilder();
+        return this;
     }
 }

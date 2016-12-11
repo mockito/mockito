@@ -25,6 +25,8 @@ import org.mockito.internal.runners.StrictRunner;
  *   <li>
  *       (new since Mockito 2.1.0) Detects unused stubs in the test code.
  *       See {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}.
+ *       Similar to JUnit rules, the runner also reports stubbing argument mismatches as console warnings
+ *       (see {@link org.mockito.quality.MockitoHint}).
  *       To opt-out from this feature, use {@code}&#064;RunWith(MockitoJUnitRunner.Silent.class){@code}
  *   <li>
  *      Initializes mocks annotated with {@link Mock},
@@ -58,7 +60,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
     /**
      * This Mockito JUnit Runner implementation ignores unused stubs
      * (e.g. it remains 'silent' even if unused stubs are present).
-     * This was the behavior of Mockito JUnit runner in versions 1.*.
+     * This was the behavior of Mockito JUnit runner in versions 1.x.
      * Using this implementation of the runner is not recommended.
      * Engineers should care for removing unused stubbings because they are dead code,
      * they add unnecessary details, potentially making the test code harder to comprehend.
@@ -76,14 +78,16 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
     }
 
     /**
-     * Detects unused stubs and reports them as failures. Default behavior.
-     * See {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}
+     * Detects unused stubs and reports them as failures. Default behavior in Mockito 2.x.
+     * See {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}.
+     * Also prints stubbing argument mismatch warnings when test fails
+     * (see {@link org.mockito.quality.MockitoHint}.
      *
      * @since 2.1.0
      */
     public static class Strict extends MockitoJUnitRunner {
         public Strict(Class<?> klass) throws InvocationTargetException {
-            super(new StrictRunner(new RunnerFactory().create(klass), klass));
+            super(new StrictRunner(new RunnerFactory().createStrict(klass), klass));
         }
     }
 
@@ -91,7 +95,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
 
     public MockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
         //by default, StrictRunner is used. We can change that potentially based on feedback from users
-        this(new StrictRunner(new RunnerFactory().create(klass), klass));
+        this(new StrictRunner(new RunnerFactory().createStrict(klass), klass));
     }
 
     MockitoJUnitRunner(RunnerImpl runner) throws InvocationTargetException {

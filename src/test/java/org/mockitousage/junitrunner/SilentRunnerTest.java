@@ -41,6 +41,15 @@ public class SilentRunnerTest extends TestBase {
         JUnitResultAssert.assertThat(result).fails(1, TooLittleActualInvocations.class);
     }
 
+    @Test public void failing_test_in_constructor() {
+        //when
+        Result result = runner.run(
+                FailsInConstructor.class
+        );
+        //then
+        JUnitResultAssert.assertThat(result).fails(1, IllegalArgumentException.class);
+    }
+
     @Test public void validates_framework_usage() {
         //when
         Result result = runner.run(
@@ -75,6 +84,17 @@ public class SilentRunnerTest extends TestBase {
             list.clear();
             verify(list, times(2)).clear();
         }
+    }
+
+    @RunWith(MockitoJUnitRunner.Silent.class)
+    public static class FailsInConstructor {
+        {
+            if (System.currentTimeMillis() > 0) {
+                throw new IllegalArgumentException("Boo!");
+            }
+        }
+        @Mock List<String> list;
+        @Test public void some_behavior() {}
     }
 
     @RunWith(MockitoJUnitRunner.Silent.class)
