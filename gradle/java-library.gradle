@@ -1,0 +1,29 @@
+apply plugin: 'java'
+
+group = 'org.mockito'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+apply plugin: 'maven-publish'
+
+configurations {
+    provided
+}
+
+sourceSets {
+    main {
+        compileClasspath = compileClasspath + configurations.provided
+    }
+    test {
+        compileClasspath = compileClasspath + configurations.provided
+    }
+}
+
+test {
+    include "**/*Test.class"
+    testLogging {
+        exceptionFormat 'full'
+        showCauses true
+    }
+}
