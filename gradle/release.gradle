@@ -84,7 +84,7 @@ task("comparePublications", type: PublicationsComparatorTask) {
     dependsOn publishToMavenLocal, sourcesJar
 
     compareBinaries({ configurations.previousSrc.singleFile }, { sourcesJar.archivePath })
-    comparePoms({ configurations.previousPom.singleFile.text }, { generatePomFileForMockitoCorePublication.destination.text })
+    comparePoms({ configurations.previousPom.singleFile.text }, { generatePomFileForMainJarPublication.destination.text })
 }
 
 //TODO if System.env.TRAVIS_BRANCH is empty, just pick up current branch from Git
@@ -128,8 +128,13 @@ task printReleaseHelp {
     }
 }
 
+task bintrayUploadAll {
+    description = "Groups all the bintrayUpload tasks of this project"
+}
+
 allprojects {
     tasks.matching { it.name == 'bintrayUpload' }.all {
+        bintrayUploadAll.dependsOn it
         dependsOn printReleaseHelp
         doFirst {
             it.dryRun = releaseTest

@@ -1,0 +1,19 @@
+//TODO temporary for testing
+version = version + "-beta.1"
+
+apply from: "$rootDir/gradle/java-library.gradle"
+archivesBaseName = 'mockito-android'
+apply from: "$rootDir/gradle/publishable-java-library.gradle"
+
+bintray {
+    pkg {
+        //TODO temporary for testing
+        repo = 'test'
+        version {
+            mavenCentralSync {
+                //TODO temporary for testing
+                sync = false
+            }
+        }
+    }
+}
