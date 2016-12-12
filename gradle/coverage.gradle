@@ -2,14 +2,8 @@ apply plugin: 'jacoco'
 
 // TODO later include subprojects, possible ideas https://gist.github.com/aalmiray/e6f54aa4b3803be0bcac
 
-repositories {
-    // TODO go back to the latest release of Jacoco. We need this snapshot
-    // because of https://github.com/jacoco/jacoco/pull/434 on JDK 9
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-}
-
 jacoco {
-    toolVersion = "0.7.8-20161102.122531-23"
+    toolVersion = "0.7.8"
 }
 
 task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
