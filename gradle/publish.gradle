@@ -5,13 +5,16 @@ tasks.bintrayUpload.mustRunAfter "build"
 
 def theVcsTag = "v" + project.version
 
+assert project.hasProperty("publishToCentral") :
+        "Please configure 'ext.publishToCentral' for project that wants to publish to Bintray / Central"
+
 bintray {
     user = 'szczepiq'
     key = System.env.MOCKITO_BINTRAY_API_KEY
 
     publications = project.publishing.publications*.name
 
-    publish = true
+    publish = project.ext.publishToCentral
 
     pkg {
         repo = 'maven'
@@ -39,6 +42,7 @@ bintray {
 
             //Automatically syncs to central repository (https://oss.sonatype.org/)
             mavenCentralSync {
+                sync = project.ext.publishToCentral
                 user = System.env.NEXUS_TOKEN_USER
                 password = System.env.NEXUS_TOKEN_PWD
             }

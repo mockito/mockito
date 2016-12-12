@@ -21,7 +21,11 @@ description = 'Mockito mock objects library core API and implementation'
 
 apply from: 'gradle/root/version.gradle'
 
-//Project specific plugins
+ext {
+    artifactName = 'mockito-core'
+    publishToCentral = true
+}
+
 apply from: "gradle/java-library.gradle"
 archivesBaseName = 'mockito-core'
 apply from: "gradle/publishable-java-library.gradle"
