@@ -27,3 +27,6 @@ test {
         showCauses true
     }
 }
+
+assert project.hasProperty("artifactName") : "Please configure 'ext.artifactName' for project that wants to use 'java-library.gradle' plugin"
+archivesBaseName = project.ext.artifactName
