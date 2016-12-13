@@ -161,7 +161,7 @@ task assertCleanWorkingCopy {
 task assertEnvVariables {
     doLast {
         ['TRAVIS_BRANCH', 'GH_TOKEN', 'MOCKITO_BINTRAY_API_KEY'].each {
-            assert System.env[it]: "Please export '$it' envinronment variable first"
+            assert System.env[it]: "Please export '$it' env variable first"
         }
     }
 }
