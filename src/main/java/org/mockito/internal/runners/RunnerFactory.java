@@ -48,7 +48,11 @@ public class RunnerFactory {
      */
     public InternalRunner create(Class<?> klass, Supplier<MockitoTestListener> listenerSupplier) throws InvocationTargetException {
         try {
-            return new RunnerProvider().newInstance("org.mockito.internal.runners.DefaultInternalRunner", klass, listenerSupplier);
+            String runnerClassName = "org.mockito.internal.runners.DefaultInternalRunner";
+            //Warning: I'm using String literal on purpose!
+            //When JUnit is not on classpath, we want the code to throw exception here so that we can catch it
+            //If we statically link the class, we will get Error when class is loaded
+            return new RunnerProvider().newInstance(runnerClassName, klass, listenerSupplier);
         } catch (InvocationTargetException e) {
             if (!hasTestMethods(klass)) {
                 throw new MockitoException(
