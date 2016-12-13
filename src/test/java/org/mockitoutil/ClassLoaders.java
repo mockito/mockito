@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -147,6 +148,12 @@ public abstract class ClassLoaders {
                 // lenient shallow copy of class compatible fields
                 for (Field field : task.getClass().getDeclaredFields()) {
                     Field declaredField = taskClassReloaded.getDeclaredField(field.getName());
+                    int modifiers = declaredField.getModifiers();
+                    if(Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
+                        // skip otherwise IllegalAccessException (can be bypassed with Unsafe though)
+                        // We may also miss coverage data.
+                        continue;
+                    }
                     if (declaredField.getType() == field.getType()) { // don't copy this
                         declaredField.setAccessible(true);
                         declaredField.set(reloaded, field.get(task));
