@@ -1,3 +1,11 @@
+### 2.3.1 (2016-12-13 18:26 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Rafael Winterhalter
+* Improvements: 1
+  * Never throw mockito exceptions from a plugin type's constructor [(#805)](https://github.com/mockito/mockito/pull/805)
+
 ### 2.3.0 (2016-12-10 17:48 UTC)
 
 * Authors: 1
