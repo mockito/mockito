@@ -1,3 +1,12 @@
+### 2.3.3 (2016-12-13 22:39 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: LiamClark
+* Improvements: 1
+  * Enhancements: 1
+    * Verification listeners [(#719)](https://github.com/mockito/mockito/pull/719)
+
 ### 2.3.2 (2016-12-13 18:33 UTC)
 
 * Authors: 2
