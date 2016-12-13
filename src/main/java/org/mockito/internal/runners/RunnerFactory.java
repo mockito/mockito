@@ -48,7 +48,7 @@ public class RunnerFactory {
      */
     public InternalRunner create(Class<?> klass, Supplier<MockitoTestListener> listenerSupplier) throws InvocationTargetException {
         try {
-            return new RunnerProvider().newInstance("org.mockito.internal.runners.SilentJUnitRunner", klass, listenerSupplier);
+            return new RunnerProvider().newInstance("org.mockito.internal.runners.DefaultInternalRunner", klass, listenerSupplier);
         } catch (InvocationTargetException e) {
             if (!hasTestMethods(klass)) {
                 throw new MockitoException(
