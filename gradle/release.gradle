@@ -136,6 +136,12 @@ allprojects {
     tasks.matching { it.name == 'bintrayUpload' }.all {
         bintrayUploadAll.dependsOn it
         dependsOn printReleaseHelp
+
+        //TODO this should be a part of release steps not here:
+        dependsOn releaseNeeded
+        onlyIf { releaseNeeded.needed }
+        //end
+
         doFirst {
             it.dryRun = releaseTest
             if (it.dryRun) {
