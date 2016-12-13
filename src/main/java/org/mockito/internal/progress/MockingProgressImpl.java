@@ -12,6 +12,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
+import org.mockito.listeners.VerificationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
@@ -45,6 +46,7 @@ public class MockingProgressImpl implements MockingProgress {
             }
         };
     }
+
     public void reportOngoingStubbing(OngoingStubbing iOngoingStubbing) {
         this.ongoingStubbing = iOngoingStubbing;
     }
@@ -54,7 +56,21 @@ public class MockingProgressImpl implements MockingProgress {
         ongoingStubbing = null;
         return temp;
     }
-    
+
+    @Override
+    public Set<VerificationListener> verificationListeners() {
+        final LinkedHashSet<VerificationListener> verificationListeners = new LinkedHashSet<VerificationListener>();
+
+        for (MockitoListener listener : listeners) {
+            if (listener instanceof VerificationListener) {
+                verificationListeners.add((VerificationListener) listener);
+            }
+        }
+
+        return verificationListeners;
+    }
+
+
     public void verificationStarted(VerificationMode verify) {
         validateState();
         resetOngoingStubbing();
@@ -72,7 +88,7 @@ public class MockingProgressImpl implements MockingProgress {
         if (verificationMode == null) {
             return null;
         }
-        
+
         VerificationMode temp = verificationMode.getObject();
         verificationMode = null;
         return temp;
@@ -85,7 +101,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void validateState() {
         validateMostStuff();
-        
+
         //validate stubbing:
         if (stubbingInProgress != null) {
             Location temp = stubbingInProgress;
