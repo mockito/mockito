@@ -1,16 +1,8 @@
-//TODO - temporary for testing. We don't want to specify different version per submodule
-version = version + "-beta." + System.currentTimeMillis()
-
 ext {
     artifactName = 'mockito-android'
-    publishToCentral = false
+    publishToBintray = false
+    syncToCentral = false
 }
 
 apply from: "$rootDir/gradle/java-library.gradle"
 apply from: "$rootDir/gradle/publishable-java-library.gradle"
-
-bintray {
-    pkg {
-        repo = 'test' //TODO - temporary for testing, we will ship every artifact to the same repo, called 'maven'
-    }
-}

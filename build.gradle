@@ -23,7 +23,8 @@ apply from: 'gradle/root/version.gradle'
 
 ext {
     artifactName = 'mockito-core'
-    publishToCentral = true
+    publishToBintray = true
+    syncToCentral = true
 }
 
 apply from: "gradle/java-library.gradle"
