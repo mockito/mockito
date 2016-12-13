@@ -5,8 +5,8 @@ tasks.bintrayUpload.mustRunAfter "build"
 
 def theVcsTag = "v" + project.version
 
-assert project.hasProperty("syncToCentral")     : "Please configure 'ext.syncToCentral' for project that wants to use publishing"
-assert project.hasProperty("publishToBintray")  : "Please configure 'ext.publishToBintray' for project that wants to use publishing"
+assert project.hasProperty("mavenCentralSync")     : "Please configure 'ext.mavenCentralSync' for project that wants to use publishing"
+assert project.hasProperty("bintrayAutoPublish")  : "Please configure 'ext.bintrayAutoPublish' for project that wants to use publishing"
 
 bintray {
     user = 'szczepiq'
@@ -14,7 +14,7 @@ bintray {
 
     publications = project.publishing.publications*.name
 
-    publish = project.ext.publishToBintray
+    publish = project.ext.bintrayAutoPublish
 
     pkg {
         repo = 'maven'
@@ -42,7 +42,7 @@ bintray {
 
             //Automatically syncs to central repository (https://oss.sonatype.org/)
             mavenCentralSync {
-                sync = project.ext.syncToCentral
+                sync = project.ext.mavenCentralSync
                 user = System.env.NEXUS_TOKEN_USER
                 password = System.env.NEXUS_TOKEN_PWD
             }
