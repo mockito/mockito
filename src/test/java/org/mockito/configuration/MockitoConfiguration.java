@@ -4,14 +4,8 @@
  */
 package org.mockito.configuration;
 
-import org.mockito.Mockito;
-import org.mockito.internal.configuration.InjectingAnnotationEngine;
 import org.mockito.stubbing.Answer;
-import org.mockitousage.configuration.SmartMock;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Set;
+import org.mockitousage.configuration.CustomizedAnnotationForSmartMockTest;
 
 public class MockitoConfiguration extends DefaultMockitoConfiguration implements IMockitoConfiguration {
 
@@ -57,21 +51,7 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
         if (this.overriddenEngine != null) {
             return this.overriddenEngine;
         }
-        return new InjectingAnnotationEngine() {
-            @Override
-            protected void onInjection(Object testClassInstance, Class<?> clazz, Set<Field> mockDependentFields, Set<Object> mocks) {
-                for (Field field : clazz.getDeclaredFields()) {
-                    if (field.isAnnotationPresent(SmartMock.class)) {
-                        field.setAccessible(true);
-                        try {
-                            field.set(Modifier.isStatic(field.getModifiers()) ? null : testClassInstance, Mockito.mock(field.getType(), Mockito.RETURNS_SMART_NULLS));
-                        } catch (Exception exception) {
-                            throw new AssertionError(exception.getMessage());
-                        }
-                    }
-                }
-            }
-        };
+        return new CustomizedAnnotationForSmartMockTest.CustomInjectingAnnotationEngine();
     }
 
     @Override
@@ -83,4 +63,5 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
     public boolean enableClassCache() {
         return enableClassCache;
     }
+
 }

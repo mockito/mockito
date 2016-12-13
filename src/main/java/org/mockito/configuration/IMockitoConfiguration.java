@@ -45,10 +45,21 @@ public interface IMockitoConfiguration {
     Answer<Object> getDefaultAnswer();
 
     /**
-     * Configures annotations for mocks
+     * Configures annotations for mocks.
+     *
+     * <p>
+     * This method will have lower priority that the new extension mechanism.
+     * That is if it exists on the classpath both a class <code>org.mockito.configuration.MockitoConfiguration</code>
+     * and a file <code>mockito-extensions/org.mockito.plugins.AnnotationEngine</code> then the implementation of
+     * <code>org.mockito.configuration.MockitoConfiguration</code> will be chosen instead of the one in the file.
+     *
      * <p>
      * See javadoc for {@link IMockitoConfiguration}
+     *
+     * @deprecated Please use the extension mechanism {@link org.mockito.plugins.AnnotationEngine} instead,
+     *             this method will probably be removed in mockito 3.
      */
+    @Deprecated
     AnnotationEngine getAnnotationEngine();
 
     /**

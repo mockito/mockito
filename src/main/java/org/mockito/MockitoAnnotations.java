@@ -5,10 +5,10 @@
 
 package org.mockito;
 
-import org.mockito.configuration.AnnotationEngine;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.plugins.AnnotationEngine;
 
 /**
  * MockitoAnnotations.initMocks(this); initializes fields annotated with Mockito annotations.
@@ -63,7 +63,7 @@ public class MockitoAnnotations {
             throw new MockitoException("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class");
         }
 
-        AnnotationEngine annotationEngine = new GlobalConfiguration().getAnnotationEngine();
+        AnnotationEngine annotationEngine = new GlobalConfiguration().tryGetPluginAnnotationEngine();
         annotationEngine.process(testClass.getClass(), testClass);
     }
 }

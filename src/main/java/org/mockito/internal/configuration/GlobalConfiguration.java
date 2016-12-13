@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.configuration;
 
+import java.io.Serializable;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.configuration.IMockitoConfiguration;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
 
 /**
  * Thread-safe wrapper on user-defined org.mockito.configuration.MockitoConfiguration implementation
@@ -48,6 +48,16 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     public AnnotationEngine getAnnotationEngine() {
         return GLOBAL_CONFIGURATION.get().getAnnotationEngine();
     }
+
+    public org.mockito.plugins.AnnotationEngine tryGetPluginAnnotationEngine() {
+        IMockitoConfiguration configuration = GLOBAL_CONFIGURATION.get();
+        if (configuration.getClass() == DefaultMockitoConfiguration.class) {
+            return Plugins.getAnnotationEngine();
+        }
+        return configuration.getAnnotationEngine();
+    }
+
+
 
     public boolean cleansStackTrace() {
         return GLOBAL_CONFIGURATION.get().cleansStackTrace();

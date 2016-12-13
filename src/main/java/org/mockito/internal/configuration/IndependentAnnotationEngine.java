@@ -4,19 +4,18 @@
  */
 package org.mockito.internal.configuration;
 
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.configuration.AnnotationEngine;
-import org.mockito.exceptions.base.MockitoException;
-
-import static org.mockito.internal.exceptions.Reporter.moreThanOneAnnotationNotAllowed;
-import static org.mockito.internal.util.reflection.FieldSetter.setField;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.plugins.AnnotationEngine;
+
+import static org.mockito.internal.exceptions.Reporter.moreThanOneAnnotationNotAllowed;
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 /**
  * Initializes fields annotated with &#64;{@link org.mockito.Mock} or &#64;{@link org.mockito.Captor}.
@@ -27,10 +26,10 @@ import java.util.Map;
  * @see MockitoAnnotations
  */
 @SuppressWarnings("unchecked")
-public class DefaultAnnotationEngine implements AnnotationEngine {
+public class IndependentAnnotationEngine implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
     private final Map<Class<? extends Annotation>, FieldAnnotationProcessor<?>> annotationProcessorMap = new HashMap<Class<? extends Annotation>, FieldAnnotationProcessor<?>>();
 
-    public DefaultAnnotationEngine() {
+    public IndependentAnnotationEngine() {
         registerAnnotationProcessor(Mock.class, new MockAnnotationProcessor());
         registerAnnotationProcessor(Captor.class, new CaptorAnnotationProcessor());
     }
