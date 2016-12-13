@@ -2,13 +2,8 @@
 In order to apply this script plugin, please ensure following is configured:
 
  ext {
-    //If true, the artifacts sent to Bintray are automatically "published"
-    //If false, the artifacts are still sent to Bintray, but someone needs to manually "publish" them from Bintray UI
-    publishToBintray = true
-
-    //If true, maven central sync is automatically triggered
-    //If false, someone needs to manually "sync" to central using Bintray UI
-    syncToCentral = true
+    bintrayAutoPublish = true //Whether version should be auto published after an upload to Bintray
+    mavenCentralSync = true //Whether to sync the version to Maven Central
  }
 
 */
