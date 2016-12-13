@@ -4,15 +4,42 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
+import org.objenesis.instantiator.ObjectInstantiator;
 
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
 public abstract class ClassLoaders {
     protected ClassLoader parent = currentClassLoader();
 
-    protected ClassLoaders() {}
+    protected ClassLoaders() {
+    }
 
     public static IsolatedURLClassLoaderBuilder isolatedClassLoader() {
         return new IsolatedURLClassLoaderBuilder();
@@ -61,7 +88,91 @@ public abstract class ClassLoaders {
         }
     }
 
+    public static ClassLoaderExecutor using(final ClassLoader classLoader) {
+        return new ClassLoaderExecutor(classLoader);
+    }
+
+    public static class ClassLoaderExecutor {
+        private ClassLoader classLoader;
+
+        public ClassLoaderExecutor(ClassLoader classLoader) {
+            this.classLoader = classLoader;
+        }
+
+        public void execute(final Runnable task) throws Exception {
+            ExecutorService executorService = Executors.newSingleThreadExecutor(new ThreadFactory() {
+                @Override
+                public Thread newThread(Runnable r) {
+                    Thread thread = Executors.defaultThreadFactory().newThread(r);
+                    thread.setContextClassLoader(classLoader);
+                    return thread;
+                }
+            });
+            try {
+                Future<?> taskFuture = executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            reloadTaskInClassLoader(task).run();
+                        } catch (Throwable throwable) {
+                            throw new IllegalStateException(format("Given task could not be loaded properly in the given classloader '%s', error '%s",
+                                                                   task,
+                                                                   throwable.getMessage()),
+                                                            throwable);
+                        }
+                    }
+                });
+                taskFuture.get();
+                executorService.shutdownNow();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } catch (ExecutionException e) {
+                throw this.<Exception>unwrapAndThrows(e);
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        private <T extends Throwable> T unwrapAndThrows(ExecutionException ex) throws T {
+            throw (T) ex.getCause();
+        }
+
+        Runnable reloadTaskInClassLoader(Runnable task) {
+            try {
+                @SuppressWarnings("unchecked")
+                Class<Runnable> taskClassReloaded = (Class<Runnable>) classLoader.loadClass(task.getClass().getName());
+
+                Objenesis objenesis = new ObjenesisStd();
+                ObjectInstantiator<Runnable> thingyInstantiator = objenesis.getInstantiatorOf(taskClassReloaded);
+                Runnable reloaded = thingyInstantiator.newInstance();
+
+                // lenient shallow copy of class compatible fields
+                for (Field field : task.getClass().getDeclaredFields()) {
+                    Field declaredField = taskClassReloaded.getDeclaredField(field.getName());
+                    int modifiers = declaredField.getModifiers();
+                    if(Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
+                        // skip otherwise IllegalAccessException (can be bypassed with Unsafe though)
+                        // We may also miss coverage data.
+                        continue;
+                    }
+                    if (declaredField.getType() == field.getType()) { // don't copy this
+                        declaredField.setAccessible(true);
+                        declaredField.set(reloaded, field.get(task));
+                    }
+                }
+
+                return reloaded;
+            } catch (ClassNotFoundException e) {
+                throw new IllegalStateException(e);
+            } catch (IllegalAccessException e) {
+                throw new IllegalStateException(e);
+            } catch (NoSuchFieldException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+    }
+
     public static class IsolatedURLClassLoaderBuilder extends ClassLoaders {
+        private final ArrayList<String> excludedPrefixes = new ArrayList<String>();
         private final ArrayList<String> privateCopyPrefixes = new ArrayList<String>();
         private final ArrayList<URL> codeSourceUrls = new ArrayList<URL>();
 
@@ -77,13 +188,18 @@ public abstract class ClassLoaders {
 
         public IsolatedURLClassLoaderBuilder withCodeSourceUrlOf(Class<?>... classes) {
             for (Class<?> clazz : classes) {
-                codeSourceUrls.add(obtainClassPathOf(clazz.getName()));
+                codeSourceUrls.add(obtainCurrentClassPathOf(clazz.getName()));
             }
             return this;
         }
 
         public IsolatedURLClassLoaderBuilder withCurrentCodeSourceUrls() {
-            codeSourceUrls.add(obtainClassPathOf(ClassLoaders.class.getName()));
+            codeSourceUrls.add(obtainCurrentClassPathOf(ClassLoaders.class.getName()));
+            return this;
+        }
+
+        public IsolatedURLClassLoaderBuilder without(String... privatePrefixes) {
+            excludedPrefixes.addAll(asList(privatePrefixes));
             return this;
         }
 
@@ -91,23 +207,40 @@ public abstract class ClassLoaders {
             return new LocalIsolatedURLClassLoader(
                     jdkClassLoader(),
                     codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
-                    privateCopyPrefixes
+                    privateCopyPrefixes,
+                    excludedPrefixes
             );
         }
     }
 
     static class LocalIsolatedURLClassLoader extends URLClassLoader {
         private final ArrayList<String> privateCopyPrefixes;
+        private final ArrayList<String> excludedPrefixes;
 
-        public LocalIsolatedURLClassLoader(ClassLoader classLoader, URL[] urls, ArrayList<String> privateCopyPrefixes) {
+        LocalIsolatedURLClassLoader(ClassLoader classLoader,
+                                    URL[] urls,
+                                    ArrayList<String> privateCopyPrefixes,
+                                    ArrayList<String> excludedPrefixes) {
             super(urls, classLoader);
             this.privateCopyPrefixes = privateCopyPrefixes;
+            this.excludedPrefixes = excludedPrefixes;
         }
 
         @Override
         public Class<?> findClass(String name) throws ClassNotFoundException {
-            if(classShouldBePrivate(name)) return super.findClass(name);
-            throw new ClassNotFoundException("Can only load classes with prefix : " + privateCopyPrefixes);
+            if (!classShouldBePrivate(name) || classShouldBeExcluded(name)) {
+                throw new ClassNotFoundException(format("Can only load classes with prefixes : %s, but not : %s",
+                                                        privateCopyPrefixes,
+                                                        excludedPrefixes));
+            }
+            try {
+                return super.findClass(name);
+            } catch (ClassNotFoundException cnfe) {
+                throw new ClassNotFoundException(format("%s%n%s%n",
+                                                        cnfe.getMessage(),
+                                                        "    Did you forgot to add the code source url 'withCodeSourceUrlOf' / 'withCurrentCodeSourceUrls' ?"),
+                                                 cnfe);
+            }
         }
 
         private boolean classShouldBePrivate(String name) {
@@ -116,14 +249,21 @@ public abstract class ClassLoaders {
             }
             return false;
         }
+
+        private boolean classShouldBeExcluded(String name) {
+            for (String prefix : excludedPrefixes) {
+                if (name.startsWith(prefix)) return true;
+            }
+            return false;
+        }
     }
 
     public static class ExcludingURLClassLoaderBuilder extends ClassLoaders {
-        private final ArrayList<String> privateCopyPrefixes = new ArrayList<String>();
+        private final ArrayList<String> excludedPrefixes = new ArrayList<String>();
         private final ArrayList<URL> codeSourceUrls = new ArrayList<URL>();
 
         public ExcludingURLClassLoaderBuilder without(String... privatePrefixes) {
-            privateCopyPrefixes.addAll(asList(privatePrefixes));
+            excludedPrefixes.addAll(asList(privatePrefixes));
             return this;
         }
 
@@ -134,13 +274,13 @@ public abstract class ClassLoaders {
 
         public ExcludingURLClassLoaderBuilder withCodeSourceUrlOf(Class<?>... classes) {
             for (Class<?> clazz : classes) {
-                codeSourceUrls.add(obtainClassPathOf(clazz.getName()));
+                codeSourceUrls.add(obtainCurrentClassPathOf(clazz.getName()));
             }
             return this;
         }
 
         public ExcludingURLClassLoaderBuilder withCurrentCodeSourceUrls() {
-            codeSourceUrls.add(obtainClassPathOf(ClassLoaders.class.getName()));
+            codeSourceUrls.add(obtainCurrentClassPathOf(ClassLoaders.class.getName()));
             return this;
         }
 
@@ -148,27 +288,30 @@ public abstract class ClassLoaders {
             return new LocalExcludingURLClassLoader(
                     jdkClassLoader(),
                     codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
-                    privateCopyPrefixes
+                    excludedPrefixes
             );
         }
     }
 
     static class LocalExcludingURLClassLoader extends URLClassLoader {
-        private final ArrayList<String> privateCopyPrefixes;
+        private final ArrayList<String> excludedPrefixes;
 
-        public LocalExcludingURLClassLoader(ClassLoader classLoader, URL[] urls, ArrayList<String> privateCopyPrefixes) {
+        LocalExcludingURLClassLoader(ClassLoader classLoader,
+                                     URL[] urls,
+                                     ArrayList<String> excludedPrefixes) {
             super(urls, classLoader);
-            this.privateCopyPrefixes = privateCopyPrefixes;
+            this.excludedPrefixes = excludedPrefixes;
         }
 
         @Override
         public Class<?> findClass(String name) throws ClassNotFoundException {
-            if(classShouldBePrivate(name)) throw new ClassNotFoundException("classes with prefix : " + privateCopyPrefixes + " are excluded");
+            if (classShouldBeExcluded(name))
+                throw new ClassNotFoundException("classes with prefix : " + excludedPrefixes + " are excluded");
             return super.findClass(name);
         }
 
-        private boolean classShouldBePrivate(String name) {
-            for (String prefix : privateCopyPrefixes) {
+        private boolean classShouldBeExcluded(String name) {
+            for (String prefix : excludedPrefixes) {
                 if (name.startsWith(prefix)) return true;
             }
             return false;
@@ -176,7 +319,7 @@ public abstract class ClassLoaders {
     }
 
     public static class InMemoryClassLoaderBuilder extends ClassLoaders {
-        private Map<String , byte[]> inMemoryClassObjects = new HashMap<String , byte[]>();
+        private Map<String, byte[]> inMemoryClassObjects = new HashMap<String, byte[]>();
 
         public InMemoryClassLoaderBuilder withParent(ClassLoader parent) {
             this.parent = parent;
@@ -195,7 +338,7 @@ public abstract class ClassLoaders {
 
     static class InMemoryClassLoader extends ClassLoader {
         public static final String SCHEME = "mem";
-        private Map<String , byte[]> inMemoryClassObjects = new HashMap<String , byte[]>();
+        private Map<String, byte[]> inMemoryClassObjects = new HashMap<String, byte[]>();
 
         public InMemoryClassLoader(ClassLoader parent, Map<String, byte[]> inMemoryClassObjects) {
             super(parent);
@@ -251,13 +394,16 @@ public abstract class ClassLoaders {
         private static class MemURLConnection extends URLConnection {
             private final InMemoryClassLoader inMemoryClassLoader;
             private String qualifiedName;
+
             public MemURLConnection(URL url, InMemoryClassLoader inMemoryClassLoader) {
                 super(url);
                 this.inMemoryClassLoader = inMemoryClassLoader;
                 qualifiedName = url.getPath();
             }
+
             @Override
-            public void connect() throws IOException { }
+            public void connect() throws IOException {
+            }
 
             @Override
             public InputStream getInputStream() throws IOException {
@@ -266,7 +412,7 @@ public abstract class ClassLoaders {
         }
     }
 
-    protected URL obtainClassPathOf(String className) {
+    URL obtainCurrentClassPathOf(String className) {
         String path = className.replace('.', '/') + ".class";
         String url = ClassLoaders.class.getClassLoader().getResource(path).toExternalForm();
 
@@ -277,7 +423,7 @@ public abstract class ClassLoaders {
         }
     }
 
-    protected List<URL> pathsToURLs(String... codeSourceUrls) {
+    List<URL> pathsToURLs(String... codeSourceUrls) {
         return pathsToURLs(Arrays.asList(codeSourceUrls));
     }
 
@@ -302,7 +448,7 @@ public abstract class ClassLoaders {
         private ClassLoader classLoader;
         private Set<String> qualifiedNameSubstring = new HashSet<String>();
 
-        public ReachableClassesFinder(ClassLoader classLoader) {
+        ReachableClassesFinder(ClassLoader classLoader) {
             this.classLoader = classLoader;
         }
 
@@ -315,15 +461,15 @@ public abstract class ClassLoaders {
             Enumeration<URL> roots = classLoader.getResources("");
 
             Set<String> classes = new HashSet<String>();
-            while(roots.hasMoreElements()) {
+            while (roots.hasMoreElements()) {
                 URI uri = roots.nextElement().toURI();
 
                 if (uri.getScheme().equalsIgnoreCase("file")) {
                     addFromFileBasedClassLoader(classes, uri);
-                } else if(uri.getScheme().equalsIgnoreCase(InMemoryClassLoader.SCHEME)) {
+                } else if (uri.getScheme().equalsIgnoreCase(InMemoryClassLoader.SCHEME)) {
                     addFromInMemoryBasedClassLoader(classes, uri);
                 } else {
-                    throw new IllegalArgumentException(String.format("Given ClassLoader '%s' don't have reachable by File or vi ClassLoaders.inMemory", classLoader));
+                    throw new IllegalArgumentException(format("Given ClassLoader '%s' don't have reachable by File or vi ClassLoaders.inMemory", classLoader));
                 }
             }
             return classes;
@@ -336,14 +482,14 @@ public abstract class ClassLoaders {
 
         private void addFromInMemoryBasedClassLoader(Set<String> classes, URI uri) {
             String qualifiedName = uri.getSchemeSpecificPart();
-            if(excludes(qualifiedName, qualifiedNameSubstring)) {
+            if (excludes(qualifiedName, qualifiedNameSubstring)) {
                 classes.add(qualifiedName);
             }
         }
 
 
         private Set<String> findClassQualifiedNames(File root, File file, Set<String> packageFilters) {
-            if(file.isDirectory()) {
+            if (file.isDirectory()) {
                 File[] files = file.listFiles();
                 Set<String> classes = new HashSet<String>();
                 for (File children : files) {
@@ -363,7 +509,7 @@ public abstract class ClassLoaders {
 
         private boolean excludes(String qualifiedName, Set<String> packageFilters) {
             for (String filter : packageFilters) {
-                if(qualifiedName.contains(filter)) return false;
+                if (qualifiedName.contains(filter)) return false;
             }
             return true;
         }
