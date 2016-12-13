@@ -1,3 +1,12 @@
+### 2.3.2 (2016-12-13 18:33 UTC)
+
+* Authors: 2
+* Commits: 7
+  * 6: Brice Dutheil
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Enable annotation engine as plugin [(#811)](https://github.com/mockito/mockito/pull/811)
+
 ### 2.3.1 (2016-12-13 18:26 UTC)
 
 * Authors: 1
