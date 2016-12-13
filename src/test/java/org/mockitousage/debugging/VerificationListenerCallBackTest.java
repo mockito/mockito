@@ -1,5 +1,6 @@
 package org.mockitousage.debugging;
 
+import org.assertj.core.api.Condition;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -30,7 +31,6 @@ public class VerificationListenerCallBackTest {
         mockitoFramework = Mockito.framework();
         mockitoFramework.addListener(listener);
         invocationWanted = Foo.class.getDeclaredMethod("doSomething", String.class);
-
     }
 
     @Test
@@ -43,7 +43,7 @@ public class VerificationListenerCallBackTest {
         verify(foo, never).doSomething("");
 
         //then
-        assertThatHasBeenNotified(listener, foo, never, invocationWanted);
+        assertThat(listener).is(notifiedFor(foo, never, invocationWanted));
     }
 
     @Test
@@ -59,20 +59,23 @@ public class VerificationListenerCallBackTest {
         verify(foo, never).doSomething("");
 
         //then
-        assertThatHasBeenNotified(listener, foo, never, invocationWanted);
-        assertThatHasBeenNotified(listener2, foo, never, invocationWanted);
+        assertThat(listener).is(notifiedFor(foo, never, invocationWanted));
+        assertThat(listener2).is(notifiedFor(foo, never, invocationWanted));
     }
 
     @Test
     public void should_not_call_listener_when_verify_was_called_incorrectly() {
         //when
         Foo foo = null;
+        VerificationListener mockListener = mock(VerificationListener.class);
+        framework().addListener(mockListener);
+
         try {
             verify(foo).doSomething("");
             fail("Exception expected.");
         } catch (Exception e) {
             //then
-            assertNull(listener.cause);
+            verify(mockListener, never()).onVerification(any(VerificationEvent.class));
         }
     }
 
@@ -141,6 +144,18 @@ public class VerificationListenerCallBackTest {
             this.data = verificationEvent.getData();
             this.cause = verificationEvent.getVerificationError();
         }
+    }
+
+    private static Condition<RememberingListener> notifiedFor(final Object mock, final VerificationMode mode, final Method wantedMethod) {
+        return new Condition<RememberingListener>() {
+            public boolean matches(RememberingListener listener) {
+                assertThat(listener.mock).isEqualTo(mock);
+                assertThat(listener.mode).isEqualTo(mode);
+                assertThat(listener.data.getTarget().getInvocation().getMethod()).isEqualTo(wantedMethod);
+
+                return true;
+            }
+        };
     }
 
     public static class RuntimeExceptionVerificationMode implements VerificationMode {

@@ -1,10 +1,12 @@
 package org.mockito.verification;
 
+import org.mockito.Incubating;
 import org.mockito.internal.verification.api.VerificationData;
 
 /**
  * Contains all information about a verification that has happened.
  */
+@Incubating
 public interface VerificationEvent {
     /**
      * @return The mock that a verification happened on.
