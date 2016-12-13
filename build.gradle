@@ -24,7 +24,7 @@ apply from: 'gradle/root/version.gradle'
 ext {
     artifactName = 'mockito-core'
     bintrayAutoPublish = true
-    mavenCentralSync = true
+    mavenCentralSync = false
 }
 
 apply from: "gradle/java-library.gradle"

@@ -17,7 +17,7 @@ bintray {
     publish = project.ext.bintrayAutoPublish
 
     pkg {
-        repo = 'maven'
+        repo = 'test'
 
         userOrg = 'mockito'
         // so that despite using 'szczepiq' user, the artifact is published
