@@ -1,15 +1,19 @@
 package org.mockitousage.debugging;
 
 import org.assertj.core.api.Condition;
+import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.mockito.Mockito;
 import org.mockito.MockitoFramework;
+import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.listeners.VerificationListener;
 import org.mockito.verification.VerificationEvent;
 import org.mockito.verification.VerificationMode;
+import org.mockitoutil.TestBase;
 
 import java.lang.reflect.Method;
 
@@ -17,7 +21,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
-public class VerificationListenerCallBackTest {
+public class VerificationListenerCallBackTest extends TestBase {
+
+    @After
+    public void clearListeners() {
+        new StateMaster().clearMockitoListeners();
+    }
 
     @Test
     public void should_call_single_listener_on_verify() throws NoSuchMethodException {
