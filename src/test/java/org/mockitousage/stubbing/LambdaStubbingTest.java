@@ -15,4 +15,12 @@ public class LambdaStubbingTest {
         IMethods mock = Mockito.mock(IMethods.class);
         MockitoLambda.when(mock::threeArgumentMethodWithStrings).isInvokedWith(anyInt(), anyString(), anyString()).thenReturn("foo");
     }
+
+    @Test
+    public void stubs_void_method_as_lambda() {
+        IMethods mock = Mockito.mock(IMethods.class);
+        MockitoLambda.when(mock::twoArgumentMethod).isInvokedWith(anyInt(), anyInt()).thenAnswer((a, b) -> {
+            System.out.println("Answered " + (a * b) + " is type-safe!");
+        });
+    }
 }
