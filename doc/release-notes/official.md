@@ -1,3 +1,16 @@
+### 2.3.4 (2016-12-14 16:19 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 3
+  * Bugfixes: 1
+    * Fixes bug were previously verified invocations could not capture argu… [(#819)](https://github.com/mockito/mockito/pull/819)
+  * Enhancements: 1
+    * Verification using After and ArgumentCaptor with Times or AtLeast methods returns unexpected size of captured values list. [(#379)](https://github.com/mockito/mockito/issues/379)
+  * Remaining changes: 1
+    * Fixes the issue #379 by removing previously verified invocations, some tests were added to verify that works [(#380)](https://github.com/mockito/mockito/pull/380)
+
 ### 2.3.3 (2016-12-13 22:39 UTC)
 
 * Authors: 1
