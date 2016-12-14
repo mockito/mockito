@@ -172,6 +172,12 @@ public interface IMethods {
 
     void mixedVarargs(Object i, String ... string);
 
+    String mixedVarargsReturningString(Object i, String ... string);
+
+    String[] mixedVarargsReturningStringArray(Object i, String ... string);
+
+    Object[] mixedVarargsReturningObjectArray(Object i, String ... string);
+
     List<String> listReturningMethod(Object ... objects);
 
     LinkedList<String> linkedListReturningMethod();
