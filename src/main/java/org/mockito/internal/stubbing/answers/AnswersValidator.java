@@ -9,7 +9,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.ValidableAnswer;
 
-import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
 import static org.mockito.internal.exceptions.Reporter.wrongTypeReturnedByDefaultAnswer;
 
 @Deprecated
@@ -19,17 +18,6 @@ public class AnswersValidator {
     public void validate(Answer<?> answer, InvocationOnMock invocation) {
         if (answer instanceof ValidableAnswer) {
             ((ValidableAnswer) answer).validateFor(invocation);
-        }
-
-        MethodInfo methodInfo = new MethodInfo(invocation);
-        if (answer instanceof CallsRealMethods) {
-            validateMockingConcreteClass((CallsRealMethods) answer, methodInfo);
-        }
-    }
-
-    private void validateMockingConcreteClass(CallsRealMethods answer, MethodInfo methodInfo) {
-        if (methodInfo.isAbstract()) {
-            throw cannotCallAbstractRealMethod();
         }
     }
 
