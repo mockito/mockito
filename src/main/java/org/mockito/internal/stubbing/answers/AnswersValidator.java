@@ -22,6 +22,10 @@ public class AnswersValidator {
 
 
     public void validate(Answer<?> answer, InvocationOnMock invocation) {
+        if (answer instanceof ValidableAnswer) {
+            ((ValidableAnswer) answer).validateFor(invocation);
+        }
+
         MethodInfo methodInfo = new MethodInfo(invocation);
         if (answer instanceof ThrowsException) {
             validateException((ThrowsException) answer, methodInfo);
@@ -38,23 +42,6 @@ public class AnswersValidator {
         if (answer instanceof CallsRealMethods) {
             validateMockingConcreteClass((CallsRealMethods) answer, methodInfo);
         }
-
-        if (answer instanceof ReturnsArgumentAt) {
-            ReturnsArgumentAt returnsArgumentAt = (ReturnsArgumentAt) answer;
-            validateReturnArgIdentity(returnsArgumentAt, invocation);
-        }
-    }
-
-    private void validateReturnArgIdentity(ReturnsArgumentAt returnsArgumentAt, Invocation invocation) {
-        returnsArgumentAt.validateIndexWithinInvocationRange(invocation);
-
-        MethodInfo methodInfo = new MethodInfo(invocation);
-        if (!methodInfo.isValidReturnType(returnsArgumentAt.returnedTypeOnSignature(invocation))) {
-            throw wrongTypeOfArgumentToReturn(invocation, methodInfo.printMethodReturnType(),
-                    returnsArgumentAt.returnedTypeOnSignature(invocation),
-                    returnsArgumentAt.wantedArgumentPosition());
-        }
-
     }
 
     private void validateMockingConcreteClass(CallsRealMethods answer, MethodInfo methodInfo) {

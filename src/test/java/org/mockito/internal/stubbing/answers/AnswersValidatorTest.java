@@ -4,16 +4,15 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import java.io.IOException;
+import java.nio.charset.CharacterCodingException;
+import java.util.ArrayList;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
-
-import java.io.IOException;
-import java.nio.charset.CharacterCodingException;
-import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -114,85 +113,7 @@ public class AnswersValidatorTest {
         //then no exception is thrown
     }
 
-    @Test
-    public void should_allow_possible_argument_types() throws Exception {
-        validator.validate(
-                new ReturnsArgumentAt(0),
-                new InvocationBuilder().method("intArgumentReturningInt").argTypes(int.class).arg(1000).toInvocation()
-        );
-        validator.validate(
-                new ReturnsArgumentAt(0),
-                new InvocationBuilder().method("toString").argTypes(String.class).arg("whatever").toInvocation()
-        );
-        validator.validate(
-                new ReturnsArgumentAt(2),
-                new InvocationBuilder().method("varargsObject")
-                                       .argTypes(int.class, Object[].class)
-                                       .args(1000, "Object", "Object")
-                                       .toInvocation()
-        );
-        validator.validate(
-                new ReturnsArgumentAt(1),
-                new InvocationBuilder().method("threeArgumentMethod")
-                                       .argTypes(int.class, Object.class, String.class)
-                                       .args(1000, "Object", "String")
-                                       .toInvocation()
-        );
-    }
 
-    @Test
-    public void should_fail_if_index_is_not_in_range_for_one_arg_invocation() throws Throwable {
-        try {
-            validator.validate(new ReturnsArgumentAt(30), new InvocationBuilder().method("oneArg").arg("A").toInvocation());
-            fail();
-        } catch (MockitoException e) {
-            assertThat(e.getMessage())
-                    .containsIgnoringCase("invalid argument index")
-                    .containsIgnoringCase("iMethods.oneArg")
-                    .containsIgnoringCase("[0] String")
-                    .containsIgnoringCase("position")
-                    .contains("30");
-        }
-    }
-
-    @Test
-    public void should_fail_if_index_is_not_in_range_for_example_with_no_arg_invocation() throws Throwable {
-        try {
-            validator.validate(
-                    new ReturnsArgumentAt(ReturnsArgumentAt.LAST_ARGUMENT),
-                    new InvocationBuilder().simpleMethod().toInvocation()
-            );
-            fail();
-        } catch (MockitoException e) {
-            assertThat(e.getMessage())
-                    .containsIgnoringCase("invalid argument index")
-                    .containsIgnoringCase("iMethods.simpleMethod")
-                    .containsIgnoringCase("no arguments")
-                    .containsIgnoringCase("last parameter wanted");
-        }
-    }
-
-    @Test
-    public void should_fail_if_argument_type_of_signature_is_incompatible_with_return_type() throws Throwable {
-        try {
-            validator.validate(
-                    new ReturnsArgumentAt(2),
-                    new InvocationBuilder().method("varargsReturningString")
-                                           .argTypes(Object[].class)
-                                           .args("anyString", new Object(), "anyString")
-                                           .toInvocation()
-            );
-            fail();
-        } catch (WrongTypeOfReturnValue e) {
-            assertThat(e.getMessage())
-                    .containsIgnoringCase("argument of type")
-                    .containsIgnoringCase("Object")
-                    .containsIgnoringCase("varargsReturningString")
-                    .containsIgnoringCase("should return")
-                    .containsIgnoringCase("String")
-                    .containsIgnoringCase("possible argument indexes");
-        }
-    }
 
     @Test
     public void should_fail_if_returned_value_of_answer_is_incompatible_with_return_type() throws Throwable {
