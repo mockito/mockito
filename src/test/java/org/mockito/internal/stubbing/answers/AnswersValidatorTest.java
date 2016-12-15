@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import java.io.IOException;
-import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
@@ -22,31 +20,6 @@ import static org.mockito.Mockito.mock;
 public class AnswersValidatorTest {
 
     private AnswersValidator validator = new AnswersValidator();
-    private Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
-
-    @Test
-    public void should_validate_null_throwable() throws Throwable {
-        try {
-            validator.validate(new ThrowsException(null), new InvocationBuilder().toInvocation());
-            fail();
-        } catch (MockitoException expected) {}
-    }
-
-    @Test
-    public void should_pass_proper_checked_exception() throws Throwable {
-        validator.validate(new ThrowsException(new CharacterCodingException()), invocation);
-    }
-
-    @Test(expected = MockitoException.class)
-    public void should_fail_invalid_checked_exception() throws Throwable {
-        validator.validate(new ThrowsException(new IOException()), invocation);
-    }
-
-    @Test
-    public void should_pass_RuntimeExceptions() throws Throwable {
-        validator.validate(new ThrowsException(new Error()), invocation);
-        validator.validate(new ThrowsException(new RuntimeException()), invocation);
-    }
 
     @Test(expected = MockitoException.class)
     public void should_fail_when_return_Value_is_set_for_void_method() throws Throwable {

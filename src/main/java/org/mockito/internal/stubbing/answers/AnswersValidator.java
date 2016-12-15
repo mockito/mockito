@@ -11,8 +11,6 @@ import org.mockito.stubbing.ValidableAnswer;
 
 import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
 import static org.mockito.internal.exceptions.Reporter.cannotStubVoidMethodWithAReturnValue;
-import static org.mockito.internal.exceptions.Reporter.cannotStubWithNullThrowable;
-import static org.mockito.internal.exceptions.Reporter.checkedExceptionInvalid;
 import static org.mockito.internal.exceptions.Reporter.onlyVoidMethodsCanBeSetToDoNothing;
 import static org.mockito.internal.exceptions.Reporter.wrongTypeOfReturnValue;
 import static org.mockito.internal.exceptions.Reporter.wrongTypeReturnedByDefaultAnswer;
@@ -27,10 +25,6 @@ public class AnswersValidator {
         }
 
         MethodInfo methodInfo = new MethodInfo(invocation);
-        if (answer instanceof ThrowsException) {
-            validateException((ThrowsException) answer, methodInfo);
-        }
-
         if (answer instanceof Returns) {
             validateReturnValue((Returns) answer, methodInfo);
         }
@@ -67,21 +61,6 @@ public class AnswersValidator {
 
         if (!answer.returnsNull() && !methodInfo.isValidReturnType(answer.getReturnType())) {
             throw wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), answer.printReturnType(), methodInfo.getMethodName());
-        }
-    }
-
-    private void validateException(ThrowsException answer, MethodInfo methodInfo) {
-        Throwable throwable = answer.getThrowable();
-        if (throwable == null) {
-            throw cannotStubWithNullThrowable();
-        }
-
-        if (throwable instanceof RuntimeException || throwable instanceof Error) {
-            return;
-        }
-
-        if (!methodInfo.isValidException(throwable)) {
-            throw checkedExceptionInvalid(throwable);
         }
     }
 
