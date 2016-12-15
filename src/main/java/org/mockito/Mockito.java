@@ -8,6 +8,7 @@ import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
+import org.mockito.internal.stubbing.OngoingVoidStubbingImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -16,6 +17,7 @@ import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Answer1;
 import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.stubbing.OngoingVoidStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.stubbing.VoidAnswer1;
 import org.mockito.verification.After;
@@ -1819,6 +1821,10 @@ public class Mockito extends ArgumentMatchers {
      */
     public static <T> OngoingStubbing<T> when(T methodCall) {
         return MOCKITO_CORE.when(methodCall);
+    }
+    
+    public static OngoingVoidStubbing when(VoidCall methodCall){
+        return new OngoingVoidStubbingImpl(methodCall);
     }
 
     /**

@@ -47,7 +47,7 @@ public class CleaningUpPotentialStubbingTest extends TestBase {
         try {
             //In real, there might be a call to real object or a final method call
             //I'm modelling it with null
-            when(null).thenReturn("anything");
+            when((Object)null).thenReturn("anything");
             fail();
         } catch (MissingMethodInvocationException e) {}
     }
