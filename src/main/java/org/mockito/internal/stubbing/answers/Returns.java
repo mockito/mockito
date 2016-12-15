@@ -53,4 +53,9 @@ public class Returns implements Answer<Object>, ValidableAnswer, Serializable {
     private boolean returnsNull() {
         return value == null;
     }
+
+    @Override
+    public String toString() {
+        return "Returns: " + value;
+    }
 }
