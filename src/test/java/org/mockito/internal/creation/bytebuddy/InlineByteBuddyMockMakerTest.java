@@ -1,5 +1,6 @@
 package org.mockito.internal.creation.bytebuddy;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -68,6 +69,13 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         FinalMethod proxy = mockMaker.createMock(settings, new MockHandlerImpl<FinalMethod>(settings));
         assertThat(proxy.foo()).isEqualTo("bar");
         assertThat(((SampleInterface) proxy).bar()).isEqualTo("bar");
+    }
+
+    @Test
+    public void should_create_mock_from_hashmap() throws Exception {
+        MockCreationSettings<HashMap> settings = settingsFor(HashMap.class);
+        HashMap proxy = mockMaker.createMock(settings, new MockHandlerImpl<HashMap>(settings));
+        assertThat(proxy.get(null)).isEqualTo("bar");
     }
 
     @Test
