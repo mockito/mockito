@@ -1,3 +1,11 @@
+### 2.3.5 (2016-12-15 10:24 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Rafael Winterhalter
+* Improvements: 1
+  * Only resolve instrumented method after validating that an instance is… [(#823)](https://github.com/mockito/mockito/pull/823)
+
 ### 2.3.4 (2016-12-14 16:19 UTC)
 
 * Authors: 1
