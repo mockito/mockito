@@ -4,12 +4,11 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import org.mockito.internal.invocation.AbstractAwareMethod;
-import org.mockito.internal.util.Primitives;
-import org.mockito.invocation.Invocation;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import org.mockito.internal.invocation.AbstractAwareMethod;
+import org.mockito.internal.util.Primitives;
+import org.mockito.invocation.InvocationOnMock;
 
 /**
  * by Szczepan Faber, created at: 3/31/12
@@ -18,7 +17,7 @@ public class MethodInfo implements AbstractAwareMethod {
 
     private final Method method;
 
-    public MethodInfo(Invocation theInvocation) {
+    public MethodInfo(InvocationOnMock theInvocation) {
         this.method = theInvocation.getMethod();
     }
 

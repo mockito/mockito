@@ -4,22 +4,24 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.ValidableAnswer;
+
 import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
 import static org.mockito.internal.exceptions.Reporter.cannotStubVoidMethodWithAReturnValue;
 import static org.mockito.internal.exceptions.Reporter.cannotStubWithNullThrowable;
 import static org.mockito.internal.exceptions.Reporter.checkedExceptionInvalid;
 import static org.mockito.internal.exceptions.Reporter.onlyVoidMethodsCanBeSetToDoNothing;
-import static org.mockito.internal.exceptions.Reporter.wrongTypeOfArgumentToReturn;
 import static org.mockito.internal.exceptions.Reporter.wrongTypeOfReturnValue;
 import static org.mockito.internal.exceptions.Reporter.wrongTypeReturnedByDefaultAnswer;
 
-import org.mockito.invocation.Invocation;
-import org.mockito.stubbing.Answer;
-
+@Deprecated
 public class AnswersValidator {
 
 
-    public void validate(Answer<?> answer, Invocation invocation) {
+    public void validate(Answer<?> answer, InvocationOnMock invocation) {
         MethodInfo methodInfo = new MethodInfo(invocation);
         if (answer instanceof ThrowsException) {
             validateException((ThrowsException) answer, methodInfo);
