@@ -8,8 +8,12 @@ import java.io.Serializable;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.ValidableAnswer;
 
-public class Returns implements Answer<Object>, Serializable {
+import static org.mockito.internal.exceptions.Reporter.cannotStubVoidMethodWithAReturnValue;
+import static org.mockito.internal.exceptions.Reporter.wrongTypeOfReturnValue;
+
+public class Returns implements Answer<Object>, ValidableAnswer, Serializable {
 
     private static final long serialVersionUID = -6245608253574215396L;
     private final Object value;
@@ -22,20 +26,31 @@ public class Returns implements Answer<Object>, Serializable {
         return value;
     }
 
-    public String printReturnType() {
+    @Override
+    public void validateFor(InvocationOnMock invocation) {
+        MethodInfo methodInfo = new MethodInfo(invocation);
+        if (methodInfo.isVoid()) {
+            throw cannotStubVoidMethodWithAReturnValue(methodInfo.getMethodName());
+        }
+
+        if (returnsNull() && methodInfo.returnsPrimitive()) {
+            throw wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), "null", methodInfo.getMethodName());
+        }
+
+        if (!returnsNull() && !methodInfo.isValidReturnType(returnType())) {
+            throw wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), printReturnType(), methodInfo.getMethodName());
+        }
+    }
+
+    private String printReturnType() {
         return value.getClass().getSimpleName();
     }
 
-    public Class<?> getReturnType() {
+    private Class<?> returnType() {
         return value.getClass();
     }
 
-    public boolean returnsNull() {
+    private boolean returnsNull() {
         return value == null;
-    }
-    
-    @Override
-    public String toString() {
-        return "Returns: " + value;
     }
 }

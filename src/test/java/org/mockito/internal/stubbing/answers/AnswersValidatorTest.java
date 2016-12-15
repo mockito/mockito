@@ -22,11 +22,6 @@ public class AnswersValidatorTest {
     private AnswersValidator validator = new AnswersValidator();
 
     @Test(expected = MockitoException.class)
-    public void should_fail_when_return_Value_is_set_for_void_method() throws Throwable {
-        validator.validate(new Returns("one"), new InvocationBuilder().method("voidMethod").toInvocation());
-    }
-
-    @Test(expected = MockitoException.class)
     public void should_fail_when_non_void_method_does_nothing() throws Throwable {
         validator.validate(new DoesNothing(), new InvocationBuilder().simpleMethod().toInvocation());
     }
@@ -34,33 +29,6 @@ public class AnswersValidatorTest {
     @Test
     public void should_allow_void_return_for_void_method() throws Throwable {
         validator.validate(new DoesNothing(), new InvocationBuilder().method("voidMethod").toInvocation());
-    }
-
-    @Test
-    public void should_allow_correct_type_of_return_value() throws Throwable {
-        validator.validate(new Returns("one"), new InvocationBuilder().simpleMethod().toInvocation());
-        validator.validate(new Returns(false), new InvocationBuilder().method("booleanReturningMethod").toInvocation());
-        validator.validate(new Returns(Boolean.TRUE), new InvocationBuilder().method("booleanObjectReturningMethod").toInvocation());
-        validator.validate(new Returns(1), new InvocationBuilder().method("integerReturningMethod").toInvocation());
-        validator.validate(new Returns(1L), new InvocationBuilder().method("longReturningMethod").toInvocation());
-        validator.validate(new Returns(1L), new InvocationBuilder().method("longObjectReturningMethod").toInvocation());
-        validator.validate(new Returns(null), new InvocationBuilder().method("objectReturningMethodNoArgs").toInvocation());
-        validator.validate(new Returns(1), new InvocationBuilder().method("objectReturningMethodNoArgs").toInvocation());
-    }
-
-    @Test(expected = MockitoException.class)
-    public void should_fail_on_return_type_mismatch() throws Throwable {
-        validator.validate(new Returns("String"), new InvocationBuilder().method("booleanReturningMethod").toInvocation());
-    }
-
-    @Test(expected = MockitoException.class)
-    public void should_fail_on_wrong_primitive() throws Throwable {
-        validator.validate(new Returns(1), new InvocationBuilder().method("doubleReturningMethod").toInvocation());
-    }
-
-    @Test(expected = MockitoException.class)
-    public void should_fail_on_null_with_primitive() throws Throwable {
-        validator.validate(new Returns(null), new InvocationBuilder().method("booleanReturningMethod").toInvocation());
     }
 
     @Test

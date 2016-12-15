@@ -10,9 +10,7 @@ import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.ValidableAnswer;
 
 import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
-import static org.mockito.internal.exceptions.Reporter.cannotStubVoidMethodWithAReturnValue;
 import static org.mockito.internal.exceptions.Reporter.onlyVoidMethodsCanBeSetToDoNothing;
-import static org.mockito.internal.exceptions.Reporter.wrongTypeOfReturnValue;
 import static org.mockito.internal.exceptions.Reporter.wrongTypeReturnedByDefaultAnswer;
 
 @Deprecated
@@ -25,10 +23,6 @@ public class AnswersValidator {
         }
 
         MethodInfo methodInfo = new MethodInfo(invocation);
-        if (answer instanceof Returns) {
-            validateReturnValue((Returns) answer, methodInfo);
-        }
-
         if (answer instanceof DoesNothing) {
             validateDoNothing((DoesNothing) answer, methodInfo);
         }
@@ -47,20 +41,6 @@ public class AnswersValidator {
     private void validateDoNothing(DoesNothing answer, MethodInfo methodInfo) {
         if (!methodInfo.isVoid()) {
             throw onlyVoidMethodsCanBeSetToDoNothing();
-        }
-    }
-
-    private void validateReturnValue(Returns answer, MethodInfo methodInfo) {
-        if (methodInfo.isVoid()) {
-            throw cannotStubVoidMethodWithAReturnValue(methodInfo.getMethodName());
-        }
-
-        if (answer.returnsNull() && methodInfo.returnsPrimitive()) {
-            throw wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), "null", methodInfo.getMethodName());
-        }
-
-        if (!answer.returnsNull() && !methodInfo.isValidReturnType(answer.getReturnType())) {
-            throw wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), answer.printReturnType(), methodInfo.getMethodName());
         }
     }
 
