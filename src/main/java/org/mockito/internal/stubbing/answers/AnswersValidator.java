@@ -10,7 +10,6 @@ import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.ValidableAnswer;
 
 import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
-import static org.mockito.internal.exceptions.Reporter.onlyVoidMethodsCanBeSetToDoNothing;
 import static org.mockito.internal.exceptions.Reporter.wrongTypeReturnedByDefaultAnswer;
 
 @Deprecated
@@ -23,10 +22,6 @@ public class AnswersValidator {
         }
 
         MethodInfo methodInfo = new MethodInfo(invocation);
-        if (answer instanceof DoesNothing) {
-            validateDoNothing((DoesNothing) answer, methodInfo);
-        }
-
         if (answer instanceof CallsRealMethods) {
             validateMockingConcreteClass((CallsRealMethods) answer, methodInfo);
         }
@@ -35,12 +30,6 @@ public class AnswersValidator {
     private void validateMockingConcreteClass(CallsRealMethods answer, MethodInfo methodInfo) {
         if (methodInfo.isAbstract()) {
             throw cannotCallAbstractRealMethod();
-        }
-    }
-
-    private void validateDoNothing(DoesNothing answer, MethodInfo methodInfo) {
-        if (!methodInfo.isVoid()) {
-            throw onlyVoidMethodsCanBeSetToDoNothing();
         }
     }
 

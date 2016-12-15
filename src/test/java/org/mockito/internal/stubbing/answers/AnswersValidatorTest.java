@@ -21,16 +21,6 @@ public class AnswersValidatorTest {
 
     private AnswersValidator validator = new AnswersValidator();
 
-    @Test(expected = MockitoException.class)
-    public void should_fail_when_non_void_method_does_nothing() throws Throwable {
-        validator.validate(new DoesNothing(), new InvocationBuilder().simpleMethod().toInvocation());
-    }
-
-    @Test
-    public void should_allow_void_return_for_void_method() throws Throwable {
-        validator.validate(new DoesNothing(), new InvocationBuilder().method("voidMethod").toInvocation());
-    }
-
     @Test
     public void should_fail_when_calling_real_method_on_interface() throws Throwable {
         //given
