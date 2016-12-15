@@ -9,22 +9,22 @@ import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.internal.invocation.InvocationBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.fail;
 
-@SuppressWarnings("unchecked")
-public class AnswersValidatorTest {
-
-    private AnswersValidator validator = new AnswersValidator();
+public class DefaultAnswerValidatorTest {
 
     @Test
     public void should_fail_if_returned_value_of_answer_is_incompatible_with_return_type() throws Throwable {
+        // given
+        class AWrongType {
+        }
         try {
-            validator.validateDefaultAnswerReturnedValue(
-                    new InvocationBuilder().method("toString").toInvocation(),
-                    AWrongType.WRONG_TYPE
-            );
-            fail();
+            // when
+            DefaultAnswerValidator.validateReturnValueFor(new InvocationBuilder().method("toString").toInvocation(),
+                                                          new AWrongType());
+            fail("expected validation to fail");
         } catch (WrongTypeOfReturnValue e) {
+            // then
             assertThat(e.getMessage())
                     .containsIgnoringCase("Default answer returned a result with the wrong type")
                     .containsIgnoringCase("AWrongType cannot be returned by toString()")
@@ -34,13 +34,7 @@ public class AnswersValidatorTest {
 
     @Test
     public void should_not_fail_if_returned_value_of_answer_is_null() throws Throwable {
-        validator.validateDefaultAnswerReturnedValue(
-                new InvocationBuilder().method("toString").toInvocation(),
-                null
-        );
-    }
-
-    private static class AWrongType {
-        public static final AWrongType WRONG_TYPE = new AWrongType();
+        DefaultAnswerValidator.validateReturnValueFor(new InvocationBuilder().method("toString").toInvocation(),
+                                                      null);
     }
 }
