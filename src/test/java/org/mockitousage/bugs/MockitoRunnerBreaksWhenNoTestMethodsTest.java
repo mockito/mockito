@@ -5,19 +5,20 @@
 
 package org.mockitousage.bugs;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import org.junit.Test;
 import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitoutil.TestBase;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
-
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 
 
 // @Ignore("for demo only. this test cannot be enabled as it fails :)")
@@ -32,6 +33,7 @@ public class MockitoRunnerBreaksWhenNoTestMethodsTest extends TestBase {
         Result result = runner.run(TestClassWithoutTestMethod.class);
 
         assertEquals(1, result.getFailureCount());
+        assertTrue(result.getFailures().get(0).getException() instanceof MockitoException);
         assertFalse(result.wasSuccessful());
     }
 
