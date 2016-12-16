@@ -14,7 +14,8 @@ buildscript {
 }
 
 plugins {
-    id 'com.gradle.build-scan' version '1.0'
+    id 'com.gradle.build-scan' version '1.3'
+    id 'me.champeau.buildscan-recipes' version '0.1.7'
 }
 
 apply plugin: 'java'
@@ -169,4 +170,6 @@ compileTestJava.finalizedBy removeTestResources
 buildScan {
     licenseAgreementUrl = 'https://gradle.com/terms-of-service'
     licenseAgree = 'yes'
+
+    recipes 'git-commit', 'travis-ci'
 }
