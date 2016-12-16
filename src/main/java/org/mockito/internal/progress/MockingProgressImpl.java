@@ -8,8 +8,10 @@ package org.mockito.internal.progress;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.util.eventbus.EventBus;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
+import org.mockito.listeners.MockCreatedReport;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.mock.MockCreationSettings;
@@ -32,7 +34,7 @@ public class MockingProgressImpl implements MockingProgress {
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
     private VerificationStrategy verificationStrategy;
-    private final Set<MockitoListener> listeners = new LinkedHashSet<MockitoListener>();
+    private final EventBus eventBus = new EventBus();
 
     public MockingProgressImpl() {
         this.verificationStrategy = getDefaultVerificationStrategy();
@@ -129,21 +131,21 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void mockingStarted(Object mock, MockCreationSettings settings) {
-        for (MockitoListener listener : listeners) {
-            if (listener instanceof MockCreationListener) {
-                ((MockCreationListener) listener).onMockCreated(mock, settings);
-            }
-        }
+        eventBus.post(new MockCreatedReport(mock,settings));
+        
         validateMostStuff();
     }
 
-    public void addListener(MockitoListener listener) {
-        this.listeners.add(listener);
+    @Override
+    public void addListener(Object listener) {
+        eventBus.register(listener);
     }
 
-    public void removeListener(MockitoListener listener) {
-        this.listeners.remove(listener);
+    @Override
+    public void removeListener(Object listener) {
+        eventBus.unregister(listener);
     }
+    
 
     public void setVerificationStrategy(VerificationStrategy strategy) {
         this.verificationStrategy = strategy;

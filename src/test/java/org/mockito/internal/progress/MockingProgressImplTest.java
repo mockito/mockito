@@ -48,12 +48,4 @@ public class MockingProgressImplTest extends TestBase {
         } catch (MockitoException e) {}
     }
 
-    @Test
-    public void shouldNotifyListenerSafely() throws Exception {
-        //when
-        mockingProgress.addListener(null);
-
-        //then no exception is thrown:
-        mockingProgress.mockingStarted(null, null);
-    }
 }
