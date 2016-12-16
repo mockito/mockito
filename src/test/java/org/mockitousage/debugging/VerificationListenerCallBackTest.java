@@ -1,24 +1,28 @@
 package org.mockitousage.debugging;
 
+import java.lang.reflect.Method;
 import org.assertj.core.api.Condition;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.mockito.Mockito;
 import org.mockito.MockitoFramework;
+import org.mockito.StateMaster;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.listeners.VerificationListener;
 import org.mockito.verification.VerificationEvent;
 import org.mockito.verification.VerificationMode;
 
-
-import java.lang.reflect.Method;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.framework;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class VerificationListenerCallBackTest {
     private Method invocationWanted;
@@ -31,6 +35,13 @@ public class VerificationListenerCallBackTest {
         mockitoFramework = Mockito.framework();
         mockitoFramework.addListener(listener);
         invocationWanted = Foo.class.getDeclaredMethod("doSomething", String.class);
+    }
+
+    @After
+    public void reset_mockito() {
+        StateMaster stateMaster = new StateMaster();
+        stateMaster.reset();
+        stateMaster.clearMockitoListeners();
     }
 
     @Test
