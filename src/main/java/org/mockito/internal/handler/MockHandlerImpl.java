@@ -81,8 +81,7 @@ public class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
         // prepare invocation for stubbing
         invocationContainerImpl.setInvocationForPotentialStubbing(invocationMatcher);
-        OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(invocationContainerImpl);
-        mockingProgress().reportOngoingStubbing(ongoingStubbing);
+        mockingProgress().reportInvocation(invocationContainerImpl);
 
         // look for existing answer for this invocation
         StubbedInvocationMatcher stubbedInvocation = invocationContainerImpl.findAnswerFor(invocation);

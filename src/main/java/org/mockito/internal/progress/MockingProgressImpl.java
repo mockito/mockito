@@ -5,10 +5,13 @@
 
 package org.mockito.internal.progress;
 
+import org.mockito.MockitoLambda;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.invocation.Invocation;
+import org.mockito.internal.stubbing.InvocationContainerImpl;
+import org.mockito.internal.stubbing.OngoingStubbingImpl;
+import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
@@ -28,44 +31,42 @@ public class MockingProgressImpl implements MockingProgress {
     
     private final ArgumentMatcherStorage argumentMatcherStorage = new ArgumentMatcherStorageImpl();
     
-    private OngoingStubbing<?> ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
     private VerificationStrategy verificationStrategy;
-    private final Set<MockitoListener> listeners = new LinkedHashSet<MockitoListener>();
+    private final Set<MockitoListener> listeners = new LinkedHashSet<>();
+    private InvocationContainerImpl invocationContainer;
 
     public MockingProgressImpl() {
         this.verificationStrategy = getDefaultVerificationStrategy();
     }
 
     public static VerificationStrategy getDefaultVerificationStrategy() {
-        return new VerificationStrategy() {
-            public VerificationMode maybeVerifyLazily(VerificationMode mode) {
-                return mode;
-            }
-        };
+        return mode -> mode;
     }
-    public void reportOngoingStubbing(OngoingStubbing iOngoingStubbing) {
-        this.ongoingStubbing = iOngoingStubbing;
+
+    @Override
+    public void reportInvocation(InvocationContainerImpl invocationContainer) {
+        this.invocationContainer = invocationContainer;
     }
 
     public OngoingStubbing<?> pullOngoingStubbing() {
-        OngoingStubbing<?> temp = ongoingStubbing;
-        ongoingStubbing = null;
+        OngoingStubbing<?> temp = new OngoingStubbingImpl(invocationContainer);
+        this.resetInvocationContainer();
         return temp;
     }
     
     public void verificationStarted(VerificationMode verify) {
         validateState();
-        resetOngoingStubbing();
+        resetInvocationContainer();
         verificationMode = new Localized(verify);
     }
 
     /* (non-Javadoc)
-     * @see org.mockito.internal.progress.MockingProgress#resetOngoingStubbing()
+     * @see org.mockito.internal.progress.MockingProgress#resetInvocationContainer()
      */
-    public void resetOngoingStubbing() {
-        ongoingStubbing = null;
+    public void resetInvocationContainer() {
+        this.invocationContainer = null;
     }
 
     public VerificationMode pullVerificationMode() {
@@ -113,7 +114,7 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public String toString() {
-        return  "iOngoingStubbing: " + ongoingStubbing + 
+        return  "invocationContainer: " + invocationContainer +
         ", verificationMode: " + verificationMode +
         ", stubbingInProgress: " + stubbingInProgress;
     }
@@ -151,6 +152,27 @@ public class MockingProgressImpl implements MockingProgress {
 
     public VerificationMode maybeVerifyLazily(VerificationMode mode) {
         return this.verificationStrategy.maybeVerifyLazily(mode);
+    }
+
+    @Override
+    public <R, A extends MockitoLambda.Answer<R>> MockitoLambda.FinishableStubbing<R, A> pullFinishableStubbing() {
+        return new MockitoLambda.FinishableStubbing<R, A>() {
+
+            @Override
+            public void thenReturn(R foo) {
+                MockingProgressImpl.this.invocationContainer.addAnswer(new Returns(foo));
+            }
+
+            @Override
+            public void thenAnswer(A answer) {
+                MockingProgressImpl.this.invocationContainer.addAnswer(answer);
+            }
+        };
+    }
+
+    @Override
+    public <R, A extends MockitoLambda.Answer<R>> MockitoLambda.FinishableAnswer<R, A> finishableAnswer() {
+        return null;
     }
 
      /*

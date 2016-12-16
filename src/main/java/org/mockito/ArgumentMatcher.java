@@ -125,4 +125,5 @@ public interface ArgumentMatcher<T> {
      * @return true if this matcher accepts the given argument.
      */
     boolean matches(T argument);
+
 }

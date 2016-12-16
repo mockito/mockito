@@ -34,7 +34,6 @@ import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.util.DefaultMockingDetails;
-import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
@@ -94,7 +93,7 @@ public class MockitoCore {
         MockingProgress mockingProgress = mockingProgress();
         mockingProgress.validateState();
         mockingProgress.reset();
-        mockingProgress.resetOngoingStubbing();
+        mockingProgress.resetInvocationContainer();
 
         for (T m : mocks) {
             resetMock(m);
@@ -105,7 +104,7 @@ public class MockitoCore {
         MockingProgress mockingProgress = mockingProgress();
         mockingProgress.validateState();
         mockingProgress.reset();
-        mockingProgress.resetOngoingStubbing();
+        mockingProgress.resetInvocationContainer();
 
         for (T m : mocks) {
             getMockHandler(m).getInvocationContainer().clearInvocations();
@@ -159,7 +158,7 @@ public class MockitoCore {
     public Stubber stubber() {
         MockingProgress mockingProgress = mockingProgress();
         mockingProgress.stubbingStarted();
-        mockingProgress.resetOngoingStubbing();
+        mockingProgress.resetInvocationContainer();
         return new StubberImpl();
     }
 
