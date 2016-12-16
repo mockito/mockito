@@ -19,26 +19,11 @@ plugins {
 
 description = 'Mockito mock objects library core API and implementation'
 
-apply from: 'gradle/root/version.gradle'
-
 ext {
     artifactName = 'mockito-core'
     bintrayAutoPublish = true
     mavenCentralSync = true
 }
-
-apply from: "gradle/java-library.gradle"
-archivesBaseName = 'mockito-core'
-apply from: "gradle/publishable-java-library.gradle"
-
-apply from: 'gradle/root/ide.gradle'
-apply from: 'gradle/root/coverage.gradle'
-apply from: 'gradle/root/gradle-fix.gradle'
-
-apply from: 'gradle/mockito-core/osgi.gradle'
-apply from: 'gradle/mockito-core/javadoc.gradle'
-apply from: 'gradle/mockito-core/license.gradle'
-apply from: 'gradle/release.gradle'
 
 allprojects {
     repositories {
@@ -54,6 +39,9 @@ allprojects {
 configurations {
     testUtil //TODO move to separate project
 }
+
+apply from: 'gradle/root/version.gradle'
+apply from: "gradle/java-library.gradle"
 
 dependencies {
     compile 'net.bytebuddy:byte-buddy:1.5.5'
@@ -71,6 +59,20 @@ dependencies {
     testUtil sourceSets.test.output
 }
 
+//need to declare dependencies before applying publishable java library
+//otherwise the pom file is incorrect
+apply from: "gradle/publishable-java-library.gradle"
+
+apply from: 'gradle/root/ide.gradle'
+apply from: 'gradle/root/coverage.gradle'
+apply from: 'gradle/root/gradle-fix.gradle'
+
+apply from: 'gradle/mockito-core/osgi.gradle'
+apply from: 'gradle/mockito-core/javadoc.gradle'
+apply from: 'gradle/mockito-core/license.gradle'
+apply from: 'gradle/mockito-core/testing.gradle'
+apply from: 'gradle/release.gradle'
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14.1'
 }
@@ -81,29 +83,7 @@ task ciBuild {
     dependsOn tasks.idea, tasks.eclipse
 }
 
-task createTestResources << {
-    def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
-    if (System.env.MOCK_MAKER != null) {
-        logger.info("Using MockMaker ${System.env.MOCK_MAKER}")
-        mockMakerFile.parentFile.mkdirs()
-        mockMakerFile.createNewFile()
-        mockMakerFile.write(System.env.MOCK_MAKER)
-    } else {
-        logger.info("Using default MockMaker")
-    }
-}
-
-task removeTestResources << {
-    def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
-    if (mockMakerFile.exists()){
-        mockMakerFile.delete()
-    }
-}
-
-//Making sure that release task is only invoked after the entire ciBuild validation
-release.mustRunAfter ciBuild
-compileTestJava.dependsOn createTestResources
-compileTestJava.finalizedBy removeTestResources
+release.mustRunAfter ciBuild //Making sure that release task is only invoked after the entire ciBuild validation
 
 //Posting Build scans to https://scans.gradle.com
 buildScan {
