@@ -6,16 +6,21 @@
 package org.mockitousage.matchers;
 
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.mockito.AdditionalMatchers;
 import org.mockito.Mockito;
+import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.Silent.class)
@@ -46,7 +51,7 @@ public class InvalidUseOfMatchersTest {
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertThat(e.getMessage())
-                    .contains("Misplaced argument matcher detected here");
+                    .contains("Misplaced or misused argument matcher detected here");
             e.printStackTrace();
         }
     }
@@ -92,5 +97,36 @@ public class InvalidUseOfMatchersTest {
                     .contains("3 matchers expected")
                     .contains("1 recorded");
         }
+    }
+
+    @Test
+    public void should_mention_matcher_when_misuse_detected() {
+        // Given
+
+
+        // When
+        Result run = new JUnitCore().run(ObjectMatcherMisuseOnPrimitiveSite.class);
+
+        // Then
+
+        assertThat(run.getFailures()).hasSize(2);
+        assertThat(run.getFailures().get(0).getException()).isInstanceOf(NullPointerException.class)
+                                                           .hasMessage(null);
+        assertThat(run.getFailures().get(1).getException()).isInstanceOf(InvalidUseOfMatchersException.class)
+                                                           .hasMessageContaining("primitive alternatives");
+        new StateMaster().reset();
+
+    }
+
+    @RunWith(MockitoJUnitRunner.class)
+    public static class ObjectMatcherMisuseOnPrimitiveSite {
+        @Test
+        public void fails_with_NPE() {
+            IMethods mock = Mockito.mock(IMethods.class);
+            doNothing().when(mock)
+                       .twoArgumentMethod(eq(73),
+                                          (Integer) any()); // <= Raise NPE on this call site
+        }
+
     }
 }
