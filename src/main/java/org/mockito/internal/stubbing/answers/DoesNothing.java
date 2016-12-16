@@ -22,7 +22,7 @@ public class DoesNothing implements Answer<Object>, ValidableAnswer, Serializabl
 
     @Override
     public void validateFor(InvocationOnMock invocation) {
-        if (!new MethodInfo(invocation).isVoid()) {
+        if (!new InvocationInfo(invocation).isVoid()) {
             throw onlyVoidMethodsCanBeSetToDoNothing();
         }
     }

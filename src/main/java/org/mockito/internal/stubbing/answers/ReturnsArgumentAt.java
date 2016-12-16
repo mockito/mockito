@@ -49,9 +49,9 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
     public void validateFor(InvocationOnMock invocation) {
         validateIndexWithinInvocationRange(invocation);
 
-        MethodInfo methodInfo = new MethodInfo(invocation);
-        if (!methodInfo.isValidReturnType(returnedTypeOnSignature(invocation))) {
-            throw wrongTypeOfArgumentToReturn(invocation, methodInfo.printMethodReturnType(),
+        InvocationInfo invocationInfo = new InvocationInfo(invocation);
+        if (!invocationInfo.isValidReturnType(returnedTypeOnSignature(invocation))) {
+            throw wrongTypeOfArgumentToReturn(invocation, invocationInfo.printMethodReturnType(),
                                               returnedTypeOnSignature(invocation),
                                               wantedArgumentPosition());
         }

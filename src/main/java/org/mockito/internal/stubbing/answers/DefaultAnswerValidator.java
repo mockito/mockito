@@ -11,13 +11,13 @@ import static org.mockito.internal.exceptions.Reporter.wrongTypeReturnedByDefaul
 
 public abstract class DefaultAnswerValidator {
     public static void validateReturnValueFor(InvocationOnMock invocation, Object returnedValue) throws Throwable {
-        MethodInfo methodInfo = new MethodInfo(invocation);
-        if (returnedValue != null && !methodInfo.isValidReturnType(returnedValue.getClass())) {
+        InvocationInfo invocationInfo = new InvocationInfo(invocation);
+        if (returnedValue != null && !invocationInfo.isValidReturnType(returnedValue.getClass())) {
             throw wrongTypeReturnedByDefaultAnswer(
                     invocation.getMock(),
-                    methodInfo.printMethodReturnType(),
+                    invocationInfo.printMethodReturnType(),
                     returnedValue.getClass().getSimpleName(),
-                    methodInfo.getMethodName());
+                    invocationInfo.getMethodName());
         }
     }
 }

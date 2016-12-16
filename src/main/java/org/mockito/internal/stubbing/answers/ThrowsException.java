@@ -43,7 +43,7 @@ public class ThrowsException implements Answer<Object>, ValidableAnswer, Seriali
             return;
         }
 
-        if (!new MethodInfo(invocation).isValidException(throwable)) {
+        if (!new InvocationInfo(invocation).isValidException(throwable)) {
             throw checkedExceptionInvalid(throwable);
         }
     }

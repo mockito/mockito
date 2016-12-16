@@ -45,7 +45,7 @@ public class CallsRealMethods implements Answer<Object>, ValidableAnswer, Serial
 
     @Override
     public void validateFor(InvocationOnMock invocation) {
-        if (new MethodInfo(invocation).isAbstract()) {
+        if (new InvocationInfo(invocation).isAbstract()) {
             throw cannotCallAbstractRealMethod();
         }
     }

@@ -28,17 +28,17 @@ public class Returns implements Answer<Object>, ValidableAnswer, Serializable {
 
     @Override
     public void validateFor(InvocationOnMock invocation) {
-        MethodInfo methodInfo = new MethodInfo(invocation);
-        if (methodInfo.isVoid()) {
-            throw cannotStubVoidMethodWithAReturnValue(methodInfo.getMethodName());
+        InvocationInfo invocationInfo = new InvocationInfo(invocation);
+        if (invocationInfo.isVoid()) {
+            throw cannotStubVoidMethodWithAReturnValue(invocationInfo.getMethodName());
         }
 
-        if (returnsNull() && methodInfo.returnsPrimitive()) {
-            throw wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), "null", methodInfo.getMethodName());
+        if (returnsNull() && invocationInfo.returnsPrimitive()) {
+            throw wrongTypeOfReturnValue(invocationInfo.printMethodReturnType(), "null", invocationInfo.getMethodName());
         }
 
-        if (!returnsNull() && !methodInfo.isValidReturnType(returnType())) {
-            throw wrongTypeOfReturnValue(methodInfo.printMethodReturnType(), printReturnType(), methodInfo.getMethodName());
+        if (!returnsNull() && !invocationInfo.isValidReturnType(returnType())) {
+            throw wrongTypeOfReturnValue(invocationInfo.printMethodReturnType(), printReturnType(), invocationInfo.getMethodName());
         }
     }
 
