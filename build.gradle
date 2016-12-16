@@ -110,5 +110,3 @@ buildScan {
     licenseAgreementUrl = 'https://gradle.com/terms-of-service'
     licenseAgree = 'yes'
 }
-
-assert false : "pom is busted. Don't merge yet."
