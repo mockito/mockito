@@ -5,6 +5,8 @@
 
 package org.mockito.internal.progress;
 
+import org.mockito.MockitoLambda;
+import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
@@ -13,8 +15,6 @@ import org.mockito.verification.VerificationStrategy;
 
 public interface MockingProgress {
     
-    void reportOngoingStubbing(OngoingStubbing<?> ongoingStubbing);
-
     OngoingStubbing<?> pullOngoingStubbing();
 
     void verificationStarted(VerificationMode verificationMode);
@@ -33,7 +33,7 @@ public interface MockingProgress {
      * Removes ongoing stubbing so that in case the framework is misused
      * state validation errors are more accurate
      */
-    void resetOngoingStubbing();
+    void resetInvocationContainer();
 
     ArgumentMatcherStorage getArgumentMatcherStorage();
     
@@ -46,4 +46,10 @@ public interface MockingProgress {
     void setVerificationStrategy(VerificationStrategy strategy);
 
     VerificationMode maybeVerifyLazily(VerificationMode mode);
+
+    <R, A extends MockitoLambda.Answer<R>> MockitoLambda.FinishableStubbing<R,A> pullFinishableStubbing();
+
+    <R, A extends MockitoLambda.Answer<R>> MockitoLambda.FinishableAnswer<R,A> finishableAnswer();
+
+    void reportInvocation(InvocationContainerImpl invocationContainer);
 }

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.stubbing;
 
+import org.mockito.MockitoLambda;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.stubbing.answers.AnswersValidator;
@@ -140,5 +141,9 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return mockSettings.isStubOnly()
           ? new SingleRegisteredInvocation()
           : new DefaultRegisteredInvocations();
+    }
+
+    public <R, A extends MockitoLambda.Answer<R>> void addAnswer(A answer) {
+        // TODO
     }
 }

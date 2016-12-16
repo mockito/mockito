@@ -1,14 +1,12 @@
 package org.mockito;
 
 import org.mockito.internal.MockitoCore;
-import org.mockito.stubbing.Answer2;
-import org.mockito.stubbing.Answer3;
-import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.stubbing.VoidAnswer2;
+import org.mockito.internal.progress.MockingProgress;
+
+import static org.mockito.internal.exceptions.Reporter.missingMethodInvocation;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 public class MockitoLambda {
-
-    static final MockitoCore MOCKITO_CORE = new MockitoCore();
 
     public static <A, B, C, R> OngoingLambdaStubbingReturn3<A, B, C, R> when(TriFunction<A, B, C, R> method) {
         return new OngoingLambdaStubbingReturn3<>(method);
@@ -28,6 +26,28 @@ public class MockitoLambda {
         void apply(A var1, B var2);
     }
 
+    private static <R, A extends Answer<R>> FinishableStubbing<R, A> when(R value) {
+        MockingProgress mockingProgress = mockingProgress();
+        mockingProgress.stubbingStarted();
+        FinishableStubbing<R, A> stubbing = mockingProgress.pullFinishableStubbing();
+        if (stubbing == null) {
+            mockingProgress.reset();
+            throw missingMethodInvocation();
+        }
+        return stubbing;
+    }
+
+    private static <R, A extends Answer<R>> FinishableAnswer<R, A> when() {
+        MockingProgress mockingProgress = mockingProgress();
+        mockingProgress.stubbingStarted();
+        FinishableAnswer<R, A> stubbing = mockingProgress.finishableAnswer();
+        if (stubbing == null) {
+            mockingProgress.reset();
+            throw missingMethodInvocation();
+        }
+        return stubbing;
+    }
+
     public static class OngoingLambdaStubbingReturn3<A, B, C, R> {
         private final TriFunction<A, B, C, R> method;
 
@@ -35,24 +55,43 @@ public class MockitoLambda {
             this.method = method;
         }
 
-        public FinishableStubbing3<A, B, C, R> isInvokedWith(ArgumentMatcher<A> var1, ArgumentMatcher<B> var2, ArgumentMatcher<C> var3) {
-            return MOCKITO_CORE.when(method.apply(var1, var2, var3));
+        public FinishableStubbing<R, Answer3<A, B, C, R>> isInvokedWith(ArgumentMatcher<A> var1, ArgumentMatcher<B> var2, ArgumentMatcher<C> var3) {
+            return when(method.apply(var1.getValue(), var2.getValue(), var3.getValue()));
         }
 
-        public FinishableStubbing3<A, B, C, R> isInvokedWith(A var1, B var2, C var3) {
-            return MOCKITO_CORE.when(method.apply(var1, var2, var3));
+        public FinishableStubbing<R, Answer3<A, B, C, R>> isInvokedWith(A var1, B var2, C var3) {
+            return when(method.apply(var1, var2, var3));
         }
     }
 
-    public static class FinishableStubbing3<A, B, C, R> {
+    public interface Answer<R> {}
+    public interface VoidAnswer2<A, B> extends Answer<Void> {
+        void answer(A argument0, B argument1) throws Throwable;
+    }
+    public interface Answer2<A, B, R> extends Answer<R> {
+        R answer(A argument0, B argument1) throws Throwable;
+    }
+    public interface Answer3<A, B, C, R> extends Answer<R> {
+        R answer(A argument0, B argument1, C argument2) throws Throwable;
+    }
 
-        public void thenReturn(R foo) {
+    public interface FinishableStubbing<R, A extends Answer<R>> {
 
-        }
+        void thenReturn(R foo);
 
-        public void thenAnswer(Answer3<A, B, C, R> answer) {
+        void thenAnswer(A answer);
+    }
 
-        }
+    public static ArgumentMatcher<Integer> anyInt() {
+        return () -> 0;
+    }
+
+    public static ArgumentMatcher<String> anyString() {
+        return () -> "";
+    }
+
+    public interface ArgumentMatcher<T> {
+        T getValue();
     }
 
     public static class OngoingLambdaStubbingVoid2<A, B> {
@@ -62,18 +101,18 @@ public class MockitoLambda {
             this.method = method;
         }
 
-        public FinishableAnswer2<A, B> isInvokedWith(ArgumentMatcher<A> var1, ArgumentMatcher<B> var2) {
-            return MOCKITO_CORE.when(method.apply(var1, var2););
+        public FinishableAnswer<Void, VoidAnswer2<A, B>> isInvokedWith(ArgumentMatcher<A> var1, ArgumentMatcher<B> var2) {
+            method.apply(var1.getValue(), var2.getValue());
+            return when();
         }
 
-        public FinishableAnswer2<A, B> isInvokedWith(A var1, B var2) {
-            return MOCKITO_CORE.when(method.apply(var1, var2));
+        public FinishableAnswer<Void, VoidAnswer2<A, B>> isInvokedWith(A var1, B var2) {
+            method.apply(var1, var2);
+            return when();
         }
     }
 
-    public static class FinishableAnswer2<A, B> {
-        public void thenAnswer(VoidAnswer2<A, B> answer) {
-
-        }
+    public interface FinishableAnswer<R, A extends Answer<R>> {
+        void thenAnswer(A answer);
     }
 }

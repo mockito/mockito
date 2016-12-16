@@ -11,7 +11,7 @@ public class StateMaster {
 
     public void reset() {
         mockingProgress().reset();
-        mockingProgress().resetOngoingStubbing();
+        mockingProgress().resetInvocationContainer();
     }
 
     public void validate() {
