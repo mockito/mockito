@@ -1,0 +1,8 @@
+ext {
+    artifactName = 'mockito-android'
+    bintrayAutoPublish = false
+    mavenCentralSync = false
+}
+
+apply from: "$rootDir/gradle/java-library.gradle"
+apply from: "$rootDir/gradle/publishable-java-library.gradle"
