@@ -1,3 +1,12 @@
+### 2.3.6 (2016-12-17 16:36 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 2
+  * Improves exception message in case a matcher is used for a primitive parameter [(#830)](https://github.com/mockito/mockito/pull/830)
+  * Test for verification listeners test can introduces bogus erro in other test cases. [(#827)](https://github.com/mockito/mockito/pull/827)
+
 ### 2.3.5 (2016-12-15 10:24 UTC)
 
 * Authors: 1
