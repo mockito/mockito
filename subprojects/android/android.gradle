@@ -1,5 +1,6 @@
 ext {
     artifactName = 'mockito-android'
+    bintrayRepo = 'test'
     bintrayAutoPublish = false
     mavenCentralSync = false
 }
