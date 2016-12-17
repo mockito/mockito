@@ -1,3 +1,5 @@
+description = "Mockito for Android"
+
 ext {
     artifactName = 'mockito-android'
     bintrayRepo = 'test'
