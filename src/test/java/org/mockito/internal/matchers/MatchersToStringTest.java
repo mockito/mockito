@@ -9,12 +9,8 @@ import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static junit.framework.TestCase.assertEquals;
 
-@SuppressWarnings("unchecked")
 public class MatchersToStringTest extends TestBase {
 
     @Test
@@ -77,10 +73,9 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void orToString() {
-        List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>();
-        matchers.add(new Equals(1));
-        matchers.add(new Equals(2));
-        assertEquals("or(1, 2)", new Or(matchers).toString());
+        ArgumentMatcher<?> m1=new Equals(1);
+        ArgumentMatcher<?> m2=new Equals(2);
+        assertEquals("or(1, 2)", new Or(m1,m2).toString());
     }
 
     @Test
@@ -90,10 +85,9 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void andToString() {
-        List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>();
-        matchers.add(new Equals(1));
-        matchers.add(new Equals(2));
-        assertEquals("and(1, 2)", new And(matchers).toString());
+        ArgumentMatcher<?> m1=new Equals(1);
+        ArgumentMatcher<?> m2=new Equals(2);
+        assertEquals("and(1, 2)", new And(m1,m2).toString());
     }
 
     @Test
