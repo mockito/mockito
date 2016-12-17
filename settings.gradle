@@ -1,5 +1,6 @@
 include 'testng'
 include 'extTest'
+include 'android'
 
 rootProject.name = 'mockito'
 

@@ -40,8 +40,6 @@ import org.mockito.release.version.*
 
 assert project == rootProject
 
-apply from: rootProject.file("gradle/publish.gradle")
-
 apply plugin: 'org.mockito.release-notes'
 apply plugin: 'org.mockito.release-workflow'
 
@@ -86,7 +84,7 @@ task("comparePublications", type: PublicationsComparatorTask) {
     dependsOn publishToMavenLocal, sourcesJar
 
     compareBinaries({ configurations.previousSrc.singleFile }, { sourcesJar.archivePath })
-    comparePoms({ configurations.previousPom.singleFile.text }, { generatePomFileForMockitoCorePublication.destination.text })
+    comparePoms({ configurations.previousPom.singleFile.text }, { generatePomFileForMainJarPublication.destination.text })
 }
 
 //TODO if System.env.TRAVIS_BRANCH is empty, just pick up current branch from Git
@@ -124,12 +122,31 @@ task("releaseNeeded") {
     }
 }
 
-bintrayUpload {
-    doFirst {
+task printReleaseHelp {
+    doLast {
         logger.lifecycle troubleshootingInfo
-        it.dryRun = releaseTest
-        if (it.dryRun) {
-            logger.lifecycle "Dry-running the release! Although 'bintrayUpload' is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
+    }
+}
+
+task bintrayUploadAll {
+    description = "Groups all the bintrayUpload tasks of this project"
+}
+
+allprojects {
+    tasks.matching { it.name == 'bintrayUpload' }.all {
+        bintrayUploadAll.dependsOn it
+        dependsOn printReleaseHelp
+
+        //TODO this should be a part of release steps not here:
+        dependsOn releaseNeeded
+        onlyIf { releaseNeeded.needed }
+        //end
+
+        doFirst {
+            it.dryRun = releaseTest
+            if (it.dryRun) {
+                logger.lifecycle "Dry-running the release! Although $path is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
+            }
         }
     }
 }
@@ -144,6 +161,14 @@ task assertCleanWorkingCopy {
         runWithOutput(["git", "status", "--porcelain"], out)
         def output = out.toString()
         assert output.trim().isEmpty() : "Working copy not clean. Commit or stash your changes before continuing.\n$output"
+    }
+}
+
+task assertEnvVariables {
+    doLast {
+        ['TRAVIS_BRANCH', 'GH_TOKEN', 'MOCKITO_BINTRAY_API_KEY'].each {
+            assert System.env[it]: "Please export '$it' env variable first"
+        }
     }
 }
 
@@ -221,10 +246,11 @@ task pushChanges(type: Exec) {
 }
 
 releaseWorkflow {
+    step assertEnvVariables
     step assertCleanWorkingCopy
     step releaseNeeded
     onlyIf { releaseNeeded.needed }
-    step bintrayUpload //TODO make upload task the very last task or very close to push so that the most invasive steps go last
+    step bintrayUploadAll //TODO make upload task the very last task or very close to push so that the most invasive steps go last
     step pullCommits
     step configureGenericGitUser, [cleanup: restoreGitUser]
     /*

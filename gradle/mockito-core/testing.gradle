@@ -1,0 +1,21 @@
+task createTestResources << {
+    def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
+    if (System.env.MOCK_MAKER != null) {
+        logger.info("Using MockMaker ${System.env.MOCK_MAKER}")
+        mockMakerFile.parentFile.mkdirs()
+        mockMakerFile.createNewFile()
+        mockMakerFile.write(System.env.MOCK_MAKER)
+    } else {
+        logger.info("Using default MockMaker")
+    }
+}
+
+task removeTestResources << {
+    def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
+    if (mockMakerFile.exists()){
+        mockMakerFile.delete()
+    }
+}
+
+compileTestJava.dependsOn createTestResources
+compileTestJava.finalizedBy removeTestResources

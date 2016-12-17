@@ -15,8 +15,11 @@ import org.mockito.release.version.Version
 assert project == rootProject
 
 def v = Version.versionFile(project.file("version.properties"))
-project.version = v.version
-project.ext.versionFile = v
+
+allprojects {
+    project.version = v.version
+    project.ext.versionFile = v
+}
 
 logger.lifecycle "Version: $project.version"
 
