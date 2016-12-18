@@ -13,7 +13,10 @@ bintray {
     user = 'szczepiq'
     key = System.env.MOCKITO_BINTRAY_API_KEY
 
-    publications = project.publishing.publications*.name
+    gradle.projectsEvaluated {
+        //workaround for Bintray bug (https://github.com/bintray/gradle-bintray-plugin/issues/159)
+        publications = project.publishing.publications*.name
+    }
 
     publish = project.ext.bintrayAutoPublish
 
