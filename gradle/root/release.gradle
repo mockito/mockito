@@ -68,6 +68,12 @@ def isReleasableBranch(String branch) {
     branch?.matches("master|release/.+")
 }
 
+def isPullRequest() {
+    //returns true only if pull request env variable points to PR number
+    def envVar = System.env.TRAVIS_PULL_REQUEST
+    envVar != null && envVar != '' && envVar != 'false'
+}
+
 configurations {
     previousSrc
     previousPom
@@ -93,10 +99,10 @@ task("comparePublications", type: PublicationsComparatorTask) {
 Release process should *not* run concurrently.
  */
 task("releaseNeeded") {
+    ext.needed = true
     dependsOn comparePublications
     doLast {
         def branch = System.env.TRAVIS_BRANCH
-        def pr = System.env.TRAVIS_PULL_REQUEST
         def skipEnvVariable = System.env.SKIP_RELEASE
         def commitMessage = System.env.TRAVIS_COMMIT_MESSAGE
         def skippedByCommitMessage = commitMessage?.contains(skipReleaseCommitMessage)
@@ -107,7 +113,7 @@ task("releaseNeeded") {
         } else if (releaseTest) {
             logger.lifecycle("Release will be initiated for testing purposes")
             ext.needed = true //testing purposes, dry run
-        } else if (pr == 'false' && isReleasableBranch(branch) && !comparePublications.publicationsEqual) {
+        } else if (!isPullRequest() && isReleasableBranch(branch) && !comparePublications.publicationsEqual) {
             logger.lifecycle("All criteria are met, the release will be initiated")
             ext.needed = true //standard, continuous delivery scenario
         } else {
@@ -116,7 +122,7 @@ task("releaseNeeded") {
         }
 
         logger.lifecycle("Release need evaluation - needed: ${ext.needed}, " +
-                "releasable branch: ${isReleasableBranch(branch)}, pull request: $pr, dry run / test release: $releaseTest, " +
+                "releasable branch: ${isReleasableBranch(branch)}, pull request: ${isPullRequest()}, dry run / test release: $releaseTest, " +
                 "publications equal: $comparePublications.publicationsEqual, " +
                 "skip env variable: $skipEnvVariable, skipped by message: $skippedByCommitMessage")
     }
@@ -145,8 +151,9 @@ allprojects {
         doFirst {
             it.dryRun = releaseTest
             if (it.dryRun) {
-                logger.lifecycle "Dry-running the release! Although $path is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
+                logger.lifecycle "$it.path - dry-running the release! Although $path is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
             }
+            logger.lifecycle "$it.path - now publishing $project.archivesBaseName:$project.version to '$project.bintray.pkg.repo' Bintray repository (dryRun=$it.dryRun)."
         }
     }
 }
