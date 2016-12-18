@@ -7,6 +7,7 @@ def theVcsTag = "v" + project.version
 
 assert project.hasProperty("mavenCentralSync")     : "Please configure 'ext.mavenCentralSync' for project that wants to use publishing"
 assert project.hasProperty("bintrayAutoPublish")  : "Please configure 'ext.bintrayAutoPublish' for project that wants to use publishing"
+assert project.description  : "Please configure 'description' for project that wants to use publishing"
 
 bintray {
     user = 'szczepiq'
@@ -17,7 +18,7 @@ bintray {
     publish = project.ext.bintrayAutoPublish
 
     pkg {
-        repo = 'maven'
+        repo = project.ext.bintrayRepo
 
         userOrg = 'mockito'
         // so that despite using 'szczepiq' user, the artifact is published

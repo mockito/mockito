@@ -21,7 +21,8 @@ description = 'Mockito mock objects library core API and implementation'
 
 ext {
     artifactName = 'mockito-core'
-    bintrayAutoPublish = true
+    bintrayAutoPublish = false
+    bintrayRepo = 'maven'
     mavenCentralSync = true
 }
 
