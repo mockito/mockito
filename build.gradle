@@ -5,7 +5,6 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2' //publishing to bintray
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0' // later versions don't work on JDK6
 
         //Needed so that release notes and release workflow plugin can be applied in separate gradle/*.gradle build files
@@ -15,6 +14,7 @@ buildscript {
 
 plugins {
     id 'com.gradle.build-scan' version '1.0'
+    id "com.jfrog.bintray" version "1.7.3"
 }
 
 description = 'Mockito mock objects library core API and implementation'
@@ -22,7 +22,7 @@ description = 'Mockito mock objects library core API and implementation'
 ext {
     artifactName = 'mockito-core'
     bintrayAutoPublish = false
-    bintrayRepo = 'maven'
+    bintrayRepo = 'test'
     mavenCentralSync = true
 }
 
