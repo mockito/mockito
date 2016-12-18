@@ -1,3 +1,12 @@
+### 2.3.7 (2016-12-18 04:31 UTC)
+
+* Authors: 1
+* Commits: 24
+  * 24: Szczepan Faber
+* Improvements: 2
+  * Fixed problem with publication [(#832)](https://github.com/mockito/mockito/pull/832)
+  * Automated publication of mockito submodule like mockito-android [(#809)](https://github.com/mockito/mockito/pull/809)
+
 ### 2.3.6 (2016-12-17 16:36 UTC)
 
 * Authors: 1
