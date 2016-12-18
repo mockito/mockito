@@ -153,7 +153,8 @@ allprojects {
             if (it.dryRun) {
                 logger.lifecycle "$it.path - dry-running the release! Although $path is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
             }
-            logger.lifecycle "$it.path - now publishing $project.archivesBaseName:$project.version to '$project.bintray.pkg.repo' Bintray repository (dryRun=$it.dryRun)."
+            logger.lifecycle "$it.path - now publishing $project.archivesBaseName:$project.version" +
+                    " to '$project.bintray.pkg.repo' Bintray repository (dryRun=$it.dryRun, autoPublish=$project.bintray.publish)."
         }
     }
 }
