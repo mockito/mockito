@@ -23,7 +23,7 @@ ext {
     artifactName = 'mockito-core'
     bintrayAutoPublish = true
     bintrayRepo = 'maven'
-    mavenCentralSync = false
+    mavenCentralSync = true
 }
 
 allprojects {
