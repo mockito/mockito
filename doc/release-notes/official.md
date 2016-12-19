@@ -1,9 +1,3 @@
-### 2.3.8 (2016-12-19 00:45 UTC)
-
-* Authors: 0
-* Commits: 0
-* No notable improvements. See the commits for detailed changes.
-
 ### 2.3.7 (2016-12-18 04:31 UTC)
 
 * Authors: 1
