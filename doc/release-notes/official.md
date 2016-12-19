@@ -1,3 +1,12 @@
+### 2.3.10 (2016-12-19 13:38 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Enhancements: 1
+    * Introduce validable answers [(#826)](https://github.com/mockito/mockito/pull/826)
+
 ### 2.3.9 (2016-12-19 03:09 UTC)
 
 * Release automation bugfixes needed for mockito-android publication
