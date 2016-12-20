@@ -1,3 +1,14 @@
+### 2.3.11 (2016-12-20 12:25 UTC)
+
+* Authors: 2
+* Commits: 5
+  * 4: Szczepan Faber
+  * 1: Christian Schwarz
+* Improvements: 3
+  * Disabled maven central sync [(#837)](https://github.com/mockito/mockito/pull/837)
+  * Main jar automatically publishes to central [(#836)](https://github.com/mockito/mockito/pull/836)
+  * Simplified ArgumentMatcherStorageImpl and logic matchers [(#833)](https://github.com/mockito/mockito/pull/833)
+
 ### 2.3.10 (2016-12-19 13:38 UTC)
 
 * Authors: 1
