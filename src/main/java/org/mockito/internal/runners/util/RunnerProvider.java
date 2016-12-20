@@ -15,6 +15,9 @@ public class RunnerProvider {
         Constructor<?> constructor;
         try {
             Class<?> runnerClass = Class.forName(runnerClassName);
+            if (runnerClass.getConstructors().length != 1) {
+                throw new IllegalArgumentException("Expected " + runnerClassName + " to have exactly one constructor.");
+            }
             constructor = runnerClass.getConstructors()[0];
         } catch (Exception e) {
             throw new RuntimeException(e);
