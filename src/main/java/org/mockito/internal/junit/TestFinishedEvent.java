@@ -1,6 +1,6 @@
 package org.mockito.internal.junit;
 
-interface TestFinishedEvent {
+public interface TestFinishedEvent {
 
     Throwable getFailure();
 
