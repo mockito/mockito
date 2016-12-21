@@ -1,3 +1,17 @@
+### 2.4.0 (2016-12-21 05:35 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 4: Szczepan Faber
+  * 1: Brice Dutheil
+  * 1: jakobjo
+* Improvements: 3
+  * Enhancements: 2
+    * JUnit runner reports argument stubbing mismatches [(#808)](https://github.com/mockito/mockito/pull/808)
+    * Verification listeners [(#719)](https://github.com/mockito/mockito/pull/719)
+  * Remaining changes: 1
+    * Test clean up according to discussions for RememberingListeners [(#831)](https://github.com/mockito/mockito/pull/831)
+
 ### 2.3.11 (2016-12-20 12:25 UTC)
 
 * Authors: 2
