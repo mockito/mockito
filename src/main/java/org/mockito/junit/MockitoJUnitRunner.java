@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.runners.RunnerFactory;
-import org.mockito.internal.runners.RunnerImpl;
+import org.mockito.internal.runners.InternalRunner;
 import org.mockito.internal.runners.StrictRunner;
 
 
@@ -91,14 +91,14 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
         }
     }
 
-    private final RunnerImpl runner;
+    private final InternalRunner runner;
 
     public MockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
         //by default, StrictRunner is used. We can change that potentially based on feedback from users
         this(new StrictRunner(new RunnerFactory().createStrict(klass), klass));
     }
 
-    MockitoJUnitRunner(RunnerImpl runner) throws InvocationTargetException {
+    MockitoJUnitRunner(InternalRunner runner) throws InvocationTargetException {
         this.runner = runner;
     }
 

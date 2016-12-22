@@ -19,8 +19,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.internal.junit.MockitoTestListener;
 import org.mockito.internal.util.Supplier;
 
-//TODO rename to DefaultInternalRunner and the parent to InternalRunner
-public class SilentJUnitRunner implements RunnerImpl {
+//TODO rename to DefaultInternalRunner and the parent to
+public class SilentJUnitRunner implements InternalRunner {
 
     private final BlockJUnit4ClassRunner runner;
 
