@@ -14,7 +14,7 @@ import org.junit.runner.notification.RunNotifier;
  *
  * TODO rename to InternalRunner
  */
-public interface RunnerImpl extends Filterable {
+public interface InternalRunner extends Filterable {
 
     void run(RunNotifier notifier);
 

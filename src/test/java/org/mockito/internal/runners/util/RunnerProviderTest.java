@@ -5,7 +5,7 @@
 package org.mockito.internal.runners.util;
 
 import org.junit.Test;
-import org.mockito.internal.runners.RunnerImpl;
+import org.mockito.internal.runners.InternalRunner;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.assertNotNull;
@@ -17,7 +17,7 @@ public class RunnerProviderTest extends TestBase {
         //given
         RunnerProvider provider = new RunnerProvider();
         //when
-        RunnerImpl runner = provider.newInstance("org.mockito.internal.runners.SilentJUnitRunner", this.getClass(), null);
+        InternalRunner runner = provider.newInstance("org.mockito.internal.runners.SilentJUnitRunner", this.getClass(), null);
         //then
         assertNotNull(runner);
     }
