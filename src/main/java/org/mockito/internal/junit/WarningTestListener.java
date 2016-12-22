@@ -7,7 +7,7 @@ import org.mockito.mock.MockCreationSettings;
 import java.util.LinkedList;
 import java.util.List;
 
-class WarningTestListener implements MockitoTestListener, MockCreationListener {
+class WarningTestListener implements MockitoTestListener {
 
     private final MockitoLogger logger;
     private final List<Object> mocks = new LinkedList<Object>();

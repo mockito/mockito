@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Reports stubbing argument mismatches to the supplied logger
  */
-public class MismatchReportingTestListener implements MockitoTestListener, MockCreationListener {
+public class MismatchReportingTestListener implements MockitoTestListener {
 
     private final MockitoLogger logger;
     private final List<Object> mocks = new LinkedList<Object>();
