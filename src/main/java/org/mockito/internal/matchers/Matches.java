@@ -5,23 +5,27 @@
 
 package org.mockito.internal.matchers;
 
-import org.mockito.ArgumentMatcher;
-
 import java.io.Serializable;
+import java.util.regex.Pattern;
+import org.mockito.ArgumentMatcher;
 
 public class Matches implements ArgumentMatcher<Object>, Serializable {
 
-    private final String regex;
+    private final Pattern pattern;
 
     public Matches(String regex) {
-        this.regex = regex;
+        this(Pattern.compile(regex));
+    }
+
+    public Matches(Pattern pattern) {
+        this.pattern = pattern;
     }
 
     public boolean matches(Object actual) {
-        return (actual instanceof String) && ((String) actual).matches(regex);
+        return (actual instanceof String) && pattern.matcher((String) actual).matches();
     }
 
     public String toString() {
-        return "matches(\"" + regex.replaceAll("\\\\", "\\\\\\\\") + "\")";
+        return "matches(\"" + pattern.pattern().replaceAll("\\\\", "\\\\\\\\") + "\")";
     }
 }
