@@ -5,6 +5,7 @@
 
 package org.mockito.internal.matchers;
 
+import java.util.regex.Pattern;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
@@ -113,6 +114,7 @@ public class MatchersToStringTest extends TestBase {
     @Test
     public void matchesToString() {
         assertEquals("matches(\"\\\\s+\")", new Matches("\\s+").toString());
+        assertEquals("matches(\"\\\\s+\")", new Matches(Pattern.compile("\\s+")).toString());
     }
 
 }
