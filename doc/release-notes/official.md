@@ -1,3 +1,13 @@
+### 2.4.1 (2016-12-22 14:02 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 2
+  * Enhancements: 2
+    * Fixes #838 : Adds a matches(Pattern) [(#839)](https://github.com/mockito/mockito/pull/839)
+    * Feature request: ArgumentMatchers.matches(Pattern regex) [(#838)](https://github.com/mockito/mockito/issues/838)
+
 ### 2.4.0 (2016-12-21 05:35 UTC)
 
 * Authors: 3
