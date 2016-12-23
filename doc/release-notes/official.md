@@ -1,3 +1,11 @@
+### 2.4.2 (2016-12-23 23:44 UTC)
+
+* Authors: 1
+* Commits: 9
+  * 9: Szczepan Faber
+* Improvements: 1
+  * Added missing Javadoc and few other tidy-ups [(#842)](https://github.com/mockito/mockito/pull/842)
+
 ### 2.4.1 (2016-12-22 14:02 UTC)
 
 * Authors: 1
