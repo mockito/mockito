@@ -24,7 +24,7 @@ public class RunnerFactory {
     /**
      * Creates silent runner implementation
      */
-    public RunnerImpl create(Class<?> klass) throws InvocationTargetException {
+    public InternalRunner create(Class<?> klass) throws InvocationTargetException {
         return create(klass, new Supplier<MockitoTestListener>() {
             public MockitoTestListener get() {
                 return new NoOpTestListener();
@@ -35,7 +35,7 @@ public class RunnerFactory {
     /**
      * Creates strict runner implementation
      */
-    public RunnerImpl createStrict(Class<?> klass) throws InvocationTargetException {
+    public InternalRunner createStrict(Class<?> klass) throws InvocationTargetException {
         return create(klass, new Supplier<MockitoTestListener>() {
             public MockitoTestListener get() {
                 return new MismatchReportingTestListener(new ConsoleMockitoLogger());
@@ -46,9 +46,13 @@ public class RunnerFactory {
     /**
      * Creates runner implementation with provided listener supplier
      */
-    public RunnerImpl create(Class<?> klass, Supplier<MockitoTestListener> listenerSupplier) throws InvocationTargetException {
+    public InternalRunner create(Class<?> klass, Supplier<MockitoTestListener> listenerSupplier) throws InvocationTargetException {
         try {
-            return new RunnerProvider().newInstance("org.mockito.internal.runners.SilentJUnitRunner", klass, listenerSupplier);
+            String runnerClassName = "org.mockito.internal.runners.DefaultInternalRunner";
+            //Warning: I'm using String literal on purpose!
+            //When JUnit is not on classpath, we want the code to throw exception here so that we can catch it
+            //If we statically link the class, we will get Error when class is loaded
+            return new RunnerProvider().newInstance(runnerClassName, klass, listenerSupplier);
         } catch (InvocationTargetException e) {
             if (!hasTestMethods(klass)) {
                 throw new MockitoException(

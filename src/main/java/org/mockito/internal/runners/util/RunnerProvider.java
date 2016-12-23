@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.runners.util;
 
-import org.mockito.internal.runners.RunnerImpl;
+import org.mockito.internal.runners.InternalRunner;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class RunnerProvider {
 
-    public RunnerImpl newInstance(String runnerClassName, Object ... constructorArgs) throws Exception {
+    public InternalRunner newInstance(String runnerClassName, Object ... constructorArgs) throws Exception {
         Constructor<?> constructor;
         try {
             Class<?> runnerClass = Class.forName(runnerClassName);
@@ -24,7 +24,7 @@ public class RunnerProvider {
         }
         
         try {
-            return (RunnerImpl) constructor.newInstance(constructorArgs);
+            return (InternalRunner) constructor.newInstance(constructorArgs);
         } catch (InvocationTargetException e) {
             throw e;
         } catch (Exception e) {
