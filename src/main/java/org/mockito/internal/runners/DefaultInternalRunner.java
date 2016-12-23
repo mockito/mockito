@@ -19,12 +19,11 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.internal.junit.MockitoTestListener;
 import org.mockito.internal.util.Supplier;
 
-//TODO rename to DefaultInternalRunner and the parent to InternalRunner
-public class SilentJUnitRunner implements RunnerImpl {
+public class DefaultInternalRunner implements InternalRunner {
 
     private final BlockJUnit4ClassRunner runner;
 
-    public SilentJUnitRunner(Class<?> testClass, final Supplier<MockitoTestListener> listenerSupplier) throws InitializationError {
+    public DefaultInternalRunner(Class<?> testClass, final Supplier<MockitoTestListener> listenerSupplier) throws InitializationError {
         runner = new BlockJUnit4ClassRunner(testClass) {
 
             public Object target;

@@ -16,7 +16,7 @@ import static org.mockito.Mockito.mockingDetails;
 /**
  * Test listener implementation that fails when there are unused stubbings
  */
-class StrictStubsTestListener implements MockitoTestListener, MockCreationListener {
+class StrictStubsTestListener implements MockitoTestListener {
 
     private final Map<Object, MockCreationSettings> mocks = new HashMap<Object, MockCreationSettings>();
 

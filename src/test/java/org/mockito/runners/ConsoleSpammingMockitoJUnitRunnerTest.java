@@ -11,7 +11,7 @@ import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
-import org.mockito.internal.runners.RunnerImpl;
+import org.mockito.internal.runners.InternalRunner;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockitoutil.TestBase;
 
@@ -37,7 +37,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     public void shouldDelegateToGetDescription() throws Exception {
         //given
         final Description expectedDescription = Description.createSuiteDescription(this.getClass());
-        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new RunnerImplStub() {
+        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new InternalRunnerStub() {
             public Description getDescription() {
                 return expectedDescription;
             }
@@ -64,7 +64,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         }
     }
 
-    static class RunnerImplStub implements RunnerImpl {
+    static class InternalRunnerStub implements InternalRunner {
 
         public Description getDescription() {
             return null;

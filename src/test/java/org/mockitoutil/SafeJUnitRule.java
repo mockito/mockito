@@ -92,13 +92,6 @@ public class SafeJUnitRule implements MethodRule {
     }
 
     /**
-     * Rule under test
-     */
-    public MethodRule getTestedRule() {
-        return testedRule;
-    }
-
-    /**
      * Thrown when user expects the tested rule to throw an exception but no exception was thrown
      */
     class ExpectedThrowableNotReported extends Throwable {
