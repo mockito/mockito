@@ -45,9 +45,27 @@ public class JUnitResultAssert {
         }
     }
 
+    public JUnitResultAssert fails(String methodName, Class expectedException) {
+        for (Failure f : result.getFailures()) {
+            if (f.getDescription().getMethodName().equals(methodName) && expectedException.isInstance(f.getException())) {
+                return this;
+            }
+        }
+        throw new AssertionError("Method '" + methodName + "' did not fail with: " + expectedException.getSimpleName()
+                + "\n" + formatFailures(result.getFailures()));
+    }
+
+    public JUnitResultAssert succeeds(int successCount) {
+        int i = result.getRunCount() - result.getFailureCount();
+        if (i != successCount) {
+            throw new AssertionError("Expected " + successCount + " passing test methods but there were " + i + " passing methods.");
+        }
+        return this;
+    }
+
     private static String formatFailures(List<Failure> failures) {
         if (failures.isEmpty()) {
-            return "";
+            return "<no failures>";
         }
         int count = 1;
         StringBuilder out = new StringBuilder("Failures:");
