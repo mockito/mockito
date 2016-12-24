@@ -1,57 +1,11 @@
-apply plugin: 'java'
-apply plugin: 'maven'
 description = "Mockito for Android"
 
-Properties props = new Properties()
-props.load(new FileInputStream(rootProject.file("version.properties")))
-
-group = 'org.mockito'
-archivesBaseName = 'mockito-android'
-version = props['mockito.version']
-
-def licenseFiles = copySpec {
-    //mockito license
-    from(".") { include 'LICENSE' }
+ext {
+    artifactName = 'mockito-android'
+    bintrayRepo = 'test'
+    bintrayAutoPublish = false
+    mavenCentralSync = false
 }
 
-jar {
-    baseName = archivesBaseName
-    from(sourceSets.main.allSource)
-    with licenseFiles
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources"
-    from sourceSets.main.allJava.srcDirs
-    include "**/*.java", "**/*.aj"
-}
-
-artifacts {
-    archives sourcesJar
-}
-
-tasks.javadoc.enabled = true
-
-publishing {
-    publications {
-        mockitoAndroid(MavenPublication) {
-            from components.java
-            artifactId archivesBaseName
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: "file://${rootProject.projectDir}/target/maven/repository")
-        }
-    }
-}
-
-dependencies {
-    compile project.rootProject
-    compile "net.bytebuddy:byte-buddy-android:1.5.5"
-}
+apply from: "$rootDir/gradle/java-library.gradle"
+apply from: "$rootDir/gradle/publishable-java-library.gradle"

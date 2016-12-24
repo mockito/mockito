@@ -4,6 +4,7 @@
  */
 package org.mockitousage.debugging;
 
+import org.assertj.core.api.Condition;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.invocation.DescribedInvocation;
@@ -23,27 +24,25 @@ import static org.mockito.Mockito.*;
  */
 public class InvocationListenerCallbackTest {
 
-    // Cannot use a mockito-mock here: during stubbing, the listener1 will be called
-    // and mockito will confuse the mocks.
-    private RememberingListener listener1 = new RememberingListener();
-    private RememberingListener listener2 = new RememberingListener();
-
     @Test
     public void should_call_single_listener_when_mock_return_normally() throws Exception {
         // given
-        Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1));
+        RememberingListener listener = new RememberingListener();
+        Foo foo = mock(Foo.class, withSettings().invocationListeners(listener));
         willReturn("basil").given(foo).giveMeSomeString("herb");
 
         // when
         foo.giveMeSomeString("herb");
 
         // then
-        assertThatHasBeenNotified(listener1, "basil", getClass().getSimpleName());
+        assertThat(listener).is(notifiedFor("basil", getClass().getSimpleName()));
     }
 
     @Test
     public void should_call_all_listener_when_mock_return_normally() throws Exception {
         // given
+        RememberingListener listener1 = new RememberingListener();
+        RememberingListener listener2 = new RememberingListener();
         Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener2));
         given(foo.giveMeSomeString("herb")).willReturn("rosemary");
 
@@ -51,10 +50,9 @@ public class InvocationListenerCallbackTest {
         foo.giveMeSomeString("herb");
 
         // then
-        assertThatHasBeenNotified(listener1, "rosemary", getClass().getSimpleName());
-        assertThatHasBeenNotified(listener2, "rosemary", getClass().getSimpleName());
+        assertThat(listener1).is(notifiedFor("rosemary", getClass().getSimpleName()));
+        assertThat(listener2).is(notifiedFor("rosemary", getClass().getSimpleName()));
     }
-
 
     @Test
     public void should_call_all_listener_when_mock_throws_exception() throws Exception {
@@ -76,12 +74,15 @@ public class InvocationListenerCallbackTest {
         }
     }
 
-    static class OvenNotWorking extends RuntimeException { }
-
-    private void assertThatHasBeenNotified(RememberingListener listener, Object returned, String location) {
-        assertThat(listener.returnValue).isEqualTo(returned);
-        assertThat(listener.invocation).isNotNull();
-        assertThat(listener.locationOfStubbing).contains(getClass().getSimpleName());
+    private static Condition<RememberingListener> notifiedFor(final Object returned, final String location) {
+        return new Condition<RememberingListener>() {
+            public boolean matches(RememberingListener toBeAsserted) {
+                assertThat(toBeAsserted.returnValue).isEqualTo(returned);
+                assertThat(toBeAsserted.invocation).isNotNull();
+                assertThat(toBeAsserted.locationOfStubbing).contains(location);
+                return true;
+            }
+        };
     }
 
     private static class RememberingListener implements InvocationListener {
@@ -95,4 +96,6 @@ public class InvocationListenerCallbackTest {
             this.locationOfStubbing = mcr.getLocationOfStubbing();
         }
     }
+
+    private static class OvenNotWorking extends RuntimeException { }
 }

@@ -4,20 +4,19 @@
  */
 package org.mockito.internal.stubbing;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.StubInfoImpl;
-import org.mockito.internal.stubbing.answers.AnswersValidator;
 import org.mockito.internal.verification.DefaultRegisteredInvocations;
 import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.internal.verification.SingleRegisteredInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import org.mockito.stubbing.ValidableAnswer;
 
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
@@ -53,11 +52,15 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         addAnswer(answer, true);
     }
 
-    public void addAnswer(Answer answer, boolean isConsecutive) {
+    /**
+     * Adds new stubbed answer and returns the invocation matcher the answer was added to.
+     */
+    public StubbedInvocationMatcher addAnswer(Answer answer, boolean isConsecutive) {
         Invocation invocation = invocationForStubbing.getInvocation();
-        mockingProgress().stubbingCompleted(invocation);
-        AnswersValidator answersValidator = new AnswersValidator();
-        answersValidator.validate(answer, invocation);
+        mockingProgress().stubbingCompleted();
+        if (answer instanceof ValidableAnswer) {
+            ((ValidableAnswer) answer).validateFor(invocation);
+        }
 
         synchronized (stubbed) {
             if (isConsecutive) {
@@ -65,6 +68,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
             } else {
                 stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
             }
+            return stubbed.getFirst();
         }
     }
 

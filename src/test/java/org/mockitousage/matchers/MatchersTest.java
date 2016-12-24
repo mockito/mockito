@@ -5,6 +5,22 @@
 
 package org.mockitousage.matchers;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.RandomAccess;
+import java.util.regex.Pattern;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotSame;
+import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalMatchers.and;
 import static org.mockito.AdditionalMatchers.aryEq;
@@ -43,20 +59,6 @@ import static org.mockito.Mockito.startsWith;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotSame;
-import static junit.framework.TestCase.fail;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.RandomAccess;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
 
 
 @SuppressWarnings("unchecked")
@@ -493,6 +495,16 @@ public class MatchersTest extends TestBase {
     public void matches_matcher() {
         when(mock.oneArg(matches("[a-z]+\\d\\d"))).thenReturn("1");
         when(mock.oneArg(matches("\\d\\d\\d"))).thenReturn("2");
+
+        assertEquals("1", mock.oneArg("a12"));
+        assertEquals("2", mock.oneArg("131"));
+        assertEquals(null, mock.oneArg("blah"));
+    }
+
+    @Test
+    public void matches_Pattern_matcher() {
+        when(mock.oneArg(matches(Pattern.compile("[a-z]+\\d\\d")))).thenReturn("1");
+        when(mock.oneArg(matches(Pattern.compile("\\d\\d\\d")))).thenReturn("2");
 
         assertEquals("1", mock.oneArg("a12"));
         assertEquals("2", mock.oneArg("131"));

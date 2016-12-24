@@ -8,6 +8,7 @@ import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.dynamic.ClassFileLocator;
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.Instantiator;
@@ -99,7 +100,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
         try {
             instrumentation = ByteBuddyAgent.install();
             if (!instrumentation.isRetransformClassesSupported()) {
-                throw new MockitoException(join(
+                throw new MockitoInitializationException(join(
                         "Byte Buddy requires retransformation for creating inline mocks. This feature is unavailable on the current VM.",
                         "",
                         "You cannot use this mock maker on this VM:",
@@ -121,13 +122,13 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
             try {
                 Class<?> dispatcher = Class.forName("org.mockito.internal.creation.bytebuddy.MockMethodDispatcher");
                 if (dispatcher.getClassLoader() != null) {
-                    throw new MockitoException(join(
+                    throw new MockitoInitializationException(join(
                             "The MockMethodDispatcher must not be loaded manually but must be injected into the bootstrap class loader.",
                             "",
                             "The dispatcher class was already loaded by: " + dispatcher.getClassLoader()));
                 }
             } catch (ClassNotFoundException cnfe) {
-                throw new MockitoException(join(
+                throw new MockitoInitializationException(join(
                         "Mockito failed to inject the MockMethodDispatcher class into the bootstrap class loader",
                         "",
                         "It seems like your current VM does not support the instrumentation API correctly:",
@@ -135,7 +136,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
             }
             bytecodeGenerator = new TypeCachingBytecodeGenerator(new InlineBytecodeGenerator(instrumentation, mocks), true);
         } catch (IOException ioe) {
-            throw new MockitoException(join(
+            throw new MockitoInitializationException(join(
                     "Mockito could not self-attach a Java agent to the current VM. This feature is required for inline mocking.",
                     "This error occured due to an I/O error during the creation of this agent: " + ioe,
                     "",
@@ -210,7 +211,10 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
                 "",
                 "If you're not sure why you're getting this error, please report to the mailing list.",
                 "",
-                Platform.isJava8BelowUpdate45() ? "Java 8 early builds have bugs that were addressed in Java 1.8.0_45, please update your JDK!\n" : "",
+                Platform.warnForVM(
+                        "IBM J9 VM", "Early IBM virtual machine are known to have issues with Mockito, please upgrade to an up-to-date version.\n",
+                        "Hotspot", Platform.isJava8BelowUpdate45() ? "Java 8 early builds have bugs that were addressed in Java 1.8.0_45, please update your JDK!\n" : ""
+                ),
                 Platform.describe(),
                 "",
                 "You are seeing this disclaimer because Mockito is configured to create inlined mocks.",
