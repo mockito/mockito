@@ -18,7 +18,7 @@ import org.mockito.junit.MockitoRule;
 public class JUnitRule implements MockitoRule {
 
     private final MockitoLogger logger;
-    private final MockitoTestListener listener;
+    private final UniversalTestListener listener;
 
     /**
      * @param logger target for the stubbing warnings
@@ -26,12 +26,7 @@ public class JUnitRule implements MockitoRule {
      */
     public JUnitRule(MockitoLogger logger, Strictness strictness) {
         this.logger = logger;
-        switch (strictness) {
-            case LENIENT: listener = new NoOpTestListener(); break;
-            case WARN: listener = new WarningTestListener(logger); break;
-            case STRICT_STUBS: listener = new StrictStubsTestListener(); break;
-            default: throw new IllegalArgumentException("Illegal argument: " + strictness);
-        }
+        this.listener = new UniversalTestListener(strictness, logger);
     }
 
 	@Override
@@ -77,6 +72,7 @@ public class JUnitRule implements MockitoRule {
     }
 
     public MockitoRule strictness(Strictness strictness) {
-        return new JUnitRule(logger, strictness);
+        this.listener.setStrictness(strictness);
+        return this;
     }
 }

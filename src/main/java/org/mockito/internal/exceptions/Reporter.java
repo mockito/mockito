@@ -873,7 +873,7 @@ public class Reporter {
         throw formatUnncessaryStubbingException(null, unused);
     }
 
-    public static PotentialStubbingProblem potentialStubbingProblemByJUnitRule(
+    public static void potentialStubbingProblemByJUnitRule(
             Invocation actualInvocation, Collection<Invocation> argMismatchStubbings) {
         StringBuilder stubbings = new StringBuilder();
         int count = 1;
