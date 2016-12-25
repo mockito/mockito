@@ -91,6 +91,15 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
         }
     }
 
+    /**
+     * TODO document
+     */
+    public static class StrictStubs extends MockitoJUnitRunner {
+        public StrictStubs(Class<?> klass) throws InvocationTargetException {
+            super(new StrictRunner(new RunnerFactory().createStrictStubs(klass), klass));
+        }
+    }
+
     private final InternalRunner runner;
 
     public MockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
