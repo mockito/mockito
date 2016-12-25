@@ -1,3 +1,11 @@
+### 2.4.3 (2016-12-25 15:39 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Added subproject for supporting class loading on Android. [(#774)](https://github.com/mockito/mockito/pull/774)
+
 ### 2.4.2 (2016-12-23 23:44 UTC)
 
 * Authors: 1
