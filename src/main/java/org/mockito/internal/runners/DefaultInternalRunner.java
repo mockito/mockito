@@ -50,13 +50,15 @@ public class DefaultInternalRunner implements InternalRunner {
 
                     public void testFinished(Description description) throws Exception {
                         super.testFinished(description);
-                        if (mockitoTestListener != null) {
-                            Mockito.framework().removeListener(mockitoTestListener);
-                            mockitoTestListener.testFinished(new DefaultTestFinishedEvent(target, description.getMethodName(), failure));
-                        }
                         try {
+                            if (mockitoTestListener != null) {
+                                Mockito.framework().removeListener(mockitoTestListener);
+                                mockitoTestListener.testFinished(new DefaultTestFinishedEvent(target, description.getMethodName(), failure));
+                            }
                             Mockito.validateMockitoUsage();
                         } catch(Throwable t) {
+                            //In order to produce clean exception to the user we need to fire test failure with the right description
+                            //Otherwise JUnit framework will report failure with some generic test name
                             notifier.fireTestFailure(new Failure(description, t));
                         }
                     }
