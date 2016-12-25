@@ -8,6 +8,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.junit.MismatchReportingTestListener;
 import org.mockito.internal.junit.MockitoTestListener;
 import org.mockito.internal.junit.NoOpTestListener;
+import org.mockito.internal.junit.StrictStubsRunnerTestListener;
 import org.mockito.internal.runners.util.RunnerProvider;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.internal.util.Supplier;
@@ -39,6 +40,19 @@ public class RunnerFactory {
         return create(klass, new Supplier<MockitoTestListener>() {
             public MockitoTestListener get() {
                 return new MismatchReportingTestListener(new ConsoleMockitoLogger());
+            }
+        });
+    }
+
+    /**
+     * Creates strict stubs runner implementation
+     *
+     * TODO, let's try to apply Brice suggestion and use switch + Strictness
+     */
+    public InternalRunner createStrictStubs(Class<?> klass) throws InvocationTargetException {
+        return create(klass, new Supplier<MockitoTestListener>() {
+            public MockitoTestListener get() {
+                return new StrictStubsRunnerTestListener();
             }
         });
     }
