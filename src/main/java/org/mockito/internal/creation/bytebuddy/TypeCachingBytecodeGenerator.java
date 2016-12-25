@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentMap;
 
 class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implements BytecodeGenerator {
 
-    private static final ClassLoader BOOT_LOADER = new URLClassLoader(new URL[0], null);
+    private static final ClassLoader BOOT_LOADER = new URLClassLoader(new URL[0], TypeCachingBytecodeGenerator.class.getClassLoader());
 
     final ConcurrentMap<Key, CachedBytecodeGenerator> avoidingClassLeakageCache = new ConcurrentHashMap<Key, CachedBytecodeGenerator>();
 
