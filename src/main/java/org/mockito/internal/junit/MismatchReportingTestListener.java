@@ -2,9 +2,9 @@ package org.mockito.internal.junit;
 
 import org.mockito.internal.junit.util.TestName;
 import org.mockito.internal.util.MockitoLogger;
-import org.mockito.listeners.MockCreationListener;
 import org.mockito.mock.MockCreationSettings;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,17 +14,22 @@ import java.util.List;
 public class MismatchReportingTestListener implements MockitoTestListener {
 
     private final MockitoLogger logger;
-    private final List<Object> mocks = new LinkedList<Object>();
+    private List<Object> mocks = new LinkedList<Object>();
 
     public MismatchReportingTestListener(MockitoLogger logger) {
         this.logger = logger;
     }
 
     public void testFinished(TestFinishedEvent event) {
+        Collection<Object> createdMocks = mocks;
+        //At this point, we don't need the mocks any more and we can mark all collected mocks for gc
+        //TODO make it better, it's easy to forget to clean up mocks and we still create new instance of list that nobody will read, it's also duplicated
+        mocks = new LinkedList<Object>();
+
         String testName = TestName.getTestName(event);
         if (event.getFailure() != null) {
             //print unused stubbings only when test succeeds to avoid reporting multiple problems and confusing users
-            new ArgMismatchFinder().getStubbingArgMismatches(mocks).format(testName, logger);
+            new ArgMismatchFinder().getStubbingArgMismatches(createdMocks).format(testName, logger);
         }
     }
 
