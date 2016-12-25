@@ -17,7 +17,7 @@ class UniversalTestListener implements MockitoTestListener {
     private Strictness currentStrictness;
     private final MockitoLogger logger;
 
-    private final Map<Object, MockCreationSettings> mocks = new IdentityHashMap<Object, MockCreationSettings>();
+    private Map<Object, MockCreationSettings> mocks = new IdentityHashMap<Object, MockCreationSettings>();
     private DefaultStubbingLookupListener stubbingLookupListener;
 
     UniversalTestListener(Strictness initialStrictness, MockitoLogger logger) {
@@ -25,14 +25,20 @@ class UniversalTestListener implements MockitoTestListener {
         this.logger = logger;
 
         //creating single stubbing lookup listener per junit rule instance / test method
+        //this way, when strictness is updated in the middle of the test it will affect the behavior of the stubbing listener
         this.stubbingLookupListener = new DefaultStubbingLookupListener(currentStrictness);
     }
 
     @Override
     public void testFinished(TestFinishedEvent event) {
+        Collection<Object> createdMocks = mocks.keySet();
+        //At this point, we don't need the mocks any more and we can mark all collected mocks for gc
+        //TODO make it better, it's easy to forget to clean up mocks and we still create new instance of list that nobody will read, it's also duplicated
+        mocks = new IdentityHashMap<Object, MockCreationSettings>();
+
         switch (currentStrictness) {
-            case WARN: emitWarnings(logger, event, mocks.keySet()); break;
-            case STRICT_STUBS: reportUnusedStubs(event, mocks.keySet()); break;
+            case WARN: emitWarnings(logger, event, createdMocks); break;
+            case STRICT_STUBS: reportUnusedStubs(event, createdMocks); break;
             case LENIENT: break;
             default: throw new IllegalStateException("Unknown strictness: " + currentStrictness);
         }
@@ -67,8 +73,6 @@ class UniversalTestListener implements MockitoTestListener {
         //In future, we should start passing MockSettings object to the creation listener
         //TODO #793 - when completed, we should be able to get rid of the CreationSettings casting below
         ((CreationSettings) settings).getStubbingLookupListeners().add(stubbingLookupListener);
-
-        //TODO #840 - we should remove stubbing lookup listeners after we're done. Otherwise we risk leaks.
     }
 
     public void setStrictness(Strictness strictness) {
