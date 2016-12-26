@@ -67,17 +67,13 @@ apply from: "gradle/publishable-java-library.gradle"
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/coverage.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
+apply from: 'gradle/root/classpath-fix.gradle'
 apply from: 'gradle/root/release.gradle'
 
 apply from: 'gradle/mockito-core/osgi.gradle'
 apply from: 'gradle/mockito-core/javadoc.gradle'
 apply from: 'gradle/mockito-core/license.gradle'
 apply from: 'gradle/mockito-core/testing.gradle'
-
-classes.doLast {
-    file("${buildDir}/classes/main/org/mockito/internal/creation/bytebuddy/MockMethodDispatcher.class")
-        .renameTo(file("${buildDir}/classes/main/org/mockito/internal/creation/bytebuddy/MockMethodDispatcher.raw"))
-}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14.1'
