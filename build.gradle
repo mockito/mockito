@@ -74,6 +74,12 @@ apply from: 'gradle/mockito-core/javadoc.gradle'
 apply from: 'gradle/mockito-core/license.gradle'
 apply from: 'gradle/mockito-core/testing.gradle'
 
+classes.doLast {
+    java.nio.file.Files.move(
+        file("${buildDir}/classes/main/org/mockito/internal/creation/bytebuddy/MockMethodDispatcher.class").toPath(),
+        file("${buildDir}/classes/main/org/mockito/internal/creation/bytebuddy/MockMethodDispatcher.raw").toPath())
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14.1'
 }
