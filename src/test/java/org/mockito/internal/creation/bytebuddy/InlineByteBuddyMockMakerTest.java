@@ -157,7 +157,7 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
         Throwable throwable = new Throwable();
         throwable.setStackTrace(stack);
-        throwable = MockMethodAdvice.hideRecursiveCall(throwable, 2, SampleInterface.class);
+        throwable = InlineByteBuddyMockMaker.hideRecursiveCall(throwable, 2, SampleInterface.class);
 
         assertThat(throwable.getStackTrace()).isEqualTo(new StackTraceElement[]{
                 new StackTraceElement("foo", "", "", -1),
@@ -170,7 +170,7 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     public void should_handle_missing_or_inconsistent_stack_trace() throws Exception {
         Throwable throwable = new Throwable();
         throwable.setStackTrace(new StackTraceElement[0]);
-        assertThat(MockMethodAdvice.hideRecursiveCall(throwable, 0, SampleInterface.class)).isSameAs(throwable);
+        assertThat(InlineByteBuddyMockMaker.hideRecursiveCall(throwable, 0, SampleInterface.class)).isSameAs(throwable);
     }
 
     @Test
