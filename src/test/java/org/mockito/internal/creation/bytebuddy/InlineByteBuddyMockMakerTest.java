@@ -1,10 +1,5 @@
 package org.mockito.internal.creation.bytebuddy;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.regex.Pattern;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.description.modifier.Visibility;
@@ -20,6 +15,12 @@ import org.mockito.internal.util.collections.Sets;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.regex.Pattern;
 
 import static net.bytebuddy.ClassFileVersion.JAVA_V8;
 import static net.bytebuddy.ClassFileVersion.JAVA_V9;
@@ -261,6 +262,11 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         mockSettings.defaultAnswer(new Returns("bar"));
         if (extraInterfaces.length > 0) mockSettings.extraInterfaces(extraInterfaces);
         return mockSettings;
+    }
+
+    @Test
+    public void testMockDispatcherIsRelocated() throws Exception {
+        assertThat(InlineByteBuddyMockMaker.class.getClassLoader().getResource("org/mockito/internal/creation/bytebuddy/MockMethodDispatcher.raw")).isNotNull();
     }
 
     private static final class FinalClass {
