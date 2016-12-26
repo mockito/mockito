@@ -111,7 +111,6 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
                 JarOutputStream outputStream = new JarOutputStream(new FileOutputStream(boot));
                 try {
                     String source = "org/mockito/internal/creation/bytebuddy/MockMethodDispatcher";
-                    outputStream.putNextEntry(new JarEntry(source + ".class"));
                     InputStream inputStream = InlineByteBuddyMockMaker.class.getClassLoader().getResourceAsStream(source + ".raw");
                     if (inputStream == null) {
                         throw new IllegalStateException(join(
@@ -120,6 +119,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
                                 "The class loader responsible for looking up the resource: " + InlineByteBuddyMockMaker.class.getClassLoader()
                         ));
                     }
+                    outputStream.putNextEntry(new JarEntry(source + ".class"));
                     try {
                         int length;
                         byte[] buffer = new byte[1024];
