@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
-import org.junit.runner.notification.Failure;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
@@ -22,7 +21,7 @@ public class StrictStubsRunnerTest extends TestBase {
 
     @Test public void detects_unnecessary_stubbings() {
         //when
-        Result result = runner.run(UnnecessaryStubbingTest.class);
+        Result result = runner.run(UnnecessaryStubbing.class);
         //then
         JUnitResultAssert.assertThat(result)
                 .fails(1, UnnecessaryStubbingException.class)
@@ -31,19 +30,15 @@ public class StrictStubsRunnerTest extends TestBase {
 
     @Test public void fails_fast_on_argument_mismatch() {
         //when
-        Result result = runner.run(StubbingArgMismatchTest.class);
+        Result result = runner.run(StubbingArgMismatch.class);
         //then
         JUnitResultAssert.assertThat(result)
                 .succeeds(2)
                 .fails(1, PotentialStubbingProblem.class);
-
-        //TODO update failure message: a) it's no longer JUnit rule feature b) make it more actionable
-//        Failure failure = result.getFailures().iterator().next();
-//        assertEquals("", failure.getMessage());
     }
 
     @RunWith(MockitoJUnitRunner.StrictStubs.class)
-    public static class UnnecessaryStubbingTest {
+    public static class UnnecessaryStubbing {
         @Mock IMethods mock;
         @Test public void unused_stubbing_1() {
             when(mock.simpleMethod()).thenReturn("");
@@ -58,7 +53,7 @@ public class StrictStubsRunnerTest extends TestBase {
     }
 
     @RunWith(MockitoJUnitRunner.StrictStubs.class)
-    public static class StubbingArgMismatchTest {
+    public static class StubbingArgMismatch {
         @Mock IMethods mock;
         @Test public void passing1() {}
         @Test public void passing2() {

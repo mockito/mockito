@@ -93,6 +93,8 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
 
     /**
      * TODO document
+     *
+     * @since 2.5.0
      */
     public static class StrictStubs extends MockitoJUnitRunner {
         public StrictStubs(Class<?> klass) throws InvocationTargetException {

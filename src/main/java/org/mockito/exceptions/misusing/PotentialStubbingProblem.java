@@ -10,9 +10,11 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoRule;
 
 /**
- * Strict stubbing is a new feature introduced in Mockito 2.3.
+ * Strict stubbing is a new feature introduced in Mockito 2.3.x for JUnit Rules ({@link MockitoRule#strictness(Strictness)})
+ * and in 2.5.x for JUnit Runner ({@link org.mockito.junit.MockitoJUnitRunner.StrictStubs}).
  * Detecting potential stubbing problems is intended to help writing and debugging tests.
- * The {@code org.mockito.exceptions.misusing.PotentialStubbingProblem} exception is thrown when a mock method is stubbed with argument X in test but then invoked with argument Y in code.
+ * The {@code org.mockito.exceptions.misusing.PotentialStubbingProblem} exception is thrown
+ * when a mock method is stubbed with argument X in test but then invoked with argument Y in code.
  * Example:
  * <pre class="code"><code class="java">
  * //test method:
