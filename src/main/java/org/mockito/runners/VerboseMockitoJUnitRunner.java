@@ -16,7 +16,7 @@ import org.junit.runner.notification.RunNotifier;
 import org.mockito.internal.debugging.WarningsCollector;
 import org.mockito.internal.junit.util.JUnitFailureHacker;
 import org.mockito.internal.runners.RunnerFactory;
-import org.mockito.internal.runners.RunnerImpl;
+import org.mockito.internal.runners.InternalRunner;
 
 /**
  * @deprecated as of 2.1.0. Use the {@link org.mockito.junit.MockitoJUnitRunner} runner instead
@@ -27,14 +27,14 @@ import org.mockito.internal.runners.RunnerImpl;
 @Deprecated
 public class VerboseMockitoJUnitRunner extends Runner implements Filterable {
 
-    private final RunnerImpl runner;
+    private final InternalRunner runner;
 
     public VerboseMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
         this(new RunnerFactory().create(klass));
     }
     
-    VerboseMockitoJUnitRunner(RunnerImpl runnerImpl) {
-        this.runner = runnerImpl;
+    VerboseMockitoJUnitRunner(InternalRunner runner) {
+        this.runner = runner;
     }
     
     @Override

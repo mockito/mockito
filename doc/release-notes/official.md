@@ -1,3 +1,185 @@
+### 2.4.5 (2016-12-27 17:52 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 3: Rafael Winterhalter
+  * 2: Szczepan Faber
+  * 1: ceduardo.melo
+* Improvements: 2
+  * Rename compiled MockMethodDispatcher class so that it works with Robolectric [(#847)](https://github.com/mockito/mockito/pull/847)
+  * Rename MockMethodDispatcher.class to MockMethodDispatcher.raw on build [(#845)](https://github.com/mockito/mockito/issues/845)
+
+### 2.4.4 (2016-12-27 14:45 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Szczepan Faber
+  * 1: Rafael Winterhalter
+* Improvements: 2
+  * Update Byte Buddy to support recent Java 9 builds [(#852)](https://github.com/mockito/mockito/pull/852)
+  * Automatically publish main jar to central [(#844)](https://github.com/mockito/mockito/pull/844)
+
+### 2.4.3 (2016-12-25 15:39 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Added subproject for supporting class loading on Android. [(#774)](https://github.com/mockito/mockito/pull/774)
+
+### 2.4.2 (2016-12-23 23:44 UTC)
+
+* Authors: 1
+* Commits: 9
+  * 9: Szczepan Faber
+* Improvements: 1
+  * Added missing Javadoc and few other tidy-ups [(#842)](https://github.com/mockito/mockito/pull/842)
+
+### 2.4.1 (2016-12-22 14:02 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 2
+  * Enhancements: 2
+    * Fixes #838 : Adds a matches(Pattern) [(#839)](https://github.com/mockito/mockito/pull/839)
+    * Feature request: ArgumentMatchers.matches(Pattern regex) [(#838)](https://github.com/mockito/mockito/issues/838)
+
+### 2.4.0 (2016-12-21 05:35 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 4: Szczepan Faber
+  * 1: Brice Dutheil
+  * 1: jakobjo
+* Improvements: 3
+  * Enhancements: 2
+    * JUnit runner reports argument stubbing mismatches [(#808)](https://github.com/mockito/mockito/pull/808)
+    * Verification listeners [(#719)](https://github.com/mockito/mockito/pull/719)
+  * Remaining changes: 1
+    * Test clean up according to discussions for RememberingListeners [(#831)](https://github.com/mockito/mockito/pull/831)
+
+### 2.3.11 (2016-12-20 12:25 UTC)
+
+* Authors: 2
+* Commits: 5
+  * 4: Szczepan Faber
+  * 1: Christian Schwarz
+* Improvements: 3
+  * Disabled maven central sync [(#837)](https://github.com/mockito/mockito/pull/837)
+  * Main jar automatically publishes to central [(#836)](https://github.com/mockito/mockito/pull/836)
+  * Simplified ArgumentMatcherStorageImpl and logic matchers [(#833)](https://github.com/mockito/mockito/pull/833)
+
+### 2.3.10 (2016-12-19 13:38 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Brice Dutheil
+* Improvements: 1
+  * Enhancements: 1
+    * Introduce validable answers [(#826)](https://github.com/mockito/mockito/pull/826)
+
+### 2.3.9 (2016-12-19 03:09 UTC)
+
+* Release automation bugfixes needed for mockito-android publication
+
+### 2.3.7 (2016-12-18 04:31 UTC)
+
+* Authors: 1
+* Commits: 24
+  * 24: Szczepan Faber
+* Improvements: 2
+  * Fixed problem with publication [(#832)](https://github.com/mockito/mockito/pull/832)
+  * Automated publication of mockito submodule like mockito-android [(#809)](https://github.com/mockito/mockito/pull/809)
+
+### 2.3.6 (2016-12-17 16:36 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 2
+  * Improves exception message in case a matcher is used for a primitive parameter [(#830)](https://github.com/mockito/mockito/pull/830)
+  * Test for verification listeners test can introduces bogus erro in other test cases. [(#827)](https://github.com/mockito/mockito/pull/827)
+
+### 2.3.5 (2016-12-15 10:24 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Rafael Winterhalter
+* Improvements: 1
+  * Only resolve instrumented method after validating that an instance is… [(#823)](https://github.com/mockito/mockito/pull/823)
+
+### 2.3.4 (2016-12-14 16:19 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 3
+  * Bugfixes: 1
+    * Fixes bug were previously verified invocations could not capture argu… [(#819)](https://github.com/mockito/mockito/pull/819)
+  * Enhancements: 1
+    * Verification using After and ArgumentCaptor with Times or AtLeast methods returns unexpected size of captured values list. [(#379)](https://github.com/mockito/mockito/issues/379)
+  * Remaining changes: 1
+    * Fixes the issue #379 by removing previously verified invocations, some tests were added to verify that works [(#380)](https://github.com/mockito/mockito/pull/380)
+
+### 2.3.3 (2016-12-13 22:39 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: LiamClark
+* Improvements: 1
+  * Enhancements: 1
+    * Verification listeners [(#719)](https://github.com/mockito/mockito/pull/719)
+
+### 2.3.2 (2016-12-13 18:33 UTC)
+
+* Authors: 2
+* Commits: 7
+  * 6: Brice Dutheil
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Enable annotation engine as plugin [(#811)](https://github.com/mockito/mockito/pull/811)
+
+### 2.3.1 (2016-12-13 18:26 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Rafael Winterhalter
+* Improvements: 1
+  * Never throw mockito exceptions from a plugin type's constructor [(#805)](https://github.com/mockito/mockito/pull/805)
+
+### 2.3.0 (2016-12-10 17:48 UTC)
+
+* Authors: 1
+* Commits: 50
+  * 50: Szczepan Faber
+* Improvements: 1
+  * New features: 1
+    * New opt-in stubbing strictness implemented in JUnit rules [(#807)](https://github.com/mockito/mockito/pull/807)
+
+### 2.2.29 (2016-12-07 13:17 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 2
+  * Bugfixes: 1
+    * Mockito 2 fails when running on IBM J9 (SR1 FP10) VM [(#801)](https://github.com/mockito/mockito/issues/801)
+  * Enhancements: 1
+    * Adds a warning for IBM J9 VMs if mock generation fails [(#803)](https://github.com/mockito/mockito/pull/803)
+
+### 2.2.28 (2016-12-02 13:45 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Brice Dutheil
+  * 1: Szczepan Faber
+* Improvements: 2
+  * Bugfixes: 1
+    * Deep stubs no longer cause unnecessary stubbing exception with JUnit runner [(#795)](https://github.com/mockito/mockito/pull/795)
+  * Remaining changes: 1
+    * Test improvements [(#791)](https://github.com/mockito/mockito/pull/791)
+
 ### 2.2.27 (2016-11-30 12:05 UTC)
 
 * Authors: 3

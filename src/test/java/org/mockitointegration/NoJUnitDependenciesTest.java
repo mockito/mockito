@@ -1,6 +1,7 @@
 package org.mockitointegration;
 
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.agent.ByteBuddyAgent;
 import org.hamcrest.Matcher;
 import org.junit.Assume;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.Objenesis;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import static org.mockitoutil.ClassLoaders.coverageTool;
@@ -24,6 +26,7 @@ public class NoJUnitDependenciesTest {
                         Mockito.class,
                         Matcher.class,
                         ByteBuddy.class,
+                        ByteBuddyAgent.class,
                         Objenesis.class
                 )
                 .withCodeSourceUrlOf(coverageTool())
@@ -31,6 +34,10 @@ public class NoJUnitDependenciesTest {
                 .build();
 
         Set<String> pureMockitoAPIClasses = ClassLoaders.in(classLoader_without_JUnit).omit("runners", "junit", "JUnit").listOwnedClasses();
+
+        // The later class is required to be initialized before any inline mock maker classes can be loaded.
+        checkDependency(classLoader_without_JUnit, "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
+        pureMockitoAPIClasses.remove("org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
 
         for (String pureMockitoAPIClass : pureMockitoAPIClasses) {
             checkDependency(classLoader_without_JUnit, pureMockitoAPIClass);

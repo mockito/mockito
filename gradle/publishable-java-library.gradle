@@ -1,0 +1,56 @@
+/**
+In order to apply this script plugin, please ensure following is configured:
+
+ ext {
+    bintrayAutoPublish = true //Whether version should be auto published after an upload to Bintray
+    mavenCentralSync = true //Whether to sync the version to Maven Central
+ }
+
+*/
+
+def licenseFiles = copySpec {
+    //mockito license
+    from(".") { include 'LICENSE' }
+}
+
+//TODO why do we still ship the main jar with sources?
+jar {
+    from(sourceSets.main.allSource)
+    with licenseFiles
+
+}
+
+task sourcesJar(type: Jar) {
+    from(sourceSets.main.allSource)
+    classifier = "sources"
+    with licenseFiles
+}
+
+task javadocJar(type: Jar) {
+    classifier = "javadoc"
+    with licenseFiles
+    from javadoc
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mainJar(MavenPublication) {
+            from components.java
+            artifactId project.archivesBaseName
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+//Gradle requires to configure pom after the publication above is configured
+apply from: "$rootDir/gradle/pom.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
+
+//so that we flesh out problems with maven publication during the build process
+build.dependsOn publishToMavenLocal

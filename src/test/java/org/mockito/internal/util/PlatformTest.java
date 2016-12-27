@@ -1,14 +1,33 @@
 package org.mockito.internal.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+// Possible description on a IBM J9 VM (see #801)
+//
+// java.specification.version = 1.8
+// java.vm.vendor = IBM Corporation
+// java.vm.version = 2.8
+// java.vm.name = IBM J9 VM
+// java.runtime.version = pwa6480sr1fp10-20150711_01 (SR1 FP10)
+// java.vm.info =
+//   JRE 1.8.0 Windows 7 amd64-64 Compressed References 20150630_255633 (JIT enabled, AOT enabled)
+//   J9VM - R28_jvm.28_20150630_1742_B255633
+//   JIT  - tr.r14.java_20150625_95081.01
+//   GC   - R28_jvm.28_20150630_1742_B255633_CMPRSS
+//   J9CL - 20150630_255633
+// os.name = Windows 7
+// os.version = 6.1
 public class PlatformTest {
+    // TODO use ClassLoaders
 
     @Test
     public void const_are_initialized_from_system_properties() {
+        System.out.println(Platform.describe());
+
         assertThat(Platform.JVM_VERSION).isEqualTo(System.getProperty("java.runtime.version"));
         assertThat(Platform.JVM_INFO).isEqualTo(System.getProperty("java.vm.info"));
         assertThat(Platform.JVM_NAME).isEqualTo(System.getProperty("java.vm.name"));
@@ -17,7 +36,23 @@ public class PlatformTest {
     }
 
     @Test
-    public void should_parse_open_jdk_string() {
+    public void should_warn_for_jvm() throws Exception {
+        assertThat(Platform.warnForVM("Java HotSpot(TM) 64-Bit Server VM",
+                                      "HotSpot", "hotspot warning",
+                                      "IBM", "ibm warning"))
+                .isEqualTo("hotspot warning");
+        assertThat(Platform.warnForVM("IBM J9 VM",
+                                      "HotSpot", "hotspot warning",
+                                      "IBM", "ibm warning"))
+                .isEqualTo("ibm warning");
+        assertThat(Platform.warnForVM("whatever",
+                                      null, "should not be returned",
+                                      null, "should not be returned"))
+                .isEqualTo("");
+    }
+
+    @Test
+    public void should_parse_open_jdk_string_and_report_wether_below_or_nut_update_45() {
         // Given
         // Sources :
         //  - http://www.oracle.com/technetwork/java/javase/versioning-naming-139433.html
@@ -36,6 +71,8 @@ public class PlatformTest {
             put("1.4.0_03-ea-b01", false);
             put("pxi3270_27sr4-20160303_03 (SR4)", false);
             put("pwi3260sr11-20120412_01 (SR11)", false);
+            put("pwa6480sr1fp10-20150711_01 (SR1 FP10)", false);
+            put("null", false);
         }};
 
         assertPlatformParsesCorrectlyVariousVersionScheme(versions);

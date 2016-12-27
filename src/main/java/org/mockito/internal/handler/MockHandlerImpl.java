@@ -4,24 +4,26 @@
  */
 package org.mockito.internal.handler;
 
-import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-
 import java.util.List;
 import org.mockito.internal.InternalMockHandler;
+import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
+import org.mockito.internal.listeners.StubbingLookupListener;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
-import org.mockito.internal.stubbing.answers.AnswersValidator;
+import org.mockito.internal.stubbing.answers.DefaultAnswerValidator;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.verification.VerificationMode;
+
+import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 /**
  * Invocation handler set on mock objects.
@@ -86,13 +88,14 @@ public class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
         // look for existing answer for this invocation
         StubbedInvocationMatcher stubbedInvocation = invocationContainerImpl.findAnswerFor(invocation);
+        notifyStubbedAnswerLookup(invocation, stubbedInvocation);
 
         if (stubbedInvocation != null) {
             stubbedInvocation.captureArgumentsFrom(invocation);
             return stubbedInvocation.answer(invocation);
         } else {
             Object ret = mockSettings.getDefaultAnswer().answer(invocation);
-            new AnswersValidator().validateDefaultAnswerReturnedValue(invocation, ret);
+            DefaultAnswerValidator.validateReturnValueFor(invocation, ret);
 
             // redo setting invocation for potential stubbing in case of partial
             // mocks / spies.
@@ -122,6 +125,14 @@ public class MockHandlerImpl<T> implements InternalMockHandler<T> {
         }
 
         return new VerificationDataImpl(invocationContainerImpl, invocationMatcher);
+    }
+
+    private void notifyStubbedAnswerLookup(Invocation invocation, StubbedInvocationMatcher exception) {
+        //TODO #793 - when completed, we should be able to get rid of the casting below
+        List<StubbingLookupListener> listeners = ((CreationSettings) mockSettings).getStubbingLookupListeners();
+        for (StubbingLookupListener listener : listeners) {
+            listener.onStubbingLookup(invocation, exception);
+        }
     }
 }
 

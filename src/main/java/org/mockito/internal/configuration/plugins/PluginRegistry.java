@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.PluginSwitch;
@@ -23,6 +24,9 @@ class PluginRegistry {
 
     private final InstantiatorProvider instantiatorProvider = new PluginLoader(pluginSwitch)
             .loadPlugin(InstantiatorProvider.class, "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
+
+    private AnnotationEngine annotationEngine = new PluginLoader(pluginSwitch)
+            .loadPlugin(AnnotationEngine.class, "org.mockito.internal.configuration.InjectingAnnotationEngine");
 
     /**
      * The implementation of the stack trace cleaner
@@ -50,5 +54,15 @@ class PluginRegistry {
      */
     InstantiatorProvider getInstantiatorProvider() {
       return instantiatorProvider;
+    }
+
+    /**
+     * Returns the annotation engine available for the current runtime.
+     *
+     * <p>Returns {@link org.mockito.internal.configuration.InjectingAnnotationEngine} if no
+     * {@link org.mockito.plugins.AnnotationEngine} extension exists or is visible in the current classpath.</p>
+     */
+    AnnotationEngine getAnnotationEngine() {
+        return annotationEngine;
     }
 }
