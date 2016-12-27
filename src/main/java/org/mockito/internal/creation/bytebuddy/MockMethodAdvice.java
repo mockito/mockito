@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.concurrent.Callable;
 
+import static org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.hideRecursiveCall;
+
 public class MockMethodAdvice extends MockMethodDispatcher {
 
     final WeakConcurrentMap<Object, MockMethodInterceptor> interceptors;
@@ -177,26 +179,6 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             Throwable cause = exception.getCause();
             new ConditionalStackTraceFilter().filter(hideRecursiveCall(cause, new Throwable().getStackTrace().length, origin.getDeclaringClass()));
             throw cause;
-        }
-    }
-
-    static Throwable hideRecursiveCall(Throwable throwable, int current, Class<?> targetType) {
-        try {
-            StackTraceElement[] stack = throwable.getStackTrace();
-            int skip = 0;
-            StackTraceElement next;
-            do {
-                next = stack[stack.length - current - ++skip];
-            } while (!next.getClassName().equals(targetType.getName()));
-            int top = stack.length - current - skip;
-            StackTraceElement[] cleared = new StackTraceElement[stack.length - skip];
-            System.arraycopy(stack, 0, cleared, 0, top);
-            System.arraycopy(stack, top + skip, cleared, top, current);
-            throwable.setStackTrace(cleared);
-            return throwable;
-        } catch (RuntimeException ignored) {
-            // This should not happen unless someone instrumented or manipulated exception stack traces.
-            return throwable;
         }
     }
 
