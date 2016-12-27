@@ -1,4 +1,5 @@
 task copyMockMethodDispatcher(type: Copy) {
+    dependsOn compileJava
     from "${buildDir}/classes/main/org/mockito/internal/creation/bytebuddy"
     into "${buildDir}/classes/main/org/mockito/internal/creation/bytebuddy"
     include "MockMethodDispatcher.class"
