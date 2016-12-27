@@ -13,11 +13,8 @@ def licenseFiles = copySpec {
     from(".") { include 'LICENSE' }
 }
 
-//TODO why do we still ship the main jar with sources?
 jar {
-    from(sourceSets.main.allSource)
     with licenseFiles
-
 }
 
 task sourcesJar(type: Jar) {
