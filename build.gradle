@@ -69,6 +69,7 @@ apply from: 'gradle/root/coverage.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
 apply from: 'gradle/root/release.gradle'
 
+apply from: 'gradle/mockito-core/inline-mock.gradle'
 apply from: 'gradle/mockito-core/osgi.gradle'
 apply from: 'gradle/mockito-core/javadoc.gradle'
 apply from: 'gradle/mockito-core/license.gradle'
