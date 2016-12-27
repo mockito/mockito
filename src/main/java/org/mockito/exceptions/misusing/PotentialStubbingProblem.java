@@ -40,6 +40,21 @@ import org.mockito.junit.MockitoRule;
  *  actual invocation on mock and the stubbing attempt in the test.
  *  Hence the need to use {@link org.mockito.BDDMockito#willReturn(Object)} or {@link Mockito#doReturn(Object)} for certain edge cases.
  *  </li>
+ *  <li>Reduce the strictness level in the test method:
+ * <pre class="code"><code class="java">
+ * public class ExampleTest {
+ *     &#064;Rule
+ *     public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
+ *
+ *     &#064;Test public void exampleTest() {
+ *         //Change the strictness level only for this test method:
+ *         mockito.strictness(Strictness.LENIENT);
+ *
+ *         //remaining test code
+ *     }
+ * }
+ * </code></pre>
+ *  </li>
  *  <li>In Mockito 2.x, simply don't use {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS} for that test.
  * You will lose stubbing strictness but at least you can complete the test.</li>
  * </ol>
