@@ -4,8 +4,6 @@
  */
 package org.mockito;
 
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-import static org.mockito.internal.util.Primitives.defaultValue;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.Contains;
 import org.mockito.internal.matchers.EndsWith;
@@ -25,6 +24,9 @@ import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.util.Primitives;
+
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+import static org.mockito.internal.util.Primitives.defaultValue;
 
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
@@ -91,6 +93,12 @@ import org.mockito.internal.util.Primitives;
  * Internally, they record a matcher on a stack and return a dummy value (usually null).
  * This implementation is due static type safety imposed by java compiler.
  * The consequence is that you cannot use <code>anyObject()</code>, <code>eq()</code> methods outside of verified/stubbed method.
+ * </p>
+ *
+ * <h1>Additional matchers</h1>
+ * <p>
+ * The class {@link AdditionalMatchers} offers rarely used matchers, although they can be useful, when
+ * it is useful to combine multiple matchers or when it is useful to negate a matcher necessary.
  * </p>
  *
  * <h1>Custom Argument ArgumentMatchers</h1>
@@ -1104,9 +1112,26 @@ public class ArgumentMatchers {
      *
      * @param regex the regular expression.
      * @return empty String ("").
+     *
+     * @see AdditionalMatchers#not(boolean)
      */
     public static String matches(String regex) {
         reportMatcher(new Matches(regex));
+        return "";
+    }
+
+    /**
+     * <code>Pattern</code> argument that matches the given regular expression.
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class
+     *
+     * @param pattern the regular expression pattern.
+     * @return empty String ("").
+     *
+     * @see AdditionalMatchers#not(boolean)
+     */
+    public static String matches(Pattern pattern) {
+        reportMatcher(new Matches(pattern));
         return "";
     }
 

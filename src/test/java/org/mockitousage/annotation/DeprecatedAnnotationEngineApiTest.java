@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockito.internal.configuration.DefaultAnnotationEngine;
+import org.mockito.internal.configuration.IndependentAnnotationEngine;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.*;
@@ -58,7 +58,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
     @Test
     public void shouldRespectUsersEngine() throws Exception {
         //given
-        AnnotationEngine customizedEngine = new DefaultAnnotationEngine() { /**/ };
+        AnnotationEngine customizedEngine = new IndependentAnnotationEngine() { /**/ };
         ConfigurationAccess.getConfig().overrideAnnotationEngine(customizedEngine);
         SimpleTestCase test = new SimpleTestCase();
         

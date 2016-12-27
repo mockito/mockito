@@ -5,6 +5,7 @@
 package org.mockito.internal.creation.settings;
 
 import org.mockito.listeners.InvocationListener;
+import org.mockito.internal.listeners.StubbingLookupListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
@@ -27,6 +28,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected MockName mockName;
     protected SerializableMode serializableMode = SerializableMode.NONE;
     protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
+    protected final List<StubbingLookupListener> stubbingLookupListeners = new ArrayList<StubbingLookupListener>();
     protected boolean stubOnly;
     private boolean useConstructor;
     private Object outerClassInstance;
@@ -102,6 +104,10 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
 
     public List<InvocationListener> getInvocationListeners() {
         return invocationListeners;
+    }
+
+    public List<StubbingLookupListener> getStubbingLookupListeners() {
+        return stubbingLookupListeners;
     }
 
     public boolean isUsingConstructor() {

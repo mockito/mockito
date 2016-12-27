@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.concurrent.Callable;
 
+import static org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.hideRecursiveCall;
+
 public class MockMethodAdvice extends MockMethodDispatcher {
 
     final WeakConcurrentMap<Object, MockMethodInterceptor> interceptors;
@@ -43,7 +45,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                                      @Advice.Origin Method origin,
                                      @Advice.AllArguments Object[] arguments) throws Throwable {
         MockMethodDispatcher dispatcher = MockMethodDispatcher.get(identifier, mock);
-        if (dispatcher == null || !dispatcher.isMocked(mock, origin)) {
+        if (dispatcher == null || !dispatcher.isMocked(mock) || !dispatcher.isOverridden(mock, origin)) {
             return null;
         } else {
             return dispatcher.handle(mock, origin, arguments);
@@ -83,15 +85,16 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     }
 
     @Override
-    public boolean isMocked(Object instance, Method origin) {
-        return selfCallInfo.checkSuperCall(instance) && isMock(instance) && isNotOverridden(instance.getClass(), origin);
+    public boolean isMocked(Object instance) {
+        return selfCallInfo.checkSuperCall(instance) && isMock(instance);
     }
 
-    private static boolean isNotOverridden(Class<?> type, Method origin) {
-        Class<?> currentType = type;
+    @Override
+    public boolean isOverridden(Object instance, Method origin) {
+        Class<?> currentType = instance.getClass();
         do {
             try {
-                return origin.equals(type.getDeclaredMethod(origin.getName(), origin.getParameterTypes()));
+                return origin.equals(currentType.getDeclaredMethod(origin.getName(), origin.getParameterTypes()));
             } catch (NoSuchMethodException ignored) {
                 currentType = currentType.getSuperclass();
             }
@@ -176,26 +179,6 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             Throwable cause = exception.getCause();
             new ConditionalStackTraceFilter().filter(hideRecursiveCall(cause, new Throwable().getStackTrace().length, origin.getDeclaringClass()));
             throw cause;
-        }
-    }
-
-    static Throwable hideRecursiveCall(Throwable throwable, int current, Class<?> targetType) {
-        try {
-            StackTraceElement[] stack = throwable.getStackTrace();
-            int skip = 0;
-            StackTraceElement next;
-            do {
-                next = stack[stack.length - current - ++skip];
-            } while (!next.getClassName().equals(targetType.getName()));
-            int top = stack.length - current - skip;
-            StackTraceElement[] cleared = new StackTraceElement[stack.length - skip];
-            System.arraycopy(stack, 0, cleared, 0, top);
-            System.arraycopy(stack, top + skip, cleared, top, current);
-            throwable.setStackTrace(cleared);
-            return throwable;
-        } catch (RuntimeException ignored) {
-            // This should not happen unless someone instrumented or manipulated exception stack traces.
-            return throwable;
         }
     }
 

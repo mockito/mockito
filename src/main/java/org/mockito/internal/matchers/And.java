@@ -5,40 +5,25 @@
 
 package org.mockito.internal.matchers;
 
+import java.io.Serializable;
+
 import org.mockito.ArgumentMatcher;
 
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
+@SuppressWarnings({ "unchecked", "serial","rawtypes" })
+public class And implements ArgumentMatcher<Object>, Serializable {
+    private ArgumentMatcher m1;
+    private ArgumentMatcher m2;
 
-@SuppressWarnings("unchecked")
-public class And implements ArgumentMatcher, Serializable {
-
-    private final List<ArgumentMatcher> matchers;
-
-    public And(List<ArgumentMatcher> matchers) {
-        this.matchers = matchers;
+    public And(ArgumentMatcher<?> m1, ArgumentMatcher<?> m2) {
+        this.m1 = m1;
+        this.m2 = m2;
     }
 
     public boolean matches(Object actual) {
-        for (ArgumentMatcher matcher : matchers) {
-            if (!matcher.matches(actual)) {
-                return false;
-            }
-        }
-        return true;
+        return m1.matches(actual) && m2.matches(actual);
     }
 
     public String toString() {
-        StringBuilder out = new StringBuilder();
-        out.append("and(");
-        for (Iterator<ArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
-            out.append(it.next().toString());
-            if (it.hasNext()) {
-                out.append(", ");
-            }
-        }
-        out.append(")");
-        return out.toString();
+        return "and("+m1+", "+m2+")";
     }
 }
