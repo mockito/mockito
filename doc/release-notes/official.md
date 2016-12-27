@@ -1,3 +1,13 @@
+### 2.4.4 (2016-12-27 14:45 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Szczepan Faber
+  * 1: Rafael Winterhalter
+* Improvements: 2
+  * Update Byte Buddy to support recent Java 9 builds [(#852)](https://github.com/mockito/mockito/pull/852)
+  * Automatically publish main jar to central [(#844)](https://github.com/mockito/mockito/pull/844)
+
 ### 2.4.3 (2016-12-25 15:39 UTC)
 
 * Authors: 1
