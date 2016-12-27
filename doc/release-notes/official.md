@@ -1,3 +1,14 @@
+### 2.4.5 (2016-12-27 17:52 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 3: Rafael Winterhalter
+  * 2: Szczepan Faber
+  * 1: ceduardo.melo
+* Improvements: 2
+  * Rename compiled MockMethodDispatcher class so that it works with Robolectric [(#847)](https://github.com/mockito/mockito/pull/847)
+  * Rename MockMethodDispatcher.class to MockMethodDispatcher.raw on build [(#845)](https://github.com/mockito/mockito/issues/845)
+
 ### 2.4.4 (2016-12-27 14:45 UTC)
 
 * Authors: 2
