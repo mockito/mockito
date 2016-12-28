@@ -10,11 +10,14 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoRule;
 
 /**
- * Strict stubbing is a new feature introduced in Mockito 2.3.x for JUnit Rules ({@link MockitoRule#strictness(Strictness)})
- * and in 2.5.x for JUnit Runner ({@link org.mockito.junit.MockitoJUnitRunner.StrictStubs}).
+ * Strict stubbing is a new opt-in feature for JUnit Rule ({@link MockitoRule#strictness(Strictness)})
+ * and JUnit Runner ({@link org.mockito.junit.MockitoJUnitRunner.StrictStubs}).
  * Detecting potential stubbing problems is intended to help writing and debugging tests.
  * The {@code org.mockito.exceptions.misusing.PotentialStubbingProblem} exception is thrown
- * when a mock method is stubbed with argument X in test but then invoked with argument Y in code.
+ * when mocked method is stubbed with some argument in test
+ * but then invoked with <strong>different</strong> argument in code.
+ * This scenario is called "stubbing argument mismatch".
+ * <p>
  * Example:
  * <pre class="code"><code class="java">
  * //test method:
@@ -23,7 +26,7 @@ import org.mockito.junit.MockitoRule;
  * //code under test:
  * Something something = mock.getSomething(50); // <-- stubbing argument mismatch
  * </code></pre>
- * The stubbing argument mismatch typically happens in following use cases:
+ * The stubbing argument mismatch is triggered in following use cases:
  * <ol>
  *     <li>Mistake or typo in the test code, the argument(s) used when declaring stubbings is unintentionally different</li>
  *     <li>Mistake or typo in the code under test, the argument(s) used in the code under test is unintentionally different</li>
@@ -38,11 +41,11 @@ import org.mockito.junit.MockitoRule;
  *  <li>Do you see this exception because you're stubbing the same method multiple times in the test?
  *  In that case, please use {@link org.mockito.BDDMockito#willReturn(Object)} or {@link Mockito#doReturn(Object)}
  *  family of methods for stubbing.
- *  Good looking stubbing via {@link Mockito#when(Object)} has its drawbacks: the framework cannot distinguish between
- *  actual invocation on mock and the stubbing attempt in the test.
+ *  Convenient stubbing via {@link Mockito#when(Object)} has its drawbacks: the framework cannot distinguish between
+ *  actual invocation on mock (real code) and the stubbing declaration (test code).
  *  Hence the need to use {@link org.mockito.BDDMockito#willReturn(Object)} or {@link Mockito#doReturn(Object)} for certain edge cases.
  *  </li>
- *  <li>Reduce the strictness level in the test method:
+ *  <li>Reduce the strictness level in the test method (only for JUnit Rules):
  * <pre class="code"><code class="java">
  * public class ExampleTest {
  *     &#064;Rule
@@ -57,8 +60,9 @@ import org.mockito.junit.MockitoRule;
  * }
  * </code></pre>
  *  </li>
- *  <li>In Mockito 2.x, simply don't use {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS} for that test.
- * You will lose stubbing strictness but at least you can complete the test.</li>
+ *  <li>In Mockito 2.x, don't use {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS} for that test.
+ *  If you use JUnit Runner, don't use {@link org.mockito.junit.MockitoJUnitRunner.StrictStubs} for that test.
+ * Strict stubbing will be unavailable for that test class.</li>
  * </ol>
  * <p>
  * We are very eager to hear feedback about "strict stubbing" feature, let us know by commenting on GitHub
