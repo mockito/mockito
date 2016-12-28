@@ -85,10 +85,10 @@ public interface MockitoRule extends MethodRule {
 
     /**
      * The strictness, especially "strict stubs" ({@link Strictness#STRICT_STUBS})
-     * can really make a difference when debugging and keeping tests clean.
+     * helps debugging and keeping tests clean.
      * It's a new feature introduced in Mockito 2.3.
      * Other levels of strictness - "Warn" - current default ({@link Strictness#WARN})
-     * and "lenient" ({@link MockitoRule#silent()}) strictness was already present in Mockito 2.1.0.
+     * and "lenient" ({@link MockitoRule#silent()}) strictness were already present in Mockito 2.1.0.
      * Version 2.3.0 introduces "strict stubs" ({@link Strictness#STRICT_STUBS}).
      *
      * <pre class="code"><code class="java">
@@ -115,6 +115,24 @@ public interface MockitoRule extends MethodRule {
      *              you no longer need to explicitly verify stubbed invocations. They are automatically verified.</li>
      *      </ul>
      * </ol>
+     *
+     * It is possible to tweak the strictness per test method.
+     * Why would need it? See the use cases in Javadoc for {@link PotentialStubbingProblem} class.
+     *
+     * <pre class="code"><code class="java">
+     * public class ExampleTest {
+     *     &#064;Rule
+     *     public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
+     *
+     *     &#064;Test public void exampleTest() {
+     *         //Change the strictness level only for this test method
+     *         //Useful for edge cases (see Javadoc for PotentialStubbingProblem class)
+     *         mockito.strictness(Strictness.LENIENT);
+     *
+     *         //remaining test code
+     *     }
+     * }
+     * </code></pre>
      *
      * "Strict stubs" are tentatively planned to be the default for Mockito 3.x</li>
      * We are very eager to hear feedback about "strict stubbing" feature, let us know by commenting on GitHub

@@ -56,7 +56,7 @@ public class SilentRunnerTest extends TestBase {
                 UsesFrameworkIncorrectly.class
         );
         //then
-        JUnitResultAssert.assertThat(result).fails(1, UnfinishedStubbingException.class);
+        JUnitResultAssert.assertThat(result).fails(1, "unfinished_stubbing_test_method", UnfinishedStubbingException.class);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class SilentRunnerTest extends TestBase {
     @RunWith(MockitoJUnitRunner.Silent.class)
     public static class UsesFrameworkIncorrectly {
         @Mock List<?> list;
-        @Test public void unfinished_stubbing() {
+        @Test public void unfinished_stubbing_test_method() {
             when(list.get(0)); //unfinished stubbing
         }
     }
