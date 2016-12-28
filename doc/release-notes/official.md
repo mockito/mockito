@@ -1,3 +1,12 @@
+### 2.5.0 (2016-12-28 08:10 UTC)
+
+* Authors: 1
+* Commits: 9
+  * 9: Szczepan Faber
+* Improvements: 2
+  * Stopped publishing java source inside main jar [(#850)](https://github.com/mockito/mockito/pull/850)
+  * JUnit rule strictness can be tweaked per test method [(#843)](https://github.com/mockito/mockito/pull/843)
+
 ### 2.4.5 (2016-12-27 17:52 UTC)
 
 * Authors: 3
