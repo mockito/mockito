@@ -32,7 +32,7 @@ public class JUnitResultAssert {
      * @param expectedFailureCount - expected number of failures
      * @param expectedException - the exception of each failure
      */
-    public void fails(int expectedFailureCount, Class expectedException) {
+    public JUnitResultAssert fails(int expectedFailureCount, Class expectedException) {
         if (result.getFailures().size() != expectedFailureCount) {
             throw new AssertionError("Wrong number of failures, expected: " + expectedFailureCount + ", actual: " + result.getFailures().size() + "\n" +
                     formatFailures(result.getFailures()));
@@ -43,11 +43,41 @@ public class JUnitResultAssert {
                         formatFailures(result.getFailures()));
             }
         }
+        return this;
+    }
+
+    /**
+     * Expects failure of given test method with given exception
+     */
+    public JUnitResultAssert fails(String methodName, Class expectedException) {
+        for (Failure f : result.getFailures()) {
+            if (methodName.equals(f.getDescription().getMethodName()) && expectedException.isInstance(f.getException())) {
+                return this;
+            }
+        }
+        throw new AssertionError("Method '" + methodName + "' did not fail with: " + expectedException.getSimpleName()
+                + "\n" + formatFailures(result.getFailures()));
+    }
+
+    /**
+     * Expects given amount of failures, with given exception triggered by given test method
+     */
+    public JUnitResultAssert fails(int expectedFailureCount, String methodName, Class expectedException) {
+        return fails(expectedFailureCount, expectedException)
+                .fails(methodName, expectedException);
+    }
+
+    public JUnitResultAssert succeeds(int successCount) {
+        int i = result.getRunCount() - result.getFailureCount();
+        if (i != successCount) {
+            throw new AssertionError("Expected " + successCount + " passing test methods but there were " + i + " passing methods.");
+        }
+        return this;
     }
 
     private static String formatFailures(List<Failure> failures) {
         if (failures.isEmpty()) {
-            return "";
+            return "<no failures>";
         }
         int count = 1;
         StringBuilder out = new StringBuilder("Failures:");
