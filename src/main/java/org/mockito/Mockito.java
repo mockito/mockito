@@ -1291,9 +1291,10 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
- *     <li>New "strict stubs" behavior of JUnit rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
- *     <li>Unnecessary stubbing detection in {@link MockitoJUnitRunner}</li>
- *     <li>Stubbing argument mismatch reporting by JUnit rules, documented in {@link org.mockito.quality.MockitoHint}</li>
+ *     <li>Strict stubbing with JUnit Rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
+ *     <li>Strict stubbing with JUnit Runner - {@link org.mockito.junit.MockitoJUnitRunner.StrictStubs}</li>
+ *     <li>Unnecessary stubbing detection with {@link MockitoJUnitRunner}</li>
+ *     <li>Stubbing argument mismatch warnings by JUnit rules, documented in {@link org.mockito.quality.MockitoHint}</li>
  * </ul>
  *
  * Mockito is a "loose" mocking framework by default.
