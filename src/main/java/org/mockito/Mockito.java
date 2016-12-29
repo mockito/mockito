@@ -4,26 +4,20 @@
  */
 package org.mockito;
 
-import org.mockito.quality.Strictness;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
+import org.mockito.internal.framework.DefaultMockitoMocking;
+import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.Answer1;
-import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.stubbing.Stubber;
-import org.mockito.stubbing.VoidAnswer1;
-import org.mockito.verification.After;
-import org.mockito.verification.Timeout;
-import org.mockito.verification.VerificationAfterDelay;
-import org.mockito.verification.VerificationMode;
-import org.mockito.verification.VerificationWithTimeout;
+import org.mockito.quality.Strictness;
+import org.mockito.stubbing.*;
+import org.mockito.verification.*;
 
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
@@ -2726,5 +2720,18 @@ public class Mockito extends ArgumentMatchers {
     @Incubating
     public static MockitoFramework framework() {
         return new DefaultMockitoFramework();
+    }
+
+    /**
+     * Allows to manage Mockito strictness (debugging, cleaner tests) without JUnit.
+     * <p>
+     * TODO javadoc
+     *
+     * @param testClassInstance
+     * @param strictness
+     */
+    @Incubating
+    public static MockitoMocking startMocking(Object testClassInstance, Strictness strictness) {
+        return new DefaultMockitoMocking(testClassInstance, strictness, new ConsoleMockitoLogger());
     }
 }
