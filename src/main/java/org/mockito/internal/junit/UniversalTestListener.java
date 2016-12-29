@@ -5,14 +5,16 @@ import org.mockito.internal.util.MockitoLogger;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 /**
  * Universal test listener that behaves accordingly to current setting of strictness.
  * Will come handy when we offer tweaking strictness at the method level with annotation.
  * Should be relatively easy to improve and offer tweaking strictness per mock.
  */
-class UniversalTestListener implements MockitoTestListener {
+public class UniversalTestListener implements MockitoTestListener {
 
     private Strictness currentStrictness;
     private final MockitoLogger logger;
@@ -20,7 +22,7 @@ class UniversalTestListener implements MockitoTestListener {
     private Map<Object, MockCreationSettings> mocks = new IdentityHashMap<Object, MockCreationSettings>();
     private DefaultStubbingLookupListener stubbingLookupListener;
 
-    UniversalTestListener(Strictness initialStrictness, MockitoLogger logger) {
+    public UniversalTestListener(Strictness initialStrictness, MockitoLogger logger) {
         this.currentStrictness = initialStrictness;
         this.logger = logger;
 
