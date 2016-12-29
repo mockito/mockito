@@ -7,6 +7,7 @@ buildscript {
     dependencies {
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3" //for publications to Bintray / central
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0' // later versions don't work on JDK6
+        classpath 'me.champeau.gradle:jmh-gradle-plugin:0.3.1' // Used to run benchmarks from command line
 
         //Needed so that release notes and release workflow plugin can be applied in separate gradle/*.gradle build files
         classpath project.'dependencies.mockito-release-tools'
@@ -15,6 +16,7 @@ buildscript {
 
 plugins {
     id 'com.gradle.build-scan' version '1.0'
+    id 'me.champeau.gradle.jmh' version '0.3.1'
 }
 
 description = 'Mockito mock objects library core API and implementation'
@@ -55,6 +57,9 @@ dependencies {
 
     testCompile 'org.assertj:assertj-core:1.7.1'
 
+    jmh 'org.openjdk.jmh:jmh-core:1.17.3'
+    jmh 'org.openjdk.jmh:jmh-generator-annprocess:1.17.3'
+
     testRuntime configurations.provided
 
     testUtil sourceSets.test.output
@@ -69,6 +74,7 @@ apply from: 'gradle/root/coverage.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
 apply from: 'gradle/root/release.gradle'
 
+apply from: 'gradle/mockito-core/benchmark.gradle'
 apply from: 'gradle/mockito-core/inline-mock.gradle'
 apply from: 'gradle/mockito-core/osgi.gradle'
 apply from: 'gradle/mockito-core/javadoc.gradle'
