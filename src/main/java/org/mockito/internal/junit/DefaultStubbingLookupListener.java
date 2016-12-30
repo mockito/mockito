@@ -20,6 +20,7 @@ import static org.mockito.Mockito.mockingDetails;
 class DefaultStubbingLookupListener implements StubbingLookupListener {
 
     Strictness currentStrictness;
+    boolean mismatchesReported;
 
     DefaultStubbingLookupListener(Strictness strictness) {
         this.currentStrictness = strictness;
@@ -35,6 +36,8 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
             //we have a stubbing arg mismatch.
             List<Invocation> argMismatchStubbings = potentialArgMismatches(invocation);
             if (!argMismatchStubbings.isEmpty()) {
+                mismatchesReported = true;
+                //TODO rename below
                 Reporter.potentialStubbingProblemByJUnitRule(invocation, argMismatchStubbings);
             }
         } else {

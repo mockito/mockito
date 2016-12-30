@@ -36,6 +36,7 @@ public class UniversalTestListener implements MockitoTestListener {
         Collection<Object> createdMocks = mocks.keySet();
         //At this point, we don't need the mocks any more and we can mark all collected mocks for gc
         //TODO make it better, it's easy to forget to clean up mocks and we still create new instance of list that nobody will read, it's also duplicated
+        //TODO clean up all other state, null out stubbingLookupListener
         mocks = new IdentityHashMap<Object, MockCreationSettings>();
 
         switch (currentStrictness) {
@@ -46,8 +47,9 @@ public class UniversalTestListener implements MockitoTestListener {
         }
     }
 
-    private static void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
-        if (event.getFailure() == null) {
+    private void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
+        if (event.getFailure() == null && !stubbingLookupListener.mismatchesReported) {
+            //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
             //Detect unused stubbings:
             UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks);
             unused.reportUnused();
