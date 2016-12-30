@@ -10,6 +10,8 @@ import org.mockito.listeners.MockitoListener;
  * <p>
  * Typically this indicates a user error - previous listener was not removed
  * according to the API specification - see {@link org.mockito.MockitoFramework#addListener(MockitoListener)}.
+ *
+ * @since 2.5.1
  */
 public class RedundantListenerException extends MockitoException {
     public RedundantListenerException(String message) {
