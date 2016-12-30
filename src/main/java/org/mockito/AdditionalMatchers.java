@@ -5,16 +5,23 @@
 
 package org.mockito;
 
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import org.mockito.internal.matchers.ArrayEquals;
+import org.mockito.internal.matchers.AssertionMatcher;
 import org.mockito.internal.matchers.CompareEqual;
 import org.mockito.internal.matchers.EqualsWithDelta;
 import org.mockito.internal.matchers.Find;
 import org.mockito.internal.matchers.GreaterOrEqual;
 import org.mockito.internal.matchers.GreaterThan;
+import org.mockito.internal.matchers.LambdaMatcher;
 import org.mockito.internal.matchers.LessOrEqual;
 import org.mockito.internal.matchers.LessThan;
+import org.mockito.internal.util.Primitives;
+
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * See {@link Matchers} for general info about matchers.
@@ -1051,7 +1058,65 @@ public class AdditionalMatchers {
         reportMatcher(new EqualsWithDelta(value, delta));
         return 0;
     }
-    
+
+    /**
+     * Allows creating inlined ArgumentCaptor with a lambda expression.
+     * <p>
+     * See examples in javadoc for a {@link AssertionMatcher} class.
+     *
+     * @param assertingLambda the lambda expression asserting the argument value
+     * @param <T> the argument type
+     * @return the default value for the given type (not used externally)
+     *
+     * @see AssertionMatcher
+     *
+     * @since 3.0.0
+     */
+    @Incubating
+    public static <T> T assertArg(Consumer<T> assertingLambda) {
+        Mockito.argThat(new AssertionMatcher<>(assertingLambda));
+        return Primitives.defaultValueForConsumerLambda(assertingLambda);
+    }
+
+    /**
+     * Allows creating inlined argument matcher with a predicate lambda expression.
+     * <p>
+     * See examples in javadoc for a {@link LambdaMatcher} class.
+     *
+     * @param predicate the boolean-valued function predicating the argument value
+     * @param <T> the argument type
+     * @return the default value for the given type (not used externally)
+     *
+     * @see AdditionalMatchers#argLambda(Predicate, String)
+     * @see LambdaMatcher
+     *
+     * @since 3.0.0
+     */
+    @Incubating
+    public static <T> T argLambda(Predicate<T> predicate) {
+        return argLambda(predicate, "Inline lambda expression - add description in code to get more detailed error message");
+    }
+
+    /**
+     * Allows creating inlined argument matcher with a lambda expression (and custom description).
+     * <p>
+     * See examples in javadoc for a {@link LambdaMatcher} class.
+     *
+     * @param predicate the boolean-valued function predicating the argument value
+     * @param description the additional description displayed in a case of a verification failure
+     * @param <T> the argument type
+     * @return the default value for the given type (not used externally)
+     *
+     * @see AdditionalMatchers#argLambda(Predicate)
+     * @see LambdaMatcher
+     *
+     * @since 3.0.0
+     */
+    @Incubating
+    public static <T> T argLambda(Predicate<T> predicate, String description) {
+        return argThat(new LambdaMatcher<>(predicate, description));
+    }
+
     private static void reportMatcher(ArgumentMatcher<?> matcher) {
         mockingProgress().getArgumentMatcherStorage().reportMatcher(matcher);
     }

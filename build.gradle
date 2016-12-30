@@ -51,6 +51,7 @@ dependencies {
 
     provided "junit:junit:4.12", "org.hamcrest:hamcrest-core:1.3"
     compile "org.objenesis:objenesis:2.5"
+    compile 'net.jodah:typetools:0.4.8'
 
     testCompile 'org.ow2.asm:asm:5.1'
 
