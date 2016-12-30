@@ -3,6 +3,8 @@ package org.mockito.internal.framework;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoMocking;
+import org.mockito.exceptions.misusing.RedundantListenerException;
+import org.mockito.exceptions.misusing.UnfinishedMockingException;
 import org.mockito.internal.junit.TestFinishedEvent;
 import org.mockito.internal.junit.UniversalTestListener;
 import org.mockito.internal.util.MockitoLogger;
@@ -16,7 +18,11 @@ public class DefaultMockitoMocking implements MockitoMocking {
     public DefaultMockitoMocking(Object testClassInstance, Strictness strictness, MockitoLogger logger) {
         this.testClassInstance = testClassInstance;
         listener = new UniversalTestListener(strictness, logger);
-        Mockito.framework().addListener(listener);
+        try {
+            Mockito.framework().addListener(listener);
+        } catch (RedundantListenerException e) {
+            throw new UnfinishedMockingException("Missing finish mocking");
+        }
         MockitoAnnotations.initMocks(testClassInstance);
     }
 

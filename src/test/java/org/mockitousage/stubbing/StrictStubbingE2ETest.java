@@ -7,7 +7,9 @@ import org.junit.runner.Result;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoMocking;
+import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
+import org.mockito.exceptions.misusing.UnfinishedMockingException;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
@@ -18,6 +20,10 @@ import static org.mockito.BDDMockito.given;
 public class StrictStubbingE2ETest {
 
     JUnitCore junit = new JUnitCore();
+
+    @After public void after() {
+        new StateMaster().clearMockitoListeners();
+    }
 
     @Test public void finish_mocking_exception_does_not_hide_the_exception_from_test() {
         Result result = junit.run(ArgumentMismatch.class);
@@ -34,6 +40,12 @@ public class StrictStubbingE2ETest {
     @Test public void strict_stubbing_does_not_leak_to_other_tests() {
         Result result = junit.run(DefaultStrictness1.class, StrictStubsPassing.class, DefaultStrictness2.class);
         JUnitResultAssert.assertThat(result).succeeds(5);
+    }
+
+    @Test public void detects_unfinished_mocking() {
+        Result result = junit.run(UnfinishedMocking.class);
+        JUnitResultAssert.assertThat(result).fails(1, UnfinishedMockingException.class);
+        //TODO exception message, use reporter, javadoc for exception
     }
 
     public static class ArgumentMismatch {
@@ -103,6 +115,19 @@ public class StrictStubbingE2ETest {
             System.out.println("SomeDemo");
             given(mock.simpleMethod(2)).willReturn("");
             mock.simpleMethod(3);
+        }
+    }
+
+    public static class UnfinishedMocking {
+        @Mock IMethods mock;
+        MockitoMocking mocking = Mockito.startMocking(this, Strictness.STRICT_STUBS);
+
+        @Test public void unused() {
+            given(mock.simpleMethod("1")).willReturn("one");
+        }
+
+        @Test public void unused2() {
+            given(mock.simpleMethod("1")).willReturn("one");
         }
     }
 }
