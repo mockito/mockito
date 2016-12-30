@@ -1,5 +1,8 @@
 package org.mockitousage.stubbing;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -21,18 +24,19 @@ public class StrictStubbingTest {
 
     MockitoMocking mocking = Mockito.startMocking(this, Strictness.STRICT_STUBS);
 
+    @After public void after() {
+        //Some tests already invoke below but that's ok
+        mocking.finishMocking();
+    }
+
     @Test public void no_interactions() throws Throwable {
         //expect no exception
         mocking.finishMocking();
     }
 
     @Test public void few_interactions() throws Throwable {
-        //when
         mock.simpleMethod(100);
         mock.otherMethod();
-
-        //expect no exception
-        mocking.finishMocking();
     }
 
     @Test public void few_verified_interactions() throws Throwable {
@@ -44,9 +48,6 @@ public class StrictStubbingTest {
         verify(mock).simpleMethod(100);
         verify(mock).otherMethod();
         verifyNoMoreInteractions(mock);
-
-        //expect no exception
-        mocking.finishMocking();
     }
 
     @Test public void stubbed_method_is_implicitly_verified() throws Throwable {
@@ -56,7 +57,6 @@ public class StrictStubbingTest {
 
         //no exceptions:
         verifyNoMoreInteractions(mock);
-        mocking.finishMocking();
     }
 
     @Test public void unused_stubbed_is_not_implicitly_verified() throws Throwable {
@@ -71,9 +71,6 @@ public class StrictStubbingTest {
                 verifyNoMoreInteractions(mock);
             }
         }).throwsException(NoInteractionsWanted.class);
-
-        //and no exception
-        mocking.finishMocking();
     }
 
     @Test public void stubbing_argument_mismatch() throws Throwable {
