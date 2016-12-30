@@ -38,7 +38,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
             if (!argMismatchStubbings.isEmpty()) {
                 mismatchesReported = true;
                 //TODO rename below
-                Reporter.potentialStubbingProblemByJUnitRule(invocation, argMismatchStubbings);
+                Reporter.potentialStubbingProblem(invocation, argMismatchStubbings);
             }
         } else {
             //when strict stubs are in use, every time a stub is realized in the code it is implicitly marked as verified
