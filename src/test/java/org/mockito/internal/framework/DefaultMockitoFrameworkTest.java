@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.MockSettings;
 import org.mockito.StateMaster;
+import org.mockito.exceptions.misusing.RedundantListenerException;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.mock.MockCreationSettings;
@@ -15,6 +16,7 @@ import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockitoutil.ThrowableAssert.assertThat;
 
 public class DefaultMockitoFrameworkTest extends TestBase {
 
@@ -86,4 +88,18 @@ public class DefaultMockitoFrameworkTest extends TestBase {
         //then
         verifyNoMoreInteractions(listener);
     }
+
+    @Test public void prevents_duplicate_listeners_of_the_same_type() {
+        //given creation listener is added
+        framework.addListener(new MyListener());
+
+        assertThat(new Runnable() {
+            @Override
+            public void run() {
+                framework.addListener(new MyListener());
+            }
+        }).throwsException(RedundantListenerException.class);
+    }
+
+    private static class MyListener implements MockitoListener {}
 }
