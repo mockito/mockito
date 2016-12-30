@@ -5,21 +5,10 @@
 
 package org.mockito.internal.exceptions;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.*;
-import org.mockito.exceptions.verification.NeverWantedButInvoked;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.SmartNullPointerException;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.VerificationInOrderFailure;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.*;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.junit.JUnitTool;
@@ -33,6 +22,12 @@ import org.mockito.invocation.Location;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static org.mockito.internal.reporting.Pluralizer.pluralize;
 import static org.mockito.internal.reporting.Pluralizer.were_exactly_x_interactions;
@@ -862,7 +857,7 @@ public class Reporter {
         throw formatUnncessaryStubbingException(null, unused);
     }
 
-    public static void potentialStubbingProblemByJUnitRule(
+    public static void potentialStubbingProblem(
             Invocation actualInvocation, Collection<Invocation> argMismatchStubbings) {
         StringBuilder stubbings = new StringBuilder();
         int count = 1;
