@@ -1,0 +1,306 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        //so that PublicationsComparatorTask can be imported
+        //this entire 'buildscript' section will be removed when the entire release automation is moved to new repo 'mockito-release-tools'
+        classpath project.'dependencies.mockito-release-tools'
+    }
+}
+
+import org.mockito.release.comparison.PublicationsComparatorTask
+
+def troubleshootingInfo = """
+Mockito artifacts are about to be published!
+
+In case the release process from Travis CI fails, please try:
+  1. push dummy commit
+    - useful when the build fails for random reason, let's say a flaky test
+  2. update version.properties manually and push (can be done in the browser via GitHub gui)
+    - useful when artifact was published but some later release step has failed
+    preventing version.properties to be bumped.
+  3. delete top release notes paragraph(s) so that they are recreated
+    - useful for recreating/merging release notes
+
+Testing release locally:
+  (this section of docs is in progress)
+  1. Configure env TRAVIS_BRANCH, GH_TOKEN, MOCKITO_BINTRAY_API_KEY
+  2. Dry running: run './gradlew release -PdryRun'
+     - It will leave the working copy clean, the changes/commits made by the release process will be rolled back.
+     - Nothing is pushed/published to GitHub, BinTray
+  3. Testing release: run './gradlew release -PreleaseTest'
+     - It will leave the changes / commits as the release process would do - useful for manual inspection
+     - Nothing is pushed/published to GitHub, BinTray
+"""
+
+def skipReleaseCommitMessage = '[ci skip-release]'
+
+import org.mockito.release.version.*
+
+assert project == rootProject
+
+apply plugin: 'org.mockito.release-notes'
+apply plugin: 'org.mockito.release-workflow'
+
+notes {
+    notesFile = file("doc/release-notes/official.md")
+    //label captions, in order of importance - this is the order they will appear in the release notes
+    labels = [
+        '1.* incompatible': 'Incompatible changes with previous major version (v1.x)',
+        'java-9': "Java 9 support",
+        'java-8': "Java 8 support",
+        'new feature': "New features",
+        'BDD': 'Behavior-Driven Development support',
+        'bug': "Bugfixes",
+        'enhancement': "Enhancements",
+        'android': "Android support",
+        'docs': 'Documentation'
+    ]
+}
+
+//dryRun project property is interpreted by the release-workflow plugin to enable rollbacks
+//releaseTest does not publish or push but it leaves the commits so that they can be inspected manually
+def releaseTest = project.hasProperty('releaseTest') || project.hasProperty('dryRun')
+
+def isReleasableBranch(String branch) {
+    // matches 'master', 'release/2.x', 'release/3.x', etc.
+    branch?.matches("master|release/.+")
+}
+
+def isPullRequest() {
+    //returns true only if pull request env variable points to PR number
+    def envVar = System.env.TRAVIS_PULL_REQUEST
+    envVar != null && envVar != '' && envVar != 'false'
+}
+
+configurations {
+    previousSrc
+    previousPom
+}
+
+dependencies {
+    //TODO I don't like the fact that the previous version is taken from the release notes document
+    //get it from the version.properties! If there is no previous version in version properties, add it during the version bump
+    previousSrc "org.mockito:mockito-core:${project.notes.getPreviousVersion()}:sources@jar"
+    previousPom "org.mockito:mockito-core:${project.notes.getPreviousVersion()}@pom"
+}
+
+task("comparePublications", type: PublicationsComparatorTask) {
+    dependsOn publishToMavenLocal, sourcesJar
+
+    compareBinaries({ configurations.previousSrc.singleFile }, { sourcesJar.archivePath })
+    comparePoms({ configurations.previousPom.singleFile.text }, { generatePomFileForMainJarPublication.destination.text })
+}
+
+//TODO if System.env.TRAVIS_BRANCH is empty, just pick up current branch from Git
+
+/*
+Release process should *not* run concurrently.
+ */
+task("releaseNeeded") {
+    ext.needed = true
+    dependsOn comparePublications
+    doLast {
+        def branch = System.env.TRAVIS_BRANCH
+        def skipEnvVariable = System.env.SKIP_RELEASE
+        def commitMessage = System.env.TRAVIS_COMMIT_MESSAGE
+        def skippedByCommitMessage = commitMessage?.contains(skipReleaseCommitMessage)
+
+        if (skippedByCommitMessage || skipEnvVariable) {
+            logger.lifecycle("Release is skipped on request")
+            ext.needed = false //we really don't want the release
+        } else if (releaseTest) {
+            logger.lifecycle("Release will be initiated for testing purposes")
+            ext.needed = true //testing purposes, dry run
+        } else if (!isPullRequest() && isReleasableBranch(branch) && !comparePublications.publicationsEqual) {
+            logger.lifecycle("All criteria are met, the release will be initiated")
+            ext.needed = true //standard, continuous delivery scenario
+        } else {
+            logger.lifecycle("Criteria are not met, the release will NOT be initiated")
+            ext.needed = false
+        }
+
+        logger.lifecycle("Release need evaluation - needed: ${ext.needed}, " +
+                "releasable branch: ${isReleasableBranch(branch)}, pull request: ${isPullRequest()}, dry run / test release: $releaseTest, " +
+                "publications equal: $comparePublications.publicationsEqual, " +
+                "skip env variable: $skipEnvVariable, skipped by message: $skippedByCommitMessage")
+    }
+}
+
+task printReleaseHelp {
+    doLast {
+        logger.lifecycle troubleshootingInfo
+    }
+}
+
+task bintrayUploadAll {
+    description = "Groups all the bintrayUpload tasks of this project"
+}
+
+allprojects {
+    tasks.matching { it.name == 'bintrayUpload' }.all {
+        bintrayUploadAll.dependsOn it
+        dependsOn printReleaseHelp
+
+        //TODO this should be a part of release steps not here:
+        dependsOn releaseNeeded
+        onlyIf { releaseNeeded.needed }
+        //end
+
+        doFirst {
+            it.dryRun = releaseTest
+            if (it.dryRun) {
+                logger.lifecycle "$it.path - dry-running the release! Although $path is executed, it won't upload any binaries ('bintrayUpload.dryRun' property is set)."
+            }
+            logger.lifecycle "$it.path - now publishing $project.archivesBaseName:$project.version" +
+                    " to '$project.bintray.pkg.repo' Bintray repository (dryRun=$it.dryRun, autoPublish=$project.bintray.publish)."
+        }
+    }
+}
+
+String currentVersion = project.version
+String buildInfo = "by Travis CI build $System.env.TRAVIS_BUILD_NUMBER [ci skip]"
+
+task assertCleanWorkingCopy {
+    doLast {
+        //TODO move to GitTool
+        def out = new ByteArrayOutputStream()
+        runWithOutput(["git", "status", "--porcelain"], out)
+        def output = out.toString()
+        assert output.trim().isEmpty() : "Working copy not clean. Commit or stash your changes before continuing.\n$output"
+    }
+}
+
+task assertEnvVariables {
+    doLast {
+        ['TRAVIS_BRANCH', 'GH_TOKEN', 'MOCKITO_BINTRAY_API_KEY'].each {
+            assert System.env[it]: "Please export '$it' env variable first"
+        }
+    }
+}
+
+task pullCommits(type: Exec) {
+    description = "Ensures good chunk of recent commits is pulled for release notes automation"
+    //Travis default clone is pretty shallow
+    //Loading extra 1K commits (1.x -> 2.x had ~700 commits)
+    commandLine "git", "pull", "--depth", "1000", "origin", System.env.TRAVIS_BRANCH
+}
+
+task configureGenericGitUser {
+    description = "Configures generic git user for automated commits"
+    doLast {
+        ext.gitAuthor = gitTool.setAuthor("Continuous Delivery Drone", "continuous.delivery.drone@gmail.com")
+    }
+}
+
+task restoreGitUser {
+    //Very useful when releasing from local
+    description = "Restores previous git user in this repo."
+    doLast {
+        configureGenericGitUser.gitAuthor.restoreOriginal()
+    }
+}
+
+task checkOutCommittableBranch(type: Exec) {
+    commandLine = ["git", "checkout",  System.env.TRAVIS_BRANCH]
+}
+
+task commitReleaseNotes {
+    description = "Commits release notes commit by resetting head by one commit (--hard)."
+    doLast {
+        def notesFile = project.file("doc/release-notes/official.md")
+        run "git", "add", "$notesFile" as String
+        run "git", "commit", "-m", "Update release notes $buildInfo" as String, "$notesFile" as String
+    }
+}
+
+task resetReleaseNotes(type: Exec) {
+    description = "Removes release notes commit by resetting head by one commit (--hard)."
+    commandLine "git", "reset", "--hard", "HEAD~1"
+}
+
+task tagNewVersion(type: Exec) {
+    commandLine "git", "tag", "-a", "v${currentVersion}", "-m", "Create tag v${currentVersion} ${buildInfo}"
+}
+
+task removeNewTag(type: Exec) {
+    commandLine "git", "tag", "-d", "v${currentVersion}"
+}
+
+task bumpVersion {
+    description = "Increments version in 'version.properties' and commits to '$System.env.TRAVIS_BRANCH'"
+    doLast {
+        String nextVersion = project.versionFile.incrementVersion()
+        String message = "Increment version '$currentVersion' -> '$nextVersion' $buildInfo"
+        run "git", "commit", "-m", "$message" as String, "version.properties"
+    }
+}
+
+task unbumpVersion(type: Exec) {
+    description = "Unbumps version in 'version.properties' by resetting head by one commit (--hard)."
+    commandLine "git", "reset", "--hard", "HEAD~1"
+}
+
+task pushChanges(type: Exec) {
+    description = "Pushes changes to '${System.env.TRAVIS_BRANCH}' branch."
+    //!!!Below command _MUST_ be quiet otherwise it exposes GitHub write token!!!
+    def mustBeQuiet = "-q"
+    def pushCommandLine = ["git", "push", "https://szczepiq:${System.env.GH_TOKEN}@github.com/mockito/mockito.git", System.env.TRAVIS_BRANCH, "v$currentVersion", mustBeQuiet]
+    if (releaseTest) {
+        pushCommandLine << '--dry-run'
+    }
+    commandLine pushCommandLine
+}
+
+releaseWorkflow {
+    step assertEnvVariables
+    step assertCleanWorkingCopy
+    step releaseNeeded
+    onlyIf { releaseNeeded.needed }
+    step bintrayUploadAll //TODO make upload task the very last task or very close to push so that the most invasive steps go last
+    step pullCommits
+    step configureGenericGitUser, [cleanup: restoreGitUser]
+    /*
+        Now we'll start operating on branch that we want to release.
+        This introduces a problem - someone might have pushed changes *after* release process has started
+        What can happen:
+         - bintrayUpload will fail saying that the version is already released
+         - git push fails saying that the pull is needed
+        Resolutions:
+         - see 'TROUBLESHOOTING' section at the top of this file
+    */
+    step checkOutCommittableBranch
+    step updateReleaseNotes
+    step commitReleaseNotes, [rollback: resetReleaseNotes]
+    step tagNewVersion, [rollback: removeNewTag]
+    step bumpVersion, [rollback: unbumpVersion]
+    step pushChanges
+}
+
+void run(Object ... args) {
+    runWithOutput(args as List, null)
+}
+
+void runWithOutput(Collection<String> args, OutputStream output) {
+    logger.lifecycle("--- Executing: {}", args.join(" "))
+    exec {
+        if (output) {
+            standardOutput = output
+        }
+        commandLine args
+    }
+    logger.lifecycle("--- Completed!", args)
+}
+
+/*
+TODO:
+-update issues and tell which version contains a fix for given issue
+-release process performs dry run first, if it is successful it makes the actual release
+-steps are better described and log stuff verbosely only in case of failure
+-steps can be rolled back:
+  -tag removal
+  -new commits removal (git reset --hard) on all affected branches
+-clean up after release:
+ -?
+ */

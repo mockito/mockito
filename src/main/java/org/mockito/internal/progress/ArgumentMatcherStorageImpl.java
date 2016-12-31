@@ -11,6 +11,7 @@ import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.matchers.Not;
 import org.mockito.internal.matchers.Or;
 
+import static java.util.Collections.emptyList;
 import static org.mockito.internal.exceptions.Reporter.incorrectUseOfAdditionalMatchers;
 import static org.mockito.internal.exceptions.Reporter.misplacedArgumentMatcher;
 import static org.mockito.internal.exceptions.Reporter.reportNoSubMatchersFound;
@@ -19,94 +20,78 @@ import java.util.*;
 
 public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
 
-    public static final int TWO_SUB_MATCHERS = 2;
-    public static final int ONE_SUB_MATCHER = 1;
+    private static final int TWO_SUB_MATCHERS = 2;
+    private static final int ONE_SUB_MATCHER = 1;
     private final Stack<LocalizedMatcher> matcherStack = new Stack<LocalizedMatcher>();
-    
-    public void reportMatcher(ArgumentMatcher matcher) {
+
+    public void reportMatcher(ArgumentMatcher<?> matcher) {
         matcherStack.push(new LocalizedMatcher(matcher));
     }
 
     public List<LocalizedMatcher> pullLocalizedMatchers() {
         if (matcherStack.isEmpty()) {
-            return Collections.emptyList();
+            return emptyList();
         }
-        
-        List<LocalizedMatcher> matchers = new ArrayList<LocalizedMatcher>(matcherStack);
-        matcherStack.clear();
-        return matchers;
+
+        List<LocalizedMatcher> lastMatchers = resetStack();
+        return lastMatchers;
     }
 
-    /* (non-Javadoc)
-    * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportAnd()
-    */
     public void reportAnd() {
         assertStateFor("And(?)", TWO_SUB_MATCHERS);
-        And and = new And(popLastArgumentMatchers(TWO_SUB_MATCHERS));
-        matcherStack.push(new LocalizedMatcher(and));
+
+        ArgumentMatcher<?> m1 = popMatcher();
+        ArgumentMatcher<?> m2 = popMatcher();
+
+        reportMatcher(new And(m1, m2));
     }
 
-    /* (non-Javadoc)
-     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportOr()
-     */
     public void reportOr() {
         assertStateFor("Or(?)", TWO_SUB_MATCHERS);
-        Or or = new Or(popLastArgumentMatchers(TWO_SUB_MATCHERS));
-        matcherStack.push(new LocalizedMatcher(or));
+
+        ArgumentMatcher<?> m1 = popMatcher();
+        ArgumentMatcher<?> m2 = popMatcher();
+
+        reportMatcher(new Or(m1, m2));
     }
 
-    /* (non-Javadoc)
-     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reportNot()
-     */
     public void reportNot() {
         assertStateFor("Not(?)", ONE_SUB_MATCHER);
-        Not not = new Not(popLastArgumentMatchers(ONE_SUB_MATCHER).get(0));
-        matcherStack.push(new LocalizedMatcher(not));
+
+        ArgumentMatcher<?> m = popMatcher();
+
+        reportMatcher(new Not(m));
     }
 
-    private void assertStateFor(String additionalMatcherName, int subMatchersCount) {
-        assertMatchersFoundFor(additionalMatcherName);
-        assertIncorrectUseOfAdditionalMatchers(additionalMatcherName, subMatchersCount);
-    }
-
-    private List<ArgumentMatcher> popLastArgumentMatchers(int count) {
-        LinkedList<ArgumentMatcher> result = new LinkedList<ArgumentMatcher>();
-        for (int i = 0; i < count; i++) {
-            result.addFirst(matcherStack.pop().getMatcher());
-        }
-        return result;
-    }
-
-    private void assertMatchersFoundFor(String additionalMatcherName) {
-        if (matcherStack.isEmpty()) {
-            matcherStack.clear();
-            throw reportNoSubMatchersFound(additionalMatcherName);
-        }
-    }
-
-    private void assertIncorrectUseOfAdditionalMatchers(String additionalMatcherName, int count) {
-        if(matcherStack.size() < count) {
-            ArrayList<LocalizedMatcher> lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
-            matcherStack.clear();
-            throw incorrectUseOfAdditionalMatchers(additionalMatcherName, count, lastMatchers);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.mockito.internal.progress.ArgumentMatcherStorage#validateState()
-     */
     public void validateState() {
         if (!matcherStack.isEmpty()) {
-            ArrayList<LocalizedMatcher> lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
-            matcherStack.clear();
+            List<LocalizedMatcher> lastMatchers = resetStack();
             throw misplacedArgumentMatcher(lastMatchers);
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.mockito.internal.progress.ArgumentMatcherStorage#reset()
-     */
     public void reset() {
         matcherStack.clear();
     }
+
+    private void assertStateFor(String additionalMatcherName, int subMatchersCount) {
+        if (matcherStack.isEmpty()) {
+            throw reportNoSubMatchersFound(additionalMatcherName);
+        }
+        if (matcherStack.size() < subMatchersCount) {
+            List<LocalizedMatcher> lastMatchers = resetStack();
+            throw incorrectUseOfAdditionalMatchers(additionalMatcherName, subMatchersCount, lastMatchers);
+        }
+    }
+
+    private ArgumentMatcher<?> popMatcher() {
+        return matcherStack.pop().getMatcher();
+    }
+
+    private List<LocalizedMatcher> resetStack() {
+        ArrayList<LocalizedMatcher> lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
+        reset();
+        return lastMatchers;
+    }
+
 }

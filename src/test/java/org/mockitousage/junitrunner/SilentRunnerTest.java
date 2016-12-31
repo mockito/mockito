@@ -41,13 +41,22 @@ public class SilentRunnerTest extends TestBase {
         JUnitResultAssert.assertThat(result).fails(1, TooLittleActualInvocations.class);
     }
 
+    @Test public void failing_test_in_constructor() {
+        //when
+        Result result = runner.run(
+                FailsInConstructor.class
+        );
+        //then
+        JUnitResultAssert.assertThat(result).fails(1, IllegalArgumentException.class);
+    }
+
     @Test public void validates_framework_usage() {
         //when
         Result result = runner.run(
                 UsesFrameworkIncorrectly.class
         );
         //then
-        JUnitResultAssert.assertThat(result).fails(1, UnfinishedStubbingException.class);
+        JUnitResultAssert.assertThat(result).fails(1, "unfinished_stubbing_test_method", UnfinishedStubbingException.class);
     }
 
     @Test
@@ -78,9 +87,20 @@ public class SilentRunnerTest extends TestBase {
     }
 
     @RunWith(MockitoJUnitRunner.Silent.class)
+    public static class FailsInConstructor {
+        {
+            if (System.currentTimeMillis() > 0) {
+                throw new IllegalArgumentException("Boo!");
+            }
+        }
+        @Mock List<String> list;
+        @Test public void some_behavior() {}
+    }
+
+    @RunWith(MockitoJUnitRunner.Silent.class)
     public static class UsesFrameworkIncorrectly {
         @Mock List<?> list;
-        @Test public void unfinished_stubbing() {
+        @Test public void unfinished_stubbing_test_method() {
             when(list.get(0)); //unfinished stubbing
         }
     }
