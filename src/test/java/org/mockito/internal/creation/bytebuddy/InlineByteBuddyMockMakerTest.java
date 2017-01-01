@@ -74,6 +74,8 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void should_create_mock_from_hashmap() throws Exception {
+        assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V9)); // Change when ByteBuddy has ASM6 - see #862
+
         MockCreationSettings<HashMap> settings = settingsFor(HashMap.class);
         HashMap proxy = mockMaker.createMock(settings, new MockHandlerImpl<HashMap>(settings));
         assertThat(proxy.get(null)).isEqualTo("bar");
