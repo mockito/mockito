@@ -118,7 +118,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
      * }
      * </code></pre>
      *
-     * @since @version@
+     * @since 2.5.1
      */
     public static class StrictStubs extends MockitoJUnitRunner {
         public StrictStubs(Class<?> klass) throws InvocationTargetException {
