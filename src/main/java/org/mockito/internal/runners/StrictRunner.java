@@ -12,17 +12,17 @@ import org.mockito.Mockito;
 import org.mockito.internal.junit.UnnecessaryStubbingsReporter;
 import org.mockito.internal.runners.util.FailureDetector;
 
-public class StrictRunner implements RunnerImpl {
+public class StrictRunner implements InternalRunner {
 
     private final Class<?> testClass;
-    private final RunnerImpl runner;
+    private final InternalRunner runner;
     private boolean filterRequested;
 
     /**
      * @param runner - the runner to wrap around
      * @param testClass - for reporting purposes
      */
-    public StrictRunner(RunnerImpl runner, Class<?> testClass) {
+    public StrictRunner(InternalRunner runner, Class<?> testClass) {
         this.runner = runner;
         this.testClass = testClass;
     }

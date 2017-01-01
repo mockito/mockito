@@ -5,6 +5,8 @@
 package org.mockito.internal.stubbing.answers;
 
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.InvocationOnMock;
 
@@ -50,9 +52,83 @@ public class ReturnsArgumentAtTest {
         }
     }
 
+    @Test
+    public void should_allow_possible_argument_types() throws Exception {
+        new ReturnsArgumentAt(0).validateFor(
+                new InvocationBuilder().method("intArgumentReturningInt").argTypes(int.class).arg(1000).toInvocation()
+        );
+        new ReturnsArgumentAt(0).validateFor(
+                new InvocationBuilder().method("toString").argTypes(String.class).arg("whatever").toInvocation()
+        );
+        new ReturnsArgumentAt(2).validateFor(
+                new InvocationBuilder().method("varargsObject")
+                                       .argTypes(int.class, Object[].class)
+                                       .args(1000, "Object", "Object")
+                                       .toInvocation()
+        );
+        new ReturnsArgumentAt(1).validateFor(
+                new InvocationBuilder().method("threeArgumentMethod")
+                                       .argTypes(int.class, Object.class, String.class)
+                                       .args(1000, "Object", "String")
+                                       .toInvocation()
+        );
+    }
+
+    @Test
+    public void should_fail_if_index_is_not_in_range_for_one_arg_invocation() throws Throwable {
+        try {
+            new ReturnsArgumentAt(30).validateFor(new InvocationBuilder().method("oneArg").arg("A").toInvocation());
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.getMessage())
+                    .containsIgnoringCase("invalid argument index")
+                    .containsIgnoringCase("iMethods.oneArg")
+                    .containsIgnoringCase("[0] String")
+                    .containsIgnoringCase("position")
+                    .contains("30");
+        }
+    }
+
+    @Test
+    public void should_fail_if_index_is_not_in_range_for_example_with_no_arg_invocation() throws Throwable {
+        try {
+            new ReturnsArgumentAt(ReturnsArgumentAt.LAST_ARGUMENT).validateFor(
+                    new InvocationBuilder().simpleMethod().toInvocation()
+            );
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.getMessage())
+                    .containsIgnoringCase("invalid argument index")
+                    .containsIgnoringCase("iMethods.simpleMethod")
+                    .containsIgnoringCase("no arguments")
+                    .containsIgnoringCase("last parameter wanted");
+        }
+    }
+
+    @Test
+    public void should_fail_if_argument_type_of_signature_is_incompatible_with_return_type() throws Throwable {
+        try {
+            new ReturnsArgumentAt(2).validateFor(
+                    new InvocationBuilder().method("varargsReturningString")
+                                           .argTypes(Object[].class)
+                                           .args("anyString", new Object(), "anyString")
+                                           .toInvocation()
+            );
+            fail();
+        } catch (WrongTypeOfReturnValue e) {
+            assertThat(e.getMessage())
+                    .containsIgnoringCase("argument of type")
+                    .containsIgnoringCase("Object")
+                    .containsIgnoringCase("varargsReturningString")
+                    .containsIgnoringCase("should return")
+                    .containsIgnoringCase("String")
+                    .containsIgnoringCase("possible argument indexes");
+        }
+    }
+
     private static InvocationOnMock invocationWith(Object... parameters) {
         return new InvocationBuilder().method("varargsReturningString").argTypes(Object[].class)
-             .args(parameters).toInvocation();
+                                      .args(parameters).toInvocation();
     }
 
 }

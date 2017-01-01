@@ -14,7 +14,7 @@ import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.internal.debugging.WarningsCollector;
 import org.mockito.internal.runners.RunnerFactory;
-import org.mockito.internal.runners.RunnerImpl;
+import org.mockito.internal.runners.InternalRunner;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.internal.util.MockitoLogger;
 
@@ -30,14 +30,14 @@ import java.lang.reflect.InvocationTargetException;
 public class ConsoleSpammingMockitoJUnitRunner extends Runner implements Filterable {
 
     private final MockitoLogger logger;
-    private final RunnerImpl runner;
+    private final InternalRunner runner;
     
     public ConsoleSpammingMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
         this(new ConsoleMockitoLogger(), new RunnerFactory().create(klass));
     }
     
-    ConsoleSpammingMockitoJUnitRunner(MockitoLogger logger, RunnerImpl runnerImpl) {
-        this.runner = runnerImpl;
+    ConsoleSpammingMockitoJUnitRunner(MockitoLogger logger, InternalRunner runner) {
+        this.runner = runner;
         this.logger = logger;
     }
     

@@ -5,39 +5,25 @@
 
 package org.mockito.internal.matchers;
 
+import java.io.Serializable;
+
 import org.mockito.ArgumentMatcher;
 
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
+@SuppressWarnings({ "unchecked", "serial","rawtypes" })
+public class Or implements ArgumentMatcher<Object>, Serializable {
+    private final ArgumentMatcher m1;
+    private final ArgumentMatcher m2;
 
-@SuppressWarnings("unchecked")
-public class Or implements ArgumentMatcher, Serializable {
-
-    private final List<ArgumentMatcher> matchers;
-
-    public Or(List<ArgumentMatcher> matchers) {
-        this.matchers = matchers;
+    public Or(ArgumentMatcher<?> m1, ArgumentMatcher<?> m2) {
+        this.m1 = m1;
+        this.m2 = m2;
     }
 
     public boolean matches(Object actual) {
-        for (ArgumentMatcher matcher : matchers) {
-            if (matcher.matches(actual)) {
-                return true;
-            }
-        }
-        return false;
+        return m1.matches(actual) || m2.matches(actual);
     }
 
     public String toString() {
-        //TODO SF here and in other places we should reuse ValuePrinter
-        StringBuilder sb = new StringBuilder("or(");
-        for (Iterator<ArgumentMatcher> it = matchers.iterator(); it.hasNext();) {
-            sb.append(it.next().toString());
-            if (it.hasNext()) {
-                sb.append(", ");
-            }
-        }
-        return sb.append(")").toString();
+        return "or("+m1+", "+m2+")";
     }
 }
