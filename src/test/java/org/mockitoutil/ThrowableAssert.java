@@ -1,5 +1,7 @@
 package org.mockitoutil;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Clean asserts for exception handling
  */
@@ -16,12 +18,19 @@ public class ThrowableAssert {
         }
         throw new AssertionError("Expected runnable to throw an exception but it didn't");
     }
-    public void throwsException(Class<? extends Throwable> exceptionType) {
+
+    public ThrowableAssert throwsException(Class<? extends Throwable> exceptionType) {
         if(!exceptionType.isInstance(reportedException)) {
-            throw new AssertionError("Expect the exception to be of type: "
+            throw new AssertionError("Exception should be of type: "
                     + exceptionType.getSimpleName() + " but it was: "
                     + reportedException.getClass().getSimpleName());
         }
+        return this;
+    }
+
+    public ThrowableAssert throwsMessage(String exceptionMessage) {
+        assertEquals(exceptionMessage, reportedException.getMessage());
+        return this;
     }
 
     /**
