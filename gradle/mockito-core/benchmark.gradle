@@ -4,4 +4,6 @@ jmh {
     warmupIterations = 5
     iterations = 5
     timeUnit = 'ms'
+    verbosity = 'EXTRA'
+    include = ['.*']
 }
