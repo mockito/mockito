@@ -6,7 +6,8 @@ import org.mockito.junit.MockitoRule;
 /**
  * Configures the "strictness" of Mockito during test execution.
  * To understand how "strictness" can improve testability refer to the javadoc
- * of the tools that use "strictness", see docs for {@link MockitoRule#strictness(Strictness)}.
+ * of the tools that use "strictness", see docs for {@link MockitoRule#strictness(Strictness)}
+ * and {@link org.mockito.junit.MockitoJUnitRunner.StrictStubs}.
  *
  * @since 2.3.0
  */
@@ -33,8 +34,9 @@ public enum Strictness {
 
     /**
      * Ensures clean tests, reduces test code duplication, improves debuggability.
-     * See {@link MockitoRule#strictness(Strictness)}.
-     * Tentatively planned default for Mockito 3.x.
+     * See {@link MockitoRule#strictness(Strictness)}
+     * and {@link org.mockito.junit.MockitoJUnitRunner.StrictStubs}.
+     * Planned as default for Mockito 3.x.
      *
      * @since 2.3.0
      */

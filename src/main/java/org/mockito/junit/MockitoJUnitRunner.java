@@ -20,7 +20,10 @@ import org.mockito.internal.runners.StrictRunner;
 
 
 /**
- * Compatible with <b>JUnit 4.4 and higher</b>, this runner adds following behavior:
+ * Mockito JUnit Runner keeps tests clean and improves debugging experience.
+ * Make sure to try out {@link MockitoJUnitRunner.StrictStubs} which automatically
+ * detects <strong>stubbing argument mismatches</strong> and is planned to be the default in Mockito v3.
+ * JUnit Runner is compatible with JUnit 4.4 and higher and adds following behavior:
  * <ul>
  *   <li>
  *       (new since Mockito 2.1.0) Detects unused stubs in the test code.
@@ -33,7 +36,7 @@ import org.mockito.internal.runners.StrictRunner;
  *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary. 
  *      Mocks are initialized before each test method.
  *   <li>
- *      validates framework usage after each test method. See javadoc for {@link Mockito#validateMockitoUsage()}.
+ *      Validates framework usage after each test method. See javadoc for {@link Mockito#validateMockitoUsage()}.
  * </ul>
  * 
  * Runner is completely optional - there are other ways you can get &#064;Mock working, for example by writing a base class.
@@ -66,8 +69,16 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
      * they add unnecessary details, potentially making the test code harder to comprehend.
      * If you have good reasons to use the silent runner, let us know at the mailing list
      * or raise an issue in our issue tracker.
-     *
+     * <p>
      * See also {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}
+     * <p>
+     * Usage:
+     * <pre class="code"><code class="java">
+     * <b>&#064;RunWith(MockitoJUnitRunner.Silent.class)</b>
+     * public class ExampleTest {
+     *   // ...
+     * }
+     * </code></pre>
      *
      * @since 2.1.0
      */
@@ -88,6 +99,30 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
     public static class Strict extends MockitoJUnitRunner {
         public Strict(Class<?> klass) throws InvocationTargetException {
             super(new StrictRunner(new RunnerFactory().createStrict(klass), klass));
+        }
+    }
+
+    /**
+     * Improves debugging tests, helps keeping the tests clean.
+     * Planned default behavior of Mockito v3.
+     * Test fails early on stubbing argument mismatch to streamline debugging tests.
+     * Unused stubbings trigger test failures to keep tests clean.
+     * For more information see javadoc for
+     * {@link org.mockito.exceptions.misusing.PotentialStubbingProblem}
+     * <p>
+     * Usage:
+     * <pre class="code"><code class="java">
+     * <b>&#064;RunWith(MockitoJUnitRunner.StrictStubs.class)</b>
+     * public class ExampleTest {
+     *   // ...
+     * }
+     * </code></pre>
+     *
+     * @since 2.5.1
+     */
+    public static class StrictStubs extends MockitoJUnitRunner {
+        public StrictStubs(Class<?> klass) throws InvocationTargetException {
+            super(new StrictRunner(new RunnerFactory().createStrictStubs(klass), klass));
         }
     }
 

@@ -70,7 +70,7 @@ public class JUnitResultAssert {
     public JUnitResultAssert succeeds(int successCount) {
         int i = result.getRunCount() - result.getFailureCount();
         if (i != successCount) {
-            throw new AssertionError("Expected " + successCount + " passing test methods but there were " + i + " passing methods.");
+            throw new AssertionError("Expected " + successCount + " passes but " + i + "/" + result.getRunCount() + " passed.");
         }
         return this;
     }
@@ -80,7 +80,7 @@ public class JUnitResultAssert {
             return "<no failures>";
         }
         int count = 1;
-        StringBuilder out = new StringBuilder("Failures:");
+        StringBuilder out = new StringBuilder("Failures:\n");
         for (Failure f : failures) {
             out.append(count++).append(". ").append(f.getTrace());
         }

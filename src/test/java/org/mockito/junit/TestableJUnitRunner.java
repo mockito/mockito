@@ -19,11 +19,11 @@ public class TestableJUnitRunner extends MockitoJUnitRunner {
     };
 
     public TestableJUnitRunner(Class<?> klass) throws InvocationTargetException, InitializationError {
-        super(new StrictRunner(new StrictRunner(new RunnerFactory().create(klass, new Supplier<MockitoTestListener>() {
+        super(new StrictRunner(new RunnerFactory().create(klass, new Supplier<MockitoTestListener>() {
             public MockitoTestListener get() {
                 return new MismatchReportingTestListener(LOGGER.get());
             }
-        }), klass), klass));
+        }), klass));
     }
 
     public static SimpleMockitoLogger refreshedLogger() {
