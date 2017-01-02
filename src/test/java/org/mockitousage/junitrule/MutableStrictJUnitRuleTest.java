@@ -46,7 +46,7 @@ public class MutableStrictJUnitRuleTest {
         }
 
         @Test public void unused_stub_with_strictness() throws Throwable {
-            //making Mockito lenient only for this test method
+            //making Mockito strict only for this test method
             mockito.strictness(Strictness.STRICT_STUBS);
 
             when(mock.simpleMethod()).thenReturn("1");
