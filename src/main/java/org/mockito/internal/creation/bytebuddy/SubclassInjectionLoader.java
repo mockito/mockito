@@ -5,7 +5,7 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 class SubclassInjectionLoader implements SubclassLoader {
 
     @Override
-    public ClassLoadingStrategy getStrategy(Class<?> mockedType) {
+    public ClassLoadingStrategy<ClassLoader> getStrategy(Class<?> mockedType) {
         return ClassLoadingStrategy.Default.INJECTION.with(mockedType.getProtectionDomain());
     }
 }
