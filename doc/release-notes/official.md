@@ -1,3 +1,12 @@
+### 2.5.2 (2017-01-02 00:50 UTC)
+
+* Authors: 1
+* Commits: 6
+  * 6: Szczepan Faber
+* Improvements: 1
+  * Enhancements: 1
+    * Safeguard for MockitoListener API [(#858)](https://github.com/mockito/mockito/pull/858)
+
 ### 2.5.1 (2017-01-02 00:13 UTC)
 
 * Authors: 1
