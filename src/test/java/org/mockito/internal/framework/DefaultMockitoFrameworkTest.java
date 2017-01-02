@@ -98,7 +98,14 @@ public class DefaultMockitoFrameworkTest extends TestBase {
             public void run() {
                 framework.addListener(new MyListener());
             }
-        }).throwsException(RedundantListenerException.class);
+        })  .throwsException(RedundantListenerException.class)
+            .throwsMessage("\n" +
+                    "Problems adding Mockito listener.\n" +
+                    "Listener of type 'MyListener' has already been added and not removed.\n" +
+                    "It indicates that previous listener was not removed according to the API.\n" +
+                    "When you add a listener, don't forget to remove the listener afterwards:\n" +
+                    "  Mockito.framework().removeListener(myListener);\n" +
+                    "For more information, see the javadoc for RedundantListenerException class.");
     }
 
     private static class MyListener implements MockitoListener {}

@@ -891,11 +891,11 @@ public class Reporter {
 
     public static void redundantMockitoListener(String listenerType) {
         throw new RedundantListenerException(join(
-            "Problems adding MockitoListener instance to Mockito framework." +
-            "This type of listener (" + listenerType + ") has already been added." +
-            "Typically, this indicates that previous listener was not removed according to the API." +
-            "When you add listeners, don't forget to remove the listener afterwards:" +
-            "  Mockito.framework().removeListener(myListener);" +
-            "For more information, see the javadoc for MockitoFramework class."));
+            "Problems adding Mockito listener.",
+            "Listener of type '" + listenerType + "' has already been added and not removed.",
+            "It indicates that previous listener was not removed according to the API.",
+            "When you add a listener, don't forget to remove the listener afterwards:",
+            "  Mockito.framework().removeListener(myListener);",
+            "For more information, see the javadoc for RedundantListenerException class."));
     }
 }
