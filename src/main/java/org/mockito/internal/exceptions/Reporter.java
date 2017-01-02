@@ -12,18 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.misusing.CannotStubVoidMethodWithReturnValue;
-import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
-import org.mockito.exceptions.misusing.FriendlyReminderException;
-import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
-import org.mockito.exceptions.misusing.MissingMethodInvocationException;
-import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.exceptions.misusing.NullInsteadOfMockException;
-import org.mockito.exceptions.misusing.PotentialStubbingProblem;
-import org.mockito.exceptions.misusing.UnfinishedStubbingException;
-import org.mockito.exceptions.misusing.UnfinishedVerificationException;
-import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
-import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
+import org.mockito.exceptions.misusing.*;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.SmartNullPointerException;
@@ -898,5 +887,15 @@ public class Reporter {
                 "  - stubbed method is intentionally invoked with different arguments by code under test",
                 "    Please use 'default' or 'silent' JUnit Rule.",
                 "For more information see javadoc for PotentialStubbingProblem class."));
+    }
+
+    public static void redundantMockitoListener(String listenerType) {
+        throw new RedundantListenerException(join(
+            "Problems adding Mockito listener.",
+            "Listener of type '" + listenerType + "' has already been added and not removed.",
+            "It indicates that previous listener was not removed according to the API.",
+            "When you add a listener, don't forget to remove the listener afterwards:",
+            "  Mockito.framework().removeListener(myListener);",
+            "For more information, see the javadoc for RedundantListenerException class."));
     }
 }

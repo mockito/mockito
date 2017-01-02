@@ -11,7 +11,7 @@ import java.util.List;
 public class JUnitResultAssert {
     private Result result;
 
-    JUnitResultAssert(Result result) {
+    private JUnitResultAssert(Result result) {
         this.result = result;
     }
 

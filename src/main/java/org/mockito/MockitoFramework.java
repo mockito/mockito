@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.exceptions.misusing.RedundantListenerException;
 import org.mockito.listeners.MockitoListener;
 
 /**
@@ -30,6 +31,12 @@ public interface MockitoFramework {
      * remove is ineffectual.
      * In typical scenarios, it is not a problem, because adding & removing listeners typically happens in the same thread.
      * <p>
+     * If you are trying to add the listener but a listener of the same type was already added (and not removed)
+     * this method will throw {@link RedundantListenerException}.
+     * This is a safeguard to ensure users actually remove the listeners via {@link #removeListener(MockitoListener)}.
+     * We do not anticipate the use case where adding the same listener type multiple times is useful.
+     * If this safeguard is problematic, please contact us via Mockito issue tracker.
+     * <p>
      * For usage examples, see Mockito codebase.
      * If you have ideas and feature requests about Mockito listeners API
      * we are very happy to hear about it via our issue tracker or mailing list.
@@ -38,11 +45,11 @@ public interface MockitoFramework {
      *   Mockito.framework().addListener(myListener);
      * </code></pre>
      *
-     * @param listener to add
+     * @param listener to add to Mockito
      * @since 2.1.0
      */
     @Incubating
-    MockitoFramework addListener(MockitoListener listener);
+    MockitoFramework addListener(MockitoListener listener) throws RedundantListenerException;
 
     /**
      * When you add listener using {@link #addListener(MockitoListener)} make sure to remove it.
