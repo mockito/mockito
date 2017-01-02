@@ -99,7 +99,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                               .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
                               .append(MockMethodInterceptor.class,
                                       MockMethodInterceptor.ForHashCode.class,
-                                      MockMethodInterceptor.ForEquals.class).build(),
+                                      MockMethodInterceptor.ForEquals.class).build(MockMethodInterceptor.class.getClassLoader()),
                               loader.getStrategy(features.mockedType))
                       .getLoaded();
     }
