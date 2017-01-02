@@ -12,11 +12,12 @@ import java.util.function.Consumer;
 
 /**
  * Allows creating inlined ArgumentCaptor with a lambda expression.
+ *
  * <p>
  * With Java 8 and lambda expressions ArgumentCaptor can be inlined:
  *
  * <pre class="code"><code class="java">
- *{@literal @}Test
+ * {@literal @}Test
  * public void shouldAllowToUseAssertionInLambda() {
  *   //when
  *   ts.findNumberOfShipsInRangeByCriteria(searchCriteria);
@@ -28,7 +29,7 @@ import java.util.function.Consumer;
  * in comparison to 3 lines in the classic way:
  *
  * <pre class="code"><code class="java">
- *{@literal @}Test
+ * {@literal @}Test
  * public void shouldAllowToUseArgumentCaptorInClassicWay() {  //old way
  *     //when
  *     ts.findNumberOfShipsInRangeByCriteria(searchCriteria);
@@ -38,10 +39,8 @@ import java.util.function.Consumer;
  *     assertThat(captor.getValue().getMinimumRange()).isLessThan(2000);
  * }
  *
- * AssertJ assertions (<pre>assertThat()</pre> used in lambda generate meaningful error messages in face of failure, but any other assertion can be
- * used if needed/preffered.
- *
- * Backported from https://github.com/szpak/mockito-java8/
+ * AssertJ assertions (assertThat()) used in lambda generate meaningful error messages in face of failure, but any other assertion can be
+ * used if needed/preferred.
  *
  * @param <T> type of argument
  *
@@ -60,9 +59,9 @@ public class AssertionMatcher<T> implements ArgumentMatcher<T> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean matches(Object argument) {
+    public boolean matches(T argument) {
         try {
-            assertingLambda.accept((T) argument);
+            assertingLambda.accept(argument);
             return true;
         } catch (AssertionError e) {
             errorMessage = e.getMessage();

@@ -17,6 +17,7 @@ import org.mockito.internal.matchers.Contains;
 import org.mockito.internal.matchers.EndsWith;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.InstanceOf;
+import org.mockito.internal.matchers.DescriptableWrapperMatcher;
 import org.mockito.internal.matchers.Matches;
 import org.mockito.internal.matchers.NotNull;
 import org.mockito.internal.matchers.Null;
@@ -1195,6 +1196,25 @@ public class ArgumentMatchers {
     public static <T> T argThat(ArgumentMatcher<T> matcher) {
         reportMatcher(matcher);
         return null;
+    }
+
+    /**
+     * Allows creating custom argument matchers with custom description in a case of failure.
+     *
+     * <p>
+     * See javadoc for {@link ArgumentMatchers#argThat(ArgumentMatcher)} to get detailed description.
+     * </p>
+     *
+     * @param matcher decides whether argument matches
+     * @param descriptionOnFailure the custom description in a case of failure
+     * @param <T> the argument type
+     * @return <code>null</code>
+     *
+     * @since 3.0.0
+     */
+    @Incubating
+    public static <T> T argThat(ArgumentMatcher<T> matcher, String descriptionOnFailure) {
+        return argThat(new DescriptableWrapperMatcher<T>(matcher, descriptionOnFailure));
     }
 
     /**
