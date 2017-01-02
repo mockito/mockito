@@ -1,3 +1,12 @@
+### 2.5.3 (2017-01-02 16:48 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Brice Dutheil
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Updated to Byte Buddy 1.6.0 [(#864)](https://github.com/mockito/mockito/pull/864)
+
 ### 2.5.2 (2017-01-02 00:50 UTC)
 
 * Authors: 1
