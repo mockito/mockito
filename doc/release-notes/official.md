@@ -1,3 +1,12 @@
+### 2.5.1 (2017-01-02 00:13 UTC)
+
+* Authors: 1
+* Commits: 9
+  * 9: Szczepan Faber
+* Improvements: 1
+  * New features: 1
+    * Mockito JUnit Runner supports strict stubbing [(#854)](https://github.com/mockito/mockito/pull/854)
+
 ### 2.5.0 (2016-12-28 08:10 UTC)
 
 * Authors: 1
