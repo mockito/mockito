@@ -12,7 +12,7 @@ import static org.mockito.internal.util.StringJoiner.join;
 class AndroidLoadingStrategy implements SubclassLoader {
 
     @Override
-    public ClassLoadingStrategy getStrategy(Class<?> mockFeatures) {
+    public ClassLoadingStrategy<ClassLoader> getStrategy(Class<?> mockFeatures) {
         File target = AndroidTempFileLocator.target;
         if (target == null) {
             throw new MockitoException(join(
