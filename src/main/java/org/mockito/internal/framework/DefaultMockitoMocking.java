@@ -42,5 +42,9 @@ public class DefaultMockitoMocking implements MockitoMocking {
                 return null;
             }
         });
+
+        //TODO
+        // 1. validate mockito usage
+        // 2. can we have JUnit rule and runner use MockitoMocking API directly?
     }
 }
