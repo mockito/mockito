@@ -37,7 +37,6 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
             List<Invocation> argMismatchStubbings = potentialArgMismatches(invocation);
             if (!argMismatchStubbings.isEmpty()) {
                 mismatchesReported = true;
-                //TODO rename below
                 Reporter.potentialStubbingProblem(invocation, argMismatchStubbings);
             }
         } else {
