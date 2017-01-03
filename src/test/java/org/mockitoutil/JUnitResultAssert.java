@@ -5,6 +5,9 @@ import org.junit.runner.notification.Failure;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockitoutil.TestBase.filterLineNo;
+
 /**
  * Assertion utility for cleaner & easier to debug tests that inspect on JUnit's Result object
  */
@@ -43,6 +46,17 @@ public class JUnitResultAssert {
                         formatFailures(result.getFailures()));
             }
         }
+        return this;
+    }
+
+    /**
+     * Expects single failure with specific exception and exception message.
+     * Automatically filters line numbers from exception messages.
+     */
+    public JUnitResultAssert fails(Class expectedException, String exceptionMessage) {
+        fails(1, expectedException);
+        Failure f = result.getFailures().iterator().next();
+        assertEquals(filterLineNo(exceptionMessage), filterLineNo(f.getException().getMessage()));
         return this;
     }
 

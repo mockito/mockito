@@ -28,6 +28,7 @@ public class StrictStubbingE2ETest {
     @Test public void finish_mocking_exception_does_not_hide_the_exception_from_test() {
         Result result = junit.run(ArgumentMismatch.class);
         JUnitResultAssert.assertThat(result)
+                //both exceptions are reported to JUnit:
                 .fails("stubbing_argument_mismatch", IllegalStateException.class)
                 .fails("stubbing_argument_mismatch", UnnecessaryStubbingException.class);
     }
@@ -38,14 +39,21 @@ public class StrictStubbingE2ETest {
     }
 
     @Test public void strict_stubbing_does_not_leak_to_other_tests() {
-        Result result = junit.run(DefaultStrictness1.class, StrictStubsPassing.class, DefaultStrictness2.class);
+        Result result = junit.run(LenientStrictness1.class, StrictStubsPassing.class, LenientStrictness2.class);
+        //all tests pass, lenient test cases contain incorrect stubbing
         JUnitResultAssert.assertThat(result).succeeds(5);
     }
 
     @Test public void detects_unfinished_mocking() {
         Result result = junit.run(UnfinishedMocking.class);
-        JUnitResultAssert.assertThat(result).fails(1, UnfinishedMockingException.class);
-        //TODO exception message, use reporter, javadoc for exception
+        JUnitResultAssert.assertThat(result)
+            .fails(UnfinishedMockingException.class, "\n" +
+                "Unfinished mocking detected.\n" +
+                "Previous 'Mockito.startMocking()' was not concluded with 'finishMocking()'. Example:\n" +
+                "  MockitoMocking mocking = Mockito.startMocking(this, Strictness.STRICT_STUBS);\n" +
+                "  //...\n" +
+                "  mocking.finishMocking();\n" +
+                "For more information, see javadoc for UnfinishedMockingException class");
     }
 
     public static class ArgumentMismatch {
@@ -91,7 +99,7 @@ public class StrictStubbingE2ETest {
         }
     }
 
-    public static class DefaultStrictness1 {
+    public static class LenientStrictness1 {
         @Mock IMethods mock = Mockito.mock(IMethods.class);
 
         @Test public void unused() {
@@ -104,7 +112,7 @@ public class StrictStubbingE2ETest {
         }
     }
 
-    public static class DefaultStrictness2 {
+    public static class LenientStrictness2 {
         @Mock IMethods mock = Mockito.mock(IMethods.class);
 
         @Test public void unused() {
