@@ -150,11 +150,13 @@ public abstract class ClassLoaders {
                     Field declaredField = taskClassReloaded.getDeclaredField(field.getName());
                     int modifiers = declaredField.getModifiers();
                     if(Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
-                        // skip otherwise IllegalAccessException (can be bypassed with Unsafe though)
+                        // Skip static final fields (e.g. jacoco fields)
+                        // otherwise IllegalAccessException (can be bypassed with Unsafe though)
                         // We may also miss coverage data.
                         continue;
                     }
                     if (declaredField.getType() == field.getType()) { // don't copy this
+                        field.setAccessible(true);
                         declaredField.setAccessible(true);
                         declaredField.set(reloaded, field.get(task));
                     }
