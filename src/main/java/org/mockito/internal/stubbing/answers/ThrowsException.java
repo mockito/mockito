@@ -29,6 +29,10 @@ public class ThrowsException implements Answer<Object>, ValidableAnswer, Seriali
             throw throwable;
         }
         Throwable t = throwable.fillInStackTrace();
+
+        if (t == null) {
+            throw throwable;
+        }
         filter.filter(t);
         throw t;
     }
