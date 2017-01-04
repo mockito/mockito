@@ -1,3 +1,16 @@
+### 2.5.4 (2017-01-04 17:02 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Brice Dutheil
+  * 1: wenwu
+* Improvements: 3
+  * Bugfixes: 2
+    * When custom exception fillInstackTrace() returns null, Exception mock cannot work properly [(#866)](https://github.com/mockito/mockito/issues/866)
+    * Jacoco 0.7.8 breaks tests for the new plugin mechanism [(#860)](https://github.com/mockito/mockito/issues/860)
+  * Remaining changes: 1
+    * Fixes #866 should not throw NPE, when custom Exception fillInStackTrace returns null [(#867)](https://github.com/mockito/mockito/pull/867)
+
 ### 2.5.3 (2017-01-02 16:48 UTC)
 
 * Authors: 2
