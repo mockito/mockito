@@ -6,13 +6,6 @@ jacoco {
     toolVersion = "0.7.8"
 }
 
-//The tests for the new plugin mechanism are broken with Jacoco 0.7.8 - https://github.com/mockito/mockito/issues/860
-test {
-    jacoco {
-        excludes = ['org.mockitoutil.ClassLoadersTest**', 'org.mockito.internal.configuration.GlobalConfigurationTest**']
-    }
-}
-
 task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
     executionData files("${buildDir}/jacoco/test.exec")
 
