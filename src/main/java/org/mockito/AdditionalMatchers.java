@@ -1065,6 +1065,12 @@ public class AdditionalMatchers {
      * @param <T> the argument type
      * @return the default value for the given type (not used externally)
      *
+     * <p>
+     * <b>Java 9 compatibility note:</b> This matcher is not compatible with Java 9 due to a removal of <code>sun.reflect.ConstantPool</code>.
+     * There seems not to be a feasible way in Java 9 to get the result type of Consumer expressed as a lambda.
+     * See: https://github.com/jhalterman/typetools/issues/34
+     * </p>
+     *
      * @see AssertionMatcher
      *
      * @since 3.0.0

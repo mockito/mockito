@@ -69,6 +69,12 @@ public class Primitives {
      * @param consumer the consumer function
      * @param <T> the function's return type
      * @return the boxed default value for the lambda return type (handling primitive and primitive wrapper types)
+     *
+     * <p>
+     * <b>Java 9 compatibility note:</b> This matcher is not compatible with Java 9 due to a removal of <code>sun.reflect.ConstantPool</code>.
+     * There seems not to be a feasible way in Java 9 to get the result type of Consumer expressed as a lambda.
+     * See: https://github.com/jhalterman/typetools/issues/34
+     * </p>
      */
     public static <T> T defaultValueForConsumerLambda(Consumer<T> consumer) {
         Class<?>[] typeArgs = TypeResolver.resolveRawArguments(Consumer.class, consumer.getClass());

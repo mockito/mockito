@@ -5,7 +5,9 @@
  */
 package org.mockito.internal.matchers;
 
+import net.bytebuddy.ClassFileVersion;
 import org.assertj.core.api.ThrowableAssert;
+import org.assertj.core.api.WithAssertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -15,12 +17,12 @@ import org.mockito.internal.matchers.domain.TacticalStation;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static net.bytebuddy.ClassFileVersion.JAVA_V9;
+import static org.junit.Assume.assumeTrue;
 import static org.mockito.AdditionalMatchers.assertArg;
 import static org.mockito.Mockito.verify;
 
-public class AssertionMatcherTest {
+public class AssertionMatcherTest implements WithAssertions {
 
     @Rule
     public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -42,6 +44,8 @@ public class AssertionMatcherTest {
 
     @Test
     public void shouldAllowToUseAssertionInLambda() {
+        //given
+        assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V9));
         //when
         ts.findNumberOfShipsInRangeByCriteria(searchCriteria);
         //then
@@ -50,6 +54,8 @@ public class AssertionMatcherTest {
 
     @Test
     public void shouldAllowToUseAssertionInLambdaWithPrimitiveAsArgument() {
+        //given
+        assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V9));
         //when
         ts.fireTorpedo(2);
         //then
@@ -58,6 +64,8 @@ public class AssertionMatcherTest {
 
     @Test
     public void shouldHaveMeaningfulErrorMessage() {
+        //given
+        assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V9));
         //when
         ts.findNumberOfShipsInRangeByCriteria(searchCriteria);
         //then
