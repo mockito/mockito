@@ -1,3 +1,14 @@
+### 2.5.5 (2017-01-06 11:19 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 2
+  * Bugfixes: 1
+    * [VarArgs] unexpected behaviour of returnsArgAt(int) [(#820)](https://github.com/mockito/mockito/issues/820)
+  * Remaining changes: 1
+    * Fixes #820 ReturnsArgAt to handle returning vararg as arrays [(#821)](https://github.com/mockito/mockito/pull/821)
+
 ### 2.5.4 (2017-01-04 17:02 UTC)
 
 * Authors: 2
