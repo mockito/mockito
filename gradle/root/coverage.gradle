@@ -21,7 +21,7 @@ task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
       classDirectories = files(classDirectories.files.collect {
         fileTree(
           dir: it,
-          exclude: ['**/org/mockito/internal/util/concurrent/**']
+          exclude: ['**/org/mockito/internal/util/concurrent/**', '**/org/mockito/internal/repackage/**']
         )
       })
     }
