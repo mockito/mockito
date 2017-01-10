@@ -1,3 +1,12 @@
+### 2.5.6 (2017-01-10 13:20 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Brice Dutheil
+  * 1: Johnny Lim
+* Improvements: 1
+  * Remove redundant defaultAnswer(RETURNS_DEFAULTS) [(#870)](https://github.com/mockito/mockito/pull/870)
+
 ### 2.5.5 (2017-01-06 11:19 UTC)
 
 * Authors: 1
