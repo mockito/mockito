@@ -27,6 +27,6 @@ class AndroidLoadingStrategy implements SubclassLoader {
                     "getInstrumentation().getTargetContext().getCacheDir().getPath()"
             ));
         }
-        return new AndroidClassLoadingStrategy(target);
+        return new AndroidClassLoadingStrategy.Injecting(target);
     }
 }
