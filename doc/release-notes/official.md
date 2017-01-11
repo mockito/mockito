@@ -1,3 +1,12 @@
+### 2.5.7 (2017-01-11 08:28 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Marcin Zajączkowski
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Update Byte Buddy and enable injecting loading strategy for Android [(#875)](https://github.com/mockito/mockito/pull/875)
+
 ### 2.5.6 (2017-01-10 13:20 UTC)
 
 * Authors: 2
