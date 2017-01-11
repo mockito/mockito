@@ -1591,7 +1591,7 @@ public class Mockito extends ArgumentMatchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return mock(classToMock, withSettings().defaultAnswer(RETURNS_DEFAULTS));
+        return mock(classToMock, withSettings());
     }
 
     /**
