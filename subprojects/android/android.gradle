@@ -2,8 +2,8 @@ description = "Mockito for Android"
 
 ext {
     artifactName = 'mockito-android'
-    bintrayRepo = 'test'
-    bintrayAutoPublish = false
+    bintrayAutoPublish = true
+    bintrayRepo = 'maven'
     mavenCentralSync = false
 }
 
