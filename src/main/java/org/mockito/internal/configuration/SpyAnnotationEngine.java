@@ -19,6 +19,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.plugins.AnnotationEngine;
 
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.withSettings;
 import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
 
@@ -59,10 +60,10 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
                         // for example happens when MockitoAnnotations.initMocks is called two times.
                         Mockito.reset(instance);
                     } else if (instance != null) {
-                        field.set(testInstance, Mockito.mock(instance.getClass(), withSettings()
-                                .spiedInstance(instance)
-                                .defaultAnswer(Mockito.CALLS_REAL_METHODS)
-                                .name(field.getName())));
+                        field.set(testInstance, Mockito.mock(instance.getClass(),
+                                                             withSettings().spiedInstance(instance)
+                                                                           .defaultAnswer(CALLS_REAL_METHODS)
+                                                                           .name(field.getName())));
                     } else {
                         field.set(testInstance, newSpyInstance(testInstance, field));
                     }
@@ -74,7 +75,7 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
     }
 
     private static void assertNotInterface(Object testInstance, Class<?> type) {
-        type = testInstance != null? testInstance.getClass() : type;
+        type = testInstance != null ? testInstance.getClass() : type;
         if (type.isInterface()) {
             throw new MockitoException("Type '" + type.getSimpleName() + "' is an interface and it cannot be spied on.");
         }
@@ -82,9 +83,8 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
 
     private static Object newSpyInstance(Object testInstance, Field field)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
-        MockSettings settings = withSettings()
-                .defaultAnswer(Mockito.CALLS_REAL_METHODS)
-                .name(field.getName());
+        MockSettings settings = withSettings().defaultAnswer(CALLS_REAL_METHODS)
+                                              .name(field.getName());
         Class<?> type = field.getType();
         if (type.isInterface()) {
             return Mockito.mock(type, settings.useConstructor());
@@ -94,12 +94,11 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
             if (enclosing != null) {
                 if (!enclosing.isInstance(testInstance)) {
                     throw new MockitoException("@Spy annotation can only initialize inner classes declared in the test. "
-                            + "Inner class: '" + type.getSimpleName() + "', "
-                            + "outer class: '" + enclosing.getSimpleName() + "'.");
+                                               + "Inner class: '" + type.getSimpleName() + "', "
+                                               + "outer class: '" + enclosing.getSimpleName() + "'.");
                 }
-                return Mockito.mock(type, settings
-                        .useConstructor()
-                        .outerInstance(testInstance));
+                return Mockito.mock(type, settings.useConstructor()
+                                                  .outerInstance(testInstance));
             }
         }
         Constructor<?> constructor;
@@ -111,18 +110,20 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
 
         if (Modifier.isPrivate(constructor.getModifiers())) {
             constructor.setAccessible(true);
-            return Mockito.mock(type, settings
-                    .spiedInstance(constructor.newInstance()));
+            return Mockito.mock(type, settings.spiedInstance(constructor.newInstance()));
         } else {
             return Mockito.mock(type, settings.useConstructor());
         }
     }
 
     //TODO duplicated elsewhere
-    private void assertNoIncompatibleAnnotations(Class<? extends Annotation> annotation, Field field, Class<? extends Annotation>... undesiredAnnotations) {
+    private void assertNoIncompatibleAnnotations(Class<? extends Annotation> annotation,
+                                                 Field field,
+                                                 Class<? extends Annotation>... undesiredAnnotations) {
         for (Class<? extends Annotation> u : undesiredAnnotations) {
             if (field.isAnnotationPresent(u)) {
-                throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(), annotation.getClass().getSimpleName());
+                throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(),
+                                                          annotation.getClass().getSimpleName());
             }
         }
     }
