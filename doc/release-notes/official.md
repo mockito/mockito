@@ -1,3 +1,12 @@
+### 2.6.0 (2017-01-12 12:42 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Tim van der Lippe
+* Improvements: 1
+  * New features: 1
+    * Prepare Android library for publication and bump version to 2.6.0 [(#872)](https://github.com/mockito/mockito/pull/872)
+
 ### 2.5.7 (2017-01-11 08:28 UTC)
 
 * Authors: 2
