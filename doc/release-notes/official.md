@@ -1,3 +1,10 @@
+### 2.6.1 (2017-01-12 13:55 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Tim van der Lippe
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.6.0 (2017-01-12 12:42 UTC)
 
 * Authors: 1
