@@ -39,6 +39,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <b>
  *      <a href="#0">0. Migrating to Mockito 2</a><br/>
+ *      <a href="#0.1">0.1 Mockito Android support</a></br/>
  *      <a href="#1">1. Let's verify some behaviour! </a><br/>
  *      <a href="#2">2. How about some stubbing? </a><br/>
  *      <a href="#3">3. Argument matchers </a><br/>
@@ -90,6 +91,20 @@ import org.mockito.verification.VerificationWithTimeout;
  * For a comprehensive guide on the new release including incompatible changes,
  * see '<a href="https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2">What's new in Mockito 2</a>' wiki page.
  * We hope that you enjoy Mockito 2!
+ *
+ * <h3 id="0.1">0.1. <a class="meaningful_link" href="#mockito-android">Mockito Android support</a></h3>
+ *
+ * With Mockito version 2.6.0 we ship "native" Android support. To enable Android support, add the `mockito-android` library as dependency
+ * to your project. This artifact is published to the same mockito organization:
+ *
+ * <pre class="code"><code>
+ * repositories { jcenter() }
+ * dependencies { testCompile "org.mockito:mockito-android:2.+" }
+ * </code></pre>
+ *
+ * All features of Mockito are still in the `mockito-core` artifact. The `mockito-android` artifact implements a compatibility layer
+ * with Android. If you encounter issues with mocking on Android, please open an issue <a href="https://github.com/mockito/mockito/issues/new">on the official issue tracker</a>.
+ * Do provide the version of Android you are working on and dependencies of your project.
  *
  * <h3 id="1">1. <a class="meaningful_link" href="#verification">Let's verify some behaviour!</a></h3>
  *
