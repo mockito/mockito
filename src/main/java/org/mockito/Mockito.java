@@ -94,7 +94,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <h3 id="0.1">0.1. <a class="meaningful_link" href="#mockito-android">Mockito Android support</a></h3>
  *
- * With Mockito version 2.6.0 we ship "native" Android support. To enable Android support, add the `mockito-android` library as dependency
+ * With Mockito version 2.6.1 we ship "native" Android support. To enable Android support, add the `mockito-android` library as dependency
  * to your project. This artifact is published to the same mockito organization:
  *
  * <pre class="code"><code>
