@@ -91,7 +91,7 @@ import static org.mockito.internal.util.Primitives.defaultValue;
  * <p>
  * Matcher methods like <code>anyObject()</code>, <code>eq()</code> <b>do not</b> return matchers.
  * Internally, they record a matcher on a stack and return a dummy value (usually null).
- * This implementation is due static type safety imposed by java compiler.
+ * This implementation is due to static type safety imposed by java compiler.
  * The consequence is that you cannot use <code>anyObject()</code>, <code>eq()</code> methods outside of verified/stubbed method.
  * </p>
  *
