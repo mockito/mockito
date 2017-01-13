@@ -1,3 +1,13 @@
+### 2.6.2 (2017-01-13 10:58 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Allon Mureinik
+  * 1: Brice Dutheil
+* Improvements: 2
+  * Fixed #879: ArgumentMatchers grammar fix [(#881)](https://github.com/mockito/mockito/pull/881)
+  * Grammar issue in ArgumentMatchers' javadoc. [(#879)](https://github.com/mockito/mockito/issues/879)
+
 ### 2.6.1 (2017-01-12 13:55 UTC)
 
 * Authors: 1
