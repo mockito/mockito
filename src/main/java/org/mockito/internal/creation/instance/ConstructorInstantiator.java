@@ -4,9 +4,10 @@
  */
 package org.mockito.internal.creation.instance;
 
-import static org.mockito.internal.util.StringJoiner.join;
 import java.lang.reflect.Constructor;
 import org.mockito.internal.util.reflection.AccessibilityChanger;
+
+import static org.mockito.internal.util.StringJoiner.join;
 
 public class ConstructorInstantiator implements Instantiator {
 
@@ -36,7 +37,7 @@ public class ConstructorInstantiator implements Instantiator {
         } catch (Exception e) {
             throw paramsException(cls, e);
         }
-        throw paramsException(cls, null);
+        throw noMatchingConstructor(cls);
     }
 
     @SuppressWarnings("unchecked")
@@ -45,12 +46,19 @@ public class ConstructorInstantiator implements Instantiator {
         accessibility.enableAccess(constructor);
         return (T) constructor.newInstance(params);
     }
+    
+    private static <T> InstantiationException paramsException(Class<T> cls, Exception cause) {
+        return new InstantiationException(
+                join("Unable to create instance of '" + cls.getSimpleName() + "'.",
+                     "Please ensure that the outer instance has correct type and that the target class has 0-arg constructor."),
+                cause);
+    }
 
-    private static <T> InstantiationException paramsException(Class<T> cls, Exception e) {
-        return new InstantiationException(join(
-                "Unable to create instance of '" + cls.getSimpleName() + "'.",
-                "Please ensure that the outer instance has correct type and that the target class has 0-arg constructor.")
-                , e);
+    private static <T> InstantiationException noMatchingConstructor(Class<T> cls) {
+        return new InstantiationException(
+                join("Unable to create instance of '" + cls.getSimpleName() + "'.",
+                     "Unable to find a matching 1-arg constructor for the outer instance.")
+                , null);
     }
 
     private static boolean paramsMatch(Class<?>[] types, Object[] params) {
@@ -72,7 +80,7 @@ public class ConstructorInstantiator implements Instantiator {
             throw new InstantiationException(join(
                     "Unable to create instance of '" + cls.getSimpleName() + "'.",
                     "Please ensure it has 0-arg constructor which invokes cleanly."),
-                    t);
+                                             t);
         }
     }
 }
