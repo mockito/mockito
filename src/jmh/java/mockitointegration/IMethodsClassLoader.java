@@ -1,5 +1,7 @@
 package mockitointegration;
 
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import org.mockitousage.IMethods;
 
 import java.io.ByteArrayOutputStream;
@@ -8,8 +10,19 @@ import java.io.InputStream;
 
 class IMethodsClassLoader extends ClassLoader {
 
+    private ByteBuddy byteBuddy;
+
     IMethodsClassLoader() {
         super(null);
+        byteBuddy = new ByteBuddy();
+    }
+
+    Class<? extends IMethods> loadIMethods() {
+        return byteBuddy
+                .subclass(IMethods.class)
+                .make()
+                .load(this, ClassLoadingStrategy.Default.WRAPPER)
+                .getLoaded();
     }
 
     @Override

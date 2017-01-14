@@ -8,7 +8,7 @@ public class MockitoMockBenchmark {
 
     private Class<?> clazz;
 
-    private ClassLoader loader;
+    private IMethodsClassLoader loader;
 
     public MockitoMockBenchmark() {
         loader = new IMethodsClassLoader();
@@ -17,7 +17,7 @@ public class MockitoMockBenchmark {
 
     @Setup(Level.Invocation)
     public void setup() throws ClassNotFoundException {
-        clazz = loader.loadClass("org.mockitousage.IMethods");
+        clazz = loader.loadIMethods();
     }
 
     @TearDown

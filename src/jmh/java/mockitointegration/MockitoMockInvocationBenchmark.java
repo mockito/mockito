@@ -9,7 +9,7 @@ public class MockitoMockInvocationBenchmark {
 
     private IMethods mock;
 
-    private ClassLoader loader;
+    private IMethodsClassLoader loader;
 
     public MockitoMockInvocationBenchmark() {
         loader = new IMethodsClassLoader();
@@ -18,7 +18,7 @@ public class MockitoMockInvocationBenchmark {
 
     @Setup(Level.Invocation)
     public void setup() throws ClassNotFoundException {
-        mock = (IMethods) Mockito.mock(loader.loadClass("org.mockitousage.IMethods"));
+        mock = Mockito.mock(loader.loadIMethods());
     }
 
     @TearDown
