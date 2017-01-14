@@ -36,10 +36,10 @@ public class SpyAnnotationTest extends TestBase {
     final List<String> spiedList = new ArrayList<String>();
 
     @Spy
-    NestedClassWithNoArgConstructor staticTypeWithNoArgConstructor;
+    InnerStaticClassWithNoArgConstructor staticTypeWithNoArgConstructor;
 
     @Spy
-    NestedClassWithoutDefinedConstructor staticTypeWithoutDefinedConstructor;
+    InnerStaticClassWithoutDefinedConstructor staticTypeWithoutDefinedConstructor;
 
     @Rule
     public final ExpectedException shouldThrow = ExpectedException.none();
@@ -175,7 +175,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_report_when_encosing_instance_is_needed() throws Exception {
+    public void should_report_when_enclosing_instance_is_needed() throws Exception {
         class Outer {
             class Inner {
             }
@@ -192,14 +192,14 @@ public class SpyAnnotationTest extends TestBase {
         }
     }
 
-    static class NestedClassWithoutDefinedConstructor {
+    static class InnerStaticClassWithoutDefinedConstructor {
     }
 
-    static class NestedClassWithNoArgConstructor {
-        NestedClassWithNoArgConstructor() {
+    static class InnerStaticClassWithNoArgConstructor {
+        InnerStaticClassWithNoArgConstructor() {
         }
 
-        NestedClassWithNoArgConstructor(String f) {
+        InnerStaticClassWithNoArgConstructor(String f) {
         }
     }
 
