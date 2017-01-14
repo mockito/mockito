@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -71,7 +70,7 @@ public class SpyAnnotationTest extends TestBase {
             MockitoAnnotations.initMocks(withSpy);
             fail();
         } catch (MockitoException e) {
-            Assertions.assertThat(e.getMessage()).contains("is an interface and it cannot be spied on");
+            assertThat(e.getMessage()).contains("is an interface and it cannot be spied on");
         }
     }
 
@@ -81,8 +80,8 @@ public class SpyAnnotationTest extends TestBase {
             @Spy
             List<String> list = new LinkedList<String>();
         }
-
         WithSpy withSpy = new WithSpy();
+        
         //when
         MockitoAnnotations.initMocks(withSpy);
 
@@ -101,7 +100,9 @@ public class SpyAnnotationTest extends TestBase {
             MockitoAnnotations.initMocks(new FailingSpy());
             fail();
         } catch (MockitoException e) {
-            Assertions.assertThat(e.getMessage()).contains("0-arg constructor");
+            assertThat(e.getMessage()).contains("Please ensure that the type")
+                                      .contains(NoValidConstructor.class.getSimpleName())
+                                      .contains("has a no-arg constructor");
         }
     }
 
@@ -116,7 +117,7 @@ public class SpyAnnotationTest extends TestBase {
             MockitoAnnotations.initMocks(new FailingSpy());
             fail();
         } catch (MockitoException e) {
-            Assertions.assertThat(e.getMessage()).contains("Unable to create mock instance");
+            assertThat(e.getMessage()).contains("Unable to create mock instance");
         }
     }
 
@@ -190,6 +191,79 @@ public class SpyAnnotationTest extends TestBase {
         } catch (MockitoException e) {
             assertThat(e).hasMessageContaining("@Spy annotation can only initialize inner classes");
         }
+    }
+
+    @Test
+    public void should_report_private_inner_not_supported() throws Exception {
+        try {
+            MockitoAnnotations.initMocks(new WithInnerPrivate());
+            fail();
+        } catch (MockitoException e) {
+            // Currently fails at instantiation time, because the mock subclass don't have the
+            // 1-arg constructor expected for the outerclass.
+            // org.mockito.internal.creation.instance.ConstructorInstantiator.withParams()
+            assertThat(e).hasMessageContaining("Unable to initialize @Spy annotated field 'spy_field'")
+                         .hasMessageContaining(WithInnerPrivate.InnerPrivate.class.getSimpleName());
+        }
+    }
+
+    @Test
+    public void should_report_private_abstract_inner_not_supported() throws Exception {
+        try {
+            MockitoAnnotations.initMocks(new WithInnerPrivateAbstract());
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e).hasMessageContaining("@Spy annotation can't initialize private abstract inner classes")
+                         .hasMessageContaining(WithInnerPrivateAbstract.class.getSimpleName())
+                         .hasMessageContaining(WithInnerPrivateAbstract.InnerPrivateAbstract.class.getSimpleName())
+                         .hasMessageContaining("You should augment the visibility of this inner class");
+        }
+    }
+
+    @Test
+    public void should_report_private_static_abstract_inner_not_supported() throws Exception {
+        try {
+            MockitoAnnotations.initMocks(new WithInnerPrivateStaticAbstract());
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e).hasMessageContaining("@Spy annotation can't initialize private abstract inner classes")
+                         .hasMessageContaining(WithInnerPrivateStaticAbstract.class.getSimpleName())
+                         .hasMessageContaining(WithInnerPrivateStaticAbstract.InnerPrivateStaticAbstract.class.getSimpleName())
+                         .hasMessageContaining("You should augment the visibility of this inner class");
+        }
+    }
+
+    static class WithInnerPrivateStaticAbstract {
+        @Spy
+        private InnerPrivateStaticAbstract spy_field;
+
+        private static abstract class InnerPrivateStaticAbstract {
+        }
+    }
+    static class WithInnerPrivateAbstract {
+        @Spy
+        private InnerPrivateAbstract spy_field;
+
+        public void some_method() {
+            new InnerPrivateConcrete();
+        }
+
+        private abstract class InnerPrivateAbstract {
+        }
+
+        private class InnerPrivateConcrete extends InnerPrivateAbstract {
+            
+        }
+    }
+
+    static class WithInnerPrivate {
+        @Spy
+        private InnerPrivate spy_field;
+
+        private class InnerPrivate {
+        }
+
+        private class InnerPrivateSub extends InnerPrivate {}
     }
 
     static class InnerStaticClassWithoutDefinedConstructor {
