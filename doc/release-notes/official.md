@@ -1,3 +1,16 @@
+### 2.6.3 (2017-01-15 21:07 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Allon Murienik
+  * 1: Szczepan Faber
+* Improvements: 3
+  * Java 9 support: 1
+    * Upgrading to Objenesis 2.5 [(#882)](https://github.com/mockito/mockito/issues/882)
+  * Remaining changes: 2
+    * Fixes #882: Upgrade to Objenesis 2.5 [(#887)](https://github.com/mockito/mockito/pull/887)
+    * Fixed build for external contributors [(#886)](https://github.com/mockito/mockito/pull/886)
+
 ### 2.6.2 (2017-01-13 10:58 UTC)
 
 * Authors: 2
