@@ -254,10 +254,10 @@ task pushChanges(type: Exec) {
 }
 
 releaseWorkflow {
-    step assertEnvVariables
-    step assertCleanWorkingCopy
     step releaseNeeded
     onlyIf { releaseNeeded.needed }
+    step assertEnvVariables
+    step assertCleanWorkingCopy
     step bintrayUploadAll //TODO make upload task the very last task or very close to push so that the most invasive steps go last
     step pullCommits
     step configureGenericGitUser, [cleanup: restoreGitUser]
