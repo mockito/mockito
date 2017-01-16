@@ -6,6 +6,7 @@ import org.junit.runner.notification.Failure;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.internal.util.collections.Iterables.firstOf;
 import static org.mockitoutil.TestBase.filterLineNo;
 
 /**
@@ -55,7 +56,7 @@ public class JUnitResultAssert {
      */
     public JUnitResultAssert fails(Class expectedException, String exceptionMessage) {
         fails(1, expectedException);
-        Failure f = result.getFailures().iterator().next();
+        Failure f = firstOf(result.getFailures());
         assertEquals(filterLineNo(exceptionMessage), filterLineNo(f.getException().getMessage()));
         return this;
     }
