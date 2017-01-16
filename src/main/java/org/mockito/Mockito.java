@@ -2727,7 +2727,11 @@ public class Mockito extends ArgumentMatchers {
     /**
      * Allows to manage Mockito strictness (debugging, cleaner tests) without JUnit.
      * <p>
-     * TODO javadoc
+     * TODO javadoc, explain:
+     *   - why to use it
+     *   - difference between runner, rule and the session
+     *   - where to use it and how
+     *
      * @since 2.7.0
      */
     @Incubating

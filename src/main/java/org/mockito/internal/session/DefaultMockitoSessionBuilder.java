@@ -25,6 +25,9 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
 
     @Override
     public MockitoSession startMocking() {
-        return new DefaultMockitoSession(testClassInstance, strictness, new ConsoleMockitoLogger());
+        //Configure default values
+        Object effectiveTest = this.testClassInstance == null ? new Object() : this.testClassInstance;
+        Strictness effectiveStrictness = this.strictness == null ? Strictness.STRICT_STUBS : this.strictness;
+        return new DefaultMockitoSession(effectiveTest, effectiveStrictness, new ConsoleMockitoLogger());
     }
 }
