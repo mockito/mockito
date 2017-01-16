@@ -2,8 +2,8 @@ package org.mockitousage.stubbing;
 
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoMocking;
-import org.mockito.internal.framework.DefaultMockitoMocking;
+import org.mockito.MockitoSession;
+import org.mockito.internal.framework.DefaultMockitoSession;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
@@ -17,7 +17,7 @@ public class StubbingWarningsTest {
     @Mock IMethods mock;
 
     SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    MockitoMocking mocking = new DefaultMockitoMocking(this, Strictness.WARN, logger);
+    MockitoSession mockito = new DefaultMockitoSession(this, Strictness.WARN, logger);
 
     @Test public void few_interactions() throws Throwable {
         //when
@@ -25,7 +25,7 @@ public class StubbingWarningsTest {
         mock.otherMethod();
 
         //expect no exception
-        mocking.finishMocking();
+        mockito.finishMocking();
         logger.assertEmpty();
     }
 
@@ -35,7 +35,7 @@ public class StubbingWarningsTest {
         mock.simpleMethod(100);
 
         //then
-        mocking.finishMocking();
+        mockito.finishMocking();
         logger.assertEmpty();
     }
 
@@ -46,7 +46,7 @@ public class StubbingWarningsTest {
         mock.simpleMethod(200); // <- other method should not generate arg mismatch
 
         //then
-        mocking.finishMocking();
+        mockito.finishMocking();
         logger.assertEmpty();
     }
 
@@ -55,7 +55,7 @@ public class StubbingWarningsTest {
         given(mock.simpleMethod(100)).willReturn("100");
         mock.simpleMethod(200);
 
-        mocking.finishMocking();
+        mockito.finishMocking();
 
         //TODO - currently we warn about "Unused" instead of "Arg mismatch" below
         //because it was simpler to implement. This can be improved given we put priority to improve the warnings.
@@ -70,7 +70,7 @@ public class StubbingWarningsTest {
         //when
         given(mock.simpleMethod(100)).willReturn("100");
 
-        mocking.finishMocking();
+        mockito.finishMocking();
 
         //then
         assertEquals(filterLineNo(
