@@ -8,7 +8,8 @@ import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
-import org.mockito.internal.framework.DefaultMockitoMocking;
+import org.mockito.internal.framework.DefaultMockitoSession;
+import org.mockito.internal.session.DefaultMockitoSessionBuilder;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.MockitoJUnit;
@@ -16,6 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
 import org.mockito.quality.Strictness;
+import org.mockito.session.MockitoSessionBuilder;
 import org.mockito.stubbing.*;
 import org.mockito.verification.*;
 
@@ -2726,12 +2728,10 @@ public class Mockito extends ArgumentMatchers {
      * Allows to manage Mockito strictness (debugging, cleaner tests) without JUnit.
      * <p>
      * TODO javadoc
-     *
-     * @param testClassInstance
-     * @param strictness
+     * @since 2.7.0
      */
     @Incubating
-    public static MockitoMocking startMocking(Object testClassInstance, Strictness strictness) {
-        return new DefaultMockitoMocking(testClassInstance, strictness, new ConsoleMockitoLogger());
+    public static MockitoSessionBuilder mockitoSession() {
+        return new DefaultMockitoSessionBuilder();
     }
 }

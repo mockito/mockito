@@ -6,7 +6,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoMocking;
+import org.mockito.MockitoSession;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnfinishedMockingException;
@@ -58,10 +58,10 @@ public class StrictStubbingEndToEndTest {
 
     public static class ArgumentMismatch {
         @Mock IMethods mock;
-        MockitoMocking mocking = Mockito.startMocking(this, Strictness.STRICT_STUBS);
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
 
         @After public void after() {
-            mocking.finishMocking();
+            mockito.finishMocking();
         }
 
         @Test public void stubbing_argument_mismatch() {
@@ -72,10 +72,10 @@ public class StrictStubbingEndToEndTest {
 
     public static class ReportMismatchButNotUnusedStubbing {
         @Mock IMethods mock;
-        MockitoMocking mocking = Mockito.startMocking(this, Strictness.STRICT_STUBS);
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
 
         @After public void after() {
-            mocking.finishMocking();
+            mockito.finishMocking();
         }
 
         @Test public void mismatch() {
@@ -86,10 +86,10 @@ public class StrictStubbingEndToEndTest {
 
     public static class StrictStubsPassing {
         @Mock IMethods mock;
-        MockitoMocking mocking = Mockito.startMocking(this, Strictness.STRICT_STUBS);
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
 
         @After public void after() {
-            mocking.finishMocking();
+            mockito.finishMocking();
         }
 
         @Test public void used() {
@@ -128,7 +128,7 @@ public class StrictStubbingEndToEndTest {
 
     public static class UnfinishedMocking {
         @Mock IMethods mock;
-        MockitoMocking mocking = Mockito.startMocking(this, Strictness.STRICT_STUBS);
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
 
         @Test public void unused() {
             given(mock.simpleMethod("1")).willReturn("one");

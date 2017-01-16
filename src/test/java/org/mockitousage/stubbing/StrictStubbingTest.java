@@ -1,12 +1,10 @@
 package org.mockitousage.stubbing;
 
 import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoMocking;
+import org.mockito.MockitoSession;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
@@ -22,16 +20,16 @@ public class StrictStubbingTest {
 
     @Mock IMethods mock;
 
-    MockitoMocking mocking = Mockito.startMocking(this, Strictness.STRICT_STUBS);
+    MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
 
     @After public void after() {
         //Some tests already invoke below but that's ok
-        mocking.finishMocking();
+        mockito.finishMocking();
     }
 
     @Test public void no_interactions() throws Throwable {
         //expect no exception
-        mocking.finishMocking();
+        mockito.finishMocking();
     }
 
     @Test public void few_interactions() throws Throwable {
@@ -92,7 +90,7 @@ public class StrictStubbingTest {
         //unused stubbing is reported
         assertThat(new Runnable() {
             public void run() {
-                mocking.finishMocking();
+                mockito.finishMocking();
             }
         }).throwsException(UnnecessaryStubbingException.class);
     }
