@@ -48,9 +48,8 @@ public class UniversalTestListener implements MockitoTestListener {
     }
 
     private void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
+        //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
         if (event.getFailure() == null && !stubbingLookupListener.mismatchesReported) {
-            //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
-            //Detect unused stubbings:
             UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks);
             unused.reportUnused();
         }

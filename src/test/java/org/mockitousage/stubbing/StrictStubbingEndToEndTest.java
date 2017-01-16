@@ -17,7 +17,7 @@ import org.mockitoutil.JUnitResultAssert;
 
 import static org.mockito.BDDMockito.given;
 
-public class StrictStubbingE2ETest {
+public class StrictStubbingEndToEndTest {
 
     JUnitCore junit = new JUnitCore();
 
