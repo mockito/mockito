@@ -111,18 +111,13 @@ public interface MockitoRule extends MethodRule {
      *     Reports console warnings about unused stubs
      *     and stubbing argument mismatch (see {@link org.mockito.quality.MockitoHint}).
      *     The default of Mockito 2.x</li>
-     *     <li>{@link Strictness#STRICT_STUBS} - ensures clean tests, reduces test code duplication, improves debuggability.
-     *     Adds following behavior:
-     *      <ul>
-     *          <li>Improved debuggability: the test fails early when code under test invokes stubbed method with different arguments (see {@link PotentialStubbingProblem}).</li>
-     *          <li>Cleaner tests without unnecessary stubbings: the test fails when there are any unused stubs declared (see {@link UnnecessaryStubbingException}).</li>
-     *          <li>Cleaner, more DRY tests ("Don't Repeat Yourself"): If you use {@link org.mockito.Mockito#verifyNoMoreInteractions(Object...)}
-     *              you no longer need to explicitly verify stubbed invocations. They are automatically verified.</li>
-     *      </ul>
+     *     <li>{@link Strictness#STRICT_STUBS} - ensures clean tests,
+     *     reduces test code duplication, improves debuggability.
+     *     See the details in the Javadoc for {@link Strictness#STRICT_STUBS}.
      * </ol>
      *
      * It is possible to tweak the strictness per test method.
-     * Why would need it? See the use cases in Javadoc for {@link PotentialStubbingProblem} class.
+     * Why would you need it? See the use cases in Javadoc for {@link PotentialStubbingProblem} class.
      *
      * <pre class="code"><code class="java">
      * public class ExampleTest {
@@ -139,10 +134,10 @@ public interface MockitoRule extends MethodRule {
      * }
      * </code></pre>
      *
-     * "Strict stubs" are tentatively planned to be the default for Mockito 3.x</li>
+     * "Strict stubs" are tentatively planned to be the default for Mockito v3</li>
      * We are very eager to hear feedback about "strict stubbing" feature, let us know by commenting on GitHub
      * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
-     * Strict stubbing is an attempt to improve testability and productivity with Mocktio. Tell us what you think!
+     * Strict stubbing is an attempt to improve testability and productivity with Mockito. Tell us what you think!
      *
      * @since 2.3.0
      */

@@ -5,6 +5,7 @@
 package org.mockito.exceptions.misusing;
 
 import org.mockito.Mockito;
+import org.mockito.MockitoSession;
 import org.mockito.quality.Strictness;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoRule;
@@ -12,6 +13,11 @@ import org.mockito.junit.MockitoRule;
 /**
  * Strict stubbing is a new opt-in feature for JUnit Rule ({@link MockitoRule#strictness(Strictness)})
  * and JUnit Runner ({@link org.mockito.junit.MockitoJUnitRunner.StrictStubs}).
+ * If rule or runner cannot be used, strict stubbing can be enabled via {@link MockitoSession}.
+ * <p>
+ * TODO
+ * What does strict stubbing mean?
+ * <p>
  * Detecting potential stubbing problems is intended to help writing and debugging tests.
  * The {@code org.mockito.exceptions.misusing.PotentialStubbingProblem} exception is thrown
  * when mocked method is stubbed with some argument in test
