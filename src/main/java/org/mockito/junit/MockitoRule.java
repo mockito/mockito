@@ -6,17 +6,22 @@ package org.mockito.junit;
 
 import org.junit.rules.MethodRule;
 import org.mockito.Incubating;
+import org.mockito.MockitoAnnotations;
 import org.mockito.quality.Strictness;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 
 /**
+ * Mockito JUnit Rule helps keeping tests clean.
+ * It initializes mocks, validates usage and detects incorrect stubbing.
+ * JUnit Rule uses {@link org.mockito.MockitoSession} behind the hood.
+ * <p>
  * Since 2.1.0, JUnit rule emits stubbing warnings and hints to System output
  * (see also {@link org.mockito.quality.MockitoHint}).
  * The JUnit rule can be used instead of {@link MockitoJUnitRunner}.
  * It requires JUnit at least 4.7.
- *
- * This rule adds following behavior:
+ * <p>
+ * The rule adds following behavior:
  * <ul>
  *   <li>
  *      Since 2.1.0, stubbing warnings and hints are printed to System output.
@@ -29,7 +34,7 @@ import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
  *      See also {@link org.mockito.quality.MockitoHint}.
  *   <li>
  *      Initializes mocks annotated with {@link org.mockito.Mock},
- *      so that explicit usage of {@link org.mockito.MockitoAnnotations#initMocks(Object)} is not necessary.
+ *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary.
  *      Mocks are initialized before each test method.
  *   <li>
  *      Validates framework usage after each test method. See javadoc for {@link org.mockito.Mockito#validateMockitoUsage()}.

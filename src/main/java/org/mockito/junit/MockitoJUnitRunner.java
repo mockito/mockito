@@ -23,7 +23,8 @@ import org.mockito.internal.runners.StrictRunner;
  * Mockito JUnit Runner keeps tests clean and improves debugging experience.
  * Make sure to try out {@link MockitoJUnitRunner.StrictStubs} which automatically
  * detects <strong>stubbing argument mismatches</strong> and is planned to be the default in Mockito v3.
- * JUnit Runner is compatible with JUnit 4.4 and higher and adds following behavior:
+ * JUnit Runner uses {@link org.mockito.MockitoSession} behind the hood.
+ * Runner is compatible with JUnit 4.4 and higher and adds following behavior:
  * <ul>
  *   <li>
  *       (new since Mockito 2.1.0) Detects unused stubs in the test code.
