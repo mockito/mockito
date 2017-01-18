@@ -11,17 +11,15 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoRule;
 
 /**
- * Strict stubbing is a new opt-in feature for JUnit Rule ({@link MockitoRule#strictness(Strictness)})
- * and JUnit Runner ({@link org.mockito.junit.MockitoJUnitRunner.StrictStubs}).
- * If rule or runner cannot be used, strict stubbing can be enabled via {@link MockitoSession}.
+ * {@code PotentialStubbingProblem} improves productivity by failing the test early when the user
+ * misconfigures mock's stubbing.
  * <p>
- * TODO
- * What does strict stubbing mean?
+ * {@code PotentialStubbingProblem} exception is a part of "strict stubbing" Mockito API
+ * intended to drive cleaner tests and better productivity with Mockito mocks.
+ * For more information see {@link Strictness}.
  * <p>
- * Detecting potential stubbing problems is intended to help writing and debugging tests.
- * The {@code org.mockito.exceptions.misusing.PotentialStubbingProblem} exception is thrown
- * when mocked method is stubbed with some argument in test
- * but then invoked with <strong>different</strong> argument in code.
+ * {@code PotentialStubbingProblem} is thrown when mocked method is stubbed with some argument in test
+ * but then invoked with <strong>different</strong> argument in the code.
  * This scenario is called "stubbing argument mismatch".
  * <p>
  * Example:
@@ -32,24 +30,30 @@ import org.mockito.junit.MockitoRule;
  * //code under test:
  * Something something = mock.getSomething(50); // <-- stubbing argument mismatch
  * </code></pre>
- * The stubbing argument mismatch is triggered in following use cases:
+ * The stubbing argument mismatch typically indicates:
  * <ol>
- *     <li>Mistake or typo in the test code, the argument(s) used when declaring stubbings is unintentionally different</li>
- *     <li>Mistake or typo in the code under test, the argument(s) used in the code under test is unintentionally different</li>
+ *     <li>Mistake, typo or misunderstanding in the test code, the argument(s) used when declaring stubbing are different by mistake</li>
+ *     <li>Mistake, typo or misunderstanding in the code under test, the argument(s) used when invoking stubbed method are different by mistake</li>
  *     <li>Intentional use of stubbed method with different argument, either in the test (more stubbing) or in code under test</li>
  * </ol>
- * This exception is very useful for 95% of the cases (use cases 1 and 2).
- * However, it can give false negative signal for 5% of the cases (use case 3).
- * It is a trade-off for better debuggability and productivity of the typical cases.
+ * User mistake (use case 1 and 2) make up 95% of the stubbing argument mismatch cases.
+ * {@code PotentialStubbingProblem} improves productivity in those scenarios
+ * by failing early with clean message pointing out the incorrect stubbing or incorrect invocation of stubbed method.
+ * In remaining 5% of the cases (use case 3) {@code PotentialStubbingProblem} can give false negative signal
+ * indicating non-existing problem. The exception message contains information how to opt-out from the feature.
+ * Mockito optimizes for enhanced productivity of 95% of the cases while offering opt-out for remaining 5%.
+ * False negative signal for edge cases is a trade-off for general improvement of productivity.
  * <p>
- * What to do if you fall into use case 3? You have 2 options:
+ * What to do if you fall into use case 3 (false negative signal)? You have 2 options:
  * <ol>
- *  <li>Do you see this exception because you're stubbing the same method multiple times in the test?
+ *  <li>Do you see this exception because you're stubbing the same method multiple times in the same test?
  *  In that case, please use {@link org.mockito.BDDMockito#willReturn(Object)} or {@link Mockito#doReturn(Object)}
  *  family of methods for stubbing.
  *  Convenient stubbing via {@link Mockito#when(Object)} has its drawbacks: the framework cannot distinguish between
  *  actual invocation on mock (real code) and the stubbing declaration (test code).
  *  Hence the need to use {@link org.mockito.BDDMockito#willReturn(Object)} or {@link Mockito#doReturn(Object)} for certain edge cases.
+ *  It is a well known limitation of Mockito API and another example how Mockito optimizes its clean API for 95% of the cases
+ *  while still supporting edge cases.
  *  </li>
  *  <li>Reduce the strictness level in the test method (only for JUnit Rules):
  * <pre class="code"><code class="java">
@@ -65,15 +69,15 @@ import org.mockito.junit.MockitoRule;
  *     }
  * }
  * </code></pre>
+ *  Currently, reducing strictness is only available to JUnit rules.
+ *  If you need it in a different context let us know at <a href="https://github.com/mockito/mockito/issues/857">issue 857</a>.
  *  </li>
- *  <li>In Mockito 2.x, don't use {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS} for that test.
- *  If you use JUnit Runner, don't use {@link org.mockito.junit.MockitoJUnitRunner.StrictStubs} for that test.
- * Strict stubbing will be unavailable for that test class.</li>
+ *  <li>To opt-out in Mockito 2.x, simply remove the strict stubbing setting in the test class.</li>
  * </ol>
  * <p>
- * We are very eager to hear feedback about "strict stubbing" feature, let us know by commenting on GitHub
+ * Mockito team is very eager to hear feedback about "strict stubbing" feature, let us know by commenting on GitHub
  * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
- * Strict stubbing is an attempt to improve testability and productivity with Mocktio. Tell us what you think!
+ * Strict stubbing is an attempt to improve testability and productivity with Mockito. Tell us what you think!
  *
  * @since 2.3.0
  */
