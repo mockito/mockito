@@ -2725,8 +2725,8 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * {@link MockitoSession} helps driving cleaner tests by eliminating boilerplate code
-     * and adding extra validation.
+     * {@code MockitoSession} is an optional, highly recommended feature
+     * that helps driving cleaner tests by eliminating boilerplate code and adding extra validation.
      * <p>
      * For more information, including use cases and sample code, see the javadoc for {@link MockitoSession}.
      *

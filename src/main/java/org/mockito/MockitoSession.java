@@ -5,7 +5,8 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
 
 /**
- * {@code MockitoSession} helps driving cleaner tests but eliminating boilerplate code and adding extra validation.
+ * {@code MockitoSession} is an optional, highly recommended feature
+ * that helps driving cleaner tests by eliminating boilerplate code and adding extra validation.
  * <p>
  * {@code MockitoSession} is a session of mocking, during which the user creates and uses Mockito mocks.
  * Typically the session is an execution of a single test method.
@@ -24,7 +25,7 @@ import org.mockito.quality.Strictness;
  *     &#064;Mock Foo foo;
  *
  *     //Keeping session object in a field so that we can complete session in 'tearDown' method.
- *     //It is recommended to hide the session object, along with 'setup' and 'tear down' methods in a base class.
+ *     //It is recommended to hide the session object, along with 'setup' and 'tear down' methods in a base class / runner.
  *     //Keep in mind that you can use Mockito's JUnit runner or rule instead of MockitoSession and get the same behavior.
  *     MockitoSession mockito;
  *
@@ -48,20 +49,24 @@ import org.mockito.quality.Strictness;
  *
  * <p>
  * Why to use {@code MockitoSession}?
- * What's the difference between {@code MockitoSession}, {@link MockitoJUnitRunner} and {@link MockitoRule}?
+ * What's the difference between {@code MockitoSession}, {@link MockitoJUnitRunner}, {@link MockitoRule}
+ * and traditional {@link MockitoAnnotations#initMocks(Object)}?
  * <p>
  * Great questions!
  * There is no need to use {@code MockitoSession} if you already use {@link MockitoJUnitRunner} or {@link MockitoRule}.
  * If you are JUnit user who does not leverage Mockito rule or runner we strongly recommend to do so.
  * Both the runner and the rule support strict stubbing which can really help driving cleaner tests.
  * See {@link MockitoJUnitRunner.StrictStubs} and {@link MockitoRule#strictness(Strictness)}.
- * If you cannot use Mockito's JUnit support (for example, you are on TestNG) {@code MockitoSession} is for you!
- * You can take advantage of strict stubbing ({@link Strictness}),
+ * If you cannot use Mockito's JUnit support (for example, you are on TestNG) {@code MockitoSession} exactly is for you!
+ * You can automatically take advantage of strict stubbing ({@link Strictness}),
  * automatic initialization of annotated mocks ({@link MockitoAnnotations}),
- * and extra validation ({@link Mockito#validateMockitoUsage()}.
+ * and extra validation ({@link Mockito#validateMockitoUsage()}).
+ * If you use Mockito annotations with {@link MockitoAnnotations#initMocks(Object)}
+ * but not Mockito runner/rule please try out Mockito's JUnit support (runner or rule) or
+ * start using {@code MockitoSession}. You'll get cleaner tests and better productivity.
  * <p>
- * Mockito team would really appreciate feedback about {@code MockitoSession} API -
- * drop us a comment at <a href="https://github.com/mockito/mockito/issues/857">issue 857</a>.
+ * Mockito team would really appreciate feedback about {@code MockitoSession} API.
+ * Help us out by commenting at <a href="https://github.com/mockito/mockito/issues/857">issue 857</a>.
  *
  * @since 2.7.0
  */
