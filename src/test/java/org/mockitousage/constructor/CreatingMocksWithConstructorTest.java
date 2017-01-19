@@ -127,4 +127,27 @@ public class CreatingMocksWithConstructorTest extends TestBase {
         List list = mock(List.class, withSettings().defaultAnswer(CALLS_REAL_METHODS));
         assertNull(list.get(1));
     }
+
+    @Test
+    public void handles_bridge_methods_correctly() {
+        SomeConcreteClass<Integer> testBug = spy(new SomeConcreteClass<Integer>());
+        assertEquals("value", testBug.getValue(0));
+    }
+
+    public abstract class SomeAbstractClass<T> {
+
+        protected abstract String getRealValue(T value);
+
+        public String getValue(T value) {
+            return getRealValue(value);
+        }
+    }
+
+    public class SomeConcreteClass<T extends Number> extends SomeAbstractClass<T> {
+
+        @Override
+        protected String getRealValue(T value) {
+            return "value";
+        }
+    }
 }
