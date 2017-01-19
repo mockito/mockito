@@ -45,8 +45,8 @@ apply from: 'gradle/root/version.gradle'
 apply from: "gradle/java-library.gradle"
 
 dependencies {
-    compile 'net.bytebuddy:byte-buddy:1.6.2'
-    compile 'net.bytebuddy:byte-buddy-agent:1.6.2'
+    compile 'net.bytebuddy:byte-buddy:1.6.4'
+    compile 'net.bytebuddy:byte-buddy-agent:1.6.4'
 
     provided "junit:junit:4.12", "org.hamcrest:hamcrest-core:1.3"
     compile "org.objenesis:objenesis:2.5"
