@@ -1,3 +1,12 @@
+### 2.6.4 (2017-01-19 17:12 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Marcin Zajączkowski
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Update to Byte Buddy 1.6.4: Fixes bridge method resolution for generic types [(#891)](https://github.com/mockito/mockito/pull/891)
+
 ### 2.6.3 (2017-01-15 21:07 UTC)
 
 * Authors: 2
