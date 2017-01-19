@@ -11,7 +11,7 @@ apply from: "$rootDir/gradle/java-library.gradle"
 
 dependencies {
     compile project.rootProject
-    compile "net.bytebuddy:byte-buddy-android:1.6.2"
+    compile "net.bytebuddy:byte-buddy-android:1.6.4"
 }
 
 apply from: "$rootDir/gradle/publishable-java-library.gradle"
