@@ -40,6 +40,8 @@ public enum Strictness {
     /**
      * No extra strictness. Mockito 1.x behavior.
      * Recommended only if you cannot use {@link #STRICT_STUBS} nor {@link #WARN}.
+     * <p>
+     * For more information see {@link Strictness}.
      *
      * @since 2.3.0
      */
@@ -51,6 +53,8 @@ public enum Strictness {
      * Extra warnings emitted to the console, see {@link MockitoHint}.
      * Default Mockito 2.x behavior.
      * Recommended if you cannot use {@link #STRICT_STUBS}.
+     * <p>
+     * For more information see {@link Strictness}.
      *
      * @since 2.3.0
      */
@@ -74,6 +78,8 @@ public enum Strictness {
      *          you no longer need to explicitly verify stubbed invocations.
      *          They are automatically verified for you.</li>
      *  </ul>
+     *
+     * For more information see {@link Strictness}.
      *
      * @since 2.3.0
      */
