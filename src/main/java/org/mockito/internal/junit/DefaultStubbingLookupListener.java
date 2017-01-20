@@ -19,8 +19,8 @@ import static org.mockito.Mockito.mockingDetails;
  */
 class DefaultStubbingLookupListener implements StubbingLookupListener {
 
-    Strictness currentStrictness;
-    boolean mismatchesReported;
+    private Strictness currentStrictness;
+    private boolean mismatchesReported;
 
     DefaultStubbingLookupListener(Strictness strictness) {
         this.currentStrictness = strictness;
@@ -55,5 +55,19 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
             }
         }
         return matchingStubbings;
+    }
+
+    /**
+     * Enables resetting the strictness to desired level
+     */
+    void setCurrentStrictness(Strictness currentStrictness) {
+        this.currentStrictness = currentStrictness;
+    }
+
+    /**
+     * Indicates that stubbing argument mismatch was reported
+     */
+    boolean isMismatchesReported() {
+        return mismatchesReported;
     }
 }
