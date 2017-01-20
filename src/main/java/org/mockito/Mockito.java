@@ -452,6 +452,16 @@ import org.mockito.verification.VerificationWithTimeout;
  *   .thenReturn("one", "two", "three");
  * </code></pre>
  *
+ * <b>Warning</b>, if instead of chaining .thenReturn() calls, multiple when/thenReturn commands are used,
+ * then each stubbing will override the previous one:
+ *
+ * <pre class="code"><code class="java">
+ * //All mock.someMethod("some arg") calls will return "two"
+ * when(mock.someMethod("some arg"))
+ *   .thenReturn("one")
+ * when(mock.someMethod("some arg"))
+ *   .thenReturn("two")
+ * </code></pre>
  *
  *
  *
