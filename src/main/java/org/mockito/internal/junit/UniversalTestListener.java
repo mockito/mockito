@@ -49,7 +49,7 @@ public class UniversalTestListener implements MockitoTestListener {
 
     private void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
         //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
-        if (event.getFailure() == null && !stubbingLookupListener.mismatchesReported) {
+        if (event.getFailure() == null && !stubbingLookupListener.isMismatchesReported()) {
             UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks);
             unused.reportUnused();
         }
@@ -80,6 +80,6 @@ public class UniversalTestListener implements MockitoTestListener {
 
     public void setStrictness(Strictness strictness) {
         this.currentStrictness = strictness;
-        this.stubbingLookupListener.currentStrictness = strictness;
+        this.stubbingLookupListener.setCurrentStrictness(strictness);
     }
 }
