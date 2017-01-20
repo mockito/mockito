@@ -27,7 +27,7 @@ import org.mockito.quality.Strictness;
  * public class ExampleTest {
  *     &#064;Mock Foo foo;
  *
- *     //Keeping session object in a field so that we can complete session in 'tearDown' method.
+ *     //Keeping session object in a field so that we can complete session in 'tear down' method.
  *     //It is recommended to hide the session object, along with 'setup' and 'tear down' methods in a base class / runner.
  *     //Keep in mind that you can use Mockito's JUnit runner or rule instead of MockitoSession and get the same behavior.
  *     MockitoSession mockito;
@@ -41,8 +41,9 @@ import org.mockito.quality.Strictness;
  *     }
  *
  *     &#064;After public void tearDown() {
- *         //it is necessary to finish the session so that Mockito
- *         //can validate the state and detect incorrect stubbing
+ *         //It is necessary to finish the session so that Mockito
+ *         // can detect incorrect stubbing and validate Mockito usage
+ *         //'finishMocking()' is intended to be used in your test framework's 'tear down' method.
  *         mockito.finishMocking();
  *     }
  *
@@ -78,6 +79,9 @@ public interface MockitoSession {
 
     /**
      * Must be invoked after mockito session has completed.
+     * This method is intended to be used in your test framework's 'tear down' method.
+     * In case of JUnit it is the "&#064;After" method.
+     * <p>
      * For example, see javadoc for {@link MockitoSession}.
      *
      * @since 2.7.0
