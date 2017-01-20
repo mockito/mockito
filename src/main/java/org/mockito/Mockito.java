@@ -95,15 +95,23 @@ import org.mockito.verification.VerificationWithTimeout;
  * <h3 id="0.1">0.1. <a class="meaningful_link" href="#mockito-android">Mockito Android support</a></h3>
  *
  * With Mockito version 2.6.1 we ship "native" Android support. To enable Android support, add the `mockito-android` library as dependency
- * to your project. This artifact is published to the same mockito organization:
+ * to your project. This artifact is published to the same Mockito organization and can be imported for Android as follows:
  *
  * <pre class="code"><code>
- * repositories { jcenter() }
- * dependencies { testCompile "org.mockito:mockito-android:2.+" }
+ * repositories {
+ *   jcenter()
+ * }
+ * dependencies {
+ *   testCompile "org.mockito:mockito-core:+"
+ *   androidTestCompile "org.mockito:mockito-android:+"
+ * }
  * </code></pre>
  *
- * All features of Mockito are still in the `mockito-core` artifact. The `mockito-android` artifact implements a compatibility layer
- * with Android. If you encounter issues with mocking on Android, please open an issue <a href="https://github.com/mockito/mockito/issues/new">on the official issue tracker</a>.
+ * You can continue to run the same unit tests on a regular VM by using the `mockito-core` artifact in your "testCompile" scope as shown
+ * above. Be aware that you cannot use the <a href="#39">inline mock maker</a> on Android due to limitations in the Android VM.
+ *
+ * If you encounter issues with mocking on Android, please open an issue
+ * <a href="https://github.com/mockito/mockito/issues/new">on the official issue tracker</a>.
  * Do provide the version of Android you are working on and dependencies of your project.
  *
  * <h3 id="1">1. <a class="meaningful_link" href="#verification">Let's verify some behaviour!</a></h3>
