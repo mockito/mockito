@@ -14,12 +14,15 @@ import org.mockito.quality.Strictness;
  * It helps keeping tests clean, {@link MockitoJUnitRunner} and {@link MockitoRule} use it behind the hood.
  * <p>
  * {@code MockitoSession} is useful when you cannot use {@link MockitoJUnitRunner} or {@link MockitoRule}.
- * Example use cases include TestNG users or tests that cannot use Mockito's JUnit support
- * because they already use different JUnit support (Jukito, Springockito).
+ * For example, you work with TestNG instead of JUnit.
+ * Another example is when different JUnit runner is in use (Jukito, Springockito)
+ * and it cannot be combined with Mockito's own runner.
+ * <p>
  * Framework integrators are welcome to use {@code MockitoSession} and give us feedback by commenting on
  * <a href="https://github.com/mockito/mockito/issues/857">issue 857</a>.
  * <p>
  *
+ * Example:
  * <pre class="code"><code class="java">
  * public class ExampleTest {
  *     &#064;Mock Foo foo;
