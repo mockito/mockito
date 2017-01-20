@@ -32,18 +32,13 @@ public class DefaultMockitoSession implements MockitoSession {
             public Throwable getFailure() {
                 return null;
             }
-
             public Object getTestClassInstance() {
                 return testClassInstance;
             }
-
             public String getTestMethodName() {
                 return null;
             }
         });
-
-        //TODO
-        // 1. validate mockito usage
-        // 2. can we have JUnit rule and runner use MockitoMocking API directly?
+        Mockito.validateMockitoUsage();
     }
 }
