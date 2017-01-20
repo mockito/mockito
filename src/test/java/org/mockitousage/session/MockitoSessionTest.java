@@ -7,12 +7,15 @@ import org.junit.runner.Result;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
+import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.JUnitResultAssert;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 public class MockitoSessionTest {
 
@@ -40,6 +43,23 @@ public class MockitoSessionTest {
 
         //expect
         JUnitResultAssert.assertThat(result).succeeds(1);
+    }
+
+    @Test public void session_with_incorrect_mockito_usage() {
+        //when
+        Result result = junit.run(MockitoSessionTest.SessionWithIncorrectMockitoUsage.class);
+
+        //expect
+        JUnitResultAssert.assertThat(result).fails(1, UnfinishedStubbingException.class);
+    }
+
+    @Test public void reports_other_failure_and_incorrect_mockito_usage() {
+        //when
+        Result result = junit.run(MockitoSessionTest.SessionWithTestFailureAndIncorrectMockitoUsage.class);
+
+        //expect
+        JUnitResultAssert.assertThat(result)
+                .failsExactly(AssertionError.class, UnfinishedStubbingException.class);
     }
 
     public static class SessionWithoutAnyConfiguration {
@@ -84,6 +104,35 @@ public class MockitoSessionTest {
 
         @Test public void some_test() {
             assertNotNull(mock);
+        }
+    }
+
+    public static class SessionWithIncorrectMockitoUsage {
+        @Mock IMethods mock;
+
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).startMocking();
+
+        @After public void after() {
+            mockito.finishMocking();
+        }
+
+        @Test public void unfinished_stubbing() {
+            when(mock.simpleMethod());
+        }
+    }
+
+    public static class SessionWithTestFailureAndIncorrectMockitoUsage {
+        @Mock IMethods mock;
+
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).startMocking();
+
+        @After public void after() {
+            mockito.finishMocking();
+        }
+
+        @Test public void unfinished_stubbing_with_other_failure() {
+            when(mock.simpleMethod());
+            assertTrue(false);
         }
     }
 }
