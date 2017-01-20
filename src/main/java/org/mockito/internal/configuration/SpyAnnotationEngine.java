@@ -61,12 +61,9 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
                         // for example happens when MockitoAnnotations.initMocks is called two times.
                         Mockito.reset(instance);
                     } else if (instance != null) {
-                        field.set(testInstance, Mockito.mock(instance.getClass(),
-                                                             withSettings().spiedInstance(instance)
-                                                                           .defaultAnswer(CALLS_REAL_METHODS)
-                                                                           .name(field.getName())));
+                        field.set(testInstance, spyInstance(field, instance));
                     } else {
-                        field.set(testInstance, newSpyInstance(testInstance, field));
+                        field.set(testInstance, spyNewInstance(testInstance, field));
                     }
                 } catch (Exception e) {
                     throw new MockitoException("Unable to initialize @Spy annotated field '" + field.getName() + "'.\n" + e.getMessage(), e);
@@ -82,7 +79,14 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
         }
     }
 
-    private static Object newSpyInstance(Object testInstance, Field field)
+    private Object spyInstance(Field field, Object instance) {
+        return Mockito.mock(instance.getClass(),
+                            withSettings().spiedInstance(instance)
+                                                           .defaultAnswer(CALLS_REAL_METHODS)
+                                                           .name(field.getName()));
+    }
+
+    private static Object spyNewInstance(Object testInstance, Field field)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
         MockSettings settings = withSettings().defaultAnswer(CALLS_REAL_METHODS)
                                               .name(field.getName());
@@ -91,39 +95,50 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
             return Mockito.mock(type, settings.useConstructor());
         }
         int modifiers = type.getModifiers();
-        if (Modifier.isPrivate(modifiers) && Modifier.isAbstract(modifiers) && type.getEnclosingClass() != null) {
+        if (typeIsPrivateAbstractInnerClass(type, modifiers)) {
             throw new MockitoException(join("@Spy annotation can't initialize private abstract inner classes.",
                                             "  inner class: '" + type.getSimpleName() + "'",
                                             "  outer class: '" + type.getEnclosingClass().getSimpleName() + "'",
                                             "",
                                             "You should augment the visibility of this inner class"));
         }
-        if (!Modifier.isStatic(modifiers)) {
+        if (typeIsNonStaticInnerClass(type, modifiers)) {
             Class<?> enclosing = type.getEnclosingClass();
-            if (enclosing != null) {
-                if (!enclosing.isInstance(testInstance)) {
-                    throw new MockitoException(join("@Spy annotation can only initialize inner classes declared in the test.",
-                                                    "  inner class: '" + type.getSimpleName() + "'",
-                                                    "  outer class: '" + enclosing.getSimpleName() + "'",
-                                                    ""));
-                }
-                return Mockito.mock(type, settings.useConstructor()
-                                                  .outerInstance(testInstance));
+            if (!enclosing.isInstance(testInstance)) {
+                throw new MockitoException(join("@Spy annotation can only initialize inner classes declared in the test.",
+                                                "  inner class: '" + type.getSimpleName() + "'",
+                                                "  outer class: '" + enclosing.getSimpleName() + "'",
+                                                ""));
             }
+            return Mockito.mock(type, settings.useConstructor()
+                                              .outerInstance(testInstance));
         }
-        Constructor<?> constructor;
-        try {
-            constructor = type.getDeclaredConstructor();
-        } catch (NoSuchMethodException e) {
-            throw new MockitoException("Please ensure that the type '" + type.getSimpleName() + "' has a no-arg constructor.");
-        }
-
+        
+        Constructor<?> constructor = noArgConstructorOf(type);
         if (Modifier.isPrivate(constructor.getModifiers())) {
             constructor.setAccessible(true);
             return Mockito.mock(type, settings.spiedInstance(constructor.newInstance()));
         } else {
             return Mockito.mock(type, settings.useConstructor());
         }
+    }
+
+    private static Constructor<?> noArgConstructorOf(Class<?> type) {
+        Constructor<?> constructor;
+        try {
+            constructor = type.getDeclaredConstructor();
+        } catch (NoSuchMethodException e) {
+            throw new MockitoException("Please ensure that the type '" + type.getSimpleName() + "' has a no-arg constructor.");
+        }
+        return constructor;
+    }
+
+    private static boolean typeIsNonStaticInnerClass(Class<?> type, int modifiers) {
+        return !Modifier.isStatic(modifiers) && type.getEnclosingClass() != null;
+    }
+
+    private static boolean typeIsPrivateAbstractInnerClass(Class<?> type, int modifiers) {
+        return Modifier.isPrivate(modifiers) && Modifier.isAbstract(modifiers) && type.getEnclosingClass() != null;
     }
 
     //TODO duplicated elsewhere
