@@ -24,12 +24,7 @@ public class JUnitResultAssert {
             return;
         }
 
-        StringBuilder sb = new StringBuilder("There were " + result.getFailures().size() + " test failures:\n");
-        int count = 0;
-        for (Failure f : result.getFailures()) {
-            sb.append("  <-----> ").append(++count).append(". ").append(f.getTrace()).append("\n");
-        }
-        throw new AssertionError(sb.toString());
+        throw new AssertionError(formatFailures(result.getFailures()));
     }
 
     /**
@@ -37,15 +32,42 @@ public class JUnitResultAssert {
      * @param expectedException - the exception of each failure
      */
     public JUnitResultAssert fails(int expectedFailureCount, Class expectedException) {
-        if (result.getFailures().size() != expectedFailureCount) {
-            throw new AssertionError("Wrong number of failures, expected: " + expectedFailureCount + ", actual: " + result.getFailures().size() + "\n" +
-                    formatFailures(result.getFailures()));
-        }
+        fails(expectedFailureCount);
         for (Failure f : result.getFailures()) {
             if (!expectedException.isInstance(f.getException())) {
                 throw new AssertionError("Incorrect failure type, expected: " + expectedException + ", actual: " + f.getException().getClass().getSimpleName() + "\n" +
                         formatFailures(result.getFailures()));
             }
+        }
+        return this;
+    }
+
+    /**
+     * @param expectedFailureCount - exact number of expected failures
+     */
+    public JUnitResultAssert fails(int expectedFailureCount) {
+        if (result.getFailures().size() != expectedFailureCount) {
+            throw new AssertionError("Wrong number of failures, expected: " + expectedFailureCount + ", actual: " + result.getFailures().size() + "\n" +
+                    formatFailures(result.getFailures()));
+        }
+        return this;
+    }
+
+    /**
+     * @param expectedExceptions - failures must match the supplied sequence in order,
+     *                           if supplied input is empty, this method is a no-op
+     */
+    public JUnitResultAssert failsExactly(Class ... expectedExceptions) {
+        fails(expectedExceptions.length);
+        int i = 0;
+        for (Failure f : result.getFailures()) {
+            if (!expectedExceptions[i].isInstance(f.getException())) {
+                throw new AssertionError("Actual failure #" + (i+1)
+                        + " should be of type: " + expectedExceptions[i].getSimpleName()
+                        + " but is of type: " + f.getException().getClass().getSimpleName()
+                        + "\n" + formatFailures(result.getFailures()));
+            }
+            i++;
         }
         return this;
     }
@@ -94,12 +116,13 @@ public class JUnitResultAssert {
         if (failures.isEmpty()) {
             return "<no failures>";
         }
-        int count = 1;
-        StringBuilder out = new StringBuilder("Failures:\n");
+        StringBuilder sb = new StringBuilder("There were " + failures.size() + " test failures:\n");
+        int count = 0;
         for (Failure f : failures) {
-            out.append(count++).append(". ").append(f.getTrace());
+            sb.append("  <-----> ").append(++count).append(". ").append(f.getTrace()).append("\n");
         }
-        return out.toString();
+
+        return sb.toString();
     }
 
     /**
