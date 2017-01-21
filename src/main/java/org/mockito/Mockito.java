@@ -8,14 +8,13 @@ import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
-import org.mockito.internal.framework.DefaultMockitoSession;
 import org.mockito.internal.session.DefaultMockitoSessionBuilder;
-import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
+import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
 import org.mockito.stubbing.*;
@@ -1313,9 +1312,10 @@ import org.mockito.verification.*;
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
  *     <li>Strict stubbing with JUnit Rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
- *     <li>Strict stubbing with JUnit Runner - {@link org.mockito.junit.MockitoJUnitRunner.StrictStubs}</li>
+ *     <li>Strict stubbing with JUnit Runner - {@link MockitoJUnitRunner.StrictStubs}</li>
+ *     <li>Strict stubbing if you cannot use runner/rule (like TestNG) - {@link MockitoSession}</li>
  *     <li>Unnecessary stubbing detection with {@link MockitoJUnitRunner}</li>
- *     <li>Stubbing argument mismatch warnings by JUnit rules, documented in {@link org.mockito.quality.MockitoHint}</li>
+ *     <li>Stubbing argument mismatch warnings, documented in {@link MockitoHint}</li>
  * </ul>
  *
  * Mockito is a "loose" mocking framework by default.
