@@ -40,30 +40,16 @@ import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 /**
  * Default answer of every Mockito mock.
  * <ul>
- * <li>
- * Returns appropriate primitive for primitive-returning methods
- * </li>
- * <li>
- * Returns consistent values for primitive wrapper classes (e.g. int-returning method returns 0 <b>and</b> Integer-returning method returns 0, too)
- * </li>
- * <li>
- * Returns empty collection for collection-returning methods (works for most commonly used collection types)
- * </li>
- * <li>
- * Returns description of mock for toString() method
- * </li>
- * <li>
- * Returns zero if references are equals otherwise non-zero for Comparable#compareTo(T other) method (see issue 184)
- * </li>
- * <li>
- * Returns an {@code java.util.Optional#empty() empty Optional} for Optional. Similarly for primitive optional variants.
- * </li>
- * <li>
- * Returns an {@code java.util.stream.Stream#empty() empty Stream} for Stream. Similarly for primitive stream variants.
- * </li>
- * <li>
- * Returns null for everything else
- * </li>
+ * <li>Returns appropriate primitive for primitive-returning methods</li>
+ * <li>Returns consistent values for primitive wrapper classes (e.g. int-returning method returns 0 <strong>and</strong>
+ *     Integer-returning method returns 0, too)</li>
+ * <li>Returns empty collection for collection-returning methods (works for most commonly used collection types)</li>
+ * <li>Returns empty array for array-returning methods</li>
+ * <li>Returns description of mock for toString() method</li>
+ * <li>Returns zero if references are equals otherwise non-zero for Comparable#compareTo(T other) method (see issue 184)</li>
+ * <li>Returns an {@link java.util.Optional#empty() empty Optional} for Optional. Similarly for primitive optional variants.</li>
+ * <li>Returns an {@link java.util.stream.Stream#empty() empty Stream} for Stream. Similarly for primitive stream variants.</li>
+ * <li>Returns null for everything else</li>
  * </ul>
  */
 public class ReturnsEmptyValues implements Answer<Object>, Serializable {
