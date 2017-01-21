@@ -15,21 +15,28 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import org.junit.Assume;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 import org.junit.Test;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class ReturnsEmptyValuesTest extends TestBase {
@@ -109,84 +116,18 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
     @Test
     public void should_return_empty_Optional() throws Exception {
-        verify_empty_Optional_is_returned("java.util.stream.Stream", "java.util.Optional");
+        assertThat((Optional) values.returnValueFor(Optional.class)).isEmpty();
+        assertThat((OptionalInt) values.returnValueFor(OptionalInt.class)).isEmpty();
+        assertThat((OptionalLong) values.returnValueFor(OptionalLong.class)).isEmpty();
+        assertThat((OptionalDouble) values.returnValueFor(OptionalDouble.class)).isEmpty();
     }
 
     @Test
-    public void should_return_empty_OptionalDouble() throws Exception {
-        verify_empty_Optional_is_returned("java.util.stream.DoubleStream", "java.util.OptionalDouble");
-    }
-
-    @Test
-    public void should_return_empty_OptionalInt() throws Exception {
-        verify_empty_Optional_is_returned("java.util.stream.IntStream", "java.util.OptionalInt");
-    }
-
-    @Test
-    public void should_return_empty_OptionalLong() throws Exception {
-        verify_empty_Optional_is_returned("java.util.stream.LongStream", "java.util.OptionalLong");
-    }
-
-    private void verify_empty_Optional_is_returned(String streamFqcn, String optionalFqcn) throws Exception {
-        Class<?> streamType = getClassOrSkipTest(streamFqcn);
-
-        //given
-        Object stream = mock(streamType);
-        Object optional = streamType.getMethod("findAny").invoke(stream);
-        assertNotNull(optional);
-        assertFalse((Boolean) Class.forName(optionalFqcn).getMethod("isPresent").invoke(optional));
-
-        Invocation findAny = this.getLastInvocation();
-
-        //when
-        Object result = values.answer(findAny);
-
-        //then
-        assertEquals(optional, result);
-    }
-
-    @Test
-    public void should_return_empty_Stream() throws Exception {
-        verify_empty_Stream_is_returned("java.util.stream.Stream");
-    }
-
-    @Test
-    public void should_return_empty_DoubleStream() throws Exception {
-        verify_empty_Stream_is_returned("java.util.stream.DoubleStream");
-    }
-
-    @Test
-    public void should_return_empty_IntStream() throws Exception {
-        verify_empty_Stream_is_returned("java.util.stream.IntStream");
-    }
-
-    @Test
-    public void should_return_empty_LongStream() throws Exception {
-        verify_empty_Stream_is_returned("java.util.stream.LongStream");
-    }
-
-    private void verify_empty_Stream_is_returned(String streamFqcn) throws Exception {
-        // given
-        Class<?> streamType = getClassOrSkipTest(streamFqcn);
-
-        // when
-        Object stream = values.returnValueFor(streamType);
-        long count = (Long) streamType.getMethod("count").invoke(stream);
-
-        // then
-        assertEquals("count of empty " + streamFqcn, 0L, count);
-    }
-
-    /**
-     * Tries to load the given class. If the class is not found, the complete test is skipped.
-     */
-    private Class<?> getClassOrSkipTest(String className) {
-        try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            Assume.assumeNoException("JVM does not support " + className, e);
-            return null;
-        }
+    public void should_return_empty_Streams() throws Exception {
+        assertThat((Stream) values.returnValueFor(Stream.class)).isEmpty();
+        assertThat(((DoubleStream) values.returnValueFor(DoubleStream.class)).count()).isEqualTo(0);
+        assertThat(((IntStream) values.returnValueFor(IntStream.class)).count()).isEqualTo(0);
+        assertThat(((LongStream) values.returnValueFor(LongStream.class)).count()).isEqualTo(0);
     }
 
 }
