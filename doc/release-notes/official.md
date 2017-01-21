@@ -1,3 +1,17 @@
+### 2.6.5 (2017-01-21 12:58 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 2: Brice Dutheil
+  * 2: Raptis
+* Improvements: 3
+  * Bugfixes: 1
+    * Overridden abstract methods using generics are not longer called for partial mock (working with Mockito 1.10.19) [(#874)](https://github.com/mockito/mockito/issues/874)
+  * Documentation: 1
+    * Clarify documentation for consecutive stubbing [(#896)](https://github.com/mockito/mockito/pull/896)
+  * Remaining changes: 1
+    * Update to Byte Buddy 1.6.4: Fixes bridge method resolution for generic types [(#891)](https://github.com/mockito/mockito/pull/891)
+
 ### 2.6.4 (2017-01-19 17:12 UTC)
 
 * Authors: 2
