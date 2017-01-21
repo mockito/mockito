@@ -4,9 +4,32 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 import org.mockito.internal.util.JavaEightUtil;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockName;
@@ -14,9 +37,6 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod;
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * Default answer of every Mockito mock.
@@ -52,9 +72,6 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     private static final long serialVersionUID = 1998191268711234347L;
 
 
-    /* (non-Javadoc)
-     * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
-     */
     public Object answer(InvocationOnMock invocation) {
         if (isToStringMethod(invocation.getMethod())) {
             Object mock = invocation.getMock();
@@ -80,6 +97,9 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return Primitives.defaultValue(type);
             //new instances are used instead of Collections.emptyList(), etc.
             //to avoid UnsupportedOperationException if code under test modifies returned collection
+        } else if (type.isArray()) {
+            Class<?> componentType = type.getComponentType();
+            return Array.newInstance(componentType, 0);
         } else if (type == Iterable.class) {
             return new ArrayList<Object>(0);
         } else if (type == Collection.class) {

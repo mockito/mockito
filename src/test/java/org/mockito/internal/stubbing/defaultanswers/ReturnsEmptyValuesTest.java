@@ -5,14 +5,31 @@
 
 package org.mockito.internal.stubbing.defaultanswers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import org.junit.Assume;
 import org.junit.Test;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
-import java.util.*;
-
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.Mockito.mock;
 
 public class ReturnsEmptyValuesTest extends TestBase {
@@ -21,6 +38,8 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
     @Test
     public void should_return_empty_collections_or_null_for_non_collections() {
+        assertTrue(((Number[]) values.returnValueFor(Number[].class)).length == 0);
+
         assertTrue(((Collection<?>) values.returnValueFor(Collection.class)).isEmpty());
 
         assertTrue(((Set<?>) values.returnValueFor(Set.class)).isEmpty());
