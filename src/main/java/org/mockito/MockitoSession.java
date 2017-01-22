@@ -1,8 +1,13 @@
 package org.mockito;
 
+import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
+import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
+import org.mockito.listeners.MockitoListener;
+import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
+import org.mockito.session.MockitoSessionBuilder;
 
 /**
  * {@code MockitoSession} is an optional, highly recommended feature
@@ -13,6 +18,8 @@ import org.mockito.quality.Strictness;
  * {@code MockitoSession} is a session of mocking, during which the user creates and uses Mockito mocks.
  * Typically the session is an execution of a single test method.
  * {@code MockitoSession} initializes mocks, validates usage and detects incorrect stubbing.
+ * When the session is started it must be concluded with {@link #finishMocking()}
+ * otherwise {@link UnfinishedMockingSessionException} is triggered when the next session is created.
  * <p>
  * {@code MockitoSession} is useful when you cannot use {@link MockitoJUnitRunner} or {@link MockitoRule}.
  * For example, you work with TestNG instead of JUnit.
@@ -79,9 +86,18 @@ import org.mockito.quality.Strictness;
 public interface MockitoSession {
 
     /**
-     * Must be invoked after mockito session has completed.
+     * Must be invoked when the user is done with mocking for given session (test method).
+     * It detects unused stubbings and may throw {@link UnnecessaryStubbingException}
+     * or emit warnings ({@link MockitoHint}) depending on the {@link Strictness} level.
+     * The method also detects incorrect Mockito usage via {@link Mockito#validateMockitoUsage()}.
+     * <p>
+     * In order to implement {@link Strictness} Mockito session keeps track of mocking using {@link MockitoListener}.
+     * This method cleans up the listeners and ensures there is no leftover state after the session finishes.
+     * It is necessary to invoke this method to conclude mocking session.
+     * For more information about session lifecycle see {@link MockitoSessionBuilder#startMocking()}.
+     * <p>
      * This method is intended to be used in your test framework's 'tear down' method.
-     * In case of JUnit it is the "&#064;After" method.
+     * In the case of JUnit it is the "&#064;After" method.
      * <p>
      * For example, see javadoc for {@link MockitoSession}.
      *

@@ -894,13 +894,10 @@ public class Reporter {
             "For more information, see the javadoc for RedundantListenerException class."));
     }
 
-    public static void unfinishedMocking() {
-        throw new UnfinishedMockingException(join(
-            "Unfinished mocking detected.",
-            "Previous 'Mockito.startMocking()' was not concluded with 'finishMocking()'. Example:",
-            "  MockitoMocking mocking = Mockito.startMocking(this, Strictness.STRICT_STUBS);",
-            "  //...",
-            "  mocking.finishMocking();",
-            "For more information, see javadoc for UnfinishedMockingException class"));
+    public static void unfinishedMockingSession() {
+        throw new UnfinishedMockingSessionException(join(
+                "Unfinished mocking session detected.",
+                "Previous MockitoSession was not concluded with 'finishMocking()'.",
+                "For examples of correct usage see javadoc for MockitoSession class."));
     }
 }
