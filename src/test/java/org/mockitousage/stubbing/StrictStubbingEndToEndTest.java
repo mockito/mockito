@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
-import org.mockito.exceptions.misusing.UnfinishedMockingException;
+import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
@@ -44,16 +44,13 @@ public class StrictStubbingEndToEndTest {
         JUnitResultAssert.assertThat(result).succeeds(5);
     }
 
-    @Test public void detects_unfinished_mocking() {
+    @Test public void detects_unfinished_session() {
         Result result = junit.run(UnfinishedMocking.class);
         JUnitResultAssert.assertThat(result)
-            .fails(UnfinishedMockingException.class, "\n" +
-                "Unfinished mocking detected.\n" +
-                "Previous 'Mockito.startMocking()' was not concluded with 'finishMocking()'. Example:\n" +
-                "  MockitoMocking mocking = Mockito.startMocking(this, Strictness.STRICT_STUBS);\n" +
-                "  //...\n" +
-                "  mocking.finishMocking();\n" +
-                "For more information, see javadoc for UnfinishedMockingException class");
+            .fails(UnfinishedMockingSessionException.class, "\n" +
+                "Unfinished mocking session detected.\n" +
+                "Previous MockitoSession was not concluded with 'finishMocking()'.\n" +
+                "For examples of correct usage see javadoc for MockitoSession class.");
     }
 
     public static class ArgumentMismatch {

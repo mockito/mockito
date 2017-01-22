@@ -3,6 +3,7 @@ package org.mockito.session;
 import org.mockito.Incubating;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
+import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
 import org.mockito.quality.Strictness;
 
 /**
@@ -53,11 +54,22 @@ public interface MockitoSessionBuilder {
     /**
      * Starts new mocking session! Creates new {@code MockitoSession} instance to initialize the session.
      * At this point annotated fields are initialized per {@link #initMocks(Object)} method.
+     * When you are done with the session it is required to invoke {@link MockitoSession#finishMocking()}.
+     * This will trigger stubbing validation, cleaning up the internal state like removal of internal listeners.
+     * <p>
+     * Mockito tracks created sessions internally and prevents the user from creating new sessions without
+     * using {@link MockitoSession#finishMocking()}.
+     * When you run tests concurrently in multiple threads, it is legal for each thread to have single active Mockito session.
+     * When you attempt to start new session in a thread that already has an unfinished session
+     * {@link UnfinishedMockingSessionException} will be triggered.
+     * <p>
      * See examples in {@link MockitoSession}.
      *
      * @return new {@code MockitoSession} instance
      * @since 2.7.0
+     * @throws UnfinishedMockingSessionException
+     *  when previous session was not concluded with {@link MockitoSession#finishMocking()}
      */
     @Incubating
-    MockitoSession startMocking();
+    MockitoSession startMocking() throws UnfinishedMockingSessionException;
 }

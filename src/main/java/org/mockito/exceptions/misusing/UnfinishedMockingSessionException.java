@@ -1,21 +1,21 @@
 package org.mockito.exceptions.misusing;
 
-import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.quality.Strictness;
+import org.mockito.session.MockitoSessionBuilder;
 
 /**
  * This exception prevents the user from forgetting to use {@link MockitoSession#finishMocking()}.
  * When {@link MockitoSession} is started is used
  * it needs to be concluded with {@link MockitoSession#finishMocking()}.
  * <p>
- * For more information see Javadoc for {@link MockitoSession}.
+ * For details on mocking session lifecycle see {@link MockitoSessionBuilder#startMocking()}
+ * and {@link MockitoSession#finishMocking()}. For examples of use see {@link MockitoSession}.
  *
  * @since 2.7.0
  */
-public class UnfinishedMockingException extends MockitoException {
-    public UnfinishedMockingException(String message) {
+public class UnfinishedMockingSessionException extends MockitoException {
+    public UnfinishedMockingSessionException(String message) {
         super(message);
     }
 }
