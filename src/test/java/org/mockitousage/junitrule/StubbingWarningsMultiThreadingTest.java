@@ -7,6 +7,7 @@ import org.mockito.quality.Strictness;
 import org.mockito.internal.junit.JUnitRule;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockitousage.IMethods;
+import org.mockitoutil.ConcurrentTesting;
 import org.mockitoutil.SafeJUnitRule;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +32,7 @@ public class StubbingWarningsMultiThreadingTest {
         //when stubbing is declared
         when(mock.simpleMethod()).thenReturn("1");
         //and used from a different thread
-        inThread(new Runnable() {
+        ConcurrentTesting.inThread(new Runnable() {
                     public void run() {
                         mock.simpleMethod();
                     }
@@ -54,16 +55,11 @@ public class StubbingWarningsMultiThreadingTest {
         when(mock.simpleMethod(2)).thenReturn("2");
 
         //and one of the stubbings is used from a different thread
-        inThread(new Runnable() {
+        ConcurrentTesting.inThread(new Runnable() {
             public void run() {
                 mock.simpleMethod(1);
             }
         });
     }
 
-    private static void inThread(Runnable r) throws InterruptedException {
-        Thread t = new Thread(r);
-        t.start();
-        t.join();
-    }
 }
