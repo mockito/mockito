@@ -19,6 +19,7 @@ public class DefaultMockitoSession implements MockitoSession {
         this.testClassInstance = testClassInstance;
         listener = new UniversalTestListener(strictness, logger);
         try {
+            //So that the listener can capture mock creation events
             Mockito.framework().addListener(listener);
         } catch (RedundantListenerException e) {
             Reporter.unfinishedMockingSession();
@@ -27,7 +28,12 @@ public class DefaultMockitoSession implements MockitoSession {
     }
 
     public void finishMocking() {
+        //Cleaning up the state, we no longer need the listener hooked up
+        //The listener implements MockCreationListener and at this point
+        //we no longer need to listen on mock creation events. We are wrapping up the session
         Mockito.framework().removeListener(listener);
+
+        //Emit test finished event so that validation such as strict stubbing can take place
         listener.testFinished(new TestFinishedEvent() {
             public Throwable getFailure() {
                 return null;
@@ -39,6 +45,8 @@ public class DefaultMockitoSession implements MockitoSession {
                 return null;
             }
         });
+
+        //Finally, validate user's misuse of Mockito framework.
         Mockito.validateMockitoUsage();
     }
 }
