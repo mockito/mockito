@@ -1,3 +1,12 @@
+### 2.6.6 (2017-01-23 10:12 UTC)
+
+* Authors: 1
+* Commits: 5
+  * 5: Brice Dutheil
+* Improvements: 1
+  * Enhancements: 1
+    * Spy annotation reports better error message if instance creation is impossible [(#885)](https://github.com/mockito/mockito/pull/885)
+
 ### 2.6.5 (2017-01-21 12:58 UTC)
 
 * Authors: 2
