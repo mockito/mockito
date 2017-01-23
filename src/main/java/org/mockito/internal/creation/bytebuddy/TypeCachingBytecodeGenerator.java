@@ -13,6 +13,8 @@ import java.util.concurrent.Callable;
 
 class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implements BytecodeGenerator {
 
+    private final Object BOOTSTRAP_LOCK = new Object();
+
     private final BytecodeGenerator bytecodeGenerator;
 
     private final TypeCache<SerializationFeatureKey> typeCache;
@@ -26,15 +28,15 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implement
     @Override
     public <T> Class<T> mockClass(final MockFeatures<T> params) {
         try {
-
-        return (Class<T>) typeCache.findOrInsert(params.mockedType.getClassLoader(),
-                new SerializationFeatureKey(params.mockedType, params.interfaces, params.serializableMode),
-                new Callable<Class<?>>() {
-                    @Override
-                    public Class<?> call() throws Exception {
-                        return bytecodeGenerator.mockClass(params);
-                    }
-                }, params.mockedType);
+            ClassLoader classLoader = params.mockedType.getClassLoader();
+            return (Class<T>) typeCache.findOrInsert(classLoader,
+                    new SerializationFeatureKey(params.mockedType, params.interfaces, params.serializableMode),
+                    new Callable<Class<?>>() {
+                        @Override
+                        public Class<?> call() throws Exception {
+                            return bytecodeGenerator.mockClass(params);
+                        }
+                    }, classLoader == null ? BOOTSTRAP_LOCK : classLoader);
         } catch (IllegalArgumentException exception) {
             Throwable cause = exception.getCause();
             if (cause instanceof RuntimeException) {
