@@ -1,16 +1,21 @@
 package org.mockitousage.constructor;
 
+import java.util.List;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.util.List;
-
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 public class CreatingMocksWithConstructorTest extends TestBase {
 
@@ -78,7 +83,7 @@ public class CreatingMocksWithConstructorTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             assertThat(e).hasMessage("Unable to create mock instance of type 'InnerClass'");
-            assertThat(e.getCause()).hasMessageContaining("Please ensure that the outer instance has correct type and that the target class has 0-arg constructor.");
+            assertThat(e.getCause()).hasMessageContaining("Unable to find a matching 1-arg constructor for the outer instance.");
         }
     }
 
