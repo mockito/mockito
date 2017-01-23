@@ -13,9 +13,13 @@ import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
-import org.mockitoutil.JUnitResultAssert;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockitoutil.ConcurrentTesting.concurrently;
+import static org.mockitoutil.JUnitResultAssert.assertThat;
 
 public class StrictStubbingEndToEndTest {
 
@@ -26,34 +30,51 @@ public class StrictStubbingEndToEndTest {
     }
 
     @Test public void finish_mocking_exception_does_not_hide_the_exception_from_test() {
-        Result result = junit.run(ArgumentMismatch.class);
-        JUnitResultAssert.assertThat(result)
+        Result result = junit.run(UnnecessaryStubbing.class);
+        assertThat(result)
                 //both exceptions are reported to JUnit:
-                .fails("stubbing_argument_mismatch", IllegalStateException.class)
-                .fails("stubbing_argument_mismatch", UnnecessaryStubbingException.class);
+                .fails("unnecessary_stubbing", IllegalStateException.class)
+                .fails("unnecessary_stubbing", UnnecessaryStubbingException.class);
     }
 
     @Test public void does_not_report_unused_stubbing_if_mismatch_reported() {
         Result result = junit.run(ReportMismatchButNotUnusedStubbing.class);
-        JUnitResultAssert.assertThat(result).fails(1, PotentialStubbingProblem.class);
+        assertThat(result).fails(1, PotentialStubbingProblem.class);
     }
 
     @Test public void strict_stubbing_does_not_leak_to_other_tests() {
         Result result = junit.run(LenientStrictness1.class, StrictStubsPassing.class, LenientStrictness2.class);
         //all tests pass, lenient test cases contain incorrect stubbing
-        JUnitResultAssert.assertThat(result).succeeds(5);
+        assertThat(result).succeeds(5);
     }
 
     @Test public void detects_unfinished_session() {
         Result result = junit.run(UnfinishedMocking.class);
-        JUnitResultAssert.assertThat(result)
+        assertThat(result)
             .fails(UnfinishedMockingSessionException.class, "\n" +
                 "Unfinished mocking session detected.\n" +
                 "Previous MockitoSession was not concluded with 'finishMocking()'.\n" +
                 "For examples of correct usage see javadoc for MockitoSession class.");
     }
 
-    public static class ArgumentMismatch {
+    @Test public void concurrent_sessions_in_different_threads() throws Exception {
+        final Map<Class, Result> results = new ConcurrentHashMap<Class, Result>();
+        concurrently(new Runnable() {
+                         public void run() {
+                             results.put(StrictStubsPassing.class, junit.run(StrictStubsPassing.class));
+                         }
+                     }, new Runnable() {
+                         public void run() {
+                             results.put(ReportMismatchButNotUnusedStubbing.class, junit.run(ReportMismatchButNotUnusedStubbing.class));
+                         }
+                     }
+        );
+
+        assertThat(results.get(StrictStubsPassing.class)).succeeds(1);
+        assertThat(results.get(ReportMismatchButNotUnusedStubbing.class)).fails(1);
+    }
+
+    public static class UnnecessaryStubbing {
         @Mock IMethods mock;
         MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
 
@@ -61,7 +82,7 @@ public class StrictStubbingEndToEndTest {
             mockito.finishMocking();
         }
 
-        @Test public void stubbing_argument_mismatch() {
+        @Test public void unnecessary_stubbing() {
             given(mock.simpleMethod("1")).willReturn("one");
             throw new IllegalStateException();
         }
@@ -90,7 +111,6 @@ public class StrictStubbingEndToEndTest {
         }
 
         @Test public void used() {
-            System.out.println("working");
             given(mock.simpleMethod(1)).willReturn("");
             mock.simpleMethod(1);
         }
@@ -117,7 +137,6 @@ public class StrictStubbingEndToEndTest {
         }
 
         @Test public void mismatch() {
-            System.out.println("SomeDemo");
             given(mock.simpleMethod(2)).willReturn("");
             mock.simpleMethod(3);
         }
