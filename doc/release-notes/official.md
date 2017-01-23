@@ -1,3 +1,13 @@
+### 2.6.8 (2017-01-23 14:53 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 2
+  * Documentation: 2
+    * Fixes #814 : A elements were missing the name attribute [(#905)](https://github.com/mockito/mockito/pull/905)
+    * Javadoc links in main Mockito doc are not linkable [(#814)](https://github.com/mockito/mockito/issues/814)
+
 ### 2.6.7 (2017-01-23 13:52 UTC)
 
 * Authors: 2
