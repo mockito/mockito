@@ -4,9 +4,31 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
-import org.mockito.internal.util.JavaEightUtil;
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockName;
@@ -15,36 +37,19 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod;
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 
-import java.io.Serializable;
-import java.util.*;
-
 /**
  * Default answer of every Mockito mock.
  * <ul>
- * <li>
- * Returns appropriate primitive for primitive-returning methods
- * </li>
- * <li>
- * Returns consistent values for primitive wrapper classes (e.g. int-returning method returns 0 <b>and</b> Integer-returning method returns 0, too)
- * </li>
- * <li>
- * Returns empty collection for collection-returning methods (works for most commonly used collection types)
- * </li>
- * <li>
- * Returns description of mock for toString() method
- * </li>
- * <li>
- * Returns zero if references are equals otherwise non-zero for Comparable#compareTo(T other) method (see issue 184)
- * </li>
- * <li>
- * Returns an {@code java.util.Optional#empty() empty Optional} for Optional. Similarly for primitive optional variants.
- * </li>
- * <li>
- * Returns an {@code java.util.stream.Stream#empty() empty Stream} for Stream. Similarly for primitive stream variants.
- * </li>
- * <li>
- * Returns null for everything else
- * </li>
+ * <li>Returns appropriate primitive for primitive-returning methods</li>
+ * <li>Returns consistent values for primitive wrapper classes (e.g. int-returning method returns 0 <strong>and</strong>
+ *     Integer-returning method returns 0, too)</li>
+ * <li>Returns empty collection for collection-returning methods (works for most commonly used collection types)</li>
+ * <li>Returns empty array for array-returning methods</li>
+ * <li>Returns description of mock for toString() method</li>
+ * <li>Returns zero if references are equals otherwise non-zero for Comparable#compareTo(T other) method (see issue 184)</li>
+ * <li>Returns an {@link java.util.Optional#empty() empty Optional} for Optional. Similarly for primitive optional variants.</li>
+ * <li>Returns an {@link java.util.stream.Stream#empty() empty Stream} for Stream. Similarly for primitive stream variants.</li>
+ * <li>Returns null for everything else</li>
  * </ul>
  */
 public class ReturnsEmptyValues implements Answer<Object>, Serializable {
@@ -52,9 +57,6 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     private static final long serialVersionUID = 1998191268711234347L;
 
 
-    /* (non-Javadoc)
-     * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
-     */
     public Object answer(InvocationOnMock invocation) {
         if (isToStringMethod(invocation.getMethod())) {
             Object mock = invocation.getMock();
@@ -80,6 +82,9 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return Primitives.defaultValue(type);
             //new instances are used instead of Collections.emptyList(), etc.
             //to avoid UnsupportedOperationException if code under test modifies returned collection
+        } else if (type.isArray()) {
+            Class<?> componentType = type.getComponentType();
+            return Array.newInstance(componentType, 0);
         } else if (type == Iterable.class) {
             return new ArrayList<Object>(0);
         } else if (type == Collection.class) {
@@ -110,22 +115,22 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return new TreeMap<Object, Object>();
         } else if (type == LinkedHashMap.class) {
             return new LinkedHashMap<Object, Object>();
-        } else if ("java.util.Optional".equals(type.getName())) {
-            return JavaEightUtil.emptyOptional();
-        } else if ("java.util.OptionalDouble".equals(type.getName())) {
-            return JavaEightUtil.emptyOptionalDouble();
-        } else if ("java.util.OptionalInt".equals(type.getName())) {
-            return JavaEightUtil.emptyOptionalInt();
-        } else if ("java.util.OptionalLong".equals(type.getName())) {
-            return JavaEightUtil.emptyOptionalLong();
-        } else if ("java.util.stream.Stream".equals(type.getName())) {
-            return JavaEightUtil.emptyStream();
-        } else if ("java.util.stream.DoubleStream".equals(type.getName())) {
-            return JavaEightUtil.emptyDoubleStream();
-        } else if ("java.util.stream.IntStream".equals(type.getName())) {
-            return JavaEightUtil.emptyIntStream();
-        } else if ("java.util.stream.LongStream".equals(type.getName())) {
-            return JavaEightUtil.emptyLongStream();
+        } else if (type == Optional.class) {
+            return Optional.empty();
+        } else if (type == OptionalDouble.class) {
+            return OptionalDouble.empty();
+        } else if (type == OptionalInt.class) {
+            return OptionalInt.empty();
+        } else if (type == OptionalLong.class) {
+            return OptionalLong.empty();
+        } else if (type == Stream.class) {
+            return Stream.empty();
+        } else if (type == DoubleStream.class) {
+            return DoubleStream.empty();
+        } else if (type == IntStream.class) {
+            return IntStream.empty();
+        } else if (type == LongStream.class) {
+            return LongStream.empty();
         }
 
         //Let's not care about the rest of collections.

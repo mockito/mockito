@@ -28,7 +28,7 @@ public class ThrowsExceptionTest {
             new ThrowsException(mock(Exception.class)).answer(new InvocationBuilder().method("canThrowException").toInvocation());
             Assertions.fail("should have raised wanted exception");
         } catch (Throwable throwable) {
-            assertThat(throwable.getStackTrace()).describedAs("no stack trace, it's mock").isNull();
+            assertThat(throwable.getStackTrace()).describedAs("no stack trace, it's mock").isEmpty();
         }
     }
 
