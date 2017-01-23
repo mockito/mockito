@@ -1,3 +1,13 @@
+### 2.6.7 (2017-01-23 13:52 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Brice Dutheil
+  * 1: Rafael Winterhalter
+* Improvements: 2
+  * Fix TypeCache dead lock [(#902)](https://github.com/mockito/mockito/pull/902)
+  * Mockito 2.6.4 hangs on JDK 1.8.0_31 [(#892)](https://github.com/mockito/mockito/issues/892)
+
 ### 2.6.6 (2017-01-23 10:12 UTC)
 
 * Authors: 1
