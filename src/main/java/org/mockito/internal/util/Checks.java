@@ -24,4 +24,11 @@ public class Checks {
         }
         return iterable;
     }
+
+    public static <T> T check(boolean assertion, T arg, String checkedValue) {
+        if (!assertion) {
+            throw new IllegalArgumentException(checkedValue + " is invalid");
+        }
+        return arg;
+    }
 }

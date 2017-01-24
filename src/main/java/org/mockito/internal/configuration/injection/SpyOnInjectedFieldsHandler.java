@@ -23,7 +23,8 @@ public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
     @Override
     protected boolean processInjection(Field field, Object fieldOwner, Set<Object> ignored) {
         if (field.isAnnotationPresent(Spy.class)) {
-            SpyFieldInitializer.initializeSpy(fieldOwner, field);
+            Object spy = SpyFieldInitializer.initializeSpy(fieldOwner, field);
+            ignored.add(spy);
         }
 
         return false;

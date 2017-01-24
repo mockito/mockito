@@ -57,6 +57,7 @@ public class MockInjection {
         private final Object fieldOwner;
         private final MockInjectionStrategy injectionStrategies = MockInjectionStrategy.nop();
         private final MockInjectionStrategy postInjectionStrategies = MockInjectionStrategy.nop();
+        private int passes = 1;
 
         private OngoingMockInjection(Field field, Object fieldOwner) {
             this(Collections.singleton(field), fieldOwner);
@@ -87,11 +88,24 @@ public class MockInjection {
             return this;
         }
 
+        // In order to have a proper graph dependency injection, this class should be
+        // changed to create a dependency graph and order fields accordingly,
+        // from independents dependencies to mid level injectees and finally to level injectees.
+        // This trick simulates multi level injection by performing multiple pass on the class,
+        // and by adding newly created spies on the go in SpyOnInjectedFieldsHandler.
+        public OngoingMockInjection poorManMultiLevelInjection() {
+            this.passes = 2; // 2 passes seem to work for simple multi level injection
+            return this;
+        }
+
         public void apply() {
-            for (Field field : fields) {
-                injectionStrategies.process(field, fieldOwner, mocks);
-                postInjectionStrategies.process(field, fieldOwner, mocks);
+            for (int i = 0; i < passes; i++) {
+                for (Field field : fields) {
+                    injectionStrategies.process(field, fieldOwner, mocks);
+                    postInjectionStrategies.process(field, fieldOwner, mocks);
+                }
             }
+
         }
     }
 }

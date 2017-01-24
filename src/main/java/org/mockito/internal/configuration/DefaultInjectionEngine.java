@@ -21,6 +21,7 @@ public class DefaultInjectionEngine {
                      .tryConstructorInjection()
                      .tryPropertyOrFieldInjection()
                      .handleSpyAnnotation()
+                     .poorManMultiLevelInjection()
                      .apply();
     }
 

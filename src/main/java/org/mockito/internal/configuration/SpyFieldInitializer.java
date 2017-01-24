@@ -20,7 +20,7 @@ import static org.mockito.Mockito.withSettings;
 import static org.mockito.internal.util.StringJoiner.join;
 
 public class SpyFieldInitializer {
-    public static void initializeSpy(Object fieldOwner, Field field) {
+    public static Object initializeSpy(Object fieldOwner, Field field) {
         FieldReader fieldReader = new FieldReader(fieldOwner, field);
         try {
             Object fieldInstance = fieldReader.read();
@@ -34,6 +34,7 @@ public class SpyFieldInitializer {
             } else {
                 FieldSetter.setField(fieldOwner, field, spyNewInstance(fieldOwner, field));
             }
+            return fieldReader.read();
         } catch (Exception e) {
             throw new MockitoException("Unable to initialize @Spy annotated field '" + field.getName() + "'.\n" + e.getMessage(), e);
         }
