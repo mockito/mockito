@@ -5,15 +5,15 @@
 
 package org.mockito.internal.configuration.injection;
 
+import java.lang.reflect.Field;
+import java.util.Set;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldReader;
 
-import java.lang.reflect.Field;
-import java.util.Set;
-
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.withSettings;
 import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
@@ -31,8 +31,8 @@ public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
     protected boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
         FieldReader fieldReader = new FieldReader(fieldOwner, field);
 
-        // TODO refoctor : code duplicated in SpyAnnotationEngine
-        if(!fieldReader.isNull() && field.isAnnotationPresent(Spy.class)) {
+        // TODO refactor : code duplicated in SpyAnnotationEngine
+        if (!fieldReader.isNull() && field.isAnnotationPresent(Spy.class)) {
             try {
                 Object instance = fieldReader.read();
                 if (MockUtil.isMock(instance)) {
@@ -40,11 +40,11 @@ public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
                     // B. protect against multiple use of MockitoAnnotations.initMocks()
                     Mockito.reset(instance);
                 } else {
-                    Object mock = Mockito.mock(instance.getClass(), withSettings()
-					    .spiedInstance(instance)
-					    .defaultAnswer(Mockito.CALLS_REAL_METHODS)
-					    .name(field.getName()));
-					setField(fieldOwner, field, mock);
+                    Object mock = Mockito.mock(instance.getClass(),
+                                               withSettings().spiedInstance(instance)
+                                                             .defaultAnswer(CALLS_REAL_METHODS)
+                                                             .name(field.getName()));
+                    setField(fieldOwner, field, mock);
                 }
             } catch (Exception e) {
                 throw new MockitoException("Problems initiating spied field " + field.getName(), e);

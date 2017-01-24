@@ -79,11 +79,11 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
         }
     }
 
-    private Object spyInstance(Field field, Object instance) {
+    private static Object spyInstance(Field field, Object instance) {
         return Mockito.mock(instance.getClass(),
                             withSettings().spiedInstance(instance)
-                                                           .defaultAnswer(CALLS_REAL_METHODS)
-                                                           .name(field.getName()));
+                                          .defaultAnswer(CALLS_REAL_METHODS)
+                                          .name(field.getName()));
     }
 
     private static Object spyNewInstance(Object testInstance, Field field)
@@ -113,7 +113,7 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
             return Mockito.mock(type, settings.useConstructor()
                                               .outerInstance(testInstance));
         }
-        
+
         Constructor<?> constructor = noArgConstructorOf(type);
         if (Modifier.isPrivate(constructor.getModifiers())) {
             constructor.setAccessible(true);
@@ -142,9 +142,9 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
     }
 
     //TODO duplicated elsewhere
-    private void assertNoIncompatibleAnnotations(Class<? extends Annotation> annotation,
-                                                 Field field,
-                                                 Class<? extends Annotation>... undesiredAnnotations) {
+    private static void assertNoIncompatibleAnnotations(Class<? extends Annotation> annotation,
+                                                        Field field,
+                                                        Class<? extends Annotation>... undesiredAnnotations) {
         for (Class<? extends Annotation> u : undesiredAnnotations) {
             if (field.isAnnotationPresent(u)) {
                 throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(),
