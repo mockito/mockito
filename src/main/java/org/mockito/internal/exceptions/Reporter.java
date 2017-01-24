@@ -12,7 +12,19 @@ import java.util.Collection;
 import java.util.List;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.misusing.*;
+import org.mockito.exceptions.misusing.CannotStubVoidMethodWithReturnValue;
+import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
+import org.mockito.exceptions.misusing.FriendlyReminderException;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.misusing.NullInsteadOfMockException;
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
+import org.mockito.exceptions.misusing.RedundantListenerException;
+import org.mockito.exceptions.misusing.UnfinishedStubbingException;
+import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
+import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.SmartNullPointerException;
@@ -622,9 +634,10 @@ public class Reporter {
                                             "For info how to use annotations see examples in javadoc for MockitoAnnotations class.");
     }
 
-    public static MockitoException unsupportedCombinationOfAnnotations(String undesiredAnnotationOne, String undesiredAnnotationTwo) {
-        return new MockitoException("This combination of annotations is not permitted on a single field:\n" +
-                                            "@" + undesiredAnnotationOne + " and @" + undesiredAnnotationTwo);
+    public static MockitoException unsupportedCombinationOfAnnotations(Field field, String undesiredAnnotationOne, String undesiredAnnotationTwo) {
+        return new MockitoException(join("This combination of annotations is not permitted on the field '" + field.getName() + "' :",
+                                         "@" + undesiredAnnotationOne + " and @" + undesiredAnnotationTwo,
+                                         ""));
     }
 
     public static MockitoException cannotInitializeForSpyAnnotation(String fieldName, Exception details) {

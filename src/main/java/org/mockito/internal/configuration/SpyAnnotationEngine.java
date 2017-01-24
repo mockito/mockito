@@ -4,15 +4,13 @@
  */
 package org.mockito.internal.configuration;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.mockito.internal.util.reflection.Annotations;
 import org.mockito.plugins.AnnotationEngine;
-
-import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
 
 /**
  * Process fields annotated with &#64;Spy.
@@ -37,20 +35,10 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
         for (Field field : fields) {
             // Combination of @InjectMocks and @Spy have to be handled separately by the injection engine
             if (field.isAnnotationPresent(Spy.class) && !field.isAnnotationPresent(InjectMocks.class)) {
-                assertNoIncompatibleAnnotations(Spy.class, field, Mock.class, Captor.class);
+                Annotations.assertNoIncompatibleAnnotations(Spy.class,
+                                                            field,
+                                                            Mock.class, Captor.class);
                 SpyFieldInitializer.initializeSpy(testInstance, field);
-            }
-        }
-    }
-
-    //TODO duplicated elsewhere
-    private static void assertNoIncompatibleAnnotations(Class<? extends Annotation> annotation,
-                                                        Field field,
-                                                        Class<? extends Annotation>... undesiredAnnotations) {
-        for (Class<? extends Annotation> u : undesiredAnnotations) {
-            if (field.isAnnotationPresent(u)) {
-                throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(),
-                                                          annotation.getClass().getSimpleName());
             }
         }
     }
