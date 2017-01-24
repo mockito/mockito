@@ -107,7 +107,8 @@ public class JUnitResultAssert {
     public JUnitResultAssert succeeds(int successCount) {
         int i = result.getRunCount() - result.getFailureCount();
         if (i != successCount) {
-            throw new AssertionError("Expected " + successCount + " passes but " + i + "/" + result.getRunCount() + " passed.");
+            throw new AssertionError("Expected " + successCount + " passes but " + i + "/" + result.getRunCount() + " passed." +
+                    "\n" + formatFailures(result.getFailures()));
         }
         return this;
     }
