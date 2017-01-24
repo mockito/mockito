@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.configuration;
 
 import java.lang.reflect.Constructor;
@@ -15,41 +19,41 @@ import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.withSettings;
 import static org.mockito.internal.util.StringJoiner.join;
 
-class SpyFieldInitializer {
-    public static void initializeSpy(Object testInstance, Field field) {
-        FieldReader fieldReader = new FieldReader(testInstance, field);
+public class SpyFieldInitializer {
+    public static void initializeSpy(Object fieldOwner, Field field) {
+        FieldReader fieldReader = new FieldReader(fieldOwner, field);
         try {
-            Object instance = fieldReader.read();
-            assertNotInterface(instance, field.getType());
-            if (MockUtil.isMock(instance)) {
-                // instance has been spied earlier
+            Object fieldInstance = fieldReader.read();
+            assertNotInterface(fieldInstance, field.getType());
+            if (MockUtil.isMock(fieldInstance)) {
+                // fieldInstance has been spied earlier
                 // for example happens when MockitoAnnotations.initMocks is called two times.
-                Mockito.reset(instance);
-            } else if (instance != null) {
-                FieldSetter.setField(testInstance, field, spyInstance(field, instance));
+                Mockito.reset(fieldInstance);
+            } else if (fieldInstance != null) {
+                FieldSetter.setField(fieldOwner, field, spyInstance(field, fieldInstance));
             } else {
-                FieldSetter.setField(testInstance, field, spyNewInstance(testInstance, field));
+                FieldSetter.setField(fieldOwner, field, spyNewInstance(fieldOwner, field));
             }
         } catch (Exception e) {
             throw new MockitoException("Unable to initialize @Spy annotated field '" + field.getName() + "'.\n" + e.getMessage(), e);
         }
     }
 
-    private static void assertNotInterface(Object testInstance, Class<?> type) {
-        type = testInstance != null ? testInstance.getClass() : type;
+    private static void assertNotInterface(Object fieldOwner, Class<?> type) {
+        type = fieldOwner != null ? fieldOwner.getClass() : type;
         if (type.isInterface()) {
             throw new MockitoException("Type '" + type.getSimpleName() + "' is an interface and it cannot be spied on.");
         }
     }
 
-    private static Object spyInstance(Field field, Object instance) {
-        return Mockito.mock(instance.getClass(),
-                            withSettings().spiedInstance(instance)
+    private static Object spyInstance(Field field, Object fieldInstance) {
+        return Mockito.mock(fieldInstance.getClass(),
+                            withSettings().spiedInstance(fieldInstance)
                                           .defaultAnswer(CALLS_REAL_METHODS)
                                           .name(field.getName()));
     }
 
-    private static Object spyNewInstance(Object testInstance, Field field)
+    private static Object spyNewInstance(Object fieldOwner, Field field)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
         MockSettings settings = withSettings().defaultAnswer(CALLS_REAL_METHODS)
                                               .name(field.getName());
@@ -67,14 +71,14 @@ class SpyFieldInitializer {
         }
         if (typeIsNonStaticInnerClass(type, modifiers)) {
             Class<?> enclosing = type.getEnclosingClass();
-            if (!enclosing.isInstance(testInstance)) {
+            if (!enclosing.isInstance(fieldOwner)) {
                 throw new MockitoException(join("@Spy annotation can only initialize inner classes declared in the test.",
                                                 "  inner class: '" + type.getSimpleName() + "'",
                                                 "  outer class: '" + enclosing.getSimpleName() + "'",
                                                 ""));
             }
             return Mockito.mock(type, settings.useConstructor()
-                                              .outerInstance(testInstance));
+                                              .outerInstance(fieldOwner));
         }
 
         Constructor<?> constructor = noArgConstructorOf(type);
