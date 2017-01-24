@@ -18,7 +18,7 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
  * See {@link MockitoAnnotations}
  */
 public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
-    private final AnnotationEngine delegate = new IndependentAnnotationEngine();
+    private final AnnotationEngine independentAnnotationEngine = new IndependentAnnotationEngine();
     private final AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
 
     /**
@@ -32,9 +32,8 @@ public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.
      * <li>Then try to inject them.</li>
      * </ol>
      *
-     * @param clazz Not used
+     * @param clazz        Not used
      * @param testInstance The instance of the test, should not be null.
-     *
      * @see org.mockito.plugins.AnnotationEngine#process(Class, Object)
      */
     public void process(Class<?> clazz, Object testInstance) {
@@ -43,18 +42,14 @@ public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.
     }
 
     private void processInjectMocks(final Class<?> clazz, final Object testInstance) {
-        Class<?> classContext = clazz;
-        while (classContext != Object.class) {
-            injectMocks(testInstance);
-            classContext = classContext.getSuperclass();
-        }
+        injectMocks(testInstance);
     }
 
     private void processIndependentAnnotations(final Class<?> clazz, final Object testInstance) {
         Class<?> classContext = clazz;
         while (classContext != Object.class) {
             //this will create @Mocks, @Captors, etc:
-            delegate.process(classContext, testInstance);
+            independentAnnotationEngine.process(classContext, testInstance);
             //this will create @Spies:
             spyAnnotationEngine.process(classContext, testInstance);
 
@@ -68,23 +63,24 @@ public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.
      * &#064;InjectMocks for given testClassInstance.
      * <p>
      * See examples in javadoc for {@link MockitoAnnotations} class.
-     * 
-     * @param testClassInstance
-     *            Test class, usually <code>this</code>
+     *
+     * @param testClassInstance Test class, usually <code>this</code>
      */
     public void injectMocks(final Object testClassInstance) {
         Class<?> clazz = testClassInstance.getClass();
         Set<Field> mockDependentFields = new HashSet<Field>();
         Set<Object> mocks = newMockSafeHashSet();
-        
+
         while (clazz != Object.class) {
             new InjectMocksScanner(clazz).addTo(mockDependentFields);
             new MockScanner(testClassInstance, clazz).addPreparedMocks(mocks);
             onInjection(testClassInstance, clazz, mockDependentFields, mocks);
             clazz = clazz.getSuperclass();
         }
-        
-        new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
+
+        new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields,
+                                                         mocks,
+                                                         testClassInstance);
     }
 
     protected void onInjection(Object testClassInstance, Class<?> clazz, Set<Field> mockDependentFields, Set<Object> mocks) {
