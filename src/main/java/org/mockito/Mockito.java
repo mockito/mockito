@@ -4,7 +4,7 @@
  */
 package org.mockito;
 
-import org.mockito.internal.InternalMockHandler;
+import java.util.concurrent.TimeUnit;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
@@ -20,11 +20,15 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.SerializableMode;
+import org.mockito.quality.Strictness;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockitoPlugins;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
+import org.mockito.stubbing.*;
+import org.mockito.verification.*;
+import org.mockito.verification.Within;
 import org.mockito.session.MockitoSessionLogger;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Answer1;
@@ -2759,6 +2763,12 @@ public class Mockito extends ArgumentMatchers {
     @CheckReturnValue
     public static VerificationWithTimeout timeout(long millis) {
         return new Timeout(millis, VerificationModeFactory.times(1));
+    }
+
+    @CheckReturnValue
+    @Incubating
+    public static Within within(long duration, TimeUnit unit) {
+        return Within.within(duration, unit);
     }
 
     /**
