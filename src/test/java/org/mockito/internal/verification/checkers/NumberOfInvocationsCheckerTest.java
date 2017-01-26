@@ -5,10 +5,14 @@
 
 package org.mockito.internal.verification.checkers;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -24,16 +28,8 @@ import org.mockito.invocation.Invocation;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static org.assertj.core.api.Assertions.assertThat;
-
 @RunWith(MockitoJUnitRunner.class)
 public class NumberOfInvocationsCheckerTest {
-
-    private NumberOfInvocationsChecker checker;
 
     private InvocationMatcher wanted;
 
@@ -48,12 +44,6 @@ public class NumberOfInvocationsCheckerTest {
     @Rule
     public TestName testName = new TestName();
 
-    @Before
-    public void setup() {
-        checker = new NumberOfInvocationsChecker();
-
-    }
-
     @Test
     public void shouldReportTooLittleActual() throws Exception {
         wanted = buildSimpleMethod().toInvocationMatcher();
@@ -64,7 +54,7 @@ public class NumberOfInvocationsCheckerTest {
         exception.expectMessage("Wanted 100 times");
         exception.expectMessage("But was 2 times");
 
-        checker.check(invocations, wanted, 100);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100);
     }
 
     @Test
@@ -78,7 +68,7 @@ public class NumberOfInvocationsCheckerTest {
         exception.expectMessage("But was 2 times");
         exception.expectMessage(containsTimes("-> at", 2));
 
-        checker.check(invocations, wanted, 100);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100);
     }
 
     @Test
@@ -92,7 +82,7 @@ public class NumberOfInvocationsCheckerTest {
         exception.expectMessage("But was 0 times");
         exception.expectMessage(containsTimes("-> at", 1));
 
-        checker.check(invocations, wanted, 100);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100);
     }
 
     @Test
@@ -106,7 +96,7 @@ public class NumberOfInvocationsCheckerTest {
 
         exception.expect(TooManyActualInvocations.class);
         exception.expectMessage("" + third.getLocation());
-        checker.check(invocations, wanted, 2);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 2);
     }
 
     @Test
@@ -120,7 +110,7 @@ public class NumberOfInvocationsCheckerTest {
         exception.expectMessage("Wanted 1 time");
         exception.expectMessage("But was 2 times");
 
-        checker.check(invocations, wanted, 1);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1);
     }
 
     @Test
@@ -135,7 +125,7 @@ public class NumberOfInvocationsCheckerTest {
         exception.expectMessage("But invoked here");
         exception.expectMessage("" + first.getLocation());
 
-        checker.check(invocations, wanted, 0);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0);
     }
 
 	@Test
@@ -145,7 +135,7 @@ public class NumberOfInvocationsCheckerTest {
 
 		invocations = asList(invocation);
 		wanted = buildSimpleMethod().toInvocationMatcher();
-		checker.check(invocations, wanted, 1);
+		NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1);
 		assertThat(invocation.isVerified()).isTrue();
 	}
 
