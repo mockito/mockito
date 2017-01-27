@@ -12,7 +12,6 @@ import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -30,7 +29,6 @@ import org.mockitousage.IMethods;
 
 public class NumberOfInvocationsInOrderCheckerTest {
 
-    private NumberOfInvocationsInOrderChecker checker;
     private InvocationMatcher wanted;
     private List<Invocation> invocations;
     private InOrderContext context;
@@ -42,7 +40,6 @@ public class NumberOfInvocationsInOrderCheckerTest {
 
     @Before
     public void setup() {
-        checker = new NumberOfInvocationsInOrderChecker();
         context = new InOrderContextImpl();
         mock = mock(IMethods.class, "mock");
 
@@ -53,14 +50,14 @@ public class NumberOfInvocationsInOrderCheckerTest {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = emptyList();
 
-        checker.check(invocations, wanted, 0, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0, context);
     }
 
     @Test
     public void shouldPassIfChunkMatches() throws Exception {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation());
-        checker.check(invocations, wanted, 1, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1, context);
     }
 
     @Test
@@ -76,7 +73,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expectMessage("Wanted 4 times");
         exception.expectMessage("But was 2 times");
 
-        checker.check(invocations, wanted, 4, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 4, context);
     }
 
     @Test
@@ -87,7 +84,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
         wanted = buildSimpleMethod().toInvocationMatcher();
 
         assertThat(context.isVerified(invocation)).isFalse();
-        checker.check(invocations, wanted, 1, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1, context);
         assertThat(context.isVerified(invocation)).isTrue();
     }
 
@@ -101,7 +98,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expectMessage("Wanted 100 times");
         exception.expectMessage("But was 2 times");
 
-        checker.check(invocations, wanted, 100, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
     }
 
     @Test
@@ -115,7 +112,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expectMessage("But was 2 times");
         exception.expectMessage(containsTimes("-> at", 2));
 
-        checker.check(invocations, wanted, 100, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
 
     }
 
@@ -130,7 +127,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expectMessage("But was 0 times");
         exception.expectMessage(containsTimes("-> at", 1));
 
-        checker.check(invocations, wanted, 100, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
     }
 
     @Test
@@ -144,7 +141,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
 
         exception.expect(VerificationInOrderFailure.class);
         exception.expectMessage("" + third.getLocation());
-        checker.check(invocations, wanted, 2, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 2, context);
     }
 
     @Test
@@ -158,7 +155,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expectMessage("Wanted 1 time");
         exception.expectMessage("But was 2 times");
 
-        checker.check(invocations, wanted, 1, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1, context);
     }
 
     @Test
@@ -174,17 +171,17 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expectMessage("But was 1 time. Undesired invocation");
         exception.expectMessage("" + first.getLocation());
 
-        checker.check(invocations, wanted, 0, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0, context);
     }
 
     @Test
     public void shouldMarkInvocationsAsVerified() throws Exception {
         Invocation invocation = buildSimpleMethod().toInvocation();
-        Assertions.assertThat(invocation.isVerified()).isFalse();
+        assertThat(invocation.isVerified()).isFalse();
 
         invocations = asList(invocation);
         wanted = buildSimpleMethod().toInvocationMatcher();
-        checker.check(invocations, wanted, 1, context);
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1, context);
         assertThat(invocation.isVerified()).isTrue();
     }
 
@@ -203,6 +200,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
             this.amount = amount;
         }
 
+        @Override
         public boolean matchesSafely(String text) {
             int lastIndex = 0;
             int count = 0;
@@ -216,6 +214,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
             return count == amount;
         }
 
+        @Override
         public void describeTo(Description description) {
             description.appendText("containing '" + expected + "' exactly " + amount + " times");
         }
