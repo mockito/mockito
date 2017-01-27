@@ -1,3 +1,11 @@
+### 2.6.9 (2017-01-27 22:02 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 1
+  * Unified all number of invocations checker in NumberOfInvocationsChecker [(#907)](https://github.com/mockito/mockito/pull/907)
+
 ### 2.6.8 (2017-01-23 14:53 UTC)
 
 * Authors: 1
