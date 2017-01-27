@@ -76,9 +76,7 @@ apply from: 'gradle/mockito-core/javadoc.gradle'
 apply from: 'gradle/mockito-core/license.gradle'
 apply from: 'gradle/mockito-core/testing.gradle'
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
-}
+//To change Gradle Wrapper version use: ./gradlew wrapper --gradle-version=x.x
 
 task ciBuild {
     //validate the state of the project
