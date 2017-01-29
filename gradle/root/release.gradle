@@ -31,7 +31,7 @@ How Tos:
     - when release published artifacts but failed on say, tagging:
         - inspect the release steps declared in 'release.gradle' file
         - identify failed release step and locally trigger specific release steps, for example:
-          ./gradlew -PsingeStep updateReleaseNotes commitReleaseNotes tagNewVersion bumpVersion
+          ./gradlew -PsingleStep updateReleaseNotes commitReleaseNotes tagNewVersion bumpVersion
         - above will update release notes, version file, create a tag but will not push the changes
         - review changes and push
 
