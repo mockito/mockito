@@ -4,26 +4,21 @@
  */
 package org.mockito;
 
-import org.mockito.quality.Strictness;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
+import org.mockito.internal.session.DefaultMockitoSessionBuilder;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.Answer1;
-import org.mockito.stubbing.OngoingStubbing;
-import org.mockito.stubbing.Stubber;
-import org.mockito.stubbing.VoidAnswer1;
-import org.mockito.verification.After;
-import org.mockito.verification.Timeout;
-import org.mockito.verification.VerificationAfterDelay;
-import org.mockito.verification.VerificationMode;
-import org.mockito.verification.VerificationWithTimeout;
+import org.mockito.quality.MockitoHint;
+import org.mockito.quality.Strictness;
+import org.mockito.session.MockitoSessionBuilder;
+import org.mockito.stubbing.*;
+import org.mockito.verification.*;
 
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
@@ -1317,9 +1312,10 @@ import org.mockito.verification.VerificationWithTimeout;
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
  *     <li>Strict stubbing with JUnit Rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
- *     <li>Strict stubbing with JUnit Runner - {@link org.mockito.junit.MockitoJUnitRunner.StrictStubs}</li>
+ *     <li>Strict stubbing with JUnit Runner - {@link MockitoJUnitRunner.StrictStubs}</li>
+ *     <li>Strict stubbing if you cannot use runner/rule (like TestNG) - {@link MockitoSession}</li>
  *     <li>Unnecessary stubbing detection with {@link MockitoJUnitRunner}</li>
- *     <li>Stubbing argument mismatch warnings by JUnit rules, documented in {@link org.mockito.quality.MockitoHint}</li>
+ *     <li>Stubbing argument mismatch warnings, documented in {@link MockitoHint}</li>
  * </ul>
  *
  * Mockito is a "loose" mocking framework by default.
@@ -2726,5 +2722,18 @@ public class Mockito extends ArgumentMatchers {
     @Incubating
     public static MockitoFramework framework() {
         return new DefaultMockitoFramework();
+    }
+
+    /**
+     * {@code MockitoSession} is an optional, highly recommended feature
+     * that helps driving cleaner tests by eliminating boilerplate code and adding extra validation.
+     * <p>
+     * For more information, including use cases and sample code, see the javadoc for {@link MockitoSession}.
+     *
+     * @since 2.7.0
+     */
+    @Incubating
+    public static MockitoSessionBuilder mockitoSession() {
+        return new DefaultMockitoSessionBuilder();
     }
 }

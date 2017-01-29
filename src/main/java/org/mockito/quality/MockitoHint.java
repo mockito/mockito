@@ -4,10 +4,15 @@
  */
 package org.mockito.quality;
 
+import org.mockito.MockitoSession;
 import org.mockito.junit.MockitoJUnitRunner;
 
 /**
- * Starting with 2.1.0 of Mockito stubbing hints / warnings are printed to standard output.
+ * To improve productivity when writing Java tests
+ * stubbing hints and warnings are printed to standard output.
+ * See also "strict stubbing" API ({@link Strictness})
+ * which drives cleaner tests and productivity more effectively than Mockito hints.
+ * <p>
  * Hints contain clickable links that take you right to the line of code that contains a possible problem.
  * Those are hints - they not necessarily indicate real problems 100% of the time.
  * This way the developer can:
@@ -17,16 +22,15 @@ import org.mockito.junit.MockitoJUnitRunner;
  * </ol>
  * We would appreciate feedback about this feature so that we can make Mockito better!
  * Our goal is to provide maximum productivity when testing Java.
- * Join the discussion in the tracker for <a href="https://github.com/mockito/mockito/issues/384">issue 384</a>.
+ * Join the discussion in <a href="https://github.com/mockito/mockito/issues/384">issue 384</a>.
  * <p>
- * How to take advantage of the hints? Use one of the JUnit integrations:
+ * How to take advantage of the hints? Use:
  * <ul>
  *     <li>{@link org.mockito.junit.MockitoJUnit#rule()}</li>
  *     <li>{@link MockitoJUnitRunner}</li>
+ *     <li>{@link MockitoSession}</li>
  * </ul>
- * Currently, the feature is available with JUnit Rule and JUnit Runner only because
- * they provide necessary hooks (the 'before' and 'after' test events).
- * <p>
+ *
  * <h3>Cleaner tests without unnecessary stubs</h3>
  * Unnecessary stubs are stubbed method calls that were never realized during test execution.
  * To find out more and see the example test code, see {@link org.mockito.exceptions.misusing.UnnecessaryStubbingException}.
@@ -64,7 +68,7 @@ import org.mockito.junit.MockitoJUnitRunner;
  * to document what the test stands for and what behavior it proves.
  * Hints just makes it quicker to figure out if the test fails for the right reason.
  * <p>
- * Feedback very welcome at <a href="https://github.com/mockito/mockito/issues/384">issue 384</a>.
+ * Feedback is very welcome at <a href="https://github.com/mockito/mockito/issues/384">issue 384</a>.
  *
  * @since 2.1.0
  */
