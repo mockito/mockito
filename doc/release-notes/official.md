@@ -1,3 +1,15 @@
+### 2.7.0 (2017-01-29 16:14 UTC)
+
+* Authors: 1
+* Commits: 29
+  * 29: Szczepan Faber
+* Improvements: 3
+  * New features: 2
+    * New strict stubbing API - MockitoSession [(#865)](https://github.com/mockito/mockito/pull/865)
+    * New strict mocking API - MockitoSession [(#857)](https://github.com/mockito/mockito/issues/857)
+  * Remaining changes: 1
+    * Release process failed on 'bumpVersion' release step [(#915)](https://github.com/mockito/mockito/issues/915)
+
 ### 2.6.9 (2017-01-27 22:02 UTC)
 
 * Authors: 1
