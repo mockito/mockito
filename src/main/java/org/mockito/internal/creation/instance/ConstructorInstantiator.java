@@ -7,7 +7,7 @@ package org.mockito.internal.creation.instance;
 import java.lang.reflect.Constructor;
 import org.mockito.internal.util.reflection.AccessibilityChanger;
 
-import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.StringUtil.join;
 
 public class ConstructorInstantiator implements Instantiator {
 

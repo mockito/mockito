@@ -5,7 +5,7 @@
 
 package org.mockito.exceptions.verification;
 
-import static org.mockito.internal.util.RemoveFirstLine.removeFirstLine;
+import static org.mockito.internal.util.StringUtil.removeFirstLine;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 

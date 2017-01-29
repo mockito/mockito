@@ -14,7 +14,6 @@ import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.junit.JUnitTool;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.StringJoiner;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
@@ -31,7 +30,7 @@ import java.util.List;
 
 import static org.mockito.internal.reporting.Pluralizer.pluralize;
 import static org.mockito.internal.reporting.Pluralizer.were_exactly_x_interactions;
-import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * Reports verification and misusing errors.
@@ -672,7 +671,7 @@ public class Reporter {
     }
 
     public static MockitoException invocationListenerThrewException(InvocationListener listener, Throwable listenerThrowable) {
-        return new MockitoException(StringJoiner.join(
+        return new MockitoException(join(
                 "The invocation listener with type " + listener.getClass().getName(),
                 "threw an exception : " + listenerThrowable.getClass().getName() + listenerThrowable.getMessage()), listenerThrowable);
     }
