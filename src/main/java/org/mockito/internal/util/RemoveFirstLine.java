@@ -6,11 +6,13 @@ package org.mockito.internal.util;
 
 public class RemoveFirstLine {
 
+    private RemoveFirstLine(){}
+    
     /**
      * @param text to have the first line removed
      * @return less first line
      */
-    public String of(String text) {
+    public static String removeFirstLine(String text) {
         return text.replaceFirst(".*?\n", "");
     }
 }
