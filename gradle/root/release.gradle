@@ -18,13 +18,24 @@ In case the release process from Travis CI fails, please try:
   1. push dummy commit
     - useful when the build fails for random reason, let's say a flaky test
   2. update version.properties manually and push (can be done in the browser via GitHub gui)
-    - useful when artifact was published but some later release step has failed
+    - useful when artifact was published but some later release step has failed due to flakiness
     preventing version.properties to be bumped.
   3. delete top release notes paragraph(s) so that they are recreated
     - useful for recreating/merging release notes
 
+How Tos:
+  1. How to locally reproduce failed behavior of single release step?
+    - run './gradlew <step> -PsingleStep'
+    - useful to identify root cause of a bug
+  2. How to fix incomplete release (missing tag, no release notes)?
+    - when release published artifacts but failed on say, tagging:
+        - inspect the release steps declared in 'release.gradle' file
+        - identify failed release step and locally trigger specific release steps, for example:
+          ./gradlew -PsingleStep updateReleaseNotes commitReleaseNotes tagNewVersion bumpVersion
+        - above will update release notes, version file, create a tag but will not push the changes
+        - review changes and push
+
 Testing release locally:
-  (this section of docs is in progress)
   1. Configure env TRAVIS_BRANCH, GH_TOKEN, MOCKITO_BINTRAY_API_KEY
   2. Dry running: run './gradlew release -PdryRun'
      - It will leave the working copy clean, the changes/commits made by the release process will be rolled back.
