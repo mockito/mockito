@@ -1,3 +1,9 @@
+### 2.7.1 (2017-01-31 16:48 UTC)
+
+* Authors: 0
+* Commits: 0
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.7.0 (2017-01-29 16:14 UTC)
 
 * Authors: 1
