@@ -22,7 +22,7 @@ import org.mockito.plugins.AnnotationEngine;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.withSettings;
 import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
-import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * Process fields annotated with &#64;Spy.

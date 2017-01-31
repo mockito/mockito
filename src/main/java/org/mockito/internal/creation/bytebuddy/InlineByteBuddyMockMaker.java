@@ -27,7 +27,7 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
 import static org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.EXCLUDES;
-import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * Agent and subclass based mock maker.

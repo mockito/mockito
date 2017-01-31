@@ -21,7 +21,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.ForWriteReplace;
-import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.StringUtil.join;
 import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 /**
