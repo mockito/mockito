@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.util;
 
+import org.mockito.internal.repackage.net.jodah.typetools.TypeResolver;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 @SuppressWarnings("unchecked")
 public class Primitives {
@@ -43,14 +46,14 @@ public class Primitives {
     }
 
     public static boolean isAssignableFromWrapper(Class<?> valueClass, Class<?> referenceType) {
-        if(isPrimitiveOrWrapper(valueClass) && isPrimitiveOrWrapper(referenceType)) {
+        if (isPrimitiveOrWrapper(valueClass) && isPrimitiveOrWrapper(referenceType)) {
             return Primitives.primitiveTypeOf(valueClass).isAssignableFrom(referenceType);
         }
         return false;
     }
 
     /**
-     * Returns the boxed default value for a primitive or a primitive wrapper.
+     * Returns the boxed default value for a primitive or a primitive wrapper or null for other types.
      *
      * @param primitiveOrWrapperType The type to lookup the default value
      * @return The boxed default values as defined in Java Language Specification,
@@ -60,6 +63,17 @@ public class Primitives {
         return (T) PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.get(primitiveOrWrapperType);
     }
 
+    /**
+     * Returns the boxed default value for the lambda return type (handling primitive and primitive wrapper types).
+     *
+     * @param consumer the consumer function
+     * @param <T> the function's return type
+     * @return the boxed default value for the lambda return type (handling primitive and primitive wrapper types)
+     */
+    public static <T> T defaultValueForConsumerLambda(Consumer<T> consumer) {
+        Class<?>[] typeArgs = TypeResolver.resolveRawArguments(Consumer.class, consumer.getClass());
+        return (T) Primitives.defaultValue(typeArgs[0]);
+    }
 
     static {
         PRIMITIVE_TYPES.put(Boolean.class, Boolean.TYPE);
