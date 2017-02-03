@@ -19,3 +19,4 @@ out
 .gradle
 classes
 .gradletasknamecache
+local.properties
