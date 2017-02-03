@@ -46,7 +46,7 @@ public class InvocationsPrinter {
         if (unused.isEmpty()) {
             return sb.toString();
         }
-        sb.append("[Mockito] Unused stubbings of: " + mock).append("\n");
+        sb.append("[Mockito] Unused stubbings of: ").append(mock).append("\n");
 
         x = 1;
         for(Stubbing s:stubbings) {
