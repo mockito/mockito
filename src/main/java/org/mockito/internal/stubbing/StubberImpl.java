@@ -27,12 +27,12 @@ public class StubberImpl implements Stubber {
     public <T> T when(T mock) {
         if (mock == null) {
             throw nullPassedToWhenMethod();
-        } 
-        
+        }
+
 		if (!MockUtil.isMock(mock)) {
 			throw notAMockPassedToWhenMethod();
 		}
-        
+
 		MockUtil.getMockHandler(mock).setAnswersForStubbing(answers);
         return mock;
     }

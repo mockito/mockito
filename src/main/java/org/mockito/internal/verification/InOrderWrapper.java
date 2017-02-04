@@ -21,7 +21,7 @@ public class InOrderWrapper implements VerificationMode {
 
     public InOrderWrapper(VerificationInOrderMode mode, InOrderImpl inOrder) {
         this.mode = mode;
-        this.inOrder = inOrder;        
+        this.inOrder = inOrder;
     }
 
     public void verify(VerificationData data) {

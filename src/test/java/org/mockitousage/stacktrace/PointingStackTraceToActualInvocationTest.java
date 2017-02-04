@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 //This is required to make sure stack trace is well filtered when runner is ON
 @RunWith(MockitoJUnitRunner.class)
 public class PointingStackTraceToActualInvocationTest extends TestBase {
-    
+
     @Mock private IMethods mock;
     @Mock private IMethods mockTwo;
 
@@ -46,7 +46,7 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
     private void fourth() {
         mockTwo.simpleMethod(4);
     }
-    
+
     @Test
     public void shouldPointToTooManyInvocationsChunkOnError() {
         try {
@@ -55,8 +55,8 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
         } catch (NeverWantedButInvoked e) {
             assertThat(e).hasMessageContaining("first(");
         }
-    }   
-    
+    }
+
     @Test
     public void shouldNotPointStackTracesToRunnersCode() {
         try {
@@ -65,5 +65,5 @@ public class PointingStackTraceToActualInvocationTest extends TestBase {
         } catch (NeverWantedButInvoked e) {
             assertThat(e.getMessage()).doesNotContain(".runners.");
         }
-    }   
+    }
 }

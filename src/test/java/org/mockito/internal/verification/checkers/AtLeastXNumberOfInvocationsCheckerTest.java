@@ -20,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker.checkAtLeastNumberOfInvocations;
 
 public class AtLeastXNumberOfInvocationsCheckerTest   {
-    
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
-            
+
     @Test
     public void shouldMarkActualInvocationsAsVerifiedInOrder() {
         InOrderContext context = new InOrderContextImpl();
@@ -37,7 +37,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest   {
         //then
         assertThat(invocation.isVerified()).isTrue();
     }
-    
+
     @Test
     public void shouldReportTooLittleInvocationsInOrder() {
         InOrderContext context = new InOrderContextImpl();
@@ -49,13 +49,13 @@ public class AtLeastXNumberOfInvocationsCheckerTest   {
         exception.expectMessage("iMethods.simpleMethod()");
         exception.expectMessage("Wanted *at least* 2 times");
         exception.expectMessage("But was 1 time");
-        
+
         //when
         checkAtLeastNumberOfInvocations(asList(invocation, invocationTwo), new InvocationMatcher(invocation), 2, context);
 
-       
+
     }
-    
+
     @Test
     public void shouldMarkActualInvocationsAsVerified() {
         //given
@@ -68,7 +68,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest   {
         //then
         assertThat(invocation.isVerified()).isTrue();
     }
-    
+
     @Test
     public void shouldReportTooLittleInvocations() {
         //given
@@ -79,7 +79,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest   {
         exception.expectMessage("iMethods.simpleMethod()");
         exception.expectMessage("Wanted *at least* 2 times");
         exception.expectMessage("But was 1 time");
-        
+
         //when
         checkAtLeastNumberOfInvocations(asList(invocation, invocationTwo), new InvocationMatcher(invocation), 2);
     }

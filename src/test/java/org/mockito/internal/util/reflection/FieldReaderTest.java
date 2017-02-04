@@ -13,11 +13,11 @@ import static junit.framework.TestCase.assertTrue;
 @SuppressWarnings("unused")
 public class FieldReaderTest extends TestBase {
 
-    class Foo {        
-        private final String isNull = null;        
-        private final String notNull = "";        
+    class Foo {
+        private final String isNull = null;
+        private final String notNull = "";
     }
-    
+
     @Test
     public void shouldKnowWhenNull() throws Exception {
         //when
@@ -25,7 +25,7 @@ public class FieldReaderTest extends TestBase {
         //then
         assertTrue(reader.isNull());
     }
-    
+
     @Test
     public void shouldKnowWhenNotNull() throws Exception {
         //when

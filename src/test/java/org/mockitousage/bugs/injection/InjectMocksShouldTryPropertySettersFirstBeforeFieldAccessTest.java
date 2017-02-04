@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Issue 211 : @InjectMocks should carry out their work by the method (and not by field) if available 
+ * Issue 211 : @InjectMocks should carry out their work by the method (and not by field) if available
  */
 @RunWith(MockitoJUnitRunner.class)
 public class InjectMocksShouldTryPropertySettersFirstBeforeFieldAccessTest {

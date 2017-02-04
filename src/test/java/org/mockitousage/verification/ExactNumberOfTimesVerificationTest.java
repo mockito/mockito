@@ -96,31 +96,31 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
 
         verify(mock, times(2)).add("test");
     }
-    
+
     @Test
     public void shouldAllowVerifyingInteractionNeverHappened() throws Exception {
         mock.add("one");
 
         verify(mock, never()).add("two");
         verify(mock, never()).clear();
-        
+
         try {
             verify(mock, never()).add("one");
             fail();
         } catch (NeverWantedButInvoked e) {}
     }
-    
+
     @Test
     public void shouldAllowVerifyingInteractionNeverHappenedInOrder() throws Exception {
         mock.add("one");
         mock.add("two");
 
         InOrder inOrder = inOrder(mock);
-        
+
         inOrder.verify(mock, never()).add("xxx");
         inOrder.verify(mock).add("one");
         inOrder.verify(mock, never()).add("one");
-        
+
         try {
             inOrder.verify(mock, never()).add("two");
             fail();

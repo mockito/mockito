@@ -24,25 +24,25 @@ import static org.mockito.Mockito.*;
 @RunWith(VerboseMockitoJUnitRunner.class)
 //TODO
 public class VerboseMockitoRunnerTest extends TestBase {
-    
+
     @Mock private IMethods mock;
-    
+
     public static class NoWarnings {
-        
+
         @Test
         @Ignore
         public void test() {
             IMethods mock = mock(IMethods.class);
             mock.simpleMethod(1);
             mock.otherMethod();
-            
+
             verify(mock).simpleMethod(1);
             throw new RuntimeException("boo");
         }
     }
 
     public static class ContainsWarnings extends TestCase {
-        
+
         public ContainsWarnings() {
             super("test");
         }
@@ -51,7 +51,7 @@ public class VerboseMockitoRunnerTest extends TestBase {
 
         public void _test() {
             IMethods mock = mock(IMethods.class);
-            
+
             //some stubbing
             when(mock.simpleMethod(1)).thenReturn("foo");
             when(mock.otherMethod()).thenReturn("foo");
@@ -63,12 +63,12 @@ public class VerboseMockitoRunnerTest extends TestBase {
             //assertion fails due to stub called with different args
             assertEquals("foo", ret);
         }
-    }    
-    
+    }
+
     public void cleanStackTraces() {
         makeStackTracesClean();
     }
-    
+
     @Test
     @Ignore
     public void shouldContainWarnings() throws Exception {
@@ -77,7 +77,7 @@ public class VerboseMockitoRunnerTest extends TestBase {
         //then
         assertEquals(1, result.getFailures().size());
         Throwable exception = result.getFailures().get(0).getException();
-        assertTrue(exception instanceof ExceptionIncludingMockitoWarnings);        
+        assertTrue(exception instanceof ExceptionIncludingMockitoWarnings);
     }
 
     @Test

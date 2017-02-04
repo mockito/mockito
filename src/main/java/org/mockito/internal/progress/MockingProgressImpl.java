@@ -26,9 +26,9 @@ import static org.mockito.internal.exceptions.Reporter.unfinishedVerificationExc
 
 @SuppressWarnings("unchecked")
 public class MockingProgressImpl implements MockingProgress {
-    
+
     private final ArgumentMatcherStorage argumentMatcherStorage = new ArgumentMatcherStorageImpl();
-    
+
     private OngoingStubbing<?> ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
@@ -129,7 +129,7 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public String toString() {
-        return  "iOngoingStubbing: " + ongoingStubbing + 
+        return  "iOngoingStubbing: " + ongoingStubbing +
         ", verificationMode: " + verificationMode +
         ", stubbingInProgress: " + stubbingInProgress;
     }

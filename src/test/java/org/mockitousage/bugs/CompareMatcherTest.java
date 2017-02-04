@@ -27,7 +27,7 @@ public class CompareMatcherTest {
 
     /**
      * Should not throw an {@link NullPointerException}
-     * 
+     *
      * @see Bug-ID https://github.com/mockito/mockito/issues/457
      */
     @Test
@@ -68,11 +68,11 @@ public class CompareMatcherTest {
 
         assertThat(mock.forObject(123)).isNull();// a default value must be returned
     }
-    
+
     @Test
     public void compareToIntVsString() throws Exception {
         when(mock.forObject(leq(5))).thenReturn("");
-        
+
         mock.forObject("abc");
     }
 

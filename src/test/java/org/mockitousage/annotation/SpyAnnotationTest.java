@@ -29,7 +29,7 @@ public class SpyAnnotationTest extends TestBase {
 
     @Spy
     NestedClassWithoutDefinedConstructor staticTypeWithoutDefinedConstructor;
-  
+
     @Rule public final ExpectedException shouldThrow = ExpectedException.none();
 
     @Test
@@ -90,7 +90,7 @@ public class SpyAnnotationTest extends TestBase {
             Assertions.assertThat(e.getMessage()).contains("0-arg constructor");
         }
     }
-    
+
     @Test
     public void should_report_when_constructor_is_explosive() throws Exception {
         class FailingSpy {
@@ -110,7 +110,7 @@ public class SpyAnnotationTest extends TestBase {
     public void should_spy_abstract_class() throws Exception {
         class SpyAbstractClass {
             @Spy AbstractList<String> list;
-            
+
             List<String> asSingletonList(String s) {
                 when(list.size()).thenReturn(1);
                 when(list.get(0)).thenReturn(s);
@@ -124,7 +124,7 @@ public class SpyAnnotationTest extends TestBase {
 
     @Test
     public void should_spy_inner_class() throws Exception {
-         
+
      class WithMockAndSpy {
             @Spy private InnerStrength strength;
             @Mock private List<String> list;
@@ -138,9 +138,9 @@ public class SpyAnnotationTest extends TestBase {
                     // Make sure constructor is indeed called.
                     this.name = "inner";
                 }
-                
+
                 abstract String strength();
-                
+
                 String fullStrength() {
                     return name + " " + strength();
                 }

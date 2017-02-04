@@ -15,7 +15,7 @@ public class LenientJUnitRuleTest {
 
     private MockitoLogger explosiveLogger = new MockitoLogger() {
         public void log(Object what) {
-            throw new RuntimeException("Silent rule should not write anything to the logger");        
+            throw new RuntimeException("Silent rule should not write anything to the logger");
         }
     };
     @Mock private IMethods mock;

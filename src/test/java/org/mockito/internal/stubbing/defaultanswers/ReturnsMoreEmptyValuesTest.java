@@ -12,7 +12,7 @@ import static junit.framework.TestCase.assertEquals;
 public class ReturnsMoreEmptyValuesTest extends TestBase {
 
     private ReturnsMoreEmptyValues rv = new ReturnsMoreEmptyValues();
-    
+
     @Test
     public void should_return_empty_string() {
         assertEquals("", rv.returnValueFor(String.class));

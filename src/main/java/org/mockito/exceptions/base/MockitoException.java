@@ -39,7 +39,7 @@ public class MockitoException extends RuntimeException {
 
     private void filterStackTrace() {
         unfilteredStackTrace = getStackTrace();
-        
+
         ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
         filter.filter(this);
     }

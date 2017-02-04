@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class NewMatchersTest extends TestBase {
-    
+
     private IMethods mock;
 
     @Before
@@ -30,37 +30,37 @@ public class NewMatchersTest extends TestBase {
     @Test
     public void shouldAllowAnyList() {
         when(mock.forList(anyListOf(String.class))).thenReturn("matched");
-        
+
         assertEquals("matched", mock.forList(Arrays.asList("x", "y")));
         assertEquals(null, mock.forList(null));
 
         verify(mock, times(1)).forList(anyListOf(String.class));
     }
-    
+
     @Test
     public void shouldAllowAnyCollection() {
         when(mock.forCollection(anyCollectionOf(String.class))).thenReturn("matched");
-        
+
         assertEquals("matched", mock.forCollection(Arrays.asList("x", "y")));
         assertEquals(null, mock.forCollection(null));
 
         verify(mock, times(1)).forCollection(anyCollectionOf(String.class));
     }
-    
+
     @Test
     public void shouldAllowAnyMap() {
         when(mock.forMap(anyMapOf(String.class, String.class))).thenReturn("matched");
-        
+
         assertEquals("matched", mock.forMap(new HashMap<String, String>()));
         assertEquals(null, mock.forMap(null));
 
         verify(mock, times(1)).forMap(anyMapOf(String.class, String.class));
     }
-    
+
     @Test
     public void shouldAllowAnySet() {
         when(mock.forSet(anySetOf(String.class))).thenReturn("matched");
-        
+
         assertEquals("matched", mock.forSet(new HashSet<String>()));
         assertEquals(null, mock.forSet(null));
 

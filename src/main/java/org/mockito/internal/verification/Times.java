@@ -20,16 +20,16 @@ import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
 
 public class Times implements VerificationInOrderMode, VerificationMode {
-    
+
     final int wantedCount;
-    
+
     public Times(int wantedNumberOfInvocations) {
         if (wantedNumberOfInvocations < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
         this.wantedCount = wantedNumberOfInvocations;
     }
-    
+
     public void verify(VerificationData data) {
         List<Invocation> invocations = data.getAllInvocations();
         MatchableInvocation wanted = data.getTarget();
@@ -40,18 +40,18 @@ public class Times implements VerificationInOrderMode, VerificationMode {
         NumberOfInvocationsChecker numberOfInvocations = new NumberOfInvocationsChecker();
         numberOfInvocations.check(invocations, wanted, wantedCount);
     }
-    
+
     public void verifyInOrder(VerificationDataInOrder data) {
         List<Invocation> allInvocations = data.getAllInvocations();
         MatchableInvocation wanted = data.getWanted();
-        
+
         if (wantedCount > 0) {
             checkMissingInvocation(allInvocations, wanted, data.getOrderingContext());
         }
         NumberOfInvocationsInOrderChecker numberOfCalls = new NumberOfInvocationsInOrderChecker();
         numberOfCalls.check(allInvocations, wanted, wantedCount, data.getOrderingContext());
-    }    
-    
+    }
+
     @Override
     public String toString() {
         return "Wanted invocations count: " + wantedCount;

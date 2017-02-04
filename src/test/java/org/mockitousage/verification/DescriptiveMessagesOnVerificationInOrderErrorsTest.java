@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase {
-    
+
     private IMethods one;
     private IMethods two;
     private IMethods three;
@@ -30,26 +30,26 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         one = Mockito.mock(IMethods.class);
         two = Mockito.mock(IMethods.class);
         three = Mockito.mock(IMethods.class);
-        
+
         one.simpleMethod(1);
         one.simpleMethod(11);
         two.simpleMethod(2);
         two.simpleMethod(2);
         three.simpleMethod(3);
-        
+
         inOrder = inOrder(one, two, three);
     }
-    
+
     @Test
     public void shouldPrintVerificationInOrderErrorAndShowBothWantedAndPrevious() {
         inOrder.verify(one).simpleMethod(1);
         inOrder.verify(two, atLeastOnce()).simpleMethod(2);
-        
+
         try {
             inOrder.verify(one, atLeastOnce()).simpleMethod(11);
             fail();
         } catch (VerificationInOrderFailure e) {
-            String expected = 
+            String expected =
                     "\n" +
                     "Verification in order failure" +
                     "\n" +
@@ -57,50 +57,50 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "iMethods.simpleMethod(11);" +
                     "\n" +
-                    "-> at "; 
-            
+                    "-> at ";
+
             assertThat(e).hasMessageContaining(expected);
-            
-            String expectedCause = 
+
+            String expectedCause =
                 "\n" +
                 "Wanted anywhere AFTER following interaction:" +
                 "\n" +
                 "iMethods.simpleMethod(2);" +
                 "\n" +
                 "-> at ";
-            
+
             assertThat(e).hasMessageContaining(expectedCause);
         }
-    }  
-    
+    }
+
     @Test
     public void shouldPrintVerificationInOrderErrorAndShowWantedOnly() {
         try {
             inOrder.verify(one).differentMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-            String expected = 
+            String expected =
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
                     "iMethods.differentMethod();" +
                     "\n" +
-                    "-> at"; 
-            
+                    "-> at";
+
             assertThat(e).hasMessageContaining(expected);
         }
-    } 
-    
+    }
+
     @Test
     public void shouldPrintVerificationInOrderErrorAndShowWantedAndActual() {
         try {
             inOrder.verify(one).simpleMethod(999);
             fail();
-        } catch (org.mockito.exceptions.verification.junit.ArgumentsAreDifferent e) {           
+        } catch (org.mockito.exceptions.verification.junit.ArgumentsAreDifferent e) {
             assertThat(e).hasMessageContaining("has different arguments");
         }
     }
-    
+
     @Test
     public void shouldNotSayArgumentsAreDifferent() {
         //this is the last invocation so any next verification in order should simply say wanted but not invoked
@@ -111,8 +111,8 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         } catch (VerificationInOrderFailure e) {
             assertThat(e).hasMessageContaining("Wanted but not invoked");
         }
-    } 
-    
+    }
+
     @Test
     public void shouldPrintMethodThatWasNotInvoked() {
         inOrder.verify(one).simpleMethod(1);
@@ -123,17 +123,17 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
             inOrder.verify(three).simpleMethod(999);
             fail();
         } catch (VerificationInOrderFailure e) {
-            String expectedMessage = 
+            String expectedMessage =
                     "\n" +
                     "Verification in order failure" +
                     "\n" +
                     "Wanted but not invoked:" +
                     "\n" +
-                    "iMethods.simpleMethod(999);"; 
+                    "iMethods.simpleMethod(999);";
             assertThat(e).hasMessageContaining(expectedMessage);
         }
-    }   
-    
+    }
+
     @Test
     public void shouldPrintTooManyInvocations() {
         inOrder.verify(one).simpleMethod(1);
@@ -142,7 +142,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
             inOrder.verify(two, times(1)).simpleMethod(2);
             fail();
         } catch (VerificationInOrderFailure e) {
-            String expectedMessage = 
+            String expectedMessage =
                     "\n" +
                     "Verification in order failure:" +
                     "\n" +
@@ -150,7 +150,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "Wanted 1 time:" +
                     "\n" +
-                    "-> at"; 
+                    "-> at";
             assertThat(e).hasMessageContaining(expectedMessage);
 
             String expectedCause =
@@ -160,21 +160,21 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                 "-> at";
             assertThat(e).hasMessageContaining(expectedCause);
         }
-    }  
-    
+    }
+
     @Test
     public void shouldPrintTooLittleInvocations() {
         two.simpleMethod(2);
-        
+
         inOrder.verify(one, atLeastOnce()).simpleMethod(anyInt());
         inOrder.verify(two, times(2)).simpleMethod(2);
         inOrder.verify(three, atLeastOnce()).simpleMethod(3);
-        
+
         try {
             inOrder.verify(two, times(2)).simpleMethod(2);
             fail();
         } catch (VerificationInOrderFailure e) {
-            String expectedMessage = 
+            String expectedMessage =
                     "\n" +
                     "Verification in order failure:" +
                     "\n" +
@@ -184,14 +184,14 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
                     "\n" +
                     "-> at";
             assertThat(e).hasMessageContaining(expectedMessage);
-            
-            String expectedCause = 
+
+            String expectedCause =
                 "\n" +
                 "But was 1 time:" +
                 "\n" +
                 "-> at";
-            
+
             assertThat(e).hasMessageContaining(expectedCause);
         }
-    }   
+    }
 }

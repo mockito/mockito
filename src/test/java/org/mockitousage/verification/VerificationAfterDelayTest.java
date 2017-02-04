@@ -56,7 +56,7 @@ public class VerificationAfterDelayTest {
             mock.oneArg('1');
         }
     };
-    
+
     @Before
     public void setUp() {
         delayedExecution = new DelayedExecution();
@@ -70,7 +70,7 @@ public class VerificationAfterDelayTest {
 
     @Test
     public void shouldVerifyNormallyWithSpecificTimes() throws Exception {
-        // given 
+        // given
         delayedExecution.callAsync(30, MILLISECONDS, callMock );
 
         // then

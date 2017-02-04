@@ -12,10 +12,10 @@ import org.mockito.ArgumentMatcher;
 public class TypeSafeMatching implements ArgumentMatcherAction {
 
     private final static ArgumentMatcherAction TYPE_SAFE_MATCHING_ACTION = new TypeSafeMatching();
-        
+
     private TypeSafeMatching() {}
 
-    
+
     public static ArgumentMatcherAction matchesTypeSafe(){
         return TYPE_SAFE_MATCHING_ACTION;
     }
@@ -24,7 +24,7 @@ public class TypeSafeMatching implements ArgumentMatcherAction {
         return isCompatible(matcher, argument) && matcher.matches(argument);
     }
 
-    
+
     /**
      * Returns <code>true</code> if the given <b>argument</b> can be passed to
      * the given <code>argumentMatcher</code> without causing a
@@ -45,7 +45,7 @@ public class TypeSafeMatching implements ArgumentMatcherAction {
      */
     private static Class<?> getArgumentType(ArgumentMatcher<?> argumentMatcher) {
         Method[] methods = argumentMatcher.getClass().getMethods();
-        
+
         for (Method method : methods) {
             if (isMatchesMethod(method)) {
                 return method.getParameterTypes()[0];

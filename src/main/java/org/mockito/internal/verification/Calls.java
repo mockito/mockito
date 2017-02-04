@@ -40,8 +40,8 @@ public class Calls implements VerificationMode, VerificationInOrderMode {
 
         checkMissingInvocation(allInvocations, wanted,  data.getOrderingContext());
         check( allInvocations, wanted, wantedCount, data.getOrderingContext());
-    }    
-    
+    }
+
     @Override
     public String toString() {
         return "Wanted invocations count (non-greedy): " + wantedCount;

@@ -16,9 +16,9 @@ import org.mockitoutil.TestBase;
 import static org.mockito.Mockito.*;
 
 public class DescriptiveMessagesOnMisuseTest extends TestBase {
-    
+
     @Mock private IMethods mock;
-    
+
     class Foo {
         public final String finalMethod() {
             return null;
@@ -29,14 +29,14 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     @Test
     public void tryDescriptiveMessagesOnMisuse() {
         Foo foo = mock(Foo.class);
-        
+
 //        when(foo.finalMethod()).thenReturn("foo");
 //        doReturn("foo").when(foo).finalMethod();
 //        verify(foo).finalMethod();
-        
+
 //        doReturn("foo");
 //        doReturn("bar");
-        
+
 //        verifyNoMoreInteractions();
 //        verifyNoMoreInteractions(null);
 //        verifyNoMoreInteractions("");
@@ -59,38 +59,38 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
 
 //        when(mock.simpleMethod());
 //        when(mock.differentMethod()).thenReturn("");
-    } 
-    
+    }
+
     @Test(expected=NotAMockException.class)
     public void shouldScreamWhenWholeMethodPassedToVerify() {
         verify(mock.booleanReturningMethod());
-    }   
-    
+    }
+
     @Test(expected=NotAMockException.class)
     public void shouldScreamWhenWholeMethodPassedToVerifyNoMoreInteractions() {
         verifyNoMoreInteractions(mock.byteReturningMethod());
     }
-    
+
     @Test(expected=NotAMockException.class)
     public void shouldScreamWhenInOrderCreatedWithDodgyMock() {
         inOrder("not a mock");
     }
-    
+
     @Test(expected=NullInsteadOfMockException.class)
     public void shouldScreamWhenInOrderCreatedWithNulls() {
         inOrder(mock, null);
     }
-    
+
     @Test(expected=NullInsteadOfMockException.class)
     public void shouldScreamNullPassedToVerify() {
         verify(null);
-    }  
-    
+    }
+
     @Test(expected=NullInsteadOfMockException.class)
     public void shouldScreamWhenNotMockPassedToVerifyNoMoreInteractions() {
         verifyNoMoreInteractions(null, "blah");
-    } 
-    
+    }
+
     @SuppressWarnings("all")
     @Test(expected=MockitoException.class)
     public void shouldScreamWhenNullPassedToVerifyNoMoreInteractions() {

@@ -42,7 +42,7 @@ public class MockHandlerImpl<T> implements InternalMockHandler<T> {
 
     public MockHandlerImpl(MockCreationSettings<T> mockSettings) {
         this.mockSettings = mockSettings;
-       
+
         this.matchersBinder = new MatchersBinder();
         this.invocationContainerImpl = new InvocationContainerImpl( mockSettings);
     }

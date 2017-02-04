@@ -21,5 +21,5 @@ public class GreaterThan<T extends Comparable<T>> extends CompareTo<T> implement
     @Override
     protected boolean matchResult(int result) {
         return result > 0;
-    }    
+    }
 }

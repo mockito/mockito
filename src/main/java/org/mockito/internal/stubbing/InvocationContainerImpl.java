@@ -135,7 +135,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     public Object invokedMock() {
         return invocationForStubbing.getInvocation().getMock();
     }
-    
+
     public InvocationMatcher getInvocationForStubbing() {
         return invocationForStubbing;
     }

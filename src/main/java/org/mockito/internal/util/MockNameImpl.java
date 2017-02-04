@@ -9,7 +9,7 @@ import org.mockito.mock.MockName;
 import java.io.Serializable;
 
 public class MockNameImpl implements MockName, Serializable {
-    
+
     private static final long serialVersionUID = 8014974700844306925L;
     private final String mockName;
     private boolean defaultName;
@@ -37,11 +37,11 @@ public class MockNameImpl implements MockName, Serializable {
         //lower case first letter
         return className.substring(0, 1).toLowerCase() + className.substring(1);
     }
-    
+
     public boolean isDefault() {
         return defaultName;
     }
-    
+
     @Override
     public String toString() {
         return mockName;

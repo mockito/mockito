@@ -13,7 +13,7 @@ import java.util.List;
 public class InvocationMarker {
 
     private InvocationMarker(){}
-	
+
     public static void markVerified(List<Invocation> invocations, MatchableInvocation wanted) {
         for (Invocation invocation : invocations) {
             markVerified(invocation, wanted);

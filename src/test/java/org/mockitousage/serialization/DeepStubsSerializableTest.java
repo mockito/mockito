@@ -35,7 +35,7 @@ public class DeepStubsSerializableTest {
 
         // when
         ListContainer deserialized_deep_stub = serializeAndBack(deep_stubbed);
-        
+
         // then
         assertThat(deserialized_deep_stub.iterator().next().add("not stubbed but mock already previously resolved")).isEqualTo(false);
         assertThat(deserialized_deep_stub.iterator().next().add("yes")).isEqualTo(true);

@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class ExplicitFrameworkValidationTest extends TestBase {
 
     @Mock IMethods mock;
-    
+
     @Test
     public void shouldValidateExplicitly() {
         verify(mock);
@@ -31,7 +31,7 @@ public class ExplicitFrameworkValidationTest extends TestBase {
             fail();
         } catch (UnfinishedVerificationException e) {}
     }
-    
+
     @Test
     public void shouldDetectUnfinishedStubbing() {
         when(mock.simpleMethod());
@@ -40,7 +40,7 @@ public class ExplicitFrameworkValidationTest extends TestBase {
             fail();
         } catch (UnfinishedStubbingException e) {}
     }
-    
+
     @Test
     public void shouldDetectMisplacedArgumentMatcher() {
         anyObject();

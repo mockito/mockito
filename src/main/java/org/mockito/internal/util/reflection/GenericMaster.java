@@ -11,11 +11,11 @@ import java.lang.reflect.Type;
 public class GenericMaster {
 
     /**
-     * Finds the generic type (parametrized type) of the field. If the field is not generic it returns Object.class. 
-     * 
+     * Finds the generic type (parametrized type) of the field. If the field is not generic it returns Object.class.
+     *
      * @param field the field to inspect
      */
-    public Class<?> getGenericType(Field field) {        
+    public Class<?> getGenericType(Field field) {
         Type generic = field.getGenericType();
         if (generic instanceof ParameterizedType) {
             Type actual = ((ParameterizedType) generic).getActualTypeArguments()[0];
@@ -26,7 +26,7 @@ public class GenericMaster {
                 return (Class<?>) ((ParameterizedType) actual).getRawType();
             }
         }
-        
+
         return Object.class;
     }
 

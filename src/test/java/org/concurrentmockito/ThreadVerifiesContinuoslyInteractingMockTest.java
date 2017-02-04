@@ -43,7 +43,7 @@ public class ThreadVerifiesContinuoslyInteractingMockTest extends TestBase {
             };
             listeners[i].start();
         }
-        
+
         verify(mock, atLeastOnce()).simpleMethod();
 
         for (Thread listener : listeners) {

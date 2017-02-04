@@ -22,7 +22,7 @@ public class NumberOfInvocationsChecker {
 
     public void check(List<Invocation> invocations, MatchableInvocation wanted, int wantedCount) {
         List<Invocation> actualInvocations = findInvocations(invocations, wanted);
-        
+
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
             Location lastInvocation = getLastLocation(actualInvocations);
