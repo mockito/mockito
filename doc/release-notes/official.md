@@ -1,3 +1,13 @@
+### 2.7.2 (2017-02-04 12:05 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Rafael Winterhalter
+  * 1: Szczepan Faber
+* Improvements: 2
+  * Deleted dead code [(#924)](https://github.com/mockito/mockito/pull/924)
+  * Added subproject for configuration-free inline mock making. [(#920)](https://github.com/mockito/mockito/pull/920)
+
 ### 2.7.1 (2017-01-31 16:48 UTC)
 
 * Authors: 0
