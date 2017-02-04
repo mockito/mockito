@@ -1265,6 +1265,7 @@ import org.mockito.verification.*;
  * Previously they were considered <em>unmockable</em>, preventing the user from mocking.
  * We already started discussing how to make this feature enabled by default.
  * Currently, the feature is still optional as we wait for more feedback from the community.
+ *
  * <p>
  * This feature is turned off by default because it is based on completely different mocking mechanism
  * that requires more feedback from the community.
@@ -1279,6 +1280,11 @@ import org.mockito.verification.*;
  * that requires more feedback from the community. It can be activated explicitly by the mockito extension mechanism,
  * just create in the classpath a file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
  * containing the value <code>mock-maker-inline</code>.
+ *
+ * <p>
+ * As a convenience, the Mockito team provides an artifact where this mock maker is preconfigured. Instead of using the
+ * <i>mockito-core</i> artifact, include the <i>mockito-inline</i> artifact in your project. Note that this artifact is
+ * likely to be discontinued once mocking of final classes and methods gets integrated into the default mock maker.
  *
  * <p>
  * Some noteworthy notes about this mock maker:
