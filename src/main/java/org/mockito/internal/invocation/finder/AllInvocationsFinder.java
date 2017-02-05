@@ -18,8 +18,8 @@ public class AllInvocationsFinder {
     private AllInvocationsFinder() {}
 
     /**
-     * gets all invocations from mocks. Invocations are ordered earlier first. 
-     * 
+     * gets all invocations from mocks. Invocations are ordered earlier first.
+     *
      * @param mocks mocks
      * @return invocations
      */
@@ -29,7 +29,7 @@ public class AllInvocationsFinder {
             Collection<Invocation> fromSingleMock = new DefaultMockingDetails(mock).getInvocations();
             invocationsInOrder.addAll(fromSingleMock);
         }
-        
+
         return new LinkedList<Invocation>(invocationsInOrder);
     }
 

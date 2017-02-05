@@ -20,7 +20,7 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     public Answer<Object> getDefaultAnswer() {
         return new ReturnsEmptyValues();
     }
-    
+
     /* (non-Javadoc)
      * @see org.mockito.IMockitoConfiguration#getAnnotationEngine()
      */
@@ -41,6 +41,6 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     public boolean enableClassCache() {
         return true;
     }
-    
-    
+
+
 }

@@ -12,11 +12,11 @@ public class ObjectMethodsGuru{
 
     private ObjectMethodsGuru() {
     }
-    
+
     public static boolean isToStringMethod(Method method) {
         MockitoMethod m = new DelegatingMethod(method);
-        return m.getReturnType() == String.class && 
-               m.getParameterTypes().length == 0 && 
+        return m.getReturnType() == String.class &&
+               m.getParameterTypes().length == 0 &&
                m.getName().equals("toString");
     }
 

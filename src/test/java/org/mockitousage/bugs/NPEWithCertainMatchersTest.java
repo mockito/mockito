@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 public class NPEWithCertainMatchersTest extends TestBase {
 
     @Mock IMethods mock;
-    
+
     @After
     public void clearState() {
         this.resetState();
@@ -33,14 +33,14 @@ public class NPEWithCertainMatchersTest extends TestBase {
     @Test
     public void shouldNotThrowNPEWhenIntPassed() {
         mock.intArgumentMethod(100);
-        
+
         verify(mock).intArgumentMethod(isA(Integer.class));
     }
-    
+
     @Test
     public void shouldNotThrowNPEWhenIntegerPassedToEq() {
         mock.intArgumentMethod(100);
-        
+
         verify(mock).intArgumentMethod(eq(new Integer(100)));
     }
 

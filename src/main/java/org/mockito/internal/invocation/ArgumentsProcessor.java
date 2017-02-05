@@ -36,7 +36,7 @@ public class ArgumentsProcessor {
         System.arraycopy(varArgs, 0, newArgs, nonVarArgsCount, varArgsCount);
         return newArgs;
     }
-    
+
     private static <T> boolean isNullOrEmpty(T[] array) {
         return array == null || array.length == 0;
     }
@@ -52,6 +52,6 @@ public class ArgumentsProcessor {
         }
         return matchers;
     }
-    
-    
+
+
 }

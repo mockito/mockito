@@ -24,48 +24,48 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
     public void goBackToDefaultConfiguration() {
         ConfigurationAccess.getConfig().overrideAnnotationEngine(null);
     }
-    
+
     class SimpleTestCase {
         @InjectMocks Tested tested = new Tested();
         @Mock Dependency mock;
     }
-    
-    class Tested {        
+
+    class Tested {
         Dependency dependency;
         public void setDependency(Dependency dependency) {
             this.dependency = dependency;
-        }        
+        }
     }
-    
+
     class Dependency {}
-    
+
     @Test
     public void shouldInjectMocksIfThereIsNoUserDefinedEngine() throws Exception {
         //given
         AnnotationEngine defaultEngine = new DefaultMockitoConfiguration().getAnnotationEngine();
         ConfigurationAccess.getConfig().overrideAnnotationEngine(defaultEngine);
         SimpleTestCase test = new SimpleTestCase();
-        
+
         //when
         MockitoAnnotations.initMocks(test);
-        
-        //then   
+
+        //then
         assertNotNull(test.mock);
         assertNotNull(test.tested.dependency);
         assertSame(test.mock, test.tested.dependency);
     }
-    
+
     @Test
     public void shouldRespectUsersEngine() throws Exception {
         //given
         AnnotationEngine customizedEngine = new IndependentAnnotationEngine() { /**/ };
         ConfigurationAccess.getConfig().overrideAnnotationEngine(customizedEngine);
         SimpleTestCase test = new SimpleTestCase();
-        
+
         //when
         MockitoAnnotations.initMocks(test);
-        
-        //then   
+
+        //then
         assertNotNull(test.mock);
         assertNull(test.tested.dependency);
     }

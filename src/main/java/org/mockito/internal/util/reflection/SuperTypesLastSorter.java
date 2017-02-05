@@ -17,10 +17,10 @@ import java.util.List;
  * moved after their subclasses.
  */
 public class SuperTypesLastSorter {
-    
+
     private SuperTypesLastSorter() {
     }
-    
+
     /**
      * Return a new collection with the fields sorted first by name,
      * then with any fields moved after their supertypes.

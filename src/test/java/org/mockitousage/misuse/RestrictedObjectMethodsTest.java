@@ -61,5 +61,5 @@ public class RestrictedObjectMethodsTest extends TestBase {
         // and when user has verification started at that time there will be a mess
         InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).equals(null);
-    }       
+    }
 }

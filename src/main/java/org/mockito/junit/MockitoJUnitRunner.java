@@ -37,7 +37,7 @@ import org.mockito.quality.Strictness;
  *       To opt-out from this feature, use {@code}&#064;RunWith(MockitoJUnitRunner.Silent.class){@code}
  *   <li>
  *      Initializes mocks annotated with {@link Mock},
- *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary. 
+ *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary.
  *      Mocks are initialized before each test method.
  *   <li>
  *      Validates framework usage after each test method. See javadoc for {@link Mockito#validateMockitoUsage()}.
@@ -48,7 +48,7 @@ import org.mockito.quality.Strictness;
  *      is because it would have been an incompatible change
  *      and Mockito strictly follows <a href="http://semver.org">semantic versioning</a>.
  * </ul>
- * 
+ *
  * Runner is completely optional - there are other ways you can get &#064;Mock working, for example by writing a base class.
  * Explicitly validating framework usage is also optional because it is triggered automatically by Mockito every time you use the framework.
  * See javadoc for {@link Mockito#validateMockitoUsage()}.
@@ -57,10 +57,10 @@ import org.mockito.quality.Strictness;
  * <pre class="code"><code class="java">
  * <b>&#064;RunWith(MockitoJUnitRunner.StrictStubs.class)</b>
  * public class ExampleTest {
- * 
+ *
  *     &#064;Mock
  *     private List list;
- * 
+ *
  *     &#064;Test
  *     public void shouldDoSomething() {
  *         list.add(100);
@@ -157,7 +157,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
     }
 
     @Override
-    public void run(final RunNotifier notifier) {           
+    public void run(final RunNotifier notifier) {
         runner.run(notifier);
     }
 

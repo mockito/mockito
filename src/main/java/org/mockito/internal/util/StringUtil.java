@@ -18,7 +18,7 @@ public class StringUtil {
     public static String removeFirstLine(String text) {
         return text.replaceFirst(".*?\n", "");
     }
-    
+
     /**
      * Joins Strings with line break character. It adds line break in front, too.
      * This makes it something like 'format' no really 'join'.
@@ -38,7 +38,7 @@ public class StringUtil {
         int lastBreak = out.lastIndexOf("\n");
         return out.replace(lastBreak, lastBreak+1, "").toString();
     }
-    
+
     public static String decamelizeMatcher(String className) {
         if (className.length() == 0) {
             return "<custom argument matcher>";

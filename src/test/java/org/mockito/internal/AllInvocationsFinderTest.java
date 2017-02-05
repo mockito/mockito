@@ -24,7 +24,7 @@ import static org.mockito.internal.invocation.finder.AllInvocationsFinder.find;
 import static org.mockito.internal.invocation.finder.AllInvocationsFinder.findStubbings;
 
 public class AllInvocationsFinderTest extends TestBase {
-    
+
     private IMethods mockTwo;
     private IMethods mockOne;
 
@@ -33,7 +33,7 @@ public class AllInvocationsFinderTest extends TestBase {
         mockOne = mock(IMethods.class);
         mockTwo = mock(IMethods.class);
     }
-    
+
     @Test
     public void no_interactions() throws Exception {
         //expect

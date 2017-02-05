@@ -33,7 +33,7 @@ public class SmartPrinterTest extends TestBase {
     public void shouldPrintBothInMultilinesWhenFirstIsMulti() {
         //when
         SmartPrinter printer = new SmartPrinter(multi, shortie.getInvocation());
-        
+
         //then
         assertThat(printer.getWanted().toString()).contains("\n");
         assertThat(printer.getActual().toString()).contains("\n");
@@ -43,7 +43,7 @@ public class SmartPrinterTest extends TestBase {
     public void shouldPrintBothInMultilinesWhenSecondIsMulti() {
         //when
         SmartPrinter printer = new SmartPrinter(shortie, multi.getInvocation());
-        
+
         //then
         assertThat(printer.getWanted().toString()).contains("\n");
         assertThat(printer.getActual().toString()).contains("\n");
@@ -53,7 +53,7 @@ public class SmartPrinterTest extends TestBase {
     public void shouldPrintBothInMultilinesWhenBothAreMulti() {
         //when
         SmartPrinter printer = new SmartPrinter(multi, multi.getInvocation());
-        
+
         //then
         assertThat(printer.getWanted().toString()).contains("\n");
         assertThat(printer.getActual().toString()).contains("\n");
@@ -63,7 +63,7 @@ public class SmartPrinterTest extends TestBase {
     public void shouldPrintBothInSingleLineWhenBothAreShort() {
         //when
         SmartPrinter printer = new SmartPrinter(shortie, shortie.getInvocation());
-        
+
         //then
         assertThat(printer.getWanted().toString()).doesNotContain("\n");
         assertThat(printer.getActual().toString()).doesNotContain("\n");

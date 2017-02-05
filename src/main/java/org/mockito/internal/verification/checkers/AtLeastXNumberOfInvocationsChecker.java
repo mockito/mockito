@@ -20,10 +20,10 @@ import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 import static org.mockito.internal.invocation.InvocationsFinder.getLastLocation;
 
 public class AtLeastXNumberOfInvocationsChecker {
-    
+
     public static void checkAtLeastNumberOfInvocations(List<Invocation> invocations, MatchableInvocation wanted, int wantedCount) {
         List<Invocation> actualInvocations = findInvocations(invocations, wanted);
-        
+
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
             Location lastLocation = getLastLocation(actualInvocations);

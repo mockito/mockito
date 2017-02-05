@@ -15,16 +15,16 @@ import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.verification.VerificationMode;
 
 public class AtLeast implements VerificationInOrderMode, VerificationMode {
-    
+
     final int wantedCount;
-    
+
     public AtLeast(int wantedNumberOfInvocations) {
         if (wantedNumberOfInvocations < 0) {
             throw new MockitoException("Negative value is not allowed here");
         }
         this.wantedCount = wantedNumberOfInvocations;
     }
-    
+
     @Override
     public void verify(VerificationData data) {
         if (wantedCount == 1) {
@@ -32,7 +32,7 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
         }
         checkAtLeastNumberOfInvocations(data.getAllInvocations(), data.getTarget(), wantedCount);
     }
-    
+
     @Override
     public void verifyInOrder(VerificationDataInOrder data) {
         if (wantedCount == 1) {

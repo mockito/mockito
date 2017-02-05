@@ -10,7 +10,7 @@ import java.util.LinkedList;
 public class IdentitySet {
 
     private final LinkedList list = new LinkedList();
-    
+
     public boolean contains(Object o) {
         for(Object existing:list) {
             if (existing == o) {
@@ -21,6 +21,6 @@ public class IdentitySet {
     }
 
     public void add(Object o) {
-        list.add(o);        
+        list.add(o);
     }
 }

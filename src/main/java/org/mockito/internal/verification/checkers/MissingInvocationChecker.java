@@ -32,16 +32,16 @@ public class MissingInvocationChecker {
         if (!actualInvocations.isEmpty()){
             return;
         }
-        
+
         Invocation similar = findSimilarInvocation(invocations, wanted);
         if (similar == null) {
             throw wantedButNotInvoked(wanted, invocations);
         }
-        
+
         Integer[] indexesOfSuspiciousArgs = getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());
         SmartPrinter smartPrinter = new SmartPrinter(wanted, similar, indexesOfSuspiciousArgs);
         throw argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
-        
+
     }
 
     public static void checkMissingInvocation(List<Invocation> invocations, MatchableInvocation wanted, InOrderContext context) {

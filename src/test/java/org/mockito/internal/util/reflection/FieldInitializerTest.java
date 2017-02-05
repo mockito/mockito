@@ -189,7 +189,7 @@ public class FieldInitializerTest {
             throw new NullPointerException("business logic failed");
         }
     }
-    
+
     static abstract class AbstractStaticClass {
         public AbstractStaticClass() {}
     }

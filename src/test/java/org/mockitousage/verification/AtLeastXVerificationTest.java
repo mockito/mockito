@@ -40,7 +40,7 @@ public class AtLeastXVerificationTest extends TestBase {
             fail();
         } catch (MockitoAssertionError e) {}
     }
-    
+
     @Test
     public void shouldAllowAtLeastZeroForTheSakeOfVerifyNoMoreInteractionsSometimes() throws Exception {
         //when
@@ -51,6 +51,6 @@ public class AtLeastXVerificationTest extends TestBase {
         verify(mock, atLeast(0)).add("one");
         verify(mock, atLeast(0)).clear();
 
-        verifyNoMoreInteractions(mock);        
+        verifyNoMoreInteractions(mock);
     }
 }

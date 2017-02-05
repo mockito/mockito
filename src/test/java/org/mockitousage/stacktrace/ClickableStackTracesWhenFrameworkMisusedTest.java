@@ -19,14 +19,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
-    
+
     @Mock private IMethods mock;
 
     @After
     public void resetState() {
         super.resetState();
     }
-    
+
     private void misplacedArgumentMatcherHere() {
         anyString();
     }
@@ -47,11 +47,11 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
     private void unfinishedStubbingHere() {
         when(mock.simpleMethod());
     }
-    
+
     @Test
     public void shouldPointOutUnfinishedStubbing() {
         unfinishedStubbingHere();
-        
+
         try {
             verify(mock).simpleMethod();
             fail();
@@ -61,7 +61,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
                 .hasMessageContaining("unfinishedStubbingHere(");
         }
     }
-    
+
     @Test
     public void shouldShowWhereIsUnfinishedVerification() throws Exception {
         unfinishedVerificationHere();

@@ -15,7 +15,7 @@ public interface VerificationDataInOrder {
     List<Invocation> getAllInvocations();
 
     MatchableInvocation getWanted();
-    
-    InOrderContext getOrderingContext(); 
-    
+
+    InOrderContext getOrderingContext();
+
 }

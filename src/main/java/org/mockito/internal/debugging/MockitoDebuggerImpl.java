@@ -42,7 +42,7 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
         out += line("********************************");
         out += line("***       Unused stubs       ***");
         out += line("********************************");
-        
+
         for(Invocation i:invocations) {
             out += line(i.toString());
             out += line(" stubbed: " + i.getLocation());

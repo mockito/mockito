@@ -17,7 +17,7 @@ import static junit.framework.TestCase.fail;
 import static org.mockito.Mockito.*;
 
 public class SelectedMocksInOrderVerificationTest extends TestBase {
-    
+
     private IMethods mockOne;
     private IMethods mockTwo;
     private IMethods mockThree;
@@ -35,7 +35,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
         mockTwo.simpleMethod(2);
         mockOne.simpleMethod(4);
     }
-    
+
     @Test
     public void shouldVerifyAllInvocationsInOrder() {
         InOrder inOrder = inOrder(mockOne, mockTwo, mockThree);
@@ -45,78 +45,78 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
         inOrder.verify(mockTwo).simpleMethod(2);
         inOrder.verify(mockOne).simpleMethod(4);
         verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
-    } 
-    
+    }
+
     @Test
     public void shouldVerifyInOrderMockTwoAndThree() {
         InOrder inOrder = inOrder(mockTwo, mockThree);
-        
+
         inOrder.verify(mockTwo, times(2)).simpleMethod(2);
         inOrder.verify(mockThree).simpleMethod(3);
         inOrder.verify(mockTwo).simpleMethod(2);
         verifyNoMoreInteractions(mockTwo, mockThree);
-    }     
-    
+    }
+
     @Test
     public void shouldVerifyInOrderMockOneAndThree() {
         InOrder inOrder = inOrder(mockOne, mockThree);
-        
+
         inOrder.verify(mockOne).simpleMethod(1);
         inOrder.verify(mockThree).simpleMethod(3);
         inOrder.verify(mockOne).simpleMethod(4);
         verifyNoMoreInteractions(mockOne, mockThree);
-    } 
-    
+    }
+
     @Test
     public void shouldVerifyMockOneInOrder() {
         InOrder inOrder = inOrder(mockOne);
-        
+
         inOrder.verify(mockOne).simpleMethod(1);
         inOrder.verify(mockOne).simpleMethod(4);
-        
+
         verifyNoMoreInteractions(mockOne);
-    } 
-    
+    }
+
     @Test
     public void shouldFailVerificationForMockOne() {
         InOrder inOrder = inOrder(mockOne);
-        
+
         inOrder.verify(mockOne).simpleMethod(1);
         try {
             inOrder.verify(mockOne).differentMethod();
             fail();
         } catch (VerificationInOrderFailure e) {}
-    } 
-    
+    }
+
     @Test
     public void shouldFailVerificationForMockOneBecauseOfWrongOrder() {
         InOrder inOrder = inOrder(mockOne);
-        
+
         inOrder.verify(mockOne).simpleMethod(4);
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
         } catch (VerificationInOrderFailure e) {}
-    } 
+    }
 
     @Test
     public void shouldVerifyMockTwoWhenThreeTimesUsed() {
         InOrder inOrder = inOrder(mockTwo);
-        
+
         inOrder.verify(mockTwo, times(3)).simpleMethod(2);
-        
+
         verifyNoMoreInteractions(mockTwo);
-    } 
-    
+    }
+
     @Test
     public void shouldVerifyMockTwo() {
         InOrder inOrder = inOrder(mockTwo);
-        
+
         inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(2);
-        
+
         verifyNoMoreInteractions(mockTwo);
-    } 
-    
+    }
+
     @Test
     public void shouldFailVerificationForMockTwo() {
         InOrder inOrder = inOrder(mockTwo);
@@ -126,7 +126,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
             fail();
         } catch (VerificationInOrderFailure e) {}
     }
-    
+
     @Test
     public void shouldThrowNoMoreInvocationsForMockTwo() {
         InOrder inOrder = inOrder(mockTwo);
@@ -136,7 +136,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
             fail();
         } catch (VerificationInOrderFailure e) {}
     }
-    
+
     @Test
     public void shouldThrowTooLittleInvocationsForMockTwo() {
         InOrder inOrder = inOrder(mockTwo);
@@ -146,7 +146,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
             fail();
         } catch (VerificationInOrderFailure e) {}
     }
-    
+
     @Test
     public void shouldThrowTooManyInvocationsForMockTwo() {
         InOrder inOrder = inOrder(mockTwo);
@@ -156,7 +156,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
             fail();
         } catch (VerificationInOrderFailure e) {}
     }
-    
+
     @Test
     public void shouldAllowThreeTimesOnMockTwo() {
         InOrder inOrder = inOrder(mockTwo);
@@ -164,7 +164,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
         inOrder.verify(mockTwo, times(3)).simpleMethod(2);
         verifyNoMoreInteractions(mockTwo);
     }
-    
+
     @Test
     public void shouldVerifyMockTwoCompletely() {
         InOrder inOrder = inOrder(mockTwo, mockThree);
@@ -174,7 +174,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
         inOrder.verify(mockTwo).simpleMethod(2);
         verifyNoMoreInteractions(mockTwo, mockThree);
     }
-    
+
     @Test
     public void shouldAllowTwoTimesOnMockTwo() {
         InOrder inOrder = inOrder(mockTwo, mockThree);

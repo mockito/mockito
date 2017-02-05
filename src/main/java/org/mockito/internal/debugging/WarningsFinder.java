@@ -19,7 +19,7 @@ public class WarningsFinder {
         this.baseUnusedStubs = unusedStubs;
         this.baseAllInvocations = allInvocations;
     }
-    
+
     public void find(FindingsListener findingsListener) {
         List<Invocation> unusedStubs = new LinkedList<Invocation>(this.baseUnusedStubs);
         List<InvocationMatcher> allInvocations = new LinkedList<InvocationMatcher>(this.baseAllInvocations);

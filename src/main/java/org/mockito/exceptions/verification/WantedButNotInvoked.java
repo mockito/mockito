@@ -16,7 +16,7 @@ public class WantedButNotInvoked extends MockitoAssertionError {
     public WantedButNotInvoked(String message) {
         super(message);
     }
-    
+
     @Override
     public String toString() {
         return removeFirstLine(super.toString());

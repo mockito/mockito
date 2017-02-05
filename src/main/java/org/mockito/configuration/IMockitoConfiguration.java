@@ -11,7 +11,7 @@ import org.mockito.stubbing.Answer;
  *
  * <p>
  * In most cases you don't really need to configure Mockito. For example in case of working with legacy code,
- * when you might want to have different 'mocking style' this interface might be helpful. 
+ * when you might want to have different 'mocking style' this interface might be helpful.
  * A reason of configuring Mockito might be if you disagree with the {@link org.mockito.Answers#RETURNS_DEFAULTS}
  * unstubbed mocks return.
  *
@@ -41,7 +41,7 @@ public interface IMockitoConfiguration {
      * Allows configuring the default answers of unstubbed invocations
      * <p>
      * See javadoc for {@link IMockitoConfiguration}
-     */    
+     */
     Answer<Object> getDefaultAnswer();
 
     /**
@@ -68,13 +68,13 @@ public interface IMockitoConfiguration {
      * Mockito developers)
      * <p>
      * See javadoc for {@link IMockitoConfiguration}
-     * 
+     *
      * @return if Mockito should clean stack traces
      */
     boolean cleansStackTrace();
-    
+
     /**
-     * Allow objenesis to cache classes. If you're in an environment where classes 
+     * Allow objenesis to cache classes. If you're in an environment where classes
      * are dynamically reloaded, you can disable this to avoid classcast exceptions.
      */
     boolean enableClassCache();

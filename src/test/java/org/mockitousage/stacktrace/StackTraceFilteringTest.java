@@ -27,19 +27,19 @@ import static org.mockito.Mockito.when;
 import static org.mockitoutil.Conditions.firstMethodInStackTrace;
 
 public class StackTraceFilteringTest extends TestBase {
-    
+
     @Mock private IMethods mock;
 
     @After
     public void resetState() {
         super.resetState();
     }
-    
+
     @Before
     public void setup() {
         makeStackTracesClean();
     }
-    
+
     @Test
     public void shouldFilterStackTraceOnVerify() {
         try {
@@ -49,7 +49,7 @@ public class StackTraceFilteringTest extends TestBase {
             Assertions.assertThat(e).has(firstMethodInStackTrace("shouldFilterStackTraceOnVerify"));
         }
     }
-    
+
     @Test
     public void shouldFilterStackTraceOnVerifyNoMoreInteractions() {
         mock.oneArg(true);
@@ -60,7 +60,7 @@ public class StackTraceFilteringTest extends TestBase {
             Assertions.assertThat(e).has(firstMethodInStackTrace("shouldFilterStackTraceOnVerifyNoMoreInteractions"));
         }
     }
-    
+
     @Test
     public void shouldFilterStackTraceOnVerifyZeroInteractions() {
         mock.oneArg(true);
@@ -71,24 +71,24 @@ public class StackTraceFilteringTest extends TestBase {
             Assertions.assertThat(e).has(firstMethodInStackTrace("shouldFilterStackTraceOnVerifyZeroInteractions"));
         }
     }
-    
+
     @Test
     public void shouldFilterStacktraceOnMockitoException() {
         verify(mock);
         try {
-            verify(mock).oneArg(true); 
+            verify(mock).oneArg(true);
             fail();
         } catch (MockitoException expected) {
             Assertions.assertThat(expected).has(firstMethodInStackTrace("shouldFilterStacktraceOnMockitoException"));
         }
     }
-    
+
     @Test
     public void shouldFilterStacktraceWhenVerifyingInOrder() {
         InOrder inOrder = inOrder(mock);
         mock.oneArg(true);
         mock.oneArg(false);
-        
+
         inOrder.verify(mock).oneArg(false);
         try {
             inOrder.verify(mock).oneArg(true);
@@ -97,7 +97,7 @@ public class StackTraceFilteringTest extends TestBase {
             Assertions.assertThat(e).has(firstMethodInStackTrace("shouldFilterStacktraceWhenVerifyingInOrder"));
         }
     }
-    
+
     @Test
     public void shouldFilterStacktraceWhenInOrderThrowsMockitoException() {
         try {
@@ -107,7 +107,7 @@ public class StackTraceFilteringTest extends TestBase {
             Assertions.assertThat(expected).has(firstMethodInStackTrace("shouldFilterStacktraceWhenInOrderThrowsMockitoException"));
         }
     }
-    
+
     @Test
     public void shouldFilterStacktraceWhenInOrderVerifies() {
         try {
@@ -118,7 +118,7 @@ public class StackTraceFilteringTest extends TestBase {
             Assertions.assertThat(expected).has(firstMethodInStackTrace("shouldFilterStacktraceWhenInOrderVerifies"));
         }
     }
-    
+
     @Test
     public void shouldFilterStackTraceWhenThrowingExceptionFromMockHandler() {
         try {
@@ -128,7 +128,7 @@ public class StackTraceFilteringTest extends TestBase {
             Assertions.assertThat(expected).has(firstMethodInStackTrace("shouldFilterStackTraceWhenThrowingExceptionFromMockHandler"));
         }
     }
-    
+
     @Test
     public void shouldShowProperExceptionStackTrace() throws Exception {
         when(mock.simpleMethod()).thenThrow(new RuntimeException());

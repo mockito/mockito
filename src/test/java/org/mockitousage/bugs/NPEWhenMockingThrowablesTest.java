@@ -17,7 +17,7 @@ public class NPEWhenMockingThrowablesTest extends TestBase {
 
     @Mock IMethods mock;
     @Mock DummyException mock2;
-    
+
     class DummyException extends RuntimeException {
         private static final long serialVersionUID = 1L;
     }

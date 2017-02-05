@@ -113,7 +113,7 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
             return Mockito.mock(type, settings.useConstructor()
                                               .outerInstance(testInstance));
         }
-        
+
         Constructor<?> constructor = noArgConstructorOf(type);
         if (Modifier.isPrivate(constructor.getModifiers())) {
             constructor.setAccessible(true);

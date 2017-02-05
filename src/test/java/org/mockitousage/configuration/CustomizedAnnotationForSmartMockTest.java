@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
  * @see MockitoConfiguration#getAnnotationEngine() for the custom smartmock injection engine
  */
 public class CustomizedAnnotationForSmartMockTest extends TestBase {
-    
+
     @SmartMock IMethods smartMock;
 
     @Test

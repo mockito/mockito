@@ -26,14 +26,14 @@ public class SmartNullsStubbingTest extends TestBase {
     public void setup() {
         mock = mock(IMethods.class, Mockito.RETURNS_SMART_NULLS);
     }
-    
+
     public IMethods unstubbedMethodInvokedHere(IMethods mock) {
         return mock.iMethodsReturningMethod();
     }
 
     @Test
     public void shouldSmartNPEPointToUnstubbedCall() throws Exception {
-        IMethods methods = unstubbedMethodInvokedHere(mock); 
+        IMethods methods = unstubbedMethodInvokedHere(mock);
         try {
             methods.simpleMethod();
             fail();
@@ -45,12 +45,12 @@ public class SmartNullsStubbingTest extends TestBase {
     interface Bar {
         void boo();
     }
-    
+
     class Foo {
         Foo getSomeClass() {
             return null;
         }
-        
+
         Bar getSomeInterface() {
             return null;
         }

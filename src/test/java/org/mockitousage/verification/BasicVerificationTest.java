@@ -22,7 +22,7 @@ public class BasicVerificationTest extends TestBase {
 
     @Mock private List<String> mock;
     @Mock private List<String> mockTwo;
-    
+
     @Test
     public void shouldVerify() throws Exception {
         mock.clear();
@@ -55,7 +55,7 @@ public class BasicVerificationTest extends TestBase {
     public void shouldFailOnWrongMethod() throws Exception {
         mock.clear();
         mock.clear();
-        
+
         mockTwo.add("add");
 
         verify(mock, atLeastOnce()).clear();
@@ -80,13 +80,13 @@ public class BasicVerificationTest extends TestBase {
             fail();
         } catch (NoInteractionsWanted e) {}
     }
-    
+
     @Test
     public void shouldDetectWhenInvokedMoreThanOnce() throws Exception {
         mock.add("foo");
         mock.clear();
         mock.clear();
-        
+
         verify(mock).add("foo");
 
         try {
@@ -98,17 +98,17 @@ public class BasicVerificationTest extends TestBase {
     @Test
     public void shouldVerifyStubbedMethods() throws Exception {
         when(mock.add("test")).thenReturn(Boolean.FALSE);
-        
+
         mock.add("test");
-        
+
         verify(mock).add("test");
     }
-    
+
 
     @Test
     public void shouldDetectWhenOverloadedMethodCalled() throws Exception {
         IMethods mockThree = mock(IMethods.class);
-        
+
         mockThree.varargs((Object[]) new Object[] {});
         try {
             verify(mockThree).varargs((String[]) new String[] {});

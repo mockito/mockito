@@ -18,9 +18,9 @@ public class Description implements VerificationMode {
 
     private final VerificationMode verification;
     private final String description;
-    
+
     /**
-     * Constructs a verification mode which wraps the given verification mode. 
+     * Constructs a verification mode which wraps the given verification mode.
      * @param verification The implementation to use for verification
      * @param description The failure message to prepend if verification fails
      */
@@ -28,7 +28,7 @@ public class Description implements VerificationMode {
         this.verification = verification;
         this.description = description;
     }
-    
+
     /**
      * Performs verification using the wrapped verification mode implementation.
      * Prepends the custom failure message if verification fails.
@@ -38,11 +38,11 @@ public class Description implements VerificationMode {
     public void verify(VerificationData data) {
         try {
             verification.verify(data);
-            
+
         } catch (MockitoAssertionError e) {
             throw new MockitoAssertionError(e, description);
         }
-    } 
+    }
 
     @Override
     public VerificationMode description(String description) {

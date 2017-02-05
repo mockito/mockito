@@ -12,7 +12,7 @@ import static junit.framework.TestCase.fail;
 import static org.mockito.Mockito.*;
 
 public class ActualInvocationHasNullArgumentNPEBugTest extends TestBase {
-    
+
     public interface Fun {
         String doFun(String something);
     }

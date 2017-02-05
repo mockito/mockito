@@ -68,7 +68,7 @@ public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.
      * &#064;InjectMocks for given testClassInstance.
      * <p>
      * See examples in javadoc for {@link MockitoAnnotations} class.
-     * 
+     *
      * @param testClassInstance
      *            Test class, usually <code>this</code>
      */
@@ -76,14 +76,14 @@ public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.
         Class<?> clazz = testClassInstance.getClass();
         Set<Field> mockDependentFields = new HashSet<Field>();
         Set<Object> mocks = newMockSafeHashSet();
-        
+
         while (clazz != Object.class) {
             new InjectMocksScanner(clazz).addTo(mockDependentFields);
             new MockScanner(testClassInstance, clazz).addPreparedMocks(mocks);
             onInjection(testClassInstance, clazz, mockDependentFields, mocks);
             clazz = clazz.getSuperclass();
         }
-        
+
         new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
     }
 

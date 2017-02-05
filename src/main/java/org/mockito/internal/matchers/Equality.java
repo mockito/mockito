@@ -6,7 +6,7 @@ package org.mockito.internal.matchers;
 
 import java.lang.reflect.Array;
 
-//stolen from hamcrest because I didn't want to have more dependency than Matcher class 
+//stolen from hamcrest because I didn't want to have more dependency than Matcher class
 public class Equality {
 
     public static boolean areEqual(Object o1, Object o2) {

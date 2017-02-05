@@ -14,7 +14,7 @@ import static java.lang.String.valueOf;
  * Inspired on hamcrest. Used for printing arguments in verification errors.
  */
 public class ValuePrinter {
-    
+
     private ValuePrinter(){}
 
     /**

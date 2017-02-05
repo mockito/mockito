@@ -21,7 +21,7 @@ public class MatcherApplicationStrategy {
     private final Invocation invocation;
     private final List<ArgumentMatcher<?>> matchers;
     private final MatcherApplicationType matchingType;
-    
+
 
 
     private MatcherApplicationStrategy(Invocation invocation, List<ArgumentMatcher<?>> matchers, MatcherApplicationType matchingType) {
@@ -39,7 +39,7 @@ public class MatcherApplicationStrategy {
     /**
      * Returns the {@link MatcherApplicationStrategy} that must be used to capture the
      * arguments of the given <b>invocation</b> using the given <b>matchers</b>.
-     * 
+     *
      * @param invocation
      *            that contain the arguments to capture
      * @param matchers
@@ -57,7 +57,7 @@ public class MatcherApplicationStrategy {
     /**
      * Applies the given {@link ArgumentMatcherAction} to all arguments and
      * corresponding matchers
-     * 
+     *
      * @param action
      *            must not be <code>null</code>
      * @return

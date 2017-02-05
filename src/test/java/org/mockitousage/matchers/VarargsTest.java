@@ -112,14 +112,14 @@ public class VarargsTest {
 
         verify(mock).varargs((String[])any()); // any() -> VarargMatcher
     }
-    
+
     @Test
     public void shouldMatchVarArgs_oneArgsOneAnyMatcher() {
         mock.varargs(1);
 
         verify(mock).varargs(any()); // any() -> VarargMatcher
     }
-    
+
     @Test
     public void shouldMatchVarArgs_twoArgsOneAnyMatcher() {
         mock.varargs(1, 2);
@@ -305,7 +305,7 @@ public class VarargsTest {
      * <li>#565 ArgumentCaptor should be type aware' are fixed this test must
      * succeed
      * </ul>
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -323,15 +323,15 @@ public class VarargsTest {
     @Test
     public void shouldNotMatchRegualrAndVaraArgs()   {
         mock.varargsString(1, "a","b");
-        
+
         exception.expect(ArgumentsAreDifferent.class);
-        
+
         verify(mock).varargsString(1);
     }
     @Test
     public void shouldNotMatchVaraArgs()   {
         when(mock.varargsObject(1, "a","b")).thenReturn("OK");
-        
+
         Assertions.assertThat(mock.varargsObject(1)).isNull();
     }
 

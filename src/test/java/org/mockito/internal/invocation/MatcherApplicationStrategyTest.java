@@ -39,7 +39,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     public void before() {
         recordAction = new RecordingAction();
     }
-    
+
     @Test
     public void shouldKnowWhenActualArgsSizeIsDifferent1() {
         // given
@@ -52,7 +52,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
         // then
         assertFalse(match);
     }
-    
+
     @Test
     public void shouldKnowWhenActualArgsSizeIsDifferent2() {
         // given
@@ -220,7 +220,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
             return true;
         }
     };
-    
+
     private static final ArgumentMatcherAction RETURN_ALWAYS_FALSE = new ArgumentMatcherAction() {
         @Override
         public boolean apply(ArgumentMatcher<?> matcher, Object argument) {

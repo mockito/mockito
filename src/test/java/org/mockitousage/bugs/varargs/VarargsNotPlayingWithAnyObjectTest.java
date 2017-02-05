@@ -19,7 +19,7 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
     interface VarargMethod {
         Object run(String... args);
     }
-    
+
     @Mock VarargMethod mock;
 
     @Test
@@ -30,7 +30,7 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
         verify(mock).run((String) anyObject(), (String) anyObject());
 
         verify(mock).run((String[]) anyVararg());
-        
+
         verify(mock, never()).run();
         verify(mock, never()).run(anyString(), eq("f"));
     }
@@ -50,7 +50,7 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
     @Test
     public void shouldStubUsingAnyVarargs() {
         when(mock.run((String[]) anyVararg())).thenReturn("foo");
-        
+
         assertEquals("foo", mock.run("a", "b"));
     }
 }

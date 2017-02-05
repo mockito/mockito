@@ -19,7 +19,7 @@ public class VerificationDataInOrderImpl implements VerificationDataInOrder {
     public VerificationDataInOrderImpl(InOrderContext inOrder, List<Invocation> allInvocations, MatchableInvocation wanted) {
         this.inOrder = inOrder;
         this.allInvocations = allInvocations;
-        this.wanted = wanted;        
+        this.wanted = wanted;
     }
 
     public List<Invocation> getAllInvocations() {

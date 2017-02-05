@@ -13,7 +13,7 @@ public interface ArgumentMatcherAction {
      * if not. In this case no more matchers and arguments will be passed by
      * {@link MatcherApplicationStrategy#forEachMatcherAndArgument(ArgumentMatcherAction)} to this method.
      * .
-     * 
+     *
      * @param matcher
      *            to process the argument, never <code>null</code>
      * @param argument
@@ -25,8 +25,8 @@ public interface ArgumentMatcherAction {
      *         argument should be passed
      *         <li><code>false</code> otherwise
      *         </ul>
-     * 
-     * 
+     *
+     *
      */
     boolean apply(ArgumentMatcher<?> matcher, Object argument);
 }

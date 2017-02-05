@@ -22,13 +22,13 @@ public class RunnerProvider {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        
+
         try {
             return (InternalRunner) constructor.newInstance(constructorArgs);
         } catch (InvocationTargetException e) {
             throw e;
         } catch (Exception e) {
-            throw new RuntimeException(e);        
+            throw new RuntimeException(e);
         }
     }
 }
