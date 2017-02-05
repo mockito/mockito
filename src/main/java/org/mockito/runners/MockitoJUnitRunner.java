@@ -49,7 +49,7 @@ public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {
 
     @Deprecated
     @Override
-    public void run(final RunNotifier notifier) {           
+    public void run(final RunNotifier notifier) {
         super.run(notifier);
     }
 

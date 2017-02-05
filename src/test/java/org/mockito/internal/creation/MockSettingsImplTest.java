@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MockSettingsImplTest extends TestBase {
 
     private MockSettingsImpl<?> mockSettingsImpl = new MockSettingsImpl<Object>();
-    
+
     @Mock private InvocationListener invocationListener;
 
     @Test(expected=MockitoException.class)
@@ -60,7 +60,7 @@ public class MockSettingsImplTest extends TestBase {
     public void shouldAllowMultipleInterfaces() {
         //when
         mockSettingsImpl.extraInterfaces(List.class, Set.class);
-        
+
         //then
         assertEquals(2, mockSettingsImpl.getExtraInterfaces().size());
         assertTrue(mockSettingsImpl.getExtraInterfaces().contains(List.class));
@@ -104,10 +104,10 @@ public class MockSettingsImplTest extends TestBase {
     public void shouldAddVerboseLoggingListenerOnlyOnce() {
         //given
         assertFalse(mockSettingsImpl.hasInvocationListeners());
-        
+
         //when
         mockSettingsImpl.verboseLogging().verboseLogging();
-        
+
         //then
         Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).hasSize(1);
     }
@@ -136,10 +136,10 @@ public class MockSettingsImplTest extends TestBase {
     public void canAddDuplicateInvocationListeners_ItsNotOurBusinessThere() {
         //given
         assertFalse(mockSettingsImpl.hasInvocationListeners());
-        
+
         //when
         mockSettingsImpl.invocationListeners(invocationListener, invocationListener).invocationListeners(invocationListener);
-        
+
         //then
         Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).containsSequence(invocationListener, invocationListener, invocationListener);
     }

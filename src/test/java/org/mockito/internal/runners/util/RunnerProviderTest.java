@@ -12,7 +12,7 @@ import org.mockitoutil.TestBase;
 import static junit.framework.TestCase.assertNotNull;
 
 public class RunnerProviderTest extends TestBase {
-    
+
     @Test
     public void shouldCreateRunnerInstance() throws Throwable {
         //given

@@ -12,7 +12,7 @@ import static junit.framework.TestCase.assertEquals;
 import static org.mockito.internal.util.Decamelizer.decamelizeMatcher;
 
 public class DecamelizerTest extends TestBase {
-    
+
     @Test
     public void shouldProduceDecentDescription() throws Exception {
         assertEquals("<Sentence with strong language>", decamelizeMatcher("SentenceWithStrongLanguage"));

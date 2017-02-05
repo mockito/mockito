@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 public class PluginStackTraceFilteringTest extends TestBase {
-    
+
     @Mock private IMethods mock;
 
     @After

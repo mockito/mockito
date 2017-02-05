@@ -27,7 +27,7 @@ public class ThreadsShareGenerouslyStubbedMockTest extends TestBase {
 
     private void performTest() throws InterruptedException {
         mock = mock(IMethods.class);
-        
+
         when(mock.simpleMethod("foo"))
             .thenReturn("foo")
             .thenReturn("bar")
@@ -35,7 +35,7 @@ public class ThreadsShareGenerouslyStubbedMockTest extends TestBase {
             .thenReturn("foo")
             .thenReturn("bar")
             .thenReturn("baz");
-        
+
         final Thread[] listeners = new Thread[100];
         for (int i = 0; i < listeners.length; i++) {
             listeners[i] = new Thread() {

@@ -18,10 +18,10 @@ public class TimesTest  {
 
     @Test
     public void shouldNotAllowNegativeNumberOfInvocations() throws Exception {
-       
+
     	exception.expect(MockitoException.class);
     	exception.expectMessage("Negative value is not allowed here");
-        
+
     	VerificationModeFactory.times(-50);
     }
 }

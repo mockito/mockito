@@ -16,7 +16,7 @@ import static junit.framework.TestCase.fail;
 import static org.mockito.Mockito.*;
 
 public class TimeoutTest extends TestBase {
-    
+
     @Mock
     VerificationMode mode;
     @Mock
@@ -49,7 +49,7 @@ public class TimeoutTest extends TestBase {
         doThrow(error).
         doThrow(error).
         when(mode).verify(data);
-        
+
         try {
             t.verify(data);
             fail();
@@ -57,7 +57,7 @@ public class TimeoutTest extends TestBase {
 
         verify(timer, times(4)).isCounting();
     }
-    
+
     @Test
     public void should_pass_even_if_first_verification_fails() {
         Timeout t = new Timeout(1, mode, timer);
@@ -67,7 +67,7 @@ public class TimeoutTest extends TestBase {
         doThrow(error).
         doNothing().
         when(mode).verify(data);
-        
+
         t.verify(data);
         verify(timer, times(3)).isCounting();
     }
@@ -75,7 +75,7 @@ public class TimeoutTest extends TestBase {
     @Test
     public void should_try_to_verify_correct_number_of_times() {
         Timeout t = new Timeout(10, mode, timer);
-        
+
         doThrow(error).when(mode).verify(data);
         when(timer.isCounting()).thenReturn(true, true, true, true, true, false);
 

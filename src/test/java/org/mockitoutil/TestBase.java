@@ -47,15 +47,15 @@ public class TestBase {
     public void init() {
         MockitoAnnotations.initMocks(this);
     }
-    
+
     public static void makeStackTracesClean() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
     }
-    
+
     public void resetState() {
         new StateMaster().reset();
     }
-    
+
     protected Invocation getLastInvocation() {
         return new MockitoCore().getLastInvocation();
     }

@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unchecked")
 public class AnyXMatchersAcceptNullsTest extends TestBase {
-    
+
     private IMethods mock;
 
     @Before
@@ -45,7 +45,7 @@ public class AnyXMatchersAcceptNullsTest extends TestBase {
         when(mock.forMap(anyMapOf(String.class, String.class))).thenReturn("2");
         when(mock.forCollection(anyCollectionOf(String.class))).thenReturn("3");
         when(mock.forSet(anySetOf(String.class))).thenReturn("4");
-        
+
         assertEquals(null, mock.oneArg((Object) null));
         assertEquals(null, mock.oneArg((String) null));
         assertEquals(null, mock.forList(null));
@@ -53,7 +53,7 @@ public class AnyXMatchersAcceptNullsTest extends TestBase {
         assertEquals(null, mock.forCollection(null));
         assertEquals(null, mock.forSet(null));
     }
-    
+
     @Test
     public void shouldNotAcceptNullInAllAnyPrimitiveWrapperMatchers() {
         when(mock.forInteger(anyInt())).thenReturn("0");
@@ -64,7 +64,7 @@ public class AnyXMatchersAcceptNullsTest extends TestBase {
         when(mock.forLong(anyLong())).thenReturn("5");
         when(mock.forFloat(anyFloat())).thenReturn("6");
         when(mock.forDouble(anyDouble())).thenReturn("7");
-        
+
         assertEquals(null, mock.forInteger(null));
         assertEquals(null, mock.forCharacter(null));
         assertEquals(null, mock.forShort(null));

@@ -22,13 +22,13 @@ import static org.mockito.Mockito.when;
 public class StubbingWithExtraAnswersTest extends TestBase {
 
     @Mock private IMethods mock;
-    
+
     @Test
     public void shouldWorkAsStandardMockito() throws Exception {
         //when
         List<Integer> list = asList(1, 2, 3);
         when(mock.objectReturningMethodNoArgs()).thenAnswer(AdditionalAnswers.returnsElementsOf(list));
-        
+
         //then
         assertEquals(1, mock.objectReturningMethodNoArgs());
         assertEquals(2, mock.objectReturningMethodNoArgs());
@@ -43,13 +43,13 @@ public class StubbingWithExtraAnswersTest extends TestBase {
         //when
         List<Integer> list = asList(1, null);
         when(mock.objectReturningMethodNoArgs()).thenAnswer(AdditionalAnswers.returnsElementsOf(list));
-        
+
         //then
         assertEquals(1, mock.objectReturningMethodNoArgs());
         assertEquals(null, mock.objectReturningMethodNoArgs());
         assertEquals(null, mock.objectReturningMethodNoArgs());
     }
-    
+
     @Test
     public void shouldScreamWhenNullPassed() throws Exception {
         try {

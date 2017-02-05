@@ -72,7 +72,7 @@ public class CapturingArgumentsTest extends TestBase {
         verify(emailService).sendEmailTo(argument.capture());
         assertEquals(12, argument.getValue().getAge());
     }
-    
+
     @Test
     public void should_allow_assertions_on_all_captured_arguments() {
         //given
@@ -86,7 +86,7 @@ public class CapturingArgumentsTest extends TestBase {
         assertEquals(11, argument.getAllValues().get(0).getAge());
         assertEquals(12, argument.getAllValues().get(1).getAge());
     }
-    
+
     @Test
     public void should_allow_assertions_on_last_argument() {
         //given
@@ -99,12 +99,12 @@ public class CapturingArgumentsTest extends TestBase {
         verify(emailService, times(3)).sendEmailTo(argument.capture());
         assertEquals(13, argument.getValue().getAge());
     }
-    
+
     @Test
     public void should_print_captor_matcher() {
         //given
         ArgumentCaptor<Person> person = ArgumentCaptor.forClass(Person.class);
-        
+
         try {
             //when
             verify(emailService).sendEmailTo(person.capture());
@@ -114,7 +114,7 @@ public class CapturingArgumentsTest extends TestBase {
             assertThat(e).hasMessageContaining("<Capturing argument>");
         }
     }
-    
+
     @Test
     public void should_allow_assertions_on_captured_null() {
         //given
@@ -142,34 +142,34 @@ public class CapturingArgumentsTest extends TestBase {
         ArgumentCaptor<List<?>> argument = ArgumentCaptor.forClass(ArrayList.class);
         assertNotNull(argument);
     }
-    
+
     @Test
     public void should_allow_capturing_for_stubbing() {
         //given
         ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
         when(emailService.sendEmailTo(argument.capture())).thenReturn(false);
-        
+
         //when
         emailService.sendEmailTo(new Person(10));
-        
+
         //then
         assertEquals(10, argument.getValue().getAge());
     }
-    
+
     @Test
     public void should_capture_when_stubbing_only_when_entire_invocation_matches() {
         //given
         ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
         when(mock.simpleMethod(argument.capture(), eq(2))).thenReturn("blah");
-        
+
         //when
         mock.simpleMethod("foo", 200);
         mock.simpleMethod("bar", 2);
-        
+
         //then
         Assertions.assertThat(argument.getAllValues()).containsOnly("bar");
     }
-    
+
     @Test
     public void should_say_something_smart_when_misused() {
         ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
@@ -178,7 +178,7 @@ public class CapturingArgumentsTest extends TestBase {
             fail();
         } catch (MockitoException expected) { }
     }
-    
+
     @Test
     public void should_capture_when_full_arg_list_matches() throws Exception {
         //given
@@ -193,7 +193,7 @@ public class CapturingArgumentsTest extends TestBase {
         assertEquals(1, captor.getAllValues().size());
         assertEquals("foo", captor.getValue());
     }
-    
+
     @Test
     public void should_capture_int_by_creating_captor_with_primitive_wrapper() {
         //given
@@ -201,7 +201,7 @@ public class CapturingArgumentsTest extends TestBase {
 
         //when
         mock.intArgumentMethod(10);
-        
+
         //then
         verify(mock).intArgumentMethod(argument.capture());
         assertEquals(10, (int) argument.getValue());
@@ -211,10 +211,10 @@ public class CapturingArgumentsTest extends TestBase {
     public void should_capture_int_by_creating_captor_with_primitive() throws Exception {
         //given
         ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(int.class);
-        
+
         //when
         mock.intArgumentMethod(10);
-        
+
         //then
         verify(mock).intArgumentMethod(argument.capture());
         assertEquals(10, (int) argument.getValue());

@@ -14,20 +14,20 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 public class DescriptionTest {
-    
+
     @Mock
     private VerificationMode mockVerificationMode;
-    
+
     @Mock
     private VerificationData mockVerificationData;
-    
+
     @Before
     public void setUp() {
         initMocks(this);
     }
 
     /**
-     * Test of verify method, of class Description. This test validates that the custom message is prepended to the 
+     * Test of verify method, of class Description. This test validates that the custom message is prepended to the
      * error message when verification fails.
      */
     @Test
@@ -37,14 +37,14 @@ public class DescriptionTest {
         String expectedResult = failureMessage + "\n" + exceptionMessage;
         MockitoAssertionError error = new MockitoAssertionError(exceptionMessage);
         doThrow(error).when(mockVerificationMode).verify(mockVerificationData);
-        
+
         Description instance = new Description(mockVerificationMode, failureMessage);
-        
+
         try {
             instance.verify(mockVerificationData);
             verify(mockVerificationMode).verify(mockVerificationData);
             fail("Should not have made it this far");
-            
+
         } catch (MockitoAssertionError e) {
             assertEquals(expectedResult, e.getMessage());
         }

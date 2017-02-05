@@ -12,7 +12,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.mockito.internal.matchers.Equality.areEqual;
 
 public class EqualityTest extends TestBase {
-    
+
     @Test
     public void shouldKnowIfObjectsAreEqual() throws Exception {
         int[] arr = new int[] {1, 2};

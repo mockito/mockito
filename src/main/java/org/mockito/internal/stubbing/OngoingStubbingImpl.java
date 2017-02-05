@@ -13,7 +13,7 @@ import static org.mockito.internal.exceptions.Reporter.incorrectUseOfApi;
 import java.util.List;
 
 public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
-    
+
     private final InvocationContainerImpl invocationContainerImpl;
 
     public OngoingStubbingImpl(InvocationContainerImpl invocationContainerImpl) {

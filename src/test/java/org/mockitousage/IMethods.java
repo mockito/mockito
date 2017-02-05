@@ -11,89 +11,89 @@ import java.util.*;
 public interface IMethods {
 
     boolean booleanReturningMethod();
-    
+
     Boolean booleanObjectReturningMethod();
 
     byte byteReturningMethod();
-    
+
     Byte byteObjectReturningMethod();
 
     short shortReturningMethod();
-    
+
     Short shortObjectReturningMethod();
 
     char charReturningMethod();
-    
+
     Character charObjectReturningMethod();
 
     int intReturningMethod();
-    
+
     Integer integerReturningMethod();
 
     long longReturningMethod();
-    
+
     Long longObjectReturningMethod();
 
     float floatReturningMethod();
-    
+
     Float floatObjectReturningMethod();
 
     double doubleReturningMethod();
-    
+
     Double doubleObjectReturningMethod();
 
     Object objectReturningMethod(Object ... objects);
-    
+
     Object objectReturningMethodNoArgs();
 
     String oneArg(boolean value);
-    
+
     String oneArg(Boolean value);
 
     String forBoolean(Boolean value);
 
     String oneArg(byte value);
-    
+
     String oneArg(Byte value);
 
     String forByte(Byte value);
-    
+
     String oneArg(short value);
 
     String oneArg(Short value);
-    
+
     String forShort(Short value);
-    
+
     String oneArg(char value);
-    
+
     String oneArg(Character value);
-    
+
     String forCharacter(Character value);
 
     String oneArg(int value);
-    
+
     String oneArg(Integer value);
-    
+
     String forInteger(Integer value);
 
     String oneArg(long value);
 
     String oneArg(Long value);
-    
+
     String forLong(Long value);
-    
+
     String oneArg(float value);
 
     String oneArg(Float value);
-    
+
     String forFloat(Float value);
-    
+
     String oneArg(double value);
 
     String oneArg(Double value);
-    
+
     String forDouble(Double value);
-    
+
     String oneArg(Object value);
 
     String oneArg(String value);
@@ -105,25 +105,25 @@ public interface IMethods {
     String throwsError(int count);
 
     String simpleMethod();
-    
+
     String differentMethod();
-    
+
     String differentMethod(String argument);
-    
+
     String otherMethod();
 
     String simpleMethod(String argument);
-    
+
     String simpleMethod(Collection<?> collection);
-    
+
     String simpleMethod(Object argument);
-    
+
     String simpleMethod(int argument);
-    
+
     String simpleMethod(String argOne, Integer argTwo);
-    
+
     String simpleMethod(String one, Integer two, Integer three, Integer four, Integer five);
-    
+
     String simpleMethod(String one, String[] two);
 
     Object threeArgumentMethod(int valueOne, Object valueTwo, String valueThree);
@@ -153,8 +153,8 @@ public interface IMethods {
     String oneArray(short[] array);
 
     String oneArray(Object[] array);
-    
-    String canThrowException() throws CharacterCodingException; 
+
+    String canThrowException() throws CharacterCodingException;
 
     String oneArray(String[] array);
 

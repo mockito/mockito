@@ -19,7 +19,7 @@ import org.mockito.stubbing.VoidAnswer5;
 
 /**
  * Functional interfaces to make it easy to implement answers in Java 8
- * 
+ *
  * @since 2.1.0
  */
 public class AnswerFunctionalInterfaces {

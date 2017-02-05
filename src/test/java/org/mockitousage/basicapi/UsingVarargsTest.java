@@ -27,28 +27,28 @@ public class UsingVarargsTest extends TestBase {
         boolean withBooleanVarargs(int value, boolean... b);
         int foo(Object ... objects);
     }
-    
+
     @Mock IVarArgs mock;
 
     @Test
     public void shouldStubStringVarargs() {
         when(mock.withStringVarargsReturningString(1)).thenReturn("1");
         when(mock.withStringVarargsReturningString(2, "1", "2", "3")).thenReturn("2");
-        
+
         RuntimeException expected = new RuntimeException();
         doThrow(expected).when(mock).withStringVarargs(3, "1", "2", "3", "4");
 
         assertEquals("1", mock.withStringVarargsReturningString(1));
         assertEquals(null, mock.withStringVarargsReturningString(2));
-        
+
         assertEquals("2", mock.withStringVarargsReturningString(2, "1", "2", "3"));
         assertEquals(null, mock.withStringVarargsReturningString(2, "1", "2"));
         assertEquals(null, mock.withStringVarargsReturningString(2, "1", "2", "3", "4"));
         assertEquals(null, mock.withStringVarargsReturningString(2, "1", "2", "9999"));
-        
+
         mock.withStringVarargs(3, "1", "2", "3", "9999");
         mock.withStringVarargs(9999, "1", "2", "3", "4");
-        
+
         try {
             mock.withStringVarargs(3, "1", "2", "3", "4");
             fail();
@@ -56,22 +56,22 @@ public class UsingVarargsTest extends TestBase {
             assertEquals(expected, e);
         }
     }
-    
+
     @Test
     public void shouldStubBooleanVarargs() {
         when(mock.withBooleanVarargs(1)).thenReturn(true);
         when(mock.withBooleanVarargs(1, true, false)).thenReturn(true);
-        
+
         assertEquals(true, mock.withBooleanVarargs(1));
         assertEquals(false, mock.withBooleanVarargs(9999));
-        
+
         assertEquals(true, mock.withBooleanVarargs(1, true, false));
         assertEquals(false, mock.withBooleanVarargs(1, true, false, true));
         assertEquals(false, mock.withBooleanVarargs(2, true, false));
         assertEquals(false, mock.withBooleanVarargs(1, true));
         assertEquals(false, mock.withBooleanVarargs(1, false, false));
     }
-    
+
     @Test
     public void shouldVerifyStringVarargs() {
         mock.withStringVarargs(1);
@@ -113,27 +113,27 @@ public class UsingVarargsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {}
     }
-    
+
     @Test
     public void shouldVerifyWithAnyObject() {
         Foo foo = Mockito.mock(Foo.class);
-        foo.varArgs("");        
+        foo.varArgs("");
         Mockito.verify(foo).varArgs((String[]) Mockito.anyObject());
         Mockito.verify(foo).varArgs((String) Mockito.anyObject());
-    }   
-    
+    }
+
     @Test
     public void shouldVerifyWithNullVarArgArray() {
         Foo foo = Mockito.mock(Foo.class);
-        foo.varArgs((String[]) null);    
+        foo.varArgs((String[]) null);
         Mockito.verify(foo).varArgs((String[]) Mockito.anyObject());
         Mockito.verify(foo).varArgs((String[]) null);
-    }  
-    
-    public class Foo {      
-        public void varArgs(String... args) {}       
     }
-    
+
+    public class Foo {
+        public void varArgs(String... args) {}
+    }
+
     interface MixedVarargs {
         String doSomething(String one, String... varargs);
         String doSomething(String one, String two, String... varargs);
@@ -149,10 +149,10 @@ public class UsingVarargsTest extends TestBase {
 
         String result = mixedVarargs.doSomething("hello",(String[]) null);
         assertEquals("hello", result);
-        
+
         verify(mixedVarargs).doSomething("hello", (String[])null);
     }
-    
+
     @SuppressWarnings("all")
     @Test
     public void shouldStubCorrectlyWhenDoubleStringAndMixedVarargsUsed() {
@@ -163,7 +163,7 @@ public class UsingVarargsTest extends TestBase {
         String result = mixedVarargs.doSomething("one", "two", (String[])null);
         assertEquals("hello", result);
     }
-    
+
     @Test
     //See bug #157
     public void shouldMatchEasilyEmptyVararg() throws Exception {
@@ -172,5 +172,5 @@ public class UsingVarargsTest extends TestBase {
 
         //then
         assertEquals(-1, mock.foo());
-    } 
+    }
 }

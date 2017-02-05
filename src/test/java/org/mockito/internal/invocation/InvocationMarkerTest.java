@@ -23,14 +23,14 @@ public class InvocationMarkerTest extends TestBase {
         Invocation i = new InvocationBuilder().toInvocation();
         InvocationMatcher im = new InvocationBuilder().toInvocationMatcher();
         assertFalse(i.isVerified());
-        
+
         //when
         InvocationMarker.markVerified(Arrays.asList(i), im);
-        
+
         //then
         assertTrue(i.isVerified());
     }
-    
+
     @Test
     public void shouldCaptureArguments() {
         //given
@@ -40,27 +40,27 @@ public class InvocationMarkerTest extends TestBase {
             public void captureArgumentsFrom(Invocation i) {
                 box.set(i);
             }};
-        
+
         //when
         InvocationMarker.markVerified(Arrays.asList(i), c);
-        
+
         //then
         assertEquals(i, box.get());
     }
-    
+
     @Test
     public void shouldMarkInvocationsAsVerifiedInOrder() {
         //given
         InOrderContextImpl context = new InOrderContextImpl();
-        
+
         Invocation i = new InvocationBuilder().toInvocation();
         InvocationMatcher im = new InvocationBuilder().toInvocationMatcher();
         assertFalse(context.isVerified(i));
         assertFalse(i.isVerified());
-        
+
         //when
         InvocationMarker.markVerifiedInOrder(Arrays.asList(i), im, context);
-        
+
         //then
         assertTrue(context.isVerified(i));
         assertTrue(i.isVerified());

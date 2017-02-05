@@ -17,12 +17,12 @@ import static org.mockito.Mockito.verify;
 
 //see issue 188
 public class CaptorAnnotationAutoboxingTest extends TestBase {
-    
+
     interface Fun {
         void doFun(double prmitive);
         void moreFun(int howMuch);
     }
-    
+
     @Mock Fun fun;
     @Captor ArgumentCaptor<Double> captor;
 
@@ -30,14 +30,14 @@ public class CaptorAnnotationAutoboxingTest extends TestBase {
     public void shouldAutoboxSafely() {
         //given
         fun.doFun(1.0);
-        
+
         //then
         verify(fun).doFun(captor.capture());
         assertEquals(1.0, captor.getValue());
     }
 
     @Captor ArgumentCaptor<Integer> intCaptor;
-    
+
     @Test
     public void shouldAutoboxAllPrimitives() {
         verify(fun, never()).moreFun(intCaptor.capture());

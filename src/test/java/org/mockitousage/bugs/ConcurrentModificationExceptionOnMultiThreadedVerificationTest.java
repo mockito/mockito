@@ -24,13 +24,13 @@ import static org.mockito.Mockito.*;
 public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
 
     int nThreads = 1;
-    
+
     static final int TIMES = 100;
     static final int INTERVAL_MILLIS = 10;
 
     ITarget target = Mockito.mock(ITarget.class);
     ExecutorService fixedThreadPool;
-    
+
     @Before
     public void setUp() {
         target = Mockito.mock(ITarget.class);
@@ -44,27 +44,27 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
 
         reset(target);
         startInvocations();
-        
+
         verify(target, timeout(expectedMaxTestLength).times(TIMES * nThreads)).targetMethod("arg");
         verifyNoMoreInteractions(target);
     }
 
     private void startInvocations() throws InterruptedException,
             ExecutionException {
-        
+
         for(int i=0; i<nThreads; i++) {
             fixedThreadPool.submit(new TargetInvoker(i));
         }
 
     }
-    
+
     public class TargetInvoker implements Callable<Object> {
         private final int seq;
 
         TargetInvoker(int seq) {
             this.seq = seq;
         }
-        
+
         public Object call() throws Exception {
             System.err.println("started " + seq);
             for (int i = 0; i < TIMES; i++) {
@@ -75,11 +75,11 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
             System.err.println("finished" + seq);
             return seq;
         }
-        
+
     }
-    
+
     public interface ITarget {
         String targetMethod(String arg);
     }
-    
+
 }

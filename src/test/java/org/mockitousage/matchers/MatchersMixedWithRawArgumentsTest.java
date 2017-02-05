@@ -16,9 +16,9 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 
 public class MatchersMixedWithRawArgumentsTest extends TestBase {
-    
+
     @Mock private IMethods mock;
-  
+
     //description of an idea:
     //types of arguments and descriptor value that identifies matcher:
     //Object: objenesis instance to check for identity
@@ -30,7 +30,7 @@ public class MatchersMixedWithRawArgumentsTest extends TestBase {
     //char: 'x'
     //double: max-1
     //float: max-1
-    
+
     //1. how objenesis deal with primitive arrays (like byte[])?
     //2. Analisys of all matchers used by R2 project finished before anyObject() and so far proves it's a good idea.
 
@@ -39,7 +39,7 @@ public class MatchersMixedWithRawArgumentsTest extends TestBase {
     public void shouldAllowMixingRawArgumentsWithMatchers() {
         mock.varargs("1", "2", "3");
         verify(mock).varargs("1", anyString(), "3");
-        
+
         verify(mock).varargs(anyBoolean(), false);
     }
 }

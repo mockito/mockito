@@ -15,7 +15,7 @@ public class ArgumentsAreDifferent extends MockitoAssertionError {
     public ArgumentsAreDifferent(String message) {
         super(message);
     }
-    
+
     @Override
     public String toString() {
         return new RemoveFirstLine().of(super.toString());

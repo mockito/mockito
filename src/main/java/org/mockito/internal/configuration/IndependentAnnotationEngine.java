@@ -58,22 +58,22 @@ public class IndependentAnnotationEngine implements AnnotationEngine, org.mockit
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             boolean alreadyAssigned = false;
-            for(Annotation annotation : field.getAnnotations()) {           
+            for(Annotation annotation : field.getAnnotations()) {
                 Object mock = createMockFor(annotation, field);
                 if (mock != null) {
-                    throwIfAlreadyAssigned(field, alreadyAssigned);                    
-                    alreadyAssigned = true;                    
+                    throwIfAlreadyAssigned(field, alreadyAssigned);
+                    alreadyAssigned = true;
                     try {
                         setField(testInstance, field,mock);
                     } catch (Exception e) {
                         throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
                                 + annotation, e);
                     }
-                }        
+                }
             }
         }
     }
-    
+
     void throwIfAlreadyAssigned(Field field, boolean alreadyAssigned) {
         if (alreadyAssigned) {
             throw moreThanOneAnnotationNotAllowed(field.getName());

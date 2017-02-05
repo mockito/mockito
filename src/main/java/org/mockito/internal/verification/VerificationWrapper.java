@@ -17,14 +17,14 @@ public abstract class VerificationWrapper<WrapperType extends VerificationMode> 
 
     public void verify(VerificationData data) {
         wrappedVerification.verify(data);
-    } 
-    
+    }
+
     protected abstract VerificationMode copySelfWithNewVerificationMode(VerificationMode verificationMode);
 
     public VerificationMode times(int wantedNumberOfInvocations) {
         return copySelfWithNewVerificationMode(VerificationModeFactory.times(wantedNumberOfInvocations));
     }
-    
+
     public VerificationMode never() {
         return copySelfWithNewVerificationMode(VerificationModeFactory.atMost(0));
     }
@@ -44,5 +44,5 @@ public abstract class VerificationWrapper<WrapperType extends VerificationMode> 
     public VerificationMode only() {
         return copySelfWithNewVerificationMode(VerificationModeFactory.only());
     }
-    
+
 }

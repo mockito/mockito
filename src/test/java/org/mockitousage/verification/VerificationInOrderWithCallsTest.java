@@ -122,7 +122,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
 
         // Then - expected exception thrown
     }
-    
+
 
     @Test
     public void shouldAllowSequentialCallsToCallsForSingleMethod(){
@@ -184,8 +184,8 @@ public class VerificationInOrderWithCallsTest extends TestBase {
 
         // Then - no exception thrown
     }
-    
-    
+
+
     @Test
     public void shouldAllowFewerCallsForSingleMethod(){
         // Given
@@ -218,7 +218,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
         verifier.verify( mockOne, calls(1)).oneArg( 2 );
         verifier.verify( mockOne, calls(1)).oneArg( 1 );
-        
+
         exceptionRule.expect( NoInteractionsWanted.class );
 
         // When

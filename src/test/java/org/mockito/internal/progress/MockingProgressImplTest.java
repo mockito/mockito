@@ -25,20 +25,20 @@ public class MockingProgressImplTest extends TestBase {
     public void setup() {
         mockingProgress = new MockingProgressImpl();
     }
-    
+
     @Test
     public void shouldStartVerificationAndPullVerificationMode() throws Exception {
         assertNull(mockingProgress.pullVerificationMode());
-        
+
         VerificationMode mode = VerificationModeFactory.times(19);
-        
+
         mockingProgress.verificationStarted(mode);
-        
+
         assertSame(mode, mockingProgress.pullVerificationMode());
-        
+
         assertNull(mockingProgress.pullVerificationMode());
     }
-    
+
     @Test
     public void shouldCheckIfVerificationWasFinished() throws Exception {
         mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());

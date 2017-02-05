@@ -67,7 +67,7 @@ public class MockScanner {
     private Object preparedMock(Object instance, Field field) {
         if (isAnnotatedByMockOrSpy(field)) {
             return instance;
-        } 
+        }
         if (isMockOrSpy(instance)) {
             MockUtil.maybeRedefineMockName(instance, field.getName());
             return instance;

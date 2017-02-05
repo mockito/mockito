@@ -122,58 +122,58 @@ public class HashCodeAndEqualsSafeSetTest {
 
         assertThat(mocks.toArray(new UnmockableHashCodeAndEquals[0])[0]).isSameAs(mock1);
     }
-    
-    @Test(expected=CloneNotSupportedException.class)    
+
+    @Test(expected=CloneNotSupportedException.class)
     public void cloneIsNotSupported() throws CloneNotSupportedException{
         HashCodeAndEqualsSafeSet.of().clone();
     }
-    
+
     @Test
     public void isEmptyAfterClear() throws Exception {
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         set.clear();
-        
+
         assertThat(set).isEmpty();
     }
-    
+
     @Test
     public void isEqualToItself(){
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         assertThat(set).isEqualTo(set);
     }
-    
+
     @Test
     public void isNotEqualToAnOtherTypeOfSetWithSameContent(){
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of();
         assertThat(set).isNotEqualTo(new HashSet<Object>());
     }
-    
+
     @Test
     public void isNotEqualWhenContentIsDifferent(){
-       
+
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         assertThat(set).isNotEqualTo(HashCodeAndEqualsSafeSet.of());
     }
-    
+
     @Test
     public void hashCodeIsEqualIfContentIsEqual(){
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         assertThat(set.hashCode()).isEqualTo(HashCodeAndEqualsSafeSet.of(mock1).hashCode());
     }
-    
+
     @Test
     public void toStringIsNotNullOrEmpty() throws Exception {
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         assertThat(set.toString()).isNotEmpty();
     }
-    
+
     @Test
     public void removeByIterator() throws Exception {
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         Iterator<Object> iterator = set.iterator();
         iterator.next();
         iterator.remove();
-        
+
         assertThat(set).isEmpty();
     }
 

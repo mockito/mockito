@@ -17,7 +17,7 @@ public class Discrepancy {
     public int getWantedCount() {
         return wantedCount;
     }
-    
+
     public String getPluralizedWantedCount() {
         return Pluralizer.pluralize(wantedCount);
     }
