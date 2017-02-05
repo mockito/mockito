@@ -11,6 +11,7 @@ apply from: "$rootDir/gradle/java-library.gradle"
 
 dependencies {
     compile project.rootProject
+    testCompile 'junit:junit:4.12'
 }
 
 apply from: "$rootDir/gradle/publishable-java-library.gradle"
