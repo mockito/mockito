@@ -15,7 +15,7 @@ import static junit.framework.TestCase.assertTrue;
 
 public class ObjectMethodsGuruTest extends TestBase {
 
-    
+
     private interface HasCompareToButDoesNotImplementComparable {
         int compareTo(HasCompareToButDoesNotImplementComparable other);
     }
@@ -26,7 +26,7 @@ public class ObjectMethodsGuruTest extends TestBase {
         int compareTo(String redHerring);
         int compareTo(HasCompare redHerring);
     }
-    
+
     @Test
     public void shouldKnowToStringMethod() throws Exception {
         assertFalse(ObjectMethodsGuru.isToStringMethod(Object.class.getMethod("equals", Object.class)));

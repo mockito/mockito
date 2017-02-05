@@ -40,9 +40,9 @@ import org.mockito.internal.matchers.CapturingMatcher;
  *
  * <p>
  * In a way ArgumentCaptor is related to custom argument matchers (see javadoc for {@link ArgumentMatcher} class).
- * Both techniques can be used for making sure certain arguments where passed to mocks. 
+ * Both techniques can be used for making sure certain arguments where passed to mocks.
  * However, ArgumentCaptor may be a better fit if:
- * <ul>  
+ * <ul>
  * <li>custom argument matcher is not likely to be reused</li>
  * <li>you just need it to assert on argument values to complete verification</li>
  * </ul>
@@ -60,7 +60,7 @@ import org.mockito.internal.matchers.CapturingMatcher;
  * @since 1.8.0
  */
 public class ArgumentCaptor<T> {
-    
+
 
     private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
     private final Class<? extends T> clazz;
@@ -73,10 +73,10 @@ public class ArgumentCaptor<T> {
      * Use it to capture the argument. This method <b>must be used inside of verification</b>.
      * <p>
      * Internally, this method registers a special implementation of an {@link ArgumentMatcher}.
-     * This argument matcher stores the argument value so that you can use it later to perform assertions.  
+     * This argument matcher stores the argument value so that you can use it later to perform assertions.
      * <p>
      * See examples in javadoc for {@link ArgumentCaptor} class.
-     * 
+     *
      * @return null or default values
      */
     public T capture() {
@@ -90,7 +90,7 @@ public class ArgumentCaptor<T> {
      * If verified method was called multiple times then this method it returns the latest captured value.
      * <p>
      * See examples in javadoc for {@link ArgumentCaptor} class.
-     * 
+     *
      * @return captured argument value
      */
     public T getValue() {
@@ -101,14 +101,14 @@ public class ArgumentCaptor<T> {
      * Returns all captured values. Use it when capturing varargs or when the verified method was called multiple times.
      * When varargs method was called multiple times, this method returns merged list of all values from all invocations.
      * <p>
-     * Example: 
+     * Example:
      * <pre class="code"><code class="java">
      *   mock.doSomething(new Person("John");
      *   mock.doSomething(new Person("Jane");
      *
      *   ArgumentCaptor&lt;Person&gt; peopleCaptor = ArgumentCaptor.forClass(Person.class);
      *   verify(mock, times(2)).doSomething(peopleCaptor.capture());
-     *   
+     *
      *   List&lt;Person&gt; capturedPeople = peopleCaptor.getAllValues();
      *   assertEquals("John", capturedPeople.get(0).getName());
      *   assertEquals("Jane", capturedPeople.get(1).getName());
@@ -126,7 +126,7 @@ public class ArgumentCaptor<T> {
      *   assertEquals(expected, peopleCaptor.getAllValues());
      * </code></pre>
      * See more examples in javadoc for {@link ArgumentCaptor} class.
-     * 
+     *
      * @return captured argument value
      */
     public List<T> getAllValues() {

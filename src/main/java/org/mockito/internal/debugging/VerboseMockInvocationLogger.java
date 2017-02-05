@@ -12,8 +12,8 @@ import org.mockito.listeners.MethodInvocationReport;
 
 /**
  * Logs all invocations to standard output.
- * 
- * Used for debugging interactions with a mock. 
+ *
+ * Used for debugging interactions with a mock.
  */
 public class VerboseMockInvocationLogger implements InvocationListener {
 
@@ -68,9 +68,9 @@ public class VerboseMockInvocationLogger implements InvocationListener {
     private void printFooter() {
         printStream.println("");
     }
-    
+
     private void printlnIndented(String message) {
         printStream.println("   " + message);
     }
-    
+
 }

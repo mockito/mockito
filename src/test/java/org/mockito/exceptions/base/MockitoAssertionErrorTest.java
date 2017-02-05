@@ -16,7 +16,7 @@ public class MockitoAssertionErrorTest extends TestBase {
     private void throwIt() {
         throw new MockitoAssertionError("boom");
     }
-    
+
     @Test
     public void shouldKeepUnfilteredStackTrace() {
         try {
@@ -26,7 +26,7 @@ public class MockitoAssertionErrorTest extends TestBase {
             assertEquals("throwIt", e.getUnfilteredStackTrace()[0].getMethodName());
         }
     }
-    
+
     @Test
     public void should_prepend_message_to_original() {
         MockitoAssertionError original = new MockitoAssertionError("original message");

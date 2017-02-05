@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Listeners(MockitoTestNGListener.class)
 public class EnsureMocksAreInitializedBeforeBeforeClassMethodTest {
-    
+
     @Mock Observer observer;
 
     @BeforeClass

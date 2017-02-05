@@ -17,7 +17,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
 
 public class GenericMetadataSupportTest {
-  
+
     interface GenericsSelfReference<T extends GenericsSelfReference<T>> {
         T self();
     }

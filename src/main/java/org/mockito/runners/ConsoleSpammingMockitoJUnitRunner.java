@@ -31,27 +31,27 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner implements Filtera
 
     private final MockitoLogger logger;
     private final InternalRunner runner;
-    
+
     public ConsoleSpammingMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
         this(new ConsoleMockitoLogger(), new RunnerFactory().create(klass));
     }
-    
+
     ConsoleSpammingMockitoJUnitRunner(MockitoLogger logger, InternalRunner runner) {
         this.runner = runner;
         this.logger = logger;
     }
-    
+
     @Override
     public void run(RunNotifier notifier) {
         RunListener listener = new RunListener() {
             WarningsCollector warningsCollector;
-            
+
             @Override
             public void testStarted(Description description) throws Exception {
                 warningsCollector = new WarningsCollector();
             }
-            
-            @Override public void testFailure(Failure failure) throws Exception {                
+
+            @Override public void testFailure(Failure failure) throws Exception {
                 logger.log(warningsCollector.getWarnings());
             }
         };
@@ -65,7 +65,7 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner implements Filtera
     public Description getDescription() {
         return runner.getDescription();
     }
-    
+
     public void filter(Filter filter) throws NoTestsRemainException {
         //filter is required because without it UnrootedTests show up in Eclipse
         runner.filter(filter);

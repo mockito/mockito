@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class VerificationInOrderTest extends TestBase {
-    
+
     private IMethods mockOne;
     private IMethods mockTwo;
     private IMethods mockThree;
@@ -29,33 +29,33 @@ public class VerificationInOrderTest extends TestBase {
         mockOne = mock(IMethods.class);
         mockTwo = mock(IMethods.class);
         mockThree = mock(IMethods.class);
-        
+
         inOrder = inOrder(mockOne, mockTwo, mockThree);
     }
-    
+
     @Test
     public void shouldVerifySingleMockInOrderAndNotInOrder() {
         mockOne = mock(IMethods.class);
         inOrder = inOrder(mockOne);
-        
+
         mockOne.simpleMethod(1);
         mockOne.simpleMethod(2);
-        
+
         verify(mockOne).simpleMethod(2);
         verify(mockOne).simpleMethod(1);
-        
+
         inOrder.verify(mockOne).simpleMethod(2);
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
         } catch (VerificationInOrderFailure e) {}
-    } 
-    
+    }
+
     @Test
     public void shouldMessagesPointToProperMethod() {
         mockTwo.differentMethod();
         mockOne.simpleMethod();
-        
+
         try {
             inOrder.verify(mockOne, atLeastOnce()).differentMethod();
             fail();
@@ -63,7 +63,7 @@ public class VerificationInOrderTest extends TestBase {
             assertThat(e).hasMessageContaining("differentMethod()");
         }
     }
-    
+
     @Test
     public void shouldVerifyInOrderWhenTwoChunksAreEqual() {
         mockOne.simpleMethod();
@@ -71,7 +71,7 @@ public class VerificationInOrderTest extends TestBase {
         mockTwo.differentMethod();
         mockOne.simpleMethod();
         mockOne.simpleMethod();
-        
+
         inOrder.verify(mockOne, times(2)).simpleMethod();
         inOrder.verify(mockTwo).differentMethod();
         inOrder.verify(mockOne, times(2)).simpleMethod();
@@ -80,7 +80,7 @@ public class VerificationInOrderTest extends TestBase {
             fail();
         } catch (VerificationInOrderFailure e) {}
     }
-    
+
     @Test
     public void shouldVerifyInOrderUsingMatcher() {
         mockOne.simpleMethod(1);
@@ -88,9 +88,9 @@ public class VerificationInOrderTest extends TestBase {
         mockTwo.differentMethod();
         mockOne.simpleMethod(3);
         mockOne.simpleMethod(4);
-        
+
         verify(mockOne, times(4)).simpleMethod(anyInt());
-        
+
         inOrder.verify(mockOne, times(2)).simpleMethod(anyInt());
         inOrder.verify(mockTwo).differentMethod();
         inOrder.verify(mockOne, times(2)).simpleMethod(anyInt());

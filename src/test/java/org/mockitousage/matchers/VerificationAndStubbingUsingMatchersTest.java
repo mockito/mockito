@@ -26,7 +26,7 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         two = mock(IMethods.class);
         three = mock(IMethods.class);
     }
-    
+
     @Test
     public void shouldStubUsingMatchers() {
         when(one.simpleMethod(2)).thenReturn("2");
@@ -35,19 +35,19 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
 
         assertEquals(null, one.simpleMethod(1));
         assertEquals("2", one.simpleMethod(2));
-        
+
         assertEquals("any", two.simpleMethod("two"));
         assertEquals("any", two.simpleMethod("two again"));
-        
+
         assertEquals(null, three.simpleMethod("three"));
         assertEquals(null, three.simpleMethod("three again"));
-       
+
         try {
             three.simpleMethod("test three again");
             fail();
         } catch (RuntimeException e) {}
     }
-    
+
     @Test
     public void shouldVerifyUsingMatchers() {
         doThrow(new RuntimeException()).when(one).oneArg(true);
@@ -61,7 +61,7 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         one.simpleMethod(100);
         two.simpleMethod("test Mockito");
         three.varargsObject(10, "first arg", "second arg");
-        
+
         assertEquals("stubbed", three.varargsObject(5, "first arg", "second arg"));
 
         verify(one).oneArg(eq(true));
@@ -69,9 +69,9 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         verify(two).simpleMethod(startsWith("test"));
         verify(three).varargsObject(5, "first arg", "second arg");
         verify(three).varargsObject(eq(10), eq("first arg"), startsWith("second"));
-        
+
         verifyNoMoreInteractions(one, two, three);
-        
+
         try {
             verify(three).varargsObject(eq(10), eq("first arg"), startsWith("third"));
             fail();

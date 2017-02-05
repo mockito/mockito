@@ -18,7 +18,7 @@ import org.mockito.internal.verification.VerificationWrapper;
  * See javadoc for {@link VerificationWithTimeout}
  */
 public class Timeout extends VerificationWrapper<VerificationOverTimeImpl> implements VerificationWithTimeout {
-    
+
     /**
      * See the javadoc for {@link VerificationWithTimeout}
      * <p>

@@ -17,7 +17,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class ClickableStackTracesTest extends TestBase {
-    
+
     @Mock private IMethods mock;
 
     private void callMethodOnMock(String param) {
@@ -27,7 +27,7 @@ public class ClickableStackTracesTest extends TestBase {
     private void verifyTheMock(int times, String param) {
         verify(mock, times(times)).simpleMethod(param);
     }
-    
+
     @Test
     public void shouldShowActualAndExpectedWhenArgumentsAreDifferent() {
         callMethodOnMock("foo");

@@ -13,9 +13,9 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 
 public class GenericMasterTest {
-    
+
     GenericMaster m = new GenericMaster();
-    
+
     List<String> one;
     Set<Integer> two;
     Map<Double, String> map;
@@ -41,12 +41,12 @@ public class GenericMasterTest {
         assertEquals(Integer.class, m.getGenericType(field("two")));
         assertEquals(Double.class, m.getGenericType(field("map")));
     }
-    
+
     @Test
     public void should_get_object_for_non_generic() throws Exception {
         assertEquals(Object.class, m.getGenericType(field("nonGeneric")));
     }
-    
+
     @Test
     public void should_deal_with_nested_generics() throws Exception {
         assertEquals(Set.class, m.getGenericType(field("nested")));

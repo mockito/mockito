@@ -22,10 +22,10 @@ import static junit.framework.TestCase.*;
  * @version $Id: EqualsBuilderTest.java 611543 2008-01-13 07:00:22Z bayard $
  */
 public class EqualsBuilderTest extends TestBase {
-    
+
     @Test
     public void testname() throws Exception {
-        
+
     }
 
     static class TestObject {
@@ -89,13 +89,13 @@ public class EqualsBuilderTest extends TestBase {
             return b;
         }
     }
-    
+
     static class TestEmptySubObject extends TestObject {
         public TestEmptySubObject(int a) {
             super(a);
         }
     }
-    
+
     @SuppressWarnings("unused")
     static class TestTSubObject extends TestObject {
         private transient int t;
@@ -150,7 +150,7 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(!EqualsBuilder.reflectionEquals(null, o2));
         assertTrue(EqualsBuilder.reflectionEquals((Object) null, (Object) null));
     }
-    
+
     @Test public void testReflectionHierarchyEquals() {
         testReflectionHierarchyEquals(false);
         testReflectionHierarchyEquals(true);
@@ -294,7 +294,7 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(new EqualsBuilder().append(o1, o2).isEquals());
 
         assertTrue(!new EqualsBuilder().append(o1, this).isEquals());
-        
+
         assertTrue(!new EqualsBuilder().append(o1, null).isEquals());
         assertTrue(!new EqualsBuilder().append(null, o2).isEquals());
         assertTrue(new EqualsBuilder().append((Object) null, (Object) null).isEquals());
@@ -371,7 +371,7 @@ public class EqualsBuilderTest extends TestBase {
         equalsBuilder.setEquals(false);
         assertFalse(equalsBuilder.isEquals());
     }
-    
+
     @Test public void testBoolean() {
         boolean o1 = true;
         boolean o2 = false;
@@ -388,7 +388,7 @@ public class EqualsBuilderTest extends TestBase {
         obj2[0] = new TestObject(4);
         obj2[1] = new TestObject(5);
         obj2[2] = null;
-        
+
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj2, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
@@ -400,7 +400,7 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[2] = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
-                       
+
         obj2 = null;
         assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
@@ -668,7 +668,7 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         array1[1][1] = false;
         assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
-        
+
         // compare 1 dim to 2.
         boolean[] array3 = new boolean[]{true, true};
         assertFalse(new EqualsBuilder().append(array1, array3).isEquals());
@@ -863,7 +863,7 @@ public class EqualsBuilderTest extends TestBase {
         array1[1] = true;
         assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
     }
-    
+
     public static class TestACanEqualB {
         private int a;
 
@@ -913,13 +913,13 @@ public class EqualsBuilderTest extends TestBase {
         }
         public int hashCode() {
             return 1;
-        }        
+        }
 
         public int getB() {
             return this.b;
         }
     }
-    
+
     /**
      * Tests two instances of classes that can be equal and that are not "related". The two classes are not subclasses
      * of each other and do not share a parent aside from Object.
@@ -944,7 +944,7 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(new EqualsBuilder().append(x, y).isEquals());
         assertTrue(new EqualsBuilder().append(y, x).isEquals());
     }
-    
+
     /**
      * Test from http://issues.apache.org/bugzilla/show_bug.cgi?id=33067
      */

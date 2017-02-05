@@ -13,34 +13,34 @@ import org.mockitoutil.TestBase;
 import static org.mockitoutil.Conditions.onlyThoseClassesInStackTrace;
 
 public class ConditionalStackTraceFilterTest extends TestBase {
-    
+
     private ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
 
     @Test
     public void shouldNotFilterWhenConfigurationSaysNo() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
-        
+
         Throwable t = new TraceBuilder().classes(
                 "org.test.MockitoSampleTest",
-                "org.mockito.Mockito" 
+                "org.mockito.Mockito"
         ).toThrowable();
-        
+
         filter.filter(t);
-        
+
         Assertions.assertThat(t).has(onlyThoseClassesInStackTrace("org.mockito.Mockito", "org.test.MockitoSampleTest"));
     }
 
     @Test
     public void shouldFilterWhenConfigurationSaysYes() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
-        
+
         Throwable t = new TraceBuilder().classes(
                 "org.test.MockitoSampleTest",
-                "org.mockito.Mockito" 
+                "org.mockito.Mockito"
         ).toThrowable();
-        
+
         filter.filter(t);
-        
+
         Assertions.assertThat(t).has(onlyThoseClassesInStackTrace("org.test.MockitoSampleTest"));
     }
 }

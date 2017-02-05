@@ -17,13 +17,13 @@ import static org.mockito.Mockito.*;
 public class CleaningUpPotentialStubbingTest extends TestBase {
 
     @Mock private IMethods mock;
-    
+
     @Test
     public void shouldResetOngoingStubbingOnVerify() {
         // first test
         mock.booleanReturningMethod();
         verify(mock).booleanReturningMethod();
-        
+
         // second test
         assertOngoingStubbingIsReset();
     }
@@ -35,7 +35,7 @@ public class CleaningUpPotentialStubbingTest extends TestBase {
         inOrder.verify(mock).booleanReturningMethod();
         assertOngoingStubbingIsReset();
     }
-    
+
     @Test
     public void shouldResetOngoingStubbingOnDoReturn() {
         mock.booleanReturningMethod();

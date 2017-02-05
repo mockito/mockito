@@ -171,7 +171,7 @@ public class MockitoCore {
 
     /**
      * For testing purposes only. Is not the part of main API.
-     * 
+     *
      * @return last invocation
      */
     public Invocation getLastInvocation() {

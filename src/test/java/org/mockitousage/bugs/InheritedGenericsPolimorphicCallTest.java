@@ -41,15 +41,15 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
         Assert.assertNotNull(((Iterable<String>) iterable).iterator());
         Assert.assertNotNull(iterable.iterator());
     }
-    
+
     @Test
     public void shouldVerificationWorks() {
         iterable.iterator();
-        
+
         verify(iterable).iterator();
         verify((Iterable<String>) iterable).iterator();
     }
-    
+
     @Test
     public void shouldWorkExactlyAsJavaProxyWould() {
         //given
@@ -59,7 +59,7 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
             methods.add(method);
             return null;
         }};
-            
+
         iterable = (MyIterable<String>) Proxy.newProxyInstance(
                 this.getClass().getClassLoader(),
                 new Class<?>[] { MyIterable.class },
@@ -68,9 +68,9 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
         //when
         iterable.iterator();
         ((Iterable<String>) iterable).iterator();
-        
+
         //then
         assertEquals(2, methods.size());
         assertEquals(methods.get(0), methods.get(1));
-    }  
+    }
 }

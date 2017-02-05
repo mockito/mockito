@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CustomMatchersTest extends TestBase {
-    
+
     private final class ContainsFoo implements ArgumentMatcher<String> {
         public boolean matches(String arg) {
             return arg.contains("foo");
@@ -32,7 +32,7 @@ public class CustomMatchersTest extends TestBase {
             return true;
         }
     }
-    
+
     private final class IsSorZ implements ArgumentMatcher<Character> {
         public boolean matches(Character character) {
             return character.equals('s') || character.equals('z');
@@ -55,27 +55,27 @@ public class CustomMatchersTest extends TestBase {
     @Test
     public void shouldUseCustomBooleanMatcher() {
         when(mock.oneArg(booleanThat(new IsAnyBoolean()))).thenReturn("foo");
-        
+
         assertEquals("foo", mock.oneArg(true));
         assertEquals("foo", mock.oneArg(false));
-        
+
         assertEquals(null, mock.oneArg("x"));
     }
-    
+
     @Test
     public void shouldUseCustomCharMatcher() {
         when(mock.oneArg(charThat(new IsSorZ()))).thenReturn("foo");
-      
+
         assertEquals("foo", mock.oneArg('s'));
         assertEquals("foo", mock.oneArg('z'));
         assertEquals(null, mock.oneArg('x'));
     }
-    
+
     class Article {
-        
+
         private int pageNumber;
         private String headline;
-        
+
         public Article(int pageNumber, String headline) {
             super();
             this.pageNumber = pageNumber;
@@ -90,7 +90,7 @@ public class CustomMatchersTest extends TestBase {
             return headline;
         }
     }
-    
+
     @Test
     public void shouldUseCustomPrimitiveNumberMatchers() {
         when(mock.oneArg(byteThat(new IsZeroOrOne<Byte>()))).thenReturn("byte");
@@ -99,26 +99,26 @@ public class CustomMatchersTest extends TestBase {
         when(mock.oneArg(longThat(new IsZeroOrOne<Long>()))).thenReturn("long");
         when(mock.oneArg(floatThat(new IsZeroOrOne<Float>()))).thenReturn("float");
         when(mock.oneArg(doubleThat(new IsZeroOrOne<Double>()))).thenReturn("double");
-        
+
         assertEquals("byte", mock.oneArg((byte) 0));
         assertEquals("short", mock.oneArg((short) 1));
         assertEquals("int", mock.oneArg(0));
         assertEquals("long", mock.oneArg(1L));
         assertEquals("float", mock.oneArg(0F));
         assertEquals("double", mock.oneArg(1.0));
-        
+
         assertEquals(null, mock.oneArg(2));
         assertEquals(null, mock.oneArg("foo"));
     }
-         
+
     @Test
     public void shouldUseCustomObjectMatcher() {
         when(mock.oneArg(argThat(new ContainsFoo()))).thenReturn("foo");
-        
+
         assertEquals("foo", mock.oneArg("foo"));
         assertEquals(null, mock.oneArg("bar"));
     }
-    
+
     @Test
     public void shouldCustomMatcherPrintDescriptionBasedOnName() {
         mock.simpleMethod("foo");
@@ -134,13 +134,13 @@ public class CustomMatchersTest extends TestBase {
     private String containsTest() {
         return argThat(new StringThatContainsXxx());
     }
-    
+
     private final class StringThatContainsXxx implements ArgumentMatcher<String> {
         public boolean matches(String arg) {
             return arg.contains("xxx");
         }
     }
-    
+
     @Test
     public void shouldAnonymousCustomMatcherPrintDefaultDescription() {
         mock.simpleMethod("foo");

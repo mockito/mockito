@@ -5,6 +5,6 @@
 package org.mockito.internal.verification.api;
 
 public interface VerificationInOrderMode {
-    
-    void verifyInOrder(VerificationDataInOrder data);    
+
+    void verifyInOrder(VerificationDataInOrder data);
 }

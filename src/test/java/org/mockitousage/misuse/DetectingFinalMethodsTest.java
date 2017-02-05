@@ -15,13 +15,13 @@ import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.*;
 
 public class DetectingFinalMethodsTest extends TestBase {
-    
+
     class WithFinal {
         final int foo() {
             return 0;
         }
     }
-    
+
     @Mock private WithFinal withFinal;
 
     @Test

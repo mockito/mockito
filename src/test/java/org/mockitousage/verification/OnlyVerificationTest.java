@@ -64,7 +64,7 @@ public class OnlyVerificationTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {}
     }
-    
+
     @Test
     public void shouldFailIfExtraMethodWithDifferentArgsFound() {
         mock.get(0);

@@ -29,7 +29,7 @@ public class ListUtilTest extends TestBase {
 
         Assertions.assertThat(filtered).containsSequence("one", "two", "three");
     }
-    
+
     @Test
     public void shouldReturnEmptyIfEmptyListGiven() throws Exception {
         List<Object> list = new LinkedList<Object>();

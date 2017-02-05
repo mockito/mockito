@@ -45,59 +45,59 @@ public class InvocationImplTest extends TestBase {
         assertFalse(invocation.equals(nonEqual));
         assertTrue(invocation.equals(withNewStringInstance));
     }
-    
+
     @Test
     public void shouldEqualToNotConsiderSequenceNumber() {
         Invocation equal = new InvocationBuilder().args(" ").mock("mock").seq(2).toInvocation();
-        
+
         assertTrue(invocation.equals(equal));
         assertTrue(invocation.getSequenceNumber() != equal.getSequenceNumber());
     }
-    
+
     @Test
     public void shouldBeACitizenOfHashes() {
         Map<Invocation, String> map = new HashMap<Invocation, String>();
         map.put(invocation, "one");
         assertEquals("one", map.get(invocation));
     }
-    
+
     @Test
     public void shouldPrintMethodName() {
         invocation = new InvocationBuilder().toInvocation();
         assertEquals("iMethods.simpleMethod();", invocation.toString());
     }
-    
+
     @Test
     public void shouldPrintMethodArgs() {
         invocation = new InvocationBuilder().args("foo").toInvocation();
         Assertions.assertThat(invocation.toString()).endsWith("simpleMethod(\"foo\");");
     }
-    
+
     @Test
     public void shouldPrintMethodIntegerArgAndString() {
         invocation = new InvocationBuilder().args("foo", 1).toInvocation();
         Assertions.assertThat(invocation.toString()).endsWith("simpleMethod(\"foo\", 1);");
     }
-    
+
     @Test
     public void shouldPrintNull() {
         invocation = new InvocationBuilder().args((String) null).toInvocation();
         Assertions.assertThat(invocation.toString()).endsWith("simpleMethod(null);");
     }
-    
+
     @Test
     public void shouldPrintArray() {
         invocation = new InvocationBuilder().method("oneArray").args(new int[] { 1, 2, 3 }).toInvocation();
         Assertions.assertThat(invocation.toString()).endsWith("oneArray([1, 2, 3]);");
     }
-    
+
     @Test
     public void shouldPrintNullIfArrayIsNull() throws Exception {
         Method m = IMethods.class.getMethod("oneArray", Object[].class);
         invocation = new InvocationBuilder().method(m).args((Object) null).toInvocation();
         Assertions.assertThat(invocation.toString()).endsWith("oneArray(null);");
     }
-    
+
     @Test
     public void shouldPrintArgumentsInMultilinesWhenGetsTooBig() {
         invocation = new InvocationBuilder().args("veeeeery long string that makes it ugly in one line", 1).toInvocation();
@@ -110,7 +110,7 @@ public class InvocationImplTest extends TestBase {
                         "\n" +
                         ");");
     }
-    
+
     @Test
     public void shouldTransformArgumentsToMatchers() throws Exception {
         Invocation i = new InvocationBuilder().args("foo", new String[]{"bar"}).toInvocation();
@@ -120,13 +120,13 @@ public class InvocationImplTest extends TestBase {
         assertEquals(Equals.class, matchers.get(0).getClass());
         assertEquals(ArrayEquals.class, matchers.get(1).getClass());
     }
-    
+
     class Foo {
         public String bark() {
             return "woof";
         }
     }
-    
+
     @Test
     public void shouldBeAbleToCallRealMethod() throws Throwable {
         //when
@@ -137,7 +137,7 @@ public class InvocationImplTest extends TestBase {
         //then
         assertEquals("woof", invocation.callRealMethod());
     }
-    
+
     @Test
     public void shouldScreamWhenCallingRealMethodOnInterface() throws Throwable {
         //given
@@ -150,7 +150,7 @@ public class InvocationImplTest extends TestBase {
             fail();
         } catch(MockitoException e) {}
     }
-    
+
     @Test
     public void shouldReturnCastedArgumentAt(){
         //given

@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 
 @Listeners(MockitoTestNGListener.class)
 public class MockFieldsShouldBeResetBetweenTestMethodsTest {
-    
+
     @Mock List<String> list;
     @Spy HashMap hashMap;
     @InjectMocks SomeType someType;

@@ -36,7 +36,7 @@ public class PrimitivesTest {
         assertNotNull(Primitives.defaultValue(double.class));
     }
 
-    @Test 
+    @Test
     public void should_default_values_for_primitive() {
         assertThat(Primitives.defaultValue(boolean.class)).isFalse();
         assertThat(Primitives.defaultValue(char.class)).isEqualTo('\u0000');
@@ -47,8 +47,8 @@ public class PrimitivesTest {
         assertThat(Primitives.defaultValue(float.class)).isEqualTo(0.0F);
         assertThat(Primitives.defaultValue(double.class)).isEqualTo(0.0D);
     }
-    
-    @Test 
+
+    @Test
     public void should_default_values_for_wrapper() {
         assertThat(Primitives.defaultValue(Boolean.class)).isFalse();
         assertThat(Primitives.defaultValue(Character.class)).isEqualTo('\u0000');

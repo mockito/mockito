@@ -28,23 +28,23 @@ import static org.mockito.Mockito.*;
 public class MocksCreationTest extends TestBase {
 
     private class HasPrivateConstructor {}
-    
+
     @Test
     public void shouldCreateMockWhenConstructorIsPrivate() {
         assertNotNull(Mockito.mock(HasPrivateConstructor.class));
     }
-    
+
     @Test
     public void shouldCombineMockNameAndSmartNulls() {
         //given
         IMethods mock = mock(IMethods.class, withSettings()
             .defaultAnswer(RETURNS_SMART_NULLS)
-            .name("great mockie"));    
-        
+            .name("great mockie"));
+
         //when
         IMethods smartNull = mock.iMethodsReturningMethod();
         String name = mock.toString();
-        
+
         //then
         assertThat(name).contains("great mockie");
         //and
@@ -53,23 +53,23 @@ public class MocksCreationTest extends TestBase {
             fail();
         } catch(SmartNullPointerException e) {}
     }
-    
+
     @Test
     public void shouldCombineMockNameAndExtraInterfaces() {
         //given
         IMethods mock = mock(IMethods.class, withSettings()
                 .extraInterfaces(List.class)
                 .name("great mockie"));
-        
+
         //when
         String name = mock.toString();
-        
+
         //then
         assertThat(name).contains("great mockie");
         //and
         assertTrue(mock instanceof List);
     }
-    
+
     @Test
     public void shouldSpecifyMockNameViaSettings() {
         //given
@@ -77,11 +77,11 @@ public class MocksCreationTest extends TestBase {
 
         //when
         String name = mock.toString();
-        
+
         //then
         assertThat(name).contains("great mockie");
     }
-    
+
     @Test
     public void shouldScreamWhenSpyCreatedWithWrongType() {
         //given

@@ -60,15 +60,15 @@ public class ReturnsMocksTest extends TestBase {
         String stringMethod();
         String[] stringArrayMethod();
     }
-    
+
     @Test
     public void should_return_empty_array() throws Throwable {
         String[] ret = (String[]) values.answer(invocationOf(StringMethods.class, "stringArrayMethod"));
-        
+
         assertTrue(ret.getClass().isArray());
         assertTrue(ret.length == 0);
     }
-    
+
     @Test
     public void should_return_empty_string() throws Throwable {
         assertEquals("", values.answer(invocationOf(StringMethods.class, "stringMethod")));

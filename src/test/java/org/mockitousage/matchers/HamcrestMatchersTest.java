@@ -43,11 +43,11 @@ public class HamcrestMatchersTest extends TestBase {
         assertNull(mock.simpleMethod("blah"));
         assertEquals("X", mock.simpleMethod("blah X blah"));
     }
-    
+
     @Test
     public void verifies_with_hamcrest_matcher() {
         mock.simpleMethod("blah");
-        
+
         try {
             verify(mock).simpleMethod(argThat(new ContainsX()));
             fail();

@@ -39,12 +39,12 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
                 .hasMessageContaining("secondInteraction(");
         }
     }
-    
+
     @Test
     public void shouldNotShowAllInteractionsOnDifferentMock() throws Exception {
         differentMockInteraction();
         firstInteraction();
-        
+
         try {
             verify(mock).simpleMethod();
             fail();
@@ -52,7 +52,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
             assertThat(e.getMessage()).contains("firstInteraction(").doesNotContain("differentMockInteraction(");
         }
     }
-    
+
     @Test
     public void shouldNotShowAllInteractionsHeaderWhenNoOtherInteractions() throws Exception {
         try {

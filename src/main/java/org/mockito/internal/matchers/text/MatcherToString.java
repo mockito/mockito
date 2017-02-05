@@ -38,6 +38,6 @@ class MatcherToString {
         }
         return decamelizeMatcher(matcher.getClass().getSimpleName());
     }
-    
-   
+
+
 }

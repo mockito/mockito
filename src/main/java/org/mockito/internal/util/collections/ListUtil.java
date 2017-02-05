@@ -33,7 +33,7 @@ public class ListUtil {
         }
         return converted;
     }
-    
+
     public interface Filter<T> {
         boolean isOut(T object);
     }

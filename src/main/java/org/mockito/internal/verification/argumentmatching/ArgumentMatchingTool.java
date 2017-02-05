@@ -21,12 +21,12 @@ public class ArgumentMatchingTool {
         if (matchers.size() != arguments.length) {
             return new Integer[0];
         }
-        
+
         List<Integer> suspicious = new LinkedList<Integer>();
         int i = 0;
         for (ArgumentMatcher m : matchers) {
             if (m instanceof ContainsExtraTypeInfo
-                    && !safelyMatches(m, arguments[i]) 
+                    && !safelyMatches(m, arguments[i])
                     && toStringEquals(m, arguments[i])
                     && !((ContainsExtraTypeInfo) m).typeMatches(arguments[i])) {
                 suspicious.add(i);

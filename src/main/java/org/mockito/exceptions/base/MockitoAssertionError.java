@@ -30,11 +30,11 @@ public class MockitoAssertionError extends AssertionError {
         super(message);
 
         unfilteredStackTrace = getStackTrace();
-        
+
         ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
         filter.filter(this);
     }
-    
+
     /**
      * Creates a copy of the given assertion error with the custom failure message prepended.
      * @param error The assertion error to copy

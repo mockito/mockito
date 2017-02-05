@@ -40,13 +40,13 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         OngoingStubbing<T> stubbing = null;
         for (Throwable t: throwables) {
             if (stubbing == null) {
-                stubbing = thenThrow(t);                    
+                stubbing = thenThrow(t);
             } else {
                 stubbing = stubbing.thenThrow(t);
             }
         }
         return stubbing;
-    }        
+    }
 
     public OngoingStubbing<T> thenThrow(Class<? extends Throwable> throwableType) {
         return thenAnswer(new ThrowsExceptionClass(throwableType));

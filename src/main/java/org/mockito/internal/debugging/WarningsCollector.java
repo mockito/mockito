@@ -14,7 +14,7 @@ import java.util.List;
 
 @Deprecated
 public class WarningsCollector {
-   
+
     private final List<Object> createdMocks;
 
     public WarningsCollector() {

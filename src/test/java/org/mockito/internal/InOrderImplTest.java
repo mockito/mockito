@@ -17,19 +17,19 @@ import static junit.framework.TestCase.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class InOrderImplTest extends TestBase {
-    
+
     @Mock IMethods mock;
-    
+
     @Test
     public void shouldMarkVerifiedInOrder() throws Exception {
         //given
         InOrderImpl impl = new InOrderImpl(singletonList(mock));
         Invocation i = new InvocationBuilder().toInvocation();
         assertFalse(impl.isVerified(i));
-        
+
         //when
         impl.markVerified(i);
-        
+
         //then
         assertTrue(impl.isVerified(i));
     }

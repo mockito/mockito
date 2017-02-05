@@ -71,7 +71,7 @@ public class FieldInitializer {
             checkNotInterface(field);
             checkNotEnum(field);
             checkNotAbstract(field);
-            
+
         }
         this.fieldOwner = fieldOwner;
         this.field = field;
@@ -120,7 +120,7 @@ public class FieldInitializer {
             throw new MockitoException("the type '" + field.getType().getSimpleName() + "' is an abstract class.");
         }
     }
-    
+
     private void checkNotEnum(Field field) {
         if(field.getType().isEnum()) {
             throw new MockitoException("the type '" + field.getType().getSimpleName() + "' is an enum.");
@@ -236,7 +236,7 @@ public class FieldInitializer {
                 }
                 return argLengths;
             }
-            
+
             private int countMockableParams(Constructor<?> constructor) {
                 int constructorMockableParamsSize = 0;
                 for (Class<?> aClass : constructor.getParameterTypes()) {
@@ -294,7 +294,7 @@ public class FieldInitializer {
         private Constructor<?> biggestConstructor(Class<?> clazz) {
             final List<? extends Constructor<?>> constructors = Arrays.asList(clazz.getDeclaredConstructors());
             Collections.sort(constructors, byParameterNumber);
-            
+
             Constructor<?> constructor = constructors.get(0);
             checkParameterized(constructor, field);
             return constructor;

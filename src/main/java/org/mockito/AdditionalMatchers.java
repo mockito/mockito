@@ -19,33 +19,33 @@ import org.mockito.internal.matchers.LessThan;
 /**
  * See {@link Matchers} for general info about matchers.
  * <p>
- * AdditionalMatchers provides rarely used matchers, kept only for somewhat compatibility with EasyMock. 
+ * AdditionalMatchers provides rarely used matchers, kept only for somewhat compatibility with EasyMock.
  * Use additional matchers very judiciously because they may impact readability of a test.
  * It is recommended to use matchers from {@link Matchers} and keep stubbing and verification simple.
  * <p>
- * Example of using logical and(), not(), or() matchers: 
- *  
+ * Example of using logical and(), not(), or() matchers:
+ *
  * <pre class="code"><code class="java">
  *   //anything but not "ejb"
  *   mock.someMethod(not(eq("ejb")));
- *   
+ *
  *   //not "ejb" and not "michael jackson"
  *   mock.someMethod(and(not(eq("ejb")), not(eq("michael jackson"))));
- *   
+ *
  *   //1 or 10
  *   mock.someMethod(or(eq(1), eq(10)));
  * </code></pre>
- * 
+ *
  * Scroll down to see all methods - full list of matchers.
  */
 @SuppressWarnings("ALL")
 public class AdditionalMatchers {
-    
+
     /**
      * argument greater than or equal the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>null</code>.
@@ -59,7 +59,7 @@ public class AdditionalMatchers {
      * byte argument greater than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -73,7 +73,7 @@ public class AdditionalMatchers {
      * double argument greater than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -87,7 +87,7 @@ public class AdditionalMatchers {
      * float argument greater than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -101,7 +101,7 @@ public class AdditionalMatchers {
      * int argument greater than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -115,7 +115,7 @@ public class AdditionalMatchers {
      * long argument greater than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -129,7 +129,7 @@ public class AdditionalMatchers {
      * short argument greater than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -143,7 +143,7 @@ public class AdditionalMatchers {
      * comparable argument less than or equal the given value details.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>null</code>.
@@ -157,7 +157,7 @@ public class AdditionalMatchers {
      * byte argument less than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -171,7 +171,7 @@ public class AdditionalMatchers {
      * double argument less than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -185,7 +185,7 @@ public class AdditionalMatchers {
      * float argument less than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -199,7 +199,7 @@ public class AdditionalMatchers {
      * int argument less than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -213,7 +213,7 @@ public class AdditionalMatchers {
      * long argument less than or equal to the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -226,8 +226,8 @@ public class AdditionalMatchers {
     /**
      * short argument less than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class 
-     * 
+     * See examples in javadoc for {@link AdditionalMatchers} class
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -241,7 +241,7 @@ public class AdditionalMatchers {
      * comparable argument greater than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>null</code>.
@@ -255,7 +255,7 @@ public class AdditionalMatchers {
      * byte argument greater than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -269,7 +269,7 @@ public class AdditionalMatchers {
      * double argument greater than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -283,7 +283,7 @@ public class AdditionalMatchers {
      * float argument greater than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -297,7 +297,7 @@ public class AdditionalMatchers {
      * int argument greater than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -311,7 +311,7 @@ public class AdditionalMatchers {
      * long argument greater than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -325,7 +325,7 @@ public class AdditionalMatchers {
      * short argument greater than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -339,7 +339,7 @@ public class AdditionalMatchers {
      * comparable argument less than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>null</code>.
@@ -353,7 +353,7 @@ public class AdditionalMatchers {
      * byte argument less than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -367,7 +367,7 @@ public class AdditionalMatchers {
      * double argument less than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -381,7 +381,7 @@ public class AdditionalMatchers {
      * float argument less than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -395,7 +395,7 @@ public class AdditionalMatchers {
      * int argument less than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -409,7 +409,7 @@ public class AdditionalMatchers {
      * long argument less than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -423,7 +423,7 @@ public class AdditionalMatchers {
      * short argument less than the given value.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>0</code>.
@@ -438,7 +438,7 @@ public class AdditionalMatchers {
      * compareTo method.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @return <code>null</code>.
@@ -451,7 +451,7 @@ public class AdditionalMatchers {
     /**
      * String argument that contains a substring that matches the given regular
      * expression.
-     * 
+     *
      * @param regex
      *            the regular expression.
      * @return <code>null</code>.
@@ -466,7 +466,7 @@ public class AdditionalMatchers {
      * have the same type, length, and each element has to be equal.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param <T>
      *            the type of the array, it is passed through to prevent casts.
      * @param value
@@ -483,7 +483,7 @@ public class AdditionalMatchers {
      * have the same length, and each element has to be equal.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given array.
      * @return <code>null</code>.
@@ -498,7 +498,7 @@ public class AdditionalMatchers {
      * the same length, and each element has to be equal.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given array.
      * @return <code>null</code>.
@@ -513,14 +513,14 @@ public class AdditionalMatchers {
      * the same length, and each element has to be equal.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given array.
      * @return <code>null</code>.
      */
     public static int[] aryEq(int[] value) {
         reportMatcher(new ArrayEquals(value));
-        return null;       
+        return null;
     }
 
     /**
@@ -528,7 +528,7 @@ public class AdditionalMatchers {
      * have the same length, and each element has to be equal.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given array.
      * @return <code>null</code>.
@@ -543,7 +543,7 @@ public class AdditionalMatchers {
      * have the same length, and each element has to be equal.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given array.
      * @return <code>null</code>.
@@ -558,7 +558,7 @@ public class AdditionalMatchers {
      * the same length, and each element has to be equal.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given array.
      * @return <code>null</code>.
@@ -573,7 +573,7 @@ public class AdditionalMatchers {
      * the same length, and each element has to be equal.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given array.
      * @return <code>null</code>.
@@ -588,7 +588,7 @@ public class AdditionalMatchers {
      * have the same length, and each element has to be equal.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given array.
      * @return <code>null</code>.
@@ -602,7 +602,7 @@ public class AdditionalMatchers {
      * boolean argument that matches both given matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -610,7 +610,7 @@ public class AdditionalMatchers {
      * @return <code>false</code>.
      */
     public static boolean and(boolean first, boolean second) {
-        mockingProgress().getArgumentMatcherStorage().reportAnd(); 
+        mockingProgress().getArgumentMatcherStorage().reportAnd();
         return false;
     }
 
@@ -618,7 +618,7 @@ public class AdditionalMatchers {
      * byte argument that matches both given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -634,7 +634,7 @@ public class AdditionalMatchers {
      * char argument that matches both given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -650,7 +650,7 @@ public class AdditionalMatchers {
      * double argument that matches both given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -666,7 +666,7 @@ public class AdditionalMatchers {
      * float argument that matches both given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -682,7 +682,7 @@ public class AdditionalMatchers {
      * int argument that matches both given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -698,7 +698,7 @@ public class AdditionalMatchers {
      * long argument that matches both given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -714,7 +714,7 @@ public class AdditionalMatchers {
      * short argument that matches both given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -730,7 +730,7 @@ public class AdditionalMatchers {
      * Object argument that matches both given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
      * @param first
@@ -748,7 +748,7 @@ public class AdditionalMatchers {
      * boolean argument that matches any of the given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -764,7 +764,7 @@ public class AdditionalMatchers {
      * Object argument that matches any of the given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
      * @param first
@@ -782,7 +782,7 @@ public class AdditionalMatchers {
      * short argument that matches any of the given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -798,7 +798,7 @@ public class AdditionalMatchers {
      * long argument that matches any of the given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -814,7 +814,7 @@ public class AdditionalMatchers {
      * int argument that matches any of the given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -830,7 +830,7 @@ public class AdditionalMatchers {
      * float argument that matches any of the given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -846,7 +846,7 @@ public class AdditionalMatchers {
      * double argument that matches any of the given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -862,7 +862,7 @@ public class AdditionalMatchers {
      * char argument that matches any of the given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -878,7 +878,7 @@ public class AdditionalMatchers {
      * byte argument that matches any of the given argument matchers.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the first argument matcher.
      * @param second
@@ -894,7 +894,7 @@ public class AdditionalMatchers {
      * Object argument that does not match the given argument matcher.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
      * @param first
@@ -910,7 +910,7 @@ public class AdditionalMatchers {
      * short argument that does not match the given argument matcher.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
@@ -924,7 +924,7 @@ public class AdditionalMatchers {
      * int argument that does not match the given argument matcher.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
@@ -938,7 +938,7 @@ public class AdditionalMatchers {
      * long argument that does not match the given argument matcher.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
@@ -952,7 +952,7 @@ public class AdditionalMatchers {
      * float argument that does not match the given argument matcher.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
@@ -966,7 +966,7 @@ public class AdditionalMatchers {
      * double argument that does not match the given argument matcher.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
@@ -980,7 +980,7 @@ public class AdditionalMatchers {
      * char argument that does not match the given argument matcher.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
@@ -994,13 +994,13 @@ public class AdditionalMatchers {
      * boolean argument that does not match the given argument matcher.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>false</code>.
      */
     public static boolean not(boolean first) {
-        mockingProgress().getArgumentMatcherStorage().reportNot(); 
+        mockingProgress().getArgumentMatcherStorage().reportNot();
         return false;
     }
 
@@ -1008,7 +1008,7 @@ public class AdditionalMatchers {
      * byte argument that does not match the given argument matcher.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
@@ -1023,7 +1023,7 @@ public class AdditionalMatchers {
      * is less than the given delta details.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @param delta
@@ -1034,13 +1034,13 @@ public class AdditionalMatchers {
         reportMatcher(new EqualsWithDelta(value, delta));
         return 0;
     }
-    
+
     /**
      * float argument that has an absolute difference to the given value that is
      * less than the given delta details.
      * <p>
      * See examples in javadoc for {@link AdditionalMatchers} class
-     * 
+     *
      * @param value
      *            the given value.
      * @param delta
@@ -1051,7 +1051,7 @@ public class AdditionalMatchers {
         reportMatcher(new EqualsWithDelta(value, delta));
         return 0;
     }
-    
+
     private static void reportMatcher(ArgumentMatcher<?> matcher) {
         mockingProgress().getArgumentMatcherStorage().reportMatcher(matcher);
     }

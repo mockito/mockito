@@ -26,11 +26,11 @@ import java.util.List;
  * Allows verifying in order. This class should not be exposed, hence default access.
  */
 public class InOrderImpl implements InOrder, InOrderContext {
-    
+
     private final MockitoCore mockitoCore = new MockitoCore();
     private final List<Object> mocksToBeVerifiedInOrder = new LinkedList<Object>();
     private final InOrderContext inOrderContext = new InOrderContextImpl();
-    
+
     public List<Object> getMocksToBeVerifiedInOrder() {
         return mocksToBeVerifiedInOrder;
     }
@@ -42,7 +42,7 @@ public class InOrderImpl implements InOrder, InOrderContext {
     public <T> T verify(T mock) {
         return this.verify(mock, VerificationModeFactory.times(1));
     }
-    
+
     public <T> T verify(T mock, VerificationMode mode) {
         if (!mocksToBeVerifiedInOrder.contains(mock)) {
             throw inOrderRequiresFamiliarMock();

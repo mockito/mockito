@@ -17,12 +17,12 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
 public class GenericMatchersTest extends TestBase {
-    
+
     private interface Foo {
         List<String> sort(List<String> otherList);
         String convertDate(Date date);
     }
-    
+
     @Mock Foo sorter;
 
     @SuppressWarnings("unchecked")

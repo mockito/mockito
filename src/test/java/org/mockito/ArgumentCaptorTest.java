@@ -22,7 +22,7 @@ public class ArgumentCaptorTest {
 			validateMockitoUsage();
 		} catch (InvalidUseOfMatchersException ignore) {
 		}
-		
+
 	}
 
 	@Test
