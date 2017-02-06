@@ -5,59 +5,110 @@
 package org.mockito.internal.creation.instance;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.mockito.internal.util.Primitives;
 import org.mockito.internal.util.reflection.AccessibilityChanger;
 
 import static org.mockito.internal.util.StringUtil.join;
 
 public class ConstructorInstantiator implements Instantiator {
 
-    private final Object outerClassInstance;
+    /**
+     * Whether or not the constructors used for creating an object refer to an outer instance or not.
+     * This member is only used to for constructing error messages.
+     * If an outer inject exists, it would be the first ([0]) element of the {@link #constructorArgs} array.
+     */
+    private final boolean hasOuterClassInstance;
+    private final Object[] constructorArgs;
 
-    public ConstructorInstantiator(Object outerClassInstance) {
-        this.outerClassInstance = outerClassInstance;
+    public ConstructorInstantiator(boolean hasOuterClassInstance, Object... constructorArgs) {
+        this.hasOuterClassInstance = hasOuterClassInstance;
+        this.constructorArgs = constructorArgs;
     }
 
     public <T> T newInstance(Class<T> cls) {
-        if (outerClassInstance == null) {
-            return noArgConstructor(cls);
-        }
-        return withParams(cls, outerClassInstance);
+        return withParams(cls, constructorArgs);
     }
 
-    private static <T> T withParams(Class<T> cls, Object... params) {
+    private <T> T withParams(Class<T> cls, Object... params) {
+        List<Constructor<?>> matchingConstructors = new LinkedList<Constructor<?>>();
         try {
-            //this is kind of over-engineered because we don't need to support more params
-            //however, I know we will be needing it :)
             for (Constructor<?> constructor : cls.getDeclaredConstructors()) {
                 Class<?>[] types = constructor.getParameterTypes();
                 if (paramsMatch(types, params)) {
-                    return invokeConstructor(constructor, params);
+                    matchingConstructors.add(constructor);
                 }
+            }
+
+            if (matchingConstructors.size() == 1) {
+                return invokeConstructor(matchingConstructors.get(0), params);
             }
         } catch (Exception e) {
             throw paramsException(cls, e);
         }
-        throw noMatchingConstructor(cls);
+        if (matchingConstructors.size() == 0) {
+            throw noMatchingConstructor(cls);
+        } else {
+            throw multipleMatchingConstructors(cls, matchingConstructors);
+        }
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> T invokeConstructor(Constructor<?> constructor, Object... params) throws java.lang.InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException {
+    private static <T> T invokeConstructor(Constructor<?> constructor, Object... params) throws java.lang.InstantiationException, IllegalAccessException, InvocationTargetException {
         AccessibilityChanger accessibility = new AccessibilityChanger();
         accessibility.enableAccess(constructor);
         return (T) constructor.newInstance(params);
     }
 
-    private static <T> InstantiationException paramsException(Class<T> cls, Exception cause) {
-        return new InstantiationException(
-                join("Unable to create instance of '" + cls.getSimpleName() + "'.",
-                     "Please ensure that the outer instance has correct type and that the target class has 0-arg constructor."),
-                cause);
+    private InstantiationException paramsException(Class<?> cls, Exception e) {
+        return new InstantiationException(join(
+                "Unable to create instance of '" + cls.getSimpleName() + "'.",
+                "Please ensure the target class has " + constructorArgsString() + " and executes cleanly.")
+                , e);
     }
 
-    private static <T> InstantiationException noMatchingConstructor(Class<T> cls) {
-        return new InstantiationException(
-                join("Unable to create instance of '" + cls.getSimpleName() + "'.",
-                     "Unable to find a matching 1-arg constructor for the outer instance.")
+    private String constructorArgTypes() {
+        int argPos = 0;
+        if (hasOuterClassInstance) {
+            ++argPos;
+        }
+        String[] constructorArgTypes = new String[constructorArgs.length - argPos];
+        for (int i = argPos; i < constructorArgs.length; ++i) {
+            constructorArgTypes[i - argPos] = constructorArgs[i] == null ? null : constructorArgs[i].getClass().getName();
+        }
+        return Arrays.toString(constructorArgTypes);
+    }
+
+    private InstantiationException noMatchingConstructor(Class<?> cls) {
+        String constructorString = constructorArgsString();
+        String outerClassString = "";
+        if (hasOuterClassInstance) {
+            outerClassString = " and that it's indeed an inner class of the passed instance of type " +
+                constructorArgs[0].getClass().getName();
+        }
+        return new InstantiationException(join("Unable to create instance of '" + cls.getSimpleName() + "'.",
+                "Please ensure that the target class has " + constructorString + outerClassString + ".")
+                , null);
+    }
+
+    private String constructorArgsString() {
+        String constructorString;
+        if (constructorArgs.length == 0 || (hasOuterClassInstance && constructorArgs.length == 1)) {
+            constructorString = "a 0-arg constructor";
+        } else {
+            constructorString = "a constructor that matches these argument types: " + constructorArgTypes();
+        }
+        return constructorString;
+    }
+
+    private InstantiationException multipleMatchingConstructors(Class<?> cls, List<Constructor<?>> constructors) {
+        return new InstantiationException(join("Unable to create instance of '" + cls.getSimpleName() + "'.",
+                "Multiple constructors could be matched to arguments of types " + constructorArgTypes() + ":",
+                join("", constructors))
                 , null);
     }
 
@@ -66,21 +117,15 @@ public class ConstructorInstantiator implements Instantiator {
             return false;
         }
         for (int i = 0; i < params.length; i++) {
-            if (!types[i].isInstance(params[i])) {
+            if (params[i] == null) {
+                if (types[i].isPrimitive()) {
+                    return false;
+                }
+            } else if ((!types[i].isPrimitive() && !types[i].isInstance(params[i])) ||
+                    (types[i].isPrimitive() && !types[i].equals(Primitives.primitiveTypeOf(params[i].getClass())))) {
                 return false;
             }
         }
         return true;
-    }
-
-    private static <T> T noArgConstructor(Class<T> cls) {
-        try {
-            return invokeConstructor(cls.getDeclaredConstructor());
-        } catch (Throwable t) {
-            throw new InstantiationException(join(
-                    "Unable to create instance of '" + cls.getSimpleName() + "'.",
-                    "Please ensure it has 0-arg constructor which invokes cleanly."),
-                                             t);
-        }
     }
 }
