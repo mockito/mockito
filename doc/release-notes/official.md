@@ -1,3 +1,11 @@
+### 2.7.3 (2017-02-06 12:51 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 1
+  * Small improvements [(#912)](https://github.com/mockito/mockito/pull/912)
+
 ### 2.7.2 (2017-02-04 12:05 UTC)
 
 * Authors: 2
