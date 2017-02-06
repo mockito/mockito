@@ -65,7 +65,7 @@ import org.mockito.verification.*;
  *      <a href="#27">27. Delegate calls to real instance (Since 1.9.5)</a><br/>
  *      <a href="#28">28. <code>MockMaker</code> API (Since 1.9.5)</a><br/>
  *      <a href="#29">29. BDD style verification (Since 1.10.0)</a><br/>
- *      <a href="#30">30. Spying or mocking abstract classes (Since 1.10.12) and Java 8 default methods (Since release 2.x)</a><br/>
+ *      <a href="#30">30. Spying or mocking abstract classes (Since 1.10.12, further enhanced in 2.7.13 and 2.7.14)</a><br/>
  *      <a href="#31">31. Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3><br/>
  *      <a href="#32">32. Better generic support with deep stubs (Since 1.10.0)</a></h3><br/>
  *      <a href="#32">33. Mockito JUnit rule (Since 1.10.17)</a><br/>
@@ -1017,7 +1017,7 @@ import org.mockito.verification.*;
  *
  *
  *
- * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes" name="spying_abstract_classes">Spying or mocking abstract classes (Since 1.10.12) and Java 8 default methods (Since release 2.x)</a></h3>
+ * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes" name="spying_abstract_classes">Spying or mocking abstract classes (Since 1.10.12, further enhanced in 2.7.13 and 2.7.14)</a></h3>
  *
  * It is now possible to conveniently spy on abstract classes. Note that overusing spies hints at code design smells (see {@link #spy(Object)}).
  * <p>
@@ -1030,19 +1030,23 @@ import org.mockito.verification.*;
  * //convenience API, new overloaded spy() method:
  * SomeAbstract spy = spy(SomeAbstract.class);
  *
- * // Mocking abstract methods, spying default methods of an interface
+ * //Mocking abstract methods, spying default methods of an interface (only avilable since 2.7.13)
  * Function<Foo, Bar> function = spy(Function.class);
  *
  * //Robust API, via settings builder:
  * OtherAbstract spy = mock(OtherAbstract.class, withSettings()
  *    .useConstructor().defaultAnswer(CALLS_REAL_METHODS));
  *
+ * //Mocking an abstract class with constructor arguments (only available since 2.7.14)
+ * SomeAbstract spy = mock(SomeAbstract.class, withSettings()
+ *   .useConstructor("arg1", 123).defaultAnswer(CALLS_REAL_METHODS));
+ *
  * //Mocking a non-static inner abstract class:
  * InnerAbstract spy = mock(InnerAbstract.class, withSettings()
  *    .useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
  * </code></pre>
  *
- * For more information please see {@link MockSettings#useConstructor()}.
+ * For more information please see {@link MockSettings#useConstructor(Object...)}.
  *
  *
  *
