@@ -6,12 +6,12 @@ package org.mockito.internal.stubbing;
 
 import static org.mockito.internal.exceptions.Reporter.notAMockPassedToWhenMethod;
 import static org.mockito.internal.exceptions.Reporter.nullPassedToWhenMethod;
+import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
-import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
@@ -24,6 +24,7 @@ public class StubberImpl implements Stubber {
 
     private final List<Answer<?>> answers = new LinkedList<Answer<?>>();
 
+    @Override
     public <T> T when(T mock) {
         if (mock == null) {
             throw nullPassedToWhenMethod();
@@ -37,10 +38,12 @@ public class StubberImpl implements Stubber {
         return mock;
     }
 
+    @Override
     public Stubber doReturn(Object toBeReturned) {
         return doReturnValues(toBeReturned);
     }
 
+    @Override
     public Stubber doReturn(Object toBeReturned, Object... nextToBeReturned) {
         return doReturnValues(toBeReturned).doReturnValues(nextToBeReturned);
     }
@@ -56,6 +59,7 @@ public class StubberImpl implements Stubber {
         return this;
     }
 
+    @Override
     public Stubber doThrow(Throwable... toBeThrown) {
         if(toBeThrown == null) {
             answers.add(new ThrowsException(null));
@@ -67,10 +71,12 @@ public class StubberImpl implements Stubber {
         return this;
     }
 
+    @Override
     public Stubber doThrow(Class<? extends Throwable> toBeThrown) {
         return doThrowClasses(toBeThrown);
     }
 
+    @Override
     public Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
         return doThrowClasses(toBeThrown).doThrowClasses(nextToBeThrown);
     }
@@ -82,16 +88,19 @@ public class StubberImpl implements Stubber {
         return this;
     }
 
+    @Override
     public Stubber doNothing() {
-        answers.add(new DoesNothing());
+        answers.add(doesNothing());
         return this;
     }
 
+    @Override
     public Stubber doAnswer(Answer answer) {
         answers.add(answer);
         return this;
     }
 
+    @Override
     public Stubber doCallRealMethod() {
         answers.add(new CallsRealMethods());
         return this;
