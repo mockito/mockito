@@ -1,3 +1,11 @@
+### 2.7.4 (2017-02-06 15:04 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Allon Murienik
+* Improvements: 1
+  * Fix whitespace issues throughout the code [(#928)](https://github.com/mockito/mockito/pull/928)
+
 ### 2.7.3 (2017-02-06 12:51 UTC)
 
 * Authors: 1
