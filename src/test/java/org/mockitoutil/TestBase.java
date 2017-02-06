@@ -56,7 +56,7 @@ public class TestBase {
         new StateMaster().reset();
     }
     
-    protected Invocation getLastInvocation() {
+    public static Invocation getLastInvocation() {
         return new MockitoCore().getLastInvocation();
     }
 

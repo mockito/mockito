@@ -7,10 +7,17 @@ package org.mockito.internal.stubbing.answers;
 import java.lang.reflect.Method;
 import java.nio.charset.CharacterCodingException;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockitoutil.TestBase.getLastInvocation;
 
 public class InvocationInfoTest {
 
@@ -69,6 +76,33 @@ public class InvocationInfoTest {
         assertThat(new InvocationInfo(new InvocationBuilder().method(iAmAbstract()).toInvocation()).isDeclaredOnInterface()).isFalse();
         assertThat(new InvocationInfo(new InvocationBuilder().method("voidMethod").toInvocation()).isDeclaredOnInterface()).isTrue();
     }
+    
+    @Test
+    public void isVoid_invocationOnVoidMethod_returnTrue(){
+        mock(IMethods.class).voidMethod();
+        
+        InvocationInfo voidMethod = new InvocationInfo(getLastInvocation());
+        
+        assertThat(voidMethod.isVoid()).isTrue();
+    }
+    
+    @Test
+    public void isVoid_invocationOnVoidReturningMethod_returnTrue(){
+        mock(IMethods.class).voidReturningMethod();
+        
+        InvocationInfo voidRetuningMethod = new InvocationInfo(getLastInvocation());
+        
+        assertThat(voidRetuningMethod.isVoid()).isTrue();
+    }
+    
+    @Test
+    public void isVoid_invocationNonVoidMethod_returnFalse(){
+        mock(IMethods.class).simpleMethod();
+        
+        InvocationInfo stringReturningMethod = new InvocationInfo(getLastInvocation());
+        
+        assertThat(stringReturningMethod.isVoid()).isFalse();
+    }
 
     private Method iAmAbstract() throws NoSuchMethodException {
         abstract class TheAbstract {
@@ -76,6 +110,7 @@ public class InvocationInfoTest {
         }
         return TheAbstract.class.getDeclaredMethod("iAmAbstract");
     }
+    
     private Method iAmNotAbstract() throws NoSuchMethodException {
         abstract class TheNotAbstract {
             void iAmNotAbstract() {};

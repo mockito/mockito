@@ -446,4 +446,9 @@ public class MethodsImpl implements IMethods {
     public String forObject(Object object) {
         return null;
     }
+
+    @Override
+    public Void voidReturningMethod() {
+        return null;
+    }
 }
