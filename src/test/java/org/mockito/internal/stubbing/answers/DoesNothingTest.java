@@ -4,25 +4,59 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
+import static org.mockitoutil.TestBase.getLastInvocation;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.invocation.Invocation;
+import org.mockitousage.IMethods;
 
-import static org.assertj.core.api.Assertions.assertThat;
+public class DoesNothingTest   {
+    
+    private IMethods mock;
+    private Invocation invocation_Void;
+    private Invocation invocation_void;
+    private Invocation invocation_String;
 
-public class DoesNothingTest {
+    @Before
+    public void init(){
+        mock = mock(IMethods.class);
+        
+        mock.voidMethod();
+        invocation_Void = getLastInvocation();
+        
+        mock.voidReturningMethod();
+        invocation_void = getLastInvocation();
+        
+        mock.simpleMethod();
+        invocation_String = getLastInvocation();
+    }
+    
     @Test
-    public void should_do_nothing() throws Throwable {
-        assertThat(new DoesNothing().answer(new InvocationBuilder().method("voidMethod").toInvocation())).isNull();
+    public void answer_returnsNull() throws Throwable {
+        assertThat(doesNothing().answer(invocation_Void)).isNull();
+        assertThat(doesNothing().answer(invocation_void)).isNull();
+        assertThat(doesNothing().answer(invocation_String)).isNull();
     }
 
     @Test(expected = MockitoException.class)
-    public void should_fail_when_non_void_method_does_nothing() throws Throwable {
-        new DoesNothing().validateFor(new InvocationBuilder().simpleMethod().toInvocation());
+    public void validateFor_nonVoidReturnType_shouldFail()   {
+        doesNothing().validateFor(invocation_String);
     }
 
     @Test
-    public void should_allow_void_return_for_void_method() throws Throwable {
-        new DoesNothing().validateFor(new InvocationBuilder().method("voidMethod").toInvocation());
+    public void validateFor_voidReturnType_shouldPass()   {
+        doesNothing().validateFor(invocation_void);
     }
+    
+    @Test
+    public void validateFor_voidObjectReturnType() throws Throwable {
+        doesNothing().validateFor(invocation_Void);
+    }
+    
+    
 }

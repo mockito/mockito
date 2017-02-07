@@ -38,8 +38,13 @@ public class InvocationInfo implements AbstractAwareMethod {
         }
     }
 
+    /**
+     * Returns {@code true} is the return type is {@link Void} or represents the pseudo-type to the keyword {@code void}.
+     * E.g:  {@code void foo()} or {@code Void bar()}
+     */
     public boolean isVoid() {
-        return this.method.getReturnType() == Void.TYPE;
+        Class<?> returnType = this.method.getReturnType();
+        return returnType == Void.TYPE|| returnType == Void.class;
     }
 
     public String printMethodReturnType() {
@@ -62,6 +67,7 @@ public class InvocationInfo implements AbstractAwareMethod {
         return method.getDeclaringClass().isInterface();
     }
 
+    @Override
     public boolean isAbstract() {
         return (method.getModifiers() & Modifier.ABSTRACT) != 0;
     }
