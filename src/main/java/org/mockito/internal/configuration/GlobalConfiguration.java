@@ -16,7 +16,7 @@ import org.mockito.stubbing.Answer;
  */
 public class GlobalConfiguration implements IMockitoConfiguration, Serializable {
     private static final long serialVersionUID = -2860353062105505938L;
-    
+
     private static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION = new ThreadLocal<IMockitoConfiguration>();
 
     //back door for testing
@@ -62,7 +62,7 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     public boolean cleansStackTrace() {
         return GLOBAL_CONFIGURATION.get().cleansStackTrace();
     }
-    
+
     public boolean enableClassCache() {
         return GLOBAL_CONFIGURATION.get().enableClassCache();
     }

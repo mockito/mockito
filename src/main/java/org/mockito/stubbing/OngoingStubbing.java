@@ -23,7 +23,7 @@ import org.mockito.Mockito;
  * when(mock.someMethod("some arg"))
  *  .thenThrow(new RuntimeException())
  *  .thenReturn("foo");
- * 
+ *
  * //There is a shorter way of consecutive stubbing:
  * when(mock.someMethod()).thenReturn(1,2,3);
  * when(mock.otherMethod()).thenThrow(exc1, exc2);
@@ -75,7 +75,7 @@ public interface OngoingStubbing<T> {
      * If throwables contain a checked exception then it has to
      * match one of the checked exceptions of method signature.
      * <p>
-     * You can specify throwables to be thrown for consecutive calls. 
+     * You can specify throwables to be thrown for consecutive calls.
      * In that case the last throwable determines the behavior of further consecutive calls.
      * <p>
      * If throwable is null then exception will be thrown.
@@ -101,7 +101,7 @@ public interface OngoingStubbing<T> {
      * If throwable is null then exception will be thrown.
      * <p>
      * See examples in javadoc for {@link Mockito#when}
-     * 
+     *
      * <p>Note depending on the JVM, stack trace information may not be available in
      * the generated throwable instance.  If you require stack trace information,
      * use {@link OngoingStubbing#thenThrow(Throwable...)} instead.
@@ -148,29 +148,29 @@ public interface OngoingStubbing<T> {
     @SuppressWarnings ({"unchecked", "varargs"})
     OngoingStubbing<T> thenThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown);
 
-    /**     
+    /**
      * Sets the real implementation to be called when the method is called on a mock object.
      * <p>
      * As usual you are going to read <b>the partial mock warning</b>:
      * Object oriented programming is more less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
-     * How does partial mock fit into this paradigm? Well, it just doesn't... 
+     * How does partial mock fit into this paradigm? Well, it just doesn't...
      * Partial mock usually means that the complexity has been moved to a different method on the same object.
      * In most cases, this is not the way you want to design your application.
      * <p>
-     * However, there are rare cases when partial mocks come handy: 
+     * However, there are rare cases when partial mocks come handy:
      * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
      * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
      * <pre class="code"><code class="java">
      *   // someMethod() must be safe (e.g. doesn't throw, doesn't have dependencies to the object state, etc.)
-     *   // if it isn't safe then you will have trouble stubbing it using this api. Use Mockito.doCallRealMethod() instead. 
+     *   // if it isn't safe then you will have trouble stubbing it using this api. Use Mockito.doCallRealMethod() instead.
      *   when(mock.someMethod()).thenCallRealMethod();
-     *   
+     *
      *   // calls real method:
      *   mock.someMethod();
-     *   
+     *
      * </code></pre>
-     * See also javadoc {@link Mockito#spy(Object)} to find out more about partial mocks. 
-     * <b>Mockito.spy() is a recommended way of creating partial mocks.</b> 
+     * See also javadoc {@link Mockito#spy(Object)} to find out more about partial mocks.
+     * <b>Mockito.spy() is a recommended way of creating partial mocks.</b>
      * The reason is it guarantees real methods are called against correctly constructed object because you're responsible for constructing the object passed to spy() method.
      * <p>
      * See examples in javadoc for {@link Mockito#when}

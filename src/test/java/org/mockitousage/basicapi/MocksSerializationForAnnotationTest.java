@@ -40,7 +40,7 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
     @Mock(serializable=true) Any anyMock;
     @Mock(serializable=true) AlreadySerializable alreadySerializableMock;
     @Mock(extraInterfaces={List.class},serializable=true) IMethods imethodsWithExtraInterfacesMock;
-    
+
     @Test
     public void should_allow_throws_exception_to_be_serializable() throws Exception {
         // given
@@ -49,7 +49,7 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
         //when-serialize then-deserialize
         serializeAndBack(barMock);
     }
-    
+
     @Test
     public void should_allow_mock_to_be_serializable() throws Exception {
         // when-serialize then-deserialize
@@ -228,7 +228,7 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
     public void should_serialize_with_stubbing_callback() throws Exception {
 
         // given
-        CustomAnswersMustImplementSerializableForSerializationToWork answer = 
+        CustomAnswersMustImplementSerializableForSerializationToWork answer =
             new CustomAnswersMustImplementSerializableForSerializationToWork();
         answer.string = "return value";
         when(imethodsMock.objectArgMethod(anyString())).thenAnswer(answer);
@@ -277,7 +277,7 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
         // then
         deserializeMock(serialized, Any.class);
     }
-    
+
     @Test
     public void should_serialize_real_partial_mock() throws Exception {
         // given
@@ -304,7 +304,7 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
         // then
         assertEquals("foo", alreadySerializableMock.toString());
     }
-    
+
     @Test
     public void should_be_serialize_and_have_extra_interfaces() throws Exception {
         //then

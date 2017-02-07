@@ -22,17 +22,17 @@ public class MockingMultipleInterfacesTest {
     class Foo {}
     interface IFoo {}
     interface IBar {}
-    
+
     @Test
     public void should_allow_multiple_interfaces() {
         //when
         Foo mock = mock(Foo.class, withSettings().extraInterfaces(IFoo.class, IBar.class));
-        
+
         //then
         assertThat(mock).isInstanceOf(IFoo.class);
         assertThat(mock).isInstanceOf(IBar.class);
     }
-    
+
     @Test
     public void should_scream_when_null_passed_instead_of_an_interface() {
         try {
@@ -44,7 +44,7 @@ public class MockingMultipleInterfacesTest {
             assertThat(e.getMessage()).contains("extraInterfaces() does not accept null parameters");
         }
     }
-    
+
     @Test
     public void should_scream_when_no_args_passed() {
         try {
@@ -56,7 +56,7 @@ public class MockingMultipleInterfacesTest {
             assertThat(e.getMessage()).contains("extraInterfaces() requires at least one interface");
         }
     }
-    
+
     @Test
     public void should_scream_when_null_passed_instead_of_an_array() {
         try {
@@ -68,7 +68,7 @@ public class MockingMultipleInterfacesTest {
             assertThat(e.getMessage()).contains("extraInterfaces() requires at least one interface");
         }
     }
-    
+
     @Test
     public void should_scream_when_non_interface_passed() {
         try {
@@ -80,7 +80,7 @@ public class MockingMultipleInterfacesTest {
             assertThat(e.getMessage()).contains("Foo which is not an interface");
         }
     }
-    
+
     @Test
     public void should_scream_when_the_same_interfaces_passed() {
         try {

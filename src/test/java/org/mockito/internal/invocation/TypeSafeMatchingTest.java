@@ -29,7 +29,7 @@ public class TypeSafeMatchingTest {
 
     /**
      * Should not throw an {@link NullPointerException}
-     * 
+     *
      * @see Bug-ID https://github.com/mockito/mockito/issues/457
      */
     @Test
@@ -122,7 +122,7 @@ public class TypeSafeMatchingTest {
     @Test
     public void dontMatchesWithSubTypeExtendingGenericClass() {
         final AtomicBoolean wasCalled = new AtomicBoolean();
-        
+
         abstract class GenericMatcher<T> implements ArgumentMatcher<T> {
         }
         class TestMatcher extends GenericMatcher<Integer> {

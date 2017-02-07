@@ -19,7 +19,7 @@ import java.util.Collection;
  * @since 1.9.5
  */
 public interface MockingDetails {
-    
+
     /**
      * Informs if the object is a mock. isMock() for null input returns false.
      * @return true if the object is a mock or a spy (spy is a different kind of mock, but it is still a mock).
@@ -35,7 +35,7 @@ public interface MockingDetails {
      * @since 1.9.5
      */
     boolean isSpy();
-    
+
     /**
      * All method invocations on this mock.
      * Can be empty - it means there were no interactions with the mock.

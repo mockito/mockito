@@ -13,7 +13,7 @@ import org.mockito.stubbing.ValidableAnswer;
 import static org.mockito.internal.exceptions.Reporter.onlyVoidMethodsCanBeSetToDoNothing;
 
 public class DoesNothing implements Answer<Object>, ValidableAnswer, Serializable {
-    
+
     private static final long serialVersionUID = 4840880517740698416L;
 
     private static final DoesNothing SINGLETON = new DoesNothing();

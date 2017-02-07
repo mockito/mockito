@@ -44,7 +44,7 @@ public class ReturnsElementsOf implements Answer<Object> {
     public Object answer(InvocationOnMock invocation) throws Throwable {
         if (elements.size() == 1)
             return elements.get(0);
-        else 
+        else
             return elements.poll();
     }
 }

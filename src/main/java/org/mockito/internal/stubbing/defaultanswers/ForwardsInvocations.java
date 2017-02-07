@@ -31,10 +31,10 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Method mockMethod = invocation.getMethod();
-        
+
         try {
             Method delegateMethod = getDelegateMethod(mockMethod);
-            
+
             if (!compatibleReturnTypes(mockMethod.getReturnType(), delegateMethod.getReturnType())) {
                 throw delegatedMethodHasWrongReturnType(mockMethod, delegateMethod, invocation.getMock(), delegatedObject);
             }

@@ -25,13 +25,13 @@ import static org.mockito.internal.invocation.InvocationsFinder.findMatchingChun
 import static org.mockito.internal.invocation.InvocationsFinder.getLastLocation;
 
 public class NumberOfInvocationsChecker {
-    
+
     private NumberOfInvocationsChecker() {
     }
 
     public static void checkNumberOfInvocations(List<Invocation> invocations, MatchableInvocation wanted, int wantedCount) {
         List<Invocation> actualInvocations = findInvocations(invocations, wanted);
-        
+
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
             Location lastInvocation = getLastLocation(actualInvocations);
@@ -48,24 +48,24 @@ public class NumberOfInvocationsChecker {
 
         markVerified(actualInvocations, wanted);
     }
-    
+
     public static void checkNumberOfInvocations(List<Invocation> invocations, MatchableInvocation wanted, int wantedCount, InOrderContext context) {
         List<Invocation> chunk = findMatchingChunk(invocations, wanted, wantedCount, context);
-        
+
         int actualCount = chunk.size();
-        
+
         if (wantedCount > actualCount) {
             Location lastInvocation = getLastLocation(chunk);
             throw tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, lastInvocation);
-        } 
+        }
         if (wantedCount < actualCount) {
             Location firstUndesired = chunk.get(wantedCount).getLocation();
             throw tooManyActualInvocationsInOrder(wantedCount, actualCount, wanted, firstUndesired);
         }
-        
+
         markVerifiedInOrder(chunk, wanted, context);
     }
-    
+
     public static void checkNumberOfInvocationsNonGreedy(List<Invocation> invocations, MatchableInvocation wanted, int wantedCount, InOrderContext context) {
         int actualCount = 0;
         Location lastLocation = null;

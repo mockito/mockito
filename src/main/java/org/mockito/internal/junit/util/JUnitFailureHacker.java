@@ -27,7 +27,7 @@ public class JUnitFailureHacker {
     }
 
     private boolean isEmpty(String warnings) {
-        return warnings == null || "".equals(warnings); // isEmpty() is in JDK 6+ 
+        return warnings == null || "".equals(warnings); // isEmpty() is in JDK 6+
     }
 
     private static Object getInternalState(Object target, String field) {

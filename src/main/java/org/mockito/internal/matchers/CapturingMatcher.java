@@ -14,12 +14,12 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
-    
+
     private final LinkedList<Object> arguments = new LinkedList<Object>();
 
     public boolean matches(Object argument) {
         return true;
-    }    
+    }
 
     public String toString() {
         return "<Capturing argument>";
@@ -29,9 +29,9 @@ public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArgument
         if (arguments.isEmpty()) {
             throw noArgumentValueWasCaptured();
         }
-        
+
         return (T) arguments.getLast();
-        
+
     }
 
     public List<T> getAllValues() {

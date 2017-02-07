@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 public class OnlyTest {
 
     Only only = new Only();
-    
+
     public class VerificationDataStub implements VerificationData {
         private final Invocation invocation;
         private final InvocationMatcher wanted;
@@ -49,26 +49,26 @@ public class OnlyTest {
         //given
         Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
-        
+
         //when
         only.verify(new VerificationDataStub(new InvocationMatcher(invocation), invocation));
-        
+
         //then
         assertTrue(invocation.isVerified());
     }
-    
+
     @Test
     public void shouldNotMarkAsVerifiedWhenAssertionFailed() {
         //given
         Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
-        
+
         //when
         try {
             only.verify(new VerificationDataStub(new InvocationBuilder().toInvocationMatcher(), invocation));
             fail();
         } catch (MockitoAssertionError e) {}
-        
+
         //then
         assertFalse(invocation.isVerified());
     }

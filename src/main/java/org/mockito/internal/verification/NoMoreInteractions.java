@@ -31,7 +31,7 @@ public class NoMoreInteractions implements VerificationMode, VerificationInOrder
     public void verifyInOrder(VerificationDataInOrder data) {
         List<Invocation> invocations = data.getAllInvocations();
         Invocation unverified = findFirstUnverifiedInOrder(data.getOrderingContext(), invocations);
-        
+
         if (unverified != null) {
             throw noMoreInteractionsWantedInOrder(unverified);
         }

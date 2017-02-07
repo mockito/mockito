@@ -46,7 +46,7 @@ public class ConstructorInstantiator implements Instantiator {
         accessibility.enableAccess(constructor);
         return (T) constructor.newInstance(params);
     }
-    
+
     private static <T> InstantiationException paramsException(Class<T> cls, Exception cause) {
         return new InstantiationException(
                 join("Unable to create instance of '" + cls.getSimpleName() + "'.",

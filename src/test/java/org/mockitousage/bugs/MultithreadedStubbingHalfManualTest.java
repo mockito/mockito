@@ -68,7 +68,7 @@ public class MultithreadedStubbingHalfManualTest {
     @Test
     //this problem shows at 4 out of 5 executions
     //it is not strictly a bug because Mockito does not support simultanous stubbing (see FAQ)
-    //however I decided to synchronize some calls in order to make the exceptions nicer 
+    //however I decided to synchronize some calls in order to make the exceptions nicer
     public void tryToRevealTheProblem() {
         ToMock toMock = mock(ToMock.class);
         for (int i = 0; i < 100; i++) {

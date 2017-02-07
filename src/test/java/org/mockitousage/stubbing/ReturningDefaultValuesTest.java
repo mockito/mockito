@@ -36,7 +36,7 @@ public class ReturningDefaultValuesTest extends TestBase {
         assertEquals(false, mock.booleanReturningMethod());
         assertEquals(null, mock.objectReturningMethod());
     }
-    
+
     @Test
     public void shouldReturnTheSameValuesForWrapperClasses() throws Exception {
         assertEquals(new Byte((byte) 0), mock.byteObjectReturningMethod());
@@ -48,27 +48,27 @@ public class ReturningDefaultValuesTest extends TestBase {
         assertEquals(new Character((char) 0), mock.charObjectReturningMethod());
         assertEquals(new Boolean(false), mock.booleanObjectReturningMethod());
     }
-    
-    @Test 
+
+    @Test
     public void shouldReturnEmptyCollections() {
         CollectionsServer mock = Mockito.mock(CollectionsServer.class);
-        
+
         assertTrue(mock.list().isEmpty());
         assertTrue(mock.linkedList().isEmpty());
         assertTrue(mock.map().isEmpty());
         assertTrue(mock.hashSet().isEmpty());
     }
-    
-    @Test 
+
+    @Test
     public void shouldReturnMutableEmptyCollection() {
         CollectionsServer mock = Mockito.mock(CollectionsServer.class);
-        
+
         List list = mock.list();
         list.add("test");
-       
+
         assertTrue(mock.list().isEmpty());
     }
-    
+
     private class CollectionsServer {
         List<?> list() {
             return null;

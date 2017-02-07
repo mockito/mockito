@@ -20,7 +20,7 @@ public class ReturnsMoreEmptyValuesTest extends TestBase {
         assertTrue(ret.getClass().isArray());
         assertTrue(ret.length == 0);
     }
-    
+
     @Test
     public void shouldReturnEmptyString() {
         assertEquals("", rv.returnValueFor(String.class));

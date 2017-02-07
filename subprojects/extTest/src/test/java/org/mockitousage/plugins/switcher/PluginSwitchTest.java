@@ -17,7 +17,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 public class PluginSwitchTest {
-    
+
     @Test
     public void plugin_switcher_is_used() {
         mock(List.class);

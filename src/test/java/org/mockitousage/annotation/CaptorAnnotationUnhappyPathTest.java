@@ -18,7 +18,7 @@ import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CaptorAnnotationUnhappyPathTest extends TestBase {
-    
+
     @Captor List<?> notACaptorField;
 
     @Before
@@ -26,7 +26,7 @@ public class CaptorAnnotationUnhappyPathTest extends TestBase {
     public void init() {
         //we need to get rid of parent implementation this time
     }
-    
+
     @Test
     public void shouldFailIfCaptorHasWrongType() throws Exception {
         try {

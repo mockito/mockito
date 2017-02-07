@@ -18,7 +18,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
 
     private interface DummyInterface {}
     private class DummyClass {}
-    
+
     @Test
     public void shouldProvideMockyImplementationOfToString() {
         DummyClass dummyClass = Mockito.mock(DummyClass.class);
@@ -26,8 +26,8 @@ public class ReplacingObjectMethodsTest extends TestBase {
         DummyInterface dummyInterface = Mockito.mock(DummyInterface.class);
         assertEquals("Mock for DummyInterface, hashCode: " + dummyInterface.hashCode(), dummyInterface.toString());
     }
-    
-    @Test 
+
+    @Test
     public void shouldReplaceObjectMethods() {
         Object mock = Mockito.mock(ObjectMethodsOverridden.class);
         Object otherMock = Mockito.mock(ObjectMethodsOverridden.class);
@@ -38,8 +38,8 @@ public class ReplacingObjectMethodsTest extends TestBase {
 
         assertThat(mock.toString()).contains("Mock for ObjectMethodsOverridden");
     }
-    
-    @Test 
+
+    @Test
     public void shouldReplaceObjectMethodsWhenOverridden() {
         Object mock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
         Object otherMock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
@@ -50,7 +50,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
 
         assertThat(mock.toString()).contains("Mock for ObjectMethodsOverriddenSubclass");
     }
-    
+
     public static class ObjectMethodsOverridden {
         public boolean equals(Object o) {
             throw new RuntimeException("Should not be called. MethodInterceptorFilter provides implementation");
@@ -62,7 +62,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
             throw new RuntimeException("Should not be called. MethodInterceptorFilter provides implementation");
         }
     }
-    
+
     public static class ObjectMethodsOverriddenSubclass extends ObjectMethodsOverridden {
     }
 }

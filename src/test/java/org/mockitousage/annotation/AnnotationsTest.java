@@ -31,7 +31,7 @@ public class AnnotationsTest extends TestBase {
 
     @Mock List<?> list;
     @Mock final Map<Integer, String> map = new HashMap<Integer, String>();
-        
+
     @NotAMock Set<?> notAMock;
 
     @Mock List<?> listTwo;
@@ -72,7 +72,7 @@ public class AnnotationsTest extends TestBase {
         assertNotNull(sub.getBaseMock());
         assertNotNull(sub.getSuperBaseMock());
     }
-    
+
     @Mock(answer = Answers.RETURNS_MOCKS, name = "i have a name") IMethods namedAndReturningMocks;
     @Mock(answer = Answers.RETURNS_DEFAULTS) IMethods returningDefaults;
     @Mock(extraInterfaces = {List.class}) IMethods hasExtraInterfaces;
@@ -82,13 +82,13 @@ public class AnnotationsTest extends TestBase {
     public void shouldInitMocksWithGivenSettings() throws Exception {
         assertEquals("i have a name", namedAndReturningMocks.toString());
         assertNotNull(namedAndReturningMocks.iMethodsReturningMethod());
-       
+
         assertEquals("returningDefaults", returningDefaults.toString());
-        assertEquals(0, returningDefaults.intReturningMethod()); 
-        
+        assertEquals(0, returningDefaults.intReturningMethod());
+
         assertTrue(hasExtraInterfaces instanceof List);
-        
-        assertEquals(0, noExtraConfig.intReturningMethod());        
+
+        assertEquals(0, noExtraConfig.intReturningMethod());
     }
 
     class SuperBase {

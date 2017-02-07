@@ -17,15 +17,15 @@ import java.lang.reflect.Method;
 public interface InvocationOnMock extends Serializable {
 
     /**
-     * returns the mock object 
-     * 
+     * returns the mock object
+     *
      * @return mock object
      */
     Object getMock();
 
     /**
      * returns the method
-     * 
+     *
      * @return method
      */
     Method getMethod();
@@ -34,11 +34,11 @@ public interface InvocationOnMock extends Serializable {
      * Returns arguments passed to the method.
      *
      * Vararg are expanded in this array.
-     * 
+     *
      * @return arguments
      */
     Object[] getArguments();
-    
+
     /**
      * Returns casted argument at the given index.
      *
@@ -53,10 +53,10 @@ public interface InvocationOnMock extends Serializable {
     /**
      * calls real method
      * <p>
-     * <b>Warning:</b> depending on the real implementation it might throw exceptions  
+     * <b>Warning:</b> depending on the real implementation it might throw exceptions
      *
      * @return whatever the real method returns / throws
-     * @throws Throwable in case real method throws 
+     * @throws Throwable in case real method throws
      */
     Object callRealMethod() throws Throwable;
 }

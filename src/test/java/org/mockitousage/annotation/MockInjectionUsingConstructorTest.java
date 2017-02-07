@@ -130,7 +130,7 @@ public class MockInjectionUsingConstructorTest {
         @InjectMocks FailingConstructor failingConstructor;
     }
 
-    
+
     @Test
     public void injectMocksMustFailWithInterface() throws Exception {
         class TestCase {
@@ -141,10 +141,10 @@ public class MockInjectionUsingConstructorTest {
         exception.expect(MockitoException.class);
         exception.expectMessage("Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'IMethods' is an interface");
 
-        
+
         initMocks(new TestCase());
     }
-    
+
     @Test
     public void injectMocksMustFailWithEnum() throws Exception {
         class TestCase {
@@ -154,10 +154,10 @@ public class MockInjectionUsingConstructorTest {
 
         exception.expect(MockitoException.class);
         exception.expectMessage("Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'TimeUnit' is an enum");
-        
+
         initMocks(new TestCase());
     }
-    
+
     @Test
     public void injectMocksMustFailWithAbstractClass() throws Exception {
         class TestCase {
@@ -167,10 +167,10 @@ public class MockInjectionUsingConstructorTest {
 
         exception.expect(MockitoException.class);
         exception.expectMessage("Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'AbstractCollection' is an abstract class");
-        
+
         initMocks(new TestCase());
     }
-    
+
     @Test
     public void injectMocksMustFailWithNonStaticInnerClass() throws Exception {
         class TestCase {
@@ -178,14 +178,14 @@ public class MockInjectionUsingConstructorTest {
             @InjectMocks
             InnerClass f;
         }
-        
+
 
         exception.expect(MockitoException.class);
         exception.expectMessage("Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'InnerClass' is an inner non static class");
-        
+
         initMocks(new TestCase());
     }
-    
+
     static class  StaticInnerClass {}
     @Test
     public void injectMocksMustSucceedWithStaticInnerClass() throws Exception {
@@ -196,10 +196,10 @@ public class MockInjectionUsingConstructorTest {
 
         TestCase testClass = new TestCase();
         initMocks(testClass);
-        
+
         assertThat(testClass.f).isInstanceOf(StaticInnerClass.class);
     }
-   
+
     @Test
     public void injectMocksMustSucceedWithInstance() throws Exception {
         class TestCase {
@@ -210,11 +210,11 @@ public class MockInjectionUsingConstructorTest {
         TestCase testClass = new TestCase();
         StaticInnerClass original = testClass.f;
         initMocks(testClass);
-        
+
         assertThat(testClass.f).isSameAs(original);
     }
-   
-    
-   
+
+
+
 
 }

@@ -75,7 +75,7 @@ import java.util.List;
  */
 @SuppressWarnings("unchecked")
 class EqualsBuilder {
-    
+
     /**
      * If the fields tested are equals.
      * The default value is <code>true</code>.
@@ -226,9 +226,9 @@ class EqualsBuilder {
         if (lhs == null || rhs == null) {
             return false;
         }
-        // Find the leaf class since there may be transients in the leaf 
+        // Find the leaf class since there may be transients in the leaf
         // class or in classes between the leaf and root.
-        // If we are not testing transients or a subclass has no ivars, 
+        // If we are not testing transients or a subclass has no ivars,
         // then a subclass can test equals to a superclass.
         Class<?> lhsClass = lhs.getClass();
         Class<?> rhsClass = rhs.getClass();
@@ -258,7 +258,7 @@ class EqualsBuilder {
             }
         } catch (IllegalArgumentException e) {
             // In this case, we tried to test a subclass vs. a superclass and
-            // the subclass has ivars or the ivars are transient and 
+            // the subclass has ivars or the ivars are transient and
             // we are testing transients.
             // If a subclass has ivars that we are trying to test them, we get an
             // exception and we know that the objects are not equal.
@@ -270,7 +270,7 @@ class EqualsBuilder {
     /**
      * <p>Appends the fields and values defined by the given object of the
      * given Class.</p>
-     * 
+     *
      * @param lhs  the left hand object
      * @param rhs  the right hand object
      * @param clazz  the class to append details of
@@ -349,9 +349,9 @@ class EqualsBuilder {
                 isEquals = lhs.equals(rhs);
             }
         } else if (lhs.getClass() != rhs.getClass()) {
-            // Here when we compare different dimensions, for example: a boolean[][] to a boolean[] 
+            // Here when we compare different dimensions, for example: a boolean[][] to a boolean[]
             this.setEquals(false);
-        
+
         // 'Switch' on type of array, to dispatch to the correct handler
         // This handles multi dimensional arrays of the same depth
         } else if (lhs instanceof long[]) {
@@ -381,7 +381,7 @@ class EqualsBuilder {
      * <p>
      * Test if two <code>long</code> s are equal.
      * </p>
-     * 
+     *
      * @param lhs
      *                  the left hand <code>long</code>
      * @param rhs
@@ -784,7 +784,7 @@ class EqualsBuilder {
 
     /**
      * Sets the <code>isEquals</code> value.
-     * 
+     *
      * @param isEquals The value to set.
      * @since 2.1
      */

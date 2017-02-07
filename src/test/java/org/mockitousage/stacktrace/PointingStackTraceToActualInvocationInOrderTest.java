@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 //This is required to make sure stack trace is well filtered when runner is ON
 @RunWith(MockitoJUnitRunner.class)
 public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
-    
+
     @Mock private IMethods mock;
     @Mock private IMethods mockTwo;
     private InOrder inOrder;
@@ -30,7 +30,7 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
     @Before
     public void setup() {
         inOrder = inOrder(mock, mockTwo);
-        
+
         first();
         second();
         third();
@@ -49,12 +49,12 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
     private void fourth() {
         mockTwo.simpleMethod(4);
     }
-    
+
     @Test
     public void shouldPointStackTraceToPreviousVerified() {
         inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
         inOrder.verify(mockTwo).simpleMethod(anyInt());
-        
+
         try {
             inOrder.verify(mock).simpleMethod(999);
             fail();
@@ -62,11 +62,11 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
             assertThat(e).hasMessageContaining("fourth(");
         }
     }
-    
+
     @Test
     public void shouldPointToThirdMethod() {
         inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
-        
+
         try {
             inOrder.verify(mockTwo).simpleMethod(999);
             fail();
@@ -74,12 +74,12 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
             assertThat(e).hasMessageContaining("third(");
         }
     }
-    
+
     @Test
     public void shouldPointToSecondMethod() {
         inOrder.verify(mock).simpleMethod(anyInt());
         inOrder.verify(mockTwo).simpleMethod(anyInt());
-        
+
         try {
             inOrder.verify(mockTwo, times(3)).simpleMethod(999);
             fail();
@@ -87,7 +87,7 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
             assertThat(e).hasMessageContaining("second(");
         }
     }
-    
+
     @Test
     public void shouldPointToFirstMethodBecauseOfTooManyActualInvocations() {
         try {
@@ -96,12 +96,12 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
         } catch (VerificationInOrderFailure e) {
             assertThat(e).hasMessageContaining("first(");
         }
-    }    
-    
+    }
+
     @Test
     public void shouldPointToSecondMethodBecauseOfTooManyActualInvocations() {
         inOrder.verify(mock).simpleMethod(anyInt());
-        
+
         try {
             inOrder.verify(mockTwo, times(0)).simpleMethod(anyInt());
             fail();
@@ -109,13 +109,13 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
             assertThat(e).hasMessageContaining("second(");
         }
     }
-    
+
     @Test
     public void shouldPointToFourthMethodBecauseOfTooLittleActualInvocations() {
         inOrder.verify(mock).simpleMethod(anyInt());
         inOrder.verify(mockTwo).simpleMethod(anyInt());
         inOrder.verify(mock).simpleMethod(anyInt());
-        
+
         try {
             inOrder.verify(mockTwo, times(3)).simpleMethod(anyInt());
             fail();

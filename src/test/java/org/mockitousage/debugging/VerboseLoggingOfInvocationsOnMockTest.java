@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 /**
  * Tests the verbose logging of invocation on mock methods.
- * 
+ *
  * BEWARE: These tests rely on mocking the standard output. While in a
  * single-threaded environment the Before/After-contract ensures, that the
  * original output stream is restored, there is no guarantee for this
@@ -126,10 +126,10 @@ public class VerboseLoggingOfInvocationsOnMockTest {
         FooImpl fooSpy = mock(FooImpl.class,
                 withSettings().spiedInstance(new FooImpl()).verboseLogging());
         doCallRealMethod().when(fooSpy).doSomething("Klipsch");
-        
+
         // when
         fooSpy.doSomething("Klipsch");
-        
+
         // then
         Assertions.assertThat(printed())
                 .contains(getClass().getName())

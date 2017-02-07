@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBase {
-    
+
     @Mock private IMethods mock;
     @Mock private IMethods mockTwo;
     private InOrder inOrder;
@@ -29,7 +29,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
     @Before
     public void setup() {
         inOrder = inOrder(mock, mockTwo);
-        
+
         firstChunk();
         secondChunk();
         thirdChunk();
@@ -52,12 +52,12 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
         mockTwo.simpleMethod(4);
         mockTwo.simpleMethod(4);
     }
-    
+
     @Test
     public void shouldPointStackTraceToPreviousInvocation() {
         inOrder.verify(mock, times(2)).simpleMethod(anyInt());
         inOrder.verify(mockTwo, times(2)).simpleMethod(anyInt());
-        
+
         try {
             inOrder.verify(mock).simpleMethod(999);
             fail();
@@ -65,11 +65,11 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             assertThat(e).hasMessageContaining("secondChunk(");
         }
     }
-    
+
     @Test
     public void shouldPointToThirdInteractionBecauseAtLeastOnceUsed() {
         inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
-        
+
         try {
             inOrder.verify(mockTwo).simpleMethod(999);
             fail();
@@ -77,13 +77,13 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             assertThat(e).hasMessageContaining("thirdChunk(");
         }
     }
-    
+
     @Test
     public void shouldPointToThirdChunkWhenTooLittleActualInvocations() {
         inOrder.verify(mock, times(2)).simpleMethod(anyInt());
         inOrder.verify(mockTwo, times(2)).simpleMethod(anyInt());
         inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
-        
+
         try {
             inOrder.verify(mockTwo, times(3)).simpleMethod(999);
             fail();
@@ -91,11 +91,11 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
             assertThat(e).hasMessageContaining("thirdChunk(");
         }
     }
-    
+
     @Test
     public void shouldPointToFourthChunkBecauseTooManyActualInvocations() {
         inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());
-        
+
         try {
             inOrder.verify(mockTwo, times(0)).simpleMethod(anyInt());
             fail();

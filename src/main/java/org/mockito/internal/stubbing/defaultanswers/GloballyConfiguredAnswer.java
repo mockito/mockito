@@ -17,7 +17,7 @@ import org.mockito.stubbing.Answer;
  * See javadoc for {@link IMockitoConfiguration}
  */
 public class GloballyConfiguredAnswer implements Answer<Object>, Serializable {
-    
+
     private static final long serialVersionUID = 3585893470101750917L;
 
     public Object answer(InvocationOnMock invocation) throws Throwable {

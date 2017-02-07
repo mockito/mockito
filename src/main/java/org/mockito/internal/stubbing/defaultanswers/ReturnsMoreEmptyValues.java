@@ -16,7 +16,7 @@ import org.mockito.stubbing.Answer;
  * <p>
  * Currently <b>used only</b> by {@link Mockito#RETURNS_SMART_NULLS}
  * <p>
- * Current version of Mockito mocks by deafult use {@link ReturnsEmptyValues}  
+ * Current version of Mockito mocks by deafult use {@link ReturnsEmptyValues}
  * <ul>
  * <li>
  *  Returns appropriate primitive for primitive-returning methods
@@ -45,10 +45,10 @@ import org.mockito.stubbing.Answer;
  * </ul>
  */
 public class ReturnsMoreEmptyValues implements Answer<Object>, Serializable {
-    
+
     private static final long serialVersionUID = -2816745041482698471L;
     private final Answer<Object> delegate = new ReturnsEmptyValues();
-    
+
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
@@ -61,7 +61,7 @@ public class ReturnsMoreEmptyValues implements Answer<Object>, Serializable {
         Class<?> returnType = invocation.getMethod().getReturnType();
         return returnValueFor(returnType);
     }
-    
+
     Object returnValueFor(Class<?> type) {
         if (type == String.class) {
             return "";

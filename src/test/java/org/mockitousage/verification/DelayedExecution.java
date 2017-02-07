@@ -13,10 +13,10 @@ import java.util.concurrent.TimeUnit;
 class DelayedExecution {
     private static final int CORE_POOL_SIZE = 3;
     /**
-     * Defines the number of milliseconds we expecting a Thread might need to unpark, we use this to avoid "oversleeping" while awaiting the deadline for  
+     * Defines the number of milliseconds we expecting a Thread might need to unpark, we use this to avoid "oversleeping" while awaiting the deadline for
      */
     private static final long MAX_EXPECTED_OVERSLEEP_MILLIS = 50;
-    
+
     private final ScheduledExecutorService executor;
 
     public DelayedExecution() {
@@ -41,7 +41,7 @@ class DelayedExecution {
         return new Runnable() {
             @Override
             public void run() {
-                //we park the current Thread till 50ms before we want to execute the runnable 
+                //we park the current Thread till 50ms before we want to execute the runnable
                 parkUntil(deadline - MAX_EXPECTED_OVERSLEEP_MILLIS);
                 //now we closing to the deadline by burning CPU-time in a loop
                 burnRemaining(deadline);
@@ -52,8 +52,8 @@ class DelayedExecution {
             }
 
             /**
-             * Loop in tight cycles until we reach the dead line. We do this cause sleep or park is very not precise, 
-             * this can causes a Thread to under- or oversleep, sometimes by +50ms.  
+             * Loop in tight cycles until we reach the dead line. We do this cause sleep or park is very not precise,
+             * this can causes a Thread to under- or oversleep, sometimes by +50ms.
              */
             private void burnRemaining(final long deadline) {
                 long remaining;

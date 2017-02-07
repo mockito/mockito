@@ -17,15 +17,15 @@ import static org.mockito.Mockito.verify;
 
 //bug 197
 public class ShouldOnlyModeAllowCapturingArgumentsTest extends TestBase {
-    
+
     @Mock IMethods mock;
-    
+
     @Test
     public void shouldAllowCapturingArguments() {
         //given
         mock.simpleMethod("o");
         ArgumentCaptor<String> arg = ArgumentCaptor.forClass(String.class);
-        
+
         //when
         verify(mock, only()).simpleMethod(arg.capture());
 

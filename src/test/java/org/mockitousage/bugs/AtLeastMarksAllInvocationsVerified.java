@@ -25,7 +25,7 @@ public class AtLeastMarksAllInvocationsVerified extends TestBase {
 
         someMethods.allowedMethod();
         someMethods.disallowedMethod();
-        
+
         verify(someMethods, atLeast(1)).allowedMethod();
         verifyNoMoreInteractions(someMethods);
     }
