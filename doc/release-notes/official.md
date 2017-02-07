@@ -1,3 +1,12 @@
+### 2.7.5 (2017-02-07 15:36 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 2
+  * Support for return type 'Void' in DoesNothingAnswer [(#933)](https://github.com/mockito/mockito/pull/933)
+  * Mockito can't unbox Void [(#927)](https://github.com/mockito/mockito/issues/927)
+
 ### 2.7.4 (2017-02-06 15:04 UTC)
 
 * Authors: 1
