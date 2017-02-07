@@ -11,6 +11,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
 
 public class UnusedStubbingsTest extends TestBase {
 
@@ -32,8 +33,8 @@ public class UnusedStubbingsTest extends TestBase {
     public void unused_stubbings() throws Exception {
         //given
         UnusedStubbings stubbings = new UnusedStubbings((List) asList(
-            new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), new DoesNothing()),
-            new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), new DoesNothing())
+            new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), doesNothing()),
+            new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), doesNothing())
         ));
 
 
