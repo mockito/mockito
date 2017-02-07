@@ -14,7 +14,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-class DelayedExecution {
+public class DelayedExecution {
     private static final int CORE_POOL_SIZE = 3;
     /**
      * Defines the number of milliseconds we expecting a Thread might need to unpark, we use this to avoid "oversleeping" while awaiting the deadline for
