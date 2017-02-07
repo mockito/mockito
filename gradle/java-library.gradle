@@ -1,24 +1,6 @@
 apply plugin: 'java'
 
-group = 'org.mockito'
-
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
-
-apply plugin: 'maven-publish'
-
-configurations {
-    provided
-}
-
-sourceSets {
-    main {
-        compileClasspath = compileClasspath + configurations.provided
-    }
-    test {
-        compileClasspath = compileClasspath + configurations.provided
-    }
-}
+apply from: "$rootDir/gradle/library.gradle"
 
 test {
     include "**/*Test.class"
@@ -27,6 +9,3 @@ test {
         showCauses true
     }
 }
-
-assert project.hasProperty("artifactName") : "Please configure 'ext.artifactName' for project that wants to use 'java-library.gradle' plugin"
-archivesBaseName = project.ext.artifactName
