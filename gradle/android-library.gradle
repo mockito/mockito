@@ -1,6 +1,6 @@
 group = 'org.mockito'
 
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
 android {
