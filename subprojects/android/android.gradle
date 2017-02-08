@@ -4,12 +4,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
 }
-
-apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
 
 description = "Mockito for Android"
 
@@ -20,13 +16,14 @@ ext {
     mavenCentralSync = false
 }
 
-apply from: "$rootDir/gradle/library.gradle"
+apply from: "$rootDir/gradle/android-library.gradle"
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
     defaultConfig {
         minSdkVersion 8
+    }
+    lintOptions {
+        disable 'InvalidPackage', 'SdCardPath'
     }
 }
 
@@ -35,6 +32,6 @@ dependencies {
     compile "net.bytebuddy:byte-buddy-android:1.6.5"
 }
 
-apply from: "$rootDir/gradle/publishable-java-library.gradle"
+apply from: "$rootDir/gradle/publishable-android-library.gradle"
 
 tasks.javadoc.enabled = false
