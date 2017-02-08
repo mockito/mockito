@@ -1,16 +1,22 @@
 /**
-In order to apply this script plugin, please ensure following is configured:
+ In order to apply this script plugin, please ensure following is configured:
 
- ext {
-    bintrayAutoPublish = true //Whether version should be auto published after an upload to Bintray
-    mavenCentralSync = true //Whether to sync the version to Maven Central
- }
-
-*/
+ ext {bintrayAutoPublish = true //Whether version should be auto published after an upload to Bintray
+ mavenCentralSync = true //Whether to sync the version to Maven Central}*/
 
 def licenseFiles = copySpec {
     //mockito license
-    from(".") { include 'LICENSE' }
+    from(rootDir) { include 'LICENSE' }
+}
+
+// copy license files into the aar archive
+tasks.matching { it.name =~ /^bundle/ }.all {
+    def name = it.name.substring(6)
+    def copyTask = tasks.create("copyLicenseFiles$name", Copy) {
+        into "$project.buildDir/intermediates/bundles/${name.substring(0, 1).toLowerCase() + name.substring(1)}"
+        with licenseFiles
+    }
+    it.dependsOn copyTask
 }
 
 task sourcesJar(type: Jar) {
