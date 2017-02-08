@@ -1,0 +1,45 @@
+publishing.publications.all {
+    //TODO github profile?
+    def devs = ['szczepiq:Szczepan Faber', 'bric3:Brice Dutheil', 'raphw:Rafael Winterhalter', 'TimvdLippe:Tim van der Lippe']
+
+    pom.withXml {
+        def root = asNode()
+        root.appendNode('name', project.archivesBaseName)
+        root.appendNode('url', 'http://mockito.org')
+        root.appendNode('description', project.description)
+
+        def license = root.appendNode('licenses').appendNode('license')
+        license.appendNode('name', 'The MIT License')
+        license.appendNode('url', 'http://github.com/mockito/mockito/blob/master/LICENSE')
+        license.appendNode('distribution', 'repo')
+
+        root.appendNode('scm').appendNode('url', 'http://github.com/mockito/mockito')
+
+        def issues = root.appendNode('issueManagement')
+        issues.appendNode('url', 'https://github.com/mockito/mockito/issues')
+        issues.appendNode('system', 'GitHub issues')
+
+        def ci = root.appendNode('ciManagement')
+        ci.appendNode('url', 'https://travis-ci.org/mockito/mockito')
+        ci.appendNode('system', 'TravisCI')
+
+        def developers = root.appendNode('developers')
+        devs.each {
+            def split = it.split(':')
+            assert split.length == 2
+            def d = developers.appendNode('developer')
+            d.appendNode('id', split[0])
+            d.appendNode('name', split[1])
+            d.appendNode('roles').appendNode('role', 'Core developer')
+        }
+
+        def dependenciesNode = root.appendNode('dependencies')
+        configurations.compile.allDependencies.each {
+            def d = dependenciesNode.appendNode('dependency')
+            d.appendNode('groupId', it.group)
+            d.appendNode('artifactId', it.name.replaceFirst(/^mockito$/, 'mockito-core'))
+            d.appendNode('version', it.version)
+            d.appendNode('scope', 'runtime')
+        }
+    }
+}
