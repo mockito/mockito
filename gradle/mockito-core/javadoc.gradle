@@ -66,7 +66,17 @@ javadoc {
     """.replaceAll(/\r|\n|[ ]{8}/, ""))
     if (JavaVersion.current().isJava8Compatible()) {
         options.addStringOption('Xdoclint:none', '-quiet')
+
+        def minorVersion = System.getProperty("java.version") =~ /1.8.0_(.*)/
+
+        // Since JDK 8 version 121 scripts are not allowed in comments. However,
+        // earlier version throw an error if an unknown option is passed.
+        // Therefore only add this option if the JDK is actually correct.
+        if (minorVersion.size() > 0 && Integer.valueOf(minorVersion[0][1]) >= 121) {
+            options.addBooleanOption('-allow-script-in-comments', true)
+        }
     }
+
 
     doLast {
         copy {
