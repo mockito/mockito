@@ -1,0 +1,60 @@
+/**
+In order to apply this script plugin, please ensure following is configured:
+
+ ext {
+    bintrayAutoPublish = true //Whether version should be auto published after an upload to Bintray
+    mavenCentralSync = true //Whether to sync the version to Maven Central
+ }
+
+*/
+
+def licenseFiles = copySpec {
+    //mockito license
+    from(".") { include 'LICENSE' }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.sourceFiles
+    from android.sourceSets.main.resources.sourceFiles
+    classifier = "sources"
+    with licenseFiles
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.sourceFiles
+    classpath += files(configurations.compile, configurations.provided)
+    doFirst {
+        classpath += files(android.bootClasspath)
+    }
+    options.links 'https://developer.android.com/reference/'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = "javadoc"
+    with licenseFiles
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mainAar(MavenPublication) {
+            artifactId project.archivesBaseName
+            artifact sourcesJar
+            artifact javadocJar
+            artifact "$project.buildDir/outputs/aar/${project.archivesBaseName}-release.aar"
+        }
+    }
+}
+
+//Gradle requires to configure pom after the publication above is configured
+apply from: "$rootDir/gradle/pom-aar.gradle"
+apply from: "$rootDir/gradle/publish.gradle"
+
+//so that we flesh out problems with maven publication during the build process
+build.dependsOn publishToMavenLocal
+tasks.javadoc.enabled = false
