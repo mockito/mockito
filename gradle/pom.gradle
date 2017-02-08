@@ -5,7 +5,6 @@ publishing.publications.all {
     pom.withXml {
         def root = asNode()
         root.appendNode('name', project.archivesBaseName)
-        root.appendNode('packaging', 'jar')
         root.appendNode('url', 'http://mockito.org')
         root.appendNode('description', project.description)
 

@@ -1,0 +1,7 @@
+apply from: "$rootDir/gradle/pom.gradle"
+
+publishing.publications.all {
+    pom.withXml {
+        asNode().appendNode('packaging', 'jar')
+    }
+}
