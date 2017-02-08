@@ -1,0 +1,17 @@
+group = 'org.mockito'
+
+apply plugin: 'android-library'
+apply plugin: 'maven-publish'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+    compileOptions {
+        sourceCompatibility 1.6
+        targetCompatibility 1.6
+    }
+    dexOptions.preDexLibraries System.getenv('TRAVIS') != 'true' && !project.hasProperty('disablePreDex')
+}
+
+assert project.hasProperty("artifactName") : "Please configure 'ext.artifactName' for project that wants to use 'library.gradle' plugin"
+archivesBaseName = project.ext.artifactName
