@@ -128,6 +128,13 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     }
 
     @Test
+    public void interface_method_stubbed() {
+        List<?> list = spy(List.class);
+        when(list.size()).thenReturn(12);
+        assertEquals(12, list.size());
+    }
+
+    @Test
     public void calls_real_interface_method() {
         List list = mock(List.class, withSettings().defaultAnswer(CALLS_REAL_METHODS));
         assertNull(list.get(1));
