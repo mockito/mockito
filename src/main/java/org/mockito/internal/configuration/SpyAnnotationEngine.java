@@ -55,7 +55,6 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
                 Object instance;
                 try {
                     instance = field.get(testInstance);
-                    assertNotInterface(instance, field.getType());
                     if (MockUtil.isMock(instance)) {
                         // instance has been spied earlier
                         // for example happens when MockitoAnnotations.initMocks is called two times.
@@ -72,14 +71,7 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
         }
     }
 
-    private static void assertNotInterface(Object testInstance, Class<?> type) {
-        type = testInstance != null ? testInstance.getClass() : type;
-        if (type.isInterface()) {
-            throw new MockitoException("Type '" + type.getSimpleName() + "' is an interface and it cannot be spied on.");
-        }
-    }
-
-    private Object spyInstance(Field field, Object instance) {
+    private static Object spyInstance(Field field, Object instance) {
         return Mockito.mock(instance.getClass(),
                             withSettings().spiedInstance(instance)
                                                            .defaultAnswer(CALLS_REAL_METHODS)
@@ -142,9 +134,9 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
     }
 
     //TODO duplicated elsewhere
-    private void assertNoIncompatibleAnnotations(Class<? extends Annotation> annotation,
-                                                 Field field,
-                                                 Class<? extends Annotation>... undesiredAnnotations) {
+    private static void assertNoIncompatibleAnnotations(Class<? extends Annotation> annotation,
+                                                        Field field,
+                                                        Class<? extends Annotation>... undesiredAnnotations) {
         for (Class<? extends Annotation> u : undesiredAnnotations) {
             if (field.isAnnotationPresent(u)) {
                 throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(),
