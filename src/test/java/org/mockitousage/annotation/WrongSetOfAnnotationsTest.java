@@ -14,7 +14,6 @@ import java.util.List;
 
 import static junit.framework.TestCase.fail;
 
-@SuppressWarnings({"unchecked", "unused"})
 public class WrongSetOfAnnotationsTest extends TestBase {
 
     @Test(expected=MockitoException.class)
@@ -25,15 +24,9 @@ public class WrongSetOfAnnotationsTest extends TestBase {
     }
 
     @Test
-    public void should_not_allow_Spy_and_or_InjectMocks_on_interfaces() throws Exception {
+    public void should_not_allow_Spy_and_InjectMocks_on_interfaces() throws Exception {
         try {
             MockitoAnnotations.initMocks(new Object() { @InjectMocks @Spy List<?> mock; });
-            fail();
-        } catch (MockitoException me) {
-            Assertions.assertThat(me.getMessage()).contains("'List' is an interface");
-        }
-        try {
-            MockitoAnnotations.initMocks(new Object() { @Spy List<?> mock; });
             fail();
         } catch (MockitoException me) {
             Assertions.assertThat(me.getMessage()).contains("'List' is an interface");
