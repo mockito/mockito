@@ -1,3 +1,15 @@
+### 2.7.6 (2017-02-13 15:40 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 3: tmurakami
+  * 2: Tim van der Lippe
+  * 1: Rafael Winterhalter
+* Improvements: 3
+  * Fix JavaDoc generation on recent JDK 8 builds [(#934)](https://github.com/mockito/mockito/pull/934)
+  * Fixes #929: Move the resources directory to src/main [(#931)](https://github.com/mockito/mockito/pull/931)
+  * New 'mockito-inline' artifact does not work [(#929)](https://github.com/mockito/mockito/issues/929)
+
 ### 2.7.5 (2017-02-07 15:36 UTC)
 
 * Authors: 1
