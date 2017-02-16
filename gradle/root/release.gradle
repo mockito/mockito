@@ -143,6 +143,7 @@ task printReleaseHelp {
     doLast {
         logger.lifecycle troubleshootingInfo
     }
+    onlyIf { releaseNeeded.needed }
 }
 
 task bintrayUploadAll {
