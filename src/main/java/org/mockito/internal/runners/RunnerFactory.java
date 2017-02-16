@@ -73,7 +73,8 @@ public class RunnerFactory {
                     "\n" +
                     "\n" +
                     "No tests found in " + klass.getSimpleName() + "\n" +
-                    "Haven't you forgot @Test annotation?\n"
+                    "Is the method annotated with @Test?\n" +
+                    "Is the method public?\n"
                     , e);
             }
             throw e;
