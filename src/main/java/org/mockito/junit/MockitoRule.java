@@ -53,7 +53,7 @@ import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
  * public class ExampleTest {
  *
  *     //Creating new rule with recommended Strictness setting
- *     &#064;Rule public MockitoRule rule = MockitoJUnit.strictness(Strictness.STRICT_STUBS).rule();
+ *     &#064;Rule public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
  *
  *     &#064;Mock
  *     private List list;
