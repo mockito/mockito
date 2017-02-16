@@ -1,3 +1,11 @@
+### 2.7.7 (2017-02-16 15:09 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Tim van der Lippe
+* Improvements: 1
+  * RunnerFactory InvocationTargetException to return one more possible reason [(#949)](https://github.com/mockito/mockito/issues/949)
+
 ### 2.7.6 (2017-02-13 15:40 UTC)
 
 * Authors: 3
