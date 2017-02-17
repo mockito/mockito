@@ -1,3 +1,15 @@
+### 2.7.8 (2017-02-17 13:45 UTC)
+
+* Authors: 4
+* Commits: 4
+  * 1: Brice Dutheil
+  * 1: Marcin Zajaczkowski
+  * 1: Marcin Zajączkowski
+  * 1: Stuart Blair
+* Improvements: 2
+  * Remove Gradle 5 depracation warning [(#954)](https://github.com/mockito/mockito/pull/954)
+  * Fix Javadocs on MockitoRule.java to correct an error on its usage. [(#953)](https://github.com/mockito/mockito/pull/953)
+
 ### 2.7.7 (2017-02-16 15:09 UTC)
 
 * Authors: 1
