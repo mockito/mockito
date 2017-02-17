@@ -1,3 +1,14 @@
+### 2.7.9 (2017-02-17 16:18 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Allon Murienik
+  * 1: Rafael Winterhalter
+* Improvements: 3
+  * Checkstyle conf. to enforce whitespace rules [(#932)](https://github.com/mockito/mockito/pull/932)
+  * Fix whitespace issues throughout the code [(#928)](https://github.com/mockito/mockito/pull/928)
+  * Add detection for Android environments and give warnings if used incorrectly. Corrected documentation. [(#893)](https://github.com/mockito/mockito/pull/893)
+
 ### 2.7.8 (2017-02-17 13:45 UTC)
 
 * Authors: 4
