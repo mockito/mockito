@@ -16,7 +16,7 @@ import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 
 public class DoesNothingTest   {
-    
+
     private IMethods mock;
     private Invocation invocation_Void;
     private Invocation invocation_void;
@@ -25,17 +25,17 @@ public class DoesNothingTest   {
     @Before
     public void init(){
         mock = mock(IMethods.class);
-        
+
         mock.voidMethod();
         invocation_Void = getLastInvocation();
-        
+
         mock.voidReturningMethod();
         invocation_void = getLastInvocation();
-        
+
         mock.simpleMethod();
         invocation_String = getLastInvocation();
     }
-    
+
     @Test
     public void answer_returnsNull() throws Throwable {
         assertThat(doesNothing().answer(invocation_Void)).isNull();
@@ -52,11 +52,11 @@ public class DoesNothingTest   {
     public void validateFor_voidReturnType_shouldPass()   {
         doesNothing().validateFor(invocation_void);
     }
-    
+
     @Test
     public void validateFor_voidObjectReturnType() throws Throwable {
         doesNothing().validateFor(invocation_Void);
     }
-    
-    
+
+
 }

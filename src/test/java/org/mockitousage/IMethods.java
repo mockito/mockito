@@ -187,7 +187,7 @@ public interface IMethods {
     String toString(String foo);
 
     void voidMethod();
-    
+
     Void voidReturningMethod();
 
     String forList(List<String> list);

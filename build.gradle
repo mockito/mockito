@@ -35,6 +35,10 @@ allprojects {
         options.warnings = false
         options.encoding = 'UTF-8'
     }
+    apply plugin: 'checkstyle'
+    checkstyle {
+       configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+    }
 }
 
 configurations {

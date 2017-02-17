@@ -28,5 +28,13 @@ test {
     }
 }
 
+tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+        html.stylesheet resources.text.fromFile("$rootDir/config/checkstyle/checkstyle.xsl")
+    }
+}
+
 assert project.hasProperty("artifactName") : "Please configure 'ext.artifactName' for project that wants to use 'java-library.gradle' plugin"
 archivesBaseName = project.ext.artifactName
