@@ -1,3 +1,13 @@
+### 2.7.10 (2017-02-19 19:37 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Allon Murienik
+  * 1: Marcin Zajączkowski
+* Improvements: 2
+  * Fix broken build [(#959)](https://github.com/mockito/mockito/pull/959)
+  * Display release warning only when needed [(#955)](https://github.com/mockito/mockito/pull/955)
+
 ### 2.7.9 (2017-02-17 16:18 UTC)
 
 * Authors: 2
