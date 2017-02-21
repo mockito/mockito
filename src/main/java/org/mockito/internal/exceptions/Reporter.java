@@ -11,7 +11,7 @@ import org.mockito.exceptions.misusing.*;
 import org.mockito.exceptions.verification.*;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
-import org.mockito.internal.junit.JUnitTool;
+import org.mockito.internal.junit.ExceptionFactory;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.DescribedInvocation;
@@ -301,7 +301,7 @@ public class Reporter {
                               ""
         );
 
-        return JUnitTool.createArgumentsAreDifferentException(message, wanted, actual);
+        return ExceptionFactory.createArgumentsAreDifferentException(message, wanted, actual);
     }
 
     public static MockitoAssertionError wantedButNotInvoked(DescribedInvocation wanted) {
