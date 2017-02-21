@@ -1,3 +1,11 @@
+### 2.7.11 (2017-02-21 20:43 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 1
+  * Simplified the creation of ArgumentsAreDifferent-Exceptions. [(#908)](https://github.com/mockito/mockito/pull/908)
+
 ### 2.7.10 (2017-02-19 19:37 UTC)
 
 * Authors: 2
