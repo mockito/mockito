@@ -23,11 +23,9 @@ import static org.mockito.internal.verification.VerificationModeFactory.noMoreIn
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.MockingDetails;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
@@ -43,7 +41,6 @@ import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
-import org.mockito.listeners.VerificationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
@@ -70,7 +67,6 @@ public class MockitoCore {
     public <T> OngoingStubbing<T> when(T methodCall) {
         MockingProgress mockingProgress = mockingProgress();
         mockingProgress.stubbingStarted();
-        @SuppressWarnings("unchecked")
         OngoingStubbing<T> stubbing = (OngoingStubbing<T>) mockingProgress.pullOngoingStubbing();
         if (stubbing == null) {
             mockingProgress.reset();
@@ -88,7 +84,7 @@ public class MockitoCore {
         }
         MockingProgress mockingProgress = mockingProgress();
         VerificationMode actualMode = mockingProgress.maybeVerifyLazily(mode);
-        mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, actualMode, mockingProgress.verificationListeners()));
+        mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, actualMode, mockingProgress));
         return mock;
     }
 

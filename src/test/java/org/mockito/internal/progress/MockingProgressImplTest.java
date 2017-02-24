@@ -5,19 +5,21 @@
 
 package org.mockito.internal.progress;
 
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertSame;
+import static junit.framework.TestCase.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.verification.VerificationEventImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.listeners.VerificationListener;
+import org.mockito.verification.VerificationEvent;
 import org.mockito.verification.VerificationMode;
-import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.*;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
-public class MockingProgressImplTest extends TestBase {
+public class MockingProgressImplTest {
 
     private MockingProgress mockingProgress;
 
@@ -45,15 +47,53 @@ public class MockingProgressImplTest extends TestBase {
         try {
             mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
             fail();
-        } catch (MockitoException e) {}
+        } catch (MockitoException e) {
+        }
     }
 
     @Test
     public void shouldNotifyListenerSafely() throws Exception {
-        //when
+        // when
         mockingProgress.addListener(null);
 
-        //then no exception is thrown:
+        // then no exception is thrown:
         mockingProgress.mockingStarted(null, null);
+    }
+
+    @Test
+    public void fireVerificationEvent_noVerificationListenerRegistered_shouldThrowNoException() {
+        VerificationEvent event = new VerificationEventImpl(null, null, null, null);
+
+        mockingProgress.fireVerificationEvent(event);
+
+    }
+
+    @Test
+    public void fireVerificationEvent_verificationListenerRegistered_shouldBeNotified() {
+
+        AssertableVerificationListener listener = new AssertableVerificationListener();
+        mockingProgress.addListener(listener);
+
+        VerificationEvent event = new VerificationEventImpl(null, null, null, null);
+
+        mockingProgress.fireVerificationEvent(event);
+
+        listener.assertLastEventIsSameAs(event);
+
+    }
+
+    private static class AssertableVerificationListener implements VerificationListener {
+
+        private VerificationEvent lastEvent;
+
+        @Override
+        public void onVerification(VerificationEvent verificationEvent) {
+            lastEvent = verificationEvent;
+        }
+
+        public void assertLastEventIsSameAs(VerificationEvent expected) {
+            assertThat(lastEvent).isSameAs(expected);
+        }
+
     }
 }

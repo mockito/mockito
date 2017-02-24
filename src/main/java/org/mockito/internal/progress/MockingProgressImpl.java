@@ -15,6 +15,7 @@ import org.mockito.listeners.MockitoListener;
 import org.mockito.listeners.VerificationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.verification.VerificationEvent;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
 
@@ -58,18 +59,13 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     @Override
-    public Set<VerificationListener> verificationListeners() {
-        final LinkedHashSet<VerificationListener> verificationListeners = new LinkedHashSet<VerificationListener>();
-
+    public void fireVerificationEvent(VerificationEvent event) {
         for (MockitoListener listener : listeners) {
             if (listener instanceof VerificationListener) {
-                verificationListeners.add((VerificationListener) listener);
+                ((VerificationListener) listener).onVerification(event);
             }
         }
-
-        return verificationListeners;
     }
-
 
     public void verificationStarted(VerificationMode verify) {
         validateState();
