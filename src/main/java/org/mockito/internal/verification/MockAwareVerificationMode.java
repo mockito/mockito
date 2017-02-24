@@ -30,7 +30,7 @@ public class MockAwareVerificationMode implements VerificationMode {
             fireVerificationEvent(data, e);
             throw e;
         }
-        
+
         fireVerificationEvent(data,null);
     }
 
