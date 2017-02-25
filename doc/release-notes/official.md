@@ -1,3 +1,14 @@
+### 2.7.12 (2017-02-25 23:25 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* Improvements: 2
+  * Bugfixes: 1
+    * Invalid property reported by mocks and partial mocks [(#963)](https://github.com/mockito/mockito/issues/963)
+  * Remaining changes: 1
+    * With Inline Mocking enabled, Mockito throws when mocking interface with default method [(#944)](https://github.com/mockito/mockito/issues/944)
+
 ### 2.7.11 (2017-02-21 20:43 UTC)
 
 * Authors: 1
