@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal() //for local testing of mockito-release-tools
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
