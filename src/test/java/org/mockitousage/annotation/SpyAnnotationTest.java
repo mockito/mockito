@@ -28,7 +28,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings({"unchecked", "unused"})
+@SuppressWarnings("unused")
 public class SpyAnnotationTest extends TestBase {
 
     @Spy
@@ -59,19 +59,16 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_prevent_spying_on_interfaces() throws Exception {
+    public void should_allow_spying_on_interfaces() throws Exception {
         class WithSpy {
             @Spy
             List<String> list;
         }
 
         WithSpy withSpy = new WithSpy();
-        try {
-            MockitoAnnotations.initMocks(withSpy);
-            fail();
-        } catch (MockitoException e) {
-            assertThat(e.getMessage()).contains("is an interface and it cannot be spied on");
-        }
+        MockitoAnnotations.initMocks(withSpy);
+        when(withSpy.list.size()).thenReturn(3);
+        assertEquals(3, withSpy.list.size());
     }
 
     @Test

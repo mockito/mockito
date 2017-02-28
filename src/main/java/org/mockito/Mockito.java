@@ -65,7 +65,7 @@ import org.mockito.verification.*;
  *      <a href="#27">27. Delegate calls to real instance (Since 1.9.5)</a><br/>
  *      <a href="#28">28. <code>MockMaker</code> API (Since 1.9.5)</a><br/>
  *      <a href="#29">29. BDD style verification (Since 1.10.0)</a><br/>
- *      <a href="#30">30. Spying or mocking abstract classes (Since 1.10.12)</a><br/>
+ *      <a href="#30">30. Spying or mocking abstract classes (Since 1.10.12) and Java 8 default methods (Since release 2.x)</a><br/>
  *      <a href="#31">31. Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3><br/>
  *      <a href="#32">32. Better generic support with deep stubs (Since 1.10.0)</a></h3><br/>
  *      <a href="#32">33. Mockito JUnit rule (Since 1.10.17)</a><br/>
@@ -1017,7 +1017,7 @@ import org.mockito.verification.*;
  *
  *
  *
- * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes" name="spying_abstract_classes">Spying or mocking abstract classes (Since 1.10.12)</a></h3>
+ * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes" name="spying_abstract_classes">Spying or mocking abstract classes (Since 1.10.12) and Java 8 default methods (Since release 2.x)</a></h3>
  *
  * It is now possible to conveniently spy on abstract classes. Note that overusing spies hints at code design smells (see {@link #spy(Object)}).
  * <p>
@@ -1029,6 +1029,9 @@ import org.mockito.verification.*;
  * <pre class="code"><code class="java">
  * //convenience API, new overloaded spy() method:
  * SomeAbstract spy = spy(SomeAbstract.class);
+ *
+ * // Mocking abstract methods, spying default methods of an interface
+ * Function<Foo, Bar> function = spy(Function.class);
  *
  * //Robust API, via settings builder:
  * OtherAbstract spy = mock(OtherAbstract.class, withSettings()
