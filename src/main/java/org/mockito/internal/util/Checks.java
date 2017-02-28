@@ -11,8 +11,16 @@ package org.mockito.internal.util;
 public class Checks {
 
     public static <T> T checkNotNull(T value, String checkedValue) {
+        return checkNotNull(value, checkedValue, null);
+    }
+
+    public static <T> T checkNotNull(T value, String checkedValue, String additionalMessage) {
         if(value == null) {
-            throw new IllegalArgumentException(checkedValue + " should not be null");
+            String message = checkedValue + " should not be null";
+            if (additionalMessage != null) {
+                message += ". " + additionalMessage;
+            }
+            throw new IllegalArgumentException(message);
         }
         return value;
     }
