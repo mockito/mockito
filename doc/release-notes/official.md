@@ -1,3 +1,14 @@
+### 2.7.13 (2017-02-28 05:38 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 3: Ben Yu
+  * 2: Szczepan Faber
+  * 1: Marcin Zajączkowski
+* Improvements: 2
+  * Enabled local testing of release tools [(#968)](https://github.com/mockito/mockito/pull/968)
+  * Allow spying on interfaces so that it is convenient to work with Java 8 default methods [(#942)](https://github.com/mockito/mockito/pull/942)
+
 ### 2.7.12 (2017-02-25 23:25 UTC)
 
 * Authors: 1
