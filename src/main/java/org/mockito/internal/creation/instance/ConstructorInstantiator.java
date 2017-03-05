@@ -85,13 +85,12 @@ public class ConstructorInstantiator implements Instantiator {
 
     private InstantiationException noMatchingConstructor(Class<?> cls) {
         String constructorString = constructorArgsString();
-        String outerClassString = "";
+        String outerInstanceHint = "";
         if (hasOuterClassInstance) {
-            outerClassString = " and that it's indeed an inner class of the passed instance of type " +
-                constructorArgs[0].getClass().getName();
+            outerInstanceHint = " and provided outer instance is correct";
         }
         return new InstantiationException(join("Unable to create instance of '" + cls.getSimpleName() + "'.",
-                "Please ensure that the target class has " + constructorString + outerClassString + ".")
+                "Please ensure that the target class has " + constructorString + outerInstanceHint + ".")
                 , null);
     }
 
@@ -108,8 +107,11 @@ public class ConstructorInstantiator implements Instantiator {
     private InstantiationException multipleMatchingConstructors(Class<?> cls, List<Constructor<?>> constructors) {
         return new InstantiationException(join("Unable to create instance of '" + cls.getSimpleName() + "'.",
                 "Multiple constructors could be matched to arguments of types " + constructorArgTypes() + ":",
-                join("", constructors))
-                , null);
+                join("", " - ", constructors),
+                "If you believe that Mockito could do a better join deciding on which constructor to use, please let us know.",
+                "Ticket 685 contains the discussion and a workaround for ambiguous constructors using inner class.",
+                "See https://github.com/mockito/mockito/issues/685"
+            ), null);
     }
 
     private static boolean paramsMatch(Class<?>[] types, Object[] params) {

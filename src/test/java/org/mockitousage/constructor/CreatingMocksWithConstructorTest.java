@@ -107,7 +107,7 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     @Test
     public void explains_constructor_exceptions() {
         try {
-            ThrowingConstructorClass mock = mock(ThrowingConstructorClass.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+            mock(ThrowingConstructorClass.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
             fail();
         } catch (MockitoException e) {
             assertThat(e).hasRootCauseInstanceOf(RuntimeException.class);
@@ -143,14 +143,14 @@ public class CreatingMocksWithConstructorTest extends TestBase {
 
     @Test
     public void can_mock_unambigous_constructor_with_inheritence() {
-        UsesBase mock = mock(UsesBase.class, withSettings().useConstructor(new Base()).defaultAnswer(CALLS_REAL_METHODS));
+        mock(UsesBase.class, withSettings().useConstructor(new Base()).defaultAnswer(CALLS_REAL_METHODS));
     }
 
     @Test
-    public void exception_message_when_ambiguous_constructor_found_exact_exists() {
+    public void exception_message_when_ambiguous_constructor_found_exact_exists() throws Exception {
         try {
             //when
-            UsesBase mock = mock(UsesBase.class, withSettings().useConstructor(new ExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
+            mock(UsesBase.class, withSettings().useConstructor(new ExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
             //then
             fail();
         } catch (MockitoException e) {
@@ -161,16 +161,21 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     }
 
     @Test
-    public void exception_message_when_ambiguous_constructor_found_exact_doesnt_exist() {
+    public void fail_when_multiple_matching_constructors() {
         try {
             //when
-            UsesBase mock = mock(UsesBase.class, withSettings().useConstructor(new ExtendsExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
+            mock(UsesBase.class, withSettings().useConstructor(new ExtendsExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
             //then
             fail();
         } catch (MockitoException e) {
+            //TODO the exception message includes Mockito internals like the name of the generated class name.
+            //I suspect that we could make this exception message nicer.
             assertThat(e).hasMessage("Unable to create mock instance of type 'UsesBase'");
-            assertThat(e.getCause()).hasMessageContaining
-                ("Multiple constructors could be matched to arguments of types [org.mockitousage.constructor.CreatingMocksWithConstructorTest$ExtendsExtendsBase]");
+            assertThat(e.getCause())
+                .hasMessageContaining("Multiple constructors could be matched to arguments of types [org.mockitousage.constructor.CreatingMocksWithConstructorTest$ExtendsExtendsBase]")
+                .hasMessageContaining("If you believe that Mockito could do a better join deciding on which constructor to use, please let us know.\n" +
+                    "Ticket 685 contains the discussion and a workaround for ambiguous constructors using inner class.\n" +
+                    "See https://github.com/mockito/mockito/issues/685");
         }
     }
 
@@ -183,9 +188,11 @@ public class CreatingMocksWithConstructorTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             assertThat(e).hasMessage("Unable to create mock instance of type 'InnerClass'");
+            //TODO it would be nice if all useful information was in the top level exception, instead of in the exception's cause
+            //also applies to other scenarios in this test
             assertThat(e.getCause()).hasMessageContaining(
                 "Please ensure that the target class has a 0-arg constructor"
-                    + " and that it's indeed an inner class of the passed instance of type java.lang.Integer");
+                    + " and provided outer instance is correct.");
         }
     }
 
