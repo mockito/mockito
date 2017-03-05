@@ -240,19 +240,25 @@ public interface MockSettings extends Serializable {
      * OtherAbstract spy = mock(OtherAbstract.class, withSettings()
      *   .useConstructor().defaultAnswer(CALLS_REAL_METHODS));
      *
+     * //Mocking an abstract class with constructor arguments
+     * SomeAbstract spy = mock(SomeAbstract.class, withSettings()
+     *   .useConstructor("arg1", 123).defaultAnswer(CALLS_REAL_METHODS));
+     *
      * //Mocking a non-static inner abstract class:
      * InnerAbstract spy = mock(InnerAbstract.class, withSettings()
      *   .useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
      * </code></pre>
      *
+     * @param args The arguments to pass to the constructor. Not passing any arguments means that a parameter-less
+     *             constructor will be called
      * @return settings instance so that you can fluently specify other settings
-     * @since 1.10.12
+     * @since 2.7.14 (useConstructor with no arguments was supported since 1.10.12)
      */
     @Incubating
-    MockSettings useConstructor();
+    MockSettings useConstructor(Object... args);
 
     /**
-     * Makes it possible to mock non-static inner classes in conjunction with {@link #useConstructor()}.
+     * Makes it possible to mock non-static inner classes in conjunction with {@link #useConstructor(Object...)}.
      * <p>
      * Example:
      * <pre class="code"><code class="java">

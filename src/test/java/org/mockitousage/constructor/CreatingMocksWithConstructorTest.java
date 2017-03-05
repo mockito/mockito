@@ -24,6 +24,12 @@ public class CreatingMocksWithConstructorTest extends TestBase {
         AbstractMessage() {
             this.message = "hey!";
         }
+        AbstractMessage(String message) {
+            this.message = message;
+        }
+        AbstractMessage(int i) {
+            this.message = String.valueOf(i);
+        }
         String getMessage() {
             return message;
         }
@@ -52,9 +58,61 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     }
 
     @Test
+    public void can_spy_abstract_classes_with_constructor_args() {
+        AbstractMessage mock = mock(AbstractMessage.class, withSettings().useConstructor("hello!").defaultAnswer(CALLS_REAL_METHODS));
+        assertEquals("hello!", mock.getMessage());
+    }
+
+    @Test
+    public void can_spy_abstract_classes_with_constructor_primitive_args() {
+        AbstractMessage mock = mock(AbstractMessage.class, withSettings().useConstructor(7).defaultAnswer(CALLS_REAL_METHODS));
+        assertEquals("7", mock.getMessage());
+    }
+
+    @Test
+    public void can_spy_abstract_classes_with_constructor_array_of_nulls() {
+        AbstractMessage mock = mock(AbstractMessage.class, withSettings().useConstructor(new Object[]{null}).defaultAnswer(CALLS_REAL_METHODS));
+        assertNull(mock.getMessage());
+    }
+
+    @Test
+    public void can_spy_abstract_classes_with_casted_null() {
+        AbstractMessage mock = mock(AbstractMessage.class, withSettings().useConstructor((String) null).defaultAnswer(CALLS_REAL_METHODS));
+        assertNull(mock.getMessage());
+    }
+
+    @Test
+    public void can_spy_abstract_classes_with_null_varargs() {
+        try {
+            mock(AbstractMessage.class, withSettings().useConstructor(null).defaultAnswer(CALLS_REAL_METHODS));
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertThat(e).hasMessageContaining("constructorArgs should not be null. " +
+                "If you need to pass null, please cast it to the right type, e.g.: useConstructor((String) null)");
+        }
+    }
+
+    @Test
     public void can_mock_inner_classes() {
         InnerClass mock = mock(InnerClass.class, withSettings().useConstructor().outerInstance(this).defaultAnswer(CALLS_REAL_METHODS));
         assertEquals("hey!", mock.getMessage());
+    }
+
+    public static class ThrowingConstructorClass{
+        public ThrowingConstructorClass() {
+            throw new RuntimeException();
+        }
+    }
+
+    @Test
+    public void explains_constructor_exceptions() {
+        try {
+            mock(ThrowingConstructorClass.class, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e).hasRootCauseInstanceOf(RuntimeException.class);
+            assertThat(e.getCause()).hasMessageContaining("Please ensure the target class has a 0-arg constructor and executes cleanly.");
+        }
     }
 
     static class HasConstructor {
@@ -70,7 +128,54 @@ public class CreatingMocksWithConstructorTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             assertThat(e).hasMessage("Unable to create mock instance of type 'HasConstructor'");
-            assertThat(e.getCause()).hasMessageContaining("0-arg constructor");
+            assertThat(e.getCause()).hasMessageContaining("Please ensure that the target class has a 0-arg constructor.");
+        }
+    }
+
+    static class Base {}
+    static class ExtendsBase extends Base {}
+    static class ExtendsExtendsBase extends ExtendsBase {}
+
+    static class UsesBase {
+        public UsesBase(Base b) {}
+        public UsesBase(ExtendsBase b) {}
+    }
+
+    @Test
+    public void can_mock_unambigous_constructor_with_inheritence() {
+        mock(UsesBase.class, withSettings().useConstructor(new Base()).defaultAnswer(CALLS_REAL_METHODS));
+    }
+
+    @Test
+    public void exception_message_when_ambiguous_constructor_found_exact_exists() throws Exception {
+        try {
+            //when
+            mock(UsesBase.class, withSettings().useConstructor(new ExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
+            //then
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e).hasMessage("Unable to create mock instance of type 'UsesBase'");
+            assertThat(e.getCause()).hasMessageContaining
+                ("Multiple constructors could be matched to arguments of types [org.mockitousage.constructor.CreatingMocksWithConstructorTest$ExtendsBase]");
+        }
+    }
+
+    @Test
+    public void fail_when_multiple_matching_constructors() {
+        try {
+            //when
+            mock(UsesBase.class, withSettings().useConstructor(new ExtendsExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
+            //then
+            fail();
+        } catch (MockitoException e) {
+            //TODO the exception message includes Mockito internals like the name of the generated class name.
+            //I suspect that we could make this exception message nicer.
+            assertThat(e).hasMessage("Unable to create mock instance of type 'UsesBase'");
+            assertThat(e.getCause())
+                .hasMessageContaining("Multiple constructors could be matched to arguments of types [org.mockitousage.constructor.CreatingMocksWithConstructorTest$ExtendsExtendsBase]")
+                .hasMessageContaining("If you believe that Mockito could do a better join deciding on which constructor to use, please let us know.\n" +
+                    "Ticket 685 contains the discussion and a workaround for ambiguous constructors using inner class.\n" +
+                    "See https://github.com/mockito/mockito/issues/685");
         }
     }
 
@@ -78,12 +183,16 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     public void mocking_inner_classes_with_wrong_outer_instance() {
         try {
             //when
-            mock(InnerClass.class, withSettings().useConstructor().outerInstance("foo").defaultAnswer(CALLS_REAL_METHODS));
+            mock(InnerClass.class, withSettings().useConstructor().outerInstance(123).defaultAnswer(CALLS_REAL_METHODS));
             //then
             fail();
         } catch (MockitoException e) {
             assertThat(e).hasMessage("Unable to create mock instance of type 'InnerClass'");
-            assertThat(e.getCause()).hasMessageContaining("Unable to find a matching 1-arg constructor for the outer instance.");
+            //TODO it would be nice if all useful information was in the top level exception, instead of in the exception's cause
+            //also applies to other scenarios in this test
+            assertThat(e.getCause()).hasMessageContaining(
+                "Please ensure that the target class has a 0-arg constructor"
+                    + " and provided outer instance is correct.");
         }
     }
 
