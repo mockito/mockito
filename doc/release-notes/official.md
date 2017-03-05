@@ -1,3 +1,17 @@
+### 2.7.14 (2017-03-05 23:25 UTC)
+
+* Authors: 3
+* Commits: 7
+  * 3: Allon Mureinik
+  * 3: Szczepan Faber
+  * 1: Tim van der Lippe
+* Improvements: 3
+  * New features: 2
+    * New feature - enable mocking using constructor arguments [(#935)](https://github.com/mockito/mockito/pull/935)
+    * Support constructor parameters for spying on abstract classes [(#685)](https://github.com/mockito/mockito/issues/685)
+  * Remaining changes: 1
+    * Add editor config to automatically adhere to code style guide [(#966)](https://github.com/mockito/mockito/pull/966)
+
 ### 2.7.13 (2017-02-28 05:38 UTC)
 
 * Authors: 3
