@@ -5,15 +5,17 @@
 
 package org.mockito.internal.util;
 
+import org.junit.Test;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static junit.framework.TestCase.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
 
 public class StringUtilTest  {
 
     @Test
-    public void decamelizeMatcher() throws Exception {
+    public void decamelizes_matcher() throws Exception {
         assertEquals("<Sentence with strong language>", StringUtil.decamelizeMatcher("SentenceWithStrongLanguage"));
         assertEquals("<W e i r d o 1>", StringUtil.decamelizeMatcher("WEIRDO1"));
         assertEquals("<_>", StringUtil.decamelizeMatcher("_"));
@@ -22,27 +24,35 @@ public class StringUtilTest  {
     }
 
     @Test
-    public void join_non() throws Exception {
-        assertThat(StringUtil.join()).isEmpty();;
+    public void joins_empty_list() throws Exception {
+        assertThat(StringUtil.join()).isEmpty();
+        assertThat(StringUtil.join("foo", emptyList())).isEmpty();
     }
 
     @Test
-    public void join_singleLine() throws Exception {
+    public void joins_single_line() throws Exception {
         assertThat(StringUtil.join("line1")).hasLineCount(2);
     }
 
     @Test
-    public void join_twoLines() throws Exception {
+    public void joins_two_lines() throws Exception {
         assertThat(StringUtil.join("line1","line2")).hasLineCount(3);
     }
 
     @Test
-    public void join_hasPreceedingLinebreak() throws Exception {
+    public void join_has_preceeding_linebreak() throws Exception {
         assertThat(StringUtil.join("line1")).isEqualTo("\nline1");
     }
 
     @Test
-    public void removeFirstLine() throws Exception {
+    public void removes_first_line() throws Exception {
         assertThat(StringUtil.removeFirstLine("line1\nline2")).isEqualTo("line2");
+    }
+
+    @Test
+    public void joins_with_line_prefix() throws Exception {
+        assertEquals("Hey!\n" +
+            " - a\n" +
+            " - b", StringUtil.join("Hey!\n", " - ", asList("a", "b")));
     }
 }
