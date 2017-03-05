@@ -73,6 +73,18 @@ public interface MockCreationSettings<T> {
     boolean isUsingConstructor();
 
     /**
+     * Used when arguments should be passed to the mocked object's constructor, regardless of whether these
+     * arguments are supplied directly, or whether they include the outer instance.
+     *
+     * @return An array of arguments that are passed to the mocked object's constructor. If
+     * {@link #getOuterClassInstance()} is available, it is prepended to the passed arguments.
+     *
+     * @since 2.7.14
+     */
+    @Incubating
+    public Object[] getConstructorArgs();
+
+    /**
      * Used when mocking non-static inner classes in conjunction with {@link #isUsingConstructor()}
      *
      * @return the outer class instance used for creation of the mock object via the constructor.

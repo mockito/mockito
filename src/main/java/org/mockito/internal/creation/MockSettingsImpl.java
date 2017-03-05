@@ -9,6 +9,7 @@ import org.mockito.MockSettings;
 import static org.mockito.internal.exceptions.Reporter.*;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
+import org.mockito.internal.util.Checks;
 import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.internal.util.MockNameImpl;
 import org.mockito.listeners.InvocationListener;
@@ -18,6 +19,8 @@ import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +33,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     private static final long serialVersionUID = 4475297236197939569L;
     private boolean useConstructor;
     private Object outerClassInstance;
+    private Object[] constructorArgs;
 
     public MockSettings serializable() {
         return serializable(SerializableMode.BASIC);
@@ -95,8 +99,12 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
-    public MockSettings useConstructor() {
+    public MockSettings useConstructor(Object... constructorArgs) {
+        Checks.checkNotNull(constructorArgs,
+            "constructorArgs",
+            "If you need to pass null, please cast it to the right type, e.g.: useConstructor((String) null)");
         this.useConstructor = true;
+        this.constructorArgs = constructorArgs;
         return this;
     }
 
@@ -111,6 +119,16 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     public Object getOuterClassInstance() {
         return outerClassInstance;
+    }
+
+    public Object[] getConstructorArgs() {
+        if (outerClassInstance == null) {
+            return constructorArgs;
+        }
+        List<Object> resultArgs = new ArrayList<Object>(constructorArgs.length + 1);
+        resultArgs.add(outerClassInstance);
+        resultArgs.addAll(Arrays.asList(constructorArgs));
+        return resultArgs.toArray(new Object[constructorArgs.length + 1]);
     }
 
     public boolean isStubOnly() {
