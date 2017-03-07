@@ -40,7 +40,7 @@ public class ConstructorInstantiator implements Instantiator {
             for (Constructor<?> constructor : cls.getDeclaredConstructors()) {
                 Class<?>[] types = constructor.getParameterTypes();
                 if (paramsMatch(types, params)) {
-                    matchingConstructors.add(constructor);
+                    evaluateConstructor(matchingConstructors, constructor);
                 }
             }
 
@@ -129,5 +129,56 @@ public class ConstructorInstantiator implements Instantiator {
             }
         }
         return true;
+    }
+
+    /**
+     * Evalutes {@code constructor} against the currently found {@code matchingConstructors} and determines if
+     * it's a better match to the given arguments, a worse match, or an equivalently good match.
+     * <p>
+     * This method tries to emulate the behavior specified in
+     * <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-15.html#jls-15.12.2">JLS 15.12.2. Compile-Time
+     * Step 2: Determine Method Signature</a>. A constructor X is deemed to be a better match than constructor Y to the
+     * given argument list if they are both applicable, constructor X has at least one parameter than is more specific
+     * than the corresponding parameter of constructor Y, and constructor Y has no parameter than is more specific than
+     * the corresponding parameter in constructor X.
+     * </p>
+     * <p>
+     * If {@code constructor} is a better match than the constructors in the {@code matchingConstructors} list, the list
+     * is cleared, and it's added to the list as a singular best matching constructor (so far).<br/>
+     * If {@code constructor} is an equivalently good of a match as the constructors in the {@code matchingConstructors}
+     * list, it's added to the list.<br/>
+     * If {@code constructor} is a worse match than the constructors in the {@code matchingConstructors} list, the list
+     * will remain unchanged.
+     * </p>
+     *
+     * @param matchingConstructors A list of equivalently best matching constructors found so far
+     * @param constructor The constructor to be evaluated against this list
+     */
+    private void evaluateConstructor(List<Constructor<?>> matchingConstructors, Constructor<?> constructor) {
+        boolean newHasBetterParam = false;
+        boolean existingHasBetterParam = false;
+
+        Class<?>[] paramTypes = constructor.getParameterTypes();
+        for (int i = 0; i < paramTypes.length; ++i) {
+            Class<?> paramType = paramTypes[i];
+            if (!paramType.isPrimitive()) {
+                for (Constructor<?> existingCtor : matchingConstructors) {
+                    Class<?> existingParamType = existingCtor.getParameterTypes()[i];
+                    if (paramType != existingParamType) {
+                        if (paramType.isAssignableFrom(existingParamType)) {
+                            existingHasBetterParam = true;
+                        } else {
+                            newHasBetterParam = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (!existingHasBetterParam) {
+            matchingConstructors.clear();
+        }
+        if (newHasBetterParam || !existingHasBetterParam) {
+            matchingConstructors.add(constructor);
+        }
     }
 }
