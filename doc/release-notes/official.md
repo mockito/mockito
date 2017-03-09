@@ -1,3 +1,11 @@
+### 2.7.15 (2017-03-09 12:05 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: paulduffin
+* Improvements: 1
+  * Break cyclical compile time dependency on hideRecursiveCall [(#983)](https://github.com/mockito/mockito/pull/983)
+
 ### 2.7.14 (2017-03-05 23:25 UTC)
 
 * Authors: 3
