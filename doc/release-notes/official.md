@@ -1,3 +1,12 @@
+### 2.7.16 (2017-03-10 11:57 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Tsuyoshi Murakami
+* Improvements: 2
+  * Fixes #981: Update Javadoc about the 'mockito-inline' artifact [(#985)](https://github.com/mockito/mockito/pull/985)
+  * Update documentation about mockito-inline artifact [(#981)](https://github.com/mockito/mockito/issues/981)
+
 ### 2.7.15 (2017-03-09 12:05 UTC)
 
 * Authors: 1
