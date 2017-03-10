@@ -36,6 +36,7 @@ import org.mockito.verification.*;
  * <b>
  *      <a href="#0">0. Migrating to Mockito 2</a><br/>
  *      <a href="#0.1">0.1 Mockito Android support</a></br/>
+ *      <a href="#0.2">0.2 Configuration-free inline mock making</a></br/>
  *      <a href="#1">1. Let's verify some behaviour! </a><br/>
  *      <a href="#2">2. How about some stubbing? </a><br/>
  *      <a href="#3">3. Argument matchers </a><br/>
@@ -109,6 +110,25 @@ import org.mockito.verification.*;
  * If you encounter issues with mocking on Android, please open an issue
  * <a href="https://github.com/mockito/mockito/issues/new">on the official issue tracker</a>.
  * Do provide the version of Android you are working on and dependencies of your project.
+ *
+ * <h3 id="0.2">0.2. <a class="meaningful_link" href="#mockito-inline" name="mockito-inline">Configuration-free inline mock making</a></h3>
+ *
+ * Starting with version 2.7.6, we offer the 'mockito-inline' artifact that enables <a href="#39">inline mock making</a> without configuring
+ * the MockMaker extension file. To use this, add the `mockito-inline` instead of the `mockito-core` artifact as follows:
+ *
+ * <pre class="code"><code>
+ * repositories {
+ *   jcenter()
+ * }
+ * dependencies {
+ *   testCompile "org.mockito:mockito-inline:+"
+ * }
+ * </code></pre>
+ *
+ * Be aware that this artifact may be abolished when the inline mock making feature is integrated into the default mock maker.
+ *
+ * <p>
+ * For more information about inline mock making, see <a href="#39">section 39</a>.
  *
  * <h3 id="1">1. <a class="meaningful_link" href="#verification" name="verification">Let's verify some behaviour!</a></h3>
  *
