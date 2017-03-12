@@ -1,3 +1,10 @@
+### 2.7.17 (2017-03-12 18:39 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.7.16 (2017-03-10 11:57 UTC)
 
 * Authors: 1
