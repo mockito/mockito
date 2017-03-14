@@ -9,13 +9,15 @@ import org.mockito.ArgumentMatcher;
 import static org.mockito.internal.exceptions.Reporter.noArgumentValueWasCaptured;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
 
-    private final LinkedList<Object> arguments = new LinkedList<Object>();
+    private final List<Object> arguments = Collections.synchronizedList(new ArrayList<Object>());
 
     public boolean matches(Object argument) {
         return true;
@@ -26,16 +28,17 @@ public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArgument
     }
 
     public T getLastValue() {
-        if (arguments.isEmpty()) {
-            throw noArgumentValueWasCaptured();
+        synchronized (arguments) {
+            if (arguments.isEmpty()) {
+                throw noArgumentValueWasCaptured();
+            }
+
+            return (T) arguments.get(arguments.size() - 1);
         }
-
-        return (T) arguments.getLast();
-
     }
 
     public List<T> getAllValues() {
-        return (List) arguments;
+        return Arrays.asList((T[]) arguments.toArray());
     }
 
     public void captureFrom(Object argument) {
