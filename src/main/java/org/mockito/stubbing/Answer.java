@@ -13,13 +13,15 @@ import org.mockito.invocation.InvocationOnMock;
  * Example of stubbing a mock with custom answer:
  *
  * <pre class="code"><code class="java">
- * when(mock.someMethod(anyString())).thenAnswer(new Answer() {
- *     Object answer(InvocationOnMock invocation) {
- *         Object[] args = invocation.getArguments();
- *         Object mock = invocation.getMock();
- *         return "called with arguments: " + Arrays.toString(args);
- *     }
- * });
+ * import static org.mockito.AdditionalAnswers.answer;
+ *
+ * when(mock.someMethod(anyString())).then(answer(
+ *     new Answer() {
+ *         public Object answer(InvocationOnMock invocation) {
+ *             Object[] args = invocation.getArguments();
+ *             Object mock = invocation.getMock();
+ *             return "called with arguments: " + Arrays.toString(args);
+ *         }}));
  *
  * //Following prints "called with arguments: [foo]"
  * System.out.println(mock.someMethod("foo"));
