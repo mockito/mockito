@@ -2,6 +2,7 @@ include 'inline'
 include 'testng'
 include 'extTest'
 include 'android'
+include 'migration'
 
 rootProject.name = 'mockito'
 

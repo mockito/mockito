@@ -89,17 +89,24 @@ package org.mockito;
  *
  * All existing custom implementations of <code>ArgumentMatcher</code> will no longer compile.
  * All locations where hamcrest matchers are passed to <code>argThat()</code> will no longer compile.
- * There are 2 approaches to fix the problems:
+ * There are 3 approaches to fix the problems:
  * <ul>
- * <li>a) Refactor the hamcrest matcher to Mockito matcher:
+ * <li>Refactor the hamcrest matcher to Mockito matcher:
  * Use "implements ArgumentMatcher" instead of "extends ArgumentMatcher".
  * Then refactor <code>describeTo()</code> method into <code>toString()</code> method.
  * </li>
+ * <li>If you need to separate the changes to the code from the switching of the Mockito versions,
+ * e.g. if you have a large repository and cannot make a single atomic change to switch Mockito
+ * version and fix any issues it causes, then you should change any of your classes that extend
+ * {@link ArgumentMatcher} directly to extend {@link BaseArgumentMatcher} instead as it is
+ * compatible across 1.x and 2.x versions. You will need to refactor the <code>describeTo()</code>
+ * method into the <code>toString()</code> method and the <code>matches(Object)</code> method into
+ * the <code>matchesSafely(T)</code> method.
+ * </li>
  * <li>
- * b) Use <code>org.mockito.hamcrest.MockitoHamcrest.argThat()</code> instead of <code>Mockito.argThat()</code>.
+ * Use <code>org.mockito.hamcrest.MockitoHamcrest.argThat()</code> instead of <code>Mockito.argThat()</code>.
  * Ensure that there is <a href="http://hamcrest.org/JavaHamcrest/">hamcrest</a> dependency on classpath
  * (Mockito does not depend on hamcrest any more).
- *
  * </li>
  * </ul>
  * What option is right for you? If you don't mind compile dependency to hamcrest
@@ -125,4 +132,12 @@ public interface ArgumentMatcher<T> {
      * @return true if this matcher accepts the given argument.
      */
     boolean matches(T argument);
+
+    /**
+     * Provide a meaningful description of the matcher in error messages.
+     *
+     * @return a description of the values that the matcher matches, e.g. the
+     * {@link ArgumentMatchers#anyString()} matcher returns {@code "<any string>"}.
+     */
+    String toString();
 }
