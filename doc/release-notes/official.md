@@ -1,3 +1,11 @@
+### 2.7.18 (2017-03-18 16:40 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: L-KID
+* Improvements: 1
+  * Corrected a comment in exceptions package-info [(#975)](https://github.com/mockito/mockito/pull/975)
+
 ### 2.7.17 (2017-03-12 18:39 UTC)
 
 * Authors: 1
