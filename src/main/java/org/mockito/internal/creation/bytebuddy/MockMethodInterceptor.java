@@ -7,9 +7,11 @@ package org.mockito.internal.creation.bytebuddy;
 import net.bytebuddy.implementation.bind.annotation.*;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.creation.DelegatingMethod;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.MockitoMethod;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.progress.SequenceNumber;
+import org.mockito.invocation.Location;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 
@@ -38,12 +40,27 @@ public class MockMethodInterceptor implements Serializable {
                        Method invokedMethod,
                        Object[] arguments,
                        InterceptedInvocation.SuperMethod superMethod) throws Throwable {
-        return handler.handle(new InterceptedInvocation(
+        return doIntercept(
                 mock,
-                createMockitoMethod(invokedMethod),
+                invokedMethod,
                 arguments,
                 superMethod,
-                SequenceNumber.next()
+                new LocationImpl()
+        );
+    }
+
+    Object doIntercept(Object mock,
+                       Method invokedMethod,
+                       Object[] arguments,
+                       InterceptedInvocation.SuperMethod superMethod,
+                       Location location) throws Throwable {
+        return handler.handle(new InterceptedInvocation(
+            mock,
+            createMockitoMethod(invokedMethod),
+            arguments,
+            superMethod,
+            location,
+            SequenceNumber.next()
         ));
     }
 
