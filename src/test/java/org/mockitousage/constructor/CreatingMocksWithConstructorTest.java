@@ -137,43 +137,91 @@ public class CreatingMocksWithConstructorTest extends TestBase {
     static class ExtendsExtendsBase extends ExtendsBase {}
 
     static class UsesBase {
-        public UsesBase(Base b) {}
-        public UsesBase(ExtendsBase b) {}
-    }
+        public UsesBase(Base b) {
+            constructorUsed = "Base";
+        }
+        public UsesBase(ExtendsBase b) {
+            constructorUsed = "ExtendsBase";
+        }
 
-    @Test
-    public void can_mock_unambigous_constructor_with_inheritence() {
-        mock(UsesBase.class, withSettings().useConstructor(new Base()).defaultAnswer(CALLS_REAL_METHODS));
-    }
-
-    @Test
-    public void exception_message_when_ambiguous_constructor_found_exact_exists() throws Exception {
-        try {
-            //when
-            mock(UsesBase.class, withSettings().useConstructor(new ExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
-            //then
-            fail();
-        } catch (MockitoException e) {
-            assertThat(e).hasMessage("Unable to create mock instance of type 'UsesBase'");
-            assertThat(e.getCause()).hasMessageContaining
-                ("Multiple constructors could be matched to arguments of types [org.mockitousage.constructor.CreatingMocksWithConstructorTest$ExtendsBase]");
+        private String constructorUsed = null;
+        String getConstructorUsed() {
+            return constructorUsed;
         }
     }
 
     @Test
-    public void fail_when_multiple_matching_constructors() {
+    public void can_mock_unambigous_constructor_with_inheritance_base_class_exact_match() {
+        UsesBase u = mock(UsesBase.class, withSettings().useConstructor(new Base()).defaultAnswer(CALLS_REAL_METHODS));
+        assertEquals("Base", u.getConstructorUsed());
+    }
+
+    @Test
+    public void can_mock_unambigous_constructor_with_inheritance_extending_class_exact_match() {
+        UsesBase u = mock(UsesBase.class, withSettings().useConstructor(new ExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
+        assertEquals("ExtendsBase", u.getConstructorUsed());
+    }
+
+    @Test
+    public void can_mock_unambigous_constructor_with_inheritance_non_exact_match() {
+        UsesBase u = mock(UsesBase.class, withSettings().useConstructor(new ExtendsExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
+        assertEquals("ExtendsBase", u.getConstructorUsed());
+    }
+
+    static class UsesTwoBases {
+        public UsesTwoBases(Base b1, Base b2) {
+            constructorUsed = "Base,Base";
+        }
+        public UsesTwoBases(ExtendsBase b1, Base b2) {
+            constructorUsed = "ExtendsBase,Base";
+        }
+        public UsesTwoBases(Base b1, ExtendsBase b2) {
+            constructorUsed = "Base,ExtendsBase";
+        }
+
+        private String constructorUsed = null;
+        String getConstructorUsed() {
+            return constructorUsed;
+        }
+    }
+
+    @Test
+    public void can_mock_unambigous_constructor_with_inheritance_multiple_base_class_exact_match() {
+        UsesTwoBases u =
+            mock(UsesTwoBases.class, withSettings().useConstructor(new Base(), new Base()).defaultAnswer(CALLS_REAL_METHODS));
+        assertEquals("Base,Base", u.getConstructorUsed());
+    }
+
+    @Test
+    public void can_mock_unambigous_constructor_with_inheritance_first_extending_class_exact_match() {
+        UsesTwoBases u =
+            mock(UsesTwoBases.class, withSettings().useConstructor(new ExtendsBase(), new Base()).defaultAnswer(CALLS_REAL_METHODS));
+        assertEquals("ExtendsBase,Base", u.getConstructorUsed());
+    }
+
+    @Test
+    public void can_mock_unambigous_constructor_with_inheritance_second_extending_class_exact_match() {
+        UsesTwoBases u =
+            mock(UsesTwoBases.class, withSettings().useConstructor(new Base(), new ExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
+        assertEquals("Base,ExtendsBase", u.getConstructorUsed());
+    }
+
+    @Test
+    public void fail_when_multiple_matching_constructors_with_inheritence() {
         try {
             //when
-            mock(UsesBase.class, withSettings().useConstructor(new ExtendsExtendsBase()).defaultAnswer(CALLS_REAL_METHODS));
+            mock(UsesTwoBases.class, withSettings().useConstructor(new ExtendsBase(), new ExtendsBase()));
             //then
             fail();
         } catch (MockitoException e) {
             //TODO the exception message includes Mockito internals like the name of the generated class name.
             //I suspect that we could make this exception message nicer.
-            assertThat(e).hasMessage("Unable to create mock instance of type 'UsesBase'");
+            assertThat(e).hasMessage("Unable to create mock instance of type 'UsesTwoBases'");
             assertThat(e.getCause())
-                .hasMessageContaining("Multiple constructors could be matched to arguments of types [org.mockitousage.constructor.CreatingMocksWithConstructorTest$ExtendsExtendsBase]")
-                .hasMessageContaining("If you believe that Mockito could do a better join deciding on which constructor to use, please let us know.\n" +
+                .hasMessageContaining("Multiple constructors could be matched to arguments of types "
+                    + "[org.mockitousage.constructor.CreatingMocksWithConstructorTest$ExtendsBase, "
+                    + "org.mockitousage.constructor.CreatingMocksWithConstructorTest$ExtendsBase]")
+                .hasMessageContaining("If you believe that Mockito could do a better job deciding on which constructor to use, please let us know.\n" +
                     "Ticket 685 contains the discussion and a workaround for ambiguous constructors using inner class.\n" +
                     "See https://github.com/mockito/mockito/issues/685");
         }
@@ -270,5 +318,25 @@ public class CreatingMocksWithConstructorTest extends TestBase {
         protected String getRealValue(T value) {
             return "value";
         }
+    }
+
+    private static class AmbiguousWithPrimitive {
+        public AmbiguousWithPrimitive(String s, int i) {
+            data = s;
+        }
+        public AmbiguousWithPrimitive(Object o, int i) {
+            data = "just an object";
+        }
+
+        private String data;
+        public String getData() {
+            return data;
+        }
+    }
+
+    @Test
+    public void can_spy_ambiguius_constructor_with_primitive() {
+        AmbiguousWithPrimitive mock = mock(AmbiguousWithPrimitive.class, withSettings().useConstructor("String", 7).defaultAnswer(CALLS_REAL_METHODS));
+        assertEquals("String", mock.getData());
     }
 }
