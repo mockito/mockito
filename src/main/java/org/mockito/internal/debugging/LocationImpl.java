@@ -19,8 +19,16 @@ public class LocationImpl implements Location, Serializable {
     }
 
     public LocationImpl(StackTraceFilter stackTraceFilter) {
+        this(stackTraceFilter, new Throwable());
+    }
+
+    public LocationImpl(Throwable stackTraceHolder) {
+        this(new StackTraceFilter(), stackTraceHolder);
+    }
+
+    private LocationImpl(StackTraceFilter stackTraceFilter, Throwable stackTraceHolder) {
         this.stackTraceFilter = stackTraceFilter;
-        stackTraceHolder = new Throwable();
+        this.stackTraceHolder = stackTraceHolder;
     }
 
     @Override
