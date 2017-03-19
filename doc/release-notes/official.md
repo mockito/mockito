@@ -1,3 +1,14 @@
+### 2.7.19 (2017-03-19 14:12 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Allon Murienik
+* Improvements: 2
+  * Enhancements: 1
+    * Make MockSettings.useConstructor able to choose the right constructor [(#976)](https://github.com/mockito/mockito/issues/976)
+  * Remaining changes: 1
+    * Fixes #976: Resolve ambiguous constructors [(#980)](https://github.com/mockito/mockito/pull/980)
+
 ### 2.7.18 (2017-03-18 16:40 UTC)
 
 * Authors: 1
