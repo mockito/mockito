@@ -221,7 +221,7 @@ public class CreatingMocksWithConstructorTest extends TestBase {
                 .hasMessageContaining("Multiple constructors could be matched to arguments of types "
                     + "[org.mockitousage.constructor.CreatingMocksWithConstructorTest$ExtendsBase, "
                     + "org.mockitousage.constructor.CreatingMocksWithConstructorTest$ExtendsBase]")
-                .hasMessageContaining("If you believe that Mockito could do a better join deciding on which constructor to use, please let us know.\n" +
+                .hasMessageContaining("If you believe that Mockito could do a better job deciding on which constructor to use, please let us know.\n" +
                     "Ticket 685 contains the discussion and a workaround for ambiguous constructors using inner class.\n" +
                     "See https://github.com/mockito/mockito/issues/685");
         }

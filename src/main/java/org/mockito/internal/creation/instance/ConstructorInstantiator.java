@@ -108,7 +108,7 @@ public class ConstructorInstantiator implements Instantiator {
         return new InstantiationException(join("Unable to create instance of '" + cls.getSimpleName() + "'.",
                 "Multiple constructors could be matched to arguments of types " + constructorArgTypes() + ":",
                 join("", " - ", constructors),
-                "If you believe that Mockito could do a better join deciding on which constructor to use, please let us know.",
+                "If you believe that Mockito could do a better job deciding on which constructor to use, please let us know.",
                 "Ticket 685 contains the discussion and a workaround for ambiguous constructors using inner class.",
                 "See https://github.com/mockito/mockito/issues/685"
             ), null);
