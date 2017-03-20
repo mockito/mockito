@@ -1319,7 +1319,7 @@ import org.mockito.verification.*;
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
  *     <li>Strict stubbing with JUnit Rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
- *     <li>Strict stubbing with JUnit Runner - {@link MockitoJUnitRunner.StrictStubs}</li>
+ *     <li>Strict stubbing with JUnit Runner - {@link MockitoJUnitRunner.StrictStubs.class}</li>
  *     <li>Strict stubbing if you cannot use runner/rule (like TestNG) - {@link MockitoSession}</li>
  *     <li>Unnecessary stubbing detection with {@link MockitoJUnitRunner}</li>
  *     <li>Stubbing argument mismatch warnings, documented in {@link MockitoHint}</li>
