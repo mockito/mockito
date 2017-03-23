@@ -4,42 +4,39 @@
  */
 package org.mockito.internal.verification;
 
-import java.util.Set;
+import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.verification.api.VerificationData;
-import org.mockito.listeners.VerificationListener;
-import org.mockito.verification.VerificationEvent;
 import org.mockito.verification.VerificationMode;
 
 public class MockAwareVerificationMode implements VerificationMode {
 
     private final Object mock;
     private final VerificationMode mode;
-    private final Set<VerificationListener> listeners;
+    private final MockingProgress mockingProgress;
 
-    public MockAwareVerificationMode(Object mock, VerificationMode mode, Set<VerificationListener> listeners) {
+    public MockAwareVerificationMode(Object mock, VerificationMode mode, MockingProgress mockingProgress) {
         this.mock = mock;
         this.mode = mode;
-        this.listeners = listeners;
+        this.mockingProgress = mockingProgress;
     }
 
     public void verify(VerificationData data) {
         try {
             mode.verify(data);
-            notifyListeners(new VerificationEventImpl(mock, mode, data, null));
         } catch (RuntimeException e) {
-            notifyListeners(new VerificationEventImpl(mock, mode, data, e));
+            fireVerificationEvent( data, e);
             throw e;
         } catch (Error e) {
-            notifyListeners(new VerificationEventImpl(mock, mode, data, e));
+            fireVerificationEvent(data, e);
             throw e;
         }
+
+        fireVerificationEvent(data,null);
     }
 
 
-    private void notifyListeners(VerificationEvent event) {
-        for (VerificationListener listener : listeners) {
-            listener.onVerification(event);
-        }
+    private void fireVerificationEvent(VerificationData data, Throwable error) {
+    	mockingProgress.fireVerificationEvent(new VerificationEventImpl(mock, mode, data, error));
     }
 
     public Object getMock() {
