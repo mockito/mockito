@@ -8,7 +8,7 @@ Most popular mocking framework for Java
 
 [![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=release/2.x)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito) [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/mockito/mockito/blob/master/LICENSE)
 
-[![latest release](https://img.shields.io/badge/release notes-2.x-yellow.svg)](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) [ ![Latest release](https://api.bintray.com/packages/mockito/maven/mockito/images/download.svg)](https://bintray.com/mockito/maven/mockito/_latestVersion) [ ![Maven Central](https://img.shields.io/maven-central/v/org.mockito/mockito-core.svg)](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core) [ ![Javadocs](http://www.javadoc.io/badge/org.mockito/mockito-core.svg?color=red)](http://www.javadoc.io/doc/org.mockito/mockito-core)
+[![latest release](https://img.shields.io/badge/release%20notes-2.x-yellow.svg)](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) [ ![Latest release](https://api.bintray.com/packages/mockito/maven/mockito/images/download.svg)](https://bintray.com/mockito/maven/mockito/_latestVersion) [ ![Maven Central](https://img.shields.io/maven-central/v/org.mockito/mockito-core.svg)](https://maven-badges.herokuapp.com/maven-central/org.mockito/mockito-core) [ ![Javadocs](http://www.javadoc.io/badge/org.mockito/mockito-core.svg?color=red)](http://www.javadoc.io/doc/org.mockito/mockito-core)
 
 
 ## Current version is 2.x
