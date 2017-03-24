@@ -1,5 +1,6 @@
 package org.mockito.internal.junit;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
@@ -10,7 +11,6 @@ import org.mockitoutil.TestBase;
 import java.util.Collections;
 
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class UnusedStubbingsTest extends TestBase {
@@ -43,8 +43,10 @@ public class UnusedStubbingsTest extends TestBase {
 
         //then
         String[] message = filterLineNo(logger.getLoggedInfo()).split("\n");
-        assertThat(message[0]).isEqualTo("[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):");
-        assertThat(message[1]).matches("\\[MockitoHint\\] 1\\. Unused \\-\\> at [[\\w\\.]+/]*[\\w\\.]+\\.reflect\\.NativeMethodAccessorImpl\\.invoke0\\(.*Native Method\\)");
-        assertThat(message[2]).matches("\\[MockitoHint\\] 2\\. Unused \\-\\> at [[\\w\\.]+/]*[\\w\\.]+\\.reflect\\.NativeMethodAccessorImpl\\.invoke0\\(.*Native Method\\)");
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(message[0]).isEqualTo("[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):");
+            softly.assertThat(message[1]).matches("\\[MockitoHint\\] 1\\. Unused \\-\\> at [[\\w\\.]+/]*[\\w\\.]+\\.reflect\\.NativeMethodAccessorImpl\\.invoke0\\(.*Native Method\\)");
+            softly.assertThat(message[2]).matches("\\[MockitoHint\\] 2\\. Unused \\-\\> at [[\\w\\.]+/]*[\\w\\.]+\\.reflect\\.NativeMethodAccessorImpl\\.invoke0\\(.*Native Method\\)");
+        });
     }
 }
