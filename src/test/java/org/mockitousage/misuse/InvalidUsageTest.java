@@ -120,6 +120,7 @@ public class InvalidUsageTest extends TestBase {
         verifyNoInteractions(inter);
     }
 
+    @Test
     public void shouldNotMockObjectMethodsOnClass() throws Exception {
         Object clazz = mock(ObjectLikeInterface.class);
 
