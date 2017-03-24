@@ -7,8 +7,7 @@ import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockitoutil.TestBase;
 
-import java.util.List;
-import java.util.regex.Pattern;
+import java.util.Collections;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +20,7 @@ public class UnusedStubbingsTest extends TestBase {
     @Test
     public void no_unused_stubbings() throws Exception {
         //given
-        UnusedStubbings stubbings = new UnusedStubbings((List) asList());
+        UnusedStubbings stubbings = new UnusedStubbings(Collections.emptyList());
 
         //when
         stubbings.format("MyTest.myTestMethod", logger);
@@ -33,7 +32,7 @@ public class UnusedStubbingsTest extends TestBase {
     @Test
     public void unused_stubbings() throws Exception {
         //given
-        UnusedStubbings stubbings = new UnusedStubbings((List) asList(
+        UnusedStubbings stubbings = new UnusedStubbings(asList(
             new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), new DoesNothing()),
             new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), new DoesNothing())
         ));
@@ -45,7 +44,7 @@ public class UnusedStubbingsTest extends TestBase {
         //then
         String[] message = filterLineNo(logger.getLoggedInfo()).split("\n");
         assertThat(message[0]).isEqualTo("[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):");
-        assertThat(message[1]).matches("\\[MockitoHint\\] 1\\. Unused \\-\\> at [\\w\\.]+\\.reflect\\.NativeMethodAccessorImpl\\.invoke0\\(.*Native Method\\)");
-        assertThat(message[2]).matches("\\[MockitoHint\\] 2\\. Unused \\-\\> at [\\w\\.]+\\.reflect\\.NativeMethodAccessorImpl\\.invoke0\\(.*Native Method\\)");
+        assertThat(message[1]).matches("\\[MockitoHint\\] 1\\. Unused \\-\\> at [[\\w\\.]+/]*[\\w\\.]+\\.reflect\\.NativeMethodAccessorImpl\\.invoke0\\(.*Native Method\\)");
+        assertThat(message[2]).matches("\\[MockitoHint\\] 2\\. Unused \\-\\> at [[\\w\\.]+/]*[\\w\\.]+\\.reflect\\.NativeMethodAccessorImpl\\.invoke0\\(.*Native Method\\)");
     }
 }
