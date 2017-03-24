@@ -14,7 +14,7 @@ import org.mockito.plugins.StackTraceCleanerProvider;
  */
 public class Plugins {
 
-    private static final PluginRegistry registry = new PluginRegistry();
+    private static PluginRegistry registry = new PluginRegistry();
 
     /**
      * The implementation of the stack trace cleaner
@@ -51,5 +51,12 @@ public class Plugins {
      */
     public static AnnotationEngine getAnnotationEngine() {
         return registry.getAnnotationEngine();
+    }
+
+    /**
+     * Refreshes the plugin registry and reloads plugins.
+     */
+    public static void refreshPluginRegistry() {
+        registry = new PluginRegistry();
     }
 }
