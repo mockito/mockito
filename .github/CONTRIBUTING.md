@@ -86,7 +86,7 @@ If you want to check if your code complies to the style guide, you can run:
 
 * `./gradlew checkstyleMain` to check the main source code
 * `./gradlew checkstyleTest` to check the test source code
-* `./gradlew build` to check main and test source code, and run the tests
+* `./gradlew check` to check main and test source code, and run the tests
 
 ### Imports
 
