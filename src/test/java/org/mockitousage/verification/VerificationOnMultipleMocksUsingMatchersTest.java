@@ -60,5 +60,6 @@ public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {
 
         verifyNoMoreInteractions(list, map);
         verifyZeroInteractions(set);
+        verifyNoInteractions(set);
     }
 }

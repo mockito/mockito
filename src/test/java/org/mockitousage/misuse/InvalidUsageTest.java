@@ -38,6 +38,11 @@ public class InvalidUsageTest extends TestBase {
     }
 
     @Test(expected=MockitoException.class)
+    public void shouldRequireArgumentsWhenVerifyingNoInteractions() {
+        verifyNoInteractions();
+    }
+
+    @Test(expected=MockitoException.class)
     public void shouldNotCreateInOrderObjectWithoutMocks() {
         inOrder();
     }
@@ -104,6 +109,17 @@ public class InvalidUsageTest extends TestBase {
         verifyZeroInteractions(inter);
     }
 
+    @Test
+    public void shouldNotMockObjectMethodsOnInterfaceVerifyNoInteractions() throws Exception {
+        ObjectLikeInterface inter = mock(ObjectLikeInterface.class);
+
+        inter.equals(null);
+        inter.toString();
+        inter.hashCode();
+
+        verifyNoInteractions(inter);
+    }
+
     public void shouldNotMockObjectMethodsOnClass() throws Exception {
         Object clazz = mock(ObjectLikeInterface.class);
 
@@ -112,5 +128,16 @@ public class InvalidUsageTest extends TestBase {
         clazz.hashCode();
 
         verifyZeroInteractions(clazz);
+    }
+
+    @Test
+    public void shouldNotMockObjectMethodsOnClassVerifyNoInteractions() throws Exception {
+        Object clazz = mock(ObjectLikeInterface.class);
+
+        clazz.equals(null);
+        clazz.toString();
+        clazz.hashCode();
+
+        verifyNoInteractions(clazz);
     }
 }

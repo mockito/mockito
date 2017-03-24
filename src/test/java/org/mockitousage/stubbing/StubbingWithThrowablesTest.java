@@ -212,7 +212,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         when(mock.size()).thenThrow(new RuntimeException());
         doThrow(new RuntimeException()).when(mock).clone();
 
-        verifyZeroInteractions(mock);
+        verifyNoInteractions(mock);
 
         mock.add("test");
 

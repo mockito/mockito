@@ -19,11 +19,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.mockitoutil.Conditions.firstMethodInStackTrace;
 
 public class StackTraceFilteringTest extends TestBase {
@@ -69,6 +65,17 @@ public class StackTraceFilteringTest extends TestBase {
             fail();
         } catch (NoInteractionsWanted e) {
             Assertions.assertThat(e).has(firstMethodInStackTrace("shouldFilterStackTraceOnVerifyZeroInteractions"));
+        }
+    }
+
+    @Test
+    public void shouldFilterStackTraceOnVerifyNoInteractions() {
+        mock.oneArg(true);
+        try {
+            verifyNoInteractions(mock);
+            fail();
+        } catch (NoInteractionsWanted e) {
+            Assertions.assertThat(e).has(firstMethodInStackTrace("shouldFilterStackTraceOnVerifyNoInteractions"));
         }
     }
 

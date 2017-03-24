@@ -67,6 +67,14 @@ public class BasicStubbingTest extends TestBase {
     }
 
     @Test
+    public void should_stubbing_not_be_treated_as_interaction_verify_no_interactions() {
+        when(mock.simpleMethod("one")).thenThrow(new RuntimeException());
+        doThrow(new RuntimeException()).when(mock).simpleMethod("two");
+
+        verifyNoInteractions(mock);
+    }
+
+    @Test
     public void unfinished_stubbing_cleans_up_the_state() {
         reset(mock);
         try {
@@ -76,6 +84,18 @@ public class BasicStubbingTest extends TestBase {
 
         //anything that can cause state validation
         verifyZeroInteractions(mock);
+    }
+
+    @Test
+    public void unfinished_stubbing_cleans_up_the_state_verify_no_interactions() {
+        reset(mock);
+        try {
+            when("").thenReturn("");
+            fail();
+        } catch (MissingMethodInvocationException e) {}
+
+        //anything that can cause state validation
+        verifyNoInteractions(mock);
     }
 
     @Test
