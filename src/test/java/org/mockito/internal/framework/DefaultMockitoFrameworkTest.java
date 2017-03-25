@@ -18,7 +18,6 @@ import org.mockitoutil.TestBase;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockitoutil.ThrowableAssert.assertThat;
 

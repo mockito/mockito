@@ -6,7 +6,6 @@ package org.mockito.internal.stubbing.defaultanswers;
 
 import org.mockito.internal.util.JavaEightUtil;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.ObjectMethodsGuru;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockName;

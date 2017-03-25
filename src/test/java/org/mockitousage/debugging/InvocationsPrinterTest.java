@@ -4,7 +4,6 @@
  */
 package org.mockitousage.debugging;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.debugging.InvocationsPrinter;

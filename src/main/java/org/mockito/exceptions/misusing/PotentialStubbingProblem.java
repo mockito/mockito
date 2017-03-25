@@ -5,10 +5,8 @@
 package org.mockito.exceptions.misusing;
 
 import org.mockito.Mockito;
-import org.mockito.MockitoSession;
 import org.mockito.quality.Strictness;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.junit.MockitoRule;
 
 /**
  * {@code PotentialStubbingProblem} improves productivity by failing the test early when the user
