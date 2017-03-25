@@ -38,7 +38,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.bytebuddy.implementation.MethodDelegation.to;
 import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
 import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
 import static net.bytebuddy.matcher.ElementMatchers.*;

@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.ArgumentsProcessor;

@@ -15,7 +15,7 @@ import static org.mockito.internal.invocation.InvocationsFinder.findSimilarInvoc
 import static org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool.getSuspiciouslyNotMatchingArgsIndexes;
 
 import java.util.List;
-import org.mockito.internal.invocation.InvocationMatcher;
+
 import org.mockito.internal.reporting.SmartPrinter;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;

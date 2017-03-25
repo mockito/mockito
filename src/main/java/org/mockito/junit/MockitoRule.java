@@ -11,7 +11,6 @@ import org.mockito.MockitoSession;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
-import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 
 /**
  * Mockito JUnit Rule helps keeping tests clean.

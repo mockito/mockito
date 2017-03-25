@@ -56,7 +56,6 @@ import org.mockitoutil.TestBase;
 import java.util.*;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
 
 public class ThreadsRunAllTestsHalfManualTest extends TestBase {
 

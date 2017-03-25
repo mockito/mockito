@@ -11,12 +11,10 @@ import org.mockito.internal.matchers.Equals;
 import org.mockitoutil.TestBase;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.*;
 
 @SuppressWarnings({ "unchecked", "serial" })
 public class ArgumentMatchingToolTest extends TestBase {

@@ -7,7 +7,6 @@ package org.mockito.internal.junit;
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
-import org.mockito.internal.stubbing.answers.DoesNothing;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockitoutil.TestBase;
 

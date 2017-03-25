@@ -14,7 +14,6 @@ import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.Objenesis;
 
-import java.util.Arrays;
 import java.util.Set;
 
 import static org.mockitoutil.ClassLoaders.coverageTool;
