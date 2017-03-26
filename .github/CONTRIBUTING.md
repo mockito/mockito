@@ -82,6 +82,12 @@ For most editors, this should be automatically enforced by [EditorConfig](http:/
 Check if your editor has a built-in plugin or if you need to download one.
 IntelliJ has a built-in plugin, for Eclipse you need to download [this plugin](https://github.com/ncjones/editorconfig-eclipse#readme).
 
+If you want to check if your code complies to the style guide, you can run:
+
+* `./gradlew checkstyleMain` to check the main source code
+* `./gradlew checkstyleTest` to check the test source code
+* `./gradlew check` to check main and test source code, and run the tests
+
 ### Imports
 
 Imports must be sorted in the following order
