@@ -14,18 +14,18 @@ import org.mockito.Incubating;
  * Example of stubbing a mock with this custom answer:
  *
  * <pre class="code"><code class="java">
- * import org.mockito.stubbing.VoidAnswer4;
  *
  * import static org.mockito.AdditionalAnswers.answerVoid;
  *
  * doAnswer(answerVoid(
  *     new VoidAnswer4&lt;String, Integer, String, Character&gt;() {
- *         public void answerVoid(String msg, Integer count, String another, Character c) throws Exception {
+ *         public void answer(String msg, Integer count, String another, Character c) throws Exception {
  *             throw new Exception(String.format(msg, another, c, count));
- *         }})).when(mock).someMethod(anyString(), anyInt(), anyString(), anyChar());
+ *         }
+ * })).when(mock).someMethod(anyString(), anyInt(), anyString(), anyChar());
  *
  * //Following will raise an exception with the message "ka-boom <3"
- * mock.someMethod("%s-boom %c%d", 3, "ka", '<');
+ * mock.someMethod("%s-boom %c%d", 3, "ka", '&lt;');
  * </code></pre>
  *
  * @param <A0> type of the first argument
