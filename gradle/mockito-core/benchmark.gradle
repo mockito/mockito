@@ -1,0 +1,9 @@
+jmh {
+    duplicateClassesStrategy = 'warn'
+    fork = 2
+    warmupIterations = 5
+    iterations = 5
+    timeUnit = 'ms'
+    verbosity = 'EXTRA'
+    include = ['.*']
+}
