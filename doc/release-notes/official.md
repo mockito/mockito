@@ -1,3 +1,30 @@
+### 2.7.20 (2017-03-29 17:23 UTC)
+
+* Authors: 7
+* Commits: 12
+  * 3: Marcin Zajączkowski
+  * 2: Allon Mureinik
+  * 2: Szczepan Faber
+  * 2: Tim van der Lippe
+  * 1: Jesse Englert
+  * 1: Nirvanall
+  * 1: Tsuyoshi Murakami
+* Improvements: 11
+  * Bugfixes: 1
+    * Enabled mocking interface clone method [(#688)](https://github.com/mockito/mockito/issues/688)
+  * Enhancements: 1
+    * Make MockSettings.useConstructor able to choose the right constructor [(#976)](https://github.com/mockito/mockito/issues/976)
+  * Remaining changes: 9
+    * Bumped version to fix CI build [(#1010)](https://github.com/mockito/mockito/pull/1010)
+    * Clean up unused imports [(#1009)](https://github.com/mockito/mockito/pull/1009)
+    * Fix release notes badge [(#1001)](https://github.com/mockito/mockito/pull/1001)
+    * Add explicit mention for code style check [(#996)](https://github.com/mockito/mockito/pull/996)
+    * fix the broken link on 1357 line in Mockito.java [(#994)](https://github.com/mockito/mockito/pull/994)
+    * Fixes #976: Resolve ambiguous constructors [(#980)](https://github.com/mockito/mockito/pull/980)
+    * Fixes #974: Fix to get correct stubbing location with inline mocking [(#979)](https://github.com/mockito/mockito/pull/979)
+    * MockitoJUnitRunner.StrictStubs does not detect 'Unnecessary Stubbing' when inline mock maker is enabled [(#974)](https://github.com/mockito/mockito/issues/974)
+    * Verifies #688: Acceptance test to prevent future regression [(#972)](https://github.com/mockito/mockito/pull/972)
+
 ### 2.7.18 (2017-03-18 16:40 UTC)
 
 * Authors: 1
