@@ -1,0 +1,9 @@
+apply plugin: 'java'
+description = "Compatibility classes to aid in migration to 2.x"
+
+dependencies {
+    compile "org.hamcrest:hamcrest-core:1.3"
+    compile project.rootProject
+
+    testCompile "junit:junit:4.10"
+}
