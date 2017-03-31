@@ -6,7 +6,6 @@ javadoc {
     // For more details on the format
     // see https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
 
-    classpath = configurations.runtime + configurations.provided
     source = sourceSets.main.allJava
     destinationDir = file("$buildDir/javadoc")
     title = "Mockito ${project.version} API"
