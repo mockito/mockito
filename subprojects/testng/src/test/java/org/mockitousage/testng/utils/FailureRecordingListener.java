@@ -14,7 +14,7 @@ import java.util.ListIterator;
  */
 public class FailureRecordingListener implements ITestListener, IConfigurationListener {
 
-    public List<ITestResult> failedTestResults = new ArrayList<ITestResult>();
+    public List<ITestResult> failedTestResults = new ArrayList<>();
 
     public void onTestFailure(ITestResult result) {
         failedTestResults.add(result);
