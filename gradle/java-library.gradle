@@ -1,11 +1,9 @@
-apply plugin: 'java'
+apply plugin: "org.mockito.mockito-release-tools.java-library"
 
 group = 'org.mockito'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
-
-apply plugin: 'maven-publish'
 
 test {
     include "**/*Test.class"
@@ -22,6 +20,3 @@ tasks.withType(Checkstyle) {
         html.stylesheet resources.text.fromFile("$rootDir/config/checkstyle/checkstyle.xsl")
     }
 }
-
-assert project.hasProperty("artifactName") : "Please configure 'ext.artifactName' for project that wants to use 'java-library.gradle' plugin"
-archivesBaseName = project.ext.artifactName
