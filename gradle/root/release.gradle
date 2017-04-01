@@ -39,11 +39,12 @@ allprojects {
                 name = 'mockito'
                 licenses = ['MIT']
                 labels = ['mocks', 'tdd', 'unit tests']
+                publish = false //TODO temporary
 
                 version {
                     //Automatically syncs to central repository (https://oss.sonatype.org/)
                     mavenCentralSync {
-                        sync = true
+                        sync = false //TODO temporary
                         user = System.env.NEXUS_TOKEN_USER
                         password = System.env.NEXUS_TOKEN_PWD
                     }
