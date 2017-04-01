@@ -14,12 +14,14 @@ import org.mockito.Incubating;
  * Example of stubbing a mock with this custom answer:
  *
  * <pre class="code"><code class="java">
- * when(mock.someMethod(anyInt(), anyString(), anyChar(), any())).thenAnswer(
- *     new Answer&lt;StringBuilder, Integer, String, Character, Object&gt;() {
- *         StringBuilder answer(Integer i, String s, Character c, Object o) {
+ * import static org.mockito.AdditionalAnswers.answer;
+ *
+ * when(mock.someMethod(anyInt(), anyString(), anyChar(), any())).then(answer(
+ *     new Answer4&lt;StringBuilder, Integer, String, Character, Object&gt;() {
+ *         public StringBuilder answer(Integer i, String s, Character c, Object o) {
  *             return new StringBuilder().append(i).append(s).append(c).append(o.hashCode());
  *         }
- *     });
+ * }));
  *
  * //Following will print a string like "3xyz131635550"
  * System.out.println(mock.someMethod(3, "xy", 'z', new Object()));

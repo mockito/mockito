@@ -14,11 +14,14 @@ import org.mockito.Incubating;
  * Example of stubbing a mock with this custom answer:
  *
  * <pre class="code"><code class="java">
- * when(mock.someMethod(anyString(), anyInt())).thenAnswer(new Answer&lt;String, Integer&gt;() {
- *     void answer(String msg, Integer count) {
- *         throw new Exception(String.format(msg, count));
- *     }
- * });
+ * import static org.mockito.AdditionalAnswers.answerVoid;
+ *
+ * doAnswer(answerVoid(
+ *     new VoidAnswer2&lt;String, Integer&gt;() {
+ *         public void answer(String msg, Integer count) throws Exception {
+ *             throw new Exception(String.format(msg, count));
+ *         }
+ * })).when(mock).someMethod(anyString(), anyInt());
  *
  * //Following will raise an exception with the message "boom 3"
  * mock.someMethod("boom %d", 3);
