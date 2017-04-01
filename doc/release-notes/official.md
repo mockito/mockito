@@ -1,3 +1,15 @@
+### 2.7.21 (2017-04-01 11:07 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Szczepan Faber
+  * 1: Tim van der Lippe
+* Improvements: 2
+  * Documentation: 1
+    * Javadoc, Answer1 code example does not compile. [(#952)](https://github.com/mockito/mockito/issues/952)
+  * Remaining changes: 1
+    * Tidy-up in build automation [(#1011)](https://github.com/mockito/mockito/pull/1011)
+
 ### 2.7.20 (2017-03-29 17:23 UTC)
 
 * Authors: 7
