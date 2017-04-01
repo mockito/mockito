@@ -3,7 +3,7 @@ apply plugin: "org.mockito.mockito-release-tools.continuous-delivery"
 ext {
     gh_repository = "mockito/mockito-release-tools-example"
     gh_user = "szczepiq"
-    gh_readOnlyAuthToken = "e7fe8fcdd6ffed5c38498c4c79b2a68e6f6ed1bb"
+    gh_readOnlyAuthToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"
     //TODO below is not used yet
     gh_writeAuthTokenEnvName = "GH_WRITE_TOKEN"
 
