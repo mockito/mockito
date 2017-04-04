@@ -1,0 +1,13 @@
+task copyMockMethodDispatcher(type: Copy) {
+  from "${buildDir}/classes/main/org/mockito/internal/creation/bytebuddy"
+  into "${buildDir}/classes/main/org/mockito/internal/creation/bytebuddy"
+  include "MockMethodDispatcher.class"
+  rename { String fileName ->
+    fileName.replace('.class', '.raw')
+  }
+}
+classes.dependsOn(copyMockMethodDispatcher)
+
+jar {
+  exclude("org/mockito/internal/creation/bytebuddy/MockMethodDispatcher.class")
+}
