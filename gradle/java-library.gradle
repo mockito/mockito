@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'ru.vyarus.animalsniffer'
 
 group = 'org.mockito'
 
@@ -25,3 +26,7 @@ tasks.withType(Checkstyle) {
 
 assert project.hasProperty("artifactName") : "Please configure 'ext.artifactName' for project that wants to use 'java-library.gradle' plugin"
 archivesBaseName = project.ext.artifactName
+
+dependencies {
+    signature 'org.codehaus.mojo.signature:java16:1.0@signature'
+}
