@@ -1821,7 +1821,7 @@ public class Mockito extends ArgumentMatchers {
      * This method, in contrast to the original {@link #spy(Object)}, creates a spy based on class instead of an object.
      * Sometimes it is more convenient to create spy based on the class and avoid providing an instance of a spied object.
      * This is particularly useful for spying on abstract classes because they cannot be instantiated.
-     * See also {@link MockSettings#useConstructor()}.
+     * See also {@link MockSettings#useConstructor(Object...)}.
      * <p>
      * Examples:
      * <pre class="code"><code class="java">
