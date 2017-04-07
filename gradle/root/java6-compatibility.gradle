@@ -1,0 +1,12 @@
+//Use animal sniffer to detect Java6 incompatibilities
+//We can remove it when we drop support for Java8
+if (project.hasProperty('checkJava6Compatibility')) {
+    allprojects { p ->
+        plugins.withId('java') {
+            p.apply plugin: 'ru.vyarus.animalsniffer'
+            p.dependencies {
+                signature 'org.codehaus.mojo.signature:java16:1.0@signature'
+            }
+        }
+    }
+}
