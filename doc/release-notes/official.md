@@ -1,3 +1,16 @@
+### 2.7.22 (2017-04-07 14:44 UTC)
+
+* Authors: 4
+* Commits: 8
+  * 3: Marcin Zajączkowski
+  * 2: Allon Mureinik
+  * 2: Szczepan Faber
+  * 1: Marcin Zajaczkowski
+* Improvements: 3
+  * Fix broken link in Mockito javadoc [(#1023)](https://github.com/mockito/mockito/pull/1023)
+  * MatchersTest numeric literals [(#1022)](https://github.com/mockito/mockito/pull/1022)
+  * Change release build to JDK 7 with binary compatibility for Java 6 [(#1021)](https://github.com/mockito/mockito/pull/1021)
+
 ### 2.7.21 (2017-04-01 11:07 UTC)
 
 * Authors: 2
