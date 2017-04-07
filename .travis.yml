@@ -26,14 +26,10 @@ before_install:
   - echo "$TRAVIS_COMMIT_MESSAGE"
 
 jdk:
-  - openjdk6
+  - oraclejdk7
 
 matrix:
   include:
-  - jdk: openjdk6
-    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
-  - jdk: oraclejdk7
-    env: SKIP_RELEASE=true
   - jdk: oraclejdk7
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
   - jdk: oraclejdk8
@@ -52,7 +48,7 @@ branches:
 install:
  - true
 script:
-  - ./gradlew ciBuild release -s
+  - ./gradlew ciBuild release -s -PcheckJava6Compatibility
 after_success:
   - ./gradlew --stacktrace coverageReport && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
   - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
