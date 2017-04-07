@@ -1,6 +1,7 @@
 //Use animal sniffer to detect Java6 incompatibilities
 //We can remove it when we drop support for Java8
-if (project.hasProperty('checkJava6Compatibility')) {
+if (project.hasProperty('checkJava6Compatibility') && !System.getenv("SKIP_RELEASE")) {
+    //if we're skipping release, let's also skip checking compatibility (faster builds)
     allprojects { p ->
         plugins.withId('java') {
             p.apply plugin: 'ru.vyarus.animalsniffer'
