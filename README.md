@@ -16,7 +16,7 @@ Still on Mockito 1.x? See [what's new](https://github.com/mockito/mockito/wiki/W
 
 Mockito [continuously delivers](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview) improvements. See the [latest release notes](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md) and [latest documentation](http://javadoc.io/page/org.mockito/mockito-core/2/org/mockito/Mockito.html). Docs in javadoc.io are available 24h after release. Read also about [semantic versioning in Mockito](https://github.com/mockito/mockito/wiki/Semantic-Versioning).
 
-Older 1.x releases are available in 
+Older 1.x releases are available in
 [Central Repository](http://search.maven.org/#artifactdetails|org.mockito|mockito-core|1.10.19|jar)
 , [Bintray](https://bintray.com/mockito/maven/mockito/1.10.19/view)
 and [javadoc.io](http://javadoc.io/page/org.mockito/mockito-core/1.10.19/org/mockito/Mockito.html) (documentation).
@@ -47,3 +47,20 @@ Alternatively generate the importable IDEA metadata files using:
      ./gradlew idea
 
 Then, _open_ the generated *.ipr file in IDEA.
+
+## How to release new version?
+
+Mockito [implements Continuous Delivery model](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview).
+Every change on main branch (for example merging a pull request) triggers Travis CI release build.
+The build publishes new version if criteria are met: all tests green, no 'ci skip release' used in commit message, see the build log for more.
+New version is published to ["mockito/maven" Bintray repository](https://bintray.com/mockito/maven).
+Notable versions are automatically included in [JCenter](https://bintray.com/bintray/jcenter) and [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.mockito%22).
+
+* Q: What's new in Mockito release model? What are notable versions?
+  A: In April 2017 we implemented [Mockito Continuous Delivery Pipeline 2.0](https://github.com/mockito/mockito/issues/911).
+* Q: How to publish new notable version?
+  A: Update "version.properties" file and set the next minor/major version like: "2.8.0", "2.9.0", "3.0.0".
+* Q: How to promote already released version to a notable version?
+  A: There is no easy way at the moment. [What's the use case?](https://github.com/mockito/mockito/issues/911)
+* Q: How to publish new notable version that is not a new minor/major (e.g. "2.8.34")?
+  A: There is no easy way at the moment but we're planning to add this. [Want to contribute?](https://github.com/mockito/mockito-release-tools/issues/67)
