@@ -65,6 +65,6 @@ public class TypeSafeMatching implements ArgumentMatcherAction {
         if (method.isBridge()) {
             return false;
         }
-        return method.getName().equals("matches");
+        return "matches".equals(method.getName());
     }
 }
