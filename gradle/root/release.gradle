@@ -2,6 +2,7 @@ apply plugin: "org.mockito.mockito-release-tools.continuous-delivery"
 
 ext {
     gh_repository = "mockito/mockito"
+    //TODO document why we are using real user name here and for Bintray user, too
     gh_user = "szczepiq"
     gh_readOnlyAuthToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"
 
