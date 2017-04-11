@@ -23,23 +23,22 @@ ext {
     git_genericEmail = "<mockito.release.tools@gmail.com>"
     git_releasableBranchRegex = "master|release/.+"  // matches 'master', 'release/2.x', 'release/3.x', etc.
 
-    bintray_repo = 'maven'
-    bintray_notableRepo = 'maven-notable'
-
     pom_developers = ['szczepiq:Szczepan Faber', 'bric3:Brice Dutheil', 'raphw:Rafael Winterhalter', 'TimvdLippe:Tim van der Lippe']
     pom_contributors = []
 }
 
 allprojects {
-    plugins.withId("org.mockito.release-tools.bintray") {
+    plugins.withId("org.mockito.mockito-release-tools.bintray") {
         bintray {
             pkg {
+                repo = 'maven'
                 user = 'szczepiq'
                 userOrg = 'mockito'
                 name = 'mockito'
                 licenses = ['MIT']
                 labels = ['mocks', 'tdd', 'unit tests']
                 publish = false //TODO temporary
+                name = project.ext.has('release_notable')? "mockito-notable-versions" : "mockito-all-versions"
 
                 version {
                     //Automatically syncs to central repository (https://oss.sonatype.org/)
