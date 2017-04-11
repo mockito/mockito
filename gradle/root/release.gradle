@@ -21,7 +21,10 @@ ext {
 
     git_genericUser = "Mockito Release Tools"
     git_genericEmail = "<mockito.release.tools@gmail.com>"
-    git_releasableBranchRegex = "master|release/.+"  // matches 'master', 'release/2.x', 'release/3.x', etc.
+
+    //TODO replace with when building Mockito 3:
+    // git_releasableBranchRegex = "master|release/.+"  // matches 'master', 'release/2.x', 'release/3.x', etc.
+    git_releasableBranchRegex = "release/.+"  // 'release/2.x', 'release/3.x', etc.
 
     pom_developers = ['szczepiq:Szczepan Faber', 'bric3:Brice Dutheil', 'raphw:Rafael Winterhalter', 'TimvdLippe:Tim van der Lippe']
     pom_contributors = []
