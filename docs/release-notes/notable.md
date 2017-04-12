@@ -1,4 +1,4 @@
-Notable release notes:
+Notable release notes generation is **work in progress** ([#911](https://github.com/mockito/mockito/issues/911))
 
 ### 2.8.0 - 2017-04-12
 
