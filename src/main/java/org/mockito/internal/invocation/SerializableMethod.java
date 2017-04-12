@@ -5,6 +5,7 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.creation.SuspendMethod;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -21,6 +22,7 @@ public class SerializableMethod implements Serializable, MockitoMethod {
     private final Class<?> returnType;
     private final Class<?>[] exceptionTypes;
     private final boolean isVarArgs;
+    private final boolean isSuspend;
     private final boolean isAbstract;
 
     private volatile transient Method method;
@@ -29,10 +31,11 @@ public class SerializableMethod implements Serializable, MockitoMethod {
         this.method = method;
         declaringClass = method.getDeclaringClass();
         methodName = method.getName();
-        parameterTypes = method.getParameterTypes();
+        parameterTypes = SuspendMethod.trimSuspendParameterTypes(method.getParameterTypes());
         returnType = method.getReturnType();
         exceptionTypes = method.getExceptionTypes();
         isVarArgs = method.isVarArgs();
+        isSuspend = SuspendMethod.isSuspend(method.getParameterTypes());
         isAbstract = (method.getModifiers() & Modifier.ABSTRACT) != 0;
     }
 
@@ -54,6 +57,10 @@ public class SerializableMethod implements Serializable, MockitoMethod {
 
     public boolean isVarArgs() {
         return isVarArgs;
+    }
+
+    public boolean isSuspend() {
+        return isSuspend;
     }
 
     public boolean isAbstract() {

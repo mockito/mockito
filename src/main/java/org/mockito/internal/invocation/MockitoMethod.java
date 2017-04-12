@@ -18,5 +18,7 @@ public interface MockitoMethod extends AbstractAwareMethod {
 
     boolean isVarArgs();
 
+    boolean isSuspend(); // Kotlin suspending function (with synthetic continuation param in the last arg)
+
     Method getJavaMethod();
 }

@@ -45,7 +45,7 @@ public class InvocationImpl implements Invocation, VerificationAwareInvocation {
         this.method = mockitoMethod;
         this.mock = mock;
         this.realMethod = realMethod;
-        this.arguments = ArgumentsProcessor.expandVarArgs(mockitoMethod.isVarArgs(), args);
+        this.arguments = ArgumentsProcessor.expandArgs(mockitoMethod, args);
         this.rawArguments = args;
         this.sequenceNumber = sequenceNumber;
         this.location = location;

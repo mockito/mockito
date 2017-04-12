@@ -31,7 +31,7 @@ public class DelegatingMethod implements MockitoMethod {
     }
 
     public Class<?>[] getParameterTypes() {
-        return method.getParameterTypes();
+        return SuspendMethod.trimSuspendParameterTypes(method.getParameterTypes());
     }
 
     public Class<?> getReturnType() {
@@ -40,6 +40,10 @@ public class DelegatingMethod implements MockitoMethod {
 
     public boolean isVarArgs() {
         return method.isVarArgs();
+    }
+
+    public boolean isSuspend() {
+        return SuspendMethod.isSuspend(method.getParameterTypes());
     }
 
     public boolean isAbstract() {

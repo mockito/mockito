@@ -16,6 +16,7 @@ buildscript {
 
 plugins {
     id 'com.gradle.build-scan' version '1.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.1.1'
 }
 
 description = 'Mockito mock objects library core API and implementation'
@@ -64,6 +65,9 @@ dependencies {
 
     testCompile 'org.assertj:assertj-core:2.6.0'
 
+    testCompile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.1'
+    testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.14'
+
     //putting 'provided' dependencies on test compile and runtime classpath
     testCompileOnly configurations.compileOnly
     testRuntime configurations.compileOnly
@@ -79,4 +83,10 @@ task wrapper(type: Wrapper) {
 buildScan {
     licenseAgreementUrl = 'https://gradle.com/terms-of-service'
     licenseAgree = 'yes'
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }

@@ -9,15 +9,24 @@ import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * by Szczepan Faber, created at: 3/31/12
  */
 public class ArgumentsProcessor {
+    // drops hidden synthetic parameters (last continuation parameter from Kotlin suspending functions)
+    // and expands varargs
+    public static Object[] expandArgs(MockitoMethod method, Object[] args) {
+        if (method.isSuspend())
+            args = Arrays.copyOf(args, args.length - 1); // drop continuation arg
+        return expandVarArgs(method.isVarArgs(), args);
+    }
+
     // expands array varArgs that are given by runtime (1, [a, b]) into true
     // varArgs (1, a, b);
-    public static Object[] expandVarArgs(final boolean isVarArgs, final Object[] args) {
+    private static Object[] expandVarArgs(final boolean isVarArgs, final Object[] args) {
         if (!isVarArgs || isNullOrEmpty(args) || args[args.length - 1] != null && !args[args.length - 1].getClass().isArray()) {
             return args == null ? new Object[0] : args;
         }
