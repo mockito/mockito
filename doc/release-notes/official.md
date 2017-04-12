@@ -1,5 +1,7 @@
 ### 2.8.0 (2017-04-12)
 
+This version **was not** synced to JCenter / Maven central (work in progress [#911](https://github.com/mockito/mockito/issues/911)).
+
 * Authors: 2
 * Commits: 23
   * 22: [Szczepan Faber](https://github.com/szczepiq)
