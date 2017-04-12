@@ -1,3 +1,14 @@
+### 2.8.0 (2017-04-12)
+
+* Authors: 2
+* Commits: 23
+  * 22: [Szczepan Faber](https://github.com/szczepiq)
+  * 1: [Allon Mureinik](https://github.com/mureinik)
+* Improvements: 3
+  * Fixed notable version [(#1030)](https://github.com/mockito/mockito/pull/1030)
+  * SmartPrinterTest toString() calls [(#1025)](https://github.com/mockito/mockito/pull/1025)
+  * Enabled continuous delivery via robust mockito-release-tools project [(#1018)](https://github.com/mockito/mockito/pull/1018)
+
 ### 2.7.22 (2017-04-07 14:44 UTC)
 
 * Authors: 4
