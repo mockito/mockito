@@ -7,7 +7,7 @@ ext {
     gh_readOnlyAuthToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"
 
     releaseNotes_file = "doc/release-notes/official.md"
-    releaseNotes_notableFile = "docs/release-notes/notable.md"
+    releaseNotes_notableFile = "doc/release-notes/notable.md"
     releaseNotes_labelMapping = [
         '1.* incompatible': 'Incompatible changes with previous major version (v1.x)',
         'java-9': "Java 9 support",
