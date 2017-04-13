@@ -1,3 +1,14 @@
+### 2.8.1 (2017-04-13)
+
+* Authors: 3
+* Commits: 3
+  * 1: [Marcin Zajączkowski](https://github.com/szpak)
+  * 1: [Szczepan Faber](https://github.com/szczepiq)
+  * 1: [yyvess](https://github.com/yyvess)
+* Improvements: 2
+  * Remove duplicated code [(#1036)](https://github.com/mockito/mockito/pull/1036)
+  * Fixed typo in configuration [(#1034)](https://github.com/mockito/mockito/pull/1034)
+
 ### 2.8.0 (2017-04-12)
 
 This version **was not** synced to JCenter / Maven central (work in progress [#911](https://github.com/mockito/mockito/issues/911)).
