@@ -42,7 +42,7 @@ allprojects {
                 licenses = ['MIT']
                 labels = ['mocks', 'tdd', 'unit tests']
                 publish = false //TODO temporary
-                name = project.ext.has('release_notable')? "mockito" : "mockito-development"
+                name = rootProject.ext.has('release_notable')? "mockito" : "mockito-development"
 
                 version {
                     //Automatically syncs to central repository (https://oss.sonatype.org/)
