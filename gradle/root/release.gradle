@@ -41,7 +41,9 @@ allprojects {
                 name = 'mockito'
                 licenses = ['MIT']
                 labels = ['mocks', 'tdd', 'unit tests']
-                publish = false //TODO temporary
+                publish = true //can be changed to 'false' for testing
+
+                //See our Bintray packages at https://bintray.com/mockito/maven
                 name = rootProject.ext.has('release_notable')? "mockito" : "mockito-development"
 
                 version {
