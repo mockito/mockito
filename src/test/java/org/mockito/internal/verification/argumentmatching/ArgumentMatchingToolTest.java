@@ -84,16 +84,12 @@ public class ArgumentMatchingToolTest extends TestBase {
         assertEquals(0, suspicious.length);
     }
 
-
-    /**
-     *
-     */
     @Test
     @SuppressWarnings("rawtypes")
     public void shouldUseMatchersSafely() {
-        /** This matcher is evil cause typeMatches(Object) returns true for every passed type but matches(T)
-         * method accepts only Strings. When a Integer is passed (thru the matches(Object) bridge method )  a
-         * ClassCastException will be thrown. */
+        // This matcher is evil cause typeMatches(Object) returns true for every passed type but matches(T)
+        // method accepts only Strings. When a Integer is passed (thru the matches(Object) bridge method )  a
+        // ClassCastException will be thrown.
         class StringMatcher implements ArgumentMatcher<String>, ContainsExtraTypeInfo {
             @Override
             public boolean matches(String item) {
