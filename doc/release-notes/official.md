@@ -1,3 +1,11 @@
+### 2.8.3 (2017-04-16)
+
+* Authors: 1
+* Commits: 1
+  * 1: [yyvess](https://github.com/yyvess)
+* Improvements: 1
+  * MockitoTestListener must be remove on case test fail on the initialization. [(#1035)](https://github.com/mockito/mockito/pull/1035)
+
 ### 2.8.2 (2017-04-14)
 
 * Authors: 1
