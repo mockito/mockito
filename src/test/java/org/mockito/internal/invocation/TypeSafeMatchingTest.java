@@ -34,7 +34,7 @@ public class TypeSafeMatchingTest {
     /**
      * Should not throw an {@link NullPointerException}
      *
-     * @see Bug-ID https://github.com/mockito/mockito/issues/457
+     * @see <a href="https://github.com/mockito/mockito/issues/457">Bug 457</a>
      */
     @Test
     public void compareNullArgument() {
