@@ -109,10 +109,10 @@ public class SilentRunnerTest extends TestBase {
         }
     }
 
-    @RunWith(MockitoJUnitRunner.Silent.class)
     /**
      * The test class itself is passing but it has some unnecessary stubs
      */
+    @RunWith(MockitoJUnitRunner.Silent.class)
     public static class HasUnnecessaryStubs {
         IMethods mock1 = when(mock(IMethods.class).simpleMethod(1)).thenReturn("1").getMock();
         IMethods mock2 = when(mock(IMethods.class).simpleMethod(2)).thenReturn("2").getMock();
