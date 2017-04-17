@@ -1,3 +1,11 @@
+### 2.8.4 (2017-04-17)
+
+* Authors: 1
+* Commits: 1
+  * 1: [Allon Murienik](https://github.com/mureinik)
+* Improvements: 1
+  * Fix javadoc issues [(#1040)](https://github.com/mockito/mockito/pull/1040)
+
 ### 2.8.3 (2017-04-16)
 
 * Authors: 1
