@@ -12,6 +12,8 @@ import org.mockito.plugins.AnnotationEngine;
 
 /**
  * MockitoAnnotations.initMocks(this); initializes fields annotated with Mockito annotations.
+ * See also {@link MockitoSession} which not only initializes mocks
+ * but also adds extra validation for cleaner tests!
  * <p>
  * <ul>
  * <li>Allows shorthand creation of objects required for testing.</li>

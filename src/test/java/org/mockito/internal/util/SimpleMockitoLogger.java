@@ -24,4 +24,10 @@ public class SimpleMockitoLogger implements MockitoLogger {
         loggedInfo = new StringBuilder();
         return this;
     }
+
+    public void assertEmpty() {
+        if (loggedInfo.length() != 0) {
+            throw new AssertionError("Expected the logger to be empty but it has:\n" + loggedInfo.toString());
+        }
+    }
 }

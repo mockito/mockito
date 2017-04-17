@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.stubbing.answers;
 
 import java.io.IOException;
@@ -28,7 +32,7 @@ public class ThrowsExceptionTest {
             new ThrowsException(mock(Exception.class)).answer(new InvocationBuilder().method("canThrowException").toInvocation());
             Assertions.fail("should have raised wanted exception");
         } catch (Throwable throwable) {
-            assertThat(throwable.getStackTrace()).describedAs("no stack trace, it's mock").isEmpty();
+            assertThat(throwable.getStackTrace()).describedAs("no stack trace, it's mock").isNull();
         }
     }
 

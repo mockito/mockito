@@ -1,7 +1,7 @@
 # More details on how to configure the Travis build
 # https://docs.travis-ci.com/user/customizing-the-build/
 
-# Speed up build by leversging travis caches
+# Speed up build by leveraging travis caches
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
@@ -49,7 +49,8 @@ branches:
 install:
  - true
 script:
-  - ./gradlew ciBuild -s
+  - ./gradlew build idea -s -PcheckJava6Compatibility
 after_success:
+  - ./gradlew travisRelease -s
   - ./gradlew --stacktrace coverageReport && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
   - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"

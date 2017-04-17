@@ -9,6 +9,7 @@ import net.bytebuddy.implementation.bind.annotation.Argument;
 import net.bytebuddy.implementation.bind.annotation.This;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
@@ -21,9 +22,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
-
-import static org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker.hideRecursiveCall;
 
 public class MockMethodAdvice extends MockMethodDispatcher {
 
@@ -61,6 +62,26 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         }
     }
 
+    static Throwable hideRecursiveCall(Throwable throwable, int current, Class<?> targetType) {
+        try {
+            StackTraceElement[] stack = throwable.getStackTrace();
+            int skip = 0;
+            StackTraceElement next;
+            do {
+                next = stack[stack.length - current - ++skip];
+            } while (!next.getClassName().equals(targetType.getName()));
+            int top = stack.length - current - skip;
+            StackTraceElement[] cleared = new StackTraceElement[stack.length - skip];
+            System.arraycopy(stack, 0, cleared, 0, top);
+            System.arraycopy(stack, top + skip, cleared, top, current);
+            throwable.setStackTrace(cleared);
+            return throwable;
+        } catch (RuntimeException ignored) {
+            // This should not happen unless someone instrumented or manipulated exception stack traces.
+            return throwable;
+        }
+    }
+
     @Override
     public Callable<?> handle(Object instance, Method origin, Object[] arguments) throws Throwable {
         MockMethodInterceptor interceptor = interceptors.get(instance);
@@ -73,10 +94,13 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         } else {
             superMethod = new SuperMethodCall(selfCallInfo, origin, instance, arguments);
         }
+        Throwable t = new Throwable();
+        t.setStackTrace(skipInlineMethodElement(t.getStackTrace()));
         return new ReturnValueWrapper(interceptor.doIntercept(instance,
                 origin,
                 arguments,
-                superMethod));
+                superMethod,
+                new LocationImpl(t)));
     }
 
     @Override
@@ -180,6 +204,21 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             new ConditionalStackTraceFilter().filter(hideRecursiveCall(cause, new Throwable().getStackTrace().length, origin.getDeclaringClass()));
             throw cause;
         }
+    }
+
+    // With inline mocking, mocks for concrete classes are not subclassed, so elements of the stubbing methods are not filtered out.
+    // Therefore, if the method is inlined, skip the element.
+    private static StackTraceElement[] skipInlineMethodElement(StackTraceElement[] elements) {
+        List<StackTraceElement> list = new ArrayList<StackTraceElement>(elements.length);
+        for (int i = 0; i < elements.length; i++) {
+            StackTraceElement element = elements[i];
+            list.add(element);
+            if (element.getClassName().equals(MockMethodAdvice.class.getName()) && element.getMethodName().equals("handle")) {
+                // If the current element is MockMethodAdvice#handle(), the next is assumed to be an inlined method.
+                i++;
+            }
+        }
+        return list.toArray(new StackTraceElement[list.size()]);
     }
 
     private static class ReturnValueWrapper implements Callable<Object> {

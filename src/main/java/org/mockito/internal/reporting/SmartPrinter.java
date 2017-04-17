@@ -5,7 +5,6 @@
 package org.mockito.internal.reporting;
 
 
-import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
 

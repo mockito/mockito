@@ -5,14 +5,6 @@ allprojects {
     apply plugin: 'idea'
 }
 
-// Configure VCS in generated IPR file
-idea.project.ipr {
-    withXml { provider ->
-        provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
-    }
-}
-
-afterEvaluate { //so the provided conf exists
-    idea.module.scopes.PROVIDED.plus += [configurations.provided]
-    eclipse.classpath.plusConfigurations += [configurations.provided]
+idea.project {
+    vcs = 'Git'
 }

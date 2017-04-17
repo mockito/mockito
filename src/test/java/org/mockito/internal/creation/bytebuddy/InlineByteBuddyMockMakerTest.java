@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
@@ -74,8 +78,6 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void should_create_mock_from_hashmap() throws Exception {
-        assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V9)); // Change when ByteBuddy has ASM6 - see #862
-
         MockCreationSettings<HashMap> settings = settingsFor(HashMap.class);
         HashMap proxy = mockMaker.createMock(settings, new MockHandlerImpl<HashMap>(settings));
         assertThat(proxy.get(null)).isEqualTo("bar");
@@ -160,7 +162,7 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
         Throwable throwable = new Throwable();
         throwable.setStackTrace(stack);
-        throwable = InlineByteBuddyMockMaker.hideRecursiveCall(throwable, 2, SampleInterface.class);
+        throwable = MockMethodAdvice.hideRecursiveCall(throwable, 2, SampleInterface.class);
 
         assertThat(throwable.getStackTrace()).isEqualTo(new StackTraceElement[]{
                 new StackTraceElement("foo", "", "", -1),
@@ -173,7 +175,7 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     public void should_handle_missing_or_inconsistent_stack_trace() throws Exception {
         Throwable throwable = new Throwable();
         throwable.setStackTrace(new StackTraceElement[0]);
-        assertThat(InlineByteBuddyMockMaker.hideRecursiveCall(throwable, 0, SampleInterface.class)).isSameAs(throwable);
+        assertThat(MockMethodAdvice.hideRecursiveCall(throwable, 0, SampleInterface.class)).isSameAs(throwable);
     }
 
     @Test

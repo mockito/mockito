@@ -10,7 +10,7 @@ import org.mockito.invocation.Invocation;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.StringUtil.join;
 
 public class LoggingListener implements FindingsListener {
     private final boolean warnAboutUnstubbed;

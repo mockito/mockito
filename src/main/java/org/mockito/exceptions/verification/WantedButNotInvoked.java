@@ -5,8 +5,9 @@
 
 package org.mockito.exceptions.verification;
 
+import static org.mockito.internal.util.StringUtil.removeFirstLine;
+
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.util.RemoveFirstLine;
 
 public class WantedButNotInvoked extends MockitoAssertionError {
 
@@ -18,6 +19,6 @@ public class WantedButNotInvoked extends MockitoAssertionError {
 
     @Override
     public String toString() {
-        return new RemoveFirstLine().of(super.toString());
+        return removeFirstLine(super.toString());
     }
 }

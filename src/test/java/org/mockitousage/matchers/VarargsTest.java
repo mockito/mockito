@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockitousage.matchers;
 
 import static org.junit.Assert.fail;
@@ -19,7 +23,6 @@ import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -82,7 +85,7 @@ public class VarargsTest {
         Object arg = null;
         mock.varargs(arg);
 
-        verify(mock).varargs(Mockito.<Object>eq(null));
+        verify(mock).varargs(eq(null));
     }
 
     @Test
@@ -90,7 +93,7 @@ public class VarargsTest {
         Object arg = null;
         mock.varargs(arg);
 
-        verify(mock).varargs(Mockito.<Object>isNull());
+        verify(mock).varargs(isNull());
     }
 
     @Test
@@ -98,7 +101,7 @@ public class VarargsTest {
         Object[] argArray = null;
         mock.varargs(argArray);
 
-        verify(mock).varargs(Mockito.<Object>isNull());
+        verify(mock).varargs(isNull());
     }
 
     @Test
@@ -121,21 +124,21 @@ public class VarargsTest {
     public void shouldMatchVarArgs_oneArgsOneAnyMatcher() {
         mock.varargs(1);
 
-        verify(mock).varargs(Mockito.<Integer>any()); // any() -> VarargMatcher
+        verify(mock).varargs(any()); // any() -> VarargMatcher
     }
 
     @Test
     public void shouldMatchVarArgs_twoArgsOneAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(Mockito.<Integer>any()); // any() -> VarargMatcher
+        verify(mock).varargs(any()); // any() -> VarargMatcher
     }
 
     @Test
     public void shouldMatchVarArgs_twoArgsTwoAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(Mockito.<Integer>any(), Mockito.<Integer>any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(), any()); // any() -> VarargMatcher
     }
 
     @Test
@@ -309,8 +312,6 @@ public class VarargsTest {
      * <li>#565 ArgumentCaptor should be type aware' are fixed this test must
      * succeed
      * </ul>
-     *
-     * @throws Exception
      */
     @Test
     @Ignore("Blocked by github issue: #584 & #565")

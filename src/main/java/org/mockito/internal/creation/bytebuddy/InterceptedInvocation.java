@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.ArgumentsProcessor;
@@ -42,14 +41,15 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
                                  MockitoMethod mockitoMethod,
                                  Object[] arguments,
                                  SuperMethod superMethod,
+                                 Location location,
                                  int sequenceNumber) {
         this.mock = mock;
         this.mockitoMethod = mockitoMethod;
         this.arguments = ArgumentsProcessor.expandVarArgs(mockitoMethod.isVarArgs(), arguments);
         this.rawArguments = arguments;
         this.superMethod = superMethod;
+        this.location = location;
         this.sequenceNumber = sequenceNumber;
-        location = new LocationImpl();
     }
 
     @Override

@@ -3,7 +3,9 @@ description = "End-to-end tests for Mockito and its extensions."
 
 //so that we can depend on locally published mockito
 //and test end-to-end mockito jar resolution (for example, flesh out missing dependencies in pom file)
-compileTestJava.dependsOn ":publishToMavenLocal"
+[compileTestJava, ideaModule].each {
+    it.dependsOn ":publishToMavenLocal"
+}
 
 repositories {
     mavenLocal() //we depend on locally published mockito

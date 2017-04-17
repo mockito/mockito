@@ -5,38 +5,15 @@
 
 package org.mockito.internal.exceptions;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.misusing.CannotStubVoidMethodWithReturnValue;
-import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
-import org.mockito.exceptions.misusing.FriendlyReminderException;
-import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
-import org.mockito.exceptions.misusing.MissingMethodInvocationException;
-import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.exceptions.misusing.NullInsteadOfMockException;
-import org.mockito.exceptions.misusing.PotentialStubbingProblem;
-import org.mockito.exceptions.misusing.UnfinishedStubbingException;
-import org.mockito.exceptions.misusing.UnfinishedVerificationException;
-import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
-import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
-import org.mockito.exceptions.verification.NeverWantedButInvoked;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.SmartNullPointerException;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockito.exceptions.verification.VerificationInOrderFailure;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.misusing.*;
+import org.mockito.exceptions.verification.*;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
-import org.mockito.internal.junit.JUnitTool;
+import org.mockito.internal.junit.ExceptionFactory;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.StringJoiner;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
@@ -45,9 +22,15 @@ import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import static org.mockito.internal.reporting.Pluralizer.pluralize;
 import static org.mockito.internal.reporting.Pluralizer.were_exactly_x_interactions;
-import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * Reports verification and misusing errors.
@@ -318,7 +301,7 @@ public class Reporter {
                               ""
         );
 
-        return JUnitTool.createArgumentsAreDifferentException(message, wanted, actual);
+        return ExceptionFactory.createArgumentsAreDifferentException(message, wanted, actual);
     }
 
     public static MockitoAssertionError wantedButNotInvoked(DescribedInvocation wanted) {
@@ -688,7 +671,7 @@ public class Reporter {
     }
 
     public static MockitoException invocationListenerThrewException(InvocationListener listener, Throwable listenerThrowable) {
-        return new MockitoException(StringJoiner.join(
+        return new MockitoException(join(
                 "The invocation listener with type " + listener.getClass().getName(),
                 "threw an exception : " + listenerThrowable.getClass().getName() + listenerThrowable.getMessage()), listenerThrowable);
     }
@@ -873,30 +856,47 @@ public class Reporter {
         throw formatUnncessaryStubbingException(null, unused);
     }
 
-    public static void potentialStubbingProblemByJUnitRule(
+    public static void potentialStubbingProblem(
             Invocation actualInvocation, Collection<Invocation> argMismatchStubbings) {
         StringBuilder stubbings = new StringBuilder();
         int count = 1;
         for (Invocation s : argMismatchStubbings) {
-            stubbings.append("  ").append(count++).append(". ").append(s);
-            stubbings.append("\n    ").append(s.getLocation()).append("\n");
+            stubbings.append("    ").append(count++).append(". ").append(s);
+            stubbings.append("\n      ").append(s.getLocation()).append("\n");
         }
         stubbings.deleteCharAt(stubbings.length()-1); //remove trailing end of line
 
         throw new PotentialStubbingProblem(join(
-                "Strict JUnit rule detected stubbing argument mismatch.",
-                "This invocation of '" + actualInvocation.getMethod().getName() + "' method:",
-                "  " + actualInvocation,
-                "  " + actualInvocation.getLocation(),
-                "Has following stubbing(s) with different arguments:",
+                "Strict stubbing argument mismatch. Please check:",
+                " - this invocation of '" + actualInvocation.getMethod().getName() + "' method:",
+                "    " + actualInvocation,
+                "    " + actualInvocation.getLocation(),
+                " - has following stubbing(s) with different arguments:",
                 stubbings,
                 "Typically, stubbing argument mismatch indicates user mistake when writing tests.",
-                "In order to streamline debugging tests Mockito fails early in this scenario.",
+                "Mockito fails early so that you can debug potential problem easily.",
                 "However, there are legit scenarios when this exception generates false negative signal:",
                 "  - stubbing the same method multiple times using 'given().will()' or 'when().then()' API",
-                "    Please use 'will().given()' or 'doReturn().when()' API for stubbing",
+                "    Please use 'will().given()' or 'doReturn().when()' API for stubbing.",
                 "  - stubbed method is intentionally invoked with different arguments by code under test",
                 "    Please use 'default' or 'silent' JUnit Rule.",
                 "For more information see javadoc for PotentialStubbingProblem class."));
+    }
+
+    public static void redundantMockitoListener(String listenerType) {
+        throw new RedundantListenerException(join(
+            "Problems adding Mockito listener.",
+            "Listener of type '" + listenerType + "' has already been added and not removed.",
+            "It indicates that previous listener was not removed according to the API.",
+            "When you add a listener, don't forget to remove the listener afterwards:",
+            "  Mockito.framework().removeListener(myListener);",
+            "For more information, see the javadoc for RedundantListenerException class."));
+    }
+
+    public static void unfinishedMockingSession() {
+        throw new UnfinishedMockingSessionException(join(
+                "Unfinished mocking session detected.",
+                "Previous MockitoSession was not concluded with 'finishMocking()'.",
+                "For examples of correct usage see javadoc for MockitoSession class."));
     }
 }

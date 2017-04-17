@@ -27,7 +27,7 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
 import static org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.EXCLUDES;
-import static org.mockito.internal.util.StringJoiner.join;
+import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * Agent and subclass based mock maker.
@@ -311,23 +311,4 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
         };
     }
 
-    static Throwable hideRecursiveCall(Throwable throwable, int current, Class<?> targetType) {
-        try {
-            StackTraceElement[] stack = throwable.getStackTrace();
-            int skip = 0;
-            StackTraceElement next;
-            do {
-                next = stack[stack.length - current - ++skip];
-            } while (!next.getClassName().equals(targetType.getName()));
-            int top = stack.length - current - skip;
-            StackTraceElement[] cleared = new StackTraceElement[stack.length - skip];
-            System.arraycopy(stack, 0, cleared, 0, top);
-            System.arraycopy(stack, top + skip, cleared, top, current);
-            throwable.setStackTrace(cleared);
-            return throwable;
-        } catch (RuntimeException ignored) {
-            // This should not happen unless someone instrumented or manipulated exception stack traces.
-            return throwable;
-        }
-    }
 }

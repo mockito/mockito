@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockitousage.junitrule;
 
 import org.junit.Rule;
@@ -46,7 +50,7 @@ public class MutableStrictJUnitRuleTest {
         }
 
         @Test public void unused_stub_with_strictness() throws Throwable {
-            //making Mockito lenient only for this test method
+            //making Mockito strict only for this test method
             mockito.strictness(Strictness.STRICT_STUBS);
 
             when(mock.simpleMethod()).thenReturn("1");

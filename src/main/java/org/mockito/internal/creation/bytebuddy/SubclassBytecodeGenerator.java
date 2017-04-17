@@ -71,7 +71,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                          .implement(new ArrayList<Type>(features.interfaces))
                          .method(matcher)
                            .intercept(to(DispatcherDefaultingToRealMethod.class))
-                           .transform(withModifiers(SynchronizationState.PLAIN, Visibility.PUBLIC))
+                           .transform(withModifiers(SynchronizationState.PLAIN))
                            .attribute(INCLUDING_RECEIVER)
                          .method(isHashCode())
                            .intercept(to(MockMethodInterceptor.ForHashCode.class))
@@ -99,7 +99,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                               .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
                               .append(MockMethodInterceptor.class,
                                       MockMethodInterceptor.ForHashCode.class,
-                                      MockMethodInterceptor.ForEquals.class).build(),
+                                      MockMethodInterceptor.ForEquals.class).build(MockMethodInterceptor.class.getClassLoader()),
                               loader.getStrategy(features.mockedType))
                       .getLoaded();
     }

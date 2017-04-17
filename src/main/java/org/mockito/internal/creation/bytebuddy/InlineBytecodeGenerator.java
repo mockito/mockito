@@ -8,6 +8,8 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
+import net.bytebuddy.description.field.FieldDescription;
+import net.bytebuddy.description.field.FieldList;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.method.ParameterDescription;
@@ -36,7 +38,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.bytebuddy.implementation.MethodDelegation.to;
+import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
 import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
@@ -74,8 +76,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         mocked = new WeakConcurrentSet<Class<?>>(WeakConcurrentSet.Cleaner.INLINE);
         identifier = RandomString.make();
         advice = new MockMethodAdvice(mocks, identifier);
-        subclassEngine = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(to(MockMethodAdvice.ForReadObject.class)
-                .appendParameterBinder(of(MockMethodAdvice.Identifier.class, identifier)), isAbstract().or(isNative())), false);
+        subclassEngine = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(withDefaultConfiguration()
+                .withBinders(of(MockMethodAdvice.Identifier.class, identifier))
+                .to(MockMethodAdvice.ForReadObject.class), isAbstract().or(isNative())), false);
         MockMethodDispatcher.set(identifier, advice);
         instrumentation.addTransformer(this, true);
     }
@@ -184,6 +187,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                                  ClassVisitor classVisitor,
                                  Implementation.Context implementationContext,
                                  TypePool typePool,
+                                 FieldList<FieldDescription.InDefinedShape> fields,
+                                 MethodList<?> methods,
                                  int writerFlags,
                                  int readerFlags) {
             return implementationContext.getClassFileVersion().isAtLeast(ClassFileVersion.JAVA_V8)

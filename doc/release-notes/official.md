@@ -1,3 +1,450 @@
+### 2.8.4 (2017-04-17)
+
+* Authors: 1
+* Commits: 1
+  * 1: [Allon Murienik](https://github.com/mureinik)
+* Improvements: 1
+  * Fix javadoc issues [(#1040)](https://github.com/mockito/mockito/pull/1040)
+
+### 2.8.3 (2017-04-16)
+
+* Authors: 1
+* Commits: 1
+  * 1: [yyvess](https://github.com/yyvess)
+* Improvements: 1
+  * MockitoTestListener must be remove on case test fail on the initialization. [(#1035)](https://github.com/mockito/mockito/pull/1035)
+
+### 2.8.2 (2017-04-14)
+
+* Authors: 1
+* Commits: 5
+  * 5: [Szczepan Faber](https://github.com/szczepiq)
+* Improvements: 1
+  * Fixed glitches with notable releases [(#1038)](https://github.com/mockito/mockito/pull/1038)
+
+### 2.8.1 (2017-04-13)
+
+* Authors: 3
+* Commits: 3
+  * 1: [Marcin Zajączkowski](https://github.com/szpak)
+  * 1: [Szczepan Faber](https://github.com/szczepiq)
+  * 1: [yyvess](https://github.com/yyvess)
+* Improvements: 2
+  * Remove duplicated code [(#1036)](https://github.com/mockito/mockito/pull/1036)
+  * Fixed typo in configuration [(#1034)](https://github.com/mockito/mockito/pull/1034)
+
+### 2.8.0 (2017-04-12)
+
+This version **was not** synced to JCenter / Maven central (work in progress [#911](https://github.com/mockito/mockito/issues/911)).
+
+* Authors: 2
+* Commits: 23
+  * 22: [Szczepan Faber](https://github.com/szczepiq)
+  * 1: [Allon Mureinik](https://github.com/mureinik)
+* Improvements: 3
+  * Fixed notable version [(#1030)](https://github.com/mockito/mockito/pull/1030)
+  * SmartPrinterTest toString() calls [(#1025)](https://github.com/mockito/mockito/pull/1025)
+  * Enabled continuous delivery via robust mockito-release-tools project [(#1018)](https://github.com/mockito/mockito/pull/1018)
+
+### 2.7.22 (2017-04-07 14:44 UTC)
+
+* Authors: 4
+* Commits: 8
+  * 3: Marcin Zajączkowski
+  * 2: Allon Mureinik
+  * 2: Szczepan Faber
+  * 1: Marcin Zajaczkowski
+* Improvements: 3
+  * Fix broken link in Mockito javadoc [(#1023)](https://github.com/mockito/mockito/pull/1023)
+  * MatchersTest numeric literals [(#1022)](https://github.com/mockito/mockito/pull/1022)
+  * Change release build to JDK 7 with binary compatibility for Java 6 [(#1021)](https://github.com/mockito/mockito/pull/1021)
+
+### 2.7.21 (2017-04-01 11:07 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 3: Szczepan Faber
+  * 1: Tim van der Lippe
+* Improvements: 2
+  * Documentation: 1
+    * Javadoc, Answer1 code example does not compile. [(#952)](https://github.com/mockito/mockito/issues/952)
+  * Remaining changes: 1
+    * Tidy-up in build automation [(#1011)](https://github.com/mockito/mockito/pull/1011)
+
+### 2.7.20 (2017-03-29 17:23 UTC)
+
+* Authors: 7
+* Commits: 12
+  * 3: Marcin Zajączkowski
+  * 2: Allon Mureinik
+  * 2: Szczepan Faber
+  * 2: Tim van der Lippe
+  * 1: Jesse Englert
+  * 1: Nirvanall
+  * 1: Tsuyoshi Murakami
+* Improvements: 11
+  * Bugfixes: 1
+    * Enabled mocking interface clone method [(#688)](https://github.com/mockito/mockito/issues/688)
+  * Enhancements: 1
+    * Make MockSettings.useConstructor able to choose the right constructor [(#976)](https://github.com/mockito/mockito/issues/976)
+  * Remaining changes: 9
+    * Bumped version to fix CI build [(#1010)](https://github.com/mockito/mockito/pull/1010)
+    * Clean up unused imports [(#1009)](https://github.com/mockito/mockito/pull/1009)
+    * Fix release notes badge [(#1001)](https://github.com/mockito/mockito/pull/1001)
+    * Add explicit mention for code style check [(#996)](https://github.com/mockito/mockito/pull/996)
+    * fix the broken link on 1357 line in Mockito.java [(#994)](https://github.com/mockito/mockito/pull/994)
+    * Fixes #976: Resolve ambiguous constructors [(#980)](https://github.com/mockito/mockito/pull/980)
+    * Fixes #974: Fix to get correct stubbing location with inline mocking [(#979)](https://github.com/mockito/mockito/pull/979)
+    * MockitoJUnitRunner.StrictStubs does not detect 'Unnecessary Stubbing' when inline mock maker is enabled [(#974)](https://github.com/mockito/mockito/issues/974)
+    * Verifies #688: Acceptance test to prevent future regression [(#972)](https://github.com/mockito/mockito/pull/972)
+
+### 2.7.18 (2017-03-18 16:40 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: L-KID
+* Improvements: 1
+  * Corrected a comment in exceptions package-info [(#975)](https://github.com/mockito/mockito/pull/975)
+
+### 2.7.17 (2017-03-12 18:39 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* No notable improvements. See the commits for detailed changes.
+
+### 2.7.16 (2017-03-10 11:57 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Tsuyoshi Murakami
+* Improvements: 2
+  * Fixes #981: Update Javadoc about the 'mockito-inline' artifact [(#985)](https://github.com/mockito/mockito/pull/985)
+  * Update documentation about mockito-inline artifact [(#981)](https://github.com/mockito/mockito/issues/981)
+
+### 2.7.15 (2017-03-09 12:05 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: paulduffin
+* Improvements: 1
+  * Break cyclical compile time dependency on hideRecursiveCall [(#983)](https://github.com/mockito/mockito/pull/983)
+
+### 2.7.14 (2017-03-05 23:25 UTC)
+
+* Authors: 3
+* Commits: 7
+  * 3: Allon Mureinik
+  * 3: Szczepan Faber
+  * 1: Tim van der Lippe
+* Improvements: 3
+  * New features: 2
+    * New feature - enable mocking using constructor arguments [(#935)](https://github.com/mockito/mockito/pull/935)
+    * Support constructor parameters for spying on abstract classes [(#685)](https://github.com/mockito/mockito/issues/685)
+  * Remaining changes: 1
+    * Add editor config to automatically adhere to code style guide [(#966)](https://github.com/mockito/mockito/pull/966)
+
+### 2.7.13 (2017-02-28 05:38 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 3: Ben Yu
+  * 2: Szczepan Faber
+  * 1: Marcin Zajączkowski
+* Improvements: 2
+  * Enabled local testing of release tools [(#968)](https://github.com/mockito/mockito/pull/968)
+  * Allow spying on interfaces so that it is convenient to work with Java 8 default methods [(#942)](https://github.com/mockito/mockito/pull/942)
+
+### 2.7.12 (2017-02-25 23:25 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Rafael Winterhalter
+* Improvements: 2
+  * Bugfixes: 1
+    * Invalid property reported by mocks and partial mocks [(#963)](https://github.com/mockito/mockito/issues/963)
+  * Remaining changes: 1
+    * With Inline Mocking enabled, Mockito throws when mocking interface with default method [(#944)](https://github.com/mockito/mockito/issues/944)
+
+### 2.7.11 (2017-02-21 20:43 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 1
+  * Simplified the creation of ArgumentsAreDifferent-Exceptions. [(#908)](https://github.com/mockito/mockito/pull/908)
+
+### 2.7.10 (2017-02-19 19:37 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Allon Murienik
+  * 1: Marcin Zajączkowski
+* Improvements: 2
+  * Fix broken build [(#959)](https://github.com/mockito/mockito/pull/959)
+  * Display release warning only when needed [(#955)](https://github.com/mockito/mockito/pull/955)
+
+### 2.7.9 (2017-02-17 16:18 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Allon Murienik
+  * 1: Rafael Winterhalter
+* Improvements: 3
+  * Checkstyle conf. to enforce whitespace rules [(#932)](https://github.com/mockito/mockito/pull/932)
+  * Fix whitespace issues throughout the code [(#928)](https://github.com/mockito/mockito/pull/928)
+  * Add detection for Android environments and give warnings if used incorrectly. Corrected documentation. [(#893)](https://github.com/mockito/mockito/pull/893)
+
+### 2.7.8 (2017-02-17 13:45 UTC)
+
+* Authors: 4
+* Commits: 4
+  * 1: Brice Dutheil
+  * 1: Marcin Zajaczkowski
+  * 1: Marcin Zajączkowski
+  * 1: Stuart Blair
+* Improvements: 2
+  * Remove Gradle 5 depracation warning [(#954)](https://github.com/mockito/mockito/pull/954)
+  * Fix Javadocs on MockitoRule.java to correct an error on its usage. [(#953)](https://github.com/mockito/mockito/pull/953)
+
+### 2.7.7 (2017-02-16 15:09 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Tim van der Lippe
+* Improvements: 1
+  * RunnerFactory InvocationTargetException to return one more possible reason [(#949)](https://github.com/mockito/mockito/issues/949)
+
+### 2.7.6 (2017-02-13 15:40 UTC)
+
+* Authors: 3
+* Commits: 6
+  * 3: tmurakami
+  * 2: Tim van der Lippe
+  * 1: Rafael Winterhalter
+* Improvements: 3
+  * Fix JavaDoc generation on recent JDK 8 builds [(#934)](https://github.com/mockito/mockito/pull/934)
+  * Fixes #929: Move the resources directory to src/main [(#931)](https://github.com/mockito/mockito/pull/931)
+  * New 'mockito-inline' artifact does not work [(#929)](https://github.com/mockito/mockito/issues/929)
+
+### 2.7.5 (2017-02-07 15:36 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 2
+  * Support for return type 'Void' in DoesNothingAnswer [(#933)](https://github.com/mockito/mockito/pull/933)
+  * Mockito can't unbox Void [(#927)](https://github.com/mockito/mockito/issues/927)
+
+### 2.7.4 (2017-02-06 15:04 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Allon Murienik
+* Improvements: 1
+  * Fix whitespace issues throughout the code [(#928)](https://github.com/mockito/mockito/pull/928)
+
+### 2.7.3 (2017-02-06 12:51 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 1
+  * Small improvements [(#912)](https://github.com/mockito/mockito/pull/912)
+
+### 2.7.2 (2017-02-04 12:05 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Rafael Winterhalter
+  * 1: Szczepan Faber
+* Improvements: 2
+  * Deleted dead code [(#924)](https://github.com/mockito/mockito/pull/924)
+  * Added subproject for configuration-free inline mock making. [(#920)](https://github.com/mockito/mockito/pull/920)
+
+### 2.7.1 (2017-01-31 16:48 UTC)
+
+* Authors: 0
+* Commits: 0
+* No notable improvements. See the commits for detailed changes.
+
+### 2.7.0 (2017-01-29 16:14 UTC)
+
+* Authors: 1
+* Commits: 29
+  * 29: Szczepan Faber
+* Improvements: 1
+  * New features: 1
+    * New strict mocking API - MockitoSession. Overview: [(#857)](https://github.com/mockito/mockito/issues/857), pull request: [(#865)](https://github.com/mockito/mockito/pull/865).
+
+### 2.6.9 (2017-01-27 22:02 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Christian Schwarz
+* Improvements: 1
+  * Unified all number of invocations checker in NumberOfInvocationsChecker [(#907)](https://github.com/mockito/mockito/pull/907)
+
+### 2.6.8 (2017-01-23 14:53 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 2
+  * Documentation: 2
+    * Fixes #814 : A elements were missing the name attribute [(#905)](https://github.com/mockito/mockito/pull/905)
+    * Javadoc links in main Mockito doc are not linkable [(#814)](https://github.com/mockito/mockito/issues/814)
+
+### 2.6.7 (2017-01-23 13:52 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Brice Dutheil
+  * 1: Rafael Winterhalter
+* Improvements: 2
+  * Fix TypeCache dead lock [(#902)](https://github.com/mockito/mockito/pull/902)
+  * Mockito 2.6.4 hangs on JDK 1.8.0_31 [(#892)](https://github.com/mockito/mockito/issues/892)
+
+### 2.6.6 (2017-01-23 10:12 UTC)
+
+* Authors: 1
+* Commits: 5
+  * 5: Brice Dutheil
+* Improvements: 1
+  * Enhancements: 1
+    * Spy annotation reports better error message if instance creation is impossible [(#885)](https://github.com/mockito/mockito/pull/885)
+
+### 2.6.5 (2017-01-21 12:58 UTC)
+
+* Authors: 2
+* Commits: 4
+  * 2: Brice Dutheil
+  * 2: Raptis
+* Improvements: 3
+  * Bugfixes: 1
+    * Overridden abstract methods using generics are not longer called for partial mock (working with Mockito 1.10.19) [(#874)](https://github.com/mockito/mockito/issues/874)
+  * Documentation: 1
+    * Clarify documentation for consecutive stubbing [(#896)](https://github.com/mockito/mockito/pull/896)
+  * Remaining changes: 1
+    * Update to Byte Buddy 1.6.4: Fixes bridge method resolution for generic types [(#891)](https://github.com/mockito/mockito/pull/891)
+
+### 2.6.4 (2017-01-19 17:12 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Marcin Zajączkowski
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Update to Byte Buddy 1.6.4: Fixes bridge method resolution for generic types [(#891)](https://github.com/mockito/mockito/pull/891)
+
+### 2.6.3 (2017-01-15 21:07 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Allon Murienik
+  * 1: Szczepan Faber
+* Improvements: 3
+  * Java 9 support: 1
+    * Upgrading to Objenesis 2.5 [(#882)](https://github.com/mockito/mockito/issues/882)
+  * Remaining changes: 2
+    * Fixes #882: Upgrade to Objenesis 2.5 [(#887)](https://github.com/mockito/mockito/pull/887)
+    * Fixed build for external contributors [(#886)](https://github.com/mockito/mockito/pull/886)
+
+### 2.6.2 (2017-01-13 10:58 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Allon Mureinik
+  * 1: Brice Dutheil
+* Improvements: 2
+  * Fixed #879: ArgumentMatchers grammar fix [(#881)](https://github.com/mockito/mockito/pull/881)
+  * Grammar issue in ArgumentMatchers' javadoc. [(#879)](https://github.com/mockito/mockito/issues/879)
+
+### 2.6.1 (2017-01-12 13:55 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Tim van der Lippe
+* No notable improvements. See the commits for detailed changes.
+
+### 2.6.0 (2017-01-12 12:42 UTC)
+
+* Authors: 1
+* Commits: 1
+  * 1: Tim van der Lippe
+* Improvements: 1
+  * New features: 1
+    * Prepare Android library for publication and bump version to 2.6.0 [(#872)](https://github.com/mockito/mockito/pull/872)
+
+### 2.5.7 (2017-01-11 08:28 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Marcin Zajączkowski
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Update Byte Buddy and enable injecting loading strategy for Android [(#875)](https://github.com/mockito/mockito/pull/875)
+
+### 2.5.6 (2017-01-10 13:20 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Brice Dutheil
+  * 1: Johnny Lim
+* Improvements: 1
+  * Remove redundant defaultAnswer(RETURNS_DEFAULTS) [(#870)](https://github.com/mockito/mockito/pull/870)
+
+### 2.5.5 (2017-01-06 11:19 UTC)
+
+* Authors: 1
+* Commits: 2
+  * 2: Brice Dutheil
+* Improvements: 2
+  * Bugfixes: 1
+    * [VarArgs] unexpected behaviour of returnsArgAt(int) [(#820)](https://github.com/mockito/mockito/issues/820)
+  * Remaining changes: 1
+    * Fixes #820 ReturnsArgAt to handle returning vararg as arrays [(#821)](https://github.com/mockito/mockito/pull/821)
+
+### 2.5.4 (2017-01-04 17:02 UTC)
+
+* Authors: 2
+* Commits: 3
+  * 2: Brice Dutheil
+  * 1: wenwu
+* Improvements: 3
+  * Bugfixes: 2
+    * When custom exception fillInstackTrace() returns null, Exception mock cannot work properly [(#866)](https://github.com/mockito/mockito/issues/866)
+    * Jacoco 0.7.8 breaks tests for the new plugin mechanism [(#860)](https://github.com/mockito/mockito/issues/860)
+  * Remaining changes: 1
+    * Fixes #866 should not throw NPE, when custom Exception fillInStackTrace returns null [(#867)](https://github.com/mockito/mockito/pull/867)
+
+### 2.5.3 (2017-01-02 16:48 UTC)
+
+* Authors: 2
+* Commits: 2
+  * 1: Brice Dutheil
+  * 1: Rafael Winterhalter
+* Improvements: 1
+  * Updated to Byte Buddy 1.6.0 [(#864)](https://github.com/mockito/mockito/pull/864)
+
+### 2.5.2 (2017-01-02 00:50 UTC)
+
+* Authors: 1
+* Commits: 6
+  * 6: Szczepan Faber
+* Improvements: 1
+  * Enhancements: 1
+    * Safeguard for MockitoListener API [(#858)](https://github.com/mockito/mockito/pull/858)
+
+### 2.5.1 (2017-01-02 00:13 UTC)
+
+* Authors: 1
+* Commits: 9
+  * 9: Szczepan Faber
+* Improvements: 1
+  * New features: 1
+    * Mockito JUnit Runner supports strict stubbing [(#854)](https://github.com/mockito/mockito/pull/854)
+
 ### 2.5.0 (2016-12-28 08:10 UTC)
 
 * Authors: 1

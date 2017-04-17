@@ -4,6 +4,6 @@
  */
 
 /**
- * Mockito configuration utilities
+ * Mockito exceptions utilities
  */
 package org.mockito.exceptions;

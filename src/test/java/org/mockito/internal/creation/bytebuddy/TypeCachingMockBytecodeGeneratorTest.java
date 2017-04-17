@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.creation.bytebuddy;
 
 import org.junit.Before;
@@ -5,6 +9,9 @@ import org.junit.Test;
 import org.mockito.mock.SerializableMode;
 import org.mockitoutil.VmArgAssumptions;
 
+import java.lang.ref.PhantomReference;
+import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.WeakHashMap;
@@ -29,13 +36,15 @@ public class TypeCachingMockBytecodeGeneratorTest {
                 .build();
 
         TypeCachingBytecodeGenerator cachingMockBytecodeGenerator = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+
         Class<?> the_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
                 classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
                 Collections.<Class<?>>emptySet(),
                 SerializableMode.NONE
         ));
 
-        assertThat(cachingMockBytecodeGenerator.avoidingClassLeakageCache).hasSize(1);
+        ReferenceQueue<Object> referenceQueue = new ReferenceQueue<Object>();
+        Reference<Object> typeReference = new PhantomReference<Object>(the_mock_type, referenceQueue);
 
         // when
         classloader_with_life_shorter_than_cache = is_no_more_referenced();
@@ -44,10 +53,8 @@ public class TypeCachingMockBytecodeGeneratorTest {
         System.gc();
         ensure_gc_happened();
 
-        cachingMockBytecodeGenerator.cleanUpCachesForObsoleteClassLoaders();
-
         // then
-        assertThat(cachingMockBytecodeGenerator.avoidingClassLeakageCache).isEmpty();
+        assertThat(referenceQueue.poll()).isEqualTo(typeReference);
     }
 
     @Test
@@ -71,19 +78,43 @@ public class TypeCachingMockBytecodeGeneratorTest {
         ));
 
         assertThat(other_mock_type).isSameAs(the_mock_type);
-        assertThat(cachingMockBytecodeGenerator.avoidingClassLeakageCache).hasSize(1);
+
+        ReferenceQueue<Object> referenceQueue = new ReferenceQueue<Object>();
+        Reference<Object> typeReference = new PhantomReference<Object>(the_mock_type, referenceQueue);
 
         // when
         classloader_with_life_shorter_than_cache = is_no_more_referenced();
         the_mock_type = is_no_more_referenced();
+        other_mock_type = is_no_more_referenced();
 
         System.gc();
         ensure_gc_happened();
 
-        cachingMockBytecodeGenerator.cleanUpCachesForObsoleteClassLoaders();
-
         // then
-        assertThat(cachingMockBytecodeGenerator.avoidingClassLeakageCache).hasSize(1);
+        assertThat(referenceQueue.poll()).isEqualTo(typeReference);
+    }
+
+    @Test
+    public void ensure_cache_returns_different_instance_serializableMode() throws Exception {
+        // given
+        ClassLoader classloader_with_life_shorter_than_cache = inMemoryClassLoader()
+                .withClassDefinition("foo.Bar", makeMarkerInterface("foo.Bar"))
+                .build();
+
+        TypeCachingBytecodeGenerator cachingMockBytecodeGenerator = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+        Class<?> the_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
+                classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
+                Collections.<Class<?>>emptySet(),
+                SerializableMode.NONE
+        ));
+
+        Class<?> other_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
+                classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
+                Collections.<Class<?>>emptySet(),
+                SerializableMode.BASIC
+        ));
+
+        assertThat(other_mock_type).isNotSameAs(the_mock_type);
     }
 
     @Test

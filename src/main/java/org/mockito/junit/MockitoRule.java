@@ -6,17 +6,23 @@ package org.mockito.junit;
 
 import org.junit.rules.MethodRule;
 import org.mockito.Incubating;
+import org.mockito.MockitoAnnotations;
+import org.mockito.MockitoSession;
+import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
-import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 
 /**
- * Since 2.1.0, JUnit rule emits stubbing warnings and hints to System output
- * (see also {@link org.mockito.quality.MockitoHint}).
+ * Mockito JUnit Rule helps keeping tests clean.
+ * It initializes mocks, validates usage and detects incorrect stubbing.
+ * Make sure to configure your rule with {@link #strictness(Strictness)} which automatically
+ * detects <strong>stubbing argument mismatches</strong> and is planned to be the default in Mockito v3.
+ * <p>
+ * Since Mockito 2.1.0, JUnit rule emits stubbing warnings and hints to System output (see {@link MockitoHint}).
  * The JUnit rule can be used instead of {@link MockitoJUnitRunner}.
  * It requires JUnit at least 4.7.
- *
- * This rule adds following behavior:
+ * <p>
+ * The rule adds following behavior:
  * <ul>
  *   <li>
  *      Since 2.1.0, stubbing warnings and hints are printed to System output.
@@ -26,21 +32,27 @@ import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
  *      It's a new feature of Mockito 2.1.0. It aims to help debugging tests.
  *      If you wish the previous behavior, see {@link MockitoRule#silent()}.
  *      However, we would really like to know why do you wish to silence the warnings!
- *      See also {@link org.mockito.quality.MockitoHint}.
+ *      See also {@link MockitoHint}.
  *   <li>
  *      Initializes mocks annotated with {@link org.mockito.Mock},
- *      so that explicit usage of {@link org.mockito.MockitoAnnotations#initMocks(Object)} is not necessary.
+ *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary.
  *      Mocks are initialized before each test method.
  *   <li>
  *      Validates framework usage after each test method. See javadoc for {@link org.mockito.Mockito#validateMockitoUsage()}.
+ *   <li>
+ *      It is highly recommended to use the rule with {@link #strictness(Strictness)} configured to {@link Strictness#STRICT_STUBS}.
+ *      It drives cleaner tests and improves debugging experience.
+ *      The only reason this feature is not turned on by default
+ *      is because it would have been an incompatible change
+ *      and Mockito strictly follows <a href="http://semver.org">semantic versioning</a>.
  *
  * </ul>
  * Example use:
  * <pre class="code"><code class="java">
  * public class ExampleTest {
  *
- *     &#064;Rule
- *     public MockitoRule rule = MockitoJUnit.rule();
+ *     //Creating new rule with recommended Strictness setting
+ *     &#064;Rule public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
  *
  *     &#064;Mock
  *     private List list;
@@ -51,6 +63,11 @@ import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
  *     }
  * }
  * </code></pre>
+ *
+ * If you would like to take advantage of Mockito JUnit rule features
+ * but you cannot use the rule because, for example, you use TestNG, there is a solution!
+ * {@link MockitoSession} API is intended to offer cleaner tests and improved debuggability
+ * to users that cannot use Mockito's built-in JUnit support (runner or the rule).
  *
  * @since 1.10.17
  */
@@ -66,7 +83,7 @@ public interface MockitoRule extends MethodRule {
      * It's a new feature of Mockito 2.1.0. It aims to help debugging tests.
      * We want to make sure the feature is useful.
      * We would really like to know why do you wish to silence the warnings!
-     * See also {@link org.mockito.quality.MockitoHint}.
+     * See also {@link MockitoHint}.
      * <p>
      *
      * Example:
@@ -104,20 +121,15 @@ public interface MockitoRule extends MethodRule {
      *      no added behavior. The default of Mockito 1.x </li>
      *     <li>{@link Strictness#WARN} - helps keeping tests clean and with debuggability.
      *     Reports console warnings about unused stubs
-     *     and stubbing argument mismatch (see {@link org.mockito.quality.MockitoHint}).
+     *     and stubbing argument mismatches (see {@link MockitoHint}).
      *     The default of Mockito 2.x</li>
-     *     <li>{@link Strictness#STRICT_STUBS} - ensures clean tests, reduces test code duplication, improves debuggability.
-     *     Adds following behavior:
-     *      <ul>
-     *          <li>Improved debuggability: the test fails early when code under test invokes stubbed method with different arguments (see {@link PotentialStubbingProblem}).</li>
-     *          <li>Cleaner tests without unnecessary stubbings: the test fails when there are any unused stubs declared (see {@link UnnecessaryStubbingException}).</li>
-     *          <li>Cleaner, more DRY tests ("Don't Repeat Yourself"): If you use {@link org.mockito.Mockito#verifyNoMoreInteractions(Object...)}
-     *              you no longer need to explicitly verify stubbed invocations. They are automatically verified.</li>
-     *      </ul>
+     *     <li>{@link Strictness#STRICT_STUBS} - ensures clean tests,
+     *     reduces test code duplication, improves debuggability.
+     *     See the details in the Javadoc for {@link Strictness#STRICT_STUBS}.
      * </ol>
      *
      * It is possible to tweak the strictness per test method.
-     * Why would need it? See the use cases in Javadoc for {@link PotentialStubbingProblem} class.
+     * Why would you need it? See the use cases in Javadoc for {@link PotentialStubbingProblem} class.
      *
      * <pre class="code"><code class="java">
      * public class ExampleTest {
@@ -134,10 +146,10 @@ public interface MockitoRule extends MethodRule {
      * }
      * </code></pre>
      *
-     * "Strict stubs" are tentatively planned to be the default for Mockito 3.x</li>
+     * "Strict stubs" are tentatively planned to be the default for Mockito v3</li>
      * We are very eager to hear feedback about "strict stubbing" feature, let us know by commenting on GitHub
      * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
-     * Strict stubbing is an attempt to improve testability and productivity with Mocktio. Tell us what you think!
+     * Strict stubbing is an attempt to improve testability and productivity with Mockito. Tell us what you think!
      *
      * @since 2.3.0
      */
