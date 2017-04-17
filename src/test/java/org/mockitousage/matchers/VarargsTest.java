@@ -309,8 +309,6 @@ public class VarargsTest {
      * <li>#565 ArgumentCaptor should be type aware' are fixed this test must
      * succeed
      * </ul>
-     *
-     * @throws Exception
      */
     @Test
     @Ignore("Blocked by github issue: #584 & #565")
