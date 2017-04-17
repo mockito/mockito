@@ -19,8 +19,9 @@ public class ArgumentsProcessor {
     // drops hidden synthetic parameters (last continuation parameter from Kotlin suspending functions)
     // and expands varargs
     public static Object[] expandArgs(MockitoMethod method, Object[] args) {
-        if (method.isSuspend())
-            args = Arrays.copyOf(args, args.length - 1); // drop continuation arg
+        int nParams = method.getParameterTypes().length;
+        if (args != null && args.length > nParams)
+            args = Arrays.copyOf(args, nParams); // drop extra args (currently -- Kotlin continuation synthetic arg)
         return expandVarArgs(method.isVarArgs(), args);
     }
 

@@ -42,10 +42,6 @@ public class DelegatingMethod implements MockitoMethod {
         return method.isVarArgs();
     }
 
-    public boolean isSuspend() {
-        return SuspendMethod.isSuspend(method.getParameterTypes());
-    }
-
     public boolean isAbstract() {
         return (method.getModifiers() & Modifier.ABSTRACT) != 0;
     }

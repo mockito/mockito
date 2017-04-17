@@ -9,14 +9,10 @@ import java.util.Arrays;
 public class SuspendMethod {
     private static final String KOTLIN_CONTINUATION = "kotlin.coroutines.experimental.Continuation";
 
-    public static boolean isSuspend(Class<?>[] parameterTypes) {
-        int n = parameterTypes.length;
-        return n > 0 && parameterTypes[n - 1].getName().equals(KOTLIN_CONTINUATION);
-    }
-
     public static Class<?>[] trimSuspendParameterTypes(Class<?>[] parameterTypes) {
-        if (isSuspend(parameterTypes))
-            return Arrays.copyOf(parameterTypes, parameterTypes.length - 1);
+        int n = parameterTypes.length;
+        if (n > 0 && parameterTypes[n - 1].getName().equals(KOTLIN_CONTINUATION))
+            return Arrays.copyOf(parameterTypes, n - 1);
         return parameterTypes;
     }
 }
