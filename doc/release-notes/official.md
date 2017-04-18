@@ -1,3 +1,11 @@
+### 2.8.5 (2017-04-18)
+
+* Authors: 1
+* Commits: 1
+  * 1: [Rafael Winterhalter](https://github.com/raphw)
+* Improvements: 1
+  * Do not suppress instrumentation exceptions [(#1012)](https://github.com/mockito/mockito/pull/1012)
+
 ### 2.8.4 (2017-04-17)
 
 * Authors: 1
