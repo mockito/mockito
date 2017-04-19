@@ -1,3 +1,12 @@
+### 2.8.6 (2017-04-19)
+
+* Authors: 1
+* Commits: 1
+  * 1: [Serge Bishyr](https://github.com/SeriyBg)
+* Improvements: 2
+  * Fixes #1044: change example for alignment of throws declaration [(#1045)](https://github.com/mockito/mockito/pull/1045)
+  * Mistake in Contribution guide, Code style example [(#1044)](https://github.com/mockito/mockito/issues/1044)
+
 ### 2.8.5 (2017-04-18)
 
 * Authors: 1
