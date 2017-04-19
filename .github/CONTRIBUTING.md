@@ -109,7 +109,7 @@ Also make sure that
    * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Class count to use import with '*'` to `100`     
    * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Names count to use import static with '*'` to `100`     
 
-##### Alignment
+### Alignment
 
 We found vertical alignment helping when reading the code, for that reason we want to align vertically chained APIs, parameters, etc. For that reason the spacing characters are spaces.
 
@@ -175,9 +175,10 @@ We found vertical alignment helping when reading the code, for that reason we wa
     we want to align vertically the exceptions parameters
 
     ```java
-    @Mock(answer = Answers.RETURNS_DEFAULTS,
-          serializable = true, 
-          extraInterfaces = { List.class, YetAnotherInterface.class }) 
+    void feature() throws IOException,
+                          YetAnotherException {
+         // ...
+    }
     ```
 
     Go to `IntelliJ setting > Editor > Code Style > Java > Throws list`
