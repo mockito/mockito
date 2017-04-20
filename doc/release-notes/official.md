@@ -1,3 +1,11 @@
+### 2.8.7 (2017-04-20)
+
+* Authors: 1
+* Commits: 3
+  * 3: [Szczepan Faber](https://github.com/szczepiq)
+* Improvements: 1
+  * Automated publishing in Bintray, documentation [(#1039)](https://github.com/mockito/mockito/pull/1039)
+
 ### 2.8.6 (2017-04-19)
 
 * Authors: 1
