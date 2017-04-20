@@ -35,19 +35,23 @@ allprojects {
     plugins.withId("org.mockito.mockito-release-tools.bintray") {
         bintray {
             pkg {
-                repo = 'maven'
-                user = 'szczepiq'
-                userOrg = 'mockito'
-                name = 'mockito'
+                repo = 'maven' //https://bintray.com/mockito/maven
+                user = 'szczepiq' //https://bintray.com/szczepiq
+                userOrg = 'mockito' //https://bintray.com/mockito
+                name = 'mockito' //https://bintray.com/mockito/maven/mockito
                 licenses = ['MIT']
                 labels = ['mocks', 'tdd', 'unit tests']
-                publish = false //TODO temporary
+                publish = true //can be changed to 'false' for testing
+
+                //See our Bintray packages at https://bintray.com/mockito/maven
                 name = rootProject.ext.has('release_notable')? "mockito" : "mockito-development"
 
                 version {
                     //Automatically syncs to central repository (https://oss.sonatype.org/)
                     mavenCentralSync {
-                        sync = false //TODO temporary
+                        sync = false
+                        // TODO, change above to below when the new publication logic is rid of glitches:
+                        // sync = rootProject.ext.has('release_notable') //can be set to 'false' for testing
                         user = System.env.NEXUS_TOKEN_USER
                         password = System.env.NEXUS_TOKEN_PWD
                     }
