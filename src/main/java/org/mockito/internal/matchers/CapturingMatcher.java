@@ -11,13 +11,19 @@ import static org.mockito.internal.exceptions.Reporter.noArgumentValueWasCapture
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @SuppressWarnings("unchecked")
 public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
 
-    private final List<Object> arguments = Collections.synchronizedList(new ArrayList<Object>());
+    private final List<Object> arguments = new ArrayList<Object>();
+
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock readLock = lock.readLock();
+    private final Lock writeLock = lock.writeLock();
 
     public boolean matches(Object argument) {
         return true;
@@ -28,20 +34,33 @@ public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArgument
     }
 
     public T getLastValue() {
-        synchronized (arguments) {
+        readLock.lock();
+        try {
             if (arguments.isEmpty()) {
                 throw noArgumentValueWasCaptured();
             }
 
             return (T) arguments.get(arguments.size() - 1);
+        } finally {
+            readLock.unlock();
         }
     }
 
     public List<T> getAllValues() {
-        return Arrays.asList((T[]) arguments.toArray());
+        readLock.lock();
+        try {
+            return Arrays.asList((T[]) arguments.toArray());
+        } finally {
+            readLock.unlock();
+        }
     }
 
     public void captureFrom(Object argument) {
-        this.arguments.add(argument);
+        writeLock.lock();
+        try {
+            this.arguments.add(argument);
+        } finally {
+            writeLock.unlock();
+        }
     }
 }
