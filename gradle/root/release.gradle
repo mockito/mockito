@@ -1,14 +1,15 @@
 apply plugin: "org.mockito.mockito-release-tools.continuous-delivery"
 
-ext {
-    gh_repository = "mockito/mockito"
+releasing {
+    gitHub.repository = "mockito/mockito"
+    gitHub.readOnlyAuthToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"
     //TODO document why we are using real user name here and for Bintray user, too
-    gh_user = "szczepiq"
-    gh_readOnlyAuthToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"
+    gitHub.writeAuthUser = "szczepiq"
+    gitHub.writeAuthToken = System.getenv("GH_WRITE_TOKEN")
 
-    releaseNotes_file = "doc/release-notes/official.md"
-    releaseNotes_notableFile = "doc/release-notes/notable.md"
-    releaseNotes_labelMapping = [
+    releaseNotes.file = "doc/release-notes/official.md"
+    releaseNotes.notableFile = "doc/release-notes/notable.md"
+    releaseNotes.labelMapping = [
         '1.* incompatible': 'Incompatible changes with previous major version (v1.x)',
         'java-9': "Java 9 support",
         'java-8': "Java 8 support",
@@ -20,20 +21,19 @@ ext {
         'docs': 'Documentation'
     ]
 
-    git_genericUser = "Mockito Release Tools"
-    git_genericEmail = "<mockito.release.tools@gmail.com>"
+    git.user = "Mockito Release Tools"
+    git.email = "<mockito.release.tools@gmail.com>"
+    //git.releasableBranchRegex = "master|release/.+"  // matches 'master', 'release/2.x', 'release/3.x', etc.
+    git.releasableBranchRegex = "release/.+"  // 'release/2.x', 'release/3.x', etc.
 
-    //TODO replace with when building Mockito 3:
-    // git_releasableBranchRegex = "master|release/.+"  // matches 'master', 'release/2.x', 'release/3.x', etc.
-    git_releasableBranchRegex = "release/.+"  // 'release/2.x', 'release/3.x', etc.
-
-    pom_developers = ['szczepiq:Szczepan Faber', 'bric3:Brice Dutheil', 'raphw:Rafael Winterhalter', 'TimvdLippe:Tim van der Lippe']
-    pom_contributors = []
+    team.developers = ['szczepiq:Szczepan Faber', 'bric3:Brice Dutheil', 'raphw:Rafael Winterhalter', 'TimvdLippe:Tim van der Lippe']
+    team.contributors = []
 }
 
 allprojects {
     plugins.withId("org.mockito.mockito-release-tools.bintray") {
         bintray {
+            key = System.getenv("BINTRAY_API_KEY")
             pkg {
                 repo = 'maven' //https://bintray.com/mockito/maven
                 user = 'szczepiq' //https://bintray.com/szczepiq
