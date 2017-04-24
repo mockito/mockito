@@ -5,42 +5,51 @@
 
 package org.mockitousage.verification.within;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.within;
 import static org.mockito.verification.Within.untilNow;
 
-import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InOrder;
+import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings("unchecked")
+
 public class TimesVerificationTest extends TestBase {
 
-    private LinkedList<String> mock;
+    private IMethods mock;
 
     @Before
     public void setup() {
-        mock = mock(LinkedList.class);
+        mock = mock(IMethods.class);
     }
 
     @Test
     public void shouldDetectTooLittleActualInvocations() throws Exception {
-        mock.clear();
-        mock.clear();
+        mock.simpleMethod();
+        mock.simpleMethod();
 
-        verify(mock, untilNow().times(2)).clear();
+        verify(mock, untilNow().times(2)).simpleMethod();
         try {
-            verify(mock, untilNow().times(100)).clear();
+            verify(mock, untilNow().times(100)).simpleMethod();
             fail();
         } catch (TooLittleActualInvocations e) {
             assertThat(e)
@@ -51,12 +60,12 @@ public class TimesVerificationTest extends TestBase {
 
     @Test
     public void shouldDetectTooManyActualInvocations() throws Exception {
-        mock.clear();
-        mock.clear();
+        mock.simpleMethod();
+        mock.simpleMethod();
 
-        verify(mock, untilNow().times(2)).clear();
+        verify(mock, untilNow().times(2)).simpleMethod();
         try {
-            verify(mock, untilNow().times(1)).clear();
+            verify(mock, untilNow().times(1)).simpleMethod();
             fail();
         } catch (TooManyActualInvocations e) {
             assertThat(e)
@@ -67,19 +76,19 @@ public class TimesVerificationTest extends TestBase {
 
     @Test
     public void shouldDetectActualInvocationsCountIsMoreThanZero() throws Exception {
-        verify(mock, untilNow().times(0)).clear();
+        verify(mock, untilNow().times(0)).simpleMethod();
         try {
-            verify(mock, untilNow().times(15)).clear();
+            verify(mock, untilNow().times(15)).simpleMethod();
             fail();
         } catch (WantedButNotInvoked e) {}
     }
 
     @Test
     public void shouldDetectActuallyCalledOnce() throws Exception {
-        mock.clear();
+        mock.simpleMethod();
 
         try {
-            verify(mock, untilNow().times(0)).clear();
+            verify(mock, untilNow().times(0)).simpleMethod();
             fail();
         } catch (NeverWantedButInvoked e) {
             assertThat(e).hasMessageContaining("Never wanted here");
@@ -88,32 +97,56 @@ public class TimesVerificationTest extends TestBase {
 
     @Test
     public void shouldPassWhenMethodsActuallyNotCalled()   {
-        verify(mock, untilNow().times(0)).clear();
-        verify(mock, untilNow().times(0)).add("yes, I wasn't called");
+        verify(mock, untilNow().times(0)).simpleMethod();
+        verify(mock, untilNow().times(0)).simpleMethod("yes, I wasn't called");
     }
 
     @Test
     public void shouldNotCountInStubbedInvocations()   {
-        when(mock.add("test")).thenReturn(false);
-        when(mock.add("test")).thenReturn(true);
+        when(mock.booleanReturningMethod()).thenReturn(false);
+        when(mock.booleanReturningMethod()).thenReturn(true);
 
-        mock.add("test");
-        mock.add("test");
+        mock.booleanReturningMethod();
+        mock.booleanReturningMethod();
 
-        verify(mock, untilNow().times(2)).add("test");
+        verify(mock, untilNow().times(2)).booleanReturningMethod();
     }
     
     @Test
     public void shouldAllowVerifyingInteractionNeverHappened()   {
-        mock.add("one");
+        mock.simpleMethod("one");
 
-        verify(mock, untilNow().never()).add("two");
-        verify(mock, untilNow().never()).clear();
+        verify(mock, untilNow().never()).simpleMethod("two");
+        verify(mock, untilNow().never()).simpleMethod();
         
         try {
-            verify(mock, untilNow().never()).add("one");
+            verify(mock, untilNow().never()).simpleMethod("one");
             fail();
         } catch (NeverWantedButInvoked e) {}
+    }
+    
+    @Test(timeout=3000)
+    public void shouldCapture10ArgumentsAsync() throws Exception {
+        
+        ExecutorService exec = Executors.newSingleThreadExecutor();
+        exec.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (int j = 0; j < 10; j++) {
+                    mock.intArgumentMethod(0);
+                }
+            }
+        });
+        
+        exec.shutdown();
+        exec.awaitTermination(1, DAYS);
+        
+        ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        
+        verify(mock, within(1,MILLISECONDS).times(10)).intArgumentMethod(argumentCaptor.capture());
+        
+        List<Integer> captured = argumentCaptor.getAllValues();
+        assertEquals(10, captured.size());
     }
     
 }
