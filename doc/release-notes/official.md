@@ -1,3 +1,11 @@
+### 2.8.8 (2017-04-24)
+
+* Authors: 1
+* Commits: 3
+  * 3: [Szczepan Faber](https://github.com/szczepiq)
+* Improvements: 1
+  * New notable version 2.7.22 and bumped release tools version [(#1048)](https://github.com/mockito/mockito/pull/1048)
+
 ### 2.8.7 (2017-04-20)
 
 * Authors: 1
