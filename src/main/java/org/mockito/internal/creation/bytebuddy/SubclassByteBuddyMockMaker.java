@@ -100,6 +100,14 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
                     ""
             ), generationFailed);
         }
+        ClassNotFoundException classNotFoundException = findClassNotFoundExceptionIfAny(generationFailed);
+        if (classNotFoundException != null) {
+            throw new MockitoException(join(
+                "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ",",
+                "because a dependent class is not in the classpath: " + classNotFoundException.getMessage(),
+                ""
+            ), generationFailed);
+        }
         throw new MockitoException(join(
                 "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
                 "",
@@ -114,6 +122,18 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
                 "",
                 "Underlying exception : " + generationFailed
         ), generationFailed);
+    }
+
+    private ClassNotFoundException findClassNotFoundExceptionIfAny(Throwable generationFailed) {
+        if (generationFailed == null) {
+            return null;
+        }
+
+        if (generationFailed instanceof ClassNotFoundException) {
+            return (ClassNotFoundException)generationFailed;
+        }
+
+        return findClassNotFoundExceptionIfAny(generationFailed.getCause());
     }
 
     private static String describeClass(Class<?> type) {
