@@ -1,3 +1,10 @@
+### 2.8.9 (2017-04-26)
+
+* Authors: 1
+* Commits: 1
+  * 1: [Rafael Winterhalter](https://github.com/raphw)
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.8.8 (2017-04-24)
 
 * Authors: 1
