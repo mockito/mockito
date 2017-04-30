@@ -109,7 +109,7 @@ public class InvocationInfoTest {
 
     private Method iAmNotAbstract() throws NoSuchMethodException {
         abstract class TheNotAbstract {
-            void iAmNotAbstract() {};
+            void iAmNotAbstract() {}
         }
         return TheNotAbstract.class.getDeclaredMethod("iAmNotAbstract");
     }

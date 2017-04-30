@@ -40,7 +40,7 @@ public class RestrictedObjectMethodsTest extends TestBase {
 
     @Test
     public void shouldBeSilentWhenVerifyHashCode() {
-        //because it leads to really wierd behavior sometimes
+        //because it leads to really weird behavior sometimes
         //it's because cglib & my code can occasionelly call those methods
         // and when user has verification started at that time there will be a mess
         verify(mock).hashCode();
@@ -48,7 +48,7 @@ public class RestrictedObjectMethodsTest extends TestBase {
 
     @Test
     public void shouldBeSilentWhenVerifyEquals() {
-        //because it leads to really wierd behavior sometimes
+        //because it leads to really weird behavior sometimes
         //it's because cglib & my code can occasionelly call those methods
         // and when user has verification started at that time there will be a mess
         verify(mock).equals(null);
@@ -56,7 +56,7 @@ public class RestrictedObjectMethodsTest extends TestBase {
 
     @Test
     public void shouldBeSilentWhenVerifyEqualsInOrder() {
-        //because it leads to really wierd behavior sometimes
+        //because it leads to really weird behavior sometimes
         //it's because cglib & my code can occasionelly call those methods
         // and when user has verification started at that time there will be a mess
         InOrder inOrder = inOrder(mock);

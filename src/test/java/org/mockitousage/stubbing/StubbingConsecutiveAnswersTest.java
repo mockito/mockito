@@ -178,7 +178,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test
-    public void should_mix_consecutive_returns_with_excepions() throws Exception {
+    public void should_mix_consecutive_returns_with_exceptions() throws Exception {
         when(mock.simpleMethod())
                 .thenThrow(new IllegalArgumentException())
                 .thenReturn("one")

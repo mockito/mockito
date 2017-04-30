@@ -1050,7 +1050,7 @@ import org.mockito.verification.*;
  * //convenience API, new overloaded spy() method:
  * SomeAbstract spy = spy(SomeAbstract.class);
  *
- * //Mocking abstract methods, spying default methods of an interface (only avilable since 2.7.13)
+ * //Mocking abstract methods, spying default methods of an interface (only available since 2.7.13)
  * Function<Foo, Bar> function = spy(Function.class);
  *
  * //Robust API, via settings builder:

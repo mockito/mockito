@@ -43,7 +43,7 @@ public class GenericTypeExtractor {
                 return extractGeneric(match.getGenericSuperclass());
             }
             //check the interfaces (recursively)
-            Type genericInterface = findGenericInteface(match, targetBaseInterface);
+            Type genericInterface = findGenericInterface(match, targetBaseInterface);
             if (genericInterface != null) {
                 return extractGeneric(genericInterface);
             }
@@ -57,13 +57,13 @@ public class GenericTypeExtractor {
      * Finds generic interface implementation based on the source class and the target interface.
      * Returns null if not found. Recurses the interface hierarchy.
      */
-    private static Type findGenericInteface(Class<?> sourceClass, Class<?> targetBaseInterface) {
+    private static Type findGenericInterface(Class<?> sourceClass, Class<?> targetBaseInterface) {
         for (int i = 0; i < sourceClass.getInterfaces().length; i++) {
             Class<?> inter = sourceClass.getInterfaces()[i];
             if (inter == targetBaseInterface) {
                 return sourceClass.getGenericInterfaces()[0];
             } else {
-                Type deeper = findGenericInteface(inter, targetBaseInterface);
+                Type deeper = findGenericInterface(inter, targetBaseInterface);
                 if (deeper != null) {
                     return deeper;
                 }

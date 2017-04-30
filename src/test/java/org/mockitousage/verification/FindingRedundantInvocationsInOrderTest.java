@@ -24,7 +24,7 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
     @Mock private IMethods mock2;
 
     @Test
-    public void shouldWorkFineIfNoInvocatins() throws Exception {
+    public void shouldWorkFineIfNoInvocations() throws Exception {
         //when
         InOrder inOrder = inOrder(mock);
 
