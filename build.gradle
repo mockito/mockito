@@ -62,7 +62,7 @@ dependencies {
 
     testCompile 'org.ow2.asm:asm:5.2'
 
-    testCompile 'org.assertj:assertj-core:1.7.1'
+    testCompile 'org.assertj:assertj-core:2.6.0'
 
     //putting 'provided' dependencies on test compile and runtime classpath
     testCompileOnly configurations.compileOnly
