@@ -2,7 +2,7 @@
 
 * Authors: 1, commits: 1, published to [Bintray "mockito"](https://bintray.com/mockito/maven/mockito/2.8.8).
   * 1: [Rafael Winterhalter](https://github.com/raphw)
-* No notable improvements. See the commits for detailed changes.
+* Updated ByteBuddy to 1.6.14, fixes agent attachment on Java 9 VM
 
 ### 2.8.8 (2017-04-24)
 
