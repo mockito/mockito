@@ -1,38 +1,3 @@
-### 2.8.18 (2017-04-30)
-
-* Authors: 0, commits: 0, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
-* No notable improvements. See the commits for detailed changes.
-
-### 2.8.17 (2017-04-30)
-
-* Authors: 0, commits: 0, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
-* No notable improvements. See the commits for detailed changes.
-
-### 2.8.16 (2017-04-30)
-
-* Authors: 0, commits: 0, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
-* No notable improvements. See the commits for detailed changes.
-
-### 2.8.15 (2017-04-30)
-
-* Authors: 0, commits: 0, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
-* No notable improvements. See the commits for detailed changes.
-
-### 2.8.14 (2017-04-30)
-
-* Authors: 0, commits: 0, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
-* No notable improvements. See the commits for detailed changes.
-
-### 2.8.13 (2017-04-30)
-
-* Authors: 0, commits: 0, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
-* No notable improvements. See the commits for detailed changes.
-
-### 2.8.12 (2017-04-30)
-
-* Authors: 0, commits: 0, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
-* No notable improvements. See the commits for detailed changes.
-
 ### 2.8.11 (2017-04-30)
 
 * Authors: 3, commits: 8, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
