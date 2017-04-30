@@ -1,30 +1,26 @@
 ### 2.8.9 (2017-04-26)
 
-* Authors: 1
-* Commits: 1
+* Authors: 1, commits: 1, published to [Bintray "mockito"](https://bintray.com/mockito/maven/mockito/2.8.8).
   * 1: [Rafael Winterhalter](https://github.com/raphw)
 * No notable improvements. See the commits for detailed changes.
 
 ### 2.8.8 (2017-04-24)
 
-* Authors: 1
-* Commits: 3
+* Authors: 1, commits: 3, published to [Bintray "mockito"](https://bintray.com/mockito/maven/mockito/2.8.8).
   * 3: [Szczepan Faber](https://github.com/szczepiq)
 * Improvements: 1
   * New notable version 2.7.22 and bumped release tools version [(#1048)](https://github.com/mockito/mockito/pull/1048)
 
 ### 2.8.7 (2017-04-20)
 
-* Authors: 1
-* Commits: 3
+* Authors: 1, commits: 3, published to [Bintray "mockito-development"](https://bintray.com/mockito/maven/mockito-development/2.8.7).
   * 3: [Szczepan Faber](https://github.com/szczepiq)
 * Improvements: 1
   * Automated publishing in Bintray, documentation [(#1039)](https://github.com/mockito/mockito/pull/1039)
 
 ### 2.8.6 (2017-04-19)
 
-* Authors: 1
-* Commits: 1
+* Authors: 1, commits: 1, published to [Bintray "mockito-development"](https://bintray.com/mockito/maven/mockito-development/2.8.6).
   * 1: [Serge Bishyr](https://github.com/SeriyBg)
 * Improvements: 2
   * Fixes #1044: change example for alignment of throws declaration [(#1045)](https://github.com/mockito/mockito/pull/1045)
@@ -32,40 +28,35 @@
 
 ### 2.8.5 (2017-04-18)
 
-* Authors: 1
-* Commits: 1
+* Authors: 1, commits: 1, published to [Bintray "mockito-development"](https://bintray.com/mockito/maven/mockito-development/2.8.5).
   * 1: [Rafael Winterhalter](https://github.com/raphw)
 * Improvements: 1
   * Do not suppress instrumentation exceptions [(#1012)](https://github.com/mockito/mockito/pull/1012)
 
 ### 2.8.4 (2017-04-17)
 
-* Authors: 1
-* Commits: 1
+* Authors: 1, commits: 1, published to [Bintray "mockito-development"](https://bintray.com/mockito/maven/mockito-development/2.8.4).
   * 1: [Allon Murienik](https://github.com/mureinik)
 * Improvements: 1
   * Fix javadoc issues [(#1040)](https://github.com/mockito/mockito/pull/1040)
 
 ### 2.8.3 (2017-04-16)
 
-* Authors: 1
-* Commits: 1
+* Authors: 1, commits: 1, published to [Bintray "mockito-development"](https://bintray.com/mockito/maven/mockito-development/2.8.3).
   * 1: [yyvess](https://github.com/yyvess)
 * Improvements: 1
   * MockitoTestListener must be remove on case test fail on the initialization. [(#1035)](https://github.com/mockito/mockito/pull/1035)
 
 ### 2.8.2 (2017-04-14)
 
-* Authors: 1
-* Commits: 5
+* Authors: 1, commits: 5, published to [Bintray "mockito-development"](https://bintray.com/mockito/maven/mockito-development/2.8.2).
   * 5: [Szczepan Faber](https://github.com/szczepiq)
 * Improvements: 1
   * Fixed glitches with notable releases [(#1038)](https://github.com/mockito/mockito/pull/1038)
 
 ### 2.8.1 (2017-04-13)
 
-* Authors: 3
-* Commits: 3
+* Authors: 3, commits: 3, published to [Bintray "mockito-development"](https://bintray.com/mockito/maven/mockito-development/2.8.1).
   * 1: [Marcin Zajączkowski](https://github.com/szpak)
   * 1: [Szczepan Faber](https://github.com/szczepiq)
   * 1: [yyvess](https://github.com/yyvess)
@@ -75,10 +66,7 @@
 
 ### 2.8.0 (2017-04-12)
 
-This version **was not** synced to JCenter / Maven central (work in progress [#911](https://github.com/mockito/mockito/issues/911)).
-
-* Authors: 2
-* Commits: 23
+* Authors: 2, commits: 23, published to [Bintray "mockito-development"](https://bintray.com/mockito/maven/mockito-development/2.8.0).
   * 22: [Szczepan Faber](https://github.com/szczepiq)
   * 1: [Allon Mureinik](https://github.com/mureinik)
 * Improvements: 3
@@ -87,6 +75,8 @@ This version **was not** synced to JCenter / Maven central (work in progress [#9
   * Enabled continuous delivery via robust mockito-release-tools project [(#1018)](https://github.com/mockito/mockito/pull/1018)
 
 ### 2.7.22 (2017-04-07 14:44 UTC)
+
+Last version published to Maven Central after the team adopted [Continuous Delivery Pipeline 2.0](https://github.com/mockito/mockito/issues/911 - work in progress).
 
 * Authors: 4
 * Commits: 8
