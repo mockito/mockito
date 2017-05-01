@@ -9,8 +9,7 @@
 
 ### 2.8.23 (2017-05-01)
 
-* Authors: 3, commits: 21, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
-  * 10: Mockito Release Tools
+* Authors: 3, commits: 11, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
   * 9: [Szczepan Faber](https://github.com/szczepiq)
   * 2: [Tim van der Lippe](https://github.com/TimvdLippe)
 * Improvements: 6
