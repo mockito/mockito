@@ -1,3 +1,8 @@
+### 2.8.21 (2017-05-01)
+
+* Authors: 0, commits: 0, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+* No notable improvements. See the commits for detailed changes.
+
 ### 2.8.20 (2017-04-30)
 
 * Authors: 1, commits: 1, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
