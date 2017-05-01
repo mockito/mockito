@@ -1,3 +1,17 @@
+### 2.8.23 (2017-05-01)
+
+* Authors: 3, commits: 21, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+  * 10: Mockito Release Tools
+  * 9: [Szczepan Faber](https://github.com/szczepiq)
+  * 2: [Tim van der Lippe](https://github.com/TimvdLippe)
+* Improvements: 6
+  * Bumped version of tools [(#1062)](https://github.com/mockito/mockito/pull/1062)
+  * Enabled automatic releasing without using skip-release keyword yet [(#1061)](https://github.com/mockito/mockito/pull/1061)
+  * Ensured the release actually happens automatically [(#1057)](https://github.com/mockito/mockito/pull/1057)
+  * Bumped version of release tools [(#1055)](https://github.com/mockito/mockito/pull/1055)
+  * Fixed problems with releases [(#1052)](https://github.com/mockito/mockito/pull/1052)
+  * Fix some issues reported by SonarQube [(#1027)](https://github.com/mockito/mockito/pull/1027)
+
 ### 2.8.9 (2017-04-26)
 
 * Authors: 1, commits: 1, published to [Bintray "mockito"](https://bintray.com/mockito/maven/mockito/2.8.8).
