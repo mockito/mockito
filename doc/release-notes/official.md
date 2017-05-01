@@ -1,3 +1,11 @@
+### 2.8.25 (2017-05-01)
+
+* Authors: 2, commits: 2, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+  * 1: [epeee](https://github.com/epeee)
+  * 1: [Szczepan Faber](https://github.com/szczepiq)
+* Improvements: 1
+  * Test code refactoring - updated assertj test dependency from 1.x to 2.6.0 [(#1058)](https://github.com/mockito/mockito/pull/1058)
+
 ### 2.8.24 (2017-05-01)
 
 * Authors: 2, commits: 2, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
