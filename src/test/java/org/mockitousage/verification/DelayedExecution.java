@@ -37,7 +37,7 @@ class DelayedExecution {
         executor.shutdownNow();
 
         if (!executor.awaitTermination(5, SECONDS)) {
-            throw new IllegalStateException("This delayed excution did not terminated after 5 seconds");
+            throw new IllegalStateException("This delayed execution did not terminated after 5 seconds");
         }
     }
 

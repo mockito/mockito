@@ -84,7 +84,7 @@ public class DetachedThreadLocal<T> implements Runnable {
 
     /**
      * @param thread The thread for which to set a thread-local value.
-     * @return The value accociated with this thread.
+     * @return The value associated with this thread.
      */
     public T get(Thread thread) {
         return map.get(thread);
