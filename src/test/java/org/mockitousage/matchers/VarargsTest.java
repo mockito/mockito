@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import org.assertj.core.api.AbstractListAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
+import org.assertj.core.api.ObjectAssert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -337,7 +338,7 @@ public class VarargsTest {
         Assertions.assertThat(mock.varargsObject(1)).isNull();
     }
 
-    private static <T> AbstractListAssert<?, ?, T> assertThat(ArgumentCaptor<T> captor) {
+    private static <T> AbstractListAssert<?, ?, T, ObjectAssert<T>> assertThat(ArgumentCaptor<T> captor) {
         return Assertions.assertThat(captor.getAllValues());
     }
 }
