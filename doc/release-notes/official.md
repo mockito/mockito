@@ -1,3 +1,12 @@
+### 2.8.24 (2017-05-01)
+
+* Authors: 2, commits: 2, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+  * 1: [epeee](https://github.com/epeee)
+  * 1: [Szczepan Faber](https://github.com/szczepiq)
+* Improvements: 1
+  * Documentation: 1
+    * Fixed  typos across the codebase [(#1060)](https://github.com/mockito/mockito/pull/1060)
+
 ### 2.8.23 (2017-05-01)
 
 * Authors: 3, commits: 21, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
