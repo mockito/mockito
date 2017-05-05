@@ -1,3 +1,10 @@
+### 2.8.26 (2017-05-05)
+
+* Authors: 1, commits: 3, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+  * 3: [Szczepan Faber](https://github.com/szczepiq)
+* Improvements: 1
+  * Bumped release tools to 0.8.4 - concise release notes [(#1069)](https://github.com/mockito/mockito/pull/1069)
+
 ### 2.8.25 (2017-05-01)
 
 * Authors: 2, commits: 2, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
