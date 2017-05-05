@@ -1,3 +1,10 @@
+### 2.8.27 (2017-05-05)
+
+* Authors: 1, commits: 1, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+  * 1: [Roman Elizarov](https://github.com/elizarov)
+* Improvements: 1
+  * Support Kotlin suspending functions [(#1032)](https://github.com/mockito/mockito/pull/1032)
+
 ### 2.8.26 (2017-05-05)
 
 * Authors: 1, commits: 3, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
