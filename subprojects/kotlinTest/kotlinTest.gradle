@@ -1,0 +1,21 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.1.1'
+    id 'java'
+}
+
+description = "Kotlin tests for Mockito."
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
+dependencies {
+    testCompile project(":")
+    testCompile "junit:junit:4.12"
+
+    testCompile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.1'
+    testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.14'
+}
+

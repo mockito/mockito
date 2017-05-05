@@ -188,7 +188,7 @@ public class ReturnsArgumentAtTest {
     private static InvocationOnMock invocationWith(Object... parameters) {
         return new InvocationBuilder().method("varargsReturningString")
                                       .argTypes(Object[].class)
-                                      .args(parameters).toInvocation();
+                                      .args(new Object[] { parameters }).toInvocation(); // one vararg param (sic!)
     }
 
 }
