@@ -1,3 +1,10 @@
+### 2.8.28 (2017-05-06)
+
+* Authors: 1, commits: 1, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+  * 1: [Allon Murienik](https://github.com/mureinik)
+* Improvements: 1
+  * README.md release FAQ newlines [(#1073)](https://github.com/mockito/mockito/pull/1073)
+
 ### 2.8.27 (2017-05-05)
 
 * Authors: 1, commits: 1, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
