@@ -57,10 +57,17 @@ New version is published to ["mockito/maven" Bintray repository](https://bintray
 Notable versions are automatically included in [JCenter](https://bintray.com/bintray/jcenter) and [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.mockito%22).
 
 * Q: What's new in Mockito release model? What are notable versions?
+
   A: In April 2017 we implemented [Mockito Continuous Delivery Pipeline 2.0](https://github.com/mockito/mockito/issues/911).
+
 * Q: How to publish new notable version?
+
   A: Update "version.properties" file and set the next minor/major version like: "2.8.0", "2.9.0", "3.0.0".
+
 * Q: How to promote already released version to a notable version?
+
   A: There is no easy way at the moment. [What's the use case?](https://github.com/mockito/mockito/issues/911)
+
 * Q: How to publish new notable version that is not a new minor/major (e.g. "2.8.34")?
+
   A: There is no easy way at the moment but we're planning to add this. [Want to contribute?](https://github.com/mockito/mockito-release-tools/issues/67)
