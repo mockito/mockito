@@ -101,7 +101,7 @@ public class SafeJUnitRuleTest {
             }, mock(FrameworkMethod.class), this).evaluate();
             fail();
         } catch (AssertionError throwable) {
-            Assertions.assertThat(throwable).hasMessageContaining("but was instance of");
+            Assertions.assertThat(throwable).hasMessageContaining("but was:");
         }
     }
 
