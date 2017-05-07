@@ -4,7 +4,7 @@ apply from: "$rootDir/gradle/java-library.gradle"
 
 dependencies {
     compile project.rootProject
-    testCompile 'junit:junit:4.12'
+    testCompile libraries.junit4
 }
 
 tasks.javadoc.enabled = false
