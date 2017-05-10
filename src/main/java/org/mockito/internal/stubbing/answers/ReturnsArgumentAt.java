@@ -4,9 +4,12 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.mockito.internal.exceptions.Reporter.invalidArgumentPositionRangeAtInvocationTime;
+import static org.mockito.internal.exceptions.Reporter.invalidArgumentRangeAtIdentityAnswerCreationTime;
+import static org.mockito.internal.exceptions.Reporter.wrongTypeOfArgumentToReturn;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -41,7 +44,7 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
      */
     public ReturnsArgumentAt(int wantedArgumentPosition) {
         if (wantedArgumentPosition != LAST_ARGUMENT && wantedArgumentPosition < 0) {
-            throw Reporter.invalidArgumentRangeAtIdentityAnswerCreationTime();
+            throw invalidArgumentRangeAtIdentityAnswerCreationTime();
         }
         this.wantedArgumentPosition = wantedArgumentPosition;
     }
@@ -54,10 +57,11 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
         if (wantedArgIndexIsVarargAndSameTypeAsReturnType(invocation.getMethod(), argumentPosition)) {
             // answer raw vararg array argument
             return ((Invocation) invocation).getRawArguments()[argumentPosition];
-        } else {
-            // answer expanded argument at wanted position
-            return invocation.getArgument(argumentPosition);
         }
+
+        // answer expanded argument at wanted position
+        return invocation.getArgument(argumentPosition);
+
     }
 
     @Override
@@ -68,12 +72,17 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
     }
 
     private int inferWantedArgumentPosition(InvocationOnMock invocation) {
-        return wantedArgumentPosition == LAST_ARGUMENT ? invocation.getArguments().length - 1 : wantedArgumentPosition;
+        if (wantedArgumentPosition == LAST_ARGUMENT)
+            return invocation.getArguments().length - 1;
+
+        return wantedArgumentPosition;
     }
 
     private void validateIndexWithinInvocationRange(InvocationOnMock invocation, int argumentPosition) {
         if (!wantedArgumentPositionIsValidForInvocation(invocation, argumentPosition)) {
-            throw Reporter.invalidArgumentPositionRangeAtInvocationTime(invocation, wantedArgumentPosition == LAST_ARGUMENT, wantedArgumentPosition);
+            throw invalidArgumentPositionRangeAtInvocationTime(invocation,
+                                                               wantedArgumentPosition == LAST_ARGUMENT,
+                                                               wantedArgumentPosition);
         }
     }
 
@@ -82,14 +91,19 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
 
         Class<?> inferredArgumentType = inferArgumentType(invocation, argumentPosition);
 
-        if (!invocationInfo.isValidReturnType(inferredArgumentType)) {
-            throw Reporter.wrongTypeOfArgumentToReturn(invocation, invocationInfo.printMethodReturnType(), inferredArgumentType, wantedArgumentPosition);
+        if (!invocationInfo.isValidReturnType(inferredArgumentType)){
+            throw wrongTypeOfArgumentToReturn(invocation,
+                                              invocationInfo.printMethodReturnType(),
+                                              inferredArgumentType,
+                                              wantedArgumentPosition);
         }
     }
 
     private boolean wantedArgIndexIsVarargAndSameTypeAsReturnType(Method method, int argumentPosition) {
         Class<?>[] parameterTypes = method.getParameterTypes();
-        return method.isVarArgs() && argumentPosition == /* vararg index */ parameterTypes.length - 1 && method.getReturnType().isAssignableFrom(parameterTypes[argumentPosition]);
+        return method.isVarArgs() &&
+              argumentPosition == /* vararg index */ parameterTypes.length - 1 &&
+              method.getReturnType().isAssignableFrom(parameterTypes[argumentPosition]);
     }
 
     private boolean wantedArgumentPositionIsValidForInvocation(InvocationOnMock invocation, int argumentPosition) {
@@ -110,7 +124,8 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
         if (!invocation.getMethod().isVarArgs()) {
             Class<?> argumentType = parameterTypes[argumentIndex];
             Object argumentValue = invocation.getArgument(argumentIndex);
-            if (argumentType.isPrimitive() || argumentValue == null) { // we don't want to return the primi
+            // we don't want to return primitive wrapper types
+            if (argumentType.isPrimitive() || argumentValue == null) {
                 return argumentType;
             }
 
