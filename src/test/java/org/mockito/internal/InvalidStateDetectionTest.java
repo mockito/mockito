@@ -64,6 +64,9 @@ public class InvalidStateDetectionTest extends TestBase {
         detectsAndCleansUp(new OnVerifyZeroInteractions(), UnfinishedStubbingException.class);
 
         when(mock.simpleMethod());
+        detectsAndCleansUp(new OnVerifyNoInteractions(), UnfinishedStubbingException.class);
+
+        when(mock.simpleMethod());
         detectsAndCleansUp(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
 
         when(mock.simpleMethod());
@@ -88,6 +91,9 @@ public class InvalidStateDetectionTest extends TestBase {
         detectsAndCleansUp(new OnVerifyZeroInteractions(), UnfinishedStubbingException.class);
 
         doAnswer(null);
+        detectsAndCleansUp(new OnVerifyNoInteractions(), UnfinishedStubbingException.class);
+
+        doAnswer(null);
         detectsAndCleansUp(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
 
         doAnswer(null);
@@ -109,6 +115,9 @@ public class InvalidStateDetectionTest extends TestBase {
         detectsAndCleansUp(new OnVerifyZeroInteractions(), UnfinishedVerificationException.class);
 
         verify(mock);
+        detectsAndCleansUp(new OnVerifyNoInteractions(), UnfinishedVerificationException.class);
+
+        verify(mock);
         detectsAndCleansUp(new OnVerifyNoMoreInteractions(), UnfinishedVerificationException.class);
 
         verify(mock);
@@ -125,6 +134,9 @@ public class InvalidStateDetectionTest extends TestBase {
 
         anyObject();
         detectsAndCleansUp(new OnVerifyZeroInteractions(), InvalidUseOfMatchersException.class);
+
+        anyObject();
+        detectsAndCleansUp(new OnVerifyNoInteractions(), InvalidUseOfMatchersException.class);
 
         anyObject();
         detectsAndCleansUp(new OnVerifyNoMoreInteractions(), InvalidUseOfMatchersException.class);
@@ -181,6 +193,12 @@ public class InvalidStateDetectionTest extends TestBase {
     private static class OnVerifyZeroInteractions implements DetectsInvalidState {
         public void detect(IMethods mock) {
             verifyZeroInteractions(mock);
+        }
+    }
+
+    private static class OnVerifyNoInteractions implements DetectsInvalidState {
+        public void detect(IMethods mock) {
+            verifyNoInteractions(mock);
         }
     }
 

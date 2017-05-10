@@ -2010,9 +2010,31 @@ public class Mockito extends ArgumentMatchers {
      * See examples in javadoc for {@link Mockito} class
      *
      * @param mocks to be verified
+     * @deprecated Since 3.0.0. Please migrate your code to {@link #verifyNoInteractions(Object...)}
      */
+    @Deprecated
     public static void verifyZeroInteractions(Object... mocks) {
         MOCKITO_CORE.verifyNoMoreInteractions(mocks);
+    }
+
+    /**
+     * Verifies that no interactions happened on given mocks.
+     * <pre class="code"><code class="java">
+     *   verifyNoInteractions(mockOne, mockTwo);
+     * </code></pre>
+     * This method will also detect invocations
+     * that occurred before the test method, for example: in <code>setUp()</code>, <code>&#064;Before</code> method or in constructor.
+     * Consider writing nice code that makes interactions only in test methods.
+     * <p>
+     * See also {@link Mockito#never()} - it is more explicit and communicates the intent well.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @since 3.0.0
+     * @param mocks to be verified
+     */
+    public static void verifyNoInteractions(Object... mocks) {
+        MOCKITO_CORE.verifyNoInteractions(mocks);
     }
 
     /**

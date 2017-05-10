@@ -19,6 +19,7 @@ import static org.mockito.internal.util.MockUtil.getMockHandler;
 import static org.mockito.internal.util.MockUtil.isMock;
 import static org.mockito.internal.util.MockUtil.resetMock;
 import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
+import static org.mockito.internal.verification.VerificationModeFactory.noInteractions;
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
 
 import java.util.Arrays;
@@ -135,6 +136,28 @@ public class MockitoCore {
         mockingProgress().validateState();
         VerificationDataInOrder data = new VerificationDataInOrderImpl(inOrderContext, VerifiableInvocationsFinder.find(mocks), null);
         VerificationModeFactory.noMoreInteractions().verifyInOrder(data);
+    }
+
+    /**
+     * Verifies that given mocks have been invoked zero times, failing otherwise
+     *
+     * @since 3.0.0
+     * @param mocks the mocks to verify
+     */
+    public void verifyNoInteractions(Object... mocks) {
+        assertMocksNotEmpty(mocks);
+        mockingProgress().validateState();
+        for (Object mock : mocks) {
+            if (mock == null) {
+                throw nullPassedToVerifyNoMoreInteractions();
+            }
+            if (!isMock(mock)) {
+                throw notAMockPassedToVerifyNoMoreInteractions();
+            }
+            InvocationContainer invocations = getMockHandler(mock).getInvocationContainer();
+            VerificationDataImpl data = new VerificationDataImpl(invocations, null);
+            noInteractions().verify(data);
+        }
     }
 
     private void assertMocksNotEmpty(Object[] mocks) {
