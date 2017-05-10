@@ -148,16 +148,15 @@ public class MockitoCore {
         assertMocksNotEmpty(mocks);
         mockingProgress().validateState();
         for (Object mock : mocks) {
-            try {
-                if (mock == null) {
-                    throw nullPassedToVerifyNoMoreInteractions();
-                }
-                InvocationContainer invocations = getMockHandler(mock).getInvocationContainer();
-                VerificationDataImpl data = new VerificationDataImpl(invocations, null);
-                noInteractions().verify(data);
-            } catch (NotAMockException e) {
+            if (mock == null) {
+                throw nullPassedToVerifyNoMoreInteractions();
+            }
+            if (!isMock(mock)) {
                 throw notAMockPassedToVerifyNoMoreInteractions();
             }
+            InvocationContainer invocations = getMockHandler(mock).getInvocationContainer();
+            VerificationDataImpl data = new VerificationDataImpl(invocations, null);
+            noInteractions().verify(data);
         }
     }
 
