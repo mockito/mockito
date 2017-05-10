@@ -15,8 +15,12 @@ import org.mockito.stubbing.ValidableAnswer;
 /**
  * Returns the passed parameter identity at specified index.
  * <p>
- * <p>The <code>argumentIndex</code> represents the index in the argument array of the invocation.</p>
- * <p>If this number equals -1 then the last argument is returned.</p>
+ * <p>
+ * The <code>argumentIndex</code> represents the index in the argument array of the invocation.
+ * </p>
+ * <p>
+ * If this number equals -1 then the last argument is returned.
+ * </p>
  *
  * @see org.mockito.AdditionalAnswers
  * @since 1.9.5
@@ -32,8 +36,8 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
     /**
      * Build the identity answer to return the argument at the given position in the argument array.
      *
-     * @param wantedArgumentPosition The position of the argument identity to return in the invocation.
-     *                               Using <code>-1</code> indicates the last argument ({@link #LAST_ARGUMENT}).
+     * @param wantedArgumentPosition
+     *            The position of the argument identity to return in the invocation. Using <code>-1</code> indicates the last argument ({@link #LAST_ARGUMENT}).
      */
     public ReturnsArgumentAt(int wantedArgumentPosition) {
         if (wantedArgumentPosition != LAST_ARGUMENT && wantedArgumentPosition < 0) {
@@ -60,39 +64,32 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
     public void validateFor(InvocationOnMock invocation) {
         int argumentPosition = inferWantedArgumentPosition(invocation);
         validateIndexWithinInvocationRange(invocation, argumentPosition);
-        validateArgumentTypeCompatibility(invocation, argumentPosition);
+        validateArgumentTypeCompatibility((Invocation) invocation, argumentPosition);
     }
 
     private int inferWantedArgumentPosition(InvocationOnMock invocation) {
-        return wantedArgumentPosition == LAST_ARGUMENT ?
-               invocation.getArguments().length - 1 :
-               wantedArgumentPosition;
+        return wantedArgumentPosition == LAST_ARGUMENT ? invocation.getArguments().length - 1 : wantedArgumentPosition;
     }
 
     private void validateIndexWithinInvocationRange(InvocationOnMock invocation, int argumentPosition) {
         if (!wantedArgumentPositionIsValidForInvocation(invocation, argumentPosition)) {
-            throw Reporter.invalidArgumentPositionRangeAtInvocationTime(invocation,
-                                                                        wantedArgumentPosition == LAST_ARGUMENT,
-                                                                        wantedArgumentPosition);
+            throw Reporter.invalidArgumentPositionRangeAtInvocationTime(invocation, wantedArgumentPosition == LAST_ARGUMENT, wantedArgumentPosition);
         }
     }
 
-    private void validateArgumentTypeCompatibility(InvocationOnMock invocation, int argumentPosition) {
+    private void validateArgumentTypeCompatibility(Invocation invocation, int argumentPosition) {
         InvocationInfo invocationInfo = new InvocationInfo(invocation);
-        Class<?> inferredArgumentType = inferWantedArgumentType(invocation, argumentPosition);
+
+        Class<?> inferredArgumentType = inferArgumentType(invocation, argumentPosition);
+
         if (!invocationInfo.isValidReturnType(inferredArgumentType)) {
-            throw Reporter.wrongTypeOfArgumentToReturn(invocation,
-                                                       invocationInfo.printMethodReturnType(),
-                                                       inferredArgumentType,
-                                                       wantedArgumentPosition);
+            throw Reporter.wrongTypeOfArgumentToReturn(invocation, invocationInfo.printMethodReturnType(), inferredArgumentType, wantedArgumentPosition);
         }
     }
 
     private boolean wantedArgIndexIsVarargAndSameTypeAsReturnType(Method method, int argumentPosition) {
         Class<?>[] parameterTypes = method.getParameterTypes();
-        return method.isVarArgs()
-               && argumentPosition == /* vararg index */ parameterTypes.length - 1
-               && method.getReturnType().isAssignableFrom(parameterTypes[argumentPosition]);
+        return method.isVarArgs() && argumentPosition == /* vararg index */ parameterTypes.length - 1 && method.getReturnType().isAssignableFrom(parameterTypes[argumentPosition]);
     }
 
     private boolean wantedArgumentPositionIsValidForInvocation(InvocationOnMock invocation, int argumentPosition) {
@@ -106,29 +103,35 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
         return true;
     }
 
-    private Class<?> inferWantedArgumentType(InvocationOnMock invocation, int argumentPosition) {
+    private Class<?> inferArgumentType(Invocation invocation, int argumentIndex) {
         Class<?>[] parameterTypes = invocation.getMethod().getParameterTypes();
+
         // Easy when the method is not a vararg
         if (!invocation.getMethod().isVarArgs()) {
-            return parameterTypes[argumentPosition];
+            Class<?> argumentType = parameterTypes[argumentIndex];
+            Object argumentValue = invocation.getArgument(argumentIndex);
+            if (argumentType.isPrimitive() || argumentValue == null) { // we don't want to return the primi
+                return argumentType;
+            }
+
+            return argumentValue.getClass();
         }
 
         // Now for varargs
         int varargIndex = parameterTypes.length - 1; // vararg always last
 
-        if (argumentPosition < varargIndex) {
+        if (argumentIndex < varargIndex) {
             // Same for non vararg arguments
-            return parameterTypes[argumentPosition];
-        } else {
-            // if wanted argument is vararg
-            if (wantedArgIndexIsVarargAndSameTypeAsReturnType(invocation.getMethod(), argumentPosition)) {
-                // return the vararg array if return type is compatible
-                // because the user probably want to return the array itself if the return type is compatible
-                return parameterTypes[argumentPosition]; // move to MethodInfo ?
-            } else {
-                // return the type in this vararg array
-                return parameterTypes[varargIndex].getComponentType();
-            }
+            return parameterTypes[argumentIndex];
         }
+        // if wanted argument is vararg
+        if (wantedArgIndexIsVarargAndSameTypeAsReturnType(invocation.getMethod(), argumentIndex)) {
+            // return the vararg array if return type is compatible
+            // because the user probably want to return the array itself if the return type is compatible
+            return parameterTypes[argumentIndex]; // move to MethodInfo ?
+        }
+        // return the type in this vararg array
+        return parameterTypes[varargIndex].getComponentType();
+
     }
 }

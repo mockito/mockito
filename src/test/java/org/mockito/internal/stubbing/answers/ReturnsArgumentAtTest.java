@@ -185,6 +185,17 @@ public class ReturnsArgumentAtTest {
         }
     }
 
+    @Test
+    public void shouldNotFailWhenArgumentIsGenericAndCompatibleWithReturnType() throws Exception {
+        new ReturnsArgumentAt(0 ).validateFor(
+                new InvocationBuilder().method("genericToString")
+                                       .argTypes(Object.class)
+                                       .args("anyString")
+                                       .toInvocation()
+        );
+    }
+
+
     private static InvocationOnMock invocationWith(Object... parameters) {
         return new InvocationBuilder().method("varargsReturningString")
                                       .argTypes(Object[].class)
