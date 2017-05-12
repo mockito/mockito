@@ -450,7 +450,7 @@ public class Reporter {
                 "    doThrow(exception).when(mock).someVoidMethod();",
                 "If you need to set the void method to do nothing you can use:",
                 "    doNothing().when(mock).someVoidMethod();",
-                "More in javadocs for Mockito.doNothing().",
+                "For more information, check out the javadocs for Mockito.doNothing().",
                 "***",
                 "If you're unsure why you're getting above error read on.",
                 "Due to the nature of the syntax above problem might occur because:",
