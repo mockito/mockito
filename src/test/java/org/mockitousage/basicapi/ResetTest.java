@@ -30,7 +30,7 @@ public class ResetTest extends TestBase {
         mock.booleanReturningMethod();
         reset(mock);
         try {
-            when(null).thenReturn("anything");
+            when((Object)null).thenReturn("anything");
             fail();
         } catch (MissingMethodInvocationException e) {
         }
