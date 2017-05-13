@@ -2331,7 +2331,7 @@ public class Mockito extends ArgumentMatchers {
      * If you want to find out more, read
      * <a href="https://github.com/mockito/mockito/wiki/Greedy-algorithm-of-verfication-InOrder">this wiki page</a>.
      * <p>
-     * As of Mockito 1.8.4 you can verifyNoMoreInvocations() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
+     * As of Mockito 1.8.4 you can verifyNoMoreInteractions() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
      * <p>
      * See examples in javadoc for {@link Mockito} class
      *
@@ -2517,7 +2517,7 @@ public class Mockito extends ArgumentMatchers {
      *   verify(mock, only()).someMethod();
      *   //above is a shorthand for following 2 lines of code:
      *   verify(mock).someMethod();
-     *   verifyNoMoreInvocations(mock);
+     *   verifyNoMoreInteractions(mock);
      * </code></pre>
      *
      * <p>
