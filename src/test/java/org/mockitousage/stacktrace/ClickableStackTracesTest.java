@@ -35,7 +35,9 @@ public class ClickableStackTracesTest extends TestBase {
             verifyTheMock(1, "not foo");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e).hasMessageContaining("callMethodOnMock(").hasMessageContaining("verifyTheMock(");
+            assertThat(e)
+                .hasMessageContaining("callMethodOnMock(")
+                .hasMessageContaining("verifyTheMock(");
         }
     }
 }

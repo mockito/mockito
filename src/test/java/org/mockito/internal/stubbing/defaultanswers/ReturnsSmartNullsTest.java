@@ -64,7 +64,7 @@ public class ReturnsSmartNullsTest extends TestBase {
 
         Foo smartNull = (Foo) answer.answer(invocationOf(Foo.class, "withArgs", "oompa", "lumpa"));
 
-        assertThat(smartNull.toString())
+        assertThat(smartNull + "")
             .contains("foo.withArgs")
             .contains("oompa")
             .contains("lumpa");
