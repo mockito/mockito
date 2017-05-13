@@ -50,6 +50,6 @@ install:
 script:
   - ./gradlew build idea -s -PcheckJava6Compatibility
 after_success:
-  - ./gradlew assertReleaseNeeded && ./gradlew travisReleasePrepare && ./gradlew performRelease -Preleasing.dryRun=false
+  - ./gradlew assertReleaseNeeded && ./gradlew ciReleasePrepare && ./gradlew performRelease -Preleasing.dryRun=false
   - ./gradlew --stacktrace coverageReport && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
   - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
