@@ -1,3 +1,11 @@
+**2.8.29** - [7 commits](https://github.com/mockito/mockito/compare/v2.8.28...v2.8.29) by [Szczepan Faber](http://github.com/szczepiq) (5), Christian Schwarz (1), Serge Bishyr (1) - *2017-05-15* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+ - Bumped version of tools to pick up release automation fixes [(#1084)](https://github.com/mockito/mockito/pull/1084)
+ - More concise release notes and codecov issue fix [(#1080)](https://github.com/mockito/mockito/pull/1080)
+ - Fixed #1065. Add information about doNothing() method to CannotStubVo… [(#1079)](https://github.com/mockito/mockito/pull/1079)
+ - Fixed validation in returnArgumentAt(int) in case of type erasure on the parameter [(#1076)](https://github.com/mockito/mockito/pull/1076)
+ - Mockito AdditionalAnswers.returnsFirstArg() doesn't work with generic first arg [(#1071)](https://github.com/mockito/mockito/issues/1071)
+ - Complement error message [(#1065)](https://github.com/mockito/mockito/issues/1065)
+
 ### 2.8.28 (2017-05-06)
 
 * Authors: 1, commits: 1, published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
