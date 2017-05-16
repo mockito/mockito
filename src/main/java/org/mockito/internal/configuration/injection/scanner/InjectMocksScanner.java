@@ -7,13 +7,14 @@ package org.mockito.internal.configuration.injection.scanner;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
+import org.mockito.Spy;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
+
+import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
 
 /**
  * Scan field for injection.
@@ -24,7 +25,7 @@ public class InjectMocksScanner {
     /**
      * Create a new InjectMocksScanner for the given clazz on the given instance
      *
-     * @param clazz    Current class in the hierarchy of the test
+     * @param clazz Current class in the hierarchy of the test
      */
     public InjectMocksScanner(Class<?> clazz) {
         this.clazz = clazz;
@@ -50,7 +51,9 @@ public class InjectMocksScanner {
         Set<Field> mockDependentFields = new HashSet<Field>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
-            if (null != field.getAnnotation(InjectMocks.class)) {
+            if (null != field.getAnnotation(InjectMocks.class)
+                    && null == field.getAnnotation(Spy.class)
+                    && null == field.getAnnotation(Mock.class)) {
                 assertNoAnnotations(field, Mock.class, Captor.class);
                 mockDependentFields.add(field);
             }
