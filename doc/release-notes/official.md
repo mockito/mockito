@@ -1,3 +1,6 @@
+**2.8.30** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.29...v2.8.30) by epeee (2), [Szczepan Faber](http://github.com/szczepiq) (1) - *2017-05-18* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+ - Streamline assertj and junit4 usage in gradle files and update assertj (v2.7.0) [(#1075)](https://github.com/mockito/mockito/pull/1075)
+
 **2.8.29** - [7 commits](https://github.com/mockito/mockito/compare/v2.8.28...v2.8.29) by [Szczepan Faber](http://github.com/szczepiq) (5), Christian Schwarz (1), Serge Bishyr (1) - *2017-05-15* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - Bumped version of tools to pick up release automation fixes [(#1084)](https://github.com/mockito/mockito/pull/1084)
  - More concise release notes and codecov issue fix [(#1080)](https://github.com/mockito/mockito/pull/1080)
