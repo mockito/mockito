@@ -33,6 +33,8 @@ apply from: 'gradle/mockito-core/javadoc.gradle'
 apply from: 'gradle/mockito-core/license.gradle'
 apply from: 'gradle/mockito-core/testing.gradle'
 
+apply from: "gradle/dependencies.gradle"
+
 archivesBaseName = "mockito-core"
 
 allprojects {
@@ -57,12 +59,12 @@ configurations {
 dependencies {
     compile 'net.bytebuddy:byte-buddy:1.6.14', 'net.bytebuddy:byte-buddy-agent:1.6.14'
 
-    compileOnly "junit:junit:4.12", "org.hamcrest:hamcrest-core:1.3"
+    compileOnly libraries.junit4, "org.hamcrest:hamcrest-core:1.3"
     compile "org.objenesis:objenesis:2.5"
 
     testCompile 'org.ow2.asm:asm:5.2'
 
-    testCompile 'org.assertj:assertj-core:2.6.0'
+    testCompile libraries.assertj
 
     //putting 'provided' dependencies on test compile and runtime classpath
     testCompileOnly configurations.compileOnly

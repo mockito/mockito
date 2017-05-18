@@ -13,7 +13,7 @@ kotlin {
 
 dependencies {
     testCompile project(":")
-    testCompile "junit:junit:4.12"
+    testCompile libraries.junit4
 
     testCompile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.1'
     testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.14'
