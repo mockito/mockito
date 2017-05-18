@@ -60,9 +60,9 @@
   * Fixed problems with releases [(#1052)](https://github.com/mockito/mockito/pull/1052)
   * Fix some issues reported by SonarQube [(#1027)](https://github.com/mockito/mockito/pull/1027)
 
-### 2.8.9 (2017-04-26)
+### 2.8.9 (2017-04-26) published to [JCenter](https://bintray.com/mockito/maven/mockito/2.8.8)/Maven Central
 
-* Authors: 1, commits: 1, published to [Bintray "mockito"](https://bintray.com/mockito/maven/mockito/2.8.8).
+* Authors: 1, commits: 1, published to [JCenter](https://bintray.com/mockito/maven/mockito/2.8.8)/Maven Central.
   * 1: [Rafael Winterhalter](https://github.com/raphw)
 * Updated ByteBuddy to 1.6.14, fixes agent attachment on Java 9 VM
 
@@ -136,7 +136,7 @@
   * SmartPrinterTest toString() calls [(#1025)](https://github.com/mockito/mockito/pull/1025)
   * Enabled continuous delivery via robust mockito-release-tools project [(#1018)](https://github.com/mockito/mockito/pull/1018)
 
-### 2.7.22 (2017-04-07 14:44 UTC)
+### 2.7.22 (2017-04-07 14:44 UTC), published to [JCenter](https://bintray.com/mockito/maven/mockito)/Maven Central.
 
 Last version published to Maven Central after the team adopted [Continuous Delivery Pipeline 2.0](https://github.com/mockito/mockito/issues/911 - work in progress).
 
