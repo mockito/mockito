@@ -32,7 +32,7 @@
   - Fixed problems with releases [(#1052)](https://github.com/mockito/mockito/pull/1052)
   - Fix some issues reported by SonarQube [(#1027)](https://github.com/mockito/mockito/pull/1027)
 
-### 2.8.9 (2017-04-26) published to [JCenter](https://bintray.com/mockito/maven/mockito/2.8.9)/[Maven Central](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.8.9%7Cjar)
+# 2.8.9 (2017-04-26) published to [JCenter](https://bintray.com/mockito/maven/mockito/2.8.9)/[Maven Central](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.8.9%7Cjar)
 
 Notable changes sincle last release to Maven Central (2.7.22):
  - Updated ByteBuddy to 1.6.14, mostly for Java9
@@ -72,7 +72,7 @@ Notable changes sincle last release to Maven Central (2.7.22):
  - SmartPrinterTest toString() calls [(#1025)](https://github.com/mockito/mockito/pull/1025)
  - Enabled continuous delivery via robust mockito-release-tools project [(#1018)](https://github.com/mockito/mockito/pull/1018)
 
-### 2.7.22 (2017-04-07), published to [JCenter](https://bintray.com/mockito/maven/mockito/2.7.22)/[Maven Central](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.7.22%7Cjar).
+# 2.7.22 (2017-04-07), published to [JCenter](https://bintray.com/mockito/maven/mockito/2.7.22)/[Maven Central](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.7.22%7Cjar).
 
 Last version published to Maven Central after the team adopted [Continuous Delivery Pipeline 2.0](https://github.com/mockito/mockito/issues/911).
 
