@@ -80,7 +80,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         advice = new MockMethodAdvice(mocks, identifier);
         subclassEngine = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(withDefaultConfiguration()
                 .withBinders(of(MockMethodAdvice.Identifier.class, identifier))
-                .to(MockMethodAdvice.ForReadObject.class), isAbstract().or(isNative())), false);
+                .to(MockMethodAdvice.ForReadObject.class), isAbstract().or(isNative()).or(isToString())), false);
         MockMethodDispatcher.set(identifier, advice);
         instrumentation.addTransformer(this, true);
     }
