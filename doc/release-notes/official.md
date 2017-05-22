@@ -1,3 +1,7 @@
+**2.8.31** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.30...v2.8.31) by [Rafael Winterhalter](http://github.com/raphw) - *2017-05-22* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+ - Fixes #1083: Interfaces only declare toString implicitly and should t… [(#1090)](https://github.com/mockito/mockito/pull/1090)
+ - Mockito 2 mock-maker-inline not able to mock Object methods on an interface [(#1083)](https://github.com/mockito/mockito/issues/1083)
+
 **2.8.30 (2017-05-18)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.29...v2.8.30) by epeee (2), [Szczepan Faber](http://github.com/szczepiq) (1) - *2017-05-18* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.30)
  - Streamline assertj and junit4 usage in gradle files and update assertj (v2.7.0) [(#1075)](https://github.com/mockito/mockito/pull/1075)
 
