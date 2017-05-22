@@ -20,10 +20,7 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static net.bytebuddy.ClassFileVersion.JAVA_V8;
@@ -148,6 +145,26 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
                     .hasMessageContaining("serialization")
                     .hasMessageContaining("extra interfaces");
         }
+    }
+
+    @Test
+    public void should_mock_interface() {
+        MockSettingsImpl<Set> mockSettings = new MockSettingsImpl<Set>();
+        mockSettings.setTypeToMock(Set.class);
+        mockSettings.defaultAnswer(new Returns(10));
+        Set<?> proxy = mockMaker.createMock(mockSettings, new MockHandlerImpl<Set>(mockSettings));
+
+        assertThat(proxy.size()).isEqualTo(10);
+    }
+
+    @Test
+    public void should_mock_interface_to_string() {
+        MockSettingsImpl<Set> mockSettings = new MockSettingsImpl<Set>();
+        mockSettings.setTypeToMock(Set.class);
+        mockSettings.defaultAnswer(new Returns("foo"));
+        Set<?> proxy = mockMaker.createMock(mockSettings, new MockHandlerImpl<Set>(mockSettings));
+
+        assertThat(proxy.toString()).isEqualTo("foo");
     }
 
     @Test
