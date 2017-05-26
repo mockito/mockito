@@ -69,7 +69,7 @@ import org.mockito.verification.*;
  *      <a href="#30">30. Spying or mocking abstract classes (Since 1.10.12, further enhanced in 2.7.13 and 2.7.14)</a><br/>
  *      <a href="#31">31. Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3><br/>
  *      <a href="#32">32. Better generic support with deep stubs (Since 1.10.0)</a></h3><br/>
- *      <a href="#32">33. Mockito JUnit rule (Since 1.10.17)</a><br/>
+ *      <a href="#33">33. Mockito JUnit rule (Since 1.10.17)</a><br/>
  *      <a href="#34">34. Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
  *      <a href="#35">35. Custom verification failure message (Since 2.1.0)</a><br/>
  *      <a href="#36">36. Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
