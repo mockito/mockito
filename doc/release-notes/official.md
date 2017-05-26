@@ -1,3 +1,6 @@
+**2.8.32** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.31...v2.8.32) by Arend v. Reinersdorff - *2017-05-26* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+ - Fix link to Mockito JUnit rule heading [(#1092)](https://github.com/mockito/mockito/pull/1092)
+
 **2.8.31** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.30...v2.8.31) by [Rafael Winterhalter](http://github.com/raphw) - *2017-05-22* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - Fixes #1083: Interfaces only declare toString implicitly and should t… [(#1090)](https://github.com/mockito/mockito/pull/1090)
  - Mockito 2 mock-maker-inline not able to mock Object methods on an interface [(#1083)](https://github.com/mockito/mockito/issues/1083)
