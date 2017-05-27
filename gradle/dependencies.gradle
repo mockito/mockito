@@ -3,4 +3,4 @@ ext {
 }
 
 libraries.junit4 = 'junit:junit:4.12'
-libraries.assertj = 'org.assertj:assertj-core:2.7.0'
+libraries.assertj = 'org.assertj:assertj-core:2.8.0'
