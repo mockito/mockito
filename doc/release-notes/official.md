@@ -1,3 +1,6 @@
+**2.8.34** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.33...v2.8.34) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+ - Updated build for latest release tools [(#1093)](https://github.com/mockito/mockito/pull/1093)
+
 **2.8.33** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.32...v2.8.33) by [Szczepan Faber](http://github.com/szczepiq) (1), Tim Cooke (1) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - [Documentation] Javadoc Example Throws Unexpected Exception [(#1088)](https://github.com/mockito/mockito/issues/1088)
  - Fixes #1088 : Updating documentation of verify feature to correct a s… [(#1091)](https://github.com/mockito/mockito/pull/1091)
