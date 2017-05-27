@@ -1,3 +1,7 @@
+**2.8.35** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.34...v2.8.35) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+ - Fixed bug with git push for tag during the release [(#1095)](https://github.com/mockito/mockito/pull/1095)
+ - update assertj (v2.8.0) [(#1094)](https://github.com/mockito/mockito/pull/1094)
+
 **2.8.34** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.33...v2.8.34) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - Updated build for latest release tools [(#1093)](https://github.com/mockito/mockito/pull/1093)
 
