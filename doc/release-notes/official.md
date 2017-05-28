@@ -1,3 +1,7 @@
+**2.8.37** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.36...v2.8.37) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-28* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+ - update gradle to v3.5 [(#1099)](https://github.com/mockito/mockito/pull/1099)
+ - Moved some more dependencies to dependencies.gradle [(#1098)](https://github.com/mockito/mockito/pull/1098)
+
 **2.8.36** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.35...v2.8.36) by [Allon Murienik](https://github.com/mureinik) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - InOrderImpl constructor signature [(#1096)](https://github.com/mockito/mockito/pull/1096)
 
