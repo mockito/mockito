@@ -2,5 +2,22 @@ ext {
     libraries = [:]
 }
 
+def versions = [:]
+
+versions.bytebuddy = '1.6.14'
+
 libraries.junit4 = 'junit:junit:4.12'
 libraries.assertj = 'org.assertj:assertj-core:2.8.0'
+libraries.hamcrest = 'org.hamcrest:hamcrest-core:1.3'
+libraries.testng = 'org.testng:testng:6.3.1'
+
+libraries.bytebuddy = "net.bytebuddy:byte-buddy:${versions.bytebuddy}"
+libraries.bytebuddyagent = "net.bytebuddy:byte-buddy-agent:${versions.bytebuddy}"
+libraries.bytebuddyandroid = "net.bytebuddy:byte-buddy-android:${versions.bytebuddy}"
+
+libraries.objenesis = 'org.objenesis:objenesis:2.5'
+
+libraries.asm = 'org.ow2.asm:asm:5.2'
+
+
+
