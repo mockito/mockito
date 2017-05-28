@@ -74,12 +74,12 @@ static boolean shouldReleaseToCentral(project) {
     boolean centralReleaseByCommit = System.getenv("TRAVIS_COMMIT_MESSAGE")?.contains("[ci maven-central-release]")
     boolean centralReleaseByProjectProperty = project.hasProperty("maven-central-release")
     boolean centralRelease = centralReleaseByCommit || centralReleaseByProjectProperty
-    def message = """Using following settings:
+    def message = """Release was using following settings:
  - commit message contains '[ci maven-central-release]': $centralReleaseByCommit
  - project property 'maven-central-release' exists: $centralReleaseByProjectProperty
  - Maven Central release is enabled: $centralRelease"""
     project.logger.info(message)
     project.afterEvaluate {
-        project.tasks.performRelease.doFirst { logger.lifecycle(message) }
+        project.tasks.performRelease.doLast { logger.lifecycle(message) }
     }
 }
