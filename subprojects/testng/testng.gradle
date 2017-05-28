@@ -47,7 +47,7 @@ uploadArchives {
 
 dependencies {
     compile project.rootProject
-    compile 'org.testng:testng:6.3.1'
+    compile libraries.testng
     testCompile libraries.assertj
 }
 

@@ -34,7 +34,7 @@ apply from: 'gradle/mockito-core/javadoc.gradle'
 apply from: 'gradle/mockito-core/license.gradle'
 apply from: 'gradle/mockito-core/testing.gradle'
 
-apply from: "gradle/dependencies.gradle"
+apply from: 'gradle/dependencies.gradle'
 
 archivesBaseName = "mockito-core"
 
@@ -58,12 +58,12 @@ configurations {
 }
 
 dependencies {
-    compile 'net.bytebuddy:byte-buddy:1.6.14', 'net.bytebuddy:byte-buddy-agent:1.6.14'
+    compile libraries.bytebuddy, libraries.bytebuddyagent
 
-    compileOnly libraries.junit4, "org.hamcrest:hamcrest-core:1.3"
-    compile "org.objenesis:objenesis:2.5"
+    compileOnly libraries.junit4, libraries.hamcrest
+    compile libraries.objenesis
 
-    testCompile 'org.ow2.asm:asm:5.2'
+    testCompile libraries.asm
 
     testCompile libraries.assertj
 
