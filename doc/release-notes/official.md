@@ -1,4 +1,4 @@
-**2.8.37** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.36...v2.8.37) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-28* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+**2.8.37** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.36...v2.8.37) by [epeee](https://github.com/epeee), [Szczepan Faber](http://github.com/szczepiq) - *2017-05-28* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - update gradle to v3.5 [(#1099)](https://github.com/mockito/mockito/pull/1099)
  - Moved some more dependencies to dependencies.gradle [(#1098)](https://github.com/mockito/mockito/pull/1098)
 
