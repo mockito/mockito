@@ -18,6 +18,3 @@ libraries.bytebuddyandroid = "net.bytebuddy:byte-buddy-android:${versions.bytebu
 libraries.objenesis = 'org.objenesis:objenesis:2.5'
 
 libraries.asm = 'org.ow2.asm:asm:5.2'
-
-
-
