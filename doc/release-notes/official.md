@@ -1,3 +1,6 @@
+**2.8.39** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.38...v2.8.39) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-30* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.39-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.39)
+ - Fixed contributor links and bintray badge in release notes [(#1103)](https://github.com/mockito/mockito/pull/1103)
+
 **2.8.38** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.37...v2.8.38) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-30* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - [Documentation] Fixed broken link in Javadoc, improved console message [(#1100)](https://github.com/mockito/mockito/pull/1100)
 
