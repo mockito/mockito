@@ -1,3 +1,6 @@
+**2.8.38** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.37...v2.8.38) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-30* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+ - [Documentation] Fixed broken link in Javadoc, improved console message [(#1100)](https://github.com/mockito/mockito/pull/1100)
+
 **2.8.37** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.36...v2.8.37) by [epeee](https://github.com/epeee), [Szczepan Faber](http://github.com/szczepiq) - *2017-05-28* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - update gradle to v3.5 [(#1099)](https://github.com/mockito/mockito/pull/1099)
  - Moved some more dependencies to dependencies.gradle [(#1098)](https://github.com/mockito/mockito/pull/1098)
