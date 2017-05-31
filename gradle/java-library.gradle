@@ -1,4 +1,4 @@
-apply plugin: "org.mockito.mockito-release-tools.java-library"
+apply plugin: "org.shipkit.java-library"
 
 group = 'org.mockito'
 archivesBaseName = "mockito-" + project.name
