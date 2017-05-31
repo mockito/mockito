@@ -10,7 +10,6 @@ import static org.mockito.internal.exceptions.Reporter.noArgumentValueWasCapture
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -49,7 +48,7 @@ public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArgument
     public List<T> getAllValues() {
         readLock.lock();
         try {
-            return Arrays.asList((T[]) arguments.toArray());
+            return new ArrayList<T>((List) arguments);
         } finally {
             readLock.unlock();
         }
