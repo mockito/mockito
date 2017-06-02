@@ -1,4 +1,4 @@
-releasing {
+shipkit {
     gitHub.repository = "mockito/mockito"
     gitHub.readOnlyAuthToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"
     //TODO document why we are using real user name here and for Bintray user, too
@@ -38,7 +38,7 @@ releasing {
 boolean centralRelease = shouldReleaseToCentral(project)
 
 allprojects {
-    plugins.withId("org.mockito.mockito-release-tools.bintray") {
+    plugins.withId("org.shipkit.bintray") {
         bintray {
             key = System.getenv("BINTRAY_API_KEY")
             pkg {

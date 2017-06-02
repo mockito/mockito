@@ -20,7 +20,7 @@ plugins {
 
 description = 'Mockito mock objects library core API and implementation'
 
-apply plugin: "org.mockito.mockito-release-tools.continuous-delivery"
+apply plugin: "org.shipkit.continuous-delivery"
 
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
