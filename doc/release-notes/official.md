@@ -1,3 +1,8 @@
+**2.8.40** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.39...v2.8.40) by [Szczepan Faber](http://github.com/szczepiq) (2), [Alex Simkin](https://github.com/SimY4) (1), mkuster (1) - *2017-06-05* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.40-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.40)
+ - [Bugfixes] Fixed Travis configuration for matrix build [(#1109)](https://github.com/mockito/mockito/pull/1109)
+ - Renamed configuration extension 'releasing' into 'shipkit' [(#1104)](https://github.com/mockito/mockito/pull/1104)
+ - Made CaturingMatcher threadsafe [(#986)](https://github.com/mockito/mockito/pull/986)
+
 **2.8.39** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.38...v2.8.39) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-30* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.39-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.39)
  - Fixed contributor links and bintray badge in release notes [(#1103)](https://github.com/mockito/mockito/pull/1103)
 
