@@ -7,7 +7,7 @@ import java.util.List;
 
 public class MyPluginSwitch implements PluginSwitch {
 
-    static List<String> invokedFor = new LinkedList<String>();
+    static List<String> invokedFor = new LinkedList<>();
 
     public boolean isEnabled(String pluginClassName) {
         invokedFor.add(pluginClassName);

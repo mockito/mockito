@@ -6,7 +6,7 @@ import org.mockito.mock.MockCreationSettings;
 
 public class MyMockMaker extends SubclassByteBuddyMockMaker {
 
-    static ThreadLocal<Object> explosive = new ThreadLocal<Object>();
+    static ThreadLocal<Object> explosive = new ThreadLocal<>();
 
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         if (explosive.get() != null) {
