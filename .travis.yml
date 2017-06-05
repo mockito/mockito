@@ -25,11 +25,9 @@ before_install:
   - export TRAVIS_COMMIT_MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
   - echo "$TRAVIS_COMMIT_MESSAGE"
 
-jdk:
-  - oraclejdk7
-
 matrix:
   include:
+  - jdk: oraclejdk7
   - jdk: oraclejdk7
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
   - jdk: oraclejdk8
