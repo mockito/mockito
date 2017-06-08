@@ -11,6 +11,7 @@ import org.mockito.stubbing.Answer;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisBase;
 import org.objenesis.ObjenesisStd;
+import org.objenesis.instantiator.ObjectInstantiator;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
 import static org.mockito.internal.exceptions.Reporter.notAnException;
