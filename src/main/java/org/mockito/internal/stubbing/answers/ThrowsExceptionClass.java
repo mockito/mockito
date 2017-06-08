@@ -62,8 +62,6 @@ public class ThrowsExceptionClass implements Answer<Object>, Serializable {
         });
     }
     
-    private static final Objenesis objenesis = new ObjenesisBase(new TryCtorStrategy());
-    
     private final Class<? extends Throwable> throwableClass;
     private final ConditionalStackTraceFilter filter = new ConditionalStackTraceFilter();
 
