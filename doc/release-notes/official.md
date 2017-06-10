@@ -1,3 +1,6 @@
+**2.8.41** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.40...v2.8.41) by [Allon Murienik](https://github.com/mureinik) - *2017-06-10* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.41-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.41)
+ - ArgsMismatchFinder#getStubbingArgMismatches generics [(#1118)](https://github.com/mockito/mockito/pull/1118)
+
 **2.8.40** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.39...v2.8.40) by [Szczepan Faber](http://github.com/szczepiq) (2), [Alex Simkin](https://github.com/SimY4) (1), mkuster (1) - *2017-06-05* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.40-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.40)
  - [Bugfixes] Fixed Travis configuration for matrix build [(#1109)](https://github.com/mockito/mockito/pull/1109)
  - Renamed configuration extension 'releasing' into 'shipkit' [(#1104)](https://github.com/mockito/mockito/pull/1104)
