@@ -1,3 +1,6 @@
+**2.8.43 (2017-06-10)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.42...v2.8.43) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.43-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.43)
+ - No pull requests referenced in commit messages.
+
 **2.8.42 (2017-06-10)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.41...v2.8.42) by epeee (2), [Szczepan Faber](http://github.com/szczepiq) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.42-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.42)
  - update to shipkit v0.8.72 [(#1115)](https://github.com/mockito/mockito/pull/1115)
 
