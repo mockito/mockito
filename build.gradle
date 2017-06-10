@@ -10,7 +10,7 @@ buildscript {
         classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.3.0' //for 'java6-compatibility.gradle'
 
         //Needed so that release notes and release workflow plugin can be applied in separate gradle/*.gradle build files
-        classpath project.'dependencies.mockito-release-tools'
+        classpath project.'dependencies.shipkit'
     }
 }
 
@@ -20,7 +20,7 @@ plugins {
 
 description = 'Mockito mock objects library core API and implementation'
 
-apply plugin: "org.shipkit.continuous-delivery"
+apply plugin: "org.shipkit.java"
 
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
