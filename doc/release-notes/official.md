@@ -1,3 +1,6 @@
+**2.8.42 (2017-06-10)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.41...v2.8.42) by epeee (2), [Szczepan Faber](http://github.com/szczepiq) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.42-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.42)
+ - update to shipkit v0.8.72 [(#1115)](https://github.com/mockito/mockito/pull/1115)
+
 **2.8.41** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.40...v2.8.41) by [Allon Murienik](https://github.com/mureinik) - *2017-06-10* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.41-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.41)
  - ArgsMismatchFinder#getStubbingArgMismatches generics [(#1118)](https://github.com/mockito/mockito/pull/1118)
 
