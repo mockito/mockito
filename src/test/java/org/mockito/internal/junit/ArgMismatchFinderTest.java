@@ -9,8 +9,6 @@ import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.util.List;
-
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
@@ -24,7 +22,7 @@ public class ArgMismatchFinderTest extends TestBase {
     @Test
     public void no_interactions() throws Exception {
         //when
-        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches((List) asList(mock1, mock2));
+        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches(asList(mock1, mock2));
 
         //then
         assertEquals(0, mismatches.size());
@@ -37,7 +35,7 @@ public class ArgMismatchFinderTest extends TestBase {
         mock2.simpleMethod(2); //arg mismatch on different mock
 
         //when
-        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches((List) asList(mock1, mock2));
+        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches(asList(mock1, mock2));
 
         //then
         assertEquals(0, mismatches.size());
@@ -50,7 +48,7 @@ public class ArgMismatchFinderTest extends TestBase {
         mock1.otherMethod();
 
         //when
-        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches((List) asList(mock1, mock2));
+        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches(asList(mock1, mock2));
 
         //then
         assertEquals(0, mismatches.size());
@@ -64,7 +62,7 @@ public class ArgMismatchFinderTest extends TestBase {
         mock1.simpleMethod(2); // no stubbing, but we don't want it to be reported, either
 
         //when
-        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches((List) asList(mock1, mock2));
+        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches(asList(mock1, mock2));
 
         //then
         assertEquals(0, mismatches.size());
@@ -77,7 +75,7 @@ public class ArgMismatchFinderTest extends TestBase {
         mock1.simpleMethod(2);
 
         //when
-        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches((List) asList(mock1, mock2));
+        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches(asList(mock1, mock2));
 
         //then
         assertEquals(1, mismatches.size());
@@ -91,7 +89,7 @@ public class ArgMismatchFinderTest extends TestBase {
         mock1.simpleMethod(3);
 
         //when
-        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches((List) asList(mock1, mock2));
+        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches(asList(mock1, mock2));
 
         //then
         assertEquals(1, mismatches.size());
@@ -106,7 +104,7 @@ public class ArgMismatchFinderTest extends TestBase {
         mock1.simpleMethod(3);
 
         //when
-        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches((List) asList(mock1, mock2));
+        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches(asList(mock1, mock2));
 
         //then
         assertEquals(2, mismatches.size());
@@ -123,7 +121,7 @@ public class ArgMismatchFinderTest extends TestBase {
         mock1.simpleMethod(3); //unstubbed
 
         //when
-        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches((List) asList(mock1, mock2));
+        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches(asList(mock1, mock2));
 
         //then
         assertEquals("{mock1.simpleMethod(1);=[mock1.simpleMethod(3);]}", mismatches.toString());
