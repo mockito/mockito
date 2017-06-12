@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.invocation.Invocation;
+import org.mockito.stubbing.Stubbing;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface InvocationContainer {
 
     void clearInvocations();
 
-    List<StubbedInvocationMatcher> getStubbedInvocations();
+    List<Stubbing> getStubbedInvocations();
 }

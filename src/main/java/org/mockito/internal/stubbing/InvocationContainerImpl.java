@@ -16,6 +16,7 @@ import org.mockito.internal.verification.SingleRegisteredInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.ValidableAnswer;
 
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
@@ -128,8 +129,8 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         registeredInvocations.clear();
     }
 
-    public List<StubbedInvocationMatcher> getStubbedInvocations() {
-        return stubbed;
+    public List<Stubbing> getStubbedInvocations() {
+        return (List) stubbed;
     }
 
     public Object invokedMock() {

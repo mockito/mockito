@@ -16,6 +16,7 @@ import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Stubbing;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -61,9 +62,9 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         InvocationContainerImpl container = (InvocationContainerImpl) handler.getInvocationContainer();
 
         // matches invocation for verification
-        for (StubbedInvocationMatcher stubbedInvocationMatcher : container.getStubbedInvocations()) {
-            if (container.getInvocationForStubbing().matches(stubbedInvocationMatcher.getInvocation())) {
-                return stubbedInvocationMatcher.answer(invocation);
+        for (Stubbing stubbing : container.getStubbedInvocations()) {
+            if (container.getInvocationForStubbing().matches(stubbing.getInvocation())) {
+                return stubbing.answer(invocation);
             }
         }
 

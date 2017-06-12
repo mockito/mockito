@@ -15,7 +15,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @SuppressWarnings("unchecked")
-public class StubbedInvocationMatcher extends InvocationMatcher implements Answer, Serializable, Stubbing {
+public class StubbedInvocationMatcher extends InvocationMatcher implements Serializable, Stubbing {
 
     private static final long serialVersionUID = 4919105134123672727L;
     private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();

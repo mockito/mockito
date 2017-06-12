@@ -13,7 +13,7 @@ import org.mockito.invocation.Invocation;
  *
  * @since 2.2.3
  */
-public interface Stubbing {
+public interface Stubbing extends Answer {
 
     /**
      * Returns the method invocation that is stubbed.
