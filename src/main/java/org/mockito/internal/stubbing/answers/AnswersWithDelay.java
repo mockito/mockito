@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  * <p>The <code>sleepyTime</code> specifies how long, in milliseconds, to pause before
  * returning the provided <code>answer</code>.</p>
  *
+ * @since 2.8.44
  * @see org.mockito.AdditionalAnswers
  */
 public class AnswersWithDelay implements Answer<Object>, ValidableAnswer, Serializable {
@@ -43,3 +44,4 @@ public class AnswersWithDelay implements Answer<Object>, ValidableAnswer, Serial
         }
     }
 }
+
