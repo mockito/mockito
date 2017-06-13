@@ -1,3 +1,6 @@
+**2.8.45 (2017-06-13)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.44...v2.8.45) by [VChirp](https://github.com/VChirp) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.45-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.45)
+ - Fix typo: Remove repeated "a" [(#1125)](https://github.com/mockito/mockito/pull/1125)
+
 **2.8.44 (2017-06-12)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.43...v2.8.44) by [Marcin Zajaczkowski](https://github.com/szpak) (1), [Marcin Zajączkowski](https://github.com/szpak) (1), [Myrle Krantz](https://github.com/myrle-krantz) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.44-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.44)
  - [New features] Answer with delay in mock or spy to improve testing of asynchronous code [(#1117)](https://github.com/mockito/mockito/issues/1117)
 
