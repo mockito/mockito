@@ -146,7 +146,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * </code></pre>
  *
  * <ul>
- * <li> By default, for all methods that return a value, a mock will return either null, a
+ * <li> By default, for all methods that return a value, a mock will return either null,
  * a primitive/primitive wrapper value, or an empty collection, as appropriate.
  * For example 0 for an int/Integer and false for a boolean/Boolean. </li>
  *
