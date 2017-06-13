@@ -1,7 +1,5 @@
 **2.8.44 (2017-06-12)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.43...v2.8.44) by [Marcin Zajaczkowski](https://github.com/szpak) (1), [Marcin Zajączkowski](https://github.com/szpak) (1), [Myrle Krantz](https://github.com/myrle-krantz) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.44-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.44)
  - [New features] Answer with delay in mock or spy to improve testing of asynchronous code [(#1117)](https://github.com/mockito/mockito/issues/1117)
- - Made it possible to delay the return of a mock or spy (#1117) [(#1122)](https://github.com/mockito/mockito/pull/1122)
- - Made it possible to delay the return of a mock or spy.  (#1117) [(#1119)](https://github.com/mockito/mockito/pull/1119)
 
 **2.8.43 (2017-06-10)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.42...v2.8.43) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.43-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.43)
  - No pull requests referenced in commit messages.
