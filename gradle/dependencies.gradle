@@ -4,7 +4,7 @@ ext {
 
 def versions = [:]
 
-versions.bytebuddy = '1.6.14'
+versions.bytebuddy = '1.7.0'
 
 libraries.junit4 = 'junit:junit:4.12'
 libraries.assertj = 'org.assertj:assertj-core:2.8.0'
