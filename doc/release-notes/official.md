@@ -1,3 +1,7 @@
+**2.8.46 (2017-06-15)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.45...v2.8.46) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.46-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.46)
+ - Fixed issue with releases to Maven Central [(#1129)](https://github.com/mockito/mockito/pull/1129)
+ - Version not released to Maven Central [(#1127)](https://github.com/mockito/mockito/issues/1127)
+
 **2.8.45 (2017-06-13)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.44...v2.8.45) by [VChirp](https://github.com/VChirp) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.45-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.45)
  - Fix typo: Remove repeated "a" [(#1125)](https://github.com/mockito/mockito/pull/1125)
 
