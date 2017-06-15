@@ -84,4 +84,5 @@ static boolean shouldReleaseToCentral(project) {
     project.afterEvaluate {
         project.tasks.performRelease.doLast { logger.lifecycle(message) }
     }
+    return centralRelease
 }
