@@ -2,8 +2,6 @@
 # https://docs.travis-ci.com/user/customizing-the-build/
 
 # Speed up build by leveraging travis caches
-before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
   directories:
     - $HOME/.gradle/caches/
