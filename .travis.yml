@@ -29,11 +29,6 @@ matrix:
   - jdk: oraclejdk8
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
 
-env:
-  global:
-  - TERM=dumb
-  - GRADLE_OPTS="-XX:+UseCompressedOops -Djava.awt.headless=true"
-
 branches:
   except:
   - /^v\d/
