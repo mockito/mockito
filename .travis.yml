@@ -13,12 +13,6 @@ sudo: true
 
 language: java
 
-# new workaround for https://github.com/travis-ci/travis-ci/issues/5227#issuecomment-165131913
-addons:
-  hosts:
-    - mockito-cd
-  hostname: mockito-cd
-
 matrix:
   include:
   - jdk: oraclejdk7
