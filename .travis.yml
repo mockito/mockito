@@ -19,10 +19,6 @@ addons:
     - mockito-cd
   hostname: mockito-cd
 
-before_install:
-  - export TRAVIS_COMMIT_MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
-  - echo "$TRAVIS_COMMIT_MESSAGE"
-
 matrix:
   include:
   - jdk: oraclejdk7
