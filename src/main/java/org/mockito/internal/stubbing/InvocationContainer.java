@@ -9,7 +9,7 @@ import org.mockito.stubbing.Stubbing;
 
 import java.util.List;
 
-//TODO move to different package
+//TODO this class needs to be exposed to complete cleaning of the API
 public interface InvocationContainer {
     List<Invocation> getInvocations();
 

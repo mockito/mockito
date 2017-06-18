@@ -4,10 +4,6 @@
  */
 package org.mockito.internal.handler;
 
-import static org.mockito.internal.exceptions.Reporter.invocationListenerThrewException;
-
-import java.util.List;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
@@ -15,18 +11,22 @@ import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 
+import java.util.List;
+
+import static org.mockito.internal.exceptions.Reporter.invocationListenerThrewException;
+
 /**
  * Handler, that call all listeners wanted for this mock, before delegating it
  * to the parameterized handler.
  *
  * Also imposterize MockHandlerImpl, delegate all call of InternalMockHandler to the real mockHandler
  */
-class InvocationNotifierHandler<T> implements MockHandler, InternalMockHandler<T> {
+class InvocationNotifierHandler<T> implements MockHandler<T> {
 
     private final List<InvocationListener> invocationListeners;
-    private final InternalMockHandler<T> mockHandler;
+    private final MockHandler<T> mockHandler;
 
-    public InvocationNotifierHandler(InternalMockHandler<T> mockHandler, MockCreationSettings<T> settings) {
+    public InvocationNotifierHandler(MockHandler<T> mockHandler, MockCreationSettings<T> settings) {
         this.mockHandler = mockHandler;
         this.invocationListeners = settings.getInvocationListeners();
     }

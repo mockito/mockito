@@ -5,7 +5,6 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.implementation.bind.annotation.*;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.creation.DelegatingMethod;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.MockitoMethod;
@@ -24,13 +23,13 @@ public class MockMethodInterceptor implements Serializable {
 
     private static final long serialVersionUID = 7152947254057253027L;
 
-    final InternalMockHandler handler;
+    final MockHandler handler;
 
     private final MockCreationSettings mockCreationSettings;
 
     private final ByteBuddyCrossClassLoaderSerializationSupport serializationSupport;
 
-    public MockMethodInterceptor(InternalMockHandler handler, MockCreationSettings mockCreationSettings) {
+    public MockMethodInterceptor(MockHandler handler, MockCreationSettings mockCreationSettings) {
         this.handler = handler;
         this.mockCreationSettings = mockCreationSettings;
         serializationSupport = new ByteBuddyCrossClassLoaderSerializationSupport();

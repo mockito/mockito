@@ -4,11 +4,8 @@
  */
 package org.mockito.internal.util;
 
-import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
-
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.util.reflection.LenientCopyTool;
@@ -17,6 +14,8 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockMaker.TypeMockability;
+
+import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
 
 @SuppressWarnings("unchecked")
 public class MockUtil {
@@ -43,21 +42,20 @@ public class MockUtil {
     }
 
     public static <T> void resetMock(T mock) {
-        InternalMockHandler oldHandler = (InternalMockHandler) getMockHandler(mock);
+        MockHandler oldHandler = getMockHandler(mock);
         MockCreationSettings settings = oldHandler.getMockSettings();
         MockHandler newHandler = createMockHandler(settings);
 
         mockMaker.resetMock(mock, newHandler, settings);
     }
 
-    public static <T> InternalMockHandler<T> getMockHandler(T mock) {
+    public static <T> MockHandler<T> getMockHandler(T mock) {
         if (mock == null) {
             throw new NotAMockException("Argument should be a mock, but is null!");
         }
 
         if (isMock(mock)) {
-            MockHandler handler = mockMaker.getHandler(mock);
-            return (InternalMockHandler) handler;
+            return mockMaker.getHandler(mock);
         } else {
             throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }

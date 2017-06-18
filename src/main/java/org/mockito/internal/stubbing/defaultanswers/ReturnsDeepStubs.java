@@ -6,7 +6,6 @@ package org.mockito.internal.stubbing.defaultanswers;
 
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
@@ -14,6 +13,7 @@ import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubbing;
@@ -58,7 +58,8 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     }
 
     private Object deepStub(InvocationOnMock invocation, GenericMetadataSupport returnTypeGenericMetadata) throws Throwable {
-        InternalMockHandler<Object> handler = MockUtil.getMockHandler(invocation.getMock());
+        MockHandler<Object> handler = MockUtil.getMockHandler(invocation.getMock());
+        //TODO below cast is unsafe and it needs to be fixed
         InvocationContainerImpl container = (InvocationContainerImpl) handler.getInvocationContainer();
 
         // matches invocation for verification

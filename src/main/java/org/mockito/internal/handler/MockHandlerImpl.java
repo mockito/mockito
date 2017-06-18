@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.handler;
 
-import java.util.List;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
@@ -18,9 +16,12 @@ import org.mockito.internal.stubbing.answers.DefaultAnswerValidator;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.verification.VerificationMode;
+
+import java.util.List;
 
 import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
@@ -30,7 +31,7 @@ import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingPro
  *
  * @param <T> type of mock object to handle
  */
-public class MockHandlerImpl<T> implements InternalMockHandler<T> {
+public class MockHandlerImpl<T> implements MockHandler<T> {
 
     private static final long serialVersionUID = -2917871070982574165L;
 
