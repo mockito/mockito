@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing;
 
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
+import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubbing;
 
 import java.util.List;
@@ -31,6 +32,15 @@ public interface InvocationContainer {
     void resetInvocationForPotentialStubbing(MatchableInvocation invocation);
 
     StubbedInvocationMatcher findAnswerFor(Invocation invocation);
+
+    /**
+     * Set collection of answers declared by the user
+     * using doReturn/doAnswer/doThrow/doNothing style of stubbing.
+     * See {@link org.mockito.Mockito#doReturn(Object)}.
+     *
+     * @param answers recorded by user with doReturn/doAnswer/doNothing/doThrow stubbing style
+     */
+    void setAnswersForStubbing(List<Answer<?>> answers);
 
     /**
      * Informs Mockito that there were Answers recorded with

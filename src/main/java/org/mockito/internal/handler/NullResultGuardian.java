@@ -8,9 +8,6 @@ import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.stubbing.Answer;
-
-import java.util.List;
 
 import static org.mockito.internal.util.Primitives.defaultValue;
 
@@ -41,11 +38,6 @@ class NullResultGuardian<T> implements MockHandler<T> {
     @Override
     public MockCreationSettings<T> getMockSettings() {
         return delegate.getMockSettings();
-    }
-
-    @Override
-    public void setAnswersForStubbing(List<Answer<?>> answers) {
-            delegate.setAnswersForStubbing(answers);
     }
 
     @Override

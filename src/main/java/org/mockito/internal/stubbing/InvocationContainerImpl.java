@@ -99,6 +99,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         answersForStubbing.add(answer);
     }
 
+    @Override
     public void setAnswersForStubbing(List<Answer<?>> answers) {
         answersForStubbing.addAll(answers);
     }

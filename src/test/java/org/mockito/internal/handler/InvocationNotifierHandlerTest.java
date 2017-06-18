@@ -121,11 +121,9 @@ public class InvocationNotifierHandlerTest {
     public void should_delegate_all_MockHandlerInterface_to_the_parameterized_MockHandler() throws Exception {
         notifier.getInvocationContainer();
         notifier.getMockSettings();
-        notifier.setAnswersForStubbing(new ArrayList<Answer<?>>());
 
         verify(mockHandler).getInvocationContainer();
         verify(mockHandler).getMockSettings();
-        verify(mockHandler).setAnswersForStubbing(ArgumentMatchers.<Answer<?>>anyList());
     }
 
     private static class CustomListener implements InvocationListener {

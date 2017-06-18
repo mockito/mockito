@@ -45,17 +45,8 @@ public interface MockHandler<T> extends Serializable {
     MockCreationSettings<T> getMockSettings();
 
     /**
-     * Provided list is a collection of answers declared by the user
-     * using doReturn/doAnswer/doThrow/doNothing style of stubbing.
-     * See {@link org.mockito.Mockito#doReturn(Object)}.
-     *
-     * @param answers recorded by user with doReturn/doAnswer/doNothing/doThrow stubbing style
-     */
-    void setAnswersForStubbing(List<Answer<?>> answers);
-
-    /**
      * Returns the object that holds all invocations on the mock object,
-     * including stubbings.
+     * including stubbings with declared answers.
      *
      * @return invocations and stubbings on the mock
      */

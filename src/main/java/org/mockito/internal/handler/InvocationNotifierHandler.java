@@ -67,10 +67,6 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
         return mockHandler.getMockSettings();
     }
 
-    public void setAnswersForStubbing(List<Answer<?>> answers) {
-        mockHandler.setAnswersForStubbing(answers);
-    }
-
     public InvocationContainer getInvocationContainer() {
         return mockHandler.getInvocationContainer();
     }

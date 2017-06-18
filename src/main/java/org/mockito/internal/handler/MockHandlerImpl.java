@@ -108,10 +108,6 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         return mockSettings;
     }
 
-    public void setAnswersForStubbing(List<Answer<?>> answers) {
-        invocationContainer.setAnswersForStubbing(answers);
-    }
-
     public InvocationContainer getInvocationContainer() {
         return invocationContainer;
     }
