@@ -28,10 +28,6 @@ branches:
   except:
   - /^v\d/
 
-#Below skips the installation step completely (https://docs.travis-ci.com/user/customizing-the-build/#Skipping-the-Installation-Step)
-install:
- - true
-
 script:
   - ./gradlew build idea -s -PcheckJava6Compatibility
 
