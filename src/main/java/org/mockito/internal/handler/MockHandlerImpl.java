@@ -35,7 +35,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
 
     private static final long serialVersionUID = -2917871070982574165L;
 
-    InvocationContainerImpl invocationContainerImpl;
+    InvocationContainerImpl invocationContainer;
 
     MatchersBinder matchersBinder = new MatchersBinder();
 
@@ -45,17 +45,17 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         this.mockSettings = mockSettings;
 
         this.matchersBinder = new MatchersBinder();
-        this.invocationContainerImpl = new InvocationContainerImpl( mockSettings);
+        this.invocationContainer = new InvocationContainerImpl( mockSettings);
     }
 
     public Object handle(Invocation invocation) throws Throwable {
-        if (invocationContainerImpl.hasAnswersForStubbing()) {
+        if (invocationContainer.hasAnswersForStubbing()) {
             // stubbing voids with doThrow() or doAnswer() style
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
                     mockingProgress().getArgumentMatcherStorage(),
                     invocation
             );
-            invocationContainerImpl.setMethodForStubbing(invocationMatcher);
+            invocationContainer.setMethodForStubbing(invocationMatcher);
             return null;
         }
         VerificationMode verificationMode = mockingProgress().pullVerificationMode();
@@ -72,7 +72,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
             // We need to check if verification was started on the correct mock
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
             if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
-                VerificationDataImpl data = createVerificationData(invocationContainerImpl, invocationMatcher);
+                VerificationDataImpl data = createVerificationData(invocationContainer, invocationMatcher);
                 verificationMode.verify(data);
                 return null;
             } else {
@@ -83,27 +83,23 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         }
 
         // prepare invocation for stubbing
-        invocationContainerImpl.setInvocationForPotentialStubbing(invocationMatcher);
-        OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(invocationContainerImpl);
+        invocationContainer.setInvocationForPotentialStubbing(invocationMatcher);
+        OngoingStubbingImpl<T> ongoingStubbing = new OngoingStubbingImpl<T>(invocationContainer);
         mockingProgress().reportOngoingStubbing(ongoingStubbing);
 
         // look for existing answer for this invocation
-        StubbedInvocationMatcher stubbedInvocation = invocationContainerImpl.findAnswerFor(invocation);
-        notifyStubbedAnswerLookup(invocation, stubbedInvocation);
+        StubbedInvocationMatcher stubbing = invocationContainer.findAnswerFor(invocation);
+        notifyStubbedAnswerLookup(invocation, stubbing);
 
-        if (stubbedInvocation != null) {
-            stubbedInvocation.captureArgumentsFrom(invocation);
-            return stubbedInvocation.answer(invocation);
+        if (stubbing != null) {
+            stubbing.captureArgumentsFrom(invocation);
+            return stubbing.answer(invocation);
         } else {
             Object ret = mockSettings.getDefaultAnswer().answer(invocation);
             DefaultAnswerValidator.validateReturnValueFor(invocation, ret);
 
-            // redo setting invocation for potential stubbing in case of partial
-            // mocks / spies.
-            // Without it, the real method inside 'when' might have delegated
-            // to other self method and overwrite the intended stubbed method
-            // with a different one. The reset is required to avoid runtime exception that validates return type with stubbed method signature.
-            invocationContainerImpl.resetInvocationForPotentialStubbing(invocationMatcher);
+            //needed for spies/partial mocking scenarios
+            invocationContainer.resetInvocationForPotentialStubbing(invocationMatcher);
             return ret;
         }
     }
@@ -113,19 +109,19 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
     }
 
     public void setAnswersForStubbing(List<Answer<?>> answers) {
-        invocationContainerImpl.setAnswersForStubbing(answers);
+        invocationContainer.setAnswersForStubbing(answers);
     }
 
     public InvocationContainer getInvocationContainer() {
-        return invocationContainerImpl;
+        return invocationContainer;
     }
 
-    private VerificationDataImpl createVerificationData(InvocationContainerImpl invocationContainerImpl, InvocationMatcher invocationMatcher) {
+    private VerificationDataImpl createVerificationData(InvocationContainer invocationContainer, InvocationMatcher invocationMatcher) {
         if (mockSettings.isStubOnly()) {
             throw stubPassedToVerify();     // this throws an exception
         }
 
-        return new VerificationDataImpl(invocationContainerImpl, invocationMatcher);
+        return new VerificationDataImpl(invocationContainer, invocationMatcher);
     }
 
     private void notifyStubbedAnswerLookup(Invocation invocation, StubbedInvocationMatcher exception) {

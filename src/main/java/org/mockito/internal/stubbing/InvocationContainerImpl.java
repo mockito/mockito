@@ -14,6 +14,7 @@ import org.mockito.internal.verification.DefaultRegisteredInvocations;
 import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.internal.verification.SingleRegisteredInvocation;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MatchableInvocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubbing;
@@ -29,18 +30,20 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     private final List<Answer<?>> answersForStubbing = new ArrayList<Answer<?>>();
     private final RegisteredInvocations registeredInvocations;
 
-    private InvocationMatcher invocationForStubbing;
+    private MatchableInvocation invocationForStubbing;
 
     public InvocationContainerImpl(MockCreationSettings mockSettings) {
         this.registeredInvocations = createRegisteredInvocations(mockSettings);
     }
 
-    public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
+    @Override
+    public void setInvocationForPotentialStubbing(MatchableInvocation invocation) {
         registeredInvocations.add(invocation.getInvocation());
         this.invocationForStubbing = invocation;
     }
 
-    public void resetInvocationForPotentialStubbing(InvocationMatcher invocationMatcher) {
+    @Override
+    public void resetInvocationForPotentialStubbing(MatchableInvocation invocationMatcher) {
         this.invocationForStubbing = invocationMatcher;
     }
 
@@ -77,6 +80,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return findAnswerFor(invocation).answer(invocation);
     }
 
+    @Override
     public StubbedInvocationMatcher findAnswerFor(Invocation invocation) {
         synchronized (stubbed) {
             for (StubbedInvocationMatcher s : stubbed) {
@@ -99,15 +103,18 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         answersForStubbing.addAll(answers);
     }
 
+    @Override
     public boolean hasAnswersForStubbing() {
         return !answersForStubbing.isEmpty();
     }
 
+    @Override
     public boolean hasInvocationForPotentialStubbing() {
         return !registeredInvocations.isEmpty();
     }
 
-    public void setMethodForStubbing(InvocationMatcher invocation) {
+    @Override
+    public void setMethodForStubbing(MatchableInvocation invocation) {
         invocationForStubbing = invocation;
         assert hasAnswersForStubbing();
         for (int i = 0; i < answersForStubbing.size(); i++) {
@@ -137,7 +144,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return invocationForStubbing.getInvocation().getMock();
     }
 
-    public InvocationMatcher getInvocationForStubbing() {
+    public MatchableInvocation getInvocationForStubbing() {
         return invocationForStubbing;
     }
 

@@ -102,8 +102,8 @@ public class MockHandlerImplTest extends TestBase {
 
 
     private void stub_ordinary_invocation_with_invocation_matcher(MockHandlerImpl<?> handler, StubbedInvocationMatcher value) {
-        handler.invocationContainerImpl = mock(InvocationContainerImpl.class);
-        given(handler.invocationContainerImpl.findAnswerFor(any(InvocationImpl.class))).willReturn(value);
+        handler.invocationContainer = mock(InvocationContainerImpl.class);
+        given(handler.invocationContainer.findAnswerFor(any(InvocationImpl.class))).willReturn(value);
     }
 
 

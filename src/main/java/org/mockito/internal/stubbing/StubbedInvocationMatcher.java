@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.MatchableInvocation;
 import org.mockito.stubbing.Stubbing;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.InvocationOnMock;
@@ -21,7 +22,7 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Seria
     private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();
     private DescribedInvocation usedAt;
 
-    public StubbedInvocationMatcher(InvocationMatcher invocation, Answer answer) {
+    public StubbedInvocationMatcher(MatchableInvocation invocation, Answer answer) {
         super(invocation.getInvocation(), invocation.getMatchers());
         this.answers.add(answer);
     }
