@@ -4,12 +4,11 @@
  */
 package org.mockito.internal.handler;
 
-import org.mockito.internal.stubbing.InvocationContainer;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.stubbing.Answer;
 
 import java.util.List;
 

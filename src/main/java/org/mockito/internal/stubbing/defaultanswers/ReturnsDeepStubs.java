@@ -58,11 +58,10 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     }
 
     private Object deepStub(InvocationOnMock invocation, GenericMetadataSupport returnTypeGenericMetadata) throws Throwable {
-        MockHandler<Object> handler = MockUtil.getMockHandler(invocation.getMock());
-        //TODO below cast is unsafe and it needs to be fixed
-        InvocationContainerImpl container = (InvocationContainerImpl) handler.getInvocationContainer();
+        InvocationContainerImpl container = MockUtil.getInvocationContainer(invocation.getMock());
 
         // matches invocation for verification
+        // TODO why don't we do container.findAnswer here?
         for (Stubbing stubbing : container.getStubbedInvocations()) {
             if (container.getInvocationForStubbing().matches(stubbing.getInvocation())) {
                 return stubbing.answer(invocation);

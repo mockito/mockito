@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.handler.MockHandlerImpl;
-import org.mockito.internal.stubbing.InvocationContainer;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;

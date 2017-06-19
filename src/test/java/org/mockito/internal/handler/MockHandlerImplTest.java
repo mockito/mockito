@@ -40,7 +40,6 @@ public class MockHandlerImplTest extends TestBase {
     private StubbedInvocationMatcher stubbedInvocationMatcher = mock(StubbedInvocationMatcher.class);
     private Invocation invocation = mock(InvocationImpl.class);
 
-
     @Test
     public void should_remove_verification_mode_even_when_invalid_matchers() throws Throwable {
         // given

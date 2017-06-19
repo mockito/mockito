@@ -5,12 +5,9 @@
 package org.mockito.invocation;
 
 import org.mockito.MockSettings;
-import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Mockito handler of an invocation on a mock. This is a core part of the API, the heart of Mockito.
@@ -46,9 +43,13 @@ public interface MockHandler<T> extends Serializable {
 
     /**
      * Returns the object that holds all invocations on the mock object,
-     * including stubbings with declared answers.
+     * including stubbings with declared answers. Do not provide your own implementation.
+     * <p>
+     * Please do not provide your own implementation of this interface at this point.
+     * If you have a use case to provide your own implementation of invocation container
+     * please reach out to us. You can open a ticket in our issue tracker to start a discussion.
      *
-     * @return invocations and stubbings on the mock
+     * @return container of invocations, stubbings, and answers of the mock
      */
     InvocationContainer getInvocationContainer();
 }

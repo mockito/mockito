@@ -8,7 +8,7 @@ import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.listeners.StubbingLookupListener;
-import org.mockito.internal.stubbing.InvocationContainer;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
@@ -18,7 +18,6 @@ import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.stubbing.Answer;
 import org.mockito.verification.VerificationMode;
 
 import java.util.List;
@@ -98,7 +97,11 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
             Object ret = mockSettings.getDefaultAnswer().answer(invocation);
             DefaultAnswerValidator.validateReturnValueFor(invocation, ret);
 
-            //needed for spies/partial mocking scenarios
+            //Mockito uses it to redo setting invocation for potential stubbing in case of partial mocks / spies.
+            //Without it, the real method inside 'when' might have delegated to other self method
+            //and overwrite the intended stubbed method with a different one.
+            //This means we would be stubbing a wrong method.
+            //Typically this would led to runtime exception that validates return type with stubbed method signature.
             invocationContainer.resetInvocationForPotentialStubbing(invocationMatcher);
             return ret;
         }
@@ -112,7 +115,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         return invocationContainer;
     }
 
-    private VerificationDataImpl createVerificationData(InvocationContainer invocationContainer, InvocationMatcher invocationMatcher) {
+    private VerificationDataImpl createVerificationData(InvocationContainerImpl invocationContainer, InvocationMatcher invocationMatcher) {
         if (mockSettings.isStubOnly()) {
             throw stubPassedToVerify();     // this throws an exception
         }

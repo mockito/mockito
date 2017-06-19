@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.settings.CreationSettings;
+import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
@@ -59,6 +60,10 @@ public class MockUtil {
         } else {
             throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }
+    }
+
+    public static InvocationContainerImpl getInvocationContainer(Object mock) {
+        return (InvocationContainerImpl) getMockHandler(mock).getInvocationContainer();
     }
 
     public static boolean isSpy(Object mock) {

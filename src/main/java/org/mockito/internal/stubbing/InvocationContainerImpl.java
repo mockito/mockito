@@ -8,12 +8,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.mockito.internal.invocation.InvocationMatcher;
+
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.verification.DefaultRegisteredInvocations;
 import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.internal.verification.SingleRegisteredInvocation;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
@@ -36,13 +37,11 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         this.registeredInvocations = createRegisteredInvocations(mockSettings);
     }
 
-    @Override
     public void setInvocationForPotentialStubbing(MatchableInvocation invocation) {
         registeredInvocations.add(invocation.getInvocation());
         this.invocationForStubbing = invocation;
     }
 
-    @Override
     public void resetInvocationForPotentialStubbing(MatchableInvocation invocationMatcher) {
         this.invocationForStubbing = invocationMatcher;
     }
@@ -80,7 +79,6 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return findAnswerFor(invocation).answer(invocation);
     }
 
-    @Override
     public StubbedInvocationMatcher findAnswerFor(Invocation invocation) {
         synchronized (stubbed) {
             for (StubbedInvocationMatcher s : stubbed) {
@@ -99,22 +97,18 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         answersForStubbing.add(answer);
     }
 
-    @Override
     public void setAnswersForStubbing(List<Answer<?>> answers) {
         answersForStubbing.addAll(answers);
     }
 
-    @Override
     public boolean hasAnswersForStubbing() {
         return !answersForStubbing.isEmpty();
     }
 
-    @Override
     public boolean hasInvocationForPotentialStubbing() {
         return !registeredInvocations.isEmpty();
     }
 
-    @Override
     public void setMethodForStubbing(MatchableInvocation invocation) {
         invocationForStubbing = invocation;
         assert hasAnswersForStubbing();
