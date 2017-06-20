@@ -176,7 +176,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return typeToMock;
     }
 
-    public MockCreationSettings<T> confirm(Class<T> typeToMock) {
+    public MockCreationSettings<T> build(Class<T> typeToMock) {
         return validatedSettings(typeToMock, this);
     }
 
