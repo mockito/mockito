@@ -5,6 +5,7 @@
 package org.mockito;
 
 import org.mockito.listeners.InvocationListener;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
 
@@ -271,4 +272,15 @@ public interface MockSettings extends Serializable {
      */
     @Incubating
     MockSettings outerInstance(Object outerClassInstance);
+
+    /**
+     * Creates immutable view of mock settings used later by Mockito.
+     * Framework integrators can use this method to create instances of creation settings.
+     *
+     * @param typeToMock class to mock
+     * @param <T> type to mock
+     * @return immutable view of mock settings
+     * @since TODO + document on main page
+     */
+    <T> MockCreationSettings<T> build(Class<T> typeToMock);
 }
