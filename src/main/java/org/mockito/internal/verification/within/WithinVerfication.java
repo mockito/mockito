@@ -7,11 +7,8 @@ import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
@@ -150,35 +147,6 @@ public class WithinVerfication implements VerificationMode, VerificationInOrderM
         @Override
         public void reportInvocation(MethodInvocationReport report) {
             allInvocations.add((Invocation) report.getInvocation());
-        }
-    }
-
-    private interface InvocationAddedListener {
-        void invocationAdded(Invocation invocation);
-    }
-
-    private static final class InvocationQueue {
-        private final BlockingQueue<Invocation> invocations = new LinkedBlockingQueue<Invocation>();
-
-        private InvocationAddedListener listener;
-
-        void add(Invocation invocation) {
-            invocations.add(invocation);
-            if (listener != null) {
-                listener.invocationAdded(invocation);
-            }
-        }
-
-        Invocation poll(long timeout, TimeUnit unit) {
-            try {
-                return invocations.poll(timeout, unit);
-            } catch (InterruptedException e) {
-                throw new MockitoException(e.getMessage(), e);
-            }
-        }
-
-        void setListener(InvocationAddedListener listener) {
-            this.listener = listener;
         }
     }
 }

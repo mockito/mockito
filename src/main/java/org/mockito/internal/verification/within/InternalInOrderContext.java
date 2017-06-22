@@ -29,7 +29,7 @@ class InternalInOrderContext implements InOrderContext {
     public boolean matchedBefore() {
         return matched;
     }
-    
+
     @Override
     public String toString() {
         return c.toString();

@@ -17,71 +17,70 @@ import org.mockito.internal.verification.within.VerificationStrategy;
 import org.mockito.internal.verification.within.WithinVerfication;
 
 public class Within implements VerificationMode, VerificationInOrderMode {
-    
-    private final long deadLine; 
-    
+
+    private final long deadLine;
+
     Within(long deadLine) {
         this.deadLine = deadLine;
     }
-    
-    
-    public static Within untilNow(){
-        return within(0,NANOSECONDS);
+
+    public static Within untilNow() {
+        return within(0, NANOSECONDS);
     }
-    
-    public static Within within(long duration, TimeUnit unit){
-        long  deadLine = System.nanoTime()+unit.toNanos(duration);
+
+    public static Within within(long duration, TimeUnit unit) {
+        long deadLine = System.nanoTime() + unit.toNanos(duration);
         return new Within(deadLine);
     }
-    
+
     @Override
     public void verify(VerificationData data) {
         times(1).verify(data);
     }
-    
+
     @Override
     public void verifyInOrder(VerificationDataInOrder data) {
-        ((VerificationInOrderMode)times(1)).verifyInOrder(data);
-        
+        ((VerificationInOrderMode) times(1)).verifyInOrder(data);
+
     }
-    
+
     @Override
     public VerificationMode description(String description) {
         return this;
     }
 
-    public VerificationModeAtLeast atLeast(int minNumberOfInvocations){
-        if (minNumberOfInvocations<=0){
-            throw new MockitoException("The minimum number of invocations must be greater that 0! Got: "+minNumberOfInvocations+"\r\nIf you want to verify that nothing was called use Mocktio.never() instead!");
+    public VerificationModeAtLeast atLeast(int minNumberOfInvocations) {
+        if (minNumberOfInvocations <= 0) {
+            throw new MockitoException("The minimum number of invocations must be greater that 0! Got: " + minNumberOfInvocations + "\r\nIf you want to verify that nothing was called use Mocktio.never() instead!");
         }
-            
+
         return new WithinAtLeast(minNumberOfInvocations);
     }
-    
-    public VerificationMode atMost(int maxNumberOfInvocations){
+
+    public VerificationMode atMost(int maxNumberOfInvocations) {
         return mode(new AtMost(maxNumberOfInvocations));
     }
-    
-    public VerificationMode times(int exactNumberOfInvocations){
-        return mode( new Times(exactNumberOfInvocations));
+
+    public VerificationMode times(int exactNumberOfInvocations) {
+        return mode(new Times(exactNumberOfInvocations));
     }
 
     public VerificationMode never() {
-        return mode( new Times(0));
+        return mode(new Times(0));
     }
-    
+
     public VerificationMode only() {
-        return mode( new Only()); 
+        return mode(new Only());
     }
-    
-    private WithinVerfication mode(VerificationStrategy strategy){
+
+    private WithinVerfication mode(VerificationStrategy strategy) {
         return new WithinVerfication(deadLine, strategy);
     }
-    
-    private class WithinAtLeast implements VerificationModeAtLeast{
+
+    private class WithinAtLeast implements VerificationModeAtLeast {
         private int minNumberOfInvocations;
 
-        public WithinAtLeast( int minNumberOfInvocations) {
+        public WithinAtLeast(int minNumberOfInvocations) {
             this.minNumberOfInvocations = minNumberOfInvocations;
         }
 
@@ -97,10 +96,9 @@ public class Within implements VerificationMode, VerificationInOrderMode {
 
         @Override
         public VerificationMode andAtMost(int maxNumberOfInvocations) {
-            AtLeastAndAtMost strategy = new AtLeastAndAtMost(minNumberOfInvocations,maxNumberOfInvocations);
+            AtLeastAndAtMost strategy = new AtLeastAndAtMost(minNumberOfInvocations, maxNumberOfInvocations);
             return mode(strategy);
         }
     }
 
-   
 }

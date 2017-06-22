@@ -17,12 +17,12 @@ public class Only implements VerificationStrategy {
 
     @Override
     public VerificationResult verifyMatchingInvocation(Invocation invocation, MatchableInvocation wanted) {
-        if (!matchingInvocations.isEmpty()){
+        if (!matchingInvocations.isEmpty()) {
             throw noMoreInteractionsWanted(invocation, matchingInvocations);
         }
-      
+
         matchingInvocations.add((VerificationAwareInvocation) invocation);
-        
+
         return GIVE_ME_THE_NEXT_INVOCATION;
     }
 

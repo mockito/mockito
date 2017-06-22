@@ -46,7 +46,7 @@ public class Times implements VerificationStrategy {
     public void verifyAfterTimeElapsed(MatchableInvocation wanted) {
         Location lastInvocation = getLastLocation(matchingInvocations);
 
-        if (expectedInvocations>0 && matchingInvocations.isEmpty()){
+        if (expectedInvocations > 0 && matchingInvocations.isEmpty()) {
             throw wantedButNotInvoked(wanted);
         }
 
@@ -59,6 +59,4 @@ public class Times implements VerificationStrategy {
     public String toString() {
         return "Times [expectedInvocations=" + expectedInvocations + ", matchingInvocations=" + matchingInvocations + "]";
     }
-    
-    
 }
