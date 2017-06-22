@@ -9,7 +9,7 @@ Most popular mocking framework for Java
 [![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=release/2.x)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito) [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/mockito/mockito/blob/master/LICENSE)
 
 [![latest release](https://img.shields.io/badge/release%20notes-2.x-yellow.svg)](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md)
-[![Bintray](https://img.shields.io/bintray/v/mockito/maven/mockito-development.svg)](https://bintray.com/mockito/maven)
+[![Bintray](https://api.bintray.com/packages/mockito/maven/mockito-development/images/download.svg)](https://bintray.com/mockito/maven)
 [![Maven Central](https://img.shields.io/maven-central/v/org.mockito/mockito-core.svg)](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.8.47%7C)
 [![Javadocs](http://www.javadoc.io/badge/org.mockito/mockito-core.svg?color=red)](http://www.javadoc.io/doc/org.mockito/mockito-core)
 
