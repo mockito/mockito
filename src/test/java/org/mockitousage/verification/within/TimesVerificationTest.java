@@ -7,7 +7,6 @@ package org.mockitousage.verification.within;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -20,8 +19,6 @@ import static org.mockito.verification.Within.untilNow;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -143,7 +140,7 @@ public class TimesVerificationTest extends TestBase {
         
         ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
         
-        verify(mock, within(1,MILLISECONDS).times(10)).intArgumentMethod(argumentCaptor.capture());
+        verify(mock,within(1,MILLISECONDS).times(10)).intArgumentMethod(argumentCaptor.capture());
         
         List<Integer> captured = argumentCaptor.getAllValues();
         assertEquals(10, captured.size());
