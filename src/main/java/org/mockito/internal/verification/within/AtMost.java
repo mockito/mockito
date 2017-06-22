@@ -11,12 +11,12 @@ import org.mockito.invocation.MatchableInvocation;
 public class AtMost implements VerificationStrategy {
 
     private final int maxInvocations;
-    private int matchingInvocations=0;
+    private int matchingInvocations = 0;
     private Invocation lastMatchingInvocation;
 
     public AtMost(int maxNumberOfInvocations) {
-        if (maxNumberOfInvocations<0){
-            throw new MockitoException("At most doesn't accept negative values! Got:"+maxNumberOfInvocations);
+        if (maxNumberOfInvocations < 0) {
+            throw new MockitoException("At most doesn't accept negative values! Got:" + maxNumberOfInvocations);
         }
         this.maxInvocations = maxNumberOfInvocations;
     }
@@ -29,12 +29,12 @@ public class AtMost implements VerificationStrategy {
     @Override
     public VerificationResult verifyMatchingInvocation(Invocation invocation, MatchableInvocation wanted) {
         matchingInvocations++;
-        lastMatchingInvocation=invocation;
-        
-        if (maxInvocations==0){
+        lastMatchingInvocation = invocation;
+
+        if (maxInvocations == 0) {
             throw neverWantedButInvoked(wanted, lastMatchingInvocation.getLocation());
         }
-        
+
         return GIVE_ME_THE_NEXT_INVOCATION;
     }
 

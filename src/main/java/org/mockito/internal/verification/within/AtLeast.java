@@ -48,8 +48,8 @@ public class AtLeast implements VerificationStrategy {
         Location location;
         if (actualInvocations == 0) {
             location = null;
-        }else{
-            location=lastMatchingInvocation.getLocation();
+        } else {
+            location = lastMatchingInvocation.getLocation();
         }
 
         throw tooLittleActualInvocations(discrepancy, wanted, location);
