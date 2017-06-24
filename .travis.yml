@@ -2,8 +2,6 @@
 # https://docs.travis-ci.com/user/customizing-the-build/
 
 # Speed up build by leveraging travis caches
-before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
   directories:
     - $HOME/.gradle/caches/
@@ -15,16 +13,6 @@ sudo: true
 
 language: java
 
-# new workaround for https://github.com/travis-ci/travis-ci/issues/5227#issuecomment-165131913
-addons:
-  hosts:
-    - mockito-cd
-  hostname: mockito-cd
-
-before_install:
-  - export TRAVIS_COMMIT_MESSAGE=$(git log --format=%B -n 1 $TRAVIS_COMMIT)
-  - echo "$TRAVIS_COMMIT_MESSAGE"
-
 matrix:
   include:
   - jdk: oraclejdk7
@@ -35,19 +23,23 @@ matrix:
   - jdk: oraclejdk8
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
 
-env:
-  global:
-  - TERM=dumb
-  - GRADLE_OPTS="-XX:+UseCompressedOops -Djava.awt.headless=true"
-
 branches:
+  #Don't build tags
   except:
   - /^v\d/
+
+#Below skips the installation step completely (https://docs.travis-ci.com/user/customizing-the-build/#Skipping-the-Installation-Step)
+#We need it because otherwise Travis CI injects an awkward './gradlew assemble' step into the CI workflow
+#We want to control and decide what Gradle tasks are executed
 install:
  - true
+
 script:
   - ./gradlew build idea -s -PcheckJava6Compatibility
+
 after_success:
+  #Releases new version:
   - ./gradlew assertReleaseNeeded && ./gradlew ciReleasePrepare && ./gradlew performRelease -Pshipkit.dryRun=false
+  #Generates coverage report:
   - ./gradlew --stacktrace coverageReport && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
   - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
