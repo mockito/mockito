@@ -28,6 +28,12 @@ branches:
   except:
   - /^v\d/
 
+#Below skips the installation step completely (https://docs.travis-ci.com/user/customizing-the-build/#Skipping-the-Installation-Step)
+#We need it because otherwise Travis CI injects an awkward './gradlew assemble' step into the CI workflow
+#We want to control and decide what Gradle tasks are executed
+install:
+ - true
+
 script:
   - ./gradlew build idea -s -PcheckJava6Compatibility
 
