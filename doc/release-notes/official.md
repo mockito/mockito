@@ -1,3 +1,6 @@
+**2.8.52 (2017-06-24)** - [8 commits](https://github.com/mockito/mockito/compare/v2.8.51...v2.8.52) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.52-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.52)
+ - Simplified and documented .travis.yml file [(#1133)](https://github.com/mockito/mockito/pull/1133)
+
 **2.8.51 (2017-06-24)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.50...v2.8.51) by [Allon Murienik](https://github.com/mureinik) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.51-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.51)
  - Don't use raw rypes in UnusedStubbingsTest [(#1137)](https://github.com/mockito/mockito/pull/1137)
 
