@@ -5,6 +5,9 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.asm.Advice;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import net.bytebuddy.implementation.bind.annotation.Argument;
 import net.bytebuddy.implementation.bind.annotation.This;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
@@ -33,6 +36,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     private final String identifier;
 
     private final SelfCallInfo selfCallInfo = new SelfCallInfo();
+    private final MethodGraph.Compiler compiler = MethodGraph.Compiler.Default.forJavaHierarchy();
 
     public MockMethodAdvice(WeakConcurrentMap<Object, MockMethodInterceptor> interceptors, String identifier) {
         this.interceptors = interceptors;
@@ -46,7 +50,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                                      @Advice.Origin Method origin,
                                      @Advice.AllArguments Object[] arguments) throws Throwable {
         MockMethodDispatcher dispatcher = MockMethodDispatcher.get(identifier, mock);
-        if (dispatcher == null || !dispatcher.isMocked(mock) || !dispatcher.isOverridden(mock, origin)) {
+        if (dispatcher == null || !dispatcher.isMocked(mock) || dispatcher.isOverridden(mock, origin)) {
             return null;
         } else {
             return dispatcher.handle(mock, origin, arguments);
@@ -115,15 +119,10 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     @Override
     public boolean isOverridden(Object instance, Method origin) {
-        Class<?> currentType = instance.getClass();
-        do {
-            try {
-                return origin.equals(currentType.getDeclaredMethod(origin.getName(), origin.getParameterTypes()));
-            } catch (NoSuchMethodException ignored) {
-                currentType = currentType.getSuperclass();
-            }
-        } while (currentType != null);
-        return true;
+        MethodGraph.Node node = compiler
+            .compile(new TypeDescription.ForLoadedType(instance.getClass()))
+            .locate(new MethodDescription.ForLoadedMethod(origin).asSignatureToken());
+        return node.getSort().isResolved() && !node.getRepresentative().represents(origin);
     }
 
     private static class SuperMethodCall implements InterceptedInvocation.SuperMethod {

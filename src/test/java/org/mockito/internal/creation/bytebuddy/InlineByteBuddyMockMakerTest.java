@@ -208,6 +208,13 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     }
 
     @Test
+    public void should_mock_method_of_package_private_class() throws Exception {
+        MockCreationSettings<NonPackagePrivateSubClass> settings = settingsFor(NonPackagePrivateSubClass.class);
+        NonPackagePrivateSubClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<NonPackagePrivateSubClass>(settings));
+        assertThat(proxy.value()).isEqualTo("bar");
+    }
+
+    @Test
     public void is_type_mockable_excludes_String() {
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(String.class);
         assertThat(mockable.mockable()).isFalse();
@@ -322,15 +329,25 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         }
     }
 
-    private static class NonFinalMethod {
-
-        public String foo() {
-            return "foo";
-        }
-    }
-
     private interface SampleInterface {
 
         String bar();
+    }
+
+    /*package-private*/ abstract class PackagePrivateSuperClass {
+
+        public abstract String indirect();
+
+        public String value() {
+            return indirect() + "qux";
+        }
+    }
+
+    public class NonPackagePrivateSubClass extends PackagePrivateSuperClass {
+
+        @Override
+        public String indirect() {
+            return "foo";
+        }
     }
 }
