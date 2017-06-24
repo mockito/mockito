@@ -1,3 +1,6 @@
+**2.8.51 (2017-06-24)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.50...v2.8.51) by [Allon Murienik](https://github.com/mureinik) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.51-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.51)
+ - Don't use raw rypes in UnusedStubbingsTest [(#1137)](https://github.com/mockito/mockito/pull/1137)
+
 **2.8.50 (2017-06-24)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.49...v2.8.50) by [Rafael Winterhalter](http://github.com/raphw) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.50-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.50)
  - Fixes #1135: Properly resolve visibility bridges. [(#1136)](https://github.com/mockito/mockito/pull/1136)
  - [mock-maker-inline] Method calls on mock forwarded to real instance [(#1135)](https://github.com/mockito/mockito/issues/1135)
