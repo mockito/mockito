@@ -1,4 +1,5 @@
 apply plugin: "org.shipkit.java-library"
+apply plugin: "org.shipkit.publications-comparator"
 
 group = 'org.mockito'
 archivesBaseName = "mockito-" + project.name
