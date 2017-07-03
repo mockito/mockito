@@ -72,4 +72,4 @@ We used to publish every version to Maven Central but we changed this strategy b
 
 * Q: How to promote already released version to a notable version?
 
-  A: Can be done but it isn't automated. [What's the use case?](https://github.com/mockito/mockito/issues/911)
+  A: It isn't automated at the moment. [What's the use case?](https://github.com/mockito/mockito/issues/911)
