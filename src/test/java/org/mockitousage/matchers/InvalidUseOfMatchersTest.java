@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
-import org.mockito.AdditionalMatchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
@@ -58,14 +58,14 @@ public class InvalidUseOfMatchersTest {
 
     @Test
     public void should_not_scream_on_correct_usage() throws Exception {
-        mock.simpleMethod(AdditionalMatchers.not(eq("asd")));
-        mock.simpleMethod(AdditionalMatchers.or(eq("jkl"), eq("asd")));
+        mock.simpleMethod(ArgumentMatchers.not(eq("asd")));
+        mock.simpleMethod(ArgumentMatchers.or(eq("jkl"), eq("asd")));
     }
 
     @Test
     public void should_scream_when_no_matchers_inside_not() {
         try {
-            mock.simpleMethod(AdditionalMatchers.not("jkl"));
+            mock.simpleMethod(ArgumentMatchers.not("jkl"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertThat(e.getMessage())
@@ -77,7 +77,7 @@ public class InvalidUseOfMatchersTest {
     @Test
     public void should_scream_when_not_enough_matchers_inside_or_AddtionalMatcher() {
         try {
-            mock.simpleMethod(AdditionalMatchers.or(eq("jkl"), "asd"));
+            mock.simpleMethod(ArgumentMatchers.or(eq("jkl"), "asd"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertThat(e.getMessage())

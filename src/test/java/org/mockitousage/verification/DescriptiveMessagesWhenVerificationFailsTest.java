@@ -19,7 +19,7 @@ import org.mockitoutil.TestBase;
 
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.AdditionalMatchers.aryEq;
+import static org.mockito.ArgumentMatchers.aryEq;
 import static org.mockito.Mockito.*;
 
 public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
