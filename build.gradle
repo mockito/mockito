@@ -21,6 +21,12 @@ plugins {
 description = 'Mockito mock objects library core API and implementation'
 
 apply plugin: "org.shipkit.java"
+allprojects {
+    plugins.withId("java") {
+        //Only upload specific modules we select
+        bintrayUpload.enabled = false
+    }
+}
 
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'

@@ -1,8 +1,8 @@
-apply plugin: "org.shipkit.java-library"
-apply plugin: "org.shipkit.publications-comparator"
+apply plugin: "java"
 
 group = 'org.mockito'
 archivesBaseName = "mockito-" + project.name
+bintrayUpload.enabled = true
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
