@@ -18,8 +18,6 @@ shipkit {
         'docs': 'Documentation'
     ]
 
-    publishAllJavaSubprojects = false
-
     git.user = "Mockito Release Tools"
     git.email = "<mockito.release.tools@gmail.com>"
     //git.releasableBranchRegex = "master|release/.+"  // matches 'master', 'release/2.x', 'release/3.x', etc.
