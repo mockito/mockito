@@ -1,3 +1,7 @@
+**2.8.53 (2017-07-06)** - [6 commits](https://github.com/mockito/mockito/compare/v2.8.52...v2.8.53) by [Szczepan Faber](http://github.com/szczepiq) (5), [Wojtek Wilk](https://github.com/wwilk) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.53-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.53)
+ - Bumped shipkit, simplified Travis file, removed unnecessary code [(#1141)](https://github.com/mockito/mockito/pull/1141)
+ - org.shipkit.publications-comparator plugin applied [(#1139)](https://github.com/mockito/mockito/pull/1139)
+
 **2.8.52 (2017-06-24)** - [8 commits](https://github.com/mockito/mockito/compare/v2.8.51...v2.8.52) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.52-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.52)
  - Simplified and documented .travis.yml file [(#1133)](https://github.com/mockito/mockito/pull/1133)
 
