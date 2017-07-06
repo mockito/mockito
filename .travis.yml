@@ -35,6 +35,9 @@ install:
  - true
 
 script:
+  # We are using && below on purpose
+  # ciPerformRelease must run only when the entire build has completed
+  # This guarantees that no release steps are executed when the build or tests fail
   - ./gradlew build idea -s -PcheckJava6Compatibility && ./gradlew ciPerformRelease
 
 after_success:
