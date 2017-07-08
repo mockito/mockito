@@ -24,7 +24,7 @@ shipkit {
     git.releasableBranchRegex = "release/.+"  // 'release/2.x', 'release/3.x', etc.
 
     def buildNo = System.getenv("TRAVIS_BUILD_NUMBER")
-    git.commitMessagePostfix = buildNo? "by CI build $buildNo [ci skip-release]" : "by local build [ci skip-release]"
+    git.commitMessagePostfix = buildNo? "by CI build $buildNo\n\n[ci skip-release]" : "by local build\n\n[ci skip-release]"
 
     team.developers = ['szczepiq:Szczepan Faber', 'bric3:Brice Dutheil', 'raphw:Rafael Winterhalter', 'TimvdLippe:Tim van der Lippe']
     team.contributors = []
