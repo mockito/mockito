@@ -5,7 +5,7 @@
 package org.mockitousage.bugs;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.AdditionalMatchers.leq;
+import static org.mockito.ArgumentMatchers.leq;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.startsWith;
 import static org.mockito.Mockito.mock;

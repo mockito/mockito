@@ -5,447 +5,389 @@
 
 package org.mockito;
 
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-
-import org.mockito.internal.matchers.ArrayEquals;
-import org.mockito.internal.matchers.CompareEqual;
-import org.mockito.internal.matchers.EqualsWithDelta;
-import org.mockito.internal.matchers.Find;
-import org.mockito.internal.matchers.GreaterOrEqual;
-import org.mockito.internal.matchers.GreaterThan;
-import org.mockito.internal.matchers.LessOrEqual;
-import org.mockito.internal.matchers.LessThan;
-
 /**
- * See {@link Matchers} for general info about matchers.
- * <p>
- * AdditionalMatchers provides rarely used matchers, kept only for somewhat compatibility with EasyMock.
- * Use additional matchers very judiciously because they may impact readability of a test.
- * It is recommended to use matchers from {@link Matchers} and keep stubbing and verification simple.
- * <p>
- * Example of using logical and(), not(), or() matchers:
- *
- * <pre class="code"><code class="java">
- *   //anything but not "ejb"
- *   mock.someMethod(not(eq("ejb")));
- *
- *   //not "ejb" and not "michael jackson"
- *   mock.someMethod(and(not(eq("ejb")), not(eq("michael jackson"))));
- *
- *   //1 or 10
- *   mock.someMethod(or(eq(1), eq(10)));
- * </code></pre>
- *
- * Scroll down to see all methods - full list of matchers.
+ * @deprecated As of Mockito 2.8.54, this <code>AdditionalMatchers</code> has been deprecated,
+ * and all it's functionality has been moved to {@link ArgumentMatchers}. This class is kept
+ * for backwards compatibility reasons only, and will be removed in the future.
  */
-@SuppressWarnings("ALL")
+@Deprecated
 public class AdditionalMatchers {
-
     /**
      * argument greater than or equal the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T geq(T value) {
-        reportMatcher(new GreaterOrEqual<T>(value));
-        return null;
+        return ArgumentMatchers.geq(value);
     }
 
     /**
      * byte argument greater than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static byte geq(byte value) {
-        reportMatcher(new GreaterOrEqual<Byte>(value));
-        return 0;
+        return ArgumentMatchers.geq(value);
     }
 
     /**
      * double argument greater than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static double geq(double value) {
-        reportMatcher(new GreaterOrEqual<Double>(value));
-        return 0;
+        return ArgumentMatchers.geq(value);
     }
 
     /**
      * float argument greater than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static float geq(float value) {
-        reportMatcher(new GreaterOrEqual<Float>(value));
-        return 0;
+        return ArgumentMatchers.geq(value);
     }
 
     /**
      * int argument greater than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static int geq(int value) {
-        reportMatcher(new GreaterOrEqual<Integer>(value));
-        return 0;
+        return ArgumentMatchers.geq(value);
     }
 
     /**
      * long argument greater than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static long geq(long value) {
-        reportMatcher(new GreaterOrEqual<Long>(value));
-        return 0;
+        return ArgumentMatchers.geq(value);
     }
 
     /**
      * short argument greater than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static short geq(short value) {
-        reportMatcher(new GreaterOrEqual<Short>(value));
-        return 0;
+        return ArgumentMatchers.geq(value);
     }
 
     /**
      * comparable argument less than or equal the given value details.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T leq(T value) {
-        reportMatcher(new LessOrEqual<T>(value));
-        return null;
+        return ArgumentMatchers.leq(value);
     }
 
     /**
      * byte argument less than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static byte leq(byte value) {
-        reportMatcher(new LessOrEqual<Byte>(value));
-        return 0;
+        return ArgumentMatchers.leq(value);
     }
 
     /**
      * double argument less than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static double leq(double value) {
-        reportMatcher(new LessOrEqual<Double>(value));
-        return 0;
+        return ArgumentMatchers.leq(value);
     }
 
     /**
      * float argument less than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static float leq(float value) {
-        reportMatcher(new LessOrEqual<Float>(value));
-        return 0;
+        return ArgumentMatchers.leq(value);
     }
 
     /**
      * int argument less than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static int leq(int value) {
-        reportMatcher(new LessOrEqual<Integer>(value));
-        return 0;
+        return ArgumentMatchers.leq(value);
     }
 
     /**
      * long argument less than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static long leq(long value) {
-        reportMatcher(new LessOrEqual<Long>(value));
-        return 0;
+        return ArgumentMatchers.leq(value);
     }
 
     /**
      * short argument less than or equal to the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static short leq(short value) {
-        reportMatcher(new LessOrEqual<Short>(value));
-        return 0;
+        return ArgumentMatchers.leq(value);
     }
 
     /**
      * comparable argument greater than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T gt(T value) {
-        reportMatcher(new GreaterThan<T>(value));
-        return null;
+        return ArgumentMatchers.gt(value);
     }
 
     /**
      * byte argument greater than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static byte gt(byte value) {
-        reportMatcher(new GreaterThan<Byte>(value));
-        return 0;
+        return ArgumentMatchers.gt(value);
     }
 
     /**
      * double argument greater than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static double gt(double value) {
-        reportMatcher(new GreaterThan<Double>(value));
-        return 0;
+        return ArgumentMatchers.gt(value);
     }
 
     /**
      * float argument greater than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static float gt(float value) {
-        reportMatcher(new GreaterThan<Float>(value));
-        return 0;
+        return ArgumentMatchers.gt(value);
     }
 
     /**
      * int argument greater than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static int gt(int value) {
-        reportMatcher(new GreaterThan<Integer>(value));
-        return 0;
+        return ArgumentMatchers.gt(value);
     }
 
     /**
      * long argument greater than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static long gt(long value) {
-        reportMatcher(new GreaterThan<Long>(value));
-        return 0;
+        return ArgumentMatchers.gt(value);
     }
 
     /**
      * short argument greater than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static short gt(short value) {
-        reportMatcher(new GreaterThan<Short>(value));
-        return 0;
+        return ArgumentMatchers.gt(value);
     }
 
     /**
      * comparable argument less than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T lt(T value) {
-        reportMatcher(new LessThan<T>(value));
-        return null;
+        return ArgumentMatchers.lt(value);
     }
 
     /**
      * byte argument less than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static byte lt(byte value) {
-        reportMatcher(new LessThan<Byte>(value));
-        return 0;
+        return ArgumentMatchers.lt(value);
     }
 
     /**
      * double argument less than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static double lt(double value) {
-        reportMatcher(new LessThan<Double>(value));
-        return 0;
+        return ArgumentMatchers.lt(value);
     }
 
     /**
      * float argument less than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static float lt(float value) {
-        reportMatcher(new LessThan<Float>(value));
-        return 0;
+        return ArgumentMatchers.lt(value);
     }
 
     /**
      * int argument less than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static int lt(int value) {
-        reportMatcher(new LessThan<Integer>(value));
-        return 0;
+        return ArgumentMatchers.lt(value);
     }
 
     /**
      * long argument less than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static long lt(long value) {
-        reportMatcher(new LessThan<Long>(value));
-        return 0;
+        return ArgumentMatchers.lt(value);
     }
 
     /**
      * short argument less than the given value.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>0</code>.
      */
     public static short lt(short value) {
-        reportMatcher(new LessThan<Short>(value));
-        return 0;
+        return ArgumentMatchers.lt(value);
     }
 
     /**
      * comparable argument equals to the given value according to their
      * compareTo method.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
      * @return <code>null</code>.
      */
     public static <T extends Comparable<T>> T cmpEq(T value) {
-        reportMatcher(new CompareEqual<T>(value));
-        return null;
+        return ArgumentMatchers.cmpEq(value);
     }
 
     /**
@@ -457,15 +399,14 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static String find(String regex) {
-        reportMatcher(new Find(regex));
-        return null;
+        return ArgumentMatchers.find(regex);
     }
 
     /**
      * Object array argument that is equal to the given array, i.e. it has to
      * have the same type, length, and each element has to be equal.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param <T>
      *            the type of the array, it is passed through to prevent casts.
@@ -474,134 +415,125 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T[] aryEq(T[] value) {
-        reportMatcher(new ArrayEquals(value));
-        return null;
+        return ArgumentMatchers.aryEq(value);
     }
 
     /**
      * short array argument that is equal to the given array, i.e. it has to
      * have the same length, and each element has to be equal.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given array.
      * @return <code>null</code>.
      */
     public static short[] aryEq(short[] value) {
-        reportMatcher(new ArrayEquals(value));
-        return null;
+        return ArgumentMatchers.aryEq(value);
     }
 
     /**
      * long array argument that is equal to the given array, i.e. it has to have
      * the same length, and each element has to be equal.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given array.
      * @return <code>null</code>.
      */
     public static long[] aryEq(long[] value) {
-        reportMatcher(new ArrayEquals(value));
-        return null;
+        return ArgumentMatchers.aryEq(value);
     }
 
     /**
      * int array argument that is equal to the given array, i.e. it has to have
      * the same length, and each element has to be equal.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given array.
      * @return <code>null</code>.
      */
     public static int[] aryEq(int[] value) {
-        reportMatcher(new ArrayEquals(value));
-        return null;
+        return ArgumentMatchers.aryEq(value);
     }
 
     /**
      * float array argument that is equal to the given array, i.e. it has to
      * have the same length, and each element has to be equal.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given array.
      * @return <code>null</code>.
      */
     public static float[] aryEq(float[] value) {
-        reportMatcher(new ArrayEquals(value));
-        return null;
+        return ArgumentMatchers.aryEq(value);
     }
 
     /**
      * double array argument that is equal to the given array, i.e. it has to
      * have the same length, and each element has to be equal.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given array.
      * @return <code>null</code>.
      */
     public static double[] aryEq(double[] value) {
-        reportMatcher(new ArrayEquals(value));
-        return null;
+        return ArgumentMatchers.aryEq(value);
     }
 
     /**
      * char array argument that is equal to the given array, i.e. it has to have
      * the same length, and each element has to be equal.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given array.
      * @return <code>null</code>.
      */
     public static char[] aryEq(char[] value) {
-        reportMatcher(new ArrayEquals(value));
-        return null;
+        return ArgumentMatchers.aryEq(value);
     }
 
     /**
      * byte array argument that is equal to the given array, i.e. it has to have
      * the same length, and each element has to be equal.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given array.
      * @return <code>null</code>.
      */
     public static byte[] aryEq(byte[] value) {
-        reportMatcher(new ArrayEquals(value));
-        return null;
+        return ArgumentMatchers.aryEq(value);
     }
 
     /**
      * boolean array argument that is equal to the given array, i.e. it has to
      * have the same length, and each element has to be equal.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given array.
      * @return <code>null</code>.
      */
     public static boolean[] aryEq(boolean[] value) {
-        reportMatcher(new ArrayEquals(value));
-        return null;
+        return ArgumentMatchers.aryEq(value);
     }
 
     /**
      * boolean argument that matches both given matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -610,14 +542,13 @@ public class AdditionalMatchers {
      * @return <code>false</code>.
      */
     public static boolean and(boolean first, boolean second) {
-        mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return false;
+        return ArgumentMatchers.and(first, second);
     }
 
     /**
      * byte argument that matches both given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -626,14 +557,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte and(byte first, byte second) {
-        mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return ArgumentMatchers.and(first, second);
     }
 
     /**
      * char argument that matches both given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -642,14 +572,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static char and(char first, char second) {
-        mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return ArgumentMatchers.and(first, second);
     }
 
     /**
      * double argument that matches both given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -658,14 +587,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double and(double first, double second) {
-        mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return ArgumentMatchers.and(first, second);
     }
 
     /**
      * float argument that matches both given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -674,14 +602,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float and(float first, float second) {
-        mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return ArgumentMatchers.and(first, second);
     }
 
     /**
      * int argument that matches both given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -690,14 +617,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int and(int first, int second) {
-        mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return ArgumentMatchers.and(first, second);
     }
 
     /**
      * long argument that matches both given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -706,14 +632,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long and(long first, long second) {
-        mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return ArgumentMatchers.and(first, second);
     }
 
     /**
      * short argument that matches both given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -722,14 +647,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short and(short first, short second) {
-        mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return ArgumentMatchers.and(first, second);
     }
 
     /**
      * Object argument that matches both given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
@@ -740,14 +664,13 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T and(T first, T second) {
-        mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return null;
+        return ArgumentMatchers.and(first, second);
     }
 
     /**
      * boolean argument that matches any of the given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -756,14 +679,13 @@ public class AdditionalMatchers {
      * @return <code>false</code>.
      */
     public static boolean or(boolean first, boolean second) {
-        mockingProgress().getArgumentMatcherStorage().reportOr();
-        return false;
+        return ArgumentMatchers.or(first, second);
     }
 
     /**
      * Object argument that matches any of the given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
@@ -774,14 +696,13 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T or(T first, T second) {
-        mockingProgress().getArgumentMatcherStorage().reportOr();
-        return null;
+        return ArgumentMatchers.or(first, second);
     }
 
     /**
      * short argument that matches any of the given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -790,14 +711,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static short or(short first, short second) {
-        mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return ArgumentMatchers.or(first, second);
     }
 
     /**
      * long argument that matches any of the given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -806,14 +726,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static long or(long first, long second) {
-        mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return ArgumentMatchers.or(first, second);
     }
 
     /**
      * int argument that matches any of the given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -822,14 +741,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static int or(int first, int second) {
-        mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return ArgumentMatchers.or(first, second);
     }
 
     /**
      * float argument that matches any of the given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -838,14 +756,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float or(float first, float second) {
-        mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return ArgumentMatchers.or(first, second);
     }
 
     /**
      * double argument that matches any of the given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -854,14 +771,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double or(double first, double second) {
-        mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return ArgumentMatchers.or(first, second);
     }
 
     /**
      * char argument that matches any of the given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -870,14 +786,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static char or(char first, char second) {
-        mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return ArgumentMatchers.or(first, second);
     }
 
     /**
      * byte argument that matches any of the given argument matchers.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the first argument matcher.
@@ -886,14 +801,13 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static byte or(byte first, byte second) {
-        mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return ArgumentMatchers.or(first, second);
     }
 
     /**
      * Object argument that does not match the given argument matcher.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param <T>
      *            the type of the object, it is passed through to prevent casts.
@@ -902,127 +816,118 @@ public class AdditionalMatchers {
      * @return <code>null</code>.
      */
     public static <T> T not(T first) {
-        mockingProgress().getArgumentMatcherStorage().reportNot();
-        return null;
+        return ArgumentMatchers.not(first);
     }
 
     /**
      * short argument that does not match the given argument matcher.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static short not(short first) {
-        mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return ArgumentMatchers.not(first);
     }
 
     /**
      * int argument that does not match the given argument matcher.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static int not(int first) {
-        mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return ArgumentMatchers.not(first);
     }
 
     /**
      * long argument that does not match the given argument matcher.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static long not(long first) {
-        mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return ArgumentMatchers.not(first);
     }
 
     /**
      * float argument that does not match the given argument matcher.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static float not(float first) {
-        mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return ArgumentMatchers.not(first);
     }
 
     /**
      * double argument that does not match the given argument matcher.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static double not(double first) {
-        mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return ArgumentMatchers.not(first);
     }
 
     /**
      * char argument that does not match the given argument matcher.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static char not(char first) {
-        mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return ArgumentMatchers.not(first);
     }
 
     /**
      * boolean argument that does not match the given argument matcher.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>false</code>.
      */
     public static boolean not(boolean first) {
-        mockingProgress().getArgumentMatcherStorage().reportNot();
-        return false;
+        return ArgumentMatchers.not(first);
     }
 
     /**
      * byte argument that does not match the given argument matcher.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param first
      *            placeholder for the argument matcher.
      * @return <code>0</code>.
      */
     public static byte not(byte first) {
-        mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return ArgumentMatchers.not(first);
     }
 
     /**
      * double argument that has an absolute difference to the given value that
      * is less than the given delta details.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
@@ -1031,15 +936,14 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static double eq(double value, double delta) {
-        reportMatcher(new EqualsWithDelta(value, delta));
-        return 0;
+        return ArgumentMatchers.eq(value, delta);
     }
 
     /**
      * float argument that has an absolute difference to the given value that is
      * less than the given delta details.
      * <p>
-     * See examples in javadoc for {@link AdditionalMatchers} class
+     * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value
      *            the given value.
@@ -1048,11 +952,6 @@ public class AdditionalMatchers {
      * @return <code>0</code>.
      */
     public static float eq(float value, float delta) {
-        reportMatcher(new EqualsWithDelta(value, delta));
-        return 0;
-    }
-
-    private static void reportMatcher(ArgumentMatcher<?> matcher) {
-        mockingProgress().getArgumentMatcherStorage().reportMatcher(matcher);
+        return ArgumentMatchers.eq(value, delta);
     }
 }

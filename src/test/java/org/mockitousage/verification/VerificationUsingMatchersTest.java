@@ -17,7 +17,7 @@ import org.mockitoutil.TestBase;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotSame;
 import static junit.framework.TestCase.fail;
-import static org.mockito.AdditionalMatchers.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
