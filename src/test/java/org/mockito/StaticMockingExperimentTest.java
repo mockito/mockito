@@ -2,6 +2,7 @@ package org.mockito;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
@@ -114,6 +116,23 @@ public class StaticMockingExperimentTest extends TestBase {
         Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "different arg");
         assertEquals(null, handler.handle(differentArg));
+    }
+
+    @Test
+    public void verify_no_more_interactions() throws Throwable {
+        //works for now because there are not interactions
+        verifyNoMoreInteractions(mock);
+
+        //register staticMethod call on mock
+        Invocation invocation = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
+            "foo");
+        handler.handle(invocation);
+
+        //fails now because we have one static invocation recorded
+        try {
+            verifyNoMoreInteractions(mock);
+            fail();
+        } catch (NoInteractionsWanted e) {}
     }
 
     static class Foo {
