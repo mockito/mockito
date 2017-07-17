@@ -27,7 +27,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     private final Object mock;
     private final MockitoMethod mockitoMethod;
     private final Object[] arguments, rawArguments;
-    private final SuperMethod superMethod;
+    private final RealMethod realMethod;
 
     private final int sequenceNumber;
 
@@ -40,14 +40,14 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     public InterceptedInvocation(Object mock,
                                  MockitoMethod mockitoMethod,
                                  Object[] arguments,
-                                 SuperMethod superMethod,
+                                 RealMethod realMethod,
                                  Location location,
                                  int sequenceNumber) {
         this.mock = mock;
         this.mockitoMethod = mockitoMethod;
         this.arguments = ArgumentsProcessor.expandArgs(mockitoMethod, arguments);
         this.rawArguments = arguments;
-        this.superMethod = superMethod;
+        this.realMethod = realMethod;
         this.location = location;
         this.sequenceNumber = sequenceNumber;
     }
@@ -125,10 +125,10 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     @Override
     public Object callRealMethod() throws Throwable {
-        if (!superMethod.isInvokable()) {
+        if (!realMethod.isInvokable()) {
             throw cannotCallAbstractRealMethod();
         }
-        return superMethod.invoke();
+        return realMethod.invoke();
     }
 
     @Override
@@ -156,7 +156,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
     }
 
-    public final static SuperMethod NO_OP = new SuperMethod() {
+    public final static RealMethod NO_OP = new RealMethod() {
         public boolean isInvokable() {
             return false;
         }
@@ -165,9 +165,9 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         }
     };
 
-    public interface SuperMethod extends Serializable {
+    public interface RealMethod extends Serializable {
 
-        enum IsIllegal implements SuperMethod {
+        enum IsIllegal implements RealMethod {
 
             INSTANCE;
 
@@ -182,7 +182,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
             }
         }
 
-        class FromCallable implements SuperMethod {
+        class FromCallable implements RealMethod {
 
             private static final long serialVersionUID = 47957363950483625L;
 

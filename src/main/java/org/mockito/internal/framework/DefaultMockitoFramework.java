@@ -33,8 +33,8 @@ public class DefaultMockitoFramework implements MockitoFramework {
 
     @Override
     public Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Object... args) {
-        //TODO x we cannot use SuperMethod here like that
-        InterceptedInvocation.SuperMethod.FromCallable superMethod = new InterceptedInvocation.SuperMethod.FromCallable(new Callable<Object>() {
+        //TODO x we cannot use RealMethod here like that
+        InterceptedInvocation.RealMethod.FromCallable superMethod = new InterceptedInvocation.RealMethod.FromCallable(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
                 throw new RuntimeException("not implemented yet");

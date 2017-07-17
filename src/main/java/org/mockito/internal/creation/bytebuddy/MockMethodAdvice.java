@@ -92,18 +92,18 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         if (interceptor == null) {
             return null;
         }
-        InterceptedInvocation.SuperMethod superMethod;
+        InterceptedInvocation.RealMethod realMethod;
         if (instance instanceof Serializable) {
-            superMethod = new SerializableSuperMethodCall(identifier, origin, instance, arguments);
+            realMethod = new SerializableRealMethodCall(identifier, origin, instance, arguments);
         } else {
-            superMethod = new SuperMethodCall(selfCallInfo, origin, instance, arguments);
+            realMethod = new RealMethodCall(selfCallInfo, origin, instance, arguments);
         }
         Throwable t = new Throwable();
         t.setStackTrace(skipInlineMethodElement(t.getStackTrace()));
         return new ReturnValueWrapper(interceptor.doIntercept(instance,
                 origin,
                 arguments,
-                superMethod,
+            realMethod,
                 new LocationImpl(t)));
     }
 
@@ -125,7 +125,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         return node.getSort().isResolved() && !node.getRepresentative().represents(origin);
     }
 
-    private static class SuperMethodCall implements InterceptedInvocation.SuperMethod {
+    private static class RealMethodCall implements InterceptedInvocation.RealMethod {
 
         private final SelfCallInfo selfCallInfo;
 
@@ -135,7 +135,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
         private final Object[] arguments;
 
-        private SuperMethodCall(SelfCallInfo selfCallInfo, Method origin, Object instance, Object[] arguments) {
+        private RealMethodCall(SelfCallInfo selfCallInfo, Method origin, Object instance, Object[] arguments) {
             this.selfCallInfo = selfCallInfo;
             this.origin = origin;
             this.instance = instance;
@@ -158,7 +158,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     }
 
-    private static class SerializableSuperMethodCall implements InterceptedInvocation.SuperMethod {
+    private static class SerializableRealMethodCall implements InterceptedInvocation.RealMethod {
 
         private final String identifier;
 
@@ -168,7 +168,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
         private final Object[] arguments;
 
-        private SerializableSuperMethodCall(String identifier, Method origin, Object instance, Object[] arguments) {
+        private SerializableRealMethodCall(String identifier, Method origin, Object instance, Object[] arguments) {
             this.origin = new SerializableMethod(origin);
             this.identifier = identifier;
             this.instance = instance;
