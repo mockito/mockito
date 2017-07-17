@@ -4,10 +4,11 @@
  */
 package org.mockito;
 
-import org.mockito.stubbing.Stubbing;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.MockitoHint;
+import org.mockito.stubbing.Stubbing;
 
 import java.util.Collection;
 
@@ -108,4 +109,9 @@ public interface MockingDetails {
      * @since 2.2.6
      */
     String printInvocations();
+
+    /**
+     * TODO x
+     */
+    MockHandler getMockHandler();
 }

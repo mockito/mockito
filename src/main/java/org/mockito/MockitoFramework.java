@@ -5,7 +5,11 @@
 package org.mockito;
 
 import org.mockito.exceptions.misusing.RedundantListenerException;
+import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MockitoListener;
+import org.mockito.mock.MockCreationSettings;
+
+import java.lang.reflect.Method;
 
 /**
  * Mockito framework settings and lifecycle listeners, for advanced users or for integrating with other frameworks.
@@ -66,4 +70,9 @@ public interface MockitoFramework {
      */
     @Incubating
     MockitoFramework removeListener(MockitoListener listener);
+
+    /**
+     * TODO x
+     */
+    Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Object ... args);
 }

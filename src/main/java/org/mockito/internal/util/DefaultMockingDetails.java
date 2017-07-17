@@ -18,8 +18,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 
-import static org.mockito.internal.util.MockUtil.getMockHandler;
-
 /**
  * Class to inspect any object, and identify whether a particular object is either a mock or a spy.  This is
  * a wrapper for {@link org.mockito.internal.util.MockUtil}.
@@ -71,9 +69,14 @@ public class DefaultMockingDetails implements MockingDetails {
         return new InvocationsPrinter().printInvocations(toInspect);
     }
 
+    @Override
+    public MockHandler getMockHandler() {
+        return mockHandler();
+    }
+
     private MockHandler<Object> mockHandler() {
         assertGoodMock();
-        return getMockHandler(toInspect);
+        return MockUtil.getMockHandler(toInspect);
     }
 
     private void assertGoodMock() {

@@ -4,7 +4,15 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import net.bytebuddy.implementation.bind.annotation.*;
+import net.bytebuddy.implementation.bind.annotation.AllArguments;
+import net.bytebuddy.implementation.bind.annotation.Argument;
+import net.bytebuddy.implementation.bind.annotation.BindingPriority;
+import net.bytebuddy.implementation.bind.annotation.FieldValue;
+import net.bytebuddy.implementation.bind.annotation.Origin;
+import net.bytebuddy.implementation.bind.annotation.RuntimeType;
+import net.bytebuddy.implementation.bind.annotation.StubValue;
+import net.bytebuddy.implementation.bind.annotation.SuperCall;
+import net.bytebuddy.implementation.bind.annotation.This;
 import org.mockito.internal.creation.DelegatingMethod;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.MockitoMethod;
@@ -53,18 +61,26 @@ public class MockMethodInterceptor implements Serializable {
                        Object[] arguments,
                        InterceptedInvocation.SuperMethod superMethod,
                        Location location) throws Throwable {
-        return handler.handle(new InterceptedInvocation(
+        return handler.handle(createInvocation(mock, invokedMethod, arguments, superMethod, mockCreationSettings, location));
+    }
+
+    public static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, InterceptedInvocation.SuperMethod superMethod, MockCreationSettings settings, Location location) {
+        return new InterceptedInvocation(
             mock,
-            createMockitoMethod(invokedMethod),
+            createMockitoMethod(invokedMethod, settings),
             arguments,
             superMethod,
             location,
             SequenceNumber.next()
-        ));
+        );
     }
 
-    private MockitoMethod createMockitoMethod(Method method) {
-        if (mockCreationSettings.isSerializable()) {
+    public static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, InterceptedInvocation.SuperMethod superMethod, MockCreationSettings settings) {
+        return createInvocation(mock, invokedMethod, arguments, superMethod, settings, new LocationImpl());
+    }
+
+    private static MockitoMethod createMockitoMethod(Method method, MockCreationSettings settings) {
+        if (settings.isSerializable()) {
             return new SerializableMethod(method);
         } else {
             return new DelegatingMethod(method);

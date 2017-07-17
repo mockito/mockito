@@ -13,14 +13,14 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
 
-import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
-
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.concurrent.Callable;
 
-class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
+import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
+
+public class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 475027563923510472L;
 
