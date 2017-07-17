@@ -156,6 +156,14 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
     }
 
+    public final static SuperMethod NO_OP = new SuperMethod() {
+        public boolean isInvokable() {
+            return false;
+        }
+        public Object invoke() throws Throwable {
+            return null;
+        }
+    };
 
     public interface SuperMethod extends Serializable {
 
