@@ -10,6 +10,7 @@ import org.mockito.listeners.MockitoListener;
 import org.mockito.mock.MockCreationSettings;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 
 /**
  * Mockito framework settings and lifecycle listeners, for advanced users or for integrating with other frameworks.
@@ -74,5 +75,5 @@ public interface MockitoFramework {
     /**
      * TODO x
      */
-    Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Object ... args);
+    Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Callable realMethod, Object... args);
 }
