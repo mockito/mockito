@@ -40,6 +40,9 @@ public class SpyAnnotationTest extends TestBase {
     @Spy
     InnerStaticClassWithoutDefinedConstructor staticTypeWithoutDefinedConstructor;
 
+    @Spy
+    MockTranslator translator;
+
     @Rule
     public final ExpectedException shouldThrow = ExpectedException.none();
 
@@ -230,6 +233,19 @@ public class SpyAnnotationTest extends TestBase {
         }
     }
 
+    @Test
+    public void should_be_able_to_stub_and_verify_via_varargs_for_list_params() throws Exception {
+      // You can stub with vararg.
+      when(translator.translate("hello", "mockito")).thenReturn(Arrays.asList("you", "too"));
+
+      // Pretend the prod code will call translate(List<String>) with these elements.
+      assertThat(translator.translate(Arrays.asList("hello", "mockito"))).containsExactly("you", "too");
+      assertThat(translator.translate(Arrays.asList("not stubbed"))).isEmpty();
+
+      // You can verify with varargs.
+      verify(translator).translate("hello", "mockito");
+    }
+
     static class WithInnerPrivateStaticAbstract {
         @Spy
         private InnerPrivateStaticAbstract spy_field;
@@ -283,5 +299,17 @@ public class SpyAnnotationTest extends TestBase {
         ThrowingConstructor() {
             throw new RuntimeException("boo!");
         }
+    }
+
+    interface Translator {
+      List<String> translate(List<String> messages);
+    }
+
+    static abstract class MockTranslator implements Translator {
+      @Override public final List<String> translate(List<String> messages) {
+        return translate(messages.toArray(new String[0]));
+      }
+
+      abstract List<String> translate(String... messages);
     }
 }
