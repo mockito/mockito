@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
@@ -24,6 +25,7 @@ import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -235,7 +237,7 @@ public class SpyAnnotationTest extends TestBase {
 
     @Test
     public void should_be_able_to_stub_and_verify_via_varargs_for_list_params() throws Exception {
-      // You can stub with vararg.
+      // You can stub with varargs.
       when(translator.translate("hello", "mockito")).thenReturn(Arrays.asList("you", "too"));
 
       // Pretend the prod code will call translate(List<String>) with these elements.
@@ -244,6 +246,20 @@ public class SpyAnnotationTest extends TestBase {
 
       // You can verify with varargs.
       verify(translator).translate("hello", "mockito");
+    }
+
+    @Test
+    public void should_be_able_to_stub_and_verify_via_varargs_of_matchers_for_list_params() throws Exception {
+      // You can stub with varargs of matchers.
+      when(translator.translate(Mockito.anyString())).thenReturn(Arrays.asList("huh?"));
+      when(translator.translate(eq("hello"))).thenReturn(Arrays.asList("hi"));
+
+      // Pretend the prod code will call translate(List<String>) with these elements.
+      assertThat(translator.translate(Arrays.asList("hello"))).containsExactly("hi");
+      assertThat(translator.translate(Arrays.asList("not explicitly stubbed"))).containsExactly("huh?");
+
+      // You can verify with varargs of matchers.
+      verify(translator).translate(eq("hello"));
     }
 
     static class WithInnerPrivateStaticAbstract {
