@@ -5,7 +5,7 @@ shipkit {
     gitHub.writeAuthUser = "szczepiq"
     gitHub.writeAuthToken = System.getenv("GH_WRITE_TOKEN")
 
-    releaseNotes.file = "doc/release-notes/official.md"
+#    releaseNotes.file = "doc/release-notes/official.md"
     releaseNotes.labelMapping = [
         '1.* incompatible': 'Incompatible changes with previous major version (v1.x)',
         'java-9': "Java 9 support",
