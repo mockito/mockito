@@ -1,3 +1,9 @@
+**2.8.54 (2017-08-09)** - [5 commits](https://github.com/mockito/mockito/compare/v2.8.53...v2.8.54) by [Marcin Zajączkowski](https://github.com/szpak) (3), [Igor C. A. de Lima](https://github.com/igorcadelima) (1), [Szczepan Faber](http://github.com/szczepiq) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.54-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.54)
+ - [Bugfixes] Unnecessary release was triggered [(#1144)](https://github.com/mockito/mockito/issues/1144)
+ - Remove duplicated word in Javadoc [(#1161)](https://github.com/mockito/mockito/pull/1161)
+ - [#1147] Provide version in release commit message [(#1147)](https://github.com/mockito/mockito/pull/1147)
+ - Bumped shipkit to fix unnecessary releasing problem [(#1145)](https://github.com/mockito/mockito/pull/1145)
+
 **2.8.53 (2017-07-06)** - [6 commits](https://github.com/mockito/mockito/compare/v2.8.52...v2.8.53) by [Szczepan Faber](http://github.com/szczepiq) (5), [Wojtek Wilk](https://github.com/wwilk) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.53-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.53)
  - Bumped shipkit, simplified Travis file, removed unnecessary code [(#1141)](https://github.com/mockito/mockito/pull/1141)
  - org.shipkit.publications-comparator plugin applied [(#1139)](https://github.com/mockito/mockito/pull/1139)
