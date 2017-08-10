@@ -3,18 +3,22 @@ package org.mockito;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockitoutil.TestBase;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
@@ -47,14 +51,14 @@ public class StaticMockingExperimentTest extends TestBase {
         handler.handle(invocation);
 
         //verify staticMethod on mock
-        Mockito.verify(mock);
+        verify(mock);
         Invocation verification = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "some arg");
 
         handler.handle(verification);
 
         //verify zero times, method with different argument
-        Mockito.verify(mock, times(0));
+        verify(mock, times(0));
         Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "different arg");
         handler.handle(differentArg);
@@ -68,7 +72,7 @@ public class StaticMockingExperimentTest extends TestBase {
         handler.handle(invocation);
 
         //verify staticMethod on mock
-        Mockito.verify(mock);
+        verify(mock);
         Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "different arg");
 
@@ -135,9 +139,78 @@ public class StaticMockingExperimentTest extends TestBase {
         } catch (NoInteractionsWanted e) {}
     }
 
+    /**
+     * Adapts constructor to method calls. Mockito API works with methods, not constructors.
+     */
+    interface ConstructorMethodAdapter {
+        Object construct(Constructor constructor, Object ... args);
+    }
+
+    @Test
+    public void stubbing_new() throws Throwable {
+        Constructor<Foo> ctr = Foo.class.getConstructor(String.class);
+        Method adapter = ConstructorMethodAdapter.class.getDeclaredMethods()[0];
+
+        //stub constructor
+        doReturn(new Foo("hey!")).when(mock);
+        Invocation constructor = Mockito.framework().createInvocation(
+            mock, withSettings().build(Foo.class), adapter, realMethod, ctr, "foo");
+        handler.handle(constructor);
+
+        //test stubbing
+        Object result = handler.handle(constructor);
+        assertEquals("foo:hey!", result.toString());
+
+        //stubbing miss
+        Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class),
+            adapter, realMethod, ctr, "different arg");
+        Object result2 = handler.handle(differentArg);
+        assertEquals(null, result2);
+    }
+
+    @Test
+    public void verifying_new() throws Throwable {
+        Constructor<Foo> ctr = Foo.class.getConstructor(String.class);
+        Method adapter = ConstructorMethodAdapter.class.getDeclaredMethods()[0];
+
+        //invoke constructor
+        Invocation constructor = Mockito.framework().createInvocation(
+            mock, withSettings().build(Foo.class), adapter, realMethod, ctr, "matching arg");
+        handler.handle(constructor);
+
+        //verify successfully
+        verify(mock);
+        handler.handle(constructor);
+
+        //verification failure
+        verify(mock);
+        Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class),
+            adapter, realMethod, ctr, "different arg");
+        try {
+            handler.handle(differentArg);
+            fail();
+        } catch (WantedButNotInvoked e) {
+            assertThat(e.getMessage())
+                .contains("matching arg")
+                .contains("different arg");
+        }
+    }
+
     static class Foo {
+
+        private final String arg;
+
+        public Foo(String arg) {
+            this.arg = arg;
+        }
+
         public static String staticMethod(String arg) {
             return "";
+        }
+
+        @Override
+        public String toString() {
+            return "foo:" + arg;
         }
     }
 }
