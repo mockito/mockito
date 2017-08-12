@@ -4,19 +4,21 @@
  */
 package org.mockito.internal.stubbing;
 
+import static org.objenesis.ObjenesisHelper.newInstance;
+
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
-import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
 import org.mockito.stubbing.OngoingStubbing;
 
 public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 
+    @Override
     public OngoingStubbing<T> thenReturn(T value) {
         return thenAnswer(new Returns(value));
     }
 
-    @SuppressWarnings({"unchecked","vararg"})
+    @Override
     public OngoingStubbing<T> thenReturn(T value, T... values) {
         OngoingStubbing<T> stubbing = thenReturn(value);
         if (values == null) {
@@ -33,6 +35,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return thenAnswer(new ThrowsException(throwable));
     }
 
+    @Override
     public OngoingStubbing<T> thenThrow(Throwable... throwables) {
         if (throwables == null) {
             return thenThrow((Throwable) null);
@@ -48,11 +51,12 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return stubbing;
     }
 
+    @Override
     public OngoingStubbing<T> thenThrow(Class<? extends Throwable> throwableType) {
-        return thenAnswer(new ThrowsExceptionClass(throwableType));
+        return thenAnswer(new ThrowsException(newInstance(throwableType)));
     }
 
-    @SuppressWarnings ({"unchecked", "varargs"})
+    @Override
     public OngoingStubbing<T> thenThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
         if (nextToBeThrown == null) {
             thenThrow((Throwable) null);
@@ -64,6 +68,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return stubbing;
     }
 
+    @Override
     public OngoingStubbing<T> thenCallRealMethod() {
         return thenAnswer(new CallsRealMethods());
     }

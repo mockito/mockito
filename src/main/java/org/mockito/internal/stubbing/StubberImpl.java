@@ -7,6 +7,7 @@ package org.mockito.internal.stubbing;
 import static org.mockito.internal.exceptions.Reporter.notAMockPassedToWhenMethod;
 import static org.mockito.internal.exceptions.Reporter.nullPassedToWhenMethod;
 import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
+import static org.objenesis.ObjenesisHelper.newInstance;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +15,6 @@ import java.util.List;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
-import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
@@ -83,7 +83,7 @@ public class StubberImpl implements Stubber {
 
     private StubberImpl doThrowClasses(Class<? extends Throwable>... toBeThrown) {
         for (Class<? extends Throwable> throwable: toBeThrown) {
-            answers.add(new ThrowsExceptionClass(throwable));
+            answers.add(new ThrowsException(newInstance(throwable)));
         }
         return this;
     }
