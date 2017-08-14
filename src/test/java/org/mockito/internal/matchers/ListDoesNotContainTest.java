@@ -69,6 +69,13 @@ public class ListDoesNotContainTest {
         assertThat(listDoesNotContain.toString()).contains(expectedObject.toString());
     }
 
+    @Test
+    public void errorMessageContainsMultipleObjects() throws Exception {
+        ListDoesNotContain<Object> listDoesNotContain = new ListDoesNotContain<Object>(expectedObject, expectedObject2);
+
+        assertThat(listDoesNotContain.toString()).contains("one or more objects");
+    }
+
     private ArrayList<Object> createListWithObjects(Object... objects) {
         ArrayList<Object> list = new ArrayList<Object>();
         list.addAll(Arrays.asList(objects));
