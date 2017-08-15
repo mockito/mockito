@@ -21,6 +21,15 @@ class SuspendTest {
         suspend open fun suspendClassFunctionWithDefault(x: Int = 1): Int = error("not implemented")
     }
 
+    class FinalSuspendableClass {
+        suspend fun fetch(): Int {
+            fetchConcrete()
+            return 2
+        }
+
+        suspend fun fetchConcrete() = 1
+    }
+
     open class CallsSuspendable(private val suspendable: SuspendableInterface) {
         fun callSuspendable(x: Int) = runBlocking {
             suspendable.suspendFunction(x)
@@ -103,5 +112,13 @@ class SuspendTest {
 
         verify(mockSuspendable).suspendClassFunctionWithDefault()
         verify(mockSuspendable).suspendClassFunctionWithDefault(2)
+    }
+
+    @Test
+    fun shouldMockFinalSuspendableClass() = runBlocking<Unit> {
+        val mockClass = mock(FinalSuspendableClass::class.java)
+        `when`(mockClass.fetch()).thenReturn(10)
+        assertThat(mockClass.fetch(), IsEqual(10))
+        verify(mockClass).fetch()
     }
 }
