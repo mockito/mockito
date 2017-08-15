@@ -140,7 +140,7 @@ public class StaticMockingExperimentTest extends TestBase {
     }
 
     /**
-     * Adapts constructor to method calls. Mockito API works with methods, not constructors.
+     * Adapts constructor to method calls needed to work with Mockito API.
      */
     interface ConstructorMethodAdapter {
         Object construct(Constructor constructor, Object ... args);
