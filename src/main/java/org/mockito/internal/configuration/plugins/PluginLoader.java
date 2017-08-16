@@ -4,7 +4,9 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import org.mockito.Mockito;
 import org.mockito.internal.util.collections.Iterables;
+import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.PluginSwitch;
 
 import java.io.IOException;
@@ -17,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 class PluginLoader {
+
+    private final MockitoPlugins plugins = Mockito.framework().getPlugins();
 
     private final PluginSwitch pluginSwitch;
 
@@ -40,23 +44,14 @@ class PluginLoader {
      * Scans the classpath for given pluginType. If not found, default class is used.
      */
     @SuppressWarnings("unchecked")
-    <T> T loadPlugin(final Class<T> pluginType, String defaultPluginClassName) {
+    <T> T loadPlugin(final Class<T> pluginType) {
         try {
             T plugin = loadImpl(pluginType);
             if (plugin != null) {
                 return plugin;
             }
 
-            try {
-                // Default implementation. Use our own ClassLoader instead of the context
-                // ClassLoader, as the default implementation is assumed to be part of
-                // Mockito and may not be available via the context ClassLoader.
-                return pluginType.cast(Class.forName(defaultPluginClassName).newInstance());
-            } catch (Exception e) {
-                throw new IllegalStateException("Internal problem occurred, please report it. " +
-                        "Mockito is unable to load the default implementation of class that is a part of Mockito distribution. " +
-                        "Failed to load " + pluginType, e);
-            }
+            return plugins.getDefaultPlugin(pluginType);
         } catch (final Throwable t) {
             return (T) Proxy.newProxyInstance(pluginType.getClassLoader(),
                     new Class<?>[]{pluginType},

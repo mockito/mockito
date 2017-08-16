@@ -5,12 +5,14 @@
 package org.mockito.internal.framework;
 
 import org.mockito.MockitoFramework;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.bytebuddy.InterceptedInvocation;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor;
 import org.mockito.internal.util.Checks;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.MockitoPlugins;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -29,6 +31,11 @@ public class DefaultMockitoFramework implements MockitoFramework {
         Checks.checkNotNull(listener, "listener");
         mockingProgress().removeListener(listener);
         return this;
+    }
+
+    @Override
+    public MockitoPlugins getPlugins() {
+        return Plugins.getPlugins();
     }
 
     public Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Callable realMethod, Object... args) {

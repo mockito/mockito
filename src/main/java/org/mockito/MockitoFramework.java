@@ -8,6 +8,7 @@ import org.mockito.exceptions.misusing.RedundantListenerException;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.MockitoPlugins;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -71,6 +72,12 @@ public interface MockitoFramework {
      */
     @Incubating
     MockitoFramework removeListener(MockitoListener listener);
+
+    /**
+     * Returns an object that has access to Mockito plugins.
+     * An example plugin is {@link org.mockito.plugins.MockMaker}.
+     */
+    MockitoPlugins getPlugins();
 
     /**
      * TODO x
