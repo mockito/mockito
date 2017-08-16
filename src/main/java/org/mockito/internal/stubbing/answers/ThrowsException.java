@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing.answers;
 
 import java.io.Serializable;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
+import org.mockito.internal.util.KotlinUtil;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -44,6 +45,12 @@ public class ThrowsException implements Answer<Object>, ValidableAnswer, Seriali
         }
 
         if (throwable instanceof RuntimeException || throwable instanceof Error) {
+            return;
+        }
+
+        // Kotlin does not have checked exceptions.
+        // https://kotlinlang.org/docs/reference/exceptions.html#checked-exceptions
+        if (KotlinUtil.isOfKotlin(invocation.getMock().getClass())) {
             return;
         }
 
