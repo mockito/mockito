@@ -47,20 +47,20 @@ public class StaticMockingExperimentTest extends TestBase {
     @Test
     public void verify_static_method() throws Throwable {
         //register staticMethod call on mock
-        Invocation invocation = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
+        Invocation invocation = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "some arg");
         handler.handle(invocation);
 
         //verify staticMethod on mock
         verify(mock);
-        Invocation verification = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
+        Invocation verification = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "some arg");
 
         handler.handle(verification);
 
         //verify zero times, method with different argument
         verify(mock, times(0));
-        Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
+        Invocation differentArg = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "different arg");
         handler.handle(differentArg);
     }
@@ -68,13 +68,13 @@ public class StaticMockingExperimentTest extends TestBase {
     @Test
     public void verification_failure_static_method() throws Throwable {
         //register staticMethod call on mock
-        Invocation invocation = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
+        Invocation invocation = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "foo");
         handler.handle(invocation);
 
         //verify staticMethod on mock
         verify(mock);
-        Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
+        Invocation differentArg = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "different arg");
 
         try {
@@ -86,7 +86,7 @@ public class StaticMockingExperimentTest extends TestBase {
     @Test
     public void stubbing_static_method() throws Throwable {
         //register staticMethod call on mock
-        Invocation invocation = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
+        Invocation invocation = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "foo");
         handler.handle(invocation);
 
@@ -98,7 +98,7 @@ public class StaticMockingExperimentTest extends TestBase {
         assertEquals("hey", handler.handle(invocation));
 
         //default null value is returned if invoked with different argument
-        Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
+        Invocation differentArg = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "different arg");
         assertEquals(null, handler.handle(differentArg));
     }
@@ -109,7 +109,7 @@ public class StaticMockingExperimentTest extends TestBase {
         doReturn("hey").when(mock);
 
         //complete stubbing by triggering an invocation that needs to be stubbed
-        Invocation invocation = Mockito.framework()
+        Invocation invocation = Mockito.framework().getInvocationFactory()
             .createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod, "foo");
         handler.handle(invocation);
 
@@ -118,7 +118,7 @@ public class StaticMockingExperimentTest extends TestBase {
         assertEquals("hey", handler.handle(invocation));
 
         //default null value is returned if invoked with different argument
-        Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
+        Invocation differentArg = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "different arg");
         assertEquals(null, handler.handle(differentArg));
     }
@@ -129,7 +129,7 @@ public class StaticMockingExperimentTest extends TestBase {
         verifyNoMoreInteractions(mock);
 
         //register staticMethod call on mock
-        Invocation invocation = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
+        Invocation invocation = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "foo");
         handler.handle(invocation);
 
@@ -147,7 +147,7 @@ public class StaticMockingExperimentTest extends TestBase {
 
         //stub constructor
         doReturn(new Foo("hey!")).when(mock);
-        Invocation constructor = Mockito.framework().createInvocation(
+        Invocation constructor = Mockito.framework().getInvocationFactory().createInvocation(
             mock, withSettings().build(Foo.class), adapter, realMethod, ctr, "foo");
         handler.handle(constructor);
 
@@ -156,7 +156,7 @@ public class StaticMockingExperimentTest extends TestBase {
         assertEquals("foo:hey!", result.toString());
 
         //stubbing miss
-        Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class),
+        Invocation differentArg = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class),
             adapter, realMethod, ctr, "different arg");
         Object result2 = handler.handle(differentArg);
         assertEquals(null, result2);
@@ -168,7 +168,7 @@ public class StaticMockingExperimentTest extends TestBase {
         Method adapter = ConstructorMethodAdapter.class.getDeclaredMethods()[0];
 
         //invoke constructor
-        Invocation constructor = Mockito.framework().createInvocation(
+        Invocation constructor = Mockito.framework().getInvocationFactory().createInvocation(
             mock, withSettings().build(Foo.class), adapter, realMethod, ctr, "matching arg");
         handler.handle(constructor);
 
@@ -178,7 +178,7 @@ public class StaticMockingExperimentTest extends TestBase {
 
         //verification failure
         verify(mock);
-        Invocation differentArg = Mockito.framework().createInvocation(mock, withSettings().build(Foo.class),
+        Invocation differentArg = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class),
             adapter, realMethod, ctr, "different arg");
         try {
             handler.handle(differentArg);

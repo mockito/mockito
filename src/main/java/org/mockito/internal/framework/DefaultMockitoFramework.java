@@ -6,16 +6,11 @@ package org.mockito.internal.framework;
 
 import org.mockito.MockitoFramework;
 import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.internal.creation.bytebuddy.InterceptedInvocation;
-import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor;
+import org.mockito.internal.invocation.DefaultInvocationFactory;
 import org.mockito.internal.util.Checks;
-import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationFactory;
 import org.mockito.listeners.MockitoListener;
-import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockitoPlugins;
-
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
@@ -38,9 +33,8 @@ public class DefaultMockitoFramework implements MockitoFramework {
         return Plugins.getPlugins();
     }
 
-    public Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Callable realMethod, Object... args) {
-        //TODO x we cannot use RealMethod here like that
-        InterceptedInvocation.RealMethod.FromCallable superMethod = new InterceptedInvocation.RealMethod.FromCallable(realMethod);
-        return MockMethodInterceptor.createInvocation(target, method, args, superMethod, settings);
+    @Override
+    public InvocationFactory getInvocationFactory() {
+        return new DefaultInvocationFactory();
     }
 }

@@ -11,6 +11,9 @@ package org.mockito.invocation;
  * The javadoc does not have lots of examples or documentation because its audience is different.
  * Vast majority of users don't need to use the Invocation. It's mostly useful for other framework authors
  * that extend Mockito.
+ * <p>
+ * Creating own implementations of this interface is not recommended.
+ * If you are a framework integrator and you need to programatically create instances of invocations see {@link InvocationFactory}.
  *
  * @since 1.9.5
  */

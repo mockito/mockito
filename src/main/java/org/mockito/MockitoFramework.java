@@ -5,13 +5,9 @@
 package org.mockito;
 
 import org.mockito.exceptions.misusing.RedundantListenerException;
-import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationFactory;
 import org.mockito.listeners.MockitoListener;
-import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockitoPlugins;
-
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 /**
  * Mockito framework settings and lifecycle listeners, for advanced users or for integrating with other frameworks.
@@ -76,11 +72,13 @@ public interface MockitoFramework {
     /**
      * Returns an object that has access to Mockito plugins.
      * An example plugin is {@link org.mockito.plugins.MockMaker}.
+     * For information why and how to use this method see {@link MockitoPlugins}.
      */
     MockitoPlugins getPlugins();
 
     /**
-     * TODO x
+     * Returns an object that allows creating instances of {@link org.mockito.invocation.Invocation}.
+     * It is useful for framework integrations, like Powermock.
      */
-    Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Callable realMethod, Object... args);
+    InvocationFactory getInvocationFactory();
 }
