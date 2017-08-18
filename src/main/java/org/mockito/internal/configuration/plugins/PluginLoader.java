@@ -32,9 +32,13 @@ class PluginLoader {
     }
 
     /**
+     * @Deprecated Let's avoid adding more aliases. It complicates the API.
+     * Instead of an alias, one just configure a different class name for the plugin.
+     *
      * Adds an alias for a class name to this plugin loader. Instead of the fully qualified type name,
      * the alias can be used as a convenience name for a known plugin.
      */
+    @Deprecated
     PluginLoader withAlias(String name, String type) {
         alias.put(name, type);
         return this;
