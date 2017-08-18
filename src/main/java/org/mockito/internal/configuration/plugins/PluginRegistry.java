@@ -16,7 +16,7 @@ class PluginRegistry {
             .loadPlugin(PluginSwitch.class);
 
     private final MockMaker mockMaker = new PluginLoader(pluginSwitch)
-            .withAlias("mock-maker-inline", "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker")
+            .withAlias(DefaultMockitoPlugins.INLINE_ALIAS)
             .loadPlugin(MockMaker.class);
 
     private final StackTraceCleanerProvider stackTraceCleanerProvider = new PluginLoader(pluginSwitch)

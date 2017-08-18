@@ -12,19 +12,29 @@ import java.util.Map;
 
 class DefaultMockitoPlugins implements MockitoPlugins {
 
-    private final static Map<Class, String> DEFAULT_PLUGINS = new HashMap<Class, String>();
+    private final static Map<String, String> DEFAULT_PLUGINS = new HashMap<String, String>();
+    static final String INLINE_ALIAS = "mock-maker-inline";
 
     static {
-        DEFAULT_PLUGINS.put(PluginSwitch.class, DefaultPluginSwitch.class.getName());
-        DEFAULT_PLUGINS.put(MockMaker.class, "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
-        DEFAULT_PLUGINS.put(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
-        DEFAULT_PLUGINS.put(InstantiatorProvider.class, "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
-        DEFAULT_PLUGINS.put(AnnotationEngine.class, "org.mockito.internal.configuration.InjectingAnnotationEngine");
+        DEFAULT_PLUGINS.put(PluginSwitch.class.getName(), DefaultPluginSwitch.class.getName());
+        DEFAULT_PLUGINS.put(MockMaker.class.getName(), "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
+        DEFAULT_PLUGINS.put(StackTraceCleanerProvider.class.getName(), "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
+        DEFAULT_PLUGINS.put(InstantiatorProvider.class.getName(), "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
+        DEFAULT_PLUGINS.put(AnnotationEngine.class.getName(), "org.mockito.internal.configuration.InjectingAnnotationEngine");
+        DEFAULT_PLUGINS.put(INLINE_ALIAS, "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
     }
 
     @Override
     public <T> T getDefaultPlugin(Class<T> pluginType) {
-        String className = DEFAULT_PLUGINS.get(pluginType);
+        String className = DEFAULT_PLUGINS.get(pluginType.getName());
+        return create(pluginType, className);
+    }
+
+    String getDefaultPluginClass(String classOrAlias) {
+        return DEFAULT_PLUGINS.get(classOrAlias);
+    }
+
+    private <T> T create(Class<T> pluginType, String className) {
         if (className == null) {
             throw new IllegalStateException(
                 "No default implementation for requested Mockito plugin type: " + pluginType.getName() + "\n"
@@ -42,5 +52,10 @@ class DefaultMockitoPlugins implements MockitoPlugins {
                 "Mockito is unable to load the default implementation of class that is a part of Mockito distribution. " +
                 "Failed to load " + pluginType, e);
         }
+    }
+
+    @Override
+    public MockMaker getInlineMockMaker() {
+        return create(MockMaker.class, DEFAULT_PLUGINS.get(INLINE_ALIAS));
     }
 }

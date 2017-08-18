@@ -4,9 +4,7 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.Mockito;
 import org.mockito.internal.util.collections.Iterables;
-import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.PluginSwitch;
 
 import java.io.IOException;
@@ -15,20 +13,17 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 class PluginLoader {
 
-    private final MockitoPlugins plugins = Mockito.framework().getPlugins();
+    private final DefaultMockitoPlugins plugins = new DefaultMockitoPlugins();
 
     private final PluginSwitch pluginSwitch;
 
-    private final Map<String, String> alias;
+    private String alias;
 
     public PluginLoader(PluginSwitch pluginSwitch) {
         this.pluginSwitch = pluginSwitch;
-        this.alias = new HashMap<String, String>();
     }
 
     /**
@@ -39,8 +34,8 @@ class PluginLoader {
      * the alias can be used as a convenience name for a known plugin.
      */
     @Deprecated
-    PluginLoader withAlias(String name, String type) {
-        alias.put(name, type);
+    PluginLoader withAlias(String name) {
+        alias = name;
         return this;
     }
 
@@ -85,13 +80,12 @@ class PluginLoader {
         }
 
         try {
-            String foundPluginClass = new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
-            if (foundPluginClass != null) {
-                String aliasType = alias.get(foundPluginClass);
-                if (aliasType != null) {
-                    foundPluginClass = aliasType;
+            String classOrAlias = new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
+            if (classOrAlias != null) {
+                if (classOrAlias.equals(alias)) {
+                    classOrAlias = plugins.getDefaultPluginClass(alias);
                 }
-                Class<?> pluginClass = loader.loadClass(foundPluginClass);
+                Class<?> pluginClass = loader.loadClass(classOrAlias);
                 Object plugin = pluginClass.newInstance();
                 return service.cast(plugin);
             }
