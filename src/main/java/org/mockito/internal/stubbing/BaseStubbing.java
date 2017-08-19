@@ -22,10 +22,10 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
     public OngoingStubbing<T> thenReturn(T value, T... values) {
         OngoingStubbing<T> stubbing = thenReturn(value);
         if (values == null) {
-            //TODO below does not seem right
+            // TODO below does not seem right
             return stubbing.thenReturn(null);
         }
-        for (T v: values) {
+        for (T v : values) {
             stubbing = stubbing.thenReturn(v);
         }
         return stubbing;
@@ -40,7 +40,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
             return thenThrow((Throwable) null);
         }
         OngoingStubbing<T> stubbing = null;
-        for (Throwable t: throwables) {
+        for (Throwable t : throwables) {
             if (stubbing == null) {
                 stubbing = thenThrow(t);
             } else {
@@ -51,7 +51,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
     }
 
     public OngoingStubbing<T> thenThrow(Class<? extends Throwable> throwableType) {
-        if (throwableType==null){
+        if (throwableType == null) {
             mockingProgress().reset();
             throw notAnException();
         }
@@ -63,7 +63,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
             thenThrow((Class<Throwable>) null);
         }
         OngoingStubbing<T> stubbing = thenThrow(toBeThrown);
-        for (Class<? extends Throwable> t: nextToBeThrown) {
+        for (Class<? extends Throwable> t : nextToBeThrown) {
             stubbing = stubbing.thenThrow(t);
         }
         return stubbing;

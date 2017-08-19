@@ -32,11 +32,11 @@ public class StubberImpl implements Stubber {
             throw nullPassedToWhenMethod();
         }
 
-		if (!isMock(mock)) {
-			throw notAMockPassedToWhenMethod();
-		}
+        if (!isMock(mock)) {
+            throw notAMockPassedToWhenMethod();
+        }
 
-		MockUtil.getMockHandler(mock).setAnswersForStubbing(answers);
+        MockUtil.getMockHandler(mock).setAnswersForStubbing(answers);
         return mock;
     }
 
@@ -51,7 +51,7 @@ public class StubberImpl implements Stubber {
     }
 
     private StubberImpl doReturnValues(Object... toBeReturned) {
-        if(toBeReturned == null) {
+        if (toBeReturned == null) {
             answers.add(new Returns(null));
             return this;
         }
@@ -63,7 +63,7 @@ public class StubberImpl implements Stubber {
 
     @Override
     public Stubber doThrow(Throwable... toBeThrown) {
-        if(toBeThrown == null) {
+        if (toBeThrown == null) {
             answers.add(new ThrowsException(null));
             return this;
         }
@@ -75,14 +75,14 @@ public class StubberImpl implements Stubber {
 
     @Override
     public Stubber doThrow(Class<? extends Throwable> toBeThrown) {
-        if (toBeThrown==null){
+        if (toBeThrown == null) {
             mockingProgress().reset();
             throw notAnException();
         }
         Throwable e;
-        try{
+        try {
             e = newInstance(toBeThrown);
-        }catch(RuntimeException instanciationError){
+        } catch (RuntimeException instanciationError) {
             mockingProgress().reset();
             throw instanciationError;
         }
@@ -92,8 +92,8 @@ public class StubberImpl implements Stubber {
     @Override
     public Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
         Stubber stubber = doThrow(toBeThrown);
-        
-        if (nextToBeThrown==null){
+
+        if (nextToBeThrown == null) {
             mockingProgress().reset();
             throw notAnException();
         }
@@ -102,7 +102,7 @@ public class StubberImpl implements Stubber {
             stubber = stubber.doThrow(next);
         }
         return stubber;
-        
+
     }
 
     @Override
@@ -123,4 +123,3 @@ public class StubberImpl implements Stubber {
         return this;
     }
 }
-
