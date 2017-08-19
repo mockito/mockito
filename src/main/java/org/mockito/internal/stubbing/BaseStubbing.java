@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.stubbing;
 
+import static org.mockito.internal.exceptions.Reporter.notAnException;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.objenesis.ObjenesisHelper.newInstance;
 
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
@@ -13,12 +15,10 @@ import org.mockito.stubbing.OngoingStubbing;
 
 public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 
-    @Override
     public OngoingStubbing<T> thenReturn(T value) {
         return thenAnswer(new Returns(value));
     }
 
-    @Override
     public OngoingStubbing<T> thenReturn(T value, T... values) {
         OngoingStubbing<T> stubbing = thenReturn(value);
         if (values == null) {
@@ -35,7 +35,6 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return thenAnswer(new ThrowsException(throwable));
     }
 
-    @Override
     public OngoingStubbing<T> thenThrow(Throwable... throwables) {
         if (throwables == null) {
             return thenThrow((Throwable) null);
@@ -51,15 +50,17 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return stubbing;
     }
 
-    @Override
     public OngoingStubbing<T> thenThrow(Class<? extends Throwable> throwableType) {
-        return thenAnswer(new ThrowsException(newInstance(throwableType)));
+        if (throwableType==null){
+            mockingProgress().reset();
+            throw notAnException();
+        }
+        return thenThrow(newInstance(throwableType));
     }
 
-    @Override
     public OngoingStubbing<T> thenThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
         if (nextToBeThrown == null) {
-            thenThrow((Throwable) null);
+            thenThrow((Class<Throwable>) null);
         }
         OngoingStubbing<T> stubbing = thenThrow(toBeThrown);
         for (Class<? extends Throwable> t: nextToBeThrown) {
@@ -68,7 +69,6 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return stubbing;
     }
 
-    @Override
     public OngoingStubbing<T> thenCallRealMethod() {
         return thenAnswer(new CallsRealMethods());
     }

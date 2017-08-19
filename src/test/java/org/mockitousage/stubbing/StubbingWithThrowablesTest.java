@@ -5,12 +5,19 @@
 
 package org.mockitousage.stubbing;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockitoutil.TestBase;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -18,15 +25,26 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import static junit.framework.TestCase.*;
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
+import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"serial", "unchecked", "all", "deprecation"})
+@SuppressWarnings({ "serial", "unchecked", "all", "deprecation" })
 public class StubbingWithThrowablesTest extends TestBase {
 
     private LinkedList mock;
 
     private Map mockTwo;
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setup() {
@@ -39,12 +57,9 @@ public class StubbingWithThrowablesTest extends TestBase {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         when(mock.add("throw")).thenThrow(expected);
 
-        try {
-            mock.add("throw");
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertEquals(expected, e);
-        }
+        exception.expect(sameInstance(expected));
+        mock.add("throw");
+
     }
 
     @Test
@@ -52,12 +67,11 @@ public class StubbingWithThrowablesTest extends TestBase {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
 
         doThrow(expected).when(mock).clear();
-        try {
-            mock.clear();
-            fail();
-        } catch (Exception e) {
-            assertEquals(expected, e);
-        }
+
+        exception.expect(IllegalArgumentException.class);
+
+        mock.clear();
+
     }
 
     @Test
@@ -65,22 +79,18 @@ public class StubbingWithThrowablesTest extends TestBase {
         doThrow(new ExceptionOne()).when(mock).clear();
         doThrow(new ExceptionTwo()).when(mock).clear();
 
-        try {
-            mock.clear();
-            fail();
-        } catch (ExceptionTwo e) {
-        }
+        exception.expect(ExceptionTwo.class);
+
+        mock.clear();
     }
 
     @Test
     public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation() throws Exception {
-        when(mock.get(1)).thenThrow(new ExceptionOne());
+        when(mock.size()).thenThrow(new ExceptionOne());
 
-        try {
-            when(mock.get(1)).thenThrow(new ExceptionTwo());
-            fail();
-        } catch (ExceptionOne e) {
-        }
+        exception.expect(ExceptionOne.class);
+
+        when(mock.size()).thenThrow(new ExceptionTwo());
     }
 
     @Test
@@ -90,12 +100,9 @@ public class StubbingWithThrowablesTest extends TestBase {
 
         when(reader.read()).thenThrow(ioException);
 
-        try {
-            reader.read();
-            fail();
-        } catch (Exception e) {
-            assertEquals(ioException, e);
-        }
+        exception.expect(sameInstance(ioException));
+
+        reader.read();
     }
 
     @Test
@@ -104,47 +111,115 @@ public class StubbingWithThrowablesTest extends TestBase {
 
         when(mock.add("quake")).thenThrow(error);
 
-        try {
-            mock.add("quake");
-            fail();
-        } catch (Error e) {
-            assertEquals(error, e);
-        }
+        exception.expect(Error.class);
+
+        mock.add("quake");
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldNotAllowNullExceptionType() {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Cannot stub with null throwable");
+
         when(mock.add(null)).thenThrow((Exception) null);
     }
 
-
-    @Test(expected = NaughtyException.class)
+    @Test
     public void shouldInstantiateExceptionClassOnInteraction() {
         when(mock.add(null)).thenThrow(NaughtyException.class);
 
+        exception.expect(NaughtyException.class);
+
         mock.add(null);
     }
 
-    @Test(expected = NaughtyException.class)
+    @Test
     public void shouldInstantiateExceptionClassWithOngoingStubbingOnInteraction() {
         doThrow(NaughtyException.class).when(mock).add(null);
 
+        exception.expect(NaughtyException.class);
+
         mock.add(null);
     }
 
-    @Test(expected = MockitoException.class)
-    public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
+    @Test
+    public void shouldNotAllowSettingInvalidCheckedException() {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Checked exception is invalid for this method");
+
         when(mock.add("monkey island")).thenThrow(new Exception());
     }
 
-    @Test(expected = MockitoException.class)
-    public void shouldNotAllowSettingNullThrowable() throws Exception {
+    @Test
+    public void shouldNotAllowSettingNullThrowable() {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Cannot stub with null throwable");
+
         when(mock.add("monkey island")).thenThrow((Throwable) null);
     }
 
-    @Test(expected = MockitoException.class)
-    public void shouldNotAllowSettingNullThrowableArray() throws Exception {
+    @Test
+    public void shouldNotAllowSettingNullThrowableArray() {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Cannot stub with null throwable");
+
         when(mock.add("monkey island")).thenThrow((Throwable[]) null);
+    }
+
+    @Test
+    public void shouldNotAllowSettingNullThrowableClass() {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Exception type cannot be null");
+
+        when(mock.isEmpty()).thenThrow((Class) null);
+    }
+
+    @Test
+    public void shouldNotAllowSettingNullThrowableClasses() {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Exception type cannot be null");
+
+        when(mock.isEmpty()).thenThrow((Class) null, null);
+    }
+
+    @Test
+    public void shouldNotAllowSettingNullVarArgThrowableClasses() {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Exception type cannot be null");
+
+        when(mock.isEmpty()).thenThrow(RuntimeException.class, null);
+    }
+
+    @Test
+    public void doThrowShouldNotAllowSettingNullThrowableClass() {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Exception type cannot be null");
+
+        doThrow((Class) null).when(mock).isEmpty();
+    }
+
+    @Test
+    public void doThrowShouldNotAllowSettingNullThrowableClasses() throws Exception {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Exception type cannot be null");
+
+        doThrow((Class) null, null).when(mock).isEmpty();
+    }
+
+    @Test
+    public void doThrowShouldNotAllowSettingNullVarArgThrowableClasses() throws Exception {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Exception type cannot be null");
+
+        doThrow(RuntimeException.class, null).when(mock).isEmpty();
+    }
+
+    @Test
+    public void shouldNotAllowSettingNullVarArgsThrowableClasses() throws Exception {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Exception type cannot be null");
+
+        when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class<RuntimeException>[]) null);
     }
 
     @Test
@@ -236,31 +311,20 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     private class ExceptionOne extends RuntimeException {
-
     }
 
     private class ExceptionTwo extends RuntimeException {
-
     }
 
     private class ExceptionThree extends RuntimeException {
-
     }
 
     private class ExceptionFour extends RuntimeException {
-
     }
 
     public class NaughtyException extends RuntimeException {
-
         public NaughtyException() {
             throw new RuntimeException("boo!");
         }
-    }
-
-    @Test(expected = NaughtyException.class)
-    public void shouldShowDecentMessageWhenExcepionIsNaughty() throws Exception {
-        when(mock.add("")).thenThrow(NaughtyException.class);
-        mock.add("");
     }
 }
