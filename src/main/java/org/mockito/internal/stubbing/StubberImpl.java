@@ -9,6 +9,7 @@ import static org.mockito.internal.exceptions.Reporter.notAnException;
 import static org.mockito.internal.exceptions.Reporter.nullPassedToWhenMethod;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
+import static org.mockito.internal.util.MockUtil.isMock;
 import static org.objenesis.ObjenesisHelper.newInstance;
 
 import java.util.LinkedList;
@@ -17,12 +18,10 @@ import java.util.List;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
-import org.mockito.internal.stubbing.answers.ThrowsExceptionClass;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 
-@SuppressWarnings("unchecked")
 public class StubberImpl implements Stubber {
 
     private final List<Answer<?>> answers = new LinkedList<Answer<?>>();
@@ -33,7 +32,7 @@ public class StubberImpl implements Stubber {
             throw nullPassedToWhenMethod();
         }
 
-		if (!MockUtil.isMock(mock)) {
+		if (!isMock(mock)) {
 			throw notAMockPassedToWhenMethod();
 		}
 
@@ -98,15 +97,13 @@ public class StubberImpl implements Stubber {
             mockingProgress().reset();
             throw notAnException();
         }
-        
+
         for (Class<? extends Throwable> next : nextToBeThrown) {
             stubber = stubber.doThrow(next);
         }
         return stubber;
         
     }
-
-    
 
     @Override
     public Stubber doNothing() {
@@ -126,3 +123,4 @@ public class StubberImpl implements Stubber {
         return this;
     }
 }
+
