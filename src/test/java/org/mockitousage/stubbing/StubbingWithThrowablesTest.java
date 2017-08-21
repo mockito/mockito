@@ -31,7 +31,7 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"all"})
+@SuppressWarnings({ "serial", "unchecked", "rawtypes" })
 public class StubbingWithThrowablesTest extends TestBase {
 
     private LinkedList mock;
@@ -174,15 +174,15 @@ public class StubbingWithThrowablesTest extends TestBase {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
-        when(mock.isEmpty()).thenThrow((Class) null, null);
+        when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class[])null);
     }
 
     @Test
-    public void shouldNotAllowSettingNullVarArgThrowableClasses() {
+    public void shouldNotAllowSettingNullVarArgThrowableClass() {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
-        when(mock.isEmpty()).thenThrow(RuntimeException.class, null);
+        when(mock.isEmpty()).thenThrow(RuntimeException.class,(Class) null);
     }
 
     @Test
@@ -198,7 +198,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
-        doThrow((Class) null, null).when(mock).isEmpty();
+        doThrow(RuntimeException.class,(Class) null).when(mock).isEmpty();
     }
 
     @Test
@@ -206,7 +206,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
-        doThrow(RuntimeException.class, null).when(mock).isEmpty();
+        doThrow(RuntimeException.class, (Class[])null).when(mock).isEmpty();
     }
 
     @Test
