@@ -310,17 +310,13 @@ public class StubbingWithThrowablesTest extends TestBase {
         }
     }
 
-    private class ExceptionOne extends RuntimeException {
-    }
+    private class ExceptionOne extends RuntimeException {}
 
-    private class ExceptionTwo extends RuntimeException {
-    }
+    private class ExceptionTwo extends RuntimeException {}
 
-    private class ExceptionThree extends RuntimeException {
-    }
+    private class ExceptionThree extends RuntimeException {}
 
-    private class ExceptionFour extends RuntimeException {
-    }
+    private class ExceptionFour extends RuntimeException {}
 
     public class NaughtyException extends RuntimeException {
         public NaughtyException() {
