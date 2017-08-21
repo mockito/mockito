@@ -10,8 +10,6 @@ import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -24,19 +22,16 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({ "serial", "unchecked", "all", "deprecation" })
+@SuppressWarnings({"all"})
 public class StubbingWithThrowablesTest extends TestBase {
 
     private LinkedList mock;
