@@ -15,10 +15,12 @@ import org.mockito.stubbing.OngoingStubbing;
 
 public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 
+    @Override
     public OngoingStubbing<T> thenReturn(T value) {
         return thenAnswer(new Returns(value));
     }
 
+    @Override
     public OngoingStubbing<T> thenReturn(T value, T... values) {
         OngoingStubbing<T> stubbing = thenReturn(value);
         if (values == null) {
@@ -35,6 +37,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return thenAnswer(new ThrowsException(throwable));
     }
 
+    @Override
     public OngoingStubbing<T> thenThrow(Throwable... throwables) {
         if (throwables == null) {
             return thenThrow((Throwable) null);
@@ -50,6 +53,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return stubbing;
     }
 
+    @Override
     public OngoingStubbing<T> thenThrow(Class<? extends Throwable> throwableType) {
         if (throwableType == null) {
             mockingProgress().reset();
@@ -58,6 +62,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return thenThrow(newInstance(throwableType));
     }
 
+    @Override
     public OngoingStubbing<T> thenThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
         if (nextToBeThrown == null) {
             thenThrow((Class<Throwable>) null);
@@ -69,8 +74,10 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return stubbing;
     }
 
+    @Override
     public OngoingStubbing<T> thenCallRealMethod() {
         return thenAnswer(new CallsRealMethods());
     }
 }
+
 
