@@ -1375,6 +1375,7 @@ import org.mockito.verification.*;
  * <p>
  * Help Mockito! Try the new features, give us feedback, join the discussion about Mockito strictness at GitHub
  * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
+ *
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
