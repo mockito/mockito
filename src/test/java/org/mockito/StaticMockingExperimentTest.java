@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
-import org.mockito.internal.invocation.ConstructorMethodAdapter;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockitoutil.TestBase;
@@ -207,5 +206,12 @@ public class StaticMockingExperimentTest extends TestBase {
         public String toString() {
             return "foo:" + arg;
         }
+    }
+
+    /**
+     * Adapts constructor to method calls needed to work with Mockito API.
+     */
+    interface ConstructorMethodAdapter {
+        Object construct(Constructor constructor, Object... args);
     }
 }
