@@ -12,6 +12,7 @@ import java.io.Serializable;
 /**
  * Mockito handler of an invocation on a mock. This is a core part of the API, the heart of Mockito.
  * See also the {@link org.mockito.plugins.MockMaker}.
+ * This type can be used for framework integrators, such as Powermock.
  * <p>
  * Mockito will provide you with the implementation of this interface via {@link org.mockito.plugins.MockMaker} methods:
  * {@link org.mockito.plugins.MockMaker#createMock(MockCreationSettings, MockHandler)}
@@ -44,9 +45,10 @@ public interface MockHandler<T> extends Serializable {
     /**
      * Returns the object that holds all invocations on the mock object,
      * including stubbings with declared answers. Do not provide your own implementation.
+     * Returned object is an internal implementation, hidden beneath a public marker interface.
      * <p>
-     * Please do not provide your own implementation of this interface at this point.
-     * If you have a use case to provide your own implementation of invocation container
+     * Please do not provide your own implementation of {@link InvocationContainer} interface at this point.
+     * If you have a use case that requires your own implementation of {@link InvocationContainer}
      * please reach out to us. You can open a ticket in our issue tracker to start a discussion.
      *
      * @return container of invocations, stubbings, and answers of the mock

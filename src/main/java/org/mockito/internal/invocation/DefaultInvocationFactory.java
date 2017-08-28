@@ -12,7 +12,7 @@ import java.util.concurrent.Callable;
 public class DefaultInvocationFactory implements InvocationFactory {
 
     public Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Callable realMethod, Object... args) {
-        //TODO x we cannot use RealMethod here like that
+        //TODO SZ - move real method away from InterceptedInvocation
         InterceptedInvocation.RealMethod.FromCallable superMethod = new InterceptedInvocation.RealMethod.FromCallable(realMethod);
         return MockMethodInterceptor.createInvocation(target, method, args, superMethod, settings);
     }

@@ -73,12 +73,16 @@ public interface MockitoFramework {
      * Returns an object that has access to Mockito plugins.
      * An example plugin is {@link org.mockito.plugins.MockMaker}.
      * For information why and how to use this method see {@link MockitoPlugins}.
+     *
+     * TODO SZ
      */
     MockitoPlugins getPlugins();
 
     /**
      * Returns an object that allows creating instances of {@link org.mockito.invocation.Invocation}.
      * It is useful for framework integrations, like Powermock.
+     *
+     * TODO SZ
      */
     InvocationFactory getInvocationFactory();
 }

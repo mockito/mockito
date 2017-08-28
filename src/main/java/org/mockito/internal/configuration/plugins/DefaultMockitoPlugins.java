@@ -16,6 +16,7 @@ class DefaultMockitoPlugins implements MockitoPlugins {
     static final String INLINE_ALIAS = "mock-maker-inline";
 
     static {
+        //Keep the mapping: plugin interface name -> plugin implementation class name
         DEFAULT_PLUGINS.put(PluginSwitch.class.getName(), DefaultPluginSwitch.class.getName());
         DEFAULT_PLUGINS.put(MockMaker.class.getName(), "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
         DEFAULT_PLUGINS.put(StackTraceCleanerProvider.class.getName(), "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
@@ -34,6 +35,9 @@ class DefaultMockitoPlugins implements MockitoPlugins {
         return DEFAULT_PLUGINS.get(classOrAlias);
     }
 
+    /**
+     * Creates an instance of given plugin type, using specific implementation class.
+     */
     private <T> T create(Class<T> pluginType, String className) {
         if (className == null) {
             throw new IllegalStateException(

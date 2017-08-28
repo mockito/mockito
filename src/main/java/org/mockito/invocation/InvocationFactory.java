@@ -6,8 +6,12 @@ import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 /**
- * Provides means to create instances of objects that are not intended to be subclassed by the users.
+ * Provides means to create instances of {@link Invocation} objects.
  * Needed for framework integrations, for example for PowerMock who can use it to implement static mocking.
+ * <p>
+ * Please don't provide your own implementation of {@link Invocation} type.
+ * Mockito team needs flexibility to add new methods to this interface if we need to.
+ * If you integrate Mockito framework and you need an instance of {@link Invocation}, use {@link #createInvocation(Object, MockCreationSettings, Method, Callable, Object...)}.
  */
 public interface InvocationFactory {
 
@@ -17,7 +21,7 @@ public interface InvocationFactory {
      * @param target the mock object the method is invoked on.
      * @param settings creation settings of the mock object.
      * @param method java method invoked on mock.
-     * @param realMethod real method behavior. Needed for spying on invoking real behavior on mock objects.
+     * @param realMethod real method behavior. Needed for spying / invoking real behavior on mock objects.
      * @param args the java method arguments
      *
      * @return invocation instance

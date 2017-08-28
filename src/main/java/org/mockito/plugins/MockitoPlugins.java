@@ -5,9 +5,7 @@ import org.mockito.MockitoFramework;
 /**
  * Instance of this interface is available via {@link MockitoFramework#getPlugins()}.
  *
- * TODO document example use and why this interface was introduced.
- *
- * @since 2.9.0
+ * TODO SZ document example use and why this interface was introduced.
  */
 public interface MockitoPlugins {
 
@@ -19,7 +17,6 @@ public interface MockitoPlugins {
      *
      * @param pluginType
      * @return the plugin instance
-     * @since 2.9.0
      */
     <T> T getDefaultPlugin(Class<T> pluginType);
 
@@ -28,7 +25,6 @@ public interface MockitoPlugins {
      * This method is needed because {@link #getDefaultPlugin(Class)} does not provide an instance of inline mock maker.
      *
      * @return instance of inline mock maker
-     * @since 2.9.0
      */
     MockMaker getInlineMockMaker();
 }

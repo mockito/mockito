@@ -280,7 +280,7 @@ public interface MockSettings extends Serializable {
      * @param typeToMock class to mock
      * @param <T> type to mock
      * @return immutable view of mock settings
-     * @since TODO + document on main page
+     * @since TODO SZ + document on main page
      */
     <T> MockCreationSettings<T> build(Class<T> typeToMock);
 }
