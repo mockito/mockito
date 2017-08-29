@@ -11,6 +11,12 @@ import java.lang.annotation.RetentionPolicy;
  * We would never break compatibility by changing the signature of an existing public method.
  * However, we need flexibility to add new methods to some types to evolve the API if needed.
  * Public types are all types that are *not* under "org.mockito.internal.*" package.
+ * <p>
+ * Absence of {@code NotExtensible} annotation on a type *does not* mean it is intended to be extended.
+ * The annotation has been introduced late and therefore it is not used frequently in the codebase.
+ * Many public types from Mockito API are not intended for extension, even though they do not have this annotation applied.
+ *
+ * @since 2.10.0
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

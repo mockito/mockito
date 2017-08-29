@@ -4,6 +4,7 @@
  */
 package org.mockito.invocation;
 
+import org.mockito.Incubating;
 import org.mockito.MockSettings;
 import org.mockito.mock.MockCreationSettings;
 
@@ -39,7 +40,10 @@ public interface MockHandler<T> extends Serializable {
     /**
      * Read-only settings the mock object was created with.
      * See {@link org.mockito.Mockito#mock(Class, MockSettings)}
+     *
+     * @since 2.10.0
      */
+    @Incubating
     MockCreationSettings<T> getMockSettings();
 
     /**
@@ -52,6 +56,8 @@ public interface MockHandler<T> extends Serializable {
      * please reach out to us. You can open a ticket in our issue tracker to start a discussion.
      *
      * @return container of invocations, stubbings, and answers of the mock
+     * @since 2.10.0
      */
+    @Incubating
     InvocationContainer getInvocationContainer();
 }

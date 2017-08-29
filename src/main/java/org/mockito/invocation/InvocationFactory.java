@@ -1,5 +1,6 @@
 package org.mockito.invocation;
 
+import org.mockito.Incubating;
 import org.mockito.mock.MockCreationSettings;
 
 import java.lang.reflect.Method;
@@ -15,6 +16,7 @@ import java.util.concurrent.Callable;
  *
  * @since 2.10.0
  */
+@Incubating
 public interface InvocationFactory {
 
     /**
@@ -31,5 +33,6 @@ public interface InvocationFactory {
      * @return invocation instance
      * @since 2.10.0
      */
+    @Incubating
     Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Callable realMethod, Object... args);
 }

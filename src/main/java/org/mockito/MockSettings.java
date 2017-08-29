@@ -284,5 +284,6 @@ public interface MockSettings extends Serializable {
      * @return immutable view of mock settings
      * @since 2.10.0
      */
+    @Incubating
     <T> MockCreationSettings<T> build(Class<T> typeToMock);
 }
