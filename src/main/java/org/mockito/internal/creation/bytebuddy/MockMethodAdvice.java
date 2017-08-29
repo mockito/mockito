@@ -14,6 +14,7 @@ import net.bytebuddy.implementation.bytecode.assign.Assigner;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
+import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 
@@ -92,7 +93,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         if (interceptor == null) {
             return null;
         }
-        InterceptedInvocation.RealMethod realMethod;
+        RealMethod realMethod;
         if (instance instanceof Serializable) {
             realMethod = new SerializableRealMethodCall(identifier, origin, instance, arguments);
         } else {
@@ -125,7 +126,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         return node.getSort().isResolved() && !node.getRepresentative().represents(origin);
     }
 
-    private static class RealMethodCall implements InterceptedInvocation.RealMethod {
+    private static class RealMethodCall implements RealMethod {
 
         private final SelfCallInfo selfCallInfo;
 
@@ -158,7 +159,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     }
 
-    private static class SerializableRealMethodCall implements InterceptedInvocation.RealMethod {
+    private static class SerializableRealMethodCall implements RealMethod {
 
         private final String identifier;
 

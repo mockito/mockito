@@ -5,18 +5,16 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
-import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.ArgumentsProcessor;
 import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
 
@@ -164,53 +162,5 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
             return null;
         }
     };
-
-    public interface RealMethod extends Serializable {
-
-        enum IsIllegal implements RealMethod {
-
-            INSTANCE;
-
-            @Override
-            public boolean isInvokable() {
-                return false;
-            }
-
-            @Override
-            public Object invoke() {
-                throw new IllegalStateException();
-            }
-        }
-
-        class FromCallable implements RealMethod {
-
-            private static final long serialVersionUID = 47957363950483625L;
-
-            private final Callable<?> callable;
-
-            public FromCallable(Callable<?> callable) {
-                this.callable = callable;
-            }
-
-            @Override
-            public boolean isInvokable() {
-                return true;
-            }
-
-            @Override
-            public Object invoke() throws Throwable {
-                try {
-                    return callable.call();
-                } catch (Throwable t) {
-                    new ConditionalStackTraceFilter().filter(t);
-                    throw t;
-                }
-            }
-        }
-
-        boolean isInvokable();
-
-        Object invoke() throws Throwable;
-    }
 
 }
