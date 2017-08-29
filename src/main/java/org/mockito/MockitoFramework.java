@@ -5,6 +5,7 @@
 package org.mockito;
 
 import org.mockito.exceptions.misusing.RedundantListenerException;
+import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationFactory;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.plugins.MockitoPlugins;
@@ -76,13 +77,15 @@ public interface MockitoFramework {
      *
      * @since 2.10.0
      */
+    @Incubating
     MockitoPlugins getPlugins();
 
     /**
-     * Returns an object that allows creating instances of {@link org.mockito.invocation.Invocation}.
-     * It is useful for framework integrations, like Powermock.
+     * Returns a factory that can create instances of {@link Invocation}.
+     * It is useful for framework integrations, because {@link Invocation} is {@link NotExtensible}.
      *
-     * TODO SZ
+     * @since 2.10.0
      */
+    @Incubating
     InvocationFactory getInvocationFactory();
 }
