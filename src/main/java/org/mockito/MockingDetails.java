@@ -111,7 +111,13 @@ public interface MockingDetails {
     String printInvocations();
 
     /**
-     * TODO SZ
+     * Returns the {@link MockHandler} associated with this mock object.
+     * The handler is the core of Mockito mock object method handling.
+     * This method is useful for framework integrators.
+     * For example, other frameworks may use mock handler to simulate method calls on the Mock object.
+     *
+     * @return mock handler instance of this mock
+     * @since 2.10.0
      */
     MockHandler getMockHandler();
 }
