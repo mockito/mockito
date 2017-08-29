@@ -4,6 +4,8 @@
  */
 package org.mockito.invocation;
 
+import org.mockito.NotExtensible;
+
 /**
  * A method call on a mock object. Contains all information and state needed for the Mockito framework to operate.
  * This API might be useful for developers who extend Mockito.
@@ -13,10 +15,11 @@ package org.mockito.invocation;
  * that extend Mockito.
  * <p>
  * Creating own implementations of this interface is not recommended.
- * If you are a framework integrator and you need to programatically create instances of invocations see {@link InvocationFactory}.
+ * If you are a framework integrator and you need to programmatically create instances of invocations see {@link InvocationFactory}.
  *
  * @since 1.9.5
  */
+@NotExtensible
 public interface Invocation extends InvocationOnMock, DescribedInvocation {
 
     /**
