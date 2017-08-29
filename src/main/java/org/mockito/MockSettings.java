@@ -275,12 +275,14 @@ public interface MockSettings extends Serializable {
 
     /**
      * Creates immutable view of mock settings used later by Mockito.
-     * Framework integrators can use this method to create instances of creation settings.
+     * Framework integrators can use this method to create instances of creation settings
+     * and use them in advanced use cases.
+     * Since {@link MockCreationSettings} is {@link NotExtensible} this method is needed to create instances.
      *
      * @param typeToMock class to mock
      * @param <T> type to mock
      * @return immutable view of mock settings
-     * @since TODO SZ + document on main page
+     * @since 2.10.0
      */
     <T> MockCreationSettings<T> build(Class<T> typeToMock);
 }
