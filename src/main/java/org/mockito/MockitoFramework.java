@@ -74,7 +74,7 @@ public interface MockitoFramework {
      * An example plugin is {@link org.mockito.plugins.MockMaker}.
      * For information why and how to use this method see {@link MockitoPlugins}.
      *
-     * TODO SZ
+     * @since 2.10.0
      */
     MockitoPlugins getPlugins();
 
