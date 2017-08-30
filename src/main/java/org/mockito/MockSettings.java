@@ -12,8 +12,6 @@ import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 /**
  * Allows mock creation with additional mock settings.

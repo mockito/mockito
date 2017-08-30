@@ -12,7 +12,6 @@ import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.session.DefaultMockitoSessionBuilder;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.Invocation;
-import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockito.junit.MockitoJUnit;
@@ -24,8 +23,16 @@ import org.mockito.plugins.MockitoPlugins;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
-import org.mockito.stubbing.*;
-import org.mockito.verification.*;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Answer1;
+import org.mockito.stubbing.OngoingStubbing;
+import org.mockito.stubbing.Stubber;
+import org.mockito.stubbing.VoidAnswer1;
+import org.mockito.verification.After;
+import org.mockito.verification.Timeout;
+import org.mockito.verification.VerificationAfterDelay;
+import org.mockito.verification.VerificationMode;
+import org.mockito.verification.VerificationWithTimeout;
 
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
@@ -1403,7 +1410,7 @@ import org.mockito.verification.*;
  *      Useful for creating invocations with {@link InvocationFactory} or when implementing custom {@link MockHandler}.
  *     </li>
  *     <li>{@link MockingDetails#getMockHandler()} -
- *      Other frameworks may use the mock handler to programmatically simulate invocations on the Mock object.
+ *      Other frameworks may use the mock handler to programmatically simulate invocations on mock objects.
  *     </li>
  *     <li>{@link MockHandler#getMockSettings()} -
  *      Useful to get hold of the setting the mock object was created with.
@@ -1419,14 +1426,14 @@ import org.mockito.verification.*;
  *     </li>
  *     <li>{@link MockHandler#getInvocationContainer()} -
  *      Provides access to invocation container object which has no methods, it is a marker interface.
- *      Container is intended for use but needed to hide the internal implementation and avoid leaking it to the public API.
+ *      Container is not intended for users, it is needed to hide the internal implementation and avoid leaking it to the public API.
  *     </li>
  *     <li>Deprecated {@link InternalMockHandler} -
  *       In order to accommodate API changes we needed to deprecate this interface.
- *       The interface was documented as internal since its inception and we don't have evidence it was used.
+ *       The interface was always documented as internal, we don't have evidence it was used by the community.
  *       The deprecation should be completely seamless for our users.
  *     </li>
- *     <li>Deprecated {@link NotExtensible} -
+ *     <li>{@link NotExtensible} -
  *       Public annotation that indicates to the user that she should not provide custom implementations of given type.
  *       Helps framework integrators and our users understand how to use Mockito API safely.
  *     </li>
