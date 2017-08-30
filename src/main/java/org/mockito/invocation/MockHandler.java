@@ -41,6 +41,7 @@ public interface MockHandler<T> extends Serializable {
      * Read-only settings the mock object was created with.
      * See {@link org.mockito.Mockito#mock(Class, MockSettings)}
      *
+     * @return read-only settings of the mock
      * @since 2.10.0
      */
     @Incubating
@@ -55,7 +56,8 @@ public interface MockHandler<T> extends Serializable {
      * If you have a use case that requires your own implementation of {@link InvocationContainer}
      * please reach out to us. You can open a ticket in our issue tracker to start a discussion.
      *
-     * @return container of invocations, stubbings, and answers of the mock
+     * @return container of invocations, stubbings, and answers of the mock.
+     *          The container is not part of the public API, please do not cast it or provide custom implementations.
      * @since 2.10.0
      */
     @Incubating

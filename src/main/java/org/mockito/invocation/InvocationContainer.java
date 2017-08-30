@@ -13,6 +13,8 @@ import org.mockito.NotExtensible;
  * Mockito depends on specific internal implementation of this interface.
  * If you need to provide your own implementation please reach out to us.
  * Use our issue tracker to open a ticket and open a discussion.
+ *
+ * @since 2.10.0
  */
 @NotExtensible
 @Incubating
