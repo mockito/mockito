@@ -1394,7 +1394,6 @@ import org.mockito.verification.VerificationWithTimeout;
  * <h3 id="41">41. <a class="meaningful_link" href="#framework_integrations_api" name="framework_integrations_api">
  *      (**new**) Advanced public API for framework integrations (Since 2.10.+)</h3>
  *
- * TODO SZ - finish off, group
  * In Summer 2017 we decided that Mockito
  * <a href="https://www.linkedin.com/pulse/mockito-vs-powermock-opinionated-dogmatic-static-mocking-faber">
  * should offer better API
@@ -1405,6 +1404,11 @@ import org.mockito.verification.VerificationWithTimeout;
  * During the design and implementation process (<a href="https://github.com/mockito/mockito/issues/1110">issue 1110</a>)
  * we have developed or changed following public API:
  * <ul>
+ *     <li>{@link MockitoPlugins} -
+ *      Enables framework integrators to get access to default Mockito plugins.
+ *      Useful when one needs to implement custom plugin such as {@link MockMaker}
+ *      and delegate some behavior to the default Mockito implementation.
+ *     </li>
  *     <li>{@link MockSettings#build(Class)} -
  *      Creates immutable view of mock settings used later by Mockito.
  *      Useful for creating invocations with {@link InvocationFactory} or when implementing custom {@link MockHandler}.
@@ -1414,11 +1418,6 @@ import org.mockito.verification.VerificationWithTimeout;
  *     </li>
  *     <li>{@link MockHandler#getMockSettings()} -
  *      Useful to get hold of the setting the mock object was created with.
- *     </li>
- *     <li>{@link MockitoPlugins} -
- *      Enables framework integrators to get access to default Mockito plugins.
- *      Useful when one needs to implement custom plugin such as {@link MockMaker}
- *      and delegate some behavior to the default Mockito implementation.
  *     </li>
  *     <li>{@link InvocationFactory} -
  *      Provides means to create instances of {@link Invocation} objects.
