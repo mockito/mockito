@@ -4,12 +4,16 @@
  */
 package org.mockito;
 
+import org.mockito.invocation.InvocationFactory;
+import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 
 /**
  * Allows mock creation with additional mock settings.
@@ -276,8 +280,9 @@ public interface MockSettings extends Serializable {
     /**
      * Creates immutable view of mock settings used later by Mockito.
      * Framework integrators can use this method to create instances of creation settings
-     * and use them in advanced use cases.
-     * Since {@link MockCreationSettings} is {@link NotExtensible} this method is needed to create instances.
+     * and use them in advanced use cases, for example to create invocations with {@link InvocationFactory}
+     * or to implement custom {@link MockHandler}.
+     * Since {@link MockCreationSettings} is {@link NotExtensible}, Mockito public API needs a creation method for this type.
      *
      * @param typeToMock class to mock
      * @param <T> type to mock

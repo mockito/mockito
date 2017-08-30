@@ -13,7 +13,7 @@ import java.io.Serializable;
 /**
  * Mockito handler of an invocation on a mock. This is a core part of the API, the heart of Mockito.
  * See also the {@link org.mockito.plugins.MockMaker}.
- * This type can be used for framework integrators, such as Powermock.
+ * Handler can be used to programmatically simulate invocations on the mock object.
  * <p>
  * Mockito will provide you with the implementation of this interface via {@link org.mockito.plugins.MockMaker} methods:
  * {@link org.mockito.plugins.MockMaker#createMock(MockCreationSettings, MockHandler)}

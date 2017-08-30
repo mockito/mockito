@@ -4,16 +4,23 @@
  */
 package org.mockito;
 
+import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.session.DefaultMockitoSessionBuilder;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
+import org.mockito.invocation.InvocationFactory;
+import org.mockito.invocation.MockHandler;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
+import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.MockitoPlugins;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
@@ -76,7 +83,8 @@ import org.mockito.verification.*;
  *      <a href="#37">37. Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
  *      <a href="#38">38. Meta data and generic type retention (Since 2.1.0)</a><br/>
  *      <a href="#39">39. Mocking final types, enums and final methods (Since 2.1.0)</a><br/>
- *      <a href="#40">40. (**new**) Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
+ *      <a href="#40">40. (*new*) Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
+ *      <a href="#41">41. (**new**) Advanced public API for framework integrations (Since 2.10.+)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1349,7 +1357,7 @@ import org.mockito.verification.*;
  * <code>org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker</code>
  *
  * <h3 id="40">40. <a class="meaningful_link" href="#strict_mockito" name="strict_mockito">
- *     (**new**) Improved productivity and cleaner tests with "stricter" Mockito</a> (Since 2.+)</h3>
+ *     (*new*) Improved productivity and cleaner tests with "stricter" Mockito</a> (Since 2.+)</h3>
  *
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
@@ -1376,6 +1384,54 @@ import org.mockito.verification.*;
  * Help Mockito! Try the new features, give us feedback, join the discussion about Mockito strictness at GitHub
  * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
  *
+ * <h3 id="41">41. <a class="meaningful_link" href="#framework_integrations_api" name="framework_integrations_api">
+ *      (**new**) Advanced public API for framework integrations (Since 2.10.+)</h3>
+ *
+ * TODO SZ - finish off, group
+ * In Summer 2017 we decided that Mockito
+ * <a href="https://www.linkedin.com/pulse/mockito-vs-powermock-opinionated-dogmatic-static-mocking-faber">
+ * should offer better API
+ * </a>
+ * for advanced framework integrations.
+ * The new API is not intended for users who wants to write clean unit tests.
+ * It is for other test tools and mocking framework that need to extend or wrap Mockito with some custom logic.
+ * During the design and implementation process (<a href="https://github.com/mockito/mockito/issues/1110">issue 1110</a>)
+ * we have developed or changed following public API:
+ * <ul>
+ *     <li>{@link MockSettings#build(Class)} -
+ *      Creates immutable view of mock settings used later by Mockito.
+ *      Useful for creating invocations with {@link InvocationFactory} or when implementing custom {@link MockHandler}.
+ *     </li>
+ *     <li>{@link MockingDetails#getMockHandler()} -
+ *      Other frameworks may use the mock handler to programmatically simulate invocations on the Mock object.
+ *     </li>
+ *     <li>{@link MockHandler#getMockSettings()} -
+ *      Useful to get hold of the setting the mock object was created with.
+ *     </li>
+ *     <li>{@link MockitoPlugins} -
+ *      Enables framework integrators to get access to default Mockito plugins.
+ *      Useful when one needs to implement custom plugin such as {@link MockMaker}
+ *      and delegate some behavior to the default Mockito implementation.
+ *     </li>
+ *     <li>{@link InvocationFactory} -
+ *      Provides means to create instances of {@link Invocation} objects.
+ *      Useful for framework integrations that need to programmatically simulate method calls on mock objects.
+ *     </li>
+ *     <li>{@link MockHandler#getInvocationContainer()} -
+ *      Provides access to invocation container object which has no methods, it is a marker interface.
+ *      Container is intended for use but needed to hide the internal implementation and avoid leaking it to the public API.
+ *     </li>
+ *     <li>Deprecated {@link InternalMockHandler} -
+ *       In order to accommodate API changes we needed to deprecate this interface.
+ *       The interface was documented as internal since its inception and we don't have evidence it was used.
+ *       The deprecation should be completely seamless for our users.
+ *     </li>
+ *     <li>Deprecated {@link NotExtensible} -
+ *       Public annotation that indicates to the user that she should not provide custom implementations of given type.
+ *       Helps framework integrators and our users understand how to use Mockito API safely.
+ *     </li>
+ * </ul>
+ * Do you have feedback? Please leave comment in <a href="https://github.com/mockito/mockito/issues/1110">issue 1110</a>.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {

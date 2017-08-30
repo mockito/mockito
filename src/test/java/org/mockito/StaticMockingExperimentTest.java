@@ -25,10 +25,14 @@ import static org.mockito.Mockito.withSettings;
 
 /**
  * This test is an experimental use of Mockito API to simulate static mocking.
- * Other frameworks (like Powermock) can use it to build decent support for static mocking.
+ * Other frameworks can use it to build good support for static mocking.
+ * Keep in mind that clean code never needs to mock static methods.
  * This test is a documentation how it can be done using current public API of Mockito.
  * This test is not only an experiment it also provides coverage for
  * some of the advanced public API exposed for framework integrators.
+ * <p>
+ * For more rationale behind this experimental test
+ * <a href="https://www.linkedin.com/pulse/mockito-vs-powermock-opinionated-dogmatic-static-mocking-faber">see the article</a>.
  */
 public class StaticMockingExperimentTest extends TestBase {
 

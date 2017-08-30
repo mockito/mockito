@@ -8,7 +8,7 @@ import org.mockito.MockitoFramework;
  * <p>
  * Example use case: one needs to implement custom {@link MockMaker}
  * and delegate some behavior to the default Mockito implementation.
- * The interface was introduced to help framework integrations like Powermock.
+ * The interface was introduced to help framework integrations.
  *
  * @since 2.10.0
  */
