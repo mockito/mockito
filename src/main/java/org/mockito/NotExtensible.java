@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Indicates to the user that she should not provide custom implementations of given type.
- * Helps framework integrators and our users understand how to use Mockito API safely.
+ * Helps framework integrators and our users understand how to use Mockito API safely,
+ * without the risk of getting exposed to incompatible changes.
  * Some types that are a part of Mockito public API are not intended to be extended.
  * It's because Mockito team needs to be able to add new methods to some types without breaking compatibility contract.
  * We would never break compatibility by changing the signature of an existing public method.

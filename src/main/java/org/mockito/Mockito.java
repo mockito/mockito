@@ -1400,37 +1400,38 @@ import org.mockito.verification.VerificationWithTimeout;
  * should offer better API
  * </a>
  * for advanced framework integrations.
- * The new API is not intended for users who wants to write clean unit tests.
- * It is for other test tools and mocking framework that need to extend or wrap Mockito with some custom logic.
+ * The new API is not intended for users who want to write unit tests.
+ * It is intended for other test tools and mocking frameworks that need to extend or wrap Mockito with some custom logic.
  * During the design and implementation process (<a href="https://github.com/mockito/mockito/issues/1110">issue 1110</a>)
- * we have developed or changed following public API:
+ * we have developed and changed following public API elements:
  * <ul>
- *     <li>{@link MockitoPlugins} -
+ *     <li>New {@link MockitoPlugins} -
  *      Enables framework integrators to get access to default Mockito plugins.
  *      Useful when one needs to implement custom plugin such as {@link MockMaker}
  *      and delegate some behavior to the default Mockito implementation.
  *     </li>
- *     <li>{@link MockSettings#build(Class)} -
+ *     <li>New {@link MockSettings#build(Class)} -
  *      Creates immutable view of mock settings used later by Mockito.
  *      Useful for creating invocations with {@link InvocationFactory} or when implementing custom {@link MockHandler}.
  *     </li>
- *     <li>{@link MockingDetails#getMockHandler()} -
+ *     <li>New {@link MockingDetails#getMockHandler()} -
  *      Other frameworks may use the mock handler to programmatically simulate invocations on mock objects.
  *     </li>
- *     <li>{@link MockHandler#getMockSettings()} -
+ *     <li>New {@link MockHandler#getMockSettings()} -
  *      Useful to get hold of the setting the mock object was created with.
  *     </li>
- *     <li>{@link InvocationFactory} -
+ *     <li>New {@link InvocationFactory} -
  *      Provides means to create instances of {@link Invocation} objects.
  *      Useful for framework integrations that need to programmatically simulate method calls on mock objects.
  *     </li>
- *     <li>{@link MockHandler#getInvocationContainer()} -
- *      Provides access to invocation container object which has no methods, it is a marker interface.
- *      Container is not intended for users, it is needed to hide the internal implementation and avoid leaking it to the public API.
+ *     <li>New {@link MockHandler#getInvocationContainer()} -
+ *      Provides access to invocation container object which has no methods (marker interface).
+ *      Container is needed to hide the internal implementation and avoid leaking it to the public API.
  *     </li>
- *     <li>Compatible change to public type {@link Stubbing} -
+ *     <li>Changed {@link Stubbing} -
  *      it now extends {@link Answer} interface.
  *      It is backwards compatible because Stubbing interface is not extensible (see {@link NotExtensible}).
+ *      The change should be seamless to our users.
  *     </li>
  *     <li>Deprecated {@link InternalMockHandler} -
  *       In order to accommodate API changes we needed to deprecate this interface.

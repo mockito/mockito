@@ -112,7 +112,7 @@ public interface MockingDetails {
 
     /**
      * Returns the {@link MockHandler} associated with this mock object.
-     * The handler is the core of Mockito mock object method handling.
+     * The handler is the core of mock object method handling.
      * This method is useful for framework integrators.
      * For example, other frameworks may use mock handler to simulate method calls on the Mock object.
      *

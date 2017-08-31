@@ -278,7 +278,7 @@ public interface MockSettings extends Serializable {
     /**
      * Creates immutable view of mock settings used later by Mockito.
      * Framework integrators can use this method to create instances of creation settings
-     * and use them in advanced use cases, for example to create invocations with {@link InvocationFactory}
+     * and use them in advanced use cases, for example to create invocations with {@link InvocationFactory},
      * or to implement custom {@link MockHandler}.
      * Since {@link MockCreationSettings} is {@link NotExtensible}, Mockito public API needs a creation method for this type.
      *

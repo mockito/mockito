@@ -11,6 +11,7 @@ import java.util.concurrent.Callable;
  * Available via {@link MockitoFramework#getInvocationFactory()}.
  * Provides means to create instances of {@link Invocation} objects.
  * Useful for framework integrations that need to programmatically simulate method calls on mock objects.
+ * To simulate a method call on mock, one needs an instance of {@link Invocation}.
  * <p>
  * Please don't provide your own implementation of {@link Invocation} type.
  * Mockito team needs flexibility to add new methods to this interface if we need to.

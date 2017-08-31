@@ -1,5 +1,6 @@
 package org.mockito.plugins;
 
+import org.mockito.Mockito;
 import org.mockito.MockitoFramework;
 
 /**
@@ -30,6 +31,7 @@ public interface MockitoPlugins {
      * Returns inline mock maker, an optional mock maker that is bundled with Mockito distribution.
      * This method is needed because {@link #getDefaultPlugin(Class)} does not provide an instance of inline mock maker.
      * Creates new instance each time is called so it is recommended to keep hold of the resulting object for future invocations.
+     * For more information about inline mock maker see the javadoc for main {@link Mockito} class.
      *
      * @return instance of inline mock maker
      * @since 2.10.0
