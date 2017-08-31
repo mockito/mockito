@@ -44,12 +44,23 @@ env:
   - GRADLE_OPTS="-XX:+UseCompressedOops -Djava.awt.headless=true"
 
 branches:
+  #Don't build tags
   except:
   - /^v\d/
+  
+#Below skips the installation step completely (https://docs.travis-ci.com/user/customizing-the-build/#Skipping-the-Installation-Step)
+#We need it because otherwise Travis CI injects an awkward './gradlew assemble' step into the CI workflow
+#We want to control and decide what Gradle tasks are executed
 install:
  - true
+ 
 script:
-  - ./gradlew ciBuild -s
+  # We are using && below on purpose
+  # ciPerformRelease must run only when the entire build has completed
+  # This guarantees that no release steps are executed when the build or tests fail
+  - ./gradlew build idea -s -PcheckJava6Compatibility && ./gradlew ciPerformRelease
+  
 after_success:
+  #Generates coverage report:
   - ./gradlew --stacktrace coverageReport && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
   - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
