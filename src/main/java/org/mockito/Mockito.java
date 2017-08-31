@@ -27,6 +27,7 @@ import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Answer1;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.VoidAnswer1;
 import org.mockito.verification.After;
 import org.mockito.verification.Timeout;
@@ -1426,6 +1427,10 @@ import org.mockito.verification.VerificationWithTimeout;
  *     <li>{@link MockHandler#getInvocationContainer()} -
  *      Provides access to invocation container object which has no methods, it is a marker interface.
  *      Container is not intended for users, it is needed to hide the internal implementation and avoid leaking it to the public API.
+ *     </li>
+ *     <li>Compatible change to public type {@link Stubbing} -
+ *      it now extends {@link Answer} interface.
+ *      It is backwards compatible because Stubbing interface is not extensible (see {@link NotExtensible}).
  *     </li>
  *     <li>Deprecated {@link InternalMockHandler} -
  *       In order to accommodate API changes we needed to deprecate this interface.

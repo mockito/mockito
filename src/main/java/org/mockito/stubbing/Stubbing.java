@@ -11,6 +11,10 @@ import org.mockito.invocation.Invocation;
 /**
  * Stubbing declared on the mock object.
  * See detailed description including sample code and use cases see javadoc for {@link MockingDetails#getStubbings()}.
+ * <p>
+ * Since 2.10.0 this interface extends {@link Answer}.
+ * Extending Answer is backwards compatible because Stubbing interface is not extensible (see {@link NotExtensible}).
+ * Extending Answer was needed to improve Mockito domain model and simplify the code.
  *
  * @since 2.2.3
  */
