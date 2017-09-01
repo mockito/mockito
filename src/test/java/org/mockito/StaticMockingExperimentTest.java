@@ -58,10 +58,16 @@ public class StaticMockingExperimentTest extends TestBase {
         handler.handle(invocation);
 
         //verify staticMethod on mock
+        //Mockito cannot capture static methods so we will simulate this scenario in 3 steps:
+        //1. Call standard 'verify' method. Internally, it will add verificationMode to the thread local state.
+        //  Effectively, we indicate to Mockito that right now we are about to verify a method call on this mock.
         verify(mock);
+        //2. Create the invocation instance using the new public API
+        //  Mockito cannot capture static methods but we can create an invocation instance of that static invocation
         Invocation verification = Mockito.framework().getInvocationFactory().createInvocation(mock, withSettings().build(Foo.class), staticMethod, realMethod,
             "some arg");
-
+        //3. Make Mockito handle the static method invocation
+        //  Mockito will find verification mode in thread local state and will try verify the invocation
         handler.handle(verification);
 
         //verify zero times, method with different argument
