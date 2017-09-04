@@ -8,6 +8,10 @@
 
 # 2.9.0 (2017-08-26) published to [JCenter](https://bintray.com/mockito/maven/mockito/2.9.0)/[Maven Central](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.9.0%7Cjar)
 
+Notable changes:
+ - bumped ByteBuddy 1.6.14 -> 1.7.0 (inline mocking, bugfixes)
+ - bumped Objenesis 2.5 -> 2.6 (Java9, bugfixes)
+
 **2.9.0 (2017-08-26)** - [5 commits](https://github.com/mockito/mockito/compare/v2.8.55...v2.9.0) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.9.0-green.svg)](https://bintray.com/mockito/maven/mockito/2.9.0)
  - Updated README.md wrt maven central release [(#1172)](https://github.com/mockito/mockito/pull/1172)
  - Bumped minor version so signify new Objenesis version [(#1171)](https://github.com/mockito/mockito/pull/1171)
