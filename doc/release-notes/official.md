@@ -37,7 +37,7 @@
  - [mock-maker-inline] Method calls on mock forwarded to real instance [(#1135)](https://github.com/mockito/mockito/issues/1135)
 
 **2.8.49 (2017-06-22)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.48...v2.8.49) by [Rafael Winterhalter](http://github.com/raphw) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.49-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.49)
- - Improve detection on non-mockable types - addresses #1064 [(#1128)](https://github.com/mockito/mockito/pull/1128)
+ - Improve detection on non-mockable types - ByteBuddy bump 1.6.14->1.7.0 [(#1128)](https://github.com/mockito/mockito/pull/1128)
 
 **2.8.48 (2017-06-18)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.47...v2.8.48) by epeee (1), [Szczepan Faber](http://github.com/szczepiq) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.48-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.48)
  - make use of shipkit v0.8.92 [(#1132)](https://github.com/mockito/mockito/pull/1132)
