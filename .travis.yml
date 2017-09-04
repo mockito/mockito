@@ -15,8 +15,8 @@ language: java
 
 matrix:
   include:
-  - jdk: oraclejdk7
-  - jdk: oraclejdk7
+  - jdk: openjdk7
+  - jdk: openjdk7
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
   - jdk: oraclejdk8
     env: SKIP_RELEASE=true
