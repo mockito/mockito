@@ -71,6 +71,13 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     }
 
     @Test
+    public void should_detect_non_overridden_generic_method_of_supertype() throws Exception {
+        MockCreationSettings<GenericSubClass> settings = settingsFor(GenericSubClass.class);
+        GenericSubClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
+        assertThat(proxy.value()).isEqualTo("bar");
+    }
+
+    @Test
     public void should_create_mock_from_hashmap() throws Exception {
         MockCreationSettings<HashMap> settings = settingsFor(HashMap.class);
         HashMap proxy = mockMaker.createMock(settings, new MockHandlerImpl<HashMap>(settings));
@@ -345,5 +352,15 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         public String indirect() {
             return "foo";
         }
+    }
+
+    public static class GenericClass<T> {
+
+        public T value() {
+            return null;
+        }
+    }
+
+    public static class GenericSubClass extends GenericClass<String> {
     }
 }
