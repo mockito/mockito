@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.MatchableInvocation;
 import org.mockito.stubbing.Stubbing;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.InvocationOnMock;
@@ -15,13 +16,13 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @SuppressWarnings("unchecked")
-public class StubbedInvocationMatcher extends InvocationMatcher implements Answer, Serializable, Stubbing {
+public class StubbedInvocationMatcher extends InvocationMatcher implements Serializable, Stubbing {
 
     private static final long serialVersionUID = 4919105134123672727L;
     private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();
     private DescribedInvocation usedAt;
 
-    public StubbedInvocationMatcher(InvocationMatcher invocation, Answer answer) {
+    public StubbedInvocationMatcher(MatchableInvocation invocation, Answer answer) {
         super(invocation.getInvocation(), invocation.getMatchers());
         this.answers.add(answer);
     }

@@ -7,6 +7,7 @@ package org.mockito.internal.configuration.plugins;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.StackTraceCleanerProvider;
 
 /**
@@ -51,5 +52,12 @@ public class Plugins {
      */
     public static AnnotationEngine getAnnotationEngine() {
         return registry.getAnnotationEngine();
+    }
+
+    /**
+     * @return instance of mockito plugins type
+     */
+    public static MockitoPlugins getPlugins() {
+        return new DefaultMockitoPlugins();
     }
 }

@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import java.lang.reflect.Modifier;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.Instantiator;
 import org.mockito.internal.util.Platform;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+
+import java.lang.reflect.Modifier;
 
 import static org.mockito.internal.util.StringUtil.join;
 
@@ -46,7 +46,7 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
         try {
             mockInstance = instantiator.newInstance(mockedProxyType);
             MockAccess mockAccess = (MockAccess) mockInstance;
-            mockAccess.setMockitoInterceptor(new MockMethodInterceptor(asInternalMockHandler(handler), settings));
+            mockAccess.setMockitoInterceptor(new MockMethodInterceptor(handler, settings));
 
             return ensureMockIsAssignableToMockedType(settings, mockInstance);
         } catch (ClassCastException cce) {
@@ -135,7 +135,7 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
     @Override
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
         ((MockAccess) mock).setMockitoInterceptor(
-                new MockMethodInterceptor(asInternalMockHandler(newHandler), settings)
+                new MockMethodInterceptor(newHandler, settings)
         );
     }
 
@@ -161,16 +161,5 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
                 return join("not handled type");
             }
         };
-    }
-
-    private static InternalMockHandler<?> asInternalMockHandler(MockHandler handler) {
-        if (!(handler instanceof InternalMockHandler)) {
-            throw new MockitoException(join(
-                    "At the moment you cannot provide own implementations of MockHandler.",
-                    "Please refer to the javadocs for the MockMaker interface.",
-                    ""
-            ));
-        }
-        return (InternalMockHandler<?>) handler;
     }
 }

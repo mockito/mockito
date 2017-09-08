@@ -9,7 +9,6 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import java.util.ArrayList;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
@@ -17,28 +16,13 @@ import org.mockito.internal.MockitoCore;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 
+import java.util.ArrayList;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEFAULTS;
 import static org.mockito.Mockito.mock;
 
 public class CallsRealMethodsTest {
-    @Test
-    public void should_invoke_real_method() throws Throwable {
-        class Concrete {
-            void concrete() {
-                throw new RuntimeException("real code");
-            }
-        }
-        Concrete mock = mock(Concrete.class);
-
-        Invocation concrete = new InvocationBuilder().mock(mock).method(Concrete.class.getDeclaredMethod("concrete")).toInvocation();
-        try {
-            new CallsRealMethods().answer(concrete);
-        } catch (RuntimeException throwable) {
-            throwable.printStackTrace();
-            assertThat(throwable).hasMessage("real code");
-        }
-    }
 
     @Test
     public void should_delegate_to_returns_default_when_abstract_method() throws Throwable {

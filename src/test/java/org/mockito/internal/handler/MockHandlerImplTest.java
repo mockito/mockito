@@ -11,7 +11,6 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
@@ -26,20 +25,19 @@ import org.mockitoutil.TestBase;
 
 import java.util.Arrays;
 
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MockHandlerImplTest extends TestBase {
 
     private StubbedInvocationMatcher stubbedInvocationMatcher = mock(StubbedInvocationMatcher.class);
-    private Invocation invocation = mock(InvocationImpl.class);
-
+    private Invocation invocation = mock(Invocation.class);
 
     @Test
     public void should_remove_verification_mode_even_when_invalid_matchers() throws Throwable {
@@ -102,8 +100,8 @@ public class MockHandlerImplTest extends TestBase {
 
 
     private void stub_ordinary_invocation_with_invocation_matcher(MockHandlerImpl<?> handler, StubbedInvocationMatcher value) {
-        handler.invocationContainerImpl = mock(InvocationContainerImpl.class);
-        given(handler.invocationContainerImpl.findAnswerFor(any(InvocationImpl.class))).willReturn(value);
+        handler.invocationContainer = mock(InvocationContainerImpl.class);
+        given(handler.invocationContainer.findAnswerFor(any(Invocation.class))).willReturn(value);
     }
 
 

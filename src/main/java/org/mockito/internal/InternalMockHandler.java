@@ -4,19 +4,17 @@
  */
 package org.mockito.internal;
 
-import java.util.List;
-
-import org.mockito.internal.stubbing.InvocationContainer;
 import org.mockito.invocation.MockHandler;
-import org.mockito.mock.MockCreationSettings;
-import org.mockito.stubbing.Answer;
 
-public interface InternalMockHandler<T> extends MockHandler {
-
-    MockCreationSettings<T> getMockSettings();
-
-    void setAnswersForStubbing(List<Answer<?>> answers);
-
-    InvocationContainer getInvocationContainer();
-
-}
+/**
+ * Deprecated, please use {@link MockHandler}.
+ * <p>
+ * This class was changed in Mockito in order to tidy up Mockito API
+ * and make it easier for other frameworks to integrate with Mockito.
+ * Since this class is internal, e.g. it resides in "org.mockito.internal" package,
+ * Mockito team can change it without the need for major version release of Mockito.
+ * <p>
+ * This interface was deprecated in Mockito 2.10.0 and will be deleted in Mockito 3.0.
+ */
+@Deprecated
+public interface InternalMockHandler<T> extends MockHandler {}
