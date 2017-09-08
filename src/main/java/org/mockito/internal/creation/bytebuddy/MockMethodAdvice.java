@@ -23,6 +23,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -38,6 +39,8 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     private final SelfCallInfo selfCallInfo = new SelfCallInfo();
     private final MethodGraph.Compiler compiler = MethodGraph.Compiler.Default.forJavaHierarchy();
+    private final WeakConcurrentMap<Class<?>, SoftReference<MethodGraph>> graphs
+        = new WeakConcurrentMap.WithInlinedExpunction<Class<?>, SoftReference<MethodGraph>>();
 
     public MockMethodAdvice(WeakConcurrentMap<Object, MockMethodInterceptor> interceptors, String identifier) {
         this.interceptors = interceptors;
@@ -120,10 +123,14 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     @Override
     public boolean isOverridden(Object instance, Method origin) {
-        MethodGraph.Node node = compiler
-            .compile(new TypeDescription.ForLoadedType(instance.getClass()))
-            .locate(new MethodDescription.ForLoadedMethod(origin).asSignatureToken());
-        return node.getSort().isResolved() && !node.getRepresentative().represents(origin);
+        SoftReference<MethodGraph> reference = graphs.get(instance.getClass());
+        MethodGraph methodGraph = reference == null ? null : reference.get();
+        if (methodGraph == null) {
+            methodGraph = compiler.compile(new TypeDescription.ForLoadedType(instance.getClass()));
+            graphs.put(instance.getClass(), new SoftReference<MethodGraph>(methodGraph));
+        }
+        MethodGraph.Node node = methodGraph.locate(new MethodDescription.ForLoadedMethod(origin).asSignatureToken());
+        return !node.getSort().isResolved() || !node.getRepresentative().asDefined().represents(origin);
     }
 
     private static class RealMethodCall implements RealMethod {
