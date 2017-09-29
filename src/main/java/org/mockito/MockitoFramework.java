@@ -5,7 +5,10 @@
 package org.mockito;
 
 import org.mockito.exceptions.misusing.RedundantListenerException;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationFactory;
 import org.mockito.listeners.MockitoListener;
+import org.mockito.plugins.MockitoPlugins;
 
 /**
  * Mockito framework settings and lifecycle listeners, for advanced users or for integrating with other frameworks.
@@ -46,6 +49,7 @@ public interface MockitoFramework {
      * </code></pre>
      *
      * @param listener to add to Mockito
+     * @return this instance of mockito framework (fluent builder pattern)
      * @since 2.1.0
      */
     @Incubating
@@ -62,8 +66,30 @@ public interface MockitoFramework {
      * we are very happy to hear about it via our issue tracker or mailing list.
      *
      * @param listener to remove
+     * @return this instance of mockito framework (fluent builder pattern)
      * @since 2.1.0
      */
     @Incubating
     MockitoFramework removeListener(MockitoListener listener);
+
+    /**
+     * Returns an object that has access to Mockito plugins.
+     * An example plugin is {@link org.mockito.plugins.MockMaker}.
+     * For information why and how to use this method see {@link MockitoPlugins}.
+     *
+     * @return object that gives access to mockito plugins
+     * @since 2.10.0
+     */
+    @Incubating
+    MockitoPlugins getPlugins();
+
+    /**
+     * Returns a factory that can create instances of {@link Invocation}.
+     * It is useful for framework integrations, because {@link Invocation} is {@link NotExtensible}.
+     *
+     * @return object that can construct invocations
+     * @since 2.10.0
+     */
+    @Incubating
+    InvocationFactory getInvocationFactory();
 }

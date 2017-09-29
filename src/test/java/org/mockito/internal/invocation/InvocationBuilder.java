@@ -5,18 +5,19 @@
 
 package org.mockito.internal.invocation;
 
-import java.lang.reflect.Method;
-import java.util.LinkedList;
-import java.util.List;
 import org.mockito.Mockito;
+import org.mockito.internal.creation.bytebuddy.InterceptedInvocation;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.realmethod.RealMethod;
-import org.mockito.internal.util.reflection.AccessibilityChanger;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockitousage.IMethods;
 
+import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
+
 import static java.util.Arrays.asList;
+import static org.mockito.internal.creation.bytebuddy.InterceptedInvocation.NO_OP;
 
 /**
  * Build an invocation.
@@ -60,32 +61,16 @@ public class InvocationBuilder {
             }
         }
 
-        Invocation i = new InvocationImpl(mock,
-                                          new SerializableMethod(method),
-                                          args,
-                                          sequenceNumber,
-                                          toDumbRealMethod(),
-                                          location == null ? new LocationImpl() : location);
+        Invocation i = new InterceptedInvocation(mock,
+            new SerializableMethod(method),
+            args,
+            NO_OP,
+            location == null ? new LocationImpl() : location,
+            1);
         if (verified) {
             i.markVerified();
         }
         return i;
-    }
-
-    private RealMethod toDumbRealMethod() {
-        return new RealMethod() {
-            @Override
-            public Object invoke(Object target, Object[] arguments) throws Throwable {
-                AccessibilityChanger accessibilityChanger = new AccessibilityChanger();
-                try {
-                    accessibilityChanger.enableAccess(method);
-                    return method.invoke(target, arguments);
-                } finally {
-                    accessibilityChanger.safelyDisableAccess(method);
-                }
-
-            }
-        };
     }
 
     public InvocationBuilder method(String methodName) {

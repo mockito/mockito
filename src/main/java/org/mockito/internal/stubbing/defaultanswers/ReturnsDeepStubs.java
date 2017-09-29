@@ -6,7 +6,6 @@ package org.mockito.internal.stubbing.defaultanswers;
 
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
@@ -16,6 +15,7 @@ import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Stubbing;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -57,13 +57,13 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
     }
 
     private Object deepStub(InvocationOnMock invocation, GenericMetadataSupport returnTypeGenericMetadata) throws Throwable {
-        InternalMockHandler<Object> handler = MockUtil.getMockHandler(invocation.getMock());
-        InvocationContainerImpl container = (InvocationContainerImpl) handler.getInvocationContainer();
+        InvocationContainerImpl container = MockUtil.getInvocationContainer(invocation.getMock());
 
         // matches invocation for verification
-        for (StubbedInvocationMatcher stubbedInvocationMatcher : container.getStubbedInvocations()) {
-            if (container.getInvocationForStubbing().matches(stubbedInvocationMatcher.getInvocation())) {
-                return stubbedInvocationMatcher.answer(invocation);
+        // TODO why don't we do container.findAnswer here?
+        for (Stubbing stubbing : container.getStubbedInvocations()) {
+            if (container.getInvocationForStubbing().matches(stubbing.getInvocation())) {
+                return stubbing.answer(invocation);
             }
         }
 

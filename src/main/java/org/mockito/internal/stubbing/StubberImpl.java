@@ -36,7 +36,9 @@ public class StubberImpl implements Stubber {
             throw notAMockPassedToWhenMethod();
         }
 
-        MockUtil.getMockHandler(mock).setAnswersForStubbing(answers);
+
+		    MockUtil.getInvocationContainer(mock).setAnswersForStubbing(answers);
+
         return mock;
     }
 
