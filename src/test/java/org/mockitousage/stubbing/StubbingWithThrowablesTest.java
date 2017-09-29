@@ -63,7 +63,7 @@ public class StubbingWithThrowablesTest extends TestBase {
 
         doThrow(expected).when(mock).clear();
 
-        exception.expect(IllegalArgumentException.class);
+        exception.expect(sameInstance(expected));
 
         mock.clear();
 
