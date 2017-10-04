@@ -4,10 +4,10 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.OngoingStubbing;
 import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class SampleTest extends TestBase {
 
@@ -20,18 +20,24 @@ public class SampleTest extends TestBase {
                 return defaultAnswer;
             }
         });
-        Thread checker = new Thread() {
+
+        // This is certainly Reporter.incorrectUseOfApi(), but helps for reproducing the issue
+        // Can occur in unit test which uses mocks in spawned threads
+        OngoingStubbing ongoingStubbing = Mockito.when(foo.bar("DOG"));
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                assertTrue(foo.bar("BUG").contains(defaultAnswer));
+                System.out.println("Before providing thenReturn - foo.bar(\"DOG\"): " + foo.bar("DOG"));
+                System.out.println("Before providing thenReturn - foo.bar(\"BUG\"): " + foo.bar("BUG"));
             }
-        };
-        checker.start();
+        });
+        t.start();
+        t.join();
+        // Because "BUG" is the recent invocation, stubbing happens as foo.bar("BUG") returning "PUG"
+        ongoingStubbing.thenReturn("PUG");
+        System.out.println("After providing thenReturn - foo.bar(\"DOG\"): " + foo.bar("DOG"));
+        System.out.println("After providing thenReturn - foo.bar(\"BUG\"): " + foo.bar("BUG"));
 
-        Mockito.when(foo.bar("DOG")).thenReturn("PUG");
-        if (foo.bar("DOG").equals(defaultAnswer)) {
-            System.out.println("something went wrong");
-        }
         assertEquals("PUG", foo.bar("DOG"));
     }
 
