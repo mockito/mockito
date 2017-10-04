@@ -27,6 +27,8 @@ afterEvaluate {
                     'org.mockito.*'
 
             instruction '-removeheaders', 'Private-Package'
+
+            attributes 'Automatic-Module-Name': 'org.mockito'
         }
     }
 }
