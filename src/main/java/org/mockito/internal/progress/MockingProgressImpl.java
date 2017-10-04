@@ -31,7 +31,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     private OngoingStubbing<?> ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
-    private Location stubbingInProgress = null;
+    private static Location stubbingInProgress = null;
     private VerificationStrategy verificationStrategy;
     private final Set<MockitoListener> listeners = new LinkedHashSet<MockitoListener>();
 
