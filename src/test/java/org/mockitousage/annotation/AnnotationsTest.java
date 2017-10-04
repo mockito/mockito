@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Answers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
@@ -77,6 +78,7 @@ public class AnnotationsTest extends TestBase {
     @Mock(answer = Answers.RETURNS_DEFAULTS) IMethods returningDefaults;
     @Mock(extraInterfaces = {List.class}) IMethods hasExtraInterfaces;
     @Mock() IMethods noExtraConfig;
+    @Mock(stubOnly=true) IMethods stubOnly;
 
     @Test
     public void shouldInitMocksWithGivenSettings() throws Exception {
@@ -87,6 +89,7 @@ public class AnnotationsTest extends TestBase {
         assertEquals(0, returningDefaults.intReturningMethod());
 
         assertTrue(hasExtraInterfaces instanceof List);
+        assertTrue(Mockito.mockingDetails(stubOnly).getMockCreationSettings().isStubOnly());
 
         assertEquals(0, noExtraConfig.intReturningMethod());
     }
