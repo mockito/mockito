@@ -29,6 +29,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings({ "serial", "unchecked", "rawtypes" })
@@ -216,7 +217,17 @@ public class StubbingWithThrowablesTest extends TestBase {
 
         when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class<RuntimeException>[]) null);
     }
+    
+    @Test
+    public void shouldNotAllowDifferntCheckedException() throws Exception {
+        IMethods mock = mock(IMethods.class);
 
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Checked exception is invalid for this method");
+
+        when(mock.throwsIOException(0)).thenThrow(CheckedException.class);
+    }
+    
     @Test
     public void shouldMixThrowablesAndReturnsOnDifferentMocks() throws Exception {
         when(mock.add("ExceptionOne")).thenThrow(new ExceptionOne());
@@ -312,6 +323,8 @@ public class StubbingWithThrowablesTest extends TestBase {
     private class ExceptionThree extends RuntimeException {}
 
     private class ExceptionFour extends RuntimeException {}
+    
+    private class CheckedException extends Exception{}
 
     public class NaughtyException extends RuntimeException {
         public NaughtyException() {
