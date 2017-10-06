@@ -175,7 +175,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
-        when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class[])null);
+        when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class[]) null);
     }
 
     @Test
@@ -183,7 +183,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
-        when(mock.isEmpty()).thenThrow(RuntimeException.class,(Class) null);
+        when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class) null);
     }
 
     @Test
@@ -199,7 +199,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
-        doThrow(RuntimeException.class,(Class) null).when(mock).isEmpty();
+        doThrow(RuntimeException.class, (Class) null).when(mock).isEmpty();
     }
 
     @Test
@@ -207,7 +207,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
-        doThrow(RuntimeException.class, (Class[])null).when(mock).isEmpty();
+        doThrow(RuntimeException.class, (Class[]) null).when(mock).isEmpty();
     }
 
     @Test
@@ -217,7 +217,7 @@ public class StubbingWithThrowablesTest extends TestBase {
 
         when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class<RuntimeException>[]) null);
     }
-    
+
     @Test
     public void shouldNotAllowDifferntCheckedException() throws Exception {
         IMethods mock = mock(IMethods.class);
@@ -227,7 +227,27 @@ public class StubbingWithThrowablesTest extends TestBase {
 
         when(mock.throwsIOException(0)).thenThrow(CheckedException.class);
     }
-    
+
+    @Test
+    public void shouldNotAllowCheckedExceptionWhenErrorIsDeclared() throws Exception {
+        IMethods mock = mock(IMethods.class);
+
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Checked exception is invalid for this method");
+
+        when(mock.throwsError(0)).thenThrow(CheckedException.class);
+    }
+
+    @Test
+    public void shouldNotAllowCheckedExceptionWhenNothingIsDeclared() throws Exception {
+        IMethods mock = mock(IMethods.class);
+
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Checked exception is invalid for this method");
+
+        when(mock.throwsNothing(true)).thenThrow(CheckedException.class);
+    }
+
     @Test
     public void shouldMixThrowablesAndReturnsOnDifferentMocks() throws Exception {
         when(mock.add("ExceptionOne")).thenThrow(new ExceptionOne());
@@ -316,15 +336,20 @@ public class StubbingWithThrowablesTest extends TestBase {
         }
     }
 
-    private class ExceptionOne extends RuntimeException {}
+    private class ExceptionOne extends RuntimeException {
+    }
 
-    private class ExceptionTwo extends RuntimeException {}
+    private class ExceptionTwo extends RuntimeException {
+    }
 
-    private class ExceptionThree extends RuntimeException {}
+    private class ExceptionThree extends RuntimeException {
+    }
 
-    private class ExceptionFour extends RuntimeException {}
-    
-    private class CheckedException extends Exception{}
+    private class ExceptionFour extends RuntimeException {
+    }
+
+    private class CheckedException extends Exception {
+    }
 
     public class NaughtyException extends RuntimeException {
         public NaughtyException() {
