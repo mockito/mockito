@@ -27,7 +27,7 @@ class PluginLoader {
     }
 
     /**
-     * @Deprecated Let's avoid adding more aliases. It complicates the API.
+     * @deprecated Let's avoid adding more aliases. It complicates the API.
      * Instead of an alias, we can use fully qualified class name of the alternative implementation.
      * <p>
      * Adds an alias for a class name to this plugin loader. Instead of the fully qualified type name,
