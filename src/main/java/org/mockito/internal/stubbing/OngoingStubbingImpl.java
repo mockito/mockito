@@ -20,6 +20,7 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
         this.invocationContainer = invocationContainer;
     }
 
+    @Override
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
         if(!invocationContainer.hasInvocationForPotentialStubbing()) {
             throw incorrectUseOfApi();
@@ -29,6 +30,7 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
         return new ConsecutiveStubbing<T>(invocationContainer);
     }
 
+    @Override
     public OngoingStubbing<T> then(Answer<?> answer) {
         return thenAnswer(answer);
     }
@@ -38,8 +40,11 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
         return invocationContainer.getInvocations();
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <M> M getMock() {
         return (M) invocationContainer.invokedMock();
     }
 }
+
+
