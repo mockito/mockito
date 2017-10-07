@@ -18,7 +18,9 @@ import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.mockito.internal.exceptions.Reporter.unfinishedStubbing;
@@ -32,6 +34,8 @@ public class MockingProgressImpl implements MockingProgress {
     private OngoingStubbing<?> ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
+    private Object currentMock;
+    private static List<Object> stubbingInProgressList = new ArrayList<Object>();
     private VerificationStrategy verificationStrategy;
     private final Set<MockitoListener> listeners = new LinkedHashSet<MockitoListener>();
 
@@ -82,6 +86,7 @@ public class MockingProgressImpl implements MockingProgress {
      */
     public void resetOngoingStubbing() {
         ongoingStubbing = null;
+        stubbingInProgressList.remove(currentMock);
     }
 
     public VerificationMode pullVerificationMode() {
@@ -96,11 +101,20 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void stubbingStarted() {
         validateState();
+        validateStubbingStatus();
+        stubbingInProgressList.add(ongoingStubbing.getMock());
         stubbingInProgress = new LocationImpl();
+    }
+
+    public void validateStubbingStatus() {
+        if (ongoingStubbing != null && stubbingInProgressList.contains(currentMock)) {
+            throw unfinishedStubbing(stubbingInProgress);
+        }
     }
 
     public void validateState() {
         validateMostStuff();
+        currentMock = ongoingStubbing != null ? ongoingStubbing.getMock() : null;
 
         //validate stubbing:
         if (stubbingInProgress != null) {
@@ -126,6 +140,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void stubbingCompleted() {
         stubbingInProgress = null;
+        stubbingInProgressList.remove(currentMock);
     }
 
     public String toString() {
@@ -136,6 +151,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     public void reset() {
         stubbingInProgress = null;
+        stubbingInProgressList.remove(currentMock);
         verificationMode = null;
         getArgumentMatcherStorage().reset();
     }
