@@ -90,7 +90,7 @@ public class CaptorAnnotationTest extends TestBase {
     }
 
     @Test
-    public void shouldScreamWhenMoreThanOneMockitoAnnotaton() {
+    public void shouldScreamWhenMoreThanOneMockitoAnnotation() {
         try {
             MockitoAnnotations.initMocks(new ToManyAnnotations());
             fail();

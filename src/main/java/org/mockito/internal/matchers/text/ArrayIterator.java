@@ -6,6 +6,7 @@ package org.mockito.internal.matchers.text;
 
 import java.lang.reflect.Array;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Inspired on hamcrest, internal package class,
@@ -33,6 +34,9 @@ class ArrayIterator implements Iterator<Object> {
     }
 
     public Object next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
         return Array.get(array, currentIndex++);
     }
 

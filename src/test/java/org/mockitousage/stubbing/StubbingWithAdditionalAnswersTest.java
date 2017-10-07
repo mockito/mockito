@@ -5,17 +5,17 @@
 package org.mockitousage.stubbing;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.mockito.AdditionalAnswers.answer;
 import static org.mockito.AdditionalAnswers.answerVoid;
 import static org.mockito.AdditionalAnswers.returnsArgAt;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.AdditionalAnswers.returnsLastArg;
 import static org.mockito.AdditionalAnswers.returnsSecondArg;
+import static org.mockito.AdditionalAnswers.answersWithDelay;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.anyInt;
-import static org.mockito.BDDMockito.anyObject;
 import static org.mockito.BDDMockito.anyString;
-import static org.mockito.BDDMockito.anyVararg;
 import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.mock;
@@ -37,6 +37,8 @@ import org.mockito.stubbing.VoidAnswer4;
 import org.mockito.stubbing.VoidAnswer5;
 import org.mockitousage.IMethods;
 
+import java.util.Date;
+
 @RunWith(MockitoJUnitRunner.class)
 public class StubbingWithAdditionalAnswersTest {
 
@@ -44,9 +46,9 @@ public class StubbingWithAdditionalAnswersTest {
 
     @Test
     public void can_return_arguments_of_invocation() throws Exception {
-        given(iMethods.objectArgMethod(anyObject())).will(returnsFirstArg());
-        given(iMethods.threeArgumentMethod(eq(0), anyObject(), anyString())).will(returnsSecondArg());
-        given(iMethods.threeArgumentMethod(eq(1), anyObject(), anyString())).will(returnsLastArg());
+        given(iMethods.objectArgMethod(any())).will(returnsFirstArg());
+        given(iMethods.threeArgumentMethod(eq(0), any(), anyString())).will(returnsSecondArg());
+        given(iMethods.threeArgumentMethod(eq(1), any(), anyString())).will(returnsLastArg());
 
         assertThat(iMethods.objectArgMethod("first")).isEqualTo("first");
         assertThat(iMethods.threeArgumentMethod(0, "second", "whatever")).isEqualTo("second");
@@ -54,8 +56,22 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
+    public void can_return_after_delay() throws Exception {
+        final long sleepyTime = 500L;
+
+        given(iMethods.objectArgMethod(any())).will(answersWithDelay(sleepyTime, returnsFirstArg()));
+
+        final Date before = new Date();
+        assertThat(iMethods.objectArgMethod("first")).isEqualTo("first");
+        final Date after = new Date();
+
+        final long timePassed = after.getTime() - before.getTime();
+        assertThat(timePassed).isCloseTo(sleepyTime, within(15L));
+    }
+
+    @Test
     public void can_return_expanded_arguments_of_invocation() throws Exception {
-        given(iMethods.varargsObject(eq(1), anyVararg())).will(returnsArgAt(3));
+        given(iMethods.varargsObject(eq(1), any())).will(returnsArgAt(3));
 
         assertThat(iMethods.varargsObject(1, "bob", "alexander", "alice", "carl")).isEqualTo("alice");
     }
@@ -163,7 +179,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-        public void can_return_based_on_strongly_typed_four_parameter_function() throws Exception {
+    public void can_return_based_on_strongly_typed_four_parameter_function() throws Exception {
         final IMethods target = mock(IMethods.class);
         given(iMethods.fourArgumentMethod(anyInt(), anyString(), anyString(), any(boolean[].class)))
                 .will(answer(new Answer4<String, Integer, String, String, boolean[]>() {

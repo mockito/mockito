@@ -8,7 +8,6 @@ import net.bytebuddy.agent.ByteBuddyAgent;
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.Instantiator;
 import org.mockito.internal.util.Platform;
@@ -184,7 +183,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
         Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(settings);
         try {
             T instance = instantiator.newInstance(type);
-            MockMethodInterceptor mockMethodInterceptor = new MockMethodInterceptor(asInternalMockHandler(handler), settings);
+            MockMethodInterceptor mockMethodInterceptor = new MockMethodInterceptor(handler, settings);
             mocks.put(instance, mockMethodInterceptor);
             if (instance instanceof MockAccess) {
                 ((MockAccess) instance).setMockitoInterceptor(mockMethodInterceptor);
@@ -256,18 +255,6 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
         ), generationFailed);
     }
 
-
-    private static InternalMockHandler<?> asInternalMockHandler(MockHandler handler) {
-        if (!(handler instanceof InternalMockHandler)) {
-            throw new MockitoException(join(
-                    "At the moment you cannot provide own implementations of MockHandler.",
-                    "Please refer to the javadocs for the MockMaker interface.",
-                    ""
-            ));
-        }
-        return (InternalMockHandler<?>) handler;
-    }
-
     @Override
     public MockHandler getHandler(Object mock) {
         MockMethodInterceptor interceptor = mocks.get(mock);
@@ -280,7 +267,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
 
     @Override
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
-        MockMethodInterceptor mockMethodInterceptor = new MockMethodInterceptor(asInternalMockHandler(newHandler), settings);
+        MockMethodInterceptor mockMethodInterceptor = new MockMethodInterceptor(newHandler, settings);
         mocks.put(mock, mockMethodInterceptor);
         if (mock instanceof MockAccess) {
             ((MockAccess) mock).setMockitoInterceptor(mockMethodInterceptor);

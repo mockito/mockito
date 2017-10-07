@@ -4,15 +4,14 @@
  */
 package org.mockito.internal.junit;
 
+import java.util.Arrays;
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.util.SimpleMockitoLogger;
+import org.mockito.stubbing.Stubbing;
 import org.mockitoutil.TestBase;
 
-import java.util.List;
-
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
 
@@ -23,7 +22,7 @@ public class UnusedStubbingsTest extends TestBase {
     @Test
     public void no_unused_stubbings() throws Exception {
         //given
-        UnusedStubbings stubbings = new UnusedStubbings((List) asList());
+        UnusedStubbings stubbings = new UnusedStubbings(Arrays.<Stubbing> asList());
 
         //when
         stubbings.format("MyTest.myTestMethod", logger);
@@ -35,7 +34,7 @@ public class UnusedStubbingsTest extends TestBase {
     @Test
     public void unused_stubbings() throws Exception {
         //given
-        UnusedStubbings stubbings = new UnusedStubbings((List) asList(
+        UnusedStubbings stubbings = new UnusedStubbings(Arrays.asList(
             new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), doesNothing()),
             new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), doesNothing())
         ));

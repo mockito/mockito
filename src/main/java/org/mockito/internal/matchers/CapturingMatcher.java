@@ -9,13 +9,20 @@ import org.mockito.ArgumentMatcher;
 import static org.mockito.internal.exceptions.Reporter.noArgumentValueWasCaptured;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @SuppressWarnings("unchecked")
 public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
 
-    private final LinkedList<Object> arguments = new LinkedList<Object>();
+    private final List<Object> arguments = new ArrayList<Object>();
+
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private final Lock readLock = lock.readLock();
+    private final Lock writeLock = lock.writeLock();
 
     public boolean matches(Object argument) {
         return true;
@@ -26,19 +33,33 @@ public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArgument
     }
 
     public T getLastValue() {
-        if (arguments.isEmpty()) {
-            throw noArgumentValueWasCaptured();
+        readLock.lock();
+        try {
+            if (arguments.isEmpty()) {
+                throw noArgumentValueWasCaptured();
+            }
+
+            return (T) arguments.get(arguments.size() - 1);
+        } finally {
+            readLock.unlock();
         }
-
-        return (T) arguments.getLast();
-
     }
 
     public List<T> getAllValues() {
-        return (List) arguments;
+        readLock.lock();
+        try {
+            return new ArrayList<T>((List) arguments);
+        } finally {
+            readLock.unlock();
+        }
     }
 
     public void captureFrom(Object argument) {
-        this.arguments.add(argument);
+        writeLock.lock();
+        try {
+            this.arguments.add(argument);
+        } finally {
+            writeLock.unlock();
+        }
     }
 }

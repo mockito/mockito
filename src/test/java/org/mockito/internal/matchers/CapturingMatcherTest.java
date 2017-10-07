@@ -4,13 +4,15 @@
  */
 package org.mockito.internal.matchers;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.fail;
+import java.util.Iterator;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class CapturingMatcherTest extends TestBase {
 
@@ -24,7 +26,7 @@ public class CapturingMatcherTest extends TestBase {
         m.captureFrom("bar");
 
         //then
-        Assertions.assertThat(m.getAllValues()).containsSequence("foo", "bar");
+        assertThat(m.getAllValues()).containsSequence("foo", "bar");
     }
 
     @Test
@@ -52,4 +54,20 @@ public class CapturingMatcherTest extends TestBase {
             fail();
         } catch (MockitoException e) {}
     }
+
+    @Test
+    public void should_not_fail_when_used_in_concurrent_tests() throws Exception {
+        //given
+        final CapturingMatcher<String> m = new CapturingMatcher<String>();
+
+        //when
+        m.captureFrom("concurrent access");
+        Iterator<String> iterator = m.getAllValues().iterator();
+        m.captureFrom("concurrent access");
+
+        //then
+        assertThat(iterator.hasNext()).isTrue();
+        assertThat(iterator.next()).isEqualTo("concurrent access"); // Potential ConcurrentModificationException
+    }
+
 }

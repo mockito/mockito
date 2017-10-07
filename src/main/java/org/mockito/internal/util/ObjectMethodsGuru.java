@@ -17,12 +17,12 @@ public class ObjectMethodsGuru{
         MockitoMethod m = new DelegatingMethod(method);
         return m.getReturnType() == String.class &&
                m.getParameterTypes().length == 0 &&
-               m.getName().equals("toString");
+               "toString".equals(m.getName());
     }
 
     public static boolean isCompareToMethod(Method method) {
         return Comparable.class.isAssignableFrom(method.getDeclaringClass())
-                && method.getName().equals("compareTo")
+                && "compareTo".equals(method.getName())
                 && method.getParameterTypes().length == 1
                 && method.getParameterTypes()[0] == method.getDeclaringClass();
     }

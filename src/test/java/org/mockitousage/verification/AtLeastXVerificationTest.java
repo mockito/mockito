@@ -31,7 +31,7 @@ public class AtLeastXVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldFailVerifiationAtLeastXTimes() throws Exception {
+    public void shouldFailVerificationAtLeastXTimes() throws Exception {
         mock.add("one");
         verify(mock, atLeast(1)).add(anyString());
 

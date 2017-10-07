@@ -1,7 +1,8 @@
-apply plugin: "org.mockito.mockito-release-tools.java-library"
+apply plugin: "java"
 
 group = 'org.mockito'
 archivesBaseName = "mockito-" + project.name
+bintrayUpload.enabled = true
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -12,9 +13,6 @@ test {
         exceptionFormat 'full'
         showCauses true
     }
-    //Required for building on Travis' container-based infrastructure to not be killed with
-    //'exit code 137' - https://github.com/travis-ci/travis-ci/issues/5582
-    jvmArgs '-Xmx512m'
 }
 
 tasks.withType(Checkstyle) {

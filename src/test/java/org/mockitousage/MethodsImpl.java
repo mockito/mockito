@@ -451,4 +451,9 @@ public class MethodsImpl implements IMethods {
     public Void voidReturningMethod() {
         return null;
     }
+
+    @Override
+    public <T> String genericToString(T arg) {
+        return null;
+    }
 }

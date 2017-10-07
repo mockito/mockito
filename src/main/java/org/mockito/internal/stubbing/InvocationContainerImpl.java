@@ -8,14 +8,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.mockito.internal.invocation.InvocationMatcher;
+
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.verification.DefaultRegisteredInvocations;
 import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.internal.verification.SingleRegisteredInvocation;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
+import org.mockito.invocation.MatchableInvocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.ValidableAnswer;
 
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
@@ -28,18 +31,18 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     private final List<Answer<?>> answersForStubbing = new ArrayList<Answer<?>>();
     private final RegisteredInvocations registeredInvocations;
 
-    private InvocationMatcher invocationForStubbing;
+    private MatchableInvocation invocationForStubbing;
 
     public InvocationContainerImpl(MockCreationSettings mockSettings) {
         this.registeredInvocations = createRegisteredInvocations(mockSettings);
     }
 
-    public void setInvocationForPotentialStubbing(InvocationMatcher invocation) {
+    public void setInvocationForPotentialStubbing(MatchableInvocation invocation) {
         registeredInvocations.add(invocation.getInvocation());
         this.invocationForStubbing = invocation;
     }
 
-    public void resetInvocationForPotentialStubbing(InvocationMatcher invocationMatcher) {
+    public void resetInvocationForPotentialStubbing(MatchableInvocation invocationMatcher) {
         this.invocationForStubbing = invocationMatcher;
     }
 
@@ -106,7 +109,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return !registeredInvocations.isEmpty();
     }
 
-    public void setMethodForStubbing(InvocationMatcher invocation) {
+    public void setMethodForStubbing(MatchableInvocation invocation) {
         invocationForStubbing = invocation;
         assert hasAnswersForStubbing();
         for (int i = 0; i < answersForStubbing.size(); i++) {
@@ -128,15 +131,15 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         registeredInvocations.clear();
     }
 
-    public List<StubbedInvocationMatcher> getStubbedInvocations() {
-        return stubbed;
+    public List<Stubbing> getStubbedInvocations() {
+        return (List) stubbed;
     }
 
     public Object invokedMock() {
         return invocationForStubbing.getInvocation().getMock();
     }
 
-    public InvocationMatcher getInvocationForStubbing() {
+    public MatchableInvocation getInvocationForStubbing() {
         return invocationForStubbing;
     }
 

@@ -233,4 +233,6 @@ public interface IMethods {
     Integer toIntWrapper(int i);
 
     String forObject(Object object);
+
+    <T> String genericToString(T arg);
 }

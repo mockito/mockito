@@ -5,6 +5,8 @@
 package org.mockito;
 
 import java.util.Collection;
+
+import org.mockito.internal.stubbing.answers.AnswersWithDelay;
 import org.mockito.internal.stubbing.answers.ReturnsArgumentAt;
 import org.mockito.internal.stubbing.answers.ReturnsElementsOf;
 import org.mockito.internal.stubbing.defaultanswers.ForwardsInvocations;
@@ -314,6 +316,21 @@ public class AdditionalAnswers {
      */
     public static <T> Answer<T> returnsElementsOf(Collection<?> elements) {
         return (Answer<T>) new ReturnsElementsOf(elements);
+    }
+
+    /**
+     * Returns an answer after a delay with a defined length.
+     *
+     * @param <T> return type
+     * @param sleepyTime the delay in milliseconds
+     * @param answer interface to the answer which provides the intended return value.
+     * @return the answer object to use
+     *
+     * @since 2.8.44
+     */
+    @Incubating
+    public static <T> Answer<T> answersWithDelay(long sleepyTime, Answer<T> answer) {
+        return (Answer<T>) new AnswersWithDelay(sleepyTime, (Answer<Object>) answer);
     }
 
     /**

@@ -13,7 +13,7 @@ import org.mockito.stubbing.Stubbing;
  */
 class ArgMismatchFinder {
 
-    StubbingArgMismatches getStubbingArgMismatches(Iterable<Object> mocks) {
+    StubbingArgMismatches getStubbingArgMismatches(Iterable<?> mocks) {
         StubbingArgMismatches mismatches = new StubbingArgMismatches();
         for (Invocation i : AllInvocationsFinder.find(mocks)) {
             if (i.stubInfo() != null) {

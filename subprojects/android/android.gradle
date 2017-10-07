@@ -4,7 +4,7 @@ apply from: "$rootDir/gradle/java-library.gradle"
 
 dependencies {
     compile project.rootProject
-    compile "net.bytebuddy:byte-buddy-android:1.6.5"
+    compile libraries.bytebuddyandroid
 }
 
 tasks.javadoc.enabled = false

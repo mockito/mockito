@@ -5,12 +5,16 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.asm.Advice;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import net.bytebuddy.implementation.bind.annotation.Argument;
 import net.bytebuddy.implementation.bind.annotation.This;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
+import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 
@@ -19,6 +23,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -33,6 +38,9 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     private final String identifier;
 
     private final SelfCallInfo selfCallInfo = new SelfCallInfo();
+    private final MethodGraph.Compiler compiler = MethodGraph.Compiler.Default.forJavaHierarchy();
+    private final WeakConcurrentMap<Class<?>, SoftReference<MethodGraph>> graphs
+        = new WeakConcurrentMap.WithInlinedExpunction<Class<?>, SoftReference<MethodGraph>>();
 
     public MockMethodAdvice(WeakConcurrentMap<Object, MockMethodInterceptor> interceptors, String identifier) {
         this.interceptors = interceptors;
@@ -46,7 +54,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                                      @Advice.Origin Method origin,
                                      @Advice.AllArguments Object[] arguments) throws Throwable {
         MockMethodDispatcher dispatcher = MockMethodDispatcher.get(identifier, mock);
-        if (dispatcher == null || !dispatcher.isMocked(mock) || !dispatcher.isOverridden(mock, origin)) {
+        if (dispatcher == null || !dispatcher.isMocked(mock) || dispatcher.isOverridden(mock, origin)) {
             return null;
         } else {
             return dispatcher.handle(mock, origin, arguments);
@@ -88,18 +96,18 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         if (interceptor == null) {
             return null;
         }
-        InterceptedInvocation.SuperMethod superMethod;
+        RealMethod realMethod;
         if (instance instanceof Serializable) {
-            superMethod = new SerializableSuperMethodCall(identifier, origin, instance, arguments);
+            realMethod = new SerializableRealMethodCall(identifier, origin, instance, arguments);
         } else {
-            superMethod = new SuperMethodCall(selfCallInfo, origin, instance, arguments);
+            realMethod = new RealMethodCall(selfCallInfo, origin, instance, arguments);
         }
         Throwable t = new Throwable();
         t.setStackTrace(skipInlineMethodElement(t.getStackTrace()));
         return new ReturnValueWrapper(interceptor.doIntercept(instance,
                 origin,
                 arguments,
-                superMethod,
+            realMethod,
                 new LocationImpl(t)));
     }
 
@@ -115,18 +123,17 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     @Override
     public boolean isOverridden(Object instance, Method origin) {
-        Class<?> currentType = instance.getClass();
-        do {
-            try {
-                return origin.equals(currentType.getDeclaredMethod(origin.getName(), origin.getParameterTypes()));
-            } catch (NoSuchMethodException ignored) {
-                currentType = currentType.getSuperclass();
-            }
-        } while (currentType != null);
-        return true;
+        SoftReference<MethodGraph> reference = graphs.get(instance.getClass());
+        MethodGraph methodGraph = reference == null ? null : reference.get();
+        if (methodGraph == null) {
+            methodGraph = compiler.compile(new TypeDescription.ForLoadedType(instance.getClass()));
+            graphs.put(instance.getClass(), new SoftReference<MethodGraph>(methodGraph));
+        }
+        MethodGraph.Node node = methodGraph.locate(new MethodDescription.ForLoadedMethod(origin).asSignatureToken());
+        return !node.getSort().isResolved() || !node.getRepresentative().asDefined().represents(origin);
     }
 
-    private static class SuperMethodCall implements InterceptedInvocation.SuperMethod {
+    private static class RealMethodCall implements RealMethod {
 
         private final SelfCallInfo selfCallInfo;
 
@@ -136,7 +143,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
         private final Object[] arguments;
 
-        private SuperMethodCall(SelfCallInfo selfCallInfo, Method origin, Object instance, Object[] arguments) {
+        private RealMethodCall(SelfCallInfo selfCallInfo, Method origin, Object instance, Object[] arguments) {
             this.selfCallInfo = selfCallInfo;
             this.origin = origin;
             this.instance = instance;
@@ -159,7 +166,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     }
 
-    private static class SerializableSuperMethodCall implements InterceptedInvocation.SuperMethod {
+    private static class SerializableRealMethodCall implements RealMethod {
 
         private final String identifier;
 
@@ -169,7 +176,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
         private final Object[] arguments;
 
-        private SerializableSuperMethodCall(String identifier, Method origin, Object instance, Object[] arguments) {
+        private SerializableRealMethodCall(String identifier, Method origin, Object instance, Object[] arguments) {
             this.origin = new SerializableMethod(origin);
             this.identifier = identifier;
             this.instance = instance;

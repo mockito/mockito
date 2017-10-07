@@ -13,20 +13,20 @@ import org.mockito.plugins.StackTraceCleanerProvider;
 class PluginRegistry {
 
     private final PluginSwitch pluginSwitch = new PluginLoader(new DefaultPluginSwitch())
-            .loadPlugin(PluginSwitch.class, DefaultPluginSwitch.class.getName());
+            .loadPlugin(PluginSwitch.class);
 
     private final MockMaker mockMaker = new PluginLoader(pluginSwitch)
-            .withAlias("mock-maker-inline", "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker")
-            .loadPlugin(MockMaker.class, "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
+            .withAlias(DefaultMockitoPlugins.INLINE_ALIAS)
+            .loadPlugin(MockMaker.class);
 
     private final StackTraceCleanerProvider stackTraceCleanerProvider = new PluginLoader(pluginSwitch)
-            .loadPlugin(StackTraceCleanerProvider.class, "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
+            .loadPlugin(StackTraceCleanerProvider.class);
 
     private final InstantiatorProvider instantiatorProvider = new PluginLoader(pluginSwitch)
-            .loadPlugin(InstantiatorProvider.class, "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
+            .loadPlugin(InstantiatorProvider.class);
 
     private AnnotationEngine annotationEngine = new PluginLoader(pluginSwitch)
-            .loadPlugin(AnnotationEngine.class, "org.mockito.internal.configuration.InjectingAnnotationEngine");
+            .loadPlugin(AnnotationEngine.class);
 
     /**
      * The implementation of the stack trace cleaner

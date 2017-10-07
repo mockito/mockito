@@ -48,7 +48,7 @@ public class UnusedStubbings {
     }
 
     public void reportUnused() {
-        if (unused.size() > 0) {
+        if (!unused.isEmpty()) {
             List<Invocation> invocations = ListUtil.convert(unused, (ListUtil.Converter) new ListUtil.Converter<Stubbing, Invocation>() {
                 public Invocation convert(Stubbing s) {
                     return s.getInvocation();

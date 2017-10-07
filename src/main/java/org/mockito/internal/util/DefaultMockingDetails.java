@@ -6,18 +6,17 @@ package org.mockito.internal.util;
 
 import org.mockito.MockingDetails;
 import org.mockito.exceptions.misusing.NotAMockException;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.debugging.InvocationsPrinter;
-import org.mockito.stubbing.Stubbing;
+import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.StubbingComparator;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.stubbing.Stubbing;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
-
-import static org.mockito.internal.util.MockUtil.getMockHandler;
 
 /**
  * Class to inspect any object, and identify whether a particular object is either a mock or a spy.  This is
@@ -43,7 +42,12 @@ public class DefaultMockingDetails implements MockingDetails {
 
     @Override
     public Collection<Invocation> getInvocations() {
-        return mockHandler().getInvocationContainer().getInvocations();
+        return getInvocationContainer().getInvocations();
+    }
+
+    private InvocationContainerImpl getInvocationContainer() {
+        assertGoodMock();
+        return MockUtil.getInvocationContainer(toInspect);
     }
 
     @Override
@@ -53,7 +57,7 @@ public class DefaultMockingDetails implements MockingDetails {
 
     @Override
     public Collection<Stubbing> getStubbings() {
-        List<? extends Stubbing> stubbings = mockHandler().getInvocationContainer().getStubbedInvocations();
+        List<? extends Stubbing> stubbings = getInvocationContainer().getStubbedInvocations();
         TreeSet<Stubbing> out = new TreeSet<Stubbing>(new StubbingComparator());
         out.addAll(stubbings);
         return out;
@@ -65,9 +69,14 @@ public class DefaultMockingDetails implements MockingDetails {
         return new InvocationsPrinter().printInvocations(toInspect);
     }
 
-    private InternalMockHandler<Object> mockHandler() {
+    @Override
+    public MockHandler getMockHandler() {
+        return mockHandler();
+    }
+
+    private MockHandler<Object> mockHandler() {
         assertGoodMock();
-        return getMockHandler(toInspect);
+        return MockUtil.getMockHandler(toInspect);
     }
 
     private void assertGoodMock() {

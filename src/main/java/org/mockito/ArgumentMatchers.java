@@ -915,7 +915,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * <p>
-     * Works similarly to <code>EqualsBuilder.reflectionEquals(this, other, exlucdeFields)</code> from
+     * Works similarly to <code>EqualsBuilder.reflectionEquals(this, other, excludeFields)</code> from
      * apache commons library.
      * <p>
      * <b>Warning</b> The equality check is shallow!
