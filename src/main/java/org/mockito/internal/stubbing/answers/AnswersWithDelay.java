@@ -44,4 +44,3 @@ public class AnswersWithDelay implements Answer<Object>, ValidableAnswer, Serial
         }
     }
 }
-

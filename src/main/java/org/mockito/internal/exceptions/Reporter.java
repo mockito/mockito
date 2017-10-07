@@ -168,7 +168,7 @@ public class Reporter {
                 "Method requires argument(s)!",
                 "Pass mocks that should be verified, e.g:",
                 "    verifyNoMoreInteractions(mockOne, mockTwo);",
-                "    verifyZeroInteractions(mockOne, mockTwo);",
+                "    verifyNoInteractions(mockOne, mockTwo);",
                 ""
         ));
     }
@@ -178,7 +178,7 @@ public class Reporter {
                 "Argument(s) passed is not a mock!",
                 "Examples of correct verifications:",
                 "    verifyNoMoreInteractions(mockOne, mockTwo);",
-                "    verifyZeroInteractions(mockOne, mockTwo);",
+                "    verifyNoInteractions(mockOne, mockTwo);",
                 ""
         ));
     }
@@ -188,7 +188,7 @@ public class Reporter {
                 "Argument(s) passed is null!",
                 "Examples of correct verifications:",
                 "    verifyNoMoreInteractions(mockOne, mockTwo);",
-                "    verifyZeroInteractions(mockOne, mockTwo);"
+                "    verifyNoInteractions(mockOne, mockTwo);"
         ));
     }
 
@@ -423,6 +423,23 @@ public class Reporter {
                 "But found this interaction on mock '" + safelyGetMockName(undesired.getMock()) + "':",
                 undesired.getLocation(),
                 scenario
+        ));
+    }
+
+    public static MockitoAssertionError noInteractionsWanted(Object mock, List<VerificationAwareInvocation> invocations) {
+        ScenarioPrinter scenarioPrinter = new ScenarioPrinter();
+        String scenario = scenarioPrinter.print(invocations);
+
+        List<Location> locations = new ArrayList<Location>();
+        for (VerificationAwareInvocation invocation : invocations) {
+            locations.add(invocation.getLocation());
+        }
+        return new NoInteractionsWanted(join(
+            "No interactions wanted here:",
+            new LocationImpl(),
+            "But found these interactions on mock '" + safelyGetMockName(mock) + "':",
+            join("", locations),
+            scenario
         ));
     }
 

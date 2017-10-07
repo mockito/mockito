@@ -33,6 +33,10 @@ public class VerificationModeFactory {
         return new NoMoreInteractions();
     }
 
+    public static NoInteractions noInteractions() {
+        return new NoInteractions();
+    }
+
     public static VerificationMode atMost(int maxNumberOfInvocations) {
         return new AtMost(maxNumberOfInvocations);
     }

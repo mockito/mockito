@@ -43,4 +43,3 @@ public class AnswersWithDelayTest {
         assertThat(timePassed).isCloseTo(sleepyTime, within(15L));
     }
 }
-

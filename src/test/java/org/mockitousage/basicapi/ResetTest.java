@@ -63,6 +63,13 @@ public class ResetTest extends TestBase {
     }
 
     @Test
+    public void shouldRemoveAllInteractionsVerifyNoInteractions() throws Exception {
+        mock.simpleMethod(1);
+        reset(mock);
+        verifyNoInteractions(mock);
+    }
+
+    @Test
     public void shouldRemoveStubbingToString() throws Exception {
         IMethods mockTwo = mock(IMethods.class);
         when(mockTwo.toString()).thenReturn("test");
@@ -76,6 +83,14 @@ public class ResetTest extends TestBase {
         doThrow(new RuntimeException()).when(mock).simpleMethod("two");
         reset(mock);
         verifyZeroInteractions(mock);
+    }
+
+    @Test
+    public void shouldStubbingNotBeTreatedAsInteractionVerifyNoInteractions() {
+        when(mock.simpleMethod("one")).thenThrow(new RuntimeException());
+        doThrow(new RuntimeException()).when(mock).simpleMethod("two");
+        reset(mock);
+        verifyNoInteractions(mock);
     }
 
     @Test
