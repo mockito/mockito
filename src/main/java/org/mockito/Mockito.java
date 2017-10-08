@@ -93,6 +93,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#39">39. Mocking final types, enums and final methods (Since 2.1.0)</a><br/>
  *      <a href="#40">40. (*new*) Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
  *      <a href="#41">41. (**new**) Advanced public API for framework integrations (Since 2.10.+)</a><br/>
+ *      <a href="#42">42. (**new**) New API for integrations: VerificationStartedListener(Since 2.11.+) TODO! javadoc</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>

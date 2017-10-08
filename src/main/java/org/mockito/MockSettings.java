@@ -7,6 +7,7 @@ package org.mockito;
 import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
@@ -207,6 +208,9 @@ public interface MockSettings extends Serializable {
      * The order, in which the listeners are added, is not guaranteed to be the
      * order in which the listeners are notified.
      *
+     * TODO! - the javadoc above does not seem to be true. I see that the underlying store is an array list.
+     * This means that we allow the same object to be added multiple times.
+     *
      * Example:
      * <pre class="code"><code class="java">
      *  List mockWithListener = mock(List.class, withSettings().invocationListeners(new YourInvocationListener()));
@@ -218,6 +222,21 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      */
     MockSettings invocationListeners(InvocationListener... listeners);
+
+    /**
+     * Registers a listener(s) that will be notified when user starts verification.
+     * See {@link VerificationStartedListener} on how such listener can be useful.
+     * <p>
+     * When multiple listeners are added, they are notified in order they were supplied.
+     * There is no reason to supply multiple listeners but we wanted to keep the API
+     * simple and consistent with {@link #invocationListeners(InvocationListener...)}.
+     *
+     * @param listeners to be notified when user starts verification.
+     * @return settings instance so that you can fluently specify other settings
+     * @since 2.11.0
+     */
+    @Incubating
+    MockSettings verificationStartedListeners(VerificationStartedListener... listeners);
 
     /**
      * A stub-only mock does not record method
