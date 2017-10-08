@@ -3,6 +3,7 @@ package org.mockitousage.verification;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockitoutil.TestBase;
@@ -95,5 +96,29 @@ public class VerificationStartedListenerTest extends TestBase {
 
         //there is no particular reason we decided on that behavior
         //we want to have a consistent and documented behavior of the verification started listener
+    }
+
+    @Test
+    public void shows_clean_exception_message_when_illegal_null_arg_is_used() throws Exception {
+        //given
+        final List<MockitoException> container = new ArrayList<MockitoException>();
+
+        List mock = mock(List.class, Mockito.withSettings().verificationStartedListeners(new VerificationStartedListener() {
+            public void onVerificationStarted(VerificationStartedEvent event) {
+                try {
+                    event.setMock(null);
+                } catch (MockitoException e) {
+                    container.add(e);
+                }
+            }
+        }));
+
+        //when
+        verify(mock, never()).clear();
+
+        //then
+        assertEquals(1, container.size());
+        assertEquals("Null passed to VerificationStartedEvent.setMock() method.\n" +
+            "Null is not acceptable, see Javadoc for VerificationStartedListener for API information.", container.get(0).getMessage());
     }
 }
