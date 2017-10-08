@@ -119,8 +119,7 @@ public class VerificationStartedListenerTest extends TestBase {
 
         //then
         assertEquals(1, container.size());
-        assertEquals("Null passed to VerificationStartedEvent.setMock() method.\n" +
-            "Null is not acceptable, see Javadoc for VerificationStartedListener for API information.", container.get(0).getMessage());
+        assertEquals("VerificationStartedEvent.setMock() does not accept null parameter. See the Javadoc.", container.get(0).getMessage());
     }
 
     @Test

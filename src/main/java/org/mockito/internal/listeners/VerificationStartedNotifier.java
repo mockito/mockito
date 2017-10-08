@@ -1,6 +1,6 @@
 package org.mockito.internal.listeners;
 
-import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.exceptions.Reporter;
 import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
 
@@ -24,8 +24,7 @@ public class VerificationStartedNotifier {
         private Object mock;
         public void setMock(Object mock) {
             if (mock == null) {
-                throw new MockitoException("Null passed to VerificationStartedEvent.setMock() method.\n" +
-                    "Null is not acceptable, see Javadoc for VerificationStartedListener for API information.");
+                throw Reporter.methodDoesNotAcceptParameter("VerificationStartedEvent.setMock", "null parameter");
             }
             this.mock = mock;
         }

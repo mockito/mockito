@@ -29,7 +29,7 @@ import static org.mockito.internal.exceptions.Reporter.extraInterfacesAcceptsOnl
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesDoesNotAcceptNullParameters;
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesRequiresAtLeastOneInterface;
 import static org.mockito.internal.exceptions.Reporter.invocationListenersRequiresAtLeastOneListener;
-import static org.mockito.internal.exceptions.Reporter.methodDoesNotAcceptNullParameters;
+import static org.mockito.internal.exceptions.Reporter.methodDoesNotAcceptParameter;
 import static org.mockito.internal.util.collections.Sets.newSet;
 
 @SuppressWarnings("unchecked")
@@ -157,11 +157,11 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     private static <T> void addListeners(T[] listeners, List<T> container, String method) {
         if (listeners == null) {
-            throw methodDoesNotAcceptNullParameters(method, "null vararg array");
+            throw methodDoesNotAcceptParameter(method, "null vararg array");
         }
         for (T listener : listeners) {
             if (listener == null) {
-                throw methodDoesNotAcceptNullParameters(method, "null listeners");
+                throw methodDoesNotAcceptParameter(method, "null listeners");
             }
             container.add(listener);
         }

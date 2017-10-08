@@ -30,9 +30,7 @@ public class VerificationStartedNotifierTest {
             fail();
         } catch (MockitoException e) {
             //then
-            assertEquals("Null passed to VerificationStartedEvent.setMock() method.\n" +
-                "Null is not acceptable, see Javadoc for VerificationStartedListener for API information.", e.getMessage());
+            assertEquals("VerificationStartedEvent.setMock() does not accept null parameter. See the Javadoc.", e.getMessage());
         }
     }
-
 }

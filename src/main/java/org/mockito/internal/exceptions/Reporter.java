@@ -671,7 +671,7 @@ public class Reporter {
 
     }
 
-    public static MockitoException methodDoesNotAcceptNullParameters(String method, String parameter) {
+    public static MockitoException methodDoesNotAcceptParameter(String method, String parameter) {
         return new MockitoException(method + "() does not accept " + parameter + ". See the Javadoc.");
     }
 
