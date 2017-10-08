@@ -100,29 +100,6 @@ public class VerificationStartedListenerTest extends TestBase {
     }
 
     @Test
-    public void shows_clean_exception_message_when_illegal_null_arg_is_used() throws Exception {
-        //given
-        final List<MockitoException> container = new ArrayList<MockitoException>();
-
-        List mock = mock(List.class, Mockito.withSettings().verificationStartedListeners(new VerificationStartedListener() {
-            public void onVerificationStarted(VerificationStartedEvent event) {
-                try {
-                    event.setMock(null);
-                } catch (MockitoException e) {
-                    container.add(e);
-                }
-            }
-        }));
-
-        //when
-        verify(mock, never()).clear();
-
-        //then
-        assertEquals(1, container.size());
-        assertEquals("VerificationStartedEvent.setMock() does not accept null parameter. See the Javadoc.", container.get(0).getMessage());
-    }
-
-    @Test
     public void shows_clean_exception_when_null_array_passed() throws Exception {
         try {
             //when

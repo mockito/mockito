@@ -50,6 +50,20 @@ public class VerificationStartedNotifierTest {
         }
     }
 
+    @Test
+    public void shows_clean_exception_message_when_illegal_null_arg_is_used() throws Exception {
+        VerificationStartedNotifier.Event event = new VerificationStartedNotifier.Event();
+
+        try {
+            //when
+            event.setMock(null);
+            fail();
+        } catch (Exception e) {
+            //then
+            assertEquals("VerificationStartedEvent.setMock() does not accept null parameter. See the Javadoc.", e.getMessage());
+        }
+    }
+
     @Ignore //TODO! not implemented yet
     @Test
     public void decent_exception_when_setting_mock_of_wrong_type() throws Exception {
