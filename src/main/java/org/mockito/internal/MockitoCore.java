@@ -16,6 +16,7 @@ import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.util.DefaultMockingDetails;
+import org.mockito.internal.util.MockitoMock;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
@@ -44,7 +45,7 @@ import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInO
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.MockUtil.createMock;
 import static org.mockito.internal.util.MockUtil.getInvocationContainer;
-import static org.mockito.internal.util.MockUtil.getMockHandler;
+import static org.mockito.internal.util.MockUtil.getMockitoMock;
 import static org.mockito.internal.util.MockUtil.isMock;
 import static org.mockito.internal.util.MockUtil.resetMock;
 import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
@@ -84,11 +85,11 @@ public class MockitoCore {
         if (mock == null) {
             throw nullPassedToVerify();
         }
-        if (!isMock(mock)) {
+        MockitoMock mockitoMock = getMockitoMock(mock);
+        if (!mockitoMock.isMock()) {
             throw notAMockPassedToVerify(mock.getClass());
         }
-        //TODO! we are calling getMockHandler multiple times, let's avoid it.
-        MockHandler handler = getMockHandler(mock);
+        MockHandler handler = mockitoMock.getHandler();
 
         //TODO! detect invalid type of object - it's when setMock() in the listener is setting some rubbish
         mock = (T) VerificationStartedNotifier.notifyVerificationStarted(

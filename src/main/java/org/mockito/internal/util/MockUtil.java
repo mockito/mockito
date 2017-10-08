@@ -71,7 +71,12 @@ public class MockUtil {
     }
 
     public static boolean isMock(Object mock) {
+        //TODO SF (perf tweak) replace with MockitoMock (see MockitoMock Javadoc)
         return mock != null && mockMaker.getHandler(mock) != null;
+    }
+
+    public static MockitoMock getMockitoMock(Object mock) {
+        return new MockitoMock(mockMaker.getHandler(mock));
     }
 
     public static MockName getMockName(Object mock) {
