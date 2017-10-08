@@ -230,6 +230,8 @@ public interface MockSettings extends Serializable {
      * When multiple listeners are added, they are notified in order they were supplied.
      * There is no reason to supply multiple listeners but we wanted to keep the API
      * simple and consistent with {@link #invocationListeners(InvocationListener...)}.
+     * <p>
+     * Throws exception when any of the passed listeners is null or when the entire vararg array is null.
      *
      * @param listeners to be notified when user starts verification.
      * @return settings instance so that you can fluently specify other settings

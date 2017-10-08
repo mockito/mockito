@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -120,5 +121,27 @@ public class VerificationStartedListenerTest extends TestBase {
         assertEquals(1, container.size());
         assertEquals("Null passed to VerificationStartedEvent.setMock() method.\n" +
             "Null is not acceptable, see Javadoc for VerificationStartedListener for API information.", container.get(0).getMessage());
+    }
+
+    @Test
+    public void shows_clean_exception_when_null_array_passed() throws Exception {
+        try {
+            //when
+            Mockito.withSettings().verificationStartedListeners(null);
+            fail();
+        } catch (MockitoException e) {
+            assertEquals("verificationStartedListeners() does not accept null vararg array. See the Javadoc.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void shows_clean_exception_when_null_listener_passed() throws Exception {
+        try {
+            //when
+            Mockito.withSettings().verificationStartedListeners(mock(VerificationStartedListener.class), null);
+            fail();
+        } catch (MockitoException e) {
+            assertEquals("verificationStartedListeners() does not accept null listeners. See the Javadoc.", e.getMessage());
+        }
     }
 }

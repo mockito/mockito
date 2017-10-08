@@ -28,8 +28,8 @@ import static org.mockito.internal.exceptions.Reporter.defaultAnswerDoesNotAccep
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesAcceptsOnlyInterfaces;
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesDoesNotAcceptNullParameters;
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesRequiresAtLeastOneInterface;
-import static org.mockito.internal.exceptions.Reporter.invocationListenerDoesNotAcceptNullParameters;
 import static org.mockito.internal.exceptions.Reporter.invocationListenersRequiresAtLeastOneListener;
+import static org.mockito.internal.exceptions.Reporter.methodDoesNotAcceptNullParameters;
 import static org.mockito.internal.util.collections.Sets.newSet;
 
 @SuppressWarnings("unchecked")
@@ -151,18 +151,24 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         if (listeners == null || listeners.length == 0) {
             throw invocationListenersRequiresAtLeastOneListener();
         }
-        for (InvocationListener listener : listeners) {
-            if (listener == null) {
-                throw invocationListenerDoesNotAcceptNullParameters();
-            }
-            this.invocationListeners.add(listener);
-        }
+        addListeners(listeners, invocationListeners, "invocationListeners");
         return this;
     }
 
+    private static <T> void addListeners(T[] listeners, List<T> container, String method) {
+        if (listeners == null) {
+            throw methodDoesNotAcceptNullParameters(method, "null vararg array");
+        }
+        for (T listener : listeners) {
+            if (listener == null) {
+                throw methodDoesNotAcceptNullParameters(method, "null listeners");
+            }
+            container.add(listener);
+        }
+    }
+
     public MockSettings verificationStartedListeners(VerificationStartedListener... listeners) {
-        //TODO! null check
-        this.verificationStartedListeners.addAll(Arrays.asList(listeners));
+        addListeners(listeners, this.verificationStartedListeners, "verificationStartedListeners");
         return this;
     }
 
