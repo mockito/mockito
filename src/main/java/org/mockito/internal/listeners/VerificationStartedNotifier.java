@@ -29,7 +29,7 @@ public class VerificationStartedNotifier {
             }
             if (!MockUtil.isMock(mock)) {
                 throw Reporter.methodDoesNotAcceptParameter("VerificationStartedEvent.setMock", "parameter which is not a Mockito mock");
-                //TODO! use ValuePrinter to print the object that was passed
+                //TODO! use ValuePrinter to print the object that was passed (also add coverage)
                 //if the user passed wrong argument, lets show him what argument was passed to streamline debugging
             }
             this.mock = mock;

@@ -91,7 +91,6 @@ public class MockitoCore {
         }
         MockHandler handler = mockitoMock.getHandler();
 
-        //TODO! detect invalid type of object - it's when setMock() in the listener is setting some rubbish
         mock = (T) VerificationStartedNotifier.notifyVerificationStarted(
             handler.getMockSettings().getVerificationStartedListeners(), mock);
 
