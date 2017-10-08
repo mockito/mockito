@@ -1,6 +1,7 @@
 package org.mockito.internal.listeners;
 
 import org.mockito.internal.exceptions.Reporter;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
 
@@ -12,7 +13,7 @@ public class VerificationStartedNotifier {
         if (listeners.isEmpty()) {
             return mock;
         }
-        VerificationStartedEvent event = new DefaultVerificationStartedEvent();
+        VerificationStartedEvent event = new Event();
         event.setMock(mock);
         for (VerificationStartedListener listener : listeners) {
             listener.onVerificationStarted(event);
@@ -20,11 +21,16 @@ public class VerificationStartedNotifier {
         return event.getMock();
     }
 
-    private static class DefaultVerificationStartedEvent implements VerificationStartedEvent {
+    static class Event implements VerificationStartedEvent {
         private Object mock;
         public void setMock(Object mock) {
             if (mock == null) {
                 throw Reporter.methodDoesNotAcceptParameter("VerificationStartedEvent.setMock", "null parameter");
+            }
+            if (!MockUtil.isMock(mock)) {
+                throw Reporter.methodDoesNotAcceptParameter("VerificationStartedEvent.setMock", "parameter which is not a Mockito mock");
+                //TODO! use ValuePrinter to print the object that was passed
+                //if the user passed wrong argument, lets show him what argument was passed to streamline debugging
             }
             this.mock = mock;
         }
