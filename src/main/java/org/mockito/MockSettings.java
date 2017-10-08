@@ -208,9 +208,6 @@ public interface MockSettings extends Serializable {
      * The order, in which the listeners are added, is not guaranteed to be the
      * order in which the listeners are notified.
      *
-     * TODO! - the javadoc above does not seem to be true. I see that the underlying store is an array list.
-     * This means that we allow the same object to be added multiple times.
-     *
      * Example:
      * <pre class="code"><code class="java">
      *  List mockWithListener = mock(List.class, withSettings().invocationListeners(new YourInvocationListener()));
