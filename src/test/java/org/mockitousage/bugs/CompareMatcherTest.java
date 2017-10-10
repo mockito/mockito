@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockitousage.bugs;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +32,7 @@ public class CompareMatcherTest {
     /**
      * Should not throw an {@link NullPointerException}
      *
-     * @see Bug-ID https://github.com/mockito/mockito/issues/457
+     * @see <a href="https://github.com/mockito/mockito/issues/457">Bug 457</a>
      */
     @Test
     public void compareNullArgument() {

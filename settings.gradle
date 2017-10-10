@@ -1,5 +1,7 @@
+include 'inline'
 include 'testng'
 include 'extTest'
+include 'kotlinTest'
 include 'android'
 
 rootProject.name = 'mockito'

@@ -14,11 +14,14 @@ import org.mockito.Incubating;
  * Example of stubbing a mock with this custom answer:
  *
  * <pre class="code"><code class="java">
- * when(mock.someMethod(anyString())).thenAnswer(new Answer&lt;Integer, String&gt;() {
- *     Integer answer(String arg) {
- *         return arg.length();
- *     }
- * });
+ * import static org.mockito.AdditionalAnswers.answer;
+ *
+ * when(mock.someMethod(anyString())).then(answer(
+ *     new Answer1&lt;Integer, String&gt;() {
+ *         public Integer answer(String arg) {
+ *             return arg.length();
+ *         }
+ * }));
  *
  * //Following will print "3"
  * System.out.println(mock.someMethod("foo"));
@@ -39,4 +42,3 @@ public interface Answer1<T, A0> {
      */
     T answer(A0 argument0) throws Throwable;
 }
-

@@ -1,18 +1,17 @@
 package org.mockito.android.internal.creation;
 
+import static org.mockito.internal.util.StringUtil.join;
+
+import java.io.File;
 import net.bytebuddy.android.AndroidClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.SubclassLoader;
 
-import java.io.File;
-
-import static org.mockito.internal.util.StringJoiner.join;
-
 class AndroidLoadingStrategy implements SubclassLoader {
 
     @Override
-    public ClassLoadingStrategy getStrategy(Class<?> mockFeatures) {
+    public ClassLoadingStrategy<ClassLoader> getStrategy(Class<?> mockFeatures) {
         File target = AndroidTempFileLocator.target;
         if (target == null) {
             throw new MockitoException(join(
@@ -27,6 +26,6 @@ class AndroidLoadingStrategy implements SubclassLoader {
                     "getInstrumentation().getTargetContext().getCacheDir().getPath()"
             ));
         }
-        return new AndroidClassLoadingStrategy(target);
+        return new AndroidClassLoadingStrategy.Injecting(target);
     }
 }

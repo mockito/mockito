@@ -16,23 +16,6 @@ jar {
             "${System.getProperty("java.version")} (${System.getProperty("java.specification.vendor")})"
     manifest.attributes["Implementation-Title"] = project.name
     manifest.attributes["Implementation-Version"] = project.version
-
-    from("${rootProject.projectDir}") {
-        include "LICENSE"
-        into "META-INF"
-        expand(copyright: new Date().format("yyyy"), version: project.version)
-    }
-
-}
-
-task sourcesJar(type: Jar, dependsOn:classes) {
-    classifier = "sources"
-    from sourceSets.main.allJava.srcDirs
-    include "**/*.java", "**/*.aj"
-}
-
-artifacts {
-    archives sourcesJar
 }
 
 tasks.javadoc.enabled = false
@@ -47,8 +30,8 @@ uploadArchives {
 
 dependencies {
     compile project.rootProject
-    compile 'org.testng:testng:6.3.1'
-    testCompile 'org.assertj:assertj-core:1.7.1'
+    compile libraries.testng
+    testCompile libraries.assertj
 }
 
 test {

@@ -70,10 +70,10 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(and(eq(false), eq(false)))).thenReturn("0");
         when(mock.oneArg(and(eq((byte) 1), eq((byte) 1)))).thenReturn("1");
         when(mock.oneArg(and(eq('a'), eq('a')))).thenReturn("2");
-        when(mock.oneArg(and(eq((double) 1), eq((double) 1)))).thenReturn("3");
-        when(mock.oneArg(and(eq((float) 1), eq((float) 1)))).thenReturn("4");
-        when(mock.oneArg(and(eq((int) 1), eq((int) 1)))).thenReturn("5");
-        when(mock.oneArg(and(eq((long) 1), eq((long) 1)))).thenReturn("6");
+        when(mock.oneArg(and(eq(1D), eq(1D)))).thenReturn("3");
+        when(mock.oneArg(and(eq(1F), eq(1F)))).thenReturn("4");
+        when(mock.oneArg(and(eq(1), eq(1)))).thenReturn("5");
+        when(mock.oneArg(and(eq(1L), eq(1L)))).thenReturn("6");
         when(mock.oneArg(and(eq((short) 1), eq((short) 1)))).thenReturn("7");
         when(mock.oneArg(and(contains("a"), contains("d")))).thenReturn("8");
         when(mock.oneArg(and(isA(Class.class), eq(Object.class)))).thenReturn("9");
@@ -83,10 +83,10 @@ public class MatchersTest extends TestBase {
 
         assertEquals("1", mock.oneArg((byte) 1));
         assertEquals("2", mock.oneArg('a'));
-        assertEquals("3", mock.oneArg((double) 1));
-        assertEquals("4", mock.oneArg((float) 1));
-        assertEquals("5", mock.oneArg((int) 1));
-        assertEquals("6", mock.oneArg((long) 1));
+        assertEquals("3", mock.oneArg(1D));
+        assertEquals("4", mock.oneArg(1F));
+        assertEquals("5", mock.oneArg(1));
+        assertEquals("6", mock.oneArg(1L));
         assertEquals("7", mock.oneArg((short) 1));
 
         assertEquals("8", mock.oneArg("abcde"));
@@ -100,10 +100,10 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(or(eq(false), eq(true)))).thenReturn("0");
         when(mock.oneArg(or(eq((byte) 1), eq((byte) 2)))).thenReturn("1");
         when(mock.oneArg(or(eq((char) 1), eq((char) 2)))).thenReturn("2");
-        when(mock.oneArg(or(eq((double) 1), eq((double) 2)))).thenReturn("3");
-        when(mock.oneArg(or(eq((float) 1), eq((float) 2)))).thenReturn("4");
-        when(mock.oneArg(or(eq((int) 1), eq((int) 2)))).thenReturn("5");
-        when(mock.oneArg(or(eq((long) 1), eq((long) 2)))).thenReturn("6");
+        when(mock.oneArg(or(eq(1D), eq(2D)))).thenReturn("3");
+        when(mock.oneArg(or(eq(1F), eq(2F)))).thenReturn("4");
+        when(mock.oneArg(or(eq(1), eq(2)))).thenReturn("5");
+        when(mock.oneArg(or(eq(1L), eq(2L)))).thenReturn("6");
         when(mock.oneArg(or(eq((short) 1), eq((short) 2)))).thenReturn("7");
         when(mock.oneArg(or(eq("asd"), eq("jkl")))).thenReturn("8");
         when(mock.oneArg(or(eq(this.getClass()), eq(Object.class)))).thenReturn("9");
@@ -113,10 +113,10 @@ public class MatchersTest extends TestBase {
 
         assertEquals("1", mock.oneArg((byte) 2));
         assertEquals("2", mock.oneArg((char) 1));
-        assertEquals("3", mock.oneArg((double) 2));
-        assertEquals("4", mock.oneArg((float) 1));
-        assertEquals("5", mock.oneArg((int) 2));
-        assertEquals("6", mock.oneArg((long) 1));
+        assertEquals("3", mock.oneArg(2D));
+        assertEquals("4", mock.oneArg(1F));
+        assertEquals("5", mock.oneArg(2));
+        assertEquals("6", mock.oneArg(1L));
         assertEquals("7", mock.oneArg((short) 1));
 
         assertEquals("8", mock.oneArg("jkl"));
@@ -132,10 +132,10 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(not(eq(false)))).thenReturn("0");
         when(mock.oneArg(not(eq((byte) 1)))).thenReturn("1");
         when(mock.oneArg(not(eq('a')))).thenReturn("2");
-        when(mock.oneArg(not(eq((double) 1)))).thenReturn("3");
-        when(mock.oneArg(not(eq((float) 1)))).thenReturn("4");
-        when(mock.oneArg(not(eq((int) 1)))).thenReturn("5");
-        when(mock.oneArg(not(eq((long) 1)))).thenReturn("6");
+        when(mock.oneArg(not(eq(1D)))).thenReturn("3");
+        when(mock.oneArg(not(eq(1F)))).thenReturn("4");
+        when(mock.oneArg(not(eq(1)))).thenReturn("5");
+        when(mock.oneArg(not(eq(1L)))).thenReturn("6");
         when(mock.oneArg(not(eq((short) 1)))).thenReturn("7");
         when(mock.oneArg(not(contains("a")))).thenReturn("8");
         when(mock.oneArg(not(isA(Class.class)))).thenReturn("9");
@@ -145,10 +145,10 @@ public class MatchersTest extends TestBase {
 
         assertEquals("1", mock.oneArg((byte) 2));
         assertEquals("2", mock.oneArg('b'));
-        assertEquals("3", mock.oneArg((double) 2));
-        assertEquals("4", mock.oneArg((float) 2));
-        assertEquals("5", mock.oneArg((int) 2));
-        assertEquals("6", mock.oneArg((long) 2));
+        assertEquals("3", mock.oneArg(2D));
+        assertEquals("4", mock.oneArg(2F));
+        assertEquals("5", mock.oneArg(2));
+        assertEquals("6", mock.oneArg(2L));
         assertEquals("7", mock.oneArg((short) 2));
         assertEquals("8", mock.oneArg("bcde"));
 
@@ -159,21 +159,21 @@ public class MatchersTest extends TestBase {
     @Test
     public void less_or_equal_overloaded() {
         when(mock.oneArg(leq((byte) 1))).thenReturn("1");
-        when(mock.oneArg(leq((double) 1))).thenReturn("3");
-        when(mock.oneArg(leq((float) 1))).thenReturn("4");
-        when(mock.oneArg(leq((int) 1))).thenReturn("5");
-        when(mock.oneArg(leq((long) 1))).thenReturn("6");
+        when(mock.oneArg(leq(1D))).thenReturn("3");
+        when(mock.oneArg(leq(1F))).thenReturn("4");
+        when(mock.oneArg(leq(1))).thenReturn("5");
+        when(mock.oneArg(leq(1L))).thenReturn("6");
         when(mock.oneArg(leq((short) 1))).thenReturn("7");
         when(mock.oneArg(leq(new BigDecimal("1")))).thenReturn("8");
 
         assertEquals("1", mock.oneArg((byte) 1));
         assertEquals(null, mock.oneArg((byte) 2));
 
-        assertEquals("3", mock.oneArg((double) 1));
+        assertEquals("3", mock.oneArg(1D));
         assertEquals("7", mock.oneArg((short) 0));
-        assertEquals("4", mock.oneArg((float) -5));
-        assertEquals("5", mock.oneArg((int) -2));
-        assertEquals("6", mock.oneArg((long) -3));
+        assertEquals("4", mock.oneArg(-5F));
+        assertEquals("5", mock.oneArg(-2));
+        assertEquals("6", mock.oneArg(-3L));
 
         assertEquals("8", mock.oneArg(new BigDecimal("0.5")));
         assertEquals(null, mock.oneArg(new BigDecimal("1.1")));
@@ -182,21 +182,21 @@ public class MatchersTest extends TestBase {
     @Test
     public void less_than_overloaded() {
         when(mock.oneArg(lt((byte) 1))).thenReturn("1");
-        when(mock.oneArg(lt((double) 1))).thenReturn("3");
-        when(mock.oneArg(lt((float) 1))).thenReturn("4");
-        when(mock.oneArg(lt((int) 1))).thenReturn("5");
-        when(mock.oneArg(lt((long) 1))).thenReturn("6");
+        when(mock.oneArg(lt(1D))).thenReturn("3");
+        when(mock.oneArg(lt(1F))).thenReturn("4");
+        when(mock.oneArg(lt(1))).thenReturn("5");
+        when(mock.oneArg(lt(1L))).thenReturn("6");
         when(mock.oneArg(lt((short) 1))).thenReturn("7");
         when(mock.oneArg(lt(new BigDecimal("1")))).thenReturn("8");
 
         assertEquals("1", mock.oneArg((byte) 0));
         assertEquals(null, mock.oneArg((byte) 1));
 
-        assertEquals("3", mock.oneArg((double) 0));
+        assertEquals("3", mock.oneArg(0D));
         assertEquals("7", mock.oneArg((short) 0));
-        assertEquals("4", mock.oneArg((float) -4));
-        assertEquals("5", mock.oneArg((int) -34));
-        assertEquals("6", mock.oneArg((long) -6));
+        assertEquals("4", mock.oneArg(-4F));
+        assertEquals("5", mock.oneArg(-34));
+        assertEquals("6", mock.oneArg(-6L));
 
         assertEquals("8", mock.oneArg(new BigDecimal("0.5")));
         assertEquals(null, mock.oneArg(new BigDecimal("23")));
@@ -205,21 +205,21 @@ public class MatchersTest extends TestBase {
     @Test
     public void greater_or_equal_matcher_overloaded() {
         when(mock.oneArg(geq((byte) 1))).thenReturn("1");
-        when(mock.oneArg(geq((double) 1))).thenReturn("3");
-        when(mock.oneArg(geq((float) 1))).thenReturn("4");
-        when(mock.oneArg(geq((int) 1))).thenReturn("5");
-        when(mock.oneArg(geq((long) 1))).thenReturn("6");
+        when(mock.oneArg(geq(1D))).thenReturn("3");
+        when(mock.oneArg(geq(1F))).thenReturn("4");
+        when(mock.oneArg(geq(1))).thenReturn("5");
+        when(mock.oneArg(geq(1L))).thenReturn("6");
         when(mock.oneArg(geq((short) 1))).thenReturn("7");
         when(mock.oneArg(geq(new BigDecimal("1")))).thenReturn("8");
 
         assertEquals("1", mock.oneArg((byte) 2));
         assertEquals(null, mock.oneArg((byte) 0));
 
-        assertEquals("3", mock.oneArg((double) 1));
+        assertEquals("3", mock.oneArg(1D));
         assertEquals("7", mock.oneArg((short) 2));
-        assertEquals("4", mock.oneArg((float) 3));
-        assertEquals("5", mock.oneArg((int) 4));
-        assertEquals("6", mock.oneArg((long) 5));
+        assertEquals("4", mock.oneArg(3F));
+        assertEquals("5", mock.oneArg(4));
+        assertEquals("6", mock.oneArg(5L));
 
         assertEquals("8", mock.oneArg(new BigDecimal("1.00")));
         assertEquals(null, mock.oneArg(new BigDecimal("0.9")));
@@ -228,21 +228,21 @@ public class MatchersTest extends TestBase {
     @Test
     public void greater_than_matcher_overloaded() {
         when(mock.oneArg(gt((byte) 1))).thenReturn("1");
-        when(mock.oneArg(gt((double) 1))).thenReturn("3");
-        when(mock.oneArg(gt((float) 1))).thenReturn("4");
-        when(mock.oneArg(gt((int) 1))).thenReturn("5");
-        when(mock.oneArg(gt((long) 1))).thenReturn("6");
+        when(mock.oneArg(gt(1D))).thenReturn("3");
+        when(mock.oneArg(gt(1F))).thenReturn("4");
+        when(mock.oneArg(gt(1))).thenReturn("5");
+        when(mock.oneArg(gt(1L))).thenReturn("6");
         when(mock.oneArg(gt((short) 1))).thenReturn("7");
         when(mock.oneArg(gt(new BigDecimal("1")))).thenReturn("8");
 
         assertEquals("1", mock.oneArg((byte) 2));
         assertEquals(null, mock.oneArg((byte) 1));
 
-        assertEquals("3", mock.oneArg((double) 2));
+        assertEquals("3", mock.oneArg(2D));
         assertEquals("7", mock.oneArg((short) 2));
-        assertEquals("4", mock.oneArg((float) 3));
-        assertEquals("5", mock.oneArg((int) 2));
-        assertEquals("6", mock.oneArg((long) 5));
+        assertEquals("4", mock.oneArg(3F));
+        assertEquals("5", mock.oneArg(2));
+        assertEquals("6", mock.oneArg(5L));
 
         assertEquals("8", mock.oneArg(new BigDecimal("1.5")));
         assertEquals(null, mock.oneArg(new BigDecimal("0.9")));
@@ -272,7 +272,7 @@ public class MatchersTest extends TestBase {
         assertEquals("matched", mock.forObject(123));
         assertEquals("matched", mock.forObject("any string"));
         assertEquals("matched", mock.forObject("any string"));
-        assertEquals("matched", mock.forObject((Object) null));
+        assertEquals("matched", mock.forObject(null));
     }
 
     @Test
@@ -294,10 +294,10 @@ public class MatchersTest extends TestBase {
 
         assertEquals("1", mock.oneArg((byte) 1));
         assertEquals("2", mock.oneArg((char) 1));
-        assertEquals("3", mock.oneArg((double) 1));
-        assertEquals("4", mock.oneArg((float) 889));
-        assertEquals("5", mock.oneArg((int) 1));
-        assertEquals("6", mock.oneArg((long) 1));
+        assertEquals("3", mock.oneArg(1D));
+        assertEquals("4", mock.oneArg(889F));
+        assertEquals("5", mock.oneArg(1));
+        assertEquals("6", mock.oneArg(1L));
         assertEquals("7", mock.oneArg((short) 1));
         assertEquals("8", mock.oneArg("Test"));
 
@@ -594,14 +594,14 @@ public class MatchersTest extends TestBase {
     public void eq_matcher_and_nulls() {
         mock.simpleMethod((Object) null);
 
-        verify(mock).simpleMethod((Object) eq(null));
+        verify(mock).simpleMethod(eq((Object)null));
     }
 
     @Test
     public void same_matcher_and_nulls() {
         mock.simpleMethod((Object) null);
 
-        verify(mock).simpleMethod((Object) same(null));
+        verify(mock).simpleMethod(same((Object)null));
     }
 
     @Test

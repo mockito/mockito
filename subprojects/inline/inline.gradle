@@ -1,0 +1,10 @@
+description = "Mockito preconfigured inline mock maker (intermediate and to be superseeded by automatic usage in a future version)"
+
+apply from: "$rootDir/gradle/java-library.gradle"
+
+dependencies {
+    compile project.rootProject
+    testCompile libraries.junit4
+}
+
+tasks.javadoc.enabled = false

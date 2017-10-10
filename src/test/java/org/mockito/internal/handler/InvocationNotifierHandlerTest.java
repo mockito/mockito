@@ -7,16 +7,15 @@ package org.mockito.internal.handler;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import java.text.ParseException;
@@ -121,11 +120,9 @@ public class InvocationNotifierHandlerTest {
     public void should_delegate_all_MockHandlerInterface_to_the_parameterized_MockHandler() throws Exception {
         notifier.getInvocationContainer();
         notifier.getMockSettings();
-        notifier.setAnswersForStubbing(new ArrayList<Answer<?>>());
 
         verify(mockHandler).getInvocationContainer();
         verify(mockHandler).getMockSettings();
-        verify(mockHandler).setAnswersForStubbing(ArgumentMatchers.<Answer<?>>anyList());
     }
 
     private static class CustomListener implements InvocationListener {

@@ -15,7 +15,7 @@ import java.lang.annotation.RetentionPolicy;
  * <li>The API is fairly new and we would appreciate your feedback. For example, what are you missing from the API
  * to solve your use case.</li>
  * <li>The API might change.
- * The chance for that is small because we care great deal for the initial design.
+ * The chance for that is incredibly small because we care great deal for the initial design.
  * The incubating API might change based on the feedback from the community in order to make the API most useful for the users.
  * </li>
  * <li>

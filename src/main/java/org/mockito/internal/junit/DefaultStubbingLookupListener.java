@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.junit;
 
 import org.mockito.internal.exceptions.Reporter;
@@ -19,7 +23,8 @@ import static org.mockito.Mockito.mockingDetails;
  */
 class DefaultStubbingLookupListener implements StubbingLookupListener {
 
-    Strictness currentStrictness;
+    private Strictness currentStrictness;
+    private boolean mismatchesReported;
 
     DefaultStubbingLookupListener(Strictness strictness) {
         this.currentStrictness = strictness;
@@ -35,7 +40,8 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
             //we have a stubbing arg mismatch.
             List<Invocation> argMismatchStubbings = potentialArgMismatches(invocation);
             if (!argMismatchStubbings.isEmpty()) {
-                Reporter.potentialStubbingProblemByJUnitRule(invocation, argMismatchStubbings);
+                mismatchesReported = true;
+                Reporter.potentialStubbingProblem(invocation, argMismatchStubbings);
             }
         } else {
             //when strict stubs are in use, every time a stub is realized in the code it is implicitly marked as verified
@@ -53,5 +59,19 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
             }
         }
         return matchingStubbings;
+    }
+
+    /**
+     * Enables resetting the strictness to desired level
+     */
+    void setCurrentStrictness(Strictness currentStrictness) {
+        this.currentStrictness = currentStrictness;
+    }
+
+    /**
+     * Indicates that stubbing argument mismatch was reported
+     */
+    boolean isMismatchesReported() {
+        return mismatchesReported;
     }
 }

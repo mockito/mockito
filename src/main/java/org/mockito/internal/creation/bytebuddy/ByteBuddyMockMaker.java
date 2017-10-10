@@ -7,7 +7,6 @@ package org.mockito.internal.creation.bytebuddy;
 import org.mockito.Incubating;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.plugins.MockMaker;
 
 /**
  * ByteBuddy MockMaker.

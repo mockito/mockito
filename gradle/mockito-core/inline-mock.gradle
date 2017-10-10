@@ -1,7 +1,7 @@
 task copyMockMethodDispatcher(type: Copy) {
     dependsOn compileJava
-    from "${buildDir}/classes/main/org/mockito/internal/creation/bytebuddy"
-    into "${buildDir}/classes/main/org/mockito/internal/creation/bytebuddy"
+    from "${sourceSets.main.java.outputDir}/org/mockito/internal/creation/bytebuddy"
+    into "${sourceSets.main.java.outputDir}/org/mockito/internal/creation/bytebuddy"
     include "MockMethodDispatcher.class"
     rename { String fileName ->
         fileName.replace('.class', '.raw')

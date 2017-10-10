@@ -4,13 +4,11 @@
  */
 package org.mockito.internal.matchers.text;
 
-import org.mockito.ArgumentMatcher;
-import org.mockito.internal.util.Decamelizer;
-import org.mockito.internal.util.ObjectMethodsGuru;
-
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
+import static org.mockito.internal.util.StringUtil.decamelizeMatcher;
 
 import java.lang.reflect.Method;
+import org.mockito.ArgumentMatcher;
 
 /**
  * Provides better toString() text for matcher that don't have toString() method declared.
@@ -38,6 +36,8 @@ class MatcherToString {
             }
             cls = cls.getSuperclass();
         }
-        return Decamelizer.decamelizeMatcher(matcher.getClass().getSimpleName());
+        return decamelizeMatcher(matcher.getClass().getSimpleName());
     }
+
+
 }

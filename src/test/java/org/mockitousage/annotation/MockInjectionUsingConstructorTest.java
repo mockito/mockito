@@ -5,18 +5,7 @@
 
 package org.mockitousage.annotation;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
-
-import java.util.AbstractCollection;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,7 +25,16 @@ import org.mockitousage.examples.use.ArticleCalculator;
 import org.mockitousage.examples.use.ArticleDatabase;
 import org.mockitousage.examples.use.ArticleManager;
 
-@RunWith(MockitoJUnitRunner.class)
+import java.util.AbstractCollection;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 public class MockInjectionUsingConstructorTest {
 
     @Mock private ArticleCalculator calculator;
@@ -47,6 +45,10 @@ public class MockInjectionUsingConstructorTest {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
+
+    @Before public void before() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void shouldNotFailWhenNotInitialized() {

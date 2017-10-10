@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockitousage.verification;
 
 import static java.lang.System.currentTimeMillis;
@@ -33,7 +37,7 @@ class DelayedExecution {
         executor.shutdownNow();
 
         if (!executor.awaitTermination(5, SECONDS)) {
-            throw new IllegalStateException("This delayed excution did not terminated after 5 seconds");
+            throw new IllegalStateException("This delayed execution did not terminated after 5 seconds");
         }
     }
 

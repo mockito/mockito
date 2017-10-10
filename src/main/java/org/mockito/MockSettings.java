@@ -4,7 +4,10 @@
  */
 package org.mockito;
 
+import org.mockito.invocation.InvocationFactory;
+import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
 
@@ -240,19 +243,25 @@ public interface MockSettings extends Serializable {
      * OtherAbstract spy = mock(OtherAbstract.class, withSettings()
      *   .useConstructor().defaultAnswer(CALLS_REAL_METHODS));
      *
+     * //Mocking an abstract class with constructor arguments
+     * SomeAbstract spy = mock(SomeAbstract.class, withSettings()
+     *   .useConstructor("arg1", 123).defaultAnswer(CALLS_REAL_METHODS));
+     *
      * //Mocking a non-static inner abstract class:
      * InnerAbstract spy = mock(InnerAbstract.class, withSettings()
      *   .useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
      * </code></pre>
      *
+     * @param args The arguments to pass to the constructor. Not passing any arguments means that a parameter-less
+     *             constructor will be called
      * @return settings instance so that you can fluently specify other settings
-     * @since 1.10.12
+     * @since 2.7.14 (useConstructor with no arguments was supported since 1.10.12)
      */
     @Incubating
-    MockSettings useConstructor();
+    MockSettings useConstructor(Object... args);
 
     /**
-     * Makes it possible to mock non-static inner classes in conjunction with {@link #useConstructor()}.
+     * Makes it possible to mock non-static inner classes in conjunction with {@link #useConstructor(Object...)}.
      * <p>
      * Example:
      * <pre class="code"><code class="java">
@@ -265,4 +274,19 @@ public interface MockSettings extends Serializable {
      */
     @Incubating
     MockSettings outerInstance(Object outerClassInstance);
+
+    /**
+     * Creates immutable view of mock settings used later by Mockito.
+     * Framework integrators can use this method to create instances of creation settings
+     * and use them in advanced use cases, for example to create invocations with {@link InvocationFactory},
+     * or to implement custom {@link MockHandler}.
+     * Since {@link MockCreationSettings} is {@link NotExtensible}, Mockito public API needs a creation method for this type.
+     *
+     * @param typeToMock class to mock
+     * @param <T> type to mock
+     * @return immutable view of mock settings
+     * @since 2.10.0
+     */
+    @Incubating
+    <T> MockCreationSettings<T> build(Class<T> typeToMock);
 }

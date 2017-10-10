@@ -12,7 +12,6 @@ import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 
 import java.util.List;
 
-import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
@@ -25,11 +24,11 @@ public class Only implements VerificationMode {
         MatchableInvocation target = data.getTarget();
         List<Invocation> invocations = data.getAllInvocations();
         List<Invocation> chunk = findInvocations(invocations,target);
-        if (invocations.size() != 1 && chunk.size() > 0) {
+        if (invocations.size() != 1 && !chunk.isEmpty()) {
             Invocation unverified = findFirstUnverified(invocations);
             throw noMoreInteractionsWanted(unverified, (List) invocations);
         }
-        if (invocations.size() != 1 || chunk.size() == 0) {
+        if (invocations.size() != 1 || chunk.isEmpty()) {
             throw wantedButNotInvoked(target);
         }
         markVerified(chunk.get(0), target);

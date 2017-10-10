@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
@@ -16,14 +20,10 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static net.bytebuddy.ClassFileVersion.JAVA_V8;
-import static net.bytebuddy.ClassFileVersion.JAVA_V9;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
@@ -49,8 +49,6 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void should_create_mock_from_final_class_in_the_JDK() throws Exception {
-        assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V9)); // Change when ByteBuddy has ASM6 - see #788
-
         MockCreationSettings<Pattern> settings = settingsFor(Pattern.class);
         Pattern proxy = mockMaker.createMock(settings, new MockHandlerImpl<Pattern>(settings));
         assertThat(proxy.pattern()).isEqualTo("bar");
@@ -73,9 +71,14 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     }
 
     @Test
-    public void should_create_mock_from_hashmap() throws Exception {
-        assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V9)); // Change when ByteBuddy has ASM6 - see #862
+    public void should_detect_non_overridden_generic_method_of_supertype() throws Exception {
+        MockCreationSettings<GenericSubClass> settings = settingsFor(GenericSubClass.class);
+        GenericSubClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
+        assertThat(proxy.value()).isEqualTo("bar");
+    }
 
+    @Test
+    public void should_create_mock_from_hashmap() throws Exception {
         MockCreationSettings<HashMap> settings = settingsFor(HashMap.class);
         HashMap proxy = mockMaker.createMock(settings, new MockHandlerImpl<HashMap>(settings));
         assertThat(proxy.get(null)).isEqualTo("bar");
@@ -149,6 +152,26 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     }
 
     @Test
+    public void should_mock_interface() {
+        MockSettingsImpl<Set> mockSettings = new MockSettingsImpl<Set>();
+        mockSettings.setTypeToMock(Set.class);
+        mockSettings.defaultAnswer(new Returns(10));
+        Set<?> proxy = mockMaker.createMock(mockSettings, new MockHandlerImpl<Set>(mockSettings));
+
+        assertThat(proxy.size()).isEqualTo(10);
+    }
+
+    @Test
+    public void should_mock_interface_to_string() {
+        MockSettingsImpl<Set> mockSettings = new MockSettingsImpl<Set>();
+        mockSettings.setTypeToMock(Set.class);
+        mockSettings.defaultAnswer(new Returns("foo"));
+        Set<?> proxy = mockMaker.createMock(mockSettings, new MockHandlerImpl<Set>(mockSettings));
+
+        assertThat(proxy.toString()).isEqualTo("foo");
+    }
+
+    @Test
     public void should_remove_recursive_self_call_from_stack_trace() throws Exception {
         StackTraceElement[] stack = new StackTraceElement[]{
                 new StackTraceElement("foo", "", "", -1),
@@ -160,7 +183,7 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
         Throwable throwable = new Throwable();
         throwable.setStackTrace(stack);
-        throwable = InlineByteBuddyMockMaker.hideRecursiveCall(throwable, 2, SampleInterface.class);
+        throwable = MockMethodAdvice.hideRecursiveCall(throwable, 2, SampleInterface.class);
 
         assertThat(throwable.getStackTrace()).isEqualTo(new StackTraceElement[]{
                 new StackTraceElement("foo", "", "", -1),
@@ -173,7 +196,7 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     public void should_handle_missing_or_inconsistent_stack_trace() throws Exception {
         Throwable throwable = new Throwable();
         throwable.setStackTrace(new StackTraceElement[0]);
-        assertThat(InlineByteBuddyMockMaker.hideRecursiveCall(throwable, 0, SampleInterface.class)).isSameAs(throwable);
+        assertThat(MockMethodAdvice.hideRecursiveCall(throwable, 0, SampleInterface.class)).isSameAs(throwable);
     }
 
     @Test
@@ -186,6 +209,13 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     public void should_provide_reason_for_vm_unsupported() {
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(int[].class);
         assertThat(mockable.nonMockableReason()).isEqualTo("VM does not not support modification of given type");
+    }
+
+    @Test
+    public void should_mock_method_of_package_private_class() throws Exception {
+        MockCreationSettings<NonPackagePrivateSubClass> settings = settingsFor(NonPackagePrivateSubClass.class);
+        NonPackagePrivateSubClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<NonPackagePrivateSubClass>(settings));
+        assertThat(proxy.value()).isEqualTo("bar");
     }
 
     @Test
@@ -238,7 +268,6 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     @Test
     public void test_parameters_retention() throws Exception {
         assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(JAVA_V8));
-        assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V9)); // Change when ByteBuddy has ASM6 - see #788
 
         Class<?> typeWithParameters = new ByteBuddy()
                 .subclass(Object.class)
@@ -303,15 +332,35 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         }
     }
 
-    private static class NonFinalMethod {
+    private interface SampleInterface {
 
-        public String foo() {
+        String bar();
+    }
+
+    /*package-private*/ abstract class PackagePrivateSuperClass {
+
+        public abstract String indirect();
+
+        public String value() {
+            return indirect() + "qux";
+        }
+    }
+
+    public class NonPackagePrivateSubClass extends PackagePrivateSuperClass {
+
+        @Override
+        public String indirect() {
             return "foo";
         }
     }
 
-    private interface SampleInterface {
+    public static class GenericClass<T> {
 
-        String bar();
+        public T value() {
+            return null;
+        }
+    }
+
+    public static class GenericSubClass extends GenericClass<String> {
     }
 }

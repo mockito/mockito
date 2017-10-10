@@ -1,18 +1,10 @@
 description = "Mockito for Android"
 
-ext {
-    artifactName = 'mockito-android'
-    bintrayRepo = 'test'
-    bintrayAutoPublish = false
-    mavenCentralSync = false
-}
-
 apply from: "$rootDir/gradle/java-library.gradle"
-apply from: "$rootDir/gradle/publishable-java-library.gradle"
 
 dependencies {
     compile project.rootProject
-    compile "net.bytebuddy:byte-buddy-android:1.5.12"
+    compile libraries.bytebuddyandroid
 }
 
 tasks.javadoc.enabled = false

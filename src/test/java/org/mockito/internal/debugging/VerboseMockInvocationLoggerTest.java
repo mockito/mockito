@@ -74,7 +74,7 @@ public class VerboseMockInvocationLoggerTest {
     }
 
     @Test
-    public void should_print_stubbed_info_if_availbable() throws Exception {
+    public void should_print_stubbed_info_if_available() throws Exception {
         invocation.markStubbed(new StubInfoImpl(stubbedInvocation));
 
         listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, "whatever"));

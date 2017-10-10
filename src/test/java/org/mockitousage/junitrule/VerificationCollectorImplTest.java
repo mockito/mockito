@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockitousage.junitrule;
 
 import org.junit.Rule;
@@ -16,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class VerificationCollectorImplTest {
 
     @Test
-    public void should_not_throw_any_exceptions_when_verifications_are_succesful() {
+    public void should_not_throw_any_exceptions_when_verifications_are_successful() {
         VerificationCollector collector = MockitoJUnit.collector().assertLazily();
 
         IMethods methods = mock(IMethods.class);
@@ -54,7 +58,7 @@ public class VerificationCollectorImplTest {
     }
 
     @Test
-    public void should_only_collect_failures_ignore_succesful_verifications() {
+    public void should_only_collect_failures_ignore_successful_verifications() {
         VerificationCollector collector = MockitoJUnit.collector().assertLazily();
 
         IMethods methods = mock(IMethods.class);

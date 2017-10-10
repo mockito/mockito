@@ -12,10 +12,12 @@ import java.lang.reflect.Modifier;
 public class DelegatingMethod implements MockitoMethod {
 
     private final Method method;
+    private final Class<?>[] parameterTypes;
 
     public DelegatingMethod(Method method) {
         assert method != null : "Method cannot be null";
         this.method = method;
+        this.parameterTypes = SuspendMethod.trimSuspendParameterTypes(method.getParameterTypes());
     }
 
     public Class<?>[] getExceptionTypes() {
@@ -31,7 +33,7 @@ public class DelegatingMethod implements MockitoMethod {
     }
 
     public Class<?>[] getParameterTypes() {
-        return method.getParameterTypes();
+        return parameterTypes;
     }
 
     public Class<?> getReturnType() {

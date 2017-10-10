@@ -11,12 +11,11 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
+import org.mockito.internal.creation.bytebuddy.InterceptedInvocation;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.invocation.InvocationImpl;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.SerializableMethod;
-import org.mockito.internal.invocation.realmethod.RealMethod;
 import org.mockito.invocation.Invocation;
 
 import java.io.ByteArrayOutputStream;
@@ -56,7 +55,7 @@ public class TestBase {
         new StateMaster().reset();
     }
 
-    protected Invocation getLastInvocation() {
+    public static Invocation getLastInvocation() {
         return new MockitoCore().getLastInvocation();
     }
 
@@ -65,13 +64,8 @@ public class TestBase {
         for (int i = 0; i < args.length; i++) {
             types[i] = args[i].getClass();
         }
-        return new InvocationImpl(mock(type), new SerializableMethod(type.getMethod(methodName,
-                types)), args, 1, null, new LocationImpl());
-    }
-
-    protected static Invocation invocationOf(Class<?> type, String methodName, RealMethod realMethod) throws NoSuchMethodException {
-        return new InvocationImpl(new Object(), new SerializableMethod(type.getMethod(methodName,
-                new Class<?>[0])), new Object[0], 1, realMethod, new LocationImpl());
+        return new InterceptedInvocation(mock(type), new SerializableMethod(type.getMethod(methodName,
+                types)), args, InterceptedInvocation.NO_OP, new LocationImpl(), 1);
     }
 
     protected static Invocation invocationAt(String location) {

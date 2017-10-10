@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 
 /*
  * Copyright (c) 2007 Mockito contributors
@@ -18,23 +22,6 @@ import static org.mockito.Mockito.RETURNS_DEFAULTS;
 import static org.mockito.Mockito.mock;
 
 public class CallsRealMethodsTest {
-    @Test
-    public void should_invoke_real_method() throws Throwable {
-        class Concrete {
-            void concrete() {
-                throw new RuntimeException("real code");
-            }
-        }
-        Concrete mock = mock(Concrete.class);
-
-        Invocation concrete = new InvocationBuilder().mock(mock).method(Concrete.class.getDeclaredMethod("concrete")).toInvocation();
-        try {
-            new CallsRealMethods().answer(concrete);
-        } catch (RuntimeException throwable) {
-            throwable.printStackTrace();
-            assertThat(throwable).hasMessage("real code");
-        }
-    }
 
     @Test
     public void should_delegate_to_returns_default_when_abstract_method() throws Throwable {

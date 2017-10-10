@@ -13,26 +13,29 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 class PluginLoader {
 
+    private final DefaultMockitoPlugins plugins = new DefaultMockitoPlugins();
+
     private final PluginSwitch pluginSwitch;
 
-    private final Map<String, String> alias;
+    private String alias;
 
     public PluginLoader(PluginSwitch pluginSwitch) {
         this.pluginSwitch = pluginSwitch;
-        this.alias = new HashMap<String, String>();
     }
 
     /**
+     * @deprecated Let's avoid adding more aliases. It complicates the API.
+     * Instead of an alias, we can use fully qualified class name of the alternative implementation.
+     * <p>
      * Adds an alias for a class name to this plugin loader. Instead of the fully qualified type name,
      * the alias can be used as a convenience name for a known plugin.
      */
-    PluginLoader withAlias(String name, String type) {
-        alias.put(name, type);
+    @Deprecated
+    PluginLoader withAlias(String name) {
+        alias = name;
         return this;
     }
 
@@ -40,23 +43,14 @@ class PluginLoader {
      * Scans the classpath for given pluginType. If not found, default class is used.
      */
     @SuppressWarnings("unchecked")
-    <T> T loadPlugin(final Class<T> pluginType, String defaultPluginClassName) {
+    <T> T loadPlugin(final Class<T> pluginType) {
         try {
             T plugin = loadImpl(pluginType);
             if (plugin != null) {
                 return plugin;
             }
 
-            try {
-                // Default implementation. Use our own ClassLoader instead of the context
-                // ClassLoader, as the default implementation is assumed to be part of
-                // Mockito and may not be available via the context ClassLoader.
-                return pluginType.cast(Class.forName(defaultPluginClassName).newInstance());
-            } catch (Exception e) {
-                throw new IllegalStateException("Internal problem occurred, please report it. " +
-                        "Mockito is unable to load the default implementation of class that is a part of Mockito distribution. " +
-                        "Failed to load " + pluginType, e);
-            }
+            return plugins.getDefaultPlugin(pluginType);
         } catch (final Throwable t) {
             return (T) Proxy.newProxyInstance(pluginType.getClassLoader(),
                     new Class<?>[]{pluginType},
@@ -86,13 +80,12 @@ class PluginLoader {
         }
 
         try {
-            String foundPluginClass = new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
-            if (foundPluginClass != null) {
-                String aliasType = alias.get(foundPluginClass);
-                if (aliasType != null) {
-                    foundPluginClass = aliasType;
+            String classOrAlias = new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
+            if (classOrAlias != null) {
+                if (classOrAlias.equals(alias)) {
+                    classOrAlias = plugins.getDefaultPluginClass(alias);
                 }
-                Class<?> pluginClass = loader.loadClass(foundPluginClass);
+                Class<?> pluginClass = loader.loadClass(classOrAlias);
                 Object plugin = pluginClass.newInstance();
                 return service.cast(plugin);
             }

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.junit;
 
 import org.junit.runners.model.InitializationError;
@@ -19,11 +23,11 @@ public class TestableJUnitRunner extends MockitoJUnitRunner {
     };
 
     public TestableJUnitRunner(Class<?> klass) throws InvocationTargetException, InitializationError {
-        super(new StrictRunner(new StrictRunner(new RunnerFactory().create(klass, new Supplier<MockitoTestListener>() {
+        super(new StrictRunner(new RunnerFactory().create(klass, new Supplier<MockitoTestListener>() {
             public MockitoTestListener get() {
                 return new MismatchReportingTestListener(LOGGER.get());
             }
-        }), klass), klass));
+        }), klass));
     }
 
     public static SimpleMockitoLogger refreshedLogger() {

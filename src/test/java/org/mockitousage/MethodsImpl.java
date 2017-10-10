@@ -328,6 +328,18 @@ public class MethodsImpl implements IMethods {
     public void mixedVarargs(Object i, String... string) {
     }
 
+    public String mixedVarargsReturningString(Object i, String... string) {
+        return null;
+    }
+
+    public String[] mixedVarargsReturningStringArray(Object i, String... string) {
+        return null;
+    }
+
+    public Object[] mixedVarargsReturningObjectArray(Object i, String... string) {
+        return null;
+    }
+
     public void varargsbyte(byte... bytes) {
     }
 
@@ -432,6 +444,16 @@ public class MethodsImpl implements IMethods {
     }
 
     public String forObject(Object object) {
+        return null;
+    }
+
+    @Override
+    public Void voidReturningMethod() {
+        return null;
+    }
+
+    @Override
+    public <T> String genericToString(T arg) {
         return null;
     }
 }

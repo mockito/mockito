@@ -38,20 +38,44 @@ import static org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces.t
  */
 @SuppressWarnings("unchecked")
 public class AdditionalAnswers {
-    private static final ReturnsArgumentAt RETURNS_FIRST_ARGUMENT = new ReturnsArgumentAt(0);
-    private static final ReturnsArgumentAt RETURNS_SECOND_ARGUMENT = new ReturnsArgumentAt(1);
-    private static final ReturnsArgumentAt RETURNS_LAST_ARGUMENT = new ReturnsArgumentAt(-1);
-
     /**
      * Returns the first parameter of an invocation.
      *
      * <p>
      *     This additional answer could be used at stub time using the
      *     <code>then|do|will{@link org.mockito.stubbing.Answer}</code> methods. For example :
+     *
+     * <pre class="code"><code class="java">
+     * given(carKeyFob.authenticate(carKey)).will(returnsFirstArg());
+     * doAnswer(returnsFirstArg()).when(carKeyFob).authenticate(carKey);
+     * </code></pre>
      * </p>
      *
-     * <pre class="code"><code class="java">given(carKeyFob.authenticate(carKey)).will(returnsFirstArg());
-     * doAnswer(returnsFirstArg()).when(carKeyFob).authenticate(carKey)</code></pre>
+     * <p>
+     * This methods works with varargs as well, mockito will expand the vararg to return the argument
+     * at the given position. Suppose the following signature :
+     *
+     * <pre class="code"><code class="java">
+     * interface Person {
+     *     Dream remember(Dream... dreams);
+     * }
+     *
+     * // returns dream1
+     * given(person.remember(dream1, dream2, dream3, dream4)).will(returnsFirstArg());
+     * </code></pre>
+     *
+     * Mockito will return the vararg array if the first argument is a vararg in the method
+     * and if the return type has the same type as the vararg array.
+     *
+     * <pre class="code"><code class="java">
+     * interface Person {
+     *     Dream[] remember(Dream... otherDreams);
+     * }
+     *
+     * // returns otherDreams (happens to be a 4 elements array)
+     * given(person.remember(dream1, dream2, dream3, dream4)).will(returnsFirstArg());
+     * </code></pre>
+     * </p>
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the first argument of the invocation.
@@ -59,7 +83,7 @@ public class AdditionalAnswers {
      * @since 1.9.5
      */
     public static <T> Answer<T> returnsFirstArg() {
-        return (Answer<T>) RETURNS_FIRST_ARGUMENT;
+        return (Answer<T>) new ReturnsArgumentAt(0);
     }
 
     /**
@@ -68,10 +92,38 @@ public class AdditionalAnswers {
      * <p>
      *     This additional answer could be used at stub time using the
      *     <code>then|do|will{@link org.mockito.stubbing.Answer}</code> methods. For example :
+     *
+     * <pre class="code"><code class="java">
+     * given(trader.apply(leesFormula, onCreditDefaultSwap)).will(returnsSecondArg());
+     * doAnswer(returnsSecondArg()).when(trader).apply(leesFormula, onCreditDefaultSwap);
+     * </code></pre>
      * </p>
      *
-     * <pre class="code"><code class="java">given(trader.apply(leesFormula, onCreditDefaultSwap)).will(returnsSecondArg());
-     * doAnswer(returnsSecondArg()).when(trader).apply(leesFormula, onCreditDefaultSwap)</code></pre>
+     * <p>
+     * This methods works with varargs as well, mockito will expand the vararg to return the argument
+     * at the given position. Suppose the following signature :
+     *
+     * <pre class="code"><code class="java">
+     * interface Person {
+     *     Dream remember(Dream dream, Dream... otherDreams);
+     * }
+     *
+     * // returns dream2
+     * given(person.remember(dream1, dream2, dream3, dream4)).will(returnsSecondArg());
+     * </code></pre>
+     *
+     * Mockito will return the vararg array if the second argument is a vararg in the method
+     * and if the return type has the same type as the vararg array.
+     *
+     * <pre class="code"><code class="java">
+     * interface Person {
+     *     Dream[] remember(Dream dream1, Dream... otherDreams);
+     * }
+     *
+     * // returns otherDreams (happens to be a 3 elements array)
+     * given(person.remember(dream1, dream2, dream3, dream4)).will(returnsSecondArg());
+     * </code></pre>
+     * </p>
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the second argument of the invocation.
@@ -79,7 +131,7 @@ public class AdditionalAnswers {
      * @since 1.9.5
      */
     public static <T> Answer<T> returnsSecondArg() {
-        return (Answer<T>) RETURNS_SECOND_ARGUMENT;
+        return (Answer<T>) new ReturnsArgumentAt(1);
     }
 
     /**
@@ -88,10 +140,38 @@ public class AdditionalAnswers {
      * <p>
      *     This additional answer could be used at stub time using the
      *     <code>then|do|will{@link org.mockito.stubbing.Answer}</code> methods. For example :
+     *
+     * <pre class="code"><code class="java">
+     * given(person.remember(dream1, dream2, dream3, dream4)).will(returnsLastArg());
+     * doAnswer(returnsLastArg()).when(person).remember(dream1, dream2, dream3, dream4);
+     * </code></pre>
      * </p>
      *
-     * <pre class="code"><code class="java">given(person.remember(dream1, dream2, dream3, dream4)).will(returnsLastArg());
-     * doAnswer(returnsLastArg()).when(person).remember(dream1, dream2, dream3, dream4)</code></pre>
+     * <p>
+     * This methods works with varargs as well, mockito will expand the vararg to return the argument
+     * at the given position. Suppose the following signature :
+     *
+     * <pre class="code"><code class="java">
+     * interface Person {
+     *     Dream remember(Dream dream, Dream... otherDreams);
+     * }
+     *
+     * // returns dream4
+     * given(person.remember(dream1, dream2, dream3, dream4)).will(returnsLastArg());
+     * </code></pre>
+     *
+     * Mockito will return the vararg array if the given {@code position} targets the vararg index in the method
+     * and if the return type has the same type as the vararg array.
+     *
+     * <pre class="code"><code class="java">
+     * interface Person {
+     *     Dream[] remember(Dream dream1, Dream dream2, Dream dream3, Dream... otherDreams);
+     * }
+     *
+     * // returns otherDreams (happens to be a single element array)
+     * given(person.remember(dream1, dream2, dream3, dream4)).will(returnsLastArg());
+     * </code></pre>
+     * </p>
      *
      * @param <T> Return type of the invocation.
      * @return Answer that will return the last argument of the invocation.
@@ -99,7 +179,7 @@ public class AdditionalAnswers {
      * @since 1.9.5
      */
     public static <T> Answer<T> returnsLastArg() {
-        return (Answer<T>) RETURNS_LAST_ARGUMENT;
+        return (Answer<T>) new ReturnsArgumentAt(ReturnsArgumentAt.LAST_ARGUMENT);
     }
 
     /**
@@ -108,10 +188,38 @@ public class AdditionalAnswers {
      * <p>
      * This additional answer could be used at stub time using the
      * <code>then|do|will{@link org.mockito.stubbing.Answer}</code> methods. For example :
+     *
+     * <pre class="code"><code class="java">
+     * given(person.remember(dream1, dream2, dream3, dream4)).will(returnsArgAt(3));
+     * doAnswer(returnsArgAt(3)).when(person).remember(dream1, dream2, dream3, dream4);
+     * </code></pre>
      * </p>
      *
-     * <pre class="code"><code class="java">given(person.remember(dream1, dream2, dream3, dream4)).will(returnsArgAt(3));
-     * doAnswer(returnsArgAt(3)).when(person).remember(dream1, dream2, dream3, dream4)</code></pre>
+     * <p>
+     * This methods works with varargs as well, mockito will expand the vararg to return the argument
+     * at the given position. Suppose the following signature :
+     *
+     * <pre class="code"><code class="java">
+     * interface Person {
+     *     Dream remember(Dream dream, Dream... otherDreams);
+     * }
+     *
+     * // returns dream 3
+     * given(person.remember(dream1, dream2, dream3, dream4)).will(returnsArgAt(2));
+     * </code></pre>
+     *
+     * Mockito will return the vararg array if the given {@code position} targets the vararg index in the method
+     * and if the return type has the same type as the vararg array.
+     *
+     * <pre class="code"><code class="java">
+     * interface Person {
+     *     Dream[] remember(Dream dream, Dream... otherDreams);
+     * }
+     *
+     * // returns otherDreams array (contains dream2, dream,3, dream4)
+     * given(person.remember(dream1, dream2, dream3, dream4)).will(returnsArgAt(1));
+     * </code></pre>
+     * </p>
      *
      * @param <T> Return type of the invocation.
      * @param position index of the argument from the list of arguments.
@@ -217,6 +325,7 @@ public class AdditionalAnswers {
      * @param sleepyTime the delay in milliseconds
      * @param answer interface to the answer which provides the intended return value.
      * @return the answer object to use
+     * @since 2.8.44
      */
     @Incubating
     public static <T> Answer<T> answersWithDelay(long sleepyTime, Answer<T> answer) {

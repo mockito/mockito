@@ -14,32 +14,37 @@ import java.util.List;
 
 public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
 
-    private final InvocationContainerImpl invocationContainerImpl;
+    private final InvocationContainerImpl invocationContainer;
 
-    public OngoingStubbingImpl(InvocationContainerImpl invocationContainerImpl) {
-        this.invocationContainerImpl = invocationContainerImpl;
+    public OngoingStubbingImpl(InvocationContainerImpl invocationContainer) {
+        this.invocationContainer = invocationContainer;
     }
 
+    @Override
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
-        if(!invocationContainerImpl.hasInvocationForPotentialStubbing()) {
+        if(!invocationContainer.hasInvocationForPotentialStubbing()) {
             throw incorrectUseOfApi();
         }
 
-        invocationContainerImpl.addAnswer(answer);
-        return new ConsecutiveStubbing<T>(invocationContainerImpl);
+        invocationContainer.addAnswer(answer);
+        return new ConsecutiveStubbing<T>(invocationContainer);
     }
 
+    @Override
     public OngoingStubbing<T> then(Answer<?> answer) {
         return thenAnswer(answer);
     }
 
     public List<Invocation> getRegisteredInvocations() {
         //TODO interface for tests
-        return invocationContainerImpl.getInvocations();
+        return invocationContainer.getInvocations();
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <M> M getMock() {
-        return (M) invocationContainerImpl.invokedMock();
+        return (M) invocationContainer.invokedMock();
     }
 }
+
+

@@ -8,6 +8,8 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
+import net.bytebuddy.description.field.FieldDescription;
+import net.bytebuddy.description.field.FieldList;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.method.ParameterDescription;
@@ -29,16 +31,16 @@ import org.mockito.mock.SerializableMode;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
-import java.lang.instrument.UnmodifiableClassException;
 import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static net.bytebuddy.implementation.MethodDelegation.to;
+import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
 import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
 import static net.bytebuddy.matcher.ElementMatchers.*;
+import static org.mockito.internal.util.StringUtil.join;
 
 public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTransformer {
 
@@ -66,6 +68,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
     private final BytecodeGenerator subclassEngine;
 
+    private volatile Throwable lastException;
+
     public InlineBytecodeGenerator(Instrumentation instrumentation, WeakConcurrentMap<Object, MockMethodInterceptor> mocks) {
         this.instrumentation = instrumentation;
         byteBuddy = new ByteBuddy()
@@ -74,8 +78,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         mocked = new WeakConcurrentSet<Class<?>>(WeakConcurrentSet.Cleaner.INLINE);
         identifier = RandomString.make();
         advice = new MockMethodAdvice(mocks, identifier);
-        subclassEngine = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(to(MockMethodAdvice.ForReadObject.class)
-                .appendParameterBinder(of(MockMethodAdvice.Identifier.class, identifier)), isAbstract().or(isNative())), false);
+        subclassEngine = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(withDefaultConfiguration()
+                .withBinders(of(MockMethodAdvice.Identifier.class, identifier))
+                .to(MockMethodAdvice.ForReadObject.class), isAbstract().or(isNative()).or(isToString())), false);
         MockMethodDispatcher.set(identifier, advice);
         instrumentation.addTransformer(this, true);
     }
@@ -110,11 +115,21 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         if (!types.isEmpty()) {
             try {
                 instrumentation.retransformClasses(types.toArray(new Class<?>[types.size()]));
-            } catch (UnmodifiableClassException exception) {
+                Throwable throwable = lastException;
+                if (throwable != null) {
+                    throw new IllegalStateException(join("Byte Buddy could not instrument all classes within the mock's type hierarchy",
+                        "",
+                        "This problem should never occur for javac-compiled classes. This problem has been observed for classes that are:",
+                        " - Compiled by older versions of scalac",
+                        " - Classes that are part of the Android distribution"), throwable);
+                }
+            } catch (Exception exception) {
                 for (Class<?> failed : types) {
                     mocked.remove(failed);
                 }
                 throw new MockitoException("Could not modify all classes " + types, exception);
+            } finally {
+                lastException = null;
             }
         }
     }
@@ -166,6 +181,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                         .make()
                         .getBytes();
             } catch (Throwable throwable) {
+                lastException = throwable;
                 return null;
             }
         }
@@ -184,6 +200,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                                  ClassVisitor classVisitor,
                                  Implementation.Context implementationContext,
                                  TypePool typePool,
+                                 FieldList<FieldDescription.InDefinedShape> fields,
+                                 MethodList<?> methods,
                                  int writerFlags,
                                  int readerFlags) {
             return implementationContext.getClassFileVersion().isAtLeast(ClassFileVersion.JAVA_V8)

@@ -14,12 +14,14 @@ import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.matcher.ElementMatcher;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.DispatcherDefaultingToRealMethod;
 import org.mockito.mock.SerializableMode;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,6 +32,7 @@ import static net.bytebuddy.dynamic.Transformer.ForMethod.withModifiers;
 import static net.bytebuddy.implementation.MethodDelegation.to;
 import static net.bytebuddy.implementation.attribute.MethodAttributeAppender.ForInstrumentedMethod.INCLUDING_RECEIVER;
 import static net.bytebuddy.matcher.ElementMatchers.*;
+import static org.mockito.internal.util.StringUtil.join;
 
 class SubclassBytecodeGenerator implements BytecodeGenerator {
 
@@ -71,7 +74,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                          .implement(new ArrayList<Type>(features.interfaces))
                          .method(matcher)
                            .intercept(to(DispatcherDefaultingToRealMethod.class))
-                           .transform(withModifiers(SynchronizationState.PLAIN, Visibility.PUBLIC))
+                           .transform(withModifiers(SynchronizationState.PLAIN))
                            .attribute(INCLUDING_RECEIVER)
                          .method(isHashCode())
                            .intercept(to(MockMethodInterceptor.ForHashCode.class))
@@ -91,16 +94,25 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                     .throwing(ClassNotFoundException.class, IOException.class)
                     .intercept(readReplace);
         }
+        ClassLoader classLoader = new MultipleParentClassLoader.Builder()
+            .append(features.mockedType)
+            .append(features.interfaces)
+            .append(currentThread().getContextClassLoader())
+            .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
+            .append(MockMethodInterceptor.class,
+                MockMethodInterceptor.ForHashCode.class,
+                MockMethodInterceptor.ForEquals.class).build(MockMethodInterceptor.class.getClassLoader());
+        if (classLoader != features.mockedType.getClassLoader()) {
+            assertVisibility(features.mockedType);
+            for (Class<?> iFace : features.interfaces) {
+                assertVisibility(iFace);
+            }
+            builder = builder.ignoreAlso(isPackagePrivate()
+                .or(returns(isPackagePrivate()))
+                .or(hasParameters(whereAny(hasType(isPackagePrivate())))));
+        }
         return builder.make()
-                      .load(new MultipleParentClassLoader.Builder()
-                              .append(features.mockedType)
-                              .append(features.interfaces)
-                              .append(currentThread().getContextClassLoader())
-                              .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
-                              .append(MockMethodInterceptor.class,
-                                      MockMethodInterceptor.ForHashCode.class,
-                                      MockMethodInterceptor.ForEquals.class).build(),
-                              loader.getStrategy(features.mockedType))
+                      .load(classLoader, loader.getStrategy(features.mockedType))
                       .getLoaded();
     }
 
@@ -134,5 +146,17 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
 
     private boolean isComingFromSignedJar(Class<?> type) {
         return type.getSigners() != null;
+    }
+
+    private static void assertVisibility(Class<?> type) {
+        if (!Modifier.isPublic(type.getModifiers())) {
+            throw new MockitoException(join("Cannot create mock for " + type,
+                "",
+                "The type is not public and its mock class is loaded by a different class loader.",
+                "This can have multiple reasons:",
+                " - You are mocking a class with additional interfaces of another class loader",
+                " - Mockito is loaded by a different class loader than the mocked type (e.g. with OSGi)",
+                " - The thread's context class loader is different than the mock's class loader"));
+        }
     }
 }

@@ -6,6 +6,7 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -17,9 +18,30 @@ import org.mockito.stubbing.Answer;
  * <p>
  * Current version of Mockito mocks by default use {@link ReturnsEmptyValues}
  * <ul>
- * <li>Returns empty values of {@link ReturnsEmptyValues}</li>
- * <li>Returns "" for String-returning method</li>
- * <li>Returns null for everything else</li>
+ * <li>
+ *  Returns appropriate primitive for primitive-returning methods
+ * </li>
+ * <li>
+ *  Returns consistent values for primitive wrapper classes (e.g. int-returning method returns 0 <b>and</b> Integer-returning method returns 0, too)
+ * </li>
+ * <li>
+ *  Returns empty collection for collection-returning methods (works for most commonly used collection types)
+ * </li>
+ * <li>
+ *  Returns empty array for array-returning methods
+ * </li>
+ * <li>
+ *  Returns "" for String-returning method
+ * </li>
+ * <li>
+ *  Returns description of mock for toString() method
+ * </li>
+ * <li>
+ *  Returns non-zero for Comparable#compareTo(T other) method (see issue 184)
+ * </li>
+ * <li>
+ *  Returns null for everything else
+ * </li>
  * </ul>
  */
 public class ReturnsMoreEmptyValues implements Answer<Object>, Serializable {
@@ -27,6 +49,9 @@ public class ReturnsMoreEmptyValues implements Answer<Object>, Serializable {
     private static final long serialVersionUID = -2816745041482698471L;
     private final Answer<Object> delegate = new ReturnsEmptyValues();
 
+    /* (non-Javadoc)
+     * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
+     */
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Object ret = delegate.answer(invocation);
         if (ret != null) {
@@ -40,6 +65,9 @@ public class ReturnsMoreEmptyValues implements Answer<Object>, Serializable {
     Object returnValueFor(Class<?> type) {
         if (type == String.class) {
             return "";
+        }  else if (type.isArray()) {
+            Class<?> componentType = type.getComponentType();
+            return Array.newInstance(componentType, 0);
         }
         return null;
     }

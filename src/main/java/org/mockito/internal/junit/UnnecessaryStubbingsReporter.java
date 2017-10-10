@@ -25,7 +25,7 @@ public class UnnecessaryStubbingsReporter implements MockCreationListener {
 
     public void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
         Collection<Invocation> unused = new UnusedStubbingsFinder().getUnusedStubbingsByLocation(mocks);
-        if (unused.size() == 0) {
+        if (unused.isEmpty()) {
             return; //whoa!!! All stubbings were used!
         }
 

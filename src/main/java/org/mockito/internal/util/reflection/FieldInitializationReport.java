@@ -29,7 +29,7 @@ public class FieldInitializationReport {
     }
 
     /**
-     * Indicate wether the field was created during the process or not.
+     * Indicate whether the field was created during the process or not.
      *
      * @return <code>true</code> if created, <code>false</code> if the field did already hold an instance.
      */
@@ -38,7 +38,7 @@ public class FieldInitializationReport {
     }
 
     /**
-     * Indicate wether the field was created using constructor args.
+     * Indicate whether the field was created using constructor args.
      *
      * @return <code>true</code> if field was created using constructor parameters.
      */

@@ -7,7 +7,6 @@ package org.mockito.junit;
 import org.junit.rules.TestRule;
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.verification.VerificationMode;
 
 /**
  * Use this rule in order to collect multiple verification failures and report at once.
@@ -35,7 +34,7 @@ import org.mockito.verification.VerificationMode;
  * </code></pre>
  *
  * @see org.mockito.Mockito#verify(Object)
- * @see org.mockito.Mockito#verify(Object, VerificationMode)
+ * @see org.mockito.Mockito#verify(Object, org.mockito.verification.VerificationMode)
  * @since 2.1.0
  */
 @Incubating

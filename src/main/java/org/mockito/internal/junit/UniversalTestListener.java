@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.junit;
 
 import org.mockito.internal.creation.settings.CreationSettings;
@@ -5,14 +9,16 @@ import org.mockito.internal.util.MockitoLogger;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 /**
  * Universal test listener that behaves accordingly to current setting of strictness.
  * Will come handy when we offer tweaking strictness at the method level with annotation.
  * Should be relatively easy to improve and offer tweaking strictness per mock.
  */
-class UniversalTestListener implements MockitoTestListener {
+public class UniversalTestListener implements MockitoTestListener {
 
     private Strictness currentStrictness;
     private final MockitoLogger logger;
@@ -20,7 +26,7 @@ class UniversalTestListener implements MockitoTestListener {
     private Map<Object, MockCreationSettings> mocks = new IdentityHashMap<Object, MockCreationSettings>();
     private DefaultStubbingLookupListener stubbingLookupListener;
 
-    UniversalTestListener(Strictness initialStrictness, MockitoLogger logger) {
+    public UniversalTestListener(Strictness initialStrictness, MockitoLogger logger) {
         this.currentStrictness = initialStrictness;
         this.logger = logger;
 
@@ -34,6 +40,7 @@ class UniversalTestListener implements MockitoTestListener {
         Collection<Object> createdMocks = mocks.keySet();
         //At this point, we don't need the mocks any more and we can mark all collected mocks for gc
         //TODO make it better, it's easy to forget to clean up mocks and we still create new instance of list that nobody will read, it's also duplicated
+        //TODO clean up all other state, null out stubbingLookupListener
         mocks = new IdentityHashMap<Object, MockCreationSettings>();
 
         switch (currentStrictness) {
@@ -44,9 +51,9 @@ class UniversalTestListener implements MockitoTestListener {
         }
     }
 
-    private static void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
-        if (event.getFailure() == null) {
-            //Detect unused stubbings:
+    private void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
+        //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
+        if (event.getFailure() == null && !stubbingLookupListener.isMismatchesReported()) {
             UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks);
             unused.reportUnused();
         }
@@ -77,6 +84,6 @@ class UniversalTestListener implements MockitoTestListener {
 
     public void setStrictness(Strictness strictness) {
         this.currentStrictness = strictness;
-        this.stubbingLookupListener.currentStrictness = strictness;
+        this.stubbingLookupListener.setCurrentStrictness(strictness);
     }
 }

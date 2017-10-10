@@ -6,6 +6,7 @@
 package org.mockito.mock;
 
 import org.mockito.Incubating;
+import org.mockito.NotExtensible;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.stubbing.Answer;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 /**
  * Informs about the mock settings. An immutable view of {@link org.mockito.MockSettings}.
  */
+@NotExtensible
 public interface MockCreationSettings<T> {
 
     /**
@@ -71,6 +73,18 @@ public interface MockCreationSettings<T> {
      */
     @Incubating
     boolean isUsingConstructor();
+
+    /**
+     * Used when arguments should be passed to the mocked object's constructor, regardless of whether these
+     * arguments are supplied directly, or whether they include the outer instance.
+     *
+     * @return An array of arguments that are passed to the mocked object's constructor. If
+     * {@link #getOuterClassInstance()} is available, it is prepended to the passed arguments.
+     *
+     * @since 2.7.14
+     */
+    @Incubating
+    public Object[] getConstructorArgs();
 
     /**
      * Used when mocking non-static inner classes in conjunction with {@link #isUsingConstructor()}

@@ -33,6 +33,8 @@ public class JUnitRule implements MockitoRule {
 	public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
+                //Ideally, JUnit rule should use MockitoSession API so that it dogfoods our public API.
+                //See https://github.com/mockito/mockito/issues/898
                 Mockito.framework().addListener(listener);
                 Throwable testFailure;
                 try {

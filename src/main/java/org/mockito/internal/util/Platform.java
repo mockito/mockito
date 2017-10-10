@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.util;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.mockito.internal.util.StringUtil.join;
 
 public abstract class Platform {
 
@@ -23,8 +26,16 @@ public abstract class Platform {
     private Platform() {
     }
 
+    public static boolean isAndroid() {
+        return System.getProperty("java.vendor", "").toLowerCase(Locale.US).contains("android");
+    }
+
+    public static boolean isAndroidMockMakerRequired() {
+        return Boolean.getBoolean("org.mockito.mock.android");
+    }
+
     public static String describe() {
-        return String.format("Java               : %s\n" +
+        String description = String.format("Java               : %s\n" +
                              "JVM vendor name    : %s\n" +
                              "JVM vendor version : %s\n" +
                              "JVM name           : %s\n" +
@@ -40,6 +51,18 @@ public abstract class Platform {
                              JVM_INFO,
                              OS_NAME,
                              OS_VERSION);
+        if (isAndroid()) {
+            description = join(
+                    "IMPORTANT INFORMATION FOR ANDROID USERS:",
+                    "",
+                    "The regular Byte Buddy mock makers cannot generate code on an Android VM!",
+                    "To resolve this, please use the 'mockito-android' dependency for your application:",
+                    "http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22mockito-android%22%20g%3A%22org.mockito%22",
+                    "",
+                    description
+            );
+        }
+        return description;
     }
 
     public static boolean isJava8BelowUpdate45() {

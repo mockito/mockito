@@ -16,7 +16,16 @@ public class DoesNothing implements Answer<Object>, ValidableAnswer, Serializabl
 
     private static final long serialVersionUID = 4840880517740698416L;
 
-    public Object answer(InvocationOnMock invocation) throws Throwable {
+    private static final DoesNothing SINGLETON = new DoesNothing();
+
+    private DoesNothing() {}
+
+    public static DoesNothing doesNothing(){
+        return SINGLETON;
+    }
+
+    @Override
+    public Object answer(InvocationOnMock invocation){
         return null;
     }
 

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockitoutil;
 
 import org.assertj.core.api.Assertions;
@@ -97,7 +101,7 @@ public class SafeJUnitRuleTest {
             }, mock(FrameworkMethod.class), this).evaluate();
             fail();
         } catch (AssertionError throwable) {
-            Assertions.assertThat(throwable).hasMessageContaining("but was instance of");
+            Assertions.assertThat(throwable).hasMessageContaining("but was:");
         }
     }
 

@@ -78,6 +78,16 @@ But first of all, make sure that :
 * Line ending character is unix-style **`LF`**
 * New line is added at end of file: `IntelliJ setting > Editor > General > Ensure line feed at file end on save`
 
+For most editors, this should be automatically enforced by [EditorConfig](http://editorconfig.org/).
+Check if your editor has a built-in plugin or if you need to download one.
+IntelliJ has a built-in plugin, for Eclipse you need to download [this plugin](https://github.com/ncjones/editorconfig-eclipse#readme).
+
+If you want to check if your code complies to the style guide, you can run:
+
+* `./gradlew checkstyleMain` to check the main source code
+* `./gradlew checkstyleTest` to check the test source code
+* `./gradlew check` to check main and test source code, and run the tests
+
 ### Imports
 
 Imports must be sorted in the following order
@@ -99,7 +109,7 @@ Also make sure that
    * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Class count to use import with '*'` to `100`     
    * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Names count to use import static with '*'` to `100`     
 
-##### Alignment
+### Alignment
 
 We found vertical alignment helping when reading the code, for that reason we want to align vertically chained APIs, parameters, etc. For that reason the spacing characters are spaces.
 
@@ -165,9 +175,10 @@ We found vertical alignment helping when reading the code, for that reason we wa
     we want to align vertically the exceptions parameters
 
     ```java
-    @Mock(answer = Answers.RETURNS_DEFAULTS,
-          serializable = true, 
-          extraInterfaces = { List.class, YetAnotherInterface.class }) 
+    void feature() throws IOException,
+                          YetAnotherException {
+         // ...
+    }
     ```
 
     Go to `IntelliJ setting > Editor > Code Style > Java > Throws list`

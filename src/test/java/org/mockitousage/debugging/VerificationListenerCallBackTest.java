@@ -1,8 +1,11 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockitousage.debugging;
 
 import org.assertj.core.api.Condition;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.mockito.Mockito;
@@ -50,10 +53,8 @@ public class VerificationListenerCallBackTest extends TestBase {
     public void should_call_all_listeners_on_verify() throws NoSuchMethodException {
         //given
         RememberingListener listener1 = new RememberingListener();
-        RememberingListener listener2 = new RememberingListener();
-        MockitoFramework mockitoFramework = Mockito.framework();
-        mockitoFramework.addListener(listener1);
-        mockitoFramework.addListener(listener2);
+        RememberingListener2 listener2 = new RememberingListener2();
+        Mockito.framework().addListener(listener1).addListener(listener2);
 
         Method invocationWanted = Foo.class.getDeclaredMethod("doSomething", String.class);
         Foo foo = mock(Foo.class);
@@ -157,6 +158,10 @@ public class VerificationListenerCallBackTest extends TestBase {
             this.data = verificationEvent.getData();
             this.cause = verificationEvent.getVerificationError();
         }
+    }
+
+    private static class RememberingListener2 extends RememberingListener {
+
     }
 
     private static Condition<RememberingListener> notifiedFor(final Object mock, final VerificationMode mode, final Method wantedMethod) {

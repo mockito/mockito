@@ -1,12 +1,15 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.handler.MockHandlerImpl;
-import org.mockito.internal.stubbing.InvocationContainer;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
@@ -182,7 +185,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
         return new DummyMockHandler();
     }
 
-    private static class DummyMockHandler implements InternalMockHandler<Object> {
+    private static class DummyMockHandler implements MockHandler<Object> {
         public Object handle(Invocation invocation) throws Throwable { return null; }
         public MockCreationSettings<Object> getMockSettings() { return null; }
         public InvocationContainer getInvocationContainer() { return null; }

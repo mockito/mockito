@@ -88,7 +88,7 @@ public class InvalidUsageTest extends TestBase {
     }
 
     @Test(expected=MockitoException.class)
-    public void shouldNotAllowMockingPrimitves() throws Exception {
+    public void shouldNotAllowMockingPrimitives() throws Exception {
         mock(Integer.TYPE);
     }
 

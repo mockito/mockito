@@ -9,14 +9,13 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.mockito.MockitoTest;
-import org.mockito.internal.exceptions.ReporterTest;
 import org.mockito.exceptions.base.MockitoAssertionErrorTest;
 import org.mockito.exceptions.base.MockitoExceptionTest;
 import org.mockito.internal.AllInvocationsFinderTest;
 import org.mockito.internal.InvalidStateDetectionTest;
 import org.mockito.internal.creation.bytebuddy.TypeCachingMockBytecodeGeneratorTest;
+import org.mockito.internal.exceptions.ReporterTest;
 import org.mockito.internal.handler.MockHandlerImplTest;
-import org.mockito.internal.invocation.InvocationImplTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
 import org.mockito.internal.invocation.InvocationsFinderTest;
 import org.mockito.internal.matchers.ComparableMatchersTest;
@@ -53,10 +52,13 @@ import org.mockitousage.stubbing.StubbingWithThrowablesTest;
 import org.mockitousage.verification.*;
 import org.mockitoutil.TestBase;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
 
 public class ThreadsRunAllTestsHalfManualTest extends TestBase {
 
@@ -81,7 +83,6 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     TypeCachingMockBytecodeGeneratorTest.class,
                     InvocationMatcherTest.class,
                     InvocationsFinderTest.class,
-                    InvocationImplTest.class,
                     MockitoTest.class,
                     MockUtilTest.class,
                     ReporterTest.class,

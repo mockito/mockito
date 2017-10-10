@@ -4,12 +4,22 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import net.bytebuddy.implementation.bind.annotation.*;
-import org.mockito.internal.InternalMockHandler;
+import net.bytebuddy.implementation.bind.annotation.AllArguments;
+import net.bytebuddy.implementation.bind.annotation.Argument;
+import net.bytebuddy.implementation.bind.annotation.BindingPriority;
+import net.bytebuddy.implementation.bind.annotation.FieldValue;
+import net.bytebuddy.implementation.bind.annotation.Origin;
+import net.bytebuddy.implementation.bind.annotation.RuntimeType;
+import net.bytebuddy.implementation.bind.annotation.StubValue;
+import net.bytebuddy.implementation.bind.annotation.SuperCall;
+import net.bytebuddy.implementation.bind.annotation.This;
 import org.mockito.internal.creation.DelegatingMethod;
+import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.progress.SequenceNumber;
+import org.mockito.invocation.Location;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 
@@ -22,13 +32,13 @@ public class MockMethodInterceptor implements Serializable {
 
     private static final long serialVersionUID = 7152947254057253027L;
 
-    final InternalMockHandler handler;
+    final MockHandler handler;
 
     private final MockCreationSettings mockCreationSettings;
 
     private final ByteBuddyCrossClassLoaderSerializationSupport serializationSupport;
 
-    public MockMethodInterceptor(InternalMockHandler handler, MockCreationSettings mockCreationSettings) {
+    public MockMethodInterceptor(MockHandler handler, MockCreationSettings mockCreationSettings) {
         this.handler = handler;
         this.mockCreationSettings = mockCreationSettings;
         serializationSupport = new ByteBuddyCrossClassLoaderSerializationSupport();
@@ -37,18 +47,41 @@ public class MockMethodInterceptor implements Serializable {
     Object doIntercept(Object mock,
                        Method invokedMethod,
                        Object[] arguments,
-                       InterceptedInvocation.SuperMethod superMethod) throws Throwable {
-        return handler.handle(new InterceptedInvocation(
+                       RealMethod realMethod) throws Throwable {
+        return doIntercept(
                 mock,
-                createMockitoMethod(invokedMethod),
+                invokedMethod,
                 arguments,
-                superMethod,
-                SequenceNumber.next()
-        ));
+            realMethod,
+                new LocationImpl()
+        );
     }
 
-    private MockitoMethod createMockitoMethod(Method method) {
-        if (mockCreationSettings.isSerializable()) {
+    Object doIntercept(Object mock,
+                       Method invokedMethod,
+                       Object[] arguments,
+                       RealMethod realMethod,
+                       Location location) throws Throwable {
+        return handler.handle(createInvocation(mock, invokedMethod, arguments, realMethod, mockCreationSettings, location));
+    }
+
+    public static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, RealMethod realMethod, MockCreationSettings settings, Location location) {
+        return new InterceptedInvocation(
+            mock,
+            createMockitoMethod(invokedMethod, settings),
+            arguments,
+            realMethod,
+            location,
+            SequenceNumber.next()
+        );
+    }
+
+    public static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, RealMethod realMethod, MockCreationSettings settings) {
+        return createInvocation(mock, invokedMethod, arguments, realMethod, settings, new LocationImpl());
+    }
+
+    private static MockitoMethod createMockitoMethod(Method method, MockCreationSettings settings) {
+        if (settings.isSerializable()) {
             return new SerializableMethod(method);
         } else {
             return new DelegatingMethod(method);
@@ -103,7 +136,7 @@ public class MockMethodInterceptor implements Serializable {
                     mock,
                     invokedMethod,
                     arguments,
-                    new InterceptedInvocation.SuperMethod.FromCallable(superCall)
+                    new RealMethod.FromCallable(superCall)
             );
         }
 
@@ -121,7 +154,7 @@ public class MockMethodInterceptor implements Serializable {
                     mock,
                     invokedMethod,
                     arguments,
-                    InterceptedInvocation.SuperMethod.IsIllegal.INSTANCE
+                    RealMethod.IsIllegal.INSTANCE
             );
         }
     }

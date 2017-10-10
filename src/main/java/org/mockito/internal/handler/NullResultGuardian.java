@@ -4,26 +4,23 @@
  */
 package org.mockito.internal.handler;
 
-import static org.mockito.internal.util.Primitives.defaultValue;
-
-import java.util.List;
-
-import org.mockito.internal.InternalMockHandler;
-import org.mockito.internal.stubbing.InvocationContainer;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.stubbing.Answer;
+
+import static org.mockito.internal.util.Primitives.defaultValue;
 
 /**
  * Protects the results from delegate MockHandler. Makes sure the results are valid.
  *
  * by Szczepan Faber, created at: 5/22/12
  */
-class NullResultGuardian<T> implements InternalMockHandler<T> {
+class NullResultGuardian<T> implements MockHandler<T> {
 
-    private final InternalMockHandler<T> delegate;
+    private final MockHandler<T> delegate;
 
-    public NullResultGuardian(InternalMockHandler<T> delegate) {
+    public NullResultGuardian(MockHandler<T> delegate) {
         this.delegate = delegate;
     }
 
@@ -41,11 +38,6 @@ class NullResultGuardian<T> implements InternalMockHandler<T> {
     @Override
     public MockCreationSettings<T> getMockSettings() {
         return delegate.getMockSettings();
-    }
-
-    @Override
-    public void setAnswersForStubbing(List<Answer<?>> answers) {
-            delegate.setAnswersForStubbing(answers);
     }
 
     @Override

@@ -4,20 +4,30 @@
  */
 package org.mockito;
 
-import org.mockito.quality.Strictness;
+import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
+import org.mockito.internal.session.DefaultMockitoSessionBuilder;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationFactory;
+import org.mockito.invocation.MockHandler;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.mockito.mock.SerializableMode;
+import org.mockito.quality.MockitoHint;
+import org.mockito.quality.Strictness;
+import org.mockito.session.MockitoSessionBuilder;
+import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.MockitoPlugins;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Answer1;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.VoidAnswer1;
 import org.mockito.verification.After;
 import org.mockito.verification.Timeout;
@@ -28,6 +38,7 @@ import org.mockito.verification.VerificationWithTimeout;
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
  * The Mockito library enables mock creation, verification and stubbing.
+ *
  * <p>
  * This javadoc content is also available on the <a href="http://mockito.org">http://mockito.org</a> web page.
  * All documentation is kept in javadocs because it guarantees consistency between what's on the web and what's in the source code.
@@ -39,6 +50,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <b>
  *      <a href="#0">0. Migrating to Mockito 2</a><br/>
+ *      <a href="#0.1">0.1 Mockito Android support</a></br/>
+ *      <a href="#0.2">0.2 Configuration-free inline mock making</a></br/>
  *      <a href="#1">1. Let's verify some behaviour! </a><br/>
  *      <a href="#2">2. How about some stubbing? </a><br/>
  *      <a href="#3">3. Argument matchers </a><br/>
@@ -68,10 +81,10 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#27">27. Delegate calls to real instance (Since 1.9.5)</a><br/>
  *      <a href="#28">28. <code>MockMaker</code> API (Since 1.9.5)</a><br/>
  *      <a href="#29">29. BDD style verification (Since 1.10.0)</a><br/>
- *      <a href="#30">30. Spying or mocking abstract classes (Since 1.10.12)</a><br/>
+ *      <a href="#30">30. Spying or mocking abstract classes (Since 1.10.12, further enhanced in 2.7.13 and 2.7.14)</a><br/>
  *      <a href="#31">31. Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3><br/>
  *      <a href="#32">32. Better generic support with deep stubs (Since 1.10.0)</a></h3><br/>
- *      <a href="#32">33. Mockito JUnit rule (Since 1.10.17)</a><br/>
+ *      <a href="#33">33. Mockito JUnit rule (Since 1.10.17)</a><br/>
  *      <a href="#34">34. Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a><br/>
  *      <a href="#35">35. Custom verification failure message (Since 2.1.0)</a><br/>
  *      <a href="#36">36. Java 8 Lambda Matcher Support (Since 2.1.0)</a><br/>
@@ -79,9 +92,10 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#38">38. Meta data and generic type retention (Since 2.1.0)</a><br/>
  *      <a href="#39">39. Mocking final types, enums and final methods (Since 2.1.0)</a><br/>
  *      <a href="#40">40. (**new**) Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
+ *      <a href="#41">41. (**new**) Advanced public API for framework integrations (Since 2.10.+)</a><br/>
  * </b>
  *
- * <h3 id="0">0. <a class="meaningful_link" href="#mockito2">Migrating to Mockito 2</a></h3>
+ * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
  *
  * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.1.0!
  * Mockito follows <a href="http://semver.org/">semantic versioning</a> and contains breaking changes only on major version upgrades.
@@ -91,7 +105,48 @@ import org.mockito.verification.VerificationWithTimeout;
  * see '<a href="https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2">What's new in Mockito 2</a>' wiki page.
  * We hope that you enjoy Mockito 2!
  *
- * <h3 id="1">1. <a class="meaningful_link" href="#verification">Let's verify some behaviour!</a></h3>
+ * <h3 id="0.1">0.1. <a class="meaningful_link" href="#mockito" name="mockito-android">Mockito Android support</a></h3>
+ *
+ * With Mockito version 2.6.1 we ship "native" Android support. To enable Android support, add the `mockito-android` library as dependency
+ * to your project. This artifact is published to the same Mockito organization and can be imported for Android as follows:
+ *
+ * <pre class="code"><code>
+ * repositories {
+ *   jcenter()
+ * }
+ * dependencies {
+ *   testCompile "org.mockito:mockito-core:+"
+ *   androidTestCompile "org.mockito:mockito-android:+"
+ * }
+ * </code></pre>
+ *
+ * You can continue to run the same unit tests on a regular VM by using the `mockito-core` artifact in your "testCompile" scope as shown
+ * above. Be aware that you cannot use the <a href="#39">inline mock maker</a> on Android due to limitations in the Android VM.
+ *
+ * If you encounter issues with mocking on Android, please open an issue
+ * <a href="https://github.com/mockito/mockito/issues/new">on the official issue tracker</a>.
+ * Do provide the version of Android you are working on and dependencies of your project.
+ *
+ * <h3 id="0.2">0.2. <a class="meaningful_link" href="#mockito-inline" name="mockito-inline">Configuration-free inline mock making</a></h3>
+ *
+ * Starting with version 2.7.6, we offer the 'mockito-inline' artifact that enables <a href="#39">inline mock making</a> without configuring
+ * the MockMaker extension file. To use this, add the `mockito-inline` instead of the `mockito-core` artifact as follows:
+ *
+ * <pre class="code"><code>
+ * repositories {
+ *   jcenter()
+ * }
+ * dependencies {
+ *   testCompile "org.mockito:mockito-inline:+"
+ * }
+ * </code></pre>
+ *
+ * Be aware that this artifact may be abolished when the inline mock making feature is integrated into the default mock maker.
+ *
+ * <p>
+ * For more information about inline mock making, see <a href="#39">section 39</a>.
+ *
+ * <h3 id="1">1. <a class="meaningful_link" href="#verification" name="verification">Let's verify some behaviour!</a></h3>
  *
  * The following examples mock a List, because most people are familiar with the interface (such as the
  * <code>add()</code>, <code>get()</code>, <code>clear()</code> methods). <br>
@@ -120,7 +175,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="2">2. <a class="meaningful_link" href="#stubbing">How about some stubbing?</a></h3>
+ * <h3 id="2">2. <a class="meaningful_link" href="#stubbing" name="stubbing">How about some stubbing?</a></h3>
  *
  * <pre class="code"><code class="java">
  * //You can mock concrete classes, not just interfaces
@@ -146,7 +201,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * </code></pre>
  *
  * <ul>
- * <li> By default, for all methods that return a value, a mock will return either null, a
+ * <li> By default, for all methods that return a value, a mock will return either null,
  * a primitive/primitive wrapper value, or an empty collection, as appropriate.
  * For example 0 for an int/Integer and false for a boolean/Boolean. </li>
  *
@@ -166,7 +221,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="3">3. <a class="meaningful_link" href="#argument_matchers">Argument matchers</a></h3>
+ * <h3 id="3">3. <a class="meaningful_link" href="#argument_matchers" name="argument_matchers">Argument matchers</a></h3>
  *
  * Mockito verifies argument values in natural java style: by using an <code>equals()</code> method.
  * Sometimes, when extra flexibility is required then you might use argument matchers:
@@ -227,8 +282,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="4">4. <a class="meaningful_link" href="#exact_verification">Verifying exact number of invocations</a> /
- * <a class="meaningful_link" href="#at_least_verification">at least x</a> / never</h3>
+ * <h3 id="4">4. <a class="meaningful_link" href="#exact_verification" name="exact_verification">Verifying exact number of invocations</a> /
+ * <a class="meaningful_link" href="#at_least_verification" name="at_least_verification">at least x</a> / never</h3>
  *
  * <pre class="code"><code class="java">
  * //using mock
@@ -254,7 +309,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * //verification using atLeast()/atMost()
  * verify(mockedList, atLeastOnce()).add("three times");
- * verify(mockedList, atLeast(2)).add("five times");
+ * verify(mockedList, atLeast(2)).add("three times");
  * verify(mockedList, atMost(5)).add("three times");
  *
  * </code></pre>
@@ -266,7 +321,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="5">5. <a class="meaningful_link" href="#stubbing_with_exceptions">Stubbing void methods with exceptions</a></h3>
+ * <h3 id="5">5. <a class="meaningful_link" href="#stubbing_with_exceptions" name="stubbing_with_exceptions">Stubbing void methods with exceptions</a></h3>
  *
  * <pre class="code"><code class="java">
  *   doThrow(new RuntimeException()).when(mockedList).clear();
@@ -278,7 +333,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Read more about <code>doThrow()</code>|<code>doAnswer()</code> family of methods in <a href="#12">section 12</a>.
  * <p>
  *
- * <h3 id="6">6. <a class="meaningful_link" href="#in_order_verification">Verification in order</a></h3>
+ * <h3 id="6">6. <a class="meaningful_link" href="#in_order_verification" name="in_order_verification">Verification in order</a></h3>
  *
  * <pre class="code"><code class="java">
  * // A. Single mock whose methods must be invoked in a particular order
@@ -323,7 +378,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="7">7. <a class="meaningful_link" href="#never_verification">Making sure interaction(s) never happened on mock</a></h3>
+ * <h3 id="7">7. <a class="meaningful_link" href="#never_verification" name="never_verification">Making sure interaction(s) never happened on mock</a></h3>
  *
  * <pre class="code"><code class="java">
  * //using mocks - only mockOne is interacted
@@ -343,7 +398,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="8">8. <a class="meaningful_link" href="#finding_redundant_invocations">Finding redundant invocations</a></h3>
+ * <h3 id="8">8. <a class="meaningful_link" href="#finding_redundant_invocations" name="finding_redundant_invocations">Finding redundant invocations</a></h3>
  *
  * <pre class="code"><code class="java">
  * //using mocks
@@ -371,7 +426,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="9">9. <a class="meaningful_link" href="#mock_annotation">Shorthand for mocks creation - <code>&#064;Mock</code> annotation</a></h3>
+ * <h3 id="9">9. <a class="meaningful_link" href="#mock_annotation" name="mock_annotation">Shorthand for mocks creation - <code>&#064;Mock</code> annotation</a></h3>
  *
  * <ul>
  * <li>Minimizes repetitive mock creation code.</li>
@@ -404,7 +459,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="10">10. <a class="meaningful_link" href="#stubbing_consecutive_calls">Stubbing consecutive calls</a> (iterator-style stubbing)</h3>
+ * <h3 id="10">10. <a class="meaningful_link" href="#stubbing_consecutive_calls" name="stubbing_consecutive_calls">Stubbing consecutive calls</a> (iterator-style stubbing)</h3>
  *
  * Sometimes we need to stub with different return value/exception for the same
  * method call. Typical use case could be mocking iterators.
@@ -437,10 +492,20 @@ import org.mockito.verification.VerificationWithTimeout;
  *   .thenReturn("one", "two", "three");
  * </code></pre>
  *
+ * <strong>Warning</strong> : if instead of chaining {@code .thenReturn()} calls, multiple stubbing with the same matchers or arguments
+ * is used, then each stubbing will override the previous one:
+ *
+ * <pre class="code"><code class="java">
+ * //All mock.someMethod("some arg") calls will return "two"
+ * when(mock.someMethod("some arg"))
+ *   .thenReturn("one")
+ * when(mock.someMethod("some arg"))
+ *   .thenReturn("two")
+ * </code></pre>
  *
  *
  *
- * <h3 id="11">11. <a class="meaningful_link" href="#answer_stubs">Stubbing with callbacks</a></h3>
+ * <h3 id="11">11. <a class="meaningful_link" href="#answer_stubs" name="answer_stubs">Stubbing with callbacks</a></h3>
  *
  * Allows stubbing with generic {@link Answer} interface.
  * <p>
@@ -465,7 +530,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="12">12. <a class="meaningful_link" href="#do_family_methods_stubs"><code>doReturn()</code>|<code>doThrow()</code>|
+ * <h3 id="12">12. <a class="meaningful_link" href="#do_family_methods_stubs" name="do_family_methods_stubs"><code>doReturn()</code>|<code>doThrow()</code>|
  * <code>doAnswer()</code>|<code>doNothing()</code>|<code>doCallRealMethod()</code> family of methods</a></h3>
  *
  * Stubbing void methods requires a different approach from {@link Mockito#when(Object)} because the compiler does not
@@ -508,7 +573,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="13">13. <a class="meaningful_link" href="#spy">Spying on real objects</a></h3>
+ * <h3 id="13">13. <a class="meaningful_link" href="#spy" name="spy">Spying on real objects</a></h3>
  *
  * You can create spies of real objects. When you use the spy then the <b>real</b> methods are called
  * (unless a method was stubbed).
@@ -580,7 +645,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="14">14. Changing <a class="meaningful_link" href="#defaultreturn">default return values of unstubbed invocations</a> (Since 1.7)</h3>
+ * <h3 id="14">14. Changing <a class="meaningful_link" href="#defaultreturn" name="defaultreturn">default return values of unstubbed invocations</a> (Since 1.7)</h3>
  *
  * You can create a mock with specified strategy for its return values.
  * It's quite an advanced feature and typically you don't need it to write decent tests.
@@ -599,7 +664,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="15">15. <a class="meaningful_link" href="#captors">Capturing arguments</a> for further assertions (Since 1.8.0)</h3>
+ * <h3 id="15">15. <a class="meaningful_link" href="#captors" name="captors">Capturing arguments</a> for further assertions (Since 1.8.0)</h3>
  *
  * Mockito verifies argument values in natural java style: by using an <code>equals()</code> method.
  * This is also the recommended way of matching arguments because it makes tests clean & simple.
@@ -627,7 +692,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="16">16. <a class="meaningful_link" href="#partial_mocks">Real partial mocks</a> (Since 1.8.0)</h3>
+ * <h3 id="16">16. <a class="meaningful_link" href="#partial_mocks" name="partial_mocks">Real partial mocks</a> (Since 1.8.0)</h3>
  *
  *  Finally, after many internal debates & discussions on the mailing list, partial mock support was added to Mockito.
  *  Previously we considered partial mocks as code smells. However, we found a legitimate use case for partial mocks - more reading:
@@ -660,7 +725,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="17">17. <a class="meaningful_link" href="#resetting_mocks">Resetting mocks</a> (Since 1.8.0)</h3>
+ * <h3 id="17">17. <a class="meaningful_link" href="#resetting_mocks" name="resetting_mocks">Resetting mocks</a> (Since 1.8.0)</h3>
  *
  * Smart Mockito users hardly use this feature because they know it could be a sign of poor tests.
  * Normally, you don't need to reset your mocks, just create new mocks for each test method.
@@ -687,7 +752,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="18">18. <a class="meaningful_link" href="#framework_validation">Troubleshooting & validating framework usage</a> (Since 1.8.0)</h3>
+ * <h3 id="18">18. <a class="meaningful_link" href="#framework_validation" name="framework_validation">Troubleshooting & validating framework usage</a> (Since 1.8.0)</h3>
  *
  * First of all, in case of any trouble, I encourage you to read the Mockito FAQ:
  * <a href="https://github.com/mockito/mockito/wiki/FAQ">https://github.com/mockito/mockito/wiki/FAQ</a>
@@ -701,7 +766,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="19">19. <a class="meaningful_link" href="#bdd_mockito">Aliases for behavior driven development</a> (Since 1.8.0)</h3>
+ * <h3 id="19">19. <a class="meaningful_link" href="#bdd_mockito" name="bdd_mockito">Aliases for behavior driven development</a> (Since 1.8.0)</h3>
  *
  * Behavior Driven Development style of writing tests uses <b>//given //when //then</b> comments as fundamental parts of your test methods.
  * This is exactly how we write our tests and we warmly encourage you to do so!
@@ -735,7 +800,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="20">20. <a class="meaningful_link" href="#serializable_mocks">Serializable mocks</a> (Since 1.8.1)</h3>
+ * <h3 id="20">20. <a class="meaningful_link" href="#serializable_mocks" name="serializable_mocks">Serializable mocks</a> (Since 1.8.1)</h3>
  *
  * Mocks can be made serializable. With this feature you can use a mock in a place that requires dependencies to be serializable.
  * <p>
@@ -766,9 +831,9 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="21">21. New annotations: <a class="meaningful_link" href="#captor_annotation"><code>&#064;Captor</code></a>,
- * <a class="meaningful_link" href="#spy_annotation"><code>&#064;Spy</code></a>,
- * <a class="meaningful_link" href="#injectmocks_annotation"><code>&#064;InjectMocks</code></a> (Since 1.8.3)</h3>
+ * <h3 id="21">21. New annotations: <a class="meaningful_link" href="#captor_annotation" name="captor_annotation"><code>&#064;Captor</code></a>,
+ * <a class="meaningful_link" href="#spy_annotation" name="spy_annotation"><code>&#064;Spy</code></a>,
+ * <a class="meaningful_link" href="#injectmocks_annotation" name="injectmocks_annotation"><code>&#064;InjectMocks</code></a> (Since 1.8.3)</h3>
  *
  * <p>
  * Release 1.8.3 brings new annotations that may be helpful on occasion:
@@ -794,7 +859,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="22">22. <a class="meaningful_link" href="#verification_timeout">Verification with timeout</a> (Since 1.8.5)</h3>
+ * <h3 id="22">22. <a class="meaningful_link" href="#verification_timeout" name="verification_timeout">Verification with timeout</a> (Since 1.8.5)</h3>
  * <p>
  * Allows verifying with timeout. It causes a verify to wait for a specified period of time for a desired
  * interaction rather than fails immediately if had not already happened. May be useful for testing in concurrent
@@ -826,8 +891,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="23">23. <a class="meaningful_link" href="#automatic_instantiation">Automatic instantiation of <code>&#064;Spies</code>,
- * <code>&#064;InjectMocks</code></a> and <a class="meaningful_link" href="#constructor_injection">constructor injection goodness</a> (Since 1.9.0)</h3>
+ * <h3 id="23">23. <a class="meaningful_link" href="#automatic_instantiation" name="automatic_instantiation">Automatic instantiation of <code>&#064;Spies</code>,
+ * <code>&#064;InjectMocks</code></a> and <a class="meaningful_link" href="#constructor_injection" name="constructor_injection">constructor injection goodness</a> (Since 1.9.0)</h3>
  *
  * <p>
  * Mockito will now try to instantiate &#064;{@link Spy} and will instantiate &#064;{@link InjectMocks} fields
@@ -850,7 +915,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="24">24. <a class="meaningful_link" href="#one_liner_stub">One-liner stubs</a> (Since 1.9.0)</h3>
+ * <h3 id="24">24. <a class="meaningful_link" href="#one_liner_stub" name="one_liner_stub">One-liner stubs</a> (Since 1.9.0)</h3>
  * <p>
  * Mockito will now allow you to create mocks when stubbing.
  * Basically, it allows to create a stub in one line of code.
@@ -866,7 +931,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="25">25. <a class="meaningful_link" href="#ignore_stubs_verification">Verification ignoring stubs</a> (Since 1.9.0)</h3>
+ * <h3 id="25">25. <a class="meaningful_link" href="#ignore_stubs_verification" name="ignore_stubs_verification">Verification ignoring stubs</a> (Since 1.9.0)</h3>
  * <p>
  * Mockito will now allow to ignore stubbing for the sake of verification.
  * Sometimes useful when coupled with <code>verifyNoMoreInteractions()</code> or verification <code>inOrder()</code>.
@@ -895,7 +960,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="26">26. <a class="meaningful_link" href="#mocking_details">Mocking details</a> (Improved in 2.2.x)</h3>
+ * <h3 id="26">26. <a class="meaningful_link" href="#mocking_details" name="mocking_details">Mocking details</a> (Improved in 2.2.x)</h3>
  * <p>
  *
  * Mockito offers API to inspect the details of a mock object.
@@ -922,7 +987,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * For more information see javadoc for {@link MockingDetails}.
  *
- * <h3 id="27">27. <a class="meaningful_link" href="#delegating_call_to_real_instance">Delegate calls to real instance</a> (Since 1.9.5)</h3>
+ * <h3 id="27">27. <a class="meaningful_link" href="#delegating_call_to_real_instance" name="delegating_call_to_real_instance">Delegate calls to real instance</a> (Since 1.9.5)</h3>
  *
  * <p>Useful for spies or partial mocks of objects <strong>that are difficult to mock or spy</strong> using the usual spy API.
  * Since Mockito 1.10.11, the delegate may or may not be of the same type as the mock.
@@ -958,7 +1023,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="28">28. <a class="meaningful_link" href="#mock_maker_plugin"><code>MockMaker</code> API</a> (Since 1.9.5)</h3>
+ * <h3 id="28">28. <a class="meaningful_link" href="#mock_maker_plugin" name="mock_maker_plugin"><code>MockMaker</code> API</a> (Since 1.9.5)</h3>
  * <p>Driven by requirements and patches from Google Android guys Mockito now offers an extension point
  *   that allows replacing the proxy generation engine. By default, Mockito uses <a href="https://github.com/raphw/byte-buddy">Byte Buddy</a>
  *   to create dynamic proxies.
@@ -970,7 +1035,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="29">29. <a class="meaningful_link" href="#BDD_behavior_verification">BDD style verification</a> (Since 1.10.0)</h3>
+ * <h3 id="29">29. <a class="meaningful_link" href="#BDD_behavior_verification" name="BDD_behavior_verification">BDD style verification</a> (Since 1.10.0)</h3>
  *
  * Enables Behavior Driven Development (BDD) style verification by starting verification with the BDD <b>then</b> keyword.
  *
@@ -988,7 +1053,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes">Spying or mocking abstract classes (Since 1.10.12)</a></h3>
+ * <h3 id="30">30. <a class="meaningful_link" href="#spying_abstract_classes" name="spying_abstract_classes">Spying or mocking abstract classes (Since 1.10.12, further enhanced in 2.7.13 and 2.7.14)</a></h3>
  *
  * It is now possible to conveniently spy on abstract classes. Note that overusing spies hints at code design smells (see {@link #spy(Object)}).
  * <p>
@@ -1001,21 +1066,28 @@ import org.mockito.verification.VerificationWithTimeout;
  * //convenience API, new overloaded spy() method:
  * SomeAbstract spy = spy(SomeAbstract.class);
  *
+ * //Mocking abstract methods, spying default methods of an interface (only available since 2.7.13)
+ * Function<Foo, Bar> function = spy(Function.class);
+ *
  * //Robust API, via settings builder:
  * OtherAbstract spy = mock(OtherAbstract.class, withSettings()
  *    .useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+ *
+ * //Mocking an abstract class with constructor arguments (only available since 2.7.14)
+ * SomeAbstract spy = mock(SomeAbstract.class, withSettings()
+ *   .useConstructor("arg1", 123).defaultAnswer(CALLS_REAL_METHODS));
  *
  * //Mocking a non-static inner abstract class:
  * InnerAbstract spy = mock(InnerAbstract.class, withSettings()
  *    .useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
  * </code></pre>
  *
- * For more information please see {@link MockSettings#useConstructor()}.
+ * For more information please see {@link MockSettings#useConstructor(Object...)}.
  *
  *
  *
  *
- * <h3 id="31">31. <a class="meaningful_link" href="#serilization_across_classloader">Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3>
+ * <h3 id="31">31. <a class="meaningful_link" href="#serilization_across_classloader" name="serilization_across_classloader">Mockito mocks can be <em>serialized</em> / <em>deserialized</em> across classloaders (Since 1.10.0)</a></h3>
  *
  * Mockito introduces serialization across classloader.
  *
@@ -1035,7 +1107,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="32">32. <a class="meaningful_link" href="#better_generic_support_with_deep_stubs">Better generic support with deep stubs (Since 1.10.0)</a></h3>
+ * <h3 id="32">32. <a class="meaningful_link" href="#better_generic_support_with_deep_stubs" name="better_generic_support_with_deep_stubs">Better generic support with deep stubs (Since 1.10.0)</a></h3>
  *
  * Deep stubbing has been improved to find generic information if available in the class.
  * That means that classes like this can be used without having to mock the behavior.
@@ -1056,7 +1128,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="33">33. <a class="meaningful_link" href="#mockito_junit_rule">Mockito JUnit rule (Since 1.10.17)</a></h3>
+ * <h3 id="33">33. <a class="meaningful_link" href="#mockito_junit_rule" name="mockito_junit_rule">Mockito JUnit rule (Since 1.10.17)</a></h3>
  *
  * Mockito now offers a JUnit rule. Until now in JUnit there were two ways to initialize fields annotated by Mockito annotations
  * such as <code>&#064;{@link Mock}</code>, <code>&#064;{@link Spy}</code>, <code>&#064;{@link InjectMocks}</code>, etc.
@@ -1081,14 +1153,14 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  *
  *
- * <h3 id="34">34. <a class="meaningful_link" href="#plugin_switch">Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a></h3>
+ * <h3 id="34">34. <a class="meaningful_link" href="#plugin_switch" name="plugin_switch">Switch <em>on</em> or <em>off</em> plugins (Since 1.10.15)</a></h3>
  *
  * An incubating feature made it's way in mockito that will allow to toggle a mockito-plugin.
  *
  * More information here {@link org.mockito.plugins.PluginSwitch}.
  *
  *
- * <h3 id="35">35. <a class="meaningful_link" href="#BDD_behavior_verification">Custom verification failure message</a> (Since 2.1.0)</h3>
+ * <h3 id="35">35. <a class="meaningful_link" href="#BDD_behavior_verification" name="BDD_behavior_verification">Custom verification failure message</a> (Since 2.1.0)</h3>
  * <p>
  * Allows specifying a custom message to be printed if verification fails.
  * <p>
@@ -1103,7 +1175,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * verify(mock, times(2).description("someMethod should be called twice")).someMethod();
  * </code></pre>
  *
- * <h3 id="36">36. <a class="meaningful_link" href="#Java_8_Lambda_Matching">Java 8 Lambda Matcher Support</a> (Since 2.1.0)</h3>
+ * <h3 id="36">36. <a class="meaningful_link" href="#Java_8_Lambda_Matching" name="Java_8_Lambda_Matching">Java 8 Lambda Matcher Support</a> (Since 2.1.0)</h3>
  * <p>
  * You can use Java 8 lambda expressions with {@link ArgumentMatcher} to reduce the dependency on {@link ArgumentCaptor}.
  * If you need to verify that the input to a function call on a mock was correct, then you would normally
@@ -1136,7 +1208,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * when(mock.someMethod(argThat(list -> list.size()<3))).willReturn(null);
  * </code></pre>
  *
- * <h3 id="37">37. <a class="meaningful_link" href="#Java_8_Custom_Answers">Java 8 Custom Answer Support</a> (Since 2.1.0)</h3>
+ * <h3 id="37">37. <a class="meaningful_link" href="#Java_8_Custom_Answers" name="Java_8_Custom_Answers">Java 8 Custom Answer Support</a> (Since 2.1.0)</h3>
  * <p>
  * As the {@link Answer} interface has just one method it is already possible to implement it in Java 8 using
  * a lambda expression for very simple situations. The more you need to use the parameters of the method call,
@@ -1215,7 +1287,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *     }})).when(mock).execute(anyString(), anyString());
  * </code></pre>
  *
- * <h3 id="38">38. <a class="meaningful_link" href="#Meta_Data_And_Generics">Meta data and generic type retention</a> (Since 2.1.0)</h3>
+ * <h3 id="38">38. <a class="meaningful_link" href="#Meta_Data_And_Generics" name="Meta_Data_And_Generics">Meta data and generic type retention</a> (Since 2.1.0)</h3>
  *
  * <p>
  * Mockito now preserves annotations on mocked methods and types as well as generic meta data. Previously, a mock type did not preserve
@@ -1237,7 +1309,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * When using Java 8, Mockito now also preserves type annotations. This is default behavior and might not hold <a href="#28">if an
  * alternative {@link org.mockito.plugins.MockMaker} is used</a>.
  *
- * <h3 id="39">39. <a class="meaningful_link" href="#Mocking_Final">Mocking final types, enums and final methods</a> (Since 2.1.0)</h3>
+ * <h3 id="39">39. <a class="meaningful_link" href="#Mocking_Final" name="Mocking_Final">Mocking final types, enums and final methods</a> (Since 2.1.0)</h3>
  *
  * Mockito now offers an {@link Incubating}, optional support for mocking final classes and methods.
  * This is a fantastic improvement that demonstrates Mockito's everlasting quest for improving testing experience.
@@ -1245,6 +1317,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Previously they were considered <em>unmockable</em>, preventing the user from mocking.
  * We already started discussing how to make this feature enabled by default.
  * Currently, the feature is still optional as we wait for more feedback from the community.
+ *
  * <p>
  * This feature is turned off by default because it is based on completely different mocking mechanism
  * that requires more feedback from the community.
@@ -1259,6 +1332,11 @@ import org.mockito.verification.VerificationWithTimeout;
  * that requires more feedback from the community. It can be activated explicitly by the mockito extension mechanism,
  * just create in the classpath a file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
  * containing the value <code>mock-maker-inline</code>.
+ *
+ * <p>
+ * As a convenience, the Mockito team provides an artifact where this mock maker is preconfigured. Instead of using the
+ * <i>mockito-core</i> artifact, include the <i>mockito-inline</i> artifact in your project. Note that this artifact is
+ * likely to be discontinued once mocking of final classes and methods gets integrated into the default mock maker.
  *
  * <p>
  * Some noteworthy notes about this mock maker:
@@ -1286,14 +1364,16 @@ import org.mockito.verification.VerificationWithTimeout;
  * If you are interested in more details of this feature please read the javadoc of
  * <code>org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker</code>
  *
- * <h3 id="40">40. <a class="meaningful_link" href="#strict_mockito">
+ * <h3 id="40">40. <a class="meaningful_link" href="#strict_mockito" name="strict_mockito">
  *     (**new**) Improved productivity and cleaner tests with "stricter" Mockito</a> (Since 2.+)</h3>
  *
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
- *     <li>New "strict stubs" behavior of JUnit rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
- *     <li>Unnecessary stubbing detection in {@link MockitoJUnitRunner}</li>
- *     <li>Stubbing argument mismatch reporting by JUnit rules, documented in {@link org.mockito.quality.MockitoHint}</li>
+ *     <li>Strict stubbing with JUnit Rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
+ *     <li>Strict stubbing with JUnit Runner - {@link MockitoJUnitRunner.StrictStubs}</li>
+ *     <li>Strict stubbing if you cannot use runner/rule (like TestNG) - {@link MockitoSession}</li>
+ *     <li>Unnecessary stubbing detection with {@link MockitoJUnitRunner}</li>
+ *     <li>Stubbing argument mismatch warnings, documented in {@link MockitoHint}</li>
  * </ul>
  *
  * Mockito is a "loose" mocking framework by default.
@@ -1311,6 +1391,59 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>
  * Help Mockito! Try the new features, give us feedback, join the discussion about Mockito strictness at GitHub
  * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
+ *
+ * <h3 id="41">41. <a class="meaningful_link" href="#framework_integrations_api" name="framework_integrations_api">
+ *      (**new**) Advanced public API for framework integrations (Since 2.10.+)</h3>
+ *
+ * In Summer 2017 we decided that Mockito
+ * <a href="https://www.linkedin.com/pulse/mockito-vs-powermock-opinionated-dogmatic-static-mocking-faber">
+ * should offer better API
+ * </a>
+ * for advanced framework integrations.
+ * The new API is not intended for users who want to write unit tests.
+ * It is intended for other test tools and mocking frameworks that need to extend or wrap Mockito with some custom logic.
+ * During the design and implementation process (<a href="https://github.com/mockito/mockito/issues/1110">issue 1110</a>)
+ * we have developed and changed following public API elements:
+ * <ul>
+ *     <li>New {@link MockitoPlugins} -
+ *      Enables framework integrators to get access to default Mockito plugins.
+ *      Useful when one needs to implement custom plugin such as {@link MockMaker}
+ *      and delegate some behavior to the default Mockito implementation.
+ *     </li>
+ *     <li>New {@link MockSettings#build(Class)} -
+ *      Creates immutable view of mock settings used later by Mockito.
+ *      Useful for creating invocations with {@link InvocationFactory} or when implementing custom {@link MockHandler}.
+ *     </li>
+ *     <li>New {@link MockingDetails#getMockHandler()} -
+ *      Other frameworks may use the mock handler to programmatically simulate invocations on mock objects.
+ *     </li>
+ *     <li>New {@link MockHandler#getMockSettings()} -
+ *      Useful to get hold of the setting the mock object was created with.
+ *     </li>
+ *     <li>New {@link InvocationFactory} -
+ *      Provides means to create instances of {@link Invocation} objects.
+ *      Useful for framework integrations that need to programmatically simulate method calls on mock objects.
+ *     </li>
+ *     <li>New {@link MockHandler#getInvocationContainer()} -
+ *      Provides access to invocation container object which has no methods (marker interface).
+ *      Container is needed to hide the internal implementation and avoid leaking it to the public API.
+ *     </li>
+ *     <li>Changed {@link Stubbing} -
+ *      it now extends {@link Answer} interface.
+ *      It is backwards compatible because Stubbing interface is not extensible (see {@link NotExtensible}).
+ *      The change should be seamless to our users.
+ *     </li>
+ *     <li>Deprecated {@link InternalMockHandler} -
+ *       In order to accommodate API changes we needed to deprecate this interface.
+ *       The interface was always documented as internal, we don't have evidence it was used by the community.
+ *       The deprecation should be completely seamless for our users.
+ *     </li>
+ *     <li>{@link NotExtensible} -
+ *       Public annotation that indicates to the user that she should not provide custom implementations of given type.
+ *       Helps framework integrators and our users understand how to use Mockito API safely.
+ *     </li>
+ * </ul>
+ * Do you have feedback? Please leave comment in <a href="https://github.com/mockito/mockito/issues/1110">issue 1110</a>.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
@@ -1575,7 +1708,7 @@ public class Mockito extends ArgumentMatchers {
      * @return mock object
      */
     public static <T> T mock(Class<T> classToMock) {
-        return mock(classToMock, withSettings().defaultAnswer(RETURNS_DEFAULTS));
+        return mock(classToMock, withSettings());
     }
 
     /**
@@ -1757,7 +1890,7 @@ public class Mockito extends ArgumentMatchers {
      * This method, in contrast to the original {@link #spy(Object)}, creates a spy based on class instead of an object.
      * Sometimes it is more convenient to create spy based on the class and avoid providing an instance of a spied object.
      * This is particularly useful for spying on abstract classes because they cannot be instantiated.
-     * See also {@link MockSettings#useConstructor()}.
+     * See also {@link MockSettings#useConstructor(Object...)}.
      * <p>
      * Examples:
      * <pre class="code"><code class="java">
@@ -1997,17 +2130,8 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * Verifies that no interactions happened on given mocks.
-     * <pre class="code"><code class="java">
-     *   verifyZeroInteractions(mockOne, mockTwo);
-     * </code></pre>
-     * This method will also detect invocations
-     * that occurred before the test method, for example: in <code>setUp()</code>, <code>&#064;Before</code> method or in constructor.
-     * Consider writing nice code that makes interactions only in test methods.
-     * <p>
-     * See also {@link Mockito#never()} - it is more explicit and communicates the intent well.
-     * <p>
-     * See examples in javadoc for {@link Mockito} class
+     * Verifies that no interactions happened on given mocks beyond the previously verified interactions.<br/>
+     * This method has the same behavior as {@link #verifyNoMoreInteractions(Object...)}.
      *
      * @param mocks to be verified
      * @deprecated Since 3.0.0. Please migrate your code to {@link #verifyNoInteractions(Object...)}
@@ -2722,5 +2846,18 @@ public class Mockito extends ArgumentMatchers {
     @Incubating
     public static MockitoFramework framework() {
         return new DefaultMockitoFramework();
+    }
+
+    /**
+     * {@code MockitoSession} is an optional, highly recommended feature
+     * that helps driving cleaner tests by eliminating boilerplate code and adding extra validation.
+     * <p>
+     * For more information, including use cases and sample code, see the javadoc for {@link MockitoSession}.
+     *
+     * @since 2.7.0
+     */
+    @Incubating
+    public static MockitoSessionBuilder mockitoSession() {
+        return new DefaultMockitoSessionBuilder();
     }
 }

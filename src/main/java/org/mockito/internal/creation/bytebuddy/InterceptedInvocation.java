@@ -4,31 +4,28 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
-import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.ArgumentsProcessor;
 import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
 
-import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
-
-import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
-class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
+import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
+
+public class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
     private static final long serialVersionUID = 475027563923510472L;
 
     private final Object mock;
     private final MockitoMethod mockitoMethod;
     private final Object[] arguments, rawArguments;
-    private final SuperMethod superMethod;
+    private final RealMethod realMethod;
 
     private final int sequenceNumber;
 
@@ -41,15 +38,16 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
     public InterceptedInvocation(Object mock,
                                  MockitoMethod mockitoMethod,
                                  Object[] arguments,
-                                 SuperMethod superMethod,
+                                 RealMethod realMethod,
+                                 Location location,
                                  int sequenceNumber) {
         this.mock = mock;
         this.mockitoMethod = mockitoMethod;
-        this.arguments = ArgumentsProcessor.expandVarArgs(mockitoMethod.isVarArgs(), arguments);
+        this.arguments = ArgumentsProcessor.expandArgs(mockitoMethod, arguments);
         this.rawArguments = arguments;
-        this.superMethod = superMethod;
+        this.realMethod = realMethod;
+        this.location = location;
         this.sequenceNumber = sequenceNumber;
-        location = new LocationImpl();
     }
 
     @Override
@@ -125,10 +123,10 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
     @Override
     public Object callRealMethod() throws Throwable {
-        if (!superMethod.isInvokable()) {
+        if (!realMethod.isInvokable()) {
             throw cannotCallAbstractRealMethod();
         }
-        return superMethod.invoke();
+        return realMethod.invoke();
     }
 
     @Override
@@ -156,53 +154,13 @@ class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
         return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
     }
 
-
-    public interface SuperMethod extends Serializable {
-
-        enum IsIllegal implements SuperMethod {
-
-            INSTANCE;
-
-            @Override
-            public boolean isInvokable() {
-                return false;
-            }
-
-            @Override
-            public Object invoke() {
-                throw new IllegalStateException();
-            }
+    public final static RealMethod NO_OP = new RealMethod() {
+        public boolean isInvokable() {
+            return false;
         }
-
-        class FromCallable implements SuperMethod {
-
-            private static final long serialVersionUID = 47957363950483625L;
-
-            private final Callable<?> callable;
-
-            public FromCallable(Callable<?> callable) {
-                this.callable = callable;
-            }
-
-            @Override
-            public boolean isInvokable() {
-                return true;
-            }
-
-            @Override
-            public Object invoke() throws Throwable {
-                try {
-                    return callable.call();
-                } catch (Throwable t) {
-                    new ConditionalStackTraceFilter().filter(t);
-                    throw t;
-                }
-            }
+        public Object invoke() throws Throwable {
+            return null;
         }
-
-        boolean isInvokable();
-
-        Object invoke() throws Throwable;
-    }
+    };
 
 }

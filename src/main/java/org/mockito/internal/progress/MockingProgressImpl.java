@@ -8,7 +8,7 @@ package org.mockito.internal.progress;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.invocation.Invocation;
+import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
@@ -154,6 +154,11 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void addListener(MockitoListener listener) {
+        for (MockitoListener existing : listeners) {
+            if (existing.getClass().equals(listener.getClass())) {
+                Reporter.redundantMockitoListener(listener.getClass().getSimpleName());
+            }
+        }
         this.listeners.add(listener);
     }
 

@@ -35,7 +35,7 @@ public class InOrderImpl implements InOrder, InOrderContext {
         return mocksToBeVerifiedInOrder;
     }
 
-    public InOrderImpl(List<? extends Object> mocksToBeVerifiedInOrder) {
+    public InOrderImpl(List<?> mocksToBeVerifiedInOrder) {
         this.mocksToBeVerifiedInOrder.addAll(mocksToBeVerifiedInOrder);
     }
 

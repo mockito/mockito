@@ -1,24 +1,11 @@
-apply plugin: 'java'
+apply plugin: "java"
 
 group = 'org.mockito'
+archivesBaseName = "mockito-" + project.name
+bintrayUpload.enabled = true
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
-apply plugin: 'maven-publish'
-
-configurations {
-    provided
-}
-
-sourceSets {
-    main {
-        compileClasspath = compileClasspath + configurations.provided
-    }
-    test {
-        compileClasspath = compileClasspath + configurations.provided
-    }
-}
 
 test {
     include "**/*Test.class"
@@ -26,10 +13,12 @@ test {
         exceptionFormat 'full'
         showCauses true
     }
-    //Required for building on Travis' container-based infrastructure to not be killed with
-    //'exit code 137' - https://github.com/travis-ci/travis-ci/issues/5582
-    jvmArgs '-Xmx512m'
 }
 
-assert project.hasProperty("artifactName") : "Please configure 'ext.artifactName' for project that wants to use 'java-library.gradle' plugin"
-archivesBaseName = project.ext.artifactName
+tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+        html.stylesheet resources.text.fromFile("$rootDir/config/checkstyle/checkstyle.xsl")
+    }
+}
