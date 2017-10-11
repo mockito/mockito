@@ -70,10 +70,11 @@ public class InvocationListenerCallbackTest {
         Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener1));
 
         // when
-        foo.giveMeSomeString("herb");
+        foo.giveMeSomeString("a");
+        foo.giveMeSomeString("b");
 
-        // then
-        assertThat(container).containsExactly(listener1, listener1);
+        // then each listener was notified 2 times (notified 4 times in total)
+        assertThat(container).containsExactly(listener1, listener1, listener1, listener1);
     }
 
     @Test
