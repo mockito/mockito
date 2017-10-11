@@ -1,9 +1,9 @@
 package org.mockito.internal.listeners;
 
+import org.mockito.MockingDetails;
+import org.mockito.Mockito;
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.matchers.text.ValuePrinter;
-import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.MockitoMock;
 import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
@@ -13,11 +13,11 @@ import java.util.Set;
 
 public class VerificationStartedNotifier {
 
-    public static Object notifyVerificationStarted(List<VerificationStartedListener> listeners, MockitoMock originalMock) {
+    public static Object notifyVerificationStarted(List<VerificationStartedListener> listeners, MockingDetails originalMockingDetails) {
         if (listeners.isEmpty()) {
-            return originalMock.getMock();
+            return originalMockingDetails.getMock();
         }
-        VerificationStartedEvent event = new Event(originalMock);
+        VerificationStartedEvent event = new Event(originalMockingDetails);
         for (VerificationStartedListener listener : listeners) {
             listener.onVerificationStarted(event);
         }
@@ -25,27 +25,28 @@ public class VerificationStartedNotifier {
     }
 
     static class Event implements VerificationStartedEvent {
-        private final MockitoMock originalMock;
+        private final MockingDetails originalMockingDetails;
         private Object mock;
 
-        public Event(MockitoMock originalMock) {
-            this.originalMock = originalMock;
-            this.mock = originalMock.getMock();
+        public Event(MockingDetails originalMockingDetails) {
+            this.originalMockingDetails = originalMockingDetails;
+            this.mock = originalMockingDetails.getMock();
         }
 
         public void setMock(Object mock) {
             if (mock == null) {
                 throw Reporter.methodDoesNotAcceptParameter("VerificationStartedEvent.setMock", "null parameter.");
             }
-            MockitoMock mockitoMock = MockUtil.getMockitoMock(mock);
-            if (!mockitoMock.isMock()) {
+            MockingDetails mockingDetails = Mockito.mockingDetails(mock);
+            if (!mockingDetails.isMock()) {
                 throw Reporter.methodDoesNotAcceptParameter("VerificationStartedEvent.setMock", "parameter which is not a Mockito mock.\n" +
                     "  Received parameter: " + ValuePrinter.print(mock) + ".\n ");
             }
-            MockCreationSettings originalMockSettings = this.originalMock.getHandler().getMockSettings();
+            MockCreationSettings originalMockSettings = this.originalMockingDetails.getMockCreationSettings();
             assertCompatibleTypes(mock, originalMockSettings);
             this.mock = mock;
         }
+
         public Object getMock() {
             return mock;
         }

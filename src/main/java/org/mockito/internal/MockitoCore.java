@@ -16,7 +16,6 @@ import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.util.DefaultMockingDetails;
-import org.mockito.internal.util.MockitoMock;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
@@ -45,7 +44,6 @@ import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInO
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.MockUtil.createMock;
 import static org.mockito.internal.util.MockUtil.getInvocationContainer;
-import static org.mockito.internal.util.MockUtil.getMockitoMock;
 import static org.mockito.internal.util.MockUtil.isMock;
 import static org.mockito.internal.util.MockUtil.resetMock;
 import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
@@ -85,14 +83,14 @@ public class MockitoCore {
         if (mock == null) {
             throw nullPassedToVerify();
         }
-        MockitoMock mockitoMock = getMockitoMock(mock);
-        if (!mockitoMock.isMock()) {
+        MockingDetails mockingDetails = mockingDetails(mock);
+        if (!mockingDetails.isMock()) {
             throw notAMockPassedToVerify(mock.getClass());
         }
-        MockHandler handler = mockitoMock.getHandler();
+        MockHandler handler = mockingDetails.getMockHandler();
 
         mock = (T) VerificationStartedNotifier.notifyVerificationStarted(
-            handler.getMockSettings().getVerificationStartedListeners(), mockitoMock);
+            handler.getMockSettings().getVerificationStartedListeners(), mockingDetails);
 
         MockingProgress mockingProgress = mockingProgress();
         VerificationMode actualMode = mockingProgress.maybeVerifyLazily(mode);
