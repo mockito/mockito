@@ -36,7 +36,9 @@ public class VerificationStartedNotifierTest extends TestBase {
             fail();
         } catch (Exception e) {
             //then
-            assertEquals("VerificationStartedEvent.setMock() does not accept parameter which is not a Mockito mock. See the Javadoc.", e.getMessage());
+            assertEquals("VerificationStartedEvent.setMock() does not accept parameter which is not a Mockito mock.\n" +
+                "  Received parameter: \"not a mock\".\n" +
+                "  See the Javadoc.", e.getMessage());
         }
     }
 
