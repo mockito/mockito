@@ -92,7 +92,7 @@ public class MockitoCore {
         MockHandler handler = mockitoMock.getHandler();
 
         mock = (T) VerificationStartedNotifier.notifyVerificationStarted(
-            handler.getMockSettings().getVerificationStartedListeners(), mock);
+            handler.getMockSettings().getVerificationStartedListeners(), mockitoMock);
 
         MockingProgress mockingProgress = mockingProgress();
         VerificationMode actualMode = mockingProgress.maybeVerifyLazily(mode);

@@ -76,7 +76,7 @@ public class MockUtil {
     }
 
     public static MockitoMock getMockitoMock(Object mock) {
-        return new MockitoMock(mockMaker.getHandler(mock));
+        return new MockitoMock(mock, mockMaker.getHandler(mock));
     }
 
     public static MockName getMockName(Object mock) {

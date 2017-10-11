@@ -16,12 +16,15 @@ import org.mockito.invocation.MockHandler;
  */
 public class MockitoMock {
 
+    private final Object mock;
     private final MockHandler handler;
 
     /**
+     * @param mock
      * @param handler ok to pass null, it means it is not a mock object
      */
-    MockitoMock(MockHandler handler) {
+    MockitoMock(Object mock, MockHandler handler) {
+        this.mock = mock;
         this.handler = handler;
     }
 
@@ -31,5 +34,9 @@ public class MockitoMock {
 
     public MockHandler getHandler() {
         return handler;
+    }
+
+    public Object getMock() {
+        return mock;
     }
 }
