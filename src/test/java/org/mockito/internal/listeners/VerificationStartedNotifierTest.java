@@ -1,6 +1,5 @@
 package org.mockito.internal.listeners;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.util.MockUtil;
@@ -8,6 +7,7 @@ import org.mockito.internal.util.MockitoMock;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static java.util.Collections.emptyList;
@@ -65,26 +65,43 @@ public class VerificationStartedNotifierTest extends TestBase {
             fail();
         } catch (Exception e) {
             //then
-            assertEquals("VerificationStartedEvent.setMock() does not accept parameter which does not implement/extend the original mock type: java.util.List. See the Javadoc.", e.getMessage());
+            assertEquals(filterHashCode("VerificationStartedEvent.setMock() does not accept parameter which is not the same type as the original mock.\n" +
+                "  Required type: java.util.List\n" +
+                "  Received parameter: Mock for Set, hashCode: xxx.\n" +
+                "  See the Javadoc."), filterHashCode(e.getMessage()));
         }
     }
 
     @Test
-    @Ignore //TODO! not yet implemented
     public void decent_exception_when_setting_mock_that_does_not_implement_all_desired_interfaces() throws Exception {
         final Set mock = mock(Set.class, withSettings().extraInterfaces(List.class));
         final Set missingExtraInterface = mock(Set.class);
-        VerificationStartedNotifier.Event event = new VerificationStartedNotifier.Event(mockitoMock);
+        VerificationStartedNotifier.Event event = new VerificationStartedNotifier.Event(MockUtil.getMockitoMock(mock));
 
         try {
-            //when
+            //when setting mock that does not have all necessary interfaces
             event.setMock(missingExtraInterface);
             fail();
         } catch (Exception e) {
             //then
-            assertEquals("???", e.getMessage());
+            assertEquals(filterHashCode("VerificationStartedEvent.setMock() does not accept parameter which does not implement all extra interfaces of the original mock.\n" +
+                "  Required type: java.util.Set\n" +
+                "  Required extra interface: java.util.List\n" +
+                "  Received parameter: Mock for Set, hashCode: xxx.\n" +
+                "  See the Javadoc."), filterHashCode(e.getMessage()));
         }
     }
 
-    interface Foo {}
+    @Test
+    public void accepts_replacement_mock_if_all_types_are_compatible() throws Exception {
+        final Set mock = mock(Set.class, withSettings().extraInterfaces(List.class, Map.class));
+        final Set compatibleMock = mock(Set.class, withSettings().extraInterfaces(List.class, Map.class));
+        VerificationStartedNotifier.Event event = new VerificationStartedNotifier.Event(MockUtil.getMockitoMock(mock));
+
+        //when
+        event.setMock(compatibleMock);
+
+        //then
+        assertEquals(compatibleMock, event.getMock());
+    }
 }

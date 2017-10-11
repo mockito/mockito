@@ -672,7 +672,7 @@ public class Reporter {
     }
 
     public static MockitoException methodDoesNotAcceptParameter(String method, String parameter) {
-        return new MockitoException(method + "() does not accept " + parameter + ". See the Javadoc.");
+        return new MockitoException(method + "() does not accept " + parameter + " See the Javadoc.");
     }
 
     public static MockitoException invocationListenersRequiresAtLeastOneListener() {

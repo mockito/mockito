@@ -5,6 +5,8 @@ import org.mockito.invocation.MockHandler;
 /**
  * Represents Mockito mock object, gives access to {@link MockHandler}
  *
+ * TODO! replace with MockingDetails type
+ *
  * TODO SF (perf tweak) in our codebase we call mockMaker.getHandler() multiple times unnecessarily
  * This is not ideal because getHandler() can be expensive (reflective calls inside mock maker)
  * The frequent pattern in the codebase is: 1) isMock(mock) 2) getMockHandler(mock)

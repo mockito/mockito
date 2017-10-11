@@ -97,4 +97,13 @@ public class TestBase {
     public static String filterLineNo(String stackTrace) {
         return stackTrace.replaceAll("(\\((\\w+\\.java):(\\d)+\\))", "($2:0)");
     }
+
+    /**
+     * Filters out hashCode from the text. Useful for writing assertions that contain the String representation of mock objects
+     * @param text to filter
+     * @return filtered text
+     */
+    public static String filterHashCode(String text) {
+        return text.replaceAll("hashCode: (\\d)+\\.", "hashCode: xxx.");
+    }
 }
