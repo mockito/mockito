@@ -1451,13 +1451,13 @@ import org.mockito.verification.VerificationWithTimeout;
  * <h3 id="42">42. <a class="meaningful_link" href="#verifiation_started_listener" name="verifiation_started_listener">
  *       (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</h3>
  *
- * Framework integrations such as <a href="TODO!">Spring Boot</a> needs public API to tackle double-proxy use case
- * (<a href="https://github.com/mockito/mockito/issues/xxxx">issue xxxx</a>).
+ * Framework integrations such as <a href="https://projects.spring.io/spring-boot">Spring Boot</a> needs public API to tackle double-proxy use case
+ * (<a href="https://github.com/mockito/mockito/issues/1191">issue 1191</a>).
  * We added:
  * <ul>
  *     <li>New {@link VerificationStartedListener} and {@link VerificationStartedEvent}
  *      enable framework integrators to replace the mock object for verification.
- *      The main driving use case is <a href="TODO!">Spring Boot</a> integration.
+ *      The main driving use case is <a href="https://projects.spring.io/spring-boot/">Spring Boot</a> integration.
  *      For details see Javadoc for {@link VerificationStartedListener}.
  *     </li>
  *     <li>New public method {@link MockSettings#verificationStartedListeners(VerificationStartedListener...)}

@@ -7,7 +7,7 @@ import org.mockito.Incubating;
  * It allows to replace the mock object for verification.
  * This API is not needed for regular Mockito users who want to write beautiful and clean tests.
  * It is only needed for advanced framework integrations where there are multiple layers of proxying.
- * An example framework that leverages this API is <a href="TODO!">Spring Boot</a>.
+ * An example framework that leverages this API is <a href="https://projects.spring.io/spring-boot/">Spring Boot</a>.
  * For details about the use case see <a href="https://github.com/mockito/mockito/issues/1191">issue 1191</a>.
  * For sample code see {@code VerificationStartedListenerTest} class.
  * Mockito is Open Source so feel free to dive into the code!
