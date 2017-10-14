@@ -31,7 +31,7 @@ public class ReporterTest extends TestBase {
 
     @Test(expected = MockitoException.class)
     public void should_throw_correct_exception_for_null_invocation_listener() throws Exception {
-        throw Reporter.invocationListenerDoesNotAcceptNullParameters();
+        throw Reporter.methodDoesNotAcceptParameter("invocationListeners", "null vararg array");
     }
 
     @Test(expected = NoInteractionsWanted.class)

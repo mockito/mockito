@@ -17,6 +17,8 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
+import org.mockito.listeners.VerificationStartedEvent;
+import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockitoPlugins;
@@ -93,6 +95,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#39">39. Mocking final types, enums and final methods (Since 2.1.0)</a><br/>
  *      <a href="#40">40. (*new*) Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
  *      <a href="#41">41. (**new**) Advanced public API for framework integrations (Since 2.10.+)</a><br/>
+ *      <a href="#42">42. (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1444,6 +1447,26 @@ import org.mockito.verification.VerificationWithTimeout;
  *     </li>
  * </ul>
  * Do you have feedback? Please leave comment in <a href="https://github.com/mockito/mockito/issues/1110">issue 1110</a>.
+ *
+ * <h3 id="42">42. <a class="meaningful_link" href="#verifiation_started_listener" name="verifiation_started_listener">
+ *       (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</h3>
+ *
+ * Framework integrations such as <a href="https://projects.spring.io/spring-boot">Spring Boot</a> needs public API to tackle double-proxy use case
+ * (<a href="https://github.com/mockito/mockito/issues/1191">issue 1191</a>).
+ * We added:
+ * <ul>
+ *     <li>New {@link VerificationStartedListener} and {@link VerificationStartedEvent}
+ *      enable framework integrators to replace the mock object for verification.
+ *      The main driving use case is <a href="https://projects.spring.io/spring-boot/">Spring Boot</a> integration.
+ *      For details see Javadoc for {@link VerificationStartedListener}.
+ *     </li>
+ *     <li>New public method {@link MockSettings#verificationStartedListeners(VerificationStartedListener...)}
+ *     allows to supply verification started listeners at mock creation time.
+ *     </li>
+ *     <li>New handy method {@link MockingDetails#getMock()} was added to make the {@code MockingDetails} API more complete.
+ *     We found this method useful during the implementation.
+ *     </li>
+ * </ul>
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {

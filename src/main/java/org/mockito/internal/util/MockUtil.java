@@ -71,6 +71,13 @@ public class MockUtil {
     }
 
     public static boolean isMock(Object mock) {
+        // TODO SF (perf tweak) in our codebase we call mockMaker.getHandler() multiple times unnecessarily
+        // This is not ideal because getHandler() can be expensive (reflective calls inside mock maker)
+        // The frequent pattern in the codebase are separate calls to: 1) isMock(mock) then 2) getMockHandler(mock)
+        // We could replace it with using mockingDetails().isMock()
+        // Let's refactor the codebase and use new mockingDetails() in all relevant places.
+        // Potentially we could also move other methods to MockitoMock, some other candidates: getInvocationContainer, isSpy, etc.
+        // This also allows us to reuse our public API MockingDetails
         return mock != null && mockMaker.getHandler(mock) != null;
     }
 

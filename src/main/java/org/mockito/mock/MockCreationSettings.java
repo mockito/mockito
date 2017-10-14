@@ -8,6 +8,7 @@ package org.mockito.mock;
 import org.mockito.Incubating;
 import org.mockito.NotExtensible;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.stubbing.Answer;
 
 import java.util.List;
@@ -62,9 +63,18 @@ public interface MockCreationSettings<T> {
     boolean isStubOnly();
 
     /**
-     * The invocation listeners attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.
+     * {@link InvocationListener} instances attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.
      */
     List<InvocationListener> getInvocationListeners();
+
+    /**
+     * {@link VerificationStartedListener} instances attached to this mock,
+     * see {@link org.mockito.MockSettings#verificationStartedListeners(VerificationStartedListener...)}
+     *
+     * @since 2.11.0
+     */
+    @Incubating
+    List<VerificationStartedListener> getVerificationStartedListeners();
 
     /**
      * Informs whether the mock instance should be created via constructor
@@ -84,7 +94,7 @@ public interface MockCreationSettings<T> {
      * @since 2.7.14
      */
     @Incubating
-    public Object[] getConstructorArgs();
+    Object[] getConstructorArgs();
 
     /**
      * Used when mocking non-static inner classes in conjunction with {@link #isUsingConstructor()}

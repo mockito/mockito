@@ -23,7 +23,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings("unchecked")
 public class DefaultMockingDetailsTest {
@@ -35,6 +39,13 @@ public class DefaultMockingDetailsTest {
 
     @Before public void before() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void should_provide_original_mock() throws Exception {
+        //expect
+        assertEquals(mockingDetails(foo).getMock(), foo);
+        assertEquals(mockingDetails(null).getMock(), null);
     }
 
     @Test

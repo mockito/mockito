@@ -10,6 +10,7 @@ import org.mockito.MockingDetails;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
+import org.mockito.internal.listeners.VerificationStartedNotifier;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
@@ -22,6 +23,7 @@ import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
 import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
@@ -30,9 +32,21 @@ import org.mockito.verification.VerificationMode;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.internal.exceptions.Reporter.*;
+import static org.mockito.internal.exceptions.Reporter.missingMethodInvocation;
+import static org.mockito.internal.exceptions.Reporter.mocksHaveToBePassedToVerifyNoMoreInteractions;
+import static org.mockito.internal.exceptions.Reporter.mocksHaveToBePassedWhenCreatingInOrder;
+import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerify;
+import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerifyNoMoreInteractions;
+import static org.mockito.internal.exceptions.Reporter.notAMockPassedWhenCreatingInOrder;
+import static org.mockito.internal.exceptions.Reporter.nullPassedToVerify;
+import static org.mockito.internal.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
+import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInOrder;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-import static org.mockito.internal.util.MockUtil.*;
+import static org.mockito.internal.util.MockUtil.createMock;
+import static org.mockito.internal.util.MockUtil.getInvocationContainer;
+import static org.mockito.internal.util.MockUtil.isMock;
+import static org.mockito.internal.util.MockUtil.resetMock;
+import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
 
 @SuppressWarnings("unchecked")
@@ -69,9 +83,15 @@ public class MockitoCore {
         if (mock == null) {
             throw nullPassedToVerify();
         }
-        if (!isMock(mock)) {
+        MockingDetails mockingDetails = mockingDetails(mock);
+        if (!mockingDetails.isMock()) {
             throw notAMockPassedToVerify(mock.getClass());
         }
+        MockHandler handler = mockingDetails.getMockHandler();
+
+        mock = (T) VerificationStartedNotifier.notifyVerificationStarted(
+            handler.getMockSettings().getVerificationStartedListeners(), mockingDetails);
+
         MockingProgress mockingProgress = mockingProgress();
         VerificationMode actualMode = mockingProgress.maybeVerifyLazily(mode);
         mockingProgress.verificationStarted(new MockAwareVerificationMode(mock, actualMode, mockingProgress.verificationListeners()));
