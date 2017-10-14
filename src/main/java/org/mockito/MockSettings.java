@@ -204,9 +204,7 @@ public interface MockSettings extends Serializable {
      * Registers a listener for method invocations on this mock. The listener is
      * notified every time a method on this mock is called.
      * <p>
-     * Multiple listeners may be added, but the same object is only added once.
-     * The order, in which the listeners are added, is not guaranteed to be the
-     * order in which the listeners are notified.
+     * Multiple listeners may be added and they will be notified in the order they were supplied.
      *
      * Example:
      * <pre class="code"><code class="java">
