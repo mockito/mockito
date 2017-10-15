@@ -9,7 +9,7 @@ We also added `Automatic-Module-Name` to mockito jar, useful in Java9 context [(
 **2.11.0 (2017-10-14)** - [20 commits](https://github.com/mockito/mockito/compare/v2.10.5...v2.11.0) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.11.0-green.svg)](https://bintray.com/mockito/maven/mockito/2.11.0)
  - Added new public API for spring-boot use case [(#1192)](https://github.com/mockito/mockito/pull/1192)
 
-**2.10.5 (2017-10-14)** - [12 commits](https://github.com/mockito/mockito/compare/v2.10.4...v2.10.5) by [Marcin Zajączkowski](https://github.com/szpak) (8), [Szczepan Faber](http://github.com/szczepiq) (3), [Allon Murienik](https://github.com/mureinik) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.10.5-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.10.5)
+**2.10.5 (2017-10-14)** - [12 commits](https://github.com/mockito/mockito/compare/v2.10.4...v2.10.5) by [Marcin Zajączkowski](https://github.com/szpak) (8), [Szczepan Faber](http://github.com/mockitoguy) (3), [Allon Murienik](https://github.com/mureinik) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.10.5-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.10.5)
  - [Java 9 support] JDK9: set a stable module name with `Automatic-Module-Name` entry in MANIFEST [(#1189)](https://github.com/mockito/mockito/issues/1189)
  - Fixed documentation issue, added unit tests [(#1203)](https://github.com/mockito/mockito/pull/1203)
  - [#1202] Java 9 CI build for Mockito 2.x [(#1202)](https://github.com/mockito/mockito/pull/1202)
@@ -34,13 +34,13 @@ We also added `Automatic-Module-Name` to mockito jar, useful in Java9 context [(
 
 The main highlight of this release is the additions to the public API to accommodate advanced framework integrations. It will help other frameworks to cleanly integrate with Mockito. For more details, see [#1121](https://github.com/mockito/mockito/pull/1121).
 
-**2.10.0 (2017-09-08)** - [42 commits](https://github.com/mockito/mockito/compare/v2.9.2...v2.10.0) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.10.0-green.svg)](https://bintray.com/mockito/maven/mockito/2.10.0)
+**2.10.0 (2017-09-08)** - [42 commits](https://github.com/mockito/mockito/compare/v2.9.2...v2.10.0) by [Szczepan Faber](http://github.com/mockitoguy) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.10.0-green.svg)](https://bintray.com/mockito/maven/mockito/2.10.0)
  - Improve and develop APIs required for framework integrators [(#1121)](https://github.com/mockito/mockito/pull/1121)
 
 **2.9.2 (2017-09-05)** - [2 commits](https://github.com/mockito/mockito/compare/v2.9.1...v2.9.2) by [Rafael Winterhalter](http://github.com/raphw) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.9.2-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.9.2)
  - Compare method of graph to defined form of method. [(#1186)](https://github.com/mockito/mockito/pull/1186)
 
-**2.9.1 (2017-09-04)** - [11 commits](https://github.com/mockito/mockito/compare/v2.9.0...v2.9.1) by [Rafael Winterhalter](http://github.com/raphw) (9), [Szczepan Faber](http://github.com/szczepiq) (2) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.9.1-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.9.1)
+**2.9.1 (2017-09-04)** - [11 commits](https://github.com/mockito/mockito/compare/v2.9.0...v2.9.1) by [Rafael Winterhalter](http://github.com/raphw) (9), [Szczepan Faber](http://github.com/mockitoguy) (2) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.9.1-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.9.1)
  - Travis [(#1184)](https://github.com/mockito/mockito/pull/1184)
  - #1179: Fix performance regression caused by use of method graph compiler. [(#1181)](https://github.com/mockito/mockito/pull/1181)
  - Mockito 2.9.0 is significantly slower [(#1179)](https://github.com/mockito/mockito/issues/1179)
@@ -52,25 +52,25 @@ Notable changes:
  - bumped ByteBuddy 1.6.14 -> 1.7.0 (inline mocking, bugfixes)
  - bumped Objenesis 2.5 -> 2.6 (Java9, bugfixes)
 
-**2.9.0 (2017-08-26)** - [5 commits](https://github.com/mockito/mockito/compare/v2.8.55...v2.9.0) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.9.0-green.svg)](https://bintray.com/mockito/maven/mockito/2.9.0)
+**2.9.0 (2017-08-26)** - [5 commits](https://github.com/mockito/mockito/compare/v2.8.55...v2.9.0) by [Szczepan Faber](http://github.com/mockitoguy) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.9.0-green.svg)](https://bintray.com/mockito/maven/mockito/2.9.0)
  - Updated README.md wrt maven central release [(#1172)](https://github.com/mockito/mockito/pull/1172)
  - Bumped minor version so signify new Objenesis version [(#1171)](https://github.com/mockito/mockito/pull/1171)
 
-**2.8.55 (2017-08-21)** - [7 commits](https://github.com/mockito/mockito/compare/v2.8.54...v2.8.55) by [Szczepan Faber](http://github.com/szczepiq) (6), [Pascal Schumacher](https://github.com/PascalSchumacher) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.55-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.55)
+**2.8.55 (2017-08-21)** - [7 commits](https://github.com/mockito/mockito/compare/v2.8.54...v2.8.55) by [Szczepan Faber](http://github.com/mockitoguy) (6), [Pascal Schumacher](https://github.com/PascalSchumacher) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.55-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.55)
  - Update objenesis version 2.5 -> 2.6 (Java9, bugfixes) [(#1170)](https://github.com/mockito/mockito/pull/1170)
  - Updated to latest Shipkit, tidied up configuration [(#1169)](https://github.com/mockito/mockito/pull/1169)
 
-**2.8.54 (2017-08-09)** - [5 commits](https://github.com/mockito/mockito/compare/v2.8.53...v2.8.54) by [Marcin Zajączkowski](https://github.com/szpak) (3), [Igor C. A. de Lima](https://github.com/igorcadelima) (1), [Szczepan Faber](http://github.com/szczepiq) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.54-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.54)
+**2.8.54 (2017-08-09)** - [5 commits](https://github.com/mockito/mockito/compare/v2.8.53...v2.8.54) by [Marcin Zajączkowski](https://github.com/szpak) (3), [Igor C. A. de Lima](https://github.com/igorcadelima) (1), [Szczepan Faber](http://github.com/mockitoguy) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.54-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.54)
  - [Bugfixes] Unnecessary release was triggered [(#1144)](https://github.com/mockito/mockito/issues/1144)
  - Remove duplicated word in Javadoc [(#1161)](https://github.com/mockito/mockito/pull/1161)
  - [#1147] Provide version in release commit message [(#1147)](https://github.com/mockito/mockito/pull/1147)
  - Bumped shipkit to fix unnecessary releasing problem [(#1145)](https://github.com/mockito/mockito/pull/1145)
 
-**2.8.53 (2017-07-06)** - [6 commits](https://github.com/mockito/mockito/compare/v2.8.52...v2.8.53) by [Szczepan Faber](http://github.com/szczepiq) (5), [Wojtek Wilk](https://github.com/wwilk) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.53-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.53)
+**2.8.53 (2017-07-06)** - [6 commits](https://github.com/mockito/mockito/compare/v2.8.52...v2.8.53) by [Szczepan Faber](http://github.com/mockitoguy) (5), [Wojtek Wilk](https://github.com/wwilk) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.53-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.53)
  - Bumped shipkit, simplified Travis file, removed unnecessary code [(#1141)](https://github.com/mockito/mockito/pull/1141)
  - org.shipkit.publications-comparator plugin applied [(#1139)](https://github.com/mockito/mockito/pull/1139)
 
-**2.8.52 (2017-06-24)** - [8 commits](https://github.com/mockito/mockito/compare/v2.8.51...v2.8.52) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.52-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.52)
+**2.8.52 (2017-06-24)** - [8 commits](https://github.com/mockito/mockito/compare/v2.8.51...v2.8.52) by [Szczepan Faber](http://github.com/mockitoguy) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.52-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.52)
  - Simplified and documented .travis.yml file [(#1133)](https://github.com/mockito/mockito/pull/1133)
 
 **2.8.51 (2017-06-24)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.50...v2.8.51) by [Allon Murienik](https://github.com/mureinik) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.51-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.51)
@@ -83,7 +83,7 @@ Notable changes:
 **2.8.49 (2017-06-22)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.48...v2.8.49) by [Rafael Winterhalter](http://github.com/raphw) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.49-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.49)
  - Improve detection on non-mockable types - ByteBuddy bump 1.6.14->1.7.0 [(#1128)](https://github.com/mockito/mockito/pull/1128)
 
-**2.8.48 (2017-06-18)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.47...v2.8.48) by epeee (1), [Szczepan Faber](http://github.com/szczepiq) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.48-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.48)
+**2.8.48 (2017-06-18)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.47...v2.8.48) by epeee (1), [Szczepan Faber](http://github.com/mockitoguy) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.48-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.48)
  - make use of shipkit v0.8.92 [(#1132)](https://github.com/mockito/mockito/pull/1132)
 
 # 2.8.47 (2017-06-15) published to [JCenter](https://bintray.com/mockito/maven/mockito/2.8.47)/[Maven Central](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.8.47%7Cjar)
@@ -91,7 +91,7 @@ Notable changes:
 **2.8.47 (2017-06-15)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.46...v2.8.47) by [Marcin Zajączkowski](https://github.com/szpak) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.47-green.svg)](https://bintray.com/mockito/maven/mockito/2.8.47)
  - No pull requests referenced in commit messages.
 
-**2.8.46 (2017-06-15)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.45...v2.8.46) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.46-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.46)
+**2.8.46 (2017-06-15)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.45...v2.8.46) by [Szczepan Faber](http://github.com/mockitoguy) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.46-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.46)
  - Fixed issue with releases to Maven Central [(#1129)](https://github.com/mockito/mockito/pull/1129)
  - Version not released to Maven Central [(#1127)](https://github.com/mockito/mockito/issues/1127)
 
@@ -101,41 +101,41 @@ Notable changes:
 **2.8.44 (2017-06-12)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.43...v2.8.44) by [Marcin Zajaczkowski](https://github.com/szpak) (1), [Marcin Zajączkowski](https://github.com/szpak) (1), [Myrle Krantz](https://github.com/myrle-krantz) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.44-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.44)
  - [New features] Answer with delay in mock or spy to improve testing of asynchronous code [(#1117)](https://github.com/mockito/mockito/issues/1117)
 
-**2.8.43 (2017-06-10)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.42...v2.8.43) by [Szczepan Faber](http://github.com/szczepiq) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.43-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.43)
+**2.8.43 (2017-06-10)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.42...v2.8.43) by [Szczepan Faber](http://github.com/mockitoguy) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.43-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.43)
  - No pull requests referenced in commit messages.
 
-**2.8.42 (2017-06-10)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.41...v2.8.42) by epeee (2), [Szczepan Faber](http://github.com/szczepiq) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.42-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.42)
+**2.8.42 (2017-06-10)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.41...v2.8.42) by epeee (2), [Szczepan Faber](http://github.com/mockitoguy) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.42-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.42)
  - update to shipkit v0.8.72 [(#1115)](https://github.com/mockito/mockito/pull/1115)
 
 **2.8.41** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.40...v2.8.41) by [Allon Murienik](https://github.com/mureinik) - *2017-06-10* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.41-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.41)
  - ArgsMismatchFinder#getStubbingArgMismatches generics [(#1118)](https://github.com/mockito/mockito/pull/1118)
 
-**2.8.40** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.39...v2.8.40) by [Szczepan Faber](http://github.com/szczepiq) (2), [Alex Simkin](https://github.com/SimY4) (1), mkuster (1) - *2017-06-05* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.40-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.40)
+**2.8.40** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.39...v2.8.40) by [Szczepan Faber](http://github.com/mockitoguy) (2), [Alex Simkin](https://github.com/SimY4) (1), mkuster (1) - *2017-06-05* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.40-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.40)
  - [Bugfixes] Fixed Travis configuration for matrix build [(#1109)](https://github.com/mockito/mockito/pull/1109)
  - Renamed configuration extension 'releasing' into 'shipkit' [(#1104)](https://github.com/mockito/mockito/pull/1104)
  - Made CaturingMatcher threadsafe [(#986)](https://github.com/mockito/mockito/pull/986)
 
-**2.8.39** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.38...v2.8.39) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-30* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.39-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.39)
+**2.8.39** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.38...v2.8.39) by [Szczepan Faber](http://github.com/mockitoguy) - *2017-05-30* - published to [![Bintray](https://img.shields.io/badge/Bintray-2.8.39-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.8.39)
  - Fixed contributor links and bintray badge in release notes [(#1103)](https://github.com/mockito/mockito/pull/1103)
 
-**2.8.38** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.37...v2.8.38) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-30* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+**2.8.38** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.37...v2.8.38) by [Szczepan Faber](http://github.com/mockitoguy) - *2017-05-30* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - [Documentation] Fixed broken link in Javadoc, improved console message [(#1100)](https://github.com/mockito/mockito/pull/1100)
 
-**2.8.37** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.36...v2.8.37) by [epeee](https://github.com/epeee), [Szczepan Faber](http://github.com/szczepiq) - *2017-05-28* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+**2.8.37** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.36...v2.8.37) by [epeee](https://github.com/epeee), [Szczepan Faber](http://github.com/mockitoguy) - *2017-05-28* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - update gradle to v3.5 [(#1099)](https://github.com/mockito/mockito/pull/1099)
  - Moved some more dependencies to dependencies.gradle [(#1098)](https://github.com/mockito/mockito/pull/1098)
 
 **2.8.36** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.35...v2.8.36) by [Allon Murienik](https://github.com/mureinik) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - InOrderImpl constructor signature [(#1096)](https://github.com/mockito/mockito/pull/1096)
 
-**2.8.35** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.34...v2.8.35) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+**2.8.35** - [4 commits](https://github.com/mockito/mockito/compare/v2.8.34...v2.8.35) by [Szczepan Faber](http://github.com/mockitoguy) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - Fixed bug with git push for tag during the release [(#1095)](https://github.com/mockito/mockito/pull/1095)
  - update assertj (v2.8.0) [(#1094)](https://github.com/mockito/mockito/pull/1094)
 
-**2.8.34** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.33...v2.8.34) by [Szczepan Faber](http://github.com/szczepiq) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+**2.8.34** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.33...v2.8.34) by [Szczepan Faber](http://github.com/mockitoguy) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - Updated build for latest release tools [(#1093)](https://github.com/mockito/mockito/pull/1093)
 
-**2.8.33** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.32...v2.8.33) by [Szczepan Faber](http://github.com/szczepiq) (1), Tim Cooke (1) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
+**2.8.33** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.32...v2.8.33) by [Szczepan Faber](http://github.com/mockitoguy) (1), Tim Cooke (1) - *2017-05-27* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development)
  - [Documentation] Javadoc Example Throws Unexpected Exception [(#1088)](https://github.com/mockito/mockito/issues/1088)
  - Fixes #1088 : Updating documentation of verify feature to correct a s… [(#1091)](https://github.com/mockito/mockito/pull/1091)
 
@@ -146,10 +146,10 @@ Notable changes:
  - Fixes #1083: Interfaces only declare toString implicitly and should t… [(#1090)](https://github.com/mockito/mockito/pull/1090)
  - Mockito 2 mock-maker-inline not able to mock Object methods on an interface [(#1083)](https://github.com/mockito/mockito/issues/1083)
 
-**2.8.30 (2017-05-18)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.29...v2.8.30) by epeee (2), [Szczepan Faber](http://github.com/szczepiq) (1) - *2017-05-18* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.30)
+**2.8.30 (2017-05-18)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.29...v2.8.30) by epeee (2), [Szczepan Faber](http://github.com/mockitoguy) (1) - *2017-05-18* - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.30)
  - Streamline assertj and junit4 usage in gradle files and update assertj (v2.7.0) [(#1075)](https://github.com/mockito/mockito/pull/1075)
 
-**2.8.29 (2017-05-15)** - [7 commits](https://github.com/mockito/mockito/compare/v2.8.28...v2.8.29) by [Szczepan Faber](http://github.com/szczepiq) (5), Christian Schwarz (1), Serge Bishyr (1) - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.29)
+**2.8.29 (2017-05-15)** - [7 commits](https://github.com/mockito/mockito/compare/v2.8.28...v2.8.29) by [Szczepan Faber](http://github.com/mockitoguy) (5), Christian Schwarz (1), Serge Bishyr (1) - published to [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.29)
  - Bumped version of tools to pick up release automation fixes [(#1084)](https://github.com/mockito/mockito/pull/1084)
  - More concise release notes and codecov issue fix [(#1080)](https://github.com/mockito/mockito/pull/1080)
  - Fixed #1065. Add information about doNothing() method to CannotStubVo… [(#1079)](https://github.com/mockito/mockito/pull/1079)
@@ -163,16 +163,16 @@ Notable changes:
 **2.8.27 (2017-05-05)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.26...v2.8.27) by [Roman Elizarov](https://github.com/elizarov), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.27)
   - Support Kotlin suspending functions [(#1032)](https://github.com/mockito/mockito/pull/1032)
 
-**2.8.26 (2017-05-05)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.25...v2.8.26) by [Szczepan Faber](https://github.com/szczepiq), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.26)
+**2.8.26 (2017-05-05)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.25...v2.8.26) by [Szczepan Faber](https://github.com/mockitoguy), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.26)
   - Bumped release tools to 0.8.4 - concise release notes [(#1069)](https://github.com/mockito/mockito/pull/1069)
 
-**2.8.25 (2017-05-01)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.24...v2.8.25) by [epeee](https://github.com/epeee), [Szczepan Faber](https://github.com/szczepiq), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.25)
+**2.8.25 (2017-05-01)** - [2 commits](https://github.com/mockito/mockito/compare/v2.8.24...v2.8.25) by [epeee](https://github.com/epeee), [Szczepan Faber](https://github.com/mockitoguy), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.25)
   - Test code refactoring - updated assertj test dependency from 1.x to 2.6.0 [(#1058)](https://github.com/mockito/mockito/pull/1058)
 
 **2.8.24 (2017-05-01)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.23...v2.8.24) by [epeee](https://github.com/epeee), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.24)
  - Fixed  typos across the codebase [(#1060)](https://github.com/mockito/mockito/pull/1060)
 
-**2.8.23 (2017-05-01)** - [11 commits](https://github.com/mockito/mockito/compare/v2.8.22...v2.8.23) by [Szczepan Faber](https://github.com/szczepiq), [Tim van der Lippe](https://github.com/TimvdLippe), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.23)
+**2.8.23 (2017-05-01)** - [11 commits](https://github.com/mockito/mockito/compare/v2.8.22...v2.8.23) by [Szczepan Faber](https://github.com/mockitoguy), [Tim van der Lippe](https://github.com/TimvdLippe), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.23)
   - Bumped version of tools [(#1062)](https://github.com/mockito/mockito/pull/1062)
   - Enabled automatic releasing without using skip-release keyword yet [(#1061)](https://github.com/mockito/mockito/pull/1061)
   - Ensured the release actually happens automatically [(#1057)](https://github.com/mockito/mockito/pull/1057)
@@ -189,10 +189,10 @@ Notable changes sincle last release to Maven Central (2.7.22):
 **2.8.9 (2017-04-26)** - [11 commits](https://github.com/mockito/mockito/compare/v2.8.8...v2.8.9) by [Rafael Winterhalter](https://github.com/raphw), published to: [JCenter](https://bintray.com/mockito/maven/mockito/2.8.9)/[Maven Central](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.8.9%7Cjar)
  - Updated ByteBuddy to 1.6.14, fixes agent attachment on Java 9 VM
 
-**2.8.8 (2017-04-24)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.7...v2.8.8) by [Szczepan Faber](https://github.com/szczepiq), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.8) 
+**2.8.8 (2017-04-24)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.7...v2.8.8) by [Szczepan Faber](https://github.com/mockitoguy), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.8)
  - Release notes tidy-up: new notable version 2.7.22, bumped release tools version [(#1048)](https://github.com/mockito/mockito/pull/1048)
 
-**2.8.7 (2017-04-20)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.6...v2.8.7) by [Szczepan Faber](https://github.com/szczepiq), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.7)
+**2.8.7 (2017-04-20)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.6...v2.8.7) by [Szczepan Faber](https://github.com/mockitoguy), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.7)
  - Release automation: automated publishing in Bintray, documentation [(#1039)](https://github.com/mockito/mockito/pull/1039)
 
 **2.8.6 (2017-04-19)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.5...v2.8.6) by [Serge Bishyr](https://github.com/SeriyBg), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.6)
@@ -208,14 +208,14 @@ Notable changes sincle last release to Maven Central (2.7.22):
 **2.8.3 (2017-04-16)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.2...v2.8.3) by [yyvess](https://github.com/yyvess), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.3)
  - Fixed NPE with MockitoJUnitRunner - MockitoTestListener must be remove on case test fail on the initialization. [(#1035)](https://github.com/mockito/mockito/pull/1035)
 
-**2.8.2 (2017-04-14)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.1...v2.8.2) by [Szczepan Faber](https://github.com/szczepiq), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.2)
+**2.8.2 (2017-04-14)** - [1 commit](https://github.com/mockito/mockito/compare/v2.8.1...v2.8.2) by [Szczepan Faber](https://github.com/mockitoguy), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.2)
  - Fixed glitches with notable releases [(#1038)](https://github.com/mockito/mockito/pull/1038)
 
-**2.8.1 (2017-04-13)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.0...v2.8.1) by [Marcin Zajączkowski](https://github.com/szpak), [Szczepan Faber](https://github.com/szczepiq), [yyvess](https://github.com/yyvess), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.1)
+**2.8.1 (2017-04-13)** - [3 commits](https://github.com/mockito/mockito/compare/v2.8.0...v2.8.1) by [Marcin Zajączkowski](https://github.com/szpak), [Szczepan Faber](https://github.com/mockitoguy), [yyvess](https://github.com/yyvess), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.1)
  - Remove duplicated code [(#1036)](https://github.com/mockito/mockito/pull/1036)
  - Fixed typo in configuration [(#1034)](https://github.com/mockito/mockito/pull/1034)
 
-**2.8.0 (2017-04-12)** - [23 commits](https://github.com/mockito/mockito/compare/v2.7.22...v2.8.0) by [Szczepan Faber](https://github.com/szczepiq), [Allon Mureinik](https://github.com/mureinik), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.0)
+**2.8.0 (2017-04-12)** - [23 commits](https://github.com/mockito/mockito/compare/v2.7.22...v2.8.0) by [Szczepan Faber](https://github.com/mockitoguy), [Allon Mureinik](https://github.com/mureinik), published to: [maven/mockito-development](https://bintray.com/mockito/maven/mockito-development/2.8.0)
  - Fixed notable version [(#1030)](https://github.com/mockito/mockito/pull/1030)
  - SmartPrinterTest toString() calls [(#1025)](https://github.com/mockito/mockito/pull/1025)
  - Enabled continuous delivery via robust mockito-release-tools project [(#1018)](https://github.com/mockito/mockito/pull/1018)
@@ -1646,7 +1646,7 @@ Thanks everybody for great contributions! Next release should come quicker thank
   * Improved MockitoTestNGListener by making it reset argument captors before each test [(#6)](https://github.com/mockito/mockito/pull/6)
   * Mock serialization/deserialization across classloader/JVM [(#5)](https://github.com/mockito/mockito/pull/5)
   * Fixed the behavior of compareTo method of the mock objects [(#32)](https://github.com/mockito/mockito/pull/32)
- 
+
 Older implemented improvements were managed in the original issue tracker and can be viewed at [Google Code site](https://code.google.com/p/mockito/issues/list?can=1&q=label%3AMilestone-Release1.10.0).
 
 ### 1.9.5 (06-10-2012)
