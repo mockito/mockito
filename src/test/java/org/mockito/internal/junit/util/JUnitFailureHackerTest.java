@@ -11,7 +11,7 @@ import org.junit.runner.notification.Failure;
 import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JUnitFailureHackerTest extends TestBase {

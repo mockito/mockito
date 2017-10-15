@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class MatchersToStringTest extends TestBase {
 

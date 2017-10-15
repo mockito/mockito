@@ -11,7 +11,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.List;
 
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 public class CloningParameterTest extends TestBase {

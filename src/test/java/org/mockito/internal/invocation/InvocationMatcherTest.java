@@ -6,9 +6,9 @@
 package org.mockito.internal.invocation;
 
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.internal.matchers.Any.ANY;
 

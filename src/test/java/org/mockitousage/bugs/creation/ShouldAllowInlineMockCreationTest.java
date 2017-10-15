@@ -12,7 +12,7 @@ import org.mockitoutil.TestBase;
 import java.util.List;
 import java.util.Set;
 
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

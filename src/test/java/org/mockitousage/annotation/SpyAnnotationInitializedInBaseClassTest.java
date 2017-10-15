@@ -14,7 +14,7 @@ import org.mockitoutil.TestBase;
 import java.util.LinkedList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.internal.util.MockUtil.isMock;
 
 @SuppressWarnings("unchecked")

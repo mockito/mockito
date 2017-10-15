@@ -9,7 +9,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockitoutil.Conditions.bridgeMethod;

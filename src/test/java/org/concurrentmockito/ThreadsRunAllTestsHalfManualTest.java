@@ -58,7 +58,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class ThreadsRunAllTestsHalfManualTest extends TestBase {
 

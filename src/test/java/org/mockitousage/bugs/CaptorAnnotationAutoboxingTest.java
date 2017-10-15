@@ -11,7 +11,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -33,7 +33,7 @@ public class CaptorAnnotationAutoboxingTest extends TestBase {
 
         //then
         verify(fun).doFun(captor.capture());
-        assertEquals(1.0, captor.getValue());
+        assertEquals(Double.valueOf(1.0), captor.getValue());
     }
 
     @Captor ArgumentCaptor<Integer> intCaptor;

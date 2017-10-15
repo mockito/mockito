@@ -16,9 +16,9 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 // @Ignore("for demo only. this test cannot be enabled as it fails :)")

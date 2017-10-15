@@ -7,8 +7,8 @@ package org.mockito.internal.matchers;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.internal.matchers.Equality.areEqual;
 
 public class EqualityTest extends TestBase {

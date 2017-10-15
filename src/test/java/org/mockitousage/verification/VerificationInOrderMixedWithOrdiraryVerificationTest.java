@@ -14,7 +14,7 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBase {
