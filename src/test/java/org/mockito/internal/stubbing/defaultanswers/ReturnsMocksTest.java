@@ -9,7 +9,7 @@ import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
 
 public class ReturnsMocksTest extends TestBase {

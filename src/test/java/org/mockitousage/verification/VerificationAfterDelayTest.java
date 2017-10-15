@@ -20,7 +20,7 @@ import org.mockitoutil.RetryRule;
 import org.mockitoutil.Stopwatch;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.rules.ExpectedException.none;
 import static org.mockito.Mockito.after;

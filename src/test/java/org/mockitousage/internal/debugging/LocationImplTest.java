@@ -11,7 +11,7 @@ import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.stacktrace.StackTraceFilter;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("serial")
 public class LocationImplTest extends TestBase {

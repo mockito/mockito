@@ -13,7 +13,7 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.fail;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")

@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MockSettingsImplTest extends TestBase {

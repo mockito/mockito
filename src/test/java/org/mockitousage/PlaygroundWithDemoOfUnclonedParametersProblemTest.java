@@ -15,7 +15,7 @@ import org.mockitoutil.TestBase;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willAnswer;
 import static org.mockito.Matchers.any;

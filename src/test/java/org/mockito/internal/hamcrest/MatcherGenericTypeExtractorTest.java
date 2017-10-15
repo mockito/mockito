@@ -13,7 +13,7 @@ import org.mockitoutil.TestBase;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.internal.hamcrest.MatcherGenericTypeExtractor.genericTypeOfMatcher;
 
 public class MatcherGenericTypeExtractorTest extends TestBase {

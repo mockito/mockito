@@ -16,7 +16,7 @@ import org.mockitoutil.TestBase;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings("unchecked")

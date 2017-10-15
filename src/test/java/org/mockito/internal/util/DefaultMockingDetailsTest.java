@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.util;
 
-import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,8 +16,8 @@ import org.mockitousage.IMethods;
 
 import java.util.Collection;
 
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.fail;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -121,7 +120,7 @@ public class DefaultMockingDetailsTest {
             //then
             fail();
         } catch (NotAMockException e) {
-            TestCase.assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is null!", e.getMessage());
+            assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is null!", e.getMessage());
         }
     }
 
@@ -133,7 +132,7 @@ public class DefaultMockingDetailsTest {
             //then
             fail();
         } catch (NotAMockException e) {
-            TestCase.assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
+            assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
         }
     }
 
@@ -145,7 +144,7 @@ public class DefaultMockingDetailsTest {
             //then
             fail();
         } catch (NotAMockException e) {
-            TestCase.assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
+            assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
         }
     }
 
@@ -201,7 +200,7 @@ public class DefaultMockingDetailsTest {
             //then
             fail();
         } catch (NotAMockException e) {
-            TestCase.assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
+            assertEquals("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of class java.lang.Object!", e.getMessage());
         }
     }
 

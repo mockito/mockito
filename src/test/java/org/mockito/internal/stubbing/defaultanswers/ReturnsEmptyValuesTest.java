@@ -12,7 +12,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.*;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class ReturnsEmptyValuesTest extends TestBase {

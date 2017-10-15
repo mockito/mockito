@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.mockito.exceptions.base.TraceBuilder;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockitoutil.Conditions.onlyThoseClasses;
 
 public class StackTraceFilterTest extends TestBase {
