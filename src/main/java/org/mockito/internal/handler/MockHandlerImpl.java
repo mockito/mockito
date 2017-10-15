@@ -65,6 +65,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         );
 
         mockingProgress().validateState();
+        mockingProgress().validateStubbingStatus();
 
         // if verificationMode is not null then someone is doing verify()
         if (verificationMode != null) {

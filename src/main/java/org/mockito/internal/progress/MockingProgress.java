@@ -31,6 +31,8 @@ public interface MockingProgress {
 
     void validateState();
 
+    void validateStubbingStatus();
+
     void reset();
 
     /**
