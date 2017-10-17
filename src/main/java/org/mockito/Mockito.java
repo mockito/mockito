@@ -1807,7 +1807,14 @@ public class Mockito extends ArgumentMatchers {
      *
      * <p>
      * <em>Warning:</em> this method could be accidentally used to downcast to
-     * a subclass of the mock, resulting in a <code>ClassCastException</code>
+     * a subclass of the mock, resulting in a <code>ClassCastException</code>.
+     * For example you cannot write:
+     * <p>
+     *
+     * <pre class="code"><code class="java">
+     *     // the mock is NOT an array list, so this will throw an exception
+     *     ArrayList&lt;String&gt; list = typed(mock(List.class));
+     * </code></pre>
      *
      * @param mock the return of a call to one of the <code>mock</code> methods
      * @param <T> the return type (inferred by Java 8)
