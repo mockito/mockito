@@ -12,6 +12,7 @@ import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -105,5 +106,12 @@ public class MocksCreationTest extends TestBase {
     public void canCreateMockOfRequiredTypeWithoutWarning() {
         List<String> list = typed(mock(List.class));
         when(list.size()).thenReturn(999);
+    }
+
+    @Test(expected=ClassCastException.class)
+    public void cannotUseTypedMethodToCastToUnrelatedConcreteType() {
+        // the mock is not of type ArrayList, this will result
+        // in a class cast exception
+        ArrayList<String> list = typed(mock(List.class));
     }
 }
