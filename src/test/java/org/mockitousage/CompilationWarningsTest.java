@@ -11,6 +11,8 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.BDDMockito.*;
 
+import java.util.List;
+
 
 public class CompilationWarningsTest {
 
@@ -75,6 +77,9 @@ public class CompilationWarningsTest {
         given(mock(IMethods.class).objectReturningMethodNoArgs()).will(ignore()).willThrow(new NullPointerException());
         given(mock(IMethods.class).objectReturningMethodNoArgs()).will(ignore()).willThrow(new NullPointerException(), new IllegalArgumentException());
         given(mock(IMethods.class).objectReturningMethodNoArgs()).will(ignore()).willThrow(NullPointerException.class);
+
+        List<String> mockList = typed(mock(List.class));
+        given(mockList.add("hello world")).willThrow(new NullPointerException());
     }
 
     @Test
