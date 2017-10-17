@@ -101,4 +101,9 @@ public class MocksCreationTest extends TestBase {
         when(mock(Set.class).isEmpty()).thenReturn(false);
     }
 
+    @Test
+    public void canCreateMockOfRequiredTypeWithoutWarning() {
+        List<String> list = typed(mock(List.class));
+        when(list.size()).thenReturn(999);
+    }
 }

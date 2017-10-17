@@ -96,6 +96,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#40">40. (*new*) Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
  *      <a href="#41">41. (**new**) Advanced public API for framework integrations (Since 2.10.+)</a><br/>
  *      <a href="#42">42. (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</a><br/>
+ *      <a href="#43">43. (**new**) Type casting Support (Since 2.11)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1467,6 +1468,27 @@ import org.mockito.verification.VerificationWithTimeout;
  *     We found this method useful during the implementation.
  *     </li>
  * </ul>
+ *
+ * <h3 id="43">43. <a class="meaningful_link" href="#type_casting">Type casting Support</a> (Since 2.11)</h3>
+ *
+ * When mocking generic types you would get a compiler warning with code like this:
+ *
+ * <pre class="code"><code class="java">
+ *     Foo&lt;Bar&gt; mockFoo = mock(Foo.class);
+ * </pre>
+ *
+ * This is because there is no way to specify the generic type within the input to the <code>mock</code>
+ * method.
+ * <p>
+ *
+ * To reduce compiler warnings and to make Mockito more interoperable with inferred types in Java 8
+ * you can wrap your calls to <code>mock</code> with the function <code>typed</code>, which will apply
+ * the parameterized type.
+ *
+ * <pre class="code"><code class="java">
+ *     Foo&lt;Bar&gt; mockFoo = typed(mock(Foo.class));
+ * </pre>
+ *
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
@@ -1770,6 +1792,31 @@ public class Mockito extends ArgumentMatchers {
     public static MockingDetails mockingDetails(Object toInspect) {
         return MOCKITO_CORE.mockingDetails(toInspect);
     }
+
+    /**
+     * Downcasts mock object to a specific type. This is helpful for Java 8 where
+     * <code>mock(Predicate.class)</code> cannot provide a compiler-friendly value
+     * for a variable of, say, <code>Predicate&lt;String&gt;</code>. If you
+     * wrap the call to <code>mock</code> in <code>typed(...)</code>, then you will not
+     * get compiler warnings.
+     * <p>
+     *
+     * <pre class="code"><code class="java">
+     *   Foo&lt;Bar&gt; mock = typed(mock(Foo.class));
+     * </code></pre>
+     *
+     * <p>
+     * <em>Warning:</em> this method could be accidentally used to downcast to
+     * a subclass of the mock, resulting in a <code>ClasCastException</code>
+     *
+     * @param mock the return of a call to one of the <code>mock</code> methods
+     * @param <T> the return type (inferred by Java 8)
+     * @param <M> the actual type of the mock
+     * @return a downcasted version of the mock
+     */
+     public static <M, T extends M> T typed(M mock) {
+        return (T)mock;
+     }
 
     /**
      * Creates mock with a specified strategy for its answers to interactions.
