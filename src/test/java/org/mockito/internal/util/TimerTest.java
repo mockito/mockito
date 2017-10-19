@@ -5,12 +5,15 @@
 package org.mockito.internal.util;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.exceptions.misusing.FriendlyReminderException;
 import org.mockitoutil.TestBase;
 
 public class TimerTest extends TestBase {
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void should_return_true_if_task_is_in_acceptable_time_bounds() {
@@ -40,12 +43,9 @@ public class TimerTest extends TestBase {
 
     @Test
     public void should_throw_friendly_reminder_exception_when_duration_is_negative() {
-        try {
-            new Timer(-1);
-            Assert.fail("It is forbidden to create timer with negative value of timer's duration.");
-        } catch (FriendlyReminderException e) {
-            Assert.assertTrue(true);
-        }
+        expectedException.expect(FriendlyReminderException.class);
+        expectedException.expectMessage("Don't panic! I'm just a friendly reminder!");
+        new Timer(-1);
     }
 
     private void oneMillisecondPasses() throws InterruptedException {
