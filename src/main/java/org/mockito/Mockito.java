@@ -2832,7 +2832,8 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * @deprecated - please use {@link MockingDetails#printInvocations()}.
+     * @deprecated - please use {@link MockingDetails#printInvocations()} instead.
+     * An instance of {@code MockingDetails} can be retrieved via {@link #mockingDetails(Object)}.
      */
     @Deprecated
     static MockitoDebugger debug() {
