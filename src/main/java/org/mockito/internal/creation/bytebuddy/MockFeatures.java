@@ -10,17 +10,23 @@ import java.util.Collections;
 import java.util.Set;
 
 class MockFeatures<T> {
+
     final Class<T> mockedType;
     final Set<Class<?>> interfaces;
     final SerializableMode serializableMode;
+    final boolean stripAnnotations;
 
-    private MockFeatures(Class<T> mockedType, Set<Class<?>> interfaces, SerializableMode serializableMode) {
+    private MockFeatures(Class<T> mockedType, Set<Class<?>> interfaces, SerializableMode serializableMode, boolean stripAnnotations) {
         this.mockedType = mockedType;
         this.interfaces = Collections.unmodifiableSet(interfaces);
         this.serializableMode = serializableMode;
+        this.stripAnnotations = stripAnnotations;
     }
 
-    public static <T> MockFeatures<T> withMockFeatures(Class<T> mockedType, Set<Class<?>> interfaces, SerializableMode serializableMode) {
-        return new MockFeatures<T>(mockedType, interfaces, serializableMode);
+    public static <T> MockFeatures<T> withMockFeatures(Class<T> mockedType,
+                                                       Set<Class<?>> interfaces,
+                                                       SerializableMode serializableMode,
+                                                       boolean stripAnnotations) {
+        return new MockFeatures<T>(mockedType, interfaces, serializableMode, stripAnnotations);
     }
 }

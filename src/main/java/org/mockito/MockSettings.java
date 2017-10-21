@@ -292,6 +292,17 @@ public interface MockSettings extends Serializable {
     MockSettings outerInstance(Object outerClassInstance);
 
     /**
+     * By default, Mockito makes an attempt to preserve all annotation meta data on the mocked
+     * type and its methods to mirror the mocked type as closely as possible. If this is not
+     * desired, this option can be used to disable this behavior.
+     *
+     * @return settings instance so that you can fluently specify other settings
+     * @since 1.10.13
+     */
+    @Incubating
+    MockSettings withoutAnnotations();
+
+    /**
      * Creates immutable view of mock settings used later by Mockito.
      * Framework integrators can use this method to create instances of creation settings
      * and use them in advanced use cases, for example to create invocations with {@link InvocationFactory},

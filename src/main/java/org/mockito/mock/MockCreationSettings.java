@@ -63,6 +63,11 @@ public interface MockCreationSettings<T> {
     boolean isStubOnly();
 
     /**
+     * Whether the mock should not make a best effort to preserve annotations.
+     */
+    boolean isStripAnnotations();
+
+    /**
      * {@link InvocationListener} instances attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.
      */
     List<InvocationListener> getInvocationListeners();

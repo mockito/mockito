@@ -5,8 +5,11 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import org.junit.Test;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.plugins.MockMaker;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -49,9 +52,49 @@ public class SubclassByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTe
         assertThat(mockable.nonMockableReason()).isEqualTo("");
     }
 
+    @Test
+    public void mock_type_with_annotations() throws Exception {
+        MockSettingsImpl<ClassWithAnnotation> mockSettings = new MockSettingsImpl<ClassWithAnnotation>();
+        mockSettings.setTypeToMock(ClassWithAnnotation.class);
+
+        ClassWithAnnotation proxy = mockMaker.createMock(mockSettings, dummyHandler());
+
+        assertThat(proxy.getClass().isAnnotationPresent(SampleAnnotation.class)).isTrue();
+        assertThat(proxy.getClass().getAnnotation(SampleAnnotation.class).value()).isEqualTo("foo");
+
+        assertThat(proxy.getClass().getMethod("sampleMethod").isAnnotationPresent(SampleAnnotation.class)).isTrue();
+        assertThat(proxy.getClass().getMethod("sampleMethod").getAnnotation(SampleAnnotation.class).value()).isEqualTo("bar");
+    }
+
+    @Test
+    public void mock_type_without_annotations() throws Exception {
+        MockSettingsImpl<ClassWithAnnotation> mockSettings = new MockSettingsImpl<ClassWithAnnotation>();
+        mockSettings.setTypeToMock(ClassWithAnnotation.class);
+        mockSettings.withoutAnnotations();
+
+        ClassWithAnnotation proxy = mockMaker.createMock(mockSettings, dummyHandler());
+
+        assertThat(proxy.getClass().isAnnotationPresent(SampleAnnotation.class)).isFalse();
+        assertThat(proxy.getClass().getMethod("sampleMethod").isAnnotationPresent(SampleAnnotation.class)).isFalse();
+    }
 
     @Override
     protected Class<?> mockTypeOf(Class<?> type) {
         return type.getSuperclass();
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface SampleAnnotation {
+
+        String value();
+    }
+
+    @SampleAnnotation("foo")
+    public static class ClassWithAnnotation {
+
+        @SampleAnnotation("bar")
+        public void sampleMethod() {
+            throw new UnsupportedOperationException();
+        }
     }
 }

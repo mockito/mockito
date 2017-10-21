@@ -33,6 +33,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected final List<StubbingLookupListener> stubbingLookupListeners = new ArrayList<StubbingLookupListener>();
     protected List<VerificationStartedListener> verificationStartedListeners = new LinkedList<VerificationStartedListener>();
     protected boolean stubOnly;
+    protected boolean stripAnnotations;
     private boolean useConstructor;
     private Object outerClassInstance;
     private Object[] constructorArgs;
@@ -56,6 +57,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.constructorArgs = copy.getConstructorArgs();
     }
 
+    @Override
     public Class<T> getTypeToMock() {
         return typeToMock;
     }
@@ -65,6 +67,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return this;
     }
 
+    @Override
     public Set<Class<?>> getExtraInterfaces() {
         return extraInterfaces;
     }
@@ -78,14 +81,17 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return name;
     }
 
+    @Override
     public Object getSpiedInstance() {
         return spiedInstance;
     }
 
+    @Override
     public Answer<Object> getDefaultAnswer() {
         return defaultAnswer;
     }
 
+    @Override
     public MockName getMockName() {
         return mockName;
     }
@@ -104,14 +110,17 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return this;
     }
 
+    @Override
     public SerializableMode getSerializableMode() {
         return serializableMode;
     }
 
+    @Override
     public List<InvocationListener> getInvocationListeners() {
         return invocationListeners;
     }
 
+    @Override
     public List<VerificationStartedListener> getVerificationStartedListeners() {
         return verificationStartedListeners;
     }
@@ -120,8 +129,14 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return stubbingLookupListeners;
     }
 
+    @Override
     public boolean isUsingConstructor() {
         return useConstructor;
+    }
+
+    @Override
+    public boolean isStripAnnotations() {
+        return stripAnnotations;
     }
 
     @Override
@@ -129,12 +144,13 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         return constructorArgs;
     }
 
+    @Override
     public Object getOuterClassInstance() {
         return outerClassInstance;
     }
 
+    @Override
     public boolean isStubOnly() {
         return stubOnly;
     }
-
 }
