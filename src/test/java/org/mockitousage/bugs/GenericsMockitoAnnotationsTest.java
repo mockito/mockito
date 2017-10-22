@@ -19,7 +19,7 @@ public class GenericsMockitoAnnotationsTest {
     private TestCollectionSourceProvider testCollectionSourceProvider;
 
     @Test
-    public void test() {
+    public void should_not_throw_class_cast_exception() {
         given(testCollectionSourceProvider.getCollection(new ArrayList<Integer>())).willReturn(new ArrayList<Integer>());
     }
 
