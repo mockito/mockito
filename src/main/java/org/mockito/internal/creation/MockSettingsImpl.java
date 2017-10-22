@@ -40,15 +40,18 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     private Object outerClassInstance;
     private Object[] constructorArgs;
 
+    @Override
     public MockSettings serializable() {
         return serializable(SerializableMode.BASIC);
     }
 
+    @Override
     public MockSettings serializable(SerializableMode mode) {
         this.serializableMode = mode;
         return this;
     }
 
+    @Override
     public MockSettings extraInterfaces(Class<?>... extraInterfaces) {
         if (extraInterfaces == null || extraInterfaces.length == 0) {
             throw extraInterfacesRequiresAtLeastOneInterface();
@@ -65,28 +68,34 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
+    @Override
     public MockName getMockName() {
         return mockName;
     }
 
+    @Override
     public Set<Class<?>> getExtraInterfaces() {
         return extraInterfaces;
     }
 
+    @Override
     public Object getSpiedInstance() {
         return spiedInstance;
     }
 
+    @Override
     public MockSettings name(String name) {
         this.name = name;
         return this;
     }
 
+    @Override
     public MockSettings spiedInstance(Object spiedInstance) {
         this.spiedInstance = spiedInstance;
         return this;
     }
 
+    @Override
     public MockSettings defaultAnswer(Answer defaultAnswer) {
         this.defaultAnswer = defaultAnswer;
         if (defaultAnswer == null) {
@@ -95,15 +104,18 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
+    @Override
     public Answer<Object> getDefaultAnswer() {
         return defaultAnswer;
     }
 
+    @Override
     public MockSettingsImpl<T> stubOnly() {
         this.stubOnly = true;
         return this;
     }
 
+    @Override
     public MockSettings useConstructor(Object... constructorArgs) {
         Checks.checkNotNull(constructorArgs,
             "constructorArgs",
@@ -113,19 +125,29 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
+    @Override
     public MockSettings outerInstance(Object outerClassInstance) {
         this.outerClassInstance = outerClassInstance;
         return this;
     }
 
+    @Override
+    public MockSettings withoutAnnotations() {
+        stripAnnotations = true;
+        return this;
+    }
+
+    @Override
     public boolean isUsingConstructor() {
         return useConstructor;
     }
 
+    @Override
     public Object getOuterClassInstance() {
         return outerClassInstance;
     }
 
+    @Override
     public Object[] getConstructorArgs() {
         if (outerClassInstance == null) {
             return constructorArgs;
@@ -136,10 +158,12 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return resultArgs.toArray(new Object[constructorArgs.length + 1]);
     }
 
+    @Override
     public boolean isStubOnly() {
         return this.stubOnly;
     }
 
+    @Override
     public MockSettings verboseLogging() {
         if (!invocationListenersContainsType(VerboseMockInvocationLogger.class)) {
             invocationListeners(new VerboseMockInvocationLogger());
@@ -147,6 +171,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
+    @Override
     public MockSettings invocationListeners(InvocationListener... listeners) {
         if (listeners == null || listeners.length == 0) {
             throw invocationListenersRequiresAtLeastOneListener();
@@ -167,6 +192,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         }
     }
 
+    @Override
     public MockSettings verificationStartedListeners(VerificationStartedListener... listeners) {
         addListeners(listeners, this.verificationStartedListeners, "verificationStartedListeners");
         return this;
@@ -181,6 +207,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return false;
     }
 
+    @Override
     public List<InvocationListener> getInvocationListeners() {
         return this.invocationListeners;
     }
@@ -189,6 +216,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return !invocationListeners.isEmpty();
     }
 
+    @Override
     public Class<T> getTypeToMock() {
         return typeToMock;
     }
