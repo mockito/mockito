@@ -118,7 +118,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     @Override
     public boolean isMocked(Object instance) {
-        return selfCallInfo.checkSuperCall(instance) && isMock(instance);
+        return !selfCallInfo.isSelfInvocation(instance) && isMock(instance);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             graphs.put(instance.getClass(), new SoftReference<MethodGraph>(methodGraph));
         }
         MethodGraph.Node node = methodGraph.locate(new MethodDescription.ForLoadedMethod(origin).asSignatureToken());
-        return !node.getSort().isResolved() || !node.getRepresentative().asDefined().represents(origin);
+        return !node.getSort().isResolved() || !node.getRepresentative().asDefined().getDeclaringType().represents(origin.getDeclaringClass());
     }
 
     private static class RealMethodCall implements RealMethod {
@@ -160,8 +160,12 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             if (!Modifier.isPublic(origin.getDeclaringClass().getModifiers() & origin.getModifiers())) {
                 origin.setAccessible(true);
             }
-            selfCallInfo.set(instance);
-            return tryInvoke(origin, instance, arguments);
+            Object previous = selfCallInfo.replace(instance);
+            try {
+                return tryInvoke(origin, instance, arguments);
+            } finally {
+                selfCallInfo.set(previous);
+            }
         }
 
     }
@@ -198,8 +202,12 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             if (!(mockMethodDispatcher instanceof MockMethodAdvice)) {
                 throw new MockitoException("Unexpected dispatcher for advice-based super call");
             }
-            ((MockMethodAdvice) mockMethodDispatcher).selfCallInfo.set(instance);
-            return tryInvoke(method, instance, arguments);
+            Object previous = ((MockMethodAdvice) mockMethodDispatcher).selfCallInfo.replace(instance);
+            try {
+                return tryInvoke(method, instance, arguments);
+            } finally {
+                ((MockMethodAdvice) mockMethodDispatcher).selfCallInfo.set(previous);
+            }
         }
     }
 
@@ -244,14 +252,14 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     private static class SelfCallInfo extends ThreadLocal<Object> {
 
-        boolean checkSuperCall(Object value) {
+        Object replace(Object instance) {
             Object current = get();
-            if (current == value) {
-                set(null);
-                return false;
-            } else {
-                return true;
-            }
+            set(instance);
+            return current;
+        }
+
+        boolean isSelfInvocation(Object instance) {
+            return get() == instance;
         }
     }
 
