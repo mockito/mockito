@@ -40,7 +40,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
 
     @Test
     public void should_create_mock_from_interface() throws Exception {
-        SomeInterface proxy = mockMaker.createMock(settingsFor(SomeInterface.class), dummyH());
+        SomeInterface proxy = mockMaker.createMock(settingsFor(SomeInterface.class), dummyHandler());
 
         Class<?> superClass = proxy.getClass().getSuperclass();
         assertThat(superClass).isEqualTo(Object.class);
@@ -49,7 +49,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
 
     @Test
     public void should_create_mock_from_class() throws Exception {
-        ClassWithoutConstructor proxy = mockMaker.createMock(settingsFor(ClassWithoutConstructor.class), dummyH());
+        ClassWithoutConstructor proxy = mockMaker.createMock(settingsFor(ClassWithoutConstructor.class), dummyHandler());
 
         Class<?> superClass = mockTypeOf(proxy.getClass());
         assertThat(superClass).isEqualTo(ClassWithoutConstructor.class);
@@ -62,14 +62,14 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
             fail();
         } catch (Exception expected) {}
 
-        ClassWithDodgyConstructor mock = mockMaker.createMock(settingsFor(ClassWithDodgyConstructor.class), dummyH());
+        ClassWithDodgyConstructor mock = mockMaker.createMock(settingsFor(ClassWithDodgyConstructor.class), dummyHandler());
         assertThat(mock).isNotNull();
     }
 
     @Test
     public void should_mocks_have_different_interceptors() throws Exception {
-        SomeClass mockOne = mockMaker.createMock(settingsFor(SomeClass.class), dummyH());
-        SomeClass mockTwo = mockMaker.createMock(settingsFor(SomeClass.class), dummyH());
+        SomeClass mockOne = mockMaker.createMock(settingsFor(SomeClass.class), dummyHandler());
+        SomeClass mockTwo = mockMaker.createMock(settingsFor(SomeClass.class), dummyHandler());
 
         MockHandler handlerOne = mockMaker.getHandler(mockOne);
         MockHandler handlerTwo = mockMaker.getHandler(mockTwo);
@@ -80,20 +80,20 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
 
     @Test
     public void should_use_ancillary_Types() {
-        SomeClass mock = mockMaker.createMock(settingsFor(SomeClass.class, SomeInterface.class), dummyH());
+        SomeClass mock = mockMaker.createMock(settingsFor(SomeClass.class, SomeInterface.class), dummyHandler());
 
         assertThat(mock).isInstanceOf(SomeInterface.class);
     }
 
     @Test
     public void should_create_class_by_constructor() {
-        OtherClass mock = mockMaker.createMock(settingsWithConstructorFor(OtherClass.class), dummyH());
+        OtherClass mock = mockMaker.createMock(settingsWithConstructorFor(OtherClass.class), dummyHandler());
         assertThat(mock).isNotNull();
     }
 
     @Test
     public void should_allow_serialization() throws Exception {
-        SerializableClass proxy = mockMaker.createMock(serializableSettingsFor(SerializableClass.class, SerializableMode.BASIC), dummyH());
+        SerializableClass proxy = mockMaker.createMock(serializableSettingsFor(SerializableClass.class, SerializableMode.BASIC), dummyHandler());
 
         SerializableClass serialized = SimpleSerializationUtil.serializeAndBack(proxy);
         assertThat(serialized).isNotNull();
@@ -181,7 +181,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
         return mockSettings;
     }
 
-    private static MockHandler dummyH() {
+    protected static MockHandler dummyHandler() {
         return new DummyMockHandler();
     }
 

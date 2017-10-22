@@ -6,7 +6,7 @@ package org.mockitoutil;
 
 import java.io.*;
 
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
 public abstract class SimpleSerializationUtil {
 

@@ -200,7 +200,8 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
             return bytecodeGenerator.mockClass(MockFeatures.withMockFeatures(
                     settings.getTypeToMock(),
                     settings.getExtraInterfaces(),
-                    settings.getSerializableMode()
+                    settings.getSerializableMode(),
+                    settings.isStripAnnotations()
             ));
         } catch (Exception bytecodeGenerationFailed) {
             throw prettifyFailure(settings, bytecodeGenerationFailed);

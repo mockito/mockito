@@ -20,7 +20,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.Set;
 
-import static junit.framework.TestCase.fail;
+import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.*;
 
 public class BDDMockitoTest extends TestBase {

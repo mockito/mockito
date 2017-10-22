@@ -32,11 +32,9 @@ import org.junit.Test;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertNull;
-import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class ReturnsEmptyValuesTest extends TestBase {

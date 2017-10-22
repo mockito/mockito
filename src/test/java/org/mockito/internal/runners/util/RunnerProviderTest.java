@@ -9,7 +9,7 @@ import org.mockito.internal.runners.DefaultInternalRunner;
 import org.mockito.internal.runners.InternalRunner;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
 public class RunnerProviderTest extends TestBase {
 

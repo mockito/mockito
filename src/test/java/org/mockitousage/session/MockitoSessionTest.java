@@ -16,8 +16,8 @@ import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.JUnitResultAssert;
 
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 

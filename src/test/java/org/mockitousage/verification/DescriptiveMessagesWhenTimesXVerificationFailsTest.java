@@ -14,7 +14,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.LinkedList;
 
-import static junit.framework.TestCase.fail;
+import static org.junit.Assert.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 

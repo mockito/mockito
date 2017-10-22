@@ -12,7 +12,7 @@ import org.mockito.internal.util.Timer;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.fail;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class TimeoutTest extends TestBase {

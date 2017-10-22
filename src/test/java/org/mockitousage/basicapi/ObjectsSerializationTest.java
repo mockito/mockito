@@ -10,7 +10,7 @@ import org.mockitoutil.TestBase;
 
 import java.io.Serializable;
 
-import static junit.framework.TestCase.assertSame;
+import static org.junit.Assert.assertSame;
 import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
 
 @SuppressWarnings("serial")

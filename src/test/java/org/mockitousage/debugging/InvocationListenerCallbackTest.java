@@ -11,11 +11,18 @@ import org.mockito.invocation.DescribedInvocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 
 
 /**
@@ -36,6 +43,38 @@ public class InvocationListenerCallbackTest {
 
         // then
         assertThat(listener).is(notifiedFor("basil", getClass().getSimpleName()));
+    }
+
+    @Test
+    public void should_call_listeners_in_order() throws Exception {
+        // given
+        List<InvocationListener> container = new ArrayList<InvocationListener>();
+        RememberingListener listener1 = new RememberingListener(container);
+        RememberingListener listener2 = new RememberingListener(container);
+
+        Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener2));
+
+        // when
+        foo.giveMeSomeString("herb");
+
+        // then
+        assertThat(container).containsExactly(listener1, listener2);
+    }
+
+    @Test
+    public void should_allow_same_listener() throws Exception {
+        // given
+        List<InvocationListener> container = new ArrayList<InvocationListener>();
+        RememberingListener listener1 = new RememberingListener(container);
+
+        Foo foo = mock(Foo.class, withSettings().invocationListeners(listener1, listener1));
+
+        // when
+        foo.giveMeSomeString("a");
+        foo.giveMeSomeString("b");
+
+        // then each listener was notified 2 times (notified 4 times in total)
+        assertThat(container).containsExactly(listener1, listener1, listener1, listener1);
     }
 
     @Test
@@ -86,14 +125,24 @@ public class InvocationListenerCallbackTest {
     }
 
     private static class RememberingListener implements InvocationListener {
+        private final List<InvocationListener> listenerContainer;
         DescribedInvocation invocation;
         Object returnValue;
         String locationOfStubbing;
+
+        RememberingListener(List<InvocationListener> listenerContainer) {
+            this.listenerContainer = listenerContainer;
+        }
+
+        RememberingListener() {
+            this(new ArrayList<InvocationListener>());
+        }
 
         public void reportInvocation(MethodInvocationReport mcr) {
             this.invocation = mcr.getInvocation();
             this.returnValue = mcr.getReturnedValue();
             this.locationOfStubbing = mcr.getLocationOfStubbing();
+            listenerContainer.add(this); //so that we can assert on order
         }
     }
 

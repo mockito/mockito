@@ -17,7 +17,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Locale;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 

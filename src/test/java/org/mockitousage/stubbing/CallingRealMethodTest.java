@@ -4,12 +4,11 @@
  */
 package org.mockitousage.stubbing;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class CallingRealMethodTest extends TestBase {
@@ -46,7 +45,7 @@ public class CallingRealMethodTest extends TestBase {
     public void shouldReturnRealValue() {
         when(mock.getValue()).thenCallRealMethod();
 
-        Assert.assertEquals("HARD_CODED_RETURN_VALUE", mock.getValue());
+        assertEquals("HARD_CODED_RETURN_VALUE", mock.getValue());
     }
 
     @Test
@@ -55,14 +54,14 @@ public class CallingRealMethodTest extends TestBase {
 
         mock.setValue("REAL_VALUE");
 
-        Assert.assertEquals("REAL_VALUE", mock.value);
+        assertEquals("REAL_VALUE", mock.value);
     }
 
     @Test
     public void shouldCallRealMethodByDefault() {
         TestedObject mock = mock(TestedObject.class, CALLS_REAL_METHODS);
 
-        Assert.assertEquals("HARD_CODED_RETURN_VALUE", mock.getValue());
+        assertEquals("HARD_CODED_RETURN_VALUE", mock.getValue());
     }
 
     @Test
@@ -72,6 +71,6 @@ public class CallingRealMethodTest extends TestBase {
         when(mock.getValue()).thenCallRealMethod();
         when(mock.getValue()).thenReturn("FAKE_VALUE");
 
-        Assert.assertEquals("FAKE_VALUE", mock.getValue());
+        assertEquals("FAKE_VALUE", mock.getValue());
     }
 }

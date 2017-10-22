@@ -16,8 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class ReturningDefaultValuesTest extends TestBase {

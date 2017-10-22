@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings({ "unchecked", "serial" })
 public class ArgumentMatchingToolTest extends TestBase {

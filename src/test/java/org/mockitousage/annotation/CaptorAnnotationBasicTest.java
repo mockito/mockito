@@ -15,8 +15,8 @@ import org.mockitoutil.TestBase;
 import java.util.LinkedList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertSame;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.verify;
 
 @SuppressWarnings("unchecked")

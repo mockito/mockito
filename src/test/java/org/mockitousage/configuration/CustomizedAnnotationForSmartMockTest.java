@@ -18,7 +18,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static java.lang.annotation.ElementType.FIELD;
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 
 
