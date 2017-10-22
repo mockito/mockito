@@ -8,7 +8,13 @@ package org.mockito.internal.exceptions;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.*;
-import org.mockito.exceptions.verification.*;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.SmartNullPointerException;
+import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.exceptions.verification.VerificationInOrderFailure;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.junit.ExceptionFactory;
@@ -682,8 +688,8 @@ public class Reporter {
 
     }
 
-    public static MockitoException invocationListenerDoesNotAcceptNullParameters() {
-        return new MockitoException("invocationListeners() does not accept null parameters");
+    public static MockitoException methodDoesNotAcceptParameter(String method, String parameter) {
+        return new MockitoException(method + "() does not accept " + parameter + " See the Javadoc.");
     }
 
     public static MockitoException invocationListenersRequiresAtLeastOneListener() {

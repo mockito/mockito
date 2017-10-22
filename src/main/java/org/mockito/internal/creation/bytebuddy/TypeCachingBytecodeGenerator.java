@@ -17,11 +17,11 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implement
 
     private final BytecodeGenerator bytecodeGenerator;
 
-    private final TypeCache<SerializationFeatureKey> typeCache;
+    private final TypeCache<MockitoMockKey> typeCache;
 
     public TypeCachingBytecodeGenerator(BytecodeGenerator bytecodeGenerator, boolean weak) {
         this.bytecodeGenerator = bytecodeGenerator;
-        typeCache = new TypeCache.WithInlineExpunction<SerializationFeatureKey>(weak ? TypeCache.Sort.WEAK : TypeCache.Sort.SOFT);
+        typeCache = new TypeCache.WithInlineExpunction<MockitoMockKey>(weak ? TypeCache.Sort.WEAK : TypeCache.Sort.SOFT);
     }
 
     @SuppressWarnings("unchecked")
@@ -30,7 +30,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implement
         try {
             ClassLoader classLoader = params.mockedType.getClassLoader();
             return (Class<T>) typeCache.findOrInsert(classLoader,
-                    new SerializationFeatureKey(params.mockedType, params.interfaces, params.serializableMode),
+                    new MockitoMockKey(params.mockedType, params.interfaces, params.serializableMode, params.stripAnnotations),
                     new Callable<Class<?>>() {
                         @Override
                         public Class<?> call() throws Exception {
@@ -47,13 +47,18 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implement
         }
     }
 
-    private static class SerializationFeatureKey extends TypeCache.SimpleKey {
+    private static class MockitoMockKey extends TypeCache.SimpleKey {
 
         private final SerializableMode serializableMode;
+        private final boolean stripAnnotations;
 
-        private SerializationFeatureKey(Class<?> type, Set<Class<?>> additionalType, SerializableMode serializableMode) {
+        private MockitoMockKey(Class<?> type,
+                               Set<Class<?>> additionalType,
+                               SerializableMode serializableMode,
+                               boolean stripAnnotations) {
             super(type, additionalType);
             this.serializableMode = serializableMode;
+            this.stripAnnotations = stripAnnotations;
         }
 
         @Override
@@ -61,13 +66,15 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implement
             if (this == object) return true;
             if (object == null || getClass() != object.getClass()) return false;
             if (!super.equals(object)) return false;
-            SerializationFeatureKey that = (SerializationFeatureKey) object;
-            return serializableMode.equals(that.serializableMode);
+            MockitoMockKey that = (MockitoMockKey) object;
+            return stripAnnotations == that.stripAnnotations
+                && serializableMode.equals(that.serializableMode);
         }
 
         @Override
         public int hashCode() {
             int result = super.hashCode();
+            result = 31 * result + (stripAnnotations ? 1 : 0);
             result = 31 * result + serializableMode.hashCode();
             return result;
         }

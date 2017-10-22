@@ -7,8 +7,8 @@ package org.mockito.internal.stubbing.defaultanswers;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ReturnsMoreEmptyValuesTest extends TestBase {
 

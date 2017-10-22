@@ -14,7 +14,7 @@ import org.mockitoutil.TestBase;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class StubbingWithCustomAnswerTest extends TestBase {

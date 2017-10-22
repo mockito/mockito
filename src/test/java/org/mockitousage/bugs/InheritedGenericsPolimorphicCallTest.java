@@ -5,7 +5,6 @@
 
 package org.mockitousage.bugs;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
@@ -17,7 +16,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 
 @SuppressWarnings("unchecked")
@@ -38,8 +38,8 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
     @Test
     public void shouldStubbingWork() {
         Mockito.when(iterable.iterator()).thenReturn(myIterator);
-        Assert.assertNotNull(((Iterable<String>) iterable).iterator());
-        Assert.assertNotNull(iterable.iterator());
+        assertNotNull(((Iterable<String>) iterable).iterator());
+        assertNotNull(iterable.iterator());
     }
 
     @Test

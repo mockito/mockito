@@ -13,6 +13,7 @@ import net.bytebuddy.dynamic.loading.MultipleParentClassLoader;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
+import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
 import net.bytebuddy.matcher.ElementMatcher;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
@@ -21,6 +22,7 @@ import org.mockito.mock.SerializableMode;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -70,12 +72,16 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 byteBuddy.subclass(features.mockedType)
                          .name(nameFor(features.mockedType))
                          .ignoreAlso(isGroovyMethod())
-                         .annotateType(features.mockedType.getAnnotations())
+                         .annotateType(features.stripAnnotations
+                             ? new Annotation[0]
+                             : features.mockedType.getAnnotations())
                          .implement(new ArrayList<Type>(features.interfaces))
                          .method(matcher)
                            .intercept(to(DispatcherDefaultingToRealMethod.class))
                            .transform(withModifiers(SynchronizationState.PLAIN))
-                           .attribute(INCLUDING_RECEIVER)
+                           .attribute(features.stripAnnotations
+                               ? MethodAttributeAppender.NoOp.INSTANCE
+                               : INCLUDING_RECEIVER)
                          .method(isHashCode())
                            .intercept(to(MockMethodInterceptor.ForHashCode.class))
                          .method(isEquals())

@@ -15,7 +15,7 @@ import org.mockito.internal.runners.InternalRunner;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockitoutil.TestBase;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
 

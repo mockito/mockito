@@ -13,7 +13,7 @@ import org.mockitoutil.TestBase;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 
 public class InvocationMarkerTest extends TestBase {
 

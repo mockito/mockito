@@ -12,8 +12,8 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static java.util.Collections.singletonList;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class InOrderImplTest extends TestBase {

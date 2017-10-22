@@ -4,7 +4,8 @@
  */
 package org.mockitousage.bugs;
 
-import org.junit.Assert;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -39,7 +40,7 @@ public class ShouldNotDeadlockAnswerExecutionTest {
 
         if (!threads.awaitTermination(1000, TimeUnit.MILLISECONDS)) {
             // threads were timed-out
-            Assert.fail();
+            fail();
         }
     }
 
@@ -66,7 +67,7 @@ public class ShouldNotDeadlockAnswerExecutionTest {
 
         if (!threads.awaitTermination(500, TimeUnit.MILLISECONDS)) {
             // threads were timed-out
-            Assert.fail();
+            fail();
         }
     }
 

@@ -10,8 +10,8 @@ import org.mockitoutil.TestBase;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 

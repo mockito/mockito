@@ -40,7 +40,8 @@ public class TypeCachingMockBytecodeGeneratorTest {
         Class<?> the_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
                 classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
                 Collections.<Class<?>>emptySet(),
-                SerializableMode.NONE
+                SerializableMode.NONE,
+                false
         ));
 
         ReferenceQueue<Object> referenceQueue = new ReferenceQueue<Object>();
@@ -68,13 +69,15 @@ public class TypeCachingMockBytecodeGeneratorTest {
         Class<?> the_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
                         classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
                         Collections.<Class<?>>emptySet(),
-                        SerializableMode.NONE
+                        SerializableMode.NONE,
+                        false
                 ));
 
         Class<?> other_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
                 classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
                 Collections.<Class<?>>emptySet(),
-                SerializableMode.NONE
+                SerializableMode.NONE,
+                false
         ));
 
         assertThat(other_mock_type).isSameAs(the_mock_type);
@@ -105,13 +108,15 @@ public class TypeCachingMockBytecodeGeneratorTest {
         Class<?> the_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
                 classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
                 Collections.<Class<?>>emptySet(),
-                SerializableMode.NONE
+                SerializableMode.NONE,
+                false
         ));
 
         Class<?> other_mock_type = cachingMockBytecodeGenerator.mockClass(withMockFeatures(
                 classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
                 Collections.<Class<?>>emptySet(),
-                SerializableMode.BASIC
+                SerializableMode.BASIC,
+                false
         ));
 
         assertThat(other_mock_type).isNotSameAs(the_mock_type);

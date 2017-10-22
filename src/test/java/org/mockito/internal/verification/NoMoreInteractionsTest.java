@@ -18,7 +18,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static java.util.Arrays.asList;
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class NoMoreInteractionsTest extends TestBase {

@@ -15,7 +15,7 @@ import org.mockitoutil.TestBase;
 
 import java.util.List;
 
-import static junit.framework.TestCase.fail;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class BasicVerificationTest extends TestBase {

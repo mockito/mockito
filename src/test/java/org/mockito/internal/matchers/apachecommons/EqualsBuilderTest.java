@@ -12,7 +12,7 @@ import org.mockitoutil.TestBase;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:sdowney@panix.com">Steve Downey</a>

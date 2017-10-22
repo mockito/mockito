@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 
-import static junit.framework.TestCase.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.mockitoutil.SimpleSerializationUtil.*;
 

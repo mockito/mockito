@@ -7,6 +7,7 @@ package org.mockito;
 import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
@@ -203,9 +204,7 @@ public interface MockSettings extends Serializable {
      * Registers a listener for method invocations on this mock. The listener is
      * notified every time a method on this mock is called.
      * <p>
-     * Multiple listeners may be added, but the same object is only added once.
-     * The order, in which the listeners are added, is not guaranteed to be the
-     * order in which the listeners are notified.
+     * Multiple listeners may be added and they will be notified in the order they were supplied.
      *
      * Example:
      * <pre class="code"><code class="java">
@@ -218,6 +217,23 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      */
     MockSettings invocationListeners(InvocationListener... listeners);
+
+    /**
+     * Registers a listener(s) that will be notified when user starts verification.
+     * See {@link VerificationStartedListener} on how such listener can be useful.
+     * <p>
+     * When multiple listeners are added, they are notified in order they were supplied.
+     * There is no reason to supply multiple listeners but we wanted to keep the API
+     * simple and consistent with {@link #invocationListeners(InvocationListener...)}.
+     * <p>
+     * Throws exception when any of the passed listeners is null or when the entire vararg array is null.
+     *
+     * @param listeners to be notified when user starts verification.
+     * @return settings instance so that you can fluently specify other settings
+     * @since 2.11.0
+     */
+    @Incubating
+    MockSettings verificationStartedListeners(VerificationStartedListener... listeners);
 
     /**
      * A stub-only mock does not record method
@@ -274,6 +290,17 @@ public interface MockSettings extends Serializable {
      */
     @Incubating
     MockSettings outerInstance(Object outerClassInstance);
+
+    /**
+     * By default, Mockito makes an attempt to preserve all annotation meta data on the mocked
+     * type and its methods to mirror the mocked type as closely as possible. If this is not
+     * desired, this option can be used to disable this behavior.
+     *
+     * @return settings instance so that you can fluently specify other settings
+     * @since 1.10.13
+     */
+    @Incubating
+    MockSettings withoutAnnotations();
 
     /**
      * Creates immutable view of mock settings used later by Mockito.

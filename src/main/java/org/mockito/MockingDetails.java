@@ -121,4 +121,14 @@ public interface MockingDetails {
      */
     @Incubating
     MockHandler getMockHandler();
+
+    /**
+     * Returns the mock object which is associated with this this instance of {@link MockingDetails}.
+     * Basically, it's the object that you have passed to {@link Mockito#mockingDetails(Object)} method.
+     *
+     * @return the mock object of this mocking details instance
+     *
+     * @since 2.11.0
+     */
+    Object getMock();
 }
