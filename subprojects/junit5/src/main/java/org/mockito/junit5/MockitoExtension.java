@@ -8,7 +8,6 @@ import org.mockito.MockitoSession;
 import org.mockito.quality.Strictness;
 
 
-import javax.annotation.Nonnull;
 import java.util.Optional;
 
 import static org.mockito.Mockito.mockitoSession;
@@ -22,7 +21,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback{
      * @param context the current extension context; never {@code null}
      */
     @Override
-    public void beforeEach(@Nonnull ExtensionContext context)  {
+    public void beforeEach(ExtensionContext context)  {
         Optional<?> testInstance=context.getTestInstance();
         if (!testInstance.isPresent()){
             //for some reason junit don't give us the test instance
@@ -44,7 +43,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback{
      * @param context the current extension context; never {@code null}
      */
     @Override
-    public void afterEach(@Nonnull ExtensionContext context) {
+    public void afterEach(ExtensionContext context) {
         session.finishMocking();
     }
 }
