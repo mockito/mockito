@@ -4,7 +4,7 @@ apply from: "$rootDir/gradle/java-library.gradle"
 
 dependencies {
     compile project.rootProject
-    testCompile libraries.junit5
+    implementation libraries.junit5
 }
 
 tasks.javadoc.enabled = true
