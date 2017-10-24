@@ -4,6 +4,7 @@ include 'testng'
 include 'extTest'
 include 'kotlinTest'
 include 'android'
+include 'junit5'
 
 rootProject.name = 'mockito'
 
