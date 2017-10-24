@@ -2,9 +2,13 @@ description = "Mockito preconfigured inline mock maker (intermediate and to be s
 
 apply from: "$rootDir/gradle/java-library.gradle"
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
     compile project.rootProject
     implementation libraries.junit5
+    testCompile libraries.assertj
 }
 
 tasks.javadoc.enabled = true
