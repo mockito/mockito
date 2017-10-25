@@ -10,6 +10,8 @@ import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.junit5.MockitoExtension;
 import org.mockito.junit5.Strictness;
 
+import java.io.BufferedOutputStream;
+import java.io.PrintStream;
 import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,7 +29,8 @@ class StricnessTest {
 
     @Test
     void strictnessFromTestRoot_defaultIsWarn_shouldThrowUnnecessaryStubbingException() {
-        when(mock.test(1));
+
+        when(mock.test(1)).thenReturn(true);
 
         //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was logged
 
@@ -36,7 +39,9 @@ class StricnessTest {
     @Test
     @Strictness(LENIENT)
     void strictnessFromTestMethod_lenient_shouldIgnoreUnnecessaryStubbing() {
-        when(mock.test(1));
+        Mockito.framework().addListener();
+
+        when(mock.test(1)).thenReturn(true);
 
 
         //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was ignored
@@ -47,7 +52,7 @@ class StricnessTest {
     class NestedTest{
         @Test
         void strictnessFromNestedTest_warn_shouldLogUnnecessaryStubbing() {
-            when(mock.test(1));
+            when(mock.test(1)).thenReturn(true);
 
             //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was logged
         }
@@ -57,7 +62,7 @@ class StricnessTest {
         class NestedTest2{
             @Test
             void strictnessFromNestedTest_warn_shouldLogUnnecessaryStubbing() {
-                when(mock.test(1));
+                when(mock.test(1)).thenReturn(true);
 
                 //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was logged
             }
