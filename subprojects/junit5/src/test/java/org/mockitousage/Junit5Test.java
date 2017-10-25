@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Junit5Test {
 
     @Mock
-    private Function<Integer,String> mock;
+    private Function<Integer, String> mock;
 
     @Test
     void ensureMockCreationWorks() {
@@ -28,22 +28,46 @@ class Junit5Test {
         Object nestedMock;
 
         @Test
-        void ensureMocksAreCreatedForNestedTests(){
-
+        void ensureMocksAreCreatedForNestedTests() {
             assertThat(nestedMock).isNotNull();
         }
     }
 
     @Nested
     @ExtendWith(MockitoExtension.class)
+        // ^^ duplicate registartion should be ignored by JUnit
+        // see http://junit.org/junit5/docs/current/user-guide/#extensions-registration-inherita
     class DuplicateExtensionOnNestedTest {
 
         @Mock
         Object nestedMock;
 
         @Test
-        void ensureMocksAreCreatedForNestedTests(){
+        void ensureMocksAreCreatedForNestedTests() {
             assertThat(nestedMock).isNotNull();
+        }
+    }
+
+    @Nested
+    class ParentMock {
+        @Test
+        void shouldWeCreateMocksInTheParentContext() {
+            assertThat(mock).isNotNull();
+        }
+    }
+
+    @Nested
+    @ExtendWith(MockitoExtension.class)
+        // ^^ duplicate registartion should be ignored by JUnit
+        // see http://junit.org/junit5/docs/current/user-guide/#extensions-registration-inheritance
+    class ParentMockNestedExtension {
+
+        /**
+         * Should creation of mock in parents be supported? I would argue -> maybe later...
+         */
+        @Test
+        void shouldWeMocksOfTheParentContext() {
+            assertThat(mock).isNotNull();
         }
     }
 

@@ -21,15 +21,13 @@ import static org.mockito.quality.Strictness.STRICT_STUBS;
 import static org.mockito.quality.Strictness.WARN;
 
 @ExtendWith(MockitoExtension.class)
-
 class StricnessTest {
 
     @Mock
-    private Predicate mock;
+    Predicate mock;
 
     @Test
     void strictnessFromTestRoot_defaultIsWarn_shouldThrowUnnecessaryStubbingException() {
-
         when(mock.test(1)).thenReturn(true);
 
         //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was logged
@@ -39,8 +37,6 @@ class StricnessTest {
     @Test
     @Strictness(LENIENT)
     void strictnessFromTestMethod_lenient_shouldIgnoreUnnecessaryStubbing() {
-        Mockito.framework().addListener();
-
         when(mock.test(1)).thenReturn(true);
 
 
@@ -50,6 +46,10 @@ class StricnessTest {
     @Nested
     @Strictness(WARN)
     class NestedTest{
+
+        @Mock
+        Predicate mock;
+
         @Test
         void strictnessFromNestedTest_warn_shouldLogUnnecessaryStubbing() {
             when(mock.test(1)).thenReturn(true);
@@ -57,9 +57,12 @@ class StricnessTest {
             //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was logged
         }
 
-        @Strictness(STRICT_STUBS)
         @Nested
+        @Strictness(STRICT_STUBS)
         class NestedTest2{
+            @Mock
+            Predicate mock;
+
             @Test
             void strictnessFromNestedTest_warn_shouldLogUnnecessaryStubbing() {
                 when(mock.test(1)).thenReturn(true);
