@@ -1,8 +1,11 @@
 package org.mockitousage;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit5.MockitoExtension;
 
 import java.util.function.Function;
@@ -16,7 +19,35 @@ public class Junit5Test {
     private Function<Integer,String> mock;
 
     @Test
-    void name() {
+    void ensureMockCreationWorks() {
         assertThat(mock).isNotNull();
     }
+
+    @Nested
+    class NestedMocking {
+
+        @Mock
+        Object nestedMock;
+
+        @Test
+        void ensureMocksAreCreatedForNestedTests(){
+
+            assertThat(nestedMock).isNotNull();
+        }
+    }
+
+    @Nested
+    @ExtendWith(MockitoExtension.class)
+    class DuplicateExtensionOnNestedTest {
+
+        @Mock
+        Object nestedMock;
+
+        @Test
+        void ensureMocksAreCreatedForNestedTests(){
+            assertThat(nestedMock).isNotNull();
+        }
+    }
+
+
 }

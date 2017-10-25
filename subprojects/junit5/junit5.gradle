@@ -1,4 +1,4 @@
-description = "Mockito preconfigured inline mock maker (intermediate and to be superseeded by automatic usage in a future version)"
+description = "Mockito JUnit 5 support"
 
 apply from: "$rootDir/gradle/java-library.gradle"
 
