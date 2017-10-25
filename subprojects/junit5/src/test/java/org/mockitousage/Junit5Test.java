@@ -1,11 +1,9 @@
 package org.mockitousage;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit5.MockitoExtension;
 
 import java.util.function.Function;
@@ -13,7 +11,7 @@ import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class Junit5Test {
+class Junit5Test {
 
     @Mock
     private Function<Integer,String> mock;
