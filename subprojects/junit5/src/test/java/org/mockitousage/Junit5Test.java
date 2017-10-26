@@ -1,5 +1,6 @@
 package org.mockitousage;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,25 +52,9 @@ class Junit5Test {
     @Nested
     class ParentMock {
         @Test
+        @Disabled // mock is not initialized by mockito session
         void shouldWeCreateMocksInTheParentContext() {
             assertThat(mock).isNotNull();
         }
     }
-
-    @Nested
-    @ExtendWith(MockitoExtension.class)
-        // ^^ duplicate registartion should be ignored by JUnit
-        // see http://junit.org/junit5/docs/current/user-guide/#extensions-registration-inheritance
-    class ParentMockNestedExtension {
-
-        /**
-         * Should creation of mock in parents be supported? I would argue -> maybe later...
-         */
-        @Test
-        void shouldWeMocksOfTheParentContext() {
-            assertThat(mock).isNotNull();
-        }
-    }
-
-
 }

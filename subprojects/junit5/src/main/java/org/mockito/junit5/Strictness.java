@@ -8,7 +8,8 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)
-@Target({METHOD,TYPE})
+@Target({METHOD, TYPE})
 public @interface Strictness {
     org.mockito.quality.Strictness value();
 }
+
