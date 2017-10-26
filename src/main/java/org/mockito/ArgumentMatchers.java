@@ -6,12 +6,14 @@ package org.mockito;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.Contains;
 import org.mockito.internal.matchers.EndsWith;
@@ -22,6 +24,7 @@ import org.mockito.internal.matchers.NotNull;
 import org.mockito.internal.matchers.Null;
 import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
+import org.mockito.internal.matchers.TreatVarargsAsArray;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.util.Primitives;
 
@@ -1315,6 +1318,24 @@ public class ArgumentMatchers {
     public static double doubleThat(ArgumentMatcher<Double> matcher) {
         reportMatcher(matcher);
         return 0;
+    }
+
+    /**
+     * Indicates that the varargs should be matched as an array rather than individual values.
+     *
+     * The value must be specified as a call to a method for matching an argument, e.g.
+     * {@link #eq(Object)} or {@link ArgumentCaptor#capture()}. Failure to do so will result in
+     * either an {@link EmptyStackException} or an {@link InvalidUseOfMatchersException}.
+     *
+     * @param value expected to be a matcher such as {@code eq(...) or
+     * {@code captor.capture()}
+     * @param <T> the type of the vararg or array of varargs
+     * @return {@code null}
+     */
+    public static <T> T varargsAsArray(T value) {
+        ArgumentMatcher nestedMatcher = mockingProgress().getArgumentMatcherStorage().popMatcher();
+        reportMatcher(new TreatVarargsAsArray<Object>(nestedMatcher));
+        return null;
     }
 
     private static void reportMatcher(ArgumentMatcher<?> matcher) {

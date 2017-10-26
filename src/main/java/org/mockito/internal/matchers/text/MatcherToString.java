@@ -13,7 +13,7 @@ import org.mockito.ArgumentMatcher;
 /**
  * Provides better toString() text for matcher that don't have toString() method declared.
  */
-class MatcherToString {
+public class MatcherToString {
 
     /**
      * Attempts to provide more descriptive toString() for given matcher.
@@ -25,7 +25,7 @@ class MatcherToString {
      * @param matcher
      * @return
      */
-    static String toString(ArgumentMatcher<?> matcher) {
+    public static String toString(ArgumentMatcher<?> matcher) {
         Class<?> cls = matcher.getClass();
         while(cls != Object.class) {
             Method[] methods = cls.getDeclaredMethods();

@@ -84,7 +84,8 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         }
     }
 
-    private ArgumentMatcher<?> popMatcher() {
+    @Override
+    public ArgumentMatcher<?> popMatcher() {
         return matcherStack.pop().getMatcher();
     }
 

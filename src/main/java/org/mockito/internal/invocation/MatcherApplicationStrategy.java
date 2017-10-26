@@ -6,13 +6,15 @@ package org.mockito.internal.invocation;
 
 import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
 import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.MATCH_EACH_VARARGS_WITH_LAST_MATCHER;
-import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.ONE_MATCHER_PER_ARGUMENT;
+import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.ONE_MATCHER_PER_EXPANDED_ARGUMENT;
+import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.ONE_MATCHER_PER_RAW_ARGUMENT;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.CapturingMatcher;
+import org.mockito.internal.matchers.TreatVarargsAsArray;
 import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.invocation.Invocation;
 
@@ -74,7 +76,7 @@ public class MatcherApplicationStrategy {
         if (matchingType == ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS)
             return false;
 
-        Object[] arguments = invocation.getArguments();
+        Object[] arguments = matchingType.getArguments(invocation);
         for (int i = 0; i < arguments.length; i++) {
             ArgumentMatcher<?> matcher = matchers.get(i);
             Object argument = arguments[i];
@@ -91,19 +93,33 @@ public class MatcherApplicationStrategy {
         final int expandedArguments = invocation.getArguments().length;
         final int matcherCount = matchers.size();
 
-        if (expandedArguments == matcherCount) {
-            return ONE_MATCHER_PER_ARGUMENT;
+        boolean treatVarargsAsArray = false;
+        boolean reuseLastMatcherForVarargs = false;
+        if (matcherCount > 0 && invocation.getMethod().isVarArgs()) {
+            ArgumentMatcher<?> lastMatcher = lastMatcher(matchers);
+            if (lastMatcher instanceof TreatVarargsAsArray) {
+                treatVarargsAsArray = true;
+            } else if (lastMatcher instanceof VarargMatcher) {
+                reuseLastMatcherForVarargs = true;
+            }
         }
 
-        if (rawArguments == matcherCount && isLastMatcherVargargMatcher(matchers)) {
-            return MATCH_EACH_VARARGS_WITH_LAST_MATCHER;
+        if (expandedArguments == matcherCount) {
+            return treatVarargsAsArray
+                ? ONE_MATCHER_PER_RAW_ARGUMENT : ONE_MATCHER_PER_EXPANDED_ARGUMENT;
+        }
+
+        if (rawArguments == matcherCount) {
+            if (treatVarargsAsArray) {
+                return ONE_MATCHER_PER_RAW_ARGUMENT;
+            }
+
+            if (reuseLastMatcherForVarargs) {
+                return MATCH_EACH_VARARGS_WITH_LAST_MATCHER;
+            }
         }
 
         return ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
-    }
-
-    private static boolean isLastMatcherVargargMatcher(final List<ArgumentMatcher<?>> matchers) {
-        return lastMatcher(matchers) instanceof VarargMatcher;
     }
 
     private static List<ArgumentMatcher<?>> appendLastMatcherNTimes(List<ArgumentMatcher<?>> matchers, int timesToAppendLastMatcher) {
@@ -127,6 +143,18 @@ public class MatcherApplicationStrategy {
     }
 
     enum MatcherApplicationType {
-        ONE_MATCHER_PER_ARGUMENT, MATCH_EACH_VARARGS_WITH_LAST_MATCHER, ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
+        ONE_MATCHER_PER_EXPANDED_ARGUMENT,
+        ONE_MATCHER_PER_RAW_ARGUMENT() {
+            @Override
+            Object[] getArguments(Invocation invocation) {
+                return invocation.getRawArguments();
+            }
+        },
+        MATCH_EACH_VARARGS_WITH_LAST_MATCHER,
+        ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
+
+        Object[] getArguments(Invocation invocation) {
+            return invocation.getArguments();
+        }
     }
 }

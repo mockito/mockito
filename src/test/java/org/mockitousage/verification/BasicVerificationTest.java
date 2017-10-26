@@ -115,4 +115,49 @@ public class BasicVerificationTest extends TestBase {
             fail();
         } catch(WantedButNotInvoked e) {}
     }
+
+    @Test
+    public void shouldVerifyVarargsAsArray_nullVarargsArray() throws Exception {
+        IMethods mock = mock(IMethods.class);
+
+        mock.mixedVarargs(null, (String[]) null);
+
+        verify(mock).mixedVarargs(any(), varargsAsArray(eq((String[]) null)));
+    }
+
+    @Test
+    public void shouldVerifyVarargsAsArray_nullVararg() throws Exception {
+        IMethods mock = mock(IMethods.class);
+
+        mock.mixedVarargs(null, (String) null);
+
+        verify(mock).mixedVarargs(any(), varargsAsArray(eq(new String[] {null})));
+    }
+
+    @Test
+    public void shouldVerifyVarargsAsArray_noVarargs() throws Exception {
+        IMethods mock = mock(IMethods.class);
+
+        mock.mixedVarargs("1");
+
+        verify(mock).mixedVarargs(any(), varargsAsArray(eq(new String[] {})));
+    }
+
+    @Test
+    public void shouldVerifyVarargsAsArray_singleVararg() throws Exception {
+        IMethods mock = mock(IMethods.class);
+
+        mock.mixedVarargs("1", "2");
+
+        verify(mock).mixedVarargs(any(), varargsAsArray(eq(new String[] {"2"})));
+    }
+
+    @Test
+    public void shouldVerifyVarargsAsArray_twoVarargs() throws Exception {
+        IMethods mock = mock(IMethods.class);
+
+        mock.mixedVarargs("1", "2", "3");
+
+        verify(mock).mixedVarargs(any(), varargsAsArray(eq(new String[] {"2", "3"})));
+    }
 }

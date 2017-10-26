@@ -9,6 +9,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.varargsAsArray;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -303,24 +305,49 @@ public class VarargsTest {
 
     }
 
-    /**
-     * As of v2.0.0-beta.118 this test fails. Once the github issues:
-     * <ul>
-     * <li>'#584 ArgumentCaptor can't capture varargs-arrays
-     * <li>#565 ArgumentCaptor should be type aware' are fixed this test must
-     * succeed
-     * </ul>
-     */
     @Test
-    @Ignore("Blocked by github issue: #584 & #565")
-    public void shouldCaptureVarArgsAsArray() {
-        mock.varargs("1", "2");
+    public void shouldCaptureVarArgsAsArray_noVarargs() {
+        mock.varargs("1");
 
         ArgumentCaptor<String[]> varargCaptor = ArgumentCaptor.forClass(String[].class);
 
-        verify(mock).varargs(varargCaptor.capture());
+        verify(mock).varargs(varargsAsArray(varargCaptor.capture()));
+
+        assertThat(varargCaptor).containsExactly(new String[] { "1" });
+    }
+
+    @Test
+    public void shouldCaptureVarArgsAsArray_oneVararg() {
+        mock.varargs("1");
+        mock.varargs("2");
+
+        ArgumentCaptor<String[]> varargCaptor = ArgumentCaptor.forClass(String[].class);
+
+        verify(mock, times(2)).varargs(varargsAsArray(varargCaptor.capture()));
+
+        assertThat(varargCaptor).containsExactly(new String[] { "1" }, new String[] { "2" });
+    }
+
+    @Test
+    public void shouldCaptureVarArgsAsArray_twoVarargs() {
+        mock.mixedVarargs(getClass(), "1", "2");
+
+        ArgumentCaptor<String[]> varargCaptor = ArgumentCaptor.forClass(String[].class);
+
+        verify(mock).mixedVarargs(any(), varargsAsArray(varargCaptor.capture()));
 
         assertThat(varargCaptor).containsExactly(new String[] { "1", "2" });
+    }
+
+    @Test
+    public void shouldCaptureVarArgsAsByteArray_twoVarargs() {
+        mock.varargsbyte((byte) 1, (byte) 2);
+
+        ArgumentCaptor<byte[]> varargCaptor = ArgumentCaptor.forClass(byte[].class);
+
+        verify(mock).varargsbyte(varargsAsArray(varargCaptor.capture()));
+
+        assertThat(varargCaptor).containsExactly(new byte[] { (byte) 1, (byte) 2 });
     }
 
     @Test

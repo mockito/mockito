@@ -26,4 +26,5 @@ public interface ArgumentMatcherStorage {
 
     void reset();
 
+    ArgumentMatcher<?> popMatcher();
 }
