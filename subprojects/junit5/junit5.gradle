@@ -8,7 +8,7 @@ targetCompatibility = 1.8
 dependencies {
     compile project.rootProject
     testRuntime libraries.assertj
-    implementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    implementation libraries.junit5
 }
 
 tasks.javadoc.enabled = true
