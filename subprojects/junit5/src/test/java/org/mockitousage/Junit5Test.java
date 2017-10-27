@@ -6,12 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit5.MockitoExtension;
+import org.mockito.junit5.WithMockito;
 
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
+@WithMockito
 class Junit5Test {
 
     @Mock
@@ -35,7 +36,7 @@ class Junit5Test {
     }
 
     @Nested
-    @ExtendWith(MockitoExtension.class)
+    @WithMockito
         // ^^ duplicate registartion should be ignored by JUnit
         // see http://junit.org/junit5/docs/current/user-guide/#extensions-registration-inherita
     class DuplicateExtensionOnNestedTest {

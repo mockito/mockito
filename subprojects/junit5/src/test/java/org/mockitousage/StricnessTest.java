@@ -7,20 +7,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit5.MockitoExtension;
 import org.mockito.junit5.Strictness;
+import org.mockito.junit5.WithMockito;
 
 import java.util.function.Predicate;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.quality.Strictness.*;
 
-@ExtendWith(MockitoExtension.class)
+@WithMockito
 class StricnessTest {
 
     @Mock
     Predicate mock;
 
     @Test
-    void strictnessFromTestRoot_defaultIsWarn_shouldThrowUnnecessaryStubbingException() {
+    void strictnessFromTestRoot_defaultIsWarn_shouldLogUnnecessaryStubbingException() {
         when(mock.test(1)).thenReturn(true);
 
         //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was logged
@@ -58,7 +59,7 @@ class StricnessTest {
 
             @Test
             @Disabled
-            void strictnessFromNestedTest_warn_shouldLogUnnecessaryStubbing() {
+            void strictnessFromNestedTest_strict_shouldThrowUnnecessaryStubbing() {
                 when(mock.test(1)).thenReturn(true);
 
                 //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was thrown

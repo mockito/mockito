@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
+import org.junit.platform.commons.support.AnnotationSupport;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.quality.Strictness;
@@ -13,6 +14,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 import static org.mockito.quality.Strictness.WARN;
 
 public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
@@ -48,31 +50,32 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
 
 
     private static Strictness retrieveStrictness(ExtensionContext context) {
+
+
         Optional<AnnotatedElement> annotatedElement = context.getElement();
         if (!annotatedElement.isPresent()) {
             return DEFAULT_STRICTNESS;
         }
 
         AnnotatedElement methodOrClass = annotatedElement.get();
-        org.mockito.junit5.Strictness annotation = methodOrClass.getAnnotation(org.mockito.junit5.Strictness.class);
 
-        if (annotation == null) {
-            Optional<ExtensionContext> parent = context.getParent();
 
-            if (parent.isPresent()) {
-                return retrieveStrictness(parent.get());
-            }
+        Optional<org.mockito.junit5.Strictness> annotation = findAnnotation(methodOrClass, org.mockito.junit5.Strictness.class);
 
-            return DEFAULT_STRICTNESS;
+        if (annotation.isPresent()) {
+            Strictness strictness = annotation.get().value();
+            return strictness;
         }
 
+        Optional<ExtensionContext> parent = context.getParent();
 
-        Strictness strictness = annotation.value();
-        if (strictness == null) {
-            return DEFAULT_STRICTNESS;
+        if (parent.isPresent()) {
+            return retrieveStrictness(parent.get());
         }
 
-        return strictness;
+        return DEFAULT_STRICTNESS;
+
+
     }
 
     private static void store(ExtensionContext context, MockitoSession session) {
