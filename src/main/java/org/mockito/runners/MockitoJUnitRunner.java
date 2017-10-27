@@ -9,6 +9,8 @@ import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
+import org.mockito.internal.runners.InternalRunner;
+import org.mockito.internal.runners.RunnerFactory;
 
 
 /**
@@ -27,7 +29,7 @@ public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {
     @Deprecated
     public static class Silent extends MockitoJUnitRunner {
         public Silent(Class<?> klass) throws InvocationTargetException {
-            super(klass);
+            super(new RunnerFactory().create(klass));
         }
     }
 
@@ -45,6 +47,10 @@ public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {
 
     public MockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
         super(klass);
+    }
+
+    MockitoJUnitRunner(InternalRunner runner) throws InvocationTargetException {
+        super(runner);
     }
 
     @Deprecated

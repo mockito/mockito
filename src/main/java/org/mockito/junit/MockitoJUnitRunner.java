@@ -152,7 +152,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
         this(new StrictRunner(new RunnerFactory().createStrict(klass), klass));
     }
 
-    MockitoJUnitRunner(InternalRunner runner) throws InvocationTargetException {
+    protected MockitoJUnitRunner(InternalRunner runner) throws InvocationTargetException {
         this.runner = runner;
     }
 
