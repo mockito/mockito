@@ -5,10 +5,8 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
-import org.junit.platform.commons.support.AnnotationSupport;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
-import org.mockito.quality.Strictness;
 
 import java.lang.reflect.AnnotatedElement;
 import java.util.Optional;
@@ -27,7 +25,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
      * FIXME we should use a more common place in mockito (MockitoCore?) to define the default strictness,
      * it should  be uses by Runner & Rule too
      */
-    private final static Strictness DEFAULT_STRICTNESS = WARN;
+    private final static org.mockito.quality.Strictness DEFAULT_STRICTNESS = WARN;
 
     /**
      * Callback that is invoked <em>before</em> each test is invoked.
@@ -38,7 +36,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
     public void beforeEach(ExtensionContext context) {
         Object testInstance = context.getRequiredTestInstance();
 
-        Strictness strictness = retrieveStrictness(context);
+        org.mockito.quality.Strictness strictness = retrieveStrictness(context);
 
         MockitoSession session = Mockito.mockitoSession()
             .initMocks(testInstance)
@@ -49,7 +47,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
     }
 
 
-    private static Strictness retrieveStrictness(ExtensionContext context) {
+    private static org.mockito.quality.Strictness retrieveStrictness(ExtensionContext context) {
 
 
         Optional<AnnotatedElement> annotatedElement = context.getElement();
@@ -60,10 +58,10 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
         AnnotatedElement methodOrClass = annotatedElement.get();
 
 
-        Optional<org.mockito.junit5.Strictness> annotation = findAnnotation(methodOrClass, org.mockito.junit5.Strictness.class);
+        Optional<Strictness> annotation = findAnnotation(methodOrClass, Strictness.class);
 
         if (annotation.isPresent()) {
-            Strictness strictness = annotation.get().value();
+            org.mockito.quality.Strictness strictness = annotation.get().value();
             return strictness;
         }
 
@@ -82,8 +80,8 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
         context.getStore(MOCKITO).put("session", session);
     }
 
-    private static MockitoSession mockitoSession(ExtensionContext context) {
-        return (MockitoSession) context.getStore(MOCKITO).get(SESSION);
+    private static MockitoSession removeMockitoSession(ExtensionContext context) {
+        return context.getStore(MOCKITO).remove(SESSION,MockitoSession.class);
     }
 
     /**
@@ -93,7 +91,9 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
      */
     @Override
     public void afterEach(ExtensionContext context) {
-        mockitoSession(context).finishMocking();
+        MockitoSession session;
+        session = removeMockitoSession(context);
+        session.finishMocking();
     }
 }
 
