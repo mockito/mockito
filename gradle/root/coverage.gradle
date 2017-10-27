@@ -1,15 +1,18 @@
 apply plugin: 'jacoco'
-
-// TODO later include subprojects, possible ideas https://gist.github.com/aalmiray/e6f54aa4b3803be0bcac
+apply from: 'gradle/dependencies.gradle'
 
 jacoco {
-    toolVersion = "0.7.9"
+    toolVersion = libraries.jacocoVersion
 }
 
-task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
-    executionData files("${buildDir}/jacoco/test.exec")
+task mockitoCoverage(type: JacocoReport, dependsOn: ["test", "kotlinTest:test", "extTest:test", "inline:test"]) {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
     sourceSets sourceSets.main
+
+    subprojects {
+        sourceSets it.sourceSets.main
+    }
 
     reports {
         xml.enabled true
@@ -31,4 +34,4 @@ task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
     }
 }
 
-task coverageReport(dependsOn: ["test", "mockitoCoverage"]) {}
+task coverageReport(dependsOn: ["mockitoCoverage"]) {}

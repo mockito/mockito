@@ -1,3 +1,5 @@
+apply from: "$rootDir/gradle/dependencies.gradle"
+
 apply plugin: 'java'
 description = "End-to-end tests for Mockito and its extensions."
 
@@ -22,4 +24,8 @@ configurations.all {
     //TODO SF enable when #154 is implemented
     //let's make those tests not use hamcrest
     //exclude group: 'org.hamcrest', module: 'hamcrest-core'
+}
+
+jacoco {
+    toolVersion = libraries.jacocoVersion
 }

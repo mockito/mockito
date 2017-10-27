@@ -19,3 +19,9 @@ dependencies {
     testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
 }
 
+apply plugin: 'jacoco'
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+jacoco {
+    toolVersion = libraries.jacocoVersion
+}
