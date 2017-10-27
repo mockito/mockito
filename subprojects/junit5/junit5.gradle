@@ -9,7 +9,6 @@ dependencies {
     compile project.rootProject
     testRuntime libraries.assertj
     implementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
-    testRuntime 'org.junit.vintage:junit-vintage-engine:5.0.1'
 }
 
 tasks.javadoc.enabled = true
