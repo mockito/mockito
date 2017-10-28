@@ -7,7 +7,7 @@ targetCompatibility = 1.8
 
 dependencies {
     compile project.rootProject
-    testRuntime libraries.assertj
+    testCompile libraries.assertj
     implementation libraries.junit5
 }
 
