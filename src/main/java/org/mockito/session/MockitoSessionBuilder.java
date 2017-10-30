@@ -10,6 +10,8 @@ import org.mockito.MockitoSession;
 import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
 import org.mockito.quality.Strictness;
 
+import java.util.List;
+
 /**
  * Fluent builder interface for {@code MockitoSession} objects.
  * See the documentation and examples in Javadoc for {@link MockitoSession}.
@@ -40,7 +42,7 @@ public interface MockitoSessionBuilder {
      * @since 2.7.0
      */
     @Incubating
-    MockitoSessionBuilder initMocks(Object testClassInstance);
+    MockitoSessionBuilder initMocks(List<Object> testClassInstance);
 
     /**
      * Adds the test class instances for initialization of fields annotated with Mockito annotations
@@ -117,7 +119,7 @@ public interface MockitoSessionBuilder {
 
     /**
      * Starts new mocking session! Creates new {@code MockitoSession} instance to initialize the session.
-     * At this point annotated fields are initialized per {@link #initMocks(Object)} method.
+     * At this point annotated fields are initialized per {@link #initMocks(List)} method.
      * When you are done with the session it is required to invoke {@link MockitoSession#finishMocking()}.
      * This will trigger stubbing validation, cleaning up the internal state like removal of internal listeners.
      * <p>

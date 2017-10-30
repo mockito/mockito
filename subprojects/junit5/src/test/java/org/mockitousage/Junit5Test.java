@@ -35,7 +35,7 @@ class Junit5Test {
 
     @Nested
     @WithMockito
-        // ^^ duplicate registartion should be ignored by JUnit
+        // ^^ duplicate registration should be ignored by JUnit
         // see http://junit.org/junit5/docs/current/user-guide/#extensions-registration-inherita
     class DuplicateExtensionOnNestedTest {
 
@@ -51,7 +51,7 @@ class Junit5Test {
     @Nested
     class ParentMock {
         @Test
-        @Disabled // mock is not initialized by mockito session
+        // mock is not initialized by mockito session
         void shouldWeCreateMocksInTheParentContext() {
             assertThat(mock).isNotNull();
         }
