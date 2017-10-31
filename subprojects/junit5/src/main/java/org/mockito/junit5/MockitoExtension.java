@@ -16,7 +16,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.mockito.internal.junit5.AnnotationUtil.retrieveStrictness;
-import static org.mockito.quality.Strictness.WARN;
 
 public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
 
@@ -58,11 +57,11 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
         collectParentsReflective( testInstances, testInstance);
 
         // collectParentsViaContextParent(context, testInstances);
-        // ^^ don't work the test instance of every parent context is null
+        // ^^ don't work, the test instance of every parent context is null
     }
 
     /**
-     * FIXME this doesn't work the test instance of every parent context is null
+     * FIXME this doesn't work, the test instance of every parent context is null
      * https://stackoverflow.com/questions/47014642/junit5-how-to-get-the-instance-of-parent-test-form-a-nested-test-class
      */
     private void collectParentsViaContextParent(ExtensionContext context, List<Object> testInstances) {
@@ -80,12 +79,14 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
     }
 
     /**
-     * This is errorprone since a compiler can decide how to name the outer instance field of a nested class
+     * This is error prone since a compiler can decide how to name the outer instance field of a nested class
      */
     @Deprecated
     private void collectParentsReflective(List<Object> testInstances, Object testInstance) {
         Object instance=testInstance;
         while(true) {
+
+
             Field outerInstanceField;
             try {
                 outerInstanceField = instance.getClass().getDeclaredField("this$0");
@@ -102,6 +103,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
             }
 
             testInstances.add(outerInstance);
+
             instance = outerInstance;
 
         }

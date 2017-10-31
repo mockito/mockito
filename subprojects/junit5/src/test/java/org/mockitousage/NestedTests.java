@@ -30,4 +30,15 @@ public class NestedTests {
             assertThat(rootMock).isNotNull();
         }
     }
+
+    class NotANestedTestClass{//this class and its inner classes are ignored by junit5
+        @Nested
+        class Nested2{
+
+            @Test
+            void rootMockCreated() {
+                assertThat(rootMock).isNotNull();
+            }
+        }
+    }
 }
