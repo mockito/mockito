@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+apply from: "$rootDir/gradle/java-library.gradle"
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+description = "Mocking with lambdas."
+
+dependencies {
+    compile project.rootProject
+
+    testCompile project(":")
+    testCompile libraries.junit4
+    testCompile libraries.assertj
+    testCompile project (path: ':', configuration: 'testUtil')
+}
+

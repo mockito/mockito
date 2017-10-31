@@ -60,7 +60,7 @@ allprojects {
 }
 
 configurations {
-    testUtil //TODO move to separate project
+    testUtil
 }
 
 dependencies {

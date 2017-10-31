@@ -3,6 +3,7 @@ include 'testng'
 include 'extTest'
 include 'kotlinTest'
 include 'android'
+include 'lambda'
 
 rootProject.name = 'mockito'
 
