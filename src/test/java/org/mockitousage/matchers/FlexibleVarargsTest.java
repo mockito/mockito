@@ -1,6 +1,7 @@
 package org.mockitousage.matchers;
 
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -26,5 +27,23 @@ public class FlexibleVarargsTest extends TestBase {
         //new matching, using an array
         verify(mock).mixedVarargs(any(), eq(new String[] {"2", "3"}));
         verify(mock).mixedVarargs(any(), (String[]) any());
+    }
+
+    @Test
+    public void shouldCaptureVarArgs_nullArrayArg1() {
+        String[] argArray = null;
+        mock.varargs(argArray);
+
+        ArgumentCaptor captor = ArgumentCaptor.forClass(String[].class);
+        verify(mock).varargs(captor.capture());
+    }
+
+    @Test
+    public void shouldCaptureVarArgs_nullArrayArg2() {
+        String[] argArray = null;
+        mock.varargs(argArray);
+
+        ArgumentCaptor captor = ArgumentCaptor.forClass(String.class);
+        verify(mock).varargs(captor.capture());
     }
 }
