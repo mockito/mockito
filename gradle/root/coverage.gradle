@@ -1,18 +1,27 @@
-apply plugin: 'jacoco'
-apply from: 'gradle/dependencies.gradle'
+//TODO: Standard JaCoCo coverage doesn't work in Android module
+task mockitoCoverage(type: JacocoReport) {
 
-jacoco {
-    toolVersion = libraries.jacocoVersion
-}
+    allprojects { currentProject ->
+        plugins.withId("java") {
+            mockitoCoverage.sourceSets currentProject.sourceSets.main
 
-task mockitoCoverage(type: JacocoReport, dependsOn: ["test", "kotlinTest:test", "extTest:test", "inline:test"]) {
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+            apply plugin: "jacoco"
 
-    sourceSets sourceSets.main
+            jacoco {
+                toolVersion = '0.7.9' //Gradle 4.2.1 uses 0.7.8 by default
 
-    subprojects {
-        sourceSets it.sourceSets.main
+                if (currentProject != rootProject) {   //already automatically enhanced in mockito main project as "java" plugin was applied before
+                    applyTo test
+                }
+            }
+
+            currentProject.tasks.withType(Test) { testTask ->
+                mockitoCoverage.dependsOn testTask
+            }
+        }
     }
+
+    executionData(file("$buildDir/jacoco/test.exec"))
 
     reports {
         xml.enabled true
@@ -30,7 +39,8 @@ task mockitoCoverage(type: JacocoReport, dependsOn: ["test", "kotlinTest:test", 
     }
 
     doLast {
-        println "Jacoco report for client created: file://${reports.xml.destination.toURI().path}"
+        logger.lifecycle "Jacoco report for client created: file://${reports.xml.destination.toURI().path}"
+        logger.lifecycle "Jacoco HTML created: file://${new File(reports.html.destination, "index.html").toURI().path}"
     }
 }
 

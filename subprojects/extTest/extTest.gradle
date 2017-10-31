@@ -25,7 +25,3 @@ configurations.all {
     //let's make those tests not use hamcrest
     //exclude group: 'org.hamcrest', module: 'hamcrest-core'
 }
-
-jacoco {
-    toolVersion = libraries.jacocoVersion
-}

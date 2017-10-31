@@ -1,7 +1,6 @@
 description = "Mockito preconfigured inline mock maker (intermediate and to be superseeded by automatic usage in a future version)"
 
 apply from: "$rootDir/gradle/java-library.gradle"
-apply from: "$rootDir/gradle/dependencies.gradle"
 
 dependencies {
     compile project.rootProject
@@ -9,7 +8,3 @@ dependencies {
 }
 
 tasks.javadoc.enabled = false
-
-jacoco {
-    toolVersion = libraries.jacocoVersion
-}
