@@ -17,8 +17,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Place this annotation on your root test class in order to initialize fields annotated with {@link Mock @Mock},
- * {@link Spy @Spy} } or {@link Captor @Captor}. To specify the stubbing stricness you can declare the
- * annotation {@link Strictness, @Stricness} <p></p>
+ * {@link Spy @Spy} or {@link Captor @Captor}. To specify the stubbing strictness you can declare the
+ * annotation {@link Strictness @Stricness}
+ * <p>
  * This is the Junit5 equivalent to {@link MockitoRule} and {@link MockitoJUnitRunner} for JUnit4.
  */
 @Retention(RUNTIME)

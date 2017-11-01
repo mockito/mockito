@@ -10,7 +10,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * This annotation can be used set the {@link org.mockito.quality.Strictness} for mocks created for a test.
- * <p><p/>
+ * <p>
  * You can place this annotation on your root-test class, on nested test classes and test methods. If you don't declare
  * this annotation the strictness will be inherited from the parent test-component (parent nested-test or root-test).
  * The default strictness is {@link org.mockito.quality.Strictness#WARN}.
