@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
+import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.quality.Strictness;
 
-import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -17,12 +17,30 @@ import java.util.Optional;
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.mockito.internal.junit5.AnnotationUtil.retrieveStrictness;
 
-public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
+public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCallback, AfterEachCallback {
 
     private final static Namespace MOCKITO = create("org.mockito");
 
     private final static String SESSION = "session";
+    private final static String TEST_INSTANCE = "testInstance";
 
+
+    /**
+     * Callback for post-processing the supplied test instance.
+     * <p>
+     * <p><strong>Note</strong>: the {@code ExtensionContext} supplied to a
+     * {@code TestInstancePostProcessor} will always return an empty
+     * {@link Optional} value from {@link ExtensionContext#getTestInstance()
+     * getTestInstance()}. A {@code TestInstancePostProcessor} should therefore
+     * only attempt to process the supplied {@code testInstance}.
+     *
+     * @param testInstance the instance to post-process; never {@code null}
+     * @param context      the current extension context; never {@code null}
+     */
+    @Override
+    public void postProcessTestInstance(Object testInstance, ExtensionContext context){
+        context.getStore(MOCKITO).put(TEST_INSTANCE,testInstance);
+    }
 
     /**
      * Callback that is invoked <em>before</em> each test is invoked.
@@ -39,7 +57,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
 
         testInstances.add(testInstance);
 
-        addParentTestInstances(context, testInstances);
+        collectParentTestInstances(context, testInstances);
 
 
         MockitoSession session = Mockito.mockitoSession()
@@ -50,66 +68,20 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
         store(context, session);
     }
 
-    private void addParentTestInstances(ExtensionContext context, List<Object> testInstances) {
-
-        Object testInstance = context.getRequiredTestInstance();
-
-        collectParentsReflective( testInstances, testInstance);
-
-        // collectParentsViaContextParent(context, testInstances);
-        // ^^ don't work, the test instance of every parent context is null
-    }
-
-    /**
-     * FIXME this doesn't work, the test instance of every parent context is null
-     * https://stackoverflow.com/questions/47014642/junit5-how-to-get-the-instance-of-parent-test-form-a-nested-test-class
-     */
-    private void collectParentsViaContextParent(ExtensionContext context, List<Object> testInstances) {
+    private void collectParentTestInstances(ExtensionContext context, List<Object> testInstances) {
         Optional<ExtensionContext> parent = context.getParent();
         while (parent.isPresent() && parent.get() != context.getRoot()){
             ExtensionContext parentContext = parent.get();
 
-            System.out.println(parentContext.getElement()+" "+parentContext.getTestInstance());
+            Object testInstance = parentContext.getStore(MOCKITO).remove(TEST_INSTANCE);
 
-            Optional<Object> parentTestInstance = parentContext.getTestInstance();
-            parentTestInstance.ifPresent(testInstances::add);
+            if(testInstance!=null){
+                testInstances.add(testInstance);
+            }
 
             parent=parentContext.getParent();
         }
     }
-
-    /**
-     * This is error prone since a compiler can decide how to name the outer instance field of a nested class
-     */
-    @Deprecated
-    private void collectParentsReflective(List<Object> testInstances, Object testInstance) {
-        Object instance=testInstance;
-        while(true) {
-
-
-            Field outerInstanceField;
-            try {
-                outerInstanceField = instance.getClass().getDeclaredField("this$0");
-            } catch (NoSuchFieldException e) {
-                return;
-            }
-
-            outerInstanceField.setAccessible(true);
-            Object outerInstance;
-            try {
-                outerInstance = outerInstanceField.get(instance);
-            } catch (IllegalAccessException e) {
-                return;
-            }
-
-            testInstances.add(outerInstance);
-
-            instance = outerInstance;
-
-        }
-
-    }
-
 
     private static void store(ExtensionContext context, MockitoSession session) {
         context.getStore(MOCKITO).put(SESSION, session);
@@ -130,5 +102,6 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback {
         session = removeMockitoSession(context);
         session.finishMocking();
     }
-}
 
+
+}
