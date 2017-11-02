@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0' // later versions don't work on JDK6
+        classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
         classpath 'org.shipkit:shipkit:0.9.38'
@@ -30,7 +30,6 @@ allprojects {
 
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
-apply from: 'gradle/root/java6-compatibility.gradle'
 apply from: 'gradle/java-library.gradle'
 apply from: 'gradle/root/coverage.gradle'
 
