@@ -39,7 +39,6 @@ task mockitoCoverage(type: JacocoReport) {
     }
 
     doLast {
-        logger.lifecycle "Jacoco report for client created: file://${reports.xml.destination.toURI().path}"
         logger.lifecycle "Jacoco HTML created: file://${new File(reports.html.destination, "index.html").toURI().path}"
     }
 }
