@@ -4,25 +4,24 @@
  */
 package org.mockito.internal.invocation;
 
-import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
-import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.MATCH_EACH_VARARGS_WITH_LAST_MATCHER;
-import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.ONE_MATCHER_PER_ARGUMENT;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.CapturingMatcher;
 import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.invocation.Invocation;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
+import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.EXPERIMENTAL_VARARGS;
+import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.MATCH_EACH_VARARGS_WITH_LAST_MATCHER;
+import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.ONE_MATCHER_PER_ARGUMENT;
 
 public class MatcherApplicationStrategy {
 
     private final Invocation invocation;
     private final List<ArgumentMatcher<?>> matchers;
     private final MatcherApplicationType matchingType;
-
-
 
     private MatcherApplicationStrategy(Invocation invocation, List<ArgumentMatcher<?>> matchers, MatcherApplicationType matchingType) {
         this.invocation = invocation;
@@ -74,13 +73,24 @@ public class MatcherApplicationStrategy {
         if (matchingType == ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS)
             return false;
 
-        Object[] arguments = invocation.getArguments();
-        for (int i = 0; i < arguments.length; i++) {
-            ArgumentMatcher<?> matcher = matchers.get(i);
-            Object argument = arguments[i];
+        if (matchingType == EXPERIMENTAL_VARARGS) {
+            //varargs use case
+            int i = 0;
+            for (ArgumentMatcher<?> m : matchers) {
+                Object arg = invocation.getRawArguments()[i++];
+                if (!action.apply(m, arg)) {
+                    return false;
+                }
+            }
+        } else {
+            Object[] arguments = invocation.getArguments();
+            for (int i = 0; i < arguments.length; i++) {
+                ArgumentMatcher<?> matcher = matchers.get(i);
+                Object argument = arguments[i];
 
-            if (!action.apply(matcher, argument)) {
-                return false;
+                if (!action.apply(matcher, argument)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -97,6 +107,10 @@ public class MatcherApplicationStrategy {
 
         if (rawArguments == matcherCount && isLastMatcherVargargMatcher(matchers)) {
             return MATCH_EACH_VARARGS_WITH_LAST_MATCHER;
+        }
+
+        if (invocation.getRawArguments().length != invocation.getArguments().length && matchers.size() == invocation.getRawArguments().length) {
+            return EXPERIMENTAL_VARARGS;
         }
 
         return ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
@@ -127,6 +141,6 @@ public class MatcherApplicationStrategy {
     }
 
     enum MatcherApplicationType {
-        ONE_MATCHER_PER_ARGUMENT, MATCH_EACH_VARARGS_WITH_LAST_MATCHER, ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
+        ONE_MATCHER_PER_ARGUMENT, MATCH_EACH_VARARGS_WITH_LAST_MATCHER, EXPERIMENTAL_VARARGS, ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
     }
 }
