@@ -18,4 +18,3 @@ dependencies {
     testCompile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3'
     testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
 }
-
