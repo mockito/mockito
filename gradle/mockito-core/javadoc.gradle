@@ -9,7 +9,6 @@ javadoc {
     source = sourceSets.main.allJava
     destinationDir = file("$buildDir/javadoc")
     title = "Mockito ${project.version} API"
-    def javadocJdk6Hack = "jdk6-project-version-insert.min.js"
 
     // The way *gradle* javadoc task works and due to *gradle exclusion* the log output triggers javadoc warning and
     // errors on internal classes that are not found, non-exhaustive list :
@@ -48,7 +47,7 @@ javadoc {
     options.header("""<em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
     options.footer("""<em id="mockito-version-header-javadoc7-footer"><strong>Mockito ${project.version} API</strong></em>""")
     options.bottom("""
-        <script type="text/javascript" src="{@docRoot}/js/${javadocJdk6Hack}"></script>
+        <script type="text/javascript" src="{@docRoot}/js/jdk6-project-version-insert.min.js"></script>
         <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
         <script type="text/javascript" src="{@docRoot}/js/highlight-8.6-java/highlight.pack.js"></script>
 
@@ -56,13 +55,6 @@ javadoc {
         <script type="text/javascript" src="{@docRoot}/js/index.js" async defer></script>
     """.replaceAll(/\r|\n|[ ]{8}/, ""))
     options.stylesheetFile rootProject.file("src/javadoc/stylesheet.css")
-    options.addStringOption('top', """<script type="text/javascript" >
-        var l = window.location; 
-        if (l.protocol === "http" && l.origin.indexOf("javadoc.io") > -1) { 
-            l.protocol = "https"; 
-        }
-        </script>
-    """.replaceAll(/\r|\n|[ ]{8}/, ""))
     if (JavaVersion.current().isJava8Compatible()) {
         options.addStringOption('Xdoclint:none', '-quiet')
 
@@ -76,24 +68,10 @@ javadoc {
         }
     }
 
-
     doLast {
         copy {
             from "src/javadoc"
             into "$buildDir/javadoc"
-        }
-        try {
-            logger.lifecycle("Installing sw-precache globally")
-            exec {
-                commandLine "npm", "install", "-g", "sw-precache"
-            }
-            exec {
-                commandLine "sw-precache", "--config=sw-precache-config.json"
-            }
-            // Even though there is an option ignoreExitValue for exec, exec keeps on throwing exceptions.
-            // Therefore we just have to catch them and continue on with the build.
-        } catch(Exception ignored) {
-            logger.lifecycle("NPM is not installed. Aborting generating service-worker");
         }
     }
 }
