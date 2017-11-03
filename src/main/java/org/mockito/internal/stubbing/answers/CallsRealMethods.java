@@ -5,7 +5,9 @@
 package org.mockito.internal.stubbing.answers;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import org.mockito.internal.util.KotlinSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.ValidableAnswer;
@@ -37,7 +39,8 @@ public class CallsRealMethods implements Answer<Object>, ValidableAnswer, Serial
     private static final long serialVersionUID = 9057165148930624087L;
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        if (Modifier.isAbstract(invocation.getMethod().getModifiers())) {
+        Method method = invocation.getMethod();
+        if (Modifier.isAbstract(method.getModifiers()) && !KotlinSupport.hasDefaultImplementation(method)) {
             return RETURNS_DEFAULTS.answer(invocation);
         }
         return invocation.callRealMethod();
@@ -45,7 +48,7 @@ public class CallsRealMethods implements Answer<Object>, ValidableAnswer, Serial
 
     @Override
     public void validateFor(InvocationOnMock invocation) {
-        if (new InvocationInfo(invocation).isAbstract()) {
+        if (new InvocationInfo(invocation).isAbstract() && !KotlinSupport.hasDefaultImplementation(invocation.getMethod())) {
             throw cannotCallAbstractRealMethod();
         }
     }

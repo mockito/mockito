@@ -19,6 +19,7 @@ import org.mockito.internal.invocation.MockitoMethod;
 import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.progress.SequenceNumber;
+import org.mockito.internal.util.KotlinSupport;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
@@ -154,7 +155,7 @@ public class MockMethodInterceptor implements Serializable {
                     mock,
                     invokedMethod,
                     arguments,
-                    RealMethod.IsIllegal.INSTANCE
+                    KotlinSupport.getDefaultImplementation(mock, invokedMethod, arguments, RealMethod.IsIllegal.INSTANCE)
             );
         }
     }
