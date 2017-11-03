@@ -10,5 +10,4 @@ license {
         groovy = 'SLASHSTAR_STYLE'
     }
     ext.year = Calendar.getInstance().get(Calendar.YEAR)
-    ext.name = 'Mockito contributors'
 }
