@@ -3,6 +3,8 @@ plugins {
     id 'java'
 }
 
+apply from: "$rootDir/gradle/license.gradle"
+
 description = "Kotlin tests for Mockito."
 
 kotlin {
