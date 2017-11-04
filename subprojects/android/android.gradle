@@ -1,7 +1,6 @@
 description = "Mockito for Android"
 
 apply from: "$rootDir/gradle/java-library.gradle"
-apply from: "$rootDir/gradle/license.gradle"
 
 dependencies {
     compile project.rootProject
