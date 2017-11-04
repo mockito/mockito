@@ -51,6 +51,8 @@ import static org.mockito.internal.util.StringUtil.join;
  */
 public class Reporter {
 
+    private final static String NON_PUBLIC_PARENT = "Mocking methods declared on non-public parent classes is not supported.";
+
     private Reporter() {
     }
 
@@ -108,7 +110,7 @@ public class Reporter {
                 "Also, this error might show up because:",
                 "1. you stub either of: final/private/equals()/hashCode() methods.",
                 "   Those methods *cannot* be stubbed/verified.",
-                "   " + MockitoLimitations.NON_PUBLIC_PARENT,
+                "   " + NON_PUBLIC_PARENT,
                 "2. inside when() you don't call method on mock but on some other object.",
                 ""
         ));
@@ -124,7 +126,7 @@ public class Reporter {
                 "",
                 "Also, this error might show up because you verify either of: final/private/equals()/hashCode() methods.",
                 "Those methods *cannot* be stubbed/verified.",
-                MockitoLimitations.NON_PUBLIC_PARENT,
+                NON_PUBLIC_PARENT,
                 ""
         ));
     }
@@ -464,7 +466,7 @@ public class Reporter {
                 "2. Somewhere in your test you are stubbing *final methods*. Sorry, Mockito does not verify/stub final methods.",
                 "3. A spy is stubbed using when(spy.foo()).then() syntax. It is safer to stub spies - ",
                 "   - with doReturn|Throw() family of methods. More in javadocs for Mockito.spy() method.",
-                "4. " + MockitoLimitations.NON_PUBLIC_PARENT,
+                "4. " + NON_PUBLIC_PARENT,
                 ""
         ));
     }
@@ -531,7 +533,7 @@ public class Reporter {
                 "",
                 "Also, this error might show up because you use argument matchers with methods that cannot be mocked.",
                 "Following methods *cannot* be stubbed/verified: final/private/equals()/hashCode().",
-                MockitoLimitations.NON_PUBLIC_PARENT,
+                NON_PUBLIC_PARENT,
                 ""
         ));
     }
