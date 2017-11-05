@@ -32,12 +32,12 @@ apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
 apply from: 'gradle/root/java6-compatibility.gradle'
 apply from: 'gradle/java-library.gradle'
+apply from: 'gradle/license.gradle'
 apply from: 'gradle/root/coverage.gradle'
 
 apply from: 'gradle/mockito-core/inline-mock.gradle'
 apply from: 'gradle/mockito-core/osgi.gradle'
 apply from: 'gradle/mockito-core/javadoc.gradle'
-apply from: 'gradle/mockito-core/license.gradle'
 apply from: 'gradle/mockito-core/testing.gradle'
 
 apply from: 'gradle/dependencies.gradle'
