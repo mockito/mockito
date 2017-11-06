@@ -37,7 +37,7 @@ import org.mockito.verification.VerificationAfterDelay;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationWithTimeout;
 
-/**
+/** 
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
  * The Mockito library enables mock creation, verification and stubbing.
  *
