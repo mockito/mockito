@@ -1,8 +1,10 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito;
 
-import org.mockito.exceptions.base.MockitoException;
-
-import java.util.concurrent.Callable;
+import org.mockito.stubbing.Answer;
 
 abstract class StubInProgress<R> {
 
@@ -14,6 +16,12 @@ abstract class StubInProgress<R> {
 
     public void thenThrow(Throwable e) {
         MockitoLambdaHandlerImpl.answerValue = (_unused) -> {throw e;};
+
+        this.invokeMethod();
+    }
+
+    public void thenAnswer(Answer<?> answer) {
+        MockitoLambdaHandlerImpl.answerValue = answer;
 
         this.invokeMethod();
     }

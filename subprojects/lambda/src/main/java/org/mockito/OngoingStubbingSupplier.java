@@ -1,13 +1,15 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito;
 
-import org.mockito.stubbing.OngoingStubbing;
+import java.util.function.Supplier;
 
-import java.util.concurrent.Callable;
+public class OngoingStubbingSupplier<R> {
+    private final Supplier<R> method;
 
-public class OngoingStubbingCallable<R> {
-    private final Callable<R> method;
-
-    OngoingStubbingCallable(Callable<R> method) {
+    OngoingStubbingSupplier(Supplier<R> method) {
         this.method = method;
     }
 
@@ -16,7 +18,7 @@ public class OngoingStubbingCallable<R> {
     }
 
     public class OngoingStubbingFunctionWithArguments extends StubInProgress<R> {
-        public void thenAnswer(CallableAnswer<R> answer) {
+        public void thenAnswer(SupplierAnswer<R> answer) {
             MockitoLambdaHandlerImpl.answerValue = answer;
 
             this.invokeMethod();
@@ -24,11 +26,7 @@ public class OngoingStubbingCallable<R> {
 
         @Override
         public void invokeMethod() {
-            try {
-                method.call();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            method.get();
         }
     }
 }

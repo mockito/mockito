@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito;
 
 public class Equals<A> implements LambdaArgumentMatcher<A> {
@@ -15,6 +19,6 @@ public class Equals<A> implements LambdaArgumentMatcher<A> {
 
     @Override
     public boolean matches(A argument) {
-        return argument.equals(value);
+        return argument == value || argument != null && argument.equals(value);
     }
 }

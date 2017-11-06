@@ -5,6 +5,9 @@ plugins {
 apply from: "$rootDir/gradle/java-library.gradle"
 apply from: "$rootDir/gradle/dependencies.gradle"
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 description = "Mocking with lambdas."
 
 dependencies {

@@ -4,9 +4,9 @@
  */
 package org.mockito;
 
-public interface LambdaArgumentMatcher<T> extends ArgumentMatcher<T> {
-
-    default T getValue() {
-        return null;
+public class Any<T> implements LambdaArgumentMatcher<T> {
+    @Override
+    public boolean matches(T argument) {
+        return true;
     }
 }
