@@ -5,18 +5,38 @@
 package org.mockito;
 
 import org.mockito.internal.verification.Times;
+import org.mockito.verification.VerificationMode;
 
+import java.util.List;
 import java.util.function.Function;
+
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 public class OngoingVerificationFunction<A, R> {
     private final Function<A, R> method;
+    private final VerificationMode mode;
 
-    OngoingVerificationFunction(Function<A, R> method) {
+    OngoingVerificationFunction(Function<A, R> method, VerificationMode mode) {
         this.method = method;
+        this.mode = mode;
     }
 
     public void invokedWithAnyArgs() {
-        MockitoLambdaHandlerImpl.verificationMode = new Times(1);
+        invokeMethod();
+    }
+
+    public void invokedWith(LambdaArgumentMatcher<A> matcher) {
+        mockingProgress().getArgumentMatcherStorage().reportMatcher(matcher);
+        this.invokeMethod();
+    }
+
+    public void invokedWith(A object) {
+        mockingProgress().getArgumentMatcherStorage().reportMatcher(new Equals<>(object));
+        this.invokeMethod();
+    }
+
+    private void invokeMethod() {
+        MockitoLambdaHandlerImpl.verificationMode = this.mode;
         try {
             method.apply(null);
         } catch (NullPointerException e) {

@@ -9,15 +9,14 @@ import org.mockito.AutoBoxingNullPointerException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.MockitoLambda.*;
 
-public class MockitoLambdaTest {
+public class MockitoLambdaStubTest {
 
     @Test
     public void should_mock_simple_lambda() {
@@ -152,31 +151,63 @@ public class MockitoLambdaTest {
         when(mock2::stringReturningMethod).invokedWithNoArgs().thenReturn("Hello World");
     }
 
+    /**
+     * Shows how #357 can be resolved.
+     */
     @Test
-    public void should_verify_simple_lambda() {
-        IMethods mock = mock(IMethods.class);
-        when(mock::stringReturningMethod).invokedWithNoArgs().thenReturn("Hello World");
+    public void correctly_infers_types_for_return_type_generic() {
+        GenericReturnTypeSubClass sub = mock(GenericReturnTypeSubClass.class);
+        when(sub::genericTypeReturningMethod).invokedWithNoArgs().thenReturn(true);
 
-        mock.stringReturningMethod();
-
-        verify(mock::stringReturningMethod).invokedWithNoArgs();
+        assertThat(sub.genericTypeReturningMethod()).isEqualTo(true);
     }
 
+    /**
+     * Shows how #357 can be resolved.
+     */
     @Test
-    public void should_verify_simple_lambda_with_any_args() {
-        IMethods mock = mock(IMethods.class);
-        when(mock::intArgumentReturningInt).invokedWith(5).thenReturn(3);
+    public void correctly_infers_type_for_generic_parameter() {
+        GenericParameterClass parameterClass = mock(GenericParameterClass.class);
+        Iterable<Boolean> iterator = Collections.singletonList(true);
 
-        mock.intArgumentReturningInt(5);
+        when((Function<Iterable<Boolean>, Boolean>) parameterClass::getFirst).invokedWith(iterator).thenReturn(true);
 
-        assertThatThrownBy(() -> verify(mock::intArgumentReturningInt).invokedWithAnyArgs())
-            .isInstanceOf(AutoBoxingNullPointerException.class)
-            .hasMessageContaining("use `any()` or `invokedWithAnyArgs()`");
+        assertThat(parameterClass.getFirst(iterator)).isEqualTo(true);
+    }
+
+    /**
+     * Shows how #308 can be resolved.
+     */
+    @Test
+    public void can_match_on_optional() {
+        OptionalClass optionalClass = mock(OptionalClass.class);
+
+        when(optionalClass::takesOptional).invokedWith(Optional::isPresent).thenReturn(true);
+
+        assertThat(optionalClass.takesOptional(Optional.of("String"))).isEqualTo(true);
     }
 
     class TestCollectionSourceProvider {
         <T extends Collection<E>, E> T getCollection(T collection) {
             return collection;
+        }
+    }
+
+    class GenericReturnTypeSuperClass<T> {
+        T genericTypeReturningMethod() {
+            return null;
+        }
+    }
+
+    private class GenericReturnTypeSubClass extends GenericReturnTypeSuperClass<Boolean> {}
+
+    class GenericParameterClass {
+        <T> T getFirst(Iterable<T> xs) { return xs.iterator().next(); }
+    }
+
+    class OptionalClass {
+        boolean takesOptional(Optional<String> optional) {
+            return false;
         }
     }
 }

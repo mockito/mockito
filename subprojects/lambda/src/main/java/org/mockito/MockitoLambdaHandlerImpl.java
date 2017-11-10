@@ -58,9 +58,10 @@ public class MockitoLambdaHandlerImpl<T> implements MockHandler<T> {
             if (answer != null) {
                 return answer.answer(invocation);
             }
+            return settings.getDefaultAnswer().answer(invocation);
         }
 
-        // At this point the method was not stubbed. Make sure to return primitive values, to prevent
+        // At this point the method was either stubbed or verified. Make sure to return primitive values, to prevent
         // NPE due to Java auto-unboxing
         Class<?> type = invocation.getMethod().getReturnType();
 
@@ -69,6 +70,7 @@ public class MockitoLambdaHandlerImpl<T> implements MockHandler<T> {
         }
 
         return null;
+
     }
 
     private void verifyForInvocation(VerificationMode verificationMode, InvocationMatcher invocationMatcher) {
