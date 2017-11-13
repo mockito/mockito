@@ -15,11 +15,14 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implement
 
     private final Object BOOTSTRAP_LOCK = new Object();
 
+    private final boolean singletonLock;
+
     private final BytecodeGenerator bytecodeGenerator;
 
     private final TypeCache<MockitoMockKey> typeCache;
 
     public TypeCachingBytecodeGenerator(BytecodeGenerator bytecodeGenerator, boolean weak) {
+        singletonLock = Boolean.getBoolean("org.mockito.lock.singleton");
         this.bytecodeGenerator = bytecodeGenerator;
         typeCache = new TypeCache.WithInlineExpunction<MockitoMockKey>(weak ? TypeCache.Sort.WEAK : TypeCache.Sort.SOFT);
     }
@@ -36,7 +39,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implement
                         public Class<?> call() throws Exception {
                             return bytecodeGenerator.mockClass(params);
                         }
-                    }, classLoader == null ? BOOTSTRAP_LOCK : classLoader);
+                    }, singletonLock || classLoader == null ? BOOTSTRAP_LOCK : classLoader);
         } catch (IllegalArgumentException exception) {
             Throwable cause = exception.getCause();
             if (cause instanceof RuntimeException) {
