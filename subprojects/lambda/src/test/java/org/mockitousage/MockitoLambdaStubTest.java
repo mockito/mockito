@@ -6,8 +6,6 @@ package org.mockitousage;
 
 import org.junit.Test;
 import org.mockito.AutoBoxingNullPointerException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.util.*;
 import java.util.function.Function;

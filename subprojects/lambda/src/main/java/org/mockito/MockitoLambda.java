@@ -6,7 +6,6 @@ package org.mockito;
 
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;

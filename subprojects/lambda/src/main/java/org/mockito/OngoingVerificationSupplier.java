@@ -4,7 +4,6 @@
  */
 package org.mockito;
 
-import org.mockito.internal.verification.Times;
 import org.mockito.verification.VerificationMode;
 
 import java.util.function.Supplier;

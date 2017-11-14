@@ -4,10 +4,8 @@
  */
 package org.mockito;
 
-import org.mockito.internal.verification.Times;
 import org.mockito.verification.VerificationMode;
 
-import java.util.List;
 import java.util.function.Function;
 
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;

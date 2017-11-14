@@ -4,18 +4,14 @@
  */
 package org.mockito;
 
-import org.mockito.internal.progress.ArgumentMatcherStorage;
-
 import java.util.function.Function;
-
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 public class OngoingStubbingFunction<A,R> {
 
     private final Function<A, R> method;
     private LambdaArgumentMatcher<A> matcher;
 
-    public OngoingStubbingFunction(Function<A, R> method) {
+    OngoingStubbingFunction(Function<A, R> method) {
         this.method = method;
     }
 
