@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker;
 import org.mockito.internal.util.reflection.LenientCopyTool;
@@ -19,7 +20,7 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class MockitoLambda {
 
-    private static final MockMaker maker = new SubclassByteBuddyMockMaker();
+    private static final MockMaker maker = Plugins.getMockMaker();
 
     public static <T> T mock(Class<T> iMethodsClass) {
         MockSettingsImpl<T> settings = new MockSettingsImpl<T>();
@@ -63,8 +64,12 @@ public class MockitoLambda {
         return new OngoingVerificationFunction<>(method, mode);
     }
 
+    public static <T> LambdaArgumentMatcher<T> any() {
+        return new Any<>();
+    }
+
     public static <T> LambdaArgumentMatcher<T> any(Class<T> clazz) {
-        return (object) -> clazz.isAssignableFrom(object.getClass());
+        return new AnyClass<>(clazz);
     }
 
     public static <T> LambdaArgumentMatcher<T> eq(T value) {

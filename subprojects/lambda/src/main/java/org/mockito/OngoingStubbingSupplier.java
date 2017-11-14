@@ -19,9 +19,7 @@ public class OngoingStubbingSupplier<R> {
 
     public class OngoingStubbingFunctionWithArguments extends StubInProgress<R> {
         public void thenAnswer(SupplierAnswer<R> answer) {
-            MockitoLambdaHandlerImpl.answerValue = answer;
-
-            this.invokeMethod();
+            this.setAnswerAndInvokeMethod(answer);
         }
 
         @Override

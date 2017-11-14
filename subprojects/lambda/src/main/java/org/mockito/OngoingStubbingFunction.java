@@ -36,22 +36,25 @@ public class OngoingStubbingFunction<A,R> {
 
     public class OngoingStubbingFunctionWithArguments extends StubInProgress<R> {
         public void thenAnswer(FunctionAnswer<A, R> answer) {
-            MockitoLambdaHandlerImpl.answerValue = answer;
-
-            this.invokeMethod();
+            this.setAnswerAndInvokeMethod(answer);
         }
 
         @Override
         void invokeMethod() {
-            final ArgumentMatcherStorage argumentMatcherStorage = mockingProgress().getArgumentMatcherStorage();
             argumentMatcherStorage.reportMatcher(matcher);
 
             try {
-                method.apply(matcher.getValue());
+                try {
+                    method.apply(matcher.getValue());
+                } catch (IllegalArgumentException ignored) {
+                    method.apply(matcher.constructObject());
+                }
             } catch (NullPointerException e) {
-                argumentMatcherStorage.reset();
-                MockitoLambdaHandlerImpl.answerValue = null;
+                this.resetState();
                 throw new AutoBoxingNullPointerException(e);
+            } catch (CouldNotConstructObjectException e) {
+                this.resetState();
+                throw e;
             }
         }
     }

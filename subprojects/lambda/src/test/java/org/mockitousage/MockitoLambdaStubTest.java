@@ -54,12 +54,7 @@ public class MockitoLambdaStubTest {
     @Test
     public void should_invoke_old_answer() {
         IMethods mock = mock(IMethods.class);
-        when((Function<String, String>) mock::oneArg).invokedWith(any(String.class)).thenAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                return invocation.getArgument(0);
-            }
-        });
+        when((Function<String, String>) mock::oneArg).invokedWith(any(String.class)).thenOldAnswer(invocation -> invocation.getArgument(0));
 
         assertThat(mock.oneArg("Hello World")).isEqualTo("Hello World");
     }

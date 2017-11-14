@@ -4,23 +4,32 @@
  */
 package org.mockito;
 
+import org.mockito.internal.progress.ArgumentMatcherStorage;
 import org.mockito.stubbing.Answer;
+
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 abstract class StubInProgress<R> {
 
-    public void thenReturn(R returnValue) {
-        MockitoLambdaHandlerImpl.answerValue = (_unused) -> returnValue;
+    protected final ArgumentMatcherStorage argumentMatcherStorage = mockingProgress().getArgumentMatcherStorage();
 
-        this.invokeMethod();
+    public void thenReturn(R returnValue) {
+        this.setAnswerAndInvokeMethod((_unused) -> returnValue);
     }
 
     public void thenThrow(Throwable e) {
-        MockitoLambdaHandlerImpl.answerValue = (_unused) -> {throw e;};
-
-        this.invokeMethod();
+        this.setAnswerAndInvokeMethod((_unused) -> {throw e;});
     }
 
-    public void thenAnswer(Answer<?> answer) {
+    public void thenOldAnswer(Answer<?> answer) {
+        this.setAnswerAndInvokeMethod(answer);
+    }
+
+    protected void resetState() {
+        argumentMatcherStorage.reset();
+    }
+
+    protected void setAnswerAndInvokeMethod(Answer<?> answer) {
         MockitoLambdaHandlerImpl.answerValue = answer;
 
         this.invokeMethod();
