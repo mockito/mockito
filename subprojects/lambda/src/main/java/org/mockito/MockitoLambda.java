@@ -11,6 +11,7 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;
 import org.mockito.verification.VerificationMode;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -45,6 +46,10 @@ public class MockitoLambda {
 
     public static <A, R> OngoingStubbingFunction<A, R> when(Function<A, R> method) {
         return new OngoingStubbingFunction<>(method);
+    }
+
+    public static <A> OngoingStubbingConsumer<A> when(Consumer<A> method) {
+        return new OngoingStubbingConsumer<>(method);
     }
 
     public static <R> OngoingVerificationSupplier<R> verify(Supplier<R> method) {

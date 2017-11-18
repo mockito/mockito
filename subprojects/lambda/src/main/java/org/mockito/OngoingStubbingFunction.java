@@ -30,7 +30,7 @@ public class OngoingStubbingFunction<A,R> {
         return new OngoingStubbingFunctionWithArguments();
     }
 
-    public class OngoingStubbingFunctionWithArguments extends StubInProgress<R> {
+    public class OngoingStubbingFunctionWithArguments extends ReturningStubInProgress<R> {
         public void thenAnswer(FunctionAnswer<A, R> answer) {
             this.setAnswerAndInvokeMethod(answer);
         }
@@ -40,17 +40,9 @@ public class OngoingStubbingFunction<A,R> {
             argumentMatcherStorage.reportMatcher(matcher);
 
             try {
-                try {
-                    method.apply(matcher.getValue());
-                } catch (IllegalArgumentException ignored) {
-                    method.apply(matcher.constructObject());
-                }
-            } catch (NullPointerException e) {
-                this.resetState();
-                throw new AutoBoxingNullPointerException(e);
-            } catch (CouldNotConstructObjectException e) {
-                this.resetState();
-                throw e;
+                method.apply(matcher.getValue());
+            } catch (IllegalArgumentException ignored) {
+                method.apply(matcher.constructObject());
             }
         }
     }

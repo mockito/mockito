@@ -180,6 +180,26 @@ public class MockitoLambdaStubTest {
         assertThat(optionalClass.takesOptional(Optional.of("String"))).isEqualTo(true);
     }
 
+    @Test
+    public void can_stub_consumers_with_throw() {
+        IMethods methods = mock(IMethods.class);
+        Exception e = new IllegalArgumentException();
+        when(methods::intArgumentMethod).invokedWith(5).thenThrow(e);
+
+        assertThatThrownBy(() -> methods.intArgumentMethod(5)).isSameAs(e);
+    }
+
+    @Test
+    public void can_stub_consumers_with_old_answer() {
+        IMethods methods = mock(IMethods.class);
+        HoldingBoolean holding = new HoldingBoolean();
+        when(methods::intArgumentMethod).invokedWith(5).thenOldAnswer((invocation) -> holding.invoked = true);
+
+        assertThat(holding.invoked).isFalse();
+        methods.intArgumentMethod(5);
+        assertThat(holding.invoked).isTrue();
+    }
+
     class TestCollectionSourceProvider {
         <T extends Collection<E>, E> T getCollection(T collection) {
             return collection;
@@ -202,5 +222,9 @@ public class MockitoLambdaStubTest {
         boolean takesOptional(Optional<String> optional) {
             return false;
         }
+    }
+
+    class HoldingBoolean {
+        boolean invoked = false;
     }
 }

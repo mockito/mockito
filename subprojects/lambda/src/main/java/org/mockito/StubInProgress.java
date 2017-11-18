@@ -9,13 +9,9 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
-abstract class StubInProgress<R> {
+abstract class StubInProgress {
 
     protected final ArgumentMatcherStorage argumentMatcherStorage = mockingProgress().getArgumentMatcherStorage();
-
-    public void thenReturn(R returnValue) {
-        this.setAnswerAndInvokeMethod((_unused) -> returnValue);
-    }
 
     public void thenThrow(Throwable e) {
         this.setAnswerAndInvokeMethod((_unused) -> {throw e;});
@@ -32,9 +28,16 @@ abstract class StubInProgress<R> {
     protected void setAnswerAndInvokeMethod(Answer<?> answer) {
         MockitoLambdaHandlerImpl.answerValue = answer;
 
-        this.invokeMethod();
+        try {
+            this.invokeMethod();
+        } catch (NullPointerException e) {
+            this.resetState();
+            throw new AutoBoxingNullPointerException(e);
+        } catch (CouldNotConstructObjectException e) {
+            this.resetState();
+            throw e;
+        }
     }
 
     abstract void invokeMethod();
-
 }

@@ -17,7 +17,7 @@ public class OngoingStubbingSupplier<R> {
         return new OngoingStubbingFunctionWithArguments();
     }
 
-    public class OngoingStubbingFunctionWithArguments extends StubInProgress<R> {
+    public class OngoingStubbingFunctionWithArguments extends ReturningStubInProgress<R> {
         public void thenAnswer(SupplierAnswer<R> answer) {
             this.setAnswerAndInvokeMethod(answer);
         }
