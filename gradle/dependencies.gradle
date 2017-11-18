@@ -18,3 +18,8 @@ libraries.bytebuddyandroid = "net.bytebuddy:byte-buddy-android:${versions.bytebu
 libraries.objenesis = 'org.objenesis:objenesis:2.6'
 
 libraries.asm = 'org.ow2.asm:asm:6.0'
+
+libraries.kotlin = [:]
+libraries.kotlin.version = '1.1.60'
+libraries.kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${libraries.kotlin.version}"
+libraries.kotlin.coroutines = 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3'
