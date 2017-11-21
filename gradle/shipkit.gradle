@@ -31,6 +31,13 @@ shipkit {
  */
 boolean centralRelease = shouldReleaseToCentral(project)
 
+afterEvaluate {
+    //using afterEvaluate because 'assertReleaseNeeded' task is added after 'shipkit.gradle' file is evaluated by Gradle
+   [assertReleaseNeeded, releaseNeeded].each {
+        it.skipComparePublications = centralRelease
+    }
+}
+
 allprojects {
     plugins.withId("org.shipkit.bintray") {
         bintray {
