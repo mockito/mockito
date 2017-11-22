@@ -96,7 +96,6 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#40">40. (*new*) Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
  *      <a href="#41">41. (**new**) Advanced public API for framework integrations (Since 2.10.+)</a><br/>
  *      <a href="#42">42. (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</a><br/>
- *      <a href="#42">43. (**new**) Class loader locking during concurrent tests (Since 2.13.+)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1468,15 +1467,6 @@ import org.mockito.verification.VerificationWithTimeout;
  *     We found this method useful during the implementation.
  *     </li>
  * </ul>
- *
- * <h3 id="43">43. <a class="meaningful_link" href="#Class_Loader_Locking" name="Class_Loader_Locking">Class_Loader_Locking</a> (Since 2.13.+)</h3>
- *
- * Whenever creating a mock, Mockito is caching that mocked class for repeated use. As class generation is an expensive
- * operation in term of resources, Mockito locks the mocked class's {@link ClassLoader} during mock creation to avoid a
- * race what would cause the creation of more than one class for mocking the same type. In rare cases, this can cause a
- * deadlock as mock creation often causes class loading which in turn locks class loaders. To avoid such deadlocking,
- * Mockito can use a singleton lock instead by setting the system property {@code org.mockito.lock.singleton} property
- * to {@code true}. This property must be set prior to loading Mockito.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
