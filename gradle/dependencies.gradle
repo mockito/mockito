@@ -19,8 +19,9 @@ libraries.objenesis = 'org.objenesis:objenesis:2.6'
 
 libraries.asm = 'org.ow2.asm:asm:6.0'
 
+def kotlinVersion = '1.1.60'
 libraries.kotlin = [
-    version: '1.1.60',
-    stdlib: "org.jetbrains.kotlin:kotlin-stdlib:${libraries.kotlin.version}",
+    version: kotlinVersion,
+    stdlib: "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
     coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3'
 ]
