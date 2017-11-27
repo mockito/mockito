@@ -1643,11 +1643,15 @@ public class Mockito extends ArgumentMatchers {
      * // this calls the real implementation of Foo.getSomething()
      * value = mock.getSomething();
      *
-     * when(mock.getSomething()).thenReturn(fakeValue);
+     * doReturn(fakeValue).when(mock).getSomething();
      *
      * // now fakeValue is returned
      * value = mock.getSomething();
      * </code></pre>
+     *
+     * <p>
+     * <u>Note:</u> Stubbing partial mocks using <code>when(mock.getSomething()).thenReturn(fakeValue)</code>
+     * syntax will call the real method. For partial mock it's recommended to use <code>doReturn</code> syntax.
      */
     public static final Answer<Object> CALLS_REAL_METHODS = Answers.CALLS_REAL_METHODS;
 
