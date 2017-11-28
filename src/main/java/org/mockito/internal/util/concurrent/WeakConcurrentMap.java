@@ -26,7 +26,7 @@ public class WeakConcurrentMap<K, V> extends ReferenceQueue<K> implements Runnab
 
     private static final AtomicLong ID = new AtomicLong();
 
-    final ConcurrentMap<WeakKey<K>, V> target;
+    public final ConcurrentMap<WeakKey<K>, V> target;
 
     private final Thread thread;
 

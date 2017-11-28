@@ -107,18 +107,20 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         return new ReturnValueWrapper(interceptor.doIntercept(instance,
                 origin,
                 arguments,
-            realMethod,
+                realMethod,
                 new LocationImpl(t)));
     }
 
     @Override
     public boolean isMock(Object instance) {
-        return interceptors.containsKey(instance);
+        // We need to exclude 'interceptors.target' explicitly to avoid a recursive check on whether
+        // the map is a mock object what requires reading from the map.
+        return instance != interceptors.target && interceptors.containsKey(instance);
     }
 
     @Override
     public boolean isMocked(Object instance) {
-        return !selfCallInfo.isSelfInvocation(instance) && isMock(instance);
+        return selfCallInfo.checkSuperCall(instance) && isMock(instance);
     }
 
     @Override
@@ -160,12 +162,8 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             if (!Modifier.isPublic(origin.getDeclaringClass().getModifiers() & origin.getModifiers())) {
                 origin.setAccessible(true);
             }
-            Object previous = selfCallInfo.replace(instance);
-            try {
-                return tryInvoke(origin, instance, arguments);
-            } finally {
-                selfCallInfo.set(previous);
-            }
+            selfCallInfo.set(instance);
+            return tryInvoke(origin, instance, arguments);
         }
 
     }
@@ -252,14 +250,19 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     private static class SelfCallInfo extends ThreadLocal<Object> {
 
-        Object replace(Object instance) {
+        Object replace(Object value) {
             Object current = get();
-            set(instance);
+            set(value);
             return current;
         }
 
-        boolean isSelfInvocation(Object instance) {
-            return get() == instance;
+        boolean checkSuperCall(Object value) {
+            if (value == get()) {
+                set(null);
+                return false;
+            } else {
+                return true;
+            }
         }
     }
 
