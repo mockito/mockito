@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.internal.junit.util.TestName;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.mock.MockCreationSettings;
 
@@ -30,7 +29,7 @@ public class MismatchReportingTestListener implements MockitoTestListener {
         //TODO make it better, it's easy to forget to clean up mocks and we still create new instance of list that nobody will read, it's also duplicated
         mocks = new LinkedList<Object>();
 
-        String testName = TestName.getTestName(event);
+        String testName = event.getTestClassInstance().getClass().getSimpleName() + "." + event.getTestMethodName();
         if (event.getFailure() != null) {
             //print unused stubbings only when test succeeds to avoid reporting multiple problems and confusing users
             new ArgMismatchFinder().getStubbingArgMismatches(createdMocks).format(testName, logger);

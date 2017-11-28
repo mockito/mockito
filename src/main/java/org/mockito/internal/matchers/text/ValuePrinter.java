@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.matchers.text;
 
+import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class ValuePrinter {
      * Prints given value so that it is neatly readable by humans.
      * Handles explosive toString() implementations.
      */
-    public static String print(Object value) {
+    public static String print(final Object value) {
         if (value == null) {
             return "null";
         }
@@ -50,7 +51,21 @@ public class ValuePrinter {
             return printMap((Map<?, ?>) value);
         }
         if (value.getClass().isArray()) {
-            return printValues("[", ", ", "]", new ArrayIterator(value));
+            return printValues("[", ", ", "]", new Iterator<Object>() {
+                private int currentIndex = 0;
+
+                public boolean hasNext() {
+                    return currentIndex < Array.getLength(value);
+                }
+
+                public Object next() {
+                    return Array.get(value, currentIndex++);
+                }
+
+                public void remove() {
+                    throw new UnsupportedOperationException("cannot remove items from an array");
+                }
+            });
         }
         if (value instanceof FormattedText) {
             return (((FormattedText) value).getText());
