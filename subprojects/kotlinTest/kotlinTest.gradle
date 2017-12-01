@@ -1,5 +1,6 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.1.4-3'
+    // Can not use libraries.kotlin.version here per https://stackoverflow.com/questions/37555196/in-gradle-how-to-use-a-variable-for-a-plugin-version
+    id 'org.jetbrains.kotlin.jvm' version '1.1.60'
     id 'java'
 }
 
@@ -15,7 +16,6 @@ dependencies {
     testCompile project(":")
     testCompile libraries.junit4
 
-    testCompile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.4-3'
-    testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.18'
+    testCompile libraries.kotlin.stdlib
+    testCompile libraries.kotlin.coroutines
 }
-

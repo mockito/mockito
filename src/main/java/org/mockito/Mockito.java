@@ -174,7 +174,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>
  * Once created, a mock will remember all interactions. Then you can selectively
  * verify whatever interactions you are interested in.
- *
+ * </p>
  *
  *
  *
@@ -2001,6 +2001,7 @@ public class Mockito extends ArgumentMatchers {
      * @return OngoingStubbing object used to stub fluently.
      *         <strong>Do not</strong> create a reference to this returned object.
      */
+    @CheckReturnValue
     public static <T> OngoingStubbing<T> when(T methodCall) {
         return MOCKITO_CORE.when(methodCall);
     }
@@ -2032,6 +2033,7 @@ public class Mockito extends ArgumentMatchers {
      * @param mock to be verified
      * @return mock object itself
      */
+    @CheckReturnValue
     public static <T> T verify(T mock) {
         return MOCKITO_CORE.verify(mock, times(1));
     }
@@ -2058,6 +2060,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return mock object itself
      */
+    @CheckReturnValue
     public static <T> T verify(T mock, VerificationMode mode) {
         return MOCKITO_CORE.verify(mock, mode);
     }
@@ -2199,6 +2202,7 @@ public class Mockito extends ArgumentMatchers {
      * @param toBeThrown to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
+    @CheckReturnValue
     public static Stubber doThrow(Throwable... toBeThrown) {
         return MOCKITO_CORE.stubber().doThrow(toBeThrown);
     }
@@ -2221,6 +2225,7 @@ public class Mockito extends ArgumentMatchers {
      * @return stubber - to select a method for stubbing
      * @since 2.1.0
      */
+    @CheckReturnValue
     public static Stubber doThrow(Class<? extends Throwable> toBeThrown) {
         return MOCKITO_CORE.stubber().doThrow(toBeThrown);
     }
@@ -2247,6 +2252,7 @@ public class Mockito extends ArgumentMatchers {
      */
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation
     @SuppressWarnings ({"unchecked", "varargs"})
+    @CheckReturnValue
     public static Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... toBeThrownNext) {
         return MOCKITO_CORE.stubber().doThrow(toBeThrown, toBeThrownNext);
     }
@@ -2283,6 +2289,7 @@ public class Mockito extends ArgumentMatchers {
      * @return stubber - to select a method for stubbing
      * @since 1.9.5
      */
+    @CheckReturnValue
     public static Stubber doCallRealMethod() {
         return MOCKITO_CORE.stubber().doCallRealMethod();
     }
@@ -2309,6 +2316,7 @@ public class Mockito extends ArgumentMatchers {
      * @param answer to answer when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
+    @CheckReturnValue
     public static Stubber doAnswer(Answer answer) {
         return MOCKITO_CORE.stubber().doAnswer(answer);
     }
@@ -2351,6 +2359,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return stubber - to select a method for stubbing
      */
+    @CheckReturnValue
     public static Stubber doNothing() {
         return MOCKITO_CORE.stubber().doNothing();
     }
@@ -2401,6 +2410,7 @@ public class Mockito extends ArgumentMatchers {
      * @param toBeReturned to be returned when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
+    @CheckReturnValue
     public static Stubber doReturn(Object toBeReturned) {
         return MOCKITO_CORE.stubber().doReturn(toBeReturned);
     }
@@ -2455,6 +2465,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 2.1.0
      */
     @SuppressWarnings({"unchecked", "varargs"})
+    @CheckReturnValue
     public static Stubber doReturn(Object toBeReturned, Object... toBeReturnedNext) {
         return MOCKITO_CORE.stubber().doReturn(toBeReturned, toBeReturnedNext);
     }

@@ -1,15 +1,27 @@
-apply plugin: 'jacoco'
+//TODO: Standard JaCoCo coverage doesn't work in Android module
+task mockitoCoverage(type: JacocoReport) {
 
-// TODO later include subprojects, possible ideas https://gist.github.com/aalmiray/e6f54aa4b3803be0bcac
+    allprojects { currentProject ->
+        plugins.withId("java") {
+            mockitoCoverage.sourceSets currentProject.sourceSets.main
 
-jacoco {
-    toolVersion = "0.7.9"
-}
+            apply plugin: "jacoco"
 
-task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
-    executionData files("${buildDir}/jacoco/test.exec")
+            jacoco {
+                toolVersion = '0.7.9' //Gradle 4.2.1 uses 0.7.8 by default
 
-    sourceSets sourceSets.main
+                if (currentProject != rootProject) {   //already automatically enhanced in mockito main project as "java" plugin was applied before
+                    applyTo test
+                }
+            }
+
+            currentProject.tasks.withType(Test) { testTask ->
+                mockitoCoverage.dependsOn testTask
+            }
+        }
+    }
+
+    executionData(file("$buildDir/jacoco/test.exec"))
 
     reports {
         xml.enabled true
@@ -27,8 +39,8 @@ task mockitoCoverage(type: JacocoReport, dependsOn: "test") {
     }
 
     doLast {
-        println "Jacoco report for client created: file://${reports.xml.destination.toURI().path}"
+        logger.lifecycle "Jacoco HTML created: file://${new File(reports.html.destination, "index.html").toURI().path}"
     }
 }
 
-task coverageReport(dependsOn: ["test", "mockitoCoverage"]) {}
+task coverageReport(dependsOn: ["mockitoCoverage"]) {}
