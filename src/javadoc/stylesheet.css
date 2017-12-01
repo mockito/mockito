@@ -427,37 +427,3 @@ Formatting effect styles
     color:green;
     padding:0 30px 0 0;
 }
-
-/*
-Service-worker toast styling.
-Taken from https://github.com/PolymerElements/paper-toast/blob/master/paper-toast.html
-*/
-#sw-toast {
-    position: fixed;
-    display: block;
-    left: 0;
-    bottom: 0;
-    background-color: #323232;
-    color: #f1f1f1;
-    min-height: 48px;
-    min-width: 288px;
-    padding: 16px 24px;
-    box-sizing: border-box;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-    border-radius: 2px;
-    margin: 12px;
-    font-size: 14px;
-    cursor: default;
-    -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
-    transition: transform 0.3s, opacity 0.3s;
-}
-#sw-toast.hidden {
-    opacity: 0;
-    -webkit-transform: translateY(100px);
-    transform: translateY(100px);
-}
-#sw-toast.shown {
-    opacity: 1;
-    -webkit-transform: translateY(0px);
-    transform: translateY(0px);
-}

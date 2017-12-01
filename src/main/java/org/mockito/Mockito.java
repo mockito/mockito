@@ -174,7 +174,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>
  * Once created, a mock will remember all interactions. Then you can selectively
  * verify whatever interactions you are interested in.
- *
+ * </p>
  *
  *
  *

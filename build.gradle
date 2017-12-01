@@ -9,7 +9,7 @@ buildscript {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
-        classpath 'org.shipkit:shipkit:0.9.38'
+        classpath 'org.shipkit:shipkit:0.9.144'
     }
 }
 
@@ -31,12 +31,12 @@ allprojects {
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
 apply from: 'gradle/java-library.gradle'
+apply from: 'gradle/license.gradle'
 apply from: 'gradle/root/coverage.gradle'
 
 apply from: 'gradle/mockito-core/inline-mock.gradle'
 apply from: 'gradle/mockito-core/osgi.gradle'
 apply from: 'gradle/mockito-core/javadoc.gradle'
-apply from: 'gradle/mockito-core/license.gradle'
 apply from: 'gradle/mockito-core/testing.gradle'
 
 apply from: 'gradle/dependencies.gradle'

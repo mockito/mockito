@@ -68,9 +68,6 @@ We used to publish every version to Maven Central but we changed this strategy b
 * Q: How to publish to Maven Central?
 
   A: Include "[ci maven-central-release]" in the **merge** commit when merging the PR.
-  **Caveat**: if the PR does not change the binaries / javadoc in any way, the release will be skipped.
-  To avoid this problem, make a whitespace change in javadoc Javadoc for some public type.
-  We will address this caveat, see [issue #353](https://github.com/mockito/shipkit/issues/353) in Shipkit.
   **Hint**: To signify a new feature consider updating version to next minor/major, like: "2.8.0", "2.9.0", "3.0.0".
 
 * Q: How to promote already released version to a notable version?

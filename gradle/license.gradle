@@ -1,0 +1,16 @@
+def licenseHeaderFile = rootProject.file('doc/licenses/HEADER.txt')
+
+allprojects {
+    apply plugin: 'com.github.hierynomus.license'
+    license {
+        header = licenseHeaderFile
+        strictCheck = true
+        ignoreFailures = true
+        skipExistingHeaders = true
+        mapping {
+            java = 'SLASHSTAR_STYLE'
+            groovy = 'SLASHSTAR_STYLE'
+        }
+        ext.year = Calendar.getInstance().get(Calendar.YEAR)
+    }
+}
