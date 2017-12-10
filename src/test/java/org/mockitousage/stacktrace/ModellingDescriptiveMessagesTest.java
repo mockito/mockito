@@ -169,26 +169,31 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         argument.getValue();
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldScreamWhenNullPassedInsteadOfAnInterface() {
         mock(IMethods.class, withSettings().extraInterfaces(List.class, null));
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldScreamWhenNonInterfacePassed() {
         mock(IMethods.class, withSettings().extraInterfaces(LinkedList.class));
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldScreamWhenExtraIsTheSame() {
         mock(IMethods.class, withSettings().extraInterfaces(IMethods.class));
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldScreamWhenExtraInterfacesEmpty() {
         mock(IMethods.class, withSettings().extraInterfaces());
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldScreamWhenExtraInterfacesIsANullArray() {
         mock(IMethods.class, withSettings().extraInterfaces((Class<?>[]) null));

@@ -1779,6 +1779,7 @@ public class Mockito extends ArgumentMatchers {
      * @param classToMock class or interface to mock
      * @return mock object
      */
+    @CheckReturnValue
     public static <T> T mock(Class<T> classToMock) {
         return mock(classToMock, withSettings());
     }
@@ -1798,6 +1799,7 @@ public class Mockito extends ArgumentMatchers {
      * @param name of the mock
      * @return mock object
      */
+    @CheckReturnValue
     public static <T> T mock(Class<T> classToMock, String name) {
         return mock(classToMock, withSettings()
                 .name(name)
@@ -1816,6 +1818,7 @@ public class Mockito extends ArgumentMatchers {
      * @return A {@link org.mockito.MockingDetails} instance.
      * @since 1.9.5
      */
+    @CheckReturnValue
     public static MockingDetails mockingDetails(Object toInspect) {
         return MOCKITO_CORE.mockingDetails(toInspect);
     }
@@ -1839,6 +1842,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return mock object
      */
+    @CheckReturnValue
     public static <T> T mock(Class<T> classToMock, Answer defaultAnswer) {
         return mock(classToMock, withSettings().defaultAnswer(defaultAnswer));
     }
@@ -1866,6 +1870,7 @@ public class Mockito extends ArgumentMatchers {
      * @param mockSettings additional mock settings
      * @return mock object
      */
+    @CheckReturnValue
     public static <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
         return MOCKITO_CORE.mock(classToMock, mockSettings);
     }
@@ -1949,6 +1954,7 @@ public class Mockito extends ArgumentMatchers {
      *            to spy on
      * @return a spy of the real object
      */
+    @CheckReturnValue
     public static <T> T spy(T object) {
         return MOCKITO_CORE.mock((Class<T>) object.getClass(), withSettings()
                 .spiedInstance(object)
@@ -1983,6 +1989,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 1.10.12
      */
     @Incubating
+    @CheckReturnValue
     public static <T> T spy(Class<T> classToSpy) {
         return MOCKITO_CORE.mock(classToSpy, withSettings()
                 .useConstructor()
@@ -2527,6 +2534,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return InOrder object to be used to verify in order
      */
+    @CheckReturnValue
     public static InOrder inOrder(Object... mocks) {
         return MOCKITO_CORE.inOrder(mocks);
     }
@@ -2610,6 +2618,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
+    @CheckReturnValue
     public static VerificationMode times(int wantedNumberOfInvocations) {
         return VerificationModeFactory.times(wantedNumberOfInvocations);
     }
@@ -2631,6 +2640,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
+    @CheckReturnValue
     public static VerificationMode never() {
         return times(0);
     }
@@ -2646,6 +2656,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
+    @CheckReturnValue
     public static VerificationMode atLeastOnce() {
         return VerificationModeFactory.atLeastOnce();
     }
@@ -2662,6 +2673,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
+    @CheckReturnValue
     public static VerificationMode atLeast(int minNumberOfInvocations) {
         return VerificationModeFactory.atLeast(minNumberOfInvocations);
     }
@@ -2678,6 +2690,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
+    @CheckReturnValue
     public static VerificationMode atMost(int maxNumberOfInvocations) {
         return VerificationModeFactory.atMost(maxNumberOfInvocations);
     }
@@ -2695,6 +2708,7 @@ public class Mockito extends ArgumentMatchers {
      * @param wantedNumberOfInvocations number of invocations to verify
      * @return  verification mode
      */
+    @CheckReturnValue
     public static VerificationMode calls( int wantedNumberOfInvocations ){
         return VerificationModeFactory.calls( wantedNumberOfInvocations );
     }
@@ -2715,6 +2729,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
+    @CheckReturnValue
     public static VerificationMode only() {
         return VerificationModeFactory.only();
     }
@@ -2754,6 +2769,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
+    @CheckReturnValue
     public static VerificationWithTimeout timeout(long millis) {
         return new Timeout(millis, VerificationModeFactory.times(1));
     }
@@ -2794,6 +2810,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
+    @CheckReturnValue
     public static VerificationAfterDelay after(long millis) {
         return new After(millis, VerificationModeFactory.times(1));
     }
@@ -2877,6 +2894,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return mock settings instance with defaults.
      */
+    @CheckReturnValue
     public static MockSettings withSettings() {
         return new MockSettingsImpl().defaultAnswer(RETURNS_DEFAULTS);
     }
@@ -2890,6 +2908,7 @@ public class Mockito extends ArgumentMatchers {
      * @return verification mode
      * @since 2.1.0
      */
+    @CheckReturnValue
     public static VerificationMode description(String description) {
         return times(1).description(description);
     }
@@ -2899,6 +2918,7 @@ public class Mockito extends ArgumentMatchers {
      * An instance of {@code MockingDetails} can be retrieved via {@link #mockingDetails(Object)}.
      */
     @Deprecated
+    @CheckReturnValue
     static MockitoDebugger debug() {
         return new MockitoDebuggerImpl();
     }
@@ -2909,6 +2929,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 2.1.0
      */
     @Incubating
+    @CheckReturnValue
     public static MockitoFramework framework() {
         return new DefaultMockitoFramework();
     }
@@ -2922,6 +2943,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 2.7.0
      */
     @Incubating
+    @CheckReturnValue
     public static MockitoSessionBuilder mockitoSession() {
         return new DefaultMockitoSessionBuilder();
     }

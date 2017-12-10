@@ -219,12 +219,14 @@ public class InvalidStateDetectionTest extends TestBase {
     }
 
     private static class OnMockCreation implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
         public void detect(IMethods mock) {
             mock(IMethods.class);
         }
     }
 
     private static class OnSpyCreation implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
         public void detect(IMethods mock) {
             spy(new Object());
         }

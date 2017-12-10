@@ -47,6 +47,7 @@ public class MockitoTest {
         Mockito.verifyZeroInteractions("notMock");
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenCreatingInOrderObject() {
         Mockito.inOrder("notMock");
