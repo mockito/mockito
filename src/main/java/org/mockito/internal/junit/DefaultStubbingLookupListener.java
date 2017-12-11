@@ -8,6 +8,7 @@ import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.listeners.StubbingLookupListener;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Stubbing;
 
@@ -30,10 +31,17 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         this.currentStrictness = strictness;
     }
 
-    public void onStubbingLookup(Invocation invocation, MatchableInvocation stubbingFound) {
+    public void onStubbingLookup(Invocation invocation, MatchableInvocation stubbingFound, MockCreationSettings mockSettings) {
+        //TODO this is not quite right
         if (currentStrictness != Strictness.STRICT_STUBS) {
             return;
         }
+
+        if (mockSettings.getStrictness() == Strictness.LENIENT || mockSettings.getStrictness() == Strictness.WARN) {
+            //strictness explicitly relaxed at the mock level
+            return;
+        }
+
 
         if (stubbingFound == null) {
             //If stubbing was not found for invocation it means that either the mock invocation was not stubbed or

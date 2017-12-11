@@ -10,6 +10,7 @@ import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
@@ -316,4 +317,6 @@ public interface MockSettings extends Serializable {
      */
     @Incubating
     <T> MockCreationSettings<T> build(Class<T> typeToMock);
+
+    MockSettings strictness(Strictness strictness);
 }

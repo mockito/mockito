@@ -5,12 +5,13 @@
 package org.mockito.internal.junit;
 
 import org.mockito.internal.exceptions.Reporter;
+import org.mockito.internal.stubbing.StubbingStrictness;
 import org.mockito.internal.util.MockitoLogger;
-import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Stubbing;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -48,15 +49,20 @@ public class UnusedStubbings {
     }
 
     public void reportUnused() {
-        if (!unused.isEmpty()) {
-            List<Invocation> invocations = ListUtil.convert(unused, (ListUtil.Converter) new ListUtil.Converter<Stubbing, Invocation>() {
-                public Invocation convert(Stubbing s) {
-                    return s.getInvocation();
-                }
-            });
-
-
-            Reporter.unncessaryStubbingException(invocations);
+        if (unused.isEmpty()) {
+            return;
         }
+
+        List<Invocation> invocations = new LinkedList<Invocation>();
+        for (Stubbing stubbing : unused) {
+            if (!StubbingStrictness.isLenientStubbing(stubbing)) {
+                invocations.add(stubbing.getInvocation());
+            }
+        }
+        if (invocations.isEmpty()) {
+            return;
+        }
+
+        Reporter.unncessaryStubbingException(invocations);
     }
 }

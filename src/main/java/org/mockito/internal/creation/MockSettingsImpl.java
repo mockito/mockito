@@ -15,6 +15,7 @@ import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
@@ -224,6 +225,12 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     @Override
     public <T> MockCreationSettings<T> build(Class<T> typeToMock) {
         return validatedSettings(typeToMock, (CreationSettings<T>) this);
+    }
+
+    @Override
+    public MockSettings strictness(Strictness strictness) {
+        this.strictness = strictness;
+        return this;
     }
 
     private static <T> CreationSettings<T> validatedSettings(Class<T> typeToMock, CreationSettings<T> source) {
