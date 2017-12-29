@@ -28,6 +28,7 @@ import org.mockito.session.MockitoSessionBuilder;
 import org.mockito.session.MockitoSessionLogger;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Answer1;
+import org.mockito.stubbing.LenientStubber;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.stubbing.Stubbing;
@@ -2949,5 +2950,9 @@ public class Mockito extends ArgumentMatchers {
     @CheckReturnValue
     public static MockitoSessionBuilder mockitoSession() {
         return new DefaultMockitoSessionBuilder();
+    }
+
+    public static LenientStubber lenient() {
+        return MOCKITO_CORE.lenient();
     }
 }

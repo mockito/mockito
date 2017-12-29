@@ -5,8 +5,8 @@
 package org.mockito.internal.listeners;
 
 import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MatchableInvocation;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.stubbing.Stubbing;
 
 /**
  * Listens to attempts to look up stubbing answer for given mocks. This class is internal for now.
@@ -33,6 +33,6 @@ public interface StubbingLookupListener {
      * @param stubbingFound - can be null - it indicates that the invocation was not stubbed.
      * @param mockSettings
      */
-    void onStubbingLookup(Invocation invocation, MatchableInvocation stubbingFound, MockCreationSettings mockSettings);
+    void onStubbingLookup(Invocation invocation, Stubbing stubbingFound, MockCreationSettings mockSettings);
 
 }

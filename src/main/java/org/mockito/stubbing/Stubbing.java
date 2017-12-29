@@ -7,6 +7,7 @@ package org.mockito.stubbing;
 import org.mockito.MockingDetails;
 import org.mockito.NotExtensible;
 import org.mockito.invocation.Invocation;
+import org.mockito.quality.Strictness;
 
 /**
  * Stubbing declared on the mock object.
@@ -50,4 +51,6 @@ public interface Stubbing extends Answer {
      * @since 2.2.3
      */
     boolean wasUsed();
+
+    Strictness getStrictness();
 }

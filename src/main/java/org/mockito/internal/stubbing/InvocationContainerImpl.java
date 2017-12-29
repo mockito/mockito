@@ -12,6 +12,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.ValidableAnswer;
@@ -46,19 +47,19 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         this.invocationForStubbing = invocationMatcher;
     }
 
-    public void addAnswer(Answer answer) {
+    public void addAnswer(Answer answer, Strictness strictness) {
         registeredInvocations.removeLast();
-        addAnswer(answer, false);
+        addAnswer(answer, false, strictness);
     }
 
     public void addConsecutiveAnswer(Answer answer) {
-        addAnswer(answer, true);
+        addAnswer(answer, true, null);
     }
 
     /**
      * Adds new stubbed answer and returns the invocation matcher the answer was added to.
      */
-    public StubbedInvocationMatcher addAnswer(Answer answer, boolean isConsecutive) {
+    public StubbedInvocationMatcher addAnswer(Answer answer, boolean isConsecutive, Strictness strictness) {
         Invocation invocation = invocationForStubbing.getInvocation();
         mockingProgress().stubbingCompleted();
         if (answer instanceof ValidableAnswer) {
@@ -69,7 +70,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
             if (isConsecutive) {
                 stubbed.getFirst().addAnswer(answer);
             } else {
-                stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
+                stubbed.addFirst(new StubbedInvocationMatcher(answer, invocationForStubbing, strictness));
             }
             return stubbed.getFirst();
         }
@@ -110,7 +111,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         invocationForStubbing = invocation;
         assert hasAnswersForStubbing();
         for (int i = 0; i < answersForStubbing.size(); i++) {
-            addAnswer(answersForStubbing.get(i), i != 0);
+            addAnswer(answersForStubbing.get(i), i != 0, null);
         }
         answersForStubbing.clear();
     }

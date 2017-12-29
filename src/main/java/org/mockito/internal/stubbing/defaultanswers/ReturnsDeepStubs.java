@@ -118,7 +118,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
     private StubbedInvocationMatcher recordDeepStubAnswer(final Object mock, InvocationContainerImpl container) {
         DeeplyStubbedAnswer answer = new DeeplyStubbedAnswer(mock);
-        return container.addAnswer(answer, false);
+        return container.addAnswer(answer, false, null);
     }
 
     protected GenericMetadataSupport actualParameterizedType(Object mock) {

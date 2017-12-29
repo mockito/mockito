@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.junit;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockito.stubbing.Stubbing;
 import org.mockitoutil.TestBase;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -38,8 +38,8 @@ public class UnusedStubbingsTest extends TestBase {
     public void unused_stubbings() throws Exception {
         //given
         UnusedStubbings stubbings = new UnusedStubbings(Arrays.asList(
-            new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), doesNothing()),
-            new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), doesNothing())
+            new StubbedInvocationMatcher(doesNothing(), new InvocationBuilder().toInvocationMatcher(), null),
+            new StubbedInvocationMatcher(doesNothing(), new InvocationBuilder().toInvocationMatcher(), null)
         ));
 
 

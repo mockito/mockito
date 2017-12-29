@@ -7,7 +7,6 @@ package org.mockito.internal.junit;
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.listeners.StubbingLookupListener;
 import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MatchableInvocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Stubbing;
@@ -31,7 +30,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         this.currentStrictness = strictness;
     }
 
-    public void onStubbingLookup(Invocation invocation, MatchableInvocation stubbingFound, MockCreationSettings mockSettings) {
+    public void onStubbingLookup(Invocation invocation, Stubbing stubbingFound, MockCreationSettings mockSettings) {
         //TODO this is not quite right
         if (currentStrictness != Strictness.STRICT_STUBS) {
             return;
@@ -41,7 +40,6 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
             //strictness explicitly relaxed at the mock level
             return;
         }
-
 
         if (stubbingFound == null) {
             //If stubbing was not found for invocation it means that either the mock invocation was not stubbed or
@@ -62,7 +60,8 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         List<Invocation> matchingStubbings = new LinkedList<Invocation>();
         Collection<Stubbing> stubbings = mockingDetails(invocation.getMock()).getStubbings();
         for (Stubbing s : stubbings) {
-            if (!s.wasUsed() && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())) {
+            if (!s.wasUsed() && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())
+                && s.getStrictness() != Strictness.LENIENT) {
                 matchingStubbings.add(s.getInvocation());
             }
         }

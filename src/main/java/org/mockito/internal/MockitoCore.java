@@ -12,6 +12,7 @@ import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
 import org.mockito.internal.listeners.VerificationStartedNotifier;
 import org.mockito.internal.progress.MockingProgress;
+import org.mockito.internal.stubbing.DefaultLenientStubber;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
@@ -25,6 +26,7 @@ import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.stubbing.LenientStubber;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.verification.VerificationMode;
@@ -165,6 +167,14 @@ public class MockitoCore {
     }
 
     public Stubber stubber() {
+        return createStubber(false);
+    }
+
+    public Stubber lenientStubber() {
+        return createStubber(true);
+    }
+
+    private Stubber createStubber(boolean lenient) {
         MockingProgress mockingProgress = mockingProgress();
         mockingProgress.stubbingStarted();
         mockingProgress.resetOngoingStubbing();
@@ -201,5 +211,9 @@ public class MockitoCore {
 
     public MockingDetails mockingDetails(Object toInspect) {
         return new DefaultMockingDetails(toInspect);
+    }
+
+    public LenientStubber lenient() {
+        return new DefaultLenientStubber();
     }
 }
