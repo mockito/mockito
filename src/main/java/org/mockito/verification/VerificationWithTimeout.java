@@ -13,8 +13,6 @@ import org.mockito.Mockito;
  * <pre class="code"><code class="java">
  * verify(mock, timeout(100).times(5)).foo();
  *
- * verify(mock, timeout(100).never()).bar();
- *
  * verify(mock, timeout(200).atLeastOnce()).baz();
  * </code></pre>
  *
