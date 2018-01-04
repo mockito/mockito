@@ -13,12 +13,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.withSettings;
 
 public class StrictnessPerMockTest {
@@ -44,8 +46,17 @@ public class StrictnessPerMockTest {
 
         //on lenient mock, we can call the stubbed method with different argument:
         lenientMock.simpleMethod(200);
+        //and stubbing will be reported in 'verifyNoMoreInteractions'
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() throws Throwable {
+                verifyNoMoreInteractions(lenientMock);
+            }
+        }).isInstanceOf(NoInteractionsWanted.class);
 
-        //on other mock, we will get strict stubbing exception
+        //on the mock with strict stubs, the stubbing is implicitly verified so 'verifyNoMoreInteractions' succeeds:
+        verifyNoMoreInteractions(mock);
+        //and we will get strict stubbing exception if there is declared stubbing with different argument:
         Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() throws Throwable {
