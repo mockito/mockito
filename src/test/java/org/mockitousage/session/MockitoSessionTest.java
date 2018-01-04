@@ -16,9 +16,11 @@ import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.JUnitResultAssert;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.when;
 
 public class MockitoSessionTest {
@@ -64,6 +66,14 @@ public class MockitoSessionTest {
         //expect
         JUnitResultAssert.assertThat(result)
                 .failsExactly(AssertionError.class, UnfinishedStubbingException.class);
+    }
+
+    @Test public void allows_initializing_mocks_manually() {
+        //when
+        Result result = junit.run(MockitoSessionTest.SessionWithManuallyInitializedMock.class);
+
+        //expect
+        JUnitResultAssert.assertThat(result).succeeds(1);
     }
 
     public static class SessionWithoutAnyConfiguration {
@@ -137,6 +147,22 @@ public class MockitoSessionTest {
         @Test public void unfinished_stubbing_with_other_failure() {
             when(mock.simpleMethod());
             assertTrue(false);
+        }
+    }
+
+    public static class SessionWithManuallyInitializedMock {
+        @Mock IMethods mock;
+        IMethods mock2 = Mockito.mock(IMethods.class, "manual mock");
+
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).startMocking();
+
+        @After public void after() {
+            mockito.finishMocking();
+        }
+
+        @Test public void manual_mock_preserves_its_settings() {
+            assertEquals("mock", mockingDetails(mock).getMockCreationSettings().getMockName().toString());
+            assertEquals("manual mock", mockingDetails(mock2).getMockCreationSettings().getMockName().toString());
         }
     }
 }
