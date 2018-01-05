@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.withSettings;
 
-//TODO also move other Strictness tests to this package (unless they already have good package)
+//TODO 792 also move other Strictness tests to this package (unless they already have good package)
 public class StrictnessPerMockTest {
 
     MockitoSession mockito;
@@ -65,7 +65,7 @@ public class StrictnessPerMockTest {
         }).isInstanceOf(UnnecessaryStubbingException.class)
             .hasMessageContaining("1. -> ")
             //good enough to prove that we're flagging just one unnecessary stubbing:
-            //TODO: let's make UnnecessaryStubbingException exception contain the Invocation instance
+            //TODO 792: let's make UnnecessaryStubbingException exception contain the Invocation instance
             //so that we can write clean assertion rather than depending on string
             .isNot(TestBase.hasMessageContaining("2. ->"));
     }
@@ -88,7 +88,7 @@ public class StrictnessPerMockTest {
             }
         }).isInstanceOf(NoInteractionsWanted.class)
             .hasMessageContaining("But found this interaction on mock 'lenientMock'")
-            //TODO: let's make NoInteractionsWanted exception contain the Invocation instances
+            //TODO 792: let's make NoInteractionsWanted exception contain the Invocation instances
             //so that we can write clean assertion rather than depending on string
             .hasMessageContaining("Actually, above is the only interaction with this mock");
     }

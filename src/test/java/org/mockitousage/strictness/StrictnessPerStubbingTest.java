@@ -63,7 +63,7 @@ public class StrictnessPerStubbingTest {
         }).isInstanceOf(UnnecessaryStubbingException.class)
             .hasMessageContaining("1. -> ")
             //good enough to prove that we're flagging just one unnecessary stubbing:
-            //TODO: this assertion is duplicated with StrictnessPerMockTest
+            //TODO 792: this assertion is duplicated with StrictnessPerMockTest
             .isNot(TestBase.hasMessageContaining("2. ->"));
     }
 
@@ -86,7 +86,7 @@ public class StrictnessPerStubbingTest {
             }
         }).isInstanceOf(NoInteractionsWanted.class)
             .hasMessageContaining("But found this interaction on mock")
-            //TODO: assertion duplicated with StrictnessPerMockTest
+            //TODO 792: assertion duplicated with StrictnessPerMockTest
             .hasMessageContaining("Actually, above is the only interaction with this mock");
     }
 
