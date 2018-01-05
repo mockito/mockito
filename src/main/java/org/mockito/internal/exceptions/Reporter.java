@@ -859,7 +859,7 @@ public class Reporter {
                 heading,
                 "Clean & maintainable test code requires zero unnecessary code.",
                 "Following stubbings are unnecessary (click to navigate to relevant line of code):" + stubbings,
-                "Please remove unnecessary stubbings or use 'silent' option. More info: javadoc for UnnecessaryStubbingException class."
+                "Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class."
         ));
     }
 
@@ -890,7 +890,7 @@ public class Reporter {
                 "  - stubbing the same method multiple times using 'given().will()' or 'when().then()' API",
                 "    Please use 'will().given()' or 'doReturn().when()' API for stubbing.",
                 "  - stubbed method is intentionally invoked with different arguments by code under test",
-                "    Please use 'default' or 'silent' JUnit Rule.",
+                "    Please use default or 'silent' JUnit Rule (equivalent of Strictness.LENIENT).",
                 "For more information see javadoc for PotentialStubbingProblem class."));
     }
 

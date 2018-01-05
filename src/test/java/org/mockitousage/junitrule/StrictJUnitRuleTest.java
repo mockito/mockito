@@ -8,18 +8,20 @@ import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.quality.Strictness;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.junit.MockitoJUnit;
+import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.SafeJUnitRule;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static org.mockitoutil.TestBase.filterLineNo;
 
 public class StrictJUnitRuleTest {
@@ -97,7 +99,7 @@ public class StrictJUnitRuleTest {
                                 "  - stubbing the same method multiple times using 'given().will()' or 'when().then()' API\n" +
                                 "    Please use 'will().given()' or 'doReturn().when()' API for stubbing.\n" +
                                 "  - stubbed method is intentionally invoked with different arguments by code under test\n" +
-                                "    Please use 'default' or 'silent' JUnit Rule.\n" +
+                                "    Please use default or 'silent' JUnit Rule (equivalent of Strictness.LENIENT).\n" +
                                 "For more information see javadoc for PotentialStubbingProblem class."),
                         filterLineNo(t.getMessage()));
             }
@@ -140,7 +142,7 @@ public class StrictJUnitRuleTest {
                         "Following stubbings are unnecessary (click to navigate to relevant line of code):\n" +
                         "  1. -> at org.mockitousage.junitrule.StrictJUnitRuleTest.unused_stubs_with_multiple_mocks(StrictJUnitRuleTest.java:0)\n" +
                         "  2. -> at org.mockitousage.junitrule.StrictJUnitRuleTest.unused_stubs_with_multiple_mocks(StrictJUnitRuleTest.java:0)\n" +
-                        "Please remove unnecessary stubbings or use 'silent' option. More info: javadoc for UnnecessaryStubbingException class."), filterLineNo(t.getMessage()));
+                        "Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class."), filterLineNo(t.getMessage()));
             }
         });
 

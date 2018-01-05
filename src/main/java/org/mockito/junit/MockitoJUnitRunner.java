@@ -4,7 +4,6 @@
  */
 package org.mockito.junit;
 
-import java.lang.reflect.InvocationTargetException;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -16,11 +15,13 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
-import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.InternalRunner;
+import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.StrictRunner;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
+
+import java.lang.reflect.InvocationTargetException;
 
 
 /**
@@ -80,6 +81,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
      * stubbing argument mismatches ({@link MockitoJUnitRunner.StrictStubs})
      * and *does not detect* unused stubbings.
      * The runner remains 'silent' even if incorrect stubbing is present.
+     * It is an equivalent of {@link Strictness#LENIENT}.
      * This was the behavior of Mockito JUnit runner in versions 1.x.
      * Using this implementation of the runner is not recommended.
      * Engineers should care for removing unused stubbings because they are dead code,
