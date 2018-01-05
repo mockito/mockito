@@ -16,6 +16,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 /**
@@ -82,6 +83,23 @@ public class UnusedStubbingsFinderTest extends TestBase {
         //then
         assertEquals(2, stubbings.size());
         assertEquals("[mock1.simpleMethod(1); stubbed with: [Returns: 1], mock2.simpleMethod(3); stubbed with: [Returns: 3]]",
+                stubbings.toString());
+    }
+
+    @Test
+    public void unused_and_lenient_stubbings() throws Exception {
+        when(mock1.simpleMethod(1)).thenReturn("1");
+        when(mock1.simpleMethod(2)).thenReturn("2");
+        lenient().when(mock2.simpleMethod(3)).thenReturn("3");
+
+        mock1.simpleMethod(1);
+
+        //when
+        UnusedStubbings stubbings = finder.getUnusedStubbings((List) asList(mock1, mock2));
+
+        //then
+        assertEquals(1, stubbings.size());
+        assertEquals("[mock1.simpleMethod(2); stubbed with: [Returns: 2]]",
                 stubbings.toString());
     }
 

@@ -4,12 +4,18 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.stubbing.Stubbing;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.invocation.Invocation;
+import org.mockito.quality.Strictness;
+import org.mockito.stubbing.Stubbing;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.mockito.internal.util.collections.ListUtil.filter;
 
@@ -19,14 +25,16 @@ import static org.mockito.internal.util.collections.ListUtil.filter;
 public class UnusedStubbingsFinder {
 
     /**
-     * Gets all unused stubbings for given set of mock objects, in order
+     * Gets all unused stubbings for given set of mock objects, in order.
+     * Stubbings explicitily marked as LENIENT are not included.
      */
     public UnusedStubbings getUnusedStubbings(Iterable<Object> mocks) {
         Set<Stubbing> stubbings = AllInvocationsFinder.findStubbings(mocks);
 
         List<Stubbing> unused = filter(stubbings, new Filter<Stubbing>() {
             public boolean isOut(Stubbing s) {
-                return s.wasUsed();
+                //TODO 792, Strictness.LENIENT -> we want to do the same thing for getUnusedStubbingsByLocation()
+                return s.wasUsed() || s.getStrictness() == Strictness.LENIENT;
             }
         });
 

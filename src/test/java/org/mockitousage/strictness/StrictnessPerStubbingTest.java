@@ -49,7 +49,6 @@ public class StrictnessPerStubbingTest {
     }
 
     @Test
-    @Ignore("TODO")
     public void unnecessary_stubbing() {
         //when
         when(mock.simpleMethod("1")).thenReturn("1");
