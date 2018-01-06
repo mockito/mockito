@@ -9,6 +9,7 @@ import org.mockito.NotExtensible;
 
 /**
  * Base interface for stubbing consecutive method calls with {@link Mockito#doReturn(Object)} syntax.
+ * This interface is needed so that we can reuse the same hierarchy in subinterfaces.
  */
 @NotExtensible
 public interface BaseStubber {

@@ -5,6 +5,7 @@
 package org.mockito.stubbing;
 
 import org.mockito.Mockito;
+import org.mockito.NotExtensible;
 
 /**
  * Allows to choose a method when stubbing in doThrow()|doAnswer()|doNothing()|doReturn() style
@@ -39,6 +40,7 @@ import org.mockito.Mockito;
  * See examples in javadoc for {@link Mockito}
  */
 @SuppressWarnings("unchecked")
+@NotExtensible
 public interface Stubber extends BaseStubber {
 
     /**

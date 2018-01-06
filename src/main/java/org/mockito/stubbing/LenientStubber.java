@@ -4,7 +4,19 @@
  */
 package org.mockito.stubbing;
 
+import org.mockito.CheckReturnValue;
+import org.mockito.Mockito;
+import org.mockito.NotExtensible;
+
+/**
+ * Used for declaring optional stubbings with {@link Mockito#lenient()}
+ */
+@NotExtensible
 public interface LenientStubber extends BaseStubber {
 
+    /**
+     * Allows declaring the method to stub. See {@link Mockito#when(Object)}
+     */
+    @CheckReturnValue
     <T> OngoingStubbing<T> when(T methodCall);
 }
