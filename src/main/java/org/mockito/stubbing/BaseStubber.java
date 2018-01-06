@@ -5,7 +5,12 @@
 package org.mockito.stubbing;
 
 import org.mockito.Mockito;
+import org.mockito.NotExtensible;
 
+/**
+ * Base interface for stubbing consecutive method calls with {@link Mockito#doReturn(Object)} syntax.
+ */
+@NotExtensible
 public interface BaseStubber {
 
     /**
