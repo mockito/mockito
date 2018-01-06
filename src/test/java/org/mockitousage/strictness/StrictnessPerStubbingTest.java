@@ -3,7 +3,6 @@ package org.mockitousage.strictness;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -68,7 +67,6 @@ public class StrictnessPerStubbingTest {
     }
 
     @Test
-    @Ignore("TODO")
     public void verify_no_more_invocations() {
         //when
         when(mock.simpleMethod("1")).thenReturn("1");
@@ -78,16 +76,18 @@ public class StrictnessPerStubbingTest {
         mock.simpleMethod("1");
         mock.differentMethod("200"); // <- different arg
 
-        //then 'verifyNoMoreInteractions' ignores strict stub (implicitly verified) but flags the lenient stubbing (called with different arg)
+        //then 'verifyNoMoreInteractions' flags the lenient stubbing (called with different arg)
+        //and reports it with [?] in the exception message
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() throws Throwable {
                 verifyNoMoreInteractions(mock);
             }
         }).isInstanceOf(NoInteractionsWanted.class)
-            .hasMessageContaining("But found this interaction on mock")
+            .hasMessageContaining("1. ->")
+            .hasMessageContaining("2. [?]->");
             //TODO 792: assertion duplicated with StrictnessPerMockTest
-            .hasMessageContaining("Actually, above is the only interaction with this mock");
+            // and we should use assertions based on content of the exception rather than the string
     }
 
     @After
