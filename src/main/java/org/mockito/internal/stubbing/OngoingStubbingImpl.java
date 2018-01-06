@@ -24,7 +24,7 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
 
     @Override
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
-        //TODO SF! rename all iOngoingStubbing -> ongoingStubbing
+        //TODO 792 rename all iOngoingStubbing -> ongoingStubbing
         if(!invocationContainer.hasInvocationForPotentialStubbing()) {
             throw incorrectUseOfApi();
         }
