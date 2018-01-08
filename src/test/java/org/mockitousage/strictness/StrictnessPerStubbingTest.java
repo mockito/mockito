@@ -15,6 +15,7 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -46,6 +47,22 @@ public class StrictnessPerStubbingTest {
                 mock.simpleMethod("100");
             }
         }).isInstanceOf(PotentialStubbingProblem.class);
+    }
+
+    @Test
+    public void doReturn_syntax() {
+        //when
+        lenient()
+            .doReturn("2")
+            .doReturn("3")
+            .when(mock).simpleMethod(1);
+
+        //then on lenient stubbing, we can call it with different argument:
+        mock.differentMethod("200");
+
+        //and stubbing works, too:
+        assertEquals("2", mock.simpleMethod(1));
+        assertEquals("3", mock.simpleMethod(1));
     }
 
     @Test

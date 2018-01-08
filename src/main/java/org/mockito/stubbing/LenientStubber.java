@@ -15,7 +15,8 @@ import org.mockito.NotExtensible;
 public interface LenientStubber extends BaseStubber {
 
     /**
-     * Allows declaring the method to stub. See {@link Mockito#when(Object)}
+     * Allows declaring the method to stub. See {@link Mockito#when(Object)}.
+     * Needed for classic stubbing with when().then()
      */
     @CheckReturnValue
     <T> OngoingStubbing<T> when(T methodCall);

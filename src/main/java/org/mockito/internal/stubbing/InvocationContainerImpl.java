@@ -18,7 +18,6 @@ import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.ValidableAnswer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     private static final long serialVersionUID = -5334301962749537177L;
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
-    private final List<Answer<?>> answersForStubbing = new ArrayList<Answer<?>>();
+    private final DoAnswerStyleStubbing doAnswerStyleStubbing = new DoAnswerStyleStubbing();
     private final RegisteredInvocations registeredInvocations;
 
     private MatchableInvocation invocationForStubbing;
@@ -95,12 +94,15 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return null;
     }
 
-    public void setAnswersForStubbing(List<Answer<?>> answers) {
-        answersForStubbing.addAll(answers);
+    /**
+     * Sets the answers declared with 'doAnswer' style.
+     */
+    public void setAnswersForStubbing(List<Answer<?>> answers, Strictness strictness) {
+        doAnswerStyleStubbing.setAnswers(answers, strictness);
     }
 
     public boolean hasAnswersForStubbing() {
-        return !answersForStubbing.isEmpty();
+        return !doAnswerStyleStubbing.isEmpty();
     }
 
     public boolean hasInvocationForPotentialStubbing() {
@@ -110,10 +112,10 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     public void setMethodForStubbing(MatchableInvocation invocation) {
         invocationForStubbing = invocation;
         assert hasAnswersForStubbing();
-        for (int i = 0; i < answersForStubbing.size(); i++) {
-            addAnswer(answersForStubbing.get(i), i != 0, null);
+        for (int i = 0; i < doAnswerStyleStubbing.getAnswers().size(); i++) {
+            addAnswer(doAnswerStyleStubbing.getAnswers().get(i), i != 0, doAnswerStyleStubbing.getStrictness());
         }
-        answersForStubbing.clear();
+        doAnswerStyleStubbing.clear();
     }
 
     @Override

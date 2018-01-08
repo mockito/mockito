@@ -26,6 +26,7 @@ import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.LenientStubber;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
@@ -167,18 +168,14 @@ public class MockitoCore {
     }
 
     public Stubber stubber() {
-        return createStubber(false);
+        return stubber(null);
     }
 
-    public Stubber lenientStubber() {
-        return createStubber(true);
-    }
-
-    private Stubber createStubber(boolean lenient) {
+    public Stubber stubber(Strictness strictness) {
         MockingProgress mockingProgress = mockingProgress();
         mockingProgress.stubbingStarted();
         mockingProgress.resetOngoingStubbing();
-        return new StubberImpl();
+        return new StubberImpl(strictness);
     }
 
     public void validateMockitoUsage() {
