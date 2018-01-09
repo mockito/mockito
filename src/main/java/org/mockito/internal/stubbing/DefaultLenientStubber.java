@@ -42,17 +42,17 @@ public class DefaultLenientStubber implements LenientStubber {
 
     @Override
     public Stubber doReturn(Object toBeReturned) {
-        return MOCKITO_CORE.stubber(Strictness.LENIENT).doReturn(toBeReturned);
+        return stubber().doReturn(toBeReturned);
     }
 
     @Override
     public Stubber doReturn(Object toBeReturned, Object... nextToBeReturned) {
-        return MOCKITO_CORE.stubber(Strictness.LENIENT).doReturn(toBeReturned, nextToBeReturned);
+        return stubber().doReturn(toBeReturned, nextToBeReturned);
     }
 
     @Override
     public Stubber doCallRealMethod() {
-        return null;
+        return stubber().doCallRealMethod();
     }
 
     @Override
@@ -60,5 +60,9 @@ public class DefaultLenientStubber implements LenientStubber {
         OngoingStubbingImpl<T> ongoingStubbing = (OngoingStubbingImpl) MOCKITO_CORE.when(methodCall);
         ongoingStubbing.setStrictness(Strictness.LENIENT);
         return ongoingStubbing;
+    }
+
+    private static Stubber stubber() {
+        return MOCKITO_CORE.stubber(Strictness.LENIENT);
     }
 }

@@ -17,6 +17,7 @@ import org.mockitoutil.TestBase;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -69,12 +70,31 @@ public class StrictnessPerStubbingTest {
         lenient().doReturn("2", "3")
             .when(mock).simpleMethod(1);
 
-        //then on lenient stubbing, we can call it with different argument:
+        //then on lenient stubbing, we can call it with different argument with no exception:
         mock.differentMethod("200");
 
         //and stubbing works, too:
         assertEquals("2", mock.simpleMethod(1));
         assertEquals("3", mock.simpleMethod(1));
+    }
+
+    static class Counter {
+        int increment(int x) {
+            return x + 1;
+        }
+    }
+
+    @Test
+    public void doCallRealMethod_syntax() {
+        //when
+        Counter mock = mock(Counter.class);
+        lenient().doCallRealMethod().when(mock).increment(1);
+
+        //then no exception and default return value if we call it with different arg:
+        assertEquals(0, mock.increment(0));
+
+        //and real method is called when using correct arg:
+        assertEquals(2, mock.increment(1));
     }
 
     @Test
