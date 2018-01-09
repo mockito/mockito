@@ -47,7 +47,7 @@ public class DefaultLenientStubber implements LenientStubber {
 
     @Override
     public Stubber doReturn(Object toBeReturned, Object... nextToBeReturned) {
-        return null;
+        return MOCKITO_CORE.stubber(Strictness.LENIENT).doReturn(toBeReturned, nextToBeReturned);
     }
 
     @Override

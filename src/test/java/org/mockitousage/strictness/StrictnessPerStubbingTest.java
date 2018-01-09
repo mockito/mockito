@@ -52,9 +52,21 @@ public class StrictnessPerStubbingTest {
     @Test
     public void doReturn_syntax() {
         //when
-        lenient()
-            .doReturn("2")
-            .doReturn("3")
+        lenient().doReturn("2").doReturn("3")
+            .when(mock).simpleMethod(1);
+
+        //then on lenient stubbing, we can call it with different argument:
+        mock.differentMethod("200");
+
+        //and stubbing works, too:
+        assertEquals("2", mock.simpleMethod(1));
+        assertEquals("3", mock.simpleMethod(1));
+    }
+
+    @Test
+    public void doReturn_varargs_syntax() {
+        //when
+        lenient().doReturn("2", "3")
             .when(mock).simpleMethod(1);
 
         //then on lenient stubbing, we can call it with different argument:
