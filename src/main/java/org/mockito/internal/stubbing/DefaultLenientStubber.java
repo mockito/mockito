@@ -37,7 +37,7 @@ public class DefaultLenientStubber implements LenientStubber {
 
     @Override
     public Stubber doNothing() {
-        return null;
+        return stubber().doNothing();
     }
 
     @Override

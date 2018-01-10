@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -82,6 +83,9 @@ public class StrictnessPerStubbingTest {
         int increment(int x) {
             return x + 1;
         }
+        void scream(String message) {
+            throw new RuntimeException(message);
+        }
     }
 
     @Test
@@ -95,6 +99,24 @@ public class StrictnessPerStubbingTest {
 
         //and real method is called when using correct arg:
         assertEquals(2, mock.increment(1));
+    }
+
+    @Test
+    public void doNothing_syntax() {
+        //when
+        final Counter spy = spy(Counter.class);
+        lenient().doNothing().when(spy).scream("1");
+
+        //then no stubbing exception and real method is called if we call stubbed method with different arg:
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() throws Throwable {
+                spy.scream("2");
+            }
+        }).hasMessage("2");
+
+        //and we do nothing when stubbing called with correct arg:
+        spy.scream("1");
     }
 
     @Test
