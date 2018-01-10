@@ -32,7 +32,7 @@ public class DefaultLenientStubber implements LenientStubber {
 
     @Override
     public Stubber doAnswer(Answer answer) {
-        return null;
+        return stubber().doAnswer(answer);
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.assertj.core.api.ThrowableAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.AdditionalAnswers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
@@ -58,7 +59,7 @@ public class StrictnessPerStubbingTest {
             .when(mock).simpleMethod(1);
 
         //then on lenient stubbing, we can call it with different argument:
-        mock.differentMethod("200");
+        mock.simpleMethod(200);
 
         //and stubbing works, too:
         assertEquals("2", mock.simpleMethod(1));
@@ -72,7 +73,7 @@ public class StrictnessPerStubbingTest {
             .when(mock).simpleMethod(1);
 
         //then on lenient stubbing, we can call it with different argument with no exception:
-        mock.differentMethod("200");
+        mock.simpleMethod(200);
 
         //and stubbing works, too:
         assertEquals("2", mock.simpleMethod(1));
@@ -117,6 +118,18 @@ public class StrictnessPerStubbingTest {
 
         //and we do nothing when stubbing called with correct arg:
         spy.scream("1");
+    }
+
+    @Test
+    public void doAnswer_syntax() {
+        //when
+        lenient().doAnswer(AdditionalAnswers.returnsFirstArg()).when(mock).simpleMethod("1");
+
+        //then on lenient stubbing, we can call it with different argument:
+        mock.simpleMethod("200");
+
+        //and stubbing works, too:
+        assertEquals("1", mock.simpleMethod("1"));
     }
 
     @Test
