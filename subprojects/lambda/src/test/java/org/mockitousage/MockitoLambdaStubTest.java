@@ -200,6 +200,19 @@ public class MockitoLambdaStubTest {
         assertThat(holding.invoked).isTrue();
     }
 
+    /**
+     * Shows how #1260 can be resolved.
+     */
+    @Test
+    public void matches_on_primitive_type_number() {
+        IMethods methods = mock(IMethods.class);
+        when(methods::intArgumentReturningInt).invokedWith(anyInt()).thenReturn(50);
+        assertThat(methods.intArgumentReturningInt(10)).isEqualTo(50);
+
+//        Uncomment this line to see the compilation error of unassignable numbers
+//        when(methods::intArgumentReturningInt).invokedWith(anyLong()).thenReturn(50);
+    }
+
     class TestCollectionSourceProvider {
         <T extends Collection<E>, E> T getCollection(T collection) {
             return collection;

@@ -76,6 +76,14 @@ public class MockitoLambda {
         return new AnyClass<>(clazz);
     }
 
+    public static LambdaArgumentMatcher<Integer> anyInt() {
+        return new AnyInt();
+    }
+
+    public static LambdaArgumentMatcher<Long> anyLong() {
+        return new AnyLong();
+    }
+
     public static <T> LambdaArgumentMatcher<T> eq(T value) {
         return new Equals<>(value);
     }
