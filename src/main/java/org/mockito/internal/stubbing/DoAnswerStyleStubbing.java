@@ -7,13 +7,14 @@ package org.mockito.internal.stubbing;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Holds answers declared using 'doAnswer' stubbing style.
  */
-class DoAnswerStyleStubbing {
+class DoAnswerStyleStubbing implements Serializable {
 
     private final List<Answer<?>> answers = new ArrayList<Answer<?>>();
     private Strictness strictness;
@@ -23,7 +24,7 @@ class DoAnswerStyleStubbing {
         this.answers.addAll(answers);
     }
 
-    boolean isEmpty() {
+    boolean isSet() {
         return answers.isEmpty();
     }
 
