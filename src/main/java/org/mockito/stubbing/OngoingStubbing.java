@@ -43,7 +43,7 @@ public interface OngoingStubbing<T> {
      *
      * @param value return value
      *
-     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     * @return object that allows stubbing consecutive calls
      */
     OngoingStubbing<T> thenReturn(T value);
 
@@ -60,7 +60,7 @@ public interface OngoingStubbing<T> {
      * @param value first return value
      * @param values next return values
      *
-     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     * @return object that allows stubbing consecutive calls
      */
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation warnings (on call site)
     @SuppressWarnings ({"unchecked", "varargs"})
@@ -84,7 +84,7 @@ public interface OngoingStubbing<T> {
      *
      * @param throwables to be thrown on method invocation
      *
-     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     * @return object that allows stubbing consecutive calls
      */
     OngoingStubbing<T> thenThrow(Throwable... throwables);
 
@@ -108,7 +108,7 @@ public interface OngoingStubbing<T> {
      *
      * @param throwableType to be thrown on method invocation
      *
-     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     * @return object that allows stubbing consecutive calls
      * @since 2.1.0
      */
     OngoingStubbing<T> thenThrow(Class<? extends Throwable> throwableType);
@@ -141,7 +141,7 @@ public interface OngoingStubbing<T> {
      * @param toBeThrown to be thrown on method invocation
      * @param nextToBeThrown next to be thrown on method invocation
      *
-     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     * @return object that allows stubbing consecutive calls
      * @since 2.1.0
      */
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation warnings (on call site)
@@ -175,7 +175,7 @@ public interface OngoingStubbing<T> {
      * <p>
      * See examples in javadoc for {@link Mockito#when}
      *
-     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     * @return object that allows stubbing consecutive calls
      */
     OngoingStubbing<T> thenCallRealMethod();
 
@@ -191,7 +191,7 @@ public interface OngoingStubbing<T> {
      *
      * @param answer the custom answer to execute.
      *
-     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     * @return object that allows stubbing consecutive calls
      */
     OngoingStubbing<T> thenAnswer(Answer<?> answer);
 
@@ -209,7 +209,7 @@ public interface OngoingStubbing<T> {
      * </code></pre>
      *
      * @param answer the custom answer to execute.
-     * @return iOngoingStubbing object that allows stubbing consecutive calls
+     * @return object that allows stubbing consecutive calls
      *
      * @see #thenAnswer(Answer)
      * @since 1.9.0

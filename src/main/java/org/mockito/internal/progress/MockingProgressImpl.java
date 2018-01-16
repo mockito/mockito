@@ -47,8 +47,8 @@ public class MockingProgressImpl implements MockingProgress {
         };
     }
 
-    public void reportOngoingStubbing(OngoingStubbing iOngoingStubbing) {
-        this.ongoingStubbing = iOngoingStubbing;
+    public void reportOngoingStubbing(OngoingStubbing ongoingStubbing) {
+        this.ongoingStubbing = ongoingStubbing;
     }
 
     public OngoingStubbing<?> pullOngoingStubbing() {
@@ -129,7 +129,7 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public String toString() {
-        return  "iOngoingStubbing: " + ongoingStubbing +
+        return  "ongoingStubbing: " + ongoingStubbing +
         ", verificationMode: " + verificationMode +
         ", stubbingInProgress: " + stubbingInProgress;
     }
