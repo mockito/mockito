@@ -33,7 +33,6 @@ public class UnusedStubbingsFinder {
 
         List<Stubbing> unused = filter(stubbings, new Filter<Stubbing>() {
             public boolean isOut(Stubbing s) {
-                //TODO 792, Strictness.LENIENT -> we want to do the same thing for getUnusedStubbingsByLocation()
                 return s.wasUsed() || s.getStrictness() == Strictness.LENIENT;
             }
         });
