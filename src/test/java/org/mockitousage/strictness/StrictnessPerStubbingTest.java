@@ -136,6 +136,31 @@ public class StrictnessPerStubbingTest {
         }).isInstanceOf(IllegalStateException.class);
     }
 
+    @Test
+    public void doThrow_instance_vararg_syntax() {
+        //when
+        lenient()
+            .doThrow(new IllegalArgumentException(), new IllegalStateException())
+            .when(mock).simpleMethod(1);
+
+        //then on lenient stubbing, we can call it with different argument with no exception:
+        mock.simpleMethod(200);
+
+        //and stubbing works, too:
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() throws Throwable {
+                mock.simpleMethod(1);
+            }
+        }).isInstanceOf(IllegalArgumentException.class);
+
+        //testing consecutive call:
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() throws Throwable {
+                mock.simpleMethod(1);
+            }
+        }).isInstanceOf(IllegalStateException.class);
+    }
+
     static class Counter {
         int increment(int x) {
             return x + 1;

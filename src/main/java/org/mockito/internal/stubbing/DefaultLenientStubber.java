@@ -17,7 +17,7 @@ public class DefaultLenientStubber implements LenientStubber {
 
     @Override
     public Stubber doThrow(Throwable... toBeThrown) {
-        return null;
+        return stubber().doThrow(toBeThrown);
     }
 
     @Override
