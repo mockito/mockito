@@ -58,7 +58,7 @@ public class UnusedStubbingsFinder {
         //note that those are _not_ locations where the stubbings was used
         Set<String> locationsOfUsedStubbings = new HashSet<String>();
         for (Stubbing s : stubbings) {
-            if (s.wasUsed()) {
+            if (s.wasUsed() || s.getStrictness() == Strictness.LENIENT) {
                 String location = s.getInvocation().getLocation().toString();
                 locationsOfUsedStubbings.add(location);
             }

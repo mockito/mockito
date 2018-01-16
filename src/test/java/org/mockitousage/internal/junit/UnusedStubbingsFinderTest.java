@@ -108,6 +108,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
         when(mock1.simpleMethod(1)).thenReturn("1");
         when(mock2.simpleMethod(2)).thenReturn("2");
         when(mock2.simpleMethod(3)).thenReturn("3");
+        lenient().when(mock2.differentMethod()).thenReturn("4"); //will not be included in results
 
         mock2.simpleMethod(2);
 
