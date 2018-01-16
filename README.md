@@ -63,7 +63,7 @@ We used to publish every version to Maven Central but we changed this strategy b
 * Q: What's new in Mockito release model?
 
   A: In Q2 2017 we implemented [Mockito Continuous Delivery Pipeline 2.0](https://github.com/mockito/mockito/issues/911).
-  Not every every version is published to Maven Central.
+  Not every version is published to Maven Central.
 
 * Q: How to publish to Maven Central?
 
