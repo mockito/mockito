@@ -20,6 +20,7 @@ import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static org.junit.Assert.assertNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -30,11 +31,13 @@ public class StrictnessPerMockTest {
 
     MockitoSession mockito;
     @Mock IMethods strictStubsMock;
-    IMethods lenientMock = mock(IMethods.class, withSettings().strictness(Strictness.LENIENT));
+    IMethods lenientMock;
 
     @Before
     public void before() {
         mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
+        assertNull(lenientMock);
+        lenientMock = mock(IMethods.class, withSettings().strictness(Strictness.LENIENT));
     }
 
     @Test
@@ -92,7 +95,7 @@ public class StrictnessPerMockTest {
                 verifyNoMoreInteractions(strictStubsMock, lenientMock);
             }
         }).isInstanceOf(NoInteractionsWanted.class)
-            .hasMessageContaining("But found this interaction on mock 'lenientMock'")
+            .hasMessageContaining("But found this interaction on mock 'iMethods'")
             //TODO 792: let's make NoInteractionsWanted exception contain the Invocation instances
             //so that we can write clean assertion rather than depending on string
             .hasMessageContaining("Actually, above is the only interaction with this mock");
