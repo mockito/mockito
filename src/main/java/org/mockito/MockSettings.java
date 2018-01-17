@@ -318,5 +318,6 @@ public interface MockSettings extends Serializable {
     @Incubating
     <T> MockCreationSettings<T> build(Class<T> typeToMock);
 
+    //TODO 792 let's just do lenient() for simpler API?
     MockSettings strictness(Strictness strictness);
 }
