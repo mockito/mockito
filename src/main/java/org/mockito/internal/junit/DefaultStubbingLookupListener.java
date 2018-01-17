@@ -6,7 +6,6 @@ package org.mockito.internal.junit;
 
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.listeners.StubbingLookupListener;
-import org.mockito.internal.stubbing.StrictnessSelector;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
@@ -17,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.mockito.Mockito.mockingDetails;
+import static org.mockito.internal.stubbing.StrictnessSelector.determineStrictness;
 
 /**
  * Default implementation of stubbing lookup listener.
@@ -32,7 +32,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
     }
 
     public void onStubbingLookup(Invocation invocation, Stubbing stubbingFound, MockCreationSettings mockSettings) {
-        Strictness actualStrictness = StrictnessSelector.determineStrictness(currentStrictness, mockSettings, stubbingFound);
+        Strictness actualStrictness = determineStrictness(currentStrictness, mockSettings, stubbingFound);
 
         if (actualStrictness != Strictness.STRICT_STUBS) {
             return;
@@ -58,7 +58,8 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         Collection<Stubbing> stubbings = mockingDetails(invocation.getMock()).getStubbings();
         for (Stubbing s : stubbings) {
             if (!s.wasUsed() && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())
-                //TODO 792 - do we need to have the strictness check here?
+                //in case the mock is strict but the stubbing is lenient,
+                // we don't want to report lenient stubbing as potential arg mismatch
                 && s.getStrictness() != Strictness.LENIENT) {
                 matchingStubbings.add(s.getInvocation());
             }
