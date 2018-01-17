@@ -6,6 +6,7 @@ package org.mockito.internal.junit;
 
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.listeners.StubbingLookupListener;
+import org.mockito.internal.stubbing.StrictnessSelector;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
@@ -31,13 +32,9 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
     }
 
     public void onStubbingLookup(Invocation invocation, Stubbing stubbingFound, MockCreationSettings mockSettings) {
-        //TODO this is not quite right
-        if (currentStrictness != Strictness.STRICT_STUBS) {
-            return;
-        }
+        Strictness actualStrictness = StrictnessSelector.determineStrictness(currentStrictness, mockSettings, stubbingFound);
 
-        if (mockSettings.getStrictness() == Strictness.LENIENT || mockSettings.getStrictness() == Strictness.WARN) {
-            //strictness explicitly relaxed at the mock level
+        if (actualStrictness != Strictness.STRICT_STUBS) {
             return;
         }
 
@@ -61,6 +58,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         Collection<Stubbing> stubbings = mockingDetails(invocation.getMock()).getStubbings();
         for (Stubbing s : stubbings) {
             if (!s.wasUsed() && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())
+                //TODO 792 - do we need to have the strictness check here?
                 && s.getStrictness() != Strictness.LENIENT) {
                 matchingStubbings.add(s.getInvocation());
             }
