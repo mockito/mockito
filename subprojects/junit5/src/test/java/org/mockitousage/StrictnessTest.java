@@ -11,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit5.MockitoExtension;
 import org.mockito.junit5.Strictness;
-import org.mockito.junit5.WithMockito;
 
 import java.util.function.Predicate;
 
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.quality.Strictness.*;
 
 @ExtendWith(MockitoExtension.class)
-class StricnessTest {
+class StrictnessTest {
 
     @Mock
     Predicate mock;
