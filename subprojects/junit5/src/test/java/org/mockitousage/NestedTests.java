@@ -6,12 +6,14 @@ package org.mockitousage;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit5.MockitoExtension;
 import org.mockito.junit5.WithMockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@WithMockito
+@ExtendWith(MockitoExtension.Strict.class)
 public class NestedTests {
     @Mock Runnable rootMock;
 

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
-import static org.mockito.internal.junit5.AnnotationUtil.retrieveStrictness;
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCallback, AfterEachCallback {
 
@@ -28,6 +28,15 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
     private final static String SESSION = "session";
     private final static String TEST_INSTANCE = "testInstance";
 
+    private final Strictness strictness;
+
+    private MockitoExtension() {
+        this(Strictness.WARN);
+    }
+
+    private MockitoExtension(Strictness strictness) {
+        this.strictness = strictness;
+    }
 
     /**
      * Callback for post-processing the supplied test instance.
@@ -53,20 +62,24 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
      */
     @Override
     public void beforeEach(final ExtensionContext context) {
-        Object testInstance = context.getRequiredTestInstance();
-
-        Strictness strictness = retrieveStrictness(context);
-
         List<Object> testInstances = new LinkedList<>();
-
-        testInstances.add(testInstance);
+        testInstances.add(context.getRequiredTestInstance());
 
         collectParentTestInstances(context, testInstances);
 
+        Strictness actualStrictness = strictness;
+
+        if (context.getElement().isPresent()) {
+            final Optional<org.mockito.junit5.Strictness> annotation = findAnnotation(context.getElement().get(), org.mockito.junit5.Strictness.class);
+
+            if (annotation.isPresent()) {
+                actualStrictness = annotation.get().value();
+            }
+        }
 
         MockitoSession session = Mockito.mockitoSession()
             .initTestInstances(testInstances)
-            .strictness(strictness)
+            .strictness(actualStrictness)
             .startMocking();
 
         store(context, session);
@@ -74,16 +87,17 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
 
     private void collectParentTestInstances(ExtensionContext context, List<Object> testInstances) {
         Optional<ExtensionContext> parent = context.getParent();
-        while (parent.isPresent() && parent.get() != context.getRoot()){
+
+        while (parent.isPresent() && parent.get() != context.getRoot()) {
             ExtensionContext parentContext = parent.get();
 
             Object testInstance = parentContext.getStore(MOCKITO).remove(TEST_INSTANCE);
 
-            if(testInstance!=null){
+            if (testInstance != null) {
                 testInstances.add(testInstance);
             }
 
-            parent=parentContext.getParent();
+            parent = parentContext.getParent();
         }
     }
 
@@ -92,7 +106,7 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
     }
 
     private static MockitoSession removeMockitoSession(ExtensionContext context) {
-        return context.getStore(MOCKITO).remove(SESSION,MockitoSession.class);
+        return context.getStore(MOCKITO).remove(SESSION, MockitoSession.class);
     }
 
     /**
@@ -102,10 +116,19 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
      */
     @Override
     public void afterEach(ExtensionContext context) {
-        MockitoSession session;
-        session = removeMockitoSession(context);
-        session.finishMocking();
+        removeMockitoSession(context)
+                .finishMocking();
     }
 
+    public static class Lenient extends MockitoExtension {
+        private Lenient() {
+            super(Strictness.LENIENT);
+        }
+    }
 
+    public static class Strict extends MockitoExtension {
+        private Strict() {
+            super(Strictness.STRICT_STUBS);
+        }
+    }
 }
