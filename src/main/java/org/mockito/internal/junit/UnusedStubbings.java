@@ -5,7 +5,6 @@
 package org.mockito.internal.junit;
 
 import org.mockito.internal.exceptions.Reporter;
-import org.mockito.internal.stubbing.StubbingStrictness;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Stubbing;
@@ -48,16 +47,14 @@ public class UnusedStubbings {
         return unused.toString();
     }
 
-    public void reportUnused() {
+    void reportUnused() {
         if (unused.isEmpty()) {
             return;
         }
 
         List<Invocation> invocations = new LinkedList<Invocation>();
         for (Stubbing stubbing : unused) {
-            if (!StubbingStrictness.isLenientStubbing(stubbing)) {
-                invocations.add(stubbing.getInvocation());
-            }
+            invocations.add(stubbing.getInvocation());
         }
         if (invocations.isEmpty()) {
             return;

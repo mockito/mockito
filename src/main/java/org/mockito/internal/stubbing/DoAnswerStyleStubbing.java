@@ -17,10 +17,10 @@ import java.util.List;
 class DoAnswerStyleStubbing implements Serializable {
 
     private final List<Answer<?>> answers = new ArrayList<Answer<?>>();
-    private Strictness strictness;
+    private Strictness stubbingStrictness;
 
-    void setAnswers(List<Answer<?>> answers, Strictness strictness) {
-        this.strictness = strictness;
+    void setAnswers(List<Answer<?>> answers, Strictness stubbingStrictness) {
+        this.stubbingStrictness = stubbingStrictness;
         this.answers.addAll(answers);
     }
 
@@ -30,14 +30,14 @@ class DoAnswerStyleStubbing implements Serializable {
 
     void clear() {
         answers.clear();
-        strictness = null;
+        stubbingStrictness = null;
     }
 
     List<Answer<?>> getAnswers() {
         return answers;
     }
 
-    Strictness getStrictness() {
-        return strictness;
+    Strictness getStubbingStrictness() {
+        return stubbingStrictness;
     }
 }
