@@ -9,7 +9,6 @@ import org.mockito.Incubating;
 import org.mockito.NotExtensible;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.VerificationStartedListener;
-import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 import java.util.List;
@@ -111,5 +110,6 @@ public interface MockCreationSettings<T> {
     @Incubating
     Object getOuterClassInstance();
 
-    Strictness getStrictness();
+    @Incubating
+    boolean isLenient();
 }

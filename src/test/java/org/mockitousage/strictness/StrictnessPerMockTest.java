@@ -20,7 +20,8 @@ import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -39,13 +40,13 @@ public class StrictnessPerMockTest {
     public void before() {
         mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
         assertNull(lenientMock);
-        lenientMock = mock(IMethods.class, withSettings().strictness(Strictness.LENIENT));
+        lenientMock = mock(IMethods.class, withSettings().lenient());
     }
 
     @Test
-    public void knows_mock_strictness() {
-        assertEquals(Strictness.LENIENT, mockingDetails(lenientMock).getMockCreationSettings().getStrictness());
-        assertEquals(null, mockingDetails(strictStubsMock).getMockCreationSettings().getStrictness());
+    public void knows_if_mock_is_lenient() {
+        assertTrue(mockingDetails(lenientMock).getMockCreationSettings().isLenient());
+        assertFalse(mockingDetails(strictStubsMock).getMockCreationSettings().isLenient());
     }
 
     @Test

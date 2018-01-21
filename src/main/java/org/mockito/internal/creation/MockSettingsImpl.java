@@ -15,7 +15,6 @@ import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
-import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
@@ -228,8 +227,8 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     }
 
     @Override
-    public MockSettings strictness(Strictness strictness) {
-        this.strictness = strictness;
+    public MockSettings lenient() {
+        this.lenient = true;
         return this;
     }
 
