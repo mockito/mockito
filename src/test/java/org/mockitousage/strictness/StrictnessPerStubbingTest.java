@@ -233,6 +233,15 @@ public class StrictnessPerStubbingTest {
     }
 
     @Test
+    public void unnecessary_stubbing_with_doReturn() {
+        //when
+        lenient().doReturn("2").when(mock).differentMethod("2");
+
+        //then no exception is thrown:
+        mockito.finishMocking();
+    }
+
+    @Test
     public void verify_no_more_invocations() {
         //when
         when(mock.simpleMethod("1")).thenReturn("1");
