@@ -92,7 +92,13 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
 
         if (stubbing != null) {
             stubbing.captureArgumentsFrom(invocation);
-            return stubbing.answer(invocation);
+
+            try {
+                return stubbing.answer(invocation);
+            }
+            finally {
+                mockingProgress().reportOngoingStubbing(ongoingStubbing);
+            }
         } else {
             Object ret = mockSettings.getDefaultAnswer().answer(invocation);
             DefaultAnswerValidator.validateReturnValueFor(invocation, ret);
