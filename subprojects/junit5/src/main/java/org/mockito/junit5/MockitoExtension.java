@@ -67,15 +67,9 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
 
         collectParentTestInstances(context, testInstances);
 
-        Strictness actualStrictness = strictness;
-
-        if (context.getElement().isPresent()) {
-            final Optional<org.mockito.junit5.Strictness> annotation = findAnnotation(context.getElement().get(), org.mockito.junit5.Strictness.class);
-
-            if (annotation.isPresent()) {
-                actualStrictness = annotation.get().value();
-            }
-        }
+        Strictness actualStrictness = findAnnotation(context.getElement(), org.mockito.junit5.Strictness.class)
+            .map(org.mockito.junit5.Strictness::value)
+            .orElse(strictness);
 
         MockitoSession session = Mockito.mockitoSession()
             .initTestInstances(testInstances)
