@@ -10,7 +10,7 @@ Most popular mocking framework for Java
 
 [![latest release](https://img.shields.io/badge/release%20notes-2.x-yellow.svg)](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md)
 [![Bintray](https://api.bintray.com/packages/mockito/maven/mockito-development/images/download.svg)](https://bintray.com/mockito/maven)
-[![Maven Central](https://img.shields.io/maven-central/v/org.mockito/mockito-core.svg)](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.8.47%7C)
+[![Maven Central](https://img.shields.io/maven-central/v/org.mockito/mockito-core.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.mockito%22%20AND%20a%3A%22mockito-core%22)
 [![Javadocs](http://www.javadoc.io/badge/org.mockito/mockito-core.svg?color=red)](http://www.javadoc.io/doc/org.mockito/mockito-core)
 
 
