@@ -7,15 +7,21 @@ package org.mockito.internal.session;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoSession;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
 import org.mockito.quality.Strictness;
+import org.mockito.session.MockitoSessionLogger;
 import org.mockitoutil.ThrowableAssert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.mockito.quality.Strictness.WARN;
 
 public class DefaultMockitoSessionBuilderTest {
 
@@ -57,6 +63,28 @@ public class DefaultMockitoSessionBuilderTest {
 
         assertNotNull(testClass.set);
         assertNotNull(nestedTestClass.list);
+    }
+
+    @Test public void uses_logger_and_strictness() {
+        TestClass testClass = new TestClass();
+
+        final List<String> hints = new ArrayList<String>();
+        MockitoSession session = new DefaultMockitoSessionBuilder()
+            .initMocks(testClass)
+            .strictness(WARN)
+            .logger(new MockitoSessionLogger() {
+                @Override
+                public void log(String hint) {
+                    hints.add(hint);
+                }
+            })
+            .startMocking();
+
+        when(testClass.set.add(1)).thenReturn(true);
+
+        session.finishMocking();
+
+        assertFalse(hints.isEmpty());
     }
 
     @Test public void requires_finish_mocking() {

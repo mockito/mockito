@@ -86,6 +86,21 @@ public interface MockitoSessionBuilder {
     MockitoSessionBuilder strictness(Strictness strictness);
 
     /**
+     * Configures logger used by {@code MockitoSession} for emitting hints when finishing
+     * the session.
+     * See examples in {@link MockitoSession}.
+     *
+     * @param logger for hints emitted when finishing {@code MockitoSession}.
+     *  Passing {@code null} is permitted and will make the session use a default value.
+     *  By default, hints will be logged to the console.
+     *
+     * @return the same builder instance for fluent configuration of {@code MockitoSession}.
+     * @since 2.13.4
+     */
+    @Incubating
+    MockitoSessionBuilder logger(MockitoSessionLogger logger);
+
+    /**
      * Starts new mocking session! Creates new {@code MockitoSession} instance to initialize the session.
      * At this point annotated fields are initialized per {@link #initMocks(Object)} method.
      * When you are done with the session it is required to invoke {@link MockitoSession#finishMocking()}.

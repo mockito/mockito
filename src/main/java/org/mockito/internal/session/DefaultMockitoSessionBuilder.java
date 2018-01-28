@@ -7,11 +7,12 @@ package org.mockito.internal.session;
 import org.mockito.MockitoSession;
 import org.mockito.internal.framework.DefaultMockitoSession;
 import org.mockito.internal.util.ConsoleMockitoLogger;
+import org.mockito.internal.util.MockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
+import org.mockito.session.MockitoSessionLogger;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     private List<Object> testClassInstances = new ArrayList<Object>();
     private String name;
     private Strictness strictness;
+    private MockitoSessionLogger logger;
 
     @Override
     public MockitoSessionBuilder initMocks(Object testClassInstance) {
@@ -54,6 +56,12 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     }
 
     @Override
+    public MockitoSessionBuilder logger(MockitoSessionLogger logger) {
+        this.logger = logger;
+        return this;
+    }
+
+    @Override
     public MockitoSession startMocking() {
         //Configure default values
         List<Object> effectiveTestClassInstances;
@@ -67,6 +75,7 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
             effectiveName = this.name == null ? lastTestClassInstance.getClass().getName() : this.name;
         }
         Strictness effectiveStrictness = this.strictness == null ? Strictness.STRICT_STUBS : this.strictness;
-        return new DefaultMockitoSession(effectiveTestClassInstances, effectiveName, effectiveStrictness, new ConsoleMockitoLogger());
+        MockitoLogger logger = this.logger == null ? new ConsoleMockitoLogger() : new MockitoLoggerAdapter(this.logger);
+        return new DefaultMockitoSession(effectiveTestClassInstances, effectiveName, effectiveStrictness, logger);
     }
 }

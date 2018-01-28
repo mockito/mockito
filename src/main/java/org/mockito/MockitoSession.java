@@ -50,6 +50,7 @@ import org.mockito.session.MockitoSessionBuilder;
  *            .initMocks(this)
  *            .name("Example")
  *            .strictness(Strictness.STRICT_STUBS)
+ *            .logger(new MyCustomMockitoSessionLogger())
  *            .startMocking();
  *     }
  *
