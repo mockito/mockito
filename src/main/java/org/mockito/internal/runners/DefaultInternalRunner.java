@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.internal.runners;
@@ -16,6 +16,7 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.junit.DefaultTestFinishedEvent;
 import org.mockito.internal.junit.MockitoTestListener;
 import org.mockito.internal.util.Supplier;
 

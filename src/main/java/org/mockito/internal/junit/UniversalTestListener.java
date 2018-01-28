@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.internal.junit;
@@ -60,14 +60,13 @@ public class UniversalTestListener implements MockitoTestListener {
     }
 
     private static void emitWarnings(MockitoLogger logger, TestFinishedEvent event, Collection<Object> mocks) {
-        String testName = event.getTestClassInstance().getClass().getSimpleName() + "." + event.getTestMethodName();
         if (event.getFailure() != null) {
             //print stubbing mismatches only when there is a test failure
             //to avoid false negatives. Give hint only when test fails.
-            new ArgMismatchFinder().getStubbingArgMismatches(mocks).format(testName, logger);
+            new ArgMismatchFinder().getStubbingArgMismatches(mocks).format(event.getTestName(), logger);
         } else {
             //print unused stubbings only when test succeeds to avoid reporting multiple problems and confusing users
-            new UnusedStubbingsFinder().getUnusedStubbings(mocks).format(testName, logger);
+            new UnusedStubbingsFinder().getUnusedStubbings(mocks).format(event.getTestName(), logger);
         }
     }
 

@@ -56,6 +56,22 @@ public interface MockitoSessionBuilder {
     MockitoSessionBuilder initMocks(Object... testClassInstances);
 
     /**
+     * Configures the name of the {@code MockitoSession} instance.
+     * See examples in {@link MockitoSession}.
+     *
+     * @param name of {@code MockitoSession} instance.
+     *  Passing {@code null} is permitted and will make the session use a default value.
+     *  The current default is the name of the last test class instance passed to
+     *  {@link #initMocks(Object)} or {@link #initMocks(Object...)}, if available;
+     *  otherwise, a random UUID is used.
+     *
+     * @return the same builder instance for fluent configuration of {@code MockitoSession}.
+     * @since 2.13.4
+     */
+    @Incubating
+    MockitoSessionBuilder name(String name);
+
+    /**
      * Configures strictness of {@code MockitoSession} instance.
      * See examples in {@link MockitoSession}.
      *

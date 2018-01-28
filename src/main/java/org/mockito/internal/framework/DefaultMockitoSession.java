@@ -19,10 +19,12 @@ import java.util.List;
 public class DefaultMockitoSession implements MockitoSession {
 
     private final List<Object> testClassInstances;
+    private final String name;
     private final UniversalTestListener listener;
 
-    public DefaultMockitoSession(List<Object> testClassInstances, Strictness strictness, MockitoLogger logger) {
+    public DefaultMockitoSession(List<Object> testClassInstances, String name, Strictness strictness, MockitoLogger logger) {
         this.testClassInstances = testClassInstances;
+        this.name = name;
         listener = new UniversalTestListener(strictness, logger);
         try {
             //So that the listener can capture mock creation events
@@ -43,14 +45,13 @@ public class DefaultMockitoSession implements MockitoSession {
 
         //Emit test finished event so that validation such as strict stubbing can take place
         listener.testFinished(new TestFinishedEvent() {
+            @Override
             public Throwable getFailure() {
                 return null;
             }
-            public Object getTestClassInstance() {
-                return testClassInstances.isEmpty() ? null : testClassInstances.get(testClassInstances.size() - 1);
-            }
-            public String getTestMethodName() {
-                return null;
+            @Override
+            public String getTestName() {
+                return name;
             }
         });
 

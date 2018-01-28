@@ -11,11 +11,16 @@ import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+
+import static java.util.Collections.emptyList;
 
 public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
 
     private List<Object> testClassInstances = new ArrayList<Object>();
+    private String name;
     private Strictness strictness;
 
     @Override
@@ -37,6 +42,12 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     }
 
     @Override
+    public MockitoSessionBuilder name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    @Override
     public MockitoSessionBuilder strictness(Strictness strictness) {
         this.strictness = strictness;
         return this;
@@ -45,8 +56,17 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     @Override
     public MockitoSession startMocking() {
         //Configure default values
-        List<Object> effectiveTestClassInstances = new ArrayList<Object>(testClassInstances);
+        List<Object> effectiveTestClassInstances;
+        String effectiveName;
+        if (testClassInstances.isEmpty()) {
+            effectiveTestClassInstances = emptyList();
+            effectiveName = this.name == null ? UUID.randomUUID().toString() : this.name;
+        } else {
+            effectiveTestClassInstances = new ArrayList<Object>(testClassInstances);
+            Object lastTestClassInstance = testClassInstances.get(testClassInstances.size() - 1);
+            effectiveName = this.name == null ? lastTestClassInstance.getClass().getName() : this.name;
+        }
         Strictness effectiveStrictness = this.strictness == null ? Strictness.STRICT_STUBS : this.strictness;
-        return new DefaultMockitoSession(effectiveTestClassInstances, effectiveStrictness, new ConsoleMockitoLogger());
+        return new DefaultMockitoSession(effectiveTestClassInstances, effectiveName, effectiveStrictness, new ConsoleMockitoLogger());
     }
 }

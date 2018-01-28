@@ -48,6 +48,7 @@ import org.mockito.session.MockitoSessionBuilder;
  *         //initialize session to start mocking
  *         mockito = Mockito.mockitoSession()
  *            .initMocks(this)
+ *            .name("Example")
  *            .strictness(Strictness.STRICT_STUBS)
  *            .startMocking();
  *     }

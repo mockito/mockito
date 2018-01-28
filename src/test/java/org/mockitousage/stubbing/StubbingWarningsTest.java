@@ -19,10 +19,12 @@ import static org.mockitoutil.TestBase.filterLineNo;
 
 public class StubbingWarningsTest {
 
+    private static final String TEST_NAME = "test.name";
+
     @Mock IMethods mock;
 
     SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    MockitoSession mockito = new DefaultMockitoSession(singletonList((Object) this), Strictness.WARN, logger);
+    MockitoSession mockito = new DefaultMockitoSession(singletonList((Object) this), TEST_NAME, Strictness.WARN, logger);
 
     @Test public void few_interactions() throws Throwable {
         //when
@@ -66,7 +68,7 @@ public class StubbingWarningsTest {
         //because it was simpler to implement. This can be improved given we put priority to improve the warnings.
         //then
         assertEquals(filterLineNo(
-            "[MockitoHint] StubbingWarningsTest.null (see javadoc for MockitoHint):\n" +
+            "[MockitoHint] " + TEST_NAME + " (see javadoc for MockitoHint):\n" +
             "[MockitoHint] 1. Unused -> at org.mockitousage.stubbing.StubbingWarningsTest.stubbing_argument_mismatch(StubbingWarningsTest.java:0)\n"),
                 filterLineNo(logger.getLoggedInfo()));
     }
@@ -79,7 +81,7 @@ public class StubbingWarningsTest {
 
         //then
         assertEquals(filterLineNo(
-            "[MockitoHint] StubbingWarningsTest.null (see javadoc for MockitoHint):\n" +
+            "[MockitoHint] " + TEST_NAME + " (see javadoc for MockitoHint):\n" +
             "[MockitoHint] 1. Unused -> at org.mockitousage.stubbing.StubbingWarningsTest.unused_stubbing(StubbingWarningsTest.java:0)\n"),
                 filterLineNo(logger.getLoggedInfo()));
     }
