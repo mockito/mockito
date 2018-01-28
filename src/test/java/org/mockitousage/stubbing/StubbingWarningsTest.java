@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockitousage.stubbing;
@@ -12,6 +12,7 @@ import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockitoutil.TestBase.filterLineNo;
@@ -21,7 +22,7 @@ public class StubbingWarningsTest {
     @Mock IMethods mock;
 
     SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    MockitoSession mockito = new DefaultMockitoSession(this, Strictness.WARN, logger);
+    MockitoSession mockito = new DefaultMockitoSession(singletonList((Object) this), Strictness.WARN, logger);
 
     @Test public void few_interactions() throws Throwable {
         //when

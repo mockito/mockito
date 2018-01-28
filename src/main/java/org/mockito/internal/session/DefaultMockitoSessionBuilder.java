@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.internal.session;
@@ -10,14 +10,29 @@ import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
 
-    private Object testClassInstance;
+    private List<Object> testClassInstances = new ArrayList<Object>();
     private Strictness strictness;
 
     @Override
     public MockitoSessionBuilder initMocks(Object testClassInstance) {
-        this.testClassInstance = testClassInstance;
+        if (testClassInstance != null) {
+            this.testClassInstances.add(testClassInstance);
+        }
+        return this;
+    }
+
+    @Override
+    public MockitoSessionBuilder initMocks(Object... testClassInstances) {
+        if (testClassInstances != null) {
+            for (Object instance : testClassInstances) {
+                initMocks(instance);
+            }
+        }
         return this;
     }
 
@@ -30,8 +45,8 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     @Override
     public MockitoSession startMocking() {
         //Configure default values
-        Object effectiveTest = this.testClassInstance == null ? new Object() : this.testClassInstance;
+        List<Object> effectiveTestClassInstances = new ArrayList<Object>(testClassInstances);
         Strictness effectiveStrictness = this.strictness == null ? Strictness.STRICT_STUBS : this.strictness;
-        return new DefaultMockitoSession(effectiveTest, effectiveStrictness, new ConsoleMockitoLogger());
+        return new DefaultMockitoSession(effectiveTestClassInstances, effectiveStrictness, new ConsoleMockitoLogger());
     }
 }

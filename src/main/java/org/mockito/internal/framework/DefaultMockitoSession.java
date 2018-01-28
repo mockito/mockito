@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.internal.framework;
@@ -14,13 +14,15 @@ import org.mockito.internal.junit.UniversalTestListener;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.quality.Strictness;
 
+import java.util.List;
+
 public class DefaultMockitoSession implements MockitoSession {
 
-    private final Object testClassInstance;
+    private final List<Object> testClassInstances;
     private final UniversalTestListener listener;
 
-    public DefaultMockitoSession(Object testClassInstance, Strictness strictness, MockitoLogger logger) {
-        this.testClassInstance = testClassInstance;
+    public DefaultMockitoSession(List<Object> testClassInstances, Strictness strictness, MockitoLogger logger) {
+        this.testClassInstances = testClassInstances;
         listener = new UniversalTestListener(strictness, logger);
         try {
             //So that the listener can capture mock creation events
@@ -28,7 +30,9 @@ public class DefaultMockitoSession implements MockitoSession {
         } catch (RedundantListenerException e) {
             Reporter.unfinishedMockingSession();
         }
-        MockitoAnnotations.initMocks(testClassInstance);
+        for (Object testClassInstance : testClassInstances) {
+            MockitoAnnotations.initMocks(testClassInstance);
+        }
     }
 
     public void finishMocking() {
@@ -43,7 +47,7 @@ public class DefaultMockitoSession implements MockitoSession {
                 return null;
             }
             public Object getTestClassInstance() {
-                return testClassInstance;
+                return testClassInstances.isEmpty() ? null : testClassInstances.get(testClassInstances.size() - 1);
             }
             public String getTestMethodName() {
                 return null;

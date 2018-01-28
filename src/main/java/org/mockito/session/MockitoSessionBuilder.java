@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.session;
@@ -20,7 +20,7 @@ import org.mockito.quality.Strictness;
 public interface MockitoSessionBuilder {
 
     /**
-     * Configures the test class instance for initialization of fields annotated with Mockito annotations
+     * Adds the test class instance for initialization of fields annotated with Mockito annotations
      * like {@link org.mockito.Mock}.
      * When this method is invoked it <strong>does not perform</strong> initialization of mocks on the spot!
      * Only when {@link #startMocking()} is invoked then annotated fields will be initialized.
@@ -30,16 +30,30 @@ public interface MockitoSessionBuilder {
      * Migrate from {@link MockitoAnnotations#initMocks(Object)}
      * to {@link MockitoSession}!
      * <p>
+     * This method may be called multiple times to add multiple, e.g. nested, test class instances.
+     * <p>
      * See code sample in {@link MockitoSession}.
      *
      * @param testClassInstance test class instance that contains fields with Mockito annotations to be initialized.
-     *  Passing {@code null} is permitted and will make the session use a default value.
-     *  The current default is '{@code new Object()}'.
+     *  Passing {@code null} is permitted but will be ignored.
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @since 2.7.0
      */
     @Incubating
     MockitoSessionBuilder initMocks(Object testClassInstance);
+
+    /**
+     * Adds the test class instances for initialization of fields annotated with Mockito annotations
+     * like {@link org.mockito.Mock}.
+     *
+     * @param testClassInstances test class instances that contains fields with Mockito annotations to be initialized.
+     *  Passing {@code null} or an empty array is permitted but will be ignored.
+     * @return the same builder instance for fluent configuration of {@code MockitoSession}.
+     * @see #initMocks(Object)
+     * @since 2.13.4
+     */
+    @Incubating
+    MockitoSessionBuilder initMocks(Object... testClassInstances);
 
     /**
      * Configures strictness of {@code MockitoSession} instance.
