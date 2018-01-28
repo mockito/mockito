@@ -37,7 +37,13 @@ public class DefaultMockitoSession implements MockitoSession {
         }
     }
 
+    @Override
     public void finishMocking() {
+        finishMocking(null);
+    }
+
+    @Override
+    public void finishMocking(final Throwable failure) {
         //Cleaning up the state, we no longer need the listener hooked up
         //The listener implements MockCreationListener and at this point
         //we no longer need to listen on mock creation events. We are wrapping up the session
@@ -47,7 +53,7 @@ public class DefaultMockitoSession implements MockitoSession {
         listener.testFinished(new TestFinishedEvent() {
             @Override
             public Throwable getFailure() {
-                return null;
+                return failure;
             }
             @Override
             public String getTestName() {
@@ -55,7 +61,10 @@ public class DefaultMockitoSession implements MockitoSession {
             }
         });
 
-        //Finally, validate user's misuse of Mockito framework.
-        Mockito.validateMockitoUsage();
+        //Validate only when there is no test failure to avoid reporting multiple problems
+        if (failure == null) {
+            //Finally, validate user's misuse of Mockito framework.
+            Mockito.validateMockitoUsage();
+        }
     }
 }

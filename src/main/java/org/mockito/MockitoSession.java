@@ -107,8 +107,22 @@ public interface MockitoSession {
      * <p>
      * For example, see javadoc for {@link MockitoSession}.
      *
+     * @see #finishMocking(Throwable)
      * @since 2.7.0
      */
     @Incubating
     void finishMocking();
+
+    /**
+     * Must be invoked when the user is done with mocking for given session (test method).
+     * When a {@linkplain Throwable failure} is specified, certain checks are disabled to avoid
+     * confusion that may arise because not the complete test was executed. Other than that,
+     * this method behaves exactly like {@link #finishMocking()}.
+     *
+     * @param failure the exception that caused the test to fail; passing {@code null} is permitted
+     * @see #finishMocking()
+     * @since 2.13.4
+     */
+    @Incubating
+    void finishMocking(Throwable failure);
 }
