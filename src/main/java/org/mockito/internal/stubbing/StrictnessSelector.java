@@ -10,6 +10,7 @@ import org.mockito.stubbing.Stubbing;
 
 public class StrictnessSelector {
 
+    //TODO x explain
     public static Strictness determineStrictness(Strictness currentStrictness, MockCreationSettings mockSettings, Stubbing stubbing) {
         if (stubbing != null && stubbing.getStrictness() != null) {
             return stubbing.getStrictness();

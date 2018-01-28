@@ -4,6 +4,7 @@
  */
 package org.mockito.stubbing;
 
+import org.mockito.Incubating;
 import org.mockito.MockingDetails;
 import org.mockito.NotExtensible;
 import org.mockito.invocation.Invocation;
@@ -52,5 +53,6 @@ public interface Stubbing extends Answer {
      */
     boolean wasUsed();
 
+    @Incubating//TODO x javadoc
     Strictness getStrictness();
 }

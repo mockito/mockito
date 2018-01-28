@@ -33,7 +33,6 @@ public class UnusedStubbingsFinder {
 
         List<Stubbing> unused = filter(stubbings, new Filter<Stubbing>() {
             public boolean isOut(Stubbing s) {
-                //TODO 792 this should be (and below, too) && s.getStrictness() == Strictness.STRICT_STUBS;
                 return s.wasUsed() || s.getStrictness() == Strictness.LENIENT;
             }
         });

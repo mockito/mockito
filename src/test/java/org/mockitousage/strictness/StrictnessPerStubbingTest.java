@@ -42,7 +42,6 @@ public class StrictnessPerStubbingTest {
     public void potential_stubbing_problem() {
         //when
         when(mock.simpleMethod("1")).thenReturn("1");
-        //TODO 792: consider renaming lenient() -> optional()
         lenient().when(mock.differentMethod("2")).thenReturn("2");
 
         //then on lenient stubbing, we can call it with different argument:

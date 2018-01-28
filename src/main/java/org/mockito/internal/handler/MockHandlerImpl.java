@@ -135,7 +135,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         //TODO #793 - when completed, we should be able to get rid of the casting below
         List<StubbingLookupListener> listeners = ((CreationSettings) this.mockSettings).getStubbingLookupListeners();
         for (StubbingLookupListener listener : listeners) {
-            //TODO 792 pass this.invocationContainer.getStubbedInvocations() so that we don't have to call 'mockingDetails'
+            //TODO x pass this.invocationContainer.getStubbedInvocations() so that we don't have to call 'mockingDetails'
             // each time a method is called on a mock (slow).
             listener.onStubbingLookup(invocation, stubbingFound, mockSettings);
         }

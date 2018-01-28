@@ -2952,6 +2952,7 @@ public class Mockito extends ArgumentMatchers {
         return new DefaultMockitoSessionBuilder();
     }
 
+    @Incubating //TODO x javadoc
     public static LenientStubber lenient() {
         return MOCKITO_CORE.lenient();
     }

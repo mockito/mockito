@@ -317,6 +317,6 @@ public interface MockSettings extends Serializable {
     @Incubating
     <T> MockCreationSettings<T> build(Class<T> typeToMock);
 
-    @Incubating
+    @Incubating//TODO X javadoc
     MockSettings lenient();
 }
