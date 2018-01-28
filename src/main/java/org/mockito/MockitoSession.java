@@ -92,6 +92,16 @@ import org.mockito.session.MockitoSessionBuilder;
 public interface MockitoSession {
 
     /**
+     * Changes the strictness of this {@code MockitoSession}.
+     *
+     * @param strictness new strictness for this session.
+     *
+     * @since 2.13.4
+     */
+    @Incubating
+    void setStrictness(Strictness strictness);
+
+    /**
      * Must be invoked when the user is done with mocking for given session (test method).
      * It detects unused stubbings and may throw {@link UnnecessaryStubbingException}
      * or emit warnings ({@link MockitoHint}) depending on the {@link Strictness} level.

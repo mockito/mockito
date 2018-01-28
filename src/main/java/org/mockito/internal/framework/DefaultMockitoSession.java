@@ -38,6 +38,11 @@ public class DefaultMockitoSession implements MockitoSession {
     }
 
     @Override
+    public void setStrictness(Strictness strictness) {
+        listener.setStrictness(strictness);
+    }
+
+    @Override
     public void finishMocking() {
         finishMocking(null);
     }
