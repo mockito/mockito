@@ -33,7 +33,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
     }
 
     public void onStubbingLookup(Invocation invocation, Stubbing stubbingFound, MockCreationSettings mockSettings) {
-        Strictness actualStrictness = determineStrictness(currentStrictness, mockSettings, stubbingFound);
+        Strictness actualStrictness = determineStrictness(stubbingFound, mockSettings, currentStrictness);
 
         if (actualStrictness != Strictness.STRICT_STUBS) {
             return;
