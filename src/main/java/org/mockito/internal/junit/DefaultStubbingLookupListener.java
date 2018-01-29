@@ -6,6 +6,7 @@ package org.mockito.internal.junit;
 
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.listeners.StubbingLookupListener;
+import org.mockito.internal.stubbing.UnusedStubbingReporting;
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
@@ -57,10 +58,8 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         List<Invocation> matchingStubbings = new LinkedList<Invocation>();
         Collection<Stubbing> stubbings = mockingDetails(invocation.getMock()).getStubbings();
         for (Stubbing s : stubbings) {
-            if (!s.wasUsed() && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())
-                //in case the mock is strict but the stubbing is lenient,
-                // we don't want to report lenient stubbing as potential arg mismatch
-                && s.getStrictness() != Strictness.LENIENT) {
+            if (UnusedStubbingReporting.shouldBeReported(s)
+                && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())) {
                 matchingStubbings.add(s.getInvocation());
             }
         }

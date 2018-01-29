@@ -5,9 +5,9 @@
 package org.mockito.internal.junit;
 
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
+import org.mockito.internal.stubbing.UnusedStubbingReporting;
 import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.invocation.Invocation;
-import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Stubbing;
 
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class UnusedStubbingsFinder {
 
         List<Stubbing> unused = filter(stubbings, new Filter<Stubbing>() {
             public boolean isOut(Stubbing s) {
-                return s.wasUsed() || s.getStrictness() == Strictness.LENIENT;
+                return !UnusedStubbingReporting.shouldBeReported(s);
             }
         });
 
@@ -57,7 +57,7 @@ public class UnusedStubbingsFinder {
         //note that those are _not_ locations where the stubbings was used
         Set<String> locationsOfUsedStubbings = new HashSet<String>();
         for (Stubbing s : stubbings) {
-            if (s.wasUsed() || s.getStrictness() == Strictness.LENIENT) {
+            if (!UnusedStubbingReporting.shouldBeReported(s)) {
                 String location = s.getInvocation().getLocation().toString();
                 locationsOfUsedStubbings.add(location);
             }
