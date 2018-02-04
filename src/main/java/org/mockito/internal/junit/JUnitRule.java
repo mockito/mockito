@@ -64,6 +64,8 @@ public class JUnitRule implements MockitoRule {
 
     public MockitoRule strictness(Strictness strictness) {
         this.strictness = strictness;
+        // session is null when this method is called during initialization of
+        // the @Rule field of the test class
         if (session != null) {
             session.setStrictness(strictness);
         }

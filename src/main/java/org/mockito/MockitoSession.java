@@ -48,9 +48,7 @@ import org.mockito.session.MockitoSessionBuilder;
  *         //initialize session to start mocking
  *         mockito = Mockito.mockitoSession()
  *            .initMocks(this)
- *            .name("Example")
  *            .strictness(Strictness.STRICT_STUBS)
- *            .logger(new MyCustomMockitoSessionLogger())
  *            .startMocking();
  *     }
  *
@@ -93,9 +91,14 @@ public interface MockitoSession {
 
     /**
      * Changes the strictness of this {@code MockitoSession}.
+     * <p>
+     * The new strictness will be applied to all mocks created after this method was called. In addition,
+     * it will be used for the checks performed by {@link #finishMocking()}.
+     * <p>
+     * This method may be useful when you use Mockito for multiple tests but want to use a different
+     * strictness for a single test.
      *
      * @param strictness new strictness for this session.
-     *
      * @since 2.13.4
      */
     @Incubating
@@ -128,6 +131,9 @@ public interface MockitoSession {
      * When a {@linkplain Throwable failure} is specified, certain checks are disabled to avoid
      * confusion that may arise because not the complete test was executed. Other than that,
      * this method behaves exactly like {@link #finishMocking()}.
+     * <p>
+     * This method is intended to be called by framework integrations. When using MockitoSession
+     * directly, most users should rather call {@link #finishMocking()}.
      *
      * @param failure the exception that caused the test to fail; passing {@code null} is permitted
      * @see #finishMocking()

@@ -45,6 +45,8 @@ public interface MockitoSessionBuilder {
     /**
      * Adds the test class instances for initialization of fields annotated with Mockito annotations
      * like {@link org.mockito.Mock}.
+     * <p>
+     * This method is useful when a test uses multiple, e.g. nested, test class instances.
      *
      * @param testClassInstances test class instances that contains fields with Mockito annotations to be initialized.
      *  Passing {@code null} or an empty array is permitted but will be ignored.
@@ -57,15 +59,21 @@ public interface MockitoSessionBuilder {
 
     /**
      * Configures the name of the {@code MockitoSession} instance.
-     * See examples in {@link MockitoSession}.
+     * <p>
+     * The name is used to output {@linkplain org.mockito.quality.MockitoHint hints} when
+     * {@linkplain MockitoSession#finishMocking() finishing} a session.
+     * <p>
+     * This method is intended to be used by framework integrations, e.g. JUnit. When building
+     * a {@code MockitoSession} for direct use, users are not expected to call it.
      *
      * @param name of {@code MockitoSession} instance.
      *  Passing {@code null} is permitted and will make the session use a default value.
      *  The current default is the name of the last test class instance passed to
      *  {@link #initMocks(Object)} or {@link #initMocks(Object...)}, if available;
-     *  otherwise, a random UUID is used.
+     *  otherwise, {@code "<Unnamed Session>"} is used.
      *
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
+     * @see org.mockito.quality.MockitoHint
      * @since 2.13.4
      */
     @Incubating
@@ -86,15 +94,18 @@ public interface MockitoSessionBuilder {
     MockitoSessionBuilder strictness(Strictness strictness);
 
     /**
-     * Configures logger used by {@code MockitoSession} for emitting hints when finishing
-     * the session.
-     * See examples in {@link MockitoSession}.
+     * Configures logger used by {@code MockitoSession} for emitting
+     * {@linkplain org.mockito.quality.MockitoHint warnings} when finishing the session.
+     * <p>
+     * Please note that the use of {@linkplain Strictness#STRICT_STUBS strict stubs} is
+     * recommended over emitting warnings.
      *
-     * @param logger for hints emitted when finishing {@code MockitoSession}.
+     * @param logger for warnings emitted when finishing {@code MockitoSession}.
      *  Passing {@code null} is permitted and will make the session use a default value.
-     *  By default, hints will be logged to the console.
+     *  By default, warnings will be logged to the console.
      *
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
+     * @see org.mockito.quality.MockitoHint
      * @since 2.13.4
      */
     @Incubating

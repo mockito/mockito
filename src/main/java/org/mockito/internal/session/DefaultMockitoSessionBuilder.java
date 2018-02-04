@@ -14,7 +14,6 @@ import org.mockito.session.MockitoSessionLogger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static java.util.Collections.emptyList;
 
@@ -68,7 +67,7 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
         String effectiveName;
         if (testClassInstances.isEmpty()) {
             effectiveTestClassInstances = emptyList();
-            effectiveName = this.name == null ? UUID.randomUUID().toString() : this.name;
+            effectiveName = this.name == null ? "<Unnamed Session>" : this.name;
         } else {
             effectiveTestClassInstances = new ArrayList<Object>(testClassInstances);
             Object lastTestClassInstance = testClassInstances.get(testClassInstances.size() - 1);
