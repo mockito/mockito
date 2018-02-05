@@ -6,6 +6,12 @@ package org.mockito.internal.creation.instance;
 
 /**
  * Provides instances of classes.
+ *
+ * <p>This interface is considered public even though it lives in private package.
+ * In the next major version of Mockito, this class will be moved to public space.
+ * </p>
+ *
+ * @since 2.14.0
  */
 public interface Instantiator {
 
