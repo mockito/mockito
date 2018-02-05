@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -91,12 +92,11 @@ public interface MockitoSession {
 
     /**
      * Changes the strictness of this {@code MockitoSession}.
-     * <p>
-     * The new strictness will be applied to all mocks created after this method was called. In addition,
-     * it will be used for the checks performed by {@link #finishMocking()}.
-     * <p>
-     * This method may be useful when you use Mockito for multiple tests but want to use a different
-     * strictness for a single test.
+     * The new strictness will be applied to operations on mocks and checks performed by {@link #finishMocking()}.
+     * This method is used behind the hood by {@link MockitoRule#strictness(Strictness)} method.
+     * In most healthy tests, this method is not needed.
+     * We keep it for edge cases and when you really need to change strictness in given test method.
+     * For use cases see Javadoc for {@link PotentialStubbingProblem} class.
      *
      * @param strictness new strictness for this session.
      * @since 2.13.4
