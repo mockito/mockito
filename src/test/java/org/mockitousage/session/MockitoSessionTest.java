@@ -76,6 +76,14 @@ public class MockitoSessionTest {
         JUnitResultAssert.assertThat(result).succeeds(1);
     }
 
+    @Test public void allows_updating_strictness() {
+        //when
+        Result result = junit.run(MockitoSessionTest.SessionWithUpdatedStrictness.class);
+
+        //expect
+        JUnitResultAssert.assertThat(result).succeeds(1);
+    }
+
     public static class SessionWithoutAnyConfiguration {
 
         @Mock IMethods mock;
@@ -163,6 +171,25 @@ public class MockitoSessionTest {
         @Test public void manual_mock_preserves_its_settings() {
             assertEquals("mock", mockingDetails(mock).getMockCreationSettings().getMockName().toString());
             assertEquals("manual mock", mockingDetails(mock2).getMockCreationSettings().getMockName().toString());
+        }
+    }
+
+    public static class SessionWithUpdatedStrictness {
+        @Mock IMethods mock;
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
+
+        @After public void after() {
+            mockito.finishMocking();
+        }
+
+        @Test public void manual_mock_preserves_its_settings() {
+            when(mock.simpleMethod(1)).thenReturn("foo");
+
+            //when
+            mockito.setStrictness(Strictness.LENIENT);
+
+            //then no exception is thrown, even though the arg is different
+            mock.simpleMethod(2);
         }
     }
 }
