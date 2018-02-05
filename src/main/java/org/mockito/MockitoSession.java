@@ -129,11 +129,12 @@ public interface MockitoSession {
     /**
      * Must be invoked when the user is done with mocking for given session (test method).
      * When a {@linkplain Throwable failure} is specified, certain checks are disabled to avoid
-     * confusion that may arise because not the complete test was executed. Other than that,
+     * confusion that may arise because there are multiple competing failures. Other than that,
      * this method behaves exactly like {@link #finishMocking()}.
      * <p>
-     * This method is intended to be called by framework integrations. When using MockitoSession
-     * directly, most users should rather call {@link #finishMocking()}.
+     * This method is intended to be used by framework integrations. When using MockitoSession
+     * directly, most users should rather use {@link #finishMocking()}.
+     * {@link MockitoRule} uses this method behind the hood.
      *
      * @param failure the exception that caused the test to fail; passing {@code null} is permitted
      * @see #finishMocking()
