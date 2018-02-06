@@ -5,6 +5,7 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
+import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.InvocationOnMock;
 
 import java.io.Serializable;
@@ -50,6 +51,32 @@ public interface RealMethod extends Serializable {
         public Object invoke() throws Throwable {
             try {
                 return callable.call();
+            } catch (Throwable t) {
+                new ConditionalStackTraceFilter().filter(t);
+                throw t;
+            }
+        }
+    }
+
+    class FromBehavior implements RealMethod {
+
+        private static final long serialVersionUID = 27957361150487543L;
+
+        private final InvocationFactory.RealMethodBehavior<?> behavior;
+
+        FromBehavior(InvocationFactory.RealMethodBehavior<?> behavior) {
+            this.behavior = behavior;
+        }
+
+        @Override
+        public boolean isInvokable() {
+            return true;
+        }
+
+        @Override
+        public Object invoke() throws Throwable {
+            try {
+                return behavior.call();
             } catch (Throwable t) {
                 new ConditionalStackTraceFilter().filter(t);
                 throw t;

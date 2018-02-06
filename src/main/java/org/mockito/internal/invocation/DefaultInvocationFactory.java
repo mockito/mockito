@@ -18,4 +18,9 @@ public class DefaultInvocationFactory implements InvocationFactory {
         RealMethod.FromCallable superMethod = new RealMethod.FromCallable(realMethod);
         return MockMethodInterceptor.createInvocation(target, method, args, superMethod, settings);
     }
+
+    public Invocation createInvocation(Object target, MockCreationSettings settings, Method method, RealMethodBehavior realMethod, Object... args) {
+        RealMethod.FromBehavior superMethod = new RealMethod.FromBehavior(realMethod);
+        return MockMethodInterceptor.createInvocation(target, method, args, superMethod, settings);
+    }
 }
