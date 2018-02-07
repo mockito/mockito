@@ -27,6 +27,11 @@ import java.util.concurrent.Callable;
 public interface InvocationFactory {
 
     /**
+     * @deprecated Use {@link #createInvocation(Object, MockCreationSettings, Method, RealMethodBehavior, Object...)} instead.
+     *
+     * Why deprecated? We found use cases where we need to handle Throwable and ensure correct stack trace filtering
+     * (removing Mockito internals from the stack trace). Hence the introduction of {@link RealMethodBehavior}.
+     *
      * Creates instance of an {@link Invocation} object.
      * This method is useful for framework integrators to programmatically simulate method calls on mocks using {@link MockHandler}.
      * It enables advanced framework integrations.
@@ -39,8 +44,6 @@ public interface InvocationFactory {
      *
      * @return invocation instance
      * @since 2.10.0
-     *
-     * @deprecated Use {@link #createInvocation(Object, MockCreationSettings, Method, RealMethodBehavior, Object...)} instead
      */
     @Deprecated
     Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Callable realMethod, Object... args);
