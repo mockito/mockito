@@ -32,35 +32,18 @@ public interface RealMethod extends Serializable {
         }
     }
 
-    class FromCallable implements RealMethod {
-
-        private static final long serialVersionUID = 47957363950483625L;
-
-        private final Callable<?> callable;
-
-        public FromCallable(Callable<?> callable) {
-            this.callable = callable;
-        }
-
-        @Override
-        public boolean isInvokable() {
-            return true;
-        }
-
-        @Override
-        public Object invoke() throws Throwable {
-            try {
-                return callable.call();
-            } catch (Throwable t) {
-                new ConditionalStackTraceFilter().filter(t);
-                throw t;
-            }
+    class FromCallable extends FromBehavior implements RealMethod {
+        public FromCallable(final Callable<?> callable) {
+            super(new InvocationFactory.RealMethodBehavior() {
+                @Override
+                public Object call() throws Throwable {
+                    return callable.call();
+                }
+            });
         }
     }
 
     class FromBehavior implements RealMethod {
-
-        private static final long serialVersionUID = 27957361150487543L;
 
         private final InvocationFactory.RealMethodBehavior<?> behavior;
 
