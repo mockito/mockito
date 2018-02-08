@@ -8,6 +8,7 @@ import org.mockito.Incubating;
 import org.mockito.MockitoFramework;
 import org.mockito.mock.MockCreationSettings;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
@@ -53,7 +54,7 @@ public interface InvocationFactory {
      *
      * @since 2.14.0
      */
-    interface RealMethodBehavior<R> {
+    interface RealMethodBehavior<R> extends Serializable {
         R call() throws Throwable;
     }
 
