@@ -5,6 +5,7 @@
 package org.mockito.internal.creation.instance;
 
 import org.mockito.internal.configuration.GlobalConfiguration;
+import org.mockito.plugins.Instantiator;
 import org.objenesis.ObjenesisStd;
 
 class ObjenesisInstantiator implements Instantiator {

@@ -5,6 +5,7 @@
 package org.mockito.internal.creation.instance;
 
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.Instantiator;
 import org.mockito.plugins.InstantiatorProvider;
 
 public class DefaultInstantiatorProvider implements InstantiatorProvider {
