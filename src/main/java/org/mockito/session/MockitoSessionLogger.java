@@ -20,7 +20,7 @@ import org.mockito.MockitoSession;
 public interface MockitoSessionLogger {
 
     /**
-     * Logs the emitted hint.
+     * Logs the hint.
      *
      * @param hint to log; never {@code null}
      */

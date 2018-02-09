@@ -46,7 +46,10 @@ public interface MockitoSessionBuilder {
      * Adds the test class instances for initialization of fields annotated with Mockito annotations
      * like {@link org.mockito.Mock}.
      * <p>
-     * This method is useful when a test uses multiple, e.g. nested, test class instances.
+     * In most scenarios, you only need to init mocks on a single test class instance.
+     * This method is useful for advanced framework integrations (like JUnit5), when a test uses multiple, e.g. nested, test class instances.
+     * <p>
+     * This method calls {@link #initMocks(Object)} for each passed test class instance.
      *
      * @param testClassInstances test class instances that contains fields with Mockito annotations to be initialized.
      *  Passing {@code null} or an empty array is permitted but will be ignored.
@@ -98,7 +101,8 @@ public interface MockitoSessionBuilder {
      * {@linkplain org.mockito.quality.MockitoHint warnings} when finishing the session.
      * <p>
      * Please note that the use of {@linkplain Strictness#STRICT_STUBS strict stubs} is
-     * recommended over emitting warnings.
+     * recommended over emitting warnings because warnings are easily ignored and spoil the log output.
+     * Instead of using this method, please consider setting strictness with {@link #strictness(Strictness)}.
      *
      * @param logger for warnings emitted when finishing {@code MockitoSession}.
      *  Passing {@code null} is permitted and will make the session use a default value.
