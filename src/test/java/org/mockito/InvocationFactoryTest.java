@@ -10,6 +10,8 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationFactory;
 import org.mockitoutil.TestBase;
 
+import java.util.concurrent.Callable;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.spy;
@@ -62,6 +64,23 @@ public class InvocationFactoryTest extends TestBase {
 
         Object ret = Mockito.mockingDetails(mock).getMockHandler().handle(invocation);
         assertEquals(String.class, ret.getClass());
+        assertEquals("mocked", ret);
+    }
+
+    @Test
+    public void deprecated_api_still_works() throws Throwable {
+        final TestClass mock = spy(TestClass.class);
+
+        Invocation invocation = Mockito.framework().getInvocationFactory().createInvocation(mock,
+            withSettings().build(TestClass.class),
+            TestClass.class.getDeclaredMethod("testMethod"),
+            new Callable() {
+                public Object call() throws Exception {
+                    return "mocked";
+                }
+            });
+
+        Object ret = Mockito.mockingDetails(mock).getMockHandler().handle(invocation);
         assertEquals("mocked", ret);
     }
 }
