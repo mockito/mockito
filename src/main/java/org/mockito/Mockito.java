@@ -25,6 +25,7 @@ import org.mockito.plugins.MockitoPlugins;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
+import org.mockito.session.MockitoSessionLogger;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Answer1;
 import org.mockito.stubbing.OngoingStubbing;
@@ -96,6 +97,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#40">40. (*new*) Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
  *      <a href="#41">41. (**new**) Advanced public API for framework integrations (Since 2.10.+)</a><br/>
  *      <a href="#42">42. (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</a><br/>
+ *      <a href="#43">43. (**new**) New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1465,6 +1467,34 @@ import org.mockito.verification.VerificationWithTimeout;
  *     </li>
  *     <li>New handy method {@link MockingDetails#getMock()} was added to make the {@code MockingDetails} API more complete.
  *     We found this method useful during the implementation.
+ *     </li>
+ * </ul>
+ *
+ * <h3 id="43">43. <a class="meaningful_link" href="#mockito_session_testing_frameworks" name="mockito_session_testing_frameworks">
+ *       (**new**) New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a></h3>
+ *
+ * <p>{@link MockitoSessionBuilder} and {@link MockitoSession} were enhanced to enable reuse by testing framework
+ * integrations (e.g. {@link MockitoRule} for JUnit):</p>
+ * <ul>
+ *     <li>{@link MockitoSessionBuilder#initMocks(Object...)} allows to pass in multiple test class instances for
+ *      initialization of fields annotated with Mockito annotations like {@link org.mockito.Mock}.
+ *      This method is useful for advanced framework integrations (e.g. JUnit Jupiter), when a test uses multiple,
+ *      e.g. nested, test class instances.
+ *     </li>
+ *     <li>{@link MockitoSessionBuilder#name(String)} allows to pass a name from the testing framework to the
+ *      {@link MockitoSession} that will be used for printing warnings when {@link Strictness#WARN} is used.
+ *     </li>
+ *     <li>{@link MockitoSessionBuilder#logger(MockitoSessionLogger)} makes it possible to customize the logger used
+ *      for hints/warnings produced when finishing mocking (useful for testing and to connect reporting capabilities
+ *      provided by testing frameworks such as JUnit Jupiter).
+ *     </li>
+ *     <li>{@link MockitoSession#setStrictness(Strictness)} allows to change the strictness of a {@link MockitoSession}
+ *      for one-off scenarios, e.g. it enables configuring a default strictness for all tests in a class but makes it
+ *      possible to change the strictness for a single or a few tests.
+ *     </li>
+ *     <li>{@link MockitoSession#finishMocking(Throwable)} was added to avoid confusion that may arise because
+ *      there are multiple competing failures. It will disable certain checks when the supplied <em>failure</em>
+ *      is not {@code null}.
  *     </li>
  * </ul>
  */
