@@ -15,17 +15,16 @@ import java.util.concurrent.Callable;
 public class DefaultInvocationFactory implements InvocationFactory {
 
     public Invocation createInvocation(Object target, MockCreationSettings settings, Method method, final Callable realMethod, Object... args) {
-        RealMethod superMethod = new RealMethod.FromBehavior(new RealMethodBehavior<Object>() {
-            @Override
-            public Object call() throws Throwable {
-                return realMethod.call();
-            }
-        });
-        return MockMethodInterceptor.createInvocation(target, method, args, superMethod, settings);
+        RealMethod superMethod = new RealMethod.FromCallable(realMethod);
+        return createInvocation(target, settings, method, superMethod, args);
     }
 
     public Invocation createInvocation(Object target, MockCreationSettings settings, Method method, RealMethodBehavior realMethod, Object... args) {
-        RealMethod.FromBehavior superMethod = new RealMethod.FromBehavior(realMethod);
+        RealMethod superMethod = new RealMethod.FromBehavior(realMethod);
+        return createInvocation(target, settings, method, superMethod, args);
+    }
+
+    private Invocation createInvocation(Object target, MockCreationSettings settings, Method method, RealMethod superMethod, Object[] args) {
         return MockMethodInterceptor.createInvocation(target, method, args, superMethod, settings);
     }
 }
