@@ -24,10 +24,10 @@ public class InvocationFactoryTest extends TestBase {
         }
     }
 
+    final TestClass mock = spy(TestClass.class);
+
     @Test
     public void call_method_that_throws_a_throwable() throws Throwable {
-        final TestClass mock = spy(TestClass.class);
-
         Invocation invocation = Mockito.framework().getInvocationFactory().createInvocation(mock,
             withSettings().build(TestClass.class),
             TestClass.class.getDeclaredMethod("testMethod"),
@@ -50,8 +50,6 @@ public class InvocationFactoryTest extends TestBase {
 
     @Test
     public void call_method_that_returns_a_string() throws Throwable {
-        final TestClass mock = spy(TestClass.class);
-
         Invocation invocation = Mockito.framework().getInvocationFactory().createInvocation(mock,
             withSettings().build(TestClass.class),
             TestClass.class.getDeclaredMethod("testMethod"),
@@ -63,14 +61,11 @@ public class InvocationFactoryTest extends TestBase {
             });
 
         Object ret = Mockito.mockingDetails(mock).getMockHandler().handle(invocation);
-        assertEquals(String.class, ret.getClass());
         assertEquals("mocked", ret);
     }
 
     @Test
     public void deprecated_api_still_works() throws Throwable {
-        final TestClass mock = spy(TestClass.class);
-
         Invocation invocation = Mockito.framework().getInvocationFactory().createInvocation(mock,
             withSettings().build(TestClass.class),
             TestClass.class.getDeclaredMethod("testMethod"),
