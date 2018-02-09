@@ -55,7 +55,7 @@ public interface MockitoSessionBuilder {
      *  Passing {@code null} or an empty array is permitted but will be ignored.
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @see #initMocks(Object)
-     * @since 2.13.4
+     * @since 2.15.0
      */
     @Incubating
     MockitoSessionBuilder initMocks(Object... testClassInstances);
@@ -77,7 +77,7 @@ public interface MockitoSessionBuilder {
      *
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @see org.mockito.quality.MockitoHint
-     * @since 2.13.4
+     * @since 2.15.0
      */
     @Incubating
     MockitoSessionBuilder name(String name);
@@ -110,7 +110,7 @@ public interface MockitoSessionBuilder {
      *
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @see org.mockito.quality.MockitoHint
-     * @since 2.13.4
+     * @since 2.15.0
      */
     @Incubating
     MockitoSessionBuilder logger(MockitoSessionLogger logger);

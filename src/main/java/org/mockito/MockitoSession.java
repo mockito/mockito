@@ -99,7 +99,7 @@ public interface MockitoSession {
      * For use cases see Javadoc for {@link PotentialStubbingProblem} class.
      *
      * @param strictness new strictness for this session.
-     * @since 2.13.4
+     * @since 2.15.0
      */
     @Incubating
     void setStrictness(Strictness strictness);
@@ -138,7 +138,7 @@ public interface MockitoSession {
      *
      * @param failure the exception that caused the test to fail; passing {@code null} is permitted
      * @see #finishMocking()
-     * @since 2.13.4
+     * @since 2.15.0
      */
     @Incubating
     void finishMocking(Throwable failure);

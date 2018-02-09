@@ -14,7 +14,7 @@ import org.mockito.MockitoSession;
  * This class is intended to be used by framework integrations, e.g. JUnit. When using
  * {@link MockitoSession} directly, you'll probably not need it.
  *
- * @since 2.13.4
+ * @since 2.15.0
  */
 @Incubating
 public interface MockitoSessionLogger {
