@@ -1398,7 +1398,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
  *
  * <h3 id="41">41. <a class="meaningful_link" href="#framework_integrations_api" name="framework_integrations_api">
- *      (**new**) Advanced public API for framework integrations (Since 2.10.+)</h3>
+ *      (**new**) Advanced public API for framework integrations (Since 2.10.+)</a></h3>
  *
  * In Summer 2017 we decided that Mockito
  * <a href="https://www.linkedin.com/pulse/mockito-vs-powermock-opinionated-dogmatic-static-mocking-faber">
@@ -1451,7 +1451,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Do you have feedback? Please leave comment in <a href="https://github.com/mockito/mockito/issues/1110">issue 1110</a>.
  *
  * <h3 id="42">42. <a class="meaningful_link" href="#verifiation_started_listener" name="verifiation_started_listener">
- *       (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</h3>
+ *       (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</a></h3>
  *
  * Framework integrations such as <a href="https://projects.spring.io/spring-boot">Spring Boot</a> needs public API to tackle double-proxy use case
  * (<a href="https://github.com/mockito/mockito/issues/1191">issue 1191</a>).
