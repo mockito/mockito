@@ -10,12 +10,12 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockitoutil.TestBase;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -43,9 +43,9 @@ public class StaticMockingExperimentTest extends TestBase {
     Foo mock = Mockito.mock(Foo.class);
     MockHandler handler = Mockito.mockingDetails(mock).getMockHandler();
     Method staticMethod;
-    Callable realMethod = new Callable() {
+    InvocationFactory.RealMethodBehavior realMethod = new InvocationFactory.RealMethodBehavior() {
         @Override
-        public Object call() throws Exception {
+        public Object call() throws Throwable {
             return null;
         }
     };
