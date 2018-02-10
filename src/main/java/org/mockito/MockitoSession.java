@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -90,6 +91,20 @@ import org.mockito.session.MockitoSessionBuilder;
 public interface MockitoSession {
 
     /**
+     * Changes the strictness of this {@code MockitoSession}.
+     * The new strictness will be applied to operations on mocks and checks performed by {@link #finishMocking()}.
+     * This method is used behind the hood by {@link MockitoRule#strictness(Strictness)} method.
+     * In most healthy tests, this method is not needed.
+     * We keep it for edge cases and when you really need to change strictness in given test method.
+     * For use cases see Javadoc for {@link PotentialStubbingProblem} class.
+     *
+     * @param strictness new strictness for this session.
+     * @since 2.15.0
+     */
+    @Incubating
+    void setStrictness(Strictness strictness);
+
+    /**
      * Must be invoked when the user is done with mocking for given session (test method).
      * It detects unused stubbings and may throw {@link UnnecessaryStubbingException}
      * or emit warnings ({@link MockitoHint}) depending on the {@link Strictness} level.
@@ -105,8 +120,26 @@ public interface MockitoSession {
      * <p>
      * For example, see javadoc for {@link MockitoSession}.
      *
+     * @see #finishMocking(Throwable)
      * @since 2.7.0
      */
     @Incubating
     void finishMocking();
+
+    /**
+     * Must be invoked when the user is done with mocking for given session (test method).
+     * When a {@linkplain Throwable failure} is specified, certain checks are disabled to avoid
+     * confusion that may arise because there are multiple competing failures. Other than that,
+     * this method behaves exactly like {@link #finishMocking()}.
+     * <p>
+     * This method is intended to be used by framework integrations. When using MockitoSession
+     * directly, most users should rather use {@link #finishMocking()}.
+     * {@link MockitoRule} uses this method behind the hood.
+     *
+     * @param failure the exception that caused the test to fail; passing {@code null} is permitted
+     * @see #finishMocking()
+     * @since 2.15.0
+     */
+    @Incubating
+    void finishMocking(Throwable failure);
 }

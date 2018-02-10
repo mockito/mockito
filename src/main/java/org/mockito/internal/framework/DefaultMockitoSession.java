@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.internal.framework;
@@ -14,13 +14,17 @@ import org.mockito.internal.junit.UniversalTestListener;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.quality.Strictness;
 
+import java.util.List;
+
 public class DefaultMockitoSession implements MockitoSession {
 
-    private final Object testClassInstance;
+    private final List<Object> testClassInstances;
+    private final String name;
     private final UniversalTestListener listener;
 
-    public DefaultMockitoSession(Object testClassInstance, Strictness strictness, MockitoLogger logger) {
-        this.testClassInstance = testClassInstance;
+    public DefaultMockitoSession(List<Object> testClassInstances, String name, Strictness strictness, MockitoLogger logger) {
+        this.testClassInstances = testClassInstances;
+        this.name = name;
         listener = new UniversalTestListener(strictness, logger);
         try {
             //So that the listener can capture mock creation events
@@ -28,10 +32,23 @@ public class DefaultMockitoSession implements MockitoSession {
         } catch (RedundantListenerException e) {
             Reporter.unfinishedMockingSession();
         }
-        MockitoAnnotations.initMocks(testClassInstance);
+        for (Object testClassInstance : testClassInstances) {
+            MockitoAnnotations.initMocks(testClassInstance);
+        }
     }
 
+    @Override
+    public void setStrictness(Strictness strictness) {
+        listener.setStrictness(strictness);
+    }
+
+    @Override
     public void finishMocking() {
+        finishMocking(null);
+    }
+
+    @Override
+    public void finishMocking(final Throwable failure) {
         //Cleaning up the state, we no longer need the listener hooked up
         //The listener implements MockCreationListener and at this point
         //we no longer need to listen on mock creation events. We are wrapping up the session
@@ -39,18 +56,20 @@ public class DefaultMockitoSession implements MockitoSession {
 
         //Emit test finished event so that validation such as strict stubbing can take place
         listener.testFinished(new TestFinishedEvent() {
+            @Override
             public Throwable getFailure() {
-                return null;
+                return failure;
             }
-            public Object getTestClassInstance() {
-                return testClassInstance;
-            }
-            public String getTestMethodName() {
-                return null;
+            @Override
+            public String getTestName() {
+                return name;
             }
         });
 
-        //Finally, validate user's misuse of Mockito framework.
-        Mockito.validateMockitoUsage();
+        //Validate only when there is no test failure to avoid reporting multiple problems
+        if (failure == null) {
+            //Finally, validate user's misuse of Mockito framework.
+            Mockito.validateMockitoUsage();
+        }
     }
 }
