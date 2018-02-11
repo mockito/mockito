@@ -8,7 +8,6 @@ import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.listeners.StubbingLookupListener;
-import org.mockito.invocation.InvocationContainer;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
@@ -16,6 +15,7 @@ import org.mockito.internal.stubbing.answers.DefaultAnswerValidator;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.verification.VerificationMode;
@@ -95,8 +95,9 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
 
             try {
                 return stubbing.answer(invocation);
-            }
-            finally {
+            } finally {
+                //Needed so that we correctly isolate stubbings in some scenarios
+                //see MockitoStubbedCallInAnswerTest or issue #1279
                 mockingProgress().reportOngoingStubbing(ongoingStubbing);
             }
         } else {
