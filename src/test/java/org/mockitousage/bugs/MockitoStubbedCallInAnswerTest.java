@@ -9,8 +9,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @see <a href="https://github.com/mockito/mockito/issues/1279">Issue #1279</a>
@@ -73,6 +73,28 @@ public class MockitoStubbedCallInAnswerTest {
             }
         });
         assertEquals(1, foo.doInt());
+    }
+
+    @Test
+    public void overriding_stubbing() throws Exception {
+        final Foo foo = mock(Foo.class);
+        final Bar bar = mock(Bar.class);
+
+        when(bar.doInt()).thenReturn(10);
+        when(foo.doInt()).thenAnswer(new Answer<Integer>() {
+            @Override
+            public Integer answer(InvocationOnMock invocation) throws Throwable {
+                return bar.doInt() + 1;
+            }
+        });
+
+        assertEquals(11, foo.doInt());
+
+        //when we override the stubbing with a different one
+        when(foo.doInt()).thenReturn(100);
+
+        //we expect it to be reflected:
+        assertEquals(100, foo.doInt());
     }
 
     interface Foo {
