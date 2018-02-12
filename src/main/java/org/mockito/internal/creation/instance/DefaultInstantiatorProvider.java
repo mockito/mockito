@@ -5,13 +5,13 @@
 package org.mockito.internal.creation.instance;
 
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.plugins.InstantiatorProvider;
+import org.mockito.plugins.InstantiatorProvider2;
 
-public class DefaultInstantiatorProvider implements InstantiatorProvider {
+public class DefaultInstantiatorProvider implements InstantiatorProvider2 {
 
-    private final static Instantiator INSTANCE = new ObjenesisInstantiator();
+    private final static org.mockito.creation.instance.Instantiator INSTANCE = new ObjenesisInstantiator();
 
-    public Instantiator getInstantiator(MockCreationSettings<?> settings) {
+    public org.mockito.creation.instance.Instantiator getInstantiator(MockCreationSettings<?> settings) {
         if (settings != null && settings.getConstructorArgs() != null) {
             return new ConstructorInstantiator(settings.getOuterClassInstance() != null, settings.getConstructorArgs());
         } else {

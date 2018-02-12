@@ -15,7 +15,7 @@ import org.mockito.internal.util.reflection.AccessibilityChanger;
 
 import static org.mockito.internal.util.StringUtil.join;
 
-public class ConstructorInstantiator implements Instantiator {
+public class ConstructorInstantiator implements org.mockito.creation.instance.Instantiator {
 
     /**
      * Whether or not the constructors used for creating an object refer to an outer instance or not.
@@ -64,8 +64,8 @@ public class ConstructorInstantiator implements Instantiator {
         return (T) constructor.newInstance(params);
     }
 
-    private InstantiationException paramsException(Class<?> cls, Exception e) {
-        return new InstantiationException(join(
+    private org.mockito.creation.instance.InstantiationException paramsException(Class<?> cls, Exception e) {
+        return new org.mockito.creation.instance.InstantiationException(join(
                 "Unable to create instance of '" + cls.getSimpleName() + "'.",
                 "Please ensure the target class has " + constructorArgsString() + " and executes cleanly.")
                 , e);
@@ -83,13 +83,13 @@ public class ConstructorInstantiator implements Instantiator {
         return Arrays.toString(constructorArgTypes);
     }
 
-    private InstantiationException noMatchingConstructor(Class<?> cls) {
+    private org.mockito.creation.instance.InstantiationException noMatchingConstructor(Class<?> cls) {
         String constructorString = constructorArgsString();
         String outerInstanceHint = "";
         if (hasOuterClassInstance) {
             outerInstanceHint = " and provided outer instance is correct";
         }
-        return new InstantiationException(join("Unable to create instance of '" + cls.getSimpleName() + "'.",
+        return new org.mockito.creation.instance.InstantiationException(join("Unable to create instance of '" + cls.getSimpleName() + "'.",
                 "Please ensure that the target class has " + constructorString + outerInstanceHint + ".")
                 , null);
     }
@@ -104,8 +104,8 @@ public class ConstructorInstantiator implements Instantiator {
         return constructorString;
     }
 
-    private InstantiationException multipleMatchingConstructors(Class<?> cls, List<Constructor<?>> constructors) {
-        return new InstantiationException(join("Unable to create instance of '" + cls.getSimpleName() + "'.",
+    private org.mockito.creation.instance.InstantiationException multipleMatchingConstructors(Class<?> cls, List<Constructor<?>> constructors) {
+        return new org.mockito.creation.instance.InstantiationException(join("Unable to create instance of '" + cls.getSimpleName() + "'.",
                 "Multiple constructors could be matched to arguments of types " + constructorArgTypes() + ":",
                 join("", " - ", constructors),
                 "If you believe that Mockito could do a better job deciding on which constructor to use, please let us know.",
