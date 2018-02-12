@@ -2,12 +2,12 @@
  * Copyright (c) 2016 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.creation.instance;
+package org.mockito.creation.instance;
 
 /**
  * Provides instances of classes.
  *
- * @deprecated Use {@link org.mockito.creation.instance.Instantiator} instead
+ * @since 2.14.0
  */
 public interface Instantiator {
 

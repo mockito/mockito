@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2007 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.plugins;
 
-import org.mockito.internal.creation.instance.Instantiator;
+import org.mockito.creation.instance.Instantiator;
 import org.mockito.mock.MockCreationSettings;
 
 /**
@@ -40,15 +40,14 @@ import org.mockito.mock.MockCreationSettings;
  *     files exists in the classpath, Mockito will only use the first returned by the standard
  *     {@link ClassLoader#getResource} mechanism.
  * <p>
- *     So just create a custom implementation of {@link InstantiatorProvider} and place the
+ *     So just create a custom implementation of {@link InstantiatorProvider2} and place the
  *     qualified name in the following file
  *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider</code>.
  * </p>
  *
- * @deprecated Use {@link InstantiatorProvider2} instead
- * @since 21.10.15
+ * @since 2.14.0
  */
-public interface InstantiatorProvider {
+public interface InstantiatorProvider2 {
 
     /**
      * Returns an instantiator, used to create new class instances.

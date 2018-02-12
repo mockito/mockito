@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider;
+import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.PluginSwitch;
@@ -26,6 +27,7 @@ public class MockitoPluginsTest extends TestBase {
         assertNotNull(plugins.getDefaultPlugin(StackTraceCleanerProvider.class));
         assertNotNull(plugins.getDefaultPlugin(PluginSwitch.class));
         assertNotNull(plugins.getDefaultPlugin(InstantiatorProvider.class));
+        assertNotNull(plugins.getDefaultPlugin(InstantiatorProvider2.class));
         assertNotNull(plugins.getDefaultPlugin(AnnotationEngine.class));
     }
 }
