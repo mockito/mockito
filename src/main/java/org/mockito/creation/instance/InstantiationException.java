@@ -9,10 +9,13 @@ import org.mockito.exceptions.base.MockitoException;
 /**
  * Exception generated when {@link Instantiator#newInstance(Class)} failed.
  *
- * @since 2.14.0
+ * @since TODO
  */
 public class InstantiationException extends MockitoException {
 
+    /**
+     * @since TODO
+     */
     public InstantiationException(String message, Throwable cause) {
         super(message, cause);
     }
