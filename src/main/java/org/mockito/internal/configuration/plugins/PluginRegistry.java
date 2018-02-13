@@ -4,9 +4,7 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.creation.instance.InstantiationException;
-import org.mockito.creation.instance.Instantiator;
-import org.mockito.mock.MockCreationSettings;
+import org.mockito.internal.creation.instance.InstantiatorProviderWrapper;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.InstantiatorProvider2;
@@ -26,13 +24,8 @@ class PluginRegistry {
     private final StackTraceCleanerProvider stackTraceCleanerProvider = new PluginLoader(pluginSwitch)
             .loadPlugin(StackTraceCleanerProvider.class);
 
-    private InstantiatorProvider defaultInstantiatorProvider;
-
-    private final InstantiatorProvider instantiatorProvider = new PluginLoader(pluginSwitch)
-            .loadPlugin(InstantiatorProvider.class);
-
-    private final InstantiatorProvider2 instantiatorProvider2 = new PluginLoader(pluginSwitch)
-            .loadPlugin(InstantiatorProvider2.class);
+    private final Object instantiatorProvider = new PluginLoader(pluginSwitch)
+            .loadPlugin(InstantiatorProvider2.class, InstantiatorProvider.class);
 
     private AnnotationEngine annotationEngine = new PluginLoader(pluginSwitch)
             .loadPlugin(AnnotationEngine.class);
@@ -63,32 +56,11 @@ class PluginRegistry {
      * current classpath.</p>
      */
     InstantiatorProvider2 getInstantiatorProvider() {
-        // Lazily init defaultInstantiatorProvider as all dependencies of the default instantiator
-        // provider might not be available when this class is initialized
-        if (defaultInstantiatorProvider == null) {
-            defaultInstantiatorProvider = (new DefaultMockitoPlugins()).getDefaultPlugin(InstantiatorProvider.class);
+        if (instantiatorProvider instanceof InstantiatorProvider) {
+            return new InstantiatorProviderWrapper((InstantiatorProvider)instantiatorProvider);
         }
 
-        if (instantiatorProvider.getClass() != defaultInstantiatorProvider.getClass()) {
-            // Map the interface of deprecated InstantiatorProviders on the new interface
-            return new InstantiatorProvider2() {
-                @Override
-                public Instantiator getInstantiator(final MockCreationSettings<?> settings) {
-                    return new Instantiator() {
-                        @Override
-                        public <T> T newInstance(Class<T> cls) throws InstantiationException {
-                            try {
-                                return instantiatorProvider.getInstantiator(settings).newInstance(cls);
-                            } catch (org.mockito.internal.creation.instance.InstantiationException e) {
-                                throw new InstantiationException(e.getMessage(), e.getCause());
-                            }
-                        }
-                    };
-                }
-            };
-        }
-
-        return instantiatorProvider2;
+        return (InstantiatorProvider2)instantiatorProvider;
     }
 
     /**
