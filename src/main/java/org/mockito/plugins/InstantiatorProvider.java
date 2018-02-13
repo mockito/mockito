@@ -9,7 +9,8 @@ import org.mockito.mock.MockCreationSettings;
 
 /**
  * @deprecated because this internal class was leaking from the public API.
- * For more information why deprecated, see {@link org.mockito.plugins.InstantiatorProvider2}.
+ * For more information why deprecated, see {@link org.mockito.plugins.InstantiatorProvider2} and
+ * <a href="https://github.com/mockito/mockito/issues/1303">Issue 1303</a>
  *
  * <p>
  *     Mockito will invoke this interface in order to fetch an instance instantiator provider.
@@ -47,8 +48,15 @@ import org.mockito.mock.MockCreationSettings;
  *     qualified name in the following file
  *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider</code>.
  * </p>
+ * <p>
+ *     This class is deprecated and was replaced by
+ *     {@link org.mockito.plugins.InstantiatorProvider2}. Hence if there is both a
+ *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider</code> and
+ *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider2</code> the second one
+ *     takes preference.
+ * </p>
  *
- * @since 21.10.15
+ * @since 2.0.31
  */
 @Deprecated
 public interface InstantiatorProvider {

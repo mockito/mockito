@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import org.mockito.internal.creation.instance.InstantiatorProvider2Wrapper;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.InstantiatorProvider2;
@@ -26,15 +27,19 @@ class DefaultMockitoPlugins implements MockitoPlugins {
         DEFAULT_PLUGINS.put(MockMaker.class.getName(), "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
         DEFAULT_PLUGINS.put(StackTraceCleanerProvider.class.getName(), "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
         DEFAULT_PLUGINS.put(InstantiatorProvider2.class.getName(), "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
-        DEFAULT_PLUGINS.put(InstantiatorProvider.class.getName(), "org.mockito.internal.creation.instance.LegacyDefaultInstantiatorProvider");
         DEFAULT_PLUGINS.put(AnnotationEngine.class.getName(), "org.mockito.internal.configuration.InjectingAnnotationEngine");
         DEFAULT_PLUGINS.put(INLINE_ALIAS, "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
     }
 
     @Override
     public <T> T getDefaultPlugin(Class<T> pluginType) {
-        String className = DEFAULT_PLUGINS.get(pluginType.getName());
-        return create(pluginType, className);
+        if (pluginType == InstantiatorProvider.class) {
+            String className = DEFAULT_PLUGINS.get(InstantiatorProvider2.class.getName());
+            return (T)new InstantiatorProvider2Wrapper(create(InstantiatorProvider2.class, className));
+        } else {
+            String className = DEFAULT_PLUGINS.get(pluginType.getName());
+            return create(pluginType, className);
+        }
     }
 
     String getDefaultPluginClass(String classOrAlias) {

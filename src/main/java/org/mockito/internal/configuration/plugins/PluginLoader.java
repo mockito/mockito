@@ -64,6 +64,39 @@ class PluginLoader {
     }
 
     /**
+     * Scans the classpath for given {@code preferredPluginType}. If not found scan for {@code
+     * alternatePluginType}. If neither a preferred or alternate plugin is found, default to default
+     * class of {@code preferredPluginType}.
+     *
+     * @return An object of either {@code preferredPluginType} or {@code alternatePluginType}
+     */
+    @SuppressWarnings("unchecked")
+    <PreferredType, AlternateType> Object loadPlugin(final Class<PreferredType> preferredPluginType, final Class<AlternateType> alternatePluginType) {
+        try {
+            PreferredType preferredPlugin = loadImpl(preferredPluginType);
+            if (preferredPlugin != null) {
+                return preferredPlugin;
+            } else {
+                AlternateType alternatePlugin = loadImpl(alternatePluginType);
+                if (alternatePlugin != null) {
+                    return alternatePlugin;
+                }
+            }
+
+            return plugins.getDefaultPlugin(preferredPluginType);
+        } catch (final Throwable t) {
+            return Proxy.newProxyInstance(preferredPluginType.getClassLoader(),
+                new Class<?>[]{preferredPluginType},
+                new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                        throw new IllegalStateException("Could not initialize plugin: " + preferredPluginType + " (alternate " + alternatePluginType + ")", t);
+                    }
+                });
+        }
+    }
+
+    /**
      * Equivalent to {@link java.util.ServiceLoader#load} but without requiring
      * Java 6 / Android 2.3 (Gingerbread).
      */
