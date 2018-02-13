@@ -28,29 +28,31 @@ import org.mockito.mock.MockCreationSettings;
  *
  * <ol style="list-style-type: lower-alpha">
  *     <li>The implementation itself, for example
- *         <code>org.awesome.mockito.AwesomeInstantiatorProvider</code> that implements the
- *         <code>InstantiatorProvider</code>.</li>
- *     <li>A file "<code>mockito-extensions/org.mockito.plugins.InstantiatorProvider</code>".
+ *         <code>org.awesome.mockito.AwesomeInstantiatorProvider2</code> that implements the
+ *         <code>InstantiatorProvider2</code>.</li>
+ *     <li>A file "<code>mockito-extensions/org.mockito.plugins.InstantiatorProvider2</code>".
  *         The content of this file is exactly a <strong>one</strong> line with the qualified
  *         name: <code>org.awesome.mockito.AwesomeInstantiatorProvider</code>.</li>
  * </ol></p>
  *
  * <p>
- *     Note that if several <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider</code>
+ *     Note that if several <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider2</code>
  *     files exists in the classpath, Mockito will only use the first returned by the standard
  *     {@link ClassLoader#getResource} mechanism.
  * <p>
  *     So just create a custom implementation of {@link InstantiatorProvider2} and place the
  *     qualified name in the following file
- *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider</code>.
+ *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider2</code>.
  * </p>
  *
- * @since 2.14.0
+ * @since TODO
  */
 public interface InstantiatorProvider2 {
 
     /**
      * Returns an instantiator, used to create new class instances.
+     *
+     * @since TODO
      */
     Instantiator getInstantiator(MockCreationSettings<?> settings);
 }

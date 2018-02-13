@@ -6,13 +6,16 @@ package org.mockito.creation.instance;
 
 /**
  * Provides instances of classes.
+ * See more information about Mockito plugin {@link org.mockito.plugins.InstantiatorProvider2}
  *
- * @since 2.14.0
+ * @since TODO
  */
 public interface Instantiator {
 
     /**
      * Creates instance of given class
+     *
+     * @since TODO
      */
     <T> T newInstance(Class<T> cls) throws InstantiationException;
 

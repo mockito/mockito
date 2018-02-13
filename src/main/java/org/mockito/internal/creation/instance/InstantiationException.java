@@ -7,10 +7,13 @@ package org.mockito.internal.creation.instance;
 import org.mockito.exceptions.base.MockitoException;
 
 /**
+ * @deprecated because this internal class was leaking from the public API.
+ * For information why deprecated, see {@link org.mockito.plugins.InstantiatorProvider2}.
+ * Use {@link org.mockito.creation.instance.Instantiator} and {@link org.mockito.creation.instance.InstantiationException} types instead.
+ * <p>
  * Exception generated when {@link Instantiator#newInstance(Class)} failed.
- *
- * @deprecated Use {@link org.mockito.creation.instance.InstantiationException} instead
  */
+@Deprecated
 public class InstantiationException extends MockitoException {
 
     public InstantiationException(String message, Throwable cause) {
