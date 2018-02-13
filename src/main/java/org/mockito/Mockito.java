@@ -2153,7 +2153,9 @@ public class Mockito extends ArgumentMatchers {
      * See also {@link Mockito#never()} - it is more explicit and communicates the intent well.
      * <p>
      * Stubbed invocations (if called) are also treated as interactions.
-     * See {@link #ignoreStubs(Object...)} to ignore.
+     * If you want stubbed invocations automatically verified, check out {@link Strictness#STRICT_STUBS} feature
+     * introduced in Mockito 2.3.0.
+     * If you want to ignore stubs for verification, see {@link #ignoreStubs(Object...)}.
      * <p>
      * A word of <b>warning</b>:
      * Some users who did a lot of classic, expect-run-verify mocking tend to use <code>verifyNoMoreInteractions()</code> very often, even in every test method.
