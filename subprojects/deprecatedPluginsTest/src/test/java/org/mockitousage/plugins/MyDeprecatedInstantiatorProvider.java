@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockitousage.plugins.switcher;
+package org.mockitousage.plugins;
 
 import org.mockito.Mockito;
 import org.mockito.internal.creation.instance.InstantiationException;
@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class MyInstantiatorProvider implements InstantiatorProvider {
+public class MyDeprecatedInstantiatorProvider implements InstantiatorProvider {
     static ThreadLocal<Boolean> shouldExcept = new ThreadLocal<>();
     static ThreadLocal<List<Class>> invokedFor = new ThreadLocal<>();
 
