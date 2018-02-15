@@ -5,8 +5,6 @@
 
 package org.mockito.internal.stubbing;
 
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
@@ -21,6 +19,7 @@ import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 public class InvocationContainerImplStubbingTest extends TestBase {
 
@@ -93,27 +92,6 @@ public class InvocationContainerImplStubbingTest extends TestBase {
             invocationContainerImplStubOnly.answerTo(differentMethod);
             fail();
         } catch (MyException e) {}
-    }
-
-    @Test
-    public void should_add_throwable_for_void_method() throws Throwable {
-        invocationContainerImpl.addAnswerForVoidMethod(new ThrowsException(new MyException()));
-        invocationContainerImpl.setMethodForStubbing(new InvocationMatcher(simpleMethod));
-
-        try {
-            invocationContainerImpl.answerTo(simpleMethod);
-            fail();
-        } catch (MyException e) {}
-    }
-
-    @Test
-    public void should_validate_throwable_for_void_method() throws Throwable {
-        invocationContainerImpl.addAnswerForVoidMethod(new ThrowsException(new Exception()));
-
-        try {
-            invocationContainerImpl.setMethodForStubbing(new InvocationMatcher(simpleMethod));
-            fail();
-        } catch (MockitoException e) {}
     }
 
     @Test
