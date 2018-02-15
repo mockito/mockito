@@ -62,7 +62,10 @@ import org.mockito.mock.MockCreationSettings;
 public interface InstantiatorProvider {
 
     /**
+     * @deprecated, see {@link InstantiatorProvider}.
+     *
      * Returns an instantiator, used to create new class instances.
      */
+    @Deprecated
     Instantiator getInstantiator(MockCreationSettings<?> settings);
 }
