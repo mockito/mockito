@@ -3,25 +3,7 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 apply plugin: 'java'
 description = "End-to-end tests for deprecated Mockito plugins."
 
-//so that we can depend on locally published mockito
-//and test end-to-end mockito jar resolution (for example, flesh out missing dependencies in pom file)
-[compileTestJava, ideaModule].each {
-    it.dependsOn ":publishToMavenLocal"
-}
-
-repositories {
-    mavenLocal() //we depend on locally published mockito
-}
-
 dependencies {
-    testCompile "org.mockito:mockito-core:$version"
-    testCompile project(path: ':', configuration: 'testUtil')
+    testCompile project(":")
     testCompile libraries.junit4
-    testCompile libraries.assertj
-}
-
-configurations.all {
-    //TODO SF enable when #154 is implemented
-    //let's make those tests not use hamcrest
-    //exclude group: 'org.hamcrest', module: 'hamcrest-core'
 }
