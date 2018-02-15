@@ -6,6 +6,7 @@
 package org.mockitousage.plugins.switcher;
 
 import org.junit.Test;
+import org.mockitousage.plugins.instantiator.MyInstantiatorProvider2;
 import org.mockitousage.plugins.stacktrace.MyStackTraceCleanerProvider;
 
 import java.util.List;
@@ -36,23 +37,6 @@ public class PluginSwitchTest {
             assertEquals(MyMockMaker.class.getName(), e.getMessage());
         } finally {
             MyMockMaker.explosive.remove();
-        }
-    }
-
-
-    @Test
-    public void uses_custom_instantiator_provider() {
-        //when
-        MyInstantiatorProvider2.explosive.set(true);
-
-        //when
-        try {
-            mock(List.class);
-            fail();
-        } catch (Exception e) {
-            assertEquals(MyInstantiatorProvider2.class.getName(), e.getMessage());
-        } finally {
-            MyInstantiatorProvider2.explosive.remove();
         }
     }
 }
