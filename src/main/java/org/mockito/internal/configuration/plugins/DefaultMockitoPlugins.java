@@ -34,8 +34,10 @@ class DefaultMockitoPlugins implements MockitoPlugins {
     @Override
     public <T> T getDefaultPlugin(Class<T> pluginType) {
         if (pluginType == InstantiatorProvider.class) {
+            //the implementation class is not configured via map so that we can reduce duplication
+            //(ensure that we are adapting the currently configured default implementation for InstantiatorProvider2)
             String className = DEFAULT_PLUGINS.get(InstantiatorProvider2.class.getName());
-            return (T)new InstantiatorProvider2Wrapper(create(InstantiatorProvider2.class, className));
+            return pluginType.cast(new InstantiatorProvider2Wrapper(create(InstantiatorProvider2.class, className)));
         } else {
             String className = DEFAULT_PLUGINS.get(pluginType.getName());
             return create(pluginType, className);
