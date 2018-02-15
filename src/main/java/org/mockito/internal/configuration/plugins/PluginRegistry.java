@@ -24,11 +24,19 @@ class PluginRegistry {
     private final StackTraceCleanerProvider stackTraceCleanerProvider = new PluginLoader(pluginSwitch)
             .loadPlugin(StackTraceCleanerProvider.class);
 
-    private final Object instantiatorProvider = new PluginLoader(pluginSwitch)
-            .loadPlugin(InstantiatorProvider2.class, InstantiatorProvider.class);
+    private final InstantiatorProvider2 instantiatorProvider;
 
     private AnnotationEngine annotationEngine = new PluginLoader(pluginSwitch)
             .loadPlugin(AnnotationEngine.class);
+
+    PluginRegistry() {
+        Object impl = new PluginLoader(pluginSwitch).loadPlugin(InstantiatorProvider2.class, InstantiatorProvider.class);
+        if (impl instanceof InstantiatorProvider) {
+            instantiatorProvider = new InstantiatorProviderWrapper((InstantiatorProvider) impl);
+        } else {
+            instantiatorProvider = (InstantiatorProvider2) impl;
+        }
+    }
 
     /**
      * The implementation of the stack trace cleaner
@@ -56,11 +64,7 @@ class PluginRegistry {
      * current classpath.</p>
      */
     InstantiatorProvider2 getInstantiatorProvider() {
-        if (instantiatorProvider instanceof InstantiatorProvider) {
-            return new InstantiatorProviderWrapper((InstantiatorProvider)instantiatorProvider);
-        }
-
-        return (InstantiatorProvider2)instantiatorProvider;
+        return instantiatorProvider;
     }
 
     /**
