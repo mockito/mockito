@@ -61,6 +61,7 @@ public class InvocationBuilder {
         }
 
         Invocation i = new InterceptedInvocation(mock,
+            false,
             new SerializableMethod(method),
             args,
             NO_OP,

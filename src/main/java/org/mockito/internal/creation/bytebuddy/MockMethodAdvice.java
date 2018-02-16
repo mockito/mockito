@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -141,14 +142,14 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
         private final Method origin;
 
-        private final Object instance;
+        private final WeakReference<Object> instanceRef;
 
         private final Object[] arguments;
 
         private RealMethodCall(SelfCallInfo selfCallInfo, Method origin, Object instance, Object[] arguments) {
             this.selfCallInfo = selfCallInfo;
             this.origin = origin;
-            this.instance = instance;
+            this.instanceRef = new WeakReference<Object>(instance);
             this.arguments = arguments;
         }
 
@@ -162,8 +163,8 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             if (!Modifier.isPublic(origin.getDeclaringClass().getModifiers() & origin.getModifiers())) {
                 origin.setAccessible(true);
             }
-            selfCallInfo.set(instance);
-            return tryInvoke(origin, instance, arguments);
+            selfCallInfo.set(instanceRef.get());
+            return tryInvoke(origin, instanceRef.get(), arguments);
         }
 
     }
@@ -174,14 +175,14 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
         private final SerializableMethod origin;
 
-        private final Object instance;
+        private final SerializeableWeakReference<Object> instanceRef;
 
         private final Object[] arguments;
 
         private SerializableRealMethodCall(String identifier, Method origin, Object instance, Object[] arguments) {
             this.origin = new SerializableMethod(origin);
             this.identifier = identifier;
-            this.instance = instance;
+            this.instanceRef = new SerializeableWeakReference<Object>(instance);
             this.arguments = arguments;
         }
 
@@ -196,13 +197,13 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             if (!Modifier.isPublic(method.getDeclaringClass().getModifiers() & method.getModifiers())) {
                 method.setAccessible(true);
             }
-            MockMethodDispatcher mockMethodDispatcher = MockMethodDispatcher.get(identifier, instance);
+            MockMethodDispatcher mockMethodDispatcher = MockMethodDispatcher.get(identifier, instanceRef.get());
             if (!(mockMethodDispatcher instanceof MockMethodAdvice)) {
                 throw new MockitoException("Unexpected dispatcher for advice-based super call");
             }
-            Object previous = ((MockMethodAdvice) mockMethodDispatcher).selfCallInfo.replace(instance);
+            Object previous = ((MockMethodAdvice) mockMethodDispatcher).selfCallInfo.replace(instanceRef.get());
             try {
-                return tryInvoke(method, instance, arguments);
+                return tryInvoke(method, instanceRef.get(), arguments);
             } finally {
                 ((MockMethodAdvice) mockMethodDispatcher).selfCallInfo.set(previous);
             }

@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.invocation;
 
+import org.mockito.internal.creation.bytebuddy.SerializableReference;
+import org.mockito.internal.creation.bytebuddy.SerializableStrongReference;
+import org.mockito.internal.creation.bytebuddy.SerializeableWeakReference;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.Invocation;
@@ -19,7 +22,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     private static final long serialVersionUID = 475027563923510472L;
 
-    private final Object mock;
+    private final SerializableReference<Object> mockRef;
     private final MockitoMethod mockitoMethod;
     private final Object[] arguments, rawArguments;
     private final RealMethod realMethod;
@@ -33,12 +36,22 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     private StubInfo stubInfo;
 
     public InterceptedInvocation(Object mock,
+                                 boolean useWeakReference,
                                  MockitoMethod mockitoMethod,
                                  Object[] arguments,
                                  RealMethod realMethod,
                                  Location location,
                                  int sequenceNumber) {
-        this.mock = mock;
+        // Strong references are used in test that use invocations without keeping a reference to
+        // the mock. In production code weak references should be used to allow the mock maker to
+        // detect when a mock is only referenced from within its own handler's invocations. See
+        // #1313
+        if (useWeakReference) {
+            this.mockRef = new SerializeableWeakReference<Object>(mock);
+        } else {
+            this.mockRef = new SerializableStrongReference<Object>(mock, false);
+        }
+
         this.mockitoMethod = mockitoMethod;
         this.arguments = ArgumentsProcessor.expandArgs(mockitoMethod, arguments);
         this.rawArguments = arguments;
@@ -99,7 +112,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     @Override
     public Object getMock() {
-        return mock;
+        return mockRef.get();
     }
 
     @Override
@@ -138,7 +151,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
             return false;
         }
         InterceptedInvocation other = (InterceptedInvocation) o;
-        return this.mock.equals(other.mock)
+        return this.mockRef.get().equals(other.mockRef.get())
                 && this.mockitoMethod.equals(other.mockitoMethod)
                 && this.equalArguments(other.arguments);
     }

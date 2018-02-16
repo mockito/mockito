@@ -34,6 +34,7 @@ public class DefaultInvocationFactory implements InvocationFactory {
     public static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, RealMethod realMethod, MockCreationSettings settings, Location location) {
         return new InterceptedInvocation(
             mock,
+            true,
             createMockitoMethod(invokedMethod, settings),
             arguments,
             realMethod,

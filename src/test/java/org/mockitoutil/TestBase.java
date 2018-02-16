@@ -64,7 +64,7 @@ public class TestBase {
         for (int i = 0; i < args.length; i++) {
             types[i] = args[i].getClass();
         }
-        return new InterceptedInvocation(mock(type), new SerializableMethod(type.getMethod(methodName,
+        return new InterceptedInvocation(mock(type), false, new SerializableMethod(type.getMethod(methodName,
                 types)), args, InterceptedInvocation.NO_OP, new LocationImpl(), 1);
     }
 
