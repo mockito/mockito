@@ -44,23 +44,7 @@ class PluginLoader {
      */
     @SuppressWarnings("unchecked")
     <T> T loadPlugin(final Class<T> pluginType) {
-        try {
-            T plugin = loadImpl(pluginType);
-            if (plugin != null) {
-                return plugin;
-            }
-
-            return plugins.getDefaultPlugin(pluginType);
-        } catch (final Throwable t) {
-            return (T) Proxy.newProxyInstance(pluginType.getClassLoader(),
-                    new Class<?>[]{pluginType},
-                    new InvocationHandler() {
-                        @Override
-                        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                            throw new IllegalStateException("Could not initialize plugin: " + pluginType, t);
-                        }
-                    });
-        }
+        return (T) loadPlugin(pluginType, null);
     }
 
     /**
@@ -76,7 +60,7 @@ class PluginLoader {
             PreferredType preferredPlugin = loadImpl(preferredPluginType);
             if (preferredPlugin != null) {
                 return preferredPlugin;
-            } else {
+            } else if (alternatePluginType != null) {
                 AlternateType alternatePlugin = loadImpl(alternatePluginType);
                 if (alternatePlugin != null) {
                     return alternatePlugin;
@@ -90,7 +74,11 @@ class PluginLoader {
                 new InvocationHandler() {
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                        throw new IllegalStateException("Could not initialize plugin: " + preferredPluginType + " (alternate " + alternatePluginType + ")", t);
+                        if (alternatePluginType == null) {
+                            throw new IllegalStateException("Could not initialize plugin: " + preferredPluginType, t);
+                        } else {
+                            throw new IllegalStateException("Could not initialize plugin: " + preferredPluginType + " (alternate " + alternatePluginType + ")", t);
+                        }
                     }
                 });
         }
