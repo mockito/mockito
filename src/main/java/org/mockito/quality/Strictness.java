@@ -89,5 +89,5 @@ public enum Strictness {
      * @since 2.3.0
      */
     @Incubating
-    STRICT_STUBS;
+    STRICT_STUBS
 }

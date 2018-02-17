@@ -48,7 +48,7 @@ public class MissingInvocationInOrderCheckerTest  {
     }
 
     @Test
-    public void shouldPassWhenMatchingInteractionFound() throws Exception {
+    public void shouldPassWhenMatchingInteractionFound() {
 
     	invocations = asList(buildSimpleMethod().toInvocation());
         wanted = buildSimpleMethod().toInvocationMatcher();
@@ -57,7 +57,7 @@ public class MissingInvocationInOrderCheckerTest  {
     }
 
     @Test
-    public void shouldReportWantedButNotInvoked() throws Exception {
+    public void shouldReportWantedButNotInvoked() {
     	invocations = asList(buildDifferentMethod().toInvocation());
         wanted = buildSimpleMethod().toInvocationMatcher();
 
@@ -69,7 +69,7 @@ public class MissingInvocationInOrderCheckerTest  {
     }
 
     @Test
-    public void shouldReportArgumentsAreDifferent() throws Exception {
+    public void shouldReportArgumentsAreDifferent() {
     	invocations = asList(buildIntArgMethod().arg(1111).toInvocation());
         wanted = buildIntArgMethod().arg(2222).toInvocationMatcher();
 
@@ -85,7 +85,7 @@ public class MissingInvocationInOrderCheckerTest  {
      }
 
     @Test
-    public void shouldReportWantedDiffersFromActual() throws Exception {
+    public void shouldReportWantedDiffersFromActual() {
 
     	Invocation invocation1 = buildIntArgMethod().arg(1111).toInvocation();
     	Invocation invocation2 = buildIntArgMethod().arg(2222).toInvocation();

@@ -47,7 +47,7 @@ public class ResetTest extends TestBase {
     }
 
     @Test
-    public void shouldRemoveAllStubbing() throws Exception {
+    public void shouldRemoveAllStubbing() {
         when(mock.objectReturningMethod(isA(Integer.class))).thenReturn(100);
         when(mock.objectReturningMethod(200)).thenReturn(200);
         reset(mock);
@@ -56,14 +56,14 @@ public class ResetTest extends TestBase {
     }
 
     @Test
-    public void shouldRemoveAllInteractions() throws Exception {
+    public void shouldRemoveAllInteractions() {
         mock.simpleMethod(1);
         reset(mock);
         verifyZeroInteractions(mock);
     }
 
     @Test
-    public void shouldRemoveStubbingToString() throws Exception {
+    public void shouldRemoveStubbingToString() {
         IMethods mockTwo = mock(IMethods.class);
         when(mockTwo.toString()).thenReturn("test");
         reset(mockTwo);

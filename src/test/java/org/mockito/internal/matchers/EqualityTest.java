@@ -14,7 +14,7 @@ import static org.mockito.internal.matchers.Equality.areEqual;
 public class EqualityTest extends TestBase {
 
     @Test
-    public void shouldKnowIfObjectsAreEqual() throws Exception {
+    public void shouldKnowIfObjectsAreEqual() {
         int[] arr = new int[] {1, 2};
         assertTrue(areEqual(arr, arr));
         assertTrue(areEqual(new int[] {1, 2}, new int[] {1, 2}));

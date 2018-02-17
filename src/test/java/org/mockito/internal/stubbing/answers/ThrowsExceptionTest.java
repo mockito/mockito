@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 
 public class ThrowsExceptionTest {
     @Test
-    public void should_raise_wanted_throwable() throws Throwable {
+    public void should_raise_wanted_throwable() {
         try {
             new ThrowsException(new IllegalStateException("my dear throwable")).answer(new InvocationBuilder().method("canThrowException").toInvocation());
             Assertions.fail("should have raised wanted exception");
@@ -27,7 +27,7 @@ public class ThrowsExceptionTest {
     }
 
     @Test
-    public void should_throw_mock_exception_without_stacktrace() throws Exception {
+    public void should_throw_mock_exception_without_stacktrace() {
         try {
             new ThrowsException(mock(Exception.class)).answer(new InvocationBuilder().method("canThrowException").toInvocation());
             Assertions.fail("should have raised wanted exception");
@@ -37,7 +37,7 @@ public class ThrowsExceptionTest {
     }
 
     @Test
-    public void should_fill_in_exception_stacktrace() throws Exception {
+    public void should_fill_in_exception_stacktrace() {
         // given
         Exception throwableToRaise = new Exception();
         throwableToRaise.fillInStackTrace();
@@ -57,7 +57,7 @@ public class ThrowsExceptionTest {
     }
 
     @Test
-    public void should_invalidate_null_throwable() throws Throwable {
+    public void should_invalidate_null_throwable() {
         try {
             new ThrowsException(null).validateFor(new InvocationBuilder().toInvocation());
             Assertions.fail("should have raised a MockitoException");
@@ -65,17 +65,17 @@ public class ThrowsExceptionTest {
     }
 
     @Test
-    public void should_pass_proper_checked_exception() throws Throwable {
+    public void should_pass_proper_checked_exception() {
         new ThrowsException(new CharacterCodingException()).validateFor(new InvocationBuilder().method("canThrowException").toInvocation());
     }
 
     @Test(expected = MockitoException.class)
-    public void should_fail_invalid_checked_exception() throws Throwable {
+    public void should_fail_invalid_checked_exception() {
         new ThrowsException(new IOException()).validateFor(new InvocationBuilder().method("canThrowException").toInvocation());
     }
 
     @Test
-    public void should_pass_RuntimeExceptions() throws Throwable {
+    public void should_pass_RuntimeExceptions() {
         new ThrowsException(new Error()).validateFor(new InvocationBuilder().method("canThrowException").toInvocation());
         new ThrowsException(new RuntimeException()).validateFor(new InvocationBuilder().method("canThrowException").toInvocation());
     }

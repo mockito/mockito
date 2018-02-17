@@ -43,7 +43,7 @@ public class AnnotationsTest extends TestBase {
     }
 
     @Test
-    public void shouldInitMocks() throws Exception {
+    public void shouldInitMocks() {
         list.clear();
         map.clear();
         listTwo.clear();
@@ -54,7 +54,7 @@ public class AnnotationsTest extends TestBase {
     }
 
     @Test
-    public void shouldScreamWhenInitializingMocksForNullClass() throws Exception {
+    public void shouldScreamWhenInitializingMocksForNullClass() {
         try {
             MockitoAnnotations.initMocks(null);
             fail();
@@ -65,7 +65,7 @@ public class AnnotationsTest extends TestBase {
     }
 
     @Test
-    public void shouldLookForAnnotatedMocksInSuperClasses() throws Exception {
+    public void shouldLookForAnnotatedMocksInSuperClasses() {
         Sub sub = new Sub();
         MockitoAnnotations.initMocks(sub);
 
@@ -81,7 +81,7 @@ public class AnnotationsTest extends TestBase {
     @Mock(stubOnly=true) IMethods stubOnly;
 
     @Test
-    public void shouldInitMocksWithGivenSettings() throws Exception {
+    public void shouldInitMocksWithGivenSettings() {
         assertEquals("i have a name", namedAndReturningMocks.toString());
         assertNotNull(namedAndReturningMocks.iMethodsReturningMethod());
 

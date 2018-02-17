@@ -82,7 +82,7 @@ public class MockUtilTest extends TestBase {
     interface SomeInterface {}
 
     @Test
-    public void should_know_if_type_is_mockable() throws Exception {
+    public void should_know_if_type_is_mockable() {
         Assertions.assertThat(MockUtil.typeMockabilityOf(FinalClass.class).mockable())
                 .isEqualTo(Plugins.getMockMaker().isTypeMockable(FinalClass.class).mockable());
 

@@ -35,32 +35,32 @@ public class SerializableMethodTest extends TestBase {
     }
 
     @Test
-    public void shouldBeAbleToRetrieveMethodExceptionTypes() throws Exception {
+    public void shouldBeAbleToRetrieveMethodExceptionTypes() {
         assertArrayEquals(toStringMethod.getExceptionTypes(), method.getExceptionTypes());
     }
 
     @Test
-    public void shouldBeAbleToRetrieveMethodName() throws Exception {
+    public void shouldBeAbleToRetrieveMethodName() {
         assertEquals(toStringMethod.getName(), method.getName());
     }
 
     @Test
-    public void shouldBeAbleToCheckIsArgVargs() throws Exception {
+    public void shouldBeAbleToCheckIsArgVargs() {
         assertEquals(toStringMethod.isVarArgs(), method.isVarArgs());
     }
 
     @Test
-    public void shouldBeAbleToGetParameterTypes() throws Exception {
+    public void shouldBeAbleToGetParameterTypes() {
         assertArrayEquals(toStringMethod.getParameterTypes(), method.getParameterTypes());
     }
 
     @Test
-    public void shouldBeAbleToGetReturnType() throws Exception {
+    public void shouldBeAbleToGetReturnType() {
         assertEquals(toStringMethod.getReturnType(), method.getReturnType());
     }
 
     @Test
-    public void shouldBeEqualForTwoInstances() throws Exception {
+    public void shouldBeEqualForTwoInstances() {
         assertTrue(new SerializableMethod(toStringMethod).equals(method));
     }
 

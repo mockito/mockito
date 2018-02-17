@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -38,7 +37,7 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
     }
 
     @Test
-    public void shouldSuccessfullyVerifyConcurrentInvocationsWithTimeout() throws Exception {
+    public void shouldSuccessfullyVerifyConcurrentInvocationsWithTimeout() {
         int potentialOverhead = 1000; // Leave 1000ms extra before timing out as leeway for test overheads
         int expectedMaxTestLength = TIMES * INTERVAL_MILLIS + potentialOverhead;
 
@@ -49,8 +48,7 @@ public class ConcurrentModificationExceptionOnMultiThreadedVerificationTest {
         verifyNoMoreInteractions(target);
     }
 
-    private void startInvocations() throws InterruptedException,
-            ExecutionException {
+    private void startInvocations() {
 
         for(int i=0; i<nThreads; i++) {
             fixedThreadPool.submit(new TargetInvoker(i));

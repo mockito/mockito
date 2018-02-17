@@ -74,7 +74,7 @@ public class CompareMatcherTest {
     }
 
     @Test
-    public void compareToIntVsString() throws Exception {
+    public void compareToIntVsString() {
         when(mock.forObject(leq(5))).thenReturn("");
 
         mock.forObject("abc");

@@ -20,19 +20,19 @@ public class AccessibilityChangerTest {
     @Test
     public void should_enable_and_safely_disable() throws Exception {
         AccessibilityChanger changer = new AccessibilityChanger();
-        changer.enableAccess(field("whatever"));
-        changer.safelyDisableAccess(field("whatever"));
+        changer.enableAccess(field());
+        changer.safelyDisableAccess(field());
     }
 
     @Test(expected = java.lang.AssertionError.class)
     public void safelyDisableAccess_should_fail_when_enableAccess_not_called() throws Exception {
         assumeVmArgPresent("-ea");
-        new AccessibilityChanger().safelyDisableAccess(field("whatever"));
+        new AccessibilityChanger().safelyDisableAccess(field());
     }
 
 
-    private Field field(String fieldName) throws NoSuchFieldException {
-        return this.getClass().getDeclaredField(fieldName);
+    private Field field() throws NoSuchFieldException {
+        return this.getClass().getDeclaredField("whatever");
     }
 
 }

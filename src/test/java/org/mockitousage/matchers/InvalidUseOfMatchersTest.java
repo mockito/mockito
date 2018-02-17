@@ -57,7 +57,7 @@ public class InvalidUseOfMatchersTest {
     }
 
     @Test
-    public void should_not_scream_on_correct_usage() throws Exception {
+    public void should_not_scream_on_correct_usage() {
         mock.simpleMethod(AdditionalMatchers.not(eq("asd")));
         mock.simpleMethod(AdditionalMatchers.or(eq("jkl"), eq("asd")));
     }

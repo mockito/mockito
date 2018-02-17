@@ -20,7 +20,7 @@ public class AtLeastXVerificationTest extends TestBase {
     @Mock private List<String> mock;
 
     @Test
-    public void shouldVerifyAtLeastXTimes() throws Exception {
+    public void shouldVerifyAtLeastXTimes() {
         //when
         mock.clear();
         mock.clear();
@@ -31,7 +31,7 @@ public class AtLeastXVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldFailVerificationAtLeastXTimes() throws Exception {
+    public void shouldFailVerificationAtLeastXTimes() {
         mock.add("one");
         verify(mock, atLeast(1)).add(anyString());
 
@@ -42,7 +42,7 @@ public class AtLeastXVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowAtLeastZeroForTheSakeOfVerifyNoMoreInteractionsSometimes() throws Exception {
+    public void shouldAllowAtLeastZeroForTheSakeOfVerifyNoMoreInteractionsSometimes() {
         //when
         mock.add("one");
         mock.clear();

@@ -27,7 +27,7 @@ public class AnnotatedFieldsShouldBeInitializedByMockitoTestNGListenerTest {
     @Captor ArgumentCaptor<List<?>> captor;
 
     @Test
-    public void ensure_annotated_fields_are_instantiated() throws Exception {
+    public void ensure_annotated_fields_are_instantiated() {
         assertThat(list).isNotNull();
         assertThat(map).isNotNull();
         assertThat(captor).isNotNull();

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNull;
 
 public class PrimitivesTest {
     @Test
-    public void should_not_return_null_for_primitives_wrappers() throws Exception {
+    public void should_not_return_null_for_primitives_wrappers() {
         assertNotNull(Primitives.defaultValue(Boolean.class));
         assertNotNull(Primitives.defaultValue(Character.class));
         assertNotNull(Primitives.defaultValue(Byte.class));
@@ -25,7 +25,7 @@ public class PrimitivesTest {
     }
 
     @Test
-    public void should_not_return_null_for_primitives() throws Exception {
+    public void should_not_return_null_for_primitives() {
         assertNotNull(Primitives.defaultValue(boolean.class));
         assertNotNull(Primitives.defaultValue(char.class));
         assertNotNull(Primitives.defaultValue(byte.class));
@@ -61,7 +61,7 @@ public class PrimitivesTest {
     }
 
     @Test
-    public void should_return_null_for_everything_else() throws Exception {
+    public void should_return_null_for_everything_else() {
         assertNull(Primitives.defaultValue(Object.class));
         assertNull(Primitives.defaultValue(String.class));
         assertNull(Primitives.defaultValue(null));

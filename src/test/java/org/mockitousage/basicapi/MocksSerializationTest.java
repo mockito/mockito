@@ -265,7 +265,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     class CustomAnswersMustImplementSerializableForSerializationToWork
             implements Answer<Object>, Serializable {
         private String string;
-        public Object answer(InvocationOnMock invocation) throws Throwable {
+        public Object answer(InvocationOnMock invocation) {
             invocation.getArguments();
             invocation.getMock();
             return string;

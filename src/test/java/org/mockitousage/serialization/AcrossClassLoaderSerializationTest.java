@@ -24,7 +24,7 @@ public class AcrossClassLoaderSerializationTest {
     public IMethods mock;
 
     @Before
-    public void reproduce_CCE_by_creating_a_mock_with_IMethods_before() throws Exception {
+    public void reproduce_CCE_by_creating_a_mock_with_IMethods_before() {
         mock = Mockito.mock(IMethods.class);
     }
 

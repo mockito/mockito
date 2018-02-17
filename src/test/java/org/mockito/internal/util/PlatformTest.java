@@ -40,7 +40,7 @@ public class PlatformTest {
     }
 
     @Test
-    public void should_warn_for_jvm() throws Exception {
+    public void should_warn_for_jvm() {
         assertThat(Platform.warnForVM("Java HotSpot(TM) 64-Bit Server VM",
                                       "HotSpot", "hotspot warning",
                                       "IBM", "ibm warning"))

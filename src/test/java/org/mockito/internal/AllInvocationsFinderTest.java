@@ -35,14 +35,14 @@ public class AllInvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void no_interactions() throws Exception {
+    public void no_interactions() {
         //expect
         assertTrue(find(asList(mockOne, mockTwo)).isEmpty());
         assertTrue(findStubbings(asList(mockOne, mockTwo)).isEmpty());
     }
 
     @Test
-    public void provides_invocations_in_order() throws Exception {
+    public void provides_invocations_in_order() {
         //given
         mockOne.simpleMethod(100);
         mockTwo.simpleMethod(200);
@@ -59,7 +59,7 @@ public class AllInvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void deduplicates_interactions_from_the_same_mock() throws Exception {
+    public void deduplicates_interactions_from_the_same_mock() {
         //given
         mockOne.simpleMethod(100);
 
@@ -71,7 +71,7 @@ public class AllInvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void provides_stubbings_in_order() throws Exception {
+    public void provides_stubbings_in_order() {
         //given
         mockOne.simpleMethod(50); //ignored, not a stubbing
         when(mockOne.simpleMethod(100)).thenReturn("100");

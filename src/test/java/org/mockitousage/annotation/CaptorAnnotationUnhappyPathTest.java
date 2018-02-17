@@ -28,7 +28,7 @@ public class CaptorAnnotationUnhappyPathTest extends TestBase {
     }
 
     @Test
-    public void shouldFailIfCaptorHasWrongType() throws Exception {
+    public void shouldFailIfCaptorHasWrongType() {
         try {
             //when
             MockitoAnnotations.initMocks(this);

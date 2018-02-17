@@ -24,7 +24,7 @@ public class TestWithoutListenerShouldNotInitializeAnnotatedFieldsTest {
     @Captor ArgumentCaptor<List<?>> captor;
 
     @Test
-    public void test_not_annotated_by_MockitoTestNGListener_should_not_touch_annotated_fields() throws Exception {
+    public void test_not_annotated_by_MockitoTestNGListener_should_not_touch_annotated_fields() {
         assertThat(list).isNull();
         assertThat(map).isNull();
         assertThat(captor).isNull();

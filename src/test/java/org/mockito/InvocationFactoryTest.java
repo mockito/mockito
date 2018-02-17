@@ -19,7 +19,7 @@ import static org.mockito.Mockito.withSettings;
 
 public class InvocationFactoryTest extends TestBase {
     static class TestClass {
-        public String testMethod() throws Throwable {
+        public String testMethod() {
             return "un-mocked";
         }
     }
@@ -55,7 +55,7 @@ public class InvocationFactoryTest extends TestBase {
             TestClass.class.getDeclaredMethod("testMethod"),
             new InvocationFactory.RealMethodBehavior() {
                 @Override
-                public Object call() throws Throwable {
+                public Object call() {
                     return "mocked";
                 }
             });
@@ -70,7 +70,7 @@ public class InvocationFactoryTest extends TestBase {
             withSettings().build(TestClass.class),
             TestClass.class.getDeclaredMethod("testMethod"),
             new Callable() {
-                public Object call() throws Exception {
+                public Object call() {
                     return "mocked";
                 }
             });

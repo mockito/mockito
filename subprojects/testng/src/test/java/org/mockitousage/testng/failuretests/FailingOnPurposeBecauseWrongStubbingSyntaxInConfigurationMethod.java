@@ -32,7 +32,7 @@ public class FailingOnPurposeBecauseWrongStubbingSyntaxInConfigurationMethod {
 
 
     @Test
-    public void here_to_execute_the_config_method() throws Exception {
+    public void here_to_execute_the_config_method() {
     }
 
 }

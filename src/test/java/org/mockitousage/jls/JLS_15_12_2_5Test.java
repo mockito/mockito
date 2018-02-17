@@ -51,7 +51,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_single_arg() throws Exception {
+        public void with_single_arg() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.oneArg(isNull())).thenReturn("ok");
@@ -63,7 +63,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_single_arg_and_matcher_cast() throws Exception {
+        public void with_single_arg_and_matcher_cast() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.oneArg((String) isNull())).thenReturn("ok");
@@ -72,7 +72,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_single_arg_and_null_Object_reference() throws Exception {
+        public void with_single_arg_and_null_Object_reference() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.oneArg(isNull())).thenReturn("ok");
@@ -82,7 +82,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_variable_arg() throws Exception {
+        public void with_variable_arg() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.varargs(isNull())).thenReturn("ok");
@@ -94,7 +94,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_variable_arg_and_matcher_String_cast() throws Exception {
+        public void with_variable_arg_and_matcher_String_cast() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.varargs((String) isNull())).thenReturn("ok");
@@ -103,7 +103,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_variable_arg_and_matcher_String_array_cast() throws Exception {
+        public void with_variable_arg_and_matcher_String_array_cast() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.varargs((String[]) isNull())).thenReturn("ok");
@@ -112,7 +112,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_variable_arg_and_null_Object_array() throws Exception {
+        public void with_variable_arg_and_null_Object_array() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.varargs(isNull())).thenReturn("ok");
@@ -122,7 +122,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_variable_arg_and_null_Object_arg() throws Exception {
+        public void with_variable_arg_and_null_Object_arg() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.varargs(isNull())).thenReturn("ok");
@@ -185,7 +185,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_single_arg() throws Exception {
+        public void with_single_arg() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.oneArg(isNull())).thenReturn("ok");
@@ -194,7 +194,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_single_arg_and_null_Object_reference() throws Exception {
+        public void with_single_arg_and_null_Object_reference() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.oneArg(isNull())).thenReturn("ok");
@@ -204,7 +204,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_variable_arg() throws Exception {
+        public void with_variable_arg() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.varargs(isNull())).thenReturn("ok");
@@ -213,7 +213,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_variable_arg_and_null_Object_array() throws Exception {
+        public void with_variable_arg_and_null_Object_array() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.varargs(isNull())).thenReturn("ok");
@@ -223,7 +223,7 @@ public class JLS_15_12_2_5Test {
         }
 
         @Test
-        public void with_variable_arg_and_null_Object_arg() throws Exception {
+        public void with_variable_arg_and_null_Object_arg() {
             SingleOverload mock = mock(SingleOverload.class);
 
             when(mock.varargs(isNull())).thenReturn("ok");

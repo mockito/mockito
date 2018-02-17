@@ -42,7 +42,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     private final WeakConcurrentMap<Class<?>, SoftReference<MethodGraph>> graphs
         = new WeakConcurrentMap.WithInlinedExpunction<Class<?>, SoftReference<MethodGraph>>();
 
-    public MockMethodAdvice(WeakConcurrentMap<Object, MockMethodInterceptor> interceptors, String identifier) {
+    MockMethodAdvice(WeakConcurrentMap<Object, MockMethodInterceptor> interceptors, String identifier) {
         this.interceptors = interceptors;
         this.identifier = identifier;
     }

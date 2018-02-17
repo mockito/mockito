@@ -68,7 +68,7 @@ public class MockInjectionUsingConstructorTest {
     }
 
     @Test
-    public void constructor_is_called_for_each_test_in_test_class() throws Exception {
+    public void constructor_is_called_for_each_test_in_test_class() {
         // given
         junit_test_with_3_tests_methods.constructor_instantiation = 0;
         JUnitCore jUnitCore = new JUnitCore();
@@ -82,13 +82,13 @@ public class MockInjectionUsingConstructorTest {
     }
 
     @Test
-    public void objects_created_with_constructor_initialization_can_be_spied() throws Exception {
+    public void objects_created_with_constructor_initialization_can_be_spied() {
         assertFalse(MockUtil.isMock(articleManager));
         assertTrue(MockUtil.isMock(spiedArticleManager));
     }
 
     @Test
-    public void should_report_failure_only_when_object_initialization_throws_exception() throws Exception {
+    public void should_report_failure_only_when_object_initialization_throws_exception() {
 
         try {
             MockitoAnnotations.initMocks(new ATest());
@@ -132,7 +132,7 @@ public class MockInjectionUsingConstructorTest {
 
 
     @Test
-    public void injectMocksMustFailWithInterface() throws Exception {
+    public void injectMocksMustFailWithInterface() {
         class TestCase {
             @InjectMocks
             IMethods f;
@@ -146,7 +146,7 @@ public class MockInjectionUsingConstructorTest {
     }
 
     @Test
-    public void injectMocksMustFailWithEnum() throws Exception {
+    public void injectMocksMustFailWithEnum() {
         class TestCase {
             @InjectMocks
             TimeUnit f;
@@ -159,7 +159,7 @@ public class MockInjectionUsingConstructorTest {
     }
 
     @Test
-    public void injectMocksMustFailWithAbstractClass() throws Exception {
+    public void injectMocksMustFailWithAbstractClass() {
         class TestCase {
             @InjectMocks
             AbstractCollection<?> f;
@@ -172,7 +172,7 @@ public class MockInjectionUsingConstructorTest {
     }
 
     @Test
-    public void injectMocksMustFailWithNonStaticInnerClass() throws Exception {
+    public void injectMocksMustFailWithNonStaticInnerClass() {
         class TestCase {
             class InnerClass {}
             @InjectMocks
@@ -188,7 +188,7 @@ public class MockInjectionUsingConstructorTest {
 
     static class  StaticInnerClass {}
     @Test
-    public void injectMocksMustSucceedWithStaticInnerClass() throws Exception {
+    public void injectMocksMustSucceedWithStaticInnerClass() {
         class TestCase {
             @InjectMocks
             StaticInnerClass f;
@@ -201,7 +201,7 @@ public class MockInjectionUsingConstructorTest {
     }
 
     @Test
-    public void injectMocksMustSucceedWithInstance() throws Exception {
+    public void injectMocksMustSucceedWithInstance() {
         class TestCase {
             @InjectMocks
             StaticInnerClass f = new StaticInnerClass();

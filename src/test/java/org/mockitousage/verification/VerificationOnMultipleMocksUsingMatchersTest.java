@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {
 
     @Test
-    public void shouldVerifyUsingMatchers() throws Exception {
+    public void shouldVerifyUsingMatchers() {
         List<Object> list = Mockito.mock(List.class);
         HashMap<Object, Object> map = Mockito.mock(HashMap.class);
 
@@ -40,7 +40,7 @@ public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyMultipleMocks() throws Exception {
+    public void shouldVerifyMultipleMocks() {
         List<String> list = mock(List.class);
         Map<Object, Integer> map = mock(Map.class);
         Set<?> set = mock(Set.class);

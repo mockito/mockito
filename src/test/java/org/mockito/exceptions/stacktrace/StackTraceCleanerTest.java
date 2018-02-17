@@ -14,7 +14,7 @@ public class StackTraceCleanerTest {
     private DefaultStackTraceCleaner cleaner= new DefaultStackTraceCleaner();
 
     @Test
-    public void allow_or_disallow_mockito_mockito_objects_in_stacktrace() throws Exception {
+    public void allow_or_disallow_mockito_mockito_objects_in_stacktrace() {
         assertAcceptedInStackTrace("my.custom.Type");
         assertRejectedInStackTrace("org.mockito.foo.Bar");
 

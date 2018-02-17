@@ -24,7 +24,7 @@ public class MockingProgressImplTest extends TestBase {
     }
 
     @Test
-    public void shouldStartVerificationAndPullVerificationMode() throws Exception {
+    public void shouldStartVerificationAndPullVerificationMode() {
         assertNull(mockingProgress.pullVerificationMode());
 
         VerificationMode mode = VerificationModeFactory.times(19);
@@ -37,7 +37,7 @@ public class MockingProgressImplTest extends TestBase {
     }
 
     @Test
-    public void shouldCheckIfVerificationWasFinished() throws Exception {
+    public void shouldCheckIfVerificationWasFinished() {
         mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
         try {
             mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
@@ -46,7 +46,7 @@ public class MockingProgressImplTest extends TestBase {
     }
 
     @Test
-    public void shouldNotifyListenerSafely() throws Exception {
+    public void shouldNotifyListenerSafely() {
         //when
         mockingProgress.addListener(null);
 

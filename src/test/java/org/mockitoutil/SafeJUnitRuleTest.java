@@ -21,7 +21,7 @@ public class SafeJUnitRuleTest {
     @Test public void happy_path_no_exception() throws Throwable {
         //when
         rule.apply(new Statement() {
-            public void evaluate() throws Throwable {
+            public void evaluate() {
                 //all good
             }
         }, mock(FrameworkMethod.class), this).evaluate();
@@ -34,7 +34,7 @@ public class SafeJUnitRuleTest {
     public void regular_failing_test() throws Throwable {
         //when
         rule.apply(new Statement() {
-            public void evaluate() throws Throwable {
+            public void evaluate() {
                 throw new IllegalArgumentException();
             }
         }, mock(FrameworkMethod.class), this).evaluate();
@@ -46,7 +46,7 @@ public class SafeJUnitRuleTest {
 
         //when
         rule.apply(new Statement() {
-            public void evaluate() throws Throwable {
+            public void evaluate() {
                 throw new AssertionError("x");
             }
         }, mock(FrameworkMethod.class), this).evaluate();
@@ -59,7 +59,7 @@ public class SafeJUnitRuleTest {
         //when
         try {
             rule.apply(new Statement() {
-                public void evaluate() throws Throwable {
+                public void evaluate() {
                     //all good
                 }
             }, mock(FrameworkMethod.class), this).evaluate();
@@ -78,7 +78,7 @@ public class SafeJUnitRuleTest {
         //when
         try {
             rule.apply(new Statement() {
-                public void evaluate() throws Throwable {
+                public void evaluate() {
                     throw new AssertionError("BAR");
                 }
             }, mock(FrameworkMethod.class), this).evaluate();
@@ -95,7 +95,7 @@ public class SafeJUnitRuleTest {
         //when
         try {
             rule.apply(new Statement() {
-                public void evaluate() throws Throwable {
+                public void evaluate() {
                     throw new RuntimeException("x");
                 }
             }, mock(FrameworkMethod.class), this).evaluate();
@@ -116,7 +116,7 @@ public class SafeJUnitRuleTest {
         //when
         try {
             rule.apply(new Statement() {
-                public void evaluate() throws Throwable {
+                public void evaluate() {
                     throw new RuntimeException();
                 }
             }, mock(FrameworkMethod.class), this).evaluate();

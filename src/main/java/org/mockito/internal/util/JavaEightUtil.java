@@ -35,7 +35,7 @@ public final class JavaEightUtil {
             return emptyOptional;
         }
 
-        return emptyOptional = invokeNullaryFactoryMethod("java.util.Optional", "empty");
+        return emptyOptional = invokeNullaryFactoryMethod("java.util.Optional");
     }
 
 
@@ -50,7 +50,7 @@ public final class JavaEightUtil {
             return emptyOptionalDouble;
         }
 
-        return emptyOptionalDouble = invokeNullaryFactoryMethod("java.util.OptionalDouble", "empty");
+        return emptyOptionalDouble = invokeNullaryFactoryMethod("java.util.OptionalDouble");
     }
 
     /**
@@ -64,7 +64,7 @@ public final class JavaEightUtil {
             return emptyOptionalInt;
         }
 
-        return emptyOptionalInt = invokeNullaryFactoryMethod("java.util.OptionalInt", "empty");
+        return emptyOptionalInt = invokeNullaryFactoryMethod("java.util.OptionalInt");
     }
 
     /**
@@ -78,7 +78,7 @@ public final class JavaEightUtil {
             return emptyOptionalLong;
         }
 
-        return emptyOptionalLong = invokeNullaryFactoryMethod("java.util.OptionalLong", "empty");
+        return emptyOptionalLong = invokeNullaryFactoryMethod("java.util.OptionalLong");
     }
 
     /**
@@ -88,7 +88,7 @@ public final class JavaEightUtil {
      */
     public static Object emptyStream() {
         // note: the empty stream can not be stored as a singleton.
-        return invokeNullaryFactoryMethod("java.util.stream.Stream", "empty");
+        return invokeNullaryFactoryMethod("java.util.stream.Stream");
     }
 
     /**
@@ -98,7 +98,7 @@ public final class JavaEightUtil {
      */
     public static Object emptyDoubleStream() {
         // note: the empty stream can not be stored as a singleton.
-        return invokeNullaryFactoryMethod("java.util.stream.DoubleStream", "empty");
+        return invokeNullaryFactoryMethod("java.util.stream.DoubleStream");
     }
 
     /**
@@ -108,7 +108,7 @@ public final class JavaEightUtil {
      */
     public static Object emptyIntStream() {
         // note: the empty stream can not be stored as a singleton.
-        return invokeNullaryFactoryMethod("java.util.stream.IntStream", "empty");
+        return invokeNullaryFactoryMethod("java.util.stream.IntStream");
     }
 
     /**
@@ -118,27 +118,26 @@ public final class JavaEightUtil {
      */
     public static Object emptyLongStream() {
         // note: the empty stream can not be stored as a singleton.
-        return invokeNullaryFactoryMethod("java.util.stream.LongStream", "empty");
+        return invokeNullaryFactoryMethod("java.util.stream.LongStream");
     }
 
     /**
      * Invokes a nullary static factory method using reflection to stay backwards-compatible with older JDKs.
      *
      * @param fqcn The fully qualified class name of the type to be produced.
-     * @param methodName The name of the factory method.
      * @return the object produced.
      */
-    private static Object invokeNullaryFactoryMethod(final String fqcn, final String methodName) {
+    private static Object invokeNullaryFactoryMethod(final String fqcn) {
         try {
             final Class<?> type = Class.forName(fqcn);
-            final Method method = type.getMethod(methodName);
+            final Method method = type.getMethod("empty");
 
             return method.invoke(null);
             // any exception is really unexpected since the type name has
             // already been verified
         } catch (final Exception e) {
             throw new InstantiationException(
-                    String.format("Could not create %s#%s(): %s", fqcn, methodName, e), e);
+                    String.format("Could not create %s#%s(): %s", fqcn, "empty", e), e);
         }
     }
 }

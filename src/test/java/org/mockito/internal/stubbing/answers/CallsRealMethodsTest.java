@@ -31,7 +31,7 @@ public class CallsRealMethodsTest {
     }
 
     @Test
-    public void should_fail_when_calling_real_method_on_interface() throws Throwable {
+    public void should_fail_when_calling_real_method_on_interface() {
         //given
         Invocation invocationOnInterface = new InvocationBuilder().method("simpleMethod").toInvocation();
         try {
@@ -43,7 +43,7 @@ public class CallsRealMethodsTest {
     }
 
     @Test
-    public void should_be_OK_when_calling_real_method_on_concrete_class() throws Throwable {
+    public void should_be_OK_when_calling_real_method_on_concrete_class() {
         //given
         ArrayList<?> mock = mock(ArrayList.class);
         mock.clear();

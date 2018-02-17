@@ -24,10 +24,11 @@ public class DefaultInternalRunner implements InternalRunner {
 
     private final BlockJUnit4ClassRunner runner;
 
+    @SuppressWarnings("WeakerAccess")
     public DefaultInternalRunner(Class<?> testClass, final Supplier<MockitoTestListener> listenerSupplier) throws InitializationError {
         runner = new BlockJUnit4ClassRunner(testClass) {
 
-            public Object target;
+            Object target;
             private MockitoTestListener mockitoTestListener;
 
             protected Statement withBefores(FrameworkMethod method, Object target, Statement statement) {
@@ -46,12 +47,12 @@ public class DefaultInternalRunner implements InternalRunner {
                     Throwable failure;
 
                     @Override
-                    public void testStarted(Description description) throws Exception {
+                    public void testStarted(Description description) {
                         started = true;
                     }
 
                     @Override
-                    public void testFailure(Failure failure) throws Exception {
+                    public void testFailure(Failure failure) {
                         this.failure = failure.getException();
                         // If the test fails during the setup, `testFinished` is never invoked
                         // Therefore, if we have not started, cleanup the testlistener
@@ -61,7 +62,7 @@ public class DefaultInternalRunner implements InternalRunner {
                     }
 
                     @Override
-                    public void testFinished(Description description) throws Exception {
+                    public void testFinished(Description description) {
                         try {
                             if (mockitoTestListener != null) {
                                 Mockito.framework().removeListener(mockitoTestListener);

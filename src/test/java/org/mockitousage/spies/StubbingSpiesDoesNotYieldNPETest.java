@@ -30,7 +30,7 @@ public class StubbingSpiesDoesNotYieldNPETest extends TestBase {
     }
 
     @Test
-    public void shouldNotThrowNPE() throws Exception {
+    public void shouldNotThrowNPE() {
         Foo foo = new Foo();
         Foo spy = spy(foo);
 

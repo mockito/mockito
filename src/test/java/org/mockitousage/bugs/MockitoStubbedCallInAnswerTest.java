@@ -22,12 +22,12 @@ public class MockitoStubbedCallInAnswerTest extends TestBase {
     @Mock Bar bar;
 
     @Test
-    public void stubbing_the_right_mock() throws Exception {
+    public void stubbing_the_right_mock() {
         //stubbing on different mock should not be altered
         when(bar.doInt()).thenReturn(0);
         when(foo.doInt()).thenAnswer(new Answer<Integer>() {
             @Override
-            public Integer answer(InvocationOnMock invocation) throws Throwable {
+            public Integer answer(InvocationOnMock invocation) {
                 return bar.doInt();
             }
         });
@@ -45,9 +45,9 @@ public class MockitoStubbedCallInAnswerTest extends TestBase {
     }
 
     @Test
-    public void return_type_validation() throws Exception {
+    public void return_type_validation() {
         when(foo.doString()).thenAnswer(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
+            public String answer(InvocationOnMock invocation) {
                 //invoking a method on a different mock, with different return type
                 return String.valueOf(bar.doInt());
             }
@@ -60,16 +60,16 @@ public class MockitoStubbedCallInAnswerTest extends TestBase {
     }
 
     @Test
-    public void prevents_stack_overflow() throws Exception {
+    public void prevents_stack_overflow() {
         when(foo.doInt()).thenAnswer(new Answer<Integer>() {
-            public Integer answer(InvocationOnMock invocation) throws Throwable {
+            public Integer answer(InvocationOnMock invocation) {
                 return bar.doInt();
             }
         });
         assertEquals(0, foo.doInt());
 
         when(foo.doInt()).thenAnswer(new Answer<Integer>() {
-            public Integer answer(InvocationOnMock invocation) throws Throwable {
+            public Integer answer(InvocationOnMock invocation) {
                 return bar.doInt() + 1;
             }
         });
@@ -79,10 +79,10 @@ public class MockitoStubbedCallInAnswerTest extends TestBase {
     }
 
     @Test
-    public void overriding_stubbing() throws Exception {
+    public void overriding_stubbing() {
         when(bar.doInt()).thenReturn(10);
         when(foo.doInt()).thenAnswer(new Answer<Integer>() {
-            public Integer answer(InvocationOnMock invocation) throws Throwable {
+            public Integer answer(InvocationOnMock invocation) {
                 return bar.doInt() + 1;
             }
         });

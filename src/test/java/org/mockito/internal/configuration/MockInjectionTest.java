@@ -24,7 +24,7 @@ public class MockInjectionTest {
     private AnObjectWithoutConstructor withoutConstructor;
 
     @After
-    public void reset() throws Exception {
+    public void reset() {
         withConstructor = null;
         withoutConstructor = null;
     }

@@ -56,7 +56,7 @@ public class VerificationWithTimeoutTest {
     }
 
     @Test
-    public void shouldVerifyWithTimeout() throws Exception {
+    public void shouldVerifyWithTimeout() {
         // when
         delayedExecution.callAsync(30, MILLISECONDS, callMock('c'));
 
@@ -69,7 +69,7 @@ public class VerificationWithTimeoutTest {
     }
 
     @Test
-    public void shouldFailVerificationWithTimeout() throws Exception {
+    public void shouldFailVerificationWithTimeout() {
         // when
         delayedExecution.callAsync(30, MILLISECONDS, callMock('c'));
 
@@ -80,7 +80,7 @@ public class VerificationWithTimeoutTest {
     }
 
     @Test
-    public void shouldAllowMixingOtherModesWithTimeout() throws Exception {
+    public void shouldAllowMixingOtherModesWithTimeout() {
         // when
         delayedExecution.callAsync(10, MILLISECONDS, callMock('c'));
         delayedExecution.callAsync(10, MILLISECONDS, callMock('c'));
@@ -92,7 +92,7 @@ public class VerificationWithTimeoutTest {
     }
 
     @Test
-    public void shouldAllowMixingOtherModesWithTimeoutAndFail() throws Exception {
+    public void shouldAllowMixingOtherModesWithTimeoutAndFail() {
         // when
         delayedExecution.callAsync(10, MILLISECONDS, callMock('c'));
         delayedExecution.callAsync(10, MILLISECONDS, callMock('c'));
@@ -104,7 +104,7 @@ public class VerificationWithTimeoutTest {
     }
 
     @Test
-    public void shouldAllowMixingOnlyWithTimeout() throws Exception {
+    public void shouldAllowMixingOnlyWithTimeout() {
         // when
         delayedExecution.callAsync(30, MILLISECONDS, callMock('c'));
 
@@ -114,7 +114,7 @@ public class VerificationWithTimeoutTest {
     }
 
     @Test
-    public void shouldAllowMixingOnlyWithTimeoutAndFail() throws Exception {
+    public void shouldAllowMixingOnlyWithTimeoutAndFail() {
         // when
         delayedExecution.callAsync(30, MILLISECONDS, callMock('c'));
 
@@ -132,7 +132,7 @@ public class VerificationWithTimeoutTest {
      * is used.
      */
     @Test
-    public void canIgnoreInvocationsWithJunit() throws InterruptedException {
+    public void canIgnoreInvocationsWithJunit() {
         // when
         delayedExecution.callAsync(10, MILLISECONDS, callMock('1'));
 
@@ -148,7 +148,7 @@ public class VerificationWithTimeoutTest {
     }
 
     @Test
-    public void shouldAllowTimeoutVerificationInOrder() throws Exception {
+    public void shouldAllowTimeoutVerificationInOrder() {
         // when
         delayedExecution.callAsync(50, MILLISECONDS, callMock('1'));
 

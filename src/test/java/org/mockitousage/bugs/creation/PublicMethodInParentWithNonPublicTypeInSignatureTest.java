@@ -15,12 +15,12 @@ public class PublicMethodInParentWithNonPublicTypeInSignatureTest {
     private Object ref;
 
     @Test
-    public void java_object_creation() throws Exception {
+    public void java_object_creation() {
         ref = new PublicClass();
     }
 
     @Test
-    public void should_not_fail_when_instantiating() throws Exception {
+    public void should_not_fail_when_instantiating() {
         ref = Mockito.mock(PublicClass.class);
     }
 }

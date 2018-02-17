@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class SimpleMockitoLoggerTest extends TestBase {
 
     @Test
-    public void shouldLog() throws Exception {
+    public void shouldLog() {
         //given
         SimpleMockitoLogger logger = new SimpleMockitoLogger();
         //when

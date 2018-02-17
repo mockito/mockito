@@ -25,8 +25,8 @@ import static org.mockito.Mockito.*;
 
 public class SpyingOnRealObjectsTest extends TestBase {
 
-    List<String> list = new LinkedList<String>();
-    List<String> spy = Mockito.spy(list);
+    private List<String> list = new LinkedList<String>();
+    private List<String> spy = Mockito.spy(list);
 
     @Test
     public void shouldVerify() {
@@ -80,7 +80,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
         try {
             spy.clear();
             fail();
-        } catch (RuntimeException e) {}
+        } catch (RuntimeException ignored) {}
 
         assertEquals(1, spy.size());
     }
@@ -120,7 +120,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
         try {
             inOrder.verify(spy).add("one");
             fail();
-        } catch (VerificationInOrderFailure f) {}
+        } catch (VerificationInOrderFailure ignored) {}
     }
 
     @Test
@@ -140,7 +140,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
         try {
             verify(spy, times(3)).add("one");
             fail();
-        } catch (TooLittleActualInvocations e) {}
+        } catch (TooLittleActualInvocations ignored) {}
     }
 
     @Test
@@ -152,7 +152,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
         try {
             verifyNoMoreInteractions(spy);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted ignored) {}
     }
 
     @Test
@@ -179,7 +179,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
     }
 
     @Test
-    public void shouldSayNiceMessageWhenSpyingOnPrivateClass() throws Exception {
+    public void shouldSayNiceMessageWhenSpyingOnPrivateClass() {
         List<String> real = Arrays.asList("first", "second");
         try {
             List<String> spy = spy(real);

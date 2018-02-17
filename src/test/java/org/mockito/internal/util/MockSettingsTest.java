@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 public class MockSettingsTest extends TestBase {
 
     @Test
-    public void public_api_for_creating_settings() throws Exception {
+    public void public_api_for_creating_settings() {
         //when
         MockCreationSettings<List> settings = Mockito.withSettings()
             .name("dummy")

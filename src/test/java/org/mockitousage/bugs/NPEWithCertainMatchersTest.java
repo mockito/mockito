@@ -44,6 +44,7 @@ public class NPEWithCertainMatchersTest extends TestBase {
         verify(mock).intArgumentMethod(eq(new Integer(100)));
     }
 
+    @SuppressWarnings("UnnecessaryBoxing")
     @Test
     public void shouldNotThrowNPEWhenIntegerPassedToSame() {
         mock.intArgumentMethod(100);

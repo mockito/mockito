@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public class SimpleArgumentResolverTest {
 
     @Test
-    public void should_return_object_matching_given_types() throws Exception {
+    public void should_return_object_matching_given_types() {
         ConstructorInjection.SimpleArgumentResolver resolver =
                 new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet<Long>(), new ByteArrayOutputStream(), new HashMap<String, String>()));
 
@@ -29,7 +29,7 @@ public class SimpleArgumentResolverTest {
     }
 
     @Test
-    public void should_return_null_when_match_is_not_possible_on_given_types() throws Exception {
+    public void should_return_null_when_match_is_not_possible_on_given_types() {
         ConstructorInjection.SimpleArgumentResolver resolver =
                 new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet<Float>(), new ByteArrayOutputStream()));
 
@@ -42,7 +42,7 @@ public class SimpleArgumentResolverTest {
     }
 
     @Test
-    public void should_return_null_when_types_are_primitives() throws Exception {
+    public void should_return_null_when_types_are_primitives() {
         ConstructorInjection.SimpleArgumentResolver resolver =
                 new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashMap<Integer, String>(), new TreeSet<Integer>()));
 

@@ -28,7 +28,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectTooLittleActualInvocations() throws Exception {
+    public void shouldDetectTooLittleActualInvocations() {
         mock.clear();
         mock.clear();
 
@@ -44,7 +44,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectTooManyActualInvocations() throws Exception {
+    public void shouldDetectTooManyActualInvocations() {
         mock.clear();
         mock.clear();
 
@@ -60,7 +60,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectActualInvocationsCountIsMoreThanZero() throws Exception {
+    public void shouldDetectActualInvocationsCountIsMoreThanZero() {
         verify(mock, times(0)).clear();
         try {
             verify(mock, times(15)).clear();
@@ -69,7 +69,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectActuallyCalledOnce() throws Exception {
+    public void shouldDetectActuallyCalledOnce() {
         mock.clear();
 
         try {
@@ -81,13 +81,13 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldPassWhenMethodsActuallyNotCalled() throws Exception {
+    public void shouldPassWhenMethodsActuallyNotCalled() {
         verify(mock, times(0)).clear();
         verify(mock, times(0)).add("yes, I wasn't called");
     }
 
     @Test
-    public void shouldNotCountInStubbedInvocations() throws Exception {
+    public void shouldNotCountInStubbedInvocations() {
         when(mock.add("test")).thenReturn(false);
         when(mock.add("test")).thenReturn(true);
 
@@ -98,7 +98,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowVerifyingInteractionNeverHappened() throws Exception {
+    public void shouldAllowVerifyingInteractionNeverHappened() {
         mock.add("one");
 
         verify(mock, never()).add("two");
@@ -111,7 +111,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowVerifyingInteractionNeverHappenedInOrder() throws Exception {
+    public void shouldAllowVerifyingInteractionNeverHappenedInOrder() {
         mock.add("one");
         mock.add("two");
 

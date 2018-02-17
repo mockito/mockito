@@ -55,7 +55,7 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
         //given
         final List<Method> methods = new LinkedList<Method>();
         InvocationHandler handler = new InvocationHandler() {
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        public Object invoke(Object proxy, Method method, Object[] args) {
             methods.add(method);
             return null;
         }};

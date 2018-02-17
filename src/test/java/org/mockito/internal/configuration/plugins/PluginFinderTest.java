@@ -102,7 +102,7 @@ public class PluginFinderTest extends TestBase {
         assertEquals(null, finder.findPluginClass(asList(f1.toURI().toURL(), f2.toURI().toURL())));
     }
 
-    @Test public void problems_loading_impl() throws Exception {
+    @Test public void problems_loading_impl() {
         when(switcher.isEnabled(anyString())).thenThrow(new RuntimeException("Boo!"));
 
         try {

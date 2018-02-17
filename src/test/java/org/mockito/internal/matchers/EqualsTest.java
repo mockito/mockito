@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 
 public class EqualsTest extends TestBase {
 
+    @SuppressWarnings("UnnecessaryBoxing")
     @Test
     public void shouldBeEqual() {
         assertEquals(new Equals(null), new Equals(null));
@@ -29,21 +30,21 @@ public class EqualsTest extends TestBase {
     }
 
     @Test
-    public void shouldDescribeWithExtraTypeInfo() throws Exception {
+    public void shouldDescribeWithExtraTypeInfo() {
         String descStr = new Equals(100).toStringWithType();
 
         assertEquals("(Integer) 100", descStr);
     }
 
     @Test
-    public void shouldDescribeWithExtraTypeInfoOfLong() throws Exception {
+    public void shouldDescribeWithExtraTypeInfoOfLong() {
         String descStr = new Equals(100L).toStringWithType();
 
         assertEquals("(Long) 100L", descStr);
     }
 
     @Test
-    public void shouldDescribeWithTypeOfString() throws Exception {
+    public void shouldDescribeWithTypeOfString() {
         String descStr = new Equals("x").toStringWithType();
 
         assertEquals("(String) \"x\"", descStr);
@@ -78,7 +79,7 @@ public class EqualsTest extends TestBase {
     }
 
     @Test
-    public void shouldMatchTypes() throws Exception {
+    public void shouldMatchTypes() {
         //when
         ContainsExtraTypeInfo equals = new Equals(10);
 
@@ -88,7 +89,7 @@ public class EqualsTest extends TestBase {
     }
 
     @Test
-    public void shouldMatchTypesSafelyWhenActualIsNull() throws Exception {
+    public void shouldMatchTypesSafelyWhenActualIsNull() {
         //when
         ContainsExtraTypeInfo equals = new Equals(null);
 
@@ -97,7 +98,7 @@ public class EqualsTest extends TestBase {
     }
 
     @Test
-    public void shouldMatchTypesSafelyWhenGivenIsNull() throws Exception {
+    public void shouldMatchTypesSafelyWhenGivenIsNull() {
         //when
         ContainsExtraTypeInfo equals = new Equals(10);
 

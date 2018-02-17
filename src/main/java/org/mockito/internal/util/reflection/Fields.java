@@ -41,8 +41,7 @@ public abstract class Fields {
      * @return InstanceFields of this object instance.
      */
     public static InstanceFields declaredFieldsOf(Object instance) {
-        List<InstanceField> instanceFields = new ArrayList<InstanceField>();
-        instanceFields.addAll(instanceFieldsIn(instance, instance.getClass().getDeclaredFields()));
+        List<InstanceField> instanceFields = new ArrayList<InstanceField>(instanceFieldsIn(instance, instance.getClass().getDeclaredFields()));
         return new InstanceFields(instance, instanceFields);
     }
 
@@ -95,7 +94,7 @@ public abstract class Fields {
      *
      * @return The filter.
      */
-    public static Filter<InstanceField> syntheticField() {
+    static Filter<InstanceField> syntheticField() {
         return new Filter<InstanceField>() {
             public boolean isOut(InstanceField instanceField) {
                 return instanceField.isSynthetic();
@@ -108,7 +107,7 @@ public abstract class Fields {
 
         private final List<InstanceField> instanceFields;
 
-        public InstanceFields(Object instance, List<InstanceField> instanceFields) {
+        InstanceFields(Object instance, List<InstanceField> instanceFields) {
             this.instance = instance;
             this.instanceFields = instanceFields;
         }

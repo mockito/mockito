@@ -20,7 +20,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     private IMethods mock;
 
     @Test
-    public void should_return_consecutive_values() throws Exception {
+    public void should_return_consecutive_values() {
         when(mock.simpleMethod())
                 .thenReturn("one")
                 .thenReturn("two")
@@ -34,7 +34,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test
-    public void should_return_consecutive_values_for_two_nulls() throws Exception {
+    public void should_return_consecutive_values_for_two_nulls() {
         when(mock.simpleMethod()).thenReturn(null, (String[]) null);
 
         assertNull(mock.simpleMethod());
@@ -42,7 +42,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test
-    public void should_return_consecutive_values_set_by_shorten_then_return_method() throws Exception {
+    public void should_return_consecutive_values_set_by_shorten_then_return_method() {
         when(mock.simpleMethod()).thenReturn("one", "two", "three");
 
         assertEquals("one", mock.simpleMethod());
@@ -79,7 +79,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test
-    public void should_throw_consecutively() throws Exception {
+    public void should_throw_consecutively() {
         when(mock.simpleMethod()).thenThrow(new RuntimeException())
                                  .thenThrow(new IllegalArgumentException())
                                  .thenThrow(new NullPointerException());
@@ -106,7 +106,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test
-    public void should_throw_consecutively_set_by_shorten_then_throw_method() throws Exception {
+    public void should_throw_consecutively_set_by_shorten_then_throw_method() {
         when(mock.simpleMethod()).thenThrow(new RuntimeException(),
                                             new IllegalArgumentException(),
                                             new NullPointerException());
@@ -133,7 +133,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test
-    public void should_throw_classes() throws Exception {
+    public void should_throw_classes() {
         // Unavoidable JDK7+ 'unchecked generic array creation' warning
         when(mock.simpleMethod()).thenThrow(IllegalArgumentException.class);
 
@@ -150,7 +150,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_throw_consecutively_classes_set_by_shorten_then_throw_method() throws Exception {
+    public void should_throw_consecutively_classes_set_by_shorten_then_throw_method() {
         // Unavoidable JDK7+ 'unchecked generic array creation' warning
         when(mock.simpleMethod()).thenThrow(RuntimeException.class,
                                             IllegalArgumentException.class,
@@ -178,7 +178,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test
-    public void should_mix_consecutive_returns_with_exceptions() throws Exception {
+    public void should_mix_consecutive_returns_with_exceptions() {
         when(mock.simpleMethod())
                 .thenThrow(new IllegalArgumentException())
                 .thenReturn("one")
@@ -202,14 +202,14 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test(expected = MockitoException.class)
-    public void should_validate_consecutive_exception() throws Exception {
+    public void should_validate_consecutive_exception() {
         when(mock.simpleMethod())
                 .thenReturn("one")
                 .thenThrow(new Exception());
     }
 
     @Test
-    public void should_stub_void_method_and_continue_throwing() throws Exception {
+    public void should_stub_void_method_and_continue_throwing() {
         doThrow(new IllegalArgumentException())
         .doNothing()
         .doThrow(new NullPointerException())
@@ -234,7 +234,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test
-    public void should_stub_void_method() throws Exception {
+    public void should_stub_void_method() {
         doNothing()
         .doThrow(new NullPointerException())
         .doNothing()
@@ -253,7 +253,7 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test(expected = MockitoException.class)
-    public void should_validate_consecutive_exception_for_void_method() throws Exception {
+    public void should_validate_consecutive_exception_for_void_method() {
         doNothing()
         .doThrow(new Exception())
         .when(mock)

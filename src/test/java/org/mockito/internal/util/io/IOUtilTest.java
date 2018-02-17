@@ -20,7 +20,7 @@ public class IOUtilTest {
     @Rule public TemporaryFolder tmp = new TemporaryFolder();
 
     @Test
-    public void closes_streams() throws Exception {
+    public void closes_streams() {
         IOUtil.closeQuietly(null);
         IOUtil.closeQuietly(new ByteArrayOutputStream());
 

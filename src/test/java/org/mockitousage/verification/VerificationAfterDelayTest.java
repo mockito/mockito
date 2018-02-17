@@ -70,7 +70,7 @@ public class VerificationAfterDelayTest {
     }
 
     @Test
-    public void shouldVerifyNormallyWithSpecificTimes() throws Exception {
+    public void shouldVerifyNormallyWithSpecificTimes() {
         // given
         delayedExecution.callAsync(30, MILLISECONDS, callMock );
 
@@ -79,7 +79,7 @@ public class VerificationAfterDelayTest {
     }
 
     @Test
-    public void shouldVerifyNormallyWithAtLeast() throws Exception {
+    public void shouldVerifyNormallyWithAtLeast() {
         // when
         delayedExecution.callAsync(30, MILLISECONDS, callMock );
 
@@ -88,7 +88,7 @@ public class VerificationAfterDelayTest {
     }
 
     @Test
-    public void shouldFailVerificationWithWrongTimes() throws Exception {
+    public void shouldFailVerificationWithWrongTimes() {
         // when
         delayedExecution.callAsync(30, MILLISECONDS, callMock );
 
@@ -99,7 +99,7 @@ public class VerificationAfterDelayTest {
     }
 
     @Test
-    public void shouldWaitTheFullTimeIfTheTestCouldPass() throws Exception {
+    public void shouldWaitTheFullTimeIfTheTestCouldPass() {
         // when
         delayedExecution.callAsync(30, MILLISECONDS, callMock );
 
@@ -116,7 +116,7 @@ public class VerificationAfterDelayTest {
     }
 
     @Test
-    public void shouldStopEarlyIfTestIsDefinitelyFailed() throws Exception {
+    public void shouldStopEarlyIfTestIsDefinitelyFailed() {
         // when
         delayedExecution.callAsync(30, MILLISECONDS, callMock );
 

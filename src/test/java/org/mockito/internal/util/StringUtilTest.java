@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StringUtilTest  {
 
     @Test
-    public void decamelizes_matcher() throws Exception {
+    public void decamelizes_matcher() {
         assertEquals("<Sentence with strong language>", StringUtil.decamelizeMatcher("SentenceWithStrongLanguage"));
         assertEquals("<W e i r d o 1>", StringUtil.decamelizeMatcher("WEIRDO1"));
         assertEquals("<_>", StringUtil.decamelizeMatcher("_"));
@@ -24,33 +24,33 @@ public class StringUtilTest  {
     }
 
     @Test
-    public void joins_empty_list() throws Exception {
+    public void joins_empty_list() {
         assertThat(StringUtil.join()).isEmpty();
         assertThat(StringUtil.join("foo", emptyList())).isEmpty();
     }
 
     @Test
-    public void joins_single_line() throws Exception {
+    public void joins_single_line() {
         assertThat(StringUtil.join("line1")).hasLineCount(2);
     }
 
     @Test
-    public void joins_two_lines() throws Exception {
+    public void joins_two_lines() {
         assertThat(StringUtil.join("line1","line2")).hasLineCount(3);
     }
 
     @Test
-    public void join_has_preceeding_linebreak() throws Exception {
+    public void join_has_preceeding_linebreak() {
         assertThat(StringUtil.join("line1")).isEqualTo("\nline1");
     }
 
     @Test
-    public void removes_first_line() throws Exception {
+    public void removes_first_line() {
         assertThat(StringUtil.removeFirstLine("line1\nline2")).isEqualTo("line2");
     }
 
     @Test
-    public void joins_with_line_prefix() throws Exception {
+    public void joins_with_line_prefix() {
         assertEquals("Hey!\n" +
             " - a\n" +
             " - b", StringUtil.join("Hey!\n", " - ", asList("a", "b")));

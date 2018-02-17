@@ -38,7 +38,7 @@ public class MockMethodInterceptor implements Serializable {
 
     private final ByteBuddyCrossClassLoaderSerializationSupport serializationSupport;
 
-    public MockMethodInterceptor(MockHandler handler, MockCreationSettings mockCreationSettings) {
+    MockMethodInterceptor(MockHandler handler, MockCreationSettings mockCreationSettings) {
         this.handler = handler;
         this.mockCreationSettings = mockCreationSettings;
         serializationSupport = new ByteBuddyCrossClassLoaderSerializationSupport();
@@ -65,7 +65,7 @@ public class MockMethodInterceptor implements Serializable {
         return handler.handle(createInvocation(mock, invokedMethod, arguments, realMethod, mockCreationSettings, location));
     }
 
-    public static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, RealMethod realMethod, MockCreationSettings settings, Location location) {
+    private static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, RealMethod realMethod, MockCreationSettings settings, Location location) {
         return new InterceptedInvocation(
             mock,
             createMockitoMethod(invokedMethod, settings),
@@ -112,6 +112,7 @@ public class MockMethodInterceptor implements Serializable {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class ForWriteReplace {
 
         public static Object doWriteReplace(@This MockAccess thiz) throws ObjectStreamException {

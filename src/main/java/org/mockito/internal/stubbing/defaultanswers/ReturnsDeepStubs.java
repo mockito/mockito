@@ -131,7 +131,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         @SuppressWarnings("serial") // not gonna be serialized
         private final GenericMetadataSupport returnTypeGenericMetadata;
 
-        public ReturnsDeepStubsSerializationFallback(GenericMetadataSupport returnTypeGenericMetadata) {
+        ReturnsDeepStubsSerializationFallback(GenericMetadataSupport returnTypeGenericMetadata) {
             this.returnTypeGenericMetadata = returnTypeGenericMetadata;
         }
 

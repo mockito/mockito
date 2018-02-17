@@ -15,7 +15,7 @@ import static org.junit.Assert.fail;
 public class VerificationDataImplTest extends TestBase {
 
     @Test
-    public void shouldToStringBeNotVerifiable() throws Exception {
+    public void shouldToStringBeNotVerifiable() {
         InvocationMatcher toString = new InvocationBuilder().method("toString").toInvocationMatcher();
         try {
             new VerificationDataImpl(null, toString);

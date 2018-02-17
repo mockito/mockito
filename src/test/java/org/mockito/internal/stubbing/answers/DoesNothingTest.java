@@ -17,14 +17,13 @@ import org.mockitousage.IMethods;
 
 public class DoesNothingTest   {
 
-    private IMethods mock;
     private Invocation invocation_Void;
     private Invocation invocation_void;
     private Invocation invocation_String;
 
     @Before
     public void init(){
-        mock = mock(IMethods.class);
+        IMethods mock = mock(IMethods.class);
 
         mock.voidMethod();
         invocation_Void = getLastInvocation();
@@ -37,7 +36,7 @@ public class DoesNothingTest   {
     }
 
     @Test
-    public void answer_returnsNull() throws Throwable {
+    public void answer_returnsNull() {
         assertThat(doesNothing().answer(invocation_Void)).isNull();
         assertThat(doesNothing().answer(invocation_void)).isNull();
         assertThat(doesNothing().answer(invocation_String)).isNull();
@@ -54,7 +53,7 @@ public class DoesNothingTest   {
     }
 
     @Test
-    public void validateFor_voidObjectReturnType() throws Throwable {
+    public void validateFor_voidObjectReturnType() {
         doesNothing().validateFor(invocation_Void);
     }
 

@@ -21,7 +21,7 @@ public class InOrderImplTest extends TestBase {
     @Mock IMethods mock;
 
     @Test
-    public void shouldMarkVerifiedInOrder() throws Exception {
+    public void shouldMarkVerifiedInOrder() {
         //given
         InOrderImpl impl = new InOrderImpl(singletonList(mock));
         Invocation i = new InvocationBuilder().toInvocation();

@@ -17,7 +17,7 @@ import static org.junit.Assert.fail;
 public class CapturingMatcherTest extends TestBase {
 
     @Test
-    public void should_capture_arguments() throws Exception {
+    public void should_capture_arguments() {
         //given
         CapturingMatcher<String> m = new CapturingMatcher<String>();
 
@@ -30,7 +30,7 @@ public class CapturingMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_know_last_captured_value() throws Exception {
+    public void should_know_last_captured_value() {
         //given
         CapturingMatcher<String> m = new CapturingMatcher<String>();
 
@@ -43,7 +43,7 @@ public class CapturingMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_scream_when_nothing_yet_captured() throws Exception {
+    public void should_scream_when_nothing_yet_captured() {
         //given
         CapturingMatcher<String> m = new CapturingMatcher<String>();
 
@@ -56,7 +56,7 @@ public class CapturingMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_not_fail_when_used_in_concurrent_tests() throws Exception {
+    public void should_not_fail_when_used_in_concurrent_tests() {
         //given
         final CapturingMatcher<String> m = new CapturingMatcher<String>();
 

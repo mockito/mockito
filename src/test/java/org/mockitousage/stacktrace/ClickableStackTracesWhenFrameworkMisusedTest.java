@@ -63,7 +63,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
     }
 
     @Test
-    public void shouldShowWhereIsUnfinishedVerification() throws Exception {
+    public void shouldShowWhereIsUnfinishedVerification() {
         unfinishedVerificationHere();
         try {
             mock(IMethods.class);

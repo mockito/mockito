@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 public class VerificationStartedListenerTest extends TestBase {
 
     @Test
-    public void verified_mock_can_be_replaced() throws Exception {
+    public void verified_mock_can_be_replaced() {
         //given
         final List mock1 = mock(List.class);
         mock1.clear(); //register clear() on mock1
@@ -54,7 +54,7 @@ public class VerificationStartedListenerTest extends TestBase {
     }
 
     @Test
-    public void verification_started_event_contains_correct_mock() throws Exception {
+    public void verification_started_event_contains_correct_mock() {
         //given
         final List<Object> container = new ArrayList<Object>();
 
@@ -73,7 +73,7 @@ public class VerificationStartedListenerTest extends TestBase {
     }
 
     @Test
-    public void listeners_are_executed_in_sequence() throws Exception {
+    public void listeners_are_executed_in_sequence() {
         //given
         final List<Object> container = new ArrayList<Object>();
         final List mock1 = mock(List.class);
@@ -104,7 +104,7 @@ public class VerificationStartedListenerTest extends TestBase {
     }
 
     @Test
-    public void shows_clean_exception_when_null_array_passed() throws Exception {
+    public void shows_clean_exception_when_null_array_passed() {
         try {
             //when
             Mockito.withSettings().verificationStartedListeners(null);
@@ -115,7 +115,7 @@ public class VerificationStartedListenerTest extends TestBase {
     }
 
     @Test
-    public void shows_clean_exception_when_null_listener_passed() throws Exception {
+    public void shows_clean_exception_when_null_listener_passed() {
         try {
             //when
             Mockito.withSettings().verificationStartedListeners(mock(VerificationStartedListener.class), null);

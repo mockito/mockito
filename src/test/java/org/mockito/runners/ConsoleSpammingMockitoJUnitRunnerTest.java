@@ -26,7 +26,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
     private RunNotifier notifier;
 
     @Before
-    public void setup() throws InitializationError {
+    public void setup() {
         loggerStub = new MockitoLoggerStub();
         notifier = new RunNotifier();
     }

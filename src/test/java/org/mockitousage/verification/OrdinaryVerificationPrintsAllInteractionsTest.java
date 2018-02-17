@@ -21,7 +21,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
     @Mock private IMethods mockTwo;
 
     @Test
-    public void shouldShowAllInteractionsOnMockWhenOrdinaryVerificationFail() throws Exception {
+    public void shouldShowAllInteractionsOnMockWhenOrdinaryVerificationFail() {
         //given
         firstInteraction();
         secondInteraction();
@@ -41,7 +41,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
     }
 
     @Test
-    public void shouldNotShowAllInteractionsOnDifferentMock() throws Exception {
+    public void shouldNotShowAllInteractionsOnDifferentMock() {
         differentMockInteraction();
         firstInteraction();
 
@@ -54,7 +54,7 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
     }
 
     @Test
-    public void shouldNotShowAllInteractionsHeaderWhenNoOtherInteractions() throws Exception {
+    public void shouldNotShowAllInteractionsHeaderWhenNoOtherInteractions() {
         try {
             verify(mock).simpleMethod();
             fail();

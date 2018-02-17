@@ -25,7 +25,7 @@ public class InvalidTargetMockitoJUnitRuleTest {
     private InjectInto injectInto;
 
     @Test
-    public void shouldInjectWithInvalidReference() throws Exception {
+    public void shouldInjectWithInvalidReference() {
         assertNotNull("Mock created", injected);
         assertNotNull("Test object created", injectInto);
     }

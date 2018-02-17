@@ -24,7 +24,7 @@ public class DefaultRegisteredInvocationsTest extends TestBase {
     }
 
     @Test
-    public void should_not_return_to_string_method() throws Exception {
+    public void should_not_return_to_string_method() {
         Invocation toString = new InvocationBuilder().method("toString").toInvocation();
         Invocation simpleMethod = new InvocationBuilder().simpleMethod().toInvocation();
 

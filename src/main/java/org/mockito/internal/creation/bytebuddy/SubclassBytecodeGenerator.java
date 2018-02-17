@@ -46,19 +46,19 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private final Implementation readReplace;
     private final ElementMatcher<? super MethodDescription> matcher;
 
-    public SubclassBytecodeGenerator() {
+    SubclassBytecodeGenerator() {
         this(new SubclassInjectionLoader());
     }
 
-    public SubclassBytecodeGenerator(SubclassLoader loader) {
+    SubclassBytecodeGenerator(SubclassLoader loader) {
         this(loader, null, any());
     }
 
-    public SubclassBytecodeGenerator(Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
+    SubclassBytecodeGenerator(Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
         this(new SubclassInjectionLoader(), readReplace, matcher);
     }
 
-    protected SubclassBytecodeGenerator(SubclassLoader loader, Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
+    private SubclassBytecodeGenerator(SubclassLoader loader, Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
         this.loader = loader;
         this.readReplace = readReplace;
         this.matcher = matcher;

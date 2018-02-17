@@ -19,7 +19,7 @@ public class CompilationWarningsTest {
     }
 
     @Test
-    public void no_warnings_for_most_common_api() throws Exception {
+    public void no_warnings_for_most_common_api() {
         doReturn(null).when(mock(IMethods.class)).objectReturningMethodNoArgs();
         doReturn("a", 12).when(mock(IMethods.class)).objectReturningMethodNoArgs();
         doReturn(1000).when(mock(IMethods.class)).objectReturningMethodNoArgs();
@@ -79,7 +79,7 @@ public class CompilationWarningsTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void heap_pollution_JDK7plus_warning_avoided_BUT_now_unchecked_generic_array_creation_warnings_ON_JDK5plus_environment() throws Exception {
+    public void heap_pollution_JDK7plus_warning_avoided_BUT_now_unchecked_generic_array_creation_warnings_ON_JDK5plus_environment() {
         doThrow(NullPointerException.class, IllegalArgumentException.class).when(mock(IMethods.class)).objectReturningMethodNoArgs();
         when(mock(IMethods.class).objectReturningMethodNoArgs()).thenThrow(NullPointerException.class, IllegalArgumentException.class);
         doAnswer(ignore()).doThrow(NullPointerException.class, IllegalArgumentException.class).when(mock(IMethods.class)).objectReturningMethodNoArgs();
@@ -90,7 +90,7 @@ public class CompilationWarningsTest {
     }
 
     @Test
-    public void unchecked_confusing_null_argument_warnings() throws Exception {
+    public void unchecked_confusing_null_argument_warnings() {
         doReturn(null, (Object[]) null).when(mock(IMethods.class)).objectReturningMethodNoArgs();
         doAnswer(ignore()).doReturn(null, (Object[]) null).when(mock(IMethods.class)).objectReturningMethodNoArgs();
         when(mock(IMethods.class).objectReturningMethodNoArgs()).thenReturn(null, (Object[]) null);
@@ -104,7 +104,7 @@ public class CompilationWarningsTest {
     private static Answer<?> ignore() {
         return new Answer<Object>() {
             @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 return null;
             }
         };

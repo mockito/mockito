@@ -25,7 +25,7 @@ import static org.mockito.Mockito.mock;
 public class FailingOnPurposeBecauseIncorrectStubbingSyntax {
 
     @Test(expectedExceptions = InvalidUseOfMatchersException.class)
-    public void incorrect_stubbing_syntax_in_test() throws Exception {
+    public void incorrect_stubbing_syntax_in_test() {
         mock(PrintStream.class);
         anyString();
         anySet();

@@ -10,6 +10,7 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.hamcrest.BaseMatcher;
@@ -54,14 +55,14 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldPassIfChunkMatches() throws Exception {
+    public void shouldPassIfChunkMatches() {
         wanted = buildSimpleMethod().toInvocationMatcher();
-        invocations = asList(buildSimpleMethod().toInvocation());
+        invocations = Collections.singletonList(buildSimpleMethod().toInvocation());
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1, context);
     }
 
     @Test
-    public void shouldReportTooLittleInvocations() throws Exception {
+    public void shouldReportTooLittleInvocations() {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
 
@@ -77,10 +78,10 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldMarkAsVerifiedInOrder() throws Exception {
+    public void shouldMarkAsVerifiedInOrder() {
         Invocation invocation = buildSimpleMethod().toInvocation();
 
-        invocations = asList(invocation);
+        invocations = Collections.singletonList(invocation);
         wanted = buildSimpleMethod().toInvocationMatcher();
 
         assertThat(context.isVerified(invocation)).isFalse();
@@ -89,7 +90,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportTooLittleActual() throws Exception {
+    public void shouldReportTooLittleActual() {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
@@ -102,7 +103,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportWithLastInvocationStackTrace() throws Exception {
+    public void shouldReportWithLastInvocationStackTrace() {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
@@ -110,14 +111,14 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expectMessage("mock.simpleMethod()");
         exception.expectMessage("Wanted 100 times");
         exception.expectMessage("But was 2 times");
-        exception.expectMessage(containsTimes("-> at", 2));
+        exception.expectMessage(containsTimes(2));
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
 
     }
 
     @Test
-    public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() throws Exception {
+    public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() {
         invocations = emptyList();
         wanted = buildSimpleMethod().toInvocationMatcher();
 
@@ -125,13 +126,13 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expectMessage("mock.simpleMethod()");
         exception.expectMessage("Wanted 100 times");
         exception.expectMessage("But was 0 times");
-        exception.expectMessage(containsTimes("-> at", 1));
+        exception.expectMessage(containsTimes(1));
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
     }
 
     @Test
-    public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
+    public void shouldReportWithFirstUndesiredInvocationStackTrace() {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
         Invocation third = buildSimpleMethod().toInvocation();
@@ -145,7 +146,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportTooManyActual() throws Exception {
+    public void shouldReportTooManyActual() {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
 
@@ -159,10 +160,10 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportNeverWantedButInvoked() throws Exception {
+    public void shouldReportNeverWantedButInvoked() {
         Invocation first = buildSimpleMethod().toInvocation();
 
-        invocations = asList(first);
+        invocations = Collections.singletonList(first);
         wanted = buildSimpleMethod().toInvocationMatcher();
 
         exception.expect(VerificationInOrderFailure.class);
@@ -175,18 +176,18 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldMarkInvocationsAsVerified() throws Exception {
+    public void shouldMarkInvocationsAsVerified() {
         Invocation invocation = buildSimpleMethod().toInvocation();
         assertThat(invocation.isVerified()).isFalse();
 
-        invocations = asList(invocation);
+        invocations = Collections.singletonList(invocation);
         wanted = buildSimpleMethod().toInvocationMatcher();
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1, context);
         assertThat(invocation.isVerified()).isTrue();
     }
 
-    private static BaseMatcher<String> containsTimes(String value, int amount) {
-        return new StringContainsNumberMatcher(value, amount);
+    private static BaseMatcher<String> containsTimes(int amount) {
+        return new StringContainsNumberMatcher("-> at", amount);
     }
 
     private static class StringContainsNumberMatcher extends TypeSafeMatcher<String> {

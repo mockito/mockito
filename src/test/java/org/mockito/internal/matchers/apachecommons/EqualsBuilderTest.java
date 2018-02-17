@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 public class EqualsBuilderTest extends TestBase {
 
     @Test
-    public void testname() throws Exception {
+    public void testname() {
 
     }
 
@@ -957,7 +957,7 @@ public class EqualsBuilderTest extends TestBase {
         new EqualsBuilder().append(x1, x2);
     }
 
-    @Test public void testReflectionEqualsExcludeFields() throws Exception {
+    @Test public void testReflectionEqualsExcludeFields() {
         TestObjectWithMultipleFields x1 = new TestObjectWithMultipleFields(1, 2, 3);
         TestObjectWithMultipleFields x2 = new TestObjectWithMultipleFields(1, 3, 4);
 

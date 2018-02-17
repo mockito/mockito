@@ -47,11 +47,11 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner implements Filtera
             WarningsCollector warningsCollector;
 
             @Override
-            public void testStarted(Description description) throws Exception {
+            public void testStarted(Description description) {
                 warningsCollector = new WarningsCollector();
             }
 
-            @Override public void testFailure(Failure failure) throws Exception {
+            @Override public void testFailure(Failure failure) {
                 logger.log(warningsCollector.getWarnings());
             }
         };

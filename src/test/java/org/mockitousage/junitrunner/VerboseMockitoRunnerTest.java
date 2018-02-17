@@ -71,7 +71,7 @@ public class VerboseMockitoRunnerTest extends TestBase {
 
     @Test
     @Ignore
-    public void shouldContainWarnings() throws Exception {
+    public void shouldContainWarnings() {
         //when
         Result result = new JUnitCore().run(new ContainsWarnings());
         //then
@@ -82,7 +82,7 @@ public class VerboseMockitoRunnerTest extends TestBase {
 
     @Test
     @Ignore
-    public void shouldNotContainWarnings() throws Exception {
+    public void shouldNotContainWarnings() {
         Result result = new JUnitCore().run(NoWarnings.class);
         assertEquals(1, result.getFailures().size());
         assertEquals("boo", result.getFailures().get(0).getException().getMessage());

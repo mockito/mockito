@@ -64,7 +64,7 @@ public class StubbingWarningsJUnitRunnerTest extends TestBase {
     @RunWith(TestableJUnitRunner.class)
     public static class PassingArgMismatch {
         IMethods mock = mock(IMethods.class);
-        @Test public void test() throws Exception {
+        @Test public void test() {
             when(mock.simpleMethod(1)).thenReturn("1");
             mock.simpleMethod(2);
         }
@@ -73,7 +73,7 @@ public class StubbingWarningsJUnitRunnerTest extends TestBase {
     @RunWith(TestableJUnitRunner.class)
     public static class FailingWithArgMismatch {
         @Mock IMethods mock;
-        @Test public void test() throws Exception {
+        @Test public void test() {
             when(mock.simpleMethod(1)).thenReturn("1");
             mock.simpleMethod(2);
             throw new RuntimeException("x");
@@ -83,7 +83,7 @@ public class StubbingWarningsJUnitRunnerTest extends TestBase {
     @RunWith(TestableJUnitRunner.class)
     public static class FailingWithMatchingArgs {
         @Mock IMethods mock;
-        @Test public void test() throws Exception {
+        @Test public void test() {
             when(mock.simpleMethod(1)).thenReturn("1");
             mock.simpleMethod(1);
             throw new RuntimeException("x");
@@ -93,7 +93,7 @@ public class StubbingWarningsJUnitRunnerTest extends TestBase {
     @RunWith(TestableJUnitRunner.class)
     public static class FailingWithSomeStubMismatches {
         @Mock IMethods mock;
-        @Test public void test() throws Exception {
+        @Test public void test() {
             when(mock.simpleMethod(1)).thenReturn("1"); // <- used
             when(mock.simpleMethod(2)).thenReturn("2"); // <- unused
 
@@ -107,7 +107,7 @@ public class StubbingWarningsJUnitRunnerTest extends TestBase {
     @RunWith(TestableJUnitRunner.class)
     public static class MismatchButStubAlreadyUsed {
         @Mock IMethods mock;
-        @Test public void test() throws Exception {
+        @Test public void test() {
             when(mock.simpleMethod(1)).thenReturn("1");
             mock.simpleMethod(1); // <-- used
             mock.simpleMethod(2); // <-- arg mismatch, but the stub was already used
@@ -119,7 +119,7 @@ public class StubbingWarningsJUnitRunnerTest extends TestBase {
     @RunWith(TestableJUnitRunner.class)
     public static class InvalidMockitoUsage {
         @Mock IMethods mock;
-        @Test public void test() throws Exception {
+        @Test public void test() {
             when(mock.simpleMethod()); // <-- unfinished stubbing
         }
     }

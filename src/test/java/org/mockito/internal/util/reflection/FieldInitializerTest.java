@@ -184,7 +184,7 @@ public class FieldInitializerTest {
     }
 
     static class StaticClassThrowingExceptionDefaultConstructor {
-        StaticClassThrowingExceptionDefaultConstructor() throws Exception {
+        StaticClassThrowingExceptionDefaultConstructor() {
             throw new NullPointerException("business logic failed");
         }
     }

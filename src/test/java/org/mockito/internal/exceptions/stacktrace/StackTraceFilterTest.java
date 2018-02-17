@@ -146,7 +146,7 @@ public class StackTraceFilterTest extends TestBase {
     }
 
     @Test
-    public void shouldReturnEmptyArrayWhenInputIsEmpty() throws Exception {
+    public void shouldReturnEmptyArrayWhenInputIsEmpty() {
         //when
         StackTraceElement[] filtered = filter.filter(new StackTraceElement[0], false);
         //then

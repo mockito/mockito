@@ -47,7 +47,7 @@ public class NoJUnitDependenciesTest {
         }
     }
 
-    private void checkDependency(ClassLoader classLoader_without_JUnit, String pureMockitoAPIClass) throws ClassNotFoundException {
+    private void checkDependency(ClassLoader classLoader_without_JUnit, String pureMockitoAPIClass) {
         try {
             Class.forName(pureMockitoAPIClass, true, classLoader_without_JUnit);
         } catch (Throwable e) {

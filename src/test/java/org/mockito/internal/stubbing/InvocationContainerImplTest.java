@@ -80,21 +80,21 @@ public class InvocationContainerImplTest {
     }
 
     @Test
-    public void should_return_invoked_mock() throws Exception {
+    public void should_return_invoked_mock() {
         container.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
 
         assertEquals(invocation.getMock(), container.invokedMock());
     }
 
     @Test
-    public void should_return_invoked_mock_stub_only() throws Exception {
+    public void should_return_invoked_mock_stub_only() {
         containerStubOnly.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
 
         assertEquals(invocation.getMock(), containerStubOnly.invokedMock());
     }
 
     @Test
-    public void should_tell_if_has_invocation_for_potential_stubbing() throws Exception {
+    public void should_tell_if_has_invocation_for_potential_stubbing() {
         container.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
         assertTrue(container.hasInvocationForPotentialStubbing());
 
@@ -103,7 +103,7 @@ public class InvocationContainerImplTest {
     }
 
     @Test
-    public void should_tell_if_has_invocation_for_potential_stubbing_stub_only() throws Exception {
+    public void should_tell_if_has_invocation_for_potential_stubbing_stub_only() {
         containerStubOnly.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
         assertTrue(containerStubOnly.hasInvocationForPotentialStubbing());
 

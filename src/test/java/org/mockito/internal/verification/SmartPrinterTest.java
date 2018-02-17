@@ -21,7 +21,7 @@ public class SmartPrinterTest extends TestBase {
     @Mock private IMethods mock;
 
     @Before
-    public void setup() throws Exception {
+    public void setup() {
         mock.varargs("first very long argument", "second very long argument", "another very long argument");
         multi = new InvocationMatcher(getLastInvocation());
 

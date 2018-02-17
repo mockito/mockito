@@ -57,8 +57,8 @@ public class NoMoreInteractionsTest extends TestBase {
     public void shouldVerifyInOrderMultipleInvoctions() {
         //given
         NoMoreInteractions n = new NoMoreInteractions();
-        Invocation i = new InvocationBuilder().seq(1).toInvocation();
-        Invocation i2 = new InvocationBuilder().seq(2).toInvocation();
+        Invocation i = new InvocationBuilder().toInvocation();
+        Invocation i2 = new InvocationBuilder().toInvocation();
 
         //when
         context.markVerified(i2);
@@ -71,8 +71,8 @@ public class NoMoreInteractionsTest extends TestBase {
     public void shouldVerifyInOrderMultipleInvoctionsAndThrow() {
         //given
         NoMoreInteractions n = new NoMoreInteractions();
-        Invocation i = new InvocationBuilder().seq(1).toInvocation();
-        Invocation i2 = new InvocationBuilder().seq(2).toInvocation();
+        Invocation i = new InvocationBuilder().toInvocation();
+        Invocation i2 = new InvocationBuilder().toInvocation();
 
         try {
             //when

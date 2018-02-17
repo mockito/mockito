@@ -33,7 +33,7 @@ public class PluginSwitchTest {
         try {
             mock(List.class);
             fail();
-        } catch (Exception e) {}
+        } catch (Exception ignored) {}
     }
 
     @After

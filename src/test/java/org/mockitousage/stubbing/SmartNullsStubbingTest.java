@@ -32,7 +32,7 @@ public class SmartNullsStubbingTest extends TestBase {
     }
 
     @Test
-    public void shouldSmartNPEPointToUnstubbedCall() throws Exception {
+    public void shouldSmartNPEPointToUnstubbedCall() {
         IMethods methods = unstubbedMethodInvokedHere(mock);
         try {
             methods.simpleMethod();
@@ -63,7 +63,7 @@ public class SmartNullsStubbingTest extends TestBase {
     }
 
     @Test
-    public void shouldThrowSmartNPEWhenMethodReturnsClass() throws Exception {
+    public void shouldThrowSmartNPEWhenMethodReturnsClass() {
         Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
         Foo foo = mock.getSomeClass();
         try {
@@ -73,7 +73,7 @@ public class SmartNullsStubbingTest extends TestBase {
     }
 
     @Test
-    public void shouldThrowSmartNPEWhenMethodReturnsInterface() throws Exception {
+    public void shouldThrowSmartNPEWhenMethodReturnsInterface() {
         Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
         Bar bar = mock.getSomeInterface();
         try {
@@ -84,7 +84,7 @@ public class SmartNullsStubbingTest extends TestBase {
 
 
     @Test
-    public void shouldReturnOrdinaryEmptyValuesForOrdinaryTypes() throws Exception {
+    public void shouldReturnOrdinaryEmptyValuesForOrdinaryTypes() {
         IMethods mock = mock(IMethods.class, RETURNS_SMART_NULLS);
 
         assertEquals("", mock.stringReturningMethod());

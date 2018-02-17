@@ -17,7 +17,7 @@ public class InitializeChildTestWhenParentHasListenerTest extends ParentTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void verify_mocks_are_initialized() throws Exception {
+    public void verify_mocks_are_initialized() {
         assertThat(childMockField).isNotNull();
         assertThat(parentMockField).isNotNull();
     }

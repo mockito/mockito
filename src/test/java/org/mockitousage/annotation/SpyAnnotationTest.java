@@ -49,14 +49,14 @@ public class SpyAnnotationTest extends TestBase {
     public final ExpectedException shouldThrow = ExpectedException.none();
 
     @Test
-    public void should_init_spy_by_instance() throws Exception {
+    public void should_init_spy_by_instance() {
         doReturn("foo").when(spiedList).get(10);
         assertEquals("foo", spiedList.get(10));
         assertTrue(spiedList.isEmpty());
     }
 
     @Test
-    public void should_init_spy_and_automatically_create_instance() throws Exception {
+    public void should_init_spy_and_automatically_create_instance() {
         when(staticTypeWithNoArgConstructor.toString()).thenReturn("x");
         when(staticTypeWithoutDefinedConstructor.toString()).thenReturn("y");
         assertEquals("x", staticTypeWithNoArgConstructor.toString());
@@ -64,7 +64,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_allow_spying_on_interfaces() throws Exception {
+    public void should_allow_spying_on_interfaces() {
         class WithSpy {
             @Spy
             List<String> list;
@@ -77,7 +77,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_allow_spying_on_interfaces_when_instance_is_concrete() throws Exception {
+    public void should_allow_spying_on_interfaces_when_instance_is_concrete() {
         class WithSpy {
             @Spy
             List<String> list = new LinkedList<String>();
@@ -92,7 +92,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_report_when_no_arg_less_constructor() throws Exception {
+    public void should_report_when_no_arg_less_constructor() {
         class FailingSpy {
             @Spy
             NoValidConstructor noValidConstructor;
@@ -109,7 +109,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_report_when_constructor_is_explosive() throws Exception {
+    public void should_report_when_constructor_is_explosive() {
         class FailingSpy {
             @Spy
             ThrowingConstructor throwingConstructor;
@@ -124,7 +124,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_spy_abstract_class() throws Exception {
+    public void should_spy_abstract_class() {
         class SpyAbstractClass {
             @Spy
             AbstractList<String> list;
@@ -141,7 +141,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_spy_inner_class() throws Exception {
+    public void should_spy_inner_class() {
 
         class WithMockAndSpy {
             @Spy
@@ -173,12 +173,12 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void should_reset_spy() throws Exception {
+    public void should_reset_spy() {
         spiedList.get(10); // see shouldInitSpy
     }
 
     @Test
-    public void should_report_when_enclosing_instance_is_needed() throws Exception {
+    public void should_report_when_enclosing_instance_is_needed() {
         class Outer {
             class Inner {
             }
@@ -196,7 +196,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_report_private_inner_not_supported() throws Exception {
+    public void should_report_private_inner_not_supported() {
         try {
             MockitoAnnotations.initMocks(new WithInnerPrivate());
             fail();
@@ -210,7 +210,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_report_private_abstract_inner_not_supported() throws Exception {
+    public void should_report_private_abstract_inner_not_supported() {
         try {
             MockitoAnnotations.initMocks(new WithInnerPrivateAbstract());
             fail();
@@ -223,7 +223,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_report_private_static_abstract_inner_not_supported() throws Exception {
+    public void should_report_private_static_abstract_inner_not_supported() {
         try {
             MockitoAnnotations.initMocks(new WithInnerPrivateStaticAbstract());
             fail();
@@ -236,7 +236,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_be_able_to_stub_and_verify_via_varargs_for_list_params() throws Exception {
+    public void should_be_able_to_stub_and_verify_via_varargs_for_list_params() {
       // You can stub with varargs.
       when(translator.translate("hello", "mockito")).thenReturn(Arrays.asList("you", "too"));
 
@@ -249,7 +249,7 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
-    public void should_be_able_to_stub_and_verify_via_varargs_of_matchers_for_list_params() throws Exception {
+    public void should_be_able_to_stub_and_verify_via_varargs_of_matchers_for_list_params() {
       // You can stub with varargs of matchers.
       when(translator.translate(Mockito.anyString())).thenReturn(Arrays.asList("huh?"));
       when(translator.translate(eq("hello"))).thenReturn(Arrays.asList("hi"));

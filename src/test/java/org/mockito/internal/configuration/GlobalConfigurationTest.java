@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GlobalConfigurationTest {
     @Test
-    public void returns_mockito_configuration_annotation_engine_if_non_default() throws Exception {
+    public void returns_mockito_configuration_annotation_engine_if_non_default() {
         ConfigurationAccess.getConfig().overrideAnnotationEngine(new CustomAnnotationEngine());
         assertThat(new GlobalConfiguration().getAnnotationEngine()).isInstanceOf(CustomAnnotationEngine.class);
         assertThat(new GlobalConfiguration().tryGetPluginAnnotationEngine()).isInstanceOf(CustomAnnotationEngine.class);

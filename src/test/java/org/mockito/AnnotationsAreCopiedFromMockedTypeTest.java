@@ -12,7 +12,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import static java.lang.annotation.ElementType.*;
@@ -89,15 +88,6 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
             }
         }
         throw new IllegalArgumentException("method name not found : " + methodName);
-    }
-
-    private Field field(String fieldName, Object mock) {
-        for (Field field : mock.getClass().getDeclaredFields()) {
-            if(fieldName.equals(field.getName())) {
-                return field;
-            }
-        }
-        throw new IllegalArgumentException("method name not found : " + fieldName);
     }
 
     @AnnotationWithDefaultValue

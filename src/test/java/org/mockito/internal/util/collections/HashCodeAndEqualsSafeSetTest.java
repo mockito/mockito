@@ -27,17 +27,17 @@ public class HashCodeAndEqualsSafeSetTest {
     private UnmockableHashCodeAndEquals mock1;
 
     @Test
-    public void can_add_mock_that_have_failing_hashCode_method() throws Exception {
+    public void can_add_mock_that_have_failing_hashCode_method() {
         new HashCodeAndEqualsSafeSet().add(mock1);
     }
 
     @Test
-    public void mock_with_failing_hashCode_method_can_be_added() throws Exception {
+    public void mock_with_failing_hashCode_method_can_be_added() {
         new HashCodeAndEqualsSafeSet().add(mock1);
     }
 
     @Test
-    public void mock_with_failing_equals_method_can_be_used() throws Exception {
+    public void mock_with_failing_equals_method_can_be_used() {
         HashCodeAndEqualsSafeSet mocks = new HashCodeAndEqualsSafeSet();
         mocks.add(mock1);
 
@@ -48,7 +48,7 @@ public class HashCodeAndEqualsSafeSetTest {
     }
 
     @Test
-    public void can_remove() throws Exception {
+    public void can_remove() {
         HashCodeAndEqualsSafeSet mocks = new HashCodeAndEqualsSafeSet();
         UnmockableHashCodeAndEquals mock = mock1;
         mocks.add(mock);
@@ -59,7 +59,7 @@ public class HashCodeAndEqualsSafeSetTest {
 
 
     @Test
-    public void can_add_a_collection() throws Exception {
+    public void can_add_a_collection() {
         HashCodeAndEqualsSafeSet mocks = HashCodeAndEqualsSafeSet.of(
                 mock1,
                 mock(Observer.class));
@@ -72,7 +72,7 @@ public class HashCodeAndEqualsSafeSetTest {
     }
 
     @Test
-    public void can_retain_a_collection() throws Exception {
+    public void can_retain_a_collection() {
         HashCodeAndEqualsSafeSet mocks = HashCodeAndEqualsSafeSet.of(
                 mock1,
                 mock(Observer.class));
@@ -87,7 +87,7 @@ public class HashCodeAndEqualsSafeSetTest {
     }
 
     @Test
-    public void can_remove_a_collection() throws Exception {
+    public void can_remove_a_collection() {
         HashCodeAndEqualsSafeSet mocks = HashCodeAndEqualsSafeSet.of(
                 mock1,
                 mock(Observer.class));
@@ -102,7 +102,7 @@ public class HashCodeAndEqualsSafeSetTest {
     }
 
     @Test
-    public void can_iterate() throws Exception {
+    public void can_iterate() {
         HashCodeAndEqualsSafeSet mocks = HashCodeAndEqualsSafeSet.of(
                 mock1,
                 mock(Observer.class));
@@ -115,7 +115,7 @@ public class HashCodeAndEqualsSafeSetTest {
     }
 
     @Test
-    public void toArray_just_work() throws Exception {
+    public void toArray_just_work() {
         HashCodeAndEqualsSafeSet mocks = HashCodeAndEqualsSafeSet.of(mock1);
 
         assertThat(mocks.toArray()[0]).isSameAs(mock1);
@@ -129,7 +129,7 @@ public class HashCodeAndEqualsSafeSetTest {
     }
 
     @Test
-    public void isEmptyAfterClear() throws Exception {
+    public void isEmptyAfterClear() {
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         set.clear();
 
@@ -162,13 +162,13 @@ public class HashCodeAndEqualsSafeSetTest {
     }
 
     @Test
-    public void toStringIsNotNullOrEmpty() throws Exception {
+    public void toStringIsNotNullOrEmpty() {
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         assertThat(set.toString()).isNotEmpty();
     }
 
     @Test
-    public void removeByIterator() throws Exception {
+    public void removeByIterator() {
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         Iterator<Object> iterator = set.iterator();
         iterator.next();

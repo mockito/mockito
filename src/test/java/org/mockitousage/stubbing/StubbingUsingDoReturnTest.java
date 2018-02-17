@@ -33,7 +33,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_stub() throws Exception {
+    public void should_stub() {
         doReturn("foo").when(mock).simpleMethod();
         doReturn("bar").when(mock).simpleMethod();
 
@@ -41,7 +41,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_stub_with_args() throws Exception {
+    public void should_stub_with_args() {
         doReturn("foo").when(mock).simpleMethod("foo");
         doReturn("bar").when(mock).simpleMethod(eq("one"), anyInt());
 
@@ -53,7 +53,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     class FooRuntimeException extends RuntimeException {}
 
     @Test
-    public void should_stub_with_throwable() throws Exception {
+    public void should_stub_with_throwable() {
         doThrow(new FooRuntimeException()).when(mock).voidMethod();
         try {
             mock.voidMethod();
@@ -74,7 +74,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     class FooCheckedException extends Exception {}
 
     @Test
-    public void should_detect_invalid_checked_exception() throws Exception {
+    public void should_detect_invalid_checked_exception() {
         try {
             doThrow(new FooCheckedException()).when(mock).throwsIOException(0);
             fail();
@@ -84,7 +84,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_scream_when_return_set_for_void() throws Exception {
+    public void should_scream_when_return_set_for_void() {
         try {
             doReturn("foo").when(mock).voidMethod();
             fail();
@@ -96,7 +96,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_scream_when_not_a_mock_passed() throws Exception {
+    public void should_scream_when_not_a_mock_passed() {
         try {
             doReturn("foo").when("foo").toString();
             fail();
@@ -106,7 +106,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_scream_when_null_passed() throws Exception {
+    public void should_scream_when_null_passed() {
         try {
             doReturn("foo").when((Object) null).toString();
             fail();
@@ -153,7 +153,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_allow_do_call_real_method_in_chained_stubbing() throws Exception {
+    public void should_allow_do_call_real_method_in_chained_stubbing() {
         MethodsImpl methods = mock(MethodsImpl.class);
         doReturn("A").doCallRealMethod()
                 .when(methods).simpleMethod();
@@ -163,7 +163,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should_allow_chained_stubbing_with_exception_class() throws Exception {
+    public void should_allow_chained_stubbing_with_exception_class() {
         doReturn("whatever").doThrow(IllegalArgumentException.class).when(mock).simpleMethod();
 
         Assertions.assertThat(mock.simpleMethod()).isEqualTo("whatever");
@@ -192,7 +192,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     @Test
     public void should_stub_with_generic_answer() {
         doAnswer(new Answer<Object>() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 return "foo";
             }
         })
@@ -212,7 +212,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_stubbing_be_treated_as_interaction() throws Exception {
+    public void should_stubbing_be_treated_as_interaction() {
         doReturn("foo").when(mock).simpleMethod();
         mock.simpleMethod();
         try {
@@ -222,7 +222,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_verify_stubbed_call() throws Exception {
+    public void should_verify_stubbed_call() {
         doReturn("foo").when(mock).simpleMethod();
         mock.simpleMethod();
         mock.simpleMethod();
@@ -232,13 +232,13 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_allow_stubbing_to_string() throws Exception {
+    public void should_allow_stubbing_to_string() {
         doReturn("test").when(mock).toString();
         Assertions.assertThat(mock.toString()).isEqualTo("test");
     }
 
     @Test
-    public void should_detect_invalid_return_type() throws Exception {
+    public void should_detect_invalid_return_type() {
         try {
             doReturn("foo").when(mock).booleanObjectReturningMethod();
             fail();
@@ -250,7 +250,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_detect_when_null_assigned_to_boolean() throws Exception {
+    public void should_detect_when_null_assigned_to_boolean() {
         try {
             doReturn(null).when(mock).intReturningMethod();
             fail();
@@ -260,7 +260,7 @@ public class StubbingUsingDoReturnTest extends TestBase {
     }
 
     @Test
-    public void should_allow_stubbing_when_types_match_signature() throws Exception {
+    public void should_allow_stubbing_when_types_match_signature() {
         doReturn("foo").when(mock).objectReturningMethodNoArgs();
         doReturn("foo").when(mock).simpleMethod();
         doReturn(1).when(mock).intReturningMethod();

@@ -33,7 +33,7 @@ public class ReturnsGenericDeepStubsTest {
     }
 
     @Test
-    public void generic_deep_mock_frenzy__look_at_these_chained_calls() throws Exception {
+    public void generic_deep_mock_frenzy__look_at_these_chained_calls() {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
         Set<? extends Map.Entry<? extends Cloneable, Set<Number>>> entries = mock.entrySet();
@@ -49,7 +49,7 @@ public class ReturnsGenericDeepStubsTest {
     }
 
     @Test
-    public void can_create_mock_from_multiple_type_variable_bounds_when_return_type_of_parameterized_method_is_a_parameterizedtype_that_is_referencing_a_typevar_on_class() throws Exception {
+    public void can_create_mock_from_multiple_type_variable_bounds_when_return_type_of_parameterized_method_is_a_parameterizedtype_that_is_referencing_a_typevar_on_class() {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
         Cloneable cloneable_bound_that_is_declared_on_typevar_K_in_the_class_which_is_referenced_by_typevar_O_declared_on_the_method =
@@ -59,7 +59,7 @@ public class ReturnsGenericDeepStubsTest {
     }
 
     @Test
-    public void can_create_mock_from_multiple_type_variable_bounds_when_method_return_type_is_referencing_a_typevar_on_class() throws Exception {
+    public void can_create_mock_from_multiple_type_variable_bounds_when_method_return_type_is_referencing_a_typevar_on_class() {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
         Cloneable cloneable_bound_of_typevar_K = mock.returningK();
@@ -67,7 +67,7 @@ public class ReturnsGenericDeepStubsTest {
     }
 
     @Test
-    public void can_create_mock_from_multiple_type_variable_bounds_when_return_type_of_parameterized_method_is_a_typevar_that_is_referencing_a_typevar_on_class() throws Exception {
+    public void can_create_mock_from_multiple_type_variable_bounds_when_return_type_of_parameterized_method_is_a_typevar_that_is_referencing_a_typevar_on_class() {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
         Cloneable cloneable_bound_of_typevar_K_referenced_by_typevar_O = (Cloneable) mock.typeVarWithTypeParams();
@@ -75,7 +75,7 @@ public class ReturnsGenericDeepStubsTest {
     }
 
     @Test
-    public void can_create_mock_from_return_types_declared_with_a_bounded_wildcard() throws Exception {
+    public void can_create_mock_from_return_types_declared_with_a_bounded_wildcard() {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
         List<? super Integer> objects = mock.returningWildcard();
@@ -84,7 +84,7 @@ public class ReturnsGenericDeepStubsTest {
     }
 
     @Test
-    public void can_still_work_with_raw_type_in_the_return_type() throws Exception {
+    public void can_still_work_with_raw_type_in_the_return_type() {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
         Number the_raw_type_that_should_be_returned = mock.returnsNormalType();
@@ -92,7 +92,7 @@ public class ReturnsGenericDeepStubsTest {
     }
 
     @Test
-    public void will_return_default_value_on_non_mockable_nested_generic() throws Exception {
+    public void will_return_default_value_on_non_mockable_nested_generic() {
         GenericsNest<?> genericsNest = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
         ListOfInteger listOfInteger = mock(ListOfInteger.class, RETURNS_DEEP_STUBS);
         AnotherListOfInteger anotherListOfInteger = mock(AnotherListOfInteger.class, RETURNS_DEEP_STUBS);
@@ -103,7 +103,7 @@ public class ReturnsGenericDeepStubsTest {
     }
 
     @Test(expected = ClassCastException.class)
-    public void as_expected_fail_with_a_CCE_on_callsite_when_erasure_takes_place_for_example___StringBuilder_is_subject_to_erasure() throws Exception {
+    public void as_expected_fail_with_a_CCE_on_callsite_when_erasure_takes_place_for_example___StringBuilder_is_subject_to_erasure() {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
         // following assignment needed to create a ClassCastException on the call site (i.e. : here)

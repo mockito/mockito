@@ -18,12 +18,12 @@ public class ReturnsTest {
     }
 
     @Test(expected = MockitoException.class)
-    public void should_fail_when_return_Value_is_set_for_void_method() throws Throwable {
+    public void should_fail_when_return_Value_is_set_for_void_method() {
         new Returns("one").validateFor(new InvocationBuilder().method("voidMethod").toInvocation());
     }
 
     @Test
-    public void should_allow_correct_type_of_return_value() throws Throwable {
+    public void should_allow_correct_type_of_return_value() {
         new Returns("one").validateFor(new InvocationBuilder().simpleMethod().toInvocation());
         new Returns(false).validateFor(new InvocationBuilder().method("booleanReturningMethod").toInvocation());
         new Returns(TRUE).validateFor(new InvocationBuilder().method("booleanObjectReturningMethod").toInvocation());
@@ -35,17 +35,17 @@ public class ReturnsTest {
     }
 
     @Test(expected = MockitoException.class)
-    public void should_fail_on_return_type_mismatch() throws Throwable {
+    public void should_fail_on_return_type_mismatch() {
         new Returns("String").validateFor(new InvocationBuilder().method("booleanReturningMethod").toInvocation());
     }
 
     @Test(expected = MockitoException.class)
-    public void should_fail_on_wrong_primitive() throws Throwable {
+    public void should_fail_on_wrong_primitive() {
         new Returns(1).validateFor(new InvocationBuilder().method("doubleReturningMethod").toInvocation());
     }
 
     @Test(expected = MockitoException.class)
-    public void should_fail_on_null_with_primitive() throws Throwable {
+    public void should_fail_on_null_with_primitive() {
         new Returns(null).validateFor(new InvocationBuilder().method("booleanReturningMethod").toInvocation());
     }
 }

@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 public class MockitoRunnerBreaksWhenNoTestMethodsTest extends TestBase {
 
     @Test
-    public void ensure_the_test_runner_breaks() throws Exception {
+    public void ensure_the_test_runner_breaks() {
         JUnitCore runner = new JUnitCore();
 //        runner.addListener(new TextListener(System.out));
         runner.addListener(new TextListener(DevNull.out));

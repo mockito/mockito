@@ -20,12 +20,12 @@ public class AnswersWithDelayTest {
     }
 
     @Test(expected = MockitoException.class)
-    public void should_fail_when_contained_answer_should_fail() throws Throwable {
+    public void should_fail_when_contained_answer_should_fail() {
         new AnswersWithDelay(1, new Returns("one")).validateFor(new InvocationBuilder().method("voidMethod").toInvocation());
     }
 
     @Test
-    public void should_succeed_when_contained_answer_should_succeed() throws Throwable {
+    public void should_succeed_when_contained_answer_should_succeed() {
         new AnswersWithDelay(1, new Returns("one")).validateFor(new InvocationBuilder().simpleMethod().toInvocation());
     }
 

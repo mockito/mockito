@@ -41,7 +41,7 @@ public class ReturnsArgumentAtTest {
     }
 
     @Test
-    public void should_identify_bad_parameter_type_for_invocation() throws Exception {
+    public void should_identify_bad_parameter_type_for_invocation() {
         try {
             new ReturnsArgumentAt(1).validateFor(new InvocationBuilder().method("varargsReturningString")
                                                                         .argTypes(Object[].class)
@@ -66,7 +66,7 @@ public class ReturnsArgumentAtTest {
     }
 
     @Test
-    public void should_not_scream_when_mixed_vararg_parameter_is_compatible_with_invocation() throws Exception {
+    public void should_not_scream_when_mixed_vararg_parameter_is_compatible_with_invocation() {
         new ReturnsArgumentAt(1).validateFor(new InvocationBuilder().method("mixedVarargsReturningString")
                                                                     .argTypes(Object.class, String[].class)
                                                                     .args(new Object(), new String[]{"A", "B", "C"})
@@ -91,7 +91,7 @@ public class ReturnsArgumentAtTest {
     }
 
     @Test
-    public void should_raise_an_exception_if_index_is_not_in_allowed_range_at_creation_time() throws Throwable {
+    public void should_raise_an_exception_if_index_is_not_in_allowed_range_at_creation_time() {
         try {
             new ReturnsArgumentAt(-30);
             fail();
@@ -104,7 +104,7 @@ public class ReturnsArgumentAtTest {
     }
 
     @Test
-    public void should_allow_possible_argument_types() throws Exception {
+    public void should_allow_possible_argument_types() {
         new ReturnsArgumentAt(0).validateFor(
                 new InvocationBuilder().method("intArgumentReturningInt")
                                        .argTypes(int.class)
@@ -132,7 +132,7 @@ public class ReturnsArgumentAtTest {
     }
 
     @Test
-    public void should_fail_if_index_is_not_in_range_for_one_arg_invocation() throws Throwable {
+    public void should_fail_if_index_is_not_in_range_for_one_arg_invocation() {
         try {
             new ReturnsArgumentAt(30).validateFor(new InvocationBuilder().method("oneArg")
                                                                          .arg("A")
@@ -149,7 +149,7 @@ public class ReturnsArgumentAtTest {
     }
 
     @Test
-    public void should_fail_if_index_is_not_in_range_for_example_with_no_arg_invocation() throws Throwable {
+    public void should_fail_if_index_is_not_in_range_for_example_with_no_arg_invocation() {
         try {
             new ReturnsArgumentAt(ReturnsArgumentAt.LAST_ARGUMENT).validateFor(
                     new InvocationBuilder().simpleMethod().toInvocation()
@@ -165,7 +165,7 @@ public class ReturnsArgumentAtTest {
     }
 
     @Test
-    public void should_fail_if_argument_type_of_signature_is_incompatible_with_return_type() throws Throwable {
+    public void should_fail_if_argument_type_of_signature_is_incompatible_with_return_type() {
         try {
             new ReturnsArgumentAt(2).validateFor(
                     new InvocationBuilder().method("varargsReturningString")
@@ -186,7 +186,7 @@ public class ReturnsArgumentAtTest {
     }
 
     @Test
-    public void shouldNotFailWhenArgumentIsGenericAndCompatibleWithReturnType() throws Exception {
+    public void shouldNotFailWhenArgumentIsGenericAndCompatibleWithReturnType() {
         new ReturnsArgumentAt(0 ).validateFor(
                 new InvocationBuilder().method("genericToString")
                                        .argTypes(Object.class)

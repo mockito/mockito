@@ -31,23 +31,23 @@ public class StrictJUnitRuleTest {
     @Mock IMethods mock;
     @Mock IMethods mock2;
 
-    @Test public void ok_when_no_stubbings() throws Throwable {
+    @Test public void ok_when_no_stubbings() {
         mock.simpleMethod();
         verify(mock).simpleMethod();
     }
 
-    @Test public void ok_when_all_stubbings_used() throws Throwable {
+    @Test public void ok_when_all_stubbings_used() {
         given(mock.simpleMethod(10)).willReturn("foo");
         mock.simpleMethod(10);
     }
 
-    @Test public void ok_when_used_and_mismatched_argument() throws Throwable {
+    @Test public void ok_when_used_and_mismatched_argument() {
         given(mock.simpleMethod(10)).willReturn("foo");
         mock.simpleMethod(10);
         mock.simpleMethod(15);
     }
 
-    @Test public void fails_when_unused_stubbings() throws Throwable {
+    @Test public void fails_when_unused_stubbings() {
         //expect
         rule.expectFailure(UnnecessaryStubbingException.class);
 
@@ -56,7 +56,7 @@ public class StrictJUnitRuleTest {
         mock2.simpleMethod(10);
     }
 
-    @Test public void test_failure_trumps_unused_stubbings() throws Throwable {
+    @Test public void test_failure_trumps_unused_stubbings() {
         //expect
         rule.expectFailure(AssertionError.class, "x");
 
@@ -67,7 +67,7 @@ public class StrictJUnitRuleTest {
         throw new AssertionError("x");
     }
 
-    @Test public void why_do_return_syntax_is_useful() throws Throwable {
+    @Test public void why_do_return_syntax_is_useful() {
         //Trade-off of Mockito strictness documented in test
 
         //expect
@@ -78,7 +78,7 @@ public class StrictJUnitRuleTest {
         when(mock.simpleMethod(20)).thenReturn("20");
     }
 
-    @Test public void fails_fast_when_stubbing_invoked_with_different_argument() throws Throwable {
+    @Test public void fails_fast_when_stubbing_invoked_with_different_argument() {
         //expect
         rule.expectFailure(new SafeJUnitRule.FailureAssert() {
             public void doAssert(Throwable t) {
@@ -119,7 +119,7 @@ public class StrictJUnitRuleTest {
         mock.simpleMethod(15);
     }
 
-    @Test public void verify_no_more_interactions_ignores_stubs() throws Throwable {
+    @Test public void verify_no_more_interactions_ignores_stubs() {
         //when stubbing in test:
         given(mock.simpleMethod(10)).willReturn("foo");
 
@@ -132,7 +132,7 @@ public class StrictJUnitRuleTest {
         verifyNoMoreInteractions(mock);
     }
 
-    @Test public void unused_stubs_with_multiple_mocks() throws Throwable {
+    @Test public void unused_stubs_with_multiple_mocks() {
         //expect
         rule.expectFailure(new SafeJUnitRule.FailureAssert() {
             public void doAssert(Throwable t) {
@@ -157,7 +157,7 @@ public class StrictJUnitRuleTest {
         mock2.booleanObjectReturningMethod();
     }
 
-    @Test public void rule_validates_mockito_usage() throws Throwable {
+    @Test public void rule_validates_mockito_usage() {
         //expect
         rule.expectFailure(UnfinishedVerificationException.class);
 

@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 public class SpyingOnInterfacesTest extends TestBase {
 
     @Test
-    public void shouldFailFastWhenCallingRealMethodOnInterface() throws Exception {
+    public void shouldFailFastWhenCallingRealMethodOnInterface() {
         List<?> list = mock(List.class);
         try {
             //when
@@ -42,7 +42,7 @@ public class SpyingOnInterfacesTest extends TestBase {
     }
 
     @Test
-    public void shouldFailInRuntimeWhenCallingRealMethodOnInterface() throws Exception {
+    public void shouldFailInRuntimeWhenCallingRealMethodOnInterface() {
         //given
         List<Object> list = mock(List.class);
         when(list.get(0)).thenAnswer(

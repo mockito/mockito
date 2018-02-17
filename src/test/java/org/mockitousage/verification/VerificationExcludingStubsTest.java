@@ -22,7 +22,7 @@ public class VerificationExcludingStubsTest extends TestBase {
     @Mock IMethods mock;
 
     @Test
-    public void shouldAllowToExcludeStubsForVerification() throws Exception {
+    public void shouldAllowToExcludeStubsForVerification() {
         //given
         when(mock.simpleMethod()).thenReturn("foo");
 
@@ -42,7 +42,7 @@ public class VerificationExcludingStubsTest extends TestBase {
     }
 
     @Test
-    public void shouldExcludeFromVerificationInOrder() throws Exception {
+    public void shouldExcludeFromVerificationInOrder() {
         //given
         when(mock.simpleMethod()).thenReturn("foo");
 
@@ -60,12 +60,12 @@ public class VerificationExcludingStubsTest extends TestBase {
     }
 
     @Test(expected = NotAMockException.class)
-    public void shouldIgnoringStubsDetectNulls() throws Exception {
+    public void shouldIgnoringStubsDetectNulls() {
         ignoreStubs(mock, null);
     }
 
     @Test(expected = NotAMockException.class)
-    public void shouldIgnoringStubsDetectNonMocks() throws Exception {
+    public void shouldIgnoringStubsDetectNonMocks() {
         ignoreStubs(mock, new Object());
     }
 

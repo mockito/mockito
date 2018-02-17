@@ -24,7 +24,7 @@ public class StubbingWithExtraAnswersTest extends TestBase {
     @Mock private IMethods mock;
 
     @Test
-    public void shouldWorkAsStandardMockito() throws Exception {
+    public void shouldWorkAsStandardMockito() {
         //when
         List<Integer> list = asList(1, 2, 3);
         when(mock.objectReturningMethodNoArgs()).thenAnswer(AdditionalAnswers.returnsElementsOf(list));
@@ -39,7 +39,7 @@ public class StubbingWithExtraAnswersTest extends TestBase {
     }
 
     @Test
-    public void shouldReturnNullIfNecessary() throws Exception {
+    public void shouldReturnNullIfNecessary() {
         //when
         List<Integer> list = asList(1, null);
         when(mock.objectReturningMethodNoArgs()).thenAnswer(AdditionalAnswers.returnsElementsOf(list));
@@ -51,7 +51,7 @@ public class StubbingWithExtraAnswersTest extends TestBase {
     }
 
     @Test
-    public void shouldScreamWhenNullPassed() throws Exception {
+    public void shouldScreamWhenNullPassed() {
         try {
             //when
             AdditionalAnswers.returnsElementsOf(null);

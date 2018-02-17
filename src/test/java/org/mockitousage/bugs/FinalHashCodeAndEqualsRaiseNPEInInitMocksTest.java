@@ -18,7 +18,7 @@ public class FinalHashCodeAndEqualsRaiseNPEInInitMocksTest {
     @InjectMocks private ConstructorCharsetHolder constructorCharsetHolder;
 
     @Test
-    public void dont_raise_NullPointerException() throws Exception {
+    public void dont_raise_NullPointerException() {
         MockitoAnnotations.initMocks(this);
     }
 

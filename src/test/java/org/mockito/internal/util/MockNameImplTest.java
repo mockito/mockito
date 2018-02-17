@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class MockNameImplTest extends TestBase {
 
     @Test
-    public void shouldProvideTheNameForClass() throws Exception {
+    public void shouldProvideTheNameForClass() {
         //when
         String name = new MockNameImpl(null, SomeClass.class).toString();
         //then
@@ -20,7 +20,7 @@ public class MockNameImplTest extends TestBase {
     }
 
     @Test
-    public void shouldProvideTheNameForAnonymousClass() throws Exception {
+    public void shouldProvideTheNameForAnonymousClass() {
         //given
         SomeInterface anonymousInstance = new SomeInterface() {};
         //when
@@ -30,7 +30,7 @@ public class MockNameImplTest extends TestBase {
     }
 
     @Test
-    public void shouldProvideTheGivenName() throws Exception {
+    public void shouldProvideTheGivenName() {
         //when
         String name = new MockNameImpl("The Hulk", SomeClass.class).toString();
         //then
