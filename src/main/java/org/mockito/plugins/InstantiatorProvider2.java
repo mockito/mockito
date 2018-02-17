@@ -45,14 +45,14 @@ import org.mockito.mock.MockCreationSettings;
  *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider2</code>.
  * </p>
  *
- * @since 2.15.4
+ * @since 2.16.0
  */
 public interface InstantiatorProvider2 {
 
     /**
      * Returns an instantiator, used to create new class instances.
      *
-     * @since 2.15.4
+     * @since 2.16.0
      */
     Instantiator getInstantiator(MockCreationSettings<?> settings);
 }

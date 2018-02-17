@@ -8,7 +8,7 @@ import org.mockito.internal.creation.instance.Instantiator;
 import org.mockito.mock.MockCreationSettings;
 
 /**
- * @deprecated because this internal class was leaking from the public API.
+ * @deprecated since 2.16.0 because this internal class was leaking from the public API.
  * For more information why deprecated, see {@link org.mockito.plugins.InstantiatorProvider2} and
  * <a href="https://github.com/mockito/mockito/issues/1303">Issue 1303</a>
  *
