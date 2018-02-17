@@ -17,8 +17,7 @@ class PluginRegistry {
     private final PluginSwitch pluginSwitch = new PluginLoader(new DefaultPluginSwitch())
             .loadPlugin(PluginSwitch.class);
 
-    private final MockMaker mockMaker = new PluginLoader(pluginSwitch)
-            .withAlias(DefaultMockitoPlugins.INLINE_ALIAS)
+    private final MockMaker mockMaker = new PluginLoader(pluginSwitch, DefaultMockitoPlugins.INLINE_ALIAS)
             .loadPlugin(MockMaker.class);
 
     private final StackTraceCleanerProvider stackTraceCleanerProvider = new PluginLoader(pluginSwitch)
