@@ -4,7 +4,6 @@
  */
 package org.mockito.junit;
 
-import org.junit.runners.model.InitializationError;
 import org.mockito.internal.junit.MismatchReportingTestListener;
 import org.mockito.internal.junit.MockitoTestListener;
 import org.mockito.internal.runners.RunnerFactory;

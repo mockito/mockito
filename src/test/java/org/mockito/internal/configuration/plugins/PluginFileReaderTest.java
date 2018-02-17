@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.mockitoutil.TestBase;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import static org.junit.Assert.assertEquals;
@@ -16,7 +15,7 @@ import static org.junit.Assert.assertNull;
 
 public class PluginFileReaderTest extends TestBase {
 
-    PluginFileReader reader = new PluginFileReader();
+    private PluginFileReader reader = new PluginFileReader();
 
     @Test
     public void no_class_in_resource() {
