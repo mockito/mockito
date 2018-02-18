@@ -12,11 +12,16 @@ import java.lang.reflect.Proxy;
 
 class PluginLoader {
 
-    private final DefaultMockitoPlugins plugins = new DefaultMockitoPlugins();
-    PluginInitializer initializer;
+    private final DefaultMockitoPlugins plugins;
+    private final PluginInitializer initializer;
+
+    PluginLoader(DefaultMockitoPlugins plugins, PluginInitializer initializer) {
+        this.plugins = plugins;
+        this.initializer = initializer;
+    }
 
     PluginLoader(PluginSwitch pluginSwitch) {
-        this.initializer = new PluginInitializer(pluginSwitch, null, plugins);
+        this(new DefaultMockitoPlugins(), new PluginInitializer(pluginSwitch, null, new DefaultMockitoPlugins()));
     }
 
     /**
@@ -28,7 +33,7 @@ class PluginLoader {
      */
     @Deprecated
     PluginLoader(PluginSwitch pluginSwitch, String alias) {
-        this.initializer = new PluginInitializer(pluginSwitch, alias, plugins);
+        this(new DefaultMockitoPlugins(), new PluginInitializer(pluginSwitch, alias, new DefaultMockitoPlugins()));
     }
 
     /**
@@ -66,11 +71,7 @@ class PluginLoader {
                 new InvocationHandler() {
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                        if (alternatePluginType == null) {
-                            throw new IllegalStateException("Could not initialize plugin: " + preferredPluginType, t);
-                        } else {
-                            throw new IllegalStateException("Could not initialize plugin: " + preferredPluginType + " (alternate " + alternatePluginType + ")", t);
-                        }
+                        throw new IllegalStateException("Could not initialize plugin: " + preferredPluginType + " (alternate: " + alternatePluginType + ")", t);
                     }
                 });
         }
