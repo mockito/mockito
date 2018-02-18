@@ -7,6 +7,7 @@
 Most popular mocking framework for Java
 
 [![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=release/2.x)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito) [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/mockito/mockito/blob/master/LICENSE)
+[![Open Source Helpers](https://www.codetriage.com/mockito/mockito/badges/users.svg)](https://www.codetriage.com/mockito/mockito)
 
 [![latest release](https://img.shields.io/badge/release%20notes-2.x-yellow.svg)](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md)
 [![Bintray](https://api.bintray.com/packages/mockito/maven/mockito-development/images/download.svg)](https://bintray.com/mockito/maven)
