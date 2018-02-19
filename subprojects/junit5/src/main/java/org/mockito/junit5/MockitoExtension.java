@@ -72,7 +72,7 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
             .orElse(strictness);
 
         MockitoSession session = Mockito.mockitoSession()
-            .initTestInstances(testInstances)
+            .initMocks(testInstances.toArray())
             .strictness(actualStrictness)
             .startMocking();
 

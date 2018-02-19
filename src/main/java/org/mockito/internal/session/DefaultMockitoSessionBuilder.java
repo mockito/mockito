@@ -33,38 +33,23 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     }
 
     @Override
-<<<<<<< HEAD
     public MockitoSessionBuilder initMocks(Object... testClassInstances) {
         if (testClassInstances != null) {
             for (Object instance : testClassInstances) {
                 initMocks(instance);
             }
-=======
-    public MockitoSessionBuilder initMocks(Object testClassInstance) {
-        if (testClassInstance != null) {
-            testInstances = singletonList(testClassInstance);
->>>>>>> Refactor handling of strictness value in mockito extension
         }
         return this;
     }
 
-<<<<<<< HEAD
     @Override
     public MockitoSessionBuilder name(String name) {
         this.name = name;
-=======
->>>>>>> Refactor handling of strictness value in mockito extension
         return this;
     }
 
     @Override
     public MockitoSessionBuilder strictness(Strictness strictness) {
-<<<<<<< HEAD
-=======
-        if (strictness == null){
-            strictness = STRICT_STUBS;
-        }
->>>>>>> Refactor handling of strictness value in mockito extension
         this.strictness = strictness;
         return this;
     }
