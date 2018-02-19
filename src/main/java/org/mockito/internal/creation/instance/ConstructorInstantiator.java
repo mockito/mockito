@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mockito.creation.instance.Instantiator;
+import org.mockito.creation.instance.InstantiationException;
 import org.mockito.internal.util.Primitives;
 import org.mockito.internal.util.reflection.AccessibilityChanger;
 

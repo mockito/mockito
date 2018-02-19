@@ -4,10 +4,11 @@
  */
 package org.mockito.internal.creation.instance;
 
+import org.mockito.creation.instance.Instantiator;
 import org.mockito.mock.MockCreationSettings;
-import org.mockito.plugins.InstantiatorProvider;
+import org.mockito.plugins.InstantiatorProvider2;
 
-public class DefaultInstantiatorProvider implements InstantiatorProvider {
+public class DefaultInstantiatorProvider implements InstantiatorProvider2 {
 
     private final static Instantiator INSTANCE = new ObjenesisInstantiator();
 

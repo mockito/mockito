@@ -1,3 +1,4 @@
+include 'deprecatedPluginsTest'
 include 'inline'
 include 'testng'
 include 'extTest'

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.instance;
 
+import org.mockito.creation.instance.Instantiator;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.objenesis.ObjenesisStd;
 
