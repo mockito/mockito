@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.internal.creation.instance.InstantiatorProviderWrapper;
+import org.mockito.internal.creation.instance.InstantiatorProviderAdapter;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.InstantiatorProvider2;
@@ -31,7 +31,7 @@ class PluginRegistry {
     PluginRegistry() {
         Object impl = new PluginLoader(pluginSwitch).loadPlugin(InstantiatorProvider2.class, InstantiatorProvider.class);
         if (impl instanceof InstantiatorProvider) {
-            instantiatorProvider = new InstantiatorProviderWrapper((InstantiatorProvider) impl);
+            instantiatorProvider = new InstantiatorProviderAdapter((InstantiatorProvider) impl);
         } else {
             instantiatorProvider = (InstantiatorProvider2) impl;
         }
