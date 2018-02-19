@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.internal.creation.instance.InstantiatorProvider2Wrapper;
+import org.mockito.internal.creation.instance.InstantiatorProvider2Adapter;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.InstantiatorProvider2;
@@ -37,7 +37,7 @@ class DefaultMockitoPlugins implements MockitoPlugins {
             //the implementation class is not configured via map so that we can reduce duplication
             //(ensure that we are adapting the currently configured default implementation for InstantiatorProvider2)
             String className = DEFAULT_PLUGINS.get(InstantiatorProvider2.class.getName());
-            return pluginType.cast(new InstantiatorProvider2Wrapper(create(InstantiatorProvider2.class, className)));
+            return pluginType.cast(new InstantiatorProvider2Adapter(create(InstantiatorProvider2.class, className)));
         } else {
             String className = DEFAULT_PLUGINS.get(pluginType.getName());
             return create(pluginType, className);
