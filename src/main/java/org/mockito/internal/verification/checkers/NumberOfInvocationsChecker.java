@@ -5,6 +5,7 @@
 
 package org.mockito.internal.verification.checkers;
 
+import java.util.Arrays;
 import java.util.List;
 import org.mockito.internal.reporting.Discrepancy;
 import org.mockito.internal.verification.api.InOrderContext;
@@ -22,7 +23,7 @@ import static org.mockito.internal.invocation.InvocationMarker.markVerifiedInOrd
 import static org.mockito.internal.invocation.InvocationsFinder.findFirstMatchingUnverifiedInvocation;
 import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 import static org.mockito.internal.invocation.InvocationsFinder.findMatchingChunk;
-import static org.mockito.internal.invocation.InvocationsFinder.getLastLocation;
+import static org.mockito.internal.invocation.InvocationsFinder.getAllLocations;
 
 public class NumberOfInvocationsChecker {
 
@@ -34,16 +35,14 @@ public class NumberOfInvocationsChecker {
 
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
-            Location lastInvocation = getLastLocation(actualInvocations);
-            throw tooLittleActualInvocations(new Discrepancy(wantedCount, actualCount), wanted, lastInvocation);
+            List<Location> allLocations = getAllLocations(actualInvocations);
+            throw tooLittleActualInvocations(new Discrepancy(wantedCount, actualCount), wanted, allLocations);
         }
         if (wantedCount == 0 && actualCount > 0) {
-            Location firstUndesired = actualInvocations.get(wantedCount).getLocation();
-            throw neverWantedButInvoked(wanted, firstUndesired);
+            throw neverWantedButInvoked(wanted, getAllLocations(actualInvocations));
         }
         if (wantedCount < actualCount) {
-            Location firstUndesired = actualInvocations.get(wantedCount).getLocation();
-            throw tooManyActualInvocations(wantedCount, actualCount, wanted, firstUndesired);
+            throw tooManyActualInvocations(wantedCount, actualCount, wanted, getAllLocations(actualInvocations));
         }
 
         markVerified(actualInvocations, wanted);
@@ -55,12 +54,11 @@ public class NumberOfInvocationsChecker {
         int actualCount = chunk.size();
 
         if (wantedCount > actualCount) {
-            Location lastInvocation = getLastLocation(chunk);
-            throw tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, lastInvocation);
+            List<Location> allLocations = getAllLocations(chunk);
+            throw tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, allLocations);
         }
         if (wantedCount < actualCount) {
-            Location firstUndesired = chunk.get(wantedCount).getLocation();
-            throw tooManyActualInvocationsInOrder(wantedCount, actualCount, wanted, firstUndesired);
+            throw tooManyActualInvocationsInOrder(wantedCount, actualCount, wanted, getAllLocations(chunk));
         }
 
         markVerifiedInOrder(chunk, wanted, context);
@@ -72,7 +70,7 @@ public class NumberOfInvocationsChecker {
         while( actualCount < wantedCount ){
             Invocation next = findFirstMatchingUnverifiedInvocation(invocations, wanted, context );
             if( next == null ){
-                throw tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, lastLocation );
+                throw tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, Arrays.asList(lastLocation));
             }
             markVerified( next, wanted );
             context.markVerified( next );

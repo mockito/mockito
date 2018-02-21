@@ -138,6 +138,14 @@ public class InvocationsFinder {
         return unverified;
     }
 
+    public static List<Location> getAllLocations(List<Invocation> invocations) {
+        List<Location> locations = new LinkedList<Location>();
+        for (Invocation invocation : invocations) {
+            locations.add(invocation.getLocation());
+        }
+        return locations;
+    }
+
     private static class RemoveNotMatching implements Filter<Invocation> {
         private final MatchableInvocation wanted;
 
