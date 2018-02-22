@@ -42,6 +42,34 @@ public class StubbingConsecutiveAnswersTest extends TestBase {
     }
 
     @Test
+    public void should_return_consecutive_values_first_var_arg_null() throws Exception {
+        when(mock.simpleMethod()).thenReturn("one", (String) null);
+
+        assertEquals("one", mock.simpleMethod());
+        assertNull(mock.simpleMethod());
+        assertNull(mock.simpleMethod());
+    }
+
+    @Test
+    public void should_return_consecutive_values_var_arg_null() throws Exception {
+        when(mock.simpleMethod()).thenReturn("one", (String[]) null);
+
+        assertEquals("one", mock.simpleMethod());
+        assertNull(mock.simpleMethod());
+        assertNull(mock.simpleMethod());
+    }
+
+    @Test
+    public void should_return_consecutive_values_var_args_contain_null() throws Exception {
+        when(mock.simpleMethod()).thenReturn("one", "two", null);
+
+        assertEquals("one", mock.simpleMethod());
+        assertEquals("two", mock.simpleMethod());
+        assertNull(mock.simpleMethod());
+        assertNull(mock.simpleMethod());
+    }
+
+    @Test
     public void should_return_consecutive_values_set_by_shorten_then_return_method() throws Exception {
         when(mock.simpleMethod()).thenReturn("one", "two", "three");
 
