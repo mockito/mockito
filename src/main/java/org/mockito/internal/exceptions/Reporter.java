@@ -370,30 +370,30 @@ public class Reporter {
         ));
     }
 
-    public static MockitoAssertionError tooManyActualInvocations(int wantedCount, int actualCount, DescribedInvocation wanted, List<Location> invocations) {
-        String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, invocations);
+    public static MockitoAssertionError tooManyActualInvocations(int wantedCount, int actualCount, DescribedInvocation wanted, List<Location> locations) {
+        String message = createTooManyInvocationsMessage(wantedCount, actualCount, wanted, locations);
         return new TooManyActualInvocations(message);
     }
 
     private static String createTooManyInvocationsMessage(int wantedCount, int actualCount, DescribedInvocation wanted,
                                                           List<Location> invocations) {
         return join(
-            wanted.toString(),
-            "Wanted " + pluralize(wantedCount) + ":",
-            new LocationImpl(),
-            "But was " + pluralize(actualCount) + ":",
-            createAllLocationsMessage(invocations),
-            ""
+                wanted.toString(),
+                "Wanted " + pluralize(wantedCount) + ":",
+                new LocationImpl(),
+                "But was " + pluralize(actualCount) + ":",
+                createAllLocationsMessage(invocations),
+                ""
         );
     }
 
     public static MockitoAssertionError neverWantedButInvoked(DescribedInvocation wanted, List<Location> invocations) {
         return new NeverWantedButInvoked(join(
-            wanted.toString(),
-            "Never wanted here:",
-            new LocationImpl(),
-            "But invoked here:",
-            createAllLocationsMessage(invocations)
+                wanted.toString(),
+                "Never wanted here:",
+                new LocationImpl(),
+                "But invoked here:",
+                createAllLocationsMessage(invocations)
         ));
     }
 
@@ -409,20 +409,21 @@ public class Reporter {
             return "\n";
         }
         StringBuilder sb = new StringBuilder();
-        for (Location invocation : locations) {
-            sb.append(invocation).append("\n");
+        for (Location location : locations) {
+            sb.append(location).append("\n");
         }
         return sb.toString();
     }
 
-    private static String createTooLittleInvocationsMessage(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted,
-                                                            List<Location> allLocations) {
+    private static String createTooLittleInvocationsMessage(org.mockito.internal.reporting.Discrepancy discrepancy,
+                                                            DescribedInvocation wanted,
+                                                            List<Location> locations) {
         return join(
                 wanted.toString(),
                 "Wanted " + discrepancy.getPluralizedWantedCount() + (discrepancy.getWantedCount() == 0 ? "." : ":"),
                 new LocationImpl(),
                 "But was " + discrepancy.getPluralizedActualCount() + (discrepancy.getActualCount() == 0 ? "." : ":"),
-                createAllLocationsMessage(allLocations)
+                createAllLocationsMessage(locations)
         );
     }
 
@@ -432,8 +433,8 @@ public class Reporter {
         return new TooLittleActualInvocations(message);
     }
 
-    public static MockitoAssertionError tooLittleActualInvocationsInOrder(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, List<Location> allLocations) {
-        String message = createTooLittleInvocationsMessage(discrepancy, wanted, allLocations);
+    public static MockitoAssertionError tooLittleActualInvocationsInOrder(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, List<Location> locations) {
+        String message = createTooLittleInvocationsMessage(discrepancy, wanted, locations);
 
         return new VerificationInOrderFailure(join(
                 "Verification in order failure:" + message
