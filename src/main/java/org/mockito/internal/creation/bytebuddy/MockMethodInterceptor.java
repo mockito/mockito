@@ -13,12 +13,8 @@ import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.StubValue;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
 import net.bytebuddy.implementation.bind.annotation.This;
-import org.mockito.internal.creation.DelegatingMethod;
 import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.invocation.MockitoMethod;
 import org.mockito.internal.invocation.RealMethod;
-import org.mockito.internal.invocation.SerializableMethod;
-import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
@@ -27,6 +23,8 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
+
+import static org.mockito.internal.invocation.DefaultInvocationFactory.createInvocation;
 
 public class MockMethodInterceptor implements Serializable {
 
@@ -63,29 +61,6 @@ public class MockMethodInterceptor implements Serializable {
                        RealMethod realMethod,
                        Location location) throws Throwable {
         return handler.handle(createInvocation(mock, invokedMethod, arguments, realMethod, mockCreationSettings, location));
-    }
-
-    public static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, RealMethod realMethod, MockCreationSettings settings, Location location) {
-        return new InterceptedInvocation(
-            mock,
-            createMockitoMethod(invokedMethod, settings),
-            arguments,
-            realMethod,
-            location,
-            SequenceNumber.next()
-        );
-    }
-
-    public static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, RealMethod realMethod, MockCreationSettings settings) {
-        return createInvocation(mock, invokedMethod, arguments, realMethod, settings, new LocationImpl());
-    }
-
-    private static MockitoMethod createMockitoMethod(Method method, MockCreationSettings settings) {
-        if (settings.isSerializable()) {
-            return new SerializableMethod(method);
-        } else {
-            return new DelegatingMethod(method);
-        }
     }
 
     public MockHandler getMockHandler() {

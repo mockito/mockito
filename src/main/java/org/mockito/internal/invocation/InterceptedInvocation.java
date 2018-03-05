@@ -2,12 +2,9 @@
  * Copyright (c) 2016 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.creation.bytebuddy;
+package org.mockito.internal.invocation;
 
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
-import org.mockito.internal.invocation.ArgumentsProcessor;
-import org.mockito.internal.invocation.MockitoMethod;
-import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;

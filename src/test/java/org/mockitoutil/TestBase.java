@@ -11,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockito.internal.creation.bytebuddy.InterceptedInvocation;
+import org.mockito.internal.invocation.InterceptedInvocation;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
