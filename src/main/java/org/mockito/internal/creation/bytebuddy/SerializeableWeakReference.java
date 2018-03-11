@@ -27,12 +27,14 @@ public class SerializeableWeakReference<T> extends WeakReference<T> implements S
         T ref = super.get();
 
         if (ref == null) {
-            throw new IllegalStateException("The mock was garbage collected. This should not " +
-                "happen as long as the calling code keeps a reference to mock. Code using the " +
-                "public mockito API should always do that. Internal users should request the " +
-                "constructor of InterceptedInvocation to not use weak references.\n" +
-                "If this exception is seen by code using the public mockito API, please file a " +
-                "bug.");
+            throw new IllegalStateException("The mock object was garbage collected. " +
+                "This should not happen in normal circumstances when using public API. " +
+                "Typically, the test class keeps strong reference to the mock object " +
+                "and it prevents getting the mock collected. Mockito internally needs " +
+                "to keep weak references to mock objects to avoid memory leaks for " +
+                "certain types of MockMaker implementations. If you see this exception " +
+                "using Mockito public API, please file a bug. For more information see " +
+                "issue #1313.");
         }
 
         return ref;
