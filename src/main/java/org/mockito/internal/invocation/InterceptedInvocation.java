@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.internal.creation.bytebuddy.SerializableReference;
-import org.mockito.internal.creation.bytebuddy.SerializableStrongReference;
-import org.mockito.internal.creation.bytebuddy.SerializeableWeakReference;
+import org.mockito.internal.creation.bytebuddy.MockReference;
+import org.mockito.internal.creation.bytebuddy.MockStrongReference;
+import org.mockito.internal.creation.bytebuddy.MockWeakReference;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.Invocation;
@@ -22,7 +22,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     private static final long serialVersionUID = 475027563923510472L;
 
-    private final SerializableReference<Object> mockRef;
+    private final MockReference<Object> mockRef;
     private final MockitoMethod mockitoMethod;
     private final Object[] arguments, rawArguments;
     private final RealMethod realMethod;
@@ -47,9 +47,9 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         // detect when a mock is only referenced from within its own handler's invocations. See
         // #1313
         if (useWeakReference) {
-            this.mockRef = new SerializeableWeakReference<Object>(mock);
+            this.mockRef = new MockWeakReference<Object>(mock);
         } else {
-            this.mockRef = new SerializableStrongReference<Object>(mock, false);
+            this.mockRef = new MockStrongReference<Object>(mock, false);
         }
 
         this.mockitoMethod = mockitoMethod;

@@ -11,15 +11,15 @@ import java.lang.ref.WeakReference;
 /**
  * A weak reference that is converted into a strong reference when serialized.
  */
-public class SerializeableWeakReference<T> extends WeakReference<T> implements SerializableReference<T> {
+public class MockWeakReference<T> extends WeakReference<T> implements MockReference<T> {
     private static final long serialVersionUID = 275065433923510472L;
 
-    public SerializeableWeakReference(T t) {
+    public MockWeakReference(T t) {
         super(t);
     }
 
     private Object writeReplace() throws ObjectStreamException {
-        return new SerializableStrongReference<T>(get(), true);
+        return new MockStrongReference<T>(get(), true);
     }
 
     @Override

@@ -7,6 +7,11 @@ package org.mockito.internal.creation.bytebuddy;
 
 import java.io.Serializable;
 
-public interface SerializableReference<T> extends Serializable {
+/**
+ * To avoid memory leaks for certain implementations of MockMaker,
+ * we need to use weak mock references internally in most cases.
+ * See #1313
+ */
+public interface MockReference<T> extends Serializable {
     T get();
 }

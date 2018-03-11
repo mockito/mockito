@@ -7,13 +7,13 @@ package org.mockito.internal.creation.bytebuddy;
 
 import java.io.ObjectStreamException;
 
-public class SerializableStrongReference<T> implements SerializableReference<T> {
+public class MockStrongReference<T> implements MockReference<T> {
     private static final long serialVersionUID = 172345563923510472L;
 
     private final T ref;
     private final boolean deserializeAsWeakRef;
 
-    public SerializableStrongReference(T ref, boolean deserializeAsWeakRef) {
+    public MockStrongReference(T ref, boolean deserializeAsWeakRef) {
         this.ref = ref;
         this.deserializeAsWeakRef = deserializeAsWeakRef;
     }
@@ -25,7 +25,7 @@ public class SerializableStrongReference<T> implements SerializableReference<T> 
 
     private Object readResolve() throws ObjectStreamException {
         if (deserializeAsWeakRef) {
-            return new SerializeableWeakReference<T>(ref);
+            return new MockWeakReference<T>(ref);
         } else {
             return this;
         }

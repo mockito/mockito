@@ -6,13 +6,13 @@ import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.fail;
 
-public class SerializeableWeakReferenceTest extends TestBase {
+public class MockWeakReferenceTest extends TestBase {
 
     @Test
     public void descriptive_exception_when_mock_was_collected() {
         try {
             //when
-            new SerializeableWeakReference(null).get();
+            new MockWeakReference(null).get();
             //then
             fail();
         } catch (Exception e) {

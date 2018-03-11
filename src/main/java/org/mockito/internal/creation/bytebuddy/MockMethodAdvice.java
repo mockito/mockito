@@ -175,14 +175,14 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
         private final SerializableMethod origin;
 
-        private final SerializeableWeakReference<Object> instanceRef;
+        private final MockReference<Object> instanceRef;
 
         private final Object[] arguments;
 
         private SerializableRealMethodCall(String identifier, Method origin, Object instance, Object[] arguments) {
             this.origin = new SerializableMethod(origin);
             this.identifier = identifier;
-            this.instanceRef = new SerializeableWeakReference<Object>(instance);
+            this.instanceRef = new MockWeakReference<Object>(instance);
             this.arguments = arguments;
         }
 
