@@ -10,9 +10,6 @@ targetCompatibility = 1.6
 test {
     include "**/*Test.class"
 
-    // To make sure we do not leak memory during tests
-    maxHeapSize = "256m"
-
     testLogging {
         exceptionFormat 'full'
         showCauses true

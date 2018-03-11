@@ -8,3 +8,6 @@ dependencies {
 }
 
 tasks.javadoc.enabled = false
+
+//required by the "StressTest.java"
+test.maxHeapSize = "256m"
