@@ -16,6 +16,8 @@ import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.invocation.SerializableMethod;
+import org.mockito.internal.invocation.mockref.MockReference;
+import org.mockito.internal.invocation.mockref.MockWeakReference;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 
 import java.io.IOException;

@@ -3,7 +3,7 @@
  * This program is made available under the terms of the MIT License.
  */
 
-package org.mockito.internal.creation.bytebuddy;
+package org.mockito.internal.invocation.mockref;
 
 import java.io.ObjectStreamException;
 import java.lang.ref.WeakReference;

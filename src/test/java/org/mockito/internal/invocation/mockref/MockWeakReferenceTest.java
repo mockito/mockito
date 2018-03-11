@@ -1,7 +1,8 @@
-package org.mockito.internal.creation.bytebuddy;
+package org.mockito.internal.invocation.mockref;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
+import org.mockito.internal.invocation.mockref.MockWeakReference;
 import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.fail;

@@ -5,7 +5,7 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.internal.creation.DelegatingMethod;
-import org.mockito.internal.creation.bytebuddy.MockWeakReference;
+import org.mockito.internal.invocation.mockref.MockWeakReference;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.invocation.Invocation;

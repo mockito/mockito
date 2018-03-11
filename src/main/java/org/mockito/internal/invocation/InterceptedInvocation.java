@@ -4,9 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.internal.creation.bytebuddy.MockReference;
-import org.mockito.internal.creation.bytebuddy.MockStrongReference;
-import org.mockito.internal.creation.bytebuddy.MockWeakReference;
+import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.Invocation;

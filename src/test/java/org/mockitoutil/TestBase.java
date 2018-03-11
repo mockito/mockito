@@ -11,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockito.internal.creation.bytebuddy.MockStrongReference;
+import org.mockito.internal.invocation.mockref.MockStrongReference;
 import org.mockito.internal.invocation.InterceptedInvocation;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;

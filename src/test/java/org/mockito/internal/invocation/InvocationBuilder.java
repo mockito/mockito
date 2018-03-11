@@ -6,7 +6,7 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.Mockito;
-import org.mockito.internal.creation.bytebuddy.MockStrongReference;
+import org.mockito.internal.invocation.mockref.MockStrongReference;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
