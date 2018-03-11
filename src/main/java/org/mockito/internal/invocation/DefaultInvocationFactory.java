@@ -5,6 +5,7 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.internal.creation.DelegatingMethod;
+import org.mockito.internal.creation.bytebuddy.MockWeakReference;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.invocation.Invocation;
@@ -33,8 +34,7 @@ public class DefaultInvocationFactory implements InvocationFactory {
 
     public static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, RealMethod realMethod, MockCreationSettings settings, Location location) {
         return new InterceptedInvocation(
-            mock,
-            true,
+            new MockWeakReference<Object>(mock),
             createMockitoMethod(invokedMethod, settings),
             arguments,
             realMethod,

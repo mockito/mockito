@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
+import org.mockito.internal.creation.bytebuddy.MockStrongReference;
 import org.mockito.internal.invocation.InterceptedInvocation;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
@@ -64,8 +65,9 @@ public class TestBase {
         for (int i = 0; i < args.length; i++) {
             types[i] = args[i].getClass();
         }
-        return new InterceptedInvocation(mock(type), false, new SerializableMethod(type.getMethod(methodName,
-                types)), args, InterceptedInvocation.NO_OP, new LocationImpl(), 1);
+        return new InterceptedInvocation(new MockStrongReference<Object>(mock(type), false),
+            new SerializableMethod(type.getMethod(methodName, types)), args, InterceptedInvocation.NO_OP,
+            new LocationImpl(), 1);
     }
 
     protected static Invocation invocationAt(String location) {

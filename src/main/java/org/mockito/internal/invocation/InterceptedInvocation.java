@@ -35,23 +35,13 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     private boolean isIgnoredForVerification;
     private StubInfo stubInfo;
 
-    public InterceptedInvocation(Object mock,
-                                 boolean useWeakReference,
+    public InterceptedInvocation(MockReference<Object> mockRef,
                                  MockitoMethod mockitoMethod,
                                  Object[] arguments,
                                  RealMethod realMethod,
                                  Location location,
                                  int sequenceNumber) {
-        // Strong references are used in test that use invocations without keeping a reference to
-        // the mock. In production code weak references should be used to allow the mock maker to
-        // detect when a mock is only referenced from within its own handler's invocations. See
-        // #1313
-        if (useWeakReference) {
-            this.mockRef = new MockWeakReference<Object>(mock);
-        } else {
-            this.mockRef = new MockStrongReference<Object>(mock, false);
-        }
-
+        this.mockRef = mockRef;
         this.mockitoMethod = mockitoMethod;
         this.arguments = ArgumentsProcessor.expandArgs(mockitoMethod, arguments);
         this.rawArguments = arguments;
