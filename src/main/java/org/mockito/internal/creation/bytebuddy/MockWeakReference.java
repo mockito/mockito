@@ -12,10 +12,12 @@ import java.lang.ref.WeakReference;
  * A weak reference that is converted into a strong reference when serialized.
  * See {@link MockReference}.
  */
-public class MockWeakReference<T> extends WeakReference<T> implements MockReference<T> {
+public class MockWeakReference<T> implements MockReference<T> {
+
+    private final WeakReference<T> ref;
 
     public MockWeakReference(T t) {
-        super(t);
+        this.ref = new WeakReference<T>(t);
     }
 
     private Object writeReplace() throws ObjectStreamException {
@@ -24,7 +26,7 @@ public class MockWeakReference<T> extends WeakReference<T> implements MockRefere
 
     @Override
     public T get() {
-        T ref = super.get();
+        T ref = this.ref.get();
 
         if (ref == null) {
             throw new IllegalStateException("The mock object was garbage collected. " +
