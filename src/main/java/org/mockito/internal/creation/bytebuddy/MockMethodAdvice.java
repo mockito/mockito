@@ -144,14 +144,14 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
         private final Method origin;
 
-        private final WeakReference<Object> instanceRef;
+        private final MockWeakReference<Object> instanceRef;
 
         private final Object[] arguments;
 
         private RealMethodCall(SelfCallInfo selfCallInfo, Method origin, Object instance, Object[] arguments) {
             this.selfCallInfo = selfCallInfo;
             this.origin = origin;
-            this.instanceRef = new WeakReference<Object>(instance);
+            this.instanceRef = new MockWeakReference<Object>(instance);
             this.arguments = arguments;
         }
 
