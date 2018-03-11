@@ -13,7 +13,6 @@ import java.lang.ref.WeakReference;
  * See {@link MockReference}.
  */
 public class MockWeakReference<T> extends WeakReference<T> implements MockReference<T> {
-    private static final long serialVersionUID = 275065433923510472L;
 
     public MockWeakReference(T t) {
         super(t);

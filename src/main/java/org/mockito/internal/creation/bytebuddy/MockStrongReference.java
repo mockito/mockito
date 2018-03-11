@@ -8,7 +8,6 @@ package org.mockito.internal.creation.bytebuddy;
 import java.io.ObjectStreamException;
 
 public class MockStrongReference<T> implements MockReference<T> {
-    private static final long serialVersionUID = 172345563923510472L;
 
     private final T ref;
     private final boolean deserializeAsWeakRef;
