@@ -4,8 +4,10 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import org.mockito.internal.creation.instance.InstantiatorProviderAdapter;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider;
+import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.PluginSwitch;
 import org.mockito.plugins.StackTraceCleanerProvider;
@@ -15,18 +17,25 @@ class PluginRegistry {
     private final PluginSwitch pluginSwitch = new PluginLoader(new DefaultPluginSwitch())
             .loadPlugin(PluginSwitch.class);
 
-    private final MockMaker mockMaker = new PluginLoader(pluginSwitch)
-            .withAlias(DefaultMockitoPlugins.INLINE_ALIAS)
+    private final MockMaker mockMaker = new PluginLoader(pluginSwitch, DefaultMockitoPlugins.INLINE_ALIAS)
             .loadPlugin(MockMaker.class);
 
     private final StackTraceCleanerProvider stackTraceCleanerProvider = new PluginLoader(pluginSwitch)
             .loadPlugin(StackTraceCleanerProvider.class);
 
-    private final InstantiatorProvider instantiatorProvider = new PluginLoader(pluginSwitch)
-            .loadPlugin(InstantiatorProvider.class);
+    private final InstantiatorProvider2 instantiatorProvider;
 
     private AnnotationEngine annotationEngine = new PluginLoader(pluginSwitch)
             .loadPlugin(AnnotationEngine.class);
+
+    PluginRegistry() {
+        Object impl = new PluginLoader(pluginSwitch).loadPlugin(InstantiatorProvider2.class, InstantiatorProvider.class);
+        if (impl instanceof InstantiatorProvider) {
+            instantiatorProvider = new InstantiatorProviderAdapter((InstantiatorProvider) impl);
+        } else {
+            instantiatorProvider = (InstantiatorProvider2) impl;
+        }
+    }
 
     /**
      * The implementation of the stack trace cleaner
@@ -50,10 +59,11 @@ class PluginRegistry {
      * Returns the instantiator provider available for the current runtime.
      *
      * <p>Returns {@link org.mockito.internal.creation.instance.DefaultInstantiatorProvider} if no
-     * {@link org.mockito.plugins.InstantiatorProvider} extension exists or is visible in the current classpath.</p>
+     * {@link org.mockito.plugins.InstantiatorProvider2} extension exists or is visible in the
+     * current classpath.</p>
      */
-    InstantiatorProvider getInstantiatorProvider() {
-      return instantiatorProvider;
+    InstantiatorProvider2 getInstantiatorProvider() {
+        return instantiatorProvider;
     }
 
     /**

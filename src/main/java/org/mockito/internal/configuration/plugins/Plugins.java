@@ -5,7 +5,7 @@
 package org.mockito.internal.configuration.plugins;
 
 import org.mockito.plugins.AnnotationEngine;
-import org.mockito.plugins.InstantiatorProvider;
+import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.StackTraceCleanerProvider;
@@ -38,9 +38,10 @@ public class Plugins {
      * Returns the instantiator provider available for the current runtime.
      *
      * <p>Returns {@link org.mockito.internal.creation.instance.DefaultInstantiatorProvider} if no
-     * {@link org.mockito.plugins.InstantiatorProvider} extension exists or is visible in the current classpath.</p>
+     * {@link org.mockito.plugins.InstantiatorProvider2} extension exists or is visible in the
+     * current classpath.</p>
      */
-    public static InstantiatorProvider getInstantiatorProvider() {
+    public static InstantiatorProvider2 getInstantiatorProvider() {
       return registry.getInstantiatorProvider();
     }
 

@@ -5,8 +5,8 @@
 
 package org.mockitousage.plugins.switcher;
 
-import org.junit.After;
 import org.junit.Test;
+import org.mockitousage.plugins.instantiator.MyInstantiatorProvider2;
 import org.mockitousage.plugins.stacktrace.MyStackTraceCleanerProvider;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class PluginSwitchTest {
     @Test
     public void plugin_switcher_is_used() {
         mock(List.class);
-        assertEquals(MyPluginSwitch.invokedFor, asList(MyMockMaker.class.getName(), MyStackTraceCleanerProvider.class.getName()));
+        assertEquals(MyPluginSwitch.invokedFor, asList(MyMockMaker.class.getName(), MyStackTraceCleanerProvider.class.getName(), MyInstantiatorProvider2.class.getName()));
     }
 
     @Test
@@ -33,11 +33,10 @@ public class PluginSwitchTest {
         try {
             mock(List.class);
             fail();
-        } catch (Exception ignored) {}
-    }
-
-    @After
-    public void after() {
-        MyMockMaker.explosive.remove();
+        } catch (Exception e) {
+            assertEquals(MyMockMaker.class.getName(), e.getMessage());
+        } finally {
+            MyMockMaker.explosive.remove();
+        }
     }
 }

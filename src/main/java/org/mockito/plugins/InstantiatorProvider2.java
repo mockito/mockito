@@ -1,17 +1,13 @@
 /*
- * Copyright (c) 2007 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.plugins;
 
-import org.mockito.internal.creation.instance.Instantiator;
+import org.mockito.creation.instance.Instantiator;
 import org.mockito.mock.MockCreationSettings;
 
 /**
- * @deprecated since 2.15.4 because this internal class was leaking from the public API.
- * For more information why deprecated, see {@link org.mockito.plugins.InstantiatorProvider2} and
- * <a href="https://github.com/mockito/mockito/issues/1303">Issue 1303</a>
- *
  * <p>
  *     Mockito will invoke this interface in order to fetch an instance instantiator provider.
  * </p>
@@ -32,40 +28,31 @@ import org.mockito.mock.MockCreationSettings;
  *
  * <ol style="list-style-type: lower-alpha">
  *     <li>The implementation itself, for example
- *         <code>org.awesome.mockito.AwesomeInstantiatorProvider</code> that implements the
- *         <code>InstantiatorProvider</code>.</li>
- *     <li>A file "<code>mockito-extensions/org.mockito.plugins.InstantiatorProvider</code>".
+ *         <code>org.awesome.mockito.AwesomeInstantiatorProvider2</code> that implements the
+ *         <code>InstantiatorProvider2</code>.</li>
+ *     <li>A file "<code>mockito-extensions/org.mockito.plugins.InstantiatorProvider2</code>".
  *         The content of this file is exactly a <strong>one</strong> line with the qualified
  *         name: <code>org.awesome.mockito.AwesomeInstantiatorProvider</code>.</li>
  * </ol></p>
  *
  * <p>
- *     Note that if several <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider</code>
+ *     Note that if several <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider2</code>
  *     files exists in the classpath, Mockito will only use the first returned by the standard
  *     {@link ClassLoader#getResource} mechanism.
  * <p>
- *     So just create a custom implementation of {@link InstantiatorProvider} and place the
+ *     So just create a custom implementation of {@link InstantiatorProvider2} and place the
  *     qualified name in the following file
- *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider</code>.
- * </p>
- * <p>
- *     This class is deprecated and was replaced by
- *     {@link org.mockito.plugins.InstantiatorProvider2}. Hence if there is both a
- *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider</code> and
- *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider2</code> the second one
- *     takes preference.
+ *     <code>mockito-extensions/org.mockito.plugins.InstantiatorProvider2</code>.
  * </p>
  *
- * @since 2.0.31
+ * @since 2.15.4
  */
-@Deprecated
-public interface InstantiatorProvider {
+public interface InstantiatorProvider2 {
 
     /**
-     * @deprecated, see {@link InstantiatorProvider}.
-     *
      * Returns an instantiator, used to create new class instances.
+     *
+     * @since 2.15.4
      */
-    @Deprecated
     Instantiator getInstantiator(MockCreationSettings<?> settings);
 }

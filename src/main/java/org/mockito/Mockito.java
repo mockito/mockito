@@ -98,6 +98,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#41">41. (**new**) Advanced public API for framework integrations (Since 2.10.+)</a><br/>
  *      <a href="#42">42. (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</a><br/>
  *      <a href="#43">43. (**new**) New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a><br/>
+ *      <a href="#44">44. Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1497,6 +1498,14 @@ import org.mockito.verification.VerificationWithTimeout;
  *      is not {@code null}.
  *     </li>
  * </ul>
+ *
+ * <h3 id="44">44. <a class="meaningful_link" href="#mockito_instantiator_provider_deprecation" name="mockito_instantiator_provider_deprecation">
+ *       Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was
+ *       replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</a></h3>
+ *
+ * <p>{@link org.mockito.plugins.InstantiatorProvider} returned an internal API. Hence it was deprecated and replaced
+ * by {@link org.mockito.plugins.InstantiatorProvider2}. Old {@link org.mockito.plugins.InstantiatorProvider
+ * instantiator providers} will continue to work, but it is recommended to switch to the new API.</p>
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {

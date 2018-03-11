@@ -4,9 +4,12 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor;
+import org.mockito.internal.creation.DelegatingMethod;
+import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationFactory;
+import org.mockito.invocation.Location;
 import org.mockito.mock.MockCreationSettings;
 
 import java.lang.reflect.Method;
@@ -25,6 +28,30 @@ public class DefaultInvocationFactory implements InvocationFactory {
     }
 
     private Invocation createInvocation(Object target, MockCreationSettings settings, Method method, RealMethod superMethod, Object[] args) {
-        return MockMethodInterceptor.createInvocation(target, method, args, superMethod, settings);
+        return createInvocation(target, method, args, superMethod, settings);
+    }
+
+    public static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[] arguments, RealMethod realMethod, MockCreationSettings settings, Location location) {
+        return new InterceptedInvocation(
+            mock,
+            createMockitoMethod(invokedMethod, settings),
+            arguments,
+            realMethod,
+            location,
+            SequenceNumber.next()
+        );
+    }
+
+    private static InterceptedInvocation createInvocation(Object mock, Method invokedMethod, Object[]
+        arguments, RealMethod realMethod, MockCreationSettings settings) {
+        return createInvocation(mock, invokedMethod, arguments, realMethod, settings, new LocationImpl());
+    }
+
+    private static MockitoMethod createMockitoMethod(Method method, MockCreationSettings settings) {
+        if (settings.isSerializable()) {
+            return new SerializableMethod(method);
+        } else {
+            return new DelegatingMethod(method);
+        }
     }
 }

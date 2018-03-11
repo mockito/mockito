@@ -9,7 +9,7 @@ import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.internal.creation.instance.Instantiator;
+import org.mockito.creation.instance.Instantiator;
 import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.invocation.MockHandler;
@@ -189,7 +189,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
                 ((MockAccess) instance).setMockitoInterceptor(mockMethodInterceptor);
             }
             return instance;
-        } catch (org.mockito.internal.creation.instance.InstantiationException e) {
+        } catch (org.mockito.creation.instance.InstantiationException e) {
             throw new MockitoException("Unable to create mock instance of type '" + type.getSimpleName() + "'", e);
         }
     }
