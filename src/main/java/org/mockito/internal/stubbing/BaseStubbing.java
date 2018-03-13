@@ -24,7 +24,8 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
     public OngoingStubbing<T> thenReturn(T value, T... values) {
         OngoingStubbing<T> stubbing = thenReturn(value);
         if (values == null) {
-            // Return null in the 2nd and subsequent invocations.
+            // For no good reason we're configuring null answer here
+            // This has been like that since forever, so let's keep it for compatibility (unless users complain)
             return stubbing.thenReturn(null);
         }
         for (T v : values) {
@@ -56,16 +57,16 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
     @Override
     public OngoingStubbing<T> thenThrow(Class<? extends Throwable> throwableType) {
         if (throwableType == null) {
-            return abortNullExceptionType();
+            mockingProgress().reset();
+            throw notAnException();
         }
         return thenThrow(newInstance(throwableType));
     }
 
     @Override
-    public OngoingStubbing<T> thenThrow(Class<? extends Throwable> toBeThrown,
-                                        Class<? extends Throwable>... nextToBeThrown) {
+    public OngoingStubbing<T> thenThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
         if (nextToBeThrown == null) {
-            return abortNullExceptionType();
+            thenThrow((Class<Throwable>) null);
         }
         OngoingStubbing<T> stubbing = thenThrow(toBeThrown);
         for (Class<? extends Throwable> t : nextToBeThrown) {
@@ -77,11 +78,6 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
     @Override
     public OngoingStubbing<T> thenCallRealMethod() {
         return thenAnswer(new CallsRealMethods());
-    }
-
-    private OngoingStubbing<T> abortNullExceptionType() {
-        mockingProgress().reset();
-        throw notAnException();
     }
 }
 
