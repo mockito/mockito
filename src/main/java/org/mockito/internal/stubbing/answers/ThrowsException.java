@@ -40,9 +40,14 @@ public class ThrowsException implements Answer<Object>, ValidableAnswer, Seriali
         if (MockUtil.isMock(throwable)) {
             throw throwable;
         }
-        throwable.fillInStackTrace();
-        filter.filter(throwable);
-        throw throwable;
+        Throwable t = throwable.fillInStackTrace();
+
+        if (t == null) {
+            //Custom exceptions sometimes return null, see #866
+            throw throwable;
+        }
+        filter.filter(t);
+        throw t;
     }
 
     @Override
