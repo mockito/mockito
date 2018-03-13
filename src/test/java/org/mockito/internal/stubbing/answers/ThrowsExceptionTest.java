@@ -12,6 +12,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 
+import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -70,8 +71,8 @@ public class ThrowsExceptionTest {
     public void should_throw_illegal_state_exception_if_null_answer() throws Throwable {
         Invocation invocation = createMethodInvocation();
         try {
-            new ThrowsException(null)
-                .answer(invocation);
+            new ThrowsException(null).answer(invocation);
+            fail();
         } catch (IllegalStateException expected) {
         }
     }
