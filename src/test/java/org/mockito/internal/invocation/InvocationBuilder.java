@@ -6,6 +6,7 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.Mockito;
+import org.mockito.internal.invocation.mockref.MockStrongReference;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
@@ -60,7 +61,7 @@ public class InvocationBuilder {
             }
         }
 
-        Invocation i = new InterceptedInvocation(mock,
+        Invocation i = new InterceptedInvocation(new MockStrongReference<Object>(mock, false),
             new SerializableMethod(method),
             args,
             NO_OP,
