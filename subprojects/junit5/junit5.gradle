@@ -12,4 +12,8 @@ dependencies {
     implementation libraries.junit5Engine
 }
 
+test {
+    useJUnitPlatform()
+}
+
 tasks.javadoc.enabled = true

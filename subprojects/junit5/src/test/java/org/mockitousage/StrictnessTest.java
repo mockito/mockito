@@ -42,7 +42,7 @@ class StrictnessTest {
     void session_checks_for_strict_stubs() {
         TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(StrictStubs.class);
 
-        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
         assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
     }
 
@@ -64,7 +64,7 @@ class StrictnessTest {
     void session_can_retrieve_strictness_from_parent_class() {
         TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(ConfiguredStrictStubs.class);
 
-        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
         assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
     }
 
