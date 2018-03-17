@@ -4,69 +4,115 @@
  */
 package org.mockitousage;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.engine.TestExecutionResult;
+import org.junit.platform.launcher.Launcher;
+import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.TestIdentifier;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
+import org.junit.platform.launcher.core.LauncherFactory;
 import org.mockito.Mock;
-import org.mockito.junit5.MockitoExtension;
-import org.mockito.junit5.Strictness;
+import org.mockito.Mockito;
+import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
+import org.mockito.junit5.ConfiguredWithMockito;
+import org.mockito.quality.Strictness;
 
-import java.util.function.Predicate;
+import java.util.function.Function;
 
-import static org.mockito.Mockito.when;
-import static org.mockito.quality.Strictness.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
-@ExtendWith(MockitoExtension.class)
+@SuppressWarnings("ConstantConditions")
 class StrictnessTest {
 
-    @Mock
-    Predicate mock;
-
-    @Test
-    void strictnessFromTestRoot_defaultIsWarn_shouldLogUnnecessaryStubbingException() {
-        when(mock.test(1)).thenReturn(true);
-
-        //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was logged
-
-    }
-
-    @Test
-    @Strictness(LENIENT)
-    void strictnessFromTestMethod_lenient_shouldIgnoreUnnecessaryStubbing() {
-        when(mock.test(1)).thenReturn(true);
-
-
-        //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was ignored
-    }
-
-    @Nested
-    @Strictness(WARN)
-    class NestedTest{
-
+    @ConfiguredWithMockito(strictness = Strictness.STRICT_STUBS)
+    static class StrictStubs {
         @Mock
-        Predicate mock;
+        private Function<Integer, String> rootMock;
 
         @Test
-        void strictnessFromNestedTest_warn_shouldLogUnnecessaryStubbing() {
-            when(mock.test(1)).thenReturn(true);
-
-            //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was logged
+        void should_throw_an_exception_on_strict_stubs() {
+            Mockito.when(rootMock.apply(10)).thenReturn("Foo");
         }
+    }
 
+    @Test
+    void session_checks_for_strict_stubs() {
+        TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(StrictStubs.class);
+
+        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+        assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
+    }
+
+    @ConfiguredWithMockito(strictness = Strictness.STRICT_STUBS)
+    static class ConfiguredStrictStubs {
         @Nested
-        @Strictness(STRICT_STUBS)
-        class NestedTest2{
+        class NestedStrictStubs {
             @Mock
-            Predicate mock;
+            private Function<Integer, String> rootMock;
 
             @Test
-            @Disabled
-            void strictnessFromNestedTest_strict_shouldThrowUnnecessaryStubbing() {
-                when(mock.test(1)).thenReturn(true);
-
-                //FIXME how to trigger MockitoSession.finishMocking() here and check that unneccesssay stubbing was thrown
+            void should_throw_an_exception_on_strict_stubs_in_a_nested_class() {
+                Mockito.when(rootMock.apply(10)).thenReturn("Foo");
             }
         }
+    }
+
+    @Test
+    void session_can_retrieve_strictness_from_parent_class() {
+        TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(ConfiguredStrictStubs.class);
+
+        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+        assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
+    }
+
+    @ConfiguredWithMockito(strictness = Strictness.STRICT_STUBS)
+    static class ParentConfiguredStrictStubs {
+        @Nested
+        @ConfiguredWithMockito(strictness = Strictness.WARN)
+        class ChildConfiguredWarnStubs {
+            @Mock
+            private Function<Integer, String> rootMock;
+
+            @Test
+            void should_throw_an_exception_on_strict_stubs_in_a_nested_class() {
+                Mockito.when(rootMock.apply(10)).thenReturn("Foo");
+            }
+        }
+    }
+
+    @Test
+    void session_retrieves_closest_strictness_configuration() {
+        TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(ParentConfiguredStrictStubs.class);
+
+        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+    }
+
+    private TestExecutionResult invokeTestClassAndRetrieveMethodResult(Class<?> clazz) {
+        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+            .selectors(
+                selectClass(clazz)
+            )
+            .build();
+
+        Launcher launcher = LauncherFactory.create();
+
+        final TestExecutionResult[] result = new TestExecutionResult[1];
+
+        launcher.registerTestExecutionListeners(new TestExecutionListener() {
+            @Override
+            public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
+                if (testIdentifier.getDisplayName().endsWith("()")) {
+                    result[0] = testExecutionResult;
+                }
+            }
+
+        });
+
+        launcher.execute(request);
+
+        return result[0];
     }
 }

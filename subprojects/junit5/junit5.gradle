@@ -8,7 +8,8 @@ targetCompatibility = 1.8
 dependencies {
     compile project.rootProject
     testCompile libraries.assertj
-    implementation libraries.junit5
+    testCompile libraries.junit5launcher
+    implementation libraries.junit5Engine
 }
 
 tasks.javadoc.enabled = true

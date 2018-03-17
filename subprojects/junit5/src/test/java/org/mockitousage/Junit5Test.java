@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit5.MockitoExtension;
 
 import java.util.function.Function;
@@ -18,22 +19,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 class Junit5Test {
 
     @Mock
-    private Function<Integer, String> mock;
+    private Function<Integer, String> rootMock;
 
     @Test
     void ensureMockCreationWorks() {
-        assertThat(mock).isNotNull();
+        assertThat(rootMock).isNotNull();
+    }
+
+    @Test
+    void can_set_stubs_on_initialized_mock() {
+        Mockito.when(rootMock.apply(10)).thenReturn("Return");
+        assertThat(rootMock.apply(10)).isEqualTo("Return");
     }
 
     @Nested
-    class NestedMocking {
-
-        @Mock
-        Object nestedMock;
+    class NestedTestWithExtraMock {
+        @Mock Runnable nestedMock;
 
         @Test
-        void ensureMocksAreCreatedForNestedTests() {
+        void nestedMockCreated() {
             assertThat(nestedMock).isNotNull();
+        }
+
+        @Test
+        void rootMockCreated() {
+            assertThat(rootMock).isNotNull();
         }
     }
 
@@ -53,11 +63,11 @@ class Junit5Test {
     }
 
     @Nested
-    class ParentMock {
+    class NestedWithoutExtraMock {
         @Test
-        // mock is not initialized by mockito session
+        // mock is initialized by mockito session
         void shouldWeCreateMocksInTheParentContext() {
-            assertThat(mock).isNotNull();
+            assertThat(rootMock).isNotNull();
         }
     }
 }
