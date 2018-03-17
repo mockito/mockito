@@ -36,7 +36,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implement
                         public Class<?> call() throws Exception {
                             return bytecodeGenerator.mockClass(params);
                         }
-                    }, classLoader == null ? BOOTSTRAP_LOCK : classLoader);
+                    }, BOOTSTRAP_LOCK);
         } catch (IllegalArgumentException exception) {
             Throwable cause = exception.getCause();
             if (cause instanceof RuntimeException) {

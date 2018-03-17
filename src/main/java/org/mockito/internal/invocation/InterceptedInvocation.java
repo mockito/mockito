@@ -2,12 +2,10 @@
  * Copyright (c) 2016 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.creation.bytebuddy;
+package org.mockito.internal.invocation;
 
+import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
-import org.mockito.internal.invocation.ArgumentsProcessor;
-import org.mockito.internal.invocation.MockitoMethod;
-import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
@@ -22,7 +20,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     private static final long serialVersionUID = 475027563923510472L;
 
-    private final Object mock;
+    private final MockReference<Object> mockRef;
     private final MockitoMethod mockitoMethod;
     private final Object[] arguments, rawArguments;
     private final RealMethod realMethod;
@@ -35,13 +33,13 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     private boolean isIgnoredForVerification;
     private StubInfo stubInfo;
 
-    public InterceptedInvocation(Object mock,
+    public InterceptedInvocation(MockReference<Object> mockRef,
                                  MockitoMethod mockitoMethod,
                                  Object[] arguments,
                                  RealMethod realMethod,
                                  Location location,
                                  int sequenceNumber) {
-        this.mock = mock;
+        this.mockRef = mockRef;
         this.mockitoMethod = mockitoMethod;
         this.arguments = ArgumentsProcessor.expandArgs(mockitoMethod, arguments);
         this.rawArguments = arguments;
@@ -102,7 +100,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     @Override
     public Object getMock() {
-        return mock;
+        return mockRef.get();
     }
 
     @Override
@@ -141,7 +139,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
             return false;
         }
         InterceptedInvocation other = (InterceptedInvocation) o;
-        return this.mock.equals(other.mock)
+        return this.mockRef.get().equals(other.mockRef.get())
                 && this.mockitoMethod.equals(other.mockitoMethod)
                 && this.equalArguments(other.arguments);
     }

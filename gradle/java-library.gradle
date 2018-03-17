@@ -9,6 +9,7 @@ targetCompatibility = 1.6
 
 test {
     include "**/*Test.class"
+
     testLogging {
         exceptionFormat 'full'
         showCauses true

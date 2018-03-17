@@ -6,7 +6,7 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.Mockito;
-import org.mockito.internal.creation.bytebuddy.InterceptedInvocation;
+import org.mockito.internal.invocation.mockref.MockStrongReference;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
-import static org.mockito.internal.creation.bytebuddy.InterceptedInvocation.NO_OP;
+import static org.mockito.internal.invocation.InterceptedInvocation.NO_OP;
 
 /**
  * Build an invocation.
@@ -61,7 +61,7 @@ public class InvocationBuilder {
             }
         }
 
-        Invocation i = new InterceptedInvocation(mock,
+        Invocation i = new InterceptedInvocation(new MockStrongReference<Object>(mock, false),
             new SerializableMethod(method),
             args,
             NO_OP,
