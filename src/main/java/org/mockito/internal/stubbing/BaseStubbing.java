@@ -66,7 +66,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
     @Override
     public OngoingStubbing<T> thenThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
         if (nextToBeThrown == null) {
-            thenThrow((Class<Throwable>) null);
+            return thenThrow((Class<Throwable>) null);
         }
         OngoingStubbing<T> stubbing = thenThrow(toBeThrown);
         for (Class<? extends Throwable> t : nextToBeThrown) {
