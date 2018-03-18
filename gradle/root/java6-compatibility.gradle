@@ -3,7 +3,7 @@
 if (project.hasProperty('checkJava6Compatibility') && !System.getenv("SKIP_RELEASE")) {
     //if we're skipping release, let's also skip checking compatibility (faster builds)
     allprojects { p ->
-        if (p.name != 'junit5') {
+        if (p.name != 'junit-jupiter') {
             plugins.withId('java') {
                 p.apply plugin: 'ru.vyarus.animalsniffer'
                 p.dependencies {

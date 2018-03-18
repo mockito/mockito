@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.junit5;
+package org.mockito.junit.jupiter;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.quality.Strictness;

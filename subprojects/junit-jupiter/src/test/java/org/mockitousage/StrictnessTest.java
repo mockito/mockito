@@ -16,7 +16,7 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
-import org.mockito.junit5.ConfiguredWithMockito;
+import org.mockito.junit.jupiter.ConfiguredWithMockito;
 import org.mockito.quality.Strictness;
 
 import java.util.function.Function;

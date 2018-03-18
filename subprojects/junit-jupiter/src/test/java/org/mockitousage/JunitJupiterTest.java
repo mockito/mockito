@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit5.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-class Junit5Test {
+class JunitJupiterTest {
 
     @Mock
     private Function<Integer, String> rootMock;

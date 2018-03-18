@@ -2,7 +2,7 @@
  * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.junit5;
+package org.mockito.junit.jupiter;
 
 
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 /**
- * Extension that initializes mocks and handles strict stubbings. This extension is the JUnit5 equivalent
+ * Extension that initializes mocks and handles strict stubbings. This extension is the JUnit Jupiter equivalent
  * of our JUnit4 {@link MockitoJUnitRunner}.
  *
  * Example usage:
@@ -67,7 +67,7 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
 
     private final Strictness strictness;
 
-    // This constructor is invoked by JUnit5 via reflection
+    // This constructor is invoked by JUnit Jupiter via reflection
     @SuppressWarnings("unused")
     private MockitoExtension() {
         this(Strictness.WARN);
