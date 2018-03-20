@@ -99,6 +99,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#42">42. (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</a><br/>
  *      <a href="#43">43. (**new**) New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a><br/>
  *      <a href="#44">44. Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a><br/>
+ *      <a href="#45">45. (**new**) New JUnit Jupiter (JUnit5+) extension</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1506,6 +1507,11 @@ import org.mockito.verification.VerificationWithTimeout;
  * <p>{@link org.mockito.plugins.InstantiatorProvider} returned an internal API. Hence it was deprecated and replaced
  * by {@link org.mockito.plugins.InstantiatorProvider2}. Old {@link org.mockito.plugins.InstantiatorProvider
  * instantiator providers} will continue to work, but it is recommended to switch to the new API.</p>
+ *
+ * <h3 id="45">45. (**new**) <a class="meaningful_link" href="#junit5_mockito" name="junit5_mockito">New JUnit Jupiter (JUnit5+) extension</a></h3>
+ *
+ * For integration with JUnit Jupiter (JUnit5+), use the `org.mockito.junit-jupiter` artifact.
+ * For more information about the usage of the integration, see the JavaDoc of <code>MockitoExtension</code>.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {

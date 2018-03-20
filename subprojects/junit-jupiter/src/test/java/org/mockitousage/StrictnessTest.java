@@ -24,6 +24,11 @@ import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
+/**
+ * Test that runs the inner test using a launcher {@see #invokeTestClassAndRetrieveMethodResult}.
+ * We then assert on the actual test run output, to see if test actually failed as a result
+ * of our extension.
+ */
 @SuppressWarnings("ConstantConditions")
 class StrictnessTest {
 

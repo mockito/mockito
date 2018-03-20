@@ -15,5 +15,3 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-
-tasks.javadoc.enabled = true

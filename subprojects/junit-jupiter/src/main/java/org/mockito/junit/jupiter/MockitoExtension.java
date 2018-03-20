@@ -70,7 +70,7 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
     // This constructor is invoked by JUnit Jupiter via reflection
     @SuppressWarnings("unused")
     private MockitoExtension() {
-        this(Strictness.WARN);
+        this(Strictness.STRICT_STUBS);
     }
 
     private MockitoExtension(Strictness strictness) {
