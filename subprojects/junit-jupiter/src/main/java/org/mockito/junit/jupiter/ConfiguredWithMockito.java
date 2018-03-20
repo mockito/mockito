@@ -20,7 +20,7 @@ public @interface ConfiguredWithMockito {
 
     /**
      * Configure the strictness used in this test.
-     * @return The strictness to configure, by default {@link Strictness#WARN}
+     * @return The strictness to configure, by default {@link Strictness#STRICT_STUBS}
      */
-    Strictness strictness() default Strictness.WARN;
+    Strictness strictness() default Strictness.STRICT_STUBS;
 }
