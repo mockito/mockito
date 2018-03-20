@@ -28,62 +28,6 @@ public class ThrowsExceptionTest {
         }
     }
 
-    /**
-     * Tests that ThrowsException raises the same instance as passed in the constructor
-     * in case of a well-behaved Throwable implementation.
-     *
-     * @see #should_raise_same_wanted_throwable_even_if_it_returns_null_in_fill_in_stack_trace()
-     */
-    @Test
-    public void should_raise_same_wanted_throwable_on_subsequent_invocations() {
-        Throwable expectedThrowable = new IllegalStateException("An expected throwable");
-        ThrowsException throwingAnswer = new ThrowsException(expectedThrowable);
-        int numInvocations = 2;
-        for (int i = 0; i < numInvocations; i++) {
-            try {
-                throwingAnswer.answer(createMethodInvocation());
-                Assertions.fail("Should have raised wanted exception");
-            } catch (Throwable throwable) {
-                // All invocations must result in the same throwable as passed to the constructor.
-                assertThat(expectedThrowable).isSameAs(expectedThrowable);
-            }
-        }
-    }
-
-    /**
-     * Tests that a custom exception that breaks the Throwable contract returning null
-     * in fillInStackTrace does not break ThrowsException#answer.
-     *
-     * Any Throwable implementation must always return a reference to this
-     * from #fillInStackTrace.
-     *
-     * @see Throwable#fillInStackTrace()
-     * @see <a href="https://github.com/mockito/mockito/issues/866">#866</a>
-     */
-    @Test
-    public void should_raise_same_wanted_throwable_even_if_it_returns_null_in_fill_in_stack_trace() {
-        /*
-         * An evil throwable implementation that breaks Throwable#fillInStackTrace contract.
-         *
-         * We can't use a mock here because ThrowsException#answer handles mocks of exceptions
-         * differently.
-         */
-        class EvilThrowable extends Throwable {
-            @Override public synchronized Throwable fillInStackTrace() {
-                return null;
-            }
-        }
-
-        Throwable expectedThrowable = new EvilThrowable();
-        ThrowsException throwingAnswer = new ThrowsException(expectedThrowable);
-        try {
-            throwingAnswer.answer(createMethodInvocation());
-            Assertions.fail("should have raised wanted exception");
-        } catch (Throwable throwable) {
-            assertThat(throwable).isSameAs(expectedThrowable);
-        }
-    }
-
     @Test
     public void should_throw_mock_exception_without_stacktrace() throws Exception {
         try {
