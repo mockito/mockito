@@ -48,12 +48,14 @@ public class MoreMatchersTest extends TestBase {
         mock.simpleMethod((String) null);
         try {
             verify(mock).simpleMethod(isA(String.class));
-            fail();
-        } catch (AssertionError ignored) { }
-        try {
-            verify(mock).simpleMethod(any(String.class));
-            fail();
-        } catch (AssertionError ignored) { }
+        } catch (AssertionError ignored) {
+            try {
+                verify(mock).simpleMethod(any(String.class));
+            } catch (AssertionError ignored2) {
+                return;
+            }
+        }
+        fail();
     }
 
     @Test

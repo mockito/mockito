@@ -63,7 +63,7 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
             @SuppressWarnings("unchecked")
             public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
                 for (Annotation firstParamAnnotation : firstParamAnnotations) {
-                    if (annotationClass.isAssignableFrom(firstParamAnnotation.getClass())) {
+                    if (annotationClass.isAssignableFrom(firstParamAnnotation.annotationType())) {
                         return (T) firstParamAnnotation;
                     }
                 }

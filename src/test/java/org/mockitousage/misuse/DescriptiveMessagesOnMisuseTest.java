@@ -61,6 +61,7 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
 //        when(mock.differentMethod()).thenReturn("");
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test(expected=NotAMockException.class)
     public void shouldScreamWhenWholeMethodPassedToVerify() {
         verify(mock.booleanReturningMethod());
@@ -81,6 +82,7 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
         inOrder(mock, null);
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test(expected=NullInsteadOfMockException.class)
     public void shouldScreamNullPassedToVerify() {
         verify(null);

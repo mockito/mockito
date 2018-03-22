@@ -5,6 +5,7 @@
 
 package org.mockitousage.bugs.varargs;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
@@ -38,13 +39,16 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
     //we cannot use anyObject() for entire varargs because it makes the verification pick up extra invocations
     //see other tests in this package
     @Test
+    @Ignore("Issue #1337")
     public void shouldNotAllowUsingAnyObjectForVarArgs() {
         mock.run("a", "b");
 
         try {
             verify(mock).run((String[]) anyObject());
-            fail();
-        } catch (AssertionError e) {}
+        } catch (AssertionError e) {
+            return;
+        }
+        fail();
     }
 
     @Test

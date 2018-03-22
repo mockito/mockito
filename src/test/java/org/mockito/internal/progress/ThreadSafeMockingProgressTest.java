@@ -34,6 +34,7 @@ public class ThreadSafeMockingProgressTest extends TestBase {
         assertNotNull(p.pullVerificationMode());
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldKnowWhenVerificationHasStarted() throws Exception {
         //given

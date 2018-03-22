@@ -74,6 +74,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
         assertTrue(result != (Object) 0);
     }
 
+    @SuppressWarnings("SelfComparison")
     @Test
     public void should_return_zero_if_mock_is_compared_to_itself() {
         //given

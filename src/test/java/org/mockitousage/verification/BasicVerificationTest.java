@@ -47,8 +47,11 @@ public class BasicVerificationTest extends TestBase {
         verify(mock).clear();
         try {
             verify(mock).add("bar");
-            fail();
-        } catch (AssertionError expected) {}
+        } catch (AssertionError expected) {
+            return;
+        }
+
+        fail();
     }
 
     @Test

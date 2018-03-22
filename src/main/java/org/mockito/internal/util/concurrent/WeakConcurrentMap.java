@@ -50,6 +50,7 @@ public class WeakConcurrentMap<K, V> extends ReferenceQueue<K> implements Runnab
      * @param key The key of the entry.
      * @return The value of the entry or the default value if it did not exist.
      */
+    @SuppressWarnings("CollectionIncompatibleType")
     public V get(K key) {
         if (key == null) throw new NullPointerException();
         V value = target.get(new LatentKey<K>(key));
@@ -69,6 +70,7 @@ public class WeakConcurrentMap<K, V> extends ReferenceQueue<K> implements Runnab
      * @param key The key of the entry.
      * @return {@code true} if the key already defines a value.
      */
+    @SuppressWarnings("CollectionIncompatibleType")
     public boolean containsKey(K key) {
         if (key == null) throw new NullPointerException();
         return target.containsKey(new LatentKey<K>(key));
@@ -88,6 +90,7 @@ public class WeakConcurrentMap<K, V> extends ReferenceQueue<K> implements Runnab
      * @param key The key of the entry.
      * @return The removed entry or {@code null} if it does not exist.
      */
+    @SuppressWarnings("CollectionIncompatibleType")
     public V remove(K key) {
         if (key == null) throw new NullPointerException();
         return target.remove(new LatentKey<K>(key));

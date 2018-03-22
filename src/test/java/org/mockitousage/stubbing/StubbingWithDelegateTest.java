@@ -111,7 +111,7 @@ public class StubbingWithDelegateTest {
         List<String> mock = mock(List.class, delegatesTo(new FakeList<String>()));
 
         mock.set(1, "1");
-        assertThat(mock.get(1).equals("1"));
+        assertThat(mock.get(1).equals("1")).isTrue();
     }
 
     @Test
@@ -119,7 +119,7 @@ public class StubbingWithDelegateTest {
         List<String> mock = mock(List.class, delegatesTo(new FakeList<String>()));
 
         List<String> subList = mock.subList(0, 0);
-        assertThat(subList.isEmpty());
+        assertThat(subList.isEmpty()).isTrue();
     }
 
     @Test

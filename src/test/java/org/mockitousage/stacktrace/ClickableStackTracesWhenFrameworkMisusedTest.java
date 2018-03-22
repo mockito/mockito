@@ -44,6 +44,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
         }
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     private void unfinishedStubbingHere() {
         when(mock.simpleMethod());
     }
@@ -73,6 +74,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
         }
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     private void unfinishedVerificationHere() {
         verify(mock);
     }

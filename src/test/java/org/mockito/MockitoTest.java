@@ -25,11 +25,13 @@ public class MockitoTest {
         assertThat(mockingProgress().pullOngoingStubbing()).isNull();
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenVerifying() {
         Mockito.verify("notMock");
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenVerifyingWithExpectedNumberOfInvocations() {
         Mockito.verify("notMock", times(19));

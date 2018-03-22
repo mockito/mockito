@@ -72,6 +72,7 @@ public class StackTraceFilteringTest extends TestBase {
         }
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void shouldFilterStacktraceOnMockitoException() {
         verify(mock);
