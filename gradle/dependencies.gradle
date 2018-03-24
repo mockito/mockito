@@ -4,12 +4,12 @@ ext {
 
 def versions = [:]
 
-versions.bytebuddy = '1.7.9'
+versions.bytebuddy = '1.8.0'
 
 libraries.junit4 = 'junit:junit:4.12'
 libraries.junitJupiterLauncher = 'org.junit.platform:junit-platform-launcher:1.1.0'
 libraries.junitJupiterEngine = 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
-libraries.assertj = 'org.assertj:assertj-core:2.8.0'
+libraries.assertj = 'org.assertj:assertj-core:2.9.0'
 libraries.hamcrest = 'org.hamcrest:hamcrest-core:1.3'
 libraries.testng = 'org.testng:testng:6.3.1'
 
@@ -19,7 +19,7 @@ libraries.bytebuddyandroid = "net.bytebuddy:byte-buddy-android:${versions.bytebu
 
 libraries.objenesis = 'org.objenesis:objenesis:2.6'
 
-libraries.asm = 'org.ow2.asm:asm:6.0'
+libraries.asm = 'org.ow2.asm:asm:6.1'
 
 def kotlinVersion = '1.2.10'
 libraries.kotlin = [
