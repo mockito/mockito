@@ -47,7 +47,7 @@ public interface MockitoSessionBuilder {
      * like {@link org.mockito.Mock}.
      * <p>
      * In most scenarios, you only need to init mocks on a single test class instance.
-     * This method is useful for advanced framework integrations (like JUnit5), when a test uses multiple, e.g. nested, test class instances.
+     * This method is useful for advanced framework integrations (like JUnit Jupiter), when a test uses multiple, e.g. nested, test class instances.
      * <p>
      * This method calls {@link #initMocks(Object)} for each passed test class instance.
      *

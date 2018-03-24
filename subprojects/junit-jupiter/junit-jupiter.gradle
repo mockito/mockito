@@ -1,0 +1,17 @@
+description = "Mockito JUnit 5 support"
+
+apply from: "$rootDir/gradle/java-library.gradle"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile project.rootProject
+    testCompile libraries.assertj
+    testCompile libraries.junitJupiterLauncher
+    implementation libraries.junitJupiterEngine
+}
+
+test {
+    useJUnitPlatform()
+}

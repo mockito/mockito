@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
-        classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.3.0' //for 'java6-compatibility.gradle'
+        classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.3.0' //for 'java-compatibility-check.gradle'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
         classpath 'org.shipkit:shipkit:0.9.144'
@@ -30,7 +30,7 @@ allprojects {
 
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
-apply from: 'gradle/root/java6-compatibility.gradle'
+apply from: 'gradle/root/java-compatibility-check.gradle'
 apply from: 'gradle/java-library.gradle'
 apply from: 'gradle/license.gradle'
 apply from: 'gradle/root/coverage.gradle'
@@ -81,7 +81,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+    gradleVersion = '4.6'
 }
 
 //Posting Build scans to https://scans.gradle.com

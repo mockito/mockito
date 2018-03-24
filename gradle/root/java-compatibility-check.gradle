@@ -1,0 +1,12 @@
+//Use animal sniffer to detect Java incompatibilities, as we build on newer JDKs
+//if we're skipping release, let's also skip checking compatibility (faster builds)
+if (project.hasProperty('checkJavaCompatibility') && !System.getenv("SKIP_RELEASE")) {
+    allprojects { p ->
+        plugins.withId('java') {
+            p.apply plugin: 'ru.vyarus.animalsniffer'
+            p.dependencies {
+                signature "org.codehaus.mojo.signature:java1${p.name != 'junit-jupiter' ? '6' : '8'}:1.0@signature"
+            }
+        }
+    }
+}

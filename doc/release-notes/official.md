@@ -37,13 +37,13 @@
 # 2.15.0 (2018-02-10) published to [JCenter](https://bintray.com/mockito/maven/mockito/2.15.0)/[Maven Central](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.15.0%7Cjar)
 
 Notable changes:
- - new APIs to ```MockitoSession``` feature that can be used by framework integrations such as JUnit5 Jupiter.
+ - new APIs to ```MockitoSession``` feature that can be used by framework integrations such as JUnit Jupiter.
  - ```InvocationFactory``` API improvements driven by integrations with Android.
  - Javadoc updates.
 
 **2.15.0 (2018-02-10)** - [16 commits](https://github.com/mockito/mockito/compare/v2.14.0...v2.15.0) by [Marc Philipp](https://github.com/marcphilipp) (10), [Szczepan Faber](http://github.com/mockitoguy) (6) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.15.0-green.svg)](https://bintray.com/mockito/maven/mockito2.15.0)
  - Extend MockitoSession(Builder) API to enable usage by testing frameworks [(#1301)](https://github.com/mockito/mockito/pull/1301)
- - [JUnit5] MockitoSession#initMocks should support multiple test instances   [(#1232)](https://github.com/mockito/mockito/issues/1232)
+ - [JUnit Jupiter] MockitoSession#initMocks should support multiple test instances   [(#1232)](https://github.com/mockito/mockito/issues/1232)
  - Design MockitoSession API improvements for unit test frameworks [(#898)](https://github.com/mockito/mockito/issues/898)
 
 **2.14.0 (2018-02-09)** - [12 commits](https://github.com/mockito/mockito/compare/v2.13.3...v2.14.0) by 4 authors - published to [![Bintray](https://img.shields.io/badge/Bintray-2.14.0-green.svg)](https://bintray.com/mockito/maven/mockito-development2.14.0)
