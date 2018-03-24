@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @ExtendWith(MockitoExtension.class)
 @Retention(RUNTIME)
-public @interface ConfiguredWithMockito {
+public @interface MockitoSettings {
 
     /**
      * Configure the strictness used in this test.

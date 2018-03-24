@@ -42,10 +42,10 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  * }
  * </code></pre>
  *
- * If you would like to configure the used strictness for the test class, use {@link ConfiguredWithMockito}.
+ * If you would like to configure the used strictness for the test class, use {@link MockitoSettings}.
  *
  * <pre class="code"><code class="java">
- * <b>&#064;ConfiguredWithMockito(strictness = Strictness.STRICT_STUBS)</b>
+ * <b>&#064;MockitoSettings(strictness = Strictness.STRICT_STUBS)</b>
  * public class ExampleTest {
  *
  *     &#064;Mock
@@ -107,7 +107,7 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
         this.collectParentTestInstances(context, testInstances);
 
         Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
-            .map(ConfiguredWithMockito::strictness)
+            .map(MockitoSettings::strictness)
             .orElse(strictness);
 
         MockitoSession session = Mockito.mockitoSession()
@@ -118,12 +118,12 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
         context.getStore(MOCKITO).put(SESSION, session);
     }
 
-    private Optional<ConfiguredWithMockito> retrieveAnnotationFromTestClasses(final ExtensionContext context) {
+    private Optional<MockitoSettings> retrieveAnnotationFromTestClasses(final ExtensionContext context) {
         ExtensionContext currentContext = context;
-        Optional<ConfiguredWithMockito> annotation;
+        Optional<MockitoSettings> annotation;
 
         do {
-            annotation = findAnnotation(currentContext.getElement(), ConfiguredWithMockito.class);
+            annotation = findAnnotation(currentContext.getElement(), MockitoSettings.class);
 
             if (!currentContext.getParent().isPresent()) {
                 break;

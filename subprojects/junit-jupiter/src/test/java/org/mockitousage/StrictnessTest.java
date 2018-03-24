@@ -6,6 +6,7 @@ package org.mockitousage;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
@@ -16,7 +17,8 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
-import org.mockito.junit.jupiter.ConfiguredWithMockito;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.quality.Strictness;
 
 import java.util.function.Function;
@@ -32,7 +34,7 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass
 @SuppressWarnings("ConstantConditions")
 class StrictnessTest {
 
-    @ConfiguredWithMockito(strictness = Strictness.STRICT_STUBS)
+    @MockitoSettings(strictness = Strictness.STRICT_STUBS)
     static class StrictStubs {
         @Mock
         private Function<Integer, String> rootMock;
@@ -51,7 +53,7 @@ class StrictnessTest {
         assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
     }
 
-    @ConfiguredWithMockito(strictness = Strictness.STRICT_STUBS)
+    @MockitoSettings(strictness = Strictness.STRICT_STUBS)
     static class ConfiguredStrictStubs {
         @Nested
         class NestedStrictStubs {
@@ -73,10 +75,10 @@ class StrictnessTest {
         assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
     }
 
-    @ConfiguredWithMockito(strictness = Strictness.STRICT_STUBS)
+    @MockitoSettings(strictness = Strictness.STRICT_STUBS)
     static class ParentConfiguredStrictStubs {
         @Nested
-        @ConfiguredWithMockito(strictness = Strictness.WARN)
+        @MockitoSettings(strictness = Strictness.WARN)
         class ChildConfiguredWarnStubs {
             @Mock
             private Function<Integer, String> rootMock;
@@ -93,6 +95,27 @@ class StrictnessTest {
         TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(ParentConfiguredStrictStubs.class);
 
         assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+    }
+
+    @ExtendWith(MockitoExtension.class)
+    static class ByDefaultUsesStrictStubs {
+
+        @Mock
+        private Function<Integer, String> rootMock;
+
+        @Test
+        void should_throw_an_exception_on_strict_stubs_configured_by_default() {
+            Mockito.when(rootMock.apply(10)).thenReturn("Foo");
+        }
+
+    }
+
+    @Test
+    void by_default_configures_strict_stubs_in_runner() {
+        TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(ByDefaultUsesStrictStubs.class);
+
+        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
+        assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
     }
 
     private TestExecutionResult invokeTestClassAndRetrieveMethodResult(Class<?> clazz) {
