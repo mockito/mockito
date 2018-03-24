@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.util;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,7 +67,6 @@ public class PrimitivesTest {
         assertNull(Primitives.defaultValue(null));
     }
 
-    @Ignore("Issue #1338")
     @Test
     public void should_check_that_value_type_is_assignable_to_wrapper_reference() {
         assertThat(Primitives.isAssignableFromWrapper(int.class, Integer.class)).isTrue();

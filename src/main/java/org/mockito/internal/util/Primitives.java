@@ -44,7 +44,7 @@ public class Primitives {
 
     public static boolean isAssignableFromWrapper(Class<?> valueClass, Class<?> referenceType) {
         if(isPrimitiveOrWrapper(valueClass) && isPrimitiveOrWrapper(referenceType)) {
-            return Primitives.primitiveTypeOf(valueClass).isAssignableFrom(referenceType);
+            return Primitives.primitiveTypeOf(valueClass).isAssignableFrom(Primitives.primitiveTypeOf(referenceType));
         }
         return false;
     }
