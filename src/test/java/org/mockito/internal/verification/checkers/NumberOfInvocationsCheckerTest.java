@@ -5,10 +5,6 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -27,6 +23,10 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NumberOfInvocationsCheckerTest {
@@ -58,7 +58,7 @@ public class NumberOfInvocationsCheckerTest {
     }
 
     @Test
-    public void shouldReportWithLastInvocationStackTrace() throws Exception {
+    public void shouldReportAllInvocationsStackTrace() throws Exception {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
@@ -66,7 +66,7 @@ public class NumberOfInvocationsCheckerTest {
         exception.expectMessage("mock.simpleMethod()");
         exception.expectMessage("Wanted 100 times");
         exception.expectMessage("But was 2 times");
-        exception.expectMessage(containsTimes("-> at", 2));
+        exception.expectMessage(containsTimes("-> at", 3));
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100);
     }
@@ -86,7 +86,7 @@ public class NumberOfInvocationsCheckerTest {
     }
 
     @Test
-    public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
+    public void shouldReportWithAllInvocationsStackTrace() throws Exception {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
         Invocation third = buildSimpleMethod().toInvocation();
@@ -95,6 +95,8 @@ public class NumberOfInvocationsCheckerTest {
         wanted = buildSimpleMethod().toInvocationMatcher();
 
         exception.expect(TooManyActualInvocations.class);
+        exception.expectMessage("" + first.getLocation());
+        exception.expectMessage("" + second.getLocation());
         exception.expectMessage("" + third.getLocation());
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 2);
     }

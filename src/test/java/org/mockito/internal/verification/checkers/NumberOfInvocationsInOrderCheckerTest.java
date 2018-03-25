@@ -5,11 +5,6 @@
 
 package org.mockito.internal.verification.checkers;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-
 import java.util.List;
 
 import org.hamcrest.BaseMatcher;
@@ -26,6 +21,11 @@ import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class NumberOfInvocationsInOrderCheckerTest {
 
@@ -102,7 +102,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportWithLastInvocationStackTrace() throws Exception {
+    public void shouldReportWithAllInvocationsStackTrace() throws Exception {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
@@ -110,7 +110,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expectMessage("mock.simpleMethod()");
         exception.expectMessage("Wanted 100 times");
         exception.expectMessage("But was 2 times");
-        exception.expectMessage(containsTimes("-> at", 2));
+        exception.expectMessage(containsTimes("-> at", 3));
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
 
@@ -168,7 +168,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expect(VerificationInOrderFailure.class);
         exception.expectMessage("mock.simpleMethod()");
         exception.expectMessage("Wanted 0 times");
-        exception.expectMessage("But was 1 time. Undesired invocation");
+        exception.expectMessage("But was 1 time:");
         exception.expectMessage("" + first.getLocation());
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0, context);
