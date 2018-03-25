@@ -190,7 +190,10 @@ public class InvocationsFinderTest extends TestBase {
     public void shouldFindAllStackTraces() {
         List<Location> all = InvocationsFinder.getAllLocations(invocations);
         Assertions.assertThat(all).contains(simpleMethodInvocation.getLocation(), simpleMethodInvocationTwo.getLocation(), differentMethodInvocation.getLocation());
+    }
 
+    @Test
+    public void shouldNotFindLocationsForEmptyInvocationsList() {
         Assertions.assertThat(InvocationsFinder.getAllLocations(Collections.<Invocation>emptyList())).isEmpty();
     }
 }
