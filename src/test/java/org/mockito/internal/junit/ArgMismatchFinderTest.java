@@ -20,7 +20,7 @@ public class ArgMismatchFinderTest extends TestBase {
     @Mock IMethods mock2;
 
     @Test
-    public void no_interactions() throws Exception {
+    public void no_interactions() {
         //when
         StubbingArgMismatches mismatches = finder.getStubbingArgMismatches(asList(mock1, mock2));
 
@@ -29,7 +29,7 @@ public class ArgMismatchFinderTest extends TestBase {
     }
 
     @Test
-    public void no_mismatch_when_mock_different() throws Exception {
+    public void no_mismatch_when_mock_different() {
         //given
         when(mock1.simpleMethod(1)).thenReturn("1");
         mock2.simpleMethod(2); //arg mismatch on different mock
@@ -42,7 +42,7 @@ public class ArgMismatchFinderTest extends TestBase {
     }
 
     @Test
-    public void no_mismatch_when_method_different() throws Exception {
+    public void no_mismatch_when_method_different() {
         //given
         when(mock1.simpleMethod(1)).thenReturn("1");
         mock1.otherMethod();
@@ -55,7 +55,7 @@ public class ArgMismatchFinderTest extends TestBase {
     }
 
     @Test
-    public void no_mismatch_when_stubbing_used() throws Exception {
+    public void no_mismatch_when_stubbing_used() {
         //given
         when(mock1.simpleMethod(1)).thenReturn("1");
         mock1.simpleMethod(1); // stub used
@@ -69,7 +69,7 @@ public class ArgMismatchFinderTest extends TestBase {
     }
 
     @Test
-    public void stubbing_mismatch() throws Exception {
+    public void stubbing_mismatch() {
         //given
         when(mock1.simpleMethod(1)).thenReturn("1");
         mock1.simpleMethod(2);
@@ -82,7 +82,7 @@ public class ArgMismatchFinderTest extends TestBase {
     }
 
     @Test
-    public void single_mismatch_with_multiple_invocations() throws Exception {
+    public void single_mismatch_with_multiple_invocations() {
         //given
         when(mock1.simpleMethod(1)).thenReturn("1");
         mock1.simpleMethod(2);
@@ -97,7 +97,7 @@ public class ArgMismatchFinderTest extends TestBase {
     }
 
     @Test
-    public void single_invocation_with_multiple_stubs() throws Exception {
+    public void single_invocation_with_multiple_stubs() {
         //given
         when(mock1.simpleMethod(1)).thenReturn("1");
         when(mock1.simpleMethod(2)).thenReturn("2");
@@ -113,7 +113,7 @@ public class ArgMismatchFinderTest extends TestBase {
     }
 
     @Test
-    public void mismatch_reports_only_unstubbed_invocations() throws Exception {
+    public void mismatch_reports_only_unstubbed_invocations() {
         //given
         when(mock1.simpleMethod(1)).thenReturn("1"); //unused
         when(mock1.simpleMethod(2)).thenReturn("2"); //used

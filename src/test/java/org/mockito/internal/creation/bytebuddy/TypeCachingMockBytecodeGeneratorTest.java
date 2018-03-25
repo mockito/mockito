@@ -24,7 +24,7 @@ import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
 public class TypeCachingMockBytecodeGeneratorTest {
 
     @Before
-    public void ensure_disable_gc_is_activated() throws Exception {
+    public void ensure_disable_gc_is_activated() {
         VmArgAssumptions.assumeVmArgNotPresent("-XX:+DisableExplicitGC");
     }
 

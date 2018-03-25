@@ -49,7 +49,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldStubWithThrowable() throws Exception {
+    public void shouldStubWithThrowable() {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         when(mock.add("throw")).thenThrow(expected);
 
@@ -59,7 +59,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldSetThrowableToVoidMethod() throws Exception {
+    public void shouldSetThrowableToVoidMethod() {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
 
         doThrow(expected).when(mock).clear();
@@ -71,7 +71,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldLastStubbingVoidBeImportant() throws Exception {
+    public void shouldLastStubbingVoidBeImportant() {
         doThrow(new ExceptionOne()).when(mock).clear();
         doThrow(new ExceptionTwo()).when(mock).clear();
 
@@ -81,7 +81,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation() throws Exception {
+    public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation() {
         when(mock.size()).thenThrow(new ExceptionOne());
 
         exception.expect(ExceptionOne.class);
@@ -102,7 +102,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowSettingError() throws Exception {
+    public void shouldAllowSettingError() {
         Error error = new Error();
 
         when(mock.add("quake")).thenThrow(error);
@@ -195,7 +195,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void doThrowShouldNotAllowSettingNullThrowableClasses() throws Exception {
+    public void doThrowShouldNotAllowSettingNullThrowableClasses() {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
@@ -203,7 +203,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void doThrowShouldNotAllowSettingNullVarArgThrowableClasses() throws Exception {
+    public void doThrowShouldNotAllowSettingNullVarArgThrowableClasses() {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
@@ -211,7 +211,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldNotAllowSettingNullVarArgsThrowableClasses() throws Exception {
+    public void shouldNotAllowSettingNullVarArgsThrowableClasses() {
         exception.expect(MockitoException.class);
         exception.expectMessage("Exception type cannot be null");
 
@@ -229,7 +229,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldNotAllowCheckedExceptionWhenErrorIsDeclared() throws Exception {
+    public void shouldNotAllowCheckedExceptionWhenErrorIsDeclared() {
         IMethods mock = mock(IMethods.class);
 
         exception.expect(MockitoException.class);
@@ -239,7 +239,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldNotAllowCheckedExceptionWhenNothingIsDeclared() throws Exception {
+    public void shouldNotAllowCheckedExceptionWhenNothingIsDeclared() {
         IMethods mock = mock(IMethods.class);
 
         exception.expect(MockitoException.class);
@@ -249,7 +249,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldMixThrowablesAndReturnsOnDifferentMocks() throws Exception {
+    public void shouldMixThrowablesAndReturnsOnDifferentMocks() {
         when(mock.add("ExceptionOne")).thenThrow(new ExceptionOne());
         when(mock.getLast()).thenReturn("last");
         doThrow(new ExceptionTwo()).when(mock).clear();

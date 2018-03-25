@@ -80,7 +80,7 @@ public class TypeSafeMatchingTest {
     }
 
     @Test
-    public void compareToIntVsString() throws Exception {
+    public void compareToIntVsString() {
         boolean match = matchesTypeSafe().apply(new LessOrEqual<Integer>(5), "Hello");
         assertThat(match).isFalse();
     }

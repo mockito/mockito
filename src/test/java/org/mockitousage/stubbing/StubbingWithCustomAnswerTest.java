@@ -22,9 +22,9 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     private IMethods mock;
 
     @Test
-    public void shouldAnswer() throws Exception {
+    public void shouldAnswer() {
         when(mock.simpleMethod(anyString())).thenAnswer(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
+            public String answer(InvocationOnMock invocation) {
                 String arg =  invocation.getArgument(0);
 
                 return invocation.getMethod().getName() + "-" + arg;
@@ -35,7 +35,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     }
 
     @Test
-    public void shouldAnswerWithThenAnswerAlias() throws Exception {
+    public void shouldAnswerWithThenAnswerAlias() {
         RecordCall recordCall = new RecordCall();
         Set<?> mockedSet = (Set<?>) when(mock(Set.class).isEmpty()).then(recordCall).getMock();
 
@@ -45,16 +45,16 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     }
 
     @Test
-    public void shouldAnswerConsecutively() throws Exception {
+    public void shouldAnswerConsecutively() {
         when(mock.simpleMethod())
                 .thenAnswer(new Answer<String>() {
-                    public String answer(InvocationOnMock invocation) throws Throwable {
+                    public String answer(InvocationOnMock invocation) {
                         return invocation.getMethod().getName();
                     }
                 })
                 .thenReturn("Hello")
                 .thenAnswer(new Answer<String>() {
-                    public String answer(InvocationOnMock invocation) throws Throwable {
+                    public String answer(InvocationOnMock invocation) {
                         return invocation.getMethod().getName() + "-1";
                     }
                 });
@@ -66,7 +66,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     }
 
     @Test
-    public void shouldAnswerVoidMethod() throws Exception {
+    public void shouldAnswerVoidMethod() {
         RecordCall recordCall = new RecordCall();
 
         doAnswer(recordCall).when(mock).voidMethod();
@@ -76,7 +76,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     }
 
     @Test
-    public void shouldAnswerVoidMethodConsecutively() throws Exception {
+    public void shouldAnswerVoidMethodConsecutively() {
         RecordCall call1 = new RecordCall();
         RecordCall call2 = new RecordCall();
 
@@ -100,9 +100,9 @@ public class StubbingWithCustomAnswerTest extends TestBase {
     }
 
     @Test
-    public void shouldMakeSureTheInterfaceDoesNotChange() throws Exception {
+    public void shouldMakeSureTheInterfaceDoesNotChange() {
         when(mock.simpleMethod(anyString())).thenAnswer(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
+            public String answer(InvocationOnMock invocation) {
                 assertTrue(invocation.getArguments().getClass().isArray());
                 assertEquals(Method.class, invocation.getMethod().getClass());
 
@@ -120,7 +120,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
             return called;
         }
 
-        public Object answer(InvocationOnMock invocation) throws Throwable {
+        public Object answer(InvocationOnMock invocation) {
             called = true;
             return null;
         }

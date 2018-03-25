@@ -244,7 +244,7 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
     static class CustomAnswersMustImplementSerializableForSerializationToWork
         implements Answer<Object>, Serializable {
         private String string;
-        public Object answer(InvocationOnMock invocation) throws Throwable {
+        public Object answer(InvocationOnMock invocation) {
             invocation.getArguments();
             invocation.getMock();
             return string;

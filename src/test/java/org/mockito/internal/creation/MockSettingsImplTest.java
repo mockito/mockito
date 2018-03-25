@@ -68,7 +68,7 @@ public class MockSettingsImplTest extends TestBase {
     }
 
     @Test
-    public void shouldSetMockToBeSerializable() throws Exception {
+    public void shouldSetMockToBeSerializable() {
         //when
         mockSettingsImpl.serializable();
 
@@ -77,7 +77,7 @@ public class MockSettingsImplTest extends TestBase {
     }
 
     @Test
-    public void shouldKnowIfIsSerializable() throws Exception {
+    public void shouldKnowIfIsSerializable() {
         //given
         assertFalse(mockSettingsImpl.isSerializable());
 
@@ -145,7 +145,7 @@ public class MockSettingsImplTest extends TestBase {
     }
 
     @Test
-    public void shouldReportErrorWhenAddingNoInvocationListeners() throws Exception {
+    public void shouldReportErrorWhenAddingNoInvocationListeners() {
         try {
             mockSettingsImpl.invocationListeners();
             fail();
@@ -155,7 +155,7 @@ public class MockSettingsImplTest extends TestBase {
     }
 
     @Test
-    public void shouldReportErrorWhenAddingANullInvocationListener() throws Exception {
+    public void shouldReportErrorWhenAddingANullInvocationListener() {
         try {
             mockSettingsImpl.invocationListeners(invocationListener, null);
             fail();

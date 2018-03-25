@@ -43,7 +43,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
     }
 
     @Test
-    public void should_return_empty_iterable() throws Exception {
+    public void should_return_empty_iterable() {
         assertFalse(((Iterable<?>) values.returnValueFor(Iterable.class)).iterator().hasNext());
     }
 
@@ -65,7 +65,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
         // given
         Date d = mock(Date.class);
         d.compareTo(new Date());
-        Invocation compareTo = this.getLastInvocation();
+        Invocation compareTo = getLastInvocation();
 
         //when
         Object result = values.answer(compareTo);
@@ -79,7 +79,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
         //given
         Date d = mock(Date.class);
         d.compareTo(d);
-        Invocation compareTo = this.getLastInvocation();
+        Invocation compareTo = getLastInvocation();
 
         //when
         Object result = values.answer(compareTo);
@@ -113,11 +113,12 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
         //given
         Object stream = mock(streamType);
+        assert streamType != null;
         Object optional = streamType.getMethod("findAny").invoke(stream);
         assertNotNull(optional);
         assertFalse((Boolean) Class.forName(optionalFqcn).getMethod("isPresent").invoke(optional));
 
-        Invocation findAny = this.getLastInvocation();
+        Invocation findAny = getLastInvocation();
 
         //when
         Object result = values.answer(findAny);
@@ -152,6 +153,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
         // when
         Object stream = values.returnValueFor(streamType);
+        assert streamType != null;
         long count = (Long) streamType.getMethod("count").invoke(stream);
 
         // then

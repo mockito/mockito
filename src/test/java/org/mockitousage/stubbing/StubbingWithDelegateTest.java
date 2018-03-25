@@ -95,7 +95,7 @@ public class StubbingWithDelegateTest {
     }
 
     @Test
-    public void null_wrapper_dont_throw_exception_from_org_mockito_package() throws Exception {
+    public void null_wrapper_dont_throw_exception_from_org_mockito_package() {
         IMethods methods = mock(IMethods.class, delegatesTo(new MethodsImpl()));
 
         try {
@@ -159,7 +159,7 @@ public class StubbingWithDelegateTest {
     }
 
     @Test
-    public void exception_should_be_propagated_from_delegate() throws Exception {
+    public void exception_should_be_propagated_from_delegate() {
         final RuntimeException failure = new RuntimeException("angry-method");
         IMethods methods = mock(IMethods.class, delegatesTo(new MethodsImpl() {
             @Override

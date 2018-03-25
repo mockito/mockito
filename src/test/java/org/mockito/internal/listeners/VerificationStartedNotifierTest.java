@@ -24,13 +24,13 @@ public class VerificationStartedNotifierTest extends TestBase {
     MockingDetails mockingDetails = mockingDetails(mock(List.class));
 
     @Test
-    public void does_not_do_anything_when_list_is_empty() throws Exception {
+    public void does_not_do_anything_when_list_is_empty() {
         //expect nothing to happen
         VerificationStartedNotifier.notifyVerificationStarted((List) emptyList(), mockingDetails);
     }
 
     @Test
-    public void decent_exception_when_setting_non_mock() throws Exception {
+    public void decent_exception_when_setting_non_mock() {
         VerificationStartedNotifier.Event event = new VerificationStartedNotifier.Event(mockingDetails);
 
         try {
@@ -46,7 +46,7 @@ public class VerificationStartedNotifierTest extends TestBase {
     }
 
     @Test
-    public void shows_clean_exception_message_when_illegal_null_arg_is_used() throws Exception {
+    public void shows_clean_exception_message_when_illegal_null_arg_is_used() {
         VerificationStartedNotifier.Event event = new VerificationStartedNotifier.Event(mockingDetails);
 
         try {
@@ -60,7 +60,7 @@ public class VerificationStartedNotifierTest extends TestBase {
     }
 
     @Test
-    public void decent_exception_when_setting_mock_of_wrong_type() throws Exception {
+    public void decent_exception_when_setting_mock_of_wrong_type() {
         final Set differentTypeMock = mock(Set.class);
         VerificationStartedNotifier.Event event = new VerificationStartedNotifier.Event(mockingDetails);
 
@@ -78,7 +78,7 @@ public class VerificationStartedNotifierTest extends TestBase {
     }
 
     @Test
-    public void decent_exception_when_setting_mock_that_does_not_implement_all_desired_interfaces() throws Exception {
+    public void decent_exception_when_setting_mock_that_does_not_implement_all_desired_interfaces() {
         final Set mock = mock(Set.class, withSettings().extraInterfaces(List.class));
         final Set missingExtraInterface = mock(Set.class);
         VerificationStartedNotifier.Event event = new VerificationStartedNotifier.Event(mockingDetails(mock));
@@ -98,7 +98,7 @@ public class VerificationStartedNotifierTest extends TestBase {
     }
 
     @Test
-    public void accepts_replacement_mock_if_all_types_are_compatible() throws Exception {
+    public void accepts_replacement_mock_if_all_types_are_compatible() {
         final Set mock = mock(Set.class, withSettings().extraInterfaces(List.class, Map.class));
         final Set compatibleMock = mock(Set.class, withSettings().extraInterfaces(List.class, Map.class));
         VerificationStartedNotifier.Event event = new VerificationStartedNotifier.Event(mockingDetails(mock));

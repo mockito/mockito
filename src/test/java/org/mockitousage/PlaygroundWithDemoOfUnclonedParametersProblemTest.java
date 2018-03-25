@@ -28,7 +28,7 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
     IImportHandler importHandler;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         importLogDao = Mockito.mock(ImportLogDao.class);
         importHandler = Mockito.mock(IImportHandler.class);
         importManager = new ImportManager(importLogDao);
@@ -74,7 +74,7 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
 
     private Answer<Object> byCheckingLogEquals(final ImportLogBean status) {
         return new Answer<Object>() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
+            public Object answer(InvocationOnMock invocation) {
                 ImportLogBean bean =  invocation.getArgument(0);
                 assertEquals(status, bean);
                 return null;

@@ -97,7 +97,7 @@ public class MocksCreationTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowInlineMockCreation() throws Exception {
+    public void shouldAllowInlineMockCreation() {
         when(mock(Set.class).isEmpty()).thenReturn(false);
     }
 

@@ -19,7 +19,7 @@ public class JUnitFailureHackerTest extends TestBase {
     JUnitFailureHacker hacker = new JUnitFailureHacker();
 
     @Test
-    public void shouldReplaceException() throws Exception {
+    public void shouldReplaceException() {
         //given
         RuntimeException actualExc = new RuntimeException("foo");
         Failure failure = new Failure(Description.EMPTY, actualExc);
@@ -34,7 +34,7 @@ public class JUnitFailureHackerTest extends TestBase {
     }
 
     @Test
-    public void shouldAppendWarning() throws Exception {
+    public void shouldAppendWarning() {
         Failure failure = new Failure(Description.EMPTY, new RuntimeException("foo"));
 
         //when
@@ -45,7 +45,7 @@ public class JUnitFailureHackerTest extends TestBase {
     }
 
     @Test
-    public void shouldNotAppendWhenNoWarnings() throws Exception {
+    public void shouldNotAppendWhenNoWarnings() {
         RuntimeException ex = new RuntimeException("foo");
         Failure failure = new Failure(Description.EMPTY, ex);
 
@@ -57,7 +57,7 @@ public class JUnitFailureHackerTest extends TestBase {
     }
 
     @Test
-    public void shouldNotAppendWhenNullWarnings() throws Exception {
+    public void shouldNotAppendWhenNullWarnings() {
         RuntimeException ex = new RuntimeException("foo");
         Failure failure = new Failure(Description.EMPTY, ex);
 
@@ -69,7 +69,7 @@ public class JUnitFailureHackerTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintTheWarningSoICanSeeIt() throws Exception {
+    public void shouldPrintTheWarningSoICanSeeIt() {
         Failure failure = new Failure(Description.EMPTY, new RuntimeException("foo"));
 
         //when

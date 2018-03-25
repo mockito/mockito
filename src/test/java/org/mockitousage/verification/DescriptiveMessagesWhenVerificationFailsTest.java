@@ -211,7 +211,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void should_print_method_name_when_verifying_at_least_once() throws Exception {
+    public void should_print_method_name_when_verifying_at_least_once() {
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(1, 2);
             fail();
@@ -221,7 +221,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void should_print_method_when_matcher_used() throws Exception {
+    public void should_print_method_when_matcher_used() {
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(anyInt(), eq(100));
             fail();
@@ -281,7 +281,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void should_print_null_arguments() throws Exception {
+    public void should_print_null_arguments() {
         mock.simpleMethod(null, (Integer) null);
         try {
             verify(mock).simpleMethod("test");
@@ -292,7 +292,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void should_say_never_wanted_but_invoked() throws Exception {
+    public void should_say_never_wanted_but_invoked() {
         mock.simpleMethod(1);
 
         verify(mock, never()).simpleMethod(2);
@@ -307,7 +307,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void should_show_right_actual_method() throws Exception {
+    public void should_show_right_actual_method() {
         mock.simpleMethod(9191);
         mock.simpleMethod("foo");
 
@@ -324,7 +324,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     @Mock private IMethods iHavefunkyName;
 
     @Test
-    public void should_print_field_name_when_annotations_used() throws Exception {
+    public void should_print_field_name_when_annotations_used() {
         iHavefunkyName.simpleMethod(10);
 
         try {
@@ -338,7 +338,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void should_print_interactions_on_mock_when_ordinary_verification_fail() throws Exception {
+    public void should_print_interactions_on_mock_when_ordinary_verification_fail() {
         mock.otherMethod();
         mock.booleanReturningMethod();
 
@@ -353,7 +353,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     @Mock private IMethods veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock;
 
     @Test
-    public void should_never_break_method_string_when_no_args_in_method() throws Exception {
+    public void should_never_break_method_string_when_no_args_in_method() {
         try {
             verify(veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock).simpleMethod();
             fail();
@@ -363,7 +363,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
-    public void should_print_method_name_and_arguments_of_other_interactions_with_different_methods() throws Exception {
+    public void should_print_method_name_and_arguments_of_other_interactions_with_different_methods() {
         try {
             mock.arrayMethod(new String[] {"a", "b", "c"});
             mock.forByte((byte) 25);
@@ -380,7 +380,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
     @Test
     @Ignore("issue 380 related")
-    public void should_print_method_name_and_arguments_of_other_interactions_of_same_method() throws Exception {
+    public void should_print_method_name_and_arguments_of_other_interactions_of_same_method() {
         try {
             mock.forByte((byte) 25);
             mock.forByte((byte) 12);

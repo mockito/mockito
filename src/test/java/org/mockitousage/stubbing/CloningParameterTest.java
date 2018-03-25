@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class CloningParameterTest extends TestBase {
 
     @Test
-    public void shouldVerifyEvenIfArgumentsWereMutated() throws Exception {
+    public void shouldVerifyEvenIfArgumentsWereMutated() {
 
         // given
         EmailSender emailSender = mock(EmailSender.class, new ClonesArguments());
@@ -36,7 +36,7 @@ public class CloningParameterTest extends TestBase {
     }
 
     @Test
-    public void shouldReturnDefaultValueWithCloningAnswer() throws Exception {
+    public void shouldReturnDefaultValueWithCloningAnswer() {
 
         // given
         EmailSender emailSender = mock(EmailSender.class, new ClonesArguments());

@@ -29,7 +29,7 @@ public class BDDMockitoTest extends TestBase {
     IMethods mock;
 
     @Test
-    public void should_stub() throws Exception {
+    public void should_stub() {
         given(mock.simpleMethod("foo")).willReturn("bar");
 
         Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("bar");
@@ -37,7 +37,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_with_throwable() throws Exception {
+    public void should_stub_with_throwable() {
         given(mock.simpleMethod("foo")).willThrow(new SomethingWasWrong());
 
         try {
@@ -48,7 +48,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_with_throwable_class() throws Exception {
+    public void should_stub_with_throwable_class() {
         given(mock.simpleMethod("foo")).willThrow(SomethingWasWrong.class);
 
         try {
@@ -60,7 +60,7 @@ public class BDDMockitoTest extends TestBase {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_stub_with_throwable_classes() throws Exception {
+    public void should_stub_with_throwable_classes() {
         // unavoidable 'unchecked generic array creation' warning (from JDK7 onward)
         given(mock.simpleMethod("foo")).willThrow(SomethingWasWrong.class, AnotherThingWasWrong.class);
 
@@ -72,9 +72,9 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_with_answer() throws Exception {
+    public void should_stub_with_answer() {
         given(mock.simpleMethod(anyString())).willAnswer(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
+            public String answer(InvocationOnMock invocation) {
                 return invocation.getArgument(0);
             }
         });
@@ -83,9 +83,9 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_with_will_answer_alias() throws Exception {
+    public void should_stub_with_will_answer_alias() {
         given(mock.simpleMethod(anyString())).will(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
+            public String answer(InvocationOnMock invocation) {
                 return invocation.getArgument(0);
             }
         });
@@ -94,7 +94,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_consecutively() throws Exception {
+    public void should_stub_consecutively() {
         given(mock.simpleMethod(anyString()))
                 .willReturn("foo")
                 .willReturn("bar");
@@ -104,7 +104,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_return_consecutively() throws Exception {
+    public void should_return_consecutively() {
         given(mock.objectReturningMethodNoArgs())
                 .willReturn("foo", "bar", 12L, new byte[0]);
 
@@ -115,7 +115,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_consecutively_with_call_real_method() throws Exception {
+    public void should_stub_consecutively_with_call_real_method() {
         MethodsImpl mock = mock(MethodsImpl.class);
         willReturn("foo").willCallRealMethod()
                 .given(mock).simpleMethod();
@@ -125,7 +125,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_void() throws Exception {
+    public void should_stub_void() {
         willThrow(new SomethingWasWrong()).given(mock).voidMethod();
 
         try {
@@ -136,7 +136,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_void_with_exception_class() throws Exception {
+    public void should_stub_void_with_exception_class() {
         willThrow(SomethingWasWrong.class).given(mock).voidMethod();
 
         try {
@@ -148,7 +148,7 @@ public class BDDMockitoTest extends TestBase {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_stub_void_with_exception_classes() throws Exception {
+    public void should_stub_void_with_exception_classes() {
         willThrow(SomethingWasWrong.class, AnotherThingWasWrong.class).given(mock).voidMethod();
 
         try {
@@ -159,7 +159,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_void_consecutively() throws Exception {
+    public void should_stub_void_consecutively() {
         willDoNothing()
                 .willThrow(new SomethingWasWrong())
                 .given(mock).voidMethod();
@@ -173,7 +173,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_void_consecutively_with_exception_class() throws Exception {
+    public void should_stub_void_consecutively_with_exception_class() {
         willDoNothing()
                 .willThrow(SomethingWasWrong.class)
                 .given(mock).voidMethod();
@@ -187,7 +187,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_using_do_return_style() throws Exception {
+    public void should_stub_using_do_return_style() {
         willReturn("foo").given(mock).simpleMethod("bar");
 
         Assertions.assertThat(mock.simpleMethod("boooo")).isEqualTo(null);
@@ -195,9 +195,9 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_using_do_answer_style() throws Exception {
+    public void should_stub_using_do_answer_style() {
         willAnswer(new Answer<String>() {
-            public String answer(InvocationOnMock invocation) throws Throwable {
+            public String answer(InvocationOnMock invocation) {
                 return invocation.getArgument(0);
             }
         })
@@ -207,7 +207,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_by_delegating_to_real_method() throws Exception {
+    public void should_stub_by_delegating_to_real_method() {
         //given
         Dog dog = mock(Dog.class);
         //when
@@ -217,7 +217,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_by_delegating_to_real_method_using_typical_stubbing_syntax() throws Exception {
+    public void should_stub_by_delegating_to_real_method_using_typical_stubbing_syntax() {
         //given
         Dog dog = mock(Dog.class);
         //when
@@ -227,7 +227,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_all_stubbed_mock_reference_access() throws Exception {
+    public void should_all_stubbed_mock_reference_access() {
         Set<?> expectedMock = mock(Set.class);
 
         Set<?> returnedMock = given(expectedMock.isEmpty()).willReturn(false).getMock();

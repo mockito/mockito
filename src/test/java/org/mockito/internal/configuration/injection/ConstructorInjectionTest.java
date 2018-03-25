@@ -34,7 +34,7 @@ public class ConstructorInjectionTest {
 
     @Test
     public void should_do_the_trick_of_instantiating() throws Exception {
-        boolean result = underTest.process(field("whatever"), this, newSetOf(observer));
+        boolean result = underTest.process(field(), this, newSetOf(observer));
 
         assertTrue(result);
         assertNotNull(whatever);
@@ -46,8 +46,8 @@ public class ConstructorInjectionTest {
         return mocks;
     }
 
-    private Field field(String fieldName) throws NoSuchFieldException {
-        return this.getClass().getDeclaredField(fieldName);
+    private Field field() throws NoSuchFieldException {
+        return this.getClass().getDeclaredField("whatever");
     }
 
     private static class ArgConstructor {

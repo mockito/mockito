@@ -31,17 +31,17 @@ public class StrictStubbingTest {
         mockito.finishMocking();
     }
 
-    @Test public void no_interactions() throws Throwable {
+    @Test public void no_interactions() {
         //expect no exception
         mockito.finishMocking();
     }
 
-    @Test public void few_interactions() throws Throwable {
+    @Test public void few_interactions() {
         mock.simpleMethod(100);
         mock.otherMethod();
     }
 
-    @Test public void few_verified_interactions() throws Throwable {
+    @Test public void few_verified_interactions() {
         //when
         mock.simpleMethod(100);
         mock.otherMethod();
@@ -52,7 +52,7 @@ public class StrictStubbingTest {
         verifyNoMoreInteractions(mock);
     }
 
-    @Test public void stubbed_method_is_implicitly_verified() throws Throwable {
+    @Test public void stubbed_method_is_implicitly_verified() {
         //when
         given(mock.simpleMethod(100)).willReturn("100");
         mock.simpleMethod(100);
@@ -61,7 +61,7 @@ public class StrictStubbingTest {
         verifyNoMoreInteractions(mock);
     }
 
-    @Test public void unused_stubbed_is_not_implicitly_verified() throws Throwable {
+    @Test public void unused_stubbed_is_not_implicitly_verified() {
         //when
         given(mock.simpleMethod(100)).willReturn("100");
         mock.simpleMethod(100); // <- implicitly verified
@@ -75,7 +75,7 @@ public class StrictStubbingTest {
         }).throwsException(NoInteractionsWanted.class);
     }
 
-    @Test public void stubbing_argument_mismatch() throws Throwable {
+    @Test public void stubbing_argument_mismatch() {
         //when
         given(mock.simpleMethod(100)).willReturn("100");
 
@@ -87,7 +87,7 @@ public class StrictStubbingTest {
         }).throwsException(PotentialStubbingProblem.class);
     }
 
-    @Test public void unused_stubbing() throws Throwable {
+    @Test public void unused_stubbing() {
         //when
         given(mock.simpleMethod(100)).willReturn("100");
 

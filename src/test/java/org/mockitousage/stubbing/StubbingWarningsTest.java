@@ -36,7 +36,7 @@ public class StubbingWarningsTest {
         stateMaster.clearMockitoListeners();
     }
 
-    @Test public void few_interactions() throws Throwable {
+    @Test public void few_interactions() {
         //when
         mock.simpleMethod(100);
         mock.otherMethod();
@@ -46,7 +46,7 @@ public class StubbingWarningsTest {
         logger.assertEmpty();
     }
 
-    @Test public void stubbing_used() throws Throwable {
+    @Test public void stubbing_used() {
         //when
         given(mock.simpleMethod(100)).willReturn("100");
         mock.simpleMethod(100);
@@ -56,7 +56,7 @@ public class StubbingWarningsTest {
         logger.assertEmpty();
     }
 
-    @Test public void unused_stubbed_is_not_implicitly_verified() throws Throwable {
+    @Test public void unused_stubbed_is_not_implicitly_verified() {
         //when
         given(mock.simpleMethod(100)).willReturn("100");
         mock.simpleMethod(100); // <- stubbing is used
@@ -67,7 +67,7 @@ public class StubbingWarningsTest {
         logger.assertEmpty();
     }
 
-    @Test public void stubbing_argument_mismatch() throws Throwable {
+    @Test public void stubbing_argument_mismatch() {
         //when
         given(mock.simpleMethod(100)).willReturn("100");
         mock.simpleMethod(200);
@@ -83,7 +83,7 @@ public class StubbingWarningsTest {
                 filterLineNo(logger.getLoggedInfo()));
     }
 
-    @Test public void unused_stubbing() throws Throwable {
+    @Test public void unused_stubbing() {
         //when
         given(mock.simpleMethod(100)).willReturn("100");
 
@@ -96,14 +96,14 @@ public class StubbingWarningsTest {
                 filterLineNo(logger.getLoggedInfo()));
     }
 
-    @Test(expected = MockitoException.class) public void unfinished_verification_without_throwable() throws Throwable {
+    @Test(expected = MockitoException.class) public void unfinished_verification_without_throwable() {
         //when
         verify(mock);
 
         mockito.finishMocking();
     }
 
-    @Test public void unfinished_verification_with_throwable() throws Throwable {
+    @Test public void unfinished_verification_with_throwable() {
         //when
         verify(mock);
 

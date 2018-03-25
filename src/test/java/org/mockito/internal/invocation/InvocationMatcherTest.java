@@ -41,7 +41,7 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_be_a_citizen_of_hashes() throws Exception {
+    public void should_be_a_citizen_of_hashes() {
         Invocation invocation = new InvocationBuilder().toInvocation();
         Invocation invocationTwo = new InvocationBuilder().args("blah").toInvocation();
 
@@ -53,7 +53,7 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_not_equal_if_number_of_arguments_differ() throws Exception {
+    public void should_not_equal_if_number_of_arguments_differ() {
         InvocationMatcher withOneArg = new InvocationMatcher(new InvocationBuilder().args("test").toInvocation());
         InvocationMatcher withTwoArgs = new InvocationMatcher(new InvocationBuilder().args("test", 100).toInvocation());
 
@@ -62,7 +62,7 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_to_string_with_matchers() throws Exception {
+    public void should_to_string_with_matchers() {
         ArgumentMatcher m = NotNull.NOT_NULL;
         InvocationMatcher notNull = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(m));
         ArgumentMatcher mTwo = new Equals('x');
@@ -73,7 +73,7 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_know_if_is_similar_to() throws Exception {
+    public void should_know_if_is_similar_to() {
         Invocation same = new InvocationBuilder().mock(mock).simpleMethod().toInvocation();
         assertTrue(simpleMethod.hasSimilarMethod(same));
 
@@ -82,13 +82,13 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_not_be_similar_to_verified_invocation() throws Exception {
+    public void should_not_be_similar_to_verified_invocation() {
         Invocation verified = new InvocationBuilder().simpleMethod().verified().toInvocation();
         assertFalse(simpleMethod.hasSimilarMethod(verified));
     }
 
     @Test
-    public void should_not_be_similar_if_mocks_are_different() throws Exception {
+    public void should_not_be_similar_if_mocks_are_different() {
         Invocation onDifferentMock = new InvocationBuilder().simpleMethod().mock("different mock").toInvocation();
         assertFalse(simpleMethod.hasSimilarMethod(onDifferentMock));
     }
@@ -118,7 +118,7 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_capture_arguments_from_invocation() throws Exception {
+    public void should_capture_arguments_from_invocation() {
         //given
         Invocation invocation = new InvocationBuilder().args("1", 100).toInvocation();
         CapturingMatcher capturingMatcher = new CapturingMatcher();
@@ -133,7 +133,7 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_match_varargs_using_any_varargs() throws Exception {
+    public void should_match_varargs_using_any_varargs() {
         //given
         mock.varargs("1", "2");
         Invocation invocation = getLastInvocation();
@@ -147,7 +147,7 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_capture_varargs_as_vararg() throws Exception {
+    public void should_capture_varargs_as_vararg() {
         //given
         mock.mixedVarargs(1, "a", "b");
         Invocation invocation = getLastInvocation();
@@ -162,7 +162,7 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test  // like using several time the captor in the vararg
-    public void should_capture_arguments_when_args_count_does_NOT_match() throws Exception {
+    public void should_capture_arguments_when_args_count_does_NOT_match() {
         //given
         mock.varargs();
         Invocation invocation = getLastInvocation();
@@ -175,7 +175,7 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_create_from_invocations() throws Exception {
+    public void should_create_from_invocations() {
         //given
         Invocation i = new InvocationBuilder().toInvocation();
         //when

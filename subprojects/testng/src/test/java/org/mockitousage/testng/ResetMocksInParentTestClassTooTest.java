@@ -11,12 +11,12 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 public class ResetMocksInParentTestClassTooTest extends ParentTest {
 
     @Test
-    public void interact_with_parent_mock() throws Exception {
+    public void interact_with_parent_mock() {
         parentMockField.get("a");
     }
 
     @Test
-    public void verify__zero_interaction_with_parent_mock() throws Exception {
+    public void verify__zero_interaction_with_parent_mock() {
         verifyZeroInteractions(parentMockField);
     }
 }

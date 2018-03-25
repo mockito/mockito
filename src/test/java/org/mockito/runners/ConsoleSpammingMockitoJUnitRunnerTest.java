@@ -8,9 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
-import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.model.InitializationError;
 import org.mockito.internal.runners.InternalRunner;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockitoutil.TestBase;
@@ -19,25 +17,20 @@ import static org.junit.Assert.assertEquals;
 
 public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
 
-    private ConsoleSpammingMockitoJUnitRunner runner;
-
     private MockitoLoggerStub loggerStub;
 
-    private RunNotifier notifier;
-
     @Before
-    public void setup() throws InitializationError {
+    public void setup() {
         loggerStub = new MockitoLoggerStub();
-        notifier = new RunNotifier();
     }
 
     //TODO add sensible tests
 
     @Test
-    public void shouldDelegateToGetDescription() throws Exception {
+    public void shouldDelegateToGetDescription() {
         //given
         final Description expectedDescription = Description.createSuiteDescription(this.getClass());
-        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new InternalRunnerStub() {
+        ConsoleSpammingMockitoJUnitRunner runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new InternalRunnerStub() {
             public Description getDescription() {
                 return expectedDescription;
             }
@@ -73,7 +66,7 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         public void run(RunNotifier notifier) {
         }
 
-        public void filter(Filter filter) throws NoTestsRemainException {
+        public void filter(Filter filter) {
         }
 
     }

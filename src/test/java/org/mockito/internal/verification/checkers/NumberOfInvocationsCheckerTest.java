@@ -45,7 +45,7 @@ public class NumberOfInvocationsCheckerTest {
     public TestName testName = new TestName();
 
     @Test
-    public void shouldReportTooLittleActual() throws Exception {
+    public void shouldReportTooLittleActual() {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
@@ -58,7 +58,7 @@ public class NumberOfInvocationsCheckerTest {
     }
 
     @Test
-    public void shouldReportWithLastInvocationStackTrace() throws Exception {
+    public void shouldReportWithLastInvocationStackTrace() {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
@@ -72,7 +72,7 @@ public class NumberOfInvocationsCheckerTest {
     }
 
     @Test
-    public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() throws Exception {
+    public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() {
         invocations = emptyList();
         wanted = buildSimpleMethod().toInvocationMatcher();
 
@@ -86,7 +86,7 @@ public class NumberOfInvocationsCheckerTest {
     }
 
     @Test
-    public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
+    public void shouldReportWithFirstUndesiredInvocationStackTrace() {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
         Invocation third = buildSimpleMethod().toInvocation();
@@ -100,7 +100,7 @@ public class NumberOfInvocationsCheckerTest {
     }
 
     @Test
-    public void shouldReportTooManyActual() throws Exception {
+    public void shouldReportTooManyActual() {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
 
@@ -114,7 +114,7 @@ public class NumberOfInvocationsCheckerTest {
     }
 
     @Test
-    public void shouldReportNeverWantedButInvoked() throws Exception {
+    public void shouldReportNeverWantedButInvoked() {
         Invocation first = buildSimpleMethod().toInvocation();
 
         invocations = asList(first);
@@ -129,7 +129,7 @@ public class NumberOfInvocationsCheckerTest {
     }
 
 	@Test
-	public void shouldMarkInvocationsAsVerified() throws Exception {
+	public void shouldMarkInvocationsAsVerified() {
 		Invocation invocation = buildSimpleMethod().toInvocation();
 		assertThat(invocation.isVerified()).isFalse();
 

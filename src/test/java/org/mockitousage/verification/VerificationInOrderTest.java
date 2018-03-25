@@ -21,16 +21,13 @@ public class VerificationInOrderTest extends TestBase {
 
     private IMethods mockOne;
     private IMethods mockTwo;
-    private IMethods mockThree;
     private InOrder inOrder;
 
     @Before
     public void setUp() {
         mockOne = mock(IMethods.class);
         mockTwo = mock(IMethods.class);
-        mockThree = mock(IMethods.class);
-
-        inOrder = inOrder(mockOne, mockTwo, mockThree);
+        inOrder = inOrder(mockOne, mockTwo, mock(IMethods.class));
     }
 
     @Test
@@ -48,7 +45,7 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure ignored) {}
     }
 
     @Test
@@ -78,7 +75,7 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, atLeastOnce()).simpleMethod();
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure ignored) {}
     }
 
     @Test
@@ -97,6 +94,6 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure ignored) {}
     }
 }

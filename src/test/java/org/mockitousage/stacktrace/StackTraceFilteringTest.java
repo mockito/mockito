@@ -130,7 +130,7 @@ public class StackTraceFilteringTest extends TestBase {
     }
 
     @Test
-    public void shouldShowProperExceptionStackTrace() throws Exception {
+    public void shouldShowProperExceptionStackTrace() {
         when(mock.simpleMethod()).thenThrow(new RuntimeException());
 
         try {

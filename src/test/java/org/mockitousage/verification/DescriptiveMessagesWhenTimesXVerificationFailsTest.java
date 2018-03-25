@@ -24,7 +24,7 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
     @Mock private LinkedList mock;
 
     @Test
-    public void shouldVerifyActualNumberOfInvocationsSmallerThanWanted() throws Exception {
+    public void shouldVerifyActualNumberOfInvocationsSmallerThanWanted() {
         mock.clear();
         mock.clear();
         mock.clear();
@@ -42,7 +42,7 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
     }
 
     @Test
-    public void shouldVerifyActualNumberOfInvocationsLargerThanWanted() throws Exception {
+    public void shouldVerifyActualNumberOfInvocationsLargerThanWanted() {
         mock.clear();
         mock.clear();
         mock.clear();

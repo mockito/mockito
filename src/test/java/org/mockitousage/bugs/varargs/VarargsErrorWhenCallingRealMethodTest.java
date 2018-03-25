@@ -20,7 +20,7 @@ public class VarargsErrorWhenCallingRealMethodTest extends TestBase {
     }
 
     @Test
-    public void shouldNotThrowAnyException() throws Exception {
+    public void shouldNotThrowAnyException() {
         Foo foo = mock(Foo.class);
 
         when(foo.blah(anyString(), anyString())).thenCallRealMethod();

@@ -31,14 +31,14 @@ public class UnusedStubbingsFinderTest extends TestBase {
     @Mock IMethods mock2;
 
     @Test
-    public void no_interactions() throws Exception {
+    public void no_interactions() {
         //expect
         assertEquals(0, finder.getUnusedStubbings((List) asList(mock1, mock2)).size());
         assertEquals(0, finder.getUnusedStubbingsByLocation((List) asList(mock1, mock2)).size());
     }
 
     @Test
-    public void no_stubbings() throws Exception {
+    public void no_stubbings() {
         //when
         mock1.simpleMethod();
 
@@ -48,7 +48,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
     }
 
     @Test
-    public void no_unused_stubbings() throws Exception {
+    public void no_unused_stubbings() {
         //when
         when(mock1.simpleMethod()).thenReturn("1");
         mock1.simpleMethod();
@@ -59,7 +59,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
     }
 
     @Test
-    public void unused_stubbings() throws Exception {
+    public void unused_stubbings() {
         //when
         when(mock1.simpleMethod()).thenReturn("1");
 
@@ -69,7 +69,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
     }
 
     @Test
-    public void some_unused_stubbings() throws Exception {
+    public void some_unused_stubbings() {
         when(mock1.simpleMethod(1)).thenReturn("1");
         when(mock2.simpleMethod(2)).thenReturn("2");
         when(mock2.simpleMethod(3)).thenReturn("3");
@@ -86,7 +86,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
     }
 
     @Test
-    public void some_unused_stubbings_by_location() throws Exception {
+    public void some_unused_stubbings_by_location() {
         when(mock1.simpleMethod(1)).thenReturn("1");
         when(mock2.simpleMethod(2)).thenReturn("2");
         when(mock2.simpleMethod(3)).thenReturn("3");
@@ -102,7 +102,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
     }
 
     @Test
-    public void stubbing_used_by_location() throws Exception {
+    public void stubbing_used_by_location() {
         //when
         //Emulating stubbing in the same location by putting stubbing in the same line:
         when(mock1.simpleMethod(1)).thenReturn("1"); when(mock2.simpleMethod(1)).thenReturn("1");
@@ -116,7 +116,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
     }
 
     @Test
-    public void deduplicates_stubbings_by_location() throws Exception {
+    public void deduplicates_stubbings_by_location() {
         //when
         //Emulating stubbing in the same location by putting stubbing in the same line:
         when(mock1.simpleMethod(1)).thenReturn("1"); when(mock2.simpleMethod(1)).thenReturn("1");

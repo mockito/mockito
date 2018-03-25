@@ -31,7 +31,7 @@ public class ShouldNotTryToInjectInFinalOrStaticFieldsTest {
     @InjectMocks private ExampleService exampleService = new ExampleService();
 
     @Test
-    public void dont_fail_with_CONSTANTS() throws Exception {
+    public void dont_fail_with_CONSTANTS() {
     }
 
     @Test

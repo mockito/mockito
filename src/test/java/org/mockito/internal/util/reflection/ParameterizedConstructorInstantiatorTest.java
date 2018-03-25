@@ -34,9 +34,12 @@ import static org.mockito.Mockito.mock;
 public class ParameterizedConstructorInstantiatorTest {
 
     private Set<?> whateverForNow;
+    @SuppressWarnings("unused")
     private OneConstructor withOneConstructor;
     private MultipleConstructor withMultipleConstructor;
+    @SuppressWarnings("unused")
     private NoArgConstructor withNoArgConstructor;
+    @SuppressWarnings("unused")
     private ThrowingConstructor withThrowingConstructor;
     private VarargConstructor withVarargConstructor;
 
@@ -126,7 +129,7 @@ public class ParameterizedConstructorInstantiatorTest {
     }
 
     private static class OneConstructor {
-        public OneConstructor(Observer observer) { }
+        OneConstructor(Observer observer) { }
     }
 
     private static class ThrowingConstructor {
@@ -138,7 +141,7 @@ public class ParameterizedConstructorInstantiatorTest {
         Map map;
 
         public MultipleConstructor(Observer observer) { this(observer, null); }
-        public MultipleConstructor(Observer observer, Map map) {
+        MultipleConstructor(Observer observer, Map map) {
             super(observer);
             this.observer = observer;
             this.map = map;

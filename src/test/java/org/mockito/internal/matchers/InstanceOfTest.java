@@ -30,6 +30,7 @@ public class InstanceOfTest {
         assertThat(new InstanceOf(List.class).matches(new Object())).isFalse();
     }
 
+    @SuppressWarnings("UnnecessaryBoxing")
     @Test
     public void should_check_for_primitive_wrapper_types() {
         assertThat(new InstanceOf(int.class).matches(1000)).isTrue();

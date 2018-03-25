@@ -12,7 +12,7 @@ import java.io.Serializable;
 public abstract class CompareTo<T extends Comparable<T>> implements ArgumentMatcher<T>, Serializable {
     private final T wanted;
 
-    public CompareTo(T value) {
+    CompareTo(T value) {
         this.wanted = value;
     }
 

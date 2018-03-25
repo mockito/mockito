@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class IOOBExceptionShouldNotBeThrownWhenNotCodingFluentlyTest {
 
     @Test
-    public void second_stubbing_throws_IndexOutOfBoundsException() throws Exception {
+    public void second_stubbing_throws_IndexOutOfBoundsException() {
 
         @SuppressWarnings("unchecked")
         Map<String, String> map = mock(Map.class);

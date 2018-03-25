@@ -33,7 +33,7 @@ public class MockHandlerFactoryTest extends TestBase {
 		MockHandler<?> handler = createMockHandler(settings);
 
         mock.intReturningMethod();
-        Invocation invocation = super.getLastInvocation();
+        Invocation invocation = getLastInvocation();
 
         //when:
         Object result = handler.handle(invocation);
@@ -51,7 +51,7 @@ public class MockHandlerFactoryTest extends TestBase {
         MockHandler<?> handler =  createMockHandler(settings);
 
         mock.intReturningMethod();
-        Invocation invocation = super.getLastInvocation();
+        Invocation invocation = getLastInvocation();
 
         //when:
         Object result = handler.handle(invocation);

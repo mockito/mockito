@@ -26,7 +26,7 @@ public class RuleTestWithParameterConstructorTest {
     private InjectInto injectInto;
 
     @Test
-    public void testInjectMocks() throws Exception {
+    public void testInjectMocks() {
         assertNotNull("Mock created", injected);
         assertNotNull("Object created", injectInto);
         assertEquals("A injected into B", injected, injectInto.getInjected());

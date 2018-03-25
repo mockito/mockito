@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class PluginTest {
 
     @Test
-    public void plugin_type_should_be_inline() throws Exception {
+    public void plugin_type_should_be_inline() {
         assertTrue(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker);
     }
 

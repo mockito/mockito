@@ -4,7 +4,6 @@
  */
 package org.mockito.junit;
 
-import org.junit.runners.model.InitializationError;
 import org.mockito.internal.junit.MismatchReportingTestListener;
 import org.mockito.internal.junit.MockitoTestListener;
 import org.mockito.internal.runners.RunnerFactory;
@@ -22,7 +21,7 @@ public class TestableJUnitRunner extends MockitoJUnitRunner {
         }
     };
 
-    public TestableJUnitRunner(Class<?> klass) throws InvocationTargetException, InitializationError {
+    public TestableJUnitRunner(Class<?> klass) throws InvocationTargetException {
         super(new StrictRunner(new RunnerFactory().create(klass, new Supplier<MockitoTestListener>() {
             public MockitoTestListener get() {
                 return new MismatchReportingTestListener(LOGGER.get());

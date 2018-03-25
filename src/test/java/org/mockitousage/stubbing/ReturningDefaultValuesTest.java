@@ -25,7 +25,7 @@ public class ReturningDefaultValuesTest extends TestBase {
     @Mock private IMethods mock;
 
     @Test
-    public void shouldReturnAllKindsOfPrimitives() throws Exception {
+    public void shouldReturnAllKindsOfPrimitives() {
         assertEquals((byte) 0, mock.byteReturningMethod());
         assertEquals((short) 0, mock.shortReturningMethod());
         assertEquals(0, mock.intReturningMethod());
@@ -37,8 +37,9 @@ public class ReturningDefaultValuesTest extends TestBase {
         assertEquals(null, mock.objectReturningMethod());
     }
 
+    @SuppressWarnings("UnnecessaryBoxing")
     @Test
-    public void shouldReturnTheSameValuesForWrapperClasses() throws Exception {
+    public void shouldReturnTheSameValuesForWrapperClasses() {
         assertEquals(new Byte((byte) 0), mock.byteObjectReturningMethod());
         assertEquals(new Short((short) 0), mock.shortObjectReturningMethod());
         assertEquals(new Integer(0), mock.integerReturningMethod());

@@ -18,12 +18,10 @@ import java.util.List;
 
 public class DefaultMockitoSession implements MockitoSession {
 
-    private final List<Object> testClassInstances;
     private final String name;
     private final UniversalTestListener listener;
 
     public DefaultMockitoSession(List<Object> testClassInstances, String name, Strictness strictness, MockitoLogger logger) {
-        this.testClassInstances = testClassInstances;
         this.name = name;
         listener = new UniversalTestListener(strictness, logger);
         try {

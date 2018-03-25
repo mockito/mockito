@@ -55,12 +55,12 @@ public class InvalidUsageTest extends TestBase {
     }
 
     @Test(expected=MockitoException.class)
-    public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
+    public void shouldNotAllowSettingInvalidCheckedException() {
         when(mock.simpleMethod()).thenThrow(new Exception());
     }
 
     @Test(expected=MockitoException.class)
-    public void shouldNotAllowSettingNullThrowable() throws Exception {
+    public void shouldNotAllowSettingNullThrowable() {
         when(mock.simpleMethod()).thenThrow(new Throwable[] {null});
     }
 
@@ -71,19 +71,19 @@ public class InvalidUsageTest extends TestBase {
     }
 
     @Test(expected=MockitoException.class)
-    public void shouldNotAllowSettingNullConsecutiveThrowable() throws Exception {
+    public void shouldNotAllowSettingNullConsecutiveThrowable() {
         when(mock.simpleMethod()).thenThrow(new RuntimeException(), null);
     }
 
     final class FinalClass {}
 
     @Test(expected=MockitoException.class)
-    public void shouldNotAllowMockingFinalClassesIfDisabled() throws Exception {
+    public void shouldNotAllowMockingFinalClassesIfDisabled() {
         assumeFalse("Inlining mock allows mocking final classes", mock(FinalClass.class).getClass() == FinalClass.class);
     }
 
     @Test(expected=MockitoException.class)
-    public void shouldNotAllowMockingPrimitives() throws Exception {
+    public void shouldNotAllowMockingPrimitives() {
         mock(Integer.TYPE);
     }
 
@@ -94,7 +94,7 @@ public class InvalidUsageTest extends TestBase {
     }
 
     @Test
-    public void shouldNotMockObjectMethodsOnInterface() throws Exception {
+    public void shouldNotMockObjectMethodsOnInterface() {
         ObjectLikeInterface inter = mock(ObjectLikeInterface.class);
 
         inter.equals(null);
@@ -104,7 +104,7 @@ public class InvalidUsageTest extends TestBase {
         verifyZeroInteractions(inter);
     }
 
-    public void shouldNotMockObjectMethodsOnClass() throws Exception {
+    public void shouldNotMockObjectMethodsOnClass() {
         Object clazz = mock(ObjectLikeInterface.class);
 
         clazz.equals(null);

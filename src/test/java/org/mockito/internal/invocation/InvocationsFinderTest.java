@@ -39,16 +39,16 @@ public class InvocationsFinderTest extends TestBase {
     @Mock private IMethods mock;
 
     @Before
-    public void setup() throws Exception {
-        simpleMethodInvocation = new InvocationBuilder().mock(mock).simpleMethod().seq(1).toInvocation();
-        simpleMethodInvocationTwo = new InvocationBuilder().mock(mock).simpleMethod().seq(2).toInvocation();
-        differentMethodInvocation = new InvocationBuilder().mock(mock).differentMethod().seq(3).toInvocation();
+    public void setup() {
+        simpleMethodInvocation = new InvocationBuilder().mock(mock).simpleMethod().toInvocation();
+        simpleMethodInvocationTwo = new InvocationBuilder().mock(mock).simpleMethod().toInvocation();
+        differentMethodInvocation = new InvocationBuilder().mock(mock).differentMethod().toInvocation();
         invocations.addAll(Arrays.asList(simpleMethodInvocation, simpleMethodInvocationTwo, differentMethodInvocation));
 
     }
 
     @Test
-    public void shouldFindActualInvocations() throws Exception {
+    public void shouldFindActualInvocations() {
         List<Invocation> actual = InvocationsFinder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation));
         Assertions.assertThat(actual).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo);
 
@@ -57,7 +57,7 @@ public class InvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void shouldFindFirstUnverifiedInvocation() throws Exception {
+    public void shouldFindFirstUnverifiedInvocation() {
         assertSame(simpleMethodInvocation, InvocationsFinder.findFirstUnverified(invocations));
 
         simpleMethodInvocationTwo.markVerified();
@@ -70,7 +70,7 @@ public class InvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void shouldFindFirstUnverifiedInOrder() throws Exception {
+    public void shouldFindFirstUnverifiedInOrder() {
         //given
         InOrderContextImpl context = new InOrderContextImpl();
         assertSame(simpleMethodInvocation, InvocationsFinder.findFirstUnverifiedInOrder(context, invocations));
@@ -90,7 +90,7 @@ public class InvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void shouldFindFirstUnverifiedInOrderAndRespectSequenceNumber() throws Exception {
+    public void shouldFindFirstUnverifiedInOrderAndRespectSequenceNumber() {
         //given
         InOrderContextImpl context = new InOrderContextImpl();
         assertSame(simpleMethodInvocation, InvocationsFinder.findFirstUnverifiedInOrder(context, invocations));
@@ -105,13 +105,13 @@ public class InvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void shouldFindFirstUnverifiedInvocationOnMock() throws Exception {
+    public void shouldFindFirstUnverifiedInvocationOnMock() {
         assertSame(simpleMethodInvocation, InvocationsFinder.findFirstUnverified(invocations, simpleMethodInvocation.getMock()));
         assertNull(InvocationsFinder.findFirstUnverified(invocations, "different mock"));
     }
 
     @Test
-    public void shouldFindFirstSimilarInvocationByName() throws Exception {
+    public void shouldFindFirstSimilarInvocationByName() {
         Invocation overloadedSimpleMethod = new InvocationBuilder().mock(mock).simpleMethod().arg("test").toInvocation();
 
         Invocation found = InvocationsFinder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedSimpleMethod));
@@ -119,7 +119,7 @@ public class InvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void shouldFindInvocationWithTheSameMethod() throws Exception {
+    public void shouldFindInvocationWithTheSameMethod() {
         Invocation overloadedDifferentMethod = new InvocationBuilder().differentMethod().arg("test").toInvocation();
 
         invocations.add(overloadedDifferentMethod);
@@ -129,7 +129,7 @@ public class InvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void shouldGetLastStackTrace() throws Exception {
+    public void shouldGetLastStackTrace() {
         Location last = InvocationsFinder.getLastLocation(invocations);
         assertSame(differentMethodInvocation.getLocation(), last);
 
@@ -137,7 +137,7 @@ public class InvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void shouldFindAllMatchingUnverifiedChunks() throws Exception {
+    public void shouldFindAllMatchingUnverifiedChunks() {
         List<Invocation> allMatching = InvocationsFinder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
         Assertions.assertThat(allMatching).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo);
 
@@ -151,13 +151,13 @@ public class InvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void shouldFindMatchingChunk() throws Exception {
+    public void shouldFindMatchingChunk() {
         List<Invocation> chunk = InvocationsFinder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 2, context);
         Assertions.assertThat(chunk).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo);
     }
 
     @Test
-    public void shouldReturnAllChunksWhenModeIsAtLeastOnce() throws Exception {
+    public void shouldReturnAllChunksWhenModeIsAtLeastOnce() {
         Invocation simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
         invocations.add(simpleMethodInvocationThree);
 
@@ -166,7 +166,7 @@ public class InvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void shouldReturnAllChunksWhenWantedCountDoesntMatch() throws Exception {
+    public void shouldReturnAllChunksWhenWantedCountDoesntMatch() {
         Invocation simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
         invocations.add(simpleMethodInvocationThree);
 
@@ -175,7 +175,7 @@ public class InvocationsFinderTest extends TestBase {
     }
 
     @Test
-    public void shouldFindPreviousInOrder() throws Exception {
+    public void shouldFindPreviousInOrder() {
         Invocation previous = InvocationsFinder.findPreviousVerifiedInOrder(invocations, context);
         assertNull(previous);
 

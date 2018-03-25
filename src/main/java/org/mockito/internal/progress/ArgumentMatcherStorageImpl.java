@@ -33,8 +33,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
             return emptyList();
         }
 
-        List<LocalizedMatcher> lastMatchers = resetStack();
-        return lastMatchers;
+        return resetStack();
     }
 
     public void reportAnd() {

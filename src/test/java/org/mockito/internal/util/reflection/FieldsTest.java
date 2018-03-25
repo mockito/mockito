@@ -14,25 +14,25 @@ import static org.mockito.internal.util.reflection.Fields.syntheticField;
 public class FieldsTest {
 
     @Test
-    public void fields_should_return_all_declared_fields_in_hierarchy() throws Exception {
+    public void fields_should_return_all_declared_fields_in_hierarchy() {
         assertThat(Fields.allDeclaredFieldsOf(new HierarchyOfClasses()).filter(syntheticField()).names())
                 .containsOnly("a", "b", "static_a", "static_b");
     }
 
     @Test
-    public void fields_should_return_declared_fields() throws Exception {
+    public void fields_should_return_declared_fields() {
         assertThat(Fields.declaredFieldsOf(new HierarchyOfClasses()).filter(syntheticField()).names())
                 .containsOnly("b", "static_b");
     }
 
     @Test
-    public void can_filter_not_null_fields() throws Exception {
+    public void can_filter_not_null_fields() {
         assertThat(Fields.declaredFieldsOf(new NullOrNotNullFields()).notNull().filter(syntheticField()).names())
                 .containsOnly("c");
     }
 
     @Test
-    public void can_get_values_of_instance_fields() throws Exception {
+    public void can_get_values_of_instance_fields() {
         assertThat(Fields.declaredFieldsOf(new ValuedFields()).filter(syntheticField()).assignedValues())
                 .containsOnly("a", "b");
     }

@@ -31,7 +31,7 @@ public class MockFieldsShouldBeResetBetweenTestMethodsTest {
     @Mock Observable will_be_nulled;
 
     @Test
-    public void behaviour_A_without_infection_from_behaviour_B() throws Exception {
+    public void behaviour_A_without_infection_from_behaviour_B() {
         // verify mock is clean
         assertThat(list.get(0)).isNull();
         verify(list, never()).add(anyString());
@@ -44,7 +44,7 @@ public class MockFieldsShouldBeResetBetweenTestMethodsTest {
     }
 
     @Test
-    public void behaviour_B_without_infection_from_behaviour_A() throws Exception {
+    public void behaviour_B_without_infection_from_behaviour_A() {
         // verify mock is clean
         assertThat(list.get(0)).isNull();
         verify(list, never()).add(anyString());
@@ -57,7 +57,7 @@ public class MockFieldsShouldBeResetBetweenTestMethodsTest {
     }
 
     @Test
-    public void dont_fail_when_reseting_null_field() throws Exception {
+    public void dont_fail_when_reseting_null_field() {
         will_be_nulled = null;
     }
 }

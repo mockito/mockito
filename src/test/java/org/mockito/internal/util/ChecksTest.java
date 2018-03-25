@@ -16,24 +16,24 @@ public class ChecksTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    public void checkNotNull_not_null() throws Exception {
+    public void checkNotNull_not_null() {
         assertEquals("abc", Checks.checkNotNull("abc", "someValue"));
     }
 
     @Test
-    public void checkNotNull_not_null_additional_message() throws Exception {
+    public void checkNotNull_not_null_additional_message() {
         assertEquals("abc", Checks.checkNotNull("abc", "someValue", "Oh no!"));
     }
 
     @Test
-    public void checkNotNull_null() throws Exception {
+    public void checkNotNull_null() {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("someValue should not be null");
         Checks.checkNotNull(null, "someValue");
     }
 
     @Test
-    public void checkNotNull_null_additonal_message() throws Exception {
+    public void checkNotNull_null_additonal_message() {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("someValue should not be null. Oh no!");
         Checks.checkNotNull(null, "someValue", "Oh no!");

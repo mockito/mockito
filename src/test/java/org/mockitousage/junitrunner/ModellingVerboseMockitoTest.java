@@ -27,11 +27,11 @@ public class ModellingVerboseMockitoTest extends TestBase {
 
     @Before
     public void cleanStackTraces() {
-        super.makeStackTracesClean();
+        makeStackTracesClean();
     }
 
     @Test
-    public void shouldLogUnusedStubbingWarningWhenTestFails() throws Exception {
+    public void shouldLogUnusedStubbingWarningWhenTestFails() {
         when(mock.simpleMethod(1)).thenReturn("foo");
         when(mock.otherMethod()).thenReturn("foo");
         when(mock.booleanObjectReturningMethod()).thenReturn(false);
@@ -44,7 +44,7 @@ public class ModellingVerboseMockitoTest extends TestBase {
     }
 
     @Test
-    public void shouldNotLogAnythingWhenNoWarnings() throws Exception {
+    public void shouldNotLogAnythingWhenNoWarnings() {
         //stub
         when(mock.simpleMethod()).thenReturn("foo");
         //use stub:

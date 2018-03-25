@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 public class FinalClassMockingTest {
 
     @Test
-    public void no_exception_while_mocking_final_class() throws Exception {
+    public void no_exception_while_mocking_final_class() {
         Mockito.mock(FinalClass.class);
     }
 

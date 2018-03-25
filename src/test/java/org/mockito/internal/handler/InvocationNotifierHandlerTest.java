@@ -49,7 +49,7 @@ public class InvocationNotifierHandlerTest {
     private InvocationNotifierHandler<ArrayList<Answer<?>>> notifier;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         notifier = new InvocationNotifierHandler<ArrayList<Answer<?>>>(
                 mockHandler,
                 (MockCreationSettings<ArrayList<Answer<?>>>) new MockSettingsImpl<ArrayList<Answer<?>>>().invocationListeners(customListener, listener1, listener2)
@@ -117,7 +117,7 @@ public class InvocationNotifierHandlerTest {
     }
 
     @Test
-    public void should_delegate_all_MockHandlerInterface_to_the_parameterized_MockHandler() throws Exception {
+    public void should_delegate_all_MockHandlerInterface_to_the_parameterized_MockHandler() {
         notifier.getInvocationContainer();
         notifier.getMockSettings();
 

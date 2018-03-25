@@ -170,7 +170,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
          * @param mockitoMock The Mockito mock to serialize.
          * @throws java.io.IOException
          */
-        public CrossClassLoaderSerializationProxy(Object mockitoMock) throws IOException {
+        CrossClassLoaderSerializationProxy(Object mockitoMock) throws IOException {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ObjectOutputStream objectOutputStream = new MockitoMockObjectOutputStream(out);
 
@@ -241,7 +241,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
         private final Class<?> typeToMock;
         private final Set<Class<?>> extraInterfaces;
 
-        public MockitoMockObjectInputStream(InputStream in, Class<?> typeToMock, Set<Class<?>> extraInterfaces) throws IOException {
+        MockitoMockObjectInputStream(InputStream in, Class<?> typeToMock, Set<Class<?>> extraInterfaces) throws IOException {
             super(in);
             this.typeToMock = typeToMock;
             this.extraInterfaces = extraInterfaces;
@@ -344,7 +344,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
     private static class MockitoMockObjectOutputStream extends ObjectOutputStream {
         private static final String NOTHING = "";
 
-        public MockitoMockObjectOutputStream(ByteArrayOutputStream out) throws IOException {
+        MockitoMockObjectOutputStream(ByteArrayOutputStream out) throws IOException {
             super(out);
         }
 

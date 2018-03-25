@@ -33,13 +33,13 @@ public class OverloadingPuzzleTest extends TestBase {
     }
 
     @Test
-    public void shouldUseArgumentTypeWhenOverloadingPuzzleDetected() throws Exception {
+    public void shouldUseArgumentTypeWhenOverloadingPuzzleDetected() {
         Sub sub = mock(Sub.class);
         setMockWithDowncast(sub);
         say("Hello");
         try {
             verify(sub).say("Hello");
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked ignored) {}
     }
 }

@@ -23,7 +23,7 @@ public class UnusedStubbingsTest extends TestBase {
     private SimpleMockitoLogger logger = new SimpleMockitoLogger();
 
     @Test
-    public void no_unused_stubbings() throws Exception {
+    public void no_unused_stubbings() {
         //given
         UnusedStubbings stubbings = new UnusedStubbings(Collections.<Stubbing>emptyList());
 
@@ -35,7 +35,7 @@ public class UnusedStubbingsTest extends TestBase {
     }
 
     @Test
-    public void unused_stubbings() throws Exception {
+    public void unused_stubbings() {
         //given
         UnusedStubbings stubbings = new UnusedStubbings(Arrays.asList(
             new StubbedInvocationMatcher(new InvocationBuilder().toInvocationMatcher(), doesNothing()),

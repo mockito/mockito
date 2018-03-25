@@ -41,7 +41,7 @@ public class DefaultMockingDetailsTest {
     }
 
     @Test
-    public void should_provide_original_mock() throws Exception {
+    public void should_provide_original_mock() {
         //expect
         assertEquals(mockingDetails(foo).getMock(), foo);
         assertEquals(mockingDetails(null).getMock(), null);
@@ -73,7 +73,7 @@ public class DefaultMockingDetailsTest {
     }
 
     @Test
-    public void should_check_that_a_spy_is_also_a_mock() throws Exception {
+    public void should_check_that_a_spy_is_also_a_mock() {
         assertEquals(true, mockingDetails(gork).isMock());
     }
 
@@ -178,7 +178,7 @@ public class DefaultMockingDetailsTest {
     }
 
     @Test
-    public void prints_invocations() throws Exception {
+    public void prints_invocations() {
         //given
         given(mock.simpleMethod("different arg")).willReturn("foo");
         mock.simpleMethod("arg");

@@ -39,14 +39,14 @@ public class ExceptionFactoryTest {
     }
 
     @Test
-    public void createArgumentsAreDifferentException_withJUnit() throws Exception {
+    public void createArgumentsAreDifferentException_withJUnit() {
         AssertionError e = ExceptionFactory.createArgumentsAreDifferentException("message", "wanted", "actual");
 
         assertThat(e).isExactlyInstanceOf(junitArgumentsAreDifferent);
     }
 
     @Test
-    public void createArgumentsAreDifferentException_withJUnit2x() throws Exception {
+    public void createArgumentsAreDifferentException_withJUnit2x() {
         AssertionError e;
 
         e = ExceptionFactory.createArgumentsAreDifferentException("message", "wanted", "actual");

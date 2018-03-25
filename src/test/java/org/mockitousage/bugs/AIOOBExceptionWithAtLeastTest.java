@@ -20,7 +20,7 @@ public class AIOOBExceptionWithAtLeastTest extends TestBase {
     }
 
     @Test
-    public void testCompleteProgress() throws Exception {
+    public void testCompleteProgress() {
         IProgressMonitor progressMonitor = mock(IProgressMonitor.class);
 
         progressMonitor.beginTask("foo", 12);

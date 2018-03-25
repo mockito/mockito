@@ -33,7 +33,7 @@ public class VerboseMockitoJUnitRunner extends Runner implements Filterable {
         this(new RunnerFactory().create(klass));
     }
 
-    VerboseMockitoJUnitRunner(InternalRunner runner) {
+    private VerboseMockitoJUnitRunner(InternalRunner runner) {
         this.runner = runner;
     }
 
@@ -46,13 +46,13 @@ public class VerboseMockitoJUnitRunner extends Runner implements Filterable {
             WarningsCollector warningsCollector;
 
             @Override
-            public void testStarted(Description description) throws Exception {
+            public void testStarted(Description description) {
                 warningsCollector = new WarningsCollector();
             }
 
             @Override
             @SuppressWarnings("deprecation")
-            public void testFailure(final Failure failure) throws Exception {
+            public void testFailure(final Failure failure) {
                 String warnings = warningsCollector.getWarnings();
                 new JUnitFailureHacker().appendWarnings(failure, warnings);
             }

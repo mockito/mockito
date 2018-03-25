@@ -26,7 +26,7 @@ public class ThreadSafeMockingProgress {
      *
      * @return never <code>null</code>
      */
-    public final static MockingProgress mockingProgress() {
+    public static MockingProgress mockingProgress() {
         return MOCKING_PROGRESS_PROVIDER.get();
     }
 }

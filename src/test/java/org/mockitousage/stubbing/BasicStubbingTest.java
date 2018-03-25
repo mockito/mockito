@@ -28,7 +28,7 @@ public class BasicStubbingTest extends TestBase {
     }
 
     @Test
-    public void should_evaluate_latest_stubbing_first() throws Exception {
+    public void should_evaluate_latest_stubbing_first() {
         when(mock.objectReturningMethod(isA(Integer.class))).thenReturn(100);
         when(mock.objectReturningMethod(200)).thenReturn(200);
 
@@ -38,7 +38,7 @@ public class BasicStubbingTest extends TestBase {
     }
 
     @Test
-    public void should_stubbing_be_treated_as_interaction() throws Exception {
+    public void should_stubbing_be_treated_as_interaction() {
         when(mock.booleanReturningMethod()).thenReturn(true);
 
         mock.booleanReturningMethod();
@@ -50,7 +50,7 @@ public class BasicStubbingTest extends TestBase {
     }
 
     @Test
-    public void should_allow_stubbing_to_string() throws Exception {
+    public void should_allow_stubbing_to_string() {
         IMethods mockTwo = mock(IMethods.class);
         when(mockTwo.toString()).thenReturn("test");
 
@@ -94,12 +94,12 @@ public class BasicStubbingTest extends TestBase {
     }
 
     @Test
-    public void should_allow_mocking_when_to_string_is_final() throws Exception {
+    public void should_allow_mocking_when_to_string_is_final() {
         mock(Foo.class);
     }
 
     @Test
-    public void test_stub_only_not_verifiable() throws Exception {
+    public void test_stub_only_not_verifiable() {
         IMethods localMock = mock(IMethods.class, withSettings().stubOnly());
 
         when(localMock.objectReturningMethod(isA(Integer.class))).thenReturn(100);

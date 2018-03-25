@@ -48,7 +48,7 @@ public class LenientCopyToolTest extends TestBase {
     private SomeObject to = mock(SomeObject.class);
 
     @Test
-    public void shouldShallowCopyBasicFinalField() throws Exception {
+    public void shouldShallowCopyBasicFinalField() {
         // given
         assertEquals(100, from.finalField);
         assertThat(to.finalField).isNotEqualTo(100);
@@ -61,7 +61,7 @@ public class LenientCopyToolTest extends TestBase {
     }
 
     @Test
-    public void shouldShallowCopyTransientPrivateFields() throws Exception {
+    public void shouldShallowCopyTransientPrivateFields() {
         // given
         from.privateTransientField = 1000;
         assertThat(to.privateTransientField).isNotEqualTo(1000);
@@ -74,7 +74,7 @@ public class LenientCopyToolTest extends TestBase {
     }
 
     @Test
-    public void shouldShallowCopyLinkedListIntoMock() throws Exception {
+    public void shouldShallowCopyLinkedListIntoMock() {
         // given
         LinkedList fromList = new LinkedList();
         LinkedList toList = mock(LinkedList.class);
@@ -86,7 +86,7 @@ public class LenientCopyToolTest extends TestBase {
     }
 
     @Test
-    public void shouldShallowCopyFieldValuesIntoMock() throws Exception {
+    public void shouldShallowCopyFieldValuesIntoMock() {
         // given
         from.defaultField = "foo";
         from.instancePublicField = new SomeOtherObject();
@@ -112,7 +112,7 @@ public class LenientCopyToolTest extends TestBase {
     }
 
     @Test
-    public void shouldCopyValuesOfInheritedFields() throws Exception {
+    public void shouldCopyValuesOfInheritedFields() {
         //given
         ((InheritMe) from).privateInherited = "foo";
         ((InheritMe) from).protectedInherited = "bar";
@@ -159,7 +159,7 @@ public class LenientCopyToolTest extends TestBase {
     }
 
     @Test
-    public void shouldBeAbleToCopyFromRealObjectToRealObject() throws Exception {
+    public void shouldBeAbleToCopyFromRealObjectToRealObject() {
 
         // given
         from.defaultField = "defaultField";

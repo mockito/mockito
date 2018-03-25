@@ -19,7 +19,7 @@ public class StubbingArgMismatchesTest extends TestBase {
     StubbingArgMismatches mismatches = new StubbingArgMismatches();
 
     @Test
-    public void no_op_when_no_mismatches() throws Exception {
+    public void no_op_when_no_mismatches() {
         //when
         mismatches.format("MyTest.myTestMethod", logger);
 
@@ -28,7 +28,7 @@ public class StubbingArgMismatchesTest extends TestBase {
     }
 
     @Test
-    public void logs_mismatch() throws Exception {
+    public void logs_mismatch() {
         //given
         mismatches.add(
                 new InvocationBuilder().args("a").location("-> at A.java").toInvocation(),
@@ -45,7 +45,7 @@ public class StubbingArgMismatchesTest extends TestBase {
     }
 
     @Test
-    public void multiple_matching_invocations_per_stub_plus_some_other_invocation() throws Exception {
+    public void multiple_matching_invocations_per_stub_plus_some_other_invocation() {
         //given
         Invocation stubbing = new InvocationBuilder().args("a").location("-> at A.java").toInvocation();
         mismatches.add(new InvocationBuilder().args("x").location("-> at X.java").toInvocation(), stubbing);

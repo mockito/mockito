@@ -38,7 +38,7 @@ public class BridgeMethodPuzzleTest extends TestBase {
     }
 
     @Test
-    public void shouldHaveBridgeMethod() throws Exception {
+    public void shouldHaveBridgeMethod() {
         Super s = new Sub();
 
         assertEquals("Dummy says: Hello", s.say("Hello"));
@@ -48,7 +48,7 @@ public class BridgeMethodPuzzleTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyCorrectlyWhenBridgeMethodCalled() throws Exception {
+    public void shouldVerifyCorrectlyWhenBridgeMethodCalled() {
         //Super has following erasure: say(Object) which differs from Dummy.say(String)
         //mock has to detect it and do the super.say()
         Sub s = mock(Sub.class);
@@ -59,7 +59,7 @@ public class BridgeMethodPuzzleTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyCorrectlyWhenBridgeMethodVerified() throws Exception {
+    public void shouldVerifyCorrectlyWhenBridgeMethodVerified() {
         //Super has following erasure: say(Object) which differs from Dummy.say(String)
         //mock has to detect it and do the super.say()
         Sub s = mock(Sub.class);

@@ -83,9 +83,10 @@ public class UsingVarargsTest extends TestBase {
         try {
             verify(mock).withStringVarargs(2, "1", "2", "79", "4");
             fail();
-        } catch (ArgumentsAreDifferent e) {}
+        } catch (ArgumentsAreDifferent ignored) {}
     }
 
+    @SuppressWarnings("UnnecessaryBoxing")
     @Test
     public void shouldVerifyObjectVarargs() {
         mock.withObjectVarargs(1);
@@ -97,7 +98,7 @@ public class UsingVarargsTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted ignored) {}
     }
 
     @Test
@@ -111,7 +112,7 @@ public class UsingVarargsTest extends TestBase {
         try {
             verify(mock).withBooleanVarargs(3, true, true, true, true);
             fail();
-        } catch (ArgumentsAreDifferent e) {}
+        } catch (ArgumentsAreDifferent ignored) {}
     }
 
     @Test
@@ -166,7 +167,7 @@ public class UsingVarargsTest extends TestBase {
 
     @Test
     //See bug #157
-    public void shouldMatchEasilyEmptyVararg() throws Exception {
+    public void shouldMatchEasilyEmptyVararg() {
         //when
         when(mock.foo(anyVararg())).thenReturn(-1);
 

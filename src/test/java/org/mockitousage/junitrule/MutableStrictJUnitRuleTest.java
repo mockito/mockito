@@ -21,7 +21,7 @@ public class MutableStrictJUnitRuleTest {
 
     JUnitCore runner = new JUnitCore();
 
-    @Test public void rule_can_be_changed_to_strict() throws Throwable {
+    @Test public void rule_can_be_changed_to_strict() {
         //when
         Result result = runner.run(LenientByDefault.class);
 
@@ -31,7 +31,7 @@ public class MutableStrictJUnitRuleTest {
                 .fails(1, RuntimeException.class);
     }
 
-    @Test public void rule_can_be_changed_to_lenient() throws Throwable {
+    @Test public void rule_can_be_changed_to_lenient() {
         //when
         Result result = runner.run(StrictByDefault.class);
 
@@ -45,11 +45,11 @@ public class MutableStrictJUnitRuleTest {
         @Rule public MockitoRule mockito = MockitoJUnit.rule().strictness(Strictness.LENIENT);
         @Mock IMethods mock;
 
-        @Test public void unused_stub() throws Throwable {
+        @Test public void unused_stub() {
             when(mock.simpleMethod()).thenReturn("1");
         }
 
-        @Test public void unused_stub_with_strictness() throws Throwable {
+        @Test public void unused_stub_with_strictness() {
             //making Mockito strict only for this test method
             mockito.strictness(Strictness.STRICT_STUBS);
 
@@ -61,11 +61,11 @@ public class MutableStrictJUnitRuleTest {
         @Rule public MockitoRule mockito = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
         @Mock IMethods mock;
 
-        @Test public void unused_stub() throws Throwable {
+        @Test public void unused_stub() {
             when(mock.simpleMethod()).thenReturn("1");
         }
 
-        @Test public void unused_stub_with_lenient() throws Throwable {
+        @Test public void unused_stub_with_lenient() {
             //making Mockito lenient only for this test method
             mockito.strictness(Strictness.LENIENT);
 

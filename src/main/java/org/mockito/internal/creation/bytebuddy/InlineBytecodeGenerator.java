@@ -29,7 +29,6 @@ import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
 
 import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
@@ -64,20 +63,18 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
     private final String identifier;
 
-    private final MockMethodAdvice advice;
-
     private final BytecodeGenerator subclassEngine;
 
     private volatile Throwable lastException;
 
-    public InlineBytecodeGenerator(Instrumentation instrumentation, WeakConcurrentMap<Object, MockMethodInterceptor> mocks) {
+    InlineBytecodeGenerator(Instrumentation instrumentation, WeakConcurrentMap<Object, MockMethodInterceptor> mocks) {
         this.instrumentation = instrumentation;
         byteBuddy = new ByteBuddy()
                 .with(TypeValidation.DISABLED)
                 .with(Implementation.Context.Disabled.Factory.INSTANCE);
         mocked = new WeakConcurrentSet<Class<?>>(WeakConcurrentSet.Cleaner.INLINE);
         identifier = RandomString.make();
-        advice = new MockMethodAdvice(mocks, identifier);
+        MockMethodAdvice advice = new MockMethodAdvice(mocks, identifier);
         subclassEngine = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(withDefaultConfiguration()
                 .withBinders(of(MockMethodAdvice.Identifier.class, identifier))
                 .to(MockMethodAdvice.ForReadObject.class), isAbstract().or(isNative()).or(isToString())), false);
@@ -157,7 +154,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             String className,
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
-                            byte[] classfileBuffer) throws IllegalClassFormatException {
+                            byte[] classfileBuffer) {
         if (classBeingRedefined == null
                 || !mocked.contains(classBeingRedefined)
                 || EXCLUDES.contains(classBeingRedefined)) {
@@ -237,7 +234,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
         private static class MethodParameterStrippingMethodVisitor extends MethodVisitor {
 
-            public MethodParameterStrippingMethodVisitor(MethodVisitor mv) {
+            MethodParameterStrippingMethodVisitor(MethodVisitor mv) {
                 super(Opcodes.ASM5, mv);
             }
 

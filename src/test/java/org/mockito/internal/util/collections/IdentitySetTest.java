@@ -14,7 +14,7 @@ public class IdentitySetTest {
     IdentitySet set = new IdentitySet();
 
     @Test
-    public void shouldWork() throws Exception {
+    public void shouldWork() {
         //when
         Object o = new Object();
         set.add(o);
@@ -32,7 +32,7 @@ public class IdentitySetTest {
     }
 
     @Test
-    public void shouldWorkEvenIfEqualsTheSame() throws Exception {
+    public void shouldWorkEvenIfEqualsTheSame() {
         //given
         assertEquals(new Fake(), new Fake());
         Fake fake = new Fake();

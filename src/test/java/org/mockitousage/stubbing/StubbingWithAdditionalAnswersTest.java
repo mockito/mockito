@@ -45,7 +45,7 @@ public class StubbingWithAdditionalAnswersTest {
     @Mock IMethods iMethods;
 
     @Test
-    public void can_return_arguments_of_invocation() throws Exception {
+    public void can_return_arguments_of_invocation() {
         given(iMethods.objectArgMethod(any())).will(returnsFirstArg());
         given(iMethods.threeArgumentMethod(eq(0), any(), anyString())).will(returnsSecondArg());
         given(iMethods.threeArgumentMethod(eq(1), any(), anyString())).will(returnsLastArg());
@@ -56,7 +56,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void can_return_after_delay() throws Exception {
+    public void can_return_after_delay() {
         final long sleepyTime = 500L;
 
         given(iMethods.objectArgMethod(any())).will(answersWithDelay(sleepyTime, returnsFirstArg()));
@@ -70,14 +70,14 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void can_return_expanded_arguments_of_invocation() throws Exception {
+    public void can_return_expanded_arguments_of_invocation() {
         given(iMethods.varargsObject(eq(1), any())).will(returnsArgAt(3));
 
         assertThat(iMethods.varargsObject(1, "bob", "alexander", "alice", "carl")).isEqualTo("alice");
     }
 
     @Test
-    public void can_return_primitives_or_wrappers() throws Exception {
+    public void can_return_primitives_or_wrappers() {
         given(iMethods.toIntPrimitive(anyInt())).will(returnsFirstArg());
         given(iMethods.toIntWrapper(anyInt())).will(returnsFirstArg());
 
@@ -86,7 +86,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void can_return_based_on_strongly_types_one_parameter_function() throws Exception {
+    public void can_return_based_on_strongly_types_one_parameter_function() {
         given(iMethods.simpleMethod(anyString()))
                 .will(answer(new Answer1<String, String>() {
                     public String answer(String s) {
@@ -98,7 +98,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void will_execute_a_void_based_on_strongly_typed_one_parameter_function() throws Exception {
+    public void will_execute_a_void_based_on_strongly_typed_one_parameter_function() {
         final IMethods target = mock(IMethods.class);
 
         given(iMethods.simpleMethod(anyString()))
@@ -116,7 +116,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void can_return_based_on_strongly_typed_two_parameter_function() throws Exception {
+    public void can_return_based_on_strongly_typed_two_parameter_function() {
         given(iMethods.simpleMethod(anyString(), anyInt()))
             .will(answer(new Answer2<String, String, Integer>() {
                 public String answer(String s, Integer i) {
@@ -128,7 +128,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void will_execute_a_void_based_on_strongly_typed_two_parameter_function() throws Exception {
+    public void will_execute_a_void_based_on_strongly_typed_two_parameter_function() {
         final IMethods target = mock(IMethods.class);
 
         given(iMethods.simpleMethod(anyString(), anyInt()))
@@ -146,7 +146,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void can_return_based_on_strongly_typed_three_parameter_function() throws Exception {
+    public void can_return_based_on_strongly_typed_three_parameter_function() {
         final IMethods target = mock(IMethods.class);
         given(iMethods.threeArgumentMethodWithStrings(anyInt(), anyString(), anyString()))
                 .will(answer(new Answer3<String, Integer, String, String>() {
@@ -161,7 +161,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void will_execute_a_void_based_on_strongly_typed_three_parameter_function() throws Exception {
+    public void will_execute_a_void_based_on_strongly_typed_three_parameter_function() {
         final IMethods target = mock(IMethods.class);
 
         given(iMethods.threeArgumentMethodWithStrings(anyInt(), anyString(), anyString()))
@@ -179,7 +179,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void can_return_based_on_strongly_typed_four_parameter_function() throws Exception {
+    public void can_return_based_on_strongly_typed_four_parameter_function() {
         final IMethods target = mock(IMethods.class);
         given(iMethods.fourArgumentMethod(anyInt(), anyString(), anyString(), any(boolean[].class)))
                 .will(answer(new Answer4<String, Integer, String, String, boolean[]>() {
@@ -195,7 +195,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void will_execute_a_void_based_on_strongly_typed_four_parameter_function() throws Exception {
+    public void will_execute_a_void_based_on_strongly_typed_four_parameter_function() {
         final IMethods target = mock(IMethods.class);
 
         given(iMethods.fourArgumentMethod(anyInt(), anyString(), anyString(), any(boolean[].class)))
@@ -214,7 +214,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void can_return_based_on_strongly_typed_five_parameter_function() throws Exception {
+    public void can_return_based_on_strongly_typed_five_parameter_function() {
         final IMethods target = mock(IMethods.class);
         given(iMethods.simpleMethod(anyString(), anyInt(), anyInt(), anyInt(), anyInt()))
                 .will(answer(new Answer5<String, String, Integer, Integer, Integer, Integer>() {
@@ -229,7 +229,7 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
-    public void will_execute_a_void_based_on_strongly_typed_five_parameter_function() throws Exception {
+    public void will_execute_a_void_based_on_strongly_typed_five_parameter_function() {
         final IMethods target = mock(IMethods.class);
 
         given(iMethods.simpleMethod(anyString(), anyInt(), anyInt(), anyInt(), anyInt()))

@@ -45,7 +45,7 @@ public class StaticMockingExperimentTest extends TestBase {
     Method staticMethod;
     InvocationFactory.RealMethodBehavior realMethod = new InvocationFactory.RealMethodBehavior() {
         @Override
-        public Object call() throws Throwable {
+        public Object call() {
             return null;
         }
     };

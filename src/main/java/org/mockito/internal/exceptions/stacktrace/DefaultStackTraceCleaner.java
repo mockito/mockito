@@ -13,13 +13,10 @@ public class DefaultStackTraceCleaner implements StackTraceCleaner {
 
     @Override
     public boolean isIn(StackTraceElement e) {
-        if (isFromMockitoRunner(e.getClassName()) || isFromMockitoRule(e.getClassName())) {
-            return true;
-        } else if (isMockDispatcher(e.getClassName()) || isFromMockito(e.getClassName())) {
-            return false;
-        } else {
-            return true;
-        }
+        return isFromMockitoRunner(e.getClassName())
+            || isFromMockitoRule(e.getClassName())
+            || !isMockDispatcher(e.getClassName())
+            && !isFromMockito(e.getClassName());
     }
 
     private static boolean isMockDispatcher(String className) {

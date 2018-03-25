@@ -40,7 +40,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
     class Dependency {}
 
     @Test
-    public void shouldInjectMocksIfThereIsNoUserDefinedEngine() throws Exception {
+    public void shouldInjectMocksIfThereIsNoUserDefinedEngine() {
         //given
         AnnotationEngine defaultEngine = new DefaultMockitoConfiguration().getAnnotationEngine();
         ConfigurationAccess.getConfig().overrideAnnotationEngine(defaultEngine);
@@ -56,7 +56,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
     }
 
     @Test
-    public void shouldRespectUsersEngine() throws Exception {
+    public void shouldRespectUsersEngine() {
         //given
         AnnotationEngine customizedEngine = new IndependentAnnotationEngine() { /**/ };
         ConfigurationAccess.getConfig().overrideAnnotationEngine(customizedEngine);

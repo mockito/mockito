@@ -26,7 +26,6 @@ import static org.mockito.internal.invocation.InterceptedInvocation.NO_OP;
 public class InvocationBuilder {
 
     private String methodName = "simpleMethod";
-    private int sequenceNumber = 0;
     private Object[] args = new Object[]{};
     private Object mock = Mockito.mock(IMethods.class);
     private Method method;
@@ -75,11 +74,6 @@ public class InvocationBuilder {
 
     public InvocationBuilder method(String methodName) {
         this.methodName = methodName;
-        return this;
-    }
-
-    public InvocationBuilder seq(int sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
         return this;
     }
 

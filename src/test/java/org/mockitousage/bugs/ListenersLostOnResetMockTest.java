@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 public class ListenersLostOnResetMockTest {
 
     @Test
-    public void listener() throws Exception {
+    public void listener() {
         InvocationListener invocationListener = mock(InvocationListener.class);
 
         List mockedList = mock(List.class, withSettings().invocationListeners(invocationListener));

@@ -25,7 +25,7 @@ public class StubbingWarningsJUnitRuleTest {
     @Mock IMethods mock;
 
     @Test
-    public void no_unused_stubs_reported_on_failure() throws Throwable {
+    public void no_unused_stubs_reported_on_failure() {
         //expect
         rule.expectFailure(new SafeJUnitRule.FailureAssert() {
             public void doAssert(Throwable t) {
@@ -40,7 +40,7 @@ public class StubbingWarningsJUnitRuleTest {
     }
 
     @Test
-    public void stubbing_arg_mismatch_on_failure() throws Throwable {
+    public void stubbing_arg_mismatch_on_failure() {
         //expect
         rule.expectFailure(new SafeJUnitRule.FailureAssert() {
             public void doAssert(Throwable t) {
@@ -59,7 +59,7 @@ public class StubbingWarningsJUnitRuleTest {
         throw new AssertionError("x");
     }
 
-    @Test public void no_stubbing_arg_mismatch_when_no_mismatch_on_fail() throws Throwable {
+    @Test public void no_stubbing_arg_mismatch_when_no_mismatch_on_fail() {
         //expect
         rule.expectFailure(new SafeJUnitRule.FailureAssert() {
             public void doAssert(Throwable t) {
@@ -75,7 +75,7 @@ public class StubbingWarningsJUnitRuleTest {
     }
 
     @Test
-    public void no_stubbing_warning_on_pass() throws Throwable {
+    public void no_stubbing_warning_on_pass() {
         //expect
         rule.expectSuccess(new Runnable() {
             public void run() {
@@ -89,7 +89,7 @@ public class StubbingWarningsJUnitRuleTest {
     }
 
     @Test
-    public void multiple_stubbing_arg_mismatch_on_failure() throws Throwable {
+    public void multiple_stubbing_arg_mismatch_on_failure() {
         //expect
         rule.expectFailure(new SafeJUnitRule.FailureAssert() {
             public void doAssert(Throwable t) {
@@ -117,7 +117,7 @@ public class StubbingWarningsJUnitRuleTest {
     }
 
     @Test
-    public void reports_only_mismatching_stubs() throws Throwable {
+    public void reports_only_mismatching_stubs() {
         //expect
         rule.expectFailure(new SafeJUnitRule.FailureAssert() {
             public void doAssert(Throwable t) {
@@ -141,7 +141,7 @@ public class StubbingWarningsJUnitRuleTest {
     }
 
     @Test
-    public void no_mismatch_when_stub_was_used() throws Throwable {
+    public void no_mismatch_when_stub_was_used() {
         //expect
         rule.expectFailure(new SafeJUnitRule.FailureAssert() {
             public void doAssert(Throwable t) {
@@ -160,7 +160,7 @@ public class StubbingWarningsJUnitRuleTest {
     }
 
     @Test
-    public void no_stubbing_arg_mismatch_on_pass() throws Throwable {
+    public void no_stubbing_arg_mismatch_on_pass() {
         //expect
         rule.expectSuccess(new Runnable() {
             public void run() {
@@ -177,7 +177,7 @@ public class StubbingWarningsJUnitRuleTest {
     }
 
     @Test
-    public void warns_about_unused_stubs_when_passed() throws Throwable {
+    public void warns_about_unused_stubs_when_passed() {
         //expect
         rule.expectSuccess(new Runnable() {
             public void run() {

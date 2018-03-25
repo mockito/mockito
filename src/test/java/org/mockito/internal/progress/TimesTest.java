@@ -17,7 +17,7 @@ public class TimesTest  {
 	public ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void shouldNotAllowNegativeNumberOfInvocations() throws Exception {
+    public void shouldNotAllowNegativeNumberOfInvocations() {
 
     	exception.expect(MockitoException.class);
     	exception.expectMessage("Negative value is not allowed here");

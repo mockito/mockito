@@ -33,7 +33,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void isolated_class_loader_cannot_load_classes_if_no_code_source_path() throws Exception {
+    public void isolated_class_loader_cannot_load_classes_if_no_code_source_path() {
         // given
         ClassLoader cl = isolatedClassLoader()
                 .withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE)
@@ -103,7 +103,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void isolated_class_loader_cannot_load_classes_if_prefix_excluded() throws Exception {
+    public void isolated_class_loader_cannot_load_classes_if_prefix_excluded() {
         // given
         ClassLoader cl = isolatedClassLoader()
                 .withCurrentCodeSourceUrls()
@@ -123,7 +123,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void isolated_class_loader_has_no_parent() throws Exception {
+    public void isolated_class_loader_has_no_parent() {
         ClassLoader cl = isolatedClassLoader()
                 .withCurrentCodeSourceUrls()
                 .withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE)
@@ -181,7 +181,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void can_not_load_a_class_not_previously_registered_in_builder() throws Exception {
+    public void can_not_load_a_class_not_previously_registered_in_builder() {
         // given
         ClassLoader cl = ClassLoaders
                 .inMemoryClassLoader()
@@ -250,7 +250,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void return_bootstrap_classloader() throws Exception {
+    public void return_bootstrap_classloader() {
         assertThat(jdkClassLoader()).isNotEqualTo(Mockito.class.getClassLoader());
         assertThat(jdkClassLoader()).isNotEqualTo(ClassLoaders.class.getClassLoader());
         assertThat(jdkClassLoader()).isEqualTo(Number.class.getClassLoader());
@@ -258,7 +258,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void return_current_classloader() throws Exception {
+    public void return_current_classloader() {
         assertThat(currentClassLoader()).isEqualTo(this.getClass().getClassLoader());
     }
 

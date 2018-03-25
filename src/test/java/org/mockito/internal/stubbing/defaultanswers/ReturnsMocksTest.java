@@ -25,19 +25,19 @@ public class ReturnsMocksTest extends TestBase {
     }
 
     @Test
-    public void should_return_mock_value_for_interface() throws Exception {
+    public void should_return_mock_value_for_interface() {
         Object interfaceMock = values.returnValueFor(FooInterface.class);
         assertTrue(MockUtil.isMock(interfaceMock));
     }
 
     @Test
-    public void should_return_mock_value_for_class() throws Exception {
+    public void should_return_mock_value_for_class() {
         Object classMock = values.returnValueFor(BarClass.class);
         assertTrue(MockUtil.isMock(classMock));
     }
 
     @Test
-    public void should_return_null_for_final_class_if_unsupported() throws Exception {
+    public void should_return_null_for_final_class_if_unsupported() {
         assumeFalse(Plugins.getMockMaker().isTypeMockable(Baz.class).mockable());
         assertNull(values.returnValueFor(Baz.class));
     }

@@ -102,7 +102,7 @@ public class CaptorAnnotationTest extends TestBase {
     }
 
     @Test
-    public void shouldScreamWhenInitializingCaptorsForNullClass() throws Exception {
+    public void shouldScreamWhenInitializingCaptorsForNullClass() {
         try {
             MockitoAnnotations.initMocks(null);
             fail();
@@ -111,7 +111,7 @@ public class CaptorAnnotationTest extends TestBase {
     }
 
     @Test
-    public void shouldLookForAnnotatedCaptorsInSuperClasses() throws Exception {
+    public void shouldLookForAnnotatedCaptorsInSuperClasses() {
         Sub sub = new Sub();
         MockitoAnnotations.initMocks(sub);
 

@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class MockAccessTest {
 
     @Test
-    public void shouldAllowStubbedMockReferenceAccess() throws Exception {
+    public void shouldAllowStubbedMockReferenceAccess() {
         Set<?> expectedMock = mock(Set.class);
 
         Set<?> returnedMock = when(expectedMock.isEmpty()).thenReturn(false).getMock();
@@ -25,7 +25,7 @@ public class MockAccessTest {
     }
 
     @Test
-    public void stubbedMockShouldWorkAsUsual() throws Exception {
+    public void stubbedMockShouldWorkAsUsual() {
         Set<?> returnedMock = when(mock(Set.class).isEmpty()).thenReturn(false, true).getMock();
 
         assertEquals(false, returnedMock.isEmpty());

@@ -27,13 +27,13 @@ public class VerboseMockInvocationLoggerTest {
     private DescribedInvocation stubbedInvocation = new InvocationBuilder().toInvocation();
 
     @Before
-    public void init_Listener() throws Exception {
+    public void init_Listener() {
         output = new ByteArrayOutputStream();
         listener = new VerboseMockInvocationLogger(new PrintStream(output));
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         System.out.println(output);
     }
 
@@ -67,14 +67,14 @@ public class VerboseMockInvocationLoggerTest {
     }
 
     @Test
-    public void should_print_if_method_has_not_been_stubbed() throws Exception {
+    public void should_print_if_method_has_not_been_stubbed() {
         listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, "whatever"));
 
         assertThat(printed()).doesNotContain("stubbed");
     }
 
     @Test
-    public void should_print_stubbed_info_if_available() throws Exception {
+    public void should_print_stubbed_info_if_available() {
         invocation.markStubbed(new StubInfoImpl(stubbedInvocation));
 
         listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, "whatever"));

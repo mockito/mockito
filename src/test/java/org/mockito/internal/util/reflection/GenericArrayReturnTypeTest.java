@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 public class GenericArrayReturnTypeTest {
 
     @Test
-    public void toArrayTypedDoesNotWork() throws Exception {
+    public void toArrayTypedDoesNotWork() {
         Container container = mock(Container.class, Answers.RETURNS_DEEP_STUBS);
         container.getInnerContainer().getTheProblem().toArray(new String[]{});
     }

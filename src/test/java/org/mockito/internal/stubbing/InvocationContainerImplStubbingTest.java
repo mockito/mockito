@@ -43,7 +43,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
     }
 
     @Test
-    public void should_finish_stubbing_when_wrong_throwable_is_set() throws Exception {
+    public void should_finish_stubbing_when_wrong_throwable_is_set() {
         state.stubbingStarted();
         try {
             invocationContainerImpl.addAnswer(new ThrowsException(new Exception()));
@@ -54,7 +54,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
     }
 
     @Test
-    public void should_finish_stubbing_on_adding_return_value() throws Exception {
+    public void should_finish_stubbing_on_adding_return_value() {
         state.stubbingStarted();
         invocationContainerImpl.addAnswer(new Returns("test"));
         state.validateState();
@@ -95,7 +95,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
     }
 
     @Test
-    public void should_validate_throwable() throws Throwable {
+    public void should_validate_throwable() {
         try {
             invocationContainerImpl.addAnswer(new ThrowsException(null));
             fail();

@@ -29,7 +29,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
 
     @Before
     public void cleanStackTrace() {
-        super.makeStackTracesClean();
+        makeStackTracesClean();
     }
 
     @Test

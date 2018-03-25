@@ -24,7 +24,7 @@ public class BasicVerificationTest extends TestBase {
     @Mock private List<String> mockTwo;
 
     @Test
-    public void shouldVerify() throws Exception {
+    public void shouldVerify() {
         mock.clear();
         verify(mock).clear();
 
@@ -35,12 +35,12 @@ public class BasicVerificationTest extends TestBase {
     }
 
     @Test(expected=WantedButNotInvoked.class)
-    public void shouldFailVerification() throws Exception {
+    public void shouldFailVerification() {
         verify(mock).clear();
     }
 
     @Test
-    public void shouldFailVerificationOnMethodArgument() throws Exception {
+    public void shouldFailVerificationOnMethodArgument() {
         mock.clear();
         mock.add("foo");
 
@@ -52,7 +52,7 @@ public class BasicVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldFailOnWrongMethod() throws Exception {
+    public void shouldFailOnWrongMethod() {
         mock.clear();
         mock.clear();
 
@@ -67,7 +67,7 @@ public class BasicVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectRedundantInvocation() throws Exception {
+    public void shouldDetectRedundantInvocation() {
         mock.clear();
         mock.add("foo");
         mock.add("bar");
@@ -82,7 +82,7 @@ public class BasicVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectWhenInvokedMoreThanOnce() throws Exception {
+    public void shouldDetectWhenInvokedMoreThanOnce() {
         mock.add("foo");
         mock.clear();
         mock.clear();
@@ -96,7 +96,7 @@ public class BasicVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyStubbedMethods() throws Exception {
+    public void shouldVerifyStubbedMethods() {
         when(mock.add("test")).thenReturn(Boolean.FALSE);
 
         mock.add("test");
@@ -106,7 +106,7 @@ public class BasicVerificationTest extends TestBase {
 
 
     @Test
-    public void shouldDetectWhenOverloadedMethodCalled() throws Exception {
+    public void shouldDetectWhenOverloadedMethodCalled() {
         IMethods mockThree = mock(IMethods.class);
 
         mockThree.varargs((Object[]) new Object[] {});

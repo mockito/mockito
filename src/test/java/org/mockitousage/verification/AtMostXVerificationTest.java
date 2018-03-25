@@ -25,7 +25,7 @@ public class AtMostXVerificationTest extends TestBase {
     @Mock private List<String> mock;
 
     @Test
-    public void shouldVerifyAtMostXTimes() throws Exception {
+    public void shouldVerifyAtMostXTimes() {
         mock.clear();
         mock.clear();
 
@@ -39,7 +39,7 @@ public class AtMostXVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldWorkWithArgumentMatchers() throws Exception {
+    public void shouldWorkWithArgumentMatchers() {
         mock.add("one");
         verify(mock, atMost(5)).add(anyString());
 
@@ -50,7 +50,7 @@ public class AtMostXVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldNotAllowNegativeNumber() throws Exception {
+    public void shouldNotAllowNegativeNumber() {
         try {
             verify(mock, atMost(-1)).clear();
             fail();
@@ -60,7 +60,7 @@ public class AtMostXVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintDecentMessage() throws Exception {
+    public void shouldPrintDecentMessage() {
         mock.clear();
         mock.clear();
 
@@ -73,7 +73,7 @@ public class AtMostXVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldNotAllowInOrderMode() throws Exception {
+    public void shouldNotAllowInOrderMode() {
         mock.clear();
         InOrder inOrder = inOrder(mock);
 
@@ -86,7 +86,7 @@ public class AtMostXVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldMarkInteractionsAsVerified() throws Exception {
+    public void shouldMarkInteractionsAsVerified() {
         mock.clear();
         mock.clear();
 
@@ -95,7 +95,7 @@ public class AtMostXVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectUnverifiedInMarkInteractionsAsVerified() throws Exception {
+    public void shouldDetectUnverifiedInMarkInteractionsAsVerified() {
         mock.clear();
         mock.clear();
         undesiredInteraction();

@@ -15,7 +15,7 @@ import static org.junit.Assert.fail;
 public class AtLeastTest extends TestBase {
 
     @Test
-    public void shouldNotAllowNegativeNumberOfMinimumInvocations() throws Exception {
+    public void shouldNotAllowNegativeNumberOfMinimumInvocations() {
         try {
             VerificationModeFactory.atLeast(-50);
             fail();
@@ -25,7 +25,7 @@ public class AtLeastTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowZeroInvocations() throws Exception {
+    public void shouldAllowZeroInvocations() {
         VerificationModeFactory.atLeast(0);
     }
 }

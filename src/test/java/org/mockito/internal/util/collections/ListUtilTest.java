@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class ListUtilTest extends TestBase {
 
     @Test
-    public void shouldFilterList() throws Exception {
+    public void shouldFilterList() {
         List<String> list = asList("one", "x", "two", "x", "three");
         List<String> filtered = ListUtil.filter(list, new Filter<String>() {
             public boolean isOut(String object) {
@@ -31,7 +31,7 @@ public class ListUtilTest extends TestBase {
     }
 
     @Test
-    public void shouldReturnEmptyIfEmptyListGiven() throws Exception {
+    public void shouldReturnEmptyIfEmptyListGiven() {
         List<Object> list = new LinkedList<Object>();
         List<Object> filtered = ListUtil.filter(list, null);
         assertTrue(filtered.isEmpty());

@@ -30,7 +30,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldStubbingNotRegisterRedundantInteractions() throws Exception {
+    public void shouldStubbingNotRegisterRedundantInteractions() {
         when(mock.add("one")).thenReturn(true);
         when(mock.add("two")).thenReturn(true);
 
@@ -41,7 +41,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyWhenWantedNumberOfInvocationsUsed() throws Exception {
+    public void shouldVerifyWhenWantedNumberOfInvocationsUsed() {
         mock.add("one");
         mock.add("one");
         mock.add("one");
@@ -52,7 +52,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyNoInteractionsAsManyTimesAsYouWant() throws Exception {
+    public void shouldVerifyNoInteractionsAsManyTimesAsYouWant() {
         verifyNoMoreInteractions(mock);
         verifyNoMoreInteractions(mock);
 
@@ -61,7 +61,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldFailZeroInteractionsVerification() throws Exception {
+    public void shouldFailZeroInteractionsVerification() {
         mock.clear();
 
         try {
@@ -71,7 +71,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldFailNoMoreInteractionsVerification() throws Exception {
+    public void shouldFailNoMoreInteractionsVerification() {
         mock.clear();
 
         try {
@@ -81,7 +81,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintAllInvocationsWhenVerifyingNoMoreInvocations() throws Exception {
+    public void shouldPrintAllInvocationsWhenVerifyingNoMoreInvocations() {
         mock.add(1);
         mock.add(2);
         mock.clear();
@@ -96,7 +96,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldNotContainAllInvocationsWhenSingleUnwantedFound() throws Exception {
+    public void shouldNotContainAllInvocationsWhenSingleUnwantedFound() {
         mock.add(1);
 
         try {
@@ -108,7 +108,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyOneMockButFailOnOther() throws Exception {
+    public void shouldVerifyOneMockButFailOnOther() {
         List<String> list = mock(List.class);
         Map<String, Integer> map = mock(Map.class);
 

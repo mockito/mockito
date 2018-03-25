@@ -32,7 +32,7 @@ import static org.mockito.Mockito.withSettings;
 public class InvocationListenerCallbackTest {
 
     @Test
-    public void should_call_single_listener_when_mock_return_normally() throws Exception {
+    public void should_call_single_listener_when_mock_return_normally() {
         // given
         RememberingListener listener = new RememberingListener();
         Foo foo = mock(Foo.class, withSettings().invocationListeners(listener));
@@ -46,7 +46,7 @@ public class InvocationListenerCallbackTest {
     }
 
     @Test
-    public void should_call_listeners_in_order() throws Exception {
+    public void should_call_listeners_in_order() {
         // given
         List<InvocationListener> container = new ArrayList<InvocationListener>();
         RememberingListener listener1 = new RememberingListener(container);
@@ -62,7 +62,7 @@ public class InvocationListenerCallbackTest {
     }
 
     @Test
-    public void should_allow_same_listener() throws Exception {
+    public void should_allow_same_listener() {
         // given
         List<InvocationListener> container = new ArrayList<InvocationListener>();
         RememberingListener listener1 = new RememberingListener(container);
@@ -78,7 +78,7 @@ public class InvocationListenerCallbackTest {
     }
 
     @Test
-    public void should_call_all_listener_when_mock_return_normally() throws Exception {
+    public void should_call_all_listener_when_mock_return_normally() {
         // given
         RememberingListener listener1 = new RememberingListener();
         RememberingListener listener2 = new RememberingListener();
@@ -94,7 +94,7 @@ public class InvocationListenerCallbackTest {
     }
 
     @Test
-    public void should_call_all_listener_when_mock_throws_exception() throws Exception {
+    public void should_call_all_listener_when_mock_throws_exception() {
         // given
         InvocationListener listener1 = mock(InvocationListener.class, "listener1");
         InvocationListener listener2 = mock(InvocationListener.class, "listener2");

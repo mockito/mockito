@@ -25,6 +25,6 @@ public class EnsureMocksAreInitializedBeforeBeforeClassMethodTest {
     }
 
     @Test
-    public void dummy_test_see_BeforeClass_code() throws Exception {
+    public void dummy_test_see_BeforeClass_code() {
     }
 }

@@ -31,7 +31,7 @@ public class SpyAnnotationInitializedInBaseClassTest extends TestBase {
     }
 
     @Test
-    public void shouldInitSpiesInBaseClass() throws Exception {
+    public void shouldInitSpiesInBaseClass() {
         //given
         SubClass subClass = new SubClass();
         //when
@@ -60,7 +60,7 @@ public class SpyAnnotationInitializedInBaseClassTest extends TestBase {
         List spyInSubclass = new LinkedList();
 
         @Test
-        public void shouldInitSpiesInHierarchy() throws Exception {
+        public void shouldInitSpiesInHierarchy() {
             assertTrue(isMock(spyInSubclass));
             assertTrue(isMock(spyInBaseclass));
         }

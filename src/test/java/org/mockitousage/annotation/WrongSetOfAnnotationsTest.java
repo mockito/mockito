@@ -17,14 +17,14 @@ import static org.junit.Assert.fail;
 public class WrongSetOfAnnotationsTest extends TestBase {
 
     @Test(expected=MockitoException.class)
-    public void should_not_allow_Mock_and_Spy() throws Exception {
+    public void should_not_allow_Mock_and_Spy() {
         MockitoAnnotations.initMocks(new Object() {
             @Mock @Spy List<?> mock;
         });
     }
 
     @Test
-    public void should_not_allow_Spy_and_InjectMocks_on_interfaces() throws Exception {
+    public void should_not_allow_Spy_and_InjectMocks_on_interfaces() {
         try {
             MockitoAnnotations.initMocks(new Object() { @InjectMocks @Spy List<?> mock; });
             fail();
@@ -34,7 +34,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
     }
 
     @Test
-    public void should_allow_Spy_and_InjectMocks() throws Exception {
+    public void should_allow_Spy_and_InjectMocks() {
         MockitoAnnotations.initMocks(new Object() {
             @InjectMocks
             @Spy
@@ -44,28 +44,28 @@ public class WrongSetOfAnnotationsTest extends TestBase {
     static class WithDependency { List<?> list; }
 
     @Test(expected=MockitoException.class)
-    public void should_not_allow_Mock_and_InjectMocks() throws Exception {
+    public void should_not_allow_Mock_and_InjectMocks() {
         MockitoAnnotations.initMocks(new Object() {
             @InjectMocks @Mock List<?> mock;
         });
     }
 
     @Test(expected=MockitoException.class)
-    public void should_not_allow_Captor_and_Mock() throws Exception {
+    public void should_not_allow_Captor_and_Mock() {
         MockitoAnnotations.initMocks(new Object() {
             @Mock @Captor ArgumentCaptor<?> captor;
         });
     }
 
     @Test(expected=MockitoException.class)
-    public void should_not_allow_Captor_and_Spy() throws Exception {
+    public void should_not_allow_Captor_and_Spy() {
         MockitoAnnotations.initMocks(new Object() {
             @Spy @Captor ArgumentCaptor<?> captor;
         });
     }
 
     @Test(expected=MockitoException.class)
-    public void should_not_allow_Captor_and_InjectMocks() throws Exception {
+    public void should_not_allow_Captor_and_InjectMocks() {
         MockitoAnnotations.initMocks(new Object() {
             @InjectMocks @Captor ArgumentCaptor<?> captor;
         });

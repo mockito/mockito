@@ -39,7 +39,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
     protected abstract Class<?> mockTypeOf(Class<?> type);
 
     @Test
-    public void should_create_mock_from_interface() throws Exception {
+    public void should_create_mock_from_interface() {
         SomeInterface proxy = mockMaker.createMock(settingsFor(SomeInterface.class), dummyHandler());
 
         Class<?> superClass = proxy.getClass().getSuperclass();
@@ -48,7 +48,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
 
 
     @Test
-    public void should_create_mock_from_class() throws Exception {
+    public void should_create_mock_from_class() {
         ClassWithoutConstructor proxy = mockMaker.createMock(settingsFor(ClassWithoutConstructor.class), dummyHandler());
 
         Class<?> superClass = mockTypeOf(proxy.getClass());
@@ -56,7 +56,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
     }
 
     @Test
-    public void should_create_mock_from_class_even_when_constructor_is_dodgy() throws Exception {
+    public void should_create_mock_from_class_even_when_constructor_is_dodgy() {
         try {
             new ClassWithDodgyConstructor();
             fail();
@@ -67,7 +67,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
     }
 
     @Test
-    public void should_mocks_have_different_interceptors() throws Exception {
+    public void should_mocks_have_different_interceptors() {
         SomeClass mockOne = mockMaker.createMock(settingsFor(SomeClass.class), dummyHandler());
         SomeClass mockTwo = mockMaker.createMock(settingsFor(SomeClass.class), dummyHandler());
 
@@ -105,14 +105,14 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
     }
 
     @Test
-    public void should_create_mock_from_class_with_super_call_to_final_method() throws Exception {
+    public void should_create_mock_from_class_with_super_call_to_final_method() {
         MockCreationSettings<CallingSuperMethodClass> settings = settingsWithSuperCall(CallingSuperMethodClass.class);
         SampleClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<CallingSuperMethodClass>(settings));
         assertThat(proxy.foo()).isEqualTo("foo");
     }
 
     @Test
-    public void should_reset_mock_and_set_new_handler() throws Throwable {
+    public void should_reset_mock_and_set_new_handler() {
         MockCreationSettings<SampleClass> settings = settingsWithSuperCall(SampleClass.class);
         SampleClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<SampleClass>(settings));
 
@@ -186,7 +186,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
     }
 
     private static class DummyMockHandler implements MockHandler<Object> {
-        public Object handle(Invocation invocation) throws Throwable { return null; }
+        public Object handle(Invocation invocation) { return null; }
         public MockCreationSettings<Object> getMockSettings() { return null; }
         public InvocationContainer getInvocationContainer() { return null; }
         public void setAnswersForStubbing(List<Answer<?>> list) { }

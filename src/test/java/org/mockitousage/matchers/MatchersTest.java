@@ -308,7 +308,7 @@ public class MatchersTest extends TestBase {
     }
 
     @Test
-    public void should_array_equals_deal_with_null_array() throws Exception {
+    public void should_array_equals_deal_with_null_array() {
         Object[] nullArray = null;
         when(mock.oneArray(aryEq(nullArray))).thenReturn("null");
 
@@ -325,7 +325,7 @@ public class MatchersTest extends TestBase {
     }
 
     @Test
-    public void should_use_smart_equals_for_arrays() throws Exception {
+    public void should_use_smart_equals_for_arrays() {
         //issue 143
         mock.arrayMethod(new String[]{"one"});
         verify(mock).arrayMethod(eq(new String[]{"one"}));
@@ -333,7 +333,7 @@ public class MatchersTest extends TestBase {
     }
 
     @Test
-    public void should_use_smart_equals_for_primitive_arrays() throws Exception {
+    public void should_use_smart_equals_for_primitive_arrays() {
         //issue 143
         mock.objectArgMethod(new int[]{1, 2});
         verify(mock).objectArgMethod(eq(new int[]{1, 2}));
@@ -350,6 +350,7 @@ public class MatchersTest extends TestBase {
         Mockito.verify(list).contains(new Object[]{"1", "2", "3"});
     }
 
+    @SuppressWarnings("UnnecessaryBoxing")
     @Test
     public void array_equals_matcher() {
         when(mock.oneArray(aryEq(new boolean[]{true, false, false}))).thenReturn("0");
@@ -605,7 +606,7 @@ public class MatchersTest extends TestBase {
     }
 
     @Test
-    public void nullable_matcher() throws Exception {
+    public void nullable_matcher() {
         // imagine a Stream.of(...).map(c -> mock.oneArg(c))...
         mock.oneArg((Character) null);
         mock.oneArg(Character.valueOf('€'));

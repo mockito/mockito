@@ -156,7 +156,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         public boolean isInvokable() {
             return false;
         }
-        public Object invoke() throws Throwable {
+        public Object invoke() {
             return null;
         }
     };

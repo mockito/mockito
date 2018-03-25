@@ -117,17 +117,17 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     }
 
     @Test
-    public void should_instantiate_inject_mock_field_if_possible() throws Exception {
+    public void should_instantiate_inject_mock_field_if_possible() {
         assertNotNull(notInitializedBase);
     }
 
     @Test
-    public void should_keep_instance_on_inject_mock_field_if_present() throws Exception {
+    public void should_keep_instance_on_inject_mock_field_if_present() {
         assertSame(baseUnderTestingInstance, initializedBase);
     }
 
     @Test
-    public void should_report_nicely() throws Exception {
+    public void should_report_nicely() {
         Object failing = new Object() {
             @InjectMocks ThrowingConstructor failingConstructor;
         };

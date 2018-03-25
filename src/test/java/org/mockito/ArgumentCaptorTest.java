@@ -26,7 +26,7 @@ public class ArgumentCaptorTest {
 	}
 
 	@Test
-	public void tell_handy_return_values_to_return_value_for() throws Exception {
+	public void tell_handy_return_values_to_return_value_for() {
 
 		ArgumentCaptor<Object> captor = ArgumentCaptor.forClass(Object.class);
 		assertThat(captor.capture()).isNull();

@@ -18,7 +18,7 @@ import static org.mockitoutil.TestBase.getLastInvocation;
 public class InvocationInfoTest {
 
     @Test
-    public void should_know_valid_throwables() throws Exception {
+    public void should_know_valid_throwables() {
         //when
         Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
         InvocationInfo info = new InvocationInfo(invocation);
@@ -29,7 +29,7 @@ public class InvocationInfoTest {
     }
 
     @Test
-    public void should_know_valid_return_types() throws Exception {
+    public void should_know_valid_return_types() {
         assertThat(new InvocationInfo(new InvocationBuilder().method("integerReturningMethod").toInvocation()).isValidReturnType(Integer.class)).isTrue();
         assertThat(new InvocationInfo(new InvocationBuilder().method("integerReturningMethod").toInvocation()).isValidReturnType(int.class)).isTrue();
         assertThat(new InvocationInfo(new InvocationBuilder().method("intReturningMethod").toInvocation()).isValidReturnType(Integer.class)).isTrue();

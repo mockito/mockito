@@ -21,23 +21,23 @@ public class Equality {
         }
     }
 
-    static boolean areArraysEqual(Object o1, Object o2) {
+    private static boolean areArraysEqual(Object o1, Object o2) {
         return areArrayLengthsEqual(o1, o2)
                 && areArrayElementsEqual(o1, o2);
     }
 
-    static boolean areArrayLengthsEqual(Object o1, Object o2) {
+    private static boolean areArrayLengthsEqual(Object o1, Object o2) {
         return Array.getLength(o1) == Array.getLength(o2);
     }
 
-    static boolean areArrayElementsEqual(Object o1, Object o2) {
+    private static boolean areArrayElementsEqual(Object o1, Object o2) {
         for (int i = 0; i < Array.getLength(o1); i++) {
             if (!areEqual(Array.get(o1, i), Array.get(o2, i))) return false;
         }
         return true;
     }
 
-    static boolean isArray(Object o) {
+    private static boolean isArray(Object o) {
         return o.getClass().isArray();
     }
 }

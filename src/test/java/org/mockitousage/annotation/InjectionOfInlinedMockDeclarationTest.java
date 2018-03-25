@@ -26,7 +26,7 @@ public class InjectionOfInlinedMockDeclarationTest {
     private Tuner tuner = spy(new Tuner());
 
     @Test
-    public void mock_declared_fields_shall_be_injected_too() throws Exception {
+    public void mock_declared_fields_shall_be_injected_too() {
         assertNotNull(receiver.oldAntenna);
         assertNotNull(receiver.satelliteAntenna);
         assertNotNull(receiver.dvbtAntenna);
@@ -34,19 +34,19 @@ public class InjectionOfInlinedMockDeclarationTest {
     }
 
     @Test
-    public void unnamed_mocks_should_be_resolved_withe_their_field_names() throws Exception {
+    public void unnamed_mocks_should_be_resolved_withe_their_field_names() {
         assertSame(oldAntenna, receiver.oldAntenna);
         assertSame(satelliteAntenna, receiver.satelliteAntenna);
     }
 
     @Test
-    public void named_mocks_should_be_resolved_with_their_name() throws Exception {
+    public void named_mocks_should_be_resolved_with_their_name() {
         assertSame(antenna, receiver.dvbtAntenna);
     }
 
 
     @Test
-    public void inject_mocks_even_in_declared_spy() throws Exception {
+    public void inject_mocks_even_in_declared_spy() {
         assertNotNull(spiedReceiver.oldAntenna);
         assertNotNull(spiedReceiver.tuner);
     }

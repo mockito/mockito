@@ -1516,7 +1516,7 @@ import org.mockito.verification.VerificationWithTimeout;
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
 
-    static final MockitoCore MOCKITO_CORE = new MockitoCore();
+    private static final MockitoCore MOCKITO_CORE = new MockitoCore();
 
     /**
      * The default <code>Answer</code> of every mock <b>if</b> the mock was not stubbed.

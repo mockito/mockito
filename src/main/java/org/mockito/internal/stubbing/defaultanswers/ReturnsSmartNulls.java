@@ -57,7 +57,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
         private final InvocationOnMock unstubbedInvocation;
         private final Location location;
 
-        public ThrowsSmartNullPointer(InvocationOnMock unstubbedInvocation, Location location) {
+        ThrowsSmartNullPointer(InvocationOnMock unstubbedInvocation, Location location) {
             this.unstubbedInvocation = unstubbedInvocation;
             this.location = location;
         }

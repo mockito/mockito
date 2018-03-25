@@ -24,7 +24,7 @@ public class ThreadSafeMockingProgressTest extends TestBase {
     }
 
     @Test
-    public void shouldShareState() throws Exception {
+    public void shouldShareState() {
         //given
         MockingProgress p = mockingProgress();
         p.verificationStarted(new DummyVerificationMode());
@@ -35,7 +35,7 @@ public class ThreadSafeMockingProgressTest extends TestBase {
     }
 
     @Test
-    public void shouldKnowWhenVerificationHasStarted() throws Exception {
+    public void shouldKnowWhenVerificationHasStarted() {
         //given
         verify(mock(List.class));
         MockingProgress p = mockingProgress();

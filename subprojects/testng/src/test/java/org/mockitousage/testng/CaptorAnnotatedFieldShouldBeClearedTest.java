@@ -24,7 +24,7 @@ public class CaptorAnnotatedFieldShouldBeClearedTest {
     @Mock List<String> list;
 
     @Test
-    public void first_test_method_that_uses_captor() throws Exception {
+    public void first_test_method_that_uses_captor() {
         list.add("a");
         list.add("b");
 
@@ -33,7 +33,7 @@ public class CaptorAnnotatedFieldShouldBeClearedTest {
     }
 
     @Test
-    public void second_test_method_that_uses_captor() throws Exception {
+    public void second_test_method_that_uses_captor() {
         list.add("t");
         list.add("u");
 

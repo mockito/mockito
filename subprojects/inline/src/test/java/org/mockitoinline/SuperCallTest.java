@@ -21,13 +21,12 @@ public final class SuperCallTest {
 
     static class Dummy {
 
-        public void foo() {
+        void foo() {
             bar("baz");
         }
 
         // Also fails if public.
         void bar(String s) {
-            return;
         }
     }
 }

@@ -24,7 +24,7 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
     @Mock private IMethods mock2;
 
     @Test
-    public void shouldWorkFineIfNoInvocations() throws Exception {
+    public void shouldWorkFineIfNoInvocations() {
         //when
         InOrder inOrder = inOrder(mock);
 
@@ -33,7 +33,7 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
     }
 
     @Test
-    public void shouldSayNoInteractionsWanted() throws Exception {
+    public void shouldSayNoInteractionsWanted() {
         //when
         mock.simpleMethod();
 
@@ -48,7 +48,7 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyNoMoreInteractionsInOrder() throws Exception {
+    public void shouldVerifyNoMoreInteractionsInOrder() {
         //when
         mock.simpleMethod();
         mock.simpleMethod(10);
@@ -62,7 +62,7 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyNoMoreInteractionsInOrderWithMultipleMocks() throws Exception {
+    public void shouldVerifyNoMoreInteractionsInOrderWithMultipleMocks() {
         //when
         mock.simpleMethod();
         mock2.simpleMethod();
@@ -76,7 +76,7 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
     }
 
     @Test
-    public void shouldFailToVerifyNoMoreInteractionsInOrder() throws Exception {
+    public void shouldFailToVerifyNoMoreInteractionsInOrder() {
         //when
         mock.simpleMethod();
         mock.simpleMethod(10);
@@ -92,7 +92,7 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
     }
 
     @Test
-    public void shouldFailToVerifyNoMoreInteractionsInOrderWithMultipleMocks() throws Exception {
+    public void shouldFailToVerifyNoMoreInteractionsInOrderWithMultipleMocks() {
         //when
         mock.simpleMethod();
         mock2.simpleMethod();
@@ -108,7 +108,7 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
     }
 
     @Test
-    public void shouldValidateState() throws Exception {
+    public void shouldValidateState() {
         //when
         InOrder inOrder = inOrder(mock);
         verify(mock); // mess up state

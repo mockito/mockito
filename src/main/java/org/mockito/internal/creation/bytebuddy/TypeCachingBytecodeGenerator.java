@@ -19,7 +19,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implement
 
     private final TypeCache<MockitoMockKey> typeCache;
 
-    public TypeCachingBytecodeGenerator(BytecodeGenerator bytecodeGenerator, boolean weak) {
+    TypeCachingBytecodeGenerator(BytecodeGenerator bytecodeGenerator, boolean weak) {
         this.bytecodeGenerator = bytecodeGenerator;
         typeCache = new TypeCache.WithInlineExpunction<MockitoMockKey>(weak ? TypeCache.Sort.WEAK : TypeCache.Sort.SOFT);
     }
@@ -33,7 +33,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implement
                     new MockitoMockKey(params.mockedType, params.interfaces, params.serializableMode, params.stripAnnotations),
                     new Callable<Class<?>>() {
                         @Override
-                        public Class<?> call() throws Exception {
+                        public Class<?> call() {
                             return bytecodeGenerator.mockClass(params);
                         }
                     }, BOOTSTRAP_LOCK);

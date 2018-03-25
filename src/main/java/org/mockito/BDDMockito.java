@@ -148,7 +148,7 @@ public class BDDMockito extends Mockito {
 
         private final OngoingStubbing<T> mockitoOngoingStubbing;
 
-        public BDDOngoingStubbingImpl(OngoingStubbing<T> ongoingStubbing) {
+        BDDOngoingStubbingImpl(OngoingStubbing<T> ongoingStubbing) {
             this.mockitoOngoingStubbing = ongoingStubbing;
         }
 
@@ -401,7 +401,7 @@ public class BDDMockito extends Mockito {
 
         private final Stubber mockitoStubber;
 
-        public BDDStubberImpl(Stubber mockitoStubber) {
+        BDDStubberImpl(Stubber mockitoStubber) {
             this.mockitoStubber = mockitoStubber;
         }
 

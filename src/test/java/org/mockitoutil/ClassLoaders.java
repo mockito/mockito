@@ -360,7 +360,7 @@ public abstract class ClassLoaders {
         }
 
         @Override
-        public Enumeration<URL> getResources(String ignored) throws IOException {
+        public Enumeration<URL> getResources(String ignored) {
             return inMemoryOnly();
         }
 
@@ -393,7 +393,7 @@ public abstract class ClassLoaders {
         }
 
         @Override
-        protected URLConnection openConnection(URL url) throws IOException {
+        protected URLConnection openConnection(URL url) {
             return new MemURLConnection(url, inMemoryClassLoader);
         }
 
@@ -408,11 +408,11 @@ public abstract class ClassLoaders {
             }
 
             @Override
-            public void connect() throws IOException {
+            public void connect() {
             }
 
             @Override
-            public InputStream getInputStream() throws IOException {
+            public InputStream getInputStream() {
                 return new ByteArrayInputStream(inMemoryClassLoader.inMemoryClassObjects.get(qualifiedName));
             }
         }
