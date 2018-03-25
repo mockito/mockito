@@ -7,9 +7,10 @@ targetCompatibility = 1.8
 
 dependencies {
     compile project.rootProject
+    implementation libraries.junitJupiterApi
     testCompile libraries.assertj
-    testCompile libraries.junitJupiterLauncher
-    implementation libraries.junitJupiterEngine
+    testCompile libraries.junitPlatformLauncher
+    testRuntime libraries.junitJupiterEngine
 }
 
 test {
