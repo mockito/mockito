@@ -10,7 +10,7 @@ buildscript {
         classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.4.3' //for 'java-compatibility-check.gradle'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
-        classpath 'org.shipkit:shipkit:2.0.12'
+        classpath 'org.shipkit:shipkit:0.9.144'
     }
 }
 
