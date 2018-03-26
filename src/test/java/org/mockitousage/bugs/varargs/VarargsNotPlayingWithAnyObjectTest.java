@@ -5,14 +5,11 @@
 
 package org.mockitousage.bugs.varargs;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 //see issue 62
