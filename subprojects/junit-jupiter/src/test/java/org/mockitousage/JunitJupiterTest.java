@@ -4,14 +4,14 @@
  */
 package org.mockitousage;
 
+import java.util.function.Function;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,6 +20,9 @@ class JunitJupiterTest {
 
     @Mock
     private Function<Integer, String> rootMock;
+
+    @InjectMocks
+    private ClassWithDependency classWithDependency;
 
     @Test
     void ensureMockCreationWorks() {
@@ -68,6 +71,19 @@ class JunitJupiterTest {
         // mock is initialized by mockito session
         void shouldWeCreateMocksInTheParentContext() {
             assertThat(rootMock).isNotNull();
+        }
+    }
+
+    @Test
+    void should_be_injected_correct_instance_of_mock() {
+        assertThat(classWithDependency.dependency).isSameAs(rootMock);
+    }
+
+    private static class ClassWithDependency {
+        private final Function<Integer, String> dependency;
+
+        private ClassWithDependency(Function<Integer, String> dependency) {
+            this.dependency = dependency;
         }
     }
 }

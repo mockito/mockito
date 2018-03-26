@@ -5,6 +5,9 @@
 package org.mockito.junit.jupiter;
 
 
+import java.util.LinkedHashSet;
+import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -14,10 +17,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.quality.Strictness;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
@@ -101,7 +100,7 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
      */
     @Override
     public void beforeEach(final ExtensionContext context) {
-        List<Object> testInstances = new LinkedList<>();
+        Set<Object> testInstances = new LinkedHashSet<>();
         testInstances.add(context.getRequiredTestInstance());
 
         this.collectParentTestInstances(context, testInstances);
@@ -135,7 +134,7 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
         return annotation;
     }
 
-    private void collectParentTestInstances(ExtensionContext context, List<Object> testInstances) {
+    private void collectParentTestInstances(ExtensionContext context, Set<Object> testInstances) {
         Optional<ExtensionContext> parent = context.getParent();
 
         while (parent.isPresent() && parent.get() != context.getRoot()) {
