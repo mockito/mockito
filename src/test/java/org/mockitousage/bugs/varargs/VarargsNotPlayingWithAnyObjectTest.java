@@ -10,7 +10,13 @@ import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyObject;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.anyVararg;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 //see issue 62
 public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
@@ -32,6 +38,12 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
 
         verify(mock, never()).run();
         verify(mock, never()).run(anyString(), eq("f"));
+    }
+
+    @Test
+    public void shouldAllowUsingAnyObjectForVarArgs() {
+        mock.run("a", "b");
+        verify(mock).run((String[]) anyObject());
     }
 
     @Test
