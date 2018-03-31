@@ -54,6 +54,7 @@ public class StaticMockingExperimentTest extends TestBase {
         staticMethod = Foo.class.getDeclaredMethod("staticMethod", String.class);
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void verify_static_method() throws Throwable {
         //register staticMethod call on mock
@@ -81,6 +82,7 @@ public class StaticMockingExperimentTest extends TestBase {
         handler.handle(differentArg);
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void verification_failure_static_method() throws Throwable {
         //register staticMethod call on mock
@@ -178,6 +180,7 @@ public class StaticMockingExperimentTest extends TestBase {
         assertEquals(null, result2);
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void verifying_new() throws Throwable {
         Constructor<Foo> ctr = Foo.class.getConstructor(String.class);

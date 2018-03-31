@@ -83,6 +83,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
     }
 
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void shouldSayUnfinishedVerificationButNotInvalidUseOfMatchers() {
         assumeTrue("Does not apply for inline mocks", withFinal.getClass() != WithFinal.class);

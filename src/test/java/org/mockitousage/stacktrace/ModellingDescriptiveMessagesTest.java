@@ -32,6 +32,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         super.makeStackTracesClean();
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void makeSureStateIsValidatedInTheVeryFirstTestThanksToTheRunner() {
         //mess up the state:
@@ -137,6 +138,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         m.simpleMethod();
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void shouldPointOutUnfinishedStubbing() {
         when(mock.simpleMethod());

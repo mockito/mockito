@@ -140,7 +140,7 @@ public class SpyAnnotationEngine implements AnnotationEngine, org.mockito.config
         for (Class<? extends Annotation> u : undesiredAnnotations) {
             if (field.isAnnotationPresent(u)) {
                 throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(),
-                                                          annotation.getClass().getSimpleName());
+                                                          u.getSimpleName());
             }
         }
     }

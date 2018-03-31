@@ -95,6 +95,7 @@ public class ResetTest extends TestBase {
         verifyNoMoreInteractions(mock, mockTwo);
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void shouldValidateStateWhenResetting() {
         //invalid verify:

@@ -32,12 +32,14 @@ public class JUnitRuleTest {
         throw new RuntimeException("foo");
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void detects_invalid_mockito_usage_on_success() throws Throwable {
         rule.expectFailure(UnfinishedStubbingException.class);
         when(mock.simpleMethod());
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void does_not_check_invalid_mockito_usage_on_failure() throws Throwable {
         //This intended behavior is questionable

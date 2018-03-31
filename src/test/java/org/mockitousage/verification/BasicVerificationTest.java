@@ -5,16 +5,19 @@
 
 package org.mockitousage.verification;
 
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
@@ -45,10 +48,13 @@ public class BasicVerificationTest extends TestBase {
         mock.add("foo");
 
         verify(mock).clear();
-        try {
-            verify(mock).add("bar");
-            fail();
-        } catch (AssertionError expected) {}
+
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() {
+                verify(mock).add("bar");
+            }
+        }).isInstanceOf(ArgumentsAreDifferent.class);
     }
 
     @Test

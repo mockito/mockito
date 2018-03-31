@@ -69,21 +69,21 @@ public class PrimitivesTest {
 
     @Test
     public void should_check_that_value_type_is_assignable_to_wrapper_reference() {
-        assertThat(Primitives.isAssignableFromWrapper(int.class, Integer.class));
-        assertThat(Primitives.isAssignableFromWrapper(Integer.class, Integer.class));
-        assertThat(Primitives.isAssignableFromWrapper(long.class, Long.class));
-        assertThat(Primitives.isAssignableFromWrapper(Long.class, Long.class));
-        assertThat(Primitives.isAssignableFromWrapper(double.class, Double.class));
-        assertThat(Primitives.isAssignableFromWrapper(Double.class, Double.class));
-        assertThat(Primitives.isAssignableFromWrapper(float.class, Float.class));
-        assertThat(Primitives.isAssignableFromWrapper(Float.class, Float.class));
-        assertThat(Primitives.isAssignableFromWrapper(char.class, Character.class));
-        assertThat(Primitives.isAssignableFromWrapper(Character.class, Character.class));
-        assertThat(Primitives.isAssignableFromWrapper(short.class, Short.class));
-        assertThat(Primitives.isAssignableFromWrapper(Short.class, Short.class));
-        assertThat(Primitives.isAssignableFromWrapper(byte.class, Byte.class));
-        assertThat(Primitives.isAssignableFromWrapper(Byte.class, Byte.class));
-        assertThat(Primitives.isAssignableFromWrapper(boolean.class, Boolean.class));
-        assertThat(Primitives.isAssignableFromWrapper(Boolean.class, Boolean.class));
+        assertThat(Primitives.isAssignableFromWrapper(int.class, Integer.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(Integer.class, Integer.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(long.class, Long.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(Long.class, Long.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(double.class, Double.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(Double.class, Double.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(float.class, Float.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(Float.class, Float.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(char.class, Character.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(Character.class, Character.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(short.class, Short.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(Short.class, Short.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(byte.class, Byte.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(Byte.class, Byte.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(boolean.class, Boolean.class)).isTrue();
+        assertThat(Primitives.isAssignableFromWrapper(Boolean.class, Boolean.class)).isTrue();
     }
 }

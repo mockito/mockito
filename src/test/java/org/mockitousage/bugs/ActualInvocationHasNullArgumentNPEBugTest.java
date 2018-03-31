@@ -29,9 +29,10 @@ public class ActualInvocationHasNullArgumentNPEBugTest extends TestBase {
         //then
         try {
             verify(mockFun).doFun("hello");
-            fail();
         } catch(AssertionError r) {
             //it's ok, we just want to reproduce the bug
+            return;
         }
+        fail();
     }
 }

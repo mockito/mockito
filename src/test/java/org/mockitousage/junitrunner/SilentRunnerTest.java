@@ -104,6 +104,8 @@ public class SilentRunnerTest extends TestBase {
     @RunWith(MockitoJUnitRunner.Silent.class)
     public static class UsesFrameworkIncorrectly {
         @Mock List<?> list;
+
+        @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
         @Test public void unfinished_stubbing_test_method() {
             when(list.get(0)); //unfinished stubbing
         }

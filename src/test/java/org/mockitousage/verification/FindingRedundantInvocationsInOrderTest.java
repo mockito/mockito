@@ -107,6 +107,7 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
         } catch(VerificationInOrderFailure e) {}
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void shouldValidateState() throws Exception {
         //when
