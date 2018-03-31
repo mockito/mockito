@@ -5,6 +5,7 @@
 
 package org.mockitousage.basicapi;
 
+import net.bytebuddy.ClassFileVersion;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -20,13 +21,12 @@ import org.mockitoutil.TestBase;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 
 import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.*;
 import static org.mockitoutil.SimpleSerializationUtil.*;
 
@@ -275,19 +275,19 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     @Test
     public void should_serialize_with_real_object_spy() throws Exception {
         // given
-        List<Object> list = new ArrayList<Object>();
-        List<Object> spy = mock(ArrayList.class, withSettings()
-                .spiedInstance(list)
+        SerializableClass sample = new SerializableClass();
+        SerializableClass spy = mock(SerializableClass.class, withSettings()
+                .spiedInstance(sample)
                 .defaultAnswer(CALLS_REAL_METHODS)
                 .serializable());
-        when(spy.size()).thenReturn(100);
+        when(spy.foo()).thenReturn("foo");
 
         // when
         ByteArrayOutputStream serialized = serializeMock(spy);
 
         // then
-        List<?> readObject = deserializeMock(serialized, List.class);
-        assertEquals(100, readObject.size());
+        SerializableClass readObject = deserializeMock(serialized, SerializableClass.class);
+        assertEquals("foo", readObject.foo());
     }
 
     @Test
@@ -346,8 +346,6 @@ public class MocksSerializationTest extends TestBase implements Serializable {
                 .isInstanceOf(IMethods.class);
     }
 
-
-
     static class SerializableAndNoDefaultConstructor implements Serializable {
         SerializableAndNoDefaultConstructor(Observable o) { super(); }
     }
@@ -385,12 +383,19 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void BUG_ISSUE_399_try_some_mocks_with_current_answers() throws Exception {
-        assumeFalse(System.getProperty("java.version").startsWith("1.6")); // Bug in last public HotSpot 1.6
+        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V7));
 
         IMethods iMethods = mock(IMethods.class, withSettings().serializable().defaultAnswer(RETURNS_DEEP_STUBS));
 
         when(iMethods.iMethodsReturningMethod().linkedListReturningMethod().contains(anyString())).thenReturn(false);
 
         serializeAndBack(iMethods);
+    }
+
+    public static class SerializableClass implements Serializable {
+
+        public String foo() {
+            return null;
+        }
     }
 }

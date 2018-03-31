@@ -59,31 +59,56 @@ public class DeepStubsSerializableTest {
         // then revert to the default RETURNS_DEEP_STUBS and the code will raise a ClassCastException
     }
 
-
     static class SampleClass implements Serializable {
-        SampleClass2 getSample() { return new SampleClass2(); }
+
+        SampleClass2 getSample() {
+            return new SampleClass2();
+        }
     }
 
     static class SampleClass2 implements Serializable {
-        boolean isFalse() { return false; }
-        int number() { return 100; }
+
+        boolean isFalse() {
+            return false;
+        }
+
+        int number() {
+            return 100;
+        }
     }
 
     static class Container<E> implements Iterable<E>, Serializable {
+
         private E e;
-        public Container(E e) { this.e = e; }
-        public E get() { return e; }
+
+        public Container(E e) {
+            this.e = e;
+        }
+
+        public E get() {
+            return e;
+        }
 
         public Iterator<E> iterator() {
             return new Iterator<E>() {
-                public boolean hasNext() { return true; }
-                public E next() { return e; }
-                public void remove() { }
+                public boolean hasNext() {
+                    return true;
+                }
+
+                public E next() {
+                    return e;
+                }
+
+                public void remove() {
+                }
             };
         }
     }
 
     static class ListContainer extends Container<List<String>> {
-        public ListContainer(List<String> list) { super(list); }
+
+        public ListContainer(List<String> list) {
+            super(list);
+        }
     }
 }

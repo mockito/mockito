@@ -22,6 +22,8 @@ matrix:
     env: SKIP_RELEASE=true
   - jdk: oraclejdk9
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+  - jdk: oraclejdk9
+    env: SKIP_RELEASE=true DISABLE_REFLECTION=true
   - install: . ./install-jdk.sh -F 10 -L GPL
     env: SKIP_RELEASE=true JDK='Oracle JDK 10'
   - install: . ./install-jdk.sh -F 10 -L GPL

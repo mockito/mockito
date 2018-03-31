@@ -1,3 +1,12 @@
+task(disableReflection).doLast {
+    if (System.env.DISABLE_REFLECTION != null) {
+        logger.info("Disabling reflection: ${System.env.DISABLE_REFLECTION}")
+        test {
+            systemProperty "org.mockito.reflection.disabled", System.env.DISABLE_REFLECTION
+        }
+    }
+}
+
 task(createTestResources).doLast {
     def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
     if (System.env.MOCK_MAKER != null) {
@@ -12,10 +21,11 @@ task(createTestResources).doLast {
 
 task(removeTestResources).doLast {
     def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
-    if (mockMakerFile.exists()){
+    if (mockMakerFile.exists()) {
         mockMakerFile.delete()
     }
 }
 
+compileTestJava.dependsOn disableReflection
 compileTestJava.dependsOn createTestResources
 compileTestJava.finalizedBy removeTestResources
