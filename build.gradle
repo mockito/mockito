@@ -82,7 +82,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.8-20180401000000+0000'
+    gradleVersion = '4.6'
 }
 
 //Posting Build scans to https://scans.gradle.com
