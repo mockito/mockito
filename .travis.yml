@@ -26,9 +26,9 @@ matrix:
     env: SKIP_RELEASE=true JDK='Oracle JDK 10'
   - install: . ./install-jdk.sh -F 10 -L GPL
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 10'
-  - install: . ./install-jdk.sh -F 11 -L GPL
+  - install: . ./install-jdk.sh -F 11 -L BCL
     env: SKIP_RELEASE=true JDK='Oracle JDK 11'
-  - install: . ./install-jdk.sh -F 11 -L GPL
+  - install: . ./install-jdk.sh -F 11 -L BCL
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 11'
 
 branches:
