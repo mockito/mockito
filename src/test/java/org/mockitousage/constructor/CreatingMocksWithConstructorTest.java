@@ -248,6 +248,7 @@ public class CreatingMocksWithConstructorTest extends TestBase {
         }
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void mocking_interfaces_with_constructor() {
         //at the moment this is allowed however we can be more strict if needed

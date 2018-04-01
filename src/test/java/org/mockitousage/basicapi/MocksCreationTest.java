@@ -90,6 +90,7 @@ public class MocksCreationTest extends TestBase {
         } catch (MockitoException e) {}
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldAllowCreatingSpiesWithCorrectType() {
         List list = new LinkedList();

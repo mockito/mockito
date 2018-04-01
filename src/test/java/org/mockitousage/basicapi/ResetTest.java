@@ -26,7 +26,6 @@ public class ResetTest extends TestBase {
 
     @Test
     public void shouldResetOngoingStubbingSoThatMoreMeaningfulExceptionsAreRaised() {
-        mock(IMethods.class);
         mock.booleanReturningMethod();
         reset(mock);
         try {

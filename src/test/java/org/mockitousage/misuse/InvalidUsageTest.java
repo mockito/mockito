@@ -37,6 +37,7 @@ public class InvalidUsageTest extends TestBase {
         verifyZeroInteractions();
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test(expected=MockitoException.class)
     public void shouldNotCreateInOrderObjectWithoutMocks() {
         inOrder();
@@ -82,6 +83,7 @@ public class InvalidUsageTest extends TestBase {
         assumeFalse("Inlining mock allows mocking final classes", mock(FinalClass.class).getClass() == FinalClass.class);
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test(expected=MockitoException.class)
     public void shouldNotAllowMockingPrimitives() throws Exception {
         mock(Integer.TYPE);
