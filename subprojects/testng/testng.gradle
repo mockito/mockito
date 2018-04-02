@@ -2,6 +2,8 @@ apply plugin: 'java'
 apply plugin: 'maven'
 description = "Mockito for TestNG"
 
+sourceCompatibility = 1.8
+
 //TODO SF ensure this one is released, too (ensure source and target compatibility, too).
 
 Properties props = new Properties()

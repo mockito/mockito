@@ -24,6 +24,7 @@ import static org.mockito.Mockito.mock;
 @Test(description = "Always failing, shouldn't be listed in 'mockito-testng.xml'")
 public class FailingOnPurposeBecauseIncorrectStubbingSyntax {
 
+    @SuppressWarnings("CheckReturnValue")
     @Test(expectedExceptions = InvalidUseOfMatchersException.class)
     public void incorrect_stubbing_syntax_in_test() throws Exception {
         mock(PrintStream.class);
