@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
         classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.4.3' //for 'java-compatibility-check.gradle'
+        classpath "net.ltgt.gradle:gradle-errorprone-plugin:0.0.13"
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
         classpath 'org.shipkit:shipkit:2.0.13'
@@ -16,7 +17,6 @@ buildscript {
 
 plugins {
     id 'com.gradle.build-scan' version '1.12.1'
-    id 'net.ltgt.errorprone' version '0.0.13' apply false
 }
 
 description = 'Mockito mock objects library core API and implementation'
@@ -52,7 +52,7 @@ allprojects { proj ->
     plugins.withId('java') {
         proj.apply plugin: 'net.ltgt.errorprone'
         proj.dependencies {
-            errorprone 'com.google.errorprone:error_prone_core:2.2.0'
+            errorprone libraries.errorprone
         }
     }
     tasks.withType(JavaCompile) {
