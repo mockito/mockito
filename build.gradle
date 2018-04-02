@@ -51,6 +51,9 @@ allprojects { proj ->
     }
     plugins.withId('java') {
         proj.apply plugin: 'net.ltgt.errorprone'
+        proj.dependencies {
+            errorprone 'com.google.errorprone:error_prone_core:2.2.0'
+        }
     }
     tasks.withType(JavaCompile) {
         //I don't believe those warnings add value given modern IDEs
