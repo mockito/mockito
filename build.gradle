@@ -45,11 +45,13 @@ apply from: 'gradle/dependencies.gradle'
 
 archivesBaseName = "mockito-core"
 
-allprojects {
+allprojects { proj ->
     repositories {
         jcenter()
     }
-    apply plugin: 'net.ltgt.errorprone'
+    plugins.withId('java') {
+        proj.apply plugin: 'net.ltgt.errorprone'
+    }
     tasks.withType(JavaCompile) {
         //I don't believe those warnings add value given modern IDEs
         options.warnings = false
