@@ -3,6 +3,8 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 apply plugin: 'java'
 description = "End-to-end tests for Mockito and its extensions."
 
+sourceCompatibility = 1.8
+
 //so that we can depend on locally published mockito
 //and test end-to-end mockito jar resolution (for example, flesh out missing dependencies in pom file)
 [compileTestJava, ideaModule].each {
