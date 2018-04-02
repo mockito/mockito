@@ -24,6 +24,7 @@ public class DeprecatedInstantiatorProviderTest {
         assertNotNull(plugin);
     }
 
+    @SuppressWarnings("CheckReturnValue")
     @Test
     public void uses_custom_instantiator_provider() {
         MyDeprecatedInstantiatorProvider.invokedFor.remove();
@@ -31,6 +32,7 @@ public class DeprecatedInstantiatorProviderTest {
         assertEquals(MyDeprecatedInstantiatorProvider.invokedFor.get(), asList(DeprecatedInstantiatorProviderTest.class));
     }
 
+    @SuppressWarnings("CheckReturnValue")
     @Test(expected = InstantiationException.class)
     public void exception_while_instantiating() throws Throwable {
         MyDeprecatedInstantiatorProvider.shouldExcept.set(true);

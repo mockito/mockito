@@ -18,6 +18,7 @@ import static org.mockito.Mockito.mock;
 
 public class PluginSwitchTest {
 
+    @SuppressWarnings("CheckReturnValue")
     @Test
     public void plugin_switcher_is_used() {
         mock(List.class);
