@@ -22,11 +22,25 @@ matrix:
     env: SKIP_RELEASE=true
   - jdk: oraclejdk9
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+  - install: . ./install-jdk.sh -F 10 -L GPL
+    env: SKIP_RELEASE=true JDK='Oracle JDK 10'
+  - install: . ./install-jdk.sh -F 10 -L GPL
+    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 10'
+  - install: . ./install-jdk.sh -F 11 -L BCL
+    env: SKIP_RELEASE=true JDK='Oracle JDK 11'
+  - install: . ./install-jdk.sh -F 11 -L BCL
+    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 11'
+  allow_failures:
+    - env: SKIP_RELEASE=true JDK='Oracle JDK 11'
+    - env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 11'
 
 branches:
   #Don't build tags
   except:
   - /^v\d/
+
+before_install:
+  - wget https://raw.githubusercontent.com/sormuras/bach/master/install-jdk.sh
 
 #Below skips the installation step completely (https://docs.travis-ci.com/user/customizing-the-build/#Skipping-the-Installation-Step)
 #We need it because otherwise Travis CI injects an awkward './gradlew assemble' step into the CI workflow
