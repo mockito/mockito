@@ -22,6 +22,9 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,13 +52,54 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
+    public void throws_same_exception_consecutively() {
+        when(mock.add("")).thenThrow(new ExceptionOne());
+
+        //1st invocation
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mock.add("");
+            }
+        }).isInstanceOf(ExceptionOne.class);
+
+        mock.add("1");
+
+        //2nd invocation
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mock.add("");
+            }
+        }).isInstanceOf(ExceptionOne.class);
+    }
+
+    @Test
+    public void throws_same_exception_consecutively_with_doThrow() {
+        doThrow(new ExceptionOne()).when(mock).clear();
+
+        //1st invocation
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mock.clear();
+            }
+        }).isInstanceOf(ExceptionOne.class);
+
+        mock.add("1");
+
+        //2nd invocation
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mock.clear();
+            }
+        }).isInstanceOf(ExceptionOne.class);
+    }
+
+    @Test
     public void shouldStubWithThrowable() throws Exception {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         when(mock.add("throw")).thenThrow(expected);
 
         exception.expect(sameInstance(expected));
         mock.add("throw");
-
     }
 
     @Test
