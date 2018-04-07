@@ -1,9 +1,8 @@
-task(disableReflection).doLast {
-    if (System.env.SIMULATE_JAVA11 != null) {
-        logger.info("Disabling reflection: ${System.env.SIMULATE_JAVA11}")
-        test {
-            systemProperty "org.mockito.internal.simulateJava11", System.env.SIMULATE_JAVA11
-        }
+def java11 = System.env.SIMULATE_JAVA11
+if (java11 != null) {
+    test {
+        logger.info("$it.path - use Java11 simluation: ${java11}")
+        systemProperty "org.mockito.internal.simulateJava11", java11
     }
 }
 
@@ -26,6 +25,5 @@ task(removeTestResources).doLast {
     }
 }
 
-compileTestJava.dependsOn disableReflection
 compileTestJava.dependsOn createTestResources
 compileTestJava.finalizedBy removeTestResources
