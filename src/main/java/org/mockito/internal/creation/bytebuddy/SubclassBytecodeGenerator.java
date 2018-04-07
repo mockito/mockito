@@ -121,7 +121,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 .or(hasParameters(whereAny(hasType(isPackagePrivate())))));
         }
         return builder.make()
-                      .load(classLoader, loader.resolveStrategy(features.mockedType, features.serializableMode, classLoader, name.startsWith(CODEGEN_PACKAGE)))
+                      .load(classLoader, loader.resolveStrategy(features.mockedType, classLoader, name.startsWith(CODEGEN_PACKAGE)))
                       .getLoaded();
     }
 

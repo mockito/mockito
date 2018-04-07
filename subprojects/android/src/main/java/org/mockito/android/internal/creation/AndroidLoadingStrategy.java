@@ -8,7 +8,6 @@ import net.bytebuddy.android.AndroidClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.SubclassLoader;
-import org.mockito.mock.SerializableMode;
 
 import java.io.File;
 
@@ -17,7 +16,7 @@ import static org.mockito.internal.util.StringUtil.join;
 class AndroidLoadingStrategy implements SubclassLoader {
 
     @Override
-    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, SerializableMode serializableMode, ClassLoader classLoader, boolean codegen) {
+    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
         File target = AndroidTempFileLocator.target;
         if (target == null) {
             throw new MockitoException(join(

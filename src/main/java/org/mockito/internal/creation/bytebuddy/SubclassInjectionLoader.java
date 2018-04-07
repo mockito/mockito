@@ -8,7 +8,7 @@ import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import org.mockito.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.mock.SerializableMode;
+import org.mockito.internal.util.Platform;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,6 +16,11 @@ import java.lang.reflect.Method;
 import static org.mockito.internal.util.StringUtil.join;
 
 class SubclassInjectionLoader implements SubclassLoader {
+
+    private static final String ERROR_MESSAGE = join("The current JVM does not support any class injection mechanism.",
+        "",
+        "Currently, Mockito supports injection via neither by method handle lookups or using sun.misc.Unsafe",
+        "Neither seems to be available on your current JVM.");
 
     private final SubclassLoader loader;
 
@@ -25,12 +30,8 @@ class SubclassInjectionLoader implements SubclassLoader {
         } else if (ClassInjector.UsingLookup.isAvailable()) {
             this.loader = tryLookup();
         } else {
-            throw mockingImpossible();
+            throw new MockitoException(join(ERROR_MESSAGE, "", Platform.describe()));
         }
-    }
-
-    private static MockitoException mockingImpossible() {
-        return new MockitoException("The current JVM does not support any class injection mechanism, neither by method handles or using sun.misc.Unsafe");
     }
 
     private static SubclassLoader tryLookup() {
@@ -40,14 +41,15 @@ class SubclassInjectionLoader implements SubclassLoader {
             Method privateLookupIn = methodHandles.getMethod("privateLookupIn", Class.class, Class.forName("java.lang.invoke.MethodHandles$Lookup"));
             Object codegenLookup = privateLookupIn.invoke(null, InjectionBase.class, lookup);
             return new WithLookup(lookup, codegenLookup, privateLookupIn);
-        } catch (Exception ignored) {
-            throw mockingImpossible();
+        } catch (Exception exception) {
+            throw new MockitoException(join(ERROR_MESSAGE, "", Platform.describe()), exception);
         }
     }
 
     private static class WithReflection implements SubclassLoader {
+
         @Override
-        public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, SerializableMode serializableMode, ClassLoader classLoader, boolean codegen) {
+        public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
             return ClassLoadingStrategy.Default.INJECTION.with(mockedType.getProtectionDomain());
         }
     }
@@ -55,7 +57,9 @@ class SubclassInjectionLoader implements SubclassLoader {
     private static class WithLookup implements SubclassLoader {
 
         private final Object lookup;
+
         private final Object codegenLookup;
+
         private final Method privateLookupIn;
 
         WithLookup(Object lookup, Object codegenLookup, Method privateLookupIn) {
@@ -65,7 +69,7 @@ class SubclassInjectionLoader implements SubclassLoader {
         }
 
         @Override
-        public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, SerializableMode serializableMode, ClassLoader classLoader, boolean codegen) {
+        public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
             if (codegen) {
                 return ClassLoadingStrategy.UsingLookup.of(codegenLookup);
             } else if (classLoader != mockedType.getClassLoader()) {
@@ -97,7 +101,7 @@ class SubclassInjectionLoader implements SubclassLoader {
     }
 
     @Override
-    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, SerializableMode serializableMode, ClassLoader classLoader, boolean codegen) {
-        return loader.resolveStrategy(mockedType, serializableMode, classLoader, codegen);
+    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
+        return loader.resolveStrategy(mockedType, classLoader, codegen);
     }
 }
