@@ -17,42 +17,55 @@ import static org.mockito.internal.util.StringUtil.join;
 
 class SubclassInjectionLoader implements SubclassLoader {
 
-    private final boolean disableReflection;
+    private final SubclassLoader loader;
 
-    private final Object lookup, codegenLookup;
-
-    private final Method privateLookupIn;
-
-    public SubclassInjectionLoader() {
-        disableReflection = Boolean.getBoolean("org.mockito.reflection.disabled");
-        Object lookup, codegenLookup;
-        Method privateLookupIn;
-        if (ClassInjector.UsingLookup.isAvailable()) {
-            try {
-                Class<?> methodHandles = Class.forName("java.lang.invoke.MethodHandles");
-                lookup = methodHandles.getMethod("lookup").invoke(null);
-                privateLookupIn = methodHandles.getMethod("privateLookupIn", Class.class, Class.forName("java.lang.invoke.MethodHandles$Lookup"));
-                codegenLookup = privateLookupIn.invoke(null, InjectionBase.class, lookup);
-            } catch (Exception ignored) {
-                lookup = null;
-                privateLookupIn = null;
-                codegenLookup = null;
-            }
+    SubclassInjectionLoader() {
+        if (!Boolean.getBoolean("org.mockito.reflection.disabled") && ClassInjector.UsingReflection.isAvailable()) {
+            this.loader = new WithReflection();
+        } else if (ClassInjector.UsingLookup.isAvailable()) {
+            this.loader = tryLookup();
         } else {
-            lookup = null;
-            privateLookupIn = null;
-            codegenLookup = null;
+            throw mockingImpossible();
         }
-        this.lookup = lookup;
-        this.privateLookupIn = privateLookupIn;
-        this.codegenLookup = codegenLookup;
     }
 
-    @Override
-    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, SerializableMode serializableMode, ClassLoader classLoader, boolean codegen) {
-        if (!disableReflection && ClassInjector.UsingReflection.isAvailable()) {
+    private static MockitoException mockingImpossible() {
+        return new MockitoException("The current JVM does not support any class injection mechanism, neither by method handles or using sun.misc.Unsafe");
+    }
+
+    private static SubclassLoader tryLookup() {
+        try {
+            Class<?> methodHandles = Class.forName("java.lang.invoke.MethodHandles");
+            Object lookup = methodHandles.getMethod("lookup").invoke(null);
+            Method privateLookupIn = methodHandles.getMethod("privateLookupIn", Class.class, Class.forName("java.lang.invoke.MethodHandles$Lookup"));
+            Object codegenLookup = privateLookupIn.invoke(null, InjectionBase.class, lookup);
+            return new WithLookup(lookup, codegenLookup, privateLookupIn);
+        } catch (Exception ignored) {
+            throw mockingImpossible();
+        }
+    }
+
+    private static class WithReflection implements SubclassLoader {
+        @Override
+        public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, SerializableMode serializableMode, ClassLoader classLoader, boolean codegen) {
             return ClassLoadingStrategy.Default.INJECTION.with(mockedType.getProtectionDomain());
-        } else if (ClassInjector.UsingLookup.isAvailable() && lookup != null && privateLookupIn != null && codegenLookup != null) {
+        }
+    }
+
+    private static class WithLookup implements SubclassLoader {
+
+        private final Object lookup;
+        private final Object codegenLookup;
+        private final Method privateLookupIn;
+
+        WithLookup(Object lookup, Object codegenLookup, Method privateLookupIn) {
+            this.lookup = lookup;
+            this.codegenLookup = codegenLookup;
+            this.privateLookupIn = privateLookupIn;
+        }
+
+        @Override
+        public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, SerializableMode serializableMode, ClassLoader classLoader, boolean codegen) {
             if (codegen) {
                 return ClassLoadingStrategy.UsingLookup.of(codegenLookup);
             } else if (classLoader != mockedType.getClassLoader()) {
@@ -80,8 +93,11 @@ class SubclassInjectionLoader implements SubclassLoader {
                     ));
                 }
             }
-        } else {
-            throw new MockitoException("The current JVM does not support any class injection mechanism, neither by method handles or using sun.misc.Unsafe");
         }
+    }
+
+    @Override
+    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, SerializableMode serializableMode, ClassLoader classLoader, boolean codegen) {
+        return loader.resolveStrategy(mockedType, serializableMode, classLoader, codegen);
     }
 }
