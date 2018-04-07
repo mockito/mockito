@@ -20,7 +20,7 @@ class SubclassInjectionLoader implements SubclassLoader {
     private final SubclassLoader loader;
 
     SubclassInjectionLoader() {
-        if (!Boolean.getBoolean("org.mockito.reflection.disabled") && ClassInjector.UsingReflection.isAvailable()) {
+        if (!Boolean.getBoolean("org.mockito.internal.simulateJava11") && ClassInjector.UsingReflection.isAvailable()) {
             this.loader = new WithReflection();
         } else if (ClassInjector.UsingLookup.isAvailable()) {
             this.loader = tryLookup();

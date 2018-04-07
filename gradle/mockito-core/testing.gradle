@@ -1,8 +1,8 @@
 task(disableReflection).doLast {
-    if (System.env.DISABLE_REFLECTION != null) {
-        logger.info("Disabling reflection: ${System.env.DISABLE_REFLECTION}")
+    if (System.env.SIMULATE_JAVA11 != null) {
+        logger.info("Disabling reflection: ${System.env.SIMULATE_JAVA11}")
         test {
-            systemProperty "org.mockito.reflection.disabled", System.env.DISABLE_REFLECTION
+            systemProperty "org.mockito.internal.simulateJava11", System.env.SIMULATE_JAVA11
         }
     }
 }
