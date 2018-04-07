@@ -19,7 +19,6 @@ import org.mockitoutil.TestBase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
@@ -254,19 +253,19 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
     @Test
     public void should_serialize_with_real_object_spy() throws Exception {
         // given
-        List<Object> list = new ArrayList<Object>();
-        List<Object> spy = mock(ArrayList.class, withSettings()
+        SerializableSample list = new SerializableSample();
+        SerializableSample spy = mock(SerializableSample.class, withSettings()
                         .spiedInstance(list)
                         .defaultAnswer(CALLS_REAL_METHODS)
                         .serializable());
-        when(spy.size()).thenReturn(100);
+        when(spy.foo()).thenReturn("foo");
 
         // when
         ByteArrayOutputStream serialized = serializeMock(spy);
 
         // then
-        List<?> readObject = deserializeMock(serialized, List.class);
-        assertEquals(100, readObject.size());
+        SerializableSample readObject = deserializeMock(serialized, SerializableSample.class);
+        assertEquals("foo", readObject.foo());
     }
 
     @Test
@@ -313,13 +312,9 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
                 .isInstanceOf(IMethods.class);
     }
 
-
-
     static class NotSerializableAndNoDefaultConstructor {
         NotSerializableAndNoDefaultConstructor(Observable o) { super(); }
     }
-
-
 
     static class SerializableAndNoDefaultConstructor implements Serializable {
         SerializableAndNoDefaultConstructor(Observable o) { super(); }
@@ -336,5 +331,12 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
         MockitoAnnotations.initMocks(testClass);
 
         serializeAndBack(testClass.serializableAndNoDefaultConstructor);
+    }
+
+    public static class SerializableSample implements Serializable {
+
+        public String foo() {
+            return null;
+        }
     }
 }
