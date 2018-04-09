@@ -3,7 +3,7 @@ package org.mockito
 import org.scalatest.{FlatSpec, Matchers => ScalaTestMatchers}
 
 
-class MockitoSugarTest extends FlatSpec with MockitoSugar with ScalaTestMatchers with MockitoMatchersSugar {
+class MockitoSugarTest extends FlatSpec with MockitoSugar with ScalaTestMatchers with ArgumentMatchersSugar {
 
     class Foo {
         def bar = "not mocked"
