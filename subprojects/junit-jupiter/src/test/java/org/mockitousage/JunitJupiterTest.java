@@ -48,6 +48,21 @@ class JunitJupiterTest {
     }
 
     @Nested
+    class NestedTestWithConstructorParameter {
+        private final Function<Integer, String> constructorMock;
+
+        NestedTestWithConstructorParameter(@Mock Function<Integer, String> constructorMock) {
+            this.constructorMock = constructorMock;
+        }
+
+        @Test
+        void can_inject_into_constructor_parameter() {
+            Mockito.when(constructorMock.apply(42)).thenReturn("42");
+            assertThat(constructorMock.apply(42)).isEqualTo("42");
+        }
+    }
+
+    @Nested
     class NestedTestWithExtraMock {
         @Mock Runnable nestedMock;
 

@@ -65,7 +65,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  * longer get a warning about "Unchecked assignment".
  *
  * <pre class="code"><code class="java">
- * <b>&#064;MockitoSettings(strictness = Strictness.STRICT_STUBS)</b>
+ * <b>&#064;ExtendWith(MockitoExtension.class)</b>
  * public class ExampleTest {
  *
  *     &#064;Mock
@@ -81,6 +81,31 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  *         localList.add(100);
  *         sharedList.add(100);
  *     }
+ * }
+ * </code></pre>
+ *
+ * Lastly, the extension allows you to initialize constructor parameters.
+ * This allows you to do any setup work in the constructor and set
+ * your fields to <code>final</code>. Moreover, if you require the mocks
+ * to be created and inserted in a test subject, but are later no longer
+ * necessary, constructor parameters are superior to field initialization.
+ * Use field initialization if you need them inserted and later need to
+ * perform verifications on them.
+ *
+ * <pre class="code"><code class="java">
+ * <b>&#064;ExtendWith(MockitoExtension.class)</b>
+ * public class ExampleTest {
+ *
+ *      private final List&lt;Integer&gt; sharedList;
+ *
+ *      ExampleTest(&#064;Mock sharedList) {
+ *          this.sharedList = sharedList;
+ *      }
+ *
+ *      &#064;Test
+ *      public void shouldDoSomething() {
+ *          sharedList.add(100);
+ *      }
  * }
  * </code></pre>
  */
@@ -190,12 +215,13 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.getParameter().isAnnotationPresent(Mock.class);
+        return parameterContext.isAnnotated(Mock.class);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         final Parameter parameter = parameterContext.getParameter();
-        return MockAnnotationProcessor.processAnnotationForMock(parameter.getAnnotation(Mock.class), parameter.getType(), parameter.getName());
+        return MockAnnotationProcessor.processAnnotationForMock(parameterContext.findAnnotation(Mock.class).get(), parameter.getType(), parameter.getName());
     }
 }
