@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Bruno Bonanno
  */
-class MockitoEnhancer {
+class MockitoEnhancerUtil {
 
     static <T> T stubMock(T entityMock, Class<?> entityClass) {
         Stream.of(entityClass.getMethods())
