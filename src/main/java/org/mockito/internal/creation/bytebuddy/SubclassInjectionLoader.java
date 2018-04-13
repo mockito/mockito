@@ -50,7 +50,7 @@ class SubclassInjectionLoader implements SubclassLoader {
 
         @Override
         public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
-            return ClassLoadingStrategy.Default.INJECTION.with(mockedType.getProtectionDomain());
+            return ClassLoadingStrategy.Default.INJECTION.with(codegen ? InjectionBase.class.getProtectionDomain() : mockedType.getProtectionDomain());
         }
     }
 
