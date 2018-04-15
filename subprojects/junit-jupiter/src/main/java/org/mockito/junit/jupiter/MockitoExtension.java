@@ -77,8 +77,8 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
     }
 
     /**
-     * Callback for post-processing the supplied test instance.
-     * <p>
+     * <p>Callback for post-processing the supplied test instance.
+     *
      * <p><strong>Note</strong>: the {@code ExtensionContext} supplied to a
      * {@code TestInstancePostProcessor} will always return an empty
      * {@link Optional} value from {@link ExtensionContext#getTestInstance()
