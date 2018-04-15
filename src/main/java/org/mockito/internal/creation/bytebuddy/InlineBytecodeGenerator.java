@@ -15,6 +15,7 @@ import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.method.ParameterDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.ClassFileLocator;
+import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.jar.asm.ClassVisitor;
@@ -74,7 +75,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         this.instrumentation = instrumentation;
         byteBuddy = new ByteBuddy()
                 .with(TypeValidation.DISABLED)
-                .with(Implementation.Context.Disabled.Factory.INSTANCE);
+                .with(Implementation.Context.Disabled.Factory.INSTANCE)
+                .with(MethodGraph.Compiler.ForDeclaredMethods.INSTANCE);
         mocked = new WeakConcurrentSet<Class<?>>(WeakConcurrentSet.Cleaner.INLINE);
         identifier = RandomString.make();
         advice = new MockMethodAdvice(mocks, identifier);
