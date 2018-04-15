@@ -22,7 +22,7 @@ import org.mockito.matchers._
   * @author Bruno Bonanno
   *
   */
-trait ArgumentMatchersSugar extends Any with Eq with That with StringThat with Null
+trait ArgumentMatchersSugar extends AnyMatchers with EqMatchers with ThatMatchers with StringThatMatchers with NullMatchers
 
 /**
   * Simple object to allow the usage of the trait without mixing it in

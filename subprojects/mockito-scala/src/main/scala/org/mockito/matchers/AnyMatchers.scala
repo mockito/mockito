@@ -13,7 +13,7 @@ package org.mockito.matchers
 
 import org.mockito.{ArgumentMatchers => JavaMatchers}
 
-private[mockito] trait Any {
+private[mockito] trait AnyMatchers {
     /** List matcher that use Scala List to avoid compile errors like
       * Error:(40, 60) type mismatch;
       * found   : List[String] (in java.util)

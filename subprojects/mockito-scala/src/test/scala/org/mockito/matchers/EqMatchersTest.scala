@@ -3,7 +3,7 @@ package org.mockito.matchers
 import org.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers => ScalaTestMatchers}
 
-class EqTest extends FlatSpec with MockitoSugar with ScalaTestMatchers with Eq {
+class EqMatchersTest extends FlatSpec with MockitoSugar with ScalaTestMatchers with EqMatchers {
 
     case class Baz(param1: String, param2: String)
 

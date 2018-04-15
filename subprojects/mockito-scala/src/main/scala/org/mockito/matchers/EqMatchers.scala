@@ -15,7 +15,7 @@ import org.mockito.{ArgumentMatchers => JavaMatchers}
 
 import scala.reflect.ClassTag
 
-private[mockito] trait Eq {
+private[mockito] trait EqMatchers {
     /**
       * Delegates to <code>ArgumentMatchers.eq()</code>, it renames the method to <code>eqTo</code> to
       * avoid clashes with the Scala <code>eq</code> method used for reference equality

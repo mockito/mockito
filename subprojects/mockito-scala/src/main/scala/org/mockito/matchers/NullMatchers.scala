@@ -13,32 +13,22 @@ package org.mockito.matchers
 
 import org.mockito.{ArgumentMatchers => JavaMatchers}
 
-private[mockito] trait StringThat {
+private[mockito] trait NullMatchers {
     /**
-      * Delegates to <code>ArgumentMatchers.matches()</code>, it's only here so we expose all the `ArgumentMatchers`
-      * on a single place
+      * Delegates to <code>ArgumentMatchers.isNull()</code>, it's only here so we expose all the `ArgumentMatchers`
+      * on a single place, but marked as @deprecated as you shouldn't be testing for nulls
+      * on Scala
       *
       */
-    def matches(regex: String): String = JavaMatchers.matches(regex)
+    @deprecated
+    def isNull[T]: T = JavaMatchers.isNull[T]
 
     /**
-      * Delegates to <code>ArgumentMatchers.startsWith()</code>, it's only here so we expose all the `ArgumentMatchers`
-      * on a single place
+      * Delegates to <code>ArgumentMatchers.isNotNull()</code>, it's only here so we expose all the `ArgumentMatchers`
+      * on a single place, but marked as @deprecated as you shouldn't be testing for nulls
+      * on Scala
       *
       */
-    def startsWith(prefix: String): String = JavaMatchers.startsWith(prefix)
-
-    /**
-      * Delegates to <code>ArgumentMatchers.contains()</code>, it's only here so we expose all the `ArgumentMatchers`
-      * on a single place
-      *
-      */
-    def contains(substring: String): String = JavaMatchers.contains(substring)
-
-    /**
-      * Delegates to <code>ArgumentMatchers.endsWith()</code>, it's only here so we expose all the `ArgumentMatchers`
-      * on a single place
-      *
-      */
-    def endsWith(suffix: String): String = JavaMatchers.endsWith(suffix)
+    @deprecated
+    def isNotNull[T]: T = JavaMatchers.isNotNull[T]
 }

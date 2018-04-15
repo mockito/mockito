@@ -3,7 +3,7 @@ package org.mockito.matchers
 import org.mockito.{ArgumentMatcher, MockitoSugar}
 import org.scalatest.{FlatSpec, Matchers => ScalaTestMatchers}
 
-class ThatTest extends FlatSpec with MockitoSugar with ScalaTestMatchers with That {
+class ThatMatchersTest extends FlatSpec with MockitoSugar with ScalaTestMatchers with ThatMatchers {
 
     class EqTo[T](value: T) extends ArgumentMatcher[T] {
         override def matches(argument: T): Boolean = argument == value

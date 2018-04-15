@@ -41,8 +41,6 @@ class MockitoSugarTest extends FlatSpec with MockitoSugar with ScalaTestMatchers
     "verifyNoMoreInteractions" should "ignore the calls to the methods that provide default arguments" in {
         val aMock = mock[Foo]
 
-        reset(aMock)
-
         aMock.iHaveSomeDefaultArguments("I'm not gonna pass the second argument")
 
         verify(aMock).iHaveSomeDefaultArguments("I'm not gonna pass the second argument", "default value")
@@ -51,8 +49,6 @@ class MockitoSugarTest extends FlatSpec with MockitoSugar with ScalaTestMatchers
 
     "argumentCaptor[T]" should "deal with default arguments" in {
         val aMock = mock[Foo]
-
-        reset(aMock)
 
         aMock.iHaveSomeDefaultArguments("I'm not gonna pass the second argument")
 

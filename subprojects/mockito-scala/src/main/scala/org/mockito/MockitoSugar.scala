@@ -34,7 +34,7 @@ private[mockito] trait DoSomething {
         Mockito.doReturn(toBeReturned, toBeReturnedNext.map(_.asInstanceOf[Object]): _*)
 
     /**
-      * Delegates to <code>Mockito.doThrow</code>, it's only here so we expose all the `ArgumentMatchers`
+      * Delegates to <code>Mockito.doThrow</code>, it's only here so we expose all the Mockito API
       * on a single place
       */
     def doThrow(toBeThrown: Throwable*): Stubber = Mockito.doThrow(toBeThrown: _*)

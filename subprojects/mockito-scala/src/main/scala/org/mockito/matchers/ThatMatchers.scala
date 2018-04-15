@@ -13,7 +13,7 @@ package org.mockito.matchers
 
 import org.mockito.{ArgumentMatcher, ArgumentMatchers => JavaMatchers}
 
-private[mockito] trait That {
+private[mockito] trait ThatMatchers {
 
     /**
       * Delegates to <code>ArgumentMatchers.argThat(matcher)</code>, it's only here so we expose all the `ArgumentMatchers`
