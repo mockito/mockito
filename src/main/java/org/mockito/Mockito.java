@@ -2507,6 +2507,12 @@ public class Mockito extends ArgumentMatchers {
         return MOCKITO_CORE.stubber().doReturn(toBeReturned, toBeReturnedNext);
     }
 
+    // TODO: 4/16/18  
+    @CheckReturnValue
+    public static Stubber doReturn(SerializableSupplier returnSupplier, Class typeHint) {
+        return MOCKITO_CORE.stubber().doReturn(returnSupplier, typeHint);
+    }
+
     /**
      * Creates {@link org.mockito.InOrder} object that allows verifying mocks in order.
      *

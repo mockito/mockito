@@ -5,6 +5,7 @@
 package org.mockito.stubbing;
 
 import org.mockito.Mockito;
+import org.mockito.SerializableSupplier;
 
 /**
  * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:
@@ -65,6 +66,20 @@ public interface OngoingStubbing<T> {
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation warnings (on call site)
     @SuppressWarnings ({"unchecked", "varargs"})
     OngoingStubbing<T> thenReturn(T value, T... values);
+
+    /**
+     * Seta a supplier that will evaluated every time the method is called. E.g.:
+     * <pre class="code"><code class="java">
+     * when(mock.someMethod()).thenReturn(MyClass::new)
+     * </code></pre>
+     *
+     * The Return value for each call will be the output of running Supplier.get()
+     *
+     * @param tSupplier
+     * @param returnType
+     * @return
+     */
+    OngoingStubbing<T> thenReturn(SerializableSupplier<T> tSupplier, Class<T> returnType);
 
     /**
      * Sets Throwable objects to be thrown when the method is called. E.g:

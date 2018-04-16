@@ -6,6 +6,8 @@ package org.mockito.internal.stubbing.answers;
 
 import java.io.Serializable;
 
+import org.mockito.SerializableSupplier;
+import org.mockito.internal.util.Supplier;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.ValidableAnswer;
@@ -16,14 +18,33 @@ import static org.mockito.internal.exceptions.Reporter.wrongTypeOfReturnValue;
 public class Returns implements Answer<Object>, ValidableAnswer, Serializable {
 
     private static final long serialVersionUID = -6245608253574215396L;
-    private final Object value;
+
+    private final SerializableSupplier valueSupplier;
+    private final Class<?> typeHint;
+    private final boolean returnsNull;
+    private final boolean singleReturnInstance;
 
     public Returns(Object value) {
-        this.value = value;
+        this.singleReturnInstance = true;
+        valueSupplier = (SerializableSupplier) () -> value;
+        if (value == null) {
+            typeHint = null;
+            returnsNull = true;
+        } else {
+            typeHint = value.getClass();
+            returnsNull = false;
+        }
+    }
+
+    public Returns(SerializableSupplier valueSupplier, Class typeHint) {
+        this.singleReturnInstance = false;
+        this.valueSupplier = valueSupplier;
+        this.typeHint = typeHint;
+        returnsNull = false;
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        return value;
+        return valueSupplier.get();
     }
 
     @Override
@@ -43,19 +64,25 @@ public class Returns implements Answer<Object>, ValidableAnswer, Serializable {
     }
 
     private String printReturnType() {
-        return value.getClass().getSimpleName();
+        return typeHint.getSimpleName();
     }
 
     private Class<?> returnType() {
-        return value.getClass();
+        return typeHint;
     }
 
     private boolean returnsNull() {
-        return value == null;
+        return returnsNull;
     }
 
     @Override
     public String toString() {
-        return "Returns: " + value;
+        Object returnObject = null;
+        if (singleReturnInstance) {
+            returnObject = valueSupplier.get();
+        } else {
+            returnObject = "Supplier of class " + typeHint;
+        }
+        return "Returns: " + returnObject;
     }
 }

@@ -34,8 +34,8 @@ public class MoreMatchersTest extends TestBase {
     public void any_should_be_actual_alias_to_anyObject() {
         mock.simpleMethod((Object) null);
 
-        verify(mock).simpleMethod(any());
-        verify(mock).simpleMethod(anyObject());
+        verify(mock).simpleMethod((Object) any());
+        verify(mock).simpleMethod((Object) anyObject());
     }
 
     @Test

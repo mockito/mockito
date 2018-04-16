@@ -5,6 +5,7 @@
 package org.mockito.stubbing;
 
 import org.mockito.Mockito;
+import org.mockito.SerializableSupplier;
 
 /**
  * Allows to choose a method when stubbing in doThrow()|doAnswer()|doNothing()|doReturn() style
@@ -168,6 +169,9 @@ public interface Stubber {
      */
     @SuppressWarnings({"unchecked", "varargs"})
     Stubber doReturn(Object toBeReturned, Object... nextToBeReturned);
+
+    // TODO: 4/16/18  
+    Stubber doReturn(SerializableSupplier returnSupplier, Class typeHint);
 
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doCallRealMethod()} style.
