@@ -48,4 +48,27 @@ public class ReturnsTest {
     public void should_fail_on_null_with_primitive() throws Throwable {
         new Returns(null).validateFor(new InvocationBuilder().method("booleanReturningMethod").toInvocation());
     }
+
+    @Test
+    public void should_return_incrementing_number() throws Throwable {
+        Returns returns = new Returns(MyClass::new, MyClass.class);
+
+        for(int i = 1; i < 10; i++) {
+            MyClass myClass = (MyClass) returns.answer(new InvocationBuilder().simpleMethod().toInvocation());
+            assertThat(myClass.getValue()).isEqualTo(i);
+        }
+
+    }
+
+    private static class MyClass {
+        private static int value = 0;
+
+        public MyClass() {
+            value++;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 }

@@ -8,6 +8,7 @@ import static org.mockito.internal.exceptions.Reporter.notAnException;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.objenesis.ObjenesisHelper.newInstance;
 
+import org.mockito.SerializableSupplier;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
@@ -32,6 +33,11 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
             stubbing = stubbing.thenReturn(v);
         }
         return stubbing;
+    }
+
+    @Override
+    public OngoingStubbing<T> thenReturn(SerializableSupplier<T> tSupplier, Class<T> returnType) {
+        return thenAnswer(new Returns(tSupplier, returnType));
     }
 
     private OngoingStubbing<T> thenThrow(Throwable throwable) {

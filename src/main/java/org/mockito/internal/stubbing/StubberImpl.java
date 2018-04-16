@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.stubbing;
 
+import org.mockito.SerializableSupplier;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
@@ -49,6 +50,13 @@ public class StubberImpl implements Stubber {
     @Override
     public Stubber doReturn(Object toBeReturned, Object... nextToBeReturned) {
         return doReturnValues(toBeReturned).doReturnValues(nextToBeReturned);
+    }
+
+    @Override
+    public Stubber doReturn(SerializableSupplier returnSupplier, Class typeHint) {
+        // TODO: 4/16/18
+        answers.add(new Returns(returnSupplier, typeHint));
+        return this;
     }
 
     private StubberImpl doReturnValues(Object... toBeReturned) {
