@@ -48,6 +48,11 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private final Implementation readReplace;
     private final ElementMatcher<? super MethodDescription> matcher;
 
+    private final Implementation dispatcher = to(DispatcherDefaultingToRealMethod.class);
+    private final Implementation hashCode = to(MockMethodInterceptor.ForHashCode.class);
+    private final Implementation equals = to(MockMethodInterceptor.ForEquals.class);
+    private final Implementation writeReplace = to(MockMethodInterceptor.ForWriteReplace.class);
+
     public SubclassBytecodeGenerator() {
         this(new SubclassInjectionLoader());
     }
@@ -80,22 +85,22 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                              : features.mockedType.getAnnotations())
                          .implement(new ArrayList<Type>(features.interfaces))
                          .method(matcher)
-                           .intercept(to(DispatcherDefaultingToRealMethod.class))
+                           .intercept(dispatcher)
                            .transform(withModifiers(SynchronizationState.PLAIN))
                            .attribute(features.stripAnnotations
                                ? MethodAttributeAppender.NoOp.INSTANCE
                                : INCLUDING_RECEIVER)
                          .method(isHashCode())
-                           .intercept(to(MockMethodInterceptor.ForHashCode.class))
+                           .intercept(hashCode)
                          .method(isEquals())
-                           .intercept(to(MockMethodInterceptor.ForEquals.class))
+                           .intercept(equals)
                          .serialVersionUid(42L)
                          .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
                          .implement(MockAccess.class)
                            .intercept(FieldAccessor.ofBeanProperty());
         if (features.serializableMode == SerializableMode.ACROSS_CLASSLOADERS) {
             builder = builder.implement(CrossClassLoaderSerializableMock.class)
-                             .intercept(to(MockMethodInterceptor.ForWriteReplace.class));
+                             .intercept(writeReplace);
         }
         if (readReplace != null) {
             builder = builder.defineMethod("readObject", void.class, Visibility.PRIVATE)
