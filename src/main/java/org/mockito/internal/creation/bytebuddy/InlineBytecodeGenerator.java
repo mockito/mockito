@@ -30,7 +30,6 @@ import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
 
 import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
@@ -63,35 +62,47 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
     private final WeakConcurrentSet<Class<?>> mocked;
 
-    private final String identifier;
-
-    private final MockMethodAdvice advice;
-
     private final BytecodeGenerator subclassEngine;
+
+    private final AsmVisitorWrapper mockTransformer;
 
     private volatile Throwable lastException;
 
     public InlineBytecodeGenerator(Instrumentation instrumentation, WeakConcurrentMap<Object, MockMethodInterceptor> mocks) {
         this.instrumentation = instrumentation;
         byteBuddy = new ByteBuddy()
-                .with(TypeValidation.DISABLED)
-                .with(Implementation.Context.Disabled.Factory.INSTANCE)
-                .with(MethodGraph.Compiler.ForDeclaredMethods.INSTANCE);
+            .with(TypeValidation.DISABLED)
+            .with(Implementation.Context.Disabled.Factory.INSTANCE)
+            .with(MethodGraph.Compiler.ForDeclaredMethods.INSTANCE);
         mocked = new WeakConcurrentSet<Class<?>>(WeakConcurrentSet.Cleaner.INLINE);
-        identifier = RandomString.make();
-        advice = new MockMethodAdvice(mocks, identifier);
+        String identifier = RandomString.make();
         subclassEngine = new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(withDefaultConfiguration()
-                .withBinders(of(MockMethodAdvice.Identifier.class, identifier))
-                .to(MockMethodAdvice.ForReadObject.class), isAbstract().or(isNative()).or(isToString())), false);
-        MockMethodDispatcher.set(identifier, advice);
+            .withBinders(of(MockMethodAdvice.Identifier.class, identifier))
+            .to(MockMethodAdvice.ForReadObject.class), isAbstract().or(isNative()).or(isToString())), false);
+        mockTransformer = new AsmVisitorWrapper.ForDeclaredMethods()
+            .method(isVirtual()
+                    .and(not(isBridge().or(isHashCode()).or(isEquals()).or(isDefaultFinalizer())))
+                    .and(not(isDeclaredBy(nameStartsWith("java.")).<MethodDescription>and(isPackagePrivate()))),
+                Advice.withCustomMapping()
+                    .bind(MockMethodAdvice.Identifier.class, identifier)
+                    .to(MockMethodAdvice.class))
+            .method(isHashCode(),
+                Advice.withCustomMapping()
+                    .bind(MockMethodAdvice.Identifier.class, identifier)
+                    .to(MockMethodAdvice.ForHashCode.class))
+            .method(isEquals(),
+                Advice.withCustomMapping()
+                    .bind(MockMethodAdvice.Identifier.class, identifier)
+                    .to(MockMethodAdvice.ForEquals.class));
+        MockMethodDispatcher.set(identifier, new MockMethodAdvice(mocks, identifier));
         instrumentation.addTransformer(this, true);
     }
 
     @Override
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
         boolean subclassingRequired = !features.interfaces.isEmpty()
-                || features.serializableMode != SerializableMode.NONE
-                || Modifier.isAbstract(features.mockedType.getModifiers());
+            || features.serializableMode != SerializableMode.NONE
+            || Modifier.isAbstract(features.mockedType.getModifiers());
 
         checkSupportedCombination(subclassingRequired, features);
 
@@ -159,29 +170,19 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             String className,
                             Class<?> classBeingRedefined,
                             ProtectionDomain protectionDomain,
-                            byte[] classfileBuffer) throws IllegalClassFormatException {
+                            byte[] classfileBuffer) {
         if (classBeingRedefined == null
-                || !mocked.contains(classBeingRedefined)
-                || EXCLUDES.contains(classBeingRedefined)) {
+            || !mocked.contains(classBeingRedefined)
+            || EXCLUDES.contains(classBeingRedefined)) {
             return null;
         } else {
             try {
                 return byteBuddy.redefine(classBeingRedefined, ClassFileLocator.Simple.of(classBeingRedefined.getName(), classfileBuffer))
-                        // Note: The VM erases parameter meta data from the provided class file (bug). We just add this information manually.
-                        .visit(new ParameterWritingVisitorWrapper(classBeingRedefined))
-                        .visit(Advice.withCustomMapping()
-                                .bind(MockMethodAdvice.Identifier.class, identifier)
-                                .to(MockMethodAdvice.class).on(isVirtual()
-                                        .and(not(isBridge().or(isHashCode()).or(isEquals()).or(isDefaultFinalizer())))
-                                        .and(not(isDeclaredBy(nameStartsWith("java.")).<MethodDescription>and(isPackagePrivate())))))
-                        .visit(Advice.withCustomMapping()
-                                .bind(MockMethodAdvice.Identifier.class, identifier)
-                                .to(MockMethodAdvice.ForHashCode.class).on(isHashCode()))
-                        .visit(Advice.withCustomMapping()
-                                .bind(MockMethodAdvice.Identifier.class, identifier)
-                                .to(MockMethodAdvice.ForEquals.class).on(isEquals()))
-                        .make()
-                        .getBytes();
+                    // Note: The VM erases parameter meta data from the provided class file (bug). We just add this information manually.
+                    .visit(new ParameterWritingVisitorWrapper(classBeingRedefined))
+                    .visit(mockTransformer)
+                    .make()
+                    .getBytes();
             } catch (Throwable throwable) {
                 lastException = throwable;
                 return null;
@@ -216,7 +217,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             private final TypeDescription typeDescription;
 
             private ParameterAddingClassVisitor(ClassVisitor cv, TypeDescription typeDescription) {
-                super(Opcodes.ASM5, cv);
+                super(Opcodes.ASM6, cv);
                 this.typeDescription = typeDescription;
             }
 
