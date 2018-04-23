@@ -44,6 +44,8 @@ import static org.mockito.internal.util.StringUtil.join;
 
 public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTransformer {
 
+    private static final String PRELOAD = "org.mockito.inline.preload";
+
     @SuppressWarnings("unchecked")
     static final Set<Class<?>> EXCLUDES = new HashSet<Class<?>>(Arrays.asList(Class.class,
             Boolean.class,
@@ -69,6 +71,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
     private volatile Throwable lastException;
 
     public InlineBytecodeGenerator(Instrumentation instrumentation, WeakConcurrentMap<Object, MockMethodInterceptor> mocks) {
+        preload();
         this.instrumentation = instrumentation;
         byteBuddy = new ByteBuddy()
             .with(TypeValidation.DISABLED)
@@ -96,6 +99,33 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                     .to(MockMethodAdvice.ForEquals.class));
         MockMethodDispatcher.set(identifier, new MockMethodAdvice(mocks, identifier));
         instrumentation.addTransformer(this, true);
+    }
+
+    /**
+     * Mockito allows to mock about any type, including such types that we are relying on ourselves. This can cause a circularity:
+     * In order to check if an instance is a mock we need to look up if this instance is registered in the {@code mocked} set. But to look
+     * up this instance, we need to create key instances that rely on weak reference properties. Loading the later classes will happen before
+     * the key instances are completed what will cause Mockito to check if those key instances are themselves mocks what causes a loop which
+     * results in a circularity error. This is not normally a problem as we explicitly check if the instance that we investigate is one of
+     * our instance of which we hold a reference by reference equality what does not cause any code execution. But it seems like the load
+     * order plays a role here with unloaded types being loaded before we even get to check the mock instance property. To avoid this, we are
+     * making sure that crucuial JVM types are loaded before we create the first inline mock. Unfortunately, these types dependant on a JVM's
+     * implementation and we can only maintain types that we know of from well-known JVM implementations such as HotSpot and extend this list
+     * once we learn of further problematic types for future Java versions. To allow users to whitelist their own types, we do not also offer
+     * a property that allows running problematic tests before a new Mockito version can be released and that allows us to ask users to
+     * easily validate that whitelisting actually solves a problem as circularities could also be caused by other problems.
+     */
+    private static void preload() {
+        String preloads = System.getProperty(PRELOAD);
+        if (preloads == null) {
+            preloads = "java.lang.WeakPairMap,java.lang.WeakPairMap$Pair,java.lang.WeakPairMap$Pair$Weak";
+        }
+        for (String preload : preloads.split(",")) {
+            try {
+                Class.forName(preload, false, null);
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
     }
 
     @Override
