@@ -19,7 +19,7 @@ libraries.bytebuddy = "net.bytebuddy:byte-buddy:${versions.bytebuddy}"
 libraries.bytebuddyagent = "net.bytebuddy:byte-buddy-agent:${versions.bytebuddy}"
 libraries.bytebuddyandroid = "net.bytebuddy:byte-buddy-android:${versions.bytebuddy}"
 
-libraries.errorprone = 'com.google.errorprone:error_prone_core:2.2.0'
+libraries.errorprone = 'com.google.errorprone:error_prone_core:2.3.1'
 
 libraries.objenesis = 'org.objenesis:objenesis:2.6'
 
