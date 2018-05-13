@@ -33,7 +33,7 @@ public class AtMostXVerificationTest extends TestBase {
         verify(mock, atMost(3)).clear();
 
         try {
-            verify(mock, atMost(1)).clear();
+            verify(mock, atMostOnce()).clear();
             fail();
         } catch (MockitoAssertionError e) {}
     }
@@ -65,7 +65,7 @@ public class AtMostXVerificationTest extends TestBase {
         mock.clear();
 
         try {
-            verify(mock, atMost(1)).clear();
+            verify(mock, atMostOnce()).clear();
             fail();
         } catch (MockitoAssertionError e) {
             assertEquals("\nWanted at most 1 time but was 2", e.getMessage());
@@ -78,7 +78,7 @@ public class AtMostXVerificationTest extends TestBase {
         InOrder inOrder = inOrder(mock);
 
         try {
-            inOrder.verify(mock, atMost(1)).clear();
+            inOrder.verify(mock, atMostOnce()).clear();
             fail();
         } catch (MockitoException e) {
             assertEquals("AtMost is not implemented to work with InOrder", e.getMessage());
