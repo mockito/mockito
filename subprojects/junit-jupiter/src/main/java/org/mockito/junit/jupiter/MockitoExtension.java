@@ -66,9 +66,9 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
 
     private final Strictness strictness;
 
-    // This constructor is invoked by JUnit Jupiter via reflection
+    // This constructor is invoked by JUnit Jupiter via reflection or ServiceLoader
     @SuppressWarnings("unused")
-    private MockitoExtension() {
+    public MockitoExtension() {
         this(Strictness.STRICT_STUBS);
     }
 
