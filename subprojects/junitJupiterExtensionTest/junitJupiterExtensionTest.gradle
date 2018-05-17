@@ -1,0 +1,18 @@
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+apply plugin: 'java'
+description = "End-to-end tests for automatic registration of MockitoExtension."
+
+sourceCompatibility = 1.8
+
+dependencies {
+    testCompile project(":junit-jupiter")
+    testCompile libraries.assertj
+    testCompile libraries.junitPlatformLauncher
+    testCompile libraries.junitJupiterApi
+    testRuntime libraries.junitJupiterEngine
+}
+
+test {
+    useJUnitPlatform()
+}

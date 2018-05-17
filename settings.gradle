@@ -5,6 +5,7 @@ include 'extTest'
 include 'kotlinTest'
 include 'android'
 include 'junit-jupiter'
+include 'junitJupiterExtensionTest'
 
 rootProject.name = 'mockito'
 
