@@ -166,9 +166,9 @@ We found vertical alignment helping when reading the code, for that reason we wa
           extraInterfaces = { List.class, YetAnotherInterface.class })
     ```
 
-    Go to `IntelliJ setting > Editor > Code Style > Java > Annotation Parameters`
+    Go to `IntelliJ setting > Editor > Code Style > Java > Wrapping and Braces`
 
-    1. For parameter `Method declaration parameters` choose : `Do not wrap`
+    1. For parameter `Annotation Parameters` choose : `Do not wrap`
     2. For sub-parameter `Align when multiline` tick the checkbox
 
 4. When declaring a throws list with several exception and when multiple line make sense,
@@ -181,8 +181,8 @@ We found vertical alignment helping when reading the code, for that reason we wa
     }
     ```
 
-    Go to `IntelliJ setting > Editor > Code Style > Java > Throws list`
+    Go to `IntelliJ setting > Editor > Code Style > Java > Wrapping and Braces`
 
-    1. For parameter `Method declaration parameters` choose : `Do not wrap`
+    1. For parameter `Throws list` choose : `Do not wrap`
     2. For sub-parameter `Align when multiline` tick the checkbox
 
