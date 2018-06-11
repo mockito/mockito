@@ -1510,8 +1510,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <h3 id="45">45. (**new**) <a class="meaningful_link" href="#junit5_mockito" name="junit5_mockito">New JUnit Jupiter (JUnit5+) extension</a></h3>
  *
- * For integration with JUnit Jupiter (JUnit5+), use the `org.mockito.junit-jupiter` artifact.
- * For more information about the usage of the integration, see the JavaDoc of <code>MockitoExtension</code>.
+ * For integration with JUnit Jupiter (JUnit5+), use the `org.mockito:mockito-junit-jupiter` artifact.
+ * For more information about the usage of the integration, see <a href="http://javadoc.io/page/org.mockito/mockito-junit-jupiter/latest/org/mockito/junit/jupiter/MockitoExtension.html">the JavaDoc of <code>MockitoExtension</code></a>.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
