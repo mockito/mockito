@@ -5,11 +5,6 @@
 
 package org.mockito.internal.configuration.injection;
 
-import static org.mockito.internal.exceptions.Reporter.cannotInitializeForInjectMocksAnnotation;
-import static org.mockito.internal.exceptions.Reporter.fieldInitialisationThrewException;
-import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
-import static org.mockito.internal.util.reflection.SuperTypesLastSorter.sortSuperTypesLast;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -18,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.mockito.InjectUnsafe;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.NameBasedCandidateFilter;
@@ -26,6 +22,12 @@ import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFil
 import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
+
+import static org.mockito.internal.exceptions.Reporter.cannotInitializeForInjectMocksAnnotation;
+import static org.mockito.internal.exceptions.Reporter.fieldInitialisationThrewException;
+import static org.mockito.internal.util.collections.ListUtil.combineOr;
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
+import static org.mockito.internal.util.reflection.SuperTypesLastSorter.sortSuperTypesLast;
 
 /**
  * Inject mocks using first setters then fields, if no setters available.
@@ -68,9 +70,47 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
                     new NameBasedCandidateFilter(
                             new TerminalMockCandidateFilter()));
 
-    private final ListUtil.Filter<Field> notFinalOrStatic = new ListUtil.Filter<Field>() {
+
+    private final ListUtil.Filter<Field> removeNothing = new ListUtil.Filter<Field>() {
+        @Override
+        public String toString() {
+            return "removeNothing";
+        }
+
         public boolean isOut(Field object) {
-            return Modifier.isFinal(object.getModifiers()) || Modifier.isStatic(object.getModifiers());
+            return false;
+        }
+    };
+
+    private final ListUtil.Filter<Field> removeStatic = new ListUtil.Filter<Field>() {
+        @Override
+        public String toString() {
+            return "removeStatic";
+        }
+
+        public boolean isOut(Field object) {
+            return Modifier.isStatic(object.getModifiers());
+        }
+    };
+
+    private final ListUtil.Filter<Field> removeStaticFinal = new ListUtil.Filter<Field>() {
+        @Override
+        public String toString() {
+            return "removeStaticFinal";
+        }
+
+        public boolean isOut(Field object) {
+            return Modifier.isStatic(object.getModifiers()) && Modifier.isFinal(object.getModifiers());
+        }
+    };
+
+    private final ListUtil.Filter<Field> removeInstanceFinalFields = new ListUtil.Filter<Field>() {
+        @Override
+        public String toString() {
+            return "removeInstanceFinalFields";
+        }
+        public boolean isOut(Field object) {
+            return !Modifier.isStatic(object.getModifiers()) && Modifier.isFinal(object.getModifiers());
         }
     };
 
@@ -82,8 +122,10 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         boolean injectionOccurred = false;
         Class<?> fieldClass = report.fieldClass();
         Object fieldInstanceNeedingInjection = report.fieldInstance();
+        InjectUnsafe injectUnsafe = parseInjectUnsafe(injectMocksField);
+
         while (fieldClass != Object.class) {
-            injectionOccurred |= injectMockCandidates(fieldClass, fieldInstanceNeedingInjection, newMockSafeHashSet(mockCandidates));
+            injectionOccurred |= injectMockCandidates(fieldClass, fieldInstanceNeedingInjection, newMockSafeHashSet(mockCandidates), injectUnsafe);
             fieldClass = fieldClass.getSuperclass();
         }
         return injectionOccurred;
@@ -102,26 +144,35 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
     }
 
 
-    private boolean injectMockCandidates(Class<?> awaitingInjectionClazz, Object injectee, Set<Object> mocks) {
+    private boolean injectMockCandidates(Class<?> awaitingInjectionClazz, Object injectee, Set<Object> mocks, InjectUnsafe injectUnsafe) {
         boolean injectionOccurred;
-        List<Field> orderedCandidateInjecteeFields = orderedInstanceFieldsFrom(awaitingInjectionClazz);
+        List<Field> orderedCandidateInjecteeFields = orderedInstanceFieldsFrom(awaitingInjectionClazz, injectUnsafe);
         // pass 1
-        injectionOccurred = injectMockCandidatesOnFields(mocks, injectee, false, orderedCandidateInjecteeFields);
+        injectionOccurred = injectMockCandidatesOnFields(mocks, injectee, orderedCandidateInjecteeFields);
         // pass 2
-        injectionOccurred |= injectMockCandidatesOnFields(mocks, injectee, injectionOccurred, orderedCandidateInjecteeFields);
+        injectionOccurred |= injectMockCandidatesOnFields(mocks, injectee, orderedCandidateInjecteeFields);
         return injectionOccurred;
+    }
+
+    private InjectUnsafe parseInjectUnsafe(Field injectMocksField) {
+        InjectUnsafe injectUnsafe = injectMocksField.getAnnotation(InjectUnsafe.class);
+        if (injectUnsafe == null) {
+            injectUnsafe = new InjectUnsafeDefaults();
+        }
+
+        return injectUnsafe;
     }
 
     private boolean injectMockCandidatesOnFields(Set<Object> mocks,
                                                  Object injectee,
-                                                 boolean injectionOccurred,
                                                  List<Field> orderedCandidateInjecteeFields) {
+        boolean injectionOccurred = false;
         for (Iterator<Field> it = orderedCandidateInjecteeFields.iterator(); it.hasNext(); ) {
             Field candidateField = it.next();
             Object injected = mockCandidateFilter.filterCandidate(mocks, candidateField, orderedCandidateInjecteeFields, injectee)
                                                  .thenInject();
             if (injected != null) {
-                injectionOccurred |= true;
+                injectionOccurred = true;
                 mocks.remove(injected);
                 it.remove();
             }
@@ -129,10 +180,38 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         return injectionOccurred;
     }
 
-    private List<Field> orderedInstanceFieldsFrom(Class<?> awaitingInjectionClazz) {
+    private List<Field> orderedInstanceFieldsFrom(Class<?> awaitingInjectionClazz, InjectUnsafe injectUnsafe) {
+        ListUtil.Filter<Field> fieldFilters = filtersFromOverrides(injectUnsafe);
+
         List<Field> declaredFields = Arrays.asList(awaitingInjectionClazz.getDeclaredFields());
-        declaredFields = ListUtil.filter(declaredFields, notFinalOrStatic);
+        declaredFields = ListUtil.filter(declaredFields, fieldFilters);
 
         return sortSuperTypesLast(declaredFields);
+    }
+
+    private ListUtil.Filter<Field> filtersFromOverrides(InjectUnsafe injectUnsafe) {
+        ListUtil.Filter<Field> staticFieldFilter;
+
+        switch (injectUnsafe.staticFields()) {
+            case STATIC_FINAL:
+                staticFieldFilter = this.removeNothing;
+                break;
+            case STATIC:
+                staticFieldFilter = this.removeStaticFinal;
+                break;
+            default:
+                staticFieldFilter = this.removeStatic;
+        }
+
+        ListUtil.Filter<Field> instanceFieldFilter;
+        switch (injectUnsafe.instanceFields()) {
+            case FINAL:
+                instanceFieldFilter = this.removeNothing;
+                break;
+            default:
+                instanceFieldFilter = this.removeInstanceFinalFields;
+        }
+
+        return combineOr(staticFieldFilter, instanceFieldFilter);
     }
 }

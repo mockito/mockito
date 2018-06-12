@@ -34,6 +34,20 @@ public class ListUtil {
         return converted;
     }
 
+    public static <T> Filter<T> combineOr(final Filter<T> a, final Filter<T> b) {
+        return new Filter<T>() {
+            @Override
+            public String toString() {
+                return "[" + a.toString() + "||" + b.toString() + "]";
+            }
+
+            @Override
+            public boolean isOut(T object) {
+                return a.isOut(object) || b.isOut(object);
+            }
+        };
+    }
+
     public interface Filter<T> {
         boolean isOut(T object);
     }

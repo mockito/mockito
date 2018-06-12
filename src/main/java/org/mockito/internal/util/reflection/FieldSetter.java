@@ -10,7 +10,7 @@ public class FieldSetter {
 
     private FieldSetter(){}
 
-    public static void setField(Object target, Field field,Object value) {
+    public static synchronized void setField(Object target, Field field, Object value) {
         AccessibilityChanger changer = new AccessibilityChanger();
         changer.enableAccess(field);
         try {
