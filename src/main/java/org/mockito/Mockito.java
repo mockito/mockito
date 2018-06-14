@@ -1326,10 +1326,6 @@ import org.mockito.verification.VerificationWithTimeout;
  * Currently, the feature is still optional as we wait for more feedback from the community.
  *
  * <p>
- * This feature is turned off by default because it is based on completely different mocking mechanism
- * that requires more feedback from the community.
- *
- * <p>
  * This alternative mock maker which uses
  * a combination of both Java instrumentation API and sub-classing rather than creating a new class to represent
  * a mock. This way, it becomes possible to mock final types and methods.
