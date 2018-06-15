@@ -16,13 +16,8 @@ import org.mockito.stubbing.OngoingStubbing;
 public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 
     @Override
-    public OngoingStubbing<T> thenReturn(T value) {
-        return thenAnswer(new Returns(value));
-    }
-
-    @Override
     public OngoingStubbing<T> thenReturn(T value, T... values) {
-        OngoingStubbing<T> stubbing = thenReturn(value);
+        OngoingStubbing<T> stubbing = thenAnswer(new Returns(value));
         if (values == null) {
             // For no good reason we're configuring null answer here
             // This has been like that since forever, so let's keep it for compatibility (unless users complain)
