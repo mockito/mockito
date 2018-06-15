@@ -34,20 +34,6 @@ import org.mockito.Mockito;
 public interface OngoingStubbing<T> {
 
     /**
-     * Sets a return value to be returned when the method is called. E.g:
-     * <pre class="code"><code class="java">
-     * when(mock.someMethod()).thenReturn(10);
-     * </code></pre>
-     *
-     * See examples in javadoc for {@link Mockito#when}
-     *
-     * @param value return value
-     *
-     * @return object that allows stubbing consecutive calls
-     */
-    OngoingStubbing<T> thenReturn(T value);
-
-    /**
      * Sets consecutive return values to be returned when the method is called. E.g:
      * <pre class="code"><code class="java">
      * when(mock.someMethod()).thenReturn(1, 2, 3);

@@ -15,8 +15,7 @@ import org.mockito.stubbing.OngoingStubbing;
 
 public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 
-    @Override
-    public OngoingStubbing<T> thenReturn(T value) {
+    private OngoingStubbing<T> thenReturn(T value) {
         return thenAnswer(new Returns(value));
     }
 
