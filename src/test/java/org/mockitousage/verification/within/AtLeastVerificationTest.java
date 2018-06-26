@@ -1,8 +1,7 @@
 /*
- * Copyright (c) 2007 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.verification.within;
 
 import static org.mockito.Mockito.verify;
@@ -18,18 +17,16 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
 
-
 public class AtLeastVerificationTest {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
-    
+
     @Rule
     public MockitoRule mockito = MockitoJUnit.rule();
-    
+
     @Mock
     private IMethods mock;
-
 
     @Test
     public void shouldVerifyAtLeastXTimes() {
@@ -56,9 +53,8 @@ public class AtLeastVerificationTest {
         exception.expect(MockitoException.class);
         exception.expectMessage("The minimum number of invocations must be greater that 0!");
         exception.expectMessage("If you want to verify that nothing was called use Mocktio.never() instead!");
-        
+
         verify(mock, untilNow().atLeast(0)).simpleMethod();
     }
 
-    
 }

@@ -1,15 +1,20 @@
+/*
+ * Copyright (c) 2018 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+
 package org.mockito.internal.verification.within;
-
-import static org.mockito.internal.exceptions.Reporter.noMoreInteractionsWanted;
-import static org.mockito.internal.exceptions.Reporter.wantedButNotInvoked;
-import static org.mockito.internal.verification.within.VerificationResult.GIVE_ME_THE_NEXT_INVOCATION;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.mockito.internal.exceptions.Reporter.noMoreInteractionsWanted;
+import static org.mockito.internal.exceptions.Reporter.wantedButNotInvoked;
+import static org.mockito.internal.verification.within.VerificationResult.GIVE_ME_THE_NEXT_INVOCATION;
 
 public class Only implements VerificationStrategy {
 

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2018 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+
 package org.mockito.internal.verification.within;
 
 import org.mockito.invocation.Invocation;
@@ -8,10 +13,8 @@ public interface VerificationStrategy {
     /**
      * Will be called if an invocation was detected on a mock that doesn't match the wanted invocation
      *
-     * @param invocation
-     *            the invocation that doesn't match
-     * @param wanted
-     *            the expected invocation
+     * @param invocation the invocation that doesn't match
+     * @param wanted     the expected invocation
      * @return
      */
     VerificationResult verifyNotMatchingInvocation(Invocation invocation, MatchableInvocation wanted);

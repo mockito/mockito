@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 
@@ -29,7 +29,6 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-
 public class TimesVerificationTest extends TestBase {
 
     private IMethods mock;
@@ -49,9 +48,7 @@ public class TimesVerificationTest extends TestBase {
             verify(mock, untilNow().times(100)).simpleMethod();
             fail();
         } catch (TooLittleActualInvocations e) {
-            assertThat(e)
-                .hasMessageContaining("Wanted 100 times")
-                .hasMessageContaining("was 2");
+            assertThat(e).hasMessageContaining("Wanted 100 times").hasMessageContaining("was 2");
         }
     }
 
@@ -65,9 +62,7 @@ public class TimesVerificationTest extends TestBase {
             verify(mock, untilNow().times(1)).simpleMethod();
             fail();
         } catch (TooManyActualInvocations e) {
-            assertThat(e)
-                .hasMessageContaining("Wanted 1 time")
-                .hasMessageContaining("was 2 times");
+            assertThat(e).hasMessageContaining("Wanted 1 time").hasMessageContaining("was 2 times");
         }
     }
 
@@ -77,7 +72,8 @@ public class TimesVerificationTest extends TestBase {
         try {
             verify(mock, untilNow().times(15)).simpleMethod();
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 
     @Test
@@ -93,13 +89,13 @@ public class TimesVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldPassWhenMethodsActuallyNotCalled()   {
+    public void shouldPassWhenMethodsActuallyNotCalled() {
         verify(mock, untilNow().times(0)).simpleMethod();
         verify(mock, untilNow().times(0)).simpleMethod("yes, I wasn't called");
     }
 
     @Test
-    public void shouldNotCountInStubbedInvocations()   {
+    public void shouldNotCountInStubbedInvocations() {
         when(mock.booleanReturningMethod()).thenReturn(false);
         when(mock.booleanReturningMethod()).thenReturn(true);
 
@@ -108,23 +104,24 @@ public class TimesVerificationTest extends TestBase {
 
         verify(mock, untilNow().times(2)).booleanReturningMethod();
     }
-    
+
     @Test
-    public void shouldAllowVerifyingInteractionNeverHappened()   {
+    public void shouldAllowVerifyingInteractionNeverHappened() {
         mock.simpleMethod("one");
 
         verify(mock, untilNow().never()).simpleMethod("two");
         verify(mock, untilNow().never()).simpleMethod();
-        
+
         try {
             verify(mock, untilNow().never()).simpleMethod("one");
             fail();
-        } catch (NeverWantedButInvoked e) {}
+        } catch (NeverWantedButInvoked e) {
+        }
     }
-    
-    @Test(timeout=3000)
+
+    @Test(timeout = 3000)
     public void shouldCapture10ArgumentsAsync() throws Exception {
-        
+
         ExecutorService exec = Executors.newSingleThreadExecutor();
         exec.execute(new Runnable() {
             @Override
@@ -134,16 +131,16 @@ public class TimesVerificationTest extends TestBase {
                 }
             }
         });
-        
+
         exec.shutdown();
         exec.awaitTermination(1, DAYS);
-        
+
         ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
-        
-        verify(mock,within(1,MILLISECONDS).times(10)).intArgumentMethod(argumentCaptor.capture());
-        
+
+        verify(mock, within(1, MILLISECONDS).times(10)).intArgumentMethod(argumentCaptor.capture());
+
         List<Integer> captured = argumentCaptor.getAllValues();
         assertEquals(10, captured.size());
     }
-    
+
 }
