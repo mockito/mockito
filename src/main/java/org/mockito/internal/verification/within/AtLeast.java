@@ -1,13 +1,19 @@
-package org.mockito.internal.verification.within;
+/*
+ * Copyright (c) 2018 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 
-import static org.mockito.internal.exceptions.Reporter.tooLittleActualInvocations;
-import static org.mockito.internal.verification.within.VerificationResult.GIVE_ME_THE_NEXT_INVOCATION;
-import static org.mockito.internal.verification.within.VerificationResult.FINISHED_SUCCESSFULL;
+package org.mockito.internal.verification.within;
 
 import org.mockito.internal.verification.checkers.AtLeastDiscrepancy;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.MatchableInvocation;
+
+import static java.util.Collections.singletonList;
+import static org.mockito.internal.exceptions.Reporter.tooLittleActualInvocations;
+import static org.mockito.internal.verification.within.VerificationResult.FINISHED_SUCCESSFULL;
+import static org.mockito.internal.verification.within.VerificationResult.GIVE_ME_THE_NEXT_INVOCATION;
 
 public class AtLeast implements VerificationStrategy {
 
@@ -52,6 +58,6 @@ public class AtLeast implements VerificationStrategy {
             location = lastMatchingInvocation.getLocation();
         }
 
-        throw tooLittleActualInvocations(discrepancy, wanted, location);
+        throw tooLittleActualInvocations(discrepancy, wanted, singletonList(location));
     }
 }

@@ -1,12 +1,10 @@
+/*
+ * Copyright (c) 2018 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+
 package org.mockito.internal.verification.within;
 
-import static java.util.concurrent.TimeUnit.NANOSECONDS;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 import org.mockito.internal.verification.api.VerificationData;
@@ -18,6 +16,14 @@ import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.verification.VerificationMode;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 public class WithinVerfication implements VerificationMode, VerificationInOrderMode {
 
@@ -82,7 +88,7 @@ public class WithinVerfication implements VerificationMode, VerificationInOrderM
         //
 
         BlockingDeque<Invocation> chunk; // = new
-                                         // LinkedBlockingDeque<Invocation>(allInvocationsQueue);
+        // LinkedBlockingDeque<Invocation>(allInvocationsQueue);
 
         chunk = allInvocationsQueue;
         chunk.addFirst(invocation);

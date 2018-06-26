@@ -1,10 +1,15 @@
-package org.mockito.internal.verification.within;
+/*
+ * Copyright (c) 2018 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 
-import static org.mockito.internal.verification.within.VerificationResult.GIVE_ME_THE_NEXT_INVOCATION;
+package org.mockito.internal.verification.within;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
+
+import static org.mockito.internal.verification.within.VerificationResult.GIVE_ME_THE_NEXT_INVOCATION;
 
 public class AtLeastAndAtMost implements VerificationStrategy {
 

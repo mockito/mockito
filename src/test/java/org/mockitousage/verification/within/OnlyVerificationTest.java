@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 Mockito contributors
+ * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 
@@ -51,7 +51,7 @@ public class OnlyVerificationTest {
         mock.clear();
 
         exception.expect(NoInteractionsWanted.class);
-        
+
         verify(mock, untilNow().only()).get(0);
     }
 
@@ -61,7 +61,7 @@ public class OnlyVerificationTest {
         mock.clear();
 
         exception.expect(NoInteractionsWanted.class);
-        
+
         verify(mock, untilNow().only()).clear();
 
     }
@@ -70,29 +70,29 @@ public class OnlyVerificationTest {
     public void shouldFailIfMethodWasInvokedButWithDifferentArguments() {
         mock.get(0);
         mock.get(2);
-       
+
         exception.expect(NoInteractionsWanted.class);
-        
+
         verify(mock, untilNow().only()).get(999);
-           
+
     }
 
     @Test
     public void shouldFailIfExtraMethodWithDifferentArgsFound() {
         mock.get(0);
         mock.get(2);
-        
+
         exception.expect(NoInteractionsWanted.class);
-        
+
         verify(mock, untilNow().only()).get(2);
-        
+
     }
 
     @Test
     public void shouldVerifyMethodWasInvokedExclusivelyWhenTwoMocksInUse() {
         mock.clear();
         mock2.get(0);
-        
+
         verify(mock, untilNow().only()).clear();
         verify(mock2, untilNow().only()).get(0);
     }

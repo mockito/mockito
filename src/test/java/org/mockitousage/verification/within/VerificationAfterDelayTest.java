@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2007 Mockito contributors This program is made available under the terms of the MIT License.
+ * Copyright (c) 2018 Mockito contributors
+ * This program is made available under the terms of the MIT License.
  */
 
 package org.mockitousage.verification.within;
@@ -47,57 +48,57 @@ public class VerificationAfterDelayTest {
     private Stopwatch stopWatch;
 
     private DelayedExecution delayedExecution;
-    
+
     private Runnable callMock = new Runnable() {
         @Override
         public void run() {
             mock.oneArg('1');
         }
     };
-    
+
     @Before
     public void setUp() {
-        delayedExecution= new  DelayedExecution();
+        delayedExecution = new DelayedExecution();
         stopWatch = createNotStarted();
     }
 
     @After
     public void tearDown() throws InterruptedException {
         delayedExecution.close();
-       
+
     }
 
     @Test
     public void shouldVerifyNormallyWithSpecificTimes() throws Exception {
-        delayedExecution.callAsync(20, MILLISECONDS, callMock);       
+        delayedExecution.callAsync(20, MILLISECONDS, callMock);
 
-        verify(mock, within(100,MILLISECONDS).times(1)).oneArg('1');
+        verify(mock, within(100, MILLISECONDS).times(1)).oneArg('1');
     }
 
     @Test
     public void shouldVerifyNormallyWithAtLeast() throws Exception {
-        delayedExecution.callAsync(20, MILLISECONDS, callMock);  
+        delayedExecution.callAsync(20, MILLISECONDS, callMock);
 
-        verify(mock,within(100,MILLISECONDS).atLeast(1)).oneArg('1');
+        verify(mock, within(100, MILLISECONDS).atLeast(1)).oneArg('1');
     }
 
     @Test
     public void shouldFailVerificationWithWrongTimes() throws Exception {
-        delayedExecution.callAsync(20, MILLISECONDS, callMock);  
+        delayedExecution.callAsync(20, MILLISECONDS, callMock);
 
         verify(mock, times(0)).oneArg('1');
- 
+
         exception.expect(MockitoAssertionError.class);
-        verify(mock, within(100,MILLISECONDS).times(2)).oneArg('1');
+        verify(mock, within(100, MILLISECONDS).times(2)).oneArg('1');
     }
 
     @Test
     public void shouldWaitTheFullTimeIfTheTestCouldPass() throws Exception {
-        delayedExecution.callAsync(20, MILLISECONDS, callMock);  
+        delayedExecution.callAsync(20, MILLISECONDS, callMock);
         stopWatch.start();
-        
+
         try {
-            verify(mock, within(100,MILLISECONDS).atLeast(2)).oneArg('1');
+            verify(mock, within(100, MILLISECONDS).atLeast(2)).oneArg('1');
             fail("Expected behavior was to throw an exception, and never reach this line");
         } catch (MockitoAssertionError ignored) {
         }
@@ -105,12 +106,12 @@ public class VerificationAfterDelayTest {
         stopWatch.assertElapsedTimeIsMoreThan(100, MILLISECONDS);
     }
 
-    @Test(timeout=200)
+    @Test(timeout = 200)
     public void shouldStopEarlyIfTestIsDefinitelyFailed() throws Exception {
-        delayedExecution.callAsync(20, MILLISECONDS, callMock);  
+        delayedExecution.callAsync(20, MILLISECONDS, callMock);
 
         exception.expect(MockitoAssertionError.class);
-        verify(mock, within(99,DAYS).never()).oneArg('1');
+        verify(mock, within(99, DAYS).never()).oneArg('1');
     }
 
     /**
@@ -124,7 +125,7 @@ public class VerificationAfterDelayTest {
 
         stopWatch.start();
 
-        verify(mock, within(200,MILLISECONDS).atMost(n)).oneArg((char) captor.capture());
+        verify(mock, within(200, MILLISECONDS).atMost(n)).oneArg((char) captor.capture());
 
         stopWatch.assertElapsedTimeIsMoreThan(200, MILLISECONDS);
         assertThat(captor.getAllValues()).containsExactly('0', '1', '2');
@@ -136,7 +137,7 @@ public class VerificationAfterDelayTest {
 
         exerciseMockNTimes(n);
 
-        verify(mock, within(200,MILLISECONDS).times(n)).oneArg((char) captor.capture());
+        verify(mock, within(200, MILLISECONDS).times(n)).oneArg((char) captor.capture());
         assertEquals(n, captor.getAllValues().size());
         assertEquals('0', (char) captor.getAllValues().get(0));
         assertEquals('1', (char) captor.getAllValues().get(1));
@@ -151,8 +152,8 @@ public class VerificationAfterDelayTest {
         // when
         exerciseMockNTimes(n);
 
-        //Then
-        verify(mock, within(200,MILLISECONDS).atLeast(n)).oneArg((char) captor.capture());
+        // Then
+        verify(mock, within(200, MILLISECONDS).atLeast(n)).oneArg((char) captor.capture());
         assertEquals(n, captor.getAllValues().size());
         assertEquals('0', (char) captor.getAllValues().get(0));
         assertEquals('1', (char) captor.getAllValues().get(1));
@@ -164,5 +165,5 @@ public class VerificationAfterDelayTest {
             mock.oneArg((char) ('0' + i));
         }
     }
-    
+
 }

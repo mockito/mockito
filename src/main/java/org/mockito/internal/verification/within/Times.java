@@ -1,18 +1,22 @@
+/*
+ * Copyright (c) 2018 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+
 package org.mockito.internal.verification.within;
 
-import static org.mockito.internal.exceptions.Reporter.neverWantedButInvoked;
-import static org.mockito.internal.exceptions.Reporter.tooLittleActualInvocations;
-import static org.mockito.internal.exceptions.Reporter.tooManyActualInvocations;
-import static org.mockito.internal.exceptions.Reporter.wantedButNotInvoked;
-import static org.mockito.internal.invocation.InvocationsFinder.getLastLocation;
-import static org.mockito.internal.verification.within.VerificationResult.GIVE_ME_THE_NEXT_INVOCATION;
-
-import java.util.LinkedList;
-import java.util.List;
 import org.mockito.internal.reporting.Discrepancy;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.MatchableInvocation;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.util.Collections.singletonList;
+import static org.mockito.internal.exceptions.Reporter.*;
+import static org.mockito.internal.invocation.InvocationsFinder.getLastLocation;
+import static org.mockito.internal.verification.within.VerificationResult.GIVE_ME_THE_NEXT_INVOCATION;
 
 public class Times implements VerificationStrategy {
 
@@ -33,10 +37,10 @@ public class Times implements VerificationStrategy {
     public VerificationResult verifyMatchingInvocation(Invocation invocation, MatchableInvocation wanted) {
         matchingInvocations.add(invocation);
         if (expectedInvocations == 0) {
-            throw neverWantedButInvoked(wanted, invocation.getLocation());
+            throw neverWantedButInvoked(wanted, singletonList(invocation.getLocation()));
         }
         if (matchingInvocations.size() > expectedInvocations) {
-            throw tooManyActualInvocations(expectedInvocations, matchingInvocations.size(), wanted, invocation.getLocation());
+            throw tooManyActualInvocations(expectedInvocations, matchingInvocations.size(), wanted, singletonList(invocation.getLocation()));
         }
 
         return GIVE_ME_THE_NEXT_INVOCATION;
@@ -51,7 +55,7 @@ public class Times implements VerificationStrategy {
         }
 
         if (expectedInvocations > matchingInvocations.size()) {
-            throw tooLittleActualInvocations(new Discrepancy(expectedInvocations, matchingInvocations.size()), wanted, lastInvocation);
+            throw tooLittleActualInvocations(new Discrepancy(expectedInvocations, matchingInvocations.size()), wanted, singletonList(lastInvocation));
         }
     }
 
