@@ -23,6 +23,7 @@ import net.bytebuddy.jar.asm.MethodVisitor;
 import net.bytebuddy.jar.asm.Opcodes;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.pool.TypePool;
+import net.bytebuddy.utility.OpenedClassReader;
 import net.bytebuddy.utility.RandomString;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
@@ -247,7 +248,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             private final TypeDescription typeDescription;
 
             private ParameterAddingClassVisitor(ClassVisitor cv, TypeDescription typeDescription) {
-                super(Opcodes.ASM6, cv);
+                super(OpenedClassReader.ASM_API, cv);
                 this.typeDescription = typeDescription;
             }
 
