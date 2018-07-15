@@ -5,12 +5,12 @@
 package org.mockito.internal.runners;
 
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.junit.MismatchReportingTestListener;
 import org.mockito.internal.junit.MockitoTestListener;
 import org.mockito.internal.junit.NoOpTestListener;
 import org.mockito.internal.junit.StrictStubsRunnerTestListener;
 import org.mockito.internal.runners.util.RunnerProvider;
-import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.internal.util.Supplier;
 
 import java.lang.reflect.InvocationTargetException;
@@ -39,7 +39,7 @@ public class RunnerFactory {
     public InternalRunner createStrict(Class<?> klass) throws InvocationTargetException {
         return create(klass, new Supplier<MockitoTestListener>() {
             public MockitoTestListener get() {
-                return new MismatchReportingTestListener(new ConsoleMockitoLogger());
+                return new MismatchReportingTestListener(Plugins.getMockitoLogger());
             }
         });
     }

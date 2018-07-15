@@ -6,7 +6,7 @@ package org.mockito.internal.junit;
 
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.listeners.AutoCleanableListener;
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
 

@@ -5,9 +5,9 @@
 package org.mockito.internal.session;
 
 import org.mockito.MockitoSession;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.framework.DefaultMockitoSession;
-import org.mockito.internal.util.ConsoleMockitoLogger;
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
 import org.mockito.session.MockitoSessionLogger;
@@ -74,7 +74,7 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
             effectiveName = this.name == null ? lastTestClassInstance.getClass().getName() : this.name;
         }
         Strictness effectiveStrictness = this.strictness == null ? Strictness.STRICT_STUBS : this.strictness;
-        MockitoLogger logger = this.logger == null ? new ConsoleMockitoLogger() : new MockitoLoggerAdapter(this.logger);
+        MockitoLogger logger = this.logger == null ? Plugins.getMockitoLogger() : new MockitoLoggerAdapter(this.logger);
         return new DefaultMockitoSession(effectiveTestClassInstances, effectiveName, effectiveStrictness, logger);
     }
 }
