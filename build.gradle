@@ -7,8 +7,8 @@ buildscript {
 
     dependencies {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
-        classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.4.3' //for 'java-compatibility-check.gradle'
-        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.13'
+        classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.4.4' //for 'java-compatibility-check.gradle'
+        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.15'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
         classpath 'org.shipkit:shipkit:2.0.15'
@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.gradle.build-scan' version '1.12.1'
+    id 'com.gradle.build-scan' version '1.15.1'
 }
 
 description = 'Mockito mock objects library core API and implementation'
