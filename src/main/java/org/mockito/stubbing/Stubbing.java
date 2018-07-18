@@ -6,6 +6,7 @@ package org.mockito.stubbing;
 
 import org.mockito.Incubating;
 import org.mockito.MockingDetails;
+import org.mockito.Mockito;
 import org.mockito.NotExtensible;
 import org.mockito.invocation.Invocation;
 import org.mockito.quality.Strictness;
@@ -53,6 +54,12 @@ public interface Stubbing extends Answer {
      */
     boolean wasUsed();
 
-    @Incubating//TODO x javadoc
+    /**
+     * Informs about the {@link Strictness} level of this stubbing.
+     * For more information about setting strictness for stubbings see {@link Mockito#lenient()}.
+     *
+     * @since TODO X
+     */
+    @Incubating
     Strictness getStrictness();
 }

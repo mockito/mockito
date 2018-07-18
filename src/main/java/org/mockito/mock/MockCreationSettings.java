@@ -6,9 +6,11 @@
 package org.mockito.mock;
 
 import org.mockito.Incubating;
+import org.mockito.MockSettings;
 import org.mockito.NotExtensible;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.VerificationStartedListener;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 import java.util.List;
@@ -110,6 +112,12 @@ public interface MockCreationSettings<T> {
     @Incubating
     Object getOuterClassInstance();
 
-    @Incubating//TODO x javadoc
+    /**
+     * Informs if the mock was created with "lenient" strictness, e.g. having {@link Strictness#LENIENT} characteristic.
+     * For more information about using mocks with lenient strictness, see {@link MockSettings#lenient()}.
+     *
+     * @since TODO x
+     */
+    @Incubating
     boolean isLenient();
 }

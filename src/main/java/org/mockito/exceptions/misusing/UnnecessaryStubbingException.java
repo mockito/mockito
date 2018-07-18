@@ -14,13 +14,15 @@ import org.mockito.quality.Strictness;
 /**
  * This exception indicates presence of unused stubbings.
  * It is highly recommended to remove unused stubbings to keep the codebase clean.
- * You can opt-out from detecting unused stubbings by configuring:
+ * In a rare scenario that unused stubbing is a false negative you can opt out from the validation via:
  * <ul>
- *     <li>JUnit rule - {@link MockitoRule#strictness(Strictness)} or {@link MockitoRule#silent()}</li>
+ *     <li>JUnit rule - {@link MockitoRule#strictness(Strictness)} passing {@link Strictness#LENIENT}.
+ *          Alternatively, use the old API: {@link MockitoRule#silent()}</li>
  *     <li>JUnit runner - {@link MockitoJUnitRunner.Silent}</li>
  *     <li>Mockito session - {@link MockitoSession}</li>
+ *     <li>JUnit Jupiter (JUnit5) Mockito extension also has ways to configure strictness</li>
  * </ul>
- * For more information about detecting unused stubbings, see {@link MockitoHint}.
+ *
  * <p>
  * Unnecessary stubbings are stubbed method calls that were never realized during test execution. Example:
  * <pre class="code"><code class="java">

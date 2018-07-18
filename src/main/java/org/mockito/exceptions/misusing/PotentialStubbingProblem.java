@@ -4,6 +4,7 @@
  */
 package org.mockito.exceptions.misusing;
 
+import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.quality.Strictness;
 import org.mockito.exceptions.base.MockitoException;
@@ -53,22 +54,10 @@ import org.mockito.exceptions.base.MockitoException;
  *  It is a well known limitation of Mockito API and another example how Mockito optimizes its clean API for 95% of the cases
  *  while still supporting edge cases.
  *  </li>
- *  <li>Reduce the strictness level in the test method (only for JUnit Rules):
- * <pre class="code"><code class="java">
- * public class ExampleTest {
- *     &#064;Rule
- *     public MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
- *
- *     &#064;Test public void exampleTest() {
- *         //Change the strictness level only for this test method:
- *         mockito.strictness(Strictness.LENIENT);
- *
- *         //remaining test code
- *     }
- * }
- * </code></pre>
- *  Currently, reducing strictness is only available to JUnit rules.
- *  If you need it in a different context let us know at <a href="https://github.com/mockito/mockito/issues/857">issue 857</a>.
+ *  <li>Reduce the strictness level. If you need one (few) stubbings to be lenient use {@link Mockito#lenient()}.
+ *  If you want a single mock object to have all its stubbings lenient use {@link MockSettings#lenient()}.
+ *  If you use JUnit Rules and want the entire test method to have all stubbings lenient use {@link org.mockito.junit.MockitoRule#strictness(Strictness)}.
+ *  Refer to JUnit Jupiter Mockito extension for information how to configure strictness in JUnit5.
  *  </li>
  *  <li>To opt-out in Mockito 2.x, simply remove the strict stubbing setting in the test class.</li>
  * </ol>
