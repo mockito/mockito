@@ -58,7 +58,7 @@ public interface Stubbing extends Answer {
      * Informs about the {@link Strictness} level of this stubbing.
      * For more information about setting strictness for stubbings see {@link Mockito#lenient()}.
      *
-     * @since TODO X
+     * @since 2.20.0
      */
     @Incubating
     Strictness getStrictness();

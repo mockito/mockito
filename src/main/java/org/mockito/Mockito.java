@@ -2969,7 +2969,7 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * For an elaborate example when setting strictness per method/mock is useful see {@link MockSettings#lenient()}.
      *
-     * @since TODO x
+     * @since 2.20.0
      */
     @Incubating
     public static LenientStubber lenient() {

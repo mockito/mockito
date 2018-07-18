@@ -116,7 +116,7 @@ public interface MockCreationSettings<T> {
      * Informs if the mock was created with "lenient" strictness, e.g. having {@link Strictness#LENIENT} characteristic.
      * For more information about using mocks with lenient strictness, see {@link MockSettings#lenient()}.
      *
-     * @since TODO x
+     * @since 2.20.0
      */
     @Incubating
     boolean isLenient();
