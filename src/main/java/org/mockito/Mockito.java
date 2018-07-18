@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
+import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
@@ -2952,7 +2954,24 @@ public class Mockito extends ArgumentMatchers {
         return new DefaultMockitoSessionBuilder();
     }
 
-    @Incubating //TODO x javadoc
+    /**
+     * Configures the stubbing to be lenient, avoiding false negatives from {@link UnnecessaryStubbingException} and {@link PotentialStubbingProblem}.
+     * Useful when "strict stubbing" is in use (see {@link Strictness#STRICT_STUBS} but some stubbings should remain lenient.
+     * <pre class="code"><code class="java">
+     *   lenient().when(mock.foo()).thenReturn("ok");
+     * </code></pre>
+     * Most mocks in most tests don't need any leniency and should happily prosper with {@link Strictness#STRICT_STUBS}.
+     * If a specific stubbing needs to be lenient, use this method.
+     * If a specific mock need to have stubbings lenient, use {@link MockSettings#lenient()}.
+     * If a specific test method / test class needs to have all stubbing lenient,
+     * configure strictness at the level of JUnit Rule ({@link MockitoRule}), JUnit Runner ({@link MockitoJUnitRunner}),
+     * Mockito Session ({@link MockitoSession}) or JUnit Jupiter extension.
+     * <p>
+     * For an elaborate example when setting strictness per method/mock is useful see {@link MockSettings#lenient()}.
+     *
+     * @since TODO x
+     */
+    @Incubating
     public static LenientStubber lenient() {
         return MOCKITO_CORE.lenient();
     }
