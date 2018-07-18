@@ -97,12 +97,13 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#37">37. Java 8 Custom Answer Support (Since 2.1.0)</a><br/>
  *      <a href="#38">38. Meta data and generic type retention (Since 2.1.0)</a><br/>
  *      <a href="#39">39. Mocking final types, enums and final methods (Since 2.1.0)</a><br/>
- *      <a href="#40">40. (*new*) Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
- *      <a href="#41">41. (**new**) Advanced public API for framework integrations (Since 2.10.+)</a><br/>
- *      <a href="#42">42. (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</a><br/>
- *      <a href="#43">43. (**new**) New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a><br/>
+ *      <a href="#40">40. Improved productivity and cleaner tests with "stricter" Mockito (Since 2.+)</a><br/>
+ *      <a href="#41">41. Advanced public API for framework integrations (Since 2.10.+)</a><br/>
+ *      <a href="#42">42. New API for integrations: listening on verification start events (Since 2.11.+)</a><br/>
+ *      <a href="#43">43. New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a><br/>
  *      <a href="#44">44. Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a><br/>
- *      <a href="#45">45. (**new**) New JUnit Jupiter (JUnit5+) extension</a><br/>
+ *      <a href="#45">45. New JUnit Jupiter (JUnit5+) extension</a><br/>
+ *      <a href="#46">46. New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1369,7 +1370,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * <code>org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker</code>
  *
  * <h3 id="40">40. <a class="meaningful_link" href="#strict_mockito" name="strict_mockito">
- *     (*new*) Improved productivity and cleaner tests with "stricter" Mockito</a> (Since 2.+)</h3>
+ *     Improved productivity and cleaner tests with "stricter" Mockito</a> (Since 2.+)</h3>
  *
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
@@ -1397,7 +1398,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
  *
  * <h3 id="41">41. <a class="meaningful_link" href="#framework_integrations_api" name="framework_integrations_api">
- *      (**new**) Advanced public API for framework integrations (Since 2.10.+)</a></h3>
+ *      Advanced public API for framework integrations (Since 2.10.+)</a></h3>
  *
  * In Summer 2017 we decided that Mockito
  * <a href="https://www.linkedin.com/pulse/mockito-vs-powermock-opinionated-dogmatic-static-mocking-faber">
@@ -1450,7 +1451,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Do you have feedback? Please leave comment in <a href="https://github.com/mockito/mockito/issues/1110">issue 1110</a>.
  *
  * <h3 id="42">42. <a class="meaningful_link" href="#verifiation_started_listener" name="verifiation_started_listener">
- *       (**new**) New API for integrations: listening on verification start events (Since 2.11.+)</a></h3>
+ *       New API for integrations: listening on verification start events (Since 2.11.+)</a></h3>
  *
  * Framework integrations such as <a href="https://projects.spring.io/spring-boot">Spring Boot</a> needs public API to tackle double-proxy use case
  * (<a href="https://github.com/mockito/mockito/issues/1191">issue 1191</a>).
@@ -1470,7 +1471,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * </ul>
  *
  * <h3 id="43">43. <a class="meaningful_link" href="#mockito_session_testing_frameworks" name="mockito_session_testing_frameworks">
- *       (**new**) New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a></h3>
+ *       New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a></h3>
  *
  * <p>{@link MockitoSessionBuilder} and {@link MockitoSession} were enhanced to enable reuse by testing framework
  * integrations (e.g. {@link MockitoRule} for JUnit):</p>
@@ -1505,10 +1506,32 @@ import org.mockito.verification.VerificationWithTimeout;
  * by {@link org.mockito.plugins.InstantiatorProvider2}. Old {@link org.mockito.plugins.InstantiatorProvider
  * instantiator providers} will continue to work, but it is recommended to switch to the new API.</p>
  *
- * <h3 id="45">45. (**new**) <a class="meaningful_link" href="#junit5_mockito" name="junit5_mockito">New JUnit Jupiter (JUnit5+) extension</a></h3>
+ * <h3 id="45">45. <a class="meaningful_link" href="#junit5_mockito" name="junit5_mockito">New JUnit Jupiter (JUnit5+) extension</a></h3>
  *
  * For integration with JUnit Jupiter (JUnit5+), use the `org.mockito:mockito-junit-jupiter` artifact.
  * For more information about the usage of the integration, see <a href="http://javadoc.io/page/org.mockito/mockito-junit-jupiter/latest/org/mockito/junit/jupiter/MockitoExtension.html">the JavaDoc of <code>MockitoExtension</code></a>.
+ *
+ * <h3 id="46">46. <a class="meaningful_link" href="#mockito_lenient" name="mockito_lenient">
+ *       New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0)</a></h3>
+ *
+ * Strict stubbing feature is available since early Mockito 2.
+ * It is a very useful feature because it drives cleaner tests and improved productivity.
+ * Strict stubbing reports unnecessary stubs, detects stubbing argument mismatch and makes the tests more DRY ({@link Strictness#STRICT_STUBS}).
+ * This comes with a trade-off: in some cases, you may get false negatives from strict stubbing.
+ * To remedy those scenarios you can now configure specific stubbing to be lenient, while all the other stubbings and mocks use strict stubbing:
+ *
+ * <pre class="code"><code class="java">
+ *   lenient().when(mock.foo()).thenReturn("ok");
+ * </code></pre>
+ *
+ * If you want all the stubbings on a given mock to be lenient, you can configure the mock accordingly:
+ *
+ * <pre class="code"><code class="java">
+ *   Foo mock = Mockito.mock(Foo.class, withSettings().lenient());
+ * </code></pre>
+ *
+ * For more information refer to {@link Mockito#lenient()} and {@link MockSettings#lenient()}.
+ * Let us know how do you find the new feature by opening a GitHub issue to discuss!
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
