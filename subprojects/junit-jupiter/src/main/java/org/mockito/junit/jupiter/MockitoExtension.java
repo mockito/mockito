@@ -58,11 +58,12 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  * }
  * </code></pre>
  *
- * This extension also allows you to initialize method parameters, see the example below.
+ * This extension also supports JUnit Jupiter's method parameters.
  * Use parameters for initialization of mocks that you use only in that specific test method.
  * In other words, where you would initialize local mocks in JUnit 4 by calling {@link Mockito#mock(Class)},
  * use the method parameter. This is especially beneficial when initializing a mock with generics, as you no
  * longer get a warning about "Unchecked assignment".
+ * Please refer to JUnit Jupiter's documentation to learn when method parameters are useful.
  *
  * <pre class="code"><code class="java">
  * <b>&#064;ExtendWith(MockitoExtension.class)</b>
@@ -84,13 +85,10 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  * }
  * </code></pre>
  *
- * Lastly, the extension allows you to initialize constructor parameters.
- * This allows you to do any setup work in the constructor and set
- * your fields to <code>final</code>. Moreover, if you require the mocks
- * to be created and inserted in a test subject, but are later no longer
- * necessary, constructor parameters are superior to field initialization.
- * Use field initialization if you need them inserted and later need to
- * perform verifications on them.
+ * Lastly, the extension supports JUnit Jupiter's constructor parameters.
+ * This allows you to do setup work in the constructor and set
+ * your fields to <code>final</code>.
+ * Please refer to JUnit Jupiter's documentation to learn when constructor parameters are useful.
  *
  * <pre class="code"><code class="java">
  * <b>&#064;ExtendWith(MockitoExtension.class)</b>
