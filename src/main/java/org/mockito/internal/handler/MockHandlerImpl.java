@@ -89,7 +89,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
 
         // look for existing answer for this invocation
         StubbedInvocationMatcher stubbing = invocationContainer.findAnswerFor(invocation);
-        notifyStubbedAnswerLookup(invocation, stubbing, mockSettings);
+        notifyStubbedAnswerLookup(invocation, stubbing);
 
         if (stubbing != null) {
             stubbing.captureArgumentsFrom(invocation);
@@ -131,13 +131,12 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         return new VerificationDataImpl(invocationContainer, invocationMatcher);
     }
 
-    private void notifyStubbedAnswerLookup(Invocation invocation, Stubbing stubbingFound, MockCreationSettings<T> mockSettings) {
+    private void notifyStubbedAnswerLookup(Invocation invocation, Stubbing stubbingFound) {
         //TODO #793 - when completed, we should be able to get rid of the casting below
         List<StubbingLookupListener> listeners = ((CreationSettings) this.mockSettings).getStubbingLookupListeners();
         for (StubbingLookupListener listener : listeners) {
-            //TODO x pass this.invocationContainer.getStubbedInvocations() so that we don't have to call 'mockingDetails'
-            // each time a method is called on a mock (slow).
-            listener.onStubbingLookup(invocation, stubbingFound, mockSettings);
+            List<Stubbing> stubbings = this.invocationContainer.getStubbedInvocations();
+            listener.onStubbingLookup(invocation, stubbingFound, stubbings, this.mockSettings);
         }
     }
 }

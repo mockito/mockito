@@ -8,6 +8,8 @@ import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Stubbing;
 
+import java.util.List;
+
 /**
  * Listens to attempts to look up stubbing answer for given mocks. This class is internal for now.
  * <p>
@@ -28,11 +30,13 @@ public interface StubbingLookupListener {
     /**
      * Called by the framework when Mockito looked up an answer for invocation on a mock.
      *
-     * TODO when making this public, we should have an event object instead of 2 arguments in the listener.
-     *  @param invocation the invocation on the mock
+     * TODO when making this public, we should have an event object instead of multiple arguments in the listener.
+     *
+     * @param invocation - the invocation that causes stubbing lookup
      * @param stubbingFound - can be null - it indicates that the invocation was not stubbed.
-     * @param mockSettings
+     * @param allStubbings - all stubbings declared on the mock object that we are invoking.
+     * @param mockSettings - settings of the mock object that we are invoking
      */
-    void onStubbingLookup(Invocation invocation, Stubbing stubbingFound, MockCreationSettings mockSettings);
+    void onStubbingLookup(Invocation invocation, Stubbing stubbingFound, List<Stubbing> allStubbings, MockCreationSettings mockSettings);
 
 }

@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.internal.stubbing.StrictnessSelector.determineStrictness;
 
 /**
@@ -32,7 +31,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         this.currentStrictness = strictness;
     }
 
-    public void onStubbingLookup(Invocation invocation, Stubbing stubbingFound, MockCreationSettings mockSettings) {
+    public void onStubbingLookup(Invocation invocation, Stubbing stubbingFound, List<Stubbing> allStubbings, MockCreationSettings mockSettings) {
         Strictness actualStrictness = determineStrictness(stubbingFound, mockSettings, currentStrictness);
 
         if (actualStrictness != Strictness.STRICT_STUBS) {
@@ -42,7 +41,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         if (stubbingFound == null) {
             //If stubbing was not found for invocation it means that either the mock invocation was not stubbed or
             //we have a stubbing arg mismatch.
-            List<Invocation> argMismatchStubbings = potentialArgMismatches(invocation);
+            List<Invocation> argMismatchStubbings = potentialArgMismatches(invocation, allStubbings);
             if (!argMismatchStubbings.isEmpty()) {
                 mismatchesReported = true;
                 Reporter.potentialStubbingProblem(invocation, argMismatchStubbings);
@@ -54,9 +53,8 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         }
     }
 
-    private static List<Invocation> potentialArgMismatches(Invocation invocation) {
+    private static List<Invocation> potentialArgMismatches(Invocation invocation, Collection<Stubbing> stubbings) {
         List<Invocation> matchingStubbings = new LinkedList<Invocation>();
-        Collection<Stubbing> stubbings = mockingDetails(invocation.getMock()).getStubbings();
         for (Stubbing s : stubbings) {
             if (UnusedStubbingReporting.shouldBeReported(s)
                 && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())) {
