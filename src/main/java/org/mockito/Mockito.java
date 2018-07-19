@@ -522,15 +522,16 @@ import org.mockito.verification.VerificationWithTimeout;
  * any clean & simple code. However, if you do have a need to stub with the generic Answer interface, here is an example:
  *
  * <pre class="code"><code class="java">
- * when(mock.someMethod(anyString())).thenAnswer(new Answer() {
- *     Object answer(InvocationOnMock invocation) {
- *         Object[] args = invocation.getArguments();
- *         Object mock = invocation.getMock();
- *         return "called with arguments: " + args;
- *     }
+ * when(mock.someMethod(anyString())).thenAnswer(
+ *     new Answer() {
+ *         public Object answer(InvocationOnMock invocation) {
+ *             Object[] args = invocation.getArguments();
+ *             Object mock = invocation.getMock();
+ *             return "called with arguments: " + Arrays.toString(args);
+ *         }
  * });
  *
- * //the following prints "called with arguments: foo"
+ * //Following prints "called with arguments: [foo]"
  * System.out.println(mock.someMethod("foo"));
  * </code></pre>
  *
