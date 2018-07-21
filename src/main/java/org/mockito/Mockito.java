@@ -2580,11 +2580,11 @@ public class Mockito extends ArgumentMatchers {
      * Ignoring stubs can be used with <b>verification in order</b>:
      * <pre class="code"><code class="java">
      *  List list = mock(List.class);
-     *  when(mock.get(0)).thenReturn("foo");
+     *  when(list.get(0)).thenReturn("foo");
      *
      *  list.add(0);
-     *  System.out.println(list.get(0)); //we don't want to verify this
      *  list.clear();
+     *  System.out.println(list.get(0)); //we don't want to verify this
      *
      *  InOrder inOrder = inOrder(ignoreStubs(list));
      *  inOrder.verify(list).add(0);
