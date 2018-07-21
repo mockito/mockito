@@ -1515,7 +1515,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *       New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0)</a></h3>
  *
  * Strict stubbing feature is available since early Mockito 2.
- * It is a very useful feature because it drives cleaner tests and improved productivity.
+ * It is very useful because it drives cleaner tests and improved productivity.
  * Strict stubbing reports unnecessary stubs, detects stubbing argument mismatch and makes the tests more DRY ({@link Strictness#STRICT_STUBS}).
  * This comes with a trade-off: in some cases, you may get false negatives from strict stubbing.
  * To remedy those scenarios you can now configure specific stubbing to be lenient, while all the other stubbings and mocks use strict stubbing:
@@ -1530,7 +1530,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *   Foo mock = Mockito.mock(Foo.class, withSettings().lenient());
  * </code></pre>
  *
- * For more information refer to {@link Mockito#lenient()} and {@link MockSettings#lenient()}.
+ * For more information refer to {@link Mockito#lenient()}.
  * Let us know how do you find the new feature by opening a GitHub issue to discuss!
  */
 @SuppressWarnings("unchecked")
@@ -2978,19 +2978,67 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * Configures the stubbing to be lenient, avoiding false negatives from {@link UnnecessaryStubbingException} and {@link PotentialStubbingProblem}.
-     * Useful when "strict stubbing" is in use (see {@link Strictness#STRICT_STUBS} but some stubbings should remain lenient.
+     * Lenient stubs bypass "strict stubbing" validation (see {@link Strictness#STRICT_STUBS}).
+     * When stubbing is declared as lenient, it will not be checked for potential stubbing problems such as
+     * 'unnecessary stubbing' ({@link UnnecessaryStubbingException}) or for 'stubbing argument mismatch' {@link PotentialStubbingProblem}.
+     *
      * <pre class="code"><code class="java">
      *   lenient().when(mock.foo()).thenReturn("ok");
      * </code></pre>
-     * Most mocks in most tests don't need any leniency and should happily prosper with {@link Strictness#STRICT_STUBS}.
-     * If a specific stubbing needs to be lenient, use this method.
-     * If a specific mock need to have stubbings lenient, use {@link MockSettings#lenient()}.
-     * If a specific test method / test class needs to have all stubbing lenient,
-     * configure strictness at the level of JUnit Rule ({@link MockitoRule}), JUnit Runner ({@link MockitoJUnitRunner}),
-     * Mockito Session ({@link MockitoSession}) or JUnit Jupiter extension.
+     *
+     * Most mocks in most tests don't need leniency and should happily prosper with {@link Strictness#STRICT_STUBS}.
+     * <ul>
+     *     <li>If a specific stubbing needs to be lenient - use this method</li>
+     *     <li>If a specific mock need to have stubbings lenient - use {@link MockSettings#lenient()}</li>
+     *     <li>If a specific test method / test class needs to have all stubbings lenient
+     *          - configure strictness at the level of JUnit Rule ({@link MockitoRule}), JUnit Runner ({@link MockitoJUnitRunner}),
+     *          Mockito Session ({@link MockitoSession}) or JUnit Jupiter extension</li>
+     * </ul>
+     *
+     * <h3>Elaborate example</h3>
+     *
+     * In below example, 'foo.foo()' is a stubbing that was moved to 'before()' method to avoid duplication.
+     * Doing so makes one of the test methods ('test3()') fail with 'unnecessary stubbing'.
+     * To resolve it we can configure 'foo.foo()' stubbing in 'before()' method to be lenient.
+     * Alternatively, we can configure entire 'foo' mock as lenient.
      * <p>
-     * For an elaborate example when setting strictness per method/mock is useful see {@link MockSettings#lenient()}.
+     * This example is simplified and not realistic.
+     * Pushing stubbings to 'before()' method may cause tests to be less readable.
+     * Some repetition in tests is OK, use your own judgement to write great tests!
+     * It is not desired to eliminate all possible duplication from the test code
+     * because it may add complexity and conceal important test information.
+     *
+     * <pre class="code"><code class="java">
+     * public class SomeTest {
+     *
+     *     &#064;Rule public MockitoRule mockito = MockitoJUnit.rule().strictness(STRICT_STUBS);
+     *
+     *     &#064;Mock Foo foo;
+     *     &#064;Mock Bar bar;
+     *
+     *     &#064;Before public void before() {
+     *         when(foo.foo()).thenReturn("ok");
+     *
+     *         // it is better to configure the stubbing to be lenient:
+     *         // lenient().when(foo.foo()).thenReturn("ok");
+     *
+     *         // or the entire mock to be lenient:
+     *         // foo = mock(Foo.class, withSettings().lenient());
+     *     }
+     *
+     *     &#064;Test public void test1() {
+     *         foo.foo();
+     *     }
+     *
+     *     &#064;Test public void test2() {
+     *         foo.foo();
+     *     }
+     *
+     *     &#064;Test public void test3() {
+     *         bar.bar();
+     *     }
+     * }
+     * </code></pre>
      *
      * @since 2.20.0
      */

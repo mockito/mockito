@@ -15,7 +15,8 @@ import org.mockito.junit.MockitoRule;
 /**
  * Configures the "strictness" of Mockito, affecting the behavior of stubbings and verification.
  * "Strict stubbing" is a new feature in Mockito 2 that drives cleaner tests and better productivity.
- * The easiest way to use it is via Mockito's JUnit support ({@link MockitoRule} or {@link MockitoJUnitRunner}).
+ * The easiest way to use it is via Mockito's JUnit support ({@link MockitoRule}, {@link MockitoJUnitRunner})
+ * or our JUnit Jupiter (JUnit5) extension.
  * If you cannot use Rules or Runners try {@link MockitoSession}.
  * <p>
  * How strictness influences the behavior of the test?
@@ -33,7 +34,7 @@ import org.mockito.junit.MockitoRule;
  *       and stubbing argument mismatch (see {@link org.mockito.quality.MockitoHint}).
  *       The default behavior of Mockito 2.x when {@link JUnitRule} or {@link MockitoJUnitRunner} are used.
  *       Recommended if you cannot use {@link #STRICT_STUBS}.
- *       Introduced originally with Mockito 2 because console warnings is the only compatible way of adding such feature.</li>
+ *       Introduced originally with Mockito 2 because console warnings was the only compatible way of adding such feature.</li>
  * </ol>
  *
  * @since 2.3.0
@@ -70,7 +71,8 @@ public enum Strictness {
      * Offers best combination of flexibility and productivity.
      * Highly recommended.
      * Planned as default for Mockito v3.
-     * Enable it via {@link MockitoRule}, {@link MockitoJUnitRunner} or {@link MockitoSession}.
+     * Enable it via {@link MockitoRule}, {@link MockitoJUnitRunner}, JUnit Jupiter (JUnit5) extension
+     * or {@link MockitoSession}.
      * <p>
      * Adds following behavior:
      *  <ul>
@@ -81,8 +83,7 @@ public enum Strictness {
      *      <li>Cleaner, more DRY tests ("Don't Repeat Yourself"):
      *          If you use {@link org.mockito.Mockito#verifyNoMoreInteractions(Object...)}
      *          you no longer need to explicitly verify stubbed invocations.
-     *          They are automatically verified for you. However if you have more invocations,
-     *          the test won't fail since it won't check that there are no more interactions on that stub.</li>
+     *          They are automatically verified for you.</li>
      *  </ul>
      *
      * For more information see {@link Strictness}.

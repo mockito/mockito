@@ -4,24 +4,31 @@
  */
 package org.mockito.exceptions.misusing;
 
+import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
-import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 
 /**
  * This exception indicates presence of unused stubbings.
  * It is highly recommended to remove unused stubbings to keep the codebase clean.
- * In a rare scenario that unused stubbing is a false negative you can opt out from the validation via:
- * <ul>
- *     <li>JUnit rule - {@link MockitoRule#strictness(Strictness)} passing {@link Strictness#LENIENT}.
- *          Alternatively, use the old API: {@link MockitoRule#silent()}</li>
- *     <li>JUnit runner - {@link MockitoJUnitRunner.Silent}</li>
- *     <li>Mockito session - {@link MockitoSession}</li>
- *     <li>JUnit Jupiter (JUnit5) Mockito extension also has ways to configure strictness</li>
- * </ul>
+ * In a rare scenario that unused stubbing is a false negative you can opt out from the validation via
+ * (in order of ascending scope):
+ * <ol>
+ *     <li>Declaring specific stubbing as 'lenient' - {@link Mockito#lenient()}</li>
+ *     <li>Declaring specific mock as 'lenient' - {@link org.mockito.MockSettings#lenient()}</li>
+ *     <li>Declaring all mocks in given test class or test method mock as 'lenient' with:
+ *      <ul>
+ *          <li>JUnit rule - {@link MockitoRule#strictness(Strictness)} passing {@link Strictness#LENIENT}.
+ *            Alternatively, use the old API: {@link MockitoRule#silent()}</li>
+ *          <li>JUnit runner - {@link MockitoJUnitRunner.Silent}</li>
+ *          <li>Mockito session - {@link MockitoSession}</li>
+ *          <li>JUnit Jupiter (JUnit5) Mockito extension also has ways to configure strictness</li>
+ *      </ul>
+ *     </li>
+ * </ol>
  *
  * <p>
  * Unnecessary stubbings are stubbed method calls that were never realized during test execution. Example:
@@ -47,11 +54,6 @@ import org.mockito.quality.Strictness;
  * Mockito JUnit Runner triggers <code>UnnecessaryStubbingException</code> only when none of the test methods use the stubbings.
  * This means that it is ok to put default stubbing in a 'setup' method or in test class constructor.
  * That default stubbing needs to be used at least once by one of the test methods.
- * <p>
- * To find out more about detecting unused stubbings see {@link MockitoHint}.
- * See javadoc for {@link MockitoRule} to understand the behavior or Mockito JUnit Rules.
- * See javadoc for {@link MockitoJUnitRunner} to find out how Mockito JUnit Runner detects unused stubs.
- * See javadoc for {@link MockitoSession} to find out about detecting unused stubs without JUnit.
  */
 public class UnnecessaryStubbingException extends MockitoException {
     public UnnecessaryStubbingException(String message) {
