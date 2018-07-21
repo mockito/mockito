@@ -18,6 +18,8 @@ import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.ValidableAnswer;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -135,8 +137,20 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         registeredInvocations.clear();
     }
 
+    /**
+     * Stubbings in descending order, most recent first
+     */
     public List<Stubbing> getStubbedInvocations() {
         return (List) stubbed;
+    }
+
+    /**
+     * Stubbings in ascending order, most recent last
+     */
+    public Collection<Stubbing> getStubbingsAscending() {
+        List<Stubbing> result = new LinkedList<Stubbing>(stubbed);
+        Collections.reverse(result);
+        return result;
     }
 
     public Object invokedMock() {
