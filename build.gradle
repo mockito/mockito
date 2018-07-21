@@ -21,6 +21,9 @@ plugins {
 
 description = 'Mockito mock objects library core API and implementation'
 
+apply plugin: 'base'
+archivesBaseName = "mockito-core"
+
 apply plugin: "org.shipkit.java"
 allprojects {
     plugins.withId("java") {
@@ -42,8 +45,6 @@ apply from: 'gradle/mockito-core/javadoc.gradle'
 apply from: 'gradle/mockito-core/testing.gradle'
 
 apply from: 'gradle/dependencies.gradle'
-
-archivesBaseName = "mockito-core"
 
 allprojects { proj ->
     repositories {
