@@ -2991,9 +2991,7 @@ public class Mockito extends ArgumentMatchers {
      *     <li>If a specific stubbing needs to be lenient - use this method</li>
      *     <li>If a specific mock need to have stubbings lenient - use {@link MockSettings#lenient()}</li>
      *     <li>If a specific test method / test class needs to have all stubbings lenient
-     *          - configure strictness at the level of JUnit Rule ({@link MockitoRule}), JUnit Runner ({@link MockitoJUnitRunner}),
-     *          Mockito Session ({@link MockitoSession}) or JUnit Jupiter extension</li>
-     * </ul>
+     *          - configure strictness using our JUnit support ({@link MockitoJUnit} or Mockito Session ({@link MockitoSession})</li>
      *
      * <h3>Elaborate example</h3>
      *

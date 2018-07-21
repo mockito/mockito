@@ -9,15 +9,14 @@ import org.mockito.MockitoSession;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.junit.JUnitRule;
+import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 
 /**
  * Configures the "strictness" of Mockito, affecting the behavior of stubbings and verification.
  * "Strict stubbing" is a new feature in Mockito 2 that drives cleaner tests and better productivity.
- * The easiest way to use it is via Mockito's JUnit support ({@link MockitoRule}, {@link MockitoJUnitRunner})
- * or our JUnit Jupiter (JUnit5) extension.
- * If you cannot use Rules or Runners try {@link MockitoSession}.
+ * The easiest way to leverage it is via Mockito's JUnit support ({@link MockitoJUnit}) or Mockito Session ({@link MockitoSession}).
  * <p>
  * How strictness influences the behavior of the test?
  * <ol>
@@ -71,8 +70,7 @@ public enum Strictness {
      * Offers best combination of flexibility and productivity.
      * Highly recommended.
      * Planned as default for Mockito v3.
-     * Enable it via {@link MockitoRule}, {@link MockitoJUnitRunner}, JUnit Jupiter (JUnit5) extension
-     * or {@link MockitoSession}.
+     * Enable it via our JUnit support ({@link MockitoJUnit}) or {@link MockitoSession}.
      * <p>
      * Adds following behavior:
      *  <ul>

@@ -7,9 +7,6 @@ package org.mockito.exceptions.misusing;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.junit.MockitoRule;
-import org.mockito.quality.Strictness;
 
 /**
  * This exception indicates presence of unused stubbings.
@@ -19,15 +16,8 @@ import org.mockito.quality.Strictness;
  * <ol>
  *     <li>Declaring specific stubbing as 'lenient' - {@link Mockito#lenient()}</li>
  *     <li>Declaring specific mock as 'lenient' - {@link org.mockito.MockSettings#lenient()}</li>
- *     <li>Declaring all mocks in given test class or test method mock as 'lenient' with:
- *      <ul>
- *          <li>JUnit rule - {@link MockitoRule#strictness(Strictness)} passing {@link Strictness#LENIENT}.
- *            Alternatively, use the old API: {@link MockitoRule#silent()}</li>
- *          <li>JUnit runner - {@link MockitoJUnitRunner.Silent}</li>
- *          <li>Mockito session - {@link MockitoSession}</li>
- *          <li>JUnit Jupiter (JUnit5) Mockito extension also has ways to configure strictness</li>
- *      </ul>
- *     </li>
+ *     <li>Declaring all mocks in given test class or test method mock as 'lenient' with
+ *          our JUnit support ({@link org.mockito.junit.MockitoJUnit}) or Mockito session ({@link MockitoSession})</li>
  * </ol>
  *
  * <p>
