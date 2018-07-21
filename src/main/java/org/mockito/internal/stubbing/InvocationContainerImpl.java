@@ -140,7 +140,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     /**
      * Stubbings in descending order, most recent first
      */
-    public List<Stubbing> getStubbedInvocations() {
+    public List<Stubbing> getStubbingsDescending() {
         return (List) stubbed;
     }
 
