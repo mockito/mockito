@@ -36,7 +36,7 @@ public class ArgumentsProcessor {
         Object[] varArgs;
         if (args[nonVarArgsCount] == null) {
             // in case someone deliberately passed null varArg array
-            varArgs = new Object[] { null };
+            varArgs = new Object[]{null};
         } else {
             varArgs = ArrayEquals.createObjectArray(args[nonVarArgsCount]);
         }
@@ -54,14 +54,16 @@ public class ArgumentsProcessor {
     public static List<ArgumentMatcher> argumentsToMatchers(Object[] arguments) {
         List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>(arguments.length);
         for (Object arg : arguments) {
-            if (arg != null && arg.getClass().isArray()) {
-                matchers.add(new ArrayEquals(arg));
-            } else {
-                matchers.add(new Equals(arg));
-            }
+            matchers.add(argumentToMatcher(arg));
         }
         return matchers;
     }
 
-
+    public static ArgumentMatcher<?> argumentToMatcher(Object arg) {
+        if (arg != null && arg.getClass().isArray()) {
+            return new ArrayEquals(arg);
+        } else {
+            return new Equals(arg);
+        }
+    }
 }
