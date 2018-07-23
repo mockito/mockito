@@ -62,7 +62,7 @@ Things we pay attention in a PR :
 * We use (4) spaces instead of tabs. Make sure line ending is Unix style (LF). More on line ending on the [Github help](https://help.github.com/articles/dealing-with-line-endings/).
 
 
-_If you are unsure about git you can have a look on our [git tips to have a clean history](https://github.com/mockito/mockito/wiki/Using git to prepare your PR to have a clean history)._
+_If you are unsure about git you can have a look on our [git tips to have a clean history](https://github.com/mockito/mockito/wiki/Using-git-to-prepare-your-PR-to-have-a-clean-history)._
 
 
 ## Coding style
