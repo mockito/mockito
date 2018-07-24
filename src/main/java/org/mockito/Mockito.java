@@ -112,7 +112,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * see '<a href="https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2">What's new in Mockito 2</a>' wiki page.
  * We hope that you enjoy Mockito 2!
  *
- * <h3 id="0.1">0.1. <a class="meaningful_link" href="#mockito" name="mockito-android">Mockito Android support</a></h3>
+ * <h3 id="0.1">0.1. <a class="meaningful_link" href="#mockito-android" name="mockito-android">Mockito Android support</a></h3>
  *
  * With Mockito version 2.6.1 we ship "native" Android support. To enable Android support, add the `mockito-android` library as dependency
  * to your project. This artifact is published to the same Mockito organization and can be imported for Android as follows:
@@ -981,9 +981,9 @@ import org.mockito.verification.VerificationWithTimeout;
  *   details.getMockCreationSettings().getTypeToMock();
  *   details.getMockCreationSettings().getDefaultAnswer();
  *
- *   //Getting interactions and stubbings of the mock:
+ *   //Getting invocations and stubbings of the mock:
  *   MockingDetails details = mockingDetails(mock);
- *   details.getInteractions();
+ *   details.getInvocations();
  *   details.getStubbings();
  *
  *   //Printing all interactions (including stubbing, unused stubs)
@@ -1053,7 +1053,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * then(person).should(times(2)).ride(bike);
  * </code></pre>
  *
- * For more information and an example see {@link BDDMockito#then(Object)}}
+ * For more information and an example see {@link BDDMockito#then(Object)}
  *
  *
  *
@@ -1165,7 +1165,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * More information here {@link org.mockito.plugins.PluginSwitch}.
  *
  *
- * <h3 id="35">35. <a class="meaningful_link" href="#BDD_behavior_verification" name="BDD_behavior_verification">Custom verification failure message</a> (Since 2.1.0)</h3>
+ * <h3 id="35">35. <a class="meaningful_link" href="#Custom_verification_failure_message" name="Custom_verification_failure_message">Custom verification failure message</a> (Since 2.1.0)</h3>
  * <p>
  * Allows specifying a custom message to be printed if verification fails.
  * <p>
@@ -1210,7 +1210,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * // this can also be used when defining the behaviour of a mock under different inputs
  * // in this case if the input list was fewer than 3 items the mock returns null
- * when(mock.someMethod(argThat(list -> list.size()<3))).willReturn(null);
+ * when(mock.someMethod(argThat(list -> list.size()<3))).thenReturn(null);
  * </code></pre>
  *
  * <h3 id="37">37. <a class="meaningful_link" href="#Java_8_Custom_Answers" name="Java_8_Custom_Answers">Java 8 Custom Answer Support</a> (Since 2.1.0)</h3>
