@@ -16,3 +16,5 @@ rootProject.children.each { project ->
     assert project.projectDir.isDirectory()
     assert project.buildFile.isFile()
 }
+
+enableFeaturePreview('STABLE_PUBLISHING')
