@@ -226,6 +226,12 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return validatedSettings(typeToMock, (CreationSettings<T>) this);
     }
 
+    @Override
+    public MockSettings lenient() {
+        this.lenient = true;
+        return this;
+    }
+
     private static <T> CreationSettings<T> validatedSettings(Class<T> typeToMock, CreationSettings<T> source) {
         MockCreationValidator validator = new MockCreationValidator();
 

@@ -4,12 +4,15 @@
  */
 package org.mockito;
 
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
+import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
@@ -316,4 +319,18 @@ public interface MockSettings extends Serializable {
      */
     @Incubating
     <T> MockCreationSettings<T> build(Class<T> typeToMock);
+
+    /**
+     * Lenient mocks bypass "strict stubbing" validation (see {@link Strictness#STRICT_STUBS}).
+     * When mock is declared as lenient none of its stubbings will be checked for potential stubbing problems such as
+     * 'unnecessary stubbing' ({@link UnnecessaryStubbingException}) or for 'stubbing argument mismatch' {@link PotentialStubbingProblem}.
+     *
+     * <pre class="code"><code class="java">
+     *   Foo mock = mock(Foo.class, withSettings.lenient());
+     * </code></pre>
+     *
+     * For more information and an elaborate example, see {@link Mockito#lenient()}.
+     */
+    @Incubating
+    MockSettings lenient();
 }

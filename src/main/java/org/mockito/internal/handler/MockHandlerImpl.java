@@ -18,8 +18,10 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.stubbing.Stubbing;
 import org.mockito.verification.VerificationMode;
 
+import java.util.Collection;
 import java.util.List;
 
 import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
@@ -130,11 +132,12 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         return new VerificationDataImpl(invocationContainer, invocationMatcher);
     }
 
-    private void notifyStubbedAnswerLookup(Invocation invocation, StubbedInvocationMatcher exception) {
+    private void notifyStubbedAnswerLookup(Invocation invocation, Stubbing stubbingFound) {
         //TODO #793 - when completed, we should be able to get rid of the casting below
-        List<StubbingLookupListener> listeners = ((CreationSettings) mockSettings).getStubbingLookupListeners();
+        List<StubbingLookupListener> listeners = ((CreationSettings) this.mockSettings).getStubbingLookupListeners();
         for (StubbingLookupListener listener : listeners) {
-            listener.onStubbingLookup(invocation, exception);
+            Collection<Stubbing> stubbings = this.invocationContainer.getStubbingsAscending();
+            listener.onStubbingLookup(invocation, stubbingFound, stubbings, this.mockSettings);
         }
     }
 }

@@ -4,9 +4,12 @@
  */
 package org.mockito.stubbing;
 
+import org.mockito.Incubating;
 import org.mockito.MockingDetails;
+import org.mockito.Mockito;
 import org.mockito.NotExtensible;
 import org.mockito.invocation.Invocation;
+import org.mockito.quality.Strictness;
 
 /**
  * Stubbing declared on the mock object.
@@ -50,4 +53,13 @@ public interface Stubbing extends Answer {
      * @since 2.2.3
      */
     boolean wasUsed();
+
+    /**
+     * Informs about the {@link Strictness} level of this stubbing.
+     * For more information about setting strictness for stubbings see {@link Mockito#lenient()}.
+     *
+     * @since 2.20.0
+     */
+    @Incubating
+    Strictness getStrictness();
 }
