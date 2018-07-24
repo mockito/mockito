@@ -2535,7 +2535,10 @@ public class Mockito extends ArgumentMatchers {
 
     /**
      * Ignores stubbed methods of given mocks for the sake of verification.
-     * Sometimes useful when coupled with <code>verifyNoMoreInteractions()</code> or verification <code>inOrder()</code>.
+     * Please consider using {@link Strictness#STRICT_STUBS} feature which eliminates the need for <code>ignoreStubs()</code>
+     * and provides other benefits.
+     * <p>
+     * <code>ignoreStubs()</code> is sometimes useful when coupled with <code>verifyNoMoreInteractions()</code> or verification <code>inOrder()</code>.
      * Helps avoiding redundant verification of stubbed calls - typically we're not interested in verifying stubs.
      * <p>
      * <b>Warning</b>, <code>ignoreStubs()</code> might lead to overuse of <code>verifyNoMoreInteractions(ignoreStubs(...));</code>
@@ -2547,9 +2550,6 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * Ignored stubs will also be ignored for verification inOrder, including {@link org.mockito.InOrder#verifyNoMoreInteractions()}.
      * See the second example.
-     * <p>
-     * <code>ignoreStubs()</code> can be replaced by {@link Strictness#STRICT_STUBS} feature introduced in Mockito 2.3.0.
-     * See the third example.
      * <p>
      * Example:
      * <pre class="code"><code class="java">
@@ -2594,9 +2594,10 @@ public class Mockito extends ArgumentMatchers {
      *  inOrder.verify(list).clear();
      *  inOrder.verifyNoMoreInteractions();
      * </code></pre>
-     * Stubbed invocations are automatically verified by {@link Strictness#STRICT_STUBS} feature.
+     * Stubbed invocations are automatically verified with {@link Strictness#STRICT_STUBS} feature
+     * and it eliminates the need for <code>ignoreStubs()</code>. Example below uses JUnit Rules:
      * <pre class="code"><code class="java">
-     *  mockitoRule.strictness(Strictness.STRICT_STUBS);
+     *  &#064;Rule public MockitoRule mockito = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
      *
      *  List list = mock(List.class);
      *  when(list.get(0)).thenReturn("foo");
