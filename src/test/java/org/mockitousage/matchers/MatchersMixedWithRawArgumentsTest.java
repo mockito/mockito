@@ -6,9 +6,11 @@
 package org.mockitousage.matchers;
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockitoutil.TestBase;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -16,13 +18,17 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 
-public class MatchersMixedWithRawArgumentsTest extends TestBase {
+public class MatchersMixedWithRawArgumentsTest {
+
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     private interface Methods {
         void int_int_String(int a, int b, String c);
 
-        void int_String_int(int a, String b, int c);
+        void int_Integer(int a, Integer b);
 
+        void int_String_int(int a, String b, int c);
     }
 
     @Mock
@@ -79,13 +85,47 @@ public class MatchersMixedWithRawArgumentsTest extends TestBase {
     public void int7_markerValueClash() {
         mock.int_String_int(0, "b", 3);
 
-        assertThatThrownBy(new ThrowingCallable() { public void call(){
+        assertThatThrownBy(new ThrowingCallable() {
+            public void call() {
 
                 verify(mock).int_String_int(0, anyString(), anyInt());
 
-        }})
-        .hasMessageContaining("3 matchers expected, 2 recorded");
+            }
+        })
+            .hasMessageContaining("3 matchers expected, 2 recorded");
+    }
+
+    @Test
+    public void int8() {
+        mock.int_Integer(1, 1);
+
+        verify(mock).int_Integer(1, anyInt());
+    }
 
 
+    @Test
+    public void int9() {
+        mock.int_Integer(1, 1);
+
+        verify(mock).int_Integer( anyInt(),1);
+    }
+
+
+    @Test
+    public void int10() {
+        mock.int_Integer(1, null);
+
+        verify(mock).int_Integer( anyInt(),null);
+    }
+
+    @Test
+    public void int11() {
+        mock.int_Integer(1, 0);
+
+        assertThatThrownBy(new ThrowingCallable() {
+            public void call() {
+                verify(mock).int_Integer(anyInt(), eq(1));
+            }
+        }).hasMessageContaining("Argument(s) are different!");
     }
 }

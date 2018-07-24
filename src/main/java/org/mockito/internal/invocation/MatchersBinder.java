@@ -18,7 +18,7 @@ import java.util.List;
 import static org.mockito.internal.exceptions.Reporter.invalidUseOfMatchers;
 import static org.mockito.internal.invocation.ArgumentsProcessor.argumentToMatcher;
 import static org.mockito.internal.invocation.ArgumentsProcessor.argumentsToMatchers;
-import static org.mockito.internal.invocation.MatchersBinder.MatcherReturnValues.INT_MARKER;
+import static org.mockito.internal.invocation.MatchersBinder.RawValueDetector.isPossiblyRawValue;
 
 @SuppressWarnings("unchecked")
 public class MatchersBinder implements Serializable {
@@ -64,7 +64,7 @@ public class MatchersBinder implements Serializable {
             Class<?> currentParamType = paramTypes[i];
             Object curentParamValue = paramValues[i];
 
-            if (currentParamType == int.class && (Integer) curentParamValue != INT_MARKER) {
+            if (isPossiblyRawValue(currentParamType, curentParamValue)) {
                 completedMatchers.add(argumentToMatcher(curentParamValue));
             } else {
                 if (currentMatcher == null) {
@@ -85,6 +85,8 @@ public class MatchersBinder implements Serializable {
     }
 
 
+
+
     private LinkedList<ArgumentMatcher> toMatchers(List<LocalizedMatcher> lastMatchers) {
         LinkedList<ArgumentMatcher> matchers = new LinkedList<ArgumentMatcher>();
         for (LocalizedMatcher m : lastMatchers) {
@@ -94,7 +96,23 @@ public class MatchersBinder implements Serializable {
     }
 
 
-    public static class MatcherReturnValues {
-        public static int INT_MARKER = 0; //Integer.MIN_VALUE+8;
+     static class RawValueDetector {
+        private static Integer INT_MARKER = 0; //Integer.MIN_VALUE+8;
+
+        static boolean isPossiblyRawValue(Class<?> currentParamType, Object currentParamValue) {
+            if  ((currentParamType == int.class || currentParamType == Integer.class) && (!INT_MARKER.equals(currentParamValue))){
+                return true;
+            }
+
+
+//            if (!isPrimitiveOrWrapper(currentParamType) && (currentParamValue!=null)){
+//                return true;
+//
+//            }
+
+            return false;
+        }
+
+
     }
 }
