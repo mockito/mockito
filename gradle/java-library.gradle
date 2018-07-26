@@ -1,7 +1,11 @@
 apply plugin: "java"
 
 group = 'org.mockito'
-archivesBaseName = "mockito-" + project.name
+
+if (!archivesBaseName.startsWith("mockito-")) {
+    archivesBaseName = "mockito-" + project.name
+}
+
 bintrayUpload.enabled = true
 
 sourceCompatibility = 1.6
