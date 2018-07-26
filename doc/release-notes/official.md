@@ -2,11 +2,12 @@
 
 # 2.20.1 (2018-07-26) published to [JCenter](https://bintray.com/mockito/maven/mockito/2.20.1)/[Maven Central](http://search.maven.org/#artifactdetails%7Corg.mockito%7Cmockito-core%7C2.20.1%7Cjar)
 
-Notable changes:
+Important changes since previous notable release:
  - new lenient() API - see blog post
  - Java 11 compatibility
  - fixed wrong artifact ids (regression in 2.20.0)
 
+2.20.1 changes:
  - 2018-07-26 - [2 commits](https://github.com/mockito/mockito/compare/v2.20.0...v2.20.1) by [Szczepan Faber](https://github.com/mockitoguy) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.20.1-green.svg)](https://bintray.com/mockito/maven/mockito/2.20.1)
  - Workaround for wrong artifact ids [(#1446)](https://github.com/mockito/mockito/pull/1446)
 
