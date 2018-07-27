@@ -46,6 +46,19 @@ public class VerificationWithAfterTest {
         async.cleanUp();
     }
 
+    /**
+
+     TODO review coverage once again, it still misses some.
+
+     -nothing + fail
+     -times(2) + fail
+     -atLeastOnce, atLeast(2), fail
+     -atMost, fail
+     -never, fail
+     -only, fail
+
+     */
+
     @Test
     public void should_verify_normally_with_specific_times() {
         // given
