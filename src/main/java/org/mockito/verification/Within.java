@@ -5,10 +5,6 @@
 
 package org.mockito.verification;
 
-import static java.util.concurrent.TimeUnit.NANOSECONDS;
-
-import java.util.concurrent.TimeUnit;
-
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;
@@ -21,7 +17,11 @@ import org.mockito.internal.verification.within.Times;
 import org.mockito.internal.verification.within.VerificationStrategy;
 import org.mockito.internal.verification.within.WithinVerfication;
 
-public class Within implements VerificationMode, VerificationInOrderMode {
+import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
+public class Within implements VerificationMode, VerificationInOrderMode, VerificationAfterDelay {
 
     private final long deadLine;
 
@@ -72,6 +72,11 @@ public class Within implements VerificationMode, VerificationInOrderMode {
 
     public VerificationMode never() {
         return mode(new Times(0));
+    }
+
+    @Override
+    public VerificationMode atLeastOnce() {
+        return atLeast(1);
     }
 
     public VerificationMode only() {

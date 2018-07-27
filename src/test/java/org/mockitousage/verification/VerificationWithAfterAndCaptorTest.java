@@ -5,7 +5,6 @@
 
 package org.mockitousage.verification;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -54,7 +53,7 @@ public class VerificationWithAfterAndCaptorTest {
     }
 
     @Test
-    @Ignore("TODO review after #936")
+//    @Ignore("TODO review after #936")
     public void shouldReturnListOfArgumentsWithSameSizeAsGivenInTimesVerification() {
         // given
         int n = 3;
@@ -71,7 +70,7 @@ public class VerificationWithAfterAndCaptorTest {
     }
 
     @Test
-    @Ignore("TODO review after #936")
+//    @Ignore("TODO review after #936")
     public void shouldReturnListOfArgumentsWithSameSizeAsGivenInAtLeastVerification() {
         // given
         int n = 3;

@@ -4,7 +4,6 @@
  */
 package org.mockito;
 
-import java.util.concurrent.TimeUnit;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
@@ -20,15 +19,11 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.SerializableMode;
-import org.mockito.quality.Strictness;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockitoPlugins;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
-import org.mockito.stubbing.*;
-import org.mockito.verification.*;
-import org.mockito.verification.Within;
 import org.mockito.session.MockitoSessionLogger;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Answer1;
@@ -36,11 +31,13 @@ import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.VoidAnswer1;
-import org.mockito.verification.After;
 import org.mockito.verification.Timeout;
 import org.mockito.verification.VerificationAfterDelay;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationWithTimeout;
+import org.mockito.verification.Within;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
@@ -2818,7 +2815,7 @@ public class Mockito extends ArgumentMatchers {
      */
     @CheckReturnValue
     public static VerificationAfterDelay after(long millis) {
-        return new After(millis, VerificationModeFactory.times(1));
+        return within(millis, TimeUnit.MILLISECONDS);
     }
 
     /**
