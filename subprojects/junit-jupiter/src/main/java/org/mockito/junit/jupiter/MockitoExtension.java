@@ -5,18 +5,19 @@
 package org.mockito.junit.jupiter;
 
 
+import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoSession;
+import org.mockito.internal.configuration.MockAnnotationProcessor;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.quality.Strictness;
+
+import java.lang.reflect.Parameter;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
-import org.junit.jupiter.api.extension.TestInstancePostProcessor;
-import org.mockito.Mockito;
-import org.mockito.MockitoSession;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.quality.Strictness;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
@@ -32,7 +33,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  * public class ExampleTest {
  *
  *     &#064;Mock
- *     private List list;
+ *     private List&lt;Integer&gt; list;
  *
  *     &#064;Test
  *     public void shouldDoSomething() {
@@ -48,7 +49,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  * public class ExampleTest {
  *
  *     &#064;Mock
- *     private List list;
+ *     private List&lt;Integer&gt; list;
  *
  *     &#064;Test
  *     public void shouldDoSomething() {
@@ -56,8 +57,57 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  *     }
  * }
  * </code></pre>
+ *
+ * This extension also supports JUnit Jupiter's method parameters.
+ * Use parameters for initialization of mocks that you use only in that specific test method.
+ * In other words, where you would initialize local mocks in JUnit 4 by calling {@link Mockito#mock(Class)},
+ * use the method parameter. This is especially beneficial when initializing a mock with generics, as you no
+ * longer get a warning about "Unchecked assignment".
+ * Please refer to JUnit Jupiter's documentation to learn when method parameters are useful.
+ *
+ * <pre class="code"><code class="java">
+ * <b>&#064;ExtendWith(MockitoExtension.class)</b>
+ * public class ExampleTest {
+ *
+ *     &#064;Mock
+ *     private List&lt;Integer&gt; sharedList;
+ *
+ *     &#064;Test
+ *     public void shouldDoSomething() {
+ *         sharedList.add(100);
+ *     }
+ *
+ *     &#064;Test
+ *     public void hasLocalMockInThisTest(@Mock List&lt;Integer&gt; localList) {
+ *         localList.add(100);
+ *         sharedList.add(100);
+ *     }
+ * }
+ * </code></pre>
+ *
+ * Lastly, the extension supports JUnit Jupiter's constructor parameters.
+ * This allows you to do setup work in the constructor and set
+ * your fields to <code>final</code>.
+ * Please refer to JUnit Jupiter's documentation to learn when constructor parameters are useful.
+ *
+ * <pre class="code"><code class="java">
+ * <b>&#064;ExtendWith(MockitoExtension.class)</b>
+ * public class ExampleTest {
+ *
+ *      private final List&lt;Integer&gt; sharedList;
+ *
+ *      ExampleTest(&#064;Mock sharedList) {
+ *          this.sharedList = sharedList;
+ *      }
+ *
+ *      &#064;Test
+ *      public void shouldDoSomething() {
+ *          sharedList.add(100);
+ *      }
+ * }
+ * </code></pre>
  */
-public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCallback, AfterEachCallback {
+public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
     private final static Namespace MOCKITO = create("org.mockito");
 
@@ -161,4 +211,15 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
                 .finishMocking();
     }
 
+    @Override
+    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+        return parameterContext.isAnnotated(Mock.class);
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+        final Parameter parameter = parameterContext.getParameter();
+        return MockAnnotationProcessor.processAnnotationForMock(parameterContext.findAnnotation(Mock.class).get(), parameter.getType(), parameter.getName());
+    }
 }
