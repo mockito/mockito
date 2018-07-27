@@ -14,7 +14,7 @@ import java.util.LinkedList;
 public class AsyncTesting {
 
     //Sanity limit of threas. Increase it if justified.
-    private final static int MAX_THREADS = 2;
+    private final static int MAX_THREADS = 3;
 
     private final LinkedList<Exception> problems = new LinkedList<Exception>();
     private final LinkedList<Thread> threads = new LinkedList<Thread>();
