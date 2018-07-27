@@ -28,5 +28,5 @@ import java.lang.annotation.Target;
     ElementType.TYPE
 })
 @Retention(RetentionPolicy.CLASS)
-@interface CheckReturnValue {
+public @interface CheckReturnValue {
 }

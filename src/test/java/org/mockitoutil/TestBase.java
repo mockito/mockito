@@ -5,6 +5,7 @@
 
 package org.mockitoutil;
 
+import org.assertj.core.api.Condition;
 import org.junit.After;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
@@ -30,6 +31,18 @@ import static org.mockito.Mockito.mock;
  * valid state for all tests.
  */
 public class TestBase {
+
+    /**
+     * Condition to be used with AssertJ
+     */
+    public static Condition<Throwable> hasMessageContaining(final String substring) {
+        return new Condition<Throwable>() {
+            @Override
+            public boolean matches(Throwable e) {
+                return e.getMessage().contains(substring);
+            }
+        };
+    }
 
     @After
     public void cleanUpConfigInAnyCase() {

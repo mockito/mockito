@@ -11,7 +11,7 @@ buildscript {
         classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.15'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
-        classpath 'org.shipkit:shipkit:2.0.15'
+        classpath 'org.shipkit:shipkit:2.0.28'
     }
 }
 
@@ -20,6 +20,9 @@ plugins {
 }
 
 description = 'Mockito mock objects library core API and implementation'
+
+apply plugin: 'base'
+archivesBaseName = "mockito-core"
 
 apply plugin: "org.shipkit.java"
 allprojects {
@@ -42,8 +45,6 @@ apply from: 'gradle/mockito-core/javadoc.gradle'
 apply from: 'gradle/mockito-core/testing.gradle'
 
 apply from: 'gradle/dependencies.gradle'
-
-archivesBaseName = "mockito-core"
 
 allprojects { proj ->
     repositories {
@@ -87,8 +88,9 @@ dependencies {
     testUtil sourceSets.test.output
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.7'
+wrapper {
+    gradleVersion = '4.9'
+    distributionSha256Sum = 'e66e69dce8173dd2004b39ba93586a184628bc6c28461bc771d6835f7f9b0d28'
 }
 
 //Posting Build scans to https://scans.gradle.com
@@ -96,3 +98,14 @@ buildScan {
     licenseAgreementUrl = 'https://gradle.com/terms-of-service'
     licenseAgree = 'yes'
 }
+
+//workaround for #1444, delete when Shipkit bug is fixed
+subprojects {
+    afterEvaluate {
+        def lib = publishing.publications.javaLibrary
+        if(lib && !lib.artifactId.startsWith("mockito-")) {
+            lib.artifactId = "mockito-" + lib.artifactId
+        }
+    }
+}
+//end workaround

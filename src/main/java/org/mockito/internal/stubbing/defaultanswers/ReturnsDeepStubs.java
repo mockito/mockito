@@ -61,7 +61,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
         // matches invocation for verification
         // TODO why don't we do container.findAnswer here?
-        for (Stubbing stubbing : container.getStubbedInvocations()) {
+        for (Stubbing stubbing : container.getStubbingsDescending()) {
             if (container.getInvocationForStubbing().matches(stubbing.getInvocation())) {
                 return stubbing.answer(invocation);
             }
@@ -118,7 +118,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
     private StubbedInvocationMatcher recordDeepStubAnswer(final Object mock, InvocationContainerImpl container) {
         DeeplyStubbedAnswer answer = new DeeplyStubbedAnswer(mock);
-        return container.addAnswer(answer, false);
+        return container.addAnswer(answer, false, null);
     }
 
     protected GenericMetadataSupport actualParameterizedType(Object mock) {
