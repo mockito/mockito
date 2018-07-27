@@ -2561,7 +2561,10 @@ public class Mockito extends ArgumentMatchers {
 
     /**
      * Ignores stubbed methods of given mocks for the sake of verification.
-     * Sometimes useful when coupled with <code>verifyNoMoreInteractions()</code> or verification <code>inOrder()</code>.
+     * Please consider using {@link Strictness#STRICT_STUBS} feature which eliminates the need for <code>ignoreStubs()</code>
+     * and provides other benefits.
+     * <p>
+     * <code>ignoreStubs()</code> is sometimes useful when coupled with <code>verifyNoMoreInteractions()</code> or verification <code>inOrder()</code>.
      * Helps avoiding redundant verification of stubbed calls - typically we're not interested in verifying stubs.
      * <p>
      * <b>Warning</b>, <code>ignoreStubs()</code> might lead to overuse of <code>verifyNoMoreInteractions(ignoreStubs(...));</code>
@@ -2616,6 +2619,20 @@ public class Mockito extends ArgumentMatchers {
      *  inOrder.verify(list).add(0);
      *  inOrder.verify(list).clear();
      *  inOrder.verifyNoMoreInteractions();
+     * </code></pre>
+     * Stubbed invocations are automatically verified with {@link Strictness#STRICT_STUBS} feature
+     * and it eliminates the need for <code>ignoreStubs()</code>. Example below uses JUnit Rules:
+     * <pre class="code"><code class="java">
+     *  &#064;Rule public MockitoRule mockito = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
+     *
+     *  List list = mock(List.class);
+     *  when(list.get(0)).thenReturn("foo");
+     *
+     *  list.size();
+     *  verify(list).size();
+     *
+     *  list.get(0); // Automatically verified by STRICT_STUBS
+     *  verifyNoMoreInteractions(list); // No need of ignoreStubs()
      * </code></pre>
      *
      * @since 1.9.0
