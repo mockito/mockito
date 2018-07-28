@@ -53,20 +53,20 @@ public class VerificationWithAfterTest {
         async.runAfter(1000, callMock);
 
         // then
-        verify(mock, after(200)).oneArg('1');
+        verify(mock, after(300)).oneArg('1');
     }
 
     @Test
     public void should_verify_with_after_and_fail() {
         // given
         async.runAfter(10, callMock);
-        async.runAfter(100, callMock);
+        async.runAfter(40, callMock);
 
         // then
         Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
-                verify(mock, after(200)).oneArg('1');
+                verify(mock, after(300)).oneArg('1');
             }
         }).isInstanceOf(TooManyActualInvocations.class);
     }
@@ -76,10 +76,10 @@ public class VerificationWithAfterTest {
         // given
         async.runAfter(10, callMock);
         async.runAfter(50, callMock);
-        async.runAfter(500, callMock);
+        async.runAfter(600, callMock);
 
         // then
-        verify(mock, after(200).times(2)).oneArg('1');
+        verify(mock, after(300).times(2)).oneArg('1');
     }
 
     @Test
@@ -93,7 +93,7 @@ public class VerificationWithAfterTest {
         Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
-                verify(mock, after(200).times(2)).oneArg('1');
+                verify(mock, after(300).times(2)).oneArg('1');
             }
         }).isInstanceOf(TooManyActualInvocations.class);
     }
@@ -105,7 +105,7 @@ public class VerificationWithAfterTest {
         async.runAfter(50, callMock);
 
         // then
-        verify(mock, after(200).atLeastOnce()).oneArg('1');
+        verify(mock, after(300).atLeastOnce()).oneArg('1');
     }
 
     @Test
@@ -113,13 +113,13 @@ public class VerificationWithAfterTest {
         // given
         async.runAfter(10, callMock);
         async.runAfter(50, callMock);
-        async.runAfter(500, callMock);
+        async.runAfter(600, callMock);
 
         // then
         Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
-                verify(mock, after(200).atLeast(3)).oneArg('1');
+                verify(mock, after(300).atLeast(3)).oneArg('1');
             }
         }).isInstanceOf(AssertionError.class).hasMessageContaining("Wanted *at least* 3 times"); //TODO specific exception
     }
@@ -129,10 +129,10 @@ public class VerificationWithAfterTest {
         // given
         async.runAfter(10, callMock);
         async.runAfter(50, callMock);
-        async.runAfter(500, callMock);
+        async.runAfter(600, callMock);
 
         // then
-        verify(mock, after(200).atMost(2)).oneArg('1');
+        verify(mock, after(300).atMost(2)).oneArg('1');
     }
 
     @Test
@@ -140,13 +140,13 @@ public class VerificationWithAfterTest {
         // given
         async.runAfter(10, callMock);
         async.runAfter(50, callMock);
-        async.runAfter(500, callMock);
+        async.runAfter(600, callMock);
 
         // then
         Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
-                verify(mock, after(200).atMost(1)).oneArg('1');
+                verify(mock, after(300).atMost(1)).oneArg('1');
             }
         }).isInstanceOf(AssertionError.class).hasMessageContaining("Wanted at most 1 time but was 2"); //TODO specific exception
     }
@@ -169,7 +169,7 @@ public class VerificationWithAfterTest {
         Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
-                verify(mock, after(200).never()).oneArg('1');
+                verify(mock, after(300).never()).oneArg('1');
             }
         }).isInstanceOf(MoreThanAllowedActualInvocations.class).hasMessageContaining("Wanted at most 0 times but was 1");
     }
@@ -178,10 +178,10 @@ public class VerificationWithAfterTest {
     public void should_verify_with_only() {
         // given
         async.runAfter(10, callMock);
-        async.runAfter(500, callMock);
+        async.runAfter(600, callMock);
 
         // then
-        verify(mock, after(200).only()).oneArg('1');
+        verify(mock, after(300).only()).oneArg('1');
     }
 
     @Test
@@ -194,7 +194,7 @@ public class VerificationWithAfterTest {
         Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
-                verify(mock, after(200).only()).oneArg('1');
+                verify(mock, after(300).only()).oneArg('1');
             }
         }).isInstanceOf(AssertionError.class).hasMessageContaining("No interactions wanted here"); //TODO specific exception
     }
