@@ -10,6 +10,8 @@ import java.util.LinkedList;
  * Streamlines testing async code for Mockito tests.
  *
  * Instances of this class are NOT thread safe (intentionally, they are not required to be thread safe)
+ *
+ * //TODO convert to test rule
  */
 public class AsyncTesting {
 
