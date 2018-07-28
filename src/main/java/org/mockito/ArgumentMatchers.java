@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import org.mockito.internal.matchers.VarargMatcherImpl;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.Contains;
 import org.mockito.internal.matchers.EndsWith;
@@ -1319,5 +1321,22 @@ public class ArgumentMatchers {
 
     private static void reportMatcher(ArgumentMatcher<?> matcher) {
         mockingProgress().getArgumentMatcherStorage().reportMatcher(matcher);
+    }
+
+    /**
+     * <code>vararg for given type</code> argument that is equal to the given value.
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
+     *
+     * @param value the given value.
+     * @return <code>default value for given type</code>.
+     */
+    public static <T> T vararg(T... value) {
+        reportMatcher(new VarargMatcherImpl<T>(value));
+        if (value == null)
+            return null;
+        return (T) Primitives.defaultValue(value.getClass());
     }
 }
