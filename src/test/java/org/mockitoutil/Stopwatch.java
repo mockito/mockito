@@ -4,12 +4,13 @@
  */
 package org.mockitoutil;
 
+import org.mockito.exceptions.base.MockitoAssertionError;
+
+import java.util.concurrent.TimeUnit;
+
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
-
-import java.util.concurrent.TimeUnit;
-import org.mockito.exceptions.base.MockitoAssertionError;
 
 /**
  * This class can be uses as stopwatch to assert that a given time is elapsed or not.
@@ -65,5 +66,17 @@ public class Stopwatch {
 
     private static void fail(String message, long expectedNanos, long elapsedNanos) {
         throw new MockitoAssertionError(format(message, NANOSECONDS.toMillis(expectedNanos), NANOSECONDS.toMillis(elapsedNanos)));
+    }
+
+    /**
+     * Waits for specific amount of millis using 'Thread.sleep()'.
+     * Rethrows InterruptedException.
+     */
+    public void waitFor(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
