@@ -16,16 +16,22 @@ import org.mockito.Mock;
 import org.mockito.exceptions.verification.TooLittleActualInvocations;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
+import org.mockitoutil.Stopwatch;
 import org.mockitoutil.async.AsyncTesting;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.junit.MockitoJUnit.rule;
+import static org.mockitoutil.Stopwatch.createNotStarted;
 
 public class VerificationWithTimeoutTest {
 
     @Rule public MockitoRule mockito = rule();
+
+    private Stopwatch watch = createNotStarted();
 
     @Mock private IMethods mock;
 
@@ -65,6 +71,26 @@ public class VerificationWithTimeoutTest {
             }
         }).isInstanceOf(AssertionError.class).hasMessageContaining("Wanted but not invoked");
         //TODO let's have a specific exception vs. generic assertion error + message
+    }
+
+    @Test
+    @Ignore //TODO nice to have
+    public void should_verify_with_timeout_and_fail_early() {
+        // when
+        callMock('c');
+        callMock('c');
+
+        watch.start();
+
+        // then
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() {
+                verify(mock, timeout(2000)).oneArg('c');
+            }
+        }).isInstanceOf(AssertionError.class).hasMessageContaining("Wanted but not invoked");
+
+        watch.assertElapsedTimeIsLessThan(1000, TimeUnit.MILLISECONDS);
     }
 
     @Test
@@ -151,6 +177,26 @@ public class VerificationWithTimeoutTest {
                 verify(mock, after(200).only()).oneArg('c');
             }
         }).isInstanceOf(AssertionError.class);
+    }
+
+    @Test
+    @Ignore //TODO nice to have
+    public void should_verify_with_only_and_fail_early() {
+        // when
+        callMock('c');
+        callMock('c');
+
+        watch.start();
+
+        // then
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() {
+                verify(mock, timeout(2000).only()).oneArg('c');
+            }
+        }).isInstanceOf(AssertionError.class).hasMessageContaining("Wanted but not invoked"); //TODO specific exception
+
+        watch.assertElapsedTimeIsLessThan(1000, TimeUnit.MILLISECONDS);
     }
 
     private Runnable callMock(final char c) {
