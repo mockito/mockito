@@ -1,7 +1,10 @@
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.matchers;
 
 import org.mockito.ArgumentMatcher;
-import org.mockito.internal.matchers.text.ValuePrinter;
 
 /**
  * This class is used to verify with a vararg matcher
