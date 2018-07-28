@@ -18,8 +18,7 @@ import static org.mockito.Mockito.*;
 /**
  * This test is used to use vararg matcher instead of arrays
  */
-public class VarargsAsArray extends TestBase {
-
+public class VarargMatcherImplTest extends TestBase {
 
     @Test
     public void testMatcher() throws Exception {
