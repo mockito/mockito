@@ -20,8 +20,6 @@ public class StubbingLookupNotifier {
         if (listeners.isEmpty()) {
             return;
         }
-        // TODO #793 - onStubbingLookup() should not be called if stubbingFound is null.
-        //             stubbingFound is currently being used in DefaultStubbingLookupListener.
         StubbingLookupEvent event = new Event(invocation, stubbingFound, allStubbings, creationSettings);
         for (StubbingLookupListener listener : listeners) {
             listener.onStubbingLookup(event);
