@@ -44,6 +44,7 @@ import static org.mockito.internal.exceptions.Reporter.notAMockPassedWhenCreatin
 import static org.mockito.internal.exceptions.Reporter.nullPassedToVerify;
 import static org.mockito.internal.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
 import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInOrder;
+import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.MockUtil.createMock;
 import static org.mockito.internal.util.MockUtil.getInvocationContainer;
@@ -91,7 +92,9 @@ public class MockitoCore {
             throw notAMockPassedToVerify(mock.getClass());
         }
         MockHandler handler = mockingDetails.getMockHandler();
-
+        if (handler.getMockSettings().isStubOnly()) {
+            throw stubPassedToVerify();
+        }
         mock = (T) VerificationStartedNotifier.notifyVerificationStarted(
             handler.getMockSettings().getVerificationStartedListeners(), mockingDetails);
 
