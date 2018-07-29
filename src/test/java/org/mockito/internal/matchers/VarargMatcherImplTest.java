@@ -9,9 +9,6 @@ import org.mockito.ArgumentMatcher;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
