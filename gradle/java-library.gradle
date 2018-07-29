@@ -27,6 +27,8 @@ test {
     }
 }
 
+apply from: "$rootDir/gradle/retry-test.gradle"
+
 tasks.withType(Checkstyle) {
     reports {
         xml.enabled false

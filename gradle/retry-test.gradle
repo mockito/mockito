@@ -1,0 +1,68 @@
+/**
+Plugin that retries failed tests.
+Mockito has concurrent API and those tests and inherently flaky.
+We decided to use retries to stabilize (conscious team choice)
+Long term, we can evolve retry-test script plugin to a binary plugin or make it more robust
+
+Plugin adds 'retryTest' task that runs tests that failed during the execution of 'test' task.
+*/
+task retryTest(type: Test) {
+    description = "Retries failed tests (if present)"
+    enabled = false
+    doFirst {
+        logger.lifecycle "[retryTest] retrying ${filter.includePatterns.size()} test(s)."
+    }
+    afterSuite { descriptor, result ->
+        if (!descriptor.parent) { //root
+            if (result.failedTestCount > 0) {
+                logger.lifecycle "\n[retryTest] retried ${filter.includePatterns.size()} test(s), $result.failedTestCount still failed."
+            } else {
+                logger.lifecycle "\n[retryTest] ${filter.includePatterns.size()} test(s) were retried successfully:\n  " + filter.includePatterns.join("\n  ")
+            }
+        }
+    }
+    testClassesDirs = test.testClassesDirs
+    classpath = test.classpath
+    scanForTestClasses = test.scanForTestClasses
+    outputs.upToDateWhen { false } //we want to always run flaky tests because they are flaky
+
+    include "**/*Test.class"
+
+    testLogging {
+        exceptionFormat 'full'
+        showCauses true
+    }
+}
+
+test {
+    finalizedBy retryTest
+    ext.failedTests = []
+    afterTest { descriptor, result ->
+        if (!descriptor.composite /* e.g. is not a parent */ && result.failedTestCount > 0 ) {
+            //adding fully qualified test name, dropping "()" from the method name
+            failedTests.add(descriptor.className + "." + descriptor.name.replaceAll("\\(\\)", ""))
+        }
+    }
+    afterSuite { descriptor, result ->
+        if (!descriptor.parent) { //root
+            def failuresReport = new File(buildDir, name + "-failures.txt")
+            def deletion = !failuresReport.exists() || failuresReport.delete()
+            if (!deletion) {
+                throw new GradleException("Problems deleting failures file: $reportPath. Please delete manually and retry.")
+            }
+            def reportPath = rootProject.relativePath(failuresReport)
+            if (!failedTests.empty) {
+                failuresReport << failedTests.join("\n")
+                logger.lifecycle "\n[retryTest] wrote ${failedTests.size()} failed tests to: $reportPath"
+                logger.info "[retryTest] all failed tests:\n  " + failedTests.join("\n  ")
+                retryTest.enabled = true
+                retryTest.filter.includePatterns = failedTests.toArray(new String[failedTests.size()])
+                ignoreFailures = true
+            } else {
+                logger.info "\n[retryTest] There are no failed tests, '$reportPath' file was deleted (if existed)."
+            }
+        }
+    }
+}
+
+
