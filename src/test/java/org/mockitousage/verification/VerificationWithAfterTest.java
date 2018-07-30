@@ -8,11 +8,10 @@ package org.mockitousage.verification;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.exceptions.verification.MoreThanAllowedActualInvocations;
+import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.junit.MockitoRule;
@@ -148,7 +147,7 @@ public class VerificationWithAfterTest {
             public void call() {
                 verify(mock, after(300).atMost(1)).oneArg('1');
             }
-        }).isInstanceOf(AssertionError.class).hasMessageContaining("Wanted at most 1 time but was 2"); //TODO specific exception
+        }).isInstanceOf(AssertionError.class).hasMessageContaining("But was 2 times"); //TODO specific exception
     }
 
     @Test
@@ -171,7 +170,7 @@ public class VerificationWithAfterTest {
             public void call() {
                 verify(mock, after(300).never()).oneArg('1');
             }
-        }).isInstanceOf(MoreThanAllowedActualInvocations.class).hasMessageContaining("Wanted at most 0 times but was 1");
+        }).isInstanceOf(NeverWantedButInvoked.class);
     }
 
     @Test
@@ -212,10 +211,10 @@ public class VerificationWithAfterTest {
             public void call() {
                 verify(mock, after(10000).atMost(1)).oneArg('1');
             }
-        }).isInstanceOf(MoreThanAllowedActualInvocations.class);
+        }).isInstanceOf(TooManyActualInvocations.class);
 
         // using generous number to avoid timing issues
-        watch.assertElapsedTimeIsLessThan(2000, MILLISECONDS);
+        //TODO X (nice to have): watch.assertElapsedTimeIsLessThan(2000, MILLISECONDS);
     }
 
     @Test
@@ -230,14 +229,14 @@ public class VerificationWithAfterTest {
             public void call() {
                 verify(mock, after(10000).never()).oneArg('1');
             }
-        }).isInstanceOf(MoreThanAllowedActualInvocations.class);
+        }).isInstanceOf(NeverWantedButInvoked.class);
 
         // using generous number to avoid timing issues
         watch.assertElapsedTimeIsLessThan(2000, MILLISECONDS);
     }
 
     @Test
-    @Ignore //TODO nice to have
+//    @Ignore //TODO nice to have
     public void should_fail_early_when_only_is_used() {
         watch.start();
 
@@ -257,7 +256,7 @@ public class VerificationWithAfterTest {
     }
 
     @Test
-    @Ignore //TODO nice to have
+//    @Ignore //TODO nice to have
     public void should_fail_early_when_time_x_is_used() {
         watch.start();
 
@@ -270,7 +269,7 @@ public class VerificationWithAfterTest {
             public void call() {
                 verify(mock, after(10000).times(1)).oneArg('1');
             }
-        }).isInstanceOf(NoInteractionsWanted.class);
+        }).isInstanceOf(TooManyActualInvocations.class);
 
         // using generous number to avoid timing issues
         watch.assertElapsedTimeIsLessThan(2000, MILLISECONDS);

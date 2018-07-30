@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
-public class Within implements VerificationMode, VerificationInOrderMode, VerificationAfterDelay {
+public class Within implements VerificationMode, VerificationInOrderMode, VerificationAfterDelay, VerificationWithTimeout {
 
     private final long deadLine;
 

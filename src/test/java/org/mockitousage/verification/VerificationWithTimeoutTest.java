@@ -164,7 +164,7 @@ public class VerificationWithTimeoutTest {
     }
 
     @Test
-    @Ignore("not testable, probably timeout().only() does not make sense")
+//    @Ignore("not testable, probably timeout().only() does not make sense")
     public void should_verify_with_only_and_fail() {
         // when
         async.runAfter(10, callMock('c'));
