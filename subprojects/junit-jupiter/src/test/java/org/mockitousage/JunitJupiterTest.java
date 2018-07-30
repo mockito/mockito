@@ -4,14 +4,16 @@
  */
 package org.mockitousage;
 
-import java.util.function.Function;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,6 +35,32 @@ class JunitJupiterTest {
     void can_set_stubs_on_initialized_mock() {
         Mockito.when(rootMock.apply(10)).thenReturn("Return");
         assertThat(rootMock.apply(10)).isEqualTo("Return");
+    }
+
+    @Test
+    void initializes_parameters(@Mock Function<String, String> localMock) {
+        Mockito.when(localMock.apply("Para")).thenReturn("Meter");
+        assertThat(localMock.apply("Para")).isEqualTo("Meter");
+    }
+
+    @Test
+    void initializes_parameters_with_custom_configuration(@Mock(name = "overriddenName") Function<String, String> localMock) {
+        assertThat(MockUtil.getMockName(localMock).toString()).isEqualTo("overriddenName");
+    }
+
+    @Nested
+    class NestedTestWithConstructorParameter {
+        private final Function<Integer, String> constructorMock;
+
+        NestedTestWithConstructorParameter(@Mock Function<Integer, String> constructorMock) {
+            this.constructorMock = constructorMock;
+        }
+
+        @Test
+        void can_inject_into_constructor_parameter() {
+            Mockito.when(constructorMock.apply(42)).thenReturn("42");
+            assertThat(constructorMock.apply(42)).isEqualTo("42");
+        }
     }
 
     @Nested

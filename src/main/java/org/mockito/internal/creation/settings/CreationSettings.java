@@ -37,6 +37,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     private boolean useConstructor;
     private Object outerClassInstance;
     private Object[] constructorArgs;
+    protected boolean lenient;
 
     public CreationSettings() {}
 
@@ -55,6 +56,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.useConstructor = copy.isUsingConstructor();
         this.outerClassInstance = copy.getOuterClassInstance();
         this.constructorArgs = copy.getConstructorArgs();
+        this.lenient = copy.lenient;
     }
 
     @Override
@@ -152,5 +154,10 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     @Override
     public boolean isStubOnly() {
         return stubOnly;
+    }
+
+    @Override
+    public boolean isLenient() {
+        return lenient;
     }
 }

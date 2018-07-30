@@ -4,8 +4,8 @@ ext {
 
 def versions = [:]
 
-versions.bytebuddy = '1.8.10'
-versions.junitJupiter = '5.1.0'
+versions.bytebuddy = '1.8.15'
+versions.junitJupiter = '5.1.1'
 
 libraries.junit4 = 'junit:junit:4.12'
 libraries.junitJupiterApi = "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}"
@@ -23,7 +23,7 @@ libraries.errorprone = 'com.google.errorprone:error_prone_core:2.3.1'
 
 libraries.objenesis = 'org.objenesis:objenesis:2.6'
 
-libraries.asm = 'org.ow2.asm:asm:6.1.1'
+libraries.asm = 'org.ow2.asm:asm:6.2'
 
 def kotlinVersion = '1.2.10'
 libraries.kotlin = [
