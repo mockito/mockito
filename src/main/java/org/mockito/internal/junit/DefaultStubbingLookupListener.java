@@ -5,10 +5,10 @@
 package org.mockito.internal.junit;
 
 import org.mockito.internal.exceptions.Reporter;
+import org.mockito.internal.listeners.StubbingLookupEvent;
 import org.mockito.internal.listeners.StubbingLookupListener;
 import org.mockito.internal.stubbing.UnusedStubbingReporting;
 import org.mockito.invocation.Invocation;
-import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Stubbing;
 
@@ -31,25 +31,25 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         this.currentStrictness = strictness;
     }
 
-    public void onStubbingLookup(Invocation invocation, Stubbing stubbingFound, Collection<Stubbing> allStubbings, MockCreationSettings mockSettings) {
-        Strictness actualStrictness = determineStrictness(stubbingFound, mockSettings, currentStrictness);
+    public void onStubbingLookup(StubbingLookupEvent event) {
+        Strictness actualStrictness = determineStrictness(event.getStubbingFound(), event.getMockSettings(), currentStrictness);
 
         if (actualStrictness != Strictness.STRICT_STUBS) {
             return;
         }
 
-        if (stubbingFound == null) {
+        if (event.getStubbingFound() == null) {
             //If stubbing was not found for invocation it means that either the mock invocation was not stubbed or
             //we have a stubbing arg mismatch.
-            List<Invocation> argMismatchStubbings = potentialArgMismatches(invocation, allStubbings);
+            List<Invocation> argMismatchStubbings = potentialArgMismatches(event.getInvocation(), event.getAllStubbings());
             if (!argMismatchStubbings.isEmpty()) {
                 mismatchesReported = true;
-                Reporter.potentialStubbingProblem(invocation, argMismatchStubbings);
+                Reporter.potentialStubbingProblem(event.getInvocation(), argMismatchStubbings);
             }
         } else {
             //when strict stubs are in use, every time a stub is realized in the code it is implicitly marked as verified
             //this way, the users don't have to repeat themselves to verify stubbed invocations (DRY)
-            invocation.markVerified();
+            event.getInvocation().markVerified();
         }
     }
 
