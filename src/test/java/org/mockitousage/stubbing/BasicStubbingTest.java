@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.internal.util.MockUtil;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -124,6 +125,32 @@ public class BasicStubbingTest extends TestBase {
         try {
             verify(localMock); // throws exception before method invocation
             fail();
-        } catch (CannotVerifyStubOnlyMock e) {}
+        } catch (CannotVerifyStubOnlyMock e) {
+            assertThat(e.getMessage()).contains(MockUtil.getMockName(localMock).toString());
+        }
+    }
+
+    @Test
+    public void test_stub_only_not_verifiable_verify_no_more_interactions() {
+        IMethods localMock = mock(IMethods.class, withSettings().stubOnly());
+
+        try {
+            verifyNoMoreInteractions(localMock);
+            fail();
+        } catch (CannotVerifyStubOnlyMock e) {
+            assertThat(e.getMessage()).contains(MockUtil.getMockName(localMock).toString());
+        }
+    }
+
+    @Test
+    public void test_stub_only_not_verifiable_in_order() {
+        IMethods localMock = mock(IMethods.class, withSettings().stubOnly());
+
+        try {
+            inOrder(localMock);
+            fail();
+        } catch (CannotVerifyStubOnlyMock e) {
+            assertThat(e.getMessage()).contains(MockUtil.getMockName(localMock).toString());
+        }
     }
 }

@@ -48,10 +48,12 @@ import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.MockUtil.createMock;
 import static org.mockito.internal.util.MockUtil.getInvocationContainer;
+import static org.mockito.internal.util.MockUtil.getMockHandler;
 import static org.mockito.internal.util.MockUtil.isMock;
 import static org.mockito.internal.util.MockUtil.resetMock;
 import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
+
 
 @SuppressWarnings("unchecked")
 public class MockitoCore {
@@ -91,10 +93,8 @@ public class MockitoCore {
         if (!mockingDetails.isMock()) {
             throw notAMockPassedToVerify(mock.getClass());
         }
+        assertVerifiableMock(mock);
         MockHandler handler = mockingDetails.getMockHandler();
-        if (handler.getMockSettings().isStubOnly()) {
-            throw stubPassedToVerify();
-        }
         mock = (T) VerificationStartedNotifier.notifyVerificationStarted(
             handler.getMockSettings().getVerificationStartedListeners(), mockingDetails);
 
@@ -135,6 +135,7 @@ public class MockitoCore {
                     throw nullPassedToVerifyNoMoreInteractions();
                 }
                 InvocationContainerImpl invocations = getInvocationContainer(mock);
+                assertVerifiableMock(mock);
                 VerificationDataImpl data = new VerificationDataImpl(invocations, null);
                 noMoreInteractions().verify(data);
             } catch (NotAMockException e) {
@@ -155,6 +156,12 @@ public class MockitoCore {
         }
     }
 
+    private void assertVerifiableMock(Object mock) {
+        if (getMockHandler(mock).getMockSettings().isStubOnly()) {
+            throw stubPassedToVerify(mock);
+        }
+    }
+
     public InOrder inOrder(Object... mocks) {
         if (mocks == null || mocks.length == 0) {
             throw mocksHaveToBePassedWhenCreatingInOrder();
@@ -166,6 +173,7 @@ public class MockitoCore {
             if (!isMock(mock)) {
                 throw notAMockPassedWhenCreatingInOrder();
             }
+            assertVerifiableMock(mock);
         }
         return new InOrderImpl(Arrays.asList(mocks));
     }
