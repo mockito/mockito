@@ -66,7 +66,7 @@ public class VerificationWithAfterTest {
         Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() {
-                verify(mock, after(300)).oneArg('1');
+                verify(mock, after(600)).oneArg('1');
             }
         }).isInstanceOf(TooManyActualInvocations.class);
     }
