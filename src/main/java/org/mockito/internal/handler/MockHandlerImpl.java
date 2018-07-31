@@ -19,7 +19,6 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.verification.VerificationMode;
 
-import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
 import static org.mockito.internal.listeners.StubbingLookupNotifier.notifyStubbedAnswerLookup;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
@@ -69,7 +68,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
             // We need to check if verification was started on the correct mock
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
             if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
-                VerificationDataImpl data = createVerificationData(invocationContainer, invocationMatcher);
+                VerificationDataImpl data = new VerificationDataImpl(invocationContainer, invocationMatcher);
                 verificationMode.verify(data);
                 return null;
             } else {
@@ -120,13 +119,5 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
 
     public InvocationContainer getInvocationContainer() {
         return invocationContainer;
-    }
-
-    private VerificationDataImpl createVerificationData(InvocationContainerImpl invocationContainer, InvocationMatcher invocationMatcher) {
-        if (mockSettings.isStubOnly()) {
-            throw stubPassedToVerify();     // this throws an exception
-        }
-
-        return new VerificationDataImpl(invocationContainer, invocationMatcher);
     }
 }
