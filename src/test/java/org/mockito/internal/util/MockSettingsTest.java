@@ -16,7 +16,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class MockSettingsTest extends TestBase {
-
     @Test
     public void public_api_for_creating_settings() throws Exception {
         //when
@@ -28,7 +27,6 @@ public class MockSettingsTest extends TestBase {
         assertEquals(List.class, settings.getTypeToMock());
         assertEquals("dummy", settings.getMockName().toString());
     }
-    
     @Test
     public void test_without_annotations() throws Exception {
         MockCreationSettings<List> settings = Mockito.withSettings()
@@ -39,9 +37,8 @@ public class MockSettingsTest extends TestBase {
 
         assertEquals(List.class, settings.getTypeToMock());
         assertEquals(List.class, copy.getTypeToMock());
-        
+
         assertTrue(settings.isStripAnnotations());
         assertTrue(copy.isStripAnnotations());
     }    
-    
 }
