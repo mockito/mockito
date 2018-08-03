@@ -9,9 +9,9 @@ import org.mockito.MockSettings;
 /**
  * This listener can be notified of method invocations on a mock.
  *
- * For this to happen, it must be registered using {@link MockSettings#invocationListeners(InvocationListener...)}.
+ * For this to happen, it must be registered using {@link MockSettings#addListeners(MockObjectListener...)}.
  */
-public interface InvocationListener {
+public interface InvocationListener extends MockObjectListener {
 
     /**
      * Called after the invocation of the listener's mock if it returned normally.

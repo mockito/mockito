@@ -4,8 +4,9 @@
  */
 package org.mockito.internal.creation.settings;
 
-import org.mockito.internal.listeners.StubbingLookupListener;
+import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.MockObjectListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
@@ -29,8 +30,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected Answer<Object> defaultAnswer;
     protected MockName mockName;
     protected SerializableMode serializableMode = SerializableMode.NONE;
-    protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
-    protected final List<StubbingLookupListener> stubbingLookupListeners = new ArrayList<StubbingLookupListener>();
+    protected List<MockObjectListener> mockObjectListeners = new ArrayList<MockObjectListener>();
     protected List<VerificationStartedListener> verificationStartedListeners = new LinkedList<VerificationStartedListener>();
     protected boolean stubOnly;
     protected boolean stripAnnotations;
@@ -50,7 +50,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.defaultAnswer = copy.defaultAnswer;
         this.mockName = copy.mockName;
         this.serializableMode = copy.serializableMode;
-        this.invocationListeners = copy.invocationListeners;
+        this.mockObjectListeners = copy.mockObjectListeners;
         this.verificationStartedListeners = copy.verificationStartedListeners;
         this.stubOnly = copy.stubOnly;
         this.useConstructor = copy.isUsingConstructor();
@@ -119,6 +119,12 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
 
     @Override
     public List<InvocationListener> getInvocationListeners() {
+        final List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
+        for (MockObjectListener listener : mockObjectListeners) {
+            if (listener instanceof InvocationListener) {
+                invocationListeners.add((InvocationListener) listener);
+            }
+        }
         return invocationListeners;
     }
 
@@ -128,6 +134,12 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     }
 
     public List<StubbingLookupListener> getStubbingLookupListeners() {
+        final List<StubbingLookupListener> stubbingLookupListeners = new ArrayList<StubbingLookupListener>();
+        for (MockObjectListener listener : mockObjectListeners) {
+            if (listener instanceof StubbingLookupListener) {
+                stubbingLookupListeners.add((StubbingLookupListener) listener);
+            }
+        }
         return stubbingLookupListeners;
     }
 

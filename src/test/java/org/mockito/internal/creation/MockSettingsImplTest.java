@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.MockObjectListener;
+import org.mockito.listeners.StubbingLookupListener;
 import org.mockitoutil.TestBase;
 
 import java.util.LinkedList;
@@ -24,6 +26,7 @@ public class MockSettingsImplTest extends TestBase {
     private MockSettingsImpl<?> mockSettingsImpl = new MockSettingsImpl<Object>();
 
     @Mock private InvocationListener invocationListener;
+    @Mock private StubbingLookupListener stubbingLookupListener;
 
     @Test(expected=MockitoException.class)
     @SuppressWarnings("unchecked")
@@ -162,5 +165,70 @@ public class MockSettingsImplTest extends TestBase {
         } catch (Exception e) {
             Assertions.assertThat(e.getMessage()).contains("does not accept null");
         }
+    }
+
+    @Test
+    public void addListeners_shouldNotAllowNullListener() {
+        try {
+            mockSettingsImpl.addListeners((MockObjectListener[])null);
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.getMessage()).contains("at least one listener");
+        }
+    }
+
+    @Test
+    public void addListeners_shouldNotAllowEmptyListener() {
+        try {
+            mockSettingsImpl.addListeners();
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.getMessage()).contains("at least one listener");
+        }
+    }
+
+    @Test
+    public void addListeners_shouldReportErrorWhenAddingANullListener() {
+        try {
+            mockSettingsImpl.addListeners(stubbingLookupListener, null);
+            fail();
+        } catch (Exception e) {
+            assertThat(e.getMessage()).contains("does not accept null");
+        }
+    }
+
+    @Test
+    public void addListeners_shouldAddMockObjectListeners() {
+        //given
+        assertTrue(mockSettingsImpl.getInvocationListeners().isEmpty());
+        assertTrue(mockSettingsImpl.getStubbingLookupListeners().isEmpty());
+
+        //when
+        mockSettingsImpl.addListeners(invocationListener);
+        mockSettingsImpl.addListeners(stubbingLookupListener);
+
+        //then
+        assertThat(mockSettingsImpl.getInvocationListeners()).contains(invocationListener);
+        assertThat(mockSettingsImpl.getStubbingLookupListeners()).contains(stubbingLookupListener);
+    }
+
+    @Test
+    public void addListeners_canAddDuplicateMockObjectListeners_ItsNotOurBusinessThere() {
+        //given
+        assertTrue(mockSettingsImpl.getInvocationListeners().isEmpty());
+        assertTrue(mockSettingsImpl.getStubbingLookupListeners().isEmpty());
+
+        //when
+        mockSettingsImpl.addListeners(stubbingLookupListener, invocationListener)
+                        .addListeners(stubbingLookupListener)
+                        .addListeners(invocationListener)
+                        .addListeners(invocationListener, stubbingLookupListener, invocationListener);
+
+        //then
+        assertThat(mockSettingsImpl.getInvocationListeners()).containsSequence(invocationListener, invocationListener,
+                                                                               invocationListener, invocationListener);
+        assertThat(mockSettingsImpl.getStubbingLookupListeners()).containsSequence(stubbingLookupListener,
+                                                                                   stubbingLookupListener,
+                                                                                   stubbingLookupListener);
     }
 }

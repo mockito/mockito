@@ -5,6 +5,7 @@
 
 package org.mockito.internal.progress;
 
+import org.mockito.MockSettings;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.LocationImpl;
@@ -13,7 +14,6 @@ import org.mockito.invocation.Location;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.listeners.VerificationListener;
-import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
@@ -144,7 +144,7 @@ public class MockingProgressImpl implements MockingProgress {
         return argumentMatcherStorage;
     }
 
-    public void mockingStarted(Object mock, MockCreationSettings settings) {
+    public void mockingStarted(Object mock, MockSettings settings) {
         for (MockitoListener listener : listeners) {
             if (listener instanceof MockCreationListener) {
                 ((MockCreationListener) listener).onMockCreated(mock, settings);

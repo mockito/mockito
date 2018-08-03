@@ -67,7 +67,7 @@ public class MockitoCore {
         MockSettingsImpl impl = MockSettingsImpl.class.cast(settings);
         MockCreationSettings<T> creationSettings = impl.build(typeToMock);
         T mock = createMock(creationSettings);
-        mockingProgress().mockingStarted(mock, creationSettings);
+        mockingProgress().mockingStarted(mock, impl);
         return mock;
     }
 

@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.invocation.Invocation;
+import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.stubbing.Stubbing;
 import org.mockitoutil.TestBase;
 

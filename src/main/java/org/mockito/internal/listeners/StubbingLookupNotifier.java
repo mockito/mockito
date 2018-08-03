@@ -4,8 +4,9 @@
  */
 package org.mockito.internal.listeners;
 
-import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.invocation.Invocation;
+import org.mockito.listeners.StubbingLookupEvent;
+import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Stubbing;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class StubbingLookupNotifier {
 
     public static void notifyStubbedAnswerLookup(Invocation invocation, Stubbing stubbingFound,
-                                                 Collection<Stubbing> allStubbings, CreationSettings creationSettings) {
+                                                 Collection<Stubbing> allStubbings, MockCreationSettings creationSettings) {
         List<StubbingLookupListener> listeners = creationSettings.getStubbingLookupListeners();
         if (listeners.isEmpty()) {
             return;

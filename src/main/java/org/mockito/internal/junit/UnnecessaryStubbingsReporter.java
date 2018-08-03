@@ -7,10 +7,10 @@ package org.mockito.internal.junit;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
+import org.mockito.MockSettings;
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MockCreationListener;
-import org.mockito.mock.MockCreationSettings;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -36,7 +36,7 @@ public class UnnecessaryStubbingsReporter implements MockCreationListener {
     }
 
     @Override
-    public void onMockCreated(Object mock, MockCreationSettings settings) {
+    public void onMockCreated(Object mock, MockSettings settings) {
         mocks.add(mock);
     }
 }

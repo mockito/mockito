@@ -9,6 +9,7 @@ import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.MockObjectListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
@@ -204,6 +205,23 @@ public interface MockSettings extends Serializable {
     MockSettings verboseLogging();
 
     /**
+     * Add listener to mock object.
+     * For a list of supported listeners, see the interfaces that extend {@link MockObjectListener}.
+     *
+     * Multiple listeners may be added and they will be notified in the order they were supplied.
+     *
+     * Example:
+     * <pre class="code"><code class="java">
+     *  List mockWithListener = mock(List.class, withSettings().addListeners(new YourInvocationListener()));
+     *  List mockWithListener = mock(List.class, withSettings().addListeners(new YourStubbingLookupListener()));
+     * </code></pre>
+     *
+     * @param listeners The mock object listeners to add. May not be null.
+     * @return settings instance so that you can fluently specify other settings
+     */
+    MockSettings addListeners(MockObjectListener... listeners);
+
+    /**
      * Registers a listener for method invocations on this mock. The listener is
      * notified every time a method on this mock is called.
      * <p>
@@ -218,7 +236,9 @@ public interface MockSettings extends Serializable {
      *
      * @param listeners The invocation listeners to add. May not be null.
      * @return settings instance so that you can fluently specify other settings
+     * @deprecated - please use {@link #addListeners(MockObjectListener...)} instead.
      */
+    @Deprecated
     MockSettings invocationListeners(InvocationListener... listeners);
 
     /**

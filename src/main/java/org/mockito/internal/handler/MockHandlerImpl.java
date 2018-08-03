@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.handler;
 
-import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
@@ -85,9 +84,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
 
         // look for existing answer for this invocation
         StubbedInvocationMatcher stubbing = invocationContainer.findAnswerFor(invocation);
-        // TODO #793 - when completed, we should be able to get rid of the casting below
-        notifyStubbedAnswerLookup(invocation, stubbing, invocationContainer.getStubbingsAscending(),
-                                  (CreationSettings) mockSettings);
+        notifyStubbedAnswerLookup(invocation, stubbing, invocationContainer.getStubbingsAscending(), mockSettings);
 
         if (stubbing != null) {
             stubbing.captureArgumentsFrom(invocation);

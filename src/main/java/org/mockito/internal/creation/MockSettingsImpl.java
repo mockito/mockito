@@ -11,6 +11,7 @@ import org.mockito.internal.util.Checks;
 import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.internal.util.MockNameImpl;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.MockObjectListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
@@ -19,11 +20,12 @@ import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.Arrays.asList;
+import static org.mockito.internal.exceptions.Reporter.addListenersRequiresAtLeastOneListener;
 import static org.mockito.internal.exceptions.Reporter.defaultAnswerDoesNotAcceptNullParameter;
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesAcceptsOnlyInterfaces;
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesDoesNotAcceptNullParameters;
@@ -154,7 +156,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         }
         List<Object> resultArgs = new ArrayList<Object>(constructorArgs.length + 1);
         resultArgs.add(outerClassInstance);
-        resultArgs.addAll(Arrays.asList(constructorArgs));
+        resultArgs.addAll(asList(constructorArgs));
         return resultArgs.toArray(new Object[constructorArgs.length + 1]);
     }
 
@@ -172,11 +174,24 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     }
 
     @Override
+    public MockSettings addListeners(MockObjectListener... listeners) {
+        if (listeners == null || listeners.length == 0) {
+            throw addListenersRequiresAtLeastOneListener();
+        }
+        List<MockObjectListener> listenerList = asList(listeners);
+        if (listenerList.contains(null)) {
+            throw methodDoesNotAcceptParameter("addListeners", "null listeners.");
+        }
+        mockObjectListeners.addAll(listenerList);
+        return this;
+    }
+
+    @Override
     public MockSettings invocationListeners(InvocationListener... listeners) {
         if (listeners == null || listeners.length == 0) {
             throw invocationListenersRequiresAtLeastOneListener();
         }
-        addListeners(listeners, invocationListeners, "invocationListeners");
+        addListeners(listeners, mockObjectListeners, "invocationListeners");
         return this;
     }
 
@@ -199,21 +214,16 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     }
 
     private boolean invocationListenersContainsType(Class<?> clazz) {
-        for (InvocationListener listener : invocationListeners) {
-            if (listener.getClass().equals(clazz)) {
+        for (MockObjectListener listener : mockObjectListeners) {
+            if ((listener instanceof InvocationListener) && listener.getClass().equals(clazz)) {
                 return true;
             }
         }
         return false;
     }
 
-    @Override
-    public List<InvocationListener> getInvocationListeners() {
-        return this.invocationListeners;
-    }
-
     public boolean hasInvocationListeners() {
-        return !invocationListeners.isEmpty();
+        return !getInvocationListeners().isEmpty();
     }
 
     @Override

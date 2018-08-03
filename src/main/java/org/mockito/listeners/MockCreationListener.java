@@ -4,7 +4,7 @@
  */
 package org.mockito.listeners;
 
-import org.mockito.mock.MockCreationSettings;
+import org.mockito.MockSettings;
 
 /**
  * Notified when mock object is created.
@@ -16,7 +16,7 @@ public interface MockCreationListener extends MockitoListener {
      * Mock object was just created.
      *
      * @param mock created mock object
-     * @param settings the settings used for creation
+     * @param settings the settings of the mock object
      */
-    void onMockCreated(Object mock, MockCreationSettings settings);
+    void onMockCreated(Object mock, MockSettings settings);
 }

@@ -4,9 +4,8 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.internal.creation.settings.CreationSettings;
+import org.mockito.MockSettings;
 import org.mockito.internal.util.MockitoLogger;
-import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
 
 import java.util.Collection;
@@ -23,7 +22,7 @@ public class UniversalTestListener implements MockitoTestListener {
     private Strictness currentStrictness;
     private final MockitoLogger logger;
 
-    private Map<Object, MockCreationSettings> mocks = new IdentityHashMap<Object, MockCreationSettings>();
+    private Map<Object, MockSettings> mocks = new IdentityHashMap<Object, MockSettings>();
     private DefaultStubbingLookupListener stubbingLookupListener;
 
     public UniversalTestListener(Strictness initialStrictness, MockitoLogger logger) {
@@ -41,7 +40,7 @@ public class UniversalTestListener implements MockitoTestListener {
         //At this point, we don't need the mocks any more and we can mark all collected mocks for gc
         //TODO make it better, it's easy to forget to clean up mocks and we still create new instance of list that nobody will read, it's also duplicated
         //TODO clean up all other state, null out stubbingLookupListener
-        mocks = new IdentityHashMap<Object, MockCreationSettings>();
+        mocks = new IdentityHashMap<Object, MockSettings>();
 
         switch (currentStrictness) {
             case WARN: emitWarnings(logger, event, createdMocks); break;
@@ -71,14 +70,9 @@ public class UniversalTestListener implements MockitoTestListener {
     }
 
     @Override
-    public void onMockCreated(Object mock, MockCreationSettings settings) {
+    public void onMockCreated(Object mock, MockSettings settings) {
         this.mocks.put(mock, settings);
-
-        //It is not ideal that we modify the state of MockCreationSettings object
-        //MockCreationSettings is intended to be an immutable view of the creation settings
-        //In future, we should start passing MockSettings object to the creation listener
-        //TODO #793 - when completed, we should be able to get rid of the CreationSettings casting below
-        ((CreationSettings) settings).getStubbingLookupListeners().add(stubbingLookupListener);
+        settings.addListeners(stubbingLookupListener);
     }
 
     public void setStrictness(Strictness strictness) {

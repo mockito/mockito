@@ -4,8 +4,8 @@
  */
 package org.mockito.internal.junit;
 
+import org.mockito.MockSettings;
 import org.mockito.internal.util.MockitoLogger;
-import org.mockito.mock.MockCreationSettings;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -35,7 +35,7 @@ public class MismatchReportingTestListener implements MockitoTestListener {
         }
     }
 
-    public void onMockCreated(Object mock, MockCreationSettings settings) {
+    public void onMockCreated(Object mock, MockSettings settings) {
         this.mocks.add(mock);
     }
 }

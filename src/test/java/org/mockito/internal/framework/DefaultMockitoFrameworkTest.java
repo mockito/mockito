@@ -12,7 +12,6 @@ import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.RedundantListenerException;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
-import org.mockito.mock.MockCreationSettings;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
@@ -69,8 +68,8 @@ public class DefaultMockitoFrameworkTest extends TestBase {
         Set mock2 = mock(Set.class);
 
         //then
-        verify(listener).onMockCreated(eq(mock), any(MockCreationSettings.class));
-        verify(listener).onMockCreated(eq(mock2), any(MockCreationSettings.class));
+        verify(listener).onMockCreated(eq(mock), any(MockSettings.class));
+        verify(listener).onMockCreated(eq(mock2), any(MockSettings.class));
         verifyNoMoreInteractions(listener);
     }
 
@@ -83,7 +82,7 @@ public class DefaultMockitoFrameworkTest extends TestBase {
 
         //and hooked up correctly
         mock(List.class);
-        verify(listener).onMockCreated(ArgumentMatchers.any(), any(MockCreationSettings.class));
+        verify(listener).onMockCreated(ArgumentMatchers.any(), any(MockSettings.class));
 
         //when
         framework.removeListener(listener);
