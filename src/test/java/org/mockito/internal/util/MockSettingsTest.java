@@ -40,5 +40,5 @@ public class MockSettingsTest extends TestBase {
 
         assertTrue(settings.isStripAnnotations());
         assertTrue(copy.isStripAnnotations());
-    }    
+    }
 }
