@@ -7,11 +7,13 @@ package org.mockito.internal.util;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MockSettingsTest extends TestBase {
 
@@ -26,4 +28,20 @@ public class MockSettingsTest extends TestBase {
         assertEquals(List.class, settings.getTypeToMock());
         assertEquals("dummy", settings.getMockName().toString());
     }
+    
+    @Test
+    public void test_without_annotations() throws Exception {
+        MockCreationSettings<List> settings = Mockito.withSettings()
+            .withoutAnnotations()
+            .build(List.class);
+
+        CreationSettings copy = new CreationSettings((CreationSettings)settings);
+
+        assertEquals(List.class, settings.getTypeToMock());
+        assertEquals(List.class, copy.getTypeToMock());
+        
+        assertTrue(settings.isStripAnnotations());
+        assertTrue(copy.isStripAnnotations());
+    }    
+    
 }
