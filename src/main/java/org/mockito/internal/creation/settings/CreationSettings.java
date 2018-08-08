@@ -18,6 +18,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CreationSettings<T> implements MockCreationSettings<T>, Serializable {
     private static final long serialVersionUID = -6789800638070123629L;
@@ -29,7 +30,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected Answer<Object> defaultAnswer;
     protected MockName mockName;
     protected SerializableMode serializableMode = SerializableMode.NONE;
-    protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
+    protected List<InvocationListener> invocationListeners = new CopyOnWriteArrayList<InvocationListener>();
     protected final List<StubbingLookupListener> stubbingLookupListeners = new ArrayList<StubbingLookupListener>();
     protected List<VerificationStartedListener> verificationStartedListeners = new LinkedList<VerificationStartedListener>();
     protected boolean stubOnly;
