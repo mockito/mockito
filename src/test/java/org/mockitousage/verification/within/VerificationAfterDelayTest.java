@@ -5,6 +5,19 @@
 
 package org.mockitousage.verification.within;
 
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.junit.MockitoRule;
+import org.mockitousage.IMethods;
+import org.mockitoutil.Stopwatch;
+import org.mockitoutil.async.AsyncTesting;
+
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static junit.framework.TestCase.assertEquals;
@@ -17,37 +30,19 @@ import static org.mockito.Mockito.within;
 import static org.mockito.junit.MockitoJUnit.rule;
 import static org.mockitoutil.Stopwatch.createNotStarted;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.junit.MockitoRule;
-import org.mockitousage.IMethods;
-import org.mockitousage.verification.DelayedExecution;
-import org.mockitoutil.Stopwatch;
-
 public class VerificationAfterDelayTest {
 
-    @Rule
-    public MockitoRule mockito = rule();
+    @Rule public MockitoRule mockito = rule();
 
-    @Rule
-    public ExpectedException exception = none();
+    @Rule public ExpectedException exception = none();
 
-    @Mock
-    private IMethods mock;
+    @Mock private IMethods mock;
 
-    @Captor
-    private ArgumentCaptor<Character> captor;
+    @Captor private ArgumentCaptor<Character> captor;
 
-    private Stopwatch stopWatch;
+    private Stopwatch stopWatch = createNotStarted();
 
-    private DelayedExecution delayedExecution;
+    private AsyncTesting async = new AsyncTesting();
 
     private Runnable callMock = new Runnable() {
         @Override
@@ -56,35 +51,28 @@ public class VerificationAfterDelayTest {
         }
     };
 
-    @Before
-    public void setUp() {
-        delayedExecution = new DelayedExecution();
-        stopWatch = createNotStarted();
-    }
-
     @After
-    public void tearDown() throws InterruptedException {
-        delayedExecution.close();
-
+    public void tearDown() {
+        async.cleanUp();
     }
 
     @Test
-    public void shouldVerifyNormallyWithSpecificTimes() throws Exception {
-        delayedExecution.callAsync(20, MILLISECONDS, callMock);
+    public void shouldVerifyNormallyWithSpecificTimes() {
+        async.runAfter(20, callMock);
 
         verify(mock, within(100, MILLISECONDS).times(1)).oneArg('1');
     }
 
     @Test
     public void shouldVerifyNormallyWithAtLeast() throws Exception {
-        delayedExecution.callAsync(20, MILLISECONDS, callMock);
+        async.runAfter(20, callMock);
 
         verify(mock, within(100, MILLISECONDS).atLeast(1)).oneArg('1');
     }
 
     @Test
     public void shouldFailVerificationWithWrongTimes() throws Exception {
-        delayedExecution.callAsync(20, MILLISECONDS, callMock);
+        async.runAfter(20, callMock);
 
         verify(mock, times(0)).oneArg('1');
 
@@ -94,7 +82,7 @@ public class VerificationAfterDelayTest {
 
     @Test
     public void shouldWaitTheFullTimeIfTheTestCouldPass() throws Exception {
-        delayedExecution.callAsync(20, MILLISECONDS, callMock);
+        async.runAfter(20, callMock);
         stopWatch.start();
 
         try {
@@ -108,7 +96,7 @@ public class VerificationAfterDelayTest {
 
     @Test(timeout = 200)
     public void shouldStopEarlyIfTestIsDefinitelyFailed() throws Exception {
-        delayedExecution.callAsync(20, MILLISECONDS, callMock);
+        async.runAfter(20, callMock);
 
         exception.expect(MockitoAssertionError.class);
         verify(mock, within(99, DAYS).never()).oneArg('1');
