@@ -35,7 +35,6 @@ import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.VoidAnswer1;
-import org.mockito.verification.Timeout;
 import org.mockito.verification.VerificationAfterDelay;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationWithTimeout;
@@ -2804,7 +2803,7 @@ public class Mockito extends ArgumentMatchers {
      */
     @CheckReturnValue
     public static VerificationWithTimeout timeout(long millis) {
-        return new Timeout(millis, VerificationModeFactory.times(1));
+        return Within.within(millis, TimeUnit.MILLISECONDS);
     }
 
     @CheckReturnValue

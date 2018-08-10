@@ -832,13 +832,11 @@ public class Reporter {
         return new MockitoException("Mocks instantiated with constructor cannot be combined with " + mode + " serialization mode.");
     }
 
-    public static MockitoException cannotCreateTimerWithNegativeDurationTime(long durationMillis) {
-        return new FriendlyReminderException(join(
+    public static MockitoException cannotCreateTimerWithNegativeDurationTime(long duration) {
+        return new InvalidArgumentException(join(
                 "",
-                "Don't panic! I'm just a friendly reminder!",
-                "It is impossible for time to go backward, therefore...",
-                "You cannot put negative value of duration: (" + durationMillis + ")",
-                "as argument of timer methods (after(), timeout())",
+                "You cannot put negative value of duration: (" + duration + ")",
+                "as argument of duration methods (after(), timeout())",
                 ""
         ));
     }

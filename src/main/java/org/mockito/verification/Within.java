@@ -20,8 +20,9 @@ import org.mockito.internal.verification.within.WithinVerfication;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
+import static org.mockito.internal.exceptions.Reporter.cannotCreateTimerWithNegativeDurationTime;
 
-public class Within implements VerificationMode, VerificationInOrderMode, VerificationAfterDelay {
+public class Within implements VerificationMode, VerificationInOrderMode, VerificationAfterDelay, VerificationWithTimeout {
 
     private final long deadLine;
 
@@ -34,6 +35,12 @@ public class Within implements VerificationMode, VerificationInOrderMode, Verifi
     }
 
     public static Within within(long duration, TimeUnit unit) {
+        if (duration < 0) {
+            throw cannotCreateTimerWithNegativeDurationTime(duration);
+        }
+        //we should fail on '0', too. However, for backwards compatibility
+        // and edge cases we allow 0 for duration
+
         long deadLine = System.nanoTime() + unit.toNanos(duration);
         return new Within(deadLine);
     }
