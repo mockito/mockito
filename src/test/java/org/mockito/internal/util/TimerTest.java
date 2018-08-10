@@ -8,7 +8,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.exceptions.misusing.FriendlyReminderException;
 import org.mockitoutil.TestBase;
 
 public class TimerTest extends TestBase {
@@ -39,13 +38,6 @@ public class TimerTest extends TestBase {
 
         //then
         Assertions.assertThat(timer.isCounting()).isFalse();
-    }
-
-    @Test
-    public void should_throw_friendly_reminder_exception_when_duration_is_negative() {
-        expectedException.expect(FriendlyReminderException.class);
-        expectedException.expectMessage("Don't panic! I'm just a friendly reminder!");
-        new Timer(-1);
     }
 
     private void oneMillisecondPasses() throws InterruptedException {
