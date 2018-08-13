@@ -5,6 +5,7 @@
 package org.mockito.internal.junit;
 
 import org.mockito.internal.creation.settings.CreationSettings;
+import org.mockito.internal.listeners.AutoCleanableListener;
 import org.mockito.internal.util.MockitoLogger;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
@@ -18,13 +19,14 @@ import java.util.Map;
  * Will come handy when we offer tweaking strictness at the method level with annotation.
  * Should be relatively easy to improve and offer tweaking strictness per mock.
  */
-public class UniversalTestListener implements MockitoTestListener {
+public class UniversalTestListener implements MockitoTestListener, AutoCleanableListener {
 
     private Strictness currentStrictness;
     private final MockitoLogger logger;
 
     private Map<Object, MockCreationSettings> mocks = new IdentityHashMap<Object, MockCreationSettings>();
     private DefaultStubbingLookupListener stubbingLookupListener;
+    private boolean listenerDirty;
 
     public UniversalTestListener(Strictness initialStrictness, MockitoLogger logger) {
         this.currentStrictness = initialStrictness;
@@ -84,5 +86,14 @@ public class UniversalTestListener implements MockitoTestListener {
     public void setStrictness(Strictness strictness) {
         this.currentStrictness = strictness;
         this.stubbingLookupListener.setCurrentStrictness(strictness);
+    }
+
+    @Override
+    public boolean isListenerDirty() {
+        return listenerDirty;
+    }
+
+    public void setListenerDirty() {
+        this.listenerDirty = true;
     }
 }

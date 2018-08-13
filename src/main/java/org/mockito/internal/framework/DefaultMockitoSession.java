@@ -32,8 +32,14 @@ public class DefaultMockitoSession implements MockitoSession {
         } catch (RedundantListenerException e) {
             Reporter.unfinishedMockingSession();
         }
-        for (Object testClassInstance : testClassInstances) {
-            MockitoAnnotations.initMocks(testClassInstance);
+        try {
+            for (Object testClassInstance : testClassInstances) {
+                MockitoAnnotations.initMocks(testClassInstance);
+            }
+        } catch (RuntimeException e) {
+            //clean up in case 'initMocks' fails
+            listener.setListenerDirty();
+            throw e;
         }
     }
 
