@@ -18,12 +18,10 @@ import java.util.List;
 
 public class DefaultMockitoSession implements MockitoSession {
 
-    private final List<Object> testClassInstances;
     private final String name;
     private final UniversalTestListener listener;
 
     public DefaultMockitoSession(List<Object> testClassInstances, String name, Strictness strictness, MockitoLogger logger) {
-        this.testClassInstances = testClassInstances;
         this.name = name;
         listener = new UniversalTestListener(strictness, logger);
         try {
@@ -32,8 +30,14 @@ public class DefaultMockitoSession implements MockitoSession {
         } catch (RedundantListenerException e) {
             Reporter.unfinishedMockingSession();
         }
-        for (Object testClassInstance : testClassInstances) {
-            MockitoAnnotations.initMocks(testClassInstance);
+        try {
+            for (Object testClassInstance : testClassInstances) {
+                MockitoAnnotations.initMocks(testClassInstance);
+            }
+        } catch (RuntimeException e) {
+            //clean up in case 'initMocks' fails
+            listener.setListenerDirty();
+            throw e;
         }
     }
 

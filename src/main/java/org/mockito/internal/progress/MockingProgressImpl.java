@@ -9,6 +9,7 @@ import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.Reporter;
+import org.mockito.internal.listeners.AutoCleanableListener;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
@@ -19,6 +20,8 @@ import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
 
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import static org.mockito.internal.exceptions.Reporter.unfinishedStubbing;
@@ -154,12 +157,28 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     public void addListener(MockitoListener listener) {
+        addListener(listener, listeners);
+    }
+
+    static void addListener(MockitoListener listener, Set<MockitoListener> listeners) {
+        List<MockitoListener> delete = new LinkedList<MockitoListener>();
         for (MockitoListener existing : listeners) {
             if (existing.getClass().equals(listener.getClass())) {
-                Reporter.redundantMockitoListener(listener.getClass().getSimpleName());
+                if (existing instanceof AutoCleanableListener && ((AutoCleanableListener) existing).isListenerDirty()) {
+                    //dirty listener means that there was an exception even before the test started
+                    //if we fail here with redundant mockito listener exception there will be multiple failures causing confusion
+                    //so we simply remove the existing listener and move on
+                    delete.add(existing);
+                } else {
+                    Reporter.redundantMockitoListener(listener.getClass().getSimpleName());
+                }
             }
         }
-        this.listeners.add(listener);
+        //delete dirty listeners so they don't occupy state/memory and don't receive notifications
+        for (MockitoListener toDelete : delete) {
+            listeners.remove(toDelete);
+        }
+        listeners.add(listener);
     }
 
     public void removeListener(MockitoListener listener) {

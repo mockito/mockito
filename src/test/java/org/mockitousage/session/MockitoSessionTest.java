@@ -5,12 +5,15 @@
 package org.mockitousage.session;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
+import org.mockito.exceptions.misusing.InjectMocksException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
@@ -95,6 +98,17 @@ public class MockitoSessionTest extends TestBase {
 
         //in order to demonstrate feature, we intentionally misuse Mockito and need to clean up state
         resetState();
+    }
+
+    @Test public void cleans_up_state_when_init_fails() {
+        //when
+        Result result = junit.run(MockitoSessionTest.SessionWithInitMocksFailure.class);
+
+        //expect that both failures are the same, indicating correct listener cleanup
+        //incorrect cleanup causes 1 failure to be InjectMocksException
+        //  but the next test method would have failed with unuseful error that session was not cleaned up
+        JUnitResultAssert.assertThat(result)
+            .fails(2, InjectMocksException.class);
     }
 
     public static class SessionWithoutAnyConfiguration {
@@ -219,6 +233,38 @@ public class MockitoSessionTest extends TestBase {
         @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
         @Test public void invalid_mockito_usage() {
             verify(mock);
+        }
+    }
+
+    public static class SessionWithInitMocksFailure {
+        @InjectMocks private ConstructorFail sut;
+        MockitoSession mockito;
+
+        @Before
+        public void before() {
+            mockito = Mockito.mockitoSession().initMocks(this).startMocking();
+        }
+
+        @After public void after() {
+            if (mockito != null) {
+                //so that we reduce amount of exceptions for easier assertions
+                //otherwise we would get an NPE here
+                mockito.finishMocking();
+            }
+        }
+
+        @Test public void test1() {
+            //should fail the same way
+        }
+
+        @Test public void test2() {
+            //should fail the same way
+        }
+
+        static class ConstructorFail {
+            ConstructorFail() {
+                throw new RuntimeException("Boo!");
+            }
         }
     }
 }

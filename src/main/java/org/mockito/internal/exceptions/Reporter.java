@@ -673,7 +673,7 @@ public class Reporter {
     }
 
     public static MockitoException fieldInitialisationThrewException(Field field, Throwable details) {
-        return new MockitoException(join(
+        return new InjectMocksException(join(
                 "Cannot instantiate @InjectMocks field named '" + field.getName() + "' of type '" + field.getType() + "'.",
                 "You haven't provided the instance at field declaration so I tried to construct the instance.",
                 "However the constructor or the initialization block threw an exception : " + details.getMessage(),
