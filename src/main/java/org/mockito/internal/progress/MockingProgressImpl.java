@@ -165,12 +165,16 @@ public class MockingProgressImpl implements MockingProgress {
         for (MockitoListener existing : listeners) {
             if (existing.getClass().equals(listener.getClass())) {
                 if (existing instanceof AutoCleanableListener && ((AutoCleanableListener) existing).isListenerDirty()) {
+                    //dirty listener means that there was an exception even before the test started
+                    //if we fail here with redundant mockito listener exception there will be multiple failures causing confusion
+                    //so we simply remove the existing listener and move on
                     delete.add(existing);
                 } else {
                     Reporter.redundantMockitoListener(listener.getClass().getSimpleName());
                 }
             }
         }
+        //delete dirty listeners so they don't occupy state/memory and don't receive notifications
         for (MockitoListener toDelete : delete) {
             listeners.remove(toDelete);
         }

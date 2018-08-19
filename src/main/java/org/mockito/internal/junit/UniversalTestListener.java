@@ -88,11 +88,17 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
         this.stubbingLookupListener.setCurrentStrictness(strictness);
     }
 
+    /**
+     * See {@link AutoCleanableListener#isListenerDirty()}
+     */
     @Override
     public boolean isListenerDirty() {
         return listenerDirty;
     }
 
+    /**
+     * Marks listener as dirty, scheduled for cleanup when the next session starts
+     */
     public void setListenerDirty() {
         this.listenerDirty = true;
     }
