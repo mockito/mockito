@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
