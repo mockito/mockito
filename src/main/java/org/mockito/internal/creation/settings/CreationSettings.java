@@ -57,6 +57,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.outerClassInstance = copy.getOuterClassInstance();
         this.constructorArgs = copy.getConstructorArgs();
         this.lenient = copy.lenient;
+        this.stripAnnotations = copy.stripAnnotations;
     }
 
     @Override
