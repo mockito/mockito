@@ -12,11 +12,14 @@ import org.mockito.exceptions.verification.SmartNullPointerException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -107,4 +110,18 @@ public class MocksCreationTest extends TestBase {
         when(mock(Set.class).isEmpty()).thenReturn(false);
     }
 
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface SomeAnnotation {}
+
+    @SomeAnnotation static class Foo {}
+
+    @Test
+    public void should_strip_annotations() {
+        Foo withAnnotations = mock(Foo.class);
+        Foo withoutAnnotations = mock(Foo.class, withSettings().withoutAnnotations());
+
+        //expect:
+        assertTrue(withAnnotations.getClass().isAnnotationPresent(SomeAnnotation.class));
+        assertFalse(withoutAnnotations.getClass().isAnnotationPresent(SomeAnnotation.class));
+    }
 }
