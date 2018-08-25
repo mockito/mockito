@@ -49,7 +49,7 @@ import org.mockito.internal.matchers.CapturingMatcher;
  * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
  *
  * <p>
- * This utility class <strong>*don't do any type checks*</strong>, the generic signatures are only there to avoid casting
+ * This utility class <strong>*doesn't do any type checks*</strong>. The generic signatures are only there to avoid casting
  * in your code.
  * <p>
  * There is an <strong>annotation</strong> that you might find useful: &#64;{@link Captor}
@@ -136,7 +136,7 @@ public class ArgumentCaptor<T> {
     /**
      * Build a new <code>ArgumentCaptor</code>.
      * <p>
-     * Note that an <code>ArgumentCaptor</code> <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * Note that an <code>ArgumentCaptor</code> <b>*doesn't do any type checks*</b>. It is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      *
