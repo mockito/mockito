@@ -4,6 +4,11 @@
  */
 package org.mockito;
 
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.InternalMockHandler;
@@ -12,6 +17,10 @@ import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.session.DefaultMockitoSessionBuilder;
+import org.mockito.internal.stubbing.answers.AppliesBiFunction;
+import org.mockito.internal.stubbing.answers.AppliesConsumer;
+import org.mockito.internal.stubbing.answers.AppliesFunction;
+import org.mockito.internal.stubbing.answers.AppliesSupplier;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationFactory;
@@ -2376,6 +2385,25 @@ public class Mockito extends ArgumentMatchers {
     @CheckReturnValue
     public static Stubber doAnswer(Answer answer) {
         return MOCKITO_CORE.stubber().doAnswer(answer);
+    }
+
+    @CheckReturnValue
+    public static <T, R> Stubber doApply(Function<T, R> function) {
+        return doAnswer(new AppliesFunction<T, R>(function));
+    }
+
+    @CheckReturnValue
+    public static <T, U, R> Stubber doApplyBi(BiFunction<T, U, R> function) {
+        return doAnswer(new AppliesBiFunction<T, U, R>(function));
+    }
+
+    @CheckReturnValue
+    public static <T> Stubber doSupply(Supplier<T> supplier) {
+        return doAnswer(new AppliesSupplier(supplier));
+    }
+
+    public static <T> Stubber doConsume(Consumer<T> consumer) {
+        return doAnswer(new AppliesConsumer<T>(consumer));
     }
 
     /**
