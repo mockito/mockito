@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
 
@@ -23,7 +22,6 @@ public class StrictStubsRunnerTestListener implements MockitoTestListener {
         //It is not ideal that we modify the state of MockCreationSettings object
         //MockCreationSettings is intended to be an immutable view of the creation settings
         //In future, we should start passing MockSettings object to the creation listener
-        //TODO #793 - when completed, we should be able to get rid of the CreationSettings casting below
-        ((CreationSettings) settings).getStubbingLookupListeners().add(stubbingLookupListener);
+        settings.getStubbingLookupListeners().add(stubbingLookupListener);
     }
 }

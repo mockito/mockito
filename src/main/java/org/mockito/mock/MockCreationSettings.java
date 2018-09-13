@@ -8,6 +8,7 @@ package org.mockito.mock;
 import org.mockito.Incubating;
 import org.mockito.MockSettings;
 import org.mockito.NotExtensible;
+import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.quality.Strictness;
@@ -70,7 +71,13 @@ public interface MockCreationSettings<T> {
     boolean isStripAnnotations();
 
     /**
-     * {@link InvocationListener} instances attached to this mock, see {@link org.mockito.MockSettings#invocationListeners}.
+     * TODO x document mutability
+     * {@link StubbingLookupListener} instances attached to this mock via {@link MockSettings#stubbingLookupListeners(StubbingLookupListener...)}.
+     */
+    List<StubbingLookupListener> getStubbingLookupListeners();
+
+    /**
+     * {@link InvocationListener} instances attached to this mock, see {@link org.mockito.MockSettings#addListeners}.
      */
     List<InvocationListener> getInvocationListeners();
 
