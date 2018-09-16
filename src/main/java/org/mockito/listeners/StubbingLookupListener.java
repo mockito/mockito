@@ -27,8 +27,6 @@ public interface StubbingLookupListener {
      * Called by the framework when Mockito looked up an answer for invocation on a mock.
      *
      * @param stubbingLookupEvent - Information about the looked up stubbing
-     *
-     * @see StubbingLookupEvent
      */
     void onStubbingLookup(StubbingLookupEvent stubbingLookupEvent);
 }
