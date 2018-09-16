@@ -211,8 +211,6 @@ public class MockSettingsImplTest extends TestBase {
         //then
         assertThat(mockSettingsImpl.getInvocationListeners()).contains(invocationListener);
         assertThat(mockSettingsImpl.getStubbingLookupListeners()).contains(stubbingLookupListener);
-
-        //TODO x add test that we can remove listeners
     }
 
     @Test
