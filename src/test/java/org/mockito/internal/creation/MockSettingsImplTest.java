@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -169,53 +170,45 @@ public class MockSettingsImplTest extends TestBase {
 
     @Test
     public void validates_listeners() {
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             public void call() {
                 mockSettingsImpl.addListeners(new Object[] {}, new LinkedList<Object>(), "myListeners");
             }
         }).hasMessageContaining("myListeners() requires at least one listener");
 
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             public void call() {
                 mockSettingsImpl.addListeners(null, new LinkedList<Object>(), "myListeners");
             }
         }).hasMessageContaining("myListeners() does not accept null vararg array");
 
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             public void call() {
                 mockSettingsImpl.addListeners(new Object[] {null}, new LinkedList<Object>(), "myListeners");
             }
         }).hasMessageContaining("myListeners() does not accept null listeners");
     }
 
-    @Test
-    public void addListeners_shouldNotAllowNullListener() {
-        try {
-            mockSettingsImpl.stubbingLookupListeners((StubbingLookupListener[])null);
-            fail();
-        } catch (MockitoException e) {
-            assertThat(e.getMessage()).contains("null vararg array");
-        }
-    }
 
     @Test
-    public void addListeners_shouldNotAllowEmptyListener() {
-        try {
-            mockSettingsImpl.stubbingLookupListeners();
-            fail();
-        } catch (MockitoException e) {
-            assertThat(e.getMessage()).contains("at least one listener");
-        }
-    }
+    public void validates_stubbing_lookup_listeners() {
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mockSettingsImpl.stubbingLookupListeners(new StubbingLookupListener[] {});
+            }
+        }).hasMessageContaining("stubbingLookupListeners() requires at least one listener");
 
-    @Test
-    public void addListeners_shouldReportErrorWhenAddingANullListener() {
-        try {
-            mockSettingsImpl.stubbingLookupListeners(stubbingLookupListener, null);
-            fail();
-        } catch (Exception e) {
-            assertThat(e.getMessage()).contains("does not accept null");
-        }
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mockSettingsImpl.stubbingLookupListeners(null);
+            }
+        }).hasMessageContaining("stubbingLookupListeners() does not accept null vararg array");
+
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mockSettingsImpl.stubbingLookupListeners(new StubbingLookupListener[] {null});
+            }
+        }).hasMessageContaining("stubbingLookupListeners() does not accept null listeners");
     }
 
     @Test
