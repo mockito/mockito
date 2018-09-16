@@ -77,7 +77,7 @@ public interface MockCreationSettings<T> {
     List<StubbingLookupListener> getStubbingLookupListeners();
 
     /**
-     * {@link InvocationListener} instances attached to this mock, see {@link org.mockito.MockSettings#addListeners}.
+     * {@link InvocationListener} instances attached to this mock, see {@link org.mockito.MockSettings#invocationListeners(InvocationListener...)}.
      */
     List<InvocationListener> getInvocationListeners();
 

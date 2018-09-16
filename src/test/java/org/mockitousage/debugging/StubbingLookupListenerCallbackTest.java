@@ -9,7 +9,13 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.InOrder;
 import org.mockito.listeners.StubbingLookupEvent;
 import org.mockito.listeners.StubbingLookupListener;
+import org.mockito.mock.MockCreationSettings;
+import org.mockitousage.IMethods;
+import org.mockitoutil.ConcurrentTesting;
 import org.mockitoutil.TestBase;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -143,6 +149,33 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
 
         // then
         verifyZeroInteractions(listener, listener2);
+    }
+
+    @Test
+    public void add_listeners_concurrently_sanity_check() throws Exception {
+        //given
+        final IMethods mock = mock(IMethods.class);
+        final MockCreationSettings<?> settings = mockingDetails(mock).getMockCreationSettings();
+
+        List<Runnable> runnables = new LinkedList<Runnable>();
+        for (int i = 0; i < 50; i++) {
+            runnables.add(new Runnable() {
+                public void run() {
+                    StubbingLookupListener listener1 = mock(StubbingLookupListener.class);
+                    StubbingLookupListener listener2 = mock(StubbingLookupListener.class);
+                    settings.getStubbingLookupListeners().add(listener1);
+                    settings.getStubbingLookupListeners().add(listener2);
+                    settings.getStubbingLookupListeners().remove(listener1);
+                }
+            });
+        }
+
+        //when
+        ConcurrentTesting.concurrently(runnables.toArray(new Runnable[runnables.size()]));
+
+        //then
+        //This assertion may be flaky. If it is let's fix it or remove the test. For now, I'm keeping the test.
+        assertEquals(50, settings.getStubbingLookupListeners().size());
     }
 
     private static class NoWater extends RuntimeException {}

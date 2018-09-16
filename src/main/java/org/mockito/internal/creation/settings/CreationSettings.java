@@ -18,6 +18,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CreationSettings<T> implements MockCreationSettings<T>, Serializable {
     private static final long serialVersionUID = -6789800638070123629L;
@@ -31,8 +32,9 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected SerializableMode serializableMode = SerializableMode.NONE;
     protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
 
-    //TODO X - concurrent scenario?
-    protected List<StubbingLookupListener> stubbingLookupListeners = new ArrayList<StubbingLookupListener>();
+    //Other listeners in this class may also need concurrency-safe implementation
+    //However, no issue was reported yet, so we only protect stubbing lookup listeners (new code)
+    protected List<StubbingLookupListener> stubbingLookupListeners = new CopyOnWriteArrayList<StubbingLookupListener>();
 
     protected List<VerificationStartedListener> verificationStartedListeners = new LinkedList<VerificationStartedListener>();
     protected boolean stubOnly;
