@@ -197,11 +197,13 @@ public class MockSettingsImplTest extends TestBase {
     }
 
     @Test
-    public void addListeners_shouldAddMockObjectListeners() {
-        //given
+    public void addListeners_has_empty_listeners_by_default() {
         assertTrue(mockSettingsImpl.getInvocationListeners().isEmpty());
         assertTrue(mockSettingsImpl.getStubbingLookupListeners().isEmpty());
+    }
 
+    @Test
+    public void addListeners_shouldAddMockObjectListeners() {
         //when
         mockSettingsImpl.invocationListeners(invocationListener);
         mockSettingsImpl.stubbingLookupListeners(stubbingLookupListener);
@@ -215,10 +217,6 @@ public class MockSettingsImplTest extends TestBase {
 
     @Test
     public void addListeners_canAddDuplicateMockObjectListeners_ItsNotOurBusinessThere() {
-        //given
-        assertTrue(mockSettingsImpl.getInvocationListeners().isEmpty());
-        assertTrue(mockSettingsImpl.getStubbingLookupListeners().isEmpty());
-
         //when
         mockSettingsImpl.stubbingLookupListeners(stubbingLookupListener)
                         .stubbingLookupListeners(stubbingLookupListener)
