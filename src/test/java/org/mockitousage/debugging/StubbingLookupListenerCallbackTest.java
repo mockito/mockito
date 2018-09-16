@@ -16,7 +16,8 @@ import static org.mockito.Mockito.*;
 
 public class StubbingLookupListenerCallbackTest extends TestBase {
 
-    final StubbingLookupListener listener = mock(StubbingLookupListener.class);
+    StubbingLookupListener listener = mock(StubbingLookupListener.class);
+    StubbingLookupListener listener2 = mock(StubbingLookupListener.class);
     Foo mock = mock(Foo.class, withSettings().stubbingLookupListeners(listener));
 
     @Test
@@ -87,26 +88,22 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
     @Test
     public void should_call_all_listeners_in_order() {
         // given
-        StubbingLookupListener listener1 = mock(StubbingLookupListener.class);
-        StubbingLookupListener listener2 = mock(StubbingLookupListener.class);
-        Foo mock = mock(Foo.class, withSettings().stubbingLookupListeners(listener1, listener2));
+        Foo mock = mock(Foo.class, withSettings().stubbingLookupListeners(listener, listener2));
         doReturn("sprite").when(mock).giveMeSomeString("soda");
 
         // when
         mock.giveMeSomeString("soda");
 
         // then
-        InOrder inOrder = inOrder(listener1, listener2);
-        inOrder.verify(listener1).onStubbingLookup(any(StubbingLookupEvent.class));
+        InOrder inOrder = inOrder(listener, listener2);
+        inOrder.verify(listener).onStubbingLookup(any(StubbingLookupEvent.class));
         inOrder.verify(listener2).onStubbingLookup(any(StubbingLookupEvent.class));
     }
 
     @Test
     public void should_call_all_listeners_when_mock_throws_exception() {
         // given
-        StubbingLookupListener listener1 = mock(StubbingLookupListener.class);
-        StubbingLookupListener listener2 = mock(StubbingLookupListener.class);
-        Foo mock = mock(Foo.class, withSettings().stubbingLookupListeners(listener1, listener2));
+        Foo mock = mock(Foo.class, withSettings().stubbingLookupListeners(listener, listener2));
         doThrow(new NoWater()).when(mock).giveMeSomeString("tea");
 
         // when
@@ -115,12 +112,38 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
             fail();
         } catch (NoWater e) {
             // then
-            verify(listener1).onStubbingLookup(any(StubbingLookupEvent.class));
+            verify(listener).onStubbingLookup(any(StubbingLookupEvent.class));
             verify(listener2).onStubbingLookup(any(StubbingLookupEvent.class));
         }
     }
 
-    //TODO x deleted listener
+    @Test
+    public void should_delete_listener() {
+        // given
+        Foo mock = mock(Foo.class, withSettings().stubbingLookupListeners(listener, listener2));
+
+        // when
+        mock.doSomething("1");
+        mockingDetails(mock).getMockCreationSettings().getStubbingLookupListeners().remove(listener2);
+        mock.doSomething("2");
+
+        // then
+        verify(listener, times(2)).onStubbingLookup(any(StubbingLookupEvent.class));
+        verify(listener2, times(1)).onStubbingLookup(any(StubbingLookupEvent.class));
+    }
+
+    @Test
+    public void should_clear_listeners() {
+        // given
+        Foo mock = mock(Foo.class, withSettings().stubbingLookupListeners(listener, listener2));
+
+        // when
+        mockingDetails(mock).getMockCreationSettings().getStubbingLookupListeners().clear();
+        mock.doSomething("foo");
+
+        // then
+        verifyZeroInteractions(listener, listener2);
+    }
 
     private static class NoWater extends RuntimeException {}
 }
