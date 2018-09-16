@@ -116,12 +116,6 @@ public class MockSettingsImplTest extends TestBase {
         Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).hasSize(1);
     }
 
-    @SuppressWarnings("unchecked")
-    @Test(expected=MockitoException.class)
-    public void shouldNotAllowNullListener() {
-        mockSettingsImpl.invocationListeners((InvocationListener[])null);
-    }
-
     @Test
     @SuppressWarnings("unchecked")
     public void shouldAddInvocationListener() {
@@ -146,26 +140,6 @@ public class MockSettingsImplTest extends TestBase {
 
         //then
         Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).containsSequence(invocationListener, invocationListener, invocationListener);
-    }
-
-    @Test
-    public void shouldReportErrorWhenAddingNoInvocationListeners() throws Exception {
-        try {
-            mockSettingsImpl.invocationListeners();
-            fail();
-        } catch (Exception e) {
-            Assertions.assertThat(e.getMessage()).contains("at least one listener");
-        }
-    }
-
-    @Test
-    public void shouldReportErrorWhenAddingANullInvocationListener() throws Exception {
-        try {
-            mockSettingsImpl.invocationListeners(invocationListener, null);
-            fail();
-        } catch (Exception e) {
-            Assertions.assertThat(e.getMessage()).contains("does not accept null");
-        }
     }
 
     @Test
@@ -209,6 +183,27 @@ public class MockSettingsImplTest extends TestBase {
                 mockSettingsImpl.stubbingLookupListeners(new StubbingLookupListener[] {null});
             }
         }).hasMessageContaining("stubbingLookupListeners() does not accept null listeners");
+    }
+
+    @Test
+    public void validates_invocation_listeners() {
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mockSettingsImpl.invocationListeners(new InvocationListener[] {});
+            }
+        }).hasMessageContaining("invocationListeners() requires at least one listener");
+
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mockSettingsImpl.invocationListeners(null);
+            }
+        }).hasMessageContaining("invocationListeners() does not accept null vararg array");
+
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mockSettingsImpl.invocationListeners(new InvocationListener[] {null});
+            }
+        }).hasMessageContaining("invocationListeners() does not accept null listeners");
     }
 
     @Test
