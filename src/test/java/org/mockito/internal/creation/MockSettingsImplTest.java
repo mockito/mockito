@@ -5,6 +5,7 @@
 package org.mockito.internal.creation;
 
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
@@ -164,6 +165,27 @@ public class MockSettingsImplTest extends TestBase {
         } catch (Exception e) {
             Assertions.assertThat(e.getMessage()).contains("does not accept null");
         }
+    }
+
+    @Test
+    public void validates_listeners() {
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mockSettingsImpl.addListeners(new Object[] {}, new LinkedList<Object>(), "myListeners");
+            }
+        }).hasMessageContaining("myListeners() requires at least one listener");
+
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mockSettingsImpl.addListeners(null, new LinkedList<Object>(), "myListeners");
+            }
+        }).hasMessageContaining("myListeners() does not accept null vararg array");
+
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                mockSettingsImpl.addListeners(new Object[] {null}, new LinkedList<Object>(), "myListeners");
+            }
+        }).hasMessageContaining("myListeners() does not accept null listeners");
     }
 
     @Test

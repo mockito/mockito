@@ -184,8 +184,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
-    //TODO X dedicated unit tests
-    private static <T> void addListeners(T[] listeners, List<T> container, String method) {
+    static <T> void addListeners(T[] listeners, List<T> container, String method) {
         if (listeners == null) {
             throw methodDoesNotAcceptParameter(method, "null vararg array.");
         }
