@@ -207,8 +207,10 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
      */
     @Override
     public void afterEach(ExtensionContext context) {
-        context.getStore(MOCKITO).remove(SESSION, MockitoSession.class)
-                .finishMocking();
+        MockitoSession mockitoSession = context.getStore(MOCKITO).remove(SESSION, MockitoSession.class);
+        if (mockitoSession != null) {
+            mockitoSession.finishMocking();
+        }
     }
 
     @Override
