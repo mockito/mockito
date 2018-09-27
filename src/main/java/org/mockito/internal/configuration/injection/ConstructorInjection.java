@@ -5,7 +5,9 @@
 
 package org.mockito.internal.configuration.injection;
 
+import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
@@ -26,14 +28,9 @@ import java.util.Set;
  * and try to resolve mocks by type.
  * </p>
  *
- * <blockquote>
- * TODO on missing mock type, shall it abandon or create "noname" mocks.
- * TODO and what if the arg type is not mockable.
- * </blockquote>
- *
  * <p>
- * For now the algorithm tries to create anonymous mocks if an argument type is missing.
- * If not possible the algorithm abandon resolution.
+ * The algorithm tries to create anonymous mocks if an argument type is missing.
+ * If not possible the algorithm abandons resolution.
  * </p>
  */
 public class ConstructorInjection extends MockInjectionStrategy {
@@ -58,7 +55,7 @@ public class ConstructorInjection extends MockInjectionStrategy {
     }
 
     /**
-     * Returns mocks that match the argument type, if not possible assigns null.
+     * Returns mocks that match the argument type, if not possible tries to assign an anonymous mock or defaults to null.
      */
     static class SimpleArgumentResolver implements ConstructorArgumentResolver {
         final Set<Object> objects;
@@ -79,7 +76,15 @@ public class ConstructorInjection extends MockInjectionStrategy {
             for (Object object : objects) {
                 if(argType.isAssignableFrom(object.getClass())) return object;
             }
-            return null;
+            return tryMocking(argType);
+        }
+
+        private Object tryMocking(Class<?> argType) {
+            try {
+                return MockUtil.createMock(Mockito.withSettings().build(argType));
+            } catch (MockitoException exception) {
+                return null;
+            }
         }
     }
 

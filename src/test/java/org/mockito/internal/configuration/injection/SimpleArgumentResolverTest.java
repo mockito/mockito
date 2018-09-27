@@ -29,7 +29,7 @@ public class SimpleArgumentResolverTest {
     }
 
     @Test
-    public void should_return_null_when_match_is_not_possible_on_given_types() throws Exception {
+    public void should_return_noname_mock_when_match_is_not_possible_on_given_types() throws Exception {
         ConstructorInjection.SimpleArgumentResolver resolver =
                 new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet<Float>(), new ByteArrayOutputStream()));
 
@@ -37,7 +37,7 @@ public class SimpleArgumentResolverTest {
 
         assertEquals(3, resolvedInstance.length);
         assertTrue(resolvedInstance[0] instanceof Set);
-        assertNull(resolvedInstance[1]);
+        assertTrue(resolvedInstance[1] instanceof Map);
         assertTrue(resolvedInstance[2] instanceof OutputStream);
     }
 
