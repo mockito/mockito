@@ -5,16 +5,22 @@
 package org.mockito.junit.jupiter;
 
 
-import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
-import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolutionException;
+import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
-import org.mockito.internal.configuration.MockAnnotationProcessor;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.resolver.ArgumentCaptorParameterResolver;
+import org.mockito.junit.jupiter.resolver.MockParameterResolver;
+import org.mockito.junit.jupiter.resolver.CompositeParameterResolver;
 import org.mockito.quality.Strictness;
 
-import java.lang.reflect.Parameter;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -116,6 +122,8 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
 
     private final Strictness strictness;
 
+    private final ParameterResolver parameterResolver;
+
     // This constructor is invoked by JUnit Jupiter via reflection or ServiceLoader
     @SuppressWarnings("unused")
     public MockitoExtension() {
@@ -124,6 +132,10 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
 
     private MockitoExtension(Strictness strictness) {
         this.strictness = strictness;
+        this.parameterResolver = new CompositeParameterResolver(
+            new MockParameterResolver(),
+            new ArgumentCaptorParameterResolver()
+        );
     }
 
     /**
@@ -213,13 +225,12 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.isAnnotated(Mock.class);
+        return parameterResolver.supportsParameter(parameterContext, extensionContext);
     }
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        final Parameter parameter = parameterContext.getParameter();
-        return MockAnnotationProcessor.processAnnotationForMock(parameterContext.findAnnotation(Mock.class).get(), parameter.getType(), parameter.getName());
+        return parameterResolver.resolveParameter(parameterContext, extensionContext);
     }
 }
