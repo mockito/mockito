@@ -188,7 +188,7 @@ class JunitJupiterTest {
 
         @Test
         void ensure_spies_are_created_for_nested_tests() {
-            MockUtil.getMockSettings(nestedSpy);
+            assertThat(MockUtil.isSpy(nestedSpy)).isTrue();
         }
 
     }
