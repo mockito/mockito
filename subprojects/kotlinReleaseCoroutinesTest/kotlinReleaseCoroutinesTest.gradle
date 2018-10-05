@@ -1,0 +1,26 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${libraries.kotlin.version_1_3}"
+    }
+}
+
+apply plugin: "org.jetbrains.kotlin.jvm"
+
+description = "Kotlin tests for Mockito."
+
+repositories {
+    mavenCentral()
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+}
+
+dependencies {
+    testCompile project(":")
+    testCompile libraries.junit4
+
+    testCompile libraries.kotlin.stdlib_1_3
+    testCompile libraries.kotlin.releaseCoroutines
+}
