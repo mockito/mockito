@@ -4,7 +4,7 @@ buildscript {
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.0-rc-57"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${libraries.kotlin.version_1_3}"
     }
 }
 
@@ -21,6 +21,6 @@ dependencies {
     testCompile project(":")
     testCompile libraries.junit4
 
-    testCompile  "org.jetbrains.kotlin:kotlin-stdlib:1.3.0-rc-57"
-    testCompile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.26.1-eap13'
+    testCompile libraries.kotlin.stdlib_1_3
+    testCompile libraries.kotlin.releaseCoroutines
 }
