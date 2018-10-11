@@ -1815,7 +1815,7 @@ For comprehensive overview of the brand new release see [What's new in Mockito 2
   * 1: Dhruv Arora
 * Improvements: 2
   * Introduce PluginSwitch extension point [(#135)](https://github.com/mockito/mockito/issues/135)
-  * bdd mockito cleanup [(#100)](https://github.com/mockito/mockito/pull/100)
+  * BDD mockito cleanup [(#100)](https://github.com/mockito/mockito/pull/100)
 
 ### 1.10.14 (2014-12-02 10:01 UTC)
 
@@ -1958,7 +1958,7 @@ Thanks everybody for great contributions! Next release should come quicker thank
   * Added useful links to README.md [(#58)](https://github.com/mockito/mockito/pull/58)
   * Fixed wrong javadoc for AdditionalAnswers [(#56)](https://github.com/mockito/mockito/pull/56)
   * Enabled continuous integration with Travis CI and coverage tracking with coveralls [(#18)](https://github.com/mockito/mockito/pull/18)
-  * Verification with timout measures time more more accurately [(#15)](https://github.com/mockito/mockito/pull/15)
+  * Verification with timeout measures time more accurately [(#15)](https://github.com/mockito/mockito/pull/15)
   * Allow calling real implementation of jdk8 extension methods [(#39)](https://github.com/mockito/mockito/pull/39)
   * Deprecated timeout().never(), in line with timeout().atMost() [(#14)](https://github.com/mockito/mockito/pull/14)
   * New "then" method for BDD-style interaction testing [(#38)](https://github.com/mockito/mockito/pull/38)
@@ -1981,12 +1981,12 @@ Older implemented improvements were managed in the original issue tracker and ca
 
 ### 1.9.5 (06-10-2012)
 
-Few minor bugfixes and a relatively small extension point added to improve the android experience.
+Few minor bug fixes and a relatively small extension point added to improve the android experience.
 
 * **StackTraceCleaner API** - to improve the experience of mocking on android platform we've added an extension point for cleaning the stack traces. This allows the friends behind the [dexmaker](http://code.google.com/p/dexmaker) to implement custom stack trace filter and hence make the Mockito verification errors contain clean and tidy stack traces. Clean stack trace is something Mockito always cares about! Thanks a lot **Jesse Wilson** for reporting, submitting the initial patch and validating the final solution.
 * javadoc fix (issue 356) - thanks **konigsberg** for reporting and patching and **Brice** for merging.
 * @InjectMocks inconsistency between java 6 and 7 (issue 353) - neat **Brice's** work.
-* fixed a problem with autoboxed default return values, needed for the MockMaker extension point (issue 352). Thanks so much **Jesse Wilson** for reporting and the patch, and **Brice** for merging!
+* Fixed a problem with auto boxed default return values, needed for the MockMaker extension point (issue 352). Thanks so much **Jesse Wilson** for reporting and the patch, and **Brice** for merging!
 
 ### 1.9.5 rc-1 (03-06-2012)
 
@@ -2016,7 +2016,7 @@ If you're upgrading from 1.8.5 please read about all the goodies delivered by 1.
  * To keep the test code slim you can now create a stub [in one line](http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#24).
  * Made it possible to verify interactions [ignoring stubs](http://docs.mockito.googlecode.com/hg/1.9.0-rc1/org/mockito/Mockito.html#25).
  * Fixed various bugs & enhancements. Full list is [here](http://code.google.com/p/mockito/issues/list?can=1&q=label%3AMilestone-Release1.9&colspec=ID+Type+Status+Priority+Milestone+Owner+Summary&cells=tiles).
- * **THANKS** to all the community members who helped improving Mockito! **Brice Dutheil** is a new Mockito champion, having contributed a lot of excellent code in the recent months! Without him, there wouldn't be any release and your mailing list queries wouldn't be answered so promptly! Brice - thank you and welcome to the team! Some fresh mojitoes ought to be served to:
+ * **THANKS** to all the community members who helped improving Mockito! **Brice Dutheil** is a new Mockito champion, having contributed a lot of excellent code in the recent months! Without him, there wouldn't be any release and your mailing list queries wouldn't be answered so promptly! Brice - thank you and welcome to the team! Some fresh mojitos ought to be served to:
   * *Steven Baker* for sharing the one-liner stubs idea
   * *Konrad Garus* for reporting the inconsistencies in the docs & exception messages
   * *Murat Knecht* for the verbose logging
