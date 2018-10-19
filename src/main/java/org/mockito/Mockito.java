@@ -357,7 +357,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * //create an inOrder verifier for a single mock
  * InOrder inOrder = inOrder(singleMock);
  *
- * //following will make sure that add is first called with "was added first, then with "was added second"
+ * //following will make sure that add is first called with "was added first", then with "was added second"
  * inOrder.verify(singleMock).add("was added first");
  * inOrder.verify(singleMock).add("was added second");
  *
@@ -464,6 +464,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * </code></pre>
  *
  * You can use built-in runner: {@link MockitoJUnitRunner} or a rule: {@link MockitoRule}.
+ * For JUnit5 tests, refer to the JUnit5 extension described in <a href="#45">section 45</a>.
  * <p>
  * Read more here: {@link MockitoAnnotations}
  *
