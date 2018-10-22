@@ -76,4 +76,6 @@ public @interface Mock {
     Class<?>[] extraInterfaces() default {};
 
     boolean serializable() default false;
+
+    boolean lenient() default false;
 }
