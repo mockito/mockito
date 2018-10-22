@@ -154,7 +154,7 @@ We found vertical alignment helping when reading the code, for that reason we wa
 
     Go to `IntelliJ setting > Editor > Code Style > Java > Wrapping and Braces`
 
-    1. For parameter `Method call parameters` choose : `Do not wrap`
+    1. For parameter `Method call arguments` choose : `Do not wrap`
     2. For sub-parameter `Align when multiline` tick the checkbox
 
 4. When declaring an annotation with several parameters and when multiple lines make sense,
