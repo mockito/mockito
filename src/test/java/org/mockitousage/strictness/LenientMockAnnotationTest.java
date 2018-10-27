@@ -30,12 +30,12 @@ public class LenientMockAnnotationTest {
         when(regularMock.simpleMethod("2")).thenReturn("2");
 
         //then lenient mock does not throw:
-        lenientMock.simpleMethod("3");
+        ProductionCode.simpleMethod(lenientMock, "3");
 
         //but regular mock throws:
         Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             public void call() {
-                regularMock.simpleMethod("4");
+                ProductionCode.simpleMethod(regularMock,"4");
             }
         }).isInstanceOf(PotentialStubbingProblem.class);
     }

@@ -51,7 +51,7 @@ public class StrictnessPerStubbingTest {
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
             @Override
             public void call() throws Throwable {
-                mock.simpleMethod("100");
+                ProductionCode.simpleMethod(mock, "100");
             }
         }).isInstanceOf(PotentialStubbingProblem.class);
     }

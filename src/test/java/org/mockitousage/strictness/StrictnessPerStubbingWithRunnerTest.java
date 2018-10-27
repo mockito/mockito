@@ -33,9 +33,8 @@ public class StrictnessPerStubbingWithRunnerTest {
 
         //but on strict stubbing, we cannot:
         assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                mock.simpleMethod("100");
+            public void call() {
+                ProductionCode.simpleMethod(mock, "100");
             }
         }).isInstanceOf(PotentialStubbingProblem.class);
 
