@@ -4,7 +4,7 @@ ext {
 
 def versions = [:]
 
-versions.bytebuddy = '1.9.0'
+versions.bytebuddy = '1.9.3'
 versions.junitJupiter = '5.1.1'
 
 libraries.junit4 = 'junit:junit:4.12'
@@ -20,9 +20,9 @@ libraries.bytebuddyandroid = "net.bytebuddy:byte-buddy-android:${versions.bytebu
 
 libraries.errorprone = 'com.google.errorprone:error_prone_core:2.3.1'
 
-libraries.objenesis = 'org.objenesis:objenesis:2.6'
+libraries.objenesis = 'org.objenesis:objenesis:3.0.1'
 
-libraries.asm = 'org.ow2.asm:asm:6.2'
+libraries.asm = 'org.ow2.asm:asm:7.0'
 
 def kotlinVersion = '1.2.10'
 def kotlinVersion_1_3 = '1.3.0-rc-57'
