@@ -33,4 +33,10 @@ public class ForwardsInvocationsTest extends TestBase {
         ForwardsInvocations forwardsInvocations = new ForwardsInvocations(new FooImpl());
         assertEquals(1, forwardsInvocations.answer(invocationOf(Foo.class, "bar", "b", new Object[] {})));
     }
+    
+    @Test
+    public void should_call_anonymous_class_method() throws Throwable {
+        ForwardsInvocations forwardsInvocations = new ForwardsInvocations(new FooImpl() {});
+        assertEquals(1, forwardsInvocations.answer(invocationOf(Foo.class, "bar", "b")));
+    }
 }
