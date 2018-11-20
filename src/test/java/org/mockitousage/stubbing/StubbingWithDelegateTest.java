@@ -5,6 +5,7 @@
 package org.mockitousage.stubbing;
 
 import org.junit.Test;
+import org.mockito.AdditionalAnswers;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitousage.IMethods;
@@ -14,12 +15,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.AdditionalAnswers.delegatesTo;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unchecked")
 public class StubbingWithDelegateTest {
@@ -174,5 +176,26 @@ public class StubbingWithDelegateTest {
         } catch (RuntimeException e) {
             assertThat(e).isEqualTo(failure);
         }
+    }
+
+    interface Foo {
+        int bar();
+    }
+
+    @Test
+    public void should_call_anonymous_class_method() throws Throwable {
+        Foo foo = new Foo() {
+            public int bar() {
+                return 0;
+            }
+        };
+
+        Foo mock = mock(Foo.class);
+        when(mock.bar()).thenAnswer(AdditionalAnswers.delegatesTo(foo));
+
+        //when
+        mock.bar();
+
+        //then no exception is thrown
     }
 }
