@@ -218,7 +218,7 @@ public interface MockSettings extends Serializable {
      *
      * @param listeners The stubbing lookup listeners to add. May not be null.
      * @return settings instance so that you can fluently specify other settings
-     * @since TODO x here and everywhere else
+     * @since 2.23.5
      */
     MockSettings stubbingLookupListeners(StubbingLookupListener... listeners);
 

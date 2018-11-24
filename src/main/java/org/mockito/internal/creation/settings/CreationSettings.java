@@ -48,7 +48,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
 
     @SuppressWarnings("unchecked")
     public CreationSettings(CreationSettings copy) {
-        //TODO x can we have a reflection test here?
+        //TODO can we have a reflection test here? We had a couple of bugs here in the past.
         this.typeToMock = copy.typeToMock;
         this.extraInterfaces = copy.extraInterfaces;
         this.name = copy.name;

@@ -21,6 +21,8 @@ public class StrictStubsRunnerTestListener implements MockitoTestListener {
     public void onMockCreated(Object mock, MockCreationSettings settings) {
         //It is not ideal that we modify the state of MockCreationSettings object
         //MockCreationSettings is intended to be an immutable view of the creation settings
+        //However, we our previous listeners work this way and it hasn't backfired.
+        //Since it is simple and pragmatic, we'll keep it for now.
         settings.getStubbingLookupListeners().add(stubbingLookupListener);
     }
 }

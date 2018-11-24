@@ -5,21 +5,23 @@
 package org.mockito.listeners;
 
 import org.mockito.MockSettings;
+import org.mockito.mock.MockCreationSettings;
 
 /**
- * This listener can be notified of looking up stubbing answer for a given mock.
- *
- * For this to happen, it must be registered using {@link MockSettings#stubbingLookupListeners(StubbingLookupListener...)}.
- *
- * TODO x use case, mutability
- *
+ * When a method is called on a mock object Mockito looks up any stubbings recorded on that mock.
+ * This listener gets notified on stubbing lookup.
+ * Register listener via {@link MockSettings#stubbingLookupListeners(StubbingLookupListener...)}.
+ * This API is used by Mockito to implement {@link org.mockito.exceptions.misusing.PotentialStubbingProblem}
+ * (part of Mockito {@link org.mockito.quality.Strictness}.
  * <p>
- * How does it work?
- * When method is called on the mock object, Mockito looks for any answer (stubbing) declared on that mock.
+ * Details: When method is called on the mock object, Mockito looks for any answer (stubbing) declared on that mock.
  * If the stubbed answer is found, that answer is invoked (value returned, thrown exception, etc.).
  * If the answer is not found (e.g. that invocation was not stubbed on the mock), mock's default answer is used.
- * This listener implementation is notified when Mockito looked up an answer for invocation on a mock.
+ * This listener implementation is notified when Mockito attempted to find an answer for invocation on a mock.
  * <p>
+ * The listeners can be accessed via {@link MockCreationSettings#getStubbingLookupListeners()}.
+ *
+ * @since 2.23.5
  */
 public interface StubbingLookupListener {
 
@@ -27,6 +29,7 @@ public interface StubbingLookupListener {
      * Called by the framework when Mockito looked up an answer for invocation on a mock.
      *
      * @param stubbingLookupEvent - Information about the looked up stubbing
+     * @since 2.23.5
      */
     void onStubbingLookup(StubbingLookupEvent stubbingLookupEvent);
 }
