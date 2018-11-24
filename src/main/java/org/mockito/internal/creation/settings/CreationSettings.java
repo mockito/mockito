@@ -32,8 +32,8 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected SerializableMode serializableMode = SerializableMode.NONE;
     protected List<InvocationListener> invocationListeners = new ArrayList<InvocationListener>();
 
-    //Other listeners in this class may also need concurrency-safe implementation
-    //However, no issue was reported yet, so we only protect stubbing lookup listeners (new code)
+    //Other listeners in this class may also need concurrency-safe implementation. However, no issue was reported about it.
+    // If we do it, we need to understand usage patterns and choose the right concurrent implementation.
     protected List<StubbingLookupListener> stubbingLookupListeners = new CopyOnWriteArrayList<StubbingLookupListener>();
 
     protected List<VerificationStartedListener> verificationStartedListeners = new LinkedList<VerificationStartedListener>();

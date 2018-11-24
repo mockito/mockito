@@ -5,10 +5,10 @@
 package org.mockito.internal.junit;
 
 import org.mockito.internal.exceptions.Reporter;
-import org.mockito.listeners.StubbingLookupEvent;
-import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.internal.stubbing.UnusedStubbingReporting;
 import org.mockito.invocation.Invocation;
+import org.mockito.listeners.StubbingLookupEvent;
+import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Stubbing;
 

@@ -207,9 +207,9 @@ public interface MockSettings extends Serializable {
     /**
      * Add stubbing lookup listener to the mock object.
      *
-     * Multiple listeners may be added and they will be notified in the order they were supplied.
+     * Multiple listeners may be added and they will be notified orderly.
      *
-     * For use cases and more info see {@link StubbingLookupListener}
+     * For use cases and more info see {@link StubbingLookupListener}.
      *
      * Example:
      * <pre class="code"><code class="java">
