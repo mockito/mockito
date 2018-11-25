@@ -19,7 +19,7 @@ public class OneLinerStubStressTest {
     }
 
     private static String generateLargeString() {
-        final int length = 1000000;
+        final int length = 2000000;
         final StringBuilder stringBuilder = new StringBuilder(length);
         for (int i = 0; i <= length; i++) {
             stringBuilder.append("B");
