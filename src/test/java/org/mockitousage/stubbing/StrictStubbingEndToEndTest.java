@@ -17,6 +17,7 @@ import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
+import org.mockitousage.strictness.ProductionCode;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,7 +103,7 @@ public class StrictStubbingEndToEndTest {
 
         @Test public void mismatch() {
             given(mock.simpleMethod(1)).willReturn("");
-            mock.simpleMethod(2);
+            ProductionCode.simpleMethod(mock, 2);
         }
     }
 

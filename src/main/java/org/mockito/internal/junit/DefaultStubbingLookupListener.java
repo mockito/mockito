@@ -57,8 +57,11 @@ class DefaultStubbingLookupListener implements StubbingLookupListener {
         List<Invocation> matchingStubbings = new LinkedList<Invocation>();
         for (Stubbing s : stubbings) {
             if (UnusedStubbingReporting.shouldBeReported(s)
-                && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())) {
-                matchingStubbings.add(s.getInvocation());
+                && s.getInvocation().getMethod().getName().equals(invocation.getMethod().getName())
+                //If stubbing and invocation are in the same source file we assume they are in the test code,
+                // and we don't flag it as mismatch:
+                && !s.getInvocation().getLocation().getSourceFile().equals(invocation.getLocation().getSourceFile())) {
+                    matchingStubbings.add(s.getInvocation());
             }
         }
         return matchingStubbings;

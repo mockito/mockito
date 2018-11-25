@@ -60,9 +60,8 @@ public class StrictnessPerMockTest {
 
         //and on strict stub mock (created by session), we cannot call stubbed method with different arg:
         Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
             public void call() throws Throwable {
-                strictStubsMock.simpleMethod(200);
+                ProductionCode.simpleMethod(strictStubsMock, 200);
             }
         }).isInstanceOf(PotentialStubbingProblem.class);
     }

@@ -130,6 +130,9 @@ public class InvocationBuilder {
             public String toString() {
                 return location;
             }
+            public String getSourceFile() {
+                return "SomeClass";
+            }
         };
         return this;
     }
