@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.stubbing;
 
-import static org.mockito.internal.exceptions.Reporter.notAnException;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-import static org.objenesis.ObjenesisHelper.newInstance;
-
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
+
+import static org.mockito.internal.exceptions.Reporter.notAnException;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+import static org.objenesis.ObjenesisHelper.newInstance;
 
 public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 
@@ -20,8 +20,8 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
     // Keep strong ref to mock preventing premature garbage collection when using 'One-liner stubs'. See #1541.
     private final Object strongMockRef;
 
-    public BaseStubbing(InvocationContainerImpl invocationContainer) {
-        this.strongMockRef = invocationContainer.invokedMock();
+    BaseStubbing(Object mock) {
+        this.strongMockRef = mock;
     }
 
     @Override

@@ -11,8 +11,8 @@ public class ConsecutiveStubbing<T> extends BaseStubbing<T> {
 
     private final InvocationContainerImpl invocationContainer;
 
-    public ConsecutiveStubbing(InvocationContainerImpl invocationContainer) {
-        super(invocationContainer);
+    ConsecutiveStubbing(InvocationContainerImpl invocationContainer) {
+        super(invocationContainer.invokedMock());
         this.invocationContainer = invocationContainer;
     }
 

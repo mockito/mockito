@@ -19,7 +19,7 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
     private Strictness strictness;
 
     public OngoingStubbingImpl(InvocationContainerImpl invocationContainer) {
-        super(invocationContainer);
+        super(invocationContainer.invokedMock());
         this.invocationContainer = invocationContainer;
     }
 
