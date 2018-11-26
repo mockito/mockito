@@ -18,3 +18,10 @@ rootProject.children.each { project ->
 }
 
 enableFeaturePreview('STABLE_PUBLISHING')
+
+buildCache {
+    local(DirectoryBuildCache) {
+        directory = new File(rootDir, 'build-cache')
+        removeUnusedEntriesAfterDays = 30
+    }
+}
