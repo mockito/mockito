@@ -21,6 +21,7 @@ enableFeaturePreview('STABLE_PUBLISHING')
 
 buildCache {
     local(DirectoryBuildCache) {
+        enabled = !System.getenv().containsKey("CI")
         directory = new File(rootDir, 'build-cache')
         removeUnusedEntriesAfterDays = 30
     }
