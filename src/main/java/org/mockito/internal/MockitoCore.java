@@ -35,16 +35,7 @@ import org.mockito.verification.VerificationMode;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.internal.exceptions.Reporter.missingMethodInvocation;
-import static org.mockito.internal.exceptions.Reporter.mocksHaveToBePassedToVerifyNoMoreInteractions;
-import static org.mockito.internal.exceptions.Reporter.mocksHaveToBePassedWhenCreatingInOrder;
-import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerify;
-import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerifyNoMoreInteractions;
-import static org.mockito.internal.exceptions.Reporter.notAMockPassedWhenCreatingInOrder;
-import static org.mockito.internal.exceptions.Reporter.nullPassedToVerify;
-import static org.mockito.internal.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
-import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInOrder;
-import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
+import static org.mockito.internal.exceptions.Reporter.*;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.MockUtil.createMock;
 import static org.mockito.internal.util.MockUtil.getInvocationContainer;
@@ -93,7 +84,7 @@ public class MockitoCore {
         if (!mockingDetails.isMock()) {
             throw notAMockPassedToVerify(mock.getClass());
         }
-        assertVerifiableMock(mock);
+        assertNotStubOnlyMock(mock);
         MockHandler handler = mockingDetails.getMockHandler();
         mock = (T) VerificationStartedNotifier.notifyVerificationStarted(
             handler.getMockSettings().getVerificationStartedListeners(), mockingDetails);
@@ -135,7 +126,7 @@ public class MockitoCore {
                     throw nullPassedToVerifyNoMoreInteractions();
                 }
                 InvocationContainerImpl invocations = getInvocationContainer(mock);
-                assertVerifiableMock(mock);
+                assertNotStubOnlyMock(mock);
                 VerificationDataImpl data = new VerificationDataImpl(invocations, null);
                 noMoreInteractions().verify(data);
             } catch (NotAMockException e) {
@@ -156,7 +147,7 @@ public class MockitoCore {
         }
     }
 
-    private void assertVerifiableMock(Object mock) {
+    private void assertNotStubOnlyMock(Object mock) {
         if (getMockHandler(mock).getMockSettings().isStubOnly()) {
             throw stubPassedToVerify(mock);
         }
@@ -173,7 +164,7 @@ public class MockitoCore {
             if (!isMock(mock)) {
                 throw notAMockPassedWhenCreatingInOrder();
             }
-            assertVerifiableMock(mock);
+            assertNotStubOnlyMock(mock);
         }
         return new InOrderImpl(Arrays.asList(mocks));
     }
