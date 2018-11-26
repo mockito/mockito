@@ -14,6 +14,7 @@ import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
+import org.mockitousage.strictness.ProductionCode;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -82,7 +83,7 @@ public class StrictStubbingTest {
         //stubbing argument mismatch is detected
         assertThat(new Runnable() {
             public void run() {
-                mock.simpleMethod(200);
+                ProductionCode.simpleMethod(mock, 200);
             }
         }).throwsException(PotentialStubbingProblem.class);
     }

@@ -115,4 +115,15 @@ public class BasicStubbingTest extends TestBase {
             fail();
         } catch (CannotVerifyStubOnlyMock e) {}
     }
+
+    @SuppressWarnings("MockitoUsage")
+    @Test
+    public void test_stub_only_not_verifiable_fail_fast() {
+        IMethods localMock = mock(IMethods.class, withSettings().stubOnly());
+
+        try {
+            verify(localMock); // throws exception before method invocation
+            fail();
+        } catch (CannotVerifyStubOnlyMock e) {}
+    }
 }

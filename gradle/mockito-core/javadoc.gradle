@@ -42,8 +42,7 @@ javadoc {
     options.noTree = false
     options.links = ['https://docs.oracle.com/javase/6/docs/api/',
                      'http://junit.org/junit4/javadoc/4.12/',
-                     'http://hamcrest.org/JavaHamcrest/javadoc/1.3/',
-                     'https://jitpack.io/com/github/cbeust/testng/master/javadoc/']
+                     'http://hamcrest.org/JavaHamcrest/javadoc/1.3/']
     options.header("""<em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
     options.footer("""<em id="mockito-version-header-javadoc7-footer"><strong>Mockito ${project.version} API</strong></em>""")
     options.bottom("""
@@ -58,7 +57,7 @@ javadoc {
     if (JavaVersion.current().isJava8Compatible()) {
         options.addStringOption('Xdoclint:none', '-quiet')
 
-        def minorVersion = System.getProperty("java.version") =~ /1.8.0_(.*)/
+        def minorVersion = System.getProperty("java.version") =~ /1.8.0_(\d*)/
 
         // Since JDK 8 version 121 scripts are not allowed in comments. However,
         // earlier version throw an error if an unknown option is passed.

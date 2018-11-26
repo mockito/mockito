@@ -8,6 +8,7 @@ import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 
@@ -24,6 +25,12 @@ import static org.objenesis.ObjenesisHelper.newInstance;
 
 public class StubberImpl implements Stubber {
 
+    private final Strictness strictness;
+
+    public StubberImpl(Strictness strictness) {
+        this.strictness = strictness;
+    }
+
     private final List<Answer<?>> answers = new LinkedList<Answer<?>>();
 
     @Override
@@ -36,7 +43,7 @@ public class StubberImpl implements Stubber {
             throw notAMockPassedToWhenMethod();
         }
 
-        MockUtil.getInvocationContainer(mock).setAnswersForStubbing(answers);
+        MockUtil.getInvocationContainer(mock).setAnswersForStubbing(answers, strictness);
 
         return mock;
     }

@@ -40,6 +40,11 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
             }
 
             Object[] rawArguments = ((Invocation) invocation).getRawArguments();
+            try {
+                delegateMethod.setAccessible(true);
+            } catch (SecurityException ignore) {
+                // try to invoke anyway
+            }
             return delegateMethod.invoke(delegatedObject, rawArguments);
         } catch (NoSuchMethodException e) {
             throw delegatedMethodDoesNotExistOnDelegate(mockMethod, invocation.getMock(), delegatedObject);

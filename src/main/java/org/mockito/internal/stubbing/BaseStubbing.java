@@ -4,16 +4,30 @@
  */
 package org.mockito.internal.stubbing;
 
+import org.mockito.internal.stubbing.answers.CallsRealMethods;
+import org.mockito.internal.stubbing.answers.Returns;
+import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.OngoingStubbing;
+
 import static org.mockito.internal.exceptions.Reporter.notAnException;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.objenesis.ObjenesisHelper.newInstance;
 
-import org.mockito.internal.stubbing.answers.CallsRealMethods;
-import org.mockito.internal.stubbing.answers.Returns;
-import org.mockito.internal.stubbing.answers.ThrowsException;
-import org.mockito.stubbing.OngoingStubbing;
-
 public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
+
+
+    // Keep strong ref to mock preventing premature garbage collection when using 'One-liner stubs'. See #1541.
+    private final Object strongMockRef;
+
+    BaseStubbing(Object mock) {
+        this.strongMockRef = mock;
+    }
+
+    @Override
+    public OngoingStubbing<T> then(Answer<?> answer) {
+        return thenAnswer(answer);
+    }
 
     @Override
     public OngoingStubbing<T> thenReturn(T value) {
@@ -78,6 +92,12 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
     @Override
     public OngoingStubbing<T> thenCallRealMethod() {
         return thenAnswer(new CallsRealMethods());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <M> M getMock() {
+        return (M) this.strongMockRef;
     }
 }
 

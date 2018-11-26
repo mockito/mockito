@@ -13,6 +13,7 @@ import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
+import org.mockitousage.strictness.ProductionCode;
 import org.mockitoutil.JUnitResultAssert;
 import org.mockitoutil.TestBase;
 
@@ -65,7 +66,7 @@ public class StrictStubsRunnerTest extends TestBase {
         }
         @Test public void argument_mismatch() {
             when(mock.simpleMethod(10)).thenReturn("");
-            mock.simpleMethod(20);
+            ProductionCode.simpleMethod(mock, 20);
         }
     }
 }

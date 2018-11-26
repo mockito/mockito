@@ -4,9 +4,6 @@
  */
 package org.mockito.internal.listeners;
 
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MatchableInvocation;
-
 /**
  * Listens to attempts to look up stubbing answer for given mocks. This class is internal for now.
  * <p>
@@ -27,11 +24,7 @@ public interface StubbingLookupListener {
     /**
      * Called by the framework when Mockito looked up an answer for invocation on a mock.
      *
-     * TODO when making this public, we should have an event object instead of 2 arguments in the listener.
-     *
-     * @param invocation the invocation on the mock
-     * @param stubbingFound - can be null - it indicates that the invocation was not stubbed.
+     * @param stubbingLookupEvent - Information about the looked up stubbing
      */
-    void onStubbingLookup(Invocation invocation, MatchableInvocation stubbingFound);
-
+    void onStubbingLookup(StubbingLookupEvent stubbingLookupEvent);
 }

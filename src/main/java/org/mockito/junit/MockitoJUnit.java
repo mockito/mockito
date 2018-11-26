@@ -5,13 +5,18 @@
 package org.mockito.junit;
 
 import org.mockito.Incubating;
-import org.mockito.quality.Strictness;
 import org.mockito.internal.junit.JUnitRule;
 import org.mockito.internal.junit.VerificationCollectorImpl;
 import org.mockito.internal.util.ConsoleMockitoLogger;
+import org.mockito.quality.Strictness;
 
 /**
- * The JUnit rule can be used instead of {@link MockitoJUnitRunner}. See {@link MockitoRule}.
+ * Mockito supports JUnit via:
+ * <li>
+ *     <ul>JUnit Rules - see {@link MockitoRule}</ul>
+ *     <ul>JUnit runners - see {@link MockitoJUnitRunner}</ul>
+ *     <ul><a href="http://javadoc.io/page/org.mockito/mockito-junit-jupiter/latest/org/mockito/junit/jupiter/MockitoExtension.html">JUnit Jupiter extension</a></ul>
+ * </li>
  *
  * @since 1.10.17
  */

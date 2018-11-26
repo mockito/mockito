@@ -1,8 +1,8 @@
 include 'deprecatedPluginsTest'
 include 'inline'
-include 'testng'
 include 'extTest'
 include 'kotlinTest'
+include 'kotlinReleaseCoroutinesTest'
 include 'android'
 include 'junit-jupiter'
 include 'junitJupiterExtensionTest'
@@ -16,3 +16,5 @@ rootProject.children.each { project ->
     assert project.projectDir.isDirectory()
     assert project.buildFile.isFile()
 }
+
+enableFeaturePreview('STABLE_PUBLISHING')

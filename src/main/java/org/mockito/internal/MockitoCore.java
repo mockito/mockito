@@ -12,6 +12,7 @@ import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
 import org.mockito.internal.listeners.VerificationStartedNotifier;
 import org.mockito.internal.progress.MockingProgress;
+import org.mockito.internal.stubbing.DefaultLenientStubber;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
@@ -25,6 +26,8 @@ import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.quality.Strictness;
+import org.mockito.stubbing.LenientStubber;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.verification.VerificationMode;
@@ -41,6 +44,7 @@ import static org.mockito.internal.exceptions.Reporter.notAMockPassedWhenCreatin
 import static org.mockito.internal.exceptions.Reporter.nullPassedToVerify;
 import static org.mockito.internal.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
 import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInOrder;
+import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.MockUtil.createMock;
 import static org.mockito.internal.util.MockUtil.getInvocationContainer;
@@ -88,7 +92,9 @@ public class MockitoCore {
             throw notAMockPassedToVerify(mock.getClass());
         }
         MockHandler handler = mockingDetails.getMockHandler();
-
+        if (handler.getMockSettings().isStubOnly()) {
+            throw stubPassedToVerify();
+        }
         mock = (T) VerificationStartedNotifier.notifyVerificationStarted(
             handler.getMockSettings().getVerificationStartedListeners(), mockingDetails);
 
@@ -165,10 +171,14 @@ public class MockitoCore {
     }
 
     public Stubber stubber() {
+        return stubber(null);
+    }
+
+    public Stubber stubber(Strictness strictness) {
         MockingProgress mockingProgress = mockingProgress();
         mockingProgress.stubbingStarted();
         mockingProgress.resetOngoingStubbing();
-        return new StubberImpl();
+        return new StubberImpl(strictness);
     }
 
     public void validateMockitoUsage() {
@@ -201,5 +211,9 @@ public class MockitoCore {
 
     public MockingDetails mockingDetails(Object toInspect) {
         return new DefaultMockingDetails(toInspect);
+    }
+
+    public LenientStubber lenient() {
+        return new DefaultLenientStubber();
     }
 }

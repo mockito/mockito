@@ -8,17 +8,21 @@ package org.mockitousage.verification;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.verification.MoreThanAllowedActualInvocations;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class AtMostXVerificationTest extends TestBase {
 
@@ -35,7 +39,7 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verify(mock, atMost(1)).clear();
             fail();
-        } catch (MockitoAssertionError e) {}
+        } catch (MoreThanAllowedActualInvocations e) {}
     }
 
     @Test
@@ -46,7 +50,7 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verify(mock, atMost(0)).add(anyString());
             fail();
-        } catch (MockitoAssertionError e) {}
+        } catch (MoreThanAllowedActualInvocations e) {}
     }
 
     @Test
@@ -67,7 +71,7 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verify(mock, atMost(1)).clear();
             fail();
-        } catch (MockitoAssertionError e) {
+        } catch (MoreThanAllowedActualInvocations e) {
             assertEquals("\nWanted at most 1 time but was 2", e.getMessage());
         }
     }
