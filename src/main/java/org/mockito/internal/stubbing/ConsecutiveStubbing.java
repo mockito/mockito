@@ -8,23 +8,17 @@ import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
 
 public class ConsecutiveStubbing<T> extends BaseStubbing<T> {
-    private final InvocationContainerImpl invocationContainerImpl;
 
-    public ConsecutiveStubbing(InvocationContainerImpl invocationContainerImpl) {
-        this.invocationContainerImpl = invocationContainerImpl;
+    private final InvocationContainerImpl invocationContainer;
+
+    ConsecutiveStubbing(InvocationContainerImpl invocationContainer) {
+        super(invocationContainer.invokedMock());
+        this.invocationContainer = invocationContainer;
     }
 
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
-        invocationContainerImpl.addConsecutiveAnswer(answer);
+        invocationContainer.addConsecutiveAnswer(answer);
         return this;
     }
 
-    public OngoingStubbing<T> then(Answer<?> answer) {
-        return thenAnswer(answer);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <M> M getMock() {
-        return (M) invocationContainerImpl.invokedMock();
-    }
 }
