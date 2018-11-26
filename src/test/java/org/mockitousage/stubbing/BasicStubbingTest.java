@@ -10,13 +10,12 @@ import org.junit.Test;
 import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.internal.util.MockUtil;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class BasicStubbingTest extends TestBase {
@@ -126,7 +125,9 @@ public class BasicStubbingTest extends TestBase {
             verify(localMock); // throws exception before method invocation
             fail();
         } catch (CannotVerifyStubOnlyMock e) {
-            assertThat(e.getMessage()).contains(MockUtil.getMockName(localMock).toString());
+            assertEquals("\n" +
+                "Argument \"iMethods\" passed to verify is a stubOnly() mock which cannot be verified.\n" +
+                "If you intend to verify invocations on this mock, don't use stubOnly() in its MockSettings.", e.getMessage());
         }
     }
 
@@ -137,9 +138,7 @@ public class BasicStubbingTest extends TestBase {
         try {
             verifyNoMoreInteractions(localMock);
             fail();
-        } catch (CannotVerifyStubOnlyMock e) {
-            assertThat(e.getMessage()).contains(MockUtil.getMockName(localMock).toString());
-        }
+        } catch (CannotVerifyStubOnlyMock e) {}
     }
 
     @Test
@@ -149,8 +148,6 @@ public class BasicStubbingTest extends TestBase {
         try {
             inOrder(localMock);
             fail();
-        } catch (CannotVerifyStubOnlyMock e) {
-            assertThat(e.getMessage()).contains(MockUtil.getMockName(localMock).toString());
-        }
+        } catch (CannotVerifyStubOnlyMock e) {}
     }
 }
