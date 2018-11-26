@@ -278,8 +278,8 @@ public class Reporter {
 
     public static MockitoException stubPassedToVerify(Object mock) {
         return new CannotVerifyStubOnlyMock(join(
-                "Argument \"" + MockUtil.getMockName(mock) + "\" passed to verify is a stubOnly() mock, not a full blown mock!",
-                "If you intend to verify invocations on a mock, don't use stubOnly() in its MockSettings."
+                "Argument \"" + MockUtil.getMockName(mock) + "\" passed to verify is a stubOnly() mock which cannot be verified.",
+                "If you intend to verify invocations on this mock, don't use stubOnly() in its MockSettings."
         ));
     }
 
