@@ -20,9 +20,7 @@ rootProject.children.each { project ->
 enableFeaturePreview('STABLE_PUBLISHING')
 
 buildCache {
-    local(DirectoryBuildCache) {
+    local {
         enabled = !System.getenv().containsKey("CI")
-        directory = new File(rootDir, 'build-cache')
-        removeUnusedEntriesAfterDays = 30
     }
 }
