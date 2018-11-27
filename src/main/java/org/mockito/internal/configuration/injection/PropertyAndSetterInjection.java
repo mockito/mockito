@@ -58,6 +58,8 @@ import static org.mockito.internal.util.reflection.SuperTypesLastSorter.sortSupe
  *   </ul>
  * </p>
  *
+ * FIXME: "Can you update documented algorythm in the javadoc in PropertyAndSetterINjection."
+ *
  * <p>
  * <u>Note:</u> If the field needing injection is not initialized, the strategy tries
  * to create one using a no-arg constructor of the field type.
@@ -77,6 +79,7 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
             return "removeNothing";
         }
 
+        @Override
         public boolean isOut(Field object) {
             return false;
         }
@@ -88,6 +91,7 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
             return "removeStatic";
         }
 
+        @Override
         public boolean isOut(Field object) {
             return Modifier.isStatic(object.getModifiers());
         }
@@ -99,6 +103,7 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
             return "removeStaticFinal";
         }
 
+        @Override
         public boolean isOut(Field object) {
             return Modifier.isStatic(object.getModifiers()) && Modifier.isFinal(object.getModifiers());
         }
@@ -109,22 +114,25 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         public String toString() {
             return "removeInstanceFinalFields";
         }
+
+        @Override
         public boolean isOut(Field object) {
             return !Modifier.isStatic(object.getModifiers()) && Modifier.isFinal(object.getModifiers());
         }
     };
 
 
-    public boolean processInjection(Field injectMocksField, Object injectMocksFieldOwner, Set<Object> mockCandidates) {
-        FieldInitializationReport report = initializeInjectMocksField(injectMocksField, injectMocksFieldOwner);
+    @Override
+    public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
+        FieldInitializationReport report = initializeInjectMocksField(field, fieldOwner);
 
         // for each field in the class hierarchy
         boolean injectionOccurred = false;
         Class<?> fieldClass = report.fieldClass();
         Object fieldInstanceNeedingInjection = report.fieldInstance();
-        InjectUnsafe injectUnsafe = parseInjectUnsafe(injectMocksField);
+        InjectUnsafe injectUnsafe = parseInjectUnsafe(field);
 
-        while (fieldClass != Object.class) {
+        while (!fieldClass.equals(Object.class)) {
             injectionOccurred |= injectMockCandidates(fieldClass, fieldInstanceNeedingInjection, newMockSafeHashSet(mockCandidates), injectUnsafe);
             fieldClass = fieldClass.getSuperclass();
         }

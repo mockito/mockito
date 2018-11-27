@@ -34,16 +34,19 @@ public class ListUtil {
         return converted;
     }
 
-    public static <T> Filter<T> combineOr(final Filter<T> a, final Filter<T> b) {
+    public static <T> Filter<T> combineOr(Filter<T> a, Filter<T> b) {
+        final Filter<T> aa = a;
+        final Filter<T> bb = b;
+
         return new Filter<T>() {
             @Override
             public String toString() {
-                return "[" + a.toString() + "||" + b.toString() + "]";
+                return "[" + aa + "||" + bb + "]";
             }
 
             @Override
             public boolean isOut(T object) {
-                return a.isOut(object) || b.isOut(object);
+                return aa == null || bb == null || aa.isOut(object) || bb.isOut(object);
             }
         };
     }

@@ -21,10 +21,74 @@ import java.lang.annotation.*;
  * <p>InjectUnsafe to the rescue:<br/>
  * Modifies the behavior of InjectMocks in a way that allows injection into static and final fields. </p>
  *
- * <p> Please note: not all mock builders are supported equally:
+ * <hr/>
+ *
+ * <strong>
+ *     With great power comes great responsibility: while injecting into final instance variables is safe,
+ *     injecting into <i>static</i> or <i>static final</i> fields may have unexpected consequences:
+ *     if these values do not get reset to their default value (mockito does <i>not</i> do this!), subsequent tests
+ *     will use the mock.
+ * </strong>
+ *
+ * <hr/>
+ *
+ * <p> Please note: not all mock makers are supported equally:
  * bytebuddy (the default) will throw {@link IllegalAccessError}
  * if you try to use <code>staticFields = {@link OverrideStaticFields#STATIC_FINAL}</code>. </p>
+ *
+ * <p>
+ * Example:
+ * <pre class="code"><code class="java">
+ * // the object under test:
+ * public class ArticleCalculator {
+ *     private static Computer computer = new Computer();
+ *
+ *     public long calculate(Integer foo) {
+ *         return computer.retrieveOrCalculateExpensiveOperation(foo);
+ *     }
+ * }
+ *
+ * public class Computer {
+ *     private final ConcurrentHashMap<Integer, Long> data = new ConcurrentHashMap<>();
+ *
+ *     public Long retrieveOrCalculateExpensiveOperation(int param) {
+ *         return data.computeIfAbsent(param, (k) -> (long) ((Math.random() * Integer.MAX_VALUE)) * param);
+ *     }
+ * }
+ *
+ * public class CalculatorTest {
+ *
+ *     &#064;Mock
+ *     private Computer computer;
+ *
+ *     &#064;InjectMocks
+ *     &#064;InjectUnsafe(staticFields = OverrideStaticFields.STATIC)
+ *     private ArticleCalculator calculator;
+ *
+ *     &#064;Before
+ *     public void initMocks() {
+ *         MockitoAnnotations.initMocks(this);
+ *     }
+ *
+ *     &#064;Test
+ *     public void shouldCalculate() {
+ *         Mockito.when(computer.retrieveOrCalculateExpensiveOperation(3)).thenReturn(42L);
+ *
+ *         long result = calculator.calculate(3);
+ *
+ *         Assert.assertEquals(42L, result);
+ *     }
+ * }
+ * </code></pre>
+ *
+ * If the &#064;InjectMocks annotation is not given in the example above,
+ * the mock will (silently) not get injected and the test will fail.
+ * </p>
+ *
+ * FIXME: add @since tag
+ * FIXME: document new API in Mockto class
  */
+@Incubating
 @Documented
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
