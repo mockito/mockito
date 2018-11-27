@@ -87,12 +87,16 @@ public class StubberImpl implements Stubber {
             mockingProgress().reset();
             throw notAnException();
         }
-        Throwable e;
+        Throwable e = null;
         try {
             e = newInstance(toBeThrown);
-        } catch (RuntimeException instantiationError) {
-            mockingProgress().reset();
-            throw instantiationError;
+        } finally {
+            if (e == null) {
+                //this means that an exception or error was thrown when trying to create new instance
+                //we don't want 'catch' statement here because we want the exception to be thrown to the user
+                //however, we do want to clean up state (e.g. "stubbing started").
+                mockingProgress().reset();
+            }
         }
         return doThrow(e);
     }
