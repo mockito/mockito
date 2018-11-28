@@ -33,6 +33,8 @@ public class ExceptionFactory {
             JUnitArgsAreDifferent.create("message", "wanted", "actual");
         } catch (NoClassDefFoundError onlyIfJUnitIsNotAvailable) {
             return false;
+        } catch (VerifyError onlyIfJUnitIsIncompatible) {
+            return false;
         }
         return true;
     }
