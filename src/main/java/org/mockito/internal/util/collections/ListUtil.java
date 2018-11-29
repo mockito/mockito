@@ -26,6 +26,16 @@ public class ListUtil {
         return filtered;
     }
 
+    public static <T> LinkedList<T> filterBy(Collection<T> collection, Predicate<T> predicate) {
+        LinkedList<T> filtered = new LinkedList<T>();
+        for (T t : collection) {
+            if (predicate.test(t)) {
+                filtered.add(t);
+            }
+        }
+        return filtered;
+    }
+
     public static <From, To> LinkedList<To> convert(Collection<From> collection, Converter<From, To> converter) {
         LinkedList<To> converted = new LinkedList<To>();
         for (From f: collection) {
@@ -34,25 +44,61 @@ public class ListUtil {
         return converted;
     }
 
-    public static <T> Filter<T> combineOr(Filter<T> a, Filter<T> b) {
-        final Filter<T> aa = a;
-        final Filter<T> bb = b;
-
-        return new Filter<T>() {
-            @Override
-            public String toString() {
-                return "[" + aa + "||" + bb + "]";
-            }
-
-            @Override
-            public boolean isOut(T object) {
-                return aa == null || bb == null || aa.isOut(object) || bb.isOut(object);
-            }
-        };
-    }
-
     public interface Filter<T> {
         boolean isOut(T object);
+    }
+
+    // heavily inspired by Java8 java.util.function.Predicate
+    public abstract static class Predicate<T> {
+        public abstract boolean test(T object);
+
+        public Predicate<T> negate() {
+            return new Predicate<T>() {
+                @Override
+                public String toString() {
+                    return "!" + Predicate.this.toString();
+                }
+
+                @Override
+                public boolean test(T object) {
+                    return !Predicate.this.test(object);
+                }
+            };
+        }
+
+        public Predicate<T> and(Predicate<? super T> other) {
+            assert other != null;
+            final Predicate<? super T> otherPred = other;
+
+            return new Predicate<T>() {
+                @Override
+                public String toString() {
+                    return Predicate.this.toString() + " && " + otherPred.toString();
+                }
+
+                @Override
+                public boolean test(T object) {
+                    return Predicate.this.test(object) && otherPred.test(object);
+                }
+            };
+        }
+
+        public Predicate<T> or(Predicate<? super T> other) {
+            assert other != null;
+            final Predicate<? super T> otherPred = other;
+
+            return new Predicate<T>() {
+                @Override
+                public String toString() {
+                    return Predicate.this.toString() + " || " + otherPred.toString();
+                }
+
+                @Override
+                public boolean test(T object) {
+                    return Predicate.this.test(object) || otherPred.test(object);
+                }
+            };
+        }
     }
 
     public interface Converter<From, To> {

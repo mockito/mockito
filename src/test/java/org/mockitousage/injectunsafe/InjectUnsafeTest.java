@@ -14,8 +14,8 @@ import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.InjectUnsafe.OverrideInstanceFields;
-import static org.mockito.InjectUnsafe.OverrideStaticFields;
+import static org.mockito.InjectUnsafe.UnsafeFieldModifier.FINAL;
+import static org.mockito.InjectUnsafe.UnsafeFieldModifier.STATIC;
 
 public class InjectUnsafeTest extends TestBase {
 
@@ -56,7 +56,7 @@ public class InjectUnsafeTest extends TestBase {
     private C spyStaticFinal;
 
     @InjectMocks
-    @InjectUnsafe(instanceFields = OverrideInstanceFields.FINAL, staticFields = OverrideStaticFields.STATIC)
+    @InjectUnsafe(allow = {FINAL, STATIC})
     private UnderTest underTest;
 
     @Before

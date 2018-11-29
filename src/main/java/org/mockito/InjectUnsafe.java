@@ -4,7 +4,11 @@
  */
 package org.mockito;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Change the behavior of {@link InjectMocks}: allow injection of static/final fields that are normally skipped.
@@ -18,23 +22,32 @@ import java.lang.annotation.*;
  * Even worse with static fields: you'd have to make setters available via method call.<br/>
  * And then there's always legacy/library code that cannot be changed easily :(</p>
  *
- * <p>InjectUnsafe to the rescue:<br/>
+ * <p>
+ * InjectUnsafe to the rescue:<br/>
  * Modifies the behavior of InjectMocks in a way that allows injection into static and final fields. </p>
  *
  * <hr/>
  *
  * <strong>
- *     With great power comes great responsibility: while injecting into final instance variables is safe,
- *     injecting into <i>static</i> or <i>static final</i> fields may have unexpected consequences:
- *     if these values do not get reset to their default value (mockito does <i>not</i> do this!), subsequent tests
- *     will use the mock.
+ * <p>
+ * With great power comes great responsibility: while injecting into final instance variables is safe,
+ * injecting into <i>static</i> or <i>static final</i> fields may have unexpected consequences:
+ * </p>
+ * <p>
+ * if these values do not get reset to their default value (mockito does <i>not</i> do this!),
+ * following tests in any test class anywhere (!) will use the mock until the ClassLoader running the tests
+ * shuts down (usually at JVM termination).
+ * </p>
+ * <p>
+ * If you forget this, there <i>will</i> be hard-to-debug bugs!
+ * </p>
  * </strong>
  *
  * <hr/>
  *
  * <p> Please note: not all mock makers are supported equally:
  * bytebuddy (the default) will throw {@link IllegalAccessError}
- * if you try to use <code>staticFields = {@link OverrideStaticFields#STATIC_FINAL}</code>. </p>
+ * if you try to use <code>allow = {@link UnsafeFieldModifier#STATIC_FINAL}</code>. </p>
  *
  * <p>
  * Example:
@@ -90,46 +103,33 @@ import java.lang.annotation.*;
  */
 @Incubating
 @Documented
-@Target({ElementType.FIELD})
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InjectUnsafe {
-    enum OverrideStaticFields {
+    enum UnsafeFieldModifier {
         /**
-         * Default: no injection into static fields
-         */
-        NONE,
-        /**
-         * Allow injection into static fields - non-final only.
-         */
-        STATIC,
-        /**
-         * Allow injection into static fields - including static final.
-         */
-        STATIC_FINAL
-    }
-
-    enum OverrideInstanceFields {
-        /**
-         * Default: no injection into final instance fields
+         * no injection into static fields. Mainly useful for tooling.
          */
         NONE,
         /**
          * Allow mock injection into final instance fields.
          */
-        FINAL
+        FINAL,
+        /**
+         * Allow injection into static fields - non-final only.
+         */
+        STATIC,
+        /**
+         * Only use this if you <strong>absolutely know what you're doing!</strong>, see {@link InjectUnsafe} for
+         * details.
+         *
+         * Allow injection into static fields - including static final.
+         */
+        STATIC_FINAL
     }
 
     /**
-     * Allow mock-injection into instance fields that get skipped during the normal injection cycle.
+     * Allow mock-injection into fields that get skipped during the normal injection cycle.
      */
-    OverrideInstanceFields instanceFields() default OverrideInstanceFields.NONE;
-
-    /**
-     * Only use this if you <strong>absolute know what you're doing!</strong>.
-     *
-     * This will change the value of static fields value for <strong>all subsequent usages of the static field</strong>
-     * as long as the current class loader lives.
-     * This might lead to very unexpected and hard-to-debug behavior of other tests!
-     */
-    OverrideStaticFields staticFields() default OverrideStaticFields.NONE;
+    UnsafeFieldModifier[] allow() default UnsafeFieldModifier.FINAL;
 }

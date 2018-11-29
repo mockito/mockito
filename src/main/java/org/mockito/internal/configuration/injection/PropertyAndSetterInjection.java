@@ -9,23 +9,26 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.mockito.InjectUnsafe;
+import org.mockito.InjectUnsafe.UnsafeFieldModifier;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.NameBasedCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.TerminalMockCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFilter;
 import org.mockito.internal.util.collections.ListUtil;
+import org.mockito.internal.util.collections.ListUtil.Predicate;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 
+import static org.mockito.InjectUnsafe.UnsafeFieldModifier.STATIC;
 import static org.mockito.internal.exceptions.Reporter.cannotInitializeForInjectMocksAnnotation;
 import static org.mockito.internal.exceptions.Reporter.fieldInitialisationThrewException;
-import static org.mockito.internal.util.collections.ListUtil.combineOr;
 import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 import static org.mockito.internal.util.reflection.SuperTypesLastSorter.sortSuperTypesLast;
 
@@ -73,54 +76,34 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
                             new TerminalMockCandidateFilter()));
 
 
-    private final ListUtil.Filter<Field> removeNothing = new ListUtil.Filter<Field>() {
+    private static final Predicate<Field> ACCEPT_ANY_STATIC = new Predicate<Field>() {
         @Override
         public String toString() {
-            return "removeNothing";
+            return "ACCEPT_ANY_STATIC";
         }
 
         @Override
-        public boolean isOut(Field object) {
-            return false;
-        }
-    };
-
-    private final ListUtil.Filter<Field> removeStatic = new ListUtil.Filter<Field>() {
-        @Override
-        public String toString() {
-            return "removeStatic";
-        }
-
-        @Override
-        public boolean isOut(Field object) {
+        public boolean test(Field object) {
             return Modifier.isStatic(object.getModifiers());
         }
     };
 
-    private final ListUtil.Filter<Field> removeStaticFinal = new ListUtil.Filter<Field>() {
+    private static final Predicate<Field> ACCEPT_ANY_FINAL = new Predicate<Field>() {
         @Override
         public String toString() {
-            return "removeStaticFinal";
+            return "ACCEPT_ANY_FINAL";
         }
 
         @Override
-        public boolean isOut(Field object) {
-            return Modifier.isStatic(object.getModifiers()) && Modifier.isFinal(object.getModifiers());
+        public boolean test(Field object) {
+            return Modifier.isFinal(object.getModifiers());
         }
     };
 
-    private final ListUtil.Filter<Field> removeInstanceFinalFields = new ListUtil.Filter<Field>() {
-        @Override
-        public String toString() {
-            return "removeInstanceFinalFields";
-        }
-
-        @Override
-        public boolean isOut(Field object) {
-            return !Modifier.isStatic(object.getModifiers()) && Modifier.isFinal(object.getModifiers());
-        }
-    };
-
+    private static final Predicate<Field> ACCEPT_INSTANCE_FIELD = ACCEPT_ANY_FINAL.negate().and(ACCEPT_ANY_STATIC.negate());
+    private static final Predicate<Field> ACCEPT_INSTANCE_FINAL = ACCEPT_ANY_FINAL.and(ACCEPT_ANY_STATIC.negate());
+    private static final Predicate<Field> ACCEPT_STATIC_FINAL = ACCEPT_ANY_STATIC.and(ACCEPT_ANY_FINAL);
+    private static final Predicate<Field> ACCEPT_STATIC_NON_FINAL = ACCEPT_ANY_STATIC.and(ACCEPT_ANY_FINAL.negate());
 
     @Override
     public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
@@ -162,10 +145,10 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         return injectionOccurred;
     }
 
-    private InjectUnsafe parseInjectUnsafe(Field injectMocksField) {
+   private InjectUnsafe parseInjectUnsafe(Field injectMocksField) {
         InjectUnsafe injectUnsafe = injectMocksField.getAnnotation(InjectUnsafe.class);
         if (injectUnsafe == null) {
-            injectUnsafe = new InjectUnsafeDefaults();
+            injectUnsafe = new InjectUnsafeFallback();
         }
 
         return injectUnsafe;
@@ -188,38 +171,32 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         return injectionOccurred;
     }
 
-    private List<Field> orderedInstanceFieldsFrom(Class<?> awaitingInjectionClazz, InjectUnsafe injectUnsafe) {
-        ListUtil.Filter<Field> fieldFilters = filtersFromOverrides(injectUnsafe);
+    List<Field> orderedInstanceFieldsFrom(Class<?> awaitingInjectionClazz, InjectUnsafe injectUnsafe) {
+        ListUtil.Predicate<Field> fieldPredicate = predicateFromOverrides(injectUnsafe);
 
         List<Field> declaredFields = Arrays.asList(awaitingInjectionClazz.getDeclaredFields());
-        declaredFields = ListUtil.filter(declaredFields, fieldFilters);
+        declaredFields = ListUtil.filterBy(declaredFields, fieldPredicate);
 
         return sortSuperTypesLast(declaredFields);
     }
 
-    private ListUtil.Filter<Field> filtersFromOverrides(InjectUnsafe injectUnsafe) {
-        ListUtil.Filter<Field> staticFieldFilter;
+    private ListUtil.Predicate<Field> predicateFromOverrides(InjectUnsafe injectUnsafe) {
+        Set<UnsafeFieldModifier> allow = EnumSet.copyOf(Arrays.asList(injectUnsafe.allow()));
 
-        switch (injectUnsafe.staticFields()) {
-            case STATIC_FINAL:
-                staticFieldFilter = this.removeNothing;
-                break;
-            case STATIC:
-                staticFieldFilter = this.removeStaticFinal;
-                break;
-            default:
-                staticFieldFilter = this.removeStatic;
+        Predicate<Field> filter = ACCEPT_INSTANCE_FIELD;
+
+        if (allow.contains(UnsafeFieldModifier.STATIC_FINAL)) {
+            filter = filter.or(ACCEPT_STATIC_FINAL);
         }
 
-        ListUtil.Filter<Field> instanceFieldFilter;
-        switch (injectUnsafe.instanceFields()) {
-            case FINAL:
-                instanceFieldFilter = this.removeNothing;
-                break;
-            default:
-                instanceFieldFilter = this.removeInstanceFinalFields;
+        if (allow.contains(UnsafeFieldModifier.FINAL)) {
+            filter = filter.or(ACCEPT_INSTANCE_FINAL);
         }
 
-        return combineOr(staticFieldFilter, instanceFieldFilter);
+        if (allow.contains(STATIC)) {
+            filter = filter.or(ACCEPT_STATIC_NON_FINAL);
+        }
+
+        return filter;
     }
 }
