@@ -31,9 +31,7 @@ public class ExceptionFactory {
     private static boolean canLoadJunitClass() {
         try {
             JUnitArgsAreDifferent.create("message", "wanted", "actual");
-        } catch (NoClassDefFoundError onlyIfJUnitIsNotAvailable) {
-            return false;
-        } catch (VerifyError onlyIfJUnitIsIncompatible) {
+        } catch (Throwable onlyIfJUnitIsNotAvailable) {
             return false;
         }
         return true;
