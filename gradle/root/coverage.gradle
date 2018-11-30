@@ -1,3 +1,11 @@
+if (!project.hasProperty("jacoco")) {
+    //JaCoCo plugin prevents using Build Cache. We will enable jacoco configuration only when specific property is supplied
+    logger.info "JaCoCo code coverage will not be configured because 'jacoco' project property is not present."
+    return //don't evaluate this Gradle file any further
+} else {
+    logger.lifecycle "Configuring JaCoCo code coverage because 'jacoco' project property is present."
+}
+
 //TODO: Standard JaCoCo coverage doesn't work in Android module
 task mockitoCoverage(type: JacocoReport) {
 
