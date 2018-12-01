@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 public class FieldSetterTest {
 
@@ -87,5 +88,16 @@ public class FieldSetterTest {
         FieldSetter.setField(foo, staticFinalFieldRef, 42);
 
         assertThat(Foo.getStaticFinalField()).isEqualTo(42);
+    }
+
+    @Test
+    public void shouldThrowIllegalArgumentException() {
+        Foo foo = new Foo();
+        try {
+            FieldSetter.setField(foo, finalFieldRef, 2d);
+            fail();
+        } catch (RuntimeException rte) {
+            assertThat(rte.getMessage()).startsWith("Wrong argument on field");
+        }
     }
 }
