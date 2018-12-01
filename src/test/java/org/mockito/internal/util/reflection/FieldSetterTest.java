@@ -6,98 +6,134 @@ package org.mockito.internal.util.reflection;
 
 import java.lang.reflect.Field;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
+/**
+ * For the FieldSetterTest, separate Object-Under-Test-Class for every test method should be created.
+ * This is because the Oracle-JDK implementation of Field.set() uses a cached accessor
+ * (e.g. sun.reflect.UnsafeStaticFieldAccessorImpl).
+ * Depending on test method ordering, the check for IllegalAccessExcpetion in Field.set() might occur in a state
+ * when our FieldSetter has made the field accessible and thus setting a value is legal.
+ * Subsequent calls of Field.set() on the same field use the cached accessor although the field modifiers probably
+ * has been reset back to a state where IllegalAccessException should have occured.
+ */
+@SuppressWarnings({ "InstantiationOfUtilityClass", "PublicField", "FieldMayBeStatic",
+    "UtilityClassWithoutPrivateConstructor", "NonFinalUtilityClass" })
 public class FieldSetterTest {
 
-    public static class Foo {
-        private Integer field = null;
-        private final Integer finalField = null;
-        private static Integer staticField = null;
-        private static final Integer staticFinalField = null;
-
-        public Integer getField() {
-            return field;
-        }
-
-        public Integer getFinalField() {
-            return finalField;
-        }
-
-        public static Integer getStaticField() {
-            return staticField;
-        }
-
-        public static Integer getStaticFinalField() {
-            return staticFinalField;
-        }
+    public static class InstanceField {
+        public Integer field = null;
     }
 
-    private static final Field fieldRef;
-    private static final Field finalFieldRef;
-    private static final Field staticFieldRef;
-    private static final Field staticFinalFieldRef;
-
-    static {
-        try {
-            fieldRef = Foo.class.getDeclaredField("field");
-            finalFieldRef = Foo.class.getDeclaredField("finalField");
-            staticFieldRef = Foo.class.getDeclaredField("staticField");
-            staticFinalFieldRef = Foo.class.getDeclaredField("staticFinalField");
-        } catch (NoSuchFieldException e) {
-            throw new IllegalArgumentException("Test setup error!", e);
-        }
+    public static class FinalField {
+        public final Integer finalField = null;
     }
 
+    public static class StaticField {
+        public static Integer staticField = null;
+    }
+
+    public static class StaticFinalField {
+        @SuppressWarnings("FieldNamingConvention")
+        public static final Integer staticFinalField = null;
+    }
+
+    // used for testing IllegalArgumentException
+    public static class IllegalArgumentExceptionField {
+        public Integer illegalArgumentExceptionField = null;
+    }
+
+    public static class SetAnyStaticFinalField {
+        @SuppressWarnings("FieldNamingConvention")
+        public static final Integer otherStaticFinalField = null;
+    }
+
+    private Field fieldRef = null;
+    private Field finalFieldRef = null;
+    private Field staticFieldRef = null;
+    private Field staticFinalFieldRef = null;
+    @SuppressWarnings("FieldAccessedSynchronizedAndUnsynchronized")
+    private Field illegalArgumentExceptionFieldRef = null;
+    @SuppressWarnings("FieldAccessedSynchronizedAndUnsynchronized")
+    private Field otherStaticFinalFieldRef = null;
+
+    @Before
+    public void before() throws Exception {
+        fieldRef = InstanceField.class.getDeclaredField("field");
+        finalFieldRef = FinalField.class.getDeclaredField("finalField");
+        staticFieldRef = StaticField.class.getDeclaredField("staticField");
+        staticFinalFieldRef = StaticFinalField.class.getDeclaredField("staticFinalField");
+        illegalArgumentExceptionFieldRef = IllegalArgumentExceptionField.class
+            .getDeclaredField("illegalArgumentExceptionField");
+        otherStaticFinalFieldRef = SetAnyStaticFinalField.class.getDeclaredField("otherStaticFinalField");
+    }
 
     @Test
     public void setField_instanceField() {
-        Foo foo = new Foo();
+        InstanceField foo = new InstanceField();
 
         FieldSetter.setField(foo, fieldRef, 42);
 
-        assertThat(foo.getField()).isEqualTo(42);
+        assertThat(foo.field).isEqualTo(42);
     }
 
     @Test
     public void setField_finalField() {
-        Foo foo = new Foo();
+        FinalField foo = new FinalField();
 
         FieldSetter.setField(foo, finalFieldRef, 42);
 
-        assertThat(foo.getFinalField()).isEqualTo(42);
+        assertThat(foo.finalField).isEqualTo(42);
     }
+
     @Test
     public void setField_staticField() {
-        Foo foo = new Foo();
-        assertThat(Foo.getStaticField()).isNull(); // sanity check since we're dealing sith statics
+        StaticField foo = new StaticField();
+        // sanity check since we're dealing with static
+        assertThat(StaticField.staticField).isNull();
 
         FieldSetter.setField(foo, staticFieldRef, 42);
 
-        assertThat(Foo.getStaticField()).isEqualTo(42);
+        assertThat(StaticField.staticField).isEqualTo(42);
     }
 
     @Test
-    public void setField_staticFinalField() {
-        Foo foo = new Foo();
-        assertThat(Foo.getStaticFinalField()).isNull(); // sanity check since we're dealing sith statics
+    public void setField_staticFinalFieldShouldThrowIllegalAccessException() {
+        StaticFinalField foo = new StaticFinalField();
+        // sanity check since we're dealing with static
+        assertThat(StaticFinalField.staticFinalField).isNull();
 
-        FieldSetter.setField(foo, staticFinalFieldRef, 42);
-
-        assertThat(Foo.getStaticFinalField()).isEqualTo(42);
-    }
-
-    @Test
-    public void shouldThrowIllegalArgumentException() {
-        Foo foo = new Foo();
         try {
-            FieldSetter.setField(foo, finalFieldRef, 2d);
+            FieldSetter.setField(foo, staticFinalFieldRef, 42);
+            fail();
+        } catch (RuntimeException rte) {
+            assertThat(rte.getMessage()).startsWith("Access not authorized on field");
+        }
+    }
+
+    @Test
+    public synchronized void setField_shouldThrowIllegalArgumentException() {
+        IllegalArgumentExceptionField foo = new IllegalArgumentExceptionField();
+        try {
+            FieldSetter.setField(foo, illegalArgumentExceptionFieldRef, new Object());
             fail();
         } catch (RuntimeException rte) {
             assertThat(rte.getMessage()).startsWith("Wrong argument on field");
         }
+    }
+
+    @Test
+    public synchronized void setAnyField_staticFinalFieldShouldWork() {
+        SetAnyStaticFinalField foo = new SetAnyStaticFinalField();
+        // sanity check since we're dealing with static
+        assertThat(SetAnyStaticFinalField.otherStaticFinalField).isNull();
+
+        FieldSetter.setAnyField(foo, otherStaticFinalFieldRef, 42);
+
+        assertThat(SetAnyStaticFinalField.otherStaticFinalField).isEqualTo(42);
     }
 }

@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
-import org.mockito.internal.util.reflection.BeanPropertySetter;
-
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
+import org.mockito.internal.util.reflection.BeanPropertySetter;
+
 import static org.mockito.internal.exceptions.Reporter.cannotInjectDependency;
-import static org.mockito.internal.util.reflection.FieldSetter.setField;
+import static org.mockito.internal.util.reflection.FieldSetter.setAnyField;
 
 /**
  * This node returns an actual injecter which will be either :
@@ -22,6 +22,7 @@ import static org.mockito.internal.util.reflection.FieldSetter.setField;
  * </ul>
  */
 public class TerminalMockCandidateFilter implements MockCandidateFilter {
+    @Override
     public OngoingInjector filterCandidate(final Collection<Object> mocks,
                                            final Field candidateFieldToBeInjected,
                                            final List<Field> allRemainingCandidateFields,
@@ -30,10 +31,11 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
             final Object matchingMock = mocks.iterator().next();
 
             return new OngoingInjector() {
+                @Override
                 public Object thenInject() {
                     try {
                         if (!new BeanPropertySetter(injectee, candidateFieldToBeInjected).set(matchingMock)) {
-                            setField(injectee, candidateFieldToBeInjected,matchingMock);
+                            setAnyField(injectee, candidateFieldToBeInjected,matchingMock);
                         }
                     } catch (RuntimeException e) {
                         throw cannotInjectDependency(candidateFieldToBeInjected, matchingMock, e);

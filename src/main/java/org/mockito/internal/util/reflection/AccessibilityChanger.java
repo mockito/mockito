@@ -23,7 +23,7 @@ public class AccessibilityChanger {
     }
 
     /**
-     * changes the accessibleObject accessibility and returns true if accessibility was changed
+     * changes the accessibleObject accessibility
      */
     public void enableAccess(AccessibleObject accessibleObject) {
         wasAccessible = accessibleObject.isAccessible();

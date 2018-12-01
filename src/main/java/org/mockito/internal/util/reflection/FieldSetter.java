@@ -6,29 +6,56 @@ package org.mockito.internal.util.reflection;
 
 import java.lang.reflect.Field;
 
-public class FieldSetter {
+public final class FieldSetter {
 
-    private FieldSetter(){}
+    private FieldSetter() {}
 
+    /**
+     * Set value of fields, except static final (use {@link #setAnyField(Object, Field, Object)} for that).
+     */
     public static void setField(Object target, Field field, Object value) {
+        // keep synchronization in sync with setAnyField method!
         synchronized (field) {
             AccessibilityChanger changer = new AccessibilityChanger();
-            StaticFinalOverrider overrider = new StaticFinalOverrider();
-
             changer.enableAccess(field);
+
+            try {
+
+                field.set(target, value);
+
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Access not authorized on field '" + field + "' of object '" + target + "'"
+                    + " with value: '" + value + "'", e);
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Wrong argument on field '" + field + "' of object '" + target + "' with "
+                    + "value: '" + value + "', \n" +
+                    "reason : " + e.getMessage(), e);
+            } finally {
+                changer.safelyDisableAccess(field);
+            }
+
+        }
+    }
+
+    /**
+     * Compared to {@link #setField(Object, Field, Object)}, this method also allows setting static final fields.
+     *
+     * Setting static final fields needs some mangling on the field modifiers of the {@link Field} class and thus should
+     * only be used when absolutely necessary. See {@link StaticFinalOverrider} for implementation details.
+     */
+    public static void setAnyField(Object target, Field field, Object value) {
+        // keep synchronization in sync with setField method!
+        synchronized (field) {
+            StaticFinalOverrider overrider = new StaticFinalOverrider();
             overrider.enableWrite(field);
 
             try {
-                field.set(target, value);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("Access not authorized on field '" + field + "' of object '" + target + "' with value: '" + value + "'", e);
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException("Wrong argument on field '" + field + "' of object '" + target + "' with value: '" + value + "', \n" +
-                    "reason : " + e.getMessage(), e);
-            }
 
-            overrider.safelyDisableWrite(field);
-            changer.safelyDisableAccess(field);
+                setField(target, field, value);
+
+            } finally {
+                overrider.safelyDisableWrite(field);
+            }
         }
     }
 }
