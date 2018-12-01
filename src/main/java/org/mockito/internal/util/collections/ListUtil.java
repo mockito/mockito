@@ -55,11 +55,6 @@ public class ListUtil {
         public Predicate<T> negate() {
             return new Predicate<T>() {
                 @Override
-                public String toString() {
-                    return "!" + Predicate.this.toString();
-                }
-
-                @Override
                 public boolean test(T object) {
                     return !Predicate.this.test(object);
                 }
@@ -72,11 +67,6 @@ public class ListUtil {
 
             return new Predicate<T>() {
                 @Override
-                public String toString() {
-                    return Predicate.this.toString() + " && " + otherPred.toString();
-                }
-
-                @Override
                 public boolean test(T object) {
                     return Predicate.this.test(object) && otherPred.test(object);
                 }
@@ -88,11 +78,6 @@ public class ListUtil {
             final Predicate<? super T> otherPred = other;
 
             return new Predicate<T>() {
-                @Override
-                public String toString() {
-                    return Predicate.this.toString() + " || " + otherPred.toString();
-                }
-
                 @Override
                 public boolean test(T object) {
                     return Predicate.this.test(object) || otherPred.test(object);

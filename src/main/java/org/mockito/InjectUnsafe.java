@@ -94,7 +94,7 @@ import java.lang.annotation.Target;
  * the mock will (silently) not get injected and the test will fail.
  * </p>
  *
- * @since FIXME
+ * @since 2.23.9
  */
 @Incubating
 @Documented

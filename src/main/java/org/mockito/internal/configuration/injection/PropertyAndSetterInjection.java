@@ -61,11 +61,12 @@ import static org.mockito.internal.util.reflection.SuperTypesLastSorter.sortSupe
  *   </ul>
  * </p>
  *
- * FIXME: "Can you update documented algorythm in the javadoc in PropertyAndSetterINjection."
- *
  * <p>
  * <u>Note:</u> If the field needing injection is not initialized, the strategy tries
  * to create one using a no-arg constructor of the field type.
+ * </p>
+ * <p>
+ * <u>Note:</u> Injection behavior can be altered using {@link InjectUnsafe}.
  * </p>
  */
 public class PropertyAndSetterInjection extends MockInjectionStrategy {
@@ -78,22 +79,12 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     private static final Predicate<Field> ACCEPT_ANY_STATIC = new Predicate<Field>() {
         @Override
-        public String toString() {
-            return "ACCEPT_ANY_STATIC";
-        }
-
-        @Override
         public boolean test(Field object) {
             return Modifier.isStatic(object.getModifiers());
         }
     };
 
     private static final Predicate<Field> ACCEPT_ANY_FINAL = new Predicate<Field>() {
-        @Override
-        public String toString() {
-            return "ACCEPT_ANY_FINAL";
-        }
-
         @Override
         public boolean test(Field object) {
             return Modifier.isFinal(object.getModifiers());

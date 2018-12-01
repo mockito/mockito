@@ -32,7 +32,6 @@ public class StaticFinalOverriderTest {
     public void testEverything() {
         StaticFinalOverrider overrider = new StaticFinalOverrider();
 
-        // assert the state is the same before and after
         assertModifiersBeforeAndAfter(FIELD);
 
         overrider.enableWrite(FIELD);

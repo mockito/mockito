@@ -76,9 +76,6 @@ public class InjectUnsafeTest extends TestBase {
         assertEquals(0, UnderTest.staticFinalField.getFoo());
     }
 
-    // The exception is thrown because the override (staticFields=STATIC) and thus does not include
-    // injecting a spy on the static final field.
-    // Not injecting a mock means the method call cannot be intercepted => MissingMethodInvocationException
     @Test
     public void testSkippedStaticFinalThrowsWithWhen() {
         Mockito.when(UnderTest.staticFinalField.getFoo()).thenReturn(3);

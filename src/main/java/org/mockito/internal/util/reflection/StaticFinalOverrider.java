@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 
 /**
  * To set a value on a static final field, setting the field accessible
- * (i.e.: {@link Field#setAccessible(boolean)}) is not enough.
+ * by using {@link Field#setAccessible(boolean)} is not enough.
  * Only if removing the field modifier {@link Modifier#STATIC}, a value can be set via reflection.
  */
 public class StaticFinalOverrider {

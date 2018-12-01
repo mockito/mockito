@@ -104,7 +104,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#44">44. Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a><br/>
  *      <a href="#45">45. New JUnit Jupiter (JUnit5+) extension</a><br/>
  *      <a href="#46">46. New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0)</a><br/>
- *      <a href="#47">47. New <code>InjectUnsafe</code> annotation (Since FIXME)</a><br/>
+ *      <a href="#47">47. New <code>InjectUnsafe</code> annotation (Since 2.23.9)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>

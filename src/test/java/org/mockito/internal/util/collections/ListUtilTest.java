@@ -28,10 +28,6 @@ public class ListUtilTest extends TestBase {
             this.match = match;
         }
 
-        @Override
-        public String toString() {
-            return "Filter[" + match + "]";
-        }
 
         @Override
         public boolean isOut(String object) {
@@ -45,11 +41,6 @@ public class ListUtilTest extends TestBase {
         private TestPredicate(String match) {
             assert match != null;
             this.match = match;
-        }
-
-        @Override
-        public String toString() {
-            return "Predicate[" + match + "]";
         }
 
         @Override
