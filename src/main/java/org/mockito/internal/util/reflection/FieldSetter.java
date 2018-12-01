@@ -13,7 +13,11 @@ public class FieldSetter {
     public static void setField(Object target, Field field, Object value) {
         synchronized (field) {
             AccessibilityChanger changer = new AccessibilityChanger();
+            StaticFinalOverrider overrider = new StaticFinalOverrider();
+
             changer.enableAccess(field);
+            overrider.enableWrite(field);
+
             try {
                 field.set(target, value);
             } catch (IllegalAccessException e) {
@@ -22,6 +26,8 @@ public class FieldSetter {
                 throw new RuntimeException("Wrong argument on field '" + field + "' of object '" + target + "' with value: '" + value + "', \n" +
                     "reason : " + e.getMessage(), e);
             }
+
+            overrider.safelyDisableWrite(field);
             changer.safelyDisableAccess(field);
         }
     }

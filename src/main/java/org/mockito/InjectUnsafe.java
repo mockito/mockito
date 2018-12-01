@@ -13,13 +13,12 @@ import java.lang.annotation.Target;
 /**
  * Change the behavior of {@link InjectMocks}: allow injection of static/final fields that are normally skipped.
  *
- * <p>Typically, injection into instances is done via the constructor.</p>
- *
- * <p>In most cases you should refactor your code to support these best practices!</p>
+ * <p>Typically, injection into instances is done via the constructor
+ * <strong>and in most cases you should refactor your code to support these best practices!</strong></p>
  *
  * <p>However, sometimes you don't want to/cannot expose fields via constructor as this might change your api
  * (even if the constructor is package-private).<br/>
- * Even worse with static fields: you'd have to make setters available via method call.<br/>
+ * Even worse with static fields: you'd have to make expose the fields via setters.<br/>
  * And then there's always legacy/library code that cannot be changed easily :(</p>
  *
  * <p>
@@ -35,7 +34,7 @@ import java.lang.annotation.Target;
  * </p>
  * <p>
  * if these values do not get reset to their default value (mockito does <i>not</i> do this!),
- * following tests in any test class anywhere (!) will use the mock until the ClassLoader running the tests
+ * followup tests in any test class anywhere (!) will use the mock until the ClassLoader running the tests
  * shuts down (usually at JVM termination).
  * </p>
  * <p>
@@ -44,10 +43,6 @@ import java.lang.annotation.Target;
  * </strong>
  *
  * <hr/>
- *
- * <p> Please note: not all mock makers are supported equally:
- * bytebuddy (the default) will throw {@link IllegalAccessError}
- * if you try to use <code>allow = {@link UnsafeFieldModifier#STATIC_FINAL}</code>. </p>
  *
  * <p>
  * Example:
@@ -75,7 +70,7 @@ import java.lang.annotation.Target;
  *     private Computer computer;
  *
  *     &#064;InjectMocks
- *     &#064;InjectUnsafe(staticFields = OverrideStaticFields.STATIC)
+ *     &#064;InjectUnsafe(OverrideStaticFields.STATIC)
  *     private ArticleCalculator calculator;
  *
  *     &#064;Before
@@ -89,6 +84,7 @@ import java.lang.annotation.Target;
  *
  *         long result = calculator.calculate(3);
  *
+ *         // the mocked value is returned
  *         Assert.assertEquals(42L, result);
  *     }
  * }
@@ -98,8 +94,7 @@ import java.lang.annotation.Target;
  * the mock will (silently) not get injected and the test will fail.
  * </p>
  *
- * FIXME: add @since tag
- * FIXME: document new API in Mockto class
+ * @since FIXME
  */
 @Incubating
 @Documented
@@ -131,5 +126,5 @@ public @interface InjectUnsafe {
     /**
      * Allow mock-injection into fields that get skipped during the normal injection cycle.
      */
-    UnsafeFieldModifier[] allow() default UnsafeFieldModifier.FINAL;
+    UnsafeFieldModifier[] value() default UnsafeFieldModifier.FINAL;
 }

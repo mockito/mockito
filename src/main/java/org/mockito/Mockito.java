@@ -103,7 +103,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#43">43. New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a><br/>
  *      <a href="#44">44. Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a><br/>
  *      <a href="#45">45. New JUnit Jupiter (JUnit5+) extension</a><br/>
- *      <a href="#46">46. New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0</a><br/>
+ *      <a href="#46">46. New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0)</a><br/>
+ *      <a href="#47">47. New <code>InjectUnsafe</code> annotation (Since FIXME)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1533,6 +1534,19 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * For more information refer to {@link Mockito#lenient()}.
  * Let us know how do you find the new feature by opening a GitHub issue to discuss!
+ *
+ *
+ *
+ * <h3 id="47">47. New annotation: <a class="meaningful_link" href="#unjectunsafe_annotation" name="unjectunsafe_annotation"><code>
+ *     &#064;InjectUnsafe </code></a></h3>
+ *
+ * <p>
+ *     The annotation {@link InjectUnsafe} modifies the behavior of {@link InjectMocks}.
+ *     It finally (hehe) enables injecting Mocks into final, static and static-final fields.
+ * </p>
+ * <p>
+ *     <strong>Please note: there are some risks involved! See {@link InjectUnsafe} for more details!</strong>
+ * </p>
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {

@@ -181,7 +181,7 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
     }
 
     private ListUtil.Predicate<Field> predicateFromOverrides(InjectUnsafe injectUnsafe) {
-        Set<UnsafeFieldModifier> allow = EnumSet.copyOf(Arrays.asList(injectUnsafe.allow()));
+        Set<UnsafeFieldModifier> allow = EnumSet.copyOf(Arrays.asList(injectUnsafe.value()));
 
         Predicate<Field> filter = ACCEPT_INSTANCE_FIELD;
 

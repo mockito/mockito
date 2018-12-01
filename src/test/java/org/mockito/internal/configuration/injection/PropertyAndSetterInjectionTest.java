@@ -29,7 +29,7 @@ public class PropertyAndSetterInjectionTest {
         }
 
         @Override
-        public UnsafeFieldModifier[] allow() {
+        public UnsafeFieldModifier[] value() {
             return allow;
         }
 

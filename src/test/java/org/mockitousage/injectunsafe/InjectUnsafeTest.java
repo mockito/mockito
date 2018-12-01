@@ -10,12 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.InjectUnsafe;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.InjectUnsafe.UnsafeFieldModifier.FINAL;
 import static org.mockito.InjectUnsafe.UnsafeFieldModifier.STATIC;
+import static org.mockito.InjectUnsafe.UnsafeFieldModifier.STATIC_FINAL;
 
 public class InjectUnsafeTest extends TestBase {
 
@@ -56,7 +56,7 @@ public class InjectUnsafeTest extends TestBase {
     private C spyStaticFinal;
 
     @InjectMocks
-    @InjectUnsafe(allow = {FINAL, STATIC})
+    @InjectUnsafe({FINAL, STATIC, STATIC_FINAL})
     private UnderTest underTest;
 
     @Before
@@ -79,9 +79,11 @@ public class InjectUnsafeTest extends TestBase {
     // The exception is thrown because the override (staticFields=STATIC) and thus does not include
     // injecting a spy on the static final field.
     // Not injecting a mock means the method call cannot be intercepted => MissingMethodInvocationException
-    @Test(expected = MissingMethodInvocationException.class)
+    @Test
     public void testSkippedStaticFinalThrowsWithWhen() {
         Mockito.when(UnderTest.staticFinalField.getFoo()).thenReturn(3);
+
+        assertEquals(3, UnderTest.staticFinalField.getFoo());
     }
 
 }

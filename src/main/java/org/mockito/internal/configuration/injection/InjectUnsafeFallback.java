@@ -17,7 +17,7 @@ import static org.mockito.InjectUnsafe.UnsafeFieldModifier.NONE;
 class InjectUnsafeFallback implements InjectUnsafe {
 
     @Override
-    public UnsafeFieldModifier[] allow() {
+    public UnsafeFieldModifier[] value() {
         return new UnsafeFieldModifier[] { NONE };
     }
 
