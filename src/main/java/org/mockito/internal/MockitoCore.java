@@ -35,23 +35,16 @@ import org.mockito.verification.VerificationMode;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.internal.exceptions.Reporter.missingMethodInvocation;
-import static org.mockito.internal.exceptions.Reporter.mocksHaveToBePassedToVerifyNoMoreInteractions;
-import static org.mockito.internal.exceptions.Reporter.mocksHaveToBePassedWhenCreatingInOrder;
-import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerify;
-import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerifyNoMoreInteractions;
-import static org.mockito.internal.exceptions.Reporter.notAMockPassedWhenCreatingInOrder;
-import static org.mockito.internal.exceptions.Reporter.nullPassedToVerify;
-import static org.mockito.internal.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
-import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInOrder;
-import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
+import static org.mockito.internal.exceptions.Reporter.*;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.MockUtil.createMock;
 import static org.mockito.internal.util.MockUtil.getInvocationContainer;
+import static org.mockito.internal.util.MockUtil.getMockHandler;
 import static org.mockito.internal.util.MockUtil.isMock;
 import static org.mockito.internal.util.MockUtil.resetMock;
 import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
+
 
 @SuppressWarnings("unchecked")
 public class MockitoCore {
@@ -91,10 +84,8 @@ public class MockitoCore {
         if (!mockingDetails.isMock()) {
             throw notAMockPassedToVerify(mock.getClass());
         }
+        assertNotStubOnlyMock(mock);
         MockHandler handler = mockingDetails.getMockHandler();
-        if (handler.getMockSettings().isStubOnly()) {
-            throw stubPassedToVerify();
-        }
         mock = (T) VerificationStartedNotifier.notifyVerificationStarted(
             handler.getMockSettings().getVerificationStartedListeners(), mockingDetails);
 
@@ -135,6 +126,7 @@ public class MockitoCore {
                     throw nullPassedToVerifyNoMoreInteractions();
                 }
                 InvocationContainerImpl invocations = getInvocationContainer(mock);
+                assertNotStubOnlyMock(mock);
                 VerificationDataImpl data = new VerificationDataImpl(invocations, null);
                 noMoreInteractions().verify(data);
             } catch (NotAMockException e) {
@@ -155,6 +147,12 @@ public class MockitoCore {
         }
     }
 
+    private void assertNotStubOnlyMock(Object mock) {
+        if (getMockHandler(mock).getMockSettings().isStubOnly()) {
+            throw stubPassedToVerify(mock);
+        }
+    }
+
     public InOrder inOrder(Object... mocks) {
         if (mocks == null || mocks.length == 0) {
             throw mocksHaveToBePassedWhenCreatingInOrder();
@@ -166,6 +164,7 @@ public class MockitoCore {
             if (!isMock(mock)) {
                 throw notAMockPassedWhenCreatingInOrder();
             }
+            assertNotStubOnlyMock(mock);
         }
         return new InOrderImpl(Arrays.asList(mocks));
     }
