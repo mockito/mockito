@@ -1,5 +1,6 @@
 if (!project.hasProperty("jacoco")) {
     //JaCoCo plugin prevents using Build Cache. We will enable jacoco configuration only when specific property is supplied
+    //TODO remove this workaround when we migrate to Gradle 5.0 (https://github.com/gradle/gradle/issues/5269)
     logger.info "JaCoCo code coverage will not be configured because 'jacoco' project property is not present."
     return //don't evaluate this Gradle file any further
 } else {
