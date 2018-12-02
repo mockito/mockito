@@ -77,7 +77,7 @@ public class MissingInvocationInOrderCheckerTest  {
 
 		exception.expectMessage("Argument(s) are different! Wanted:");
 		exception.expectMessage("mock.intArgumentMethod(2222);");
-		exception.expectMessage("Actual invocation has different arguments:");
+		exception.expectMessage("Actual invocations have different arguments:");
 		exception.expectMessage("mock.intArgumentMethod(1111);");
 
     	checkMissingInvocation(invocations, wanted, context);

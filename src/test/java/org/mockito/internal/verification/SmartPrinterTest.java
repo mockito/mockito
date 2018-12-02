@@ -36,7 +36,9 @@ public class SmartPrinterTest extends TestBase {
 
         //then
         assertThat(printer.getWanted()).contains("\n");
-        assertThat(printer.getActual()).contains("\n");
+        for (String actual : printer.getActuals()) {
+            assertThat(actual).contains("\n");
+        }
     }
 
     @Test
@@ -46,7 +48,9 @@ public class SmartPrinterTest extends TestBase {
 
         //then
         assertThat(printer.getWanted()).contains("\n");
-        assertThat(printer.getActual()).contains("\n");
+        for (String actual : printer.getActuals()) {
+            assertThat(actual).contains("\n");
+        }
     }
 
     @Test
@@ -56,7 +60,9 @@ public class SmartPrinterTest extends TestBase {
 
         //then
         assertThat(printer.getWanted()).contains("\n");
-        assertThat(printer.getActual()).contains("\n");
+        for (String actual : printer.getActuals()) {
+            assertThat(actual).contains("\n");
+        }
     }
 
     @Test
@@ -66,6 +72,8 @@ public class SmartPrinterTest extends TestBase {
 
         //then
         assertThat(printer.getWanted()).doesNotContain("\n");
-        assertThat(printer.getActual()).doesNotContain("\n");
+        for (String actual : printer.getActuals()) {
+            assertThat(actual).doesNotContain("\n");
+        }
     }
 }
