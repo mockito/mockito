@@ -24,13 +24,13 @@ matrix:
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
   - jdk: oraclejdk9
     env: SKIP_RELEASE=true SIMULATE_JAVA11=true
-  - install: . ./install-jdk.sh -F 10 -L GPL
+  - jdk: openjdk10
     env: SKIP_RELEASE=true JDK='Oracle JDK 10'
-  - install: . ./install-jdk.sh -F 10 -L GPL
+  - jdk: openjdk10
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 10'
-  - install: . ./install-jdk.sh -F 11 -L BCL
+  - jdk: openjdk11
     env: SKIP_RELEASE=true JDK='Oracle JDK 11'
-  - install: . ./install-jdk.sh -F 11 -L BCL
+  - jdk: openjdk11
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 11'
   allow_failures:
     - env: SKIP_RELEASE=true JDK='Oracle JDK 11'
