@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
         classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.4.4' //for 'java-compatibility-check.gradle'
-        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.15'
+        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.6'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
         classpath 'org.shipkit:shipkit:2.0.28'
@@ -51,10 +51,7 @@ allprojects { proj ->
         jcenter()
     }
     plugins.withId('java') {
-        proj.apply plugin: 'net.ltgt.errorprone'
-        proj.dependencies {
-            errorprone libraries.errorprone
-        }
+        proj.apply from: "$rootDir/gradle/errorprone.gradle"
     }
     tasks.withType(JavaCompile) {
         //I don't believe those warnings add value given modern IDEs
