@@ -32,9 +32,6 @@ matrix:
     env: SKIP_RELEASE=true JDK='Oracle JDK 11'
   - jdk: openjdk11
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 11'
-  allow_failures:
-    - env: SKIP_RELEASE=true JDK='Oracle JDK 11'
-    - env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline JDK='Oracle JDK 11'
 
 branches:
   #Don't build tags
