@@ -27,7 +27,7 @@ public class CloningParameterTest extends TestBase {
         businessLogic(emailSender);
 
         // then
-        verify(emailSender).sendEmail(1, new Person("Wes"), any(), any());
+        verify(emailSender).sendEmail(eq(1), eq(new Person("Wes")), any(), any());
     }
 
     private void businessLogic(EmailSender emailSender) {
