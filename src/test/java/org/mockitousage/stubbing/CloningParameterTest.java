@@ -12,6 +12,7 @@ import org.mockitoutil.TestBase;
 import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 public class CloningParameterTest extends TestBase {
@@ -26,12 +27,12 @@ public class CloningParameterTest extends TestBase {
         businessLogic(emailSender);
 
         // then
-        verify(emailSender).sendEmail(1, new Person("Wes"));
+        verify(emailSender).sendEmail(1, new Person("Wes"), any(), any());
     }
 
     private void businessLogic(EmailSender emailSender) {
         Person person = new Person("Wes");
-        emailSender.sendEmail(1, person);
+        emailSender.sendEmail(1, person, null, new Person[0]);
         person.emailSent();
     }
 
@@ -101,7 +102,7 @@ public class CloningParameterTest extends TestBase {
 
     public interface EmailSender {
 
-        void sendEmail(int i, Person person);
+        void sendEmail(int i, Person person, Person from, Person[] ccList);
 
         List<?> getAllEmails(Person person);
 
