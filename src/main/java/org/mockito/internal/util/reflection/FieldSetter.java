@@ -14,26 +14,22 @@ public final class FieldSetter {
      * Set value of fields, except static final (use {@link #setAnyField(Object, Field, Object)} for that).
      */
     public static void setField(Object target, Field field, Object value) {
-        // keep synchronization in sync with setAnyField method!
-        synchronized (field) {
-            AccessibilityChanger changer = new AccessibilityChanger();
-            changer.enableAccess(field);
+        AccessibilityChanger changer = new AccessibilityChanger();
+        changer.enableAccess(field);
 
-            try {
+        try {
 
-                field.set(target, value);
+            field.set(target, value);
 
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("Access not authorized on field '" + field + "' of object '" + target + "'"
-                    + " with value: '" + value + "'", e);
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException("Wrong argument on field '" + field + "' of object '" + target + "' with "
-                    + "value: '" + value + "', \n" +
-                    "reason : " + e.getMessage(), e);
-            } finally {
-                changer.safelyDisableAccess(field);
-            }
-
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Access not authorized on field '" + field + "' of object '" + target + "'"
+                + " with value: '" + value + "'", e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Wrong argument on field '" + field + "' of object '" + target + "' with "
+                + "value: '" + value + "', \n" +
+                "reason : " + e.getMessage(), e);
+        } finally {
+            changer.safelyDisableAccess(field);
         }
     }
 
@@ -44,7 +40,6 @@ public final class FieldSetter {
      * only be used when absolutely necessary. See {@link StaticFinalOverrider} for implementation details.
      */
     public static void setAnyField(Object target, Field field, Object value) {
-        // keep synchronization in sync with setField method!
         synchronized (field) {
             StaticFinalOverrider overrider = new StaticFinalOverrider();
             overrider.enableWrite(field);
