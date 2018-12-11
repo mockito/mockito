@@ -6,10 +6,13 @@
 package org.mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import java.util.List;
+import java.util.function.Function;
+
 import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
@@ -62,4 +65,13 @@ public class MockitoTest {
         assertThat(Mockito.RETURNS_DEFAULTS).isEqualTo(settings.getDefaultAnswer());
     }
 
+    @Test
+    public  void mockLambda(){
+        Function<Integer,Integer> mock = Mockito.mock(x -> x + 1);
+        assertEquals(2,foo(mock,1).intValue());
+    }
+
+    public Integer foo(Function<Integer, Integer> func, Integer arg) {
+        return func.apply(arg);
+    }
 }

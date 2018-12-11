@@ -1805,6 +1805,15 @@ public class Mockito extends ArgumentMatchers {
         return mock(classToMock, withSettings());
     }
 
+    public static <T, R> java.util.function.Function<T,R> mock(java.util.function.Function<T,R> function){
+        java.util.function.Function<T,R> mock = Mockito.mock(java.util.function.Function.class);
+                when(mock.apply(any())).thenAnswer(invocation -> {
+                    T arg = invocation.getArgument(0);
+                    return function.apply(arg);
+                });
+      return mock;
+    }
+
     /**
      * Specifies mock name. Naming mocks can be helpful for debugging - the name is used in all verification errors.
      * <p>
