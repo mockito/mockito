@@ -1805,6 +1805,25 @@ public class Mockito extends ArgumentMatchers {
         return mock(classToMock, withSettings());
     }
 
+    /**
+     *
+     * @param function a lambda expression
+     * @param <T> the lambda argument type
+     * @param <R> the lambda result type
+     * @return mock object for that lambda
+     * The following test will succeed
+     * </code></pre>
+     *  &#064;Test
+     *     public  void mockLambda(){
+     *         Function<Integer,Integer> mock = Mockito.mock(x -> x + 1);
+     *         assertEquals(2,foo(mock,1).intValue());
+     *     }
+     *
+     *     public Integer foo(Function<Integer, Integer> func, Integer arg) {
+     *         return func.apply(arg);
+     *     }
+     * </code></pre>
+     */
     public static <T, R> java.util.function.Function<T,R> mock(java.util.function.Function<T,R> function){
         java.util.function.Function<T,R> mock = Mockito.mock(java.util.function.Function.class);
                 when(mock.apply(any())).thenAnswer(invocation -> {
