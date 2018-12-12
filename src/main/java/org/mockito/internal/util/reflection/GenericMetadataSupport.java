@@ -116,6 +116,12 @@ public abstract class GenericMetadataSupport {
             TypeVariable<?> typeParameter = typeParameters[i];
             Type actualTypeArgument = actualTypeArguments[i];
 
+            // Prevent registration of a cycle of TypeVariables. This can happen when we are processing
+            // type parameters in a Method, while we already processed the type parameters of a class.
+            if (actualTypeArgument instanceof TypeVariable && contextualActualTypeParameters.containsKey(typeParameter)) {
+                continue;
+            }
+
             if (actualTypeArgument instanceof WildcardType) {
                 contextualActualTypeParameters.put(typeParameter, boundsOf((WildcardType) actualTypeArgument));
             } else if (typeParameter != actualTypeArgument) {
