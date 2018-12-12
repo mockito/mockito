@@ -4,7 +4,6 @@
  */
 package org.mockitousage.stubbing;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
@@ -17,7 +16,11 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Locale;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -73,6 +76,20 @@ public class DeepStubbingTest extends TestBase {
     }
 
     interface Second extends List<String> {}
+
+    class BaseClassGenerics<A, B> {}
+
+    class ReversedGenerics<A, B> extends BaseClassGenerics<A, B> {
+        ReversedGenerics<B, A> reverse() {
+            return null;
+        }
+
+        A finalMethod() {
+            return null;
+        }
+    }
+
+    class SuperOfReversedGenerics extends ReversedGenerics<String, Long> {}
 
     @Test
     public void myTest() throws Exception {
@@ -304,7 +321,7 @@ public class DeepStubbingTest extends TestBase {
             verify(person.getAddress("the docks"), times(1)).getStreet();
             fail();
         } catch (TooManyActualInvocations e) {
-            Assertions.assertThat(e.getMessage())
+            assertThat(e.getMessage())
                     .contains("Wanted 1 time")
                     .contains("But was 3 times");
         }
@@ -326,4 +343,14 @@ public class DeepStubbingTest extends TestBase {
         assertNull(first.getString());
         assertNull(first.getSecond().get(0));
     }
+
+    @Test
+    public void deep_stub_does_not_stack_overflow_on_reversed_generics() {
+        SuperOfReversedGenerics mock = mock(SuperOfReversedGenerics.class, RETURNS_DEEP_STUBS);
+
+        when((Object) mock.reverse().finalMethod()).thenReturn(5L);
+
+        assertThat(mock.reverse().finalMethod()).isEqualTo(5L);
+    }
+
 }
