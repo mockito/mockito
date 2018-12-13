@@ -48,7 +48,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         if (invocationContainer.hasAnswersForStubbing()) {
             // stubbing voids with doThrow() or doAnswer() style
             InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
-                    mockingProgress().getArgumentMatcherStorage(),
+                    mockingProgress().getArgumentMatcherStorage().pullLocalizedMatchers(),
                     invocation
             );
             invocationContainer.setMethodForStubbing(invocationMatcher);
@@ -57,7 +57,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         VerificationMode verificationMode = mockingProgress().pullVerificationMode();
 
         InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
-                mockingProgress().getArgumentMatcherStorage(),
+                mockingProgress().getArgumentMatcherStorage().pullLocalizedMatchers(),
                 invocation
         );
 

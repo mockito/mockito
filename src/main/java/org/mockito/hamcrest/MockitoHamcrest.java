@@ -9,8 +9,8 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 
 import static org.mockito.internal.hamcrest.MatcherGenericTypeExtractor.genericTypeOfMatcher;
+import static org.mockito.internal.matchers.MatcherMarkers.markerOf;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-import static org.mockito.internal.util.Primitives.defaultValue;
 
 /**
  * Allows matching arguments with hamcrest matchers.
@@ -53,13 +53,13 @@ public class MockitoHamcrest {
      * See examples in javadoc for {@link MockitoHamcrest} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>null</code> or default value for primitive (0, false, etc.)
+     * @return A marker value.
      * @since 2.1.0
      */
     @SuppressWarnings("unchecked")
     public static <T> T argThat(Matcher<T> matcher) {
         reportMatcher(matcher);
-        return  (T) defaultValue(genericTypeOfMatcher(matcher.getClass()));
+        return  (T) markerOf(genericTypeOfMatcher(matcher.getClass()));
     }
 
     /**
@@ -69,11 +69,11 @@ public class MockitoHamcrest {
      * See examples in javadoc for {@link MockitoHamcrest} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static char charThat(Matcher<Character> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(char.class);
     }
 
     /**
@@ -83,11 +83,11 @@ public class MockitoHamcrest {
      * See examples in javadoc for {@link MockitoHamcrest} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>false</code>.
+     * @return A marker value.
      */
     public static boolean booleanThat(Matcher<Boolean> matcher) {
         reportMatcher(matcher);
-        return false;
+        return markerOf(boolean.class);
     }
 
     /**
@@ -97,11 +97,11 @@ public class MockitoHamcrest {
      * * See examples in javadoc for {@link MockitoHamcrest} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static byte byteThat(Matcher<Byte> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
@@ -111,11 +111,11 @@ public class MockitoHamcrest {
      * * See examples in javadoc for {@link MockitoHamcrest} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static short shortThat(Matcher<Short> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
@@ -125,11 +125,11 @@ public class MockitoHamcrest {
      * * See examples in javadoc for {@link MockitoHamcrest} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static int intThat(Matcher<Integer> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
@@ -139,11 +139,11 @@ public class MockitoHamcrest {
      * * See examples in javadoc for {@link MockitoHamcrest} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static long longThat(Matcher<Long> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
@@ -153,11 +153,11 @@ public class MockitoHamcrest {
      * * See examples in javadoc for {@link MockitoHamcrest} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float floatThat(Matcher<Float> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
@@ -167,11 +167,11 @@ public class MockitoHamcrest {
      * * See examples in javadoc for {@link MockitoHamcrest} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double doubleThat(Matcher<Double> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(double.class);
     }
 
     private static <T> void reportMatcher(Matcher<T> matcher) {

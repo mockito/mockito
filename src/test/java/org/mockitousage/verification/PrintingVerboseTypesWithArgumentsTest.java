@@ -5,7 +5,6 @@
 
 package org.mockitousage.verification;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
@@ -13,8 +12,6 @@ import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.fail;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -28,84 +25,6 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
         }
     }
 
-    @Test
-    public void should_not_report_argument_types_when_to_string_is_the_same() {
-        //given
-        Boo boo = mock(Boo.class);
-        boo.withLong(100);
-
-        try {
-            //when
-            verify(boo).withLong(eq(100));
-            fail();
-        } catch (ArgumentsAreDifferent e) {
-            //then
-            assertThat(e)
-                .hasMessageContaining("withLong((Integer) 100);")
-                .hasMessageContaining("withLong((Long) 100L);");
-        }
-    }
-
-    @Test
-    public void should_show_the_type_of_only_the_argument_that_doesnt_match() {
-        //given
-        Boo boo = mock(Boo.class);
-        boo.withLongAndInt(100, 200);
-
-        try {
-            //when
-            verify(boo).withLongAndInt(eq(100), eq(200));
-            fail();
-        } catch (ArgumentsAreDifferent e) {
-            //then
-            assertThat(e)
-                .hasMessageContaining("withLongAndInt((Integer) 100, 200)")
-                .hasMessageContaining("withLongAndInt((Long) 100L, 200)");
-        }
-    }
-
-    @Test
-    public void should_show_the_type_of_the_mismatching_argument_when_output_descriptions_for_invocations_are_different() {
-        //given
-        Boo boo = mock(Boo.class);
-        boo.withLongAndInt(100, 200);
-
-        try {
-            //when
-            verify(boo).withLongAndInt(eq(100), any(Integer.class));
-            fail();
-        } catch (ArgumentsAreDifferent e) {
-            //then
-            Assertions.assertThat(e.getMessage())
-                      .contains("withLongAndInt(\n" +
-                                        "    (Long) 100L,\n" +
-                                        "    200\n" +
-                                        ")")
-                      .contains("withLongAndInt(\n" +
-                                        "    (Integer) 100,\n" +
-                                        "    <any java.lang.Integer>\n" +
-                                        ")");
-        }
-    }
-
-    @Test
-    public void should_not_show_types_when_argument_value_is_different() {
-        //given
-        Boo boo = mock(Boo.class);
-        boo.withLongAndInt(100, 200);
-
-        try {
-            //when
-            verify(boo).withLongAndInt(eq(100L), eq(230));
-            fail();
-        } catch (ArgumentsAreDifferent e) {
-            //then
-            assertThat(e)
-                .hasMessageContaining("withLongAndInt(100L, 200)")
-                .hasMessageContaining("withLongAndInt(100L, 230)");
-        }
-    }
-
     class Foo {
 
         private final int x;
@@ -115,6 +34,8 @@ public class PrintingVerboseTypesWithArgumentsTest extends TestBase {
         }
 
         public boolean equals(Object obj) {
+            if (obj == null) return false;
+
             return x == ((Foo) obj).x;
         }
 

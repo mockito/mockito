@@ -149,7 +149,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     }
 
     public String toString() {
-        return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
+        return new PrintSettings().print(ArgumentsProcessor.argumentsToEqualsMatchers(getArguments()), this);
     }
 
     public final static RealMethod NO_OP = new RealMethod() {

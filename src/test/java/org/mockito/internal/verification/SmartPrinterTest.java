@@ -23,10 +23,10 @@ public class SmartPrinterTest extends TestBase {
     @Before
     public void setup() throws Exception {
         mock.varargs("first very long argument", "second very long argument", "another very long argument");
-        multi = new InvocationMatcher(getLastInvocation());
+        multi = InvocationMatcher.createFrom(getLastInvocation());
 
         mock.varargs("short arg");
-        shortie = new InvocationMatcher(getLastInvocation());
+        shortie = InvocationMatcher.createFrom(getLastInvocation());
     }
 
     @Test

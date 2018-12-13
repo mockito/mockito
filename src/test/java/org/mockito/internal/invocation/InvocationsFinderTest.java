@@ -49,10 +49,10 @@ public class InvocationsFinderTest extends TestBase {
 
     @Test
     public void shouldFindActualInvocations() throws Exception {
-        List<Invocation> actual = InvocationsFinder.findInvocations(invocations, new InvocationMatcher(simpleMethodInvocation));
+        List<Invocation> actual = InvocationsFinder.findInvocations(invocations, InvocationMatcher.createFrom(simpleMethodInvocation));
         Assertions.assertThat(actual).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo);
 
-        actual = InvocationsFinder.findInvocations(invocations, new InvocationMatcher(differentMethodInvocation));
+        actual = InvocationsFinder.findInvocations(invocations, InvocationMatcher.createFrom(differentMethodInvocation));
         Assertions.assertThat(actual).containsSequence(differentMethodInvocation);
     }
 
@@ -114,7 +114,7 @@ public class InvocationsFinderTest extends TestBase {
     public void shouldFindFirstSimilarInvocationByName() throws Exception {
         Invocation overloadedSimpleMethod = new InvocationBuilder().mock(mock).simpleMethod().arg("test").toInvocation();
 
-        Invocation found = InvocationsFinder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedSimpleMethod));
+        Invocation found = InvocationsFinder.findSimilarInvocation(invocations, InvocationMatcher.createFrom(overloadedSimpleMethod));
         assertSame(found, simpleMethodInvocation);
     }
 
@@ -124,7 +124,7 @@ public class InvocationsFinderTest extends TestBase {
 
         invocations.add(overloadedDifferentMethod);
 
-        Invocation found = InvocationsFinder.findSimilarInvocation(invocations, new InvocationMatcher(overloadedDifferentMethod));
+        Invocation found = InvocationsFinder.findSimilarInvocation(invocations, InvocationMatcher.createFrom(overloadedDifferentMethod));
         assertSame(found, overloadedDifferentMethod);
     }
 
@@ -138,21 +138,21 @@ public class InvocationsFinderTest extends TestBase {
 
     @Test
     public void shouldFindAllMatchingUnverifiedChunks() throws Exception {
-        List<Invocation> allMatching = InvocationsFinder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
+        List<Invocation> allMatching = InvocationsFinder.findAllMatchingUnverifiedChunks(invocations, InvocationMatcher.createFrom(simpleMethodInvocation), context);
         Assertions.assertThat(allMatching).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo);
 
         context.markVerified(simpleMethodInvocation);
-        allMatching = InvocationsFinder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
+        allMatching = InvocationsFinder.findAllMatchingUnverifiedChunks(invocations, InvocationMatcher.createFrom(simpleMethodInvocation), context);
         Assertions.assertThat(allMatching).containsSequence(simpleMethodInvocationTwo);
 
         context.markVerified(simpleMethodInvocationTwo);
-        allMatching = InvocationsFinder.findAllMatchingUnverifiedChunks(invocations, new InvocationMatcher(simpleMethodInvocation), context);
+        allMatching = InvocationsFinder.findAllMatchingUnverifiedChunks(invocations, InvocationMatcher.createFrom(simpleMethodInvocation), context);
         assertTrue(allMatching.isEmpty());
     }
 
     @Test
     public void shouldFindMatchingChunk() throws Exception {
-        List<Invocation> chunk = InvocationsFinder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 2, context);
+        List<Invocation> chunk = InvocationsFinder.findMatchingChunk(invocations, InvocationMatcher.createFrom(simpleMethodInvocation), 2, context);
         Assertions.assertThat(chunk).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo);
     }
 
@@ -161,7 +161,7 @@ public class InvocationsFinderTest extends TestBase {
         Invocation simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
         invocations.add(simpleMethodInvocationThree);
 
-        List<Invocation> chunk = InvocationsFinder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1, context);
+        List<Invocation> chunk = InvocationsFinder.findMatchingChunk(invocations, InvocationMatcher.createFrom(simpleMethodInvocation), 1, context);
         Assertions.assertThat(chunk).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree);
     }
 
@@ -170,7 +170,7 @@ public class InvocationsFinderTest extends TestBase {
         Invocation simpleMethodInvocationThree = new InvocationBuilder().mock(mock).toInvocation();
         invocations.add(simpleMethodInvocationThree);
 
-        List<Invocation> chunk = InvocationsFinder.findMatchingChunk(invocations, new InvocationMatcher(simpleMethodInvocation), 1, context);
+        List<Invocation> chunk = InvocationsFinder.findMatchingChunk(invocations, InvocationMatcher.createFrom(simpleMethodInvocation), 1, context);
         Assertions.assertThat(chunk).containsSequence(simpleMethodInvocation, simpleMethodInvocationTwo, simpleMethodInvocationThree);
     }
 

@@ -5,18 +5,16 @@
 
 package org.mockito.internal.invocation;
 
-import static org.mockito.internal.invocation.ArgumentsProcessor.argumentsToMatchers;
 import static org.mockito.internal.invocation.MatcherApplicationStrategy.getMatcherApplicationStrategyFor;
 import static org.mockito.internal.invocation.TypeSafeMatching.matchesTypeSafe;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.CapturesArguments;
+import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.reporting.PrintSettings;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
@@ -32,25 +30,22 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
     private final Invocation invocation;
     private final List<ArgumentMatcher<?>> matchers;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public InvocationMatcher(Invocation invocation, List<ArgumentMatcher> matchers) {
         this.invocation = invocation;
-        if (matchers.isEmpty()) {
-            this.matchers = (List) argumentsToMatchers(invocation.getArguments());
-        } else {
-            this.matchers = (List) matchers;
-        }
+        this.matchers = (List) matchers;
     }
 
-    @SuppressWarnings("rawtypes")
-    public InvocationMatcher(Invocation invocation) {
-        this(invocation, Collections.<ArgumentMatcher> emptyList());
+    public static InvocationMatcher createFrom(Invocation invocation) {
+
+        return createFrom(Arrays.asList(invocation)).get(0);
     }
 
     public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {
         LinkedList<InvocationMatcher> out = new LinkedList<InvocationMatcher>();
+        MatchersBinder binder = new MatchersBinder();
         for (Invocation i : invocations) {
-            out.add(new InvocationMatcher(i));
+            out.add(binder.bindMatchers(Collections.<LocalizedMatcher>emptyList(), i));
         }
         return out;
     }
@@ -65,13 +60,13 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public List<ArgumentMatcher> getMatchers() {
         return (List) matchers;
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public String toString() {
         return new PrintSettings().print((List) matchers, invocation);
     }
@@ -146,9 +141,9 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
         };
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private boolean argumentsMatch(Invocation actual) {
         List matchers = getMatchers();
-        return getMatcherApplicationStrategyFor(actual, matchers).forEachMatcherAndArgument( matchesTypeSafe());
+        return getMatcherApplicationStrategyFor(actual, matchers).forEachMatcherAndArgument(matchesTypeSafe());
     }
 }

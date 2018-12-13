@@ -32,7 +32,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest   {
         Invocation invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
 
         //when
-        checkAtLeastNumberOfInvocations(asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1, context);
+        checkAtLeastNumberOfInvocations(asList(invocation, invocationTwo), InvocationMatcher.createFrom(invocation), 1, context);
 
         //then
         assertThat(invocation.isVerified()).isTrue();
@@ -51,7 +51,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest   {
         exception.expectMessage("But was 1 time");
 
         //when
-        checkAtLeastNumberOfInvocations(asList(invocation, invocationTwo), new InvocationMatcher(invocation), 2, context);
+        checkAtLeastNumberOfInvocations(asList(invocation, invocationTwo), InvocationMatcher.createFrom(invocation), 2, context);
 
 
     }
@@ -63,7 +63,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest   {
         Invocation invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
 
         //when
-        checkAtLeastNumberOfInvocations(asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1);
+        checkAtLeastNumberOfInvocations(asList(invocation, invocationTwo), InvocationMatcher.createFrom(invocation), 1);
 
         //then
         assertThat(invocation.isVerified()).isTrue();
@@ -81,6 +81,6 @@ public class AtLeastXNumberOfInvocationsCheckerTest   {
         exception.expectMessage("But was 1 time");
 
         //when
-        checkAtLeastNumberOfInvocations(asList(invocation, invocationTwo), new InvocationMatcher(invocation), 2);
+        checkAtLeastNumberOfInvocations(asList(invocation, invocationTwo), InvocationMatcher.createFrom(invocation), 2);
     }
 }

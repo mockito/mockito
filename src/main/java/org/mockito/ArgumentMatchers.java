@@ -4,29 +4,15 @@
  */
 package org.mockito;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-import org.mockito.internal.matchers.Any;
-import org.mockito.internal.matchers.Contains;
-import org.mockito.internal.matchers.EndsWith;
-import org.mockito.internal.matchers.Equals;
-import org.mockito.internal.matchers.InstanceOf;
-import org.mockito.internal.matchers.Matches;
-import org.mockito.internal.matchers.NotNull;
-import org.mockito.internal.matchers.Null;
-import org.mockito.internal.matchers.Same;
-import org.mockito.internal.matchers.StartsWith;
+import org.mockito.internal.matchers.*;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.mockito.internal.util.Primitives;
 
+import java.util.*;
+import java.util.regex.Pattern;
+
+import static org.mockito.internal.matchers.MatcherMarkers.genericMarker;
+import static org.mockito.internal.matchers.MatcherMarkers.markerOf;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-import static org.mockito.internal.util.Primitives.defaultValue;
 
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
@@ -65,32 +51,39 @@ import static org.mockito.internal.util.Primitives.defaultValue;
  * mock.dryRun(true); // ok
  *
  * </code></pre>
- *
+ * <p>
  * The same apply for verification.
  * </p>
- *
- *
+ * <p>
+ * <p>
  * Scroll down to see all methods - full list of matchers.
  *
  * <p>
  * <b>Warning:</b><br/>
- *
- * If you are using argument matchers, <b>all arguments</b> have to be provided by matchers.
- *
+ * <p>
+ * One can mix concrete arguments with argument-matchers; however, note that there are some exceptions.
+ * Since <code>null</code> is used as a "marker" value by many argument-matchers, it is impossible to mix concrete
+ * <code>null</code>s with other argument matchers; use <code>isNull</code> instead.
+ * In some edge cases, concrete arguments may collide with the "marker" values for the primitive types (which are quite
+ * arbitrary). In such cases, one must use concrete arguments only or argument-matchers only.
+ * <p>
  * E.g: (example shows verification but the same applies to stubbing):
  * </p>
  *
  * <pre class="code"><code class="java">
- * verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
- * //above is correct - eq() is also an argument matcher
+ * verify(mock).someMethod(anyInt(), anyString(), "third argument");
+ * //above is correct
  *
- * verify(mock).someMethod(anyInt(), anyString(), <b>"third argument"</b>);
- * //above is incorrect - exception will be thrown because third argument is given without argument matcher.
+ * verify(mock).someMethod(anyInt(), anyString(), <b>null</b>);
+ * //above is incorrect - exception will be thrown because third argument is a concrete null mixed with matchers.
+ *
+ * verify(mock).someMethod(<b>13981398</b>, anyString(), "third argument");
+ * //above is incorrect - exception will be thrown because first argument happens to be the marker value for int.
  * </code></pre>
  *
  * <p>
  * Matcher methods like <code>anyObject()</code>, <code>eq()</code> <b>do not</b> return matchers.
- * Internally, they record a matcher on a stack and return a dummy value (usually null).
+ * Internally, they record a matcher on a stack and return a "marker" value (usually null).
  * This implementation is due to static type safety imposed by java compiler.
  * The consequence is that you cannot use <code>anyObject()</code>, <code>eq()</code> methods outside of verified/stubbed method.
  * </p>
@@ -119,20 +112,19 @@ public class ArgumentMatchers {
      *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
-     *
+     * <p>
      * This is an alias of: {@link #anyObject()} and {@link #any(java.lang.Class)}
      * </p>
      *
      * <p>
      * <strong>Notes : </strong><br/>
      * <ul>
-     *     <li>For primitive types use {@link #anyChar()} family or {@link #isA(Class)} or {@link #any(Class)}.</li>
-     *     <li>Since mockito 2.1.0 {@link #any(Class)} is not anymore an alias of this method.</li>
+     * <li>For primitive types use {@link #anyChar()} family or {@link #isA(Class)} or {@link #any(Class)}.</li>
+     * <li>Since mockito 2.1.0 {@link #any(Class)} is not anymore an alias of this method.</li>
      * </ul>
      * </p>
      *
-     * @return <code>null</code>.
-     *
+     * @return A marker value.
      * @see #any(Class)
      * @see #anyObject()
      * @see #anyVararg()
@@ -153,7 +145,7 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return <code>null</code>.
+     * @return A marker value.
      * @see #any()
      * @see #any(Class)
      * @see #notNull()
@@ -163,7 +155,7 @@ public class ArgumentMatchers {
     @Deprecated
     public static <T> T anyObject() {
         reportMatcher(Any.ANY);
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -172,7 +164,7 @@ public class ArgumentMatchers {
      * <p>
      * This matcher will perform a type check with the given type, thus excluding values.
      * See examples in javadoc for {@link ArgumentMatchers} class.
-     *
+     * <p>
      * This is an alias of: {@link #isA(Class)}}
      * </p>
      *
@@ -185,15 +177,15 @@ public class ArgumentMatchers {
      *
      * <p><strong>Notes : </strong><br/>
      * <ul>
-     *     <li>For primitive types use {@link #anyChar()} family.</li>
-     *     <li>Since Mockito 2.1.0 this method will perform a type check thus <code>null</code> values are not authorized.</li>
-     *     <li>Since mockito 2.1.0 {@link #any()} and {@link #anyObject()} are not anymore aliases of this method.</li>
+     * <li>For primitive types use {@link #anyChar()} family.</li>
+     * <li>Since Mockito 2.1.0 this method will perform a type check thus <code>null</code> values are not authorized.</li>
+     * <li>Since mockito 2.1.0 {@link #any()} and {@link #anyObject()} are not anymore aliases of this method.</li>
      * </ul>
      * </p>
      *
-     * @param <T> The accepted type
+     * @param <T>  The accepted type
      * @param type the class of the accepted type.
-     * @return <code>null</code>.
+     * @return A marker value.
      * @see #any()
      * @see #anyObject()
      * @see #anyVararg()
@@ -205,7 +197,7 @@ public class ArgumentMatchers {
      */
     public static <T> T any(Class<T> type) {
         reportMatcher(new InstanceOf.VarArgAware(type, "<any " + type.getCanonicalName() + ">"));
-        return defaultValue(type);
+        return markerOf(type);
     }
 
     /**
@@ -215,12 +207,12 @@ public class ArgumentMatchers {
      *
      * @param <T>  the accepted type.
      * @param type the class of the accepted type.
-     * @return <code>null</code>.
+     * @return A marker value.
      * @see #any(Class)
      */
     public static <T> T isA(Class<T> type) {
         reportMatcher(new InstanceOf(type));
-        return defaultValue(type);
+        return markerOf(type);
     }
 
     /**
@@ -249,15 +241,14 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return <code>null</code>.
+     * @return A marker value.
      * @see #any()
      * @see #any(Class)
      * @deprecated as of 2.1.0 use {@link #any()}
      */
     @Deprecated
     public static <T> T anyVararg() {
-        any();
-        return null;
+        return any();
     }
 
     /**
@@ -274,13 +265,13 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return <code>false</code>.
+     * @return A marker value.
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static boolean anyBoolean() {
         reportMatcher(new InstanceOf(Boolean.class, "<any boolean>"));
-        return false;
+        return markerOf(boolean.class);
     }
 
     /**
@@ -297,13 +288,13 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return <code>0</code>.
+     * @return A marker value.
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static byte anyByte() {
         reportMatcher(new InstanceOf(Byte.class, "<any byte>"));
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
@@ -320,13 +311,13 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return <code>0</code>.
+     * @return A marker value.
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static char anyChar() {
         reportMatcher(new InstanceOf(Character.class, "<any char>"));
-        return 0;
+        return markerOf(char.class);
     }
 
     /**
@@ -343,13 +334,13 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return <code>0</code>.
+     * @return A marker value.
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static int anyInt() {
         reportMatcher(new InstanceOf(Integer.class, "<any integer>"));
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
@@ -366,13 +357,13 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return <code>0</code>.
+     * @return A marker value.
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static long anyLong() {
         reportMatcher(new InstanceOf(Long.class, "<any long>"));
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
@@ -389,13 +380,13 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return <code>0</code>.
+     * @return A marker value.
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static float anyFloat() {
         reportMatcher(new InstanceOf(Float.class, "<any float>"));
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
@@ -412,13 +403,13 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return <code>0</code>.
+     * @return A marker value.
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static double anyDouble() {
         reportMatcher(new InstanceOf(Double.class, "<any double>"));
-        return 0;
+        return markerOf(double.class);
     }
 
     /**
@@ -435,13 +426,13 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return <code>0</code>.
+     * @return A marker value.
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static short anyShort() {
         reportMatcher(new InstanceOf(Short.class, "<any short>"));
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
@@ -458,13 +449,13 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return empty String ("")
+     * @return A marker value.
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static String anyString() {
         reportMatcher(new InstanceOf(String.class, "<any string>"));
-        return "";
+        return markerOf(String.class);
     }
 
     /**
@@ -481,19 +472,19 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return empty List.
+     * @return A marker value.
      * @see #anyListOf(Class)
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static <T> List<T> anyList() {
         reportMatcher(new InstanceOf(List.class, "<any List>"));
-        return new ArrayList<T>(0);
+        return markerOf(List.class);
     }
 
     /**
      * Any <strong>non-null</strong> <code>List</code>.
-     *
+     * <p>
      * Generic friendly alias to {@link ArgumentMatchers#anyList()}. It's an alternative to
      * <code>&#064;SuppressWarnings("unchecked")</code> to keep code clean of compiler warnings.
      *
@@ -514,7 +505,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param clazz Type owned by the list to avoid casting
-     * @return empty List.
+     * @return A marker value.
      * @see #anyList()
      * @see #isNull()
      * @see #isNull(Class)
@@ -539,14 +530,14 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return empty Set
+     * @return A marker value.
      * @see #anySetOf(Class)
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static <T> Set<T> anySet() {
         reportMatcher(new InstanceOf(Set.class, "<any set>"));
-        return new HashSet<T>(0);
+        return markerOf(Set.class);
     }
 
     /**
@@ -574,7 +565,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param clazz Type owned by the Set to avoid casting
-     * @return empty Set
+     * @return A marker value.
      * @see #anySet()
      * @see #isNull()
      * @see #isNull(Class)
@@ -599,14 +590,14 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return empty Map.
+     * @return A marker value.
      * @see #anyMapOf(Class, Class)
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static <K, V> Map<K, V> anyMap() {
         reportMatcher(new InstanceOf(Map.class, "<any map>"));
-        return new HashMap<K, V>(0);
+        return markerOf(Map.class);
     }
 
     /**
@@ -660,14 +651,14 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return empty Collection.
+     * @return A marker value.
      * @see #anyCollectionOf(Class)
      * @see #isNull()
      * @see #isNull(Class)
      */
     public static <T> Collection<T> anyCollection() {
         reportMatcher(new InstanceOf(Collection.class, "<any collection>"));
-        return new ArrayList<T>(0);
+        return markerOf(Collection.class);
     }
 
     /**
@@ -695,7 +686,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param clazz Type owned by the collection to avoid casting
-     * @return empty Collection.
+     * @return A marker value.
      * @see #anyCollection()
      * @see #isNull()
      * @see #isNull(Class)
@@ -720,7 +711,7 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
-     * @return empty Iterable.
+     * @return A marker value.
      * @see #anyIterableOf(Class)
      * @see #isNull()
      * @see #isNull(Class)
@@ -728,7 +719,7 @@ public class ArgumentMatchers {
      */
     public static <T> Iterable<T> anyIterable() {
         reportMatcher(new InstanceOf(Iterable.class, "<any iterable>"));
-        return new ArrayList<T>(0);
+        return markerOf(Iterable.class);
     }
 
     /**
@@ -756,7 +747,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param clazz Type owned by the collection to avoid casting
-     * @return empty Iterable.
+     * @return A marker value.
      * @see #anyIterable()
      * @see #isNull()
      * @see #isNull(Class)
@@ -769,7 +760,6 @@ public class ArgumentMatchers {
     }
 
 
-
     /**
      * <code>boolean</code> argument that is equal to the given value.
      *
@@ -778,11 +768,11 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param value the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static boolean eq(boolean value) {
         reportMatcher(new Equals(value));
-        return false;
+        return markerOf(boolean.class);
     }
 
     /**
@@ -793,11 +783,11 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param value the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static byte eq(byte value) {
         reportMatcher(new Equals(value));
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
@@ -808,11 +798,11 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param value the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static char eq(char value) {
         reportMatcher(new Equals(value));
-        return 0;
+        return markerOf(char.class);
     }
 
     /**
@@ -823,11 +813,11 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param value the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double eq(double value) {
         reportMatcher(new Equals(value));
-        return 0;
+        return markerOf(double.class);
     }
 
     /**
@@ -838,11 +828,11 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param value the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float eq(float value) {
         reportMatcher(new Equals(value));
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
@@ -853,11 +843,11 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param value the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static int eq(int value) {
         reportMatcher(new Equals(value));
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
@@ -868,11 +858,11 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param value the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static long eq(long value) {
         reportMatcher(new Equals(value));
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
@@ -881,11 +871,11 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param value the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static short eq(short value) {
         reportMatcher(new Equals(value));
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
@@ -896,13 +886,11 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param value the given value.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T> T eq(T value) {
         reportMatcher(new Equals(value));
-        if (value == null)
-            return null;
-        return (T) Primitives.defaultValue(value.getClass());
+        return (T) markerOf(value);
     }
 
     /**
@@ -927,11 +915,11 @@ public class ArgumentMatchers {
      *
      * @param value         the given value.
      * @param excludeFields fields to exclude, if field does not exist it is ignored.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T> T refEq(T value, String... excludeFields) {
         reportMatcher(new ReflectionEquals(value, excludeFields));
-        return null;
+        return (T) markerOf(value);
     }
 
     /**
@@ -943,13 +931,11 @@ public class ArgumentMatchers {
      *
      * @param <T>   the type of the object, it is passed through to prevent casts.
      * @param value the given value.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T> T same(T value) {
         reportMatcher(new Same(value));
-        if (value == null)
-            return null;
-        return (T) Primitives.defaultValue(value.getClass());
+        return (T) markerOf(value);
     }
 
     /**
@@ -959,14 +945,14 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class
      * </p>
      *
-     * @return <code>null</code>.
+     * @return A marker value.
      * @see #isNull(Class)
      * @see #isNotNull()
      * @see #isNotNull(Class)
      */
     public static <T> T isNull() {
         reportMatcher(Null.NULL);
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -981,7 +967,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param clazz Type to avoid casting
-     * @return <code>null</code>.
+     * @return A marker value.
      * @see #isNull()
      * @see #isNotNull()
      * @see #isNotNull(Class)
@@ -1003,11 +989,11 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class
      * </p>
      *
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T> T notNull() {
         reportMatcher(NotNull.NOT_NULL);
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -1015,7 +1001,7 @@ public class ArgumentMatchers {
      *
      * <p>
      * The class argument is provided to avoid casting.
-     *
+     * <p>
      * Alias to {@link ArgumentMatchers#isNotNull(Class)}
      * <p>
      *
@@ -1024,7 +1010,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param clazz Type to avoid casting
-     * @return <code>null</code>.
+     * @return A marker value.
      * @see #isNotNull()
      * @see #isNull()
      * @see #isNull(Class)
@@ -1046,7 +1032,7 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class
      * </p>
      *
-     * @return <code>null</code>.
+     * @return A marker value.
      * @see #isNotNull(Class)
      * @see #isNull()
      * @see #isNull(Class)
@@ -1068,7 +1054,7 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param clazz Type to avoid casting
-     * @return <code>null</code>.
+     * @return A marker value.
      * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
@@ -1085,11 +1071,11 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param clazz Type to avoid casting
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T> T nullable(Class<T> clazz) {
         AdditionalMatchers.or(isNull(), isA(clazz));
-        return  (T) Primitives.defaultValue(clazz);
+        return markerOf(clazz);
     }
 
     /**
@@ -1098,11 +1084,11 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param substring the substring.
-     * @return empty String ("").
+     * @return A marker value.
      */
     public static String contains(String substring) {
         reportMatcher(new Contains(substring));
-        return "";
+        return markerOf(String.class);
     }
 
     /**
@@ -1111,13 +1097,12 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param regex the regular expression.
-     * @return empty String ("").
-     *
+     * @return A marker value.
      * @see AdditionalMatchers#not(boolean)
      */
     public static String matches(String regex) {
         reportMatcher(new Matches(regex));
-        return "";
+        return markerOf(String.class);
     }
 
     /**
@@ -1126,13 +1111,12 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param pattern the regular expression pattern.
-     * @return empty String ("").
-     *
+     * @return A marker value.
      * @see AdditionalMatchers#not(boolean)
      */
     public static String matches(Pattern pattern) {
         reportMatcher(new Matches(pattern));
-        return "";
+        return markerOf(String.class);
     }
 
     /**
@@ -1141,11 +1125,11 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param suffix the suffix.
-     * @return empty String ("").
+     * @return A marker value.
      */
     public static String endsWith(String suffix) {
         reportMatcher(new EndsWith(suffix));
-        return "";
+        return markerOf(String.class);
     }
 
     /**
@@ -1154,11 +1138,11 @@ public class ArgumentMatchers {
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param prefix the prefix.
-     * @return empty String ("").
+     * @return A marker value.
      */
     public static String startsWith(String prefix) {
         reportMatcher(new StartsWith(prefix));
-        return "";
+        return markerOf(String.class);
     }
 
     /**
@@ -1190,131 +1174,131 @@ public class ArgumentMatchers {
      * </p>
      *
      * @param matcher decides whether argument matches
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T> T argThat(ArgumentMatcher<T> matcher) {
         reportMatcher(matcher);
-        return null;
+        return (T) genericMarker();
     }
 
     /**
      * Allows creating custom <code>char</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>char</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static char charThat(ArgumentMatcher<Character> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(char.class);
     }
 
     /**
      * Allows creating custom <code>boolean</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>boolean</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>false</code>.
+     * @return A marker value.
      */
     public static boolean booleanThat(ArgumentMatcher<Boolean> matcher) {
         reportMatcher(matcher);
-        return false;
+        return markerOf(boolean.class);
     }
 
     /**
      * Allows creating custom <code>byte</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>byte</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static byte byteThat(ArgumentMatcher<Byte> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
      * Allows creating custom <code>short</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>short</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static short shortThat(ArgumentMatcher<Short> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
      * Allows creating custom <code>int</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>int</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static int intThat(ArgumentMatcher<Integer> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
      * Allows creating custom <code>long</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>long</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static long longThat(ArgumentMatcher<Long> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
      * Allows creating custom <code>float</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>float</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float floatThat(ArgumentMatcher<Float> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
      * Allows creating custom <code>double</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>double</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
      * @param matcher decides whether argument matches
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double doubleThat(ArgumentMatcher<Double> matcher) {
         reportMatcher(matcher);
-        return 0;
+        return markerOf(double.class);
     }
 
     private static void reportMatcher(ArgumentMatcher<?> matcher) {

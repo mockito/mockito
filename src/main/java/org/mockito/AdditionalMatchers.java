@@ -5,6 +5,8 @@
 
 package org.mockito;
 
+import static org.mockito.internal.matchers.MatcherMarkers.genericMarker;
+import static org.mockito.internal.matchers.MatcherMarkers.markerOf;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import org.mockito.internal.matchers.ArrayEquals;
@@ -48,11 +50,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T extends Comparable<T>> T geq(T value) {
         reportMatcher(new GreaterOrEqual<T>(value));
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -62,11 +64,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static byte geq(byte value) {
         reportMatcher(new GreaterOrEqual<Byte>(value));
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
@@ -76,11 +78,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double geq(double value) {
         reportMatcher(new GreaterOrEqual<Double>(value));
-        return 0;
+        return markerOf(double.class);
     }
 
     /**
@@ -90,11 +92,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float geq(float value) {
         reportMatcher(new GreaterOrEqual<Float>(value));
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
@@ -104,11 +106,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static int geq(int value) {
         reportMatcher(new GreaterOrEqual<Integer>(value));
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
@@ -118,11 +120,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static long geq(long value) {
         reportMatcher(new GreaterOrEqual<Long>(value));
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
@@ -132,11 +134,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static short geq(short value) {
         reportMatcher(new GreaterOrEqual<Short>(value));
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
@@ -146,11 +148,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T extends Comparable<T>> T leq(T value) {
         reportMatcher(new LessOrEqual<T>(value));
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -160,11 +162,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static byte leq(byte value) {
         reportMatcher(new LessOrEqual<Byte>(value));
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
@@ -174,11 +176,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double leq(double value) {
         reportMatcher(new LessOrEqual<Double>(value));
-        return 0;
+        return markerOf(double.class);
     }
 
     /**
@@ -188,11 +190,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float leq(float value) {
         reportMatcher(new LessOrEqual<Float>(value));
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
@@ -202,11 +204,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static int leq(int value) {
         reportMatcher(new LessOrEqual<Integer>(value));
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
@@ -216,11 +218,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static long leq(long value) {
         reportMatcher(new LessOrEqual<Long>(value));
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
@@ -230,11 +232,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static short leq(short value) {
         reportMatcher(new LessOrEqual<Short>(value));
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
@@ -244,11 +246,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T extends Comparable<T>> T gt(T value) {
         reportMatcher(new GreaterThan<T>(value));
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -258,11 +260,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static byte gt(byte value) {
         reportMatcher(new GreaterThan<Byte>(value));
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
@@ -272,11 +274,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double gt(double value) {
         reportMatcher(new GreaterThan<Double>(value));
-        return 0;
+        return markerOf(double.class);
     }
 
     /**
@@ -286,11 +288,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float gt(float value) {
         reportMatcher(new GreaterThan<Float>(value));
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
@@ -300,11 +302,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static int gt(int value) {
         reportMatcher(new GreaterThan<Integer>(value));
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
@@ -314,11 +316,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static long gt(long value) {
         reportMatcher(new GreaterThan<Long>(value));
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
@@ -328,11 +330,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static short gt(short value) {
         reportMatcher(new GreaterThan<Short>(value));
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
@@ -342,11 +344,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T extends Comparable<T>> T lt(T value) {
         reportMatcher(new LessThan<T>(value));
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -356,11 +358,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static byte lt(byte value) {
         reportMatcher(new LessThan<Byte>(value));
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
@@ -370,11 +372,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double lt(double value) {
         reportMatcher(new LessThan<Double>(value));
-        return 0;
+        return markerOf(double.class);
     }
 
     /**
@@ -384,11 +386,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float lt(float value) {
         reportMatcher(new LessThan<Float>(value));
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
@@ -398,11 +400,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static int lt(int value) {
         reportMatcher(new LessThan<Integer>(value));
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
@@ -412,11 +414,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static long lt(long value) {
         reportMatcher(new LessThan<Long>(value));
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
@@ -426,11 +428,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static short lt(short value) {
         reportMatcher(new LessThan<Short>(value));
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
@@ -441,11 +443,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given value.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T extends Comparable<T>> T cmpEq(T value) {
         reportMatcher(new CompareEqual<T>(value));
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -454,11 +456,11 @@ public class AdditionalMatchers {
      *
      * @param regex
      *            the regular expression.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static String find(String regex) {
         reportMatcher(new Find(regex));
-        return null;
+        return (String) genericMarker();
     }
 
     /**
@@ -471,11 +473,11 @@ public class AdditionalMatchers {
      *            the type of the array, it is passed through to prevent casts.
      * @param value
      *            the given array.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T> T[] aryEq(T[] value) {
         reportMatcher(new ArrayEquals(value));
-        return null;
+        return (T[]) genericMarker();
     }
 
     /**
@@ -486,11 +488,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given array.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static short[] aryEq(short[] value) {
         reportMatcher(new ArrayEquals(value));
-        return null;
+        return (short[]) genericMarker();
     }
 
     /**
@@ -501,11 +503,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given array.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static long[] aryEq(long[] value) {
         reportMatcher(new ArrayEquals(value));
-        return null;
+        return (long[]) genericMarker();
     }
 
     /**
@@ -516,11 +518,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given array.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static int[] aryEq(int[] value) {
         reportMatcher(new ArrayEquals(value));
-        return null;
+        return (int[]) genericMarker();
     }
 
     /**
@@ -531,11 +533,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given array.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static float[] aryEq(float[] value) {
         reportMatcher(new ArrayEquals(value));
-        return null;
+        return (float[]) genericMarker();
     }
 
     /**
@@ -546,11 +548,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given array.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static double[] aryEq(double[] value) {
         reportMatcher(new ArrayEquals(value));
-        return null;
+        return (double[]) genericMarker();
     }
 
     /**
@@ -561,11 +563,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given array.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static char[] aryEq(char[] value) {
         reportMatcher(new ArrayEquals(value));
-        return null;
+        return (char[]) genericMarker();
     }
 
     /**
@@ -576,11 +578,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given array.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static byte[] aryEq(byte[] value) {
         reportMatcher(new ArrayEquals(value));
-        return null;
+        return (byte[]) genericMarker();
     }
 
     /**
@@ -591,11 +593,11 @@ public class AdditionalMatchers {
      *
      * @param value
      *            the given array.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static boolean[] aryEq(boolean[] value) {
         reportMatcher(new ArrayEquals(value));
-        return null;
+        return (boolean[]) genericMarker();
     }
 
     /**
@@ -607,11 +609,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>false</code>.
+     * @return A marker value.
      */
     public static boolean and(boolean first, boolean second) {
         mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return false;
+        return markerOf(boolean.class);
     }
 
     /**
@@ -623,11 +625,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static byte and(byte first, byte second) {
         mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
@@ -639,11 +641,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static char and(char first, char second) {
         mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return markerOf(char.class);
     }
 
     /**
@@ -655,11 +657,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double and(double first, double second) {
         mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return markerOf(double.class);
     }
 
     /**
@@ -671,11 +673,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float and(float first, float second) {
         mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
@@ -687,11 +689,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static int and(int first, int second) {
         mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
@@ -703,11 +705,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static long and(long first, long second) {
         mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
@@ -719,11 +721,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static short and(short first, short second) {
         mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
@@ -737,11 +739,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T> T and(T first, T second) {
         mockingProgress().getArgumentMatcherStorage().reportAnd();
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -753,11 +755,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>false</code>.
+     * @return A marker value.
      */
     public static boolean or(boolean first, boolean second) {
         mockingProgress().getArgumentMatcherStorage().reportOr();
-        return false;
+        return markerOf(boolean.class);
     }
 
     /**
@@ -771,11 +773,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T> T or(T first, T second) {
         mockingProgress().getArgumentMatcherStorage().reportOr();
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -787,11 +789,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static short or(short first, short second) {
         mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
@@ -803,11 +805,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static long or(long first, long second) {
         mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
@@ -819,11 +821,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static int or(int first, int second) {
         mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
@@ -835,11 +837,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float or(float first, float second) {
         mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
@@ -851,11 +853,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double or(double first, double second) {
         mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return markerOf(double.class);
     }
 
     /**
@@ -867,11 +869,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static char or(char first, char second) {
         mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return markerOf(char.class);
     }
 
     /**
@@ -883,11 +885,11 @@ public class AdditionalMatchers {
      *            placeholder for the first argument matcher.
      * @param second
      *            placeholder for the second argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static byte or(byte first, byte second) {
         mockingProgress().getArgumentMatcherStorage().reportOr();
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
@@ -899,11 +901,11 @@ public class AdditionalMatchers {
      *            the type of the object, it is passed through to prevent casts.
      * @param first
      *            placeholder for the argument matcher.
-     * @return <code>null</code>.
+     * @return A marker value.
      */
     public static <T> T not(T first) {
         mockingProgress().getArgumentMatcherStorage().reportNot();
-        return null;
+        return (T) genericMarker();
     }
 
     /**
@@ -913,11 +915,11 @@ public class AdditionalMatchers {
      *
      * @param first
      *            placeholder for the argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static short not(short first) {
         mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return markerOf(short.class);
     }
 
     /**
@@ -927,11 +929,11 @@ public class AdditionalMatchers {
      *
      * @param first
      *            placeholder for the argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static int not(int first) {
         mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return markerOf(int.class);
     }
 
     /**
@@ -941,11 +943,11 @@ public class AdditionalMatchers {
      *
      * @param first
      *            placeholder for the argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static long not(long first) {
         mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return markerOf(long.class);
     }
 
     /**
@@ -955,11 +957,11 @@ public class AdditionalMatchers {
      *
      * @param first
      *            placeholder for the argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float not(float first) {
         mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return markerOf(float.class);
     }
 
     /**
@@ -969,11 +971,11 @@ public class AdditionalMatchers {
      *
      * @param first
      *            placeholder for the argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double not(double first) {
         mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return markerOf(double.class);
     }
 
     /**
@@ -983,11 +985,11 @@ public class AdditionalMatchers {
      *
      * @param first
      *            placeholder for the argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static char not(char first) {
         mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return markerOf(char.class);
     }
 
     /**
@@ -997,11 +999,11 @@ public class AdditionalMatchers {
      *
      * @param first
      *            placeholder for the argument matcher.
-     * @return <code>false</code>.
+     * @return A marker value.
      */
     public static boolean not(boolean first) {
         mockingProgress().getArgumentMatcherStorage().reportNot();
-        return false;
+        return markerOf(boolean.class);
     }
 
     /**
@@ -1011,11 +1013,11 @@ public class AdditionalMatchers {
      *
      * @param first
      *            placeholder for the argument matcher.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static byte not(byte first) {
         mockingProgress().getArgumentMatcherStorage().reportNot();
-        return 0;
+        return markerOf(byte.class);
     }
 
     /**
@@ -1028,11 +1030,11 @@ public class AdditionalMatchers {
      *            the given value.
      * @param delta
      *            the given delta.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static double eq(double value, double delta) {
         reportMatcher(new EqualsWithDelta(value, delta));
-        return 0;
+        return markerOf(double.class);
     }
 
     /**
@@ -1045,11 +1047,11 @@ public class AdditionalMatchers {
      *            the given value.
      * @param delta
      *            the given delta.
-     * @return <code>0</code>.
+     * @return A marker value.
      */
     public static float eq(float value, float delta) {
         reportMatcher(new EqualsWithDelta(value, delta));
-        return 0;
+        return markerOf(float.class);
     }
 
     private static void reportMatcher(ArgumentMatcher<?> matcher) {

@@ -54,7 +54,7 @@ public class InvocationContainerImplTest {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    c.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
+                    c.setInvocationForPotentialStubbing(InvocationMatcher.createFrom(invocation));
                     c.addAnswer(new Returns("foo"), null);
                     c.findAnswerFor(invocation);
                 }
@@ -82,14 +82,14 @@ public class InvocationContainerImplTest {
 
     @Test
     public void should_return_invoked_mock() throws Exception {
-        container.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
+        container.setInvocationForPotentialStubbing(InvocationMatcher.createFrom(invocation));
 
         assertEquals(invocation.getMock(), container.invokedMock());
     }
 
     @Test
     public void should_return_invoked_mock_stub_only() throws Exception {
-        containerStubOnly.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
+        containerStubOnly.setInvocationForPotentialStubbing(InvocationMatcher.createFrom(invocation));
 
         assertEquals(invocation.getMock(), containerStubOnly.invokedMock());
     }

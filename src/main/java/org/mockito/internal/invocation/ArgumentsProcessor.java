@@ -51,17 +51,20 @@ public class ArgumentsProcessor {
         return array == null || array.length == 0;
     }
 
-    public static List<ArgumentMatcher> argumentsToMatchers(Object[] arguments) {
+    public static List<ArgumentMatcher> argumentsToEqualsMatchers(Object[] arguments) {
         List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>(arguments.length);
         for (Object arg : arguments) {
-            if (arg != null && arg.getClass().isArray()) {
-                matchers.add(new ArrayEquals(arg));
-            } else {
-                matchers.add(new Equals(arg));
-            }
+            matchers.add(argumentToEqualsMatcher(arg));
         }
         return matchers;
     }
 
+    public static ArgumentMatcher argumentToEqualsMatcher(Object argument) {
 
+        if (argument != null && argument.getClass().isArray()) {
+            return new ArrayEquals(argument);
+        } else {
+            return new Equals(argument);
+        }
+    }
 }

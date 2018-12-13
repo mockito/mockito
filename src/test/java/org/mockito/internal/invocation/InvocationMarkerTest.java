@@ -5,12 +5,14 @@
 package org.mockito.internal.invocation;
 
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockitoutil.TestBase;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.*;
@@ -36,7 +38,7 @@ public class InvocationMarkerTest extends TestBase {
         //given
         Invocation i = new InvocationBuilder().toInvocation();
         final AtomicReference<Invocation> box = new AtomicReference<Invocation>();
-        MatchableInvocation c = new InvocationMatcher(i) {
+        MatchableInvocation c = new InvocationMatcher(i, Collections.<ArgumentMatcher>emptyList()) {
             public void captureArgumentsFrom(Invocation i) {
                 box.set(i);
             }};

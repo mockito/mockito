@@ -55,7 +55,7 @@ public class PrintSettings {
     }
 
     public String print(Invocation invocation) {
-        return print(ArgumentsProcessor.argumentsToMatchers(invocation.getArguments()), invocation);
+        return print(ArgumentsProcessor.argumentsToEqualsMatchers(invocation.getArguments()), invocation);
     }
 
     public String print(MatchableInvocation invocation) {

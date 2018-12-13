@@ -4,11 +4,10 @@
  */
 package org.mockito;
 
-import static org.mockito.internal.util.Primitives.defaultValue;
-
 import java.util.List;
 
 import org.mockito.internal.matchers.CapturingMatcher;
+import org.mockito.internal.matchers.MatcherMarkers;
 
 /**
  * Use it to capture argument values for further assertions.
@@ -77,11 +76,11 @@ public class ArgumentCaptor<T> {
      * <p>
      * See examples in javadoc for {@link ArgumentCaptor} class.
      *
-     * @return null or default values
+     * @return The "marker" value for this captor's argument type.
      */
     public T capture() {
         Mockito.argThat(capturingMatcher);
-        return defaultValue(clazz);
+        return MatcherMarkers.markerOf(clazz);
     }
 
     /**

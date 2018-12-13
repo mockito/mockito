@@ -46,16 +46,16 @@ public class InvocationMatcherTest extends TestBase {
         Invocation invocationTwo = new InvocationBuilder().args("blah").toInvocation();
 
         Map<InvocationMatcher, String> map = new HashMap<InvocationMatcher, String>();
-        map.put(new InvocationMatcher(invocation), "one");
-        map.put(new InvocationMatcher(invocationTwo), "two");
+        map.put(InvocationMatcher.createFrom(invocation), "one");
+        map.put(InvocationMatcher.createFrom(invocationTwo), "two");
 
         assertEquals(2, map.size());
     }
 
     @Test
     public void should_not_equal_if_number_of_arguments_differ() throws Exception {
-        InvocationMatcher withOneArg = new InvocationMatcher(new InvocationBuilder().args("test").toInvocation());
-        InvocationMatcher withTwoArgs = new InvocationMatcher(new InvocationBuilder().args("test", 100).toInvocation());
+        InvocationMatcher withOneArg = InvocationMatcher.createFrom(new InvocationBuilder().args("test").toInvocation());
+        InvocationMatcher withTwoArgs = InvocationMatcher.createFrom(new InvocationBuilder().args("test", 100).toInvocation());
 
         assertFalse(withOneArg.equals(null));
         assertFalse(withOneArg.equals(withTwoArgs));

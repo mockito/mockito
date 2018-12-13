@@ -62,11 +62,11 @@ public class InvocationContainerImplStubbingTest extends TestBase {
 
     @Test
     public void should_get_results_for_methods() throws Throwable {
-        invocationContainerImpl.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
+        invocationContainerImpl.setInvocationForPotentialStubbing(InvocationMatcher.createFrom(simpleMethod));
         invocationContainerImpl.addAnswer(new Returns("simpleMethod"), null);
 
         Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
-        invocationContainerImpl.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
+        invocationContainerImpl.setInvocationForPotentialStubbing(InvocationMatcher.createFrom(differentMethod));
         invocationContainerImpl.addAnswer(new ThrowsException(new MyException()), null);
 
         assertEquals("simpleMethod", invocationContainerImpl.answerTo(simpleMethod));
@@ -79,11 +79,11 @@ public class InvocationContainerImplStubbingTest extends TestBase {
 
     @Test
     public void should_get_results_for_methods_stub_only() throws Throwable {
-        invocationContainerImplStubOnly.setInvocationForPotentialStubbing(new InvocationMatcher(simpleMethod));
+        invocationContainerImplStubOnly.setInvocationForPotentialStubbing(InvocationMatcher.createFrom(simpleMethod));
         invocationContainerImplStubOnly.addAnswer(new Returns("simpleMethod"), null);
 
         Invocation differentMethod = new InvocationBuilder().differentMethod().toInvocation();
-        invocationContainerImplStubOnly.setInvocationForPotentialStubbing(new InvocationMatcher(differentMethod));
+        invocationContainerImplStubOnly.setInvocationForPotentialStubbing(InvocationMatcher.createFrom(differentMethod));
         invocationContainerImplStubOnly.addAnswer(new ThrowsException(new MyException()), null);
 
         assertEquals("simpleMethod", invocationContainerImplStubOnly.answerTo(simpleMethod));

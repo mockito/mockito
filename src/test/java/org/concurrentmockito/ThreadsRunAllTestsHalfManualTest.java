@@ -18,6 +18,7 @@ import org.mockito.internal.exceptions.ReporterTest;
 import org.mockito.internal.handler.MockHandlerImplTest;
 import org.mockito.internal.invocation.InvocationMatcherTest;
 import org.mockito.internal.invocation.InvocationsFinderTest;
+import org.mockito.internal.invocation.MatchersBinderTest;
 import org.mockito.internal.matchers.ComparableMatchersTest;
 import org.mockito.internal.matchers.EqualsTest;
 import org.mockito.internal.matchers.MatchersToStringTest;
@@ -82,6 +83,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                     MissingInvocationInOrderCheckerTest.class,
                     TypeCachingMockBytecodeGeneratorTest.class,
                     InvocationMatcherTest.class,
+                    MatchersBinderTest.class,
                     InvocationsFinderTest.class,
                     MockitoTest.class,
                     MockUtilTest.class,

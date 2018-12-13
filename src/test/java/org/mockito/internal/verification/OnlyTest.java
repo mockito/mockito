@@ -51,7 +51,7 @@ public class OnlyTest {
         assertFalse(invocation.isVerified());
 
         //when
-        only.verify(new VerificationDataStub(new InvocationMatcher(invocation), invocation));
+        only.verify(new VerificationDataStub(InvocationMatcher.createFrom(invocation), invocation));
 
         //then
         assertTrue(invocation.isVerified());

@@ -14,9 +14,13 @@ public class LocalizedMatcher {
     private final ArgumentMatcher<?> matcher;
     private final Location location;
 
-    public LocalizedMatcher(ArgumentMatcher<?> matcher) {
+    public LocalizedMatcher(ArgumentMatcher<?> matcher, Location location) {
         this.matcher = matcher;
-        this.location = new LocationImpl();
+        this.location = location;
+    }
+
+    public LocalizedMatcher(ArgumentMatcher<?> matcher) {
+        this(matcher, new LocationImpl());
     }
 
     public Location getLocation() {

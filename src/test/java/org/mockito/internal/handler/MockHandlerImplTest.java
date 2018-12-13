@@ -13,7 +13,7 @@ import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
-import org.mockito.internal.progress.ArgumentMatcherStorage;
+import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.stubbing.answers.Returns;
@@ -24,6 +24,7 @@ import org.mockito.listeners.MethodInvocationReport;
 import org.mockitoutil.TestBase;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
@@ -47,7 +48,8 @@ public class MockHandlerImplTest extends TestBase {
         MockHandlerImpl<?> handler = new MockHandlerImpl(new MockSettingsImpl());
         mockingProgress().verificationStarted(VerificationModeFactory.atLeastOnce());
         handler.matchersBinder = new MatchersBinder() {
-            public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
+            @Override
+            public InvocationMatcher bindMatchers(List<LocalizedMatcher> matchers, Invocation invocation) {
                 throw new InvalidUseOfMatchersException();
             }
         };

@@ -192,6 +192,12 @@ public class CapturingArgumentsTest extends TestBase {
         verify(mock).simpleMethod(captor.capture(), eq(1));
         assertEquals(1, captor.getAllValues().size());
         assertEquals("foo", captor.getValue());
+
+        // with concrete values as well
+        verify(mock).simpleMethod(captor.capture(), 2);
+        assertEquals(2, captor.getAllValues().size());
+        assertEquals("foo", captor.getAllValues().get(0));
+        assertEquals("bar", captor.getAllValues().get(1));
     }
 
     @Test

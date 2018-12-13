@@ -109,7 +109,7 @@ public class InvocationBuilder {
     }
 
     public InvocationMatcher toInvocationMatcher() {
-        return new InvocationMatcher(toInvocation());
+        return InvocationMatcher.createFrom(toInvocation());
     }
 
     public InvocationBuilder simpleMethod() {

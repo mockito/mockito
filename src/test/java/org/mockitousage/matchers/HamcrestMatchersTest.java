@@ -12,6 +12,7 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.internal.matchers.MatcherMarkers;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -105,7 +106,7 @@ public class HamcrestMatchersTest extends TestBase {
     @SuppressWarnings("unchecked")
     private int nonGenericMatcher() {
         argThat(new NonGenericMatcher());
-        return 0;
+        return MatcherMarkers.markerOf(int.class);
     }
 
     @Test
