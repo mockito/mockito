@@ -25,6 +25,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
+import javax.tools.ToolProvider;
+
 import static org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.EXCLUDES;
 import static org.mockito.internal.util.StringUtil.join;
 
@@ -170,7 +172,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
         if (INITIALIZATION_ERROR != null) {
             throw new MockitoInitializationException(join(
                     "Could not initialize inline Byte Buddy mock maker. (This mock maker is not supported on Android.)",
-                    "",
+                    ToolProvider.getSystemJavaCompiler() == null ? "Are you running a JRE instead of a JDK? The inline mock maker needs to be run on a JDK.\n" : "",
                     Platform.describe()), INITIALIZATION_ERROR);
         }
         bytecodeGenerator = new TypeCachingBytecodeGenerator(new InlineBytecodeGenerator(INSTRUMENTATION, mocks), true);
