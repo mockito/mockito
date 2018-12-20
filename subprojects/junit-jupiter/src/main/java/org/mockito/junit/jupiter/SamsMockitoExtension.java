@@ -22,12 +22,13 @@ import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
-import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.internal.session.MockitoSessionLoggerAdapter;
 import org.mockito.internal.configuration.MockAnnotationProcessor;
-import org.mockito.internal.junit.StubbingCheckingCreationListener;
+import org.mockito.internal.junit.TestFinishedEvent;
+import org.mockito.internal.junit.UniversalTestListener;
+import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.quality.Strictness;
+import org.mockito.session.MockitoSessionBuilder;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
@@ -35,7 +36,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
 /**
  * Extension that initializes mocks and handles strict stubbings. This extension is the JUnit Jupiter equivalent
  * of our JUnit4 {@link MockitoJUnitRunner}.
- *
+ * <p>
  * Example usage:
  *
  * <pre class="code"><code class="java">
@@ -51,7 +52,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  *     }
  * }
  * </code></pre>
- *
+ * <p>
  * If you would like to configure the used strictness for the test class, use {@link MockitoSettings}.
  *
  * <pre class="code"><code class="java">
@@ -67,7 +68,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  *     }
  * }
  * </code></pre>
- *
+ * <p>
  * This extension also supports JUnit Jupiter's method parameters.
  * Use parameters for initialization of mocks that you use only in that specific test method.
  * In other words, where you would initialize local mocks in JUnit 4 by calling {@link Mockito#mock(Class)},
@@ -94,7 +95,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  *     }
  * }
  * </code></pre>
- *
+ * <p>
  * Lastly, the extension supports JUnit Jupiter's constructor parameters.
  * This allows you to do setup work in the constructor and set
  * your fields to <code>final</code>.
@@ -117,23 +118,24 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  * }
  * </code></pre>
  */
-public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCallback, BeforeEachCallback, AfterEachCallback, AfterAllCallback, ParameterResolver {
+public class SamsMockitoExtension implements TestInstancePostProcessor, BeforeAllCallback, BeforeEachCallback, AfterAllCallback, AfterEachCallback, ParameterResolver {
 
     private final static Namespace MOCKITO = create("org.mockito");
 
     private final static String SESSION = "session";
     private final static String TEST_INSTANCE = "testInstance";
-    private static final String MOCK_CREATED_LISTENER = "MockCreatedListener";
+    private static final String SESSION_BUILDER = "SESSION_BUILDER";
+    public static final String UNIVERSAL_TEST_LISTENER = "UniversalTestListener";
 
     private final Strictness strictness;
 
     // This constructor is invoked by JUnit Jupiter via reflection or ServiceLoader
     @SuppressWarnings("unused")
-    public MockitoExtension() {
+    public SamsMockitoExtension() {
         this(Strictness.STRICT_STUBS);
     }
 
-    private MockitoExtension(Strictness strictness) {
+    private SamsMockitoExtension(Strictness strictness) {
         this.strictness = strictness;
     }
 
@@ -156,18 +158,17 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
 
     @Override
     public void beforeAll(ExtensionContext context) {
-        final StubbingCheckingCreationListener mockCreatedListener = context.getStore(MOCKITO).getOrComputeIfAbsent(MOCK_CREATED_LISTENER, k ->
-                                                                                                                    {
-                                                                                                                        StubbingCheckingCreationListener creationListener = new StubbingCheckingCreationListener();
-                                                                                                                        Mockito.framework().addListener(creationListener);
-                                                                                                                        return creationListener;
-                                                                                                                    },
-                                                                                                                    StubbingCheckingCreationListener.class);
+
         Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
                                           .map(MockitoSettings::strictness)
                                           .orElse(strictness);
 
-        mockCreatedListener.strictnessForTest(context.getDisplayName(), actualStrictness);
+        final UniversalTestListener testListener = new UniversalTestListener(strictness, new ConsoleMockitoLogger());//TODO better handling of logger
+        MockitoSessionBuilder sessionBuilder = Mockito.mockitoSession()
+                                                      .strictness(actualStrictness)
+                                                      .enableSamsSession(testListener);
+        context.getStore(MOCKITO).put(SESSION_BUILDER, sessionBuilder);
+        context.getStore(MOCKITO).put(UNIVERSAL_TEST_LISTENER, testListener);
     }
 
     /**
@@ -182,21 +183,20 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
 
         this.collectParentTestInstances(context, testInstances);
 
-        Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
-                                          .map(MockitoSettings::strictness)
-                                          .orElse(strictness);
 
-        MockitoSession session = Mockito.mockitoSession()
-                                        .initMocks(testInstances.toArray())
-                                        .strictness(actualStrictness)
-                                        .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
-                                        .disableStubbingErrorReporting()
-                                        .startMocking();
+        final UniversalTestListener testListener = context.getStore(MOCKITO).get(UNIVERSAL_TEST_LISTENER, UniversalTestListener.class);
+        if (testListener != null) {
+            Mockito.framework().addListener(testListener);
+        }
 
-        context.getStore(MOCKITO).put(SESSION, session);
+        final MockitoSessionBuilder mockitoSessionBuilder = context.getStore(MOCKITO).get(SESSION_BUILDER, MockitoSessionBuilder.class);
 
-        final String displayName = context.getDisplayName();
-        context.getStore(MOCKITO).get(MOCK_CREATED_LISTENER, StubbingCheckingCreationListener.class).strictnessForTest(displayName, actualStrictness);
+        final MockitoSession mockitoSession = mockitoSessionBuilder
+            .initMocks(testInstances.toArray())
+            .startMocking();
+
+        context.getStore(MOCKITO).put(SESSION, mockitoSession);
+
     }
 
     private Optional<MockitoSettings> retrieveAnnotationFromTestClasses(final ExtensionContext context) {
@@ -239,25 +239,49 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
      */
     @Override
     public void afterEach(ExtensionContext context) {
-        context.getStore(MOCKITO).remove(SESSION, MockitoSession.class)
+        context.getStore(MOCKITO).get(SESSION, MockitoSession.class)
                .finishMocking();
+
+        final UniversalTestListener testListener = context.getStore(MOCKITO).get(UNIVERSAL_TEST_LISTENER, UniversalTestListener.class);
+        if (testListener != null) {
+            Mockito.framework().removeListener(testListener);
+        }
     }
 
+    /**
+     * Callback that is invoked <em>after</em> each test has been invoked.
+     *
+     * @param context the current extension context; never {@code null}
+     */
     @Override
-    public void afterAll(ExtensionContext context) throws Exception {
-        final ExtensionContext.Store mockitoStore = context.getStore(MOCKITO);
-        final StubbingCheckingCreationListener mockCreatedListener = mockitoStore.get(MOCK_CREATED_LISTENER, StubbingCheckingCreationListener.class);
-        try {
-            if (mockCreatedListener != null) {
-                mockCreatedListener.checkStubbing(context.getTestClass().orElse(null), context.getDisplayName());
-            }
-        } finally {
-            //Remove does not check parent contexts so only remove only returns a value in the context which added it.
-            //Finally to ensure it happens even if we found unused stubbings
-            final StubbingCheckingCreationListener removedListener = mockitoStore.remove(MOCK_CREATED_LISTENER, StubbingCheckingCreationListener.class);
-            if (removedListener != null) {
-                Mockito.framework().removeListener(removedListener);
-                removedListener.checkStubbing(context.getTestClass().orElse(null));
+    public void afterAll(ExtensionContext context) {
+        context.getStore(MOCKITO).remove(SESSION_BUILDER);
+        final Optional<Throwable> executionException = context.getExecutionException();
+        final MockitoSession mockitoSession = context.getStore(MOCKITO).remove(SESSION, MockitoSession.class);
+        if (mockitoSession != null) {
+            mockitoSession.sessionFinished(executionException.orElse(null));
+        }
+        final UniversalTestListener testListener = context.getStore(MOCKITO).remove(UNIVERSAL_TEST_LISTENER, UniversalTestListener.class);
+        if (testListener != null) {
+            try {
+                testListener.testFinished(new TestFinishedEvent() {
+                    @Override
+                    public Throwable getFailure() {
+                        return executionException.orElse(null);
+                    }
+
+                    @Override
+                    public String getTestName() {
+                        return null;
+                    }
+
+                    @Override
+                    public boolean isRunFinished() {
+                        return true;
+                    }
+                });
+            } finally {
+                Mockito.framework().removeListener(testListener);
             }
         }
     }
@@ -267,7 +291,6 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
         return parameterContext.isAnnotated(Mock.class);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         final Parameter parameter = parameterContext.getParameter();

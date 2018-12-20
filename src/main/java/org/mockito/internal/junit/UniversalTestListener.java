@@ -4,15 +4,17 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.internal.creation.settings.CreationSettings;
-import org.mockito.internal.listeners.AutoCleanableListener;
-import org.mockito.plugins.MockitoLogger;
-import org.mockito.mock.MockCreationSettings;
-import org.mockito.quality.Strictness;
-
 import java.util.Collection;
+import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import org.mockito.internal.creation.settings.CreationSettings;
+import org.mockito.internal.listeners.AutoCleanableListener;
+import org.mockito.invocation.Invocation;
+import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.MockitoLogger;
+import org.mockito.quality.Strictness;
+import org.mockito.stubbing.Stubbing;
 
 /**
  * Universal test listener that behaves accordingly to current setting of strictness.
@@ -49,7 +51,7 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
 
         switch (currentStrictness) {
             case WARN: emitWarnings(logger, event, createdMocks); break;
-            case STRICT_STUBS: reportUnusedStubs(event, createdMocks); break;
+            case STRICT_STUBS: reportUnusedStubs(event, createdMocks);break;
             case LENIENT: break;
             default: throw new IllegalStateException("Unknown strictness: " + currentStrictness);
         }
@@ -58,8 +60,8 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
     private void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
         //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
         if (reportStubbingErrors && event.getFailure() == null && !stubbingLookupListener.isMismatchesReported()) {
-            UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks);
-            unused.reportUnused();
+            final Collection<Invocation> unusedStubbingsByLocation = new UnusedStubbingsFinder().getUnusedStubbingsByLocation(mocks);
+            new UnusedStubbings(Collections.<Stubbing>emptyList()).reportUnused(unusedStubbingsByLocation);
         }
     }
 
