@@ -142,4 +142,7 @@ public interface MockitoSession {
      */
     @Incubating
     void finishMocking(Throwable failure);
+
+    @Incubating
+    void sessionFinished(Throwable failure);
 }

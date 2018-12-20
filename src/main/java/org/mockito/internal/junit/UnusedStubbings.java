@@ -56,6 +56,10 @@ public class UnusedStubbings {
         for (Stubbing stubbing : unused) {
             invocations.add(stubbing.getInvocation());
         }
+        reportUnused(invocations);
+    }
+
+    void reportUnused(Collection<Invocation> invocations) {
         if (invocations.isEmpty()) {
             return;
         }
