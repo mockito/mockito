@@ -7,6 +7,8 @@ package org.mockito.internal.session;
 import org.mockito.MockitoSession;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.framework.DefaultMockitoSession;
+import org.mockito.internal.framework.SamsMockitoSession;
+import org.mockito.internal.junit.UniversalTestListener;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
@@ -23,6 +25,8 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     private String name;
     private Strictness strictness;
     private MockitoSessionLogger logger;
+    private boolean samsSession;
+    private UniversalTestListener listener;
 
     @Override
     public MockitoSessionBuilder initMocks(Object testClassInstance) {
@@ -61,6 +65,14 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     }
 
     @Override
+    public MockitoSessionBuilder enableSamsSession(UniversalTestListener testListener) {
+        this.samsSession = true;
+        this.listener = testListener;
+
+        return this;
+    }
+
+    @Override
     public MockitoSession startMocking() {
         //Configure default values
         List<Object> effectiveTestClassInstances;
@@ -75,6 +87,9 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
         }
         Strictness effectiveStrictness = this.strictness == null ? Strictness.STRICT_STUBS : this.strictness;
         MockitoLogger logger = this.logger == null ? Plugins.getMockitoLogger() : new MockitoLoggerAdapter(this.logger);
+        if (samsSession) {
+            return new SamsMockitoSession(effectiveTestClassInstances, effectiveName, listener);
+        }
         return new DefaultMockitoSession(effectiveTestClassInstances, effectiveName, effectiveStrictness, logger);
     }
 }
