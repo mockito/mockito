@@ -96,13 +96,3 @@ buildScan {
     licenseAgree = 'yes'
 }
 
-//workaround for #1444, delete when Shipkit bug is fixed
-subprojects {
-    afterEvaluate {
-        def lib = publishing.publications.javaLibrary
-        if(lib && !lib.artifactId.startsWith("mockito-")) {
-            lib.artifactId = "mockito-" + lib.artifactId
-        }
-    }
-}
-//end workaround
