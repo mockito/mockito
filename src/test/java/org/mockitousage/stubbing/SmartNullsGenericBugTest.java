@@ -5,7 +5,6 @@
 package org.mockitousage.stubbing;
 
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.mockito.Answers;
 
@@ -16,22 +15,56 @@ import static org.mockito.Mockito.withSettings;
 public class SmartNullsGenericBugTest {
 
     @Test
-    public void smart_nulls_generic_bug() {
-        final ConcreteDao concreteDao = mock(ConcreteDao.class, withSettings().defaultAnswer(Answers.RETURNS_SMART_NULLS));
+    public void smart_nulls_generic_bug_generic_T() {
+        ConcreteDao concreteDao = mock(ConcreteDao.class, withSettings().defaultAnswer(Answers.RETURNS_SMART_NULLS));
 
-        final Throwable throwable = Assertions.catchThrowable(new ThrowableAssert.ThrowingCallable() {
-            public void call() {
-                concreteDao.findById();
-            }
-        });
+        final Entity result = concreteDao.findById();
 
-        Assertions.assertThat(throwable).as("Issume #1551 - Avoid CCE").isNull();
+        Assertions.assertThat(result)
+            .as("Issume #1551 - Avoid CCE")
+            .isNotNull();
+    }
+
+    @Test
+    public void smart_nulls_generic_bug_generic_M() {
+        ConcreteDao concreteDao = mock(ConcreteDao.class, withSettings().defaultAnswer(Answers.RETURNS_SMART_NULLS));
+
+        final String other = concreteDao.find();
+
+        Assertions.assertThat(other)
+            .as("Issume #1551 - Avoid CCE")
+            .isNull();
+    }
+
+    @Test
+    public void smart_nulls_generic_bug_generic_M_provided_in_args() {
+        ConcreteDao concreteDao = mock(ConcreteDao.class, withSettings().defaultAnswer(Answers.RETURNS_SMART_NULLS));
+
+        final String other = concreteDao.findArgs(1, "plop");
+
+        Assertions.assertThat(other)
+            .as("Issume #1551 - Avoid CCE")
+            .isEqualTo("");
+    }
+
+    @Test
+    public void smart_nulls_generic_bug_generic_M_provided_as_varargs() {
+        ConcreteDao concreteDao = mock(ConcreteDao.class, withSettings().defaultAnswer(Answers.RETURNS_SMART_NULLS));
+
+        final String other = concreteDao.findVarargs(42, "plip", "plop");
+
+        Assertions.assertThat(other)
+            .as("Issume #1551 - Avoid CCE")
+            .isEqualTo("");
     }
 
     static class AbstractDao<T> {
         T findById() {
             return null;
         }
+        <M> M find() { return null; }
+        <M> M findArgs(int idx, M arg) { return null; }
+        <M> M findVarargs(int idx, M... args) { return null; }
     }
 
     static class Entity { }

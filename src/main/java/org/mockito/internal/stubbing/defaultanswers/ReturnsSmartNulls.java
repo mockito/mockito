@@ -8,6 +8,7 @@ import static org.mockito.internal.exceptions.Reporter.smartNullPointerException
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 
 import java.io.Serializable;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -54,7 +55,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
 
         final Type returnType = invocation.getMethod().getGenericReturnType();
         if (returnType instanceof TypeVariable) {
-            type = findTypeFromGeneric(invocation);
+            type = findTypeFromGeneric(invocation, (TypeVariable) returnType);
             if (type != null) {
                 defaultReturnValue = delegateChains(type);
             }
@@ -107,17 +108,17 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
      * @param invocation the current invocation
      * @return the type or null if not found
      */
-    private Class<?> findTypeFromGeneric(final InvocationOnMock invocation) {
+    private Class<?> findTypeFromGeneric(final InvocationOnMock invocation, final TypeVariable returnType) {
         // Class level
         final MockCreationSettings mockSettings = MockUtil.getMockHandler(invocation.getMock()).getMockSettings();
-        final GenericMetadataSupport returnType = GenericMetadataSupport
+        final GenericMetadataSupport returnTypeSupport = GenericMetadataSupport
             .inferFrom(mockSettings.getTypeToMock())
             .resolveGenericReturnType(invocation.getMethod());
-        final Class<?> rawType = returnType.rawType();
+        final Class<?> rawType = returnTypeSupport.rawType();
 
         // Method level
         if (rawType == Object.class) {
-            return findTypeFromGenericInArguments(invocation);
+            return findTypeFromGenericInArguments(invocation, returnType);
         }
         return rawType;
     }
@@ -128,12 +129,18 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
      * @param invocation the current invocation
      * @return the return type or null if the return type cannot be found
      */
-    private Class<?> findTypeFromGenericInArguments(final InvocationOnMock invocation) {
-        final Type returnType = invocation.getMethod().getGenericReturnType();
+    private Class<?> findTypeFromGenericInArguments(final InvocationOnMock invocation, final TypeVariable returnType) {
         final Type[] parameterTypes = invocation.getMethod().getGenericParameterTypes();
         for (int i = 0; i < parameterTypes.length; i++) {
-            if (parameterTypes[i] instanceof TypeVariable && returnType.equals(parameterTypes[i])) {
+            Type argType = parameterTypes[i];
+            if (returnType.equals(argType)) {
                 return invocation.getArgument(i).getClass();
+            }
+            if (argType instanceof GenericArrayType) {
+                argType = ((GenericArrayType) argType).getGenericComponentType();
+                if (returnType.equals(argType)) {
+                    return invocation.getArgument(i).getClass();
+                }
             }
         }
         return null;
