@@ -19,12 +19,13 @@ public class SmartNullsGenericBugTest {
     public void smart_nulls_generic_bug() {
         final ConcreteDao concreteDao = mock(ConcreteDao.class, withSettings().defaultAnswer(Answers.RETURNS_SMART_NULLS));
 
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+        final Throwable throwable = Assertions.catchThrowable(new ThrowableAssert.ThrowingCallable() {
             public void call() {
                 concreteDao.findById();
             }
-        }).isInstanceOf(ClassCastException.class);
-        //TODO: can we avoid CCE here? Can we make the exception message better? See issue #1551
+        });
+
+        Assertions.assertThat(throwable).as("Issume #1551 - Avoid CCE").isNull();
     }
 
     static class AbstractDao<T> {
