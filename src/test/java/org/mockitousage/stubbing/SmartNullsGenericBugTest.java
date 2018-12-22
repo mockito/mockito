@@ -21,7 +21,7 @@ public class SmartNullsGenericBugTest {
         final Entity result = concreteDao.findById();
 
         Assertions.assertThat(result)
-            .as("Issume #1551 - Avoid CCE")
+            .as("#1551")
             .isNotNull();
     }
 
@@ -32,7 +32,7 @@ public class SmartNullsGenericBugTest {
         final String other = concreteDao.find();
 
         Assertions.assertThat(other)
-            .as("Issume #1551 - Avoid CCE")
+            .as("#1551 - CCannot resolve type")
             .isNull();
     }
 
@@ -43,7 +43,7 @@ public class SmartNullsGenericBugTest {
         final String other = concreteDao.findArgs(1, "plop");
 
         Assertions.assertThat(other)
-            .as("Issume #1551 - Avoid CCE")
+            .as("#1551")
             .isEqualTo("");
     }
 
@@ -54,7 +54,7 @@ public class SmartNullsGenericBugTest {
         final String other = concreteDao.findVarargs(42, "plip", "plop");
 
         Assertions.assertThat(other)
-            .as("Issume #1551 - Avoid CCE")
+            .as("#1551")
             .isEqualTo("");
     }
 

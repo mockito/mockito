@@ -72,8 +72,9 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
     }
 
     /**
-     * Try to resolve a given type using {@link ReturnsEmptyValues} and {@link ReturnsMoreEmptyValues}. This will also
-     * try to invoke interface on the current class and all it's superclass.
+     * Try to resolve the result value using {@link ReturnsEmptyValues} and {@link ReturnsMoreEmptyValues}.
+     *
+     * This will try to use all parent class (superclass & interfaces) to retrieve the value..
      *
      * @param type the return type of the method
      * @return a non-null instance if the type has been resolve. Null otherwise.
@@ -81,6 +82,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
     private Object delegateChains(final Class<?> type) {
         final ReturnsEmptyValues returnsEmptyValues = new ReturnsEmptyValues();
         Object result = returnsEmptyValues.returnValueFor(type);
+
         if (result == null) {
             Class<?> emptyValueForClass = type;
             while (emptyValueForClass != null && result == null) {
@@ -106,6 +108,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
      * Retrieve the expected type when it came from a primitive. If the type cannot be retrieve, return null.
      *
      * @param invocation the current invocation
+     * @param returnType the expected return type
      * @return the type or null if not found
      */
     private Class<?> findTypeFromGeneric(final InvocationOnMock invocation, final TypeVariable returnType) {
@@ -127,6 +130,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
      * Find a return type using generic arguments provided by the calling method.
      *
      * @param invocation the current invocation
+     * @param returnType the expected return type
      * @return the return type or null if the return type cannot be found
      */
     private Class<?> findTypeFromGenericInArguments(final InvocationOnMock invocation, final TypeVariable returnType) {
