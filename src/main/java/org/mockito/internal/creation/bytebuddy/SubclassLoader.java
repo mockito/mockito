@@ -11,6 +11,8 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
  */
 public interface SubclassLoader {
 
+    boolean isUsingLookup();
+
     /**
      * Resolves a class loading strategy.
      *
