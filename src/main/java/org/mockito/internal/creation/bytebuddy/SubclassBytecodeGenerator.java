@@ -15,6 +15,7 @@ import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
 import net.bytebuddy.matcher.ElementMatcher;
+import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.DispatcherDefaultingToRealMethod;
@@ -23,6 +24,7 @@ import org.mockito.mock.SerializableMode;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -39,6 +41,26 @@ import static org.mockito.internal.util.StringUtil.join;
 class SubclassBytecodeGenerator implements BytecodeGenerator {
 
     private static final String CODEGEN_PACKAGE = "org.mockito.codegen.";
+
+    private static final Object MOCKITO_MODULE;
+    private static final Method GET_MODULE, IS_OPEN;
+
+    static {
+        Object mockitoModule;
+        Method getModule, isOpen;
+        try {
+            getModule = Class.class.getMethod("getModule");
+            isOpen = getModule.getReturnType().getMethod("isOpen", String.class, getModule.getReturnType());
+            mockitoModule = getModule.invoke(Mockito.class);
+        } catch (Throwable ignored) {
+            mockitoModule = null;
+            getModule = null;
+            isOpen = null;
+        }
+        MOCKITO_MODULE = mockitoModule;
+        GET_MODULE = getModule;
+        IS_OPEN = isOpen;
+    }
 
     private final SubclassLoader loader;
 
@@ -75,7 +97,13 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
 
     @Override
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
-        String name = nameFor(features.mockedType);
+        ClassLoader classLoader = new MultipleParentClassLoader.Builder()
+            .append(features.mockedType)
+            .append(features.interfaces)
+            .append(currentThread().getContextClassLoader())
+            .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
+            .append(MockMethodInterceptor.class).build(MockMethodInterceptor.class.getClassLoader());
+        String name = nameFor(features.mockedType, classLoader);
         DynamicType.Builder<T> builder =
                 byteBuddy.subclass(features.mockedType)
                          .name(name)
@@ -108,14 +136,6 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                     .throwing(ClassNotFoundException.class, IOException.class)
                     .intercept(readReplace);
         }
-        ClassLoader classLoader = new MultipleParentClassLoader.Builder()
-            .append(features.mockedType)
-            .append(features.interfaces)
-            .append(currentThread().getContextClassLoader())
-            .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
-            .append(MockMethodInterceptor.class,
-                MockMethodInterceptor.ForHashCode.class,
-                MockMethodInterceptor.ForEquals.class).build(MockMethodInterceptor.class.getClassLoader());
         if (classLoader != features.mockedType.getClassLoader()) {
             assertVisibility(features.mockedType);
             for (Class<?> iFace : features.interfaces) {
@@ -134,13 +154,14 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         return isDeclaredBy(named("groovy.lang.GroovyObjectSupport"));
     }
 
-    // TODO inspect naming strategy (for OSGI, signed package, java.* (and bootstrap classes), etc...)
-    private String nameFor(Class<?> type) {
-        String typeName = type.getName();
-        if (isComingFromJDK(type)
-                || isComingFromSignedJar(type)
-                || isComingFromSealedPackage(type)) {
+    private String nameFor(Class<?> type, ClassLoader classLoader) {
+        String typeName;
+        if (classLoader == type.getClassLoader()
+            ? loader.isUsingLookup() && !isOpenedToMockito(type)
+            : isComingFromJDK(type) || isComingFromSignedJar(type) || isComingFromSealedPackage(type)) {
             typeName = CODEGEN_PACKAGE + type.getSimpleName();
+        } else {
+            typeName = type.getName();
         }
         return String.format("%s$%s$%d", typeName, "MockitoMock", Math.abs(random.nextInt()));
     }
@@ -156,6 +177,20 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
 
     private boolean isComingFromSealedPackage(Class<?> type) {
         return type.getPackage() != null && type.getPackage().isSealed();
+    }
+
+    private boolean isOpenedToMockito(Class<?> type) {
+        if (type.getPackage() == null) {
+            return true;
+        }
+        try {
+            return MOCKITO_MODULE != null && (Boolean) IS_OPEN.invoke(GET_MODULE.invoke(type), type.getPackage().getName(), MOCKITO_MODULE);
+        } catch (Exception e) {
+            throw new MockitoException(join("Cannot assert if " + type + " is opened to Mockito",
+                "",
+                "Error during reflective access of expected methods of the Java module system"
+            ), e);
+        }
     }
 
     private boolean isComingFromSignedJar(Class<?> type) {
