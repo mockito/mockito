@@ -1,5 +1,9 @@
-if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
-    apply plugin: 'java'
+plugins {
+    id 'java'
+}
+
+if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+    project.tasks.all { task -> task.enabled = false }
 }
 
 description = "Test suite for Java 9 modules with Mockito"
