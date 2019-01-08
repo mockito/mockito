@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+description = "Test suite for Java 9 modules with Mockito"
+
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+dependencies {
+    compile project.rootProject
+    testCompile libraries.junit4
+    testCompile libraries.assertj
+}
+
+tasks.javadoc.enabled = false
+
+sourceCompatibility = 1.9
+targetCompatibility = 1.9
