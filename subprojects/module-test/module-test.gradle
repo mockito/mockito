@@ -1,5 +1,5 @@
-plugins {
-    id 'java'
+if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
+    apply plugin: 'java'
 }
 
 description = "Test suite for Java 9 modules with Mockito"
