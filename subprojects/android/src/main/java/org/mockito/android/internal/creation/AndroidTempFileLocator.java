@@ -32,6 +32,14 @@ class AndroidTempFileLocator {
         }
         if (t == null) {
             try {
+                Class<?> clazz = Class.forName("androidx.test.InstrumentationRegistry");
+                Object context = clazz.getDeclaredMethod("getTargetContext").invoke(clazz);
+                t = (File) context.getClass().getMethod("getCacheDir").invoke(context);
+            } catch (Throwable ignored) {
+            }
+        }
+        if (t == null) {
+            try {
                 Class<?> clazz = Class.forName("dalvik.system.PathClassLoader");
                 Field pathField = clazz.getDeclaredField("path");
                 pathField.setAccessible(true);
