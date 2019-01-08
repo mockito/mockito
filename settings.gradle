@@ -6,6 +6,7 @@ include 'kotlinReleaseCoroutinesTest'
 include 'android'
 include 'junit-jupiter'
 include 'junitJupiterExtensionTest'
+include 'module-test'
 
 rootProject.name = 'mockito'
 
