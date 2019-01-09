@@ -13,7 +13,11 @@ import net.bytebuddy.dynamic.loading.MultipleParentClassLoader;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
+import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
+import net.bytebuddy.implementation.bytecode.ByteCodeAppender;
+import net.bytebuddy.implementation.bytecode.StackManipulation;
+import net.bytebuddy.jar.asm.MethodVisitor;
 import net.bytebuddy.matcher.ElementMatcher;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
@@ -157,7 +161,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private String nameFor(Class<?> type, ClassLoader classLoader) {
         String typeName;
         if (classLoader == type.getClassLoader()
-            ? loader.isUsingLookup() && !isOpenedToMockito(type)
+            ? loader.isUsingLookup() && !isOpenedToMockito(type) // also check if reading mockito
             : isComingFromJDK(type) || isComingFromSignedJar(type) || isComingFromSealedPackage(type)) {
             typeName = CODEGEN_PACKAGE + type.getSimpleName();
         } else {

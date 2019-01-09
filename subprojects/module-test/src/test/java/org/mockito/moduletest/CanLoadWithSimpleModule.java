@@ -4,19 +4,6 @@
  */
 package org.mockito.moduletest;
 
-import static net.bytebuddy.matcher.ElementMatchers.named;
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.lang.ModuleLayer;
-import java.io.IOException;
-import java.lang.module.Configuration;
-import java.lang.module.ModuleFinder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.concurrent.Callable;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.implementation.FixedValue;
@@ -25,60 +12,81 @@ import net.bytebuddy.jar.asm.ModuleVisitor;
 import net.bytebuddy.jar.asm.Opcodes;
 import net.bytebuddy.utility.OpenedClassReader;
 import org.junit.Test;
-import org.mockito.Mockito;
+
+import java.io.IOException;
+import java.lang.module.Configuration;
+import java.lang.module.ModuleFinder;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.concurrent.Callable;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+
+import static net.bytebuddy.matcher.ElementMatchers.named;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CanLoadWithSimpleModule {
 
     @Test
-    public void can_open_simple_module() throws Exception {
+    public void can_define_class_in_open_module() throws Exception {
         Path jar = modularJar(true, true, true);
         ModuleLayer layer = layer(jar);
 
-        Class<?> type = layer.findLoader("mockito.test").loadClass("sample.MyCallable");
-        @SuppressWarnings("unchecked")
-        Callable<String> mock = (Callable<String>) Mockito.mock(type);
-        Mockito.when(mock.call()).thenCallRealMethod();
-        Object result = mock.call();
+        ClassLoader loader = layer.findLoader("mockito.test");
+        Class<?> type = loader.loadClass("sample.MyCallable");
 
-        // We should have a check that fails mock creation of mock cannot be loaded in target class loader.
-        assertThat(mock.getClass().getName()).startsWith("org.mockito.codegen.MyCallable$MockitoMock$");
-        assertThat(result).isEqualTo("foo");
+        ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(loader);
+        try {
+            Class<?> mockito = loader.loadClass("org.mockito.Mockito");
+            @SuppressWarnings("unchecked")
+            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
+            loader.loadClass("org.mockito.stubbing.OngoingStubbing").getMethod("thenCallRealMethod").invoke(stubbing);
+
+            assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
+            assertThat(mock.call()).isEqualTo("foo");
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextLoader);
+        }
     }
 
-    private static Path modularJar(boolean publik, boolean exported, boolean opened) throws IOException {
+    private static Path modularJar(boolean isPublic, boolean isExported, boolean isOpened) throws IOException {
         Path jar = Files.createTempFile("sample-module", ".jar");
         try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jar))) {
             out.putNextEntry(new JarEntry("module-info.class"));
-            out.write(moduleInfo(exported, opened));
+            out.write(moduleInfo(isExported, isOpened));
             out.closeEntry();
             out.putNextEntry(new JarEntry("sample/MyCallable.class"));
-            out.write(type(publik));
+            out.write(type(isPublic));
             out.closeEntry();
         }
         return jar;
     }
 
-    private static byte[] type(boolean publik) {
+    private static byte[] type(boolean isPublic) {
         return new ByteBuddy()
             .subclass(Callable.class)
             .name("sample.MyCallable")
-            .merge(publik ? Visibility.PUBLIC : Visibility.PACKAGE_PRIVATE)
+            .merge(isPublic ? Visibility.PUBLIC : Visibility.PACKAGE_PRIVATE)
             .method(named("call"))
             .intercept(FixedValue.value("foo"))
             .make()
             .getBytes();
     }
 
-    private static byte[] moduleInfo(boolean exported, boolean opened) {
+    private static byte[] moduleInfo(boolean isExported, boolean isOpened) {
         ClassWriter classWriter = new ClassWriter(OpenedClassReader.ASM_API);
         classWriter.visit(Opcodes.V9, Opcodes.ACC_MODULE, "module-info", null, null, null);
         ModuleVisitor mv = classWriter.visitModule("mockito.test", 0, null);
         mv.visitRequire("java.base", Opcodes.ACC_MANDATED, null);
         mv.visitPackage("sample");
-        if (exported) {
+        if (isExported) {
             mv.visitExport("sample", 0);
         }
-        if (opened) {
+        if (isOpened) {
             mv.visitOpen("sample", 0);
         }
         mv.visitEnd();
@@ -86,7 +94,7 @@ public class CanLoadWithSimpleModule {
         return classWriter.toByteArray();
     }
 
-    private static ModuleLayer layer(Path jar) {
+    private static ModuleLayer layer(Path jar) throws MalformedURLException {
         Configuration configuration = Configuration.resolve(
             ModuleFinder.of(jar),
             Collections.singletonList(ModuleLayer.boot().configuration()),
@@ -94,11 +102,18 @@ public class CanLoadWithSimpleModule {
             Collections.singleton("mockito.test")
         );
 
-        return ModuleLayer.defineModulesWithOneLoader(
+        ClassLoader classLoader = new ReplicatingClassLoader(jar);
+        ModuleLayer.Controller controller = ModuleLayer.defineModules(
             configuration,
             Collections.singletonList(ModuleLayer.boot()),
-            null
-        ).layer();
+            module -> classLoader
+        );
+        // TODO: Add logic to Mockito that adds this read automatically if possible.
+        controller.addReads(
+            controller.layer().findModule("mockito.test").orElseThrow(IllegalStateException::new),
+            controller.layer().findLoader("mockito.test").getUnnamedModule()
+        );
+        return controller.layer();
     }
 
 }
