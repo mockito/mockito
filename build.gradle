@@ -17,6 +17,7 @@ buildscript {
 
 plugins {
     id 'com.gradle.build-scan' version '1.16'
+    id 'eclipse'
 }
 
 description = 'Mockito mock objects library core API and implementation'
@@ -98,6 +99,12 @@ buildScan {
 
 //workaround for #1444, delete when Shipkit bug is fixed
 subprojects {
+	eclipse {
+		project {
+			name = rootProject.name + '-' + project.name
+		}
+	}
+	
     afterEvaluate {
         def lib = publishing.publications.javaLibrary
         if(lib && !lib.artifactId.startsWith("mockito-")) {
