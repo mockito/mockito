@@ -15,10 +15,8 @@ import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
-import net.bytebuddy.implementation.bytecode.ByteCodeAppender;
-import net.bytebuddy.implementation.bytecode.StackManipulation;
-import net.bytebuddy.jar.asm.MethodVisitor;
 import net.bytebuddy.matcher.ElementMatcher;
+import net.bytebuddy.utility.RandomString;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
@@ -33,6 +31,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 import static java.lang.Thread.currentThread;
 import static net.bytebuddy.description.modifier.Visibility.PRIVATE;
@@ -47,23 +46,29 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private static final String CODEGEN_PACKAGE = "org.mockito.codegen.";
 
     private static final Object MOCKITO_MODULE;
-    private static final Method GET_MODULE, IS_OPEN;
+    private static final Method GET_MODULE, IS_OPEN, CAN_READ, ADD_READ;
 
     static {
         Object mockitoModule;
-        Method getModule, isOpen;
+        Method getModule, isOpen, canRead, addRead;
         try {
             getModule = Class.class.getMethod("getModule");
             isOpen = getModule.getReturnType().getMethod("isOpen", String.class, getModule.getReturnType());
+            canRead = getModule.getReturnType().getMethod("canRead", getModule.getReturnType());
+            addRead = getModule.getReturnType().getMethod("addReads", getModule.getReturnType());
             mockitoModule = getModule.invoke(Mockito.class);
         } catch (Throwable ignored) {
             mockitoModule = null;
             getModule = null;
             isOpen = null;
+            canRead = null;
+            addRead = null;
         }
         MOCKITO_MODULE = mockitoModule;
         GET_MODULE = getModule;
         IS_OPEN = isOpen;
+        CAN_READ = canRead;
+        ADD_READ = addRead;
     }
 
     private final SubclassLoader loader;
@@ -148,10 +153,32 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             builder = builder.ignoreAlso(isPackagePrivate()
                 .or(returns(isPackagePrivate()))
                 .or(hasParameters(whereAny(hasType(isPackagePrivate())))));
+        } else if (!canReadMockito(features.mockedType)) {
+            addReadEdgeByProbe(features.mockedType);
         }
         return builder.make()
                       .load(classLoader, loader.resolveStrategy(features.mockedType, classLoader, name.startsWith(CODEGEN_PACKAGE)))
                       .getLoaded();
+    }
+
+    private void addReadEdgeByProbe(Class<?> type) {
+        try {
+            byteBuddy.subclass(Runnable.class)
+                    .name(String.format("%s$%s$%d", type.getName(), "MockitoModuleProbe", Math.abs(random.nextInt())))
+                    .invokable(named("run")).intercept(MethodCall.invoke(ADD_READ)
+                    .onMethodCall(MethodCall.invoke(GET_MODULE).on(type))
+                    .withMethodCall(MethodCall.invoke(GET_MODULE).on(Mockito.class)))
+                    .make()
+                    .load(type.getClassLoader(), loader.resolveStrategy(type, type.getClassLoader(), false))
+                    .getLoaded()
+                    .getConstructor()
+                    .newInstance()
+                    .run();
+        } catch (Exception e) {
+            throw new MockitoException(join("Could not force initialization of " + type,
+                "",
+                "This is required to adjust the module graph to enable mock creation"), e);
+        }
     }
 
     private static ElementMatcher<MethodDescription> isGroovyMethod() {
@@ -161,7 +188,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private String nameFor(Class<?> type, ClassLoader classLoader) {
         String typeName;
         if (classLoader == type.getClassLoader()
-            ? loader.isUsingLookup() && !isOpenedToMockito(type) // also check if reading mockito
+            ? !isOpenedToMockito(type)
             : isComingFromJDK(type) || isComingFromSignedJar(type) || isComingFromSealedPackage(type)) {
             typeName = CODEGEN_PACKAGE + type.getSimpleName();
         } else {
@@ -189,6 +216,20 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         }
         try {
             return MOCKITO_MODULE != null && (Boolean) IS_OPEN.invoke(GET_MODULE.invoke(type), type.getPackage().getName(), MOCKITO_MODULE);
+        } catch (Exception e) {
+            throw new MockitoException(join("Cannot assert if " + type + " is opened to Mockito",
+                "",
+                "Error during reflective access of expected methods of the Java module system"
+            ), e);
+        }
+    }
+
+    private boolean canReadMockito(Class<?> type) {
+        if (type.getPackage() == null) {
+            return true;
+        }
+        try {
+            return MOCKITO_MODULE != null && (Boolean) CAN_READ.invoke(GET_MODULE.invoke(type), MOCKITO_MODULE);
         } catch (Exception e) {
             throw new MockitoException(join("Cannot assert if " + type + " is opened to Mockito",
                 "",
