@@ -12,6 +12,7 @@ import net.bytebuddy.jar.asm.ModuleVisitor;
 import net.bytebuddy.jar.asm.Opcodes;
 import net.bytebuddy.utility.OpenedClassReader;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.lang.module.Configuration;
@@ -30,9 +31,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CanLoadWithSimpleModule {
 
     @Test
-    public void can_define_class_in_open_module() throws Exception {
+    public void can_define_class_in_open_reading_module() throws Exception {
         Path jar = modularJar(true, true, true);
-        ModuleLayer layer = layer(jar);
+        ModuleLayer layer = layer(jar, true);
 
         ClassLoader loader = layer.findLoader("mockito.test");
         Class<?> type = loader.loadClass("sample.MyCallable");
@@ -47,6 +48,78 @@ public class CanLoadWithSimpleModule {
             loader.loadClass("org.mockito.stubbing.OngoingStubbing").getMethod("thenCallRealMethod").invoke(stubbing);
 
             assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
+            assertThat(mock.call()).isEqualTo("foo");
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextLoader);
+        }
+    }
+
+    @Test
+    public void can_define_class_in_open_reading_private_module() throws Exception {
+        Path jar = modularJar(false, true, true);
+        ModuleLayer layer = layer(jar, true);
+
+        ClassLoader loader = layer.findLoader("mockito.test");
+        Class<?> type = loader.loadClass("sample.MyCallable");
+
+        ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(loader);
+        try {
+            Class<?> mockito = loader.loadClass("org.mockito.Mockito");
+            @SuppressWarnings("unchecked")
+            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
+            loader.loadClass("org.mockito.stubbing.OngoingStubbing").getMethod("thenCallRealMethod").invoke(stubbing);
+
+            assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
+            assertThat(mock.call()).isEqualTo("foo");
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextLoader);
+        }
+    }
+
+    @Test
+    public void can_define_class_in_open_non_reading_module() throws Exception {
+        Path jar = modularJar(true, true, true);
+        ModuleLayer layer = layer(jar, false);
+
+        ClassLoader loader = layer.findLoader("mockito.test");
+        Class<?> type = loader.loadClass("sample.MyCallable");
+
+        ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(loader);
+        try {
+            Class<?> mockito = loader.loadClass("org.mockito.Mockito");
+            @SuppressWarnings("unchecked")
+            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
+            loader.loadClass("org.mockito.stubbing.OngoingStubbing").getMethod("thenCallRealMethod").invoke(stubbing);
+
+            assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
+            assertThat(mock.call()).isEqualTo("foo");
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextLoader);
+        }
+    }
+
+    @Test
+    public void can_define_class_in_closed_module() throws Exception {
+        Path jar = modularJar(true, true, false);
+        ModuleLayer layer = layer(jar, false);
+
+        ClassLoader loader = layer.findLoader("mockito.test");
+        Class<?> type = loader.loadClass("sample.MyCallable");
+
+        ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(loader);
+        try {
+            Class<?> mockito = loader.loadClass("org.mockito.Mockito");
+            @SuppressWarnings("unchecked")
+            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
+            loader.loadClass("org.mockito.stubbing.OngoingStubbing").getMethod("thenCallRealMethod").invoke(stubbing);
+
+            assertThat(mock.getClass().getName()).startsWith("org.mockito.codegen.MyCallable$MockitoMock$");
             assertThat(mock.call()).isEqualTo("foo");
         } finally {
             Thread.currentThread().setContextClassLoader(contextLoader);
@@ -94,7 +167,7 @@ public class CanLoadWithSimpleModule {
         return classWriter.toByteArray();
     }
 
-    private static ModuleLayer layer(Path jar) throws MalformedURLException {
+    private static ModuleLayer layer(Path jar, boolean canRead) throws MalformedURLException {
         Configuration configuration = Configuration.resolve(
             ModuleFinder.of(jar),
             Collections.singletonList(ModuleLayer.boot().configuration()),
@@ -108,11 +181,12 @@ public class CanLoadWithSimpleModule {
             Collections.singletonList(ModuleLayer.boot()),
             module -> classLoader
         );
-        // TODO: Add logic to Mockito that adds this read automatically if possible.
-        controller.addReads(
-            controller.layer().findModule("mockito.test").orElseThrow(IllegalStateException::new),
-            controller.layer().findLoader("mockito.test").getUnnamedModule()
-        );
+        if (canRead) {
+            controller.addReads(
+                controller.layer().findModule("mockito.test").orElseThrow(IllegalStateException::new),
+                Mockito.class.getModule()
+            );
+        }
         return controller.layer();
     }
 

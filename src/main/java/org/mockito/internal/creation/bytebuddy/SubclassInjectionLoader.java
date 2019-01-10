@@ -49,11 +49,6 @@ class SubclassInjectionLoader implements SubclassLoader {
     private static class WithReflection implements SubclassLoader {
 
         @Override
-        public boolean isUsingLookup() {
-            return false;
-        }
-
-        @Override
         public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
             return ClassLoadingStrategy.Default.INJECTION.with(codegen ? InjectionBase.class.getProtectionDomain() : mockedType.getProtectionDomain());
         }
@@ -71,11 +66,6 @@ class SubclassInjectionLoader implements SubclassLoader {
             this.lookup = lookup;
             this.codegenLookup = codegenLookup;
             this.privateLookupIn = privateLookupIn;
-        }
-
-        @Override
-        public boolean isUsingLookup() {
-            return true;
         }
 
         @Override
@@ -108,11 +98,6 @@ class SubclassInjectionLoader implements SubclassLoader {
                 }
             }
         }
-    }
-
-    @Override
-    public boolean isUsingLookup() {
-        return loader.isUsingLookup();
     }
 
     @Override

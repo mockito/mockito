@@ -16,11 +16,6 @@ import static org.mockito.internal.util.StringUtil.join;
 class AndroidLoadingStrategy implements SubclassLoader {
 
     @Override
-    public boolean isUsingLookup() {
-        return false;
-    }
-
-    @Override
     public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
         File target = AndroidTempFileLocator.target;
         if (target == null) {
