@@ -179,7 +179,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                     .throwing(ClassNotFoundException.class, IOException.class)
                     .intercept(readReplace);
         }
-        if (name.startsWith(CODEGEN_PACKAGE)) {
+        if (name.startsWith(CODEGEN_PACKAGE) || classLoader instanceof MultipleParentClassLoader) {
             builder = builder.ignoreAlso(isPackagePrivate()
                 .or(returns(isPackagePrivate()))
                 .or(hasParameters(whereAny(hasType(isPackagePrivate())))));
