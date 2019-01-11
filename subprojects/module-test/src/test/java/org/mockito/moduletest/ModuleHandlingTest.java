@@ -6,6 +6,7 @@ package org.mockito.moduletest;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.jar.asm.ClassWriter;
 import net.bytebuddy.jar.asm.ModuleVisitor;
@@ -32,7 +33,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-public class CanLoadWithSimpleModule {
+public class ModuleHandlingTest {
 
     @Test
     public void can_define_class_in_open_reading_module() throws Exception {
@@ -147,7 +148,9 @@ public class CanLoadWithSimpleModule {
             Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
             loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
 
-            assertThat(mock.getClass().getName()).startsWith("org.mockito.codegen.MyCallable$MockitoMock$");
+            boolean relocated = !Boolean.getBoolean("org.mockito.internal.simulateJava11") && ClassInjector.UsingReflection.isAvailable();
+            String prefix = relocated ? "sample.MyCallable$MockitoMock$" : "org.mockito.codegen.MyCallable$MockitoMock$";
+            assertThat(mock.getClass().getName()).startsWith(prefix);
             assertThat(mock.call()).isEqualTo("foo");
         } finally {
             Thread.currentThread().setContextClassLoader(contextLoader);

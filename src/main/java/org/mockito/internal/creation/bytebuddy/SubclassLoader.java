@@ -12,6 +12,13 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 public interface SubclassLoader {
 
     /**
+     * Checks if this loader does not require a module to be open.
+     *
+     * @return {@code true} if this loader is not constraint to a target module being opened for loading a class.
+     */
+    boolean isDisrespectingOpenness();
+
+    /**
      * Resolves a class loading strategy.
      *
      * @param mockedType  The type being mocked.
