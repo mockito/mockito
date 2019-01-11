@@ -131,19 +131,19 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             assertModuleAccessability(iFace);
         }
         String name = nameFor(features.mockedType, features.interfaces, classLoader);
-        if (name.startsWith(CODEGEN_PACKAGE) || classLoader instanceof MultipleParentClassLoader) {
+        if (!name.startsWith(CODEGEN_PACKAGE) && classLoader == features.mockedType.getClassLoader()) {
+            loadModuleProble(features.mockedType, Mockito.class, true, !loader.isDisrespectingOpenness(), false);
+            for (Class<?> iFace : features.interfaces) {
+                loadModuleProble(iFace, features.mockedType, false, false, true);
+                loadModuleProble(features.mockedType, iFace, true, false, false);
+            }
+        } else {
             Class<?> target = classLoader instanceof MultipleParentClassLoader ? loadHookType(classLoader) : Mockito.class;
             assertVisibility(features.mockedType);
             loadModuleProble(features.mockedType, target, false, false, true);
             for (Class<?> iFace : features.interfaces) {
                 assertVisibility(iFace);
                 loadModuleProble(iFace, target, false, false, true);
-            }
-        } else {
-            loadModuleProble(features.mockedType, Mockito.class, true, !loader.isDisrespectingOpenness(), false);
-            for (Class<?> iFace : features.interfaces) {
-                loadModuleProble(iFace, features.mockedType, false, false, true);
-                loadModuleProble(features.mockedType, iFace, true, false, false);
             }
         }
         DynamicType.Builder<T> builder =
@@ -218,11 +218,11 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         try {
             byteBuddy.subclass(Object.class)
                     .name(String.format("%s$%s$%d", type.getName(), "MockitoModuleProbe", Math.abs(random.nextInt())))
-                    .defineMethod("run", void.class, Visibility.PUBLIC, Ownership.STATIC).intercept(implementation)
+                    .defineMethod("init", void.class, Visibility.PUBLIC, Ownership.STATIC).intercept(implementation)
                     .make()
                     .load(type.getClassLoader(), loader.resolveStrategy(type, type.getClassLoader(), false))
                     .getLoaded()
-                    .getMethod("run")
+                    .getMethod("init")
                     .invoke(null);
         } catch (Exception e) {
             throw new MockitoException(join("Could not force initialization of " + type,

@@ -15,6 +15,8 @@ import net.bytebuddy.utility.OpenedClassReader;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.io.IOException;
@@ -32,11 +34,15 @@ import java.util.jar.JarOutputStream;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assume.assumeThat;
 
 public class ModuleHandlingTest {
 
     @Test
     public void can_define_class_in_open_reading_module() throws Exception {
+        assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
+
         Path jar = modularJar(true, true, true);
         ModuleLayer layer = layer(jar, true);
 
@@ -60,7 +66,29 @@ public class ModuleHandlingTest {
     }
 
     @Test
+    public void inline_mock_maker_can_mock_closed_modules() throws Exception {
+        assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(true));
+
+        Path jar = modularJar(false, false, false);
+        ModuleLayer layer = layer(jar, false);
+
+        ClassLoader loader = layer.findLoader("mockito.test");
+        Class<?> type = loader.loadClass("sample.MyCallable");
+
+        Class<?> mockito = loader.loadClass(Mockito.class.getName());
+        @SuppressWarnings("unchecked")
+        Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+        Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
+        loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
+
+        assertThat(mock.getClass().getName()).isEqualTo("sample.MyCallable");
+        assertThat(mock.call()).isEqualTo("foo");
+    }
+
+    @Test
     public void can_define_class_in_open_reading_private_module() throws Exception {
+        assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
+
         Path jar = modularJar(false, true, true);
         ModuleLayer layer = layer(jar, true);
 
@@ -85,6 +113,8 @@ public class ModuleHandlingTest {
 
     @Test
     public void can_define_class_in_open_non_reading_module() throws Exception {
+        assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
+
         Path jar = modularJar(true, true, true);
         ModuleLayer layer = layer(jar, false);
 
@@ -109,6 +139,8 @@ public class ModuleHandlingTest {
 
     @Test
     public void can_define_class_in_open_non_reading_non_exporting_module() throws Exception {
+        assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
+
         Path jar = modularJar(true, false, true);
         ModuleLayer layer = layer(jar, false);
 
@@ -133,6 +165,8 @@ public class ModuleHandlingTest {
 
     @Test
     public void can_define_class_in_closed_module() throws Exception {
+        assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
+
         Path jar = modularJar(true, true, false);
         ModuleLayer layer = layer(jar, false);
 
@@ -159,6 +193,8 @@ public class ModuleHandlingTest {
 
     @Test
     public void cannot_define_class_in_non_opened_non_exported_module() throws Exception {
+        assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
+
         Path jar = modularJar(false, false, false);
         ModuleLayer layer = layer(jar, false);
 
