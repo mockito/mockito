@@ -241,9 +241,9 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         if (classLoader instanceof MultipleParentClassLoader) {
             relocate = isComingFromJDK(type) || isComingFromSignedJar(type) || isComingFromSealedPackage(type);
         } else if (loader.isDisrespectingOpenness()) {
-            relocate = false;
+            relocate = isComingFromJDK(type);
         } else {
-            relocate = isOpenedTo(type, Mockito.class);
+            relocate = isComingFromJDK(type) || isOpenedTo(type, Mockito.class);
             Iterator<Class<?>> it = interfaces.iterator();
             while (!relocate && it.hasNext()) {
                 relocate = isOpenedTo(it.next(), Mockito.class);
