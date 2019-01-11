@@ -121,11 +121,12 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     @Override
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
         ClassLoader classLoader = new MultipleParentClassLoader.Builder()
-            .append(features.mockedType)
-            .append(features.interfaces)
-            .append(currentThread().getContextClassLoader())
-            .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
-            .append(MockMethodInterceptor.class).build(MockMethodInterceptor.class.getClassLoader());
+            .appendMostSpecific(features.mockedType)
+            .appendMostSpecific(features.interfaces)
+            .appendMostSpecific(currentThread().getContextClassLoader())
+            .appendMostSpecific(MockAccess.class, DispatcherDefaultingToRealMethod.class)
+            .appendMostSpecific(MockMethodInterceptor.class)
+            .build(MockMethodInterceptor.class.getClassLoader());
         assertModuleAccessability(features.mockedType);
         for (Class<?> iFace : features.interfaces) {
             assertModuleAccessability(iFace);
