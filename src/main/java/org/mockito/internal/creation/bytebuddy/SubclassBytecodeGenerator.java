@@ -6,6 +6,7 @@ package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.modifier.Ownership;
 import net.bytebuddy.description.modifier.SynchronizationState;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
@@ -16,7 +17,6 @@ import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
 import net.bytebuddy.matcher.ElementMatcher;
-import net.bytebuddy.utility.RandomString;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
@@ -31,7 +31,6 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.Callable;
 
 import static java.lang.Thread.currentThread;
 import static net.bytebuddy.description.modifier.Visibility.PRIVATE;
@@ -46,27 +45,33 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private static final String CODEGEN_PACKAGE = "org.mockito.codegen.";
 
     private static final Object MOCKITO_MODULE;
-    private static final Method GET_MODULE, IS_OPEN, CAN_READ, ADD_READ;
+    private static final Method GET_MODULE, IS_OPEN, IS_EXPORTED, ADD_EXPORTS, CAN_READ, ADD_READ;
 
     static {
         Object mockitoModule;
-        Method getModule, isOpen, canRead, addRead;
+        Method getModule, isOpen, isExported, addExports, canRead, addRead;
         try {
             getModule = Class.class.getMethod("getModule");
             isOpen = getModule.getReturnType().getMethod("isOpen", String.class, getModule.getReturnType());
             canRead = getModule.getReturnType().getMethod("canRead", getModule.getReturnType());
+            isExported = getModule.getReturnType().getMethod("isExported", String.class, getModule.getReturnType());
+            addExports = getModule.getReturnType().getMethod("addExports", String.class, getModule.getReturnType());
             addRead = getModule.getReturnType().getMethod("addReads", getModule.getReturnType());
             mockitoModule = getModule.invoke(Mockito.class);
         } catch (Throwable ignored) {
             mockitoModule = null;
             getModule = null;
             isOpen = null;
+            isExported = null;
+            addExports = null;
             canRead = null;
             addRead = null;
         }
         MOCKITO_MODULE = mockitoModule;
         GET_MODULE = getModule;
         IS_OPEN = isOpen;
+        IS_EXPORTED = isExported;
+        ADD_EXPORTS = addExports;
         CAN_READ = canRead;
         ADD_READ = addRead;
     }
@@ -112,7 +117,24 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             .append(currentThread().getContextClassLoader())
             .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
             .append(MockMethodInterceptor.class).build(MockMethodInterceptor.class.getClassLoader());
+        assertModuleAccessability(features.mockedType);
+        for (Class<?> iFace : features.interfaces) {
+            assertModuleAccessability(iFace);
+        }
         String name = nameFor(features.mockedType, classLoader);
+        if (name.startsWith(CODEGEN_PACKAGE)) {
+            assertVisibility(features.mockedType);
+            addExportEdgeByProbe(features.mockedType, Mockito.class);
+            for (Class<?> iFace : features.interfaces) {
+                assertVisibility(iFace);
+                addExportEdgeByProbe(iFace, Mockito.class);
+            }
+        } else {
+            addReadEdgeByProbe(features.mockedType, Mockito.class);
+            for (Class<?> iFace : features.interfaces) {
+                addExportEdgeByProbe(iFace, features.mockedType);
+            }
+        }
         DynamicType.Builder<T> builder =
                 byteBuddy.subclass(features.mockedType)
                          .name(name)
@@ -145,35 +167,54 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                     .throwing(ClassNotFoundException.class, IOException.class)
                     .intercept(readReplace);
         }
-        if (classLoader != features.mockedType.getClassLoader()) {
-            assertVisibility(features.mockedType);
-            for (Class<?> iFace : features.interfaces) {
-                assertVisibility(iFace);
-            }
+        if (name.startsWith(CODEGEN_PACKAGE)) {
             builder = builder.ignoreAlso(isPackagePrivate()
                 .or(returns(isPackagePrivate()))
                 .or(hasParameters(whereAny(hasType(isPackagePrivate())))));
-        } else if (!canReadMockito(features.mockedType)) {
-            addReadEdgeByProbe(features.mockedType);
         }
         return builder.make()
                       .load(classLoader, loader.resolveStrategy(features.mockedType, classLoader, name.startsWith(CODEGEN_PACKAGE)))
                       .getLoaded();
     }
 
-    private void addReadEdgeByProbe(Class<?> type) {
+    private void addReadEdgeByProbe(Class<?> type, Class<?> target) {
+        if (canRead(type, target)) {
+            return;
+        }
         try {
-            byteBuddy.subclass(Runnable.class)
+            byteBuddy.subclass(Object.class)
                     .name(String.format("%s$%s$%d", type.getName(), "MockitoModuleProbe", Math.abs(random.nextInt())))
-                    .invokable(named("run")).intercept(MethodCall.invoke(ADD_READ)
+                    .defineMethod("run", void.class, Visibility.PUBLIC, Ownership.STATIC).intercept(MethodCall.invoke(ADD_READ)
                     .onMethodCall(MethodCall.invoke(GET_MODULE).on(type))
-                    .withMethodCall(MethodCall.invoke(GET_MODULE).on(Mockito.class)))
+                    .withMethodCall(MethodCall.invoke(GET_MODULE).on(target)))
                     .make()
                     .load(type.getClassLoader(), loader.resolveStrategy(type, type.getClassLoader(), false))
                     .getLoaded()
-                    .getConstructor()
-                    .newInstance()
-                    .run();
+                    .getMethod("run")
+                    .invoke(null);
+        } catch (Exception e) {
+            throw new MockitoException(join("Could not force initialization of " + type,
+                "",
+                "This is required to adjust the module graph to enable mock creation"), e);
+        }
+    }
+
+    private void addExportEdgeByProbe(Class<?> type, Class<?> target) {
+        if (isExportedTo(type, target)) {
+            return;
+        }
+        try {
+            byteBuddy.subclass(Object.class)
+                .name(String.format("%s$%s$%d", type.getName(), "MockitoModuleProbe", Math.abs(random.nextInt())))
+                .defineMethod("run", void.class, Visibility.PUBLIC, Ownership.STATIC).intercept(MethodCall.invoke(ADD_EXPORTS)
+                .onMethodCall(MethodCall.invoke(GET_MODULE).on(type))
+                .with(type.getPackage().getName())
+                .withMethodCall(MethodCall.invoke(GET_MODULE).on(target)))
+                .make()
+                .load(type.getClassLoader(), loader.resolveStrategy(type, type.getClassLoader(), false))
+                .getLoaded()
+                .getMethod("run")
+                .invoke(null);
         } catch (Exception e) {
             throw new MockitoException(join("Could not force initialization of " + type,
                 "",
@@ -188,7 +229,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private String nameFor(Class<?> type, ClassLoader classLoader) {
         String typeName;
         if (classLoader == type.getClassLoader()
-            ? !isOpenedToMockito(type)
+            ? !isOpenedTo(type, Mockito.class)
             : isComingFromJDK(type) || isComingFromSignedJar(type) || isComingFromSealedPackage(type)) {
             typeName = CODEGEN_PACKAGE + type.getSimpleName();
         } else {
@@ -210,12 +251,24 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         return type.getPackage() != null && type.getPackage().isSealed();
     }
 
-    private boolean isOpenedToMockito(Class<?> type) {
+    private Object getModule(Class<?> type) {
+        if (MOCKITO_MODULE == null) {
+            return null;
+        } else {
+            try {
+                return GET_MODULE.invoke(type);
+            } catch (Exception e) {
+                throw new MockitoException("Cannot extract module of " + type, e);
+            }
+        }
+    }
+
+    private boolean isOpenedTo(Class<?> type, Class<?> target) {
         if (type.getPackage() == null) {
             return true;
         }
         try {
-            return MOCKITO_MODULE != null && (Boolean) IS_OPEN.invoke(GET_MODULE.invoke(type), type.getPackage().getName(), MOCKITO_MODULE);
+            return MOCKITO_MODULE == null || (Boolean) IS_OPEN.invoke(GET_MODULE.invoke(type), type.getPackage().getName(), GET_MODULE.invoke(target));
         } catch (Exception e) {
             throw new MockitoException(join("Cannot assert if " + type + " is opened to Mockito",
                 "",
@@ -224,12 +277,26 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         }
     }
 
-    private boolean canReadMockito(Class<?> type) {
+    private boolean canRead(Class<?> type, Class<?> target) {
         if (type.getPackage() == null) {
             return true;
         }
         try {
-            return MOCKITO_MODULE != null && (Boolean) CAN_READ.invoke(GET_MODULE.invoke(type), MOCKITO_MODULE);
+            return MOCKITO_MODULE == null || (Boolean) CAN_READ.invoke(GET_MODULE.invoke(type), GET_MODULE.invoke(target));
+        } catch (Exception e) {
+            throw new MockitoException(join("Cannot assert if " + type + " is opened to Mockito",
+                "",
+                "Error during reflective access of expected methods of the Java module system"
+            ), e);
+        }
+    }
+
+    private boolean isExportedTo(Class<?> type, Class<?> target) {
+        if (type.getPackage() == null) {
+            return true;
+        }
+        try {
+            return MOCKITO_MODULE == null || (Boolean) IS_EXPORTED.invoke(GET_MODULE.invoke(type), type.getPackage().getName(), GET_MODULE.invoke(target));
         } catch (Exception e) {
             throw new MockitoException(join("Cannot assert if " + type + " is opened to Mockito",
                 "",
@@ -251,6 +318,15 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 " - You are mocking a class with additional interfaces of another class loader",
                 " - Mockito is loaded by a different class loader than the mocked type (e.g. with OSGi)",
                 " - The thread's context class loader is different than the mock's class loader"));
+        }
+    }
+
+    private void assertModuleAccessability(Class<?> type) {
+        if (!isOpenedTo(type, Mockito.class) && !isExportedTo(type, Mockito.class)) {
+            throw new MockitoException(join("Mocking target " + type + " is neither opened nor exported to Mockito",
+                "",
+                "Types that are neither open or exported to Mockito cannot be mocked as mock type cannot be defined within the types module or outside",
+                "To allow for mocking this type, you must open the module " + getModule(type)) + " to " + MOCKITO_MODULE);
         }
     }
 }
