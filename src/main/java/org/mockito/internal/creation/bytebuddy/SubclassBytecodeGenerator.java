@@ -131,12 +131,13 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             assertModuleAccessability(iFace);
         }
         String name = nameFor(features.mockedType, features.interfaces, classLoader);
-        if (name.startsWith(CODEGEN_PACKAGE)) {
+        if (name.startsWith(CODEGEN_PACKAGE) || classLoader instanceof MultipleParentClassLoader) {
+            Class<?> target = classLoader instanceof MultipleParentClassLoader ? loadHookType(classLoader) : Mockito.class;
             assertVisibility(features.mockedType);
-            loadModuleProble(features.mockedType, Mockito.class, false, false, true);
+            loadModuleProble(features.mockedType, target, false, false, true);
             for (Class<?> iFace : features.interfaces) {
                 assertVisibility(iFace);
-                loadModuleProble(iFace, Mockito.class, false, false, true);
+                loadModuleProble(iFace, target, false, false, true);
             }
         } else {
             loadModuleProble(features.mockedType, Mockito.class, true, !loader.isDisrespectingOpenness(), false);
@@ -184,6 +185,13 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         return builder.make()
                       .load(classLoader, loader.resolveStrategy(features.mockedType, classLoader, name.startsWith(CODEGEN_PACKAGE)))
                       .getLoaded();
+    }
+
+    private Class<?> loadHookType(ClassLoader classLoader) {
+        return byteBuddy.subclass(Object.class)
+            .make()
+            .load(classLoader, loader.resolveStrategy(Object.class, classLoader, true))
+            .getLoaded();
     }
 
     private void loadModuleProble(Class<?> type, Class<?> target, boolean addRead, boolean addOpen, boolean addExports) {
