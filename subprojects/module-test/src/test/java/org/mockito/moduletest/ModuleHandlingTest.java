@@ -148,7 +148,7 @@ public class ModuleHandlingTest {
             Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
             loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
 
-            boolean relocated = !Boolean.getBoolean("org.mockito.internal.simulateJava11") && ClassInjector.UsingReflection.isAvailable();
+            boolean relocated = !Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable();
             String prefix = relocated ? "sample.MyCallable$MockitoMock$" : "org.mockito.codegen.MyCallable$MockitoMock$";
             assertThat(mock.getClass().getName()).startsWith(prefix);
             assertThat(mock.call()).isEqualTo("foo");
