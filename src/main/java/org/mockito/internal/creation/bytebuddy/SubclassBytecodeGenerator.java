@@ -142,7 +142,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         } else {
             loadModuleProble(features.mockedType, Mockito.class, true, !loader.isDisrespectingOpenness(), false);
             for (Class<?> iFace : features.interfaces) {
-                loadModuleProble(iFace, features.mockedType, true, false, false);
+                loadModuleProble(iFace, features.mockedType, false, false, true);
             }
         }
         DynamicType.Builder<T> builder =
