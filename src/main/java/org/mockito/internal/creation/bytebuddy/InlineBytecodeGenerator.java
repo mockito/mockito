@@ -32,11 +32,10 @@ import org.mockito.mock.SerializableMode;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
 import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
@@ -69,6 +68,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
     private final AsmVisitorWrapper mockTransformer;
 
+    private final Method GET_MODULE, CAN_READ, REDEFINE_MODULE;
+
     private volatile Throwable lastException;
 
     public InlineBytecodeGenerator(Instrumentation instrumentation, WeakConcurrentMap<Object, MockMethodInterceptor> mocks) {
@@ -98,6 +99,20 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                 Advice.withCustomMapping()
                     .bind(MockMethodAdvice.Identifier.class, identifier)
                     .to(MockMethodAdvice.ForEquals.class));
+        Method getModule, canRead, redefineModule;
+        try {
+            getModule = Class.class.getMethod("getModule");
+            canRead = getModule.getReturnType().getMethod("canRead", getModule.getReturnType());
+            redefineModule = Instrumentation.class.getMethod("redefineModule",
+                getModule.getReturnType(), Set.class, Map.class, Map.class, Set.class, Map.class);
+        } catch (Exception ignored) {
+            getModule = null;
+            canRead = null;
+            redefineModule = null;
+        }
+        GET_MODULE = getModule;
+        CAN_READ = canRead;
+        REDEFINE_MODULE = redefineModule;
         MockMethodDispatcher.set(identifier, new MockMethodAdvice(mocks, identifier));
         instrumentation.addTransformer(this, true);
     }
@@ -158,6 +173,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         } while (type != null);
         if (!types.isEmpty()) {
             try {
+                assureCanReadMockito(types);
                 instrumentation.retransformClasses(types.toArray(new Class<?>[types.size()]));
                 Throwable throwable = lastException;
                 if (throwable != null) {
@@ -175,6 +191,32 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             } finally {
                 lastException = null;
             }
+        }
+    }
+
+    private void assureCanReadMockito(Set<Class<?>> types) {
+        if (REDEFINE_MODULE == null) {
+            return;
+        }
+        Set<Object> modules = new HashSet<Object>();
+        try {
+            Object target = GET_MODULE.invoke(Class.forName("org.mockito.internal.creation.bytebuddy.MockMethodDispatcher", false, null));
+            for (Class<?> type : types) {
+                Object module = GET_MODULE.invoke(type);
+                if (!modules.contains(module) && !(Boolean) CAN_READ.invoke(module, target)) {
+                    modules.add(module);
+                }
+            }
+            for (Object module : modules) {
+                REDEFINE_MODULE.invoke(module, Collections.singleton(target),
+                    Collections.emptyMap(), Collections.emptyMap(), Collections.emptySet(), Collections.emptyMap());
+            }
+        } catch (Exception e) {
+            throw new IllegalStateException(join("Could not adjust module graph to make the mock instance dispatcher visible to some classes",
+                "",
+                "At least one of those modules: " + modules + " is not reading the unnamed module of the bootstrap loader",
+                "Without such a read edge, the classes that are redefined to become mocks cannot access the mock dispatcher.",
+                "To circumvent this, Mockito attempted to add a read edge to this module what failed for an unexpected reason"), e);
         }
     }
 
