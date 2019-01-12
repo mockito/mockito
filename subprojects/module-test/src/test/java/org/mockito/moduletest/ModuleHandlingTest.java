@@ -192,8 +192,36 @@ public class ModuleHandlingTest {
     }
 
     @Test
-    public void cannot_define_class_in_non_opened_non_exported_module() throws Exception {
+    public void cannot_define_class_in_non_opened_non_exported_module_if_lookup_injection() throws Exception {
         assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
+        assumeThat(!Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable(), is(true));
+
+        Path jar = modularJar(false, false, false);
+        ModuleLayer layer = layer(jar, false);
+
+        ClassLoader loader = layer.findLoader("mockito.test");
+        Class<?> type = loader.loadClass("sample.MyCallable");
+
+        ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(loader);
+        try {
+            Class<?> mockito = loader.loadClass(Mockito.class.getName());
+            @SuppressWarnings("unchecked")
+            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
+            loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
+
+            assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
+            assertThat(mock.call()).isEqualTo("foo");
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextLoader);
+        }
+    }
+
+    @Test
+    public void can_define_class_in_non_opened_non_exported_module_if_unsafe_injection() throws Exception {
+        assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
+        assumeThat(!Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable(), is(false));
 
         Path jar = modularJar(false, false, false);
         ModuleLayer layer = layer(jar, false);
