@@ -97,6 +97,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         // This also requires that we are able to access the package of the mocked class either by override or explicit
         // privilege given by the target package being opened to Mockito.
         boolean localMock = classLoader == features.mockedType.getClassLoader()
+            && features.serializableMode != SerializableMode.ACROSS_CLASSLOADERS
             && !isComingFromJDK(features.mockedType)
             && (loader.isDisrespectingOpenness() || handler.isOpened(features.mockedType, Mockito.class));
         String typeName;
@@ -160,7 +161,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 .or(hasParameters(whereAny(hasType(isPackagePrivate())))));
         }
         return builder.make()
-            .load(classLoader, loader.resolveStrategy(features.mockedType, classLoader, name.startsWith(CODEGEN_PACKAGE)))
+            .load(classLoader, loader.resolveStrategy(features.mockedType, classLoader, localMock))
             .getLoaded();
     }
 

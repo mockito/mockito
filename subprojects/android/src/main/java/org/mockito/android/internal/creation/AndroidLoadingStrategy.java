@@ -21,7 +21,7 @@ class AndroidLoadingStrategy implements SubclassLoader {
     }
 
     @Override
-    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
+    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean localMock) {
         File target = AndroidTempFileLocator.target;
         if (target == null) {
             throw new MockitoException(join(
