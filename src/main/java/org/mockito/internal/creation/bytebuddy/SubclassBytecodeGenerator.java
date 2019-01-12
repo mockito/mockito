@@ -89,9 +89,8 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             .appendMostSpecific(features.mockedType)
             .appendMostSpecific(features.interfaces)
             .appendMostSpecific(currentThread().getContextClassLoader())
-            .appendMostSpecific(MockAccess.class, DispatcherDefaultingToRealMethod.class)
-            .appendMostSpecific(MockMethodInterceptor.class)
-            .build(MockMethodInterceptor.class.getClassLoader());
+            .appendMostSpecific(MockAccess.class)
+            .build();
 
         // If Mockito does not need to create a new class loader and if a mock is not based on a JDK type, we attempt
         // to define the mock class in the user runtime package to allow for mocking package private types and methods.

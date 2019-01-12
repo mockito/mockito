@@ -12,6 +12,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Stubbing;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +23,7 @@ import static org.mockito.internal.stubbing.StrictnessSelector.determineStrictne
  * Default implementation of stubbing lookup listener.
  * Fails early if stub called with unexpected arguments, but only if current strictness is set to STRICT_STUBS.
  */
-class DefaultStubbingLookupListener implements StubbingLookupListener {
+class DefaultStubbingLookupListener implements StubbingLookupListener, Serializable {
 
     private Strictness currentStrictness;
     private boolean mismatchesReported;

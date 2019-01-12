@@ -5,6 +5,9 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.field.FieldDescription;
+import net.bytebuddy.description.modifier.Ownership;
+import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.StubMethod;
@@ -12,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Random;
 
@@ -103,20 +107,50 @@ abstract class ModuleHandler {
 
         @Override
         void adjustModuleGraph(Class<?> source, Class<?> target, boolean export, boolean read) {
-            Implementation.Composable implementation = StubMethod.INSTANCE;
-            if (export && !isExported(source, target)) {
-                implementation = implementation.andThen(MethodCall.invoke(addExports)
-                    .onMethodCall(MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(source.getName())))
-                    .with(target.getPackage().getName())
-                    .withMethodCall(MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(target.getName()))));
-            }
-            if (read && !canRead(source, target)) {
-                implementation = implementation.andThen(MethodCall.invoke(addReads)
-                    .onMethodCall(MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(source.getName())))
-                    .withMethodCall(MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(target.getName()))));
-            }
-            if (implementation == StubMethod.INSTANCE) {
+            boolean needsExport = export && !isExported(source, target);
+            boolean needsRead = read && !canRead(source, target);
+            if (!needsExport && !needsRead) {
                 return;
+            }
+            ClassLoader classLoader = source.getClassLoader();
+            boolean targetVisible = classLoader == target.getClassLoader();
+            while (!targetVisible && classLoader != null) {
+                classLoader = classLoader.getParent();
+                targetVisible = classLoader == target.getClassLoader();
+            }
+            MethodCall targetLookup;
+            if (targetVisible) {
+                targetLookup = MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(target.getName()));
+            } else {
+                Field field;
+                try {
+                    field = byteBuddy.subclass(Object.class)
+                        .name(String.format("%s$%d", "org.mockito.inject.MockitoTypeCarrier", Math.abs(random.nextInt())))
+                        .defineField("mockitoType", Class.class, Visibility.PUBLIC, Ownership.STATIC)
+                        .make()
+                        .load(source.getClassLoader(), loader.resolveStrategy(source, source.getClassLoader(), false))
+                        .getLoaded()
+                        .getField("mockitoType");
+                    field.set(null, target);
+                } catch (Exception e) {
+                    throw new MockitoException(join("Could not create a carrier for making the Mockito type visible to " + source,
+                        "",
+                        "This is required to adjust the module graph to enable mock creation"), e);
+                }
+                targetLookup = MethodCall.invoke(getModule).onField(new FieldDescription.ForLoadedField(field));
+            }
+            MethodCall sourceLookup = MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(source.getName()));
+            Implementation.Composable implementation = StubMethod.INSTANCE;
+            if (needsExport) {
+                implementation = implementation.andThen(MethodCall.invoke(addExports)
+                    .onMethodCall(sourceLookup)
+                    .with(target.getPackage().getName())
+                    .withMethodCall(targetLookup));
+            }
+            if (needsRead) {
+                implementation = implementation.andThen(MethodCall.invoke(addReads)
+                    .onMethodCall(sourceLookup)
+                    .withMethodCall(targetLookup));
             }
             try {
                 Class.forName(byteBuddy.subclass(Object.class)
