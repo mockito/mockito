@@ -111,8 +111,8 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         if (localMock) {
             handler.adjustModuleGraph(features.mockedType, Mockito.class, false, true);
             for (Class<?> iFace : features.interfaces) {
-                handler.adjustModuleGraph(features.mockedType, iFace, false, true);
                 handler.adjustModuleGraph(iFace, features.mockedType, true, false);
+                handler.adjustModuleGraph(features.mockedType, iFace, false, true);
             }
         } else {
             Class<?> hook = handler.injectionBase(classLoader, typeName);
