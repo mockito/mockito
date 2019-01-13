@@ -208,7 +208,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                 }
             }
             for (Object module : modules) {
-                REDEFINE_MODULE.invoke(module, Collections.singleton(target),
+                REDEFINE_MODULE.invoke(instrumentation, module, Collections.singleton(target),
                     Collections.emptyMap(), Collections.emptyMap(), Collections.emptySet(), Collections.emptyMap());
             }
         } catch (Exception e) {
