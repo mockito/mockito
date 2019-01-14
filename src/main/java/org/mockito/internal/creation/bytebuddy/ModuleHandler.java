@@ -7,6 +7,7 @@ package org.mockito.internal.creation.bytebuddy;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Ownership;
 import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.StubMethod;
@@ -46,10 +47,10 @@ abstract class ModuleHandler {
     private static class ModuleSystemFound extends ModuleHandler {
 
         private final ByteBuddy byteBuddy;
-
         private final SubclassLoader loader;
-
         private final Random random;
+
+        private final int injectonBaseSuffix;
 
         private final Method getModule, isOpen, isExported, canRead, addExports, addReads, addOpens, forName;
 
@@ -57,6 +58,7 @@ abstract class ModuleHandler {
             this.byteBuddy = byteBuddy;
             this.loader = loader;
             this.random = random;
+            injectonBaseSuffix = Math.abs(random.nextInt());
             Class<?> moduleType = Class.forName("java.lang.Module");
             getModule = Class.class.getMethod("getModule");
             isOpen = moduleType.getMethod("isOpen", String.class, moduleType);
@@ -92,18 +94,21 @@ abstract class ModuleHandler {
             if (classLoader == Mockito.class.getClassLoader() && InjectionBase.class.getPackage().getName().equals(packageName)) {
                 return InjectionBase.class;
             } else {
-                try {
-                    Class<?> type = Class.forName(packageName + "." + InjectionBase.class.getSimpleName(), false, classLoader);
-                    if (type.getClassLoader() == classLoader) {
-                        return type;
+                synchronized (this) {
+                    String name = packageName + "." + InjectionBase.class.getSimpleName() + "$" + injectonBaseSuffix;
+                    try {
+                        Class<?> type = Class.forName(name, false, classLoader);
+                        if (type.getClassLoader() == classLoader) {
+                            return type;
+                        }
+                    } catch (Exception ignored) {
                     }
-                } catch (Exception ignored) {
+                    return byteBuddy.subclass(Object.class, ConstructorStrategy.Default.NO_CONSTRUCTORS)
+                        .name(name)
+                        .make()
+                        .load(classLoader, loader.resolveStrategy(InjectionBase.class, classLoader, false))
+                        .getLoaded();
                 }
-                return byteBuddy.subclass(Object.class)
-                    .name(packageName + "." + InjectionBase.class.getSimpleName())
-                    .make()
-                    .load(classLoader, loader.resolveStrategy(InjectionBase.class, classLoader, false))
-                    .getLoaded();
             }
         }
 
@@ -136,7 +141,7 @@ abstract class ModuleHandler {
                 Class<?> intermediate;
                 Field field;
                 try {
-                    intermediate = byteBuddy.subclass(Object.class)
+                    intermediate = byteBuddy.subclass(Object.class, ConstructorStrategy.Default.NO_CONSTRUCTORS)
                         .name(String.format("%s$%d", "org.mockito.inject.MockitoTypeCarrier", Math.abs(random.nextInt())))
                         .defineField("mockitoType", Class.class, Visibility.PUBLIC, Ownership.STATIC)
                         .make()
