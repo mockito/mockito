@@ -20,7 +20,6 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 import static net.bytebuddy.matcher.ElementMatchers.isTypeInitializer;
-import static net.bytebuddy.matcher.ElementMatchers.ofSort;
 import static org.mockito.internal.util.StringUtil.join;
 
 abstract class ModuleHandler {
@@ -50,9 +49,7 @@ abstract class ModuleHandler {
     private static class ModuleSystemFound extends ModuleHandler {
 
         private final ByteBuddy byteBuddy;
-
         private final SubclassLoader loader;
-
         private final Random random;
 
         private final int injectonBaseSuffix;
