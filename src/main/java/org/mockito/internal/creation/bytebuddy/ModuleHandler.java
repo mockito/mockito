@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.util.Random;
 
 import static net.bytebuddy.matcher.ElementMatchers.isTypeInitializer;
+import static net.bytebuddy.matcher.ElementMatchers.ofSort;
 import static org.mockito.internal.util.StringUtil.join;
 
 abstract class ModuleHandler {
@@ -77,7 +78,10 @@ abstract class ModuleHandler {
 
         @Override
         boolean isOpened(Class<?> source, Class<?> target) {
-            return (Boolean) invoke(isOpen, invoke(getModule, source), invoke(getModule, target));
+            if (source.getPackage() == null) {
+                return true;
+            }
+            return (Boolean) invoke(isOpen, invoke(getModule, source), source.getPackage().getName(), invoke(getModule, target));
         }
 
         @Override
