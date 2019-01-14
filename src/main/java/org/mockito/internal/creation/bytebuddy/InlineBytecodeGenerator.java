@@ -59,16 +59,12 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             String.class));
 
     private final Instrumentation instrumentation;
-
     private final ByteBuddy byteBuddy;
-
     private final WeakConcurrentSet<Class<?>> mocked;
-
     private final BytecodeGenerator subclassEngine;
-
     private final AsmVisitorWrapper mockTransformer;
 
-    private final Method GET_MODULE, CAN_READ, REDEFINE_MODULE;
+    private final Method getModule, canRead, redefineModule;
 
     private volatile Throwable lastException;
 
@@ -110,9 +106,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             canRead = null;
             redefineModule = null;
         }
-        GET_MODULE = getModule;
-        CAN_READ = canRead;
-        REDEFINE_MODULE = redefineModule;
+        this.getModule = getModule;
+        this.canRead = canRead;
+        this.redefineModule = redefineModule;
         MockMethodDispatcher.set(identifier, new MockMethodAdvice(mocks, identifier));
         instrumentation.addTransformer(this, true);
     }
@@ -195,20 +191,20 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
     }
 
     private void assureCanReadMockito(Set<Class<?>> types) {
-        if (REDEFINE_MODULE == null) {
+        if (redefineModule == null) {
             return;
         }
         Set<Object> modules = new HashSet<Object>();
         try {
-            Object target = GET_MODULE.invoke(Class.forName("org.mockito.internal.creation.bytebuddy.MockMethodDispatcher", false, null));
+            Object target = getModule.invoke(Class.forName("org.mockito.internal.creation.bytebuddy.MockMethodDispatcher", false, null));
             for (Class<?> type : types) {
-                Object module = GET_MODULE.invoke(type);
-                if (!modules.contains(module) && !(Boolean) CAN_READ.invoke(module, target)) {
+                Object module = getModule.invoke(type);
+                if (!modules.contains(module) && !(Boolean) canRead.invoke(module, target)) {
                     modules.add(module);
                 }
             }
             for (Object module : modules) {
-                REDEFINE_MODULE.invoke(instrumentation, module, Collections.singleton(target),
+                redefineModule.invoke(instrumentation, module, Collections.singleton(target),
                     Collections.emptyMap(), Collections.emptyMap(), Collections.emptySet(), Collections.emptyMap());
             }
         } catch (Exception e) {
