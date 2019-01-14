@@ -28,6 +28,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 import static java.lang.Thread.currentThread;
@@ -107,12 +108,27 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 handler.adjustModuleGraph(features.mockedType, iFace, false, true);
             }
         } else {
-            Class<?> hook = handler.injectionBase(classLoader, typeName);
-            assertVisibility(features.mockedType);
-            handler.adjustModuleGraph(features.mockedType, hook, true, false);
-            for (Class<?> iFace : features.interfaces) {
-                assertVisibility(iFace);
-                handler.adjustModuleGraph(iFace, hook, true, false);
+            boolean exported = handler.isExported(features.mockedType);
+            Iterator<Class<?>> it = features.interfaces.iterator();
+            while (exported && it.hasNext()) {
+                exported = handler.isExported(it.next());
+            }
+            // We check if all mocked types are exported without qualification to avoid generating a hook type.
+            // unless this is necessary. We expect this to be the case for most mocked types what makes this a
+            // worthy performance optimization.
+            if (exported) {
+                assertVisibility(features.mockedType);
+                for (Class<?> iFace : features.interfaces) {
+                    assertVisibility(iFace);
+                }
+            } else {
+                Class<?> hook = handler.injectionBase(classLoader, typeName);
+                assertVisibility(features.mockedType);
+                handler.adjustModuleGraph(features.mockedType, hook, true, false);
+                for (Class<?> iFace : features.interfaces) {
+                    assertVisibility(iFace);
+                    handler.adjustModuleGraph(iFace, hook, true, false);
+                }
             }
         }
 

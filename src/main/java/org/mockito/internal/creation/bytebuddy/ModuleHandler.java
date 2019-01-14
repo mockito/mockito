@@ -28,6 +28,8 @@ abstract class ModuleHandler {
 
     abstract boolean canRead(Class<?> source, Class<?> target);
 
+    abstract boolean isExported(Class<?> source);
+
     abstract boolean isExported(Class<?> source, Class<?> target);
 
     abstract Class<?> injectionBase(ClassLoader classLoader, String tyoeName);
@@ -47,12 +49,14 @@ abstract class ModuleHandler {
     private static class ModuleSystemFound extends ModuleHandler {
 
         private final ByteBuddy byteBuddy;
+
         private final SubclassLoader loader;
+
         private final Random random;
 
         private final int injectonBaseSuffix;
 
-        private final Method getModule, isOpen, isExported, canRead, addExports, addReads, addOpens, forName;
+        private final Method getModule, isOpen, isExported, isExportedUnqualified, canRead, addExports, addReads, addOpens, forName;
 
         private ModuleSystemFound(ByteBuddy byteBuddy, SubclassLoader loader, Random random) throws Exception {
             this.byteBuddy = byteBuddy;
@@ -63,6 +67,7 @@ abstract class ModuleHandler {
             getModule = Class.class.getMethod("getModule");
             isOpen = moduleType.getMethod("isOpen", String.class, moduleType);
             isExported = moduleType.getMethod("isExported", String.class, moduleType);
+            isExportedUnqualified = moduleType.getMethod("isExported", String.class);
             canRead = moduleType.getMethod("canRead", moduleType);
             addExports = moduleType.getMethod("addExports", String.class, moduleType);
             addReads = moduleType.getMethod("addReads", moduleType);
@@ -81,6 +86,14 @@ abstract class ModuleHandler {
         }
 
         @Override
+        boolean isExported(Class<?> source) {
+            if (source.getPackage() == null) {
+                return true;
+            }
+            return (Boolean) invoke(isExportedUnqualified, invoke(getModule, source), source.getPackage().getName());
+        }
+
+        @Override
         boolean isExported(Class<?> source, Class<?> target) {
             if (source.getPackage() == null) {
                 return true;
@@ -95,14 +108,22 @@ abstract class ModuleHandler {
                 return InjectionBase.class;
             } else {
                 synchronized (this) {
-                    String name = packageName + "." + InjectionBase.class.getSimpleName() + "$" + injectonBaseSuffix;
-                    try {
-                        Class<?> type = Class.forName(name, false, classLoader);
-                        if (type.getClassLoader() == classLoader) {
-                            return type;
+                    String name;
+                    int suffix = injectonBaseSuffix;
+                    do {
+                        name = packageName + "." + InjectionBase.class.getSimpleName() + "$" + suffix++;
+                        try {
+                            Class<?> type = Class.forName(name, false, classLoader);
+                            // The injected type must be defined in the class loader that is target of the injection. Otherwise,
+                            // the class's unnamed module would differ from the intended module. To avoid conflicts, we increment
+                            // the suffix until we hit a class with a known name and generate one if it does not exist.
+                            if (type.getClassLoader() == classLoader) {
+                                return type;
+                            }
+                        } catch (ClassNotFoundException ignored) {
+                            break;
                         }
-                    } catch (Exception ignored) {
-                    }
+                    } while (true);
                     return byteBuddy.subclass(Object.class, ConstructorStrategy.Default.NO_CONSTRUCTORS)
                         .name(name)
                         .make()
@@ -142,7 +163,7 @@ abstract class ModuleHandler {
                 Field field;
                 try {
                     intermediate = byteBuddy.subclass(Object.class, ConstructorStrategy.Default.NO_CONSTRUCTORS)
-                        .name(String.format("%s$%d", "org.mockito.inject.MockitoTypeCarrier", Math.abs(random.nextInt())))
+                        .name(String.format("%s$%d", "org.mockito.codegen.MockitoTypeCarrier", Math.abs(random.nextInt())))
                         .defineField("mockitoType", Class.class, Visibility.PUBLIC, Ownership.STATIC)
                         .make()
                         .load(source.getClassLoader(), loader.resolveStrategy(source, source.getClassLoader(), false))
@@ -204,6 +225,11 @@ abstract class ModuleHandler {
 
         @Override
         boolean canRead(Class<?> source, Class<?> target) {
+            return true;
+        }
+
+        @Override
+        boolean isExported(Class<?> source) {
             return true;
         }
 
