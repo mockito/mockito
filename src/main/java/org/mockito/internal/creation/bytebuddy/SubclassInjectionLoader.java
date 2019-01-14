@@ -25,7 +25,7 @@ class SubclassInjectionLoader implements SubclassLoader {
     private final SubclassLoader loader;
 
     SubclassInjectionLoader() {
-        if (!Boolean.getBoolean("org.mockito.internal.simulateJava11") && ClassInjector.UsingReflection.isAvailable()) {
+        if (!Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable()) {
             this.loader = new WithReflection();
         } else if (ClassInjector.UsingLookup.isAvailable()) {
             this.loader = tryLookup();
@@ -49,8 +49,13 @@ class SubclassInjectionLoader implements SubclassLoader {
     private static class WithReflection implements SubclassLoader {
 
         @Override
-        public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
-            return ClassLoadingStrategy.Default.INJECTION.with(codegen ? InjectionBase.class.getProtectionDomain() : mockedType.getProtectionDomain());
+        public boolean isDisrespectingOpenness() {
+            return true;
+        }
+
+        @Override
+        public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean localMock) {
+            return ClassLoadingStrategy.Default.INJECTION.with(localMock ? mockedType.getProtectionDomain() : InjectionBase.class.getProtectionDomain());
         }
     }
 
@@ -69,12 +74,13 @@ class SubclassInjectionLoader implements SubclassLoader {
         }
 
         @Override
-        public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
-            if (codegen) {
-                return ClassLoadingStrategy.UsingLookup.of(codegenLookup);
-            } else if (classLoader != mockedType.getClassLoader()) {
-                return ClassLoadingStrategy.Default.WRAPPER.with(mockedType.getProtectionDomain());
-            } else {
+        public boolean isDisrespectingOpenness() {
+            return false;
+        }
+
+        @Override
+        public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean localMock) {
+            if (localMock) {
                 try {
                     Object privateLookup;
                     try {
@@ -96,12 +102,21 @@ class SubclassInjectionLoader implements SubclassLoader {
                         exception
                     ));
                 }
+            } else if (classLoader == InjectionBase.class.getClassLoader()) {
+                return ClassLoadingStrategy.UsingLookup.of(codegenLookup);
+            } else {
+                return ClassLoadingStrategy.Default.WRAPPER.with(mockedType.getProtectionDomain());
             }
         }
     }
 
     @Override
-    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
-        return loader.resolveStrategy(mockedType, classLoader, codegen);
+    public boolean isDisrespectingOpenness() {
+        return loader.isDisrespectingOpenness();
+    }
+
+    @Override
+    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean localMock) {
+        return loader.resolveStrategy(mockedType, classLoader, localMock);
     }
 }

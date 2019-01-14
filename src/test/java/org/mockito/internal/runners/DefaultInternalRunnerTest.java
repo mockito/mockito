@@ -67,7 +67,7 @@ public class DefaultInternalRunnerTest {
     public static final class SuccessTest {
 
         @Test
-        public void test() {
+        public void this_test_is_NOT_supposed_to_fail() {
             assertTrue(true);
         }
     }
@@ -78,7 +78,7 @@ public class DefaultInternalRunnerTest {
         private System system;
 
         @Test
-        public void test() {
+        public void this_test_is_supposed_to_fail() {
             assertNotNull(system);
         }
     }
