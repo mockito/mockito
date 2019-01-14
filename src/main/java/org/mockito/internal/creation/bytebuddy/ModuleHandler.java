@@ -150,7 +150,7 @@ abstract class ModuleHandler {
                         "",
                         "This is required to adjust the module graph to enable mock creation"), e);
                 }
-                targetLookup = MethodCall.invoke(getModule).onField(field));
+                targetLookup = MethodCall.invoke(getModule).onField(field);
                 implementation = MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(intermediate.getName()));
             }
             MethodCall sourceLookup = MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(source.getName()));
