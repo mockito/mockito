@@ -129,28 +129,31 @@ abstract class ModuleHandler {
                 targetVisible = classLoader == target.getClassLoader();
             }
             MethodCall targetLookup;
+            Implementation.Composable implementation;
             if (targetVisible) {
                 targetLookup = MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(target.getName()));
+                implementation = StubMethod.INSTANCE;
             } else {
+                Class<?> intermediate;
                 Field field;
                 try {
-                    field = byteBuddy.subclass(Object.class)
+                    intermediate = byteBuddy.subclass(Object.class)
                         .name(String.format("%s$%d", "org.mockito.inject.MockitoTypeCarrier", Math.abs(random.nextInt())))
                         .defineField("mockitoType", Class.class, Visibility.PUBLIC, Ownership.STATIC)
                         .make()
                         .load(source.getClassLoader(), loader.resolveStrategy(source, source.getClassLoader(), false))
-                        .getLoaded()
-                        .getField("mockitoType");
+                        .getLoaded();
+                    field = intermediate.getField("mockitoType");
                     field.set(null, target);
                 } catch (Exception e) {
                     throw new MockitoException(join("Could not create a carrier for making the Mockito type visible to " + source,
                         "",
                         "This is required to adjust the module graph to enable mock creation"), e);
                 }
-                targetLookup = MethodCall.invoke(getModule).onField(new FieldDescription.ForLoadedField(field));
+                targetLookup = MethodCall.invoke(getModule).onField(field));
+                implementation = MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(intermediate.getName()));
             }
             MethodCall sourceLookup = MethodCall.invoke(getModule).onMethodCall(MethodCall.invoke(forName).with(source.getName()));
-            Implementation.Composable implementation = StubMethod.INSTANCE;
             if (needsExport) {
                 implementation = implementation.andThen(MethodCall.invoke(addExports)
                     .onMethodCall(sourceLookup)
