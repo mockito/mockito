@@ -43,23 +43,15 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private static final String CODEGEN_PACKAGE = "org.mockito.codegen.";
 
     private final SubclassLoader loader;
-
     private final ModuleHandler handler;
-
     private final ByteBuddy byteBuddy;
-
     private final Random random;
-
     private final Implementation readReplace;
-
     private final ElementMatcher<? super MethodDescription> matcher;
 
     private final Implementation dispatcher = to(DispatcherDefaultingToRealMethod.class);
-
     private final Implementation hashCode = to(MockMethodInterceptor.ForHashCode.class);
-
     private final Implementation equals = to(MockMethodInterceptor.ForEquals.class);
-
     private final Implementation writeReplace = to(MockMethodInterceptor.ForWriteReplace.class);
 
     public SubclassBytecodeGenerator() {
