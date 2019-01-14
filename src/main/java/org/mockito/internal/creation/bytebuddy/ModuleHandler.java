@@ -81,7 +81,10 @@ abstract class ModuleHandler {
 
         @Override
         boolean isExported(Class<?> source, Class<?> target) {
-            return (Boolean) invoke(isExported, invoke(getModule, source), target.getPackage().getName(), invoke(getModule, target));
+            if (source.getPackage() == null) {
+                return true;
+            }
+            return (Boolean) invoke(isExported, invoke(getModule, source), source.getPackage().getName(), invoke(getModule, target));
         }
 
         @Override
