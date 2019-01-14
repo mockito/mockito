@@ -5,7 +5,6 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.modifier.Ownership;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.implementation.Implementation;
