@@ -113,6 +113,13 @@ abstract class ModuleHandler {
                 return;
             }
             ClassLoader classLoader = source.getClassLoader();
+            if (classLoader == null) {
+                throw new MockitoException(join("Cannot adjust module graph for modules in the bootstrap loader",
+                    "",
+                    source + " is declared by the bootstrap loader cannot be adjusted",
+                    "Requires package export to " + target + ": " + needsExport,
+                    "Requires adjusted reading of " + target + ": " + needsRead)
+            }
             boolean targetVisible = classLoader == target.getClassLoader();
             while (!targetVisible && classLoader != null) {
                 classLoader = classLoader.getParent();
