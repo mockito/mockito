@@ -99,6 +99,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
         Instrumentation instrumentation;
         Throwable initializationError = null;
         try {
+            Class<?> dispatcher;
             try {
                 instrumentation = ByteBuddyAgent.install();
                 if (!instrumentation.isRetransformClassesSupported()) {
@@ -136,7 +137,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
                 }
                 instrumentation.appendToBootstrapClassLoaderSearch(new JarFile(boot));
                 try {
-                    Class<?> dispatcher = Class.forName("org.mockito.internal.creation.bytebuddy.MockMethodDispatcher");
+                    dispatcher = Class.forName("org.mockito.internal.creation.bytebuddy.MockMethodDispatcher");
                     if (dispatcher.getClassLoader() != null) {
                         throw new IllegalStateException(join(
                                 "The MockMethodDispatcher must not be loaded manually but must be injected into the bootstrap class loader.",
@@ -155,6 +156,18 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
                         "This error occured due to an I/O error during the creation of this agent: " + ioe,
                         "",
                         "Potentially, the current VM does not support the instrumentation API correctly"), ioe);
+            }
+            try {
+                Class<?> module = Class.forName("java.lang.Module");
+                Method getModule = Class.class.getMethod("getModule");
+                Method canRead = module.getMethod("canRead", module);
+                Object mockitoModule = getModule.invoke(InlineByteBuddyMockMaker.class);
+                Object dispatcherModule = getModule.invoke(dispatcher);
+                if (!(Boolean) canRead.invoke(mockitoModule, dispatcherModule)) {
+                    module.getMethod("addReads", module).invoke(mockitoModule, dispatcherModule);
+                }
+            } catch (ClassNotFoundException cnfe) {
+                // The module system not available on current VM (JVM version < 9).
             }
         } catch (Throwable throwable) {
             instrumentation = null;
