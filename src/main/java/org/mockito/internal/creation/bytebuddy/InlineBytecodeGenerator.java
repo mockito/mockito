@@ -26,6 +26,7 @@ import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.OpenedClassReader;
 import net.bytebuddy.utility.RandomString;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
@@ -196,7 +197,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         }
         Set<Object> modules = new HashSet<Object>();
         try {
-            Object target = getModule.invoke(Class.forName("org.mockito.internal.creation.bytebuddy.MockMethodDispatcher", false, null));
+            Object target = getModule.invoke(Class.forName("org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher", false, null));
             for (Class<?> type : types) {
                 Object module = getModule.invoke(type);
                 if (!modules.contains(module) && !(Boolean) canRead.invoke(module, target)) {

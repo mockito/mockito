@@ -297,7 +297,9 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void testMockDispatcherIsRelocated() throws Exception {
-        assertThat(InlineByteBuddyMockMaker.class.getClassLoader().getResource("org/mockito/internal/creation/bytebuddy/MockMethodDispatcher.raw")).isNotNull();
+        assertThat(InlineByteBuddyMockMaker.class.getClassLoader()
+            .getResource("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.raw"))
+            .isNotNull();
     }
 
     private static final class FinalClass {
