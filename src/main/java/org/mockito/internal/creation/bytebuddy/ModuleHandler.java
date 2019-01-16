@@ -11,7 +11,6 @@ import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.StubMethod;
-import org.mockito.Mockito;
 import org.mockito.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
 
@@ -105,7 +104,7 @@ abstract class ModuleHandler {
         @Override
         Class<?> injectionBase(ClassLoader classLoader, String typeName) {
             String packageName = typeName.substring(0, typeName.lastIndexOf('.'));
-            if (classLoader == Mockito.class.getClassLoader() && InjectionBase.class.getPackage().getName().equals(packageName)) {
+            if (classLoader == InjectionBase.class.getClassLoader() && InjectionBase.class.getPackage().getName().equals(packageName)) {
                 return InjectionBase.class;
             } else {
                 synchronized (this) {

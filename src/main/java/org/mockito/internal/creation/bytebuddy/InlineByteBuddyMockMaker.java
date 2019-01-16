@@ -136,13 +136,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
                 }
                 instrumentation.appendToBootstrapClassLoaderSearch(new JarFile(boot));
                 try {
-                    Class<?> dispatcher = Class.forName("org.mockito.internal.creation.bytebuddy.MockMethodDispatcher");
-                    if (dispatcher.getClassLoader() != null) {
-                        throw new IllegalStateException(join(
-                                "The MockMethodDispatcher must not be loaded manually but must be injected into the bootstrap class loader.",
-                                "",
-                                "The dispatcher class was already loaded by: " + dispatcher.getClassLoader()));
-                    }
+                    Class.forName("org.mockito.internal.creation.bytebuddy.MockMethodDispatcher", false, null);
                 } catch (ClassNotFoundException cnfe) {
                     throw new IllegalStateException(join(
                             "Mockito failed to inject the MockMethodDispatcher class into the bootstrap class loader",
