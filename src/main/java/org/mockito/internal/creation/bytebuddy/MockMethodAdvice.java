@@ -12,6 +12,7 @@ import net.bytebuddy.implementation.bind.annotation.Argument;
 import net.bytebuddy.implementation.bind.annotation.This;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.RealMethod;
@@ -35,7 +36,7 @@ import java.util.concurrent.Callable;
 
 public class MockMethodAdvice extends MockMethodDispatcher {
 
-    final WeakConcurrentMap<Object, MockMethodInterceptor> interceptors;
+    private final WeakConcurrentMap<Object, MockMethodInterceptor> interceptors;
 
     private final String identifier;
 
