@@ -10,5 +10,6 @@ task copyMockMethodDispatcher(type: Copy) {
 classes.dependsOn(copyMockMethodDispatcher)
 
 jar {
+    exclude("org/mockito/internal/creation/bytebuddy/inject/package-info.class")
     exclude("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class")
 }
