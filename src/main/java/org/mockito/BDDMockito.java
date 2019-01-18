@@ -4,9 +4,13 @@
  */
 package org.mockito;
 
+import org.mockito.internal.stubbing.OngoingStubbingImpl;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.BaseStubber;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
+import org.mockito.stubbing.LenientStubber;
 import org.mockito.verification.VerificationMode;
 
 /**
@@ -319,21 +323,21 @@ public class BDDMockito extends Mockito {
     }
 
     /**
-     * See original {@link Stubber}
+     * See original {@link BaseStubber}
      * @since 1.8.0
      */
-    public interface BDDStubber {
+    public interface BaseBDDStubber {
         /**
          * See original {@link Stubber#doAnswer(Answer)}
          * @since 1.8.0
          */
-        BDDStubber willAnswer(Answer<?> answer);
+        BDDStrubber willAnswer(Answer<?> answer);
 
         /**
          * See original {@link Stubber#doAnswer(Answer)}
          * @since 1.8.0
          */
-        BDDStubber will(Answer<?> answer);
+        BDDStrubber will(Answer<?> answer);
 
         /**
          * See original {@link Stubber#doNothing()}.
@@ -344,60 +348,68 @@ public class BDDMockito extends Mockito {
          * @deprecated as of 2.1.0 please use {@link #willDoNothing()} instead
          */
         @Deprecated
-        BDDStubber willNothing();
+        BDDStrubber willNothing();
 
         /**
          * See original {@link Stubber#doNothing()}
          * @since 1.10.20
          */
-        BDDStubber willDoNothing();
+        BDDStrubber willDoNothing();
 
         /**
          * See original {@link Stubber#doReturn(Object)}
          * @since 2.1.0
          */
-        BDDStubber willReturn(Object toBeReturned);
+        BDDStrubber willReturn(Object toBeReturned);
 
         /**
          * See original {@link Stubber#doReturn(Object)}
          * @since 2.1.0
          */
         @SuppressWarnings({"unchecked", "varargs"})
-        BDDStubber willReturn(Object toBeReturned, Object... nextToBeReturned);
+        BDDStrubber willReturn(Object toBeReturned, Object... nextToBeReturned);
 
         /**
          * See original {@link Stubber#doThrow(Throwable...)}
          * @since 1.8.0
          */
-        BDDStubber willThrow(Throwable... toBeThrown);
+        BDDStrubber willThrow(Throwable... toBeThrown);
 
         /**
          * See original {@link Stubber#doThrow(Class)}
          * @since 2.1.0
          */
-        BDDStubber willThrow(Class<? extends Throwable> toBeThrown);
+        BDDStrubber willThrow(Class<? extends Throwable> toBeThrown);
 
         /**
          * See original {@link Stubber#doThrow(Class, Class[])}
          * @since 2.1.0
          */
-        @SuppressWarnings ({"unchecked", "varargs"})
-        BDDStubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown);
+        @SuppressWarnings({"unchecked", "varargs"})
+        BDDStrubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown);
 
         /**
          * See original {@link Stubber#doCallRealMethod()}
          * @since 1.9.0
          */
-        BDDStubber willCallRealMethod();
+        BDDStrubber willCallRealMethod();
+    }
+
+    /**
+     * see original {@link Stubber}
+     * @since 1.8.0
+     */
+    public interface BDDStrubber extends BaseBDDStubber {
 
         /**
          * See original {@link Stubber#when(Object)}
+         *
          * @since 1.8.0
          */
         <T> T given(T mock);
     }
 
-    private static class BDDStubberImpl implements BDDStubber {
+    private static class BDDStubberImpl implements BDDStrubber {
 
         private final Stubber mockitoStubber;
 
@@ -409,11 +421,11 @@ public class BDDMockito extends Mockito {
             return mockitoStubber.when(mock);
         }
 
-        public BDDStubber willAnswer(Answer<?> answer) {
+        public BDDStrubber willAnswer(Answer<?> answer) {
             return new BDDStubberImpl(mockitoStubber.doAnswer(answer));
         }
 
-        public BDDStubber will(Answer<?> answer) {
+        public BDDStrubber will(Answer<?> answer) {
             return new BDDStubberImpl(mockitoStubber.doAnswer(answer));
         }
 
@@ -421,36 +433,149 @@ public class BDDMockito extends Mockito {
          * @deprecated please use {@link #willDoNothing()} instead
          */
         @Deprecated
-        public BDDStubber willNothing() {
+        public BDDStrubber willNothing() {
             return willDoNothing();
         }
 
-        public BDDStubber willDoNothing() {
+        public BDDStrubber willDoNothing() {
             return new BDDStubberImpl(mockitoStubber.doNothing());
         }
 
-        public BDDStubber willReturn(Object toBeReturned) {
+        public BDDStrubber willReturn(Object toBeReturned) {
             return new BDDStubberImpl(mockitoStubber.doReturn(toBeReturned));
         }
 
-        public BDDStubber willReturn(Object toBeReturned, Object... nextToBeReturned) {
+        public BDDStrubber willReturn(Object toBeReturned, Object... nextToBeReturned) {
             return new BDDStubberImpl(mockitoStubber.doReturn(toBeReturned).doReturn(nextToBeReturned));
         }
 
-        public BDDStubber willThrow(Throwable... toBeThrown) {
+        public BDDStrubber willThrow(Throwable... toBeThrown) {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown));
         }
 
-        public BDDStubber willThrow(Class<? extends Throwable> toBeThrown) {
+        public BDDStrubber willThrow(Class<? extends Throwable> toBeThrown) {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown));
         }
 
-        public BDDStubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
+        public BDDStrubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown, nextToBeThrown));
         }
 
-        public BDDStubber willCallRealMethod() {
+        public BDDStrubber willCallRealMethod() {
             return new BDDStubberImpl(mockitoStubber.doCallRealMethod());
+        }
+    }
+
+    /**
+     * see original {@link org.mockito.stubbing.LenientStubber}
+     * @since 1.8.0
+     */
+    public interface BDDLenientStubber extends BaseBDDStubber {
+
+        /**
+         * see original {@link org.mockito.stubbing.LenientStubber#when(Object)}
+         * @since 1.8.0
+         */
+        <T> BDDMyOngoingStubbing<T> given(T mock);
+    }
+
+    private static class BDDLenientStubberImpl implements BDDLenientStubber {
+
+        private LenientStubber mockitoStubber;
+
+        public BDDLenientStubberImpl(LenientStubber stubber) {
+            this.mockitoStubber = stubber;
+        }
+
+        /**
+         * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#doAnswer(Answer)}
+         * @since 1.8.0
+         */
+        public BDDStrubber willAnswer(Answer<?> answer) {
+            return new BDDStubberImpl(mockitoStubber.doAnswer(answer));
+        }
+
+        /**
+         * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#doAnswer(Answer)}
+         * @since 1.8.0
+         */
+        public BDDStrubber will(Answer<?> answer) {
+            return new BDDStubberImpl(mockitoStubber.doAnswer(answer));
+        }
+
+        /**
+         * @deprecated please use {@link #willDoNothing()} instead
+         */
+        @Deprecated
+        public BDDStrubber willNothing() {
+            return willDoNothing();
+        }
+
+        /**
+         * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#doNothing()}
+         * @since 1.8.0
+         */
+        public BDDStrubber willDoNothing() {
+            return new BDDStubberImpl(mockitoStubber.doNothing());
+        }
+
+        /**
+         * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#doAnswer(Answer)}
+         * @since 1.8.0
+         */
+        public BDDStrubber willReturn(Object toBeReturned) {
+            return new BDDStubberImpl(mockitoStubber.doReturn(toBeReturned));
+        }
+
+        /**
+         * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#doReturn(Object, Object...)}
+         * @since 1.8.0
+         */
+        public BDDStrubber willReturn(Object toBeReturned, Object... nextToBeReturned) {
+            return new BDDStubberImpl(mockitoStubber.doReturn(toBeReturned, nextToBeReturned));
+        }
+
+        /**
+         * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#doThrow(Throwable...)}
+         * @since 1.8.0
+         */
+        public BDDStrubber willThrow(Throwable... toBeThrown) {
+            return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown));
+        }
+
+        /**
+         * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#doThrow(Class)}
+         * @since 1.8.0
+         */
+        public BDDStrubber willThrow(Class<? extends Throwable> toBeThrown) {
+            return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown));
+        }
+
+        /**
+         * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#doThrow(Class, Class[])}
+         * @since 1.8.0
+         */
+        public BDDStrubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
+            return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown, nextToBeThrown));
+        }
+
+        /**
+         * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#doCallRealMethod()}
+         * @since 1.8.0
+         */
+        public BDDStrubber willCallRealMethod() {
+            return new BDDStubberImpl(mockitoStubber.doCallRealMethod());
+        }
+
+        /**
+         * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#when(Object)}
+         * @since 1.8.0
+         */
+        @Override
+        public <T> BDDMyOngoingStubbing<T> given(T mock) {
+            OngoingStubbingImpl<T> ongoingStubbing = (OngoingStubbingImpl) Mockito.when(mock);
+            ongoingStubbing.setStrictness(Strictness.LENIENT);
+            return new BDDOngoingStubbingImpl<T>(ongoingStubbing);
         }
     }
 
@@ -458,7 +583,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doThrow(Throwable[])}
      * @since 2.1.0
      */
-    public static BDDStubber willThrow(Throwable... toBeThrown) {
+    public static BDDStrubber willThrow(Throwable... toBeThrown) {
         return new BDDStubberImpl(Mockito.doThrow(toBeThrown));
     }
 
@@ -466,7 +591,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doThrow(Class)}
      * @since 1.9.0
      */
-    public static BDDStubber willThrow(Class<? extends Throwable> toBeThrown) {
+    public static BDDStrubber willThrow(Class<? extends Throwable> toBeThrown) {
         return new BDDStubberImpl(Mockito.doThrow(toBeThrown));
     }
 
@@ -474,7 +599,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doThrow(Class)}
      * @since 1.9.0
      */
-    public static BDDStubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... throwableTypes) {
+    public static BDDStrubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... throwableTypes) {
         return new BDDStubberImpl(Mockito.doThrow(toBeThrown, throwableTypes));
     }
 
@@ -482,7 +607,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doAnswer(Answer)}
      * @since 1.8.0
      */
-    public static BDDStubber willAnswer(Answer<?> answer) {
+    public static BDDStrubber willAnswer(Answer<?> answer) {
         return new BDDStubberImpl(Mockito.doAnswer(answer));
     }
 
@@ -490,7 +615,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doAnswer(Answer)}
      * @since 2.1.0
      */
-    public static BDDStubber will(Answer<?> answer) {
+    public static BDDStrubber will(Answer<?> answer) {
         return new BDDStubberImpl(Mockito.doAnswer(answer));
     }
 
@@ -498,7 +623,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doNothing()}
      * @since 1.8.0
      */
-    public static BDDStubber willDoNothing() {
+    public static BDDStrubber willDoNothing() {
         return new BDDStubberImpl(Mockito.doNothing());
     }
 
@@ -506,7 +631,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doReturn(Object)}
      * @since 1.8.0
      */
-    public static BDDStubber willReturn(Object toBeReturned) {
+    public static BDDStrubber willReturn(Object toBeReturned) {
         return new BDDStubberImpl(Mockito.doReturn(toBeReturned));
     }
 
@@ -515,7 +640,7 @@ public class BDDMockito extends Mockito {
      * @since 2.1.0
      */
     @SuppressWarnings({"unchecked", "varargs"})
-    public static BDDStubber willReturn(Object toBeReturned, Object... toBeReturnedNext) {
+    public static BDDStrubber willReturn(Object toBeReturned, Object... toBeReturnedNext) {
         return new BDDStubberImpl(Mockito.doReturn(toBeReturned, toBeReturnedNext));
     }
 
@@ -523,7 +648,15 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doCallRealMethod()}
      * @since 1.8.0
      */
-    public static BDDStubber willCallRealMethod() {
+    public static BDDStrubber willCallRealMethod() {
         return new BDDStubberImpl(Mockito.doCallRealMethod());
+    }
+
+    /**
+     * see original {@link Mockito#lenient()}
+     * @since 1.8.0
+     */
+    public static BDDLenientStubber lenientBDD() {
+        return new BDDLenientStubberImpl(Mockito.lenient());
     }
 }

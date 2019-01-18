@@ -16,6 +16,8 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.lenientBDD;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -104,11 +106,45 @@ public class UnusedStubbingsFinderTest extends TestBase {
     }
 
     @Test
+    public void bdd_unused_and_lenient_stubbings() throws Exception {
+        given(mock1.simpleMethod(1)).willReturn("1");
+        given(mock1.simpleMethod(2)).willReturn("2");
+        lenientBDD().given(mock2.simpleMethod(3)).willReturn("3");
+
+        mock1.simpleMethod(1);
+
+        //when
+        UnusedStubbings stubbings = finder.getUnusedStubbings((List) asList(mock1, mock2));
+
+        //then
+        assertEquals(1, stubbings.size());
+        assertEquals("[mock1.simpleMethod(2); stubbed with: [Returns: 2]]",
+            stubbings.toString());
+    }
+
+    @Test
     public void some_unused_stubbings_by_location() throws Exception {
         when(mock1.simpleMethod(1)).thenReturn("1");
         when(mock2.simpleMethod(2)).thenReturn("2");
         when(mock2.simpleMethod(3)).thenReturn("3");
         lenient().when(mock2.differentMethod()).thenReturn("4"); //will not be included in results
+
+        mock2.simpleMethod(2);
+
+        //when
+        Collection stubbings = finder.getUnusedStubbingsByLocation((List) asList(mock1, mock2));
+
+        //then
+        assertEquals(2, stubbings.size());
+        assertEquals("[mock1.simpleMethod(1);, mock2.simpleMethod(3);]", stubbings.toString());
+    }
+
+    @Test
+    public void bdd_some_unused_stubbings_by_location() throws Exception {
+        given(mock1.simpleMethod(1)).willReturn("1");
+        given(mock2.simpleMethod(2)).willReturn("2");
+        given(mock2.simpleMethod(3)).willReturn("3");
+        lenientBDD().given(mock2.differentMethod()).willReturn("4"); //will not be included in results
 
         mock2.simpleMethod(2);
 
