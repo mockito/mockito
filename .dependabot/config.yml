@@ -1,0 +1,9 @@
+version: 1
+
+update_configs:
+  - package_manager: "java:gradle"
+    directory: "/"
+    update_schedule: "daily"
+    # Redundant - default repository branch by default
+    target_branch: "release/2.x"
+
