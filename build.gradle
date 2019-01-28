@@ -59,6 +59,12 @@ allprojects { proj ->
         options.warnings = false
         options.encoding = 'UTF-8'
     }
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+        options.addStringOption('charSet', 'UTF-8')
+        options.setSource('8')
+    }
     apply plugin: 'checkstyle'
     checkstyle {
        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
