@@ -15,7 +15,6 @@ import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
 import net.bytebuddy.matcher.ElementMatcher;
-import org.mockito.Mockito;
 import org.mockito.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
@@ -92,7 +91,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         boolean localMock = classLoader == features.mockedType.getClassLoader()
             && features.serializableMode != SerializableMode.ACROSS_CLASSLOADERS
             && !isComingFromJDK(features.mockedType)
-            && (loader.isDisrespectingOpenness() || handler.isOpened(features.mockedType, Mockito.class));
+            && (loader.isDisrespectingOpenness() || handler.isOpened(features.mockedType, MockAccess.class));
         String typeName;
         if (localMock || loader instanceof MultipleParentClassLoader && !isComingFromJDK(features.mockedType)) {
             typeName = features.mockedType.getName();
@@ -102,7 +101,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         String name = String.format("%s$%s$%d", typeName, "MockitoMock", Math.abs(random.nextInt()));
 
         if (localMock) {
-            handler.adjustModuleGraph(features.mockedType, Mockito.class, false, true);
+            handler.adjustModuleGraph(features.mockedType, MockAccess.class, false, true);
             for (Class<?> iFace : features.interfaces) {
                 handler.adjustModuleGraph(iFace, features.mockedType, true, false);
                 handler.adjustModuleGraph(features.mockedType, iFace, false, true);
