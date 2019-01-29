@@ -27,7 +27,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Random;
 
 import static java.lang.Thread.currentThread;
@@ -78,7 +80,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     @Override
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
         ClassLoader classLoader = new MultipleParentClassLoader.Builder()
-            .appendMostSpecific(features.mockedType)
+            .appendMostSpecific(getAllTypes(features.mockedType))
             .appendMostSpecific(features.interfaces)
             .appendMostSpecific(currentThread().getContextClassLoader())
             .appendMostSpecific(MockAccess.class)
@@ -170,6 +172,17 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         return builder.make()
             .load(classLoader, loader.resolveStrategy(features.mockedType, classLoader, localMock))
             .getLoaded();
+    }
+
+    private <T> Collection<Class<? super T>> getAllTypes(Class<T> type) {
+        Collection<Class<? super T>> supertypes = new LinkedList<Class<? super T>>();
+        supertypes.add(type);
+        Class<? super T> superType = type;
+        while (superType != null) {
+            supertypes.add(superType);
+            superType = superType.getSuperclass();
+        }
+        return supertypes;
     }
 
     private static ElementMatcher<MethodDescription> isGroovyMethod() {
