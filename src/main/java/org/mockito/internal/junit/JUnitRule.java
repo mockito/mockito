@@ -9,7 +9,7 @@ import org.junit.runners.model.Statement;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.internal.session.MockitoSessionLoggerAdapter;
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockito.junit.MockitoRule;
 

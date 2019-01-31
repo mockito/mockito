@@ -22,6 +22,8 @@ import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.session.MockitoSessionLoggerAdapter;
 import org.mockito.internal.configuration.MockAnnotationProcessor;
 import org.mockito.internal.junit.StubbingCheckingCreationListener;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -148,7 +150,7 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
      * @param context      the current extension context; never {@code null}
      */
     @Override
-    public void postProcessTestInstance(Object testInstance, ExtensionContext context){
+    public void postProcessTestInstance(Object testInstance, ExtensionContext context) {
         context.getStore(MOCKITO).put(TEST_INSTANCE, testInstance);
     }
 
@@ -187,6 +189,7 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
         MockitoSession session = Mockito.mockitoSession()
             .initMocks(testInstances.toArray())
             .strictness(actualStrictness)
+            .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
             .disableStubbingErrorReporting()
             .startMocking();
 

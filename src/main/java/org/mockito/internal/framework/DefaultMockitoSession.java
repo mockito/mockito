@@ -11,7 +11,7 @@ import org.mockito.exceptions.misusing.RedundantListenerException;
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.junit.TestFinishedEvent;
 import org.mockito.internal.junit.UniversalTestListener;
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 
 import java.util.List;

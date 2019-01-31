@@ -12,11 +12,11 @@ import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.debugging.WarningsCollector;
 import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.InternalRunner;
-import org.mockito.internal.util.ConsoleMockitoLogger;
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.plugins.MockitoLogger;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -33,7 +33,7 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner implements Filtera
     private final InternalRunner runner;
 
     public ConsoleSpammingMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
-        this(new ConsoleMockitoLogger(), new RunnerFactory().create(klass));
+        this(Plugins.getMockitoLogger(), new RunnerFactory().create(klass));
     }
 
     ConsoleSpammingMockitoJUnitRunner(MockitoLogger logger, InternalRunner runner) {
