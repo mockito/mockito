@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.session.MockitoSessionLoggerAdapter;
 import org.mockito.internal.configuration.MockAnnotationProcessor;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.quality.Strictness;
@@ -107,7 +109,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  * }
  * </code></pre>
  */
-public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCallback, AfterEachCallback, ParameterResolver {
+public class MockitoExtension implements TestInstancePostProcessor, BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
     private final static Namespace MOCKITO = create("org.mockito");
 
@@ -139,7 +141,7 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
      * @param context      the current extension context; never {@code null}
      */
     @Override
-    public void postProcessTestInstance(Object testInstance, ExtensionContext context){
+    public void postProcessTestInstance(Object testInstance, ExtensionContext context) {
         context.getStore(MOCKITO).put(TEST_INSTANCE, testInstance);
     }
 
@@ -162,6 +164,7 @@ public class MockitoExtension implements TestInstancePostProcessor,BeforeEachCal
         MockitoSession session = Mockito.mockitoSession()
             .initMocks(testInstances.toArray())
             .strictness(actualStrictness)
+            .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
             .startMocking();
 
         context.getStore(MOCKITO).put(SESSION, session);
