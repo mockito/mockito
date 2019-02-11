@@ -4,6 +4,7 @@
  */
 package org.mockito.moduletest;
 
+import java.util.concurrent.locks.Lock;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.loading.ClassInjector;
@@ -86,6 +87,34 @@ public class ModuleHandlingTest {
 
             assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
             assertThat(mock.call()).isEqualTo("foo");
+        } finally {
+            Thread.currentThread().setContextClassLoader(contextLoader);
+        }
+    }
+
+    @Test
+    public void can_define_class_in_open_java_util_module() throws Exception {
+        assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
+
+        Path jar = modularJar(true, true, true);
+        ModuleLayer layer = layer(jar, true);
+
+        ClassLoader loader = layer.findLoader("mockito.test");
+        Class<?> type = loader.loadClass("java.util.concurrent.locks.Lock");
+
+        ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader(loader);
+        try {
+            Class<?> mockito = loader.loadClass(Mockito.class.getName());
+            @SuppressWarnings("unchecked")
+            Lock mock = (Lock) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.tryLock());
+            loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenReturn", Object.class).invoke(stubbing, true);
+
+            boolean relocated = !Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable();
+            String prefix = relocated ? "org.mockito.codegen.Lock$MockitoMock$" : "java.util.concurrent.locks.Lock$MockitoMock$";
+            assertThat(mock.getClass().getName()).startsWith(prefix);
+            assertThat(mock.tryLock()).isEqualTo(true);
         } finally {
             Thread.currentThread().setContextClassLoader(contextLoader);
         }

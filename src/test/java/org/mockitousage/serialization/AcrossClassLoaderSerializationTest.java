@@ -33,7 +33,7 @@ public class AcrossClassLoaderSerializationTest {
         byte[] bytes = create_mock_and_serialize_it_in_class_loader_A();
 
         Object the_deserialized_mock = read_stream_and_deserialize_it_in_class_loader_B(bytes);
-        assertThat(the_deserialized_mock.getClass().getName()).startsWith("org.mockito.codegenAClassToBeMockedInThisTestOnlyAndInCallablesOnly");
+        assertThat(the_deserialized_mock.getClass().getName()).startsWith("org.mockito.codegen.AClassToBeMockedInThisTestOnlyAndInCallablesOnly");
     }
 
     private Object read_stream_and_deserialize_it_in_class_loader_B(byte[] bytes) throws Exception {
