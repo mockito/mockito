@@ -10,14 +10,18 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.MockSettings;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.RedundantListenerException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.InlineMockMaker;
 import org.mockitoutil.TestBase;
 
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.mockitoutil.ThrowableAssert.assertThat;
 
@@ -110,6 +114,36 @@ public class DefaultMockitoFrameworkTest extends TestBase {
                     "When you add a listener, don't forget to remove the listener afterwards:\n" +
                     "  Mockito.framework().removeListener(myListener);\n" +
                     "For more information, see the javadoc for RedundantListenerException class.");
+    }
+
+    @Test
+    public void clears_all_mocks() {
+        List list1 = mock(List.class);
+        assertTrue(mockingDetails(list1).isMock());
+        List list2 = mock(List.class);
+        assertTrue(mockingDetails(list2).isMock());
+
+        framework.clearAllMocks();
+
+        if (Plugins.getMockMaker() instanceof InlineMockMaker) {
+            assertFalse(mockingDetails(list1).isMock());
+            assertFalse(mockingDetails(list2).isMock());
+        }
+    }
+
+    @Test
+    public void clears_mock() {
+        List list1 = mock(List.class);
+        assertTrue(mockingDetails(list1).isMock());
+        List list2 = mock(List.class);
+        assertTrue(mockingDetails(list2).isMock());
+
+        framework.clearMock(list1);
+
+        if (Plugins.getMockMaker() instanceof InlineMockMaker) {
+            assertFalse(mockingDetails(list1).isMock());
+            assertTrue(mockingDetails(list2).isMock());
+        }
     }
 
     private static class MyListener implements MockitoListener {}

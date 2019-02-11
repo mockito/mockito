@@ -92,4 +92,26 @@ public interface MockitoFramework {
      */
     @Incubating
     InvocationFactory getInvocationFactory();
+
+    /**
+     * Clears up internal state of all existing mocks. This is useful when testing with {@link org.mockito.plugins.InlineMockMaker}
+     * which may hold references to mocks and leak memory. No interaction to any mock created previously is not allowed
+     * after calling this method.
+     *
+     * @since 2.24.8
+     * @see #clearMock(Object)
+     */
+    @Incubating
+    void clearAllMocks();
+
+    /**
+     * Clears up internal state of the mock. This is useful when testing with {@link org.mockito.plugins.InlineMockMaker}
+     * which may hold references to mocks and leak memory. No interaction to this mock is allowed after calling this method.
+     *
+     * @param mock the mock to clear up
+     * @since 2.24.8
+     * @see #clearAllMocks()
+     */
+    @Incubating
+    void clearMock(Object mock);
 }

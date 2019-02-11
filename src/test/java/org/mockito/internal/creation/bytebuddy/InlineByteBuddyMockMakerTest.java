@@ -287,6 +287,31 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
                 .getOnly().getParameters().getOnly().getName()).isEqualTo("bar");
     }
 
+    @Test
+    public void test_clear_mock_clears_handler() {
+        MockCreationSettings<GenericSubClass> settings = settingsFor(GenericSubClass.class);
+        GenericSubClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
+        assertThat(mockMaker.getHandler(proxy)).isNotNull();
+        mockMaker.clearMock(proxy);
+        assertThat(mockMaker.getHandler(proxy)).isNull();
+    }
+
+    @Test
+    public void test_clear_all_mock_clears_handler() {
+        MockCreationSettings<GenericSubClass> settings = settingsFor(GenericSubClass.class);
+        GenericSubClass proxy1 = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
+        assertThat(mockMaker.getHandler(proxy1)).isNotNull();
+
+        settings = settingsFor(GenericSubClass.class);
+        GenericSubClass proxy2 = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
+        assertThat(mockMaker.getHandler(proxy1)).isNotNull();
+
+        mockMaker.clearAllMocks();
+
+        assertThat(mockMaker.getHandler(proxy1)).isNull();
+        assertThat(mockMaker.getHandler(proxy2)).isNull();
+    }
+
     private static <T> MockCreationSettings<T> settingsFor(Class<T> type, Class<?>... extraInterfaces) {
         MockSettingsImpl<T> mockSettings = new MockSettingsImpl<T>();
         mockSettings.setTypeToMock(type);
