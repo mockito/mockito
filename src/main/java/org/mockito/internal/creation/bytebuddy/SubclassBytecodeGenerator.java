@@ -98,7 +98,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         if (localMock || loader instanceof MultipleParentClassLoader && !isComingFromJDK(features.mockedType)) {
             typeName = features.mockedType.getName();
         } else {
-            typeName = InjectionBase.class.getPackage().getName() + features.mockedType.getSimpleName();
+            typeName = InjectionBase.class.getPackage().getName() + "." + features.mockedType.getSimpleName();
         }
         String name = String.format("%s$%s$%d", typeName, "MockitoMock", Math.abs(random.nextInt()));
 
