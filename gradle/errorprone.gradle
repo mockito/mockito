@@ -10,3 +10,7 @@ if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
 dependencies {
     errorprone libraries.errorprone
 }
+
+tasks.named("compileTestJava").configure {
+    options.errorprone.errorproneArgs << "-Xep:MockitoCast:OFF"
+}

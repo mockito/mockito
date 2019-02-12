@@ -53,6 +53,15 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
             return delegate().returnValueFor(rawType);
         }
 
+        // When dealing with erasured generics, we only receive the Object type as rawType. At this
+        // point, there is nothing to salvage for Mockito. Instead of trying to be smart and generate
+        // a mock that would potentially match the return signature, instead return `null`. This
+        // is valid per the CheckCast JVM instruction and is better than causing a ClassCastException
+        // on runtime.
+        if (rawType.equals(Object.class)) {
+            return null;
+        }
+
         return deepStub(invocation, returnTypeGenericMetadata);
     }
 

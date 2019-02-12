@@ -14,6 +14,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unused")
 public class ReturnsGenericDeepStubsTest {
@@ -109,5 +110,27 @@ public class ReturnsGenericDeepStubsTest {
         // following assignment needed to create a ClassCastException on the call site (i.e. : here)
         StringBuilder stringBuilder_assignment_that_should_throw_a_CCE =
                 mock.twoTypeParams(new StringBuilder()).append(2).append(3);
+    }
+
+    class WithGenerics<T> {
+        T execute() {
+            throw new IllegalArgumentException();
+        }
+    }
+    class SubClass<S> extends WithGenerics<S> {}
+
+    class UserOfSubClass {
+        SubClass<String> generate() {
+            return null;
+        }
+    }
+
+    @Test
+    public void can_handle_deep_stubs_with_generics_at_end_of_deep_invocation() {
+        UserOfSubClass mock = mock(UserOfSubClass.class, RETURNS_DEEP_STUBS);
+
+        when(mock.generate().execute()).thenReturn("sub");
+
+        assertThat(mock.generate().execute()).isEqualTo("sub");
     }
 }
