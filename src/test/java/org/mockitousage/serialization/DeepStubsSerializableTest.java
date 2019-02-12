@@ -45,7 +45,7 @@ public class DeepStubsSerializableTest {
         assertThat(deserialized_deep_stub.iterator().next().add("yes")).isEqualTo(true);
     }
 
-    @Test(expected = ClassCastException.class)
+    @Test(expected = NullPointerException.class)
     public void should_discard_generics_metadata_when_serialized_then_disabling_deep_stubs_with_generics() throws Exception {
         // given
         ListContainer deep_stubbed = mock(ListContainer.class, withSettings().defaultAnswer(RETURNS_DEEP_STUBS).serializable());
