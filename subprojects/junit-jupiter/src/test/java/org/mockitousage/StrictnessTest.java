@@ -4,6 +4,10 @@
  */
 package org.mockitousage;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,11 +21,9 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
-import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-
-import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
@@ -118,6 +120,147 @@ class StrictnessTest {
         assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
     }
 
+    @ExtendWith(MockitoExtension.class)
+    static class UnusedStubInTestsStillFail {
+
+        @Mock
+        private Dependency dependency;
+
+        private SystemUnderTest systemUnderTest;
+
+        @BeforeEach
+        void setUp() {
+            systemUnderTest = new SystemUnderTest(dependency);
+        }
+
+        @Test
+        void shouldDoWork() {
+            //Given
+            Mockito.when(dependency.doWork()).thenReturn(true);
+
+            //When
+            systemUnderTest.doThing(true);
+
+            //Then
+            Mockito.verify(dependency).doWork();
+        }
+
+        @Test
+        void shouldDoNoWork() {
+            //Given
+            Mockito.when(dependency.doWork()).thenReturn(true);
+
+            //When
+            systemUnderTest.doThing(false);
+
+            //Then
+            Mockito.verifyZeroInteractions(dependency);
+        }
+
+
+        private class SystemUnderTest {
+
+            private final Dependency dependency;
+
+
+            private SystemUnderTest(final Dependency dependency) {
+                this.dependency = dependency;
+            }
+
+
+            boolean doThing(boolean works) {
+                if (works) {
+                    return dependency.doWork();
+                } else {
+                    return false;
+                }
+            }
+        }
+
+    }
+
+    @Test
+    void unnessesary_stubbing_in_test_still_caught() {
+        final Map<String, TestExecutionResult> resultsMap = invokeTestClassAndRetrieveClassResult(UnusedStubInTestsStillFail.class);
+
+        assertThat(resultsMap.get("shouldDoWork()").getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+        assertThat(resultsMap.get("shouldDoNoWork()").getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
+        assertThat(resultsMap.get("shouldDoNoWork()").getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
+    }
+
+    @ExtendWith(MockitoExtension.class)
+    static class UseStubsAtLeastOnceAcrossTests {
+
+        @Mock
+        private Dependency dependency;
+
+        private UseStubsAtLeastOnceAcrossTests.SystemUnderTest systemUnderTest;
+
+        @BeforeEach
+        void setUp() {
+            Mockito.when(dependency.doWork()).thenReturn(true);
+            systemUnderTest = new UseStubsAtLeastOnceAcrossTests.SystemUnderTest(dependency);
+        }
+
+        @Test
+        void shouldDoWork() {
+            //Given
+
+            //When
+            systemUnderTest.doThing(true);
+
+            //Then
+            Mockito.verify(dependency).doWork();
+        }
+
+        @Test
+        void shouldDoNoWork() {
+            //Given
+
+            //When
+            systemUnderTest.doThing(false);
+
+            //Then
+            Mockito.verifyZeroInteractions(dependency);
+        }
+
+
+        private class SystemUnderTest {
+
+            private final Dependency dependency;
+
+
+            private SystemUnderTest(final Dependency dependency) {
+                this.dependency = dependency;
+            }
+
+
+            boolean doThing(boolean works) {
+                if (works) {
+                    return dependency.doWork();
+                } else {
+                    return false;
+                }
+            }
+        }
+
+    }
+
+    @Test
+    void use_stubs_at_least_once_across_all_test_cases() {
+        final Map<String, TestExecutionResult> resultsMap = invokeTestClassAndRetrieveClassResult(UseStubsAtLeastOnceAcrossTests.class);
+
+        assertThat(resultsMap.get("shouldDoWork()").getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+        assertThat(resultsMap.get("shouldDoNoWork()").getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+    }
+
+    private interface Dependency {
+        boolean doWork();
+
+        boolean workDone();
+
+    }
+
     private TestExecutionResult invokeTestClassAndRetrieveMethodResult(Class<?> clazz) {
         LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
             .selectors(
@@ -132,7 +275,7 @@ class StrictnessTest {
         launcher.registerTestExecutionListeners(new TestExecutionListener() {
             @Override
             public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-                if (testIdentifier.getDisplayName().endsWith("()")) {
+                if (testIdentifier.getType().isTest()) {
                     result[0] = testExecutionResult;
                 }
             }
@@ -142,5 +285,28 @@ class StrictnessTest {
         launcher.execute(request);
 
         return result[0];
+    }
+
+    private Map<String, TestExecutionResult> invokeTestClassAndRetrieveClassResult(Class<?> clazz) {
+        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+                                                                          .selectors(selectClass(clazz))
+                                                                          .build();
+
+        Launcher launcher = LauncherFactory.create();
+
+        final Map<String, TestExecutionResult> results = new HashMap<>();
+
+        launcher.registerTestExecutionListeners(new TestExecutionListener() {
+            @Override
+            public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
+                if (testIdentifier.isTest()) {
+                    results.put(testIdentifier.getDisplayName(), testExecutionResult);
+                }
+            }
+        });
+
+        launcher.execute(request);
+
+        return results;
     }
 }
