@@ -181,7 +181,7 @@ class StrictnessTest {
 
     @Test
     void unnessesary_stubbing_in_test_still_caught() {
-        final Map<String, TestExecutionResult> resultsMap = invokeTestClassAndRetrieveClassResult(UnusedStubInTestsStillFail.class);
+        final Map<String, TestExecutionResult> resultsMap = invokeTestClassAndRetrieveMethodResults(UnusedStubInTestsStillFail.class);
 
         assertThat(resultsMap.get("shouldDoWork()").getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
         assertThat(resultsMap.get("shouldDoNoWork()").getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
@@ -248,7 +248,7 @@ class StrictnessTest {
 
     @Test
     void use_stubs_at_least_once_across_all_test_cases() {
-        final Map<String, TestExecutionResult> resultsMap = invokeTestClassAndRetrieveClassResult(UseStubsAtLeastOnceAcrossTests.class);
+        final Map<String, TestExecutionResult> resultsMap = invokeTestClassAndRetrieveMethodResults(UseStubsAtLeastOnceAcrossTests.class);
 
         assertThat(resultsMap.get("shouldDoWork()").getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
         assertThat(resultsMap.get("shouldDoNoWork()").getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
@@ -287,7 +287,7 @@ class StrictnessTest {
         return result[0];
     }
 
-    private Map<String, TestExecutionResult> invokeTestClassAndRetrieveClassResult(Class<?> clazz) {
+    private Map<String, TestExecutionResult> invokeTestClassAndRetrieveMethodResults(Class<?> clazz) {
         LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
                                                                           .selectors(selectClass(clazz))
                                                                           .build();
