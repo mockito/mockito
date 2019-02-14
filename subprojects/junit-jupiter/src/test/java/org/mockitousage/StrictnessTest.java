@@ -76,11 +76,10 @@ class StrictnessTest {
     void session_can_retrieve_strictness_from_parent_class() {
         Map<String, TestExecutionResult> result = invokeTestClassAndRetrieveMethodResults(ConfiguredStrictStubs.class);
 
-        assertThat(result.get("StrictnessTest$ConfiguredStrictStubs").getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
-        assertThat(result.get("StrictnessTest$ConfiguredStrictStubs").getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
-        //TODO should fail at nested level rather than parent, ideally fail at test level
-//        assertThat(result.get("NestedStrictStubs").getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
-//        assertThat(result.get("NestedStrictStubs").getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
+        assertThat(result.get("StrictnessTest$ConfiguredStrictStubs").getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+        assertThat(result.get("StrictnessTest$ConfiguredStrictStubs").getThrowable().orElse(null)).isNull();
+        assertThat(result.get("NestedStrictStubs").getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
+        assertThat(result.get("NestedStrictStubs").getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
 //        assertThat(result.get("should_throw_an_exception_on_strict_stubs_in_a_nested_class()").getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
 //        assertThat(result.get("should_throw_an_exception_on_strict_stubs_in_a_nested_class()").getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
     }
