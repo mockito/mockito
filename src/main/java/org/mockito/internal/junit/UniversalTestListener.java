@@ -62,7 +62,7 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
         //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
         if (event.getFailure() == null && !stubbingLookupListener.isMismatchesReported()) {
             final Collection<Invocation> unusedStubbingsByLocation = new UnusedStubbingsFinder().getUnusedStubbingsByLocation(mocks);
-            new UnusedStubbings(Collections.<Stubbing>emptyList()).reportUnused(unusedStubbingsByLocation);
+//            new UnusedStubbings(Collections.<Stubbing>emptyList()).reportUnused(unusedStubbingsByLocation);
         }
     }
 

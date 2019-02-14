@@ -5,19 +5,27 @@
 package org.mockito.junit.jupiter;
 
 
-import org.junit.jupiter.api.extension.*;
-import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoSession;
-import org.mockito.internal.configuration.MockAnnotationProcessor;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.quality.Strictness;
-
 import java.lang.reflect.Parameter;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import org.junit.jupiter.api.extension.AfterAllCallback;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolutionException;
+import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.api.extension.TestInstancePostProcessor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoSession;
+import org.mockito.internal.configuration.MockAnnotationProcessor;
+import org.mockito.internal.junit.StubbingCheckingCreationListener;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.quality.Strictness;
 
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
@@ -107,7 +115,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.findAnnotatio
  * }
  * </code></pre>
  */
-public class MockitoExtension implements TestInstancePostProcessor, BeforeEachCallback, AfterEachCallback, ParameterResolver {
+public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCallback, BeforeEachCallback, AfterEachCallback, AfterAllCallback, ParameterResolver {
 
     private final static Namespace MOCKITO = create("org.mockito");
 
@@ -143,6 +151,17 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeEachCa
         context.getStore(MOCKITO).put(TEST_INSTANCE, testInstance);
     }
 
+    @Override
+    public void beforeAll(ExtensionContext context) {
+        context.getStore(MOCKITO).getOrComputeIfAbsent("MockCreatedListener", k ->
+                                                       {
+                                                           StubbingCheckingCreationListener creationListener = new StubbingCheckingCreationListener();
+                                                           Mockito.framework().addListener(creationListener);
+                                                           return creationListener;
+                                                       },
+                                                       StubbingCheckingCreationListener.class);
+    }
+
     /**
      * Callback that is invoked <em>before</em> each test is invoked.
      *
@@ -163,7 +182,6 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeEachCa
                                         .initMocks(testInstances.toArray())
                                         .strictness(actualStrictness)
                                         .startMocking();
-
         context.getStore(MOCKITO).put(SESSION, session);
     }
 
@@ -209,6 +227,15 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeEachCa
     public void afterEach(ExtensionContext context) {
         context.getStore(MOCKITO).remove(SESSION, MockitoSession.class)
                .finishMocking();
+    }
+
+    @Override
+    public void afterAll(ExtensionContext context) throws Exception {
+        final StubbingCheckingCreationListener mockCreatedListener = context.getStore(MOCKITO).remove("MockCreatedListener", StubbingCheckingCreationListener.class);
+        if (mockCreatedListener != null) {
+            Mockito.framework().removeListener(mockCreatedListener);
+            mockCreatedListener.checkStubbing(context.getTestClass().orElse(null));
+        }
     }
 
     @Override
