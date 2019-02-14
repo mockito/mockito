@@ -123,6 +123,7 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
 
     private final static String SESSION = "session";
     private final static String TEST_INSTANCE = "testInstance";
+    private static final String MOCK_CREATED_LISTENER = "MockCreatedListener";
 
     private final Strictness strictness;
 
@@ -155,13 +156,18 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
 
     @Override
     public void beforeAll(ExtensionContext context) {
-        context.getStore(MOCKITO).getOrComputeIfAbsent("MockCreatedListener", k ->
-                                                       {
-                                                           StubbingCheckingCreationListener creationListener = new StubbingCheckingCreationListener();
-                                                           Mockito.framework().addListener(creationListener);
-                                                           return creationListener;
-                                                       },
-                                                       StubbingCheckingCreationListener.class);
+        final StubbingCheckingCreationListener mockCreatedListener = context.getStore(MOCKITO).getOrComputeIfAbsent(MOCK_CREATED_LISTENER, k ->
+                                                                                                                    {
+                                                                                                                        StubbingCheckingCreationListener creationListener = new StubbingCheckingCreationListener();
+                                                                                                                        Mockito.framework().addListener(creationListener);
+                                                                                                                        return creationListener;
+                                                                                                                    },
+                                                                                                                    StubbingCheckingCreationListener.class);
+        Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
+                                          .map(MockitoSettings::strictness)
+                                          .orElse(strictness);
+
+        mockCreatedListener.strictnessForTest(context.getDisplayName(), actualStrictness);
     }
 
     /**
@@ -187,6 +193,9 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
             .startMocking();
 
         context.getStore(MOCKITO).put(SESSION, session);
+
+        final String displayName = context.getDisplayName();
+        context.getStore(MOCKITO).get(MOCK_CREATED_LISTENER, StubbingCheckingCreationListener.class).strictnessForTest(displayName, actualStrictness);
     }
 
     private Optional<MockitoSettings> retrieveAnnotationFromTestClasses(final ExtensionContext context) {
@@ -235,10 +244,20 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
 
     @Override
     public void afterAll(ExtensionContext context) throws Exception {
-        final StubbingCheckingCreationListener mockCreatedListener = context.getStore(MOCKITO).remove("MockCreatedListener", StubbingCheckingCreationListener.class);
-        if (mockCreatedListener != null) {
-            Mockito.framework().removeListener(mockCreatedListener);
-            mockCreatedListener.checkStubbing(context.getTestClass().orElse(null));
+        final ExtensionContext.Store mockitoStore = context.getStore(MOCKITO);
+        final StubbingCheckingCreationListener mockCreatedListener = mockitoStore.get(MOCK_CREATED_LISTENER, StubbingCheckingCreationListener.class);
+        try {
+            if (mockCreatedListener != null) {
+                mockCreatedListener.checkStubbing(context.getTestClass().orElse(null), context.getDisplayName());
+            }
+        } finally {
+            //Remove does not check parent contexts so only remove only returns a value in the context which added it.
+            //Finally to ensure it happens even if we found unused stubbings
+            final StubbingCheckingCreationListener removedListener = mockitoStore.remove(MOCK_CREATED_LISTENER, StubbingCheckingCreationListener.class);
+            if (removedListener != null) {
+                Mockito.framework().removeListener(removedListener);
+                removedListener.checkStubbing(context.getTestClass().orElse(null));
+            }
         }
     }
 
