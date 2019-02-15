@@ -50,7 +50,7 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
 
         switch (currentStrictness) {
             case WARN: emitWarnings(logger, event, createdMocks); break;
-            case STRICT_STUBS: reportUnusedStubs(event, createdMocks);break;
+            case STRICT_STUBS: reportUnusedStubs(event, createdMocks); break;
             case LENIENT: break;
             default: throw new IllegalStateException("Unknown strictness: " + currentStrictness);
         }
@@ -59,7 +59,8 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
     private void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
         //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
         if (reportStubbingErrors && event.getFailure() == null && !stubbingLookupListener.isMismatchesReported()) {
-            new UnusedStubbingsFinder().getUnusedStubbings(mocks).reportUnused();
+            UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks);
+            unused.reportUnused();
         }
     }
 

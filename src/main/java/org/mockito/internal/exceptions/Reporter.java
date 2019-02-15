@@ -866,7 +866,7 @@ public class Reporter {
         ));
     }
 
-    public static void unncessaryStubbingException(Collection<Invocation> unused) {
+    public static void unncessaryStubbingException(List<Invocation> unused) {
         throw formatUnncessaryStubbingException(null, unused);
     }
 
