@@ -8,7 +8,6 @@ import org.mockito.Incubating;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
 import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
-import org.mockito.internal.junit.UniversalTestListener;
 import org.mockito.quality.Strictness;
 
 /**

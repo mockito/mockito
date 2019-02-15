@@ -100,7 +100,6 @@ class StrictnessTest {
     }
 
     @Test
-    @Disabled("Parent context still fails")
     void session_retrieves_closest_strictness_configuration() {
         Map<String, TestExecutionResult> result = invokeTestClassAndRetrieveMethodResults(ParentConfiguredStrictStubs.class);
         for (Map.Entry<String, TestExecutionResult> testResult : result.entrySet()) {

@@ -189,6 +189,7 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
         MockitoSession session = Mockito.mockitoSession()
                                         .initMocks(testInstances.toArray())
                                         .strictness(actualStrictness)
+                                        .disableStubbingErrorReporting()
                                         .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
                                         .disableStubbingErrorReporting()
                                         .startMocking();

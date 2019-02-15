@@ -14,7 +14,6 @@ import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
-import org.mockito.stubbing.Stubbing;
 
 /**
  * Universal test listener that behaves accordingly to current setting of strictness.
@@ -60,8 +59,7 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
     private void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
         //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
         if (reportStubbingErrors && event.getFailure() == null && !stubbingLookupListener.isMismatchesReported()) {
-            final Collection<Invocation> unusedStubbingsByLocation = new UnusedStubbingsFinder().getUnusedStubbingsByLocation(mocks);
-//            new UnusedStubbings(Collections.<Stubbing>emptyList()).reportUnused(unusedStubbingsByLocation);
+            new UnusedStubbingsFinder().getUnusedStubbings(mocks).reportUnused();
         }
     }
 
