@@ -27,10 +27,12 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
     private Map<Object, MockCreationSettings> mocks = new IdentityHashMap<Object, MockCreationSettings>();
     private DefaultStubbingLookupListener stubbingLookupListener;
     private boolean listenerDirty;
+    private boolean reportStubbingErrors;
 
-    public UniversalTestListener(Strictness initialStrictness, MockitoLogger logger) {
+    public UniversalTestListener(Strictness initialStrictness, MockitoLogger logger, boolean reportStubbingErrors) {
         this.currentStrictness = initialStrictness;
         this.logger = logger;
+        this.reportStubbingErrors = reportStubbingErrors;
 
         //creating single stubbing lookup listener per junit rule instance / test method
         //this way, when strictness is updated in the middle of the test it will affect the behavior of the stubbing listener
@@ -55,9 +57,8 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
 
     private void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
         //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
-        if (event.getFailure() == null && !stubbingLookupListener.isMismatchesReported()) {
-            UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks);
-            unused.reportUnused();
+        if (reportStubbingErrors && event.getFailure() == null && !stubbingLookupListener.isMismatchesReported()) {
+            new UnusedStubbingsFinder().getUnusedStubbings(mocks).reportUnused();
         }
     }
 

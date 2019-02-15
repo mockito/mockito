@@ -190,6 +190,7 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
             .initMocks(testInstances.toArray())
             .strictness(actualStrictness)
             .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
+            .disableStubbingErrorReporting()
             .startMocking();
 
         context.getStore(MOCKITO).put(SESSION, session);

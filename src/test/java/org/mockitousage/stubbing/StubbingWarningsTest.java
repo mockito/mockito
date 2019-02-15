@@ -28,7 +28,7 @@ public class StubbingWarningsTest {
     @Mock IMethods mock;
 
     SimpleMockitoLogger logger = new SimpleMockitoLogger();
-    MockitoSession mockito = new DefaultMockitoSession(singletonList((Object) this), TEST_NAME, Strictness.WARN, logger);
+    MockitoSession mockito = new DefaultMockitoSession(singletonList((Object) this), TEST_NAME, Strictness.WARN, logger, true);
 
     @After public void after() {
         StateMaster stateMaster = new StateMaster();
