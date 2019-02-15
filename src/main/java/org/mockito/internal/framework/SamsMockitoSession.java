@@ -74,24 +74,4 @@ public class SamsMockitoSession implements MockitoSession {
 
     }
 
-    @Override
-    public void sessionFinished(final Throwable failure) {
-
-        listener.testFinished(new TestFinishedEvent() {
-            @Override
-            public Throwable getFailure() {
-                return failure;
-            }
-
-            @Override
-            public String getTestName() {
-                return name;
-            }
-
-            @Override
-            public boolean isRunFinished() {
-                return true;
-            }
-        });
-    }
 }

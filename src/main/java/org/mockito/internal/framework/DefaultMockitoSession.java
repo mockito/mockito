@@ -83,8 +83,4 @@ public class DefaultMockitoSession implements MockitoSession {
         }
     }
 
-    @Override
-    public void sessionFinished(Throwable failure) {
-        finishMocking(failure);
-    }
 }
