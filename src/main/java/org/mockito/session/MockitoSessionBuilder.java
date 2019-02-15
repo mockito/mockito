@@ -35,7 +35,7 @@ public interface MockitoSessionBuilder {
      * See code sample in {@link MockitoSession}.
      *
      * @param testClassInstance test class instance that contains fields with Mockito annotations to be initialized.
-     *                          Passing {@code null} is permitted but will be ignored.
+     *  Passing {@code null} is permitted but will be ignored.
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @since 2.7.0
      */
@@ -52,7 +52,7 @@ public interface MockitoSessionBuilder {
      * This method calls {@link #initMocks(Object)} for each passed test class instance.
      *
      * @param testClassInstances test class instances that contains fields with Mockito annotations to be initialized.
-     *                           Passing {@code null} or an empty array is permitted but will be ignored.
+     *  Passing {@code null} or an empty array is permitted but will be ignored.
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @see #initMocks(Object)
      * @since 2.15.0
@@ -70,10 +70,10 @@ public interface MockitoSessionBuilder {
      * a {@code MockitoSession} for direct use, users are not expected to call it.
      *
      * @param name of {@code MockitoSession} instance.
-     *             Passing {@code null} is permitted and will make the session use a default value.
-     *             The current default is the name of the last test class instance passed to
-     *             {@link #initMocks(Object)} or {@link #initMocks(Object...)}, if available;
-     *             otherwise, {@code "<Unnamed Session>"} is used.
+     *  Passing {@code null} is permitted and will make the session use a default value.
+     *  The current default is the name of the last test class instance passed to
+     *  {@link #initMocks(Object)} or {@link #initMocks(Object...)}, if available;
+     *  otherwise, {@code "<Unnamed Session>"} is used.
      *
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @see org.mockito.quality.MockitoHint
@@ -87,8 +87,8 @@ public interface MockitoSessionBuilder {
      * See examples in {@link MockitoSession}.
      *
      * @param strictness for {@code MockitoSession} instance.
-     *                   Passing {@code null} is permitted and will make the session use a default value.
-     *                   The current default is {@link Strictness#STRICT_STUBS}.
+     *  Passing {@code null} is permitted and will make the session use a default value.
+     *  The current default is {@link Strictness#STRICT_STUBS}.
      *
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @since 2.7.0
@@ -105,8 +105,8 @@ public interface MockitoSessionBuilder {
      * Instead of using this method, please consider setting strictness with {@link #strictness(Strictness)}.
      *
      * @param logger for warnings emitted when finishing {@code MockitoSession}.
-     *               Passing {@code null} is permitted and will make the session use a default value.
-     *               By default, warnings will be logged to the console.
+     *  Passing {@code null} is permitted and will make the session use a default value.
+     *  By default, warnings will be logged to the console.
      *
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @see org.mockito.quality.MockitoHint
