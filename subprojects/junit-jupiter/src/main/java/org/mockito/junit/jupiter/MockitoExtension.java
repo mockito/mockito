@@ -148,7 +148,7 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
      * @param context      the current extension context; never {@code null}
      */
     @Override
-    public void postProcessTestInstance(Object testInstance, ExtensionContext context) {
+    public void postProcessTestInstance(Object testInstance, ExtensionContext context){
         context.getStore(MOCKITO).put(TEST_INSTANCE, testInstance);
     }
 
@@ -181,14 +181,15 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
         this.collectParentTestInstances(context, testInstances);
 
         Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
-                                          .map(MockitoSettings::strictness)
-                                          .orElse(strictness);
+            .map(MockitoSettings::strictness)
+            .orElse(strictness);
 
         MockitoSession session = Mockito.mockitoSession()
-                                        .initMocks(testInstances.toArray())
-                                        .strictness(actualStrictness)
-                                        .disableStubbingErrorReporting()
-                                        .startMocking();
+            .initMocks(testInstances.toArray())
+            .strictness(actualStrictness)
+            .disableStubbingErrorReporting()
+            .startMocking();
+
         context.getStore(MOCKITO).put(SESSION, session);
 
         final String displayName = context.getDisplayName();
@@ -236,7 +237,7 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
     @Override
     public void afterEach(ExtensionContext context) {
         context.getStore(MOCKITO).remove(SESSION, MockitoSession.class)
-               .finishMocking();
+                .finishMocking();
     }
 
     @Override
