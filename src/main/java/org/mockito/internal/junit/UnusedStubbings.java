@@ -56,7 +56,7 @@ public class UnusedStubbings {
         for (Stubbing stubbing : unused) {
             invocations.add(stubbing.getInvocation());
         }
-        reportUnused(invocations, null);
+        Reporter.unncessaryStubbingException(invocations);
     }
 
     void reportUnused(Collection<Invocation> invocations, Class<?> testClass) {

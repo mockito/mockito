@@ -150,7 +150,7 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeAllCal
      * @param context      the current extension context; never {@code null}
      */
     @Override
-    public void postProcessTestInstance(Object testInstance, ExtensionContext context) {
+    public void postProcessTestInstance(Object testInstance, ExtensionContext context){
         context.getStore(MOCKITO).put(TEST_INSTANCE, testInstance);
     }
 
