@@ -7,8 +7,6 @@ package org.mockito.internal.session;
 import org.mockito.MockitoSession;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.framework.DefaultMockitoSession;
-import org.mockito.internal.framework.SamsMockitoSession;
-import org.mockito.internal.junit.UniversalTestListener;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
