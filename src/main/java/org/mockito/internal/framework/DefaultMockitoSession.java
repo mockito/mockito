@@ -66,11 +66,6 @@ public class DefaultMockitoSession implements MockitoSession {
             }
 
             @Override
-            public boolean isRunFinished() {
-                return true;
-            }
-
-            @Override
             public String getTestName() {
                 return name;
             }

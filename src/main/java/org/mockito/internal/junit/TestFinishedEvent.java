@@ -10,6 +10,4 @@ public interface TestFinishedEvent {
 
     String getTestName();
 
-    boolean isRunFinished();
-
 }
