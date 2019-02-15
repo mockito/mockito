@@ -100,12 +100,10 @@ class StrictnessTest {
     }
 
     @Test
-    @Disabled("Parent context still fails")
     void session_retrieves_closest_strictness_configuration() {
         Map<String, TestExecutionResult> result = invokeTestClassAndRetrieveMethodResults(ParentConfiguredStrictStubs.class);
-        //TODO track strictness
         for (Map.Entry<String, TestExecutionResult> testResult : result.entrySet()) {
-            assertThat(testResult.getValue()).withFailMessage(testResult.getKey() + " should have been SUCCESSFUL but was " + testResult.getValue()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+            assertThat(testResult.getValue().getStatus()).withFailMessage(testResult.getKey() + " should have been SUCCESSFUL but was " + testResult.getValue()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
         }
     }
 

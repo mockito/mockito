@@ -43,11 +43,13 @@ public class StubbingCheckingCreationListener implements MockCreationListener {
 
         final UnusedStubbingsFinder unusedStubbingsFinder = new UnusedStubbingsFinder();
         Collection<Invocation> unusedStubbingsByLocation = unusedStubbingsFinder.getUnusedStubbingsByLocation(mocks);
-        final Set<DefaultStubbingLookupListener> unreportedStubbingProblems = stubbingListeners.values().stream().filter(defaultStubbingLookupListener -> !defaultStubbingLookupListener.isMismatchesReported()).collect(Collectors.toSet());
+        final Set<DefaultStubbingLookupListener> unreportedStubbingProblems = stubbingListeners.entrySet().stream()
+               .filter(defaultStubbingLookupListener -> !defaultStubbingLookupListener.getValue().isMismatchesReported()
+                   && strictnessByTest.getOrDefault(defaultStubbingLookupListener.getKey(), Strictness.STRICT_STUBS) == Strictness.STRICT_STUBS)
+               .map(Map.Entry::getValue)
+               .collect(Collectors.toSet());
 
-        if (unusedStubbingsByLocation.isEmpty() && unreportedStubbingProblems.isEmpty()) {
-            return;
-        } else {
+        if (!unusedStubbingsByLocation.isEmpty() && !unreportedStubbingProblems.isEmpty()) {
             new UnusedStubbings(Collections.emptyList()).reportUnused(unusedStubbingsByLocation, testClass);
         }
     }

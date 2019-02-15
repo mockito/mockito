@@ -21,9 +21,9 @@ public class DefaultMockitoSession implements MockitoSession {
     private final String name;
     private final UniversalTestListener listener;
 
-    public DefaultMockitoSession(List<Object> testClassInstances, String name, Strictness strictness, MockitoLogger logger) {
+    public DefaultMockitoSession(List<Object> testClassInstances, String name, Strictness strictness, MockitoLogger logger, boolean reportStubbingErrors) {
         this.name = name;
-        listener = new UniversalTestListener(strictness, logger);
+        listener = new UniversalTestListener(strictness, logger, reportStubbingErrors);
         try {
             //So that the listener can capture mock creation events
             Mockito.framework().addListener(listener);
