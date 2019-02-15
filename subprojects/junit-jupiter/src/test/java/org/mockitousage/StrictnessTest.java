@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
- * Test that runs the inner test using a launcher {@see #invokeTestClassAndRetrieveMethodResult}.
+ * Test that runs the inner test using a launcher {@see #invokeTestClassAndRetrieveMethodResults}.
  * We then assert on the actual test run output, to see if test actually failed as a result
  * of our extension.
  */
@@ -255,48 +254,21 @@ class StrictnessTest {
                 }
             }
         }
-
     }
 
     @Test
     void use_stubs_at_least_once_across_all_test_cases() {
-        final Map<String, TestExecutionResult> resultsMap = invokeTestClassAndRetrieveMethodResults(UseStubsAtLeastOnceAcrossTests.class);
+        final Map<String, TestExecutionResult> testResults = invokeTestClassAndRetrieveMethodResults(UseStubsAtLeastOnceAcrossTests.class);
 
-        assertThat(resultsMap.get("shouldDoWork()").getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
-        assertThat(resultsMap.get("shouldDoNoWork()").getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+        for (Map.Entry<String, TestExecutionResult> testResult : testResults.entrySet()) {
+            assertThat(testResult.getValue().getStatus()).withFailMessage(testResult.getKey() + " should have been SUCCESSFUL but was " + testResult.getValue()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+        }
     }
 
     private interface Dependency {
         boolean doWork();
 
         boolean workDone();
-
-    }
-
-    private TestExecutionResult invokeTestClassAndRetrieveMethodResult(Class<?> clazz) {
-        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-            .selectors(
-                selectClass(clazz)
-            )
-            .build();
-
-        Launcher launcher = LauncherFactory.create();
-
-        final TestExecutionResult[] result = new TestExecutionResult[1];
-
-        launcher.registerTestExecutionListeners(new TestExecutionListener() {
-            @Override
-            public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-                if (testIdentifier.getType().isTest()) {
-                    result[0] = testExecutionResult;
-                }
-            }
-
-        });
-
-        launcher.execute(request);
-
-        return result[0];
     }
 
     private Map<String, TestExecutionResult> invokeTestClassAndRetrieveMethodResults(Class<?> clazz) {
@@ -311,9 +283,7 @@ class StrictnessTest {
         launcher.registerTestExecutionListeners(new TestExecutionListener() {
             @Override
             public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-//                if (testIdentifier.isTest()) {
-                    results.put(testIdentifier.getDisplayName(), testExecutionResult);
-//                }
+                results.put(testIdentifier.getDisplayName(), testExecutionResult);
             }
         });
 
