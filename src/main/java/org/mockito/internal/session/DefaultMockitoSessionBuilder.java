@@ -23,7 +23,7 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     private String name;
     private Strictness strictness;
     private MockitoSessionLogger logger;
-    private boolean reportStubbingErrors;
+    private boolean reportStubbingErrors = true;
 
     @Override
     public MockitoSessionBuilder initMocks(Object testClassInstance) {
@@ -63,7 +63,7 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
 
     @Override
     public MockitoSessionBuilder disableStubbingErrorReporting() {
-        this.reportStubbingErrors = true;
+        this.reportStubbingErrors = false;
 
         return this;
     }
@@ -83,6 +83,6 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
         }
         Strictness effectiveStrictness = this.strictness == null ? Strictness.STRICT_STUBS : this.strictness;
         MockitoLogger logger = this.logger == null ? Plugins.getMockitoLogger() : new MockitoLoggerAdapter(this.logger);
-        return new DefaultMockitoSession(effectiveTestClassInstances, effectiveName, effectiveStrictness, logger, !reportStubbingErrors);
+        return new DefaultMockitoSession(effectiveTestClassInstances, effectiveName, effectiveStrictness, logger, reportStubbingErrors);
     }
 }
