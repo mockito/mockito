@@ -10,7 +10,12 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -48,6 +53,17 @@ public class GenericMetadataSupportTest {
 
     static class StringList extends ArrayList<String> { }
 
+    public interface TopInterface<T> {
+        T generic();
+    }
+    public interface MiddleInterface<T> extends TopInterface<T> { }
+    public class OwningClassWithDeclaredUpperBounds<T extends List<String> & Comparable> {
+        public abstract class AbstractInner implements MiddleInterface<T> { }
+    }
+    public class OwningClassWithNoDeclaredUpperBounds<T> {
+        public abstract class AbstractInner implements MiddleInterface<T> { }
+    }
+
     @Test
     public void typeVariable_of_self_type() {
         GenericMetadataSupport genericMetadata = inferFrom(GenericsSelfReference.class).resolveGenericReturnType(firstNamedMethod("self", GenericsSelfReference.class));
@@ -56,7 +72,7 @@ public class GenericMetadataSupportTest {
     }
 
     @Test
-    public void can_get_raw_type_from_Class() throws Exception {
+    public void can_get_raw_type_from_Class() {
         assertThat(inferFrom(ListOfAnyNumbers.class).rawType()).isEqualTo(ListOfAnyNumbers.class);
         assertThat(inferFrom(ListOfNumbers.class).rawType()).isEqualTo(ListOfNumbers.class);
         assertThat(inferFrom(GenericsNest.class).rawType()).isEqualTo(GenericsNest.class);
@@ -197,6 +213,18 @@ public class GenericMetadataSupportTest {
 
         assertThat(inferFrom(boundedType.firstBound()).rawType()).isEqualTo(Comparable.class);
         assertThat(boundedType.interfaceBounds()).contains(Cloneable.class);
+    }
+
+    @Test
+    public void can_extract_raw_type_from_bounds_on_terminal_typeVariable() {
+        assertThat(inferFrom(OwningClassWithDeclaredUpperBounds.AbstractInner.class)
+                       .resolveGenericReturnType(firstNamedMethod("generic", OwningClassWithDeclaredUpperBounds.AbstractInner.class))
+                       .rawType()
+                  ).isEqualTo(List.class);
+        assertThat(inferFrom(OwningClassWithNoDeclaredUpperBounds.AbstractInner.class)
+                       .resolveGenericReturnType(firstNamedMethod("generic", OwningClassWithNoDeclaredUpperBounds.AbstractInner.class))
+                       .rawType()
+                  ).isEqualTo(Object.class);
     }
 
     private Type typeVariableValue(Map<TypeVariable<?>, Type> typeVariables, String typeVariableName) {

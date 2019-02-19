@@ -97,10 +97,20 @@ public abstract class GenericMetadataSupport {
         }
         if (type instanceof TypeVariable) {
             /*
-             * If type is a TypeVariable, then it is needed to gather data elsewhere. Usually TypeVariables are declared
-             * on the class definition, such as such as List<E>.
+             * If type is a TypeVariable, then it is needed to gather data elsewhere.
+             * Usually TypeVariables are declared on the class definition, such as
+             * such as List<E>.
+             *
+             * If the data cannot be found in the contextual map, try harder on the
+             * TypeVariable itself looking for defined bounds.
              */
-            return extractRawTypeOf(contextualActualTypeParameters.get(type));
+            Type typeArgument = contextualActualTypeParameters.get(type);
+            if (typeArgument == null) {
+                BoundedType boundedType = boundsOf((TypeVariable<?>) type);
+                contextualActualTypeParameters.put((TypeVariable<?>) type, boundedType);
+                return extractRawTypeOf(boundedType);
+            }
+            return extractRawTypeOf(typeArgument);
         }
         throw new MockitoException("Raw extraction not supported for : '" + type + "'");
     }
@@ -164,8 +174,12 @@ public abstract class GenericMetadataSupport {
     private BoundedType boundsOf(WildcardType wildCard) {
         /*
          *  According to JLS(http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.5.1):
-         *  - Lower and upper can't coexist: (for instance, this is not allowed: <? extends List<String> & super MyInterface>)
-         *  - Multiple bounds are not supported (for instance, this is not allowed: <? extends List<String> & MyInterface>)
+         *  - Lower and upper can't coexist: (for instance, this is not allowed:
+         *    <? extends List<String> & super MyInterface>)
+         *  - Multiple concrete type bounds are not supported (for instance, this is not allowed:
+         *    <? extends ArrayList<String> & MyInterface>)
+         *    But the following form is possible where there is a single concrete tyep bound followed by interface type bounds
+         *    <T extends List<String> & Comparable>
          */
 
         WildCardBoundedType wildCardBoundedType = new WildCardBoundedType(wildCard);
