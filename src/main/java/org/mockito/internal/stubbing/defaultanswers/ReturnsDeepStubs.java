@@ -58,9 +58,9 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         // a mock that would potentially match the return signature, instead return `null`. This
         // is valid per the CheckCast JVM instruction and is better than causing a ClassCastException
         // on runtime.
-        if (rawType.equals(Object.class)) {
-            return null;
-        }
+//        if (rawType.equals(Object.class)) {
+//            return null;
+//        }
 
         return deepStub(invocation, returnTypeGenericMetadata);
     }
