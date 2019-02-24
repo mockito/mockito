@@ -233,16 +233,14 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     }
 
     private static <T> CreationSettings<T> validatedSettings(Class<T> typeToMock, CreationSettings<T> source) {
-        MockCreationValidator validator = new MockCreationValidator();
-
-        validator.validateType(typeToMock);
-        validator.validateExtraInterfaces(typeToMock, source.getExtraInterfaces());
-        validator.validateMockedType(typeToMock, source.getSpiedInstance());
+        MockCreationValidator.validateType(typeToMock);
+        MockCreationValidator.validateExtraInterfaces(typeToMock, source.getExtraInterfaces());
+        MockCreationValidator.validateMockedType(typeToMock, source.getSpiedInstance());
 
         //TODO SF - add this validation and also add missing coverage
 //        validator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance());
 
-        validator.validateConstructorUse(source.isUsingConstructor(), source.getSerializableMode());
+        MockCreationValidator.validateConstructorUse(source.isUsingConstructor(), source.getSerializableMode());
 
         //TODO SF - I don't think we really need CreationSettings type
         //TODO do we really need to copy the entire settings every time we create mock object? it does not seem necessary.

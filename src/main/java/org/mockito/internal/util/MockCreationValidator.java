@@ -18,14 +18,16 @@ import org.mockito.plugins.MockMaker.TypeMockability;
 @SuppressWarnings("unchecked")
 public class MockCreationValidator {
 
-    public void validateType(Class<?> classToMock) {
+    private MockCreationValidator() {}
+
+    public static void validateType(Class<?> classToMock) {
         TypeMockability typeMockability = MockUtil.typeMockabilityOf(classToMock);
         if (!typeMockability.mockable()) {
             throw cannotMockClass(classToMock, typeMockability.nonMockableReason());
         }
     }
 
-    public void validateExtraInterfaces(Class<?> classToMock, Collection<Class<?>> extraInterfaces) {
+    public static void validateExtraInterfaces(Class<?> classToMock, Collection<Class<?>> extraInterfaces) {
         if (extraInterfaces == null) {
             return;
         }
@@ -37,7 +39,7 @@ public class MockCreationValidator {
         }
     }
 
-    public void validateMockedType(Class<?> classToMock, Object spiedInstance) {
+    public static void validateMockedType(Class<?> classToMock, Object spiedInstance) {
         if (classToMock == null || spiedInstance == null) {
             return;
         }
@@ -46,7 +48,7 @@ public class MockCreationValidator {
         }
     }
 
-    public void validateDelegatedInstance(Class<?> classToMock, Object delegatedInstance) {
+    public static void validateDelegatedInstance(Class<?> classToMock, Object delegatedInstance) {
         if (classToMock == null || delegatedInstance == null) {
             return;
         }
@@ -55,7 +57,7 @@ public class MockCreationValidator {
         }
     }
 
-    public void validateConstructorUse(boolean usingConstructor, SerializableMode mode) {
+    public static void validateConstructorUse(boolean usingConstructor, SerializableMode mode) {
         if (usingConstructor && mode == SerializableMode.ACROSS_CLASSLOADERS) {
             throw usingConstructorWithFancySerializable(mode);
         }
