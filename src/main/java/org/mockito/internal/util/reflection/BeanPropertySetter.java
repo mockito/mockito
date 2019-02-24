@@ -9,6 +9,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Locale;
 
+import static org.mockito.internal.util.reflection.AccessibilityChanger.enableAccess;
+import static org.mockito.internal.util.reflection.AccessibilityChanger.safelyDisableAccess;
+
 /**
  * This utility class will call the setter of the property to inject a new value.
  */
@@ -50,12 +53,11 @@ public class BeanPropertySetter {
      */
     public boolean set(final Object value) {
 
-        AccessibilityChanger changer = new AccessibilityChanger();
         Method writeMethod = null;
         try {
             writeMethod = target.getClass().getMethod(setterName(field.getName()), field.getType());
 
-            changer.enableAccess(writeMethod);
+            enableAccess(writeMethod);
             writeMethod.invoke(target, value);
             return true;
         } catch (InvocationTargetException e) {
@@ -66,7 +68,7 @@ public class BeanPropertySetter {
             reportNoSetterFound();
         } finally {
             if(writeMethod != null) {
-                changer.safelyDisableAccess(writeMethod);
+                safelyDisableAccess(writeMethod);
             }
         }
 
