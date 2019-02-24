@@ -24,8 +24,11 @@ public class BeanPropertySetterTest {
         Field theField = someBean.getClass().getDeclaredField("theField");
         File valueToInject = new File("path");
 
+        BeanPropertySetter.target = someBean;
+        BeanPropertySetter.reportNoSetterFound = true;
+        BeanPropertySetter.field = theField;
         // when
-        boolean injected = new BeanPropertySetter(someBean, theField, true).set(valueToInject);
+        boolean injected = BeanPropertySetter.set(valueToInject);
 
         // then
         assertTrue(injected);
@@ -41,7 +44,10 @@ public class BeanPropertySetterTest {
         UUID valueToInject = new UUID(0L, 0L);
 
         // when
-        boolean injected = new BeanPropertySetter(someBean, theField, true).set(valueToInject);
+        BeanPropertySetter.target = someBean;
+        BeanPropertySetter.reportNoSetterFound = true;
+        BeanPropertySetter.field = theField;
+        boolean injected = BeanPropertySetter.set(valueToInject);
 
         // then
         assertTrue(injected);
@@ -57,7 +63,10 @@ public class BeanPropertySetterTest {
         File valueToInject = new File("path");
 
         // when
-        boolean injected = new BeanPropertySetter(someBean, theField, true).set(valueToInject);
+        BeanPropertySetter.target = someBean;
+        BeanPropertySetter.reportNoSetterFound = true;
+        BeanPropertySetter.field = theField;
+        boolean injected = BeanPropertySetter.set(valueToInject);
 
         // then
         assertTrue(injected);
@@ -71,9 +80,13 @@ public class BeanPropertySetterTest {
         Field theField = bean.getClass().getDeclaredField("theField");
         File valueToInject = new File("path");
 
+        BeanPropertySetter.target = bean;
+        BeanPropertySetter.reportNoSetterFound = true;
+        BeanPropertySetter.field = theField;
+
         try {
             // when
-            new BeanPropertySetter(bean, theField, true).set(valueToInject);
+            BeanPropertySetter.set(valueToInject);
             fail();
         } catch (Exception e) {
             // then
@@ -89,7 +102,10 @@ public class BeanPropertySetterTest {
         File valueToInject = new File("path");
 
         // when
-        boolean injected = new BeanPropertySetter(bean, theField).set(valueToInject);
+        BeanPropertySetter.target = bean;
+        BeanPropertySetter.reportNoSetterFound = false;
+        BeanPropertySetter.field = theField;
+        boolean injected = BeanPropertySetter.set(valueToInject);
 
         // then
         assertFalse(injected);
@@ -103,7 +119,10 @@ public class BeanPropertySetterTest {
         File valueToInject = new File("path");
 
         // when
-        boolean injected = new BeanPropertySetter(bean, theField, false).set(valueToInject);
+        BeanPropertySetter.target = bean;
+        BeanPropertySetter.reportNoSetterFound = false;
+        BeanPropertySetter.field = theField;
+        boolean injected = BeanPropertySetter.set(valueToInject);
 
         // then
         assertFalse(injected);
