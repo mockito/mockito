@@ -20,7 +20,7 @@ public class ClonesArguments implements Answer<Object> {
             Object from = arguments[i];
             Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(null);
             Object newInstance = instantiator.newInstance(from.getClass());
-            new LenientCopyTool().copyToRealObject(from, newInstance);
+            LenientCopyTool.copyToRealObject(from, newInstance);
             arguments[i] = newInstance;
         }
         return new ReturnsEmptyValues().answer(invocation);

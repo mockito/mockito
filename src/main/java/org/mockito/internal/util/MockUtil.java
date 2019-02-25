@@ -36,7 +36,7 @@ public class MockUtil {
 
         Object spiedInstance = settings.getSpiedInstance();
         if (spiedInstance != null) {
-            new LenientCopyTool().copyToMock(spiedInstance, mock);
+            LenientCopyTool.copyToMock(spiedInstance, mock);
         }
 
         return mock;
