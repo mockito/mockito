@@ -7,7 +7,7 @@ package org.mockito.internal.util.reflection;
 import java.lang.reflect.AccessibleObject;
 
 public final class AccessibilityChanger {
-    private static Boolean wasAccessible = null;
+    public static Boolean wasAccessible = null;
 
     private AccessibilityChanger() {}
 

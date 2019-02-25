@@ -18,6 +18,7 @@ public class AccessibilityChangerTest {
 
     @SuppressWarnings("unused")
     private Observable whatever;
+    public static Boolean wasAccessible = null;
 
     @Test
     public void should_enable_and_safely_disable() throws Exception {
@@ -27,8 +28,9 @@ public class AccessibilityChangerTest {
 
     @Test(expected = java.lang.AssertionError.class)
     public void safelyDisableAccess_should_fail_when_enableAccess_not_called() throws Exception {
+        AccessibilityChanger.wasAccessible = null;
         assumeVmArgPresent("-ea");
-        AccessibilityChanger.safelyDisableAccess(field("whatever"));
+        safelyDisableAccess(field("whatever"));
     }
 
 
