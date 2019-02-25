@@ -34,7 +34,7 @@ import org.mockito.session.MockitoSessionBuilder;
  * Framework integrators are welcome to use {@code MockitoSession} and give us feedback by commenting on
  * <a href="https://github.com/mockito/mockito/issues/857">issue 857</a>.
  * <p>
- *
+ * <p>
  * Example:
  * <pre class="code"><code class="java">
  * public class ExampleTest {
@@ -142,7 +142,4 @@ public interface MockitoSession {
      */
     @Incubating
     void finishMocking(Throwable failure);
-
-    @Incubating
-    void sessionFinished(Throwable failure);
 }
