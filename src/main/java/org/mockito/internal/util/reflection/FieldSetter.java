@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.util.reflection;
 
+import static org.mockito.internal.util.reflection.AccessibilityChanger.enableAccess;
+import static org.mockito.internal.util.reflection.AccessibilityChanger.safelyDisableAccess;
+
 import java.lang.reflect.Field;
 
 public class FieldSetter {
@@ -11,8 +14,8 @@ public class FieldSetter {
     private FieldSetter(){}
 
     public static void setField(Object target, Field field,Object value) {
-        AccessibilityChanger changer = new AccessibilityChanger();
-        changer.enableAccess(field);
+
+        enableAccess(field);
         try {
             field.set(target, value);
         } catch (IllegalAccessException e) {
@@ -21,6 +24,6 @@ public class FieldSetter {
             throw new RuntimeException("Wrong argument on field '" + field + "' of object '" + target + "' with value: '" + value + "', \n" +
                     "reason : " + e.getMessage(), e);
         }
-        changer.safelyDisableAccess(field);
+        safelyDisableAccess(field);
     }
 }

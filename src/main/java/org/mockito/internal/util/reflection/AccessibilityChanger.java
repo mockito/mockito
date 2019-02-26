@@ -6,14 +6,15 @@ package org.mockito.internal.util.reflection;
 
 import java.lang.reflect.AccessibleObject;
 
-public class AccessibilityChanger {
+public final class AccessibilityChanger {
+    public static Boolean wasAccessible = null;
 
-    private Boolean wasAccessible = null;
+    private AccessibilityChanger() {}
 
     /**
      * safely disables access
      */
-    public void safelyDisableAccess(AccessibleObject accessibleObject) {
+    public static void safelyDisableAccess(AccessibleObject accessibleObject) {
         assert wasAccessible != null : "accessibility info shall not be null";
         try {
             accessibleObject.setAccessible(wasAccessible);
@@ -25,7 +26,7 @@ public class AccessibilityChanger {
     /**
      * changes the accessibleObject accessibility and returns true if accessibility was changed
      */
-    public void enableAccess(AccessibleObject accessibleObject) {
+    public static void enableAccess(AccessibleObject accessibleObject) {
         wasAccessible = accessibleObject.isAccessible();
         accessibleObject.setAccessible(true);
     }
