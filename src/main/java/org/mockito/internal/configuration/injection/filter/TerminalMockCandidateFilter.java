@@ -34,7 +34,8 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
                     try {
                         BeanPropertySetter.target = injectee;
                         BeanPropertySetter.field = candidateFieldToBeInjected;
-                        if (BeanPropertySetter.set(matchingMock)) {
+                        BeanPropertySetter.reportNoSetterFound = false;
+                        if (!BeanPropertySetter.set(matchingMock)) {
                             setField(injectee, candidateFieldToBeInjected,matchingMock);
                         }
                     } catch (RuntimeException e) {

@@ -24,10 +24,8 @@ public final class BeanPropertySetter {
      * @param propertyField The field that should be accessed with the setter
      * @param reportNoSetterFound Allow the set method to raise an Exception if the setter cannot be found
      */
-    private BeanPropertySetter(final Object target, final Field propertyField, boolean reportNoSetterFound) {
-        this.field = propertyField;
-        this.target = target;
-        this.reportNoSetterFound = reportNoSetterFound;
+    private BeanPropertySetter() {
+        throw new UnsupportedOperationException();
     }
 
     /**
