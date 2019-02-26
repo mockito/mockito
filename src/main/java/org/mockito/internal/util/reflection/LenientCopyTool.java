@@ -10,8 +10,7 @@ import java.lang.reflect.Modifier;
 @SuppressWarnings("unchecked")
 public class LenientCopyTool {
 
-//    FieldCopier fieldCopier = new FieldCopier();
-    public static boolean Apa = false;
+    public static boolean disableAccessForTest = false;
 
     private LenientCopyTool(){
         throw new UnsupportedOperationException();
@@ -43,7 +42,8 @@ public class LenientCopyTool {
             AccessibilityChanger accessibilityChanger = new AccessibilityChanger();
             try {
                 accessibilityChanger.enableAccess(field);
-                if(Apa){
+                //Only used for testing, is there a better solution than this?
+                if(disableAccessForTest){
                     accessibilityChanger.safelyDisableAccess(field);
                 }
                 FieldCopier.copyValue(from, mock, field);

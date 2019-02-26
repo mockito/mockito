@@ -141,27 +141,21 @@ public class LenientCopyToolTest extends TestBase {
 
     @Test
     public void shouldContinueEvenIfThereAreProblemsCopyingSingleFieldValue() throws Exception {
-        //given
-        FieldCopier hej = mock(FieldCopier.class);
 
-        /*
-        doNothing().
-        doThrow(new IllegalAccessException()).
-        doNothing().
-        when(hej).
-        copyValue(anyObject(), anyObject(), any(Field.class));*/
-        //when
-       // doThrow(new IllegalAccessException()).when(hej).copyToMock();
         LenientCopyTool.copyToMock(from, to);
-        LenientCopyTool.Apa = true;
+        assertEquals(from.privateField, to.privateField);
+        LenientCopyTool.disableAccessForTest = true;
+        from.defaultField = "newTest";
+        from.privateField = 12;
         LenientCopyTool.copyToMock(from, to);
-      //  assertNotEquals(from.defaultField, to.defaultField);
-        LenientCopyTool.Apa = false;
+        //With disableAccessForTest set to true it will throw a IllegalAccessException when running
+        //It will copy all fields it can access and ignore those were an exception occurred
+        assertEquals(from.defaultField, to.defaultField);
+        assertNotEquals(from.privateField, to.privateField);
+        LenientCopyTool.disableAccessForTest = false;
         LenientCopyTool.copyToMock(from, to);
-        //boolean hejja = false;
-        //assertTrue(hejja);
-        //then
-      //  verify(hej, atLeast(3)).copyValue(any(), any(), any(Field.class));
+        assertEquals(from.privateField, to.privateField);
+
     }
 
 
