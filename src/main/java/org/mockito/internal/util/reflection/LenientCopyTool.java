@@ -11,6 +11,7 @@ import java.lang.reflect.Modifier;
 public class LenientCopyTool {
 
 //    FieldCopier fieldCopier = new FieldCopier();
+    public static boolean Apa = false;
 
     private LenientCopyTool(){
         throw new UnsupportedOperationException();
@@ -42,6 +43,9 @@ public class LenientCopyTool {
             AccessibilityChanger accessibilityChanger = new AccessibilityChanger();
             try {
                 accessibilityChanger.enableAccess(field);
+                if(Apa){
+                    accessibilityChanger.safelyDisableAccess(field);
+                }
                 FieldCopier.copyValue(from, mock, field);
             } catch (Throwable t) {
                 //Ignore - be lenient - if some field cannot be copied then let's be it

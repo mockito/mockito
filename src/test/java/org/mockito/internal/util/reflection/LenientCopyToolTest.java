@@ -10,9 +10,8 @@ import org.mockitoutil.TestBase;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
@@ -145,17 +144,24 @@ public class LenientCopyToolTest extends TestBase {
         //given
         FieldCopier hej = mock(FieldCopier.class);
 
+        /*
         doNothing().
         doThrow(new IllegalAccessException()).
         doNothing().
         when(hej).
-        copyValue(anyObject(), anyObject(), any(Field.class));
-
+        copyValue(anyObject(), anyObject(), any(Field.class));*/
         //when
+       // doThrow(new IllegalAccessException()).when(hej).copyToMock();
         LenientCopyTool.copyToMock(from, to);
-
+        LenientCopyTool.Apa = true;
+        LenientCopyTool.copyToMock(from, to);
+      //  assertNotEquals(from.defaultField, to.defaultField);
+        LenientCopyTool.Apa = false;
+        LenientCopyTool.copyToMock(from, to);
+        //boolean hejja = false;
+        //assertTrue(hejja);
         //then
-        verify(hej, atLeast(3)).copyValue(any(), any(), any(Field.class));
+      //  verify(hej, atLeast(3)).copyValue(any(), any(), any(Field.class));
     }
 
 
