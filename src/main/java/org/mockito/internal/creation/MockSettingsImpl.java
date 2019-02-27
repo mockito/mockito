@@ -11,6 +11,7 @@ import org.mockito.internal.util.Checks;
 import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.internal.util.MockNameImpl;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
@@ -19,17 +20,17 @@ import org.mockito.stubbing.Answer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.Arrays.asList;
 import static org.mockito.internal.exceptions.Reporter.defaultAnswerDoesNotAcceptNullParameter;
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesAcceptsOnlyInterfaces;
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesDoesNotAcceptNullParameters;
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesRequiresAtLeastOneInterface;
-import static org.mockito.internal.exceptions.Reporter.invocationListenersRequiresAtLeastOneListener;
 import static org.mockito.internal.exceptions.Reporter.methodDoesNotAcceptParameter;
+import static org.mockito.internal.exceptions.Reporter.requiresAtLeastOneListener;
 import static org.mockito.internal.util.collections.Sets.newSet;
 
 @SuppressWarnings("unchecked")
@@ -154,7 +155,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         }
         List<Object> resultArgs = new ArrayList<Object>(constructorArgs.length + 1);
         resultArgs.add(outerClassInstance);
-        resultArgs.addAll(Arrays.asList(constructorArgs));
+        resultArgs.addAll(asList(constructorArgs));
         return resultArgs.toArray(new Object[constructorArgs.length + 1]);
     }
 
@@ -173,16 +174,22 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     @Override
     public MockSettings invocationListeners(InvocationListener... listeners) {
-        if (listeners == null || listeners.length == 0) {
-            throw invocationListenersRequiresAtLeastOneListener();
-        }
         addListeners(listeners, invocationListeners, "invocationListeners");
         return this;
     }
 
-    private static <T> void addListeners(T[] listeners, List<T> container, String method) {
+    @Override
+    public MockSettings stubbingLookupListeners(StubbingLookupListener... listeners) {
+        addListeners(listeners, stubbingLookupListeners, "stubbingLookupListeners");
+        return this;
+    }
+
+    static <T> void addListeners(T[] listeners, List<T> container, String method) {
         if (listeners == null) {
             throw methodDoesNotAcceptParameter(method, "null vararg array.");
+        }
+        if (listeners.length == 0) {
+            throw requiresAtLeastOneListener(method);
         }
         for (T listener : listeners) {
             if (listener == null) {
@@ -207,13 +214,8 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return false;
     }
 
-    @Override
-    public List<InvocationListener> getInvocationListeners() {
-        return this.invocationListeners;
-    }
-
     public boolean hasInvocationListeners() {
-        return !invocationListeners.isEmpty();
+        return !getInvocationListeners().isEmpty();
     }
 
     @Override

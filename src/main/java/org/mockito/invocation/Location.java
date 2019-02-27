@@ -23,7 +23,7 @@ public interface Location {
      * Source file of this location
      *
      * @return source file
-     * @since 2.23.5
+     * @since 2.24.6
      */
     String getSourceFile();
 }
