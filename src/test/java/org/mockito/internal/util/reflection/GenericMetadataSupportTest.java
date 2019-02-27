@@ -8,9 +8,11 @@ import org.junit.Test;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -26,42 +28,66 @@ public class GenericMetadataSupportTest {
     interface GenericsSelfReference<T extends GenericsSelfReference<T>> {
         T self();
     }
+
     interface UpperBoundedTypeWithClass<E extends Number & Comparable<E>> {
         E get();
     }
+
     interface UpperBoundedTypeWithInterfaces<E extends Comparable<E> & Cloneable> {
         E get();
     }
-    interface ListOfNumbers extends List<Number> {}
-    interface AnotherListOfNumbers extends ListOfNumbers {}
 
-    abstract class ListOfNumbersImpl implements ListOfNumbers {}
-    abstract class AnotherListOfNumbersImpl extends ListOfNumbersImpl {}
+    interface ListOfNumbers extends List<Number> {
+    }
 
-    interface ListOfAnyNumbers<N extends Number & Cloneable> extends List<N> {}
+    interface AnotherListOfNumbers extends ListOfNumbers {
+    }
+
+    abstract class ListOfNumbersImpl implements ListOfNumbers {
+    }
+
+    abstract class AnotherListOfNumbersImpl extends ListOfNumbersImpl {
+    }
+
+    interface ListOfAnyNumbers<N extends Number & Cloneable> extends List<N> {
+    }
 
     interface GenericsNest<K extends Comparable<K> & Cloneable> extends Map<K, Set<Number>> {
         Set<Number> remove(Object key); // override with fixed ParameterizedType
+
         List<? super Integer> returning_wildcard_with_class_lower_bound();
+
         List<? super K> returning_wildcard_with_typeVar_lower_bound();
+
         List<? extends K> returning_wildcard_with_typeVar_upper_bound();
+
         K returningK();
+
         <O extends K> List<O> paramType_with_type_params();
+
         <S, T extends S> T two_type_params();
+
         <O extends K> O typeVar_with_type_params();
     }
 
-    static class StringList extends ArrayList<String> { }
+    static class StringList extends ArrayList<String> {
+    }
 
     public interface TopInterface<T> {
         T generic();
     }
-    public interface MiddleInterface<T> extends TopInterface<T> { }
-    public class OwningClassWithDeclaredUpperBounds<T extends List<String> & Comparable> {
-        public abstract class AbstractInner implements MiddleInterface<T> { }
+
+    public interface MiddleInterface<T> extends TopInterface<T> {
     }
+
+    public class OwningClassWithDeclaredUpperBounds<T extends List<String> & Comparable<String> & Cloneable> {
+        public abstract class AbstractInner implements MiddleInterface<T> {
+        }
+    }
+
     public class OwningClassWithNoDeclaredUpperBounds<T> {
-        public abstract class AbstractInner implements MiddleInterface<T> { }
+        public abstract class AbstractInner implements MiddleInterface<T> {
+        }
     }
 
     @Test
@@ -183,7 +209,6 @@ public class GenericMetadataSupportTest {
     }
 
 
-
     @Test
     public void paramType_with_wildcard_return_type_of____returning_wildcard_with_class_lower_bound____resolved_to_List_and_type_argument_to_Integer() {
         GenericMetadataSupport genericMetadata = inferFrom(GenericsNest.class).resolveGenericReturnType(firstNamedMethod("returning_wildcard_with_class_lower_bound", GenericsNest.class));
@@ -202,7 +227,8 @@ public class GenericMetadataSupportTest {
         GenericMetadataSupport.BoundedType boundedType = (GenericMetadataSupport.BoundedType) typeVariableValue(genericMetadata.actualTypeArguments(), "E");
 
         assertThat(inferFrom(boundedType.firstBound()).rawType()).isEqualTo(Comparable.class);
-        assertThat(boundedType.interfaceBounds()).contains(Cloneable.class);    }
+        assertThat(boundedType.interfaceBounds()).contains(Cloneable.class);
+    }
 
     @Test
     public void paramType_with_wildcard_return_type_of____returning_wildcard_with_typeVar_upper_bound____resolved_to_List_and_type_argument_to_Integer() {
@@ -225,6 +251,63 @@ public class GenericMetadataSupportTest {
                        .resolveGenericReturnType(firstNamedMethod("generic", OwningClassWithNoDeclaredUpperBounds.AbstractInner.class))
                        .rawType()
                   ).isEqualTo(Object.class);
+    }
+
+    @Test
+    public void can_extract_interface_type_from_bounds_on_terminal_typeVariable() {
+
+        assertThat(inferFrom(OwningClassWithDeclaredUpperBounds.AbstractInner.class)
+                       .resolveGenericReturnType(firstNamedMethod("generic", OwningClassWithDeclaredUpperBounds.AbstractInner.class))
+                       .rawExtraInterfaces()
+                  ).containsExactly(Comparable.class, Cloneable.class);
+        assertThat(inferFrom(OwningClassWithDeclaredUpperBounds.AbstractInner.class)
+                       .resolveGenericReturnType(firstNamedMethod("generic", OwningClassWithDeclaredUpperBounds.AbstractInner.class))
+                       .extraInterfaces()
+                  ).containsExactly(parameterizedTypeOf(Comparable.class, null, String.class),
+                                                                                                                                                                         Cloneable.class);
+
+        assertThat(inferFrom(OwningClassWithNoDeclaredUpperBounds.AbstractInner.class)
+                       .resolveGenericReturnType(firstNamedMethod("generic", OwningClassWithNoDeclaredUpperBounds.AbstractInner.class))
+                       .extraInterfaces()
+                  ).isEmpty();
+    }
+
+    private ParameterizedType parameterizedTypeOf(final Class<?> rawType, final Class<?> ownerType, final Type... actualTypeArguments) {
+        return new ParameterizedType() {
+            @Override
+            public Type[] getActualTypeArguments() {
+                return actualTypeArguments;
+            }
+
+            @Override
+            public Type getRawType() {
+                return rawType;
+            }
+
+            @Override
+            public Type getOwnerType() {
+                return ownerType;
+            }
+
+            public boolean equals(Object other) {
+                if (other instanceof ParameterizedType) {
+                    ParameterizedType otherParamType = (ParameterizedType) other;
+                    if (this == otherParamType) {
+                        return true;
+                    } else {
+                        return equals(ownerType, otherParamType.getOwnerType())
+                               && equals(rawType, otherParamType.getRawType())
+                               && Arrays.equals(actualTypeArguments, otherParamType.getActualTypeArguments());
+                    }
+                } else {
+                    return false;
+                }
+            }
+
+            private boolean equals(Object a, Object b) {
+                return (a == b) || (a != null && a.equals(b));
+            }
+        };
     }
 
     private Type typeVariableValue(Map<TypeVariable<?>, Type> typeVariables, String typeVariableName) {
