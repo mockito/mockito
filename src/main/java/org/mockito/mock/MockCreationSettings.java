@@ -76,7 +76,7 @@ public interface MockCreationSettings<T> {
      * <p>
      * For more details see {@link StubbingLookupListener}.
      *
-     * @since 2.23.5
+     * @since 2.24.6
      */
     List<StubbingLookupListener> getStubbingLookupListeners();
 

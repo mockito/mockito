@@ -21,7 +21,7 @@ import org.mockito.mock.MockCreationSettings;
  * <p>
  * The listeners can be accessed via {@link MockCreationSettings#getStubbingLookupListeners()}.
  *
- * @since 2.23.5
+ * @since 2.24.6
  */
 public interface StubbingLookupListener {
 
@@ -30,7 +30,7 @@ public interface StubbingLookupListener {
      * For details, see {@link StubbingLookupListener}.
      *
      * @param stubbingLookupEvent - Information about the looked up stubbing
-     * @since 2.23.5
+     * @since 2.24.6
      */
     void onStubbingLookup(StubbingLookupEvent stubbingLookupEvent);
 }
