@@ -6,7 +6,6 @@ package org.mockito.internal.stubbing.defaultanswers;
 
 import java.io.Serializable;
 import org.mockito.Mockito;
-import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -15,7 +14,6 @@ public class ReturnsMocks implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = -6755257986994634579L;
     private final Answer<Object> delegate = new ReturnsMoreEmptyValues();
-    private final MockitoCore mockitoCore = new MockitoCore();
 
     @Override
     public Object answer(final InvocationOnMock invocation) throws Throwable {
@@ -31,10 +29,6 @@ public class ReturnsMocks implements Answer<Object>, Serializable {
                 public Object apply(Class<?> type) {
                     if (type == null) {
                         type = invocation.getMethod().getReturnType();
-
-                        if (!mockitoCore.isTypeMockable(type)) {
-                            return null;
-                        }
                     }
 
                     return Mockito

@@ -5,15 +5,17 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import org.mockito.internal.MockitoCore;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockCreationSettings;
 
 class RetrieveGenericsForDefaultAnswers {
+
+    private static final MockitoCore MOCKITO_CORE = new MockitoCore();
 
     static Object returnTypeForMockWithCorrectGenerics(
         InvocationOnMock invocation, AnswerCallback answerCallback) {
@@ -34,7 +36,11 @@ class RetrieveGenericsForDefaultAnswers {
             return defaultReturnValue;
         }
 
-        if (type != null && !type.isPrimitive() && !Modifier.isFinal(type.getModifiers())) {
+        if (type != null) {
+            if (!MOCKITO_CORE.isTypeMockable(type)) {
+                return null;
+            }
+
             return answerCallback.apply(type);
         }
 
