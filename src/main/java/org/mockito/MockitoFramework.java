@@ -102,11 +102,27 @@ public interface MockitoFramework {
      * (issue <a href="https://github.com/mockito/mockito/pull/1619">#1619</a>).
      * If you are facing those problems, call this method at the end of the test (or in "@After" method).
      * See examples of using "clearInlineMocks" in Mockito test code.
+     * To find out why inline mock maker keeps track of the mock objects see {@link org.mockito.plugins.InlineMockMaker}.
      * <p>
      * Mockito's "inline mocking" enables mocking final types, enums and final methods
      * (read more in section 39 of {@link Mockito} javadoc).
      * This method is only meaningful when {@link org.mockito.plugins.InlineMockMaker} is in use.
      * If you're using a different {@link org.mockito.plugins.MockMaker} then this method is a no-op.
+     *
+     * <pre class="code"><code class="java">
+     * public class ExampleTest {
+     *
+     *     &#064;After
+     *     public void clearMocks() {
+     *         Mockito.framework().clearInlineMocks();
+     *     }
+     *
+     *     &#064;Test
+     *     public void someTest() {
+     *         ...
+     *     }
+     * }
+     * </pre>
      *
      * @since 2.24.8
      * @see #clearInlineMock(Object)
