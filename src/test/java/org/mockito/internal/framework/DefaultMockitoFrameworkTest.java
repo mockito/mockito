@@ -22,6 +22,7 @@ import java.util.Set;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
@@ -124,32 +125,40 @@ public class DefaultMockitoFrameworkTest extends TestBase {
 
     @Test
     public void clears_all_mocks() {
+        //clearing mocks only works with inline mocking
+        assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
+
+        //given
         List list1 = mock(List.class);
         assertTrue(mockingDetails(list1).isMock());
         List list2 = mock(List.class);
         assertTrue(mockingDetails(list2).isMock());
 
+        //when
         framework.clearInlineMocks();
 
-        if (Plugins.getMockMaker() instanceof InlineMockMaker) {
-            assertFalse(mockingDetails(list1).isMock());
-            assertFalse(mockingDetails(list2).isMock());
-        }
+        //then
+        assertFalse(mockingDetails(list1).isMock());
+        assertFalse(mockingDetails(list2).isMock());
     }
 
     @Test
     public void clears_mock() {
+        //clearing mocks only works with inline mocking
+        assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
+
+        //given
         List list1 = mock(List.class);
         assertTrue(mockingDetails(list1).isMock());
         List list2 = mock(List.class);
         assertTrue(mockingDetails(list2).isMock());
 
+        //when
         framework.clearInlineMock(list1);
 
-        if (Plugins.getMockMaker() instanceof InlineMockMaker) {
-            assertFalse(mockingDetails(list1).isMock());
-            assertTrue(mockingDetails(list2).isMock());
-        }
+        //then
+        assertFalse(mockingDetails(list1).isMock());
+        assertTrue(mockingDetails(list2).isMock());
     }
 
     private static class MyListener implements MockitoListener {}
