@@ -25,7 +25,7 @@ import org.mockito.MockitoFramework;
  * please have your mock maker implement {@code InlineMockMaker} interface.
  * This way, it can participate in {@link MockitoFramework#clearInlineMocks()} API.
  *
- * @since 2.24.8
+ * @since 2.25.0
  */
 @Incubating
 public interface InlineMockMaker extends MockMaker {
@@ -35,7 +35,7 @@ public interface InlineMockMaker extends MockMaker {
      * mock after this is called.
      *
      * @param mock the mock instance whose internal state is to be cleaned.
-     * @since 2.24.8
+     * @since 2.25.0
      */
     @Incubating
     void clearMock(Object mock);
@@ -44,7 +44,7 @@ public interface InlineMockMaker extends MockMaker {
      * Cleans up internal state for all existing mocks. You may assume there won't be any interaction to mocks created
      * previously after this is called.
      *
-     * @since 2.24.8
+     * @since 2.25.0
      */
     @Incubating
     void clearAllMocks();

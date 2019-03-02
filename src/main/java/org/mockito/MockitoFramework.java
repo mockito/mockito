@@ -124,7 +124,9 @@ public interface MockitoFramework {
      * }
      * </pre>
      *
-     * @since 2.24.8
+     * If you have feedback or a better idea how to solve the problem please reach out.
+     *
+     * @since 2.25.0
      * @see #clearInlineMock(Object)
      */
     @Incubating
@@ -136,7 +138,7 @@ public interface MockitoFramework {
      * Please read javadoc for {@link #clearInlineMocks()}.
      *
      * @param mock to clear up
-     * @since 2.24.8
+     * @since 2.25.0
      * @see #clearInlineMocks()
      */
     @Incubating
