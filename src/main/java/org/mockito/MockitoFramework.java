@@ -94,24 +94,35 @@ public interface MockitoFramework {
     InvocationFactory getInvocationFactory();
 
     /**
-     * Clears up internal state of all existing mocks. This is useful when testing with {@link org.mockito.plugins.InlineMockMaker}
-     * which may hold references to mocks and leak memory. No interaction to any mock created previously is not allowed
-     * after calling this method.
+     * Clears up internal state of all inline mocks.
+     * This method is only meaningful if inline mock maker is in use.
+     * Otherwise this method is a no-op and need not be used.
+     * <p>
+     * This method is useful to tackle subtle memory leaks that are possible due to the nature of inline mocking
+     * (issue <a href="https://github.com/mockito/mockito/pull/1619">#1619</a>).
+     * If you are facing those problems, call this method at the end of the test (or in "@After" method).
+     * See examples of using "clearInlineMocks" in Mockito test code.
+     * <p>
+     * Mockito's "inline mocking" enables mocking final types, enums and final methods
+     * (read more in section 39 of {@link Mockito} javadoc).
+     * This method is only meaningful when {@link org.mockito.plugins.InlineMockMaker} is in use.
+     * If you're using a different {@link org.mockito.plugins.MockMaker} then this method is a no-op.
      *
      * @since 2.24.8
-     * @see #clearMock(Object)
+     * @see #clearInlineMock(Object)
      */
     @Incubating
-    void clearAllMocks();
+    void clearInlineMocks();
 
     /**
-     * Clears up internal state of the mock. This is useful when testing with {@link org.mockito.plugins.InlineMockMaker}
-     * which may hold references to mocks and leak memory. No interaction to this mock is allowed after calling this method.
+     * Clears up internal state of specific inline mock.
+     * This method is a single-mock variant of {@link #clearInlineMocks()}.
+     * Please read javadoc for {@link #clearInlineMocks()}.
      *
-     * @param mock the mock to clear up
+     * @param mock to clear up
      * @since 2.24.8
-     * @see #clearAllMocks()
+     * @see #clearInlineMocks()
      */
     @Incubating
-    void clearMock(Object mock);
+    void clearInlineMock(Object mock);
 }

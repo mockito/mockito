@@ -46,7 +46,7 @@ public class DefaultMockitoFramework implements MockitoFramework {
     }
 
     @Override
-    public void clearAllMocks() {
+    public void clearInlineMocks() {
         InlineMockMaker mockMaker = getInlineMockMaker();
         if (mockMaker != null) {
             mockMaker.clearAllMocks();
@@ -54,7 +54,7 @@ public class DefaultMockitoFramework implements MockitoFramework {
     }
 
     @Override
-    public void clearMock(Object mock) {
+    public void clearInlineMock(Object mock) {
         InlineMockMaker mockMaker = getInlineMockMaker();
         if (mockMaker != null) {
             mockMaker.clearMock(mock);

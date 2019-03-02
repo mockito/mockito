@@ -13,6 +13,7 @@ import org.mockito.Incubating;
  */
 @Incubating
 public interface InlineMockMaker extends MockMaker {
+
     /**
      * Clean up internal state for specified {@code mock}. You may assume there won't be any interaction to the specific
      * mock after this is called.

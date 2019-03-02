@@ -19,7 +19,7 @@ public class SelfSpyReferenceMemoryLeakTest {
             final DeepRefSelfClass instance = spy(new DeepRefSelfClass());
             instance.refInstance(instance);
 
-            framework().clearAllMocks();
+            framework().clearInlineMocks();
         }
     }
 

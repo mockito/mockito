@@ -22,7 +22,13 @@ import java.util.Set;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.withSettings;
 import static org.mockitoutil.ThrowableAssert.assertThat;
 
 public class DefaultMockitoFrameworkTest extends TestBase {
@@ -123,7 +129,7 @@ public class DefaultMockitoFrameworkTest extends TestBase {
         List list2 = mock(List.class);
         assertTrue(mockingDetails(list2).isMock());
 
-        framework.clearAllMocks();
+        framework.clearInlineMocks();
 
         if (Plugins.getMockMaker() instanceof InlineMockMaker) {
             assertFalse(mockingDetails(list1).isMock());
@@ -138,7 +144,7 @@ public class DefaultMockitoFrameworkTest extends TestBase {
         List list2 = mock(List.class);
         assertTrue(mockingDetails(list2).isMock());
 
-        framework.clearMock(list1);
+        framework.clearInlineMock(list1);
 
         if (Plugins.getMockMaker() instanceof InlineMockMaker) {
             assertFalse(mockingDetails(list1).isMock());

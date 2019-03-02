@@ -23,7 +23,7 @@ public class CyclicMockMethodArgumentMemoryLeakTest {
             a.accept(b);
             b.accept(a);
 
-            framework().clearAllMocks();
+            framework().clearInlineMocks();
         }
     }
 
