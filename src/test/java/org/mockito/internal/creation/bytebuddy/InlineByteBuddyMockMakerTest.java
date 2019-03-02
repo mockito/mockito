@@ -20,7 +20,11 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import static net.bytebuddy.ClassFileVersion.JAVA_V8;
@@ -292,7 +296,11 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         MockCreationSettings<GenericSubClass> settings = settingsFor(GenericSubClass.class);
         GenericSubClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
         assertThat(mockMaker.getHandler(proxy)).isNotNull();
+
+        //when
         mockMaker.clearMock(proxy);
+
+        //then
         assertThat(mockMaker.getHandler(proxy)).isNull();
     }
 
@@ -306,8 +314,10 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         GenericSubClass proxy2 = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
         assertThat(mockMaker.getHandler(proxy1)).isNotNull();
 
+        //when
         mockMaker.clearAllMocks();
 
+        //then
         assertThat(mockMaker.getHandler(proxy1)).isNull();
         assertThat(mockMaker.getHandler(proxy2)).isNull();
     }
