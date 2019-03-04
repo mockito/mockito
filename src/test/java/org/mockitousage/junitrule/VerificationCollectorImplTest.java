@@ -14,7 +14,7 @@ import org.mockito.junit.VerificationCollector;
 import org.mockitousage.IMethods;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.mockito.Mockito.*;
 
 public class VerificationCollectorImplTest {
@@ -50,7 +50,7 @@ public class VerificationCollectorImplTest {
         verify(methods).byteReturningMethod();
         try {
             collector.collectAndReport();
-            fail();
+            failBecauseExceptionWasNotThrown(MockitoAssertionError.class);
         } catch (MockitoAssertionError error) {
             assertThat(error).hasMessageContaining("1. Wanted but not invoked:");
             assertThat(error).hasMessageContaining("2. Wanted but not invoked:");
@@ -85,7 +85,7 @@ public class VerificationCollectorImplTest {
     private void assertExactlyOneFailure(VerificationCollector collector) {
         try {
             collector.collectAndReport();
-            fail();
+            failBecauseExceptionWasNotThrown(MockitoAssertionError.class);
         } catch (MockitoAssertionError error) {
             assertThat(error).hasMessageContaining("1. Wanted but not invoked:");
             assertThat(error.getMessage()).doesNotContain("2.");
