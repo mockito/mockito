@@ -66,7 +66,7 @@ public class VerificationCollectorImplTest {
         verify(methods, never()).simpleMethod();
         verify(methods).byteReturningMethod();
 
-        this.assertAtLeastOneFailure(collector);
+        this.assertExactlyOneFailure(collector);
     }
 
     @Test
@@ -79,10 +79,10 @@ public class VerificationCollectorImplTest {
         verify(methods).byteReturningMethod();
         verify(methods).simpleMethod();
 
-        this.assertAtLeastOneFailure(collector);
+        this.assertExactlyOneFailure(collector);
     }
 
-    private void assertAtLeastOneFailure(VerificationCollector collector) {
+    private void assertExactlyOneFailure(VerificationCollector collector) {
         try {
             collector.collectAndReport();
             fail();
