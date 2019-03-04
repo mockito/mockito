@@ -62,8 +62,8 @@ public class DeepStubsSerializableTest {
             // then revert to the default RETURNS_DEEP_STUBS and the code will raise a ClassCastException
             when(deserialized_deep_stub.iterator().next().get(42)).thenReturn("no");
             fail("Expected an exception to be thrown as deep stubs and serialization does not play well together");
-        } catch (ClassCastException e) {
-            assertThat(e).hasMessageContaining("java.util.List");
+        } catch (NullPointerException e) {
+            assertThat(e).hasMessage(null);
         }
     }
 

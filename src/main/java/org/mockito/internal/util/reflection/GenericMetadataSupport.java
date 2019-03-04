@@ -418,6 +418,7 @@ public abstract class GenericMetadataSupport {
         private final TypeVariable<?> typeVariable;
         private final TypeVariable<?>[] typeParameters;
         private Class<?> rawType;
+        private List<Type> extraInterfaces;
 
         public TypeVariableReturnType(GenericMetadataSupport source, TypeVariable<?>[] typeParameters, TypeVariable<?> typeVariable) {
             this.typeParameters = typeParameters;
@@ -450,15 +451,18 @@ public abstract class GenericMetadataSupport {
 
         @Override
         public List<Type> extraInterfaces() {
+            if (extraInterfaces != null) {
+                return extraInterfaces;
+            }
             Type type = extractActualBoundedTypeOf(typeVariable);
             if (type instanceof BoundedType) {
-                return Arrays.asList(((BoundedType) type).interfaceBounds());
+                return extraInterfaces = Arrays.asList(((BoundedType) type).interfaceBounds());
             }
             if (type instanceof ParameterizedType) {
-                return Collections.singletonList(type);
+                return extraInterfaces = Collections.singletonList(type);
             }
             if (type instanceof Class) {
-                return Collections.emptyList();
+                return extraInterfaces = Collections.emptyList();
             }
             throw new MockitoException("Cannot extract extra-interfaces from '" + typeVariable + "' : '" + type + "'");
         }
