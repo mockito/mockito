@@ -114,7 +114,13 @@ class RetrieveGenericsForDefaultAnswers {
         for (int i = 0; i < parameterTypes.length; i++) {
             Type argType = parameterTypes[i];
             if (returnType.equals(argType)) {
-                return invocation.getArgument(i).getClass();
+                Object argument = invocation.getArgument(i);
+                
+                if (argument == null) {
+                    return null;
+                }
+                
+                return argument.getClass();
             }
             if (argType instanceof GenericArrayType) {
                 argType = ((GenericArrayType) argType).getGenericComponentType();
