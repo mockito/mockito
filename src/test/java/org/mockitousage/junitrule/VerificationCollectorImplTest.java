@@ -8,13 +8,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
+import org.mockito.ArgumentMatcher;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.VerificationCollector;
 import org.mockitousage.IMethods;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.mockito.Mockito.*;
 
 public class VerificationCollectorImplTest {
@@ -46,14 +47,54 @@ public class VerificationCollectorImplTest {
 
         IMethods methods = mock(IMethods.class);
 
+        methods.intArgumentMethod(6);
+
         verify(methods).simpleMethod();
         verify(methods).byteReturningMethod();
+        verify(methods).intArgumentMethod(8);
+        verify(methods).longArg(8L);
         try {
             collector.collectAndReport();
-            fail();
+            failBecauseExceptionWasNotThrown(MockitoAssertionError.class);
         } catch (MockitoAssertionError error) {
             assertThat(error).hasMessageContaining("1. Wanted but not invoked:");
             assertThat(error).hasMessageContaining("2. Wanted but not invoked:");
+            assertThat(error).hasMessageContaining("3. Argument(s) are different! Wanted:");
+            assertThat(error).hasMessageContaining("4. Wanted but not invoked:");
+        }
+    }
+
+    @Test
+    public void should_collect_matching_error_from_non_matching_arguments() {
+        VerificationCollector collector = MockitoJUnit.collector().assertLazily();
+
+        IMethods methods = mock(IMethods.class);
+
+        methods.intArgumentMethod(6);
+        methods.longArg(8L);
+        methods.forShort((short)6);
+
+        verify(methods).intArgumentMethod(8);
+        verify(methods).longArg(longThat(new ArgumentMatcher<Long>() {
+            @Override
+            public boolean matches(Long argument) {
+                throw new AssertionError("custom error message");
+            }
+        }));
+        verify(methods).forShort(shortThat(new ArgumentMatcher<Short>() {
+            @Override
+            public boolean matches(Short argument) {
+                return false;
+            }
+        }));
+
+        try {
+            collector.collectAndReport();
+            failBecauseExceptionWasNotThrown(MockitoAssertionError.class);
+        } catch (MockitoAssertionError error) {
+            assertThat(error).hasMessageContaining("1. Argument(s) are different! Wanted:");
+            assertThat(error).hasMessageContaining("2. custom error message");
+            assertThat(error).hasMessageContaining("3. Argument(s) are different! Wanted:");
         }
     }
 
@@ -66,7 +107,7 @@ public class VerificationCollectorImplTest {
         verify(methods, never()).simpleMethod();
         verify(methods).byteReturningMethod();
 
-        this.assertAtLeastOneFailure(collector);
+        this.assertExactlyOneFailure(collector);
     }
 
     @Test
@@ -79,13 +120,13 @@ public class VerificationCollectorImplTest {
         verify(methods).byteReturningMethod();
         verify(methods).simpleMethod();
 
-        this.assertAtLeastOneFailure(collector);
+        this.assertExactlyOneFailure(collector);
     }
 
-    private void assertAtLeastOneFailure(VerificationCollector collector) {
+    private void assertExactlyOneFailure(VerificationCollector collector) {
         try {
             collector.collectAndReport();
-            fail();
+            failBecauseExceptionWasNotThrown(MockitoAssertionError.class);
         } catch (MockitoAssertionError error) {
             assertThat(error).hasMessageContaining("1. Wanted but not invoked:");
             assertThat(error.getMessage()).doesNotContain("2.");
@@ -97,8 +138,11 @@ public class VerificationCollectorImplTest {
         JUnitCore runner = new JUnitCore();
         Result result = runner.run(VerificationCollectorRuleInner.class);
 
-        assertThat(result.getFailureCount()).isEqualTo(1);
-        assertThat(result.getFailures().get(0).getMessage()).contains("1. Wanted but not invoked:");
+        assertThat(result.getFailureCount()).as("failureCount").isEqualTo(2);
+        assertThat(result.getFailures().get(0).getMessage()).as("failure1").contains("1. Wanted but not invoked:");
+        assertThat(result.getFailures().get(1).getMessage()).as("failure2")
+            .contains("1. Argument(s) are different! Wanted:")
+            .contains("2. Wanted but not invoked:");
     }
 
     // This class is picked up when running a test suite using an IDE. It fails on purpose.
@@ -120,6 +164,15 @@ public class VerificationCollectorImplTest {
             methods.simpleMethod();
 
             verify(methods).simpleMethod();
+        }
+
+        @Test
+        public void should_fail_with_args() {
+            IMethods methods = mock(IMethods.class);
+            methods.intArgumentMethod(8);
+
+            verify(methods).intArgumentMethod(9);
+            verify(methods).byteReturningMethod();
         }
     }
 }
