@@ -1682,6 +1682,7 @@ public class Mockito extends ArgumentMatchers {
 
     /**
      * Optional <code>Answer</code> to be used with {@link Mockito#mock(Class, Answer)}
+     *
      * <p>
      * {@link Answer} can be used to define the return values of unstubbed invocations.
      * <p>
@@ -1713,8 +1714,11 @@ public class Mockito extends ArgumentMatchers {
      * </code></pre>
      *
      * <p>
-     * <u>Note:</u> Stubbing partial mocks using <code>when(mock.getSomething()).thenReturn(fakeValue)</code>
+     * <u>Note 1:</u> Stubbing partial mocks using <code>when(mock.getSomething()).thenReturn(fakeValue)</code>
      * syntax will call the real method. For partial mock it's recommended to use <code>doReturn</code> syntax.
+     * <p>
+     * <u>Note 2:</u> If the mock is serialized then deserialized, then this answer will not be able to understand
+     * generics metadata.
      */
     public static final Answer<Object> CALLS_REAL_METHODS = Answers.CALLS_REAL_METHODS;
 
