@@ -5,7 +5,9 @@
 package org.mockito.internal.stubbing.answers;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.ValidableAnswer;
@@ -37,9 +39,38 @@ public class CallsRealMethods implements Answer<Object>, ValidableAnswer, Serial
     private static final long serialVersionUID = 9057165148930624087L;
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        if (Modifier.isAbstract(invocation.getMethod().getModifiers())) {
+        Method methodOfInvocation = invocation.getMethod();
+        Object mock = invocation.getMock();
+
+        if (MockUtil.isSpy(mock)) {
+            Object spiedInstance = MockUtil.getMockHandler(mock).getMockSettings()
+                .getSpiedInstance();
+
+            if (spiedInstance != null) {
+                Class<?> mockedClass = spiedInstance.getClass();
+
+                // We intentionally do not use the original mock class when spying on anonymous classes
+                // This is why we need to look up the original method on the class we are spying on,
+                // while also invoking the method on that class.
+                // Since an anonymous class can implement an interface, the `Method.isAbstract` would
+                // incorrectly be true and the real method would never been invoked.
+                if (mockedClass.isAnonymousClass()) {
+                    Method methodOfOriginalSpiedInstance = mockedClass.getMethod(methodOfInvocation.getName(),
+                        methodOfInvocation.getParameterTypes());
+
+                    if (!Modifier.isPublic(mockedClass.getModifiers() & methodOfOriginalSpiedInstance.getModifiers())) {
+                        methodOfOriginalSpiedInstance.setAccessible(true);
+                    }
+
+                    return methodOfOriginalSpiedInstance.invoke(spiedInstance, invocation.getArguments());
+                }
+            }
+        }
+
+        if (Modifier.isAbstract(methodOfInvocation.getModifiers())) {
             return RETURNS_DEFAULTS.answer(invocation);
         }
+
         return invocation.callRealMethod();
     }
 

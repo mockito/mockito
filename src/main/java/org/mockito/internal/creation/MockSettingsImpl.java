@@ -239,7 +239,17 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
         validator.validateType(typeToMock);
         validator.validateExtraInterfaces(typeToMock, source.getExtraInterfaces());
-        validator.validateMockedType(typeToMock, source.getSpiedInstance());
+
+        // This is only the case if we are spying a real object. In that case, anonymous classes
+        // do not allow us to override methods. However, since the interface of an anonymous class
+        // is the same as the "first interface" it implements, we can use that as the type instead.
+        // The validator should not be run in this case, as we are intentionally using a different
+        // class to define our mock class with.
+        if (typeToMock.isAnonymousClass() && source.getSpiedInstance() != null) {
+            typeToMock = (Class<T>) typeToMock.getInterfaces()[0];
+        } else {
+            validator.validateMockedType(typeToMock, source.getSpiedInstance());
+        }
 
         //TODO SF - add this validation and also add missing coverage
 //        validator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance());
