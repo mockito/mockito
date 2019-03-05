@@ -1541,7 +1541,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * inline mocking causes memory leaks.
  * There is no clean way to mitigate this problem completely.
  * Hence, we introduced a new API to explicitly clear mock state (only make sense in inline mocking!).
- * See example in {@link MockitoFramework#clearInlineMocks()}.
+ * See example usage in {@link MockitoFramework#clearInlineMocks()}.
  * If you have feedback or a better idea how to solve the problem please reach out.
  */
 @SuppressWarnings("unchecked")
