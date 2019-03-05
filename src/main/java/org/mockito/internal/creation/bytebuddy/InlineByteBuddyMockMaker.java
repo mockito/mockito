@@ -14,6 +14,7 @@ import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.InlineMockMaker;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -89,7 +90,7 @@ import static org.mockito.internal.util.StringUtil.join;
  * support this feature.
  */
 @Incubating
-public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
+public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineMockMaker {
 
     private static final Instrumentation INSTRUMENTATION;
 
@@ -269,6 +270,16 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker {
         if (mock instanceof MockAccess) {
             ((MockAccess) mock).setMockitoInterceptor(mockMethodInterceptor);
         }
+    }
+
+    @Override
+    public void clearMock(Object mock) {
+        mocks.remove(mock);
+    }
+
+    @Override
+    public void clearAllMocks() {
+        mocks.clear();
     }
 
     @Override

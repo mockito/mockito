@@ -103,7 +103,8 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#43">43. New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a><br/>
  *      <a href="#44">44. Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a><br/>
  *      <a href="#45">45. New JUnit Jupiter (JUnit5+) extension</a><br/>
- *      <a href="#46">46. New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0</a><br/>
+ *      <a href="#46">46. New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0)</a><br/>
+ *      <a href="#47">47. New API for clearing mock state in inline mocking (Since 2.25.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1530,6 +1531,15 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * For more information refer to {@link Mockito#lenient()}.
  * Let us know how do you find the new feature by opening a GitHub issue to discuss!
+ *
+ * <h3 id="47">47. <a class="meaningful_link" href="#clear_inline_mocks" name="clear_inline_mocks">New API for clearing mock state in inline mocking (Since 2.25.0)</a></h3>
+ *
+ * In certain specific, rare scenarios (issue <a href="https://github.com/mockito/mockito/pull/1619">#1619</a>)
+ * inline mocking causes memory leaks.
+ * There is no clean way to mitigate this problem completely.
+ * Hence, we introduced a new API to explicitly clear mock state (only make sense in inline mocking!).
+ * See example usage in {@link MockitoFramework#clearInlineMocks()}.
+ * If you have feedback or a better idea how to solve the problem please reach out.
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
