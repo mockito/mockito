@@ -4,6 +4,8 @@
  */
 
 /**
- * JUnit integration to provide better support for junit runners in IDEs.
+ * JUnit 3 integration to provide better support for junit 3 runners in IDEs.
+ *
+ * @see org.mockito.execeptions.verification.junit4
  */
 package org.mockito.exceptions.verification.junit;

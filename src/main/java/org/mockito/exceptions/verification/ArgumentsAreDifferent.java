@@ -21,7 +21,7 @@ public class ArgumentsAreDifferent extends MockitoAssertionError {
      * Three-arg constructor for compatibility with ExceptionFactory's three-arg
      * create method. This implementation simply ignores the second and third
      * arguments.
-     * 
+     *
      * @param message
      * @param wanted ignored
      * @param actual ignored

@@ -9,7 +9,7 @@ import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.junit4.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 

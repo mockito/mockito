@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.junit4.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
