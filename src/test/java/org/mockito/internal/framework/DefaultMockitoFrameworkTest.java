@@ -124,6 +124,15 @@ public class DefaultMockitoFrameworkTest extends TestBase {
     }
 
     @Test
+    public void clearing_all_mocks_is_safe_regardless_of_mock_maker_type() {
+        List mock = mock(List.class);
+
+        //expect
+        assertTrue(mockingDetails(mock).isMock());
+        framework.clearInlineMocks();
+    }
+
+    @Test
     public void clears_all_mocks() {
         //clearing mocks only works with inline mocking
         assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
