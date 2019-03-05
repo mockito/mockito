@@ -11,7 +11,7 @@ buildscript {
         classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.6'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
-        classpath 'org.shipkit:shipkit:2.0.28'
+        classpath 'org.shipkit:shipkit:2.1.6'
     }
 }
 
@@ -110,7 +110,7 @@ subprojects {
 			name = rootProject.name + '-' + project.name
 		}
 	}
-	
+
     afterEvaluate {
         def lib = publishing.publications.javaLibrary
         if(lib && !lib.artifactId.startsWith("mockito-")) {

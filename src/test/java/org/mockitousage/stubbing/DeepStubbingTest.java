@@ -224,7 +224,7 @@ public class DeepStubbingTest extends TestBase {
     Person person = mock(Person.class, RETURNS_DEEP_STUBS);
 
     @Test
-    public void shouldStubbingBasicallyWorkFine() throws Exception {
+    public void shouldStubbingBasicallyWorkFine() {
         //given
         given(person.getAddress().getStreet().getName()).willReturn("Norymberska");
 
@@ -236,7 +236,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void shouldVerificationBasicallyWorkFine() throws Exception {
+    public void shouldVerificationBasicallyWorkFine() {
         //given
         person.getAddress().getStreet().getName();
 
@@ -245,7 +245,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void verification_work_with_argument_Matchers_in_nested_calls() throws Exception {
+    public void verification_work_with_argument_Matchers_in_nested_calls() {
         //given
         person.getAddress("111 Mock Lane").getStreet();
         person.getAddress("111 Mock Lane").getStreet(Locale.ITALIAN).getName();
@@ -257,7 +257,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void deep_stub_return_same_mock_instance_if_invocation_matchers_matches() throws Exception {
+    public void deep_stub_return_same_mock_instance_if_invocation_matchers_matches() {
         when(person.getAddress(anyString()).getStreet().getName()).thenReturn("deep");
 
         person.getAddress("the docks").getStreet().getName();
@@ -270,7 +270,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void times_never_atLeast_atMost_verificationModes_should_work() throws Exception {
+    public void times_never_atLeast_atMost_verificationModes_should_work() {
         when(person.getAddress(anyString()).getStreet().getName()).thenReturn("deep");
 
         person.getAddress("the docks").getStreet().getName();
@@ -285,7 +285,7 @@ public class DeepStubbingTest extends TestBase {
 
 
     @Test
-    public void inOrder_only_work_on_the_very_last_mock_but_it_works() throws Exception {
+    public void inOrder_only_work_on_the_very_last_mock_but_it_works() {
         when(person.getAddress(anyString()).getStreet().getName()).thenReturn("deep");
         when(person.getAddress(anyString()).getStreet(Locale.ITALIAN).getName()).thenReturn("deep");
         when(person.getAddress(anyString()).getStreet(Locale.CHINESE).getName()).thenReturn("deep");
@@ -307,7 +307,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void verificationMode_only_work_on_the_last_returned_mock() throws Exception {
+    public void verificationMode_only_work_on_the_last_returned_mock() {
         // 1st invocation on Address mock (stubbing)
         when(person.getAddress("the docks").getStreet().getName()).thenReturn("deep");
 
@@ -328,7 +328,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void shouldFailGracefullyWhenClassIsFinal() throws Exception {
+    public void shouldFailGracefullyWhenClassIsFinal() {
         //when
         FinalClass value = new FinalClass();
         given(person.getFinalClass()).willReturn(value);

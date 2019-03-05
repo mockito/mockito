@@ -75,7 +75,7 @@ public class VerificationCollectorImpl implements VerificationCollector {
         this.numberOfFailures++;
         this.builder.append('\n')
                 .append(this.numberOfFailures).append(". ")
-                .append(message.substring(1, message.length()));
+                .append(message.trim()).append('\n');
     }
 
     private class VerificationWrapper implements VerificationMode {
@@ -89,7 +89,7 @@ public class VerificationCollectorImpl implements VerificationCollector {
         public void verify(VerificationData data) {
             try {
                 this.delegate.verify(data);
-            } catch (MockitoAssertionError error) {
+            } catch (AssertionError error) {
                 VerificationCollectorImpl.this.append(error.getMessage());
             }
         }

@@ -684,8 +684,8 @@ public class Reporter {
         return new MockitoException(method + "() does not accept " + parameter + " See the Javadoc.");
     }
 
-    public static MockitoException invocationListenersRequiresAtLeastOneListener() {
-        return new MockitoException("invocationListeners() requires at least one listener");
+    public static MockitoException requiresAtLeastOneListener(String method) {
+        return new MockitoException(method + "() requires at least one listener");
     }
 
     public static MockitoException invocationListenerThrewException(InvocationListener listener, Throwable listenerThrowable) {
