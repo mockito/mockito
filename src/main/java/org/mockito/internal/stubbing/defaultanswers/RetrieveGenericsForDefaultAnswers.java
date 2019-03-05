@@ -115,11 +115,11 @@ class RetrieveGenericsForDefaultAnswers {
             Type argType = parameterTypes[i];
             if (returnType.equals(argType)) {
                 Object argument = invocation.getArgument(i);
-                
+
                 if (argument == null) {
                     return null;
                 }
-                
+
                 return argument.getClass();
             }
             if (argType instanceof GenericArrayType) {
