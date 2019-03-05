@@ -96,7 +96,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         try {
             inOrder.verify(one).simpleMethod(999);
             fail();
-        } catch (org.mockito.exceptions.verification.junit.ArgumentsAreDifferent e) {
+        } catch (org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent e) {
             assertThat(e).hasMessageContaining("has different arguments");
         }
     }

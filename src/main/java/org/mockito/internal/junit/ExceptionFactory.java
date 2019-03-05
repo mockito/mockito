@@ -14,25 +14,30 @@ public class ExceptionFactory {
     private static interface ExceptionFactoryImpl {
         AssertionError create(String message, String wanted, String actual);
     }
-    
+
     private final static ExceptionFactoryImpl factory;
-    
+
     static {
         ExceptionFactoryImpl theFactory = null;
-        
+
         try {
-            // The following is neater but requires -source >= 1.8
-            // theFactory = org.mockito.exceptions.verification.junit.ArgumentsAreDifferent::new;
             theFactory = new ExceptionFactoryImpl() {
                 @Override
                 public AssertionError create(String message, String wanted, String actual) {
-                    return new org.mockito.exceptions.verification.junit.ArgumentsAreDifferent(message, wanted, actual);
+                    return new org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent(message, wanted, actual);
                 }
             };
-        } catch (Throwable onlyIfJUnit3IsNotAvailable) {
+        } catch (Throwable onlyIfOpenTestIsNotAvailable) {
+            try {
+                theFactory = new ExceptionFactoryImpl() {
+                    @Override
+                    public AssertionError create(String message, String wanted, String actual) {
+                        return new org.mockito.exceptions.verification.junit.ArgumentsAreDifferent(message, wanted, actual);
+                    }
+                };
+            } catch (Throwable onlyIfJUnitIsNotAvailable) {
+            }
         }
-        // The following is much neater but requires -source >= 1.8
-        // factory = (theFactory == null) ? ArgumentsAreDifferent::new : theFactory;
         factory = (theFactory == null) ? new ExceptionFactoryImpl() {
             @Override
             public AssertionError create(String message, String wanted, String actual) {
@@ -40,9 +45,15 @@ public class ExceptionFactory {
             }
         } : theFactory;
     }
-    
+
     /**
-     * If JUnit is used, an AssertionError is returned that extends from JUnit {@link ComparisonFailure} and hence provide a better IDE support as the comparison result is comparable
+     * Returns an AssertionError that describes the fact that the arguments of an invocation are different.
+     * If {@link org.opentest4j.AssertionFailedError} is on the class path (used by JUnit 5 and others),
+     * it returns a class that extends it. Otherwise, if {@link junit.framework.ComparisonFailure} is on the
+     * class path (shipped with JUnit 3 and 4), it will return a class that extends that. This provides
+     * better IDE support as the comparison result can be opened in a visual diff. If neither are available,
+     * it returns an instance of
+     * {@link org.mockito.exceptions.verification.ArgumentsAreDifferent}.
      */
     public static AssertionError createArgumentsAreDifferentException(String message, String wanted, String actual) {
         return factory.create(message, wanted, actual);

@@ -33,10 +33,10 @@ public class NoJUnitDependenciesTest {
                         Objenesis.class
                 )
                 .withCodeSourceUrlOf(coverageTool())
-                .without("junit", "org.junit")
+                .without("junit", "org.junit", "org.opentest4j")
                 .build();
 
-        Set<String> pureMockitoAPIClasses = ClassLoaders.in(classLoader_without_JUnit).omit("runners", "junit", "JUnit").listOwnedClasses();
+        Set<String> pureMockitoAPIClasses = ClassLoaders.in(classLoader_without_JUnit).omit("runners", "junit", "JUnit", "opentest4j").listOwnedClasses();
 
         // The later class is required to be initialized before any inline mock maker classes can be loaded.
         checkDependency(classLoader_without_JUnit, "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
