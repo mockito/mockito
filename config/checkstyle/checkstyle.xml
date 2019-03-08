@@ -5,7 +5,7 @@
 <module name="Checker">
     <!--
      Different editors and IDEs may insert or remove trailing
-     whitespaces at the end of source lines or newline characyers
+     whitespaces at the end of source lines or newline characters
      at the end of source files.
 
      This changes have no actual meaning, but may cause visual spam
