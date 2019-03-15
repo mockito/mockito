@@ -44,6 +44,7 @@ import java.io.Serializable;
  * Firstly, to make it easy to add another mock setting when the demand comes.
  * Secondly, to enable combining together different mock settings without introducing zillions of overloaded mock() methods.
  */
+@NotExtensible
 public interface MockSettings extends Serializable {
 
     /**

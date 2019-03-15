@@ -120,6 +120,11 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     }
 
     @Override
+    public <T> T getArgument(int index, Class<T> clazz) {
+        return clazz.cast(arguments[index]);
+    }
+
+    @Override
     public Object callRealMethod() throws Throwable {
         if (!realMethod.isInvokable()) {
             throw cannotCallAbstractRealMethod();

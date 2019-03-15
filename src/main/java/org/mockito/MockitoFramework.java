@@ -20,6 +20,7 @@ import org.mockito.plugins.MockitoPlugins;
  * @since 2.1.0
  */
 @Incubating
+@NotExtensible
 public interface MockitoFramework {
 
     /**
