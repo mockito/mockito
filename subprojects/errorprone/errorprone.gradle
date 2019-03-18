@@ -17,4 +17,7 @@ targetCompatibility = 1.8
 test {
     inputs.files(configurations.errorproneJavac).withNormalizer(ClasspathNormalizer)
     jvmArgs += "-Xbootclasspath/p:${configurations.errorproneJavac.asPath}"
+
+    // ErrorProne can only run on JDK 8
+    it.enabled = !JavaVersion.current().isJava9Compatible()
 }
