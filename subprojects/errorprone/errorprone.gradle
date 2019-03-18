@@ -13,3 +13,8 @@ dependencies {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+test {
+    inputs.files(configurations.errorproneJavac).withNormalizer(ClasspathNormalizer)
+    jvmArgs += "-Xbootclasspath/p:${configurations.errorproneJavac.asPath}"
+}
