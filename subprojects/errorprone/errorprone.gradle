@@ -1,0 +1,15 @@
+description = "ErrorProne plugins for Mockito"
+
+apply from: "$rootDir/gradle/java-library.gradle"
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+dependencies {
+    compile project.rootProject
+    compile libraries.errorprone
+
+    testCompile libraries.junit4
+    testCompile libraries.errorproneTestApi
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
