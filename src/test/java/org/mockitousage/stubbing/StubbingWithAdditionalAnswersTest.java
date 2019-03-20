@@ -30,11 +30,13 @@ import org.mockito.stubbing.Answer2;
 import org.mockito.stubbing.Answer3;
 import org.mockito.stubbing.Answer4;
 import org.mockito.stubbing.Answer5;
+import org.mockito.stubbing.Answer6;
 import org.mockito.stubbing.VoidAnswer1;
 import org.mockito.stubbing.VoidAnswer2;
 import org.mockito.stubbing.VoidAnswer3;
 import org.mockito.stubbing.VoidAnswer4;
 import org.mockito.stubbing.VoidAnswer5;
+import org.mockito.stubbing.VoidAnswer6;
 import org.mockitousage.IMethods;
 
 import java.util.Date;
@@ -246,4 +248,36 @@ public class StubbingWithAdditionalAnswersTest {
         verify(target, times(1)).simpleMethod("hello", 1, 2, 3, 4);
     }
 
+    @Test
+    public void can_return_based_on_strongly_typed_six_parameter_function() throws Exception {
+        final IMethods target = mock(IMethods.class);
+        given(iMethods.simpleMethod(anyString(), anyInt(), anyInt(), anyInt(), anyInt(), anyInt()))
+                .will(answer(new Answer6<String, String, Integer, Integer, Integer, Integer, Integer>() {
+                    public String answer(String s1, Integer i1, Integer i2, Integer i3, Integer i4, Integer i5) {
+                        target.simpleMethod(s1, i1, i2, i3, i4, i5);
+                        return "answered";
+                    }
+                }));
+
+        assertThat(iMethods.simpleMethod("hello", 1, 2, 3, 4, 5)).isEqualTo("answered");
+        verify(target, times(1)).simpleMethod("hello", 1, 2, 3, 4, 5);
+    }
+
+    @Test
+    public void will_execute_a_void_returning_strongly_typed_six_parameter_function() throws Exception {
+        final IMethods target = mock(IMethods.class);
+
+        given(iMethods.simpleMethod(anyString(), anyInt(), anyInt(), anyInt(), anyInt(), anyInt()))
+                .will(answerVoid(new VoidAnswer6<String, Integer, Integer, Integer, Integer, Integer>() {
+                    public void answer(String s1, Integer i1, Integer i2, Integer i3, Integer i4, Integer i5) {
+                        target.simpleMethod(s1, i1, i2, i3, i4, i5);
+                    }
+                }));
+
+        // invoke on iMethods
+        iMethods.simpleMethod("hello", 1, 2, 3, 4, 5);
+
+        // expect the answer to write correctly to "target"
+        verify(target, times(1)).simpleMethod("hello", 1, 2, 3, 4, 5);
+    }
 }
