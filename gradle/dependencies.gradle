@@ -6,6 +6,7 @@ def versions = [:]
 
 versions.bytebuddy = '1.9.7'
 versions.junitJupiter = '5.1.1'
+versions.errorprone = '2.3.2'
 
 libraries.junit4 = 'junit:junit:4.12'
 libraries.junitJupiterApi = "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}"
@@ -18,7 +19,8 @@ libraries.bytebuddy = "net.bytebuddy:byte-buddy:${versions.bytebuddy}"
 libraries.bytebuddyagent = "net.bytebuddy:byte-buddy-agent:${versions.bytebuddy}"
 libraries.bytebuddyandroid = "net.bytebuddy:byte-buddy-android:${versions.bytebuddy}"
 
-libraries.errorprone = 'com.google.errorprone:error_prone_core:2.3.2'
+libraries.errorprone = "com.google.errorprone:error_prone_core:${versions.errorprone}"
+libraries.errorproneTestApi = "com.google.errorprone:error_prone_test_helpers:${versions.errorprone}"
 
 // objenesis 3.x with full Java 11 support requires Java 8, bump version when Java 7 support is dropped
 libraries.objenesis = 'org.objenesis:objenesis:2.6'
