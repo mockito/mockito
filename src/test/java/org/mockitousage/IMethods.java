@@ -124,6 +124,8 @@ public interface IMethods {
 
     String simpleMethod(String one, Integer two, Integer three, Integer four, Integer five);
 
+    String simpleMethod(String one, Integer two, Integer three, Integer four, Integer five, Integer six);
+
     String simpleMethod(String one, String[] two);
 
     Object threeArgumentMethod(int valueOne, Object valueTwo, String valueThree);
