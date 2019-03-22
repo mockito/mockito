@@ -21,6 +21,7 @@ afterEvaluate {
                     'org.junit.*;resolution:=optional',
                     'org.hamcrest;resolution:=optional',
                     'org.objenesis;version="[2.5,3.0)"',
+                    'org.opentest4j.*;resolution:=optional',
                     'org.mockito.*'
 
             instruction 'Private-Package',
