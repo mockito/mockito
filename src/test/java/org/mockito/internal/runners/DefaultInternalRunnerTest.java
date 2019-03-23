@@ -45,10 +45,10 @@ public class DefaultInternalRunnerTest {
             .run(newNotifier(runListener));
 
         verify(runListener, times(1)).testFailure(any(Failure.class));
-        verify(runListener, never()).testFinished(any(Description.class));
-        verify(mockitoTestListener, never()).testFinished(any(TestFinishedEvent.class));
+        verify(runListener, times(1)).testFinished(any(Description.class));
+        verify(mockitoTestListener, only()).testFinished(any(TestFinishedEvent.class));
 
-        reset(runListener);
+        reset(runListener, mockitoTestListener);
 
         new DefaultInternalRunner(SuccessTest.class, supplier)
             .run(newNotifier(runListener));
