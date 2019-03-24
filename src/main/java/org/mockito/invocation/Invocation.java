@@ -4,7 +4,10 @@
  */
 package org.mockito.invocation;
 
+import org.mockito.ArgumentMatcher;
 import org.mockito.NotExtensible;
+
+import java.util.List;
 
 /**
  * A method call on a mock object. Contains all information and state needed for the Mockito framework to operate.
@@ -46,6 +49,13 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
      * @return unprocessed arguments, exactly as provided to this invocation.
      */
     Object[] getRawArguments();
+
+    /**
+     * Returns arguments wrapped into ArgumentMatchers
+     *
+     * @return a list of ArgumentMatcher wrapping each of this invocation arguments
+     */
+    List<ArgumentMatcher> getArgumentsAsMatchers();
 
     /**
      * Returns unprocessed arguments whereas {@link #getArguments()} returns
