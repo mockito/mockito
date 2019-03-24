@@ -11,7 +11,7 @@ buildscript {
         classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.6'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
-        classpath 'org.shipkit:shipkit:2.1.6'
+        classpath 'org.shipkit:shipkit:2.2.2'
     }
 }
 
@@ -26,6 +26,7 @@ apply plugin: 'base'
 archivesBaseName = "mockito-core"
 
 apply plugin: "org.shipkit.java"
+apply plugin: "org.shipkit.javadoc"
 allprojects {
     plugins.withId("java") {
         //Only upload specific modules we select
