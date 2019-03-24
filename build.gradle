@@ -26,7 +26,6 @@ apply plugin: 'base'
 archivesBaseName = "mockito-core"
 
 apply plugin: "org.shipkit.java"
-apply plugin: "org.shipkit.javadoc"
 allprojects {
     plugins.withId("java") {
         //Only upload specific modules we select
@@ -71,6 +70,8 @@ allprojects { proj ->
        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
     }
 }
+
+apply plugin: "org.shipkit.javadoc"
 
 configurations {
     testUtil //TODO move to separate project
