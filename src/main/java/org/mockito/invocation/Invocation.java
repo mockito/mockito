@@ -51,9 +51,11 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
     Object[] getRawArguments();
 
     /**
-     * Returns arguments wrapped into ArgumentMatchers
+     * Wraps each argument using ArgumentMatchers.eq() or AdditionalMatchers.arryEq()
+     * Used internally for the purposes of human-readable invocation printing.
      *
      * @return a list of ArgumentMatcher wrapping each of this invocation arguments
+     * @since 2.25.6
      */
     List<ArgumentMatcher> getArgumentsAsMatchers();
 
