@@ -51,10 +51,11 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
     Object[] getRawArguments();
 
     /**
-     * Wraps each argument using ArgumentMatchers.eq() or AdditionalMatchers.arryEq()
+     * Wraps each argument using {@link org.mockito.ArgumentMatchers#eq(Object)} or
+     * {@link org.mockito.AdditionalMatchers#aryEq(Object[])}
      * Used internally for the purposes of human-readable invocation printing.
      *
-     * @return a list of ArgumentMatcher wrapping each of this invocation arguments
+     * @return a list of {@link ArgumentMatcher} wrapping each of this invocation arguments
      * @since 2.25.6
      */
     List<ArgumentMatcher> getArgumentsAsMatchers();
