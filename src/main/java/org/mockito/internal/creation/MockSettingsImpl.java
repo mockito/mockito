@@ -10,6 +10,7 @@ import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.util.Checks;
 import org.mockito.internal.util.MockCreationValidator;
 import org.mockito.internal.util.MockNameImpl;
+import org.mockito.invocation.MockHandlerFactory;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.VerificationStartedListener;
@@ -231,6 +232,12 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     @Override
     public MockSettings lenient() {
         this.lenient = true;
+        return this;
+    }
+
+    @Override
+    public MockSettings mockHandlerFactory(MockHandlerFactory factory) {
+        this.mockHandlerFactory = factory;
         return this;
     }
 

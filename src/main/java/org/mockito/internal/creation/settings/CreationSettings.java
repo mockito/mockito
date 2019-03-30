@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.settings;
 
+import org.mockito.invocation.MockHandlerFactory;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.VerificationStartedListener;
@@ -43,6 +44,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     private Object outerClassInstance;
     private Object[] constructorArgs;
     protected boolean lenient;
+    protected MockHandlerFactory mockHandlerFactory;
 
     public CreationSettings() {}
 
@@ -65,6 +67,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.constructorArgs = copy.getConstructorArgs();
         this.lenient = copy.lenient;
         this.stripAnnotations = copy.stripAnnotations;
+        this.mockHandlerFactory = copy.mockHandlerFactory;
     }
 
     @Override
@@ -167,5 +170,10 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     @Override
     public boolean isLenient() {
         return lenient;
+    }
+
+    @Override
+    public MockHandlerFactory getMockHandlerFactory() {
+        return mockHandlerFactory;
     }
 }
