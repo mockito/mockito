@@ -14,7 +14,7 @@ public class LocationImpl implements Location, Serializable {
     //Limit the amount of objects being created, as this class is heavily instantiated:
     private static final StackTraceFilter defaultStackTraceFilter = new StackTraceFilter();
 
-    private final Throwable stackTraceHolder;
+    private final String stackTraceLine;
     private final StackTraceFilter stackTraceFilter;
     private final String sourceFile;
 
@@ -32,7 +32,7 @@ public class LocationImpl implements Location, Serializable {
 
     private LocationImpl(StackTraceFilter stackTraceFilter, Throwable stackTraceHolder) {
         this.stackTraceFilter = stackTraceFilter;
-        this.stackTraceHolder = stackTraceHolder;
+        this.stackTraceLine = computeStacktraceLine(this.stackTraceFilter, stackTraceHolder);
         if (stackTraceHolder.getStackTrace() == null || stackTraceHolder.getStackTrace().length == 0) {
             //there are corner cases where exception can have a null or empty stack trace
             //for example, a custom exception can override getStackTrace() method
@@ -44,8 +44,17 @@ public class LocationImpl implements Location, Serializable {
 
     @Override
     public String toString() {
-        //TODO SF perhaps store the results after invocation?
-        StackTraceElement[] filtered = stackTraceFilter.filter(stackTraceHolder.getStackTrace(), false);
+        return stackTraceLine;
+    }
+
+    /**
+     * Eagerly compute the stacktrace line from the stackTraceHolder. Storing the Throwable is
+     * memory-intensive for tests that have large stacktraces and have a lot of invocations on mocks.
+     */
+    private static String computeStacktraceLine(
+        StackTraceFilter stackTraceFilter, Throwable stackTraceHolder) {
+        StackTraceElement[] filtered =
+            stackTraceFilter.filter(stackTraceHolder.getStackTrace(), false);
         if (filtered.length == 0) {
             return "-> at <<unknown line>>";
         }
