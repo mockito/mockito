@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+description = "Test suite memory usage of Mockito"
+
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+dependencies {
+    compile project.rootProject
+    testCompile libraries.junit4
+    testCompile libraries.assertj
+}
+
+tasks.javadoc.enabled = false
+
+test {
+    maxHeapSize = "128m"
+    jvmArgs = ["-XX:MaxPermSize=128m"]
+}
