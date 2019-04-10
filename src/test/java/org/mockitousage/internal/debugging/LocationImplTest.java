@@ -33,7 +33,7 @@ public class LocationImplTest extends TestBase {
             }
 
             @Override
-            public StackTraceElement filterFirst(Throwable target) {
+            public StackTraceElement filterFirst(Throwable target, boolean isInline) {
                 return null;
             }
         };
