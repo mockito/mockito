@@ -16,7 +16,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.gradle.build-scan' version '1.16'
+    id 'com.gradle.build-scan' version '2.2.1'
     id 'eclipse'
 }
 
@@ -99,8 +99,8 @@ wrapper {
 
 //Posting Build scans to https://scans.gradle.com
 buildScan {
-    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
-    licenseAgree = 'yes'
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
 }
 
 //workaround for #1444, delete when Shipkit bug is fixed
