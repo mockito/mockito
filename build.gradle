@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
-        classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.4.4' //for 'java-compatibility-check.gradle'
+        classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.5.0' //for 'java-compatibility-check.gradle'
         classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.6'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
