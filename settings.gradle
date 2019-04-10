@@ -7,6 +7,7 @@ include 'android'
 include 'junit-jupiter'
 include 'junitJupiterExtensionTest'
 include 'module-test'
+include 'memory-test'
 include 'errorprone'
 
 rootProject.name = 'mockito'
