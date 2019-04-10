@@ -72,7 +72,9 @@ public class StackTraceFilter implements Serializable {
      *     not be filtered out per {@link StackTraceFilter#CLEANER}.
      * @return The first {@link StackTraceElement} outside of the {@link StackTraceFilter#CLEANER}
      */
-    public StackTraceElement filterFirst(Throwable target) {
+    public StackTraceElement filterFirst(Throwable target, boolean isInline) {
+        boolean shouldSkip = isInline;
+
         if (GET_STACK_TRACE_ELEMENT != null) {
             int i = 0;
 
@@ -88,7 +90,11 @@ public class StackTraceFilter implements Serializable {
                             GET_STACK_TRACE_ELEMENT.invoke(JAVA_LANG_ACCESS, target, i);
 
                     if (CLEANER.isIn(stackTraceElement)) {
-                        return stackTraceElement;
+                        if (shouldSkip) {
+                            shouldSkip = false;
+                        } else {
+                            return stackTraceElement;
+                        }
                     }
                 } catch (Exception e) {
                     // Fall back to slow path
@@ -102,7 +108,11 @@ public class StackTraceFilter implements Serializable {
         // iterating over the actual stacktrace
         for (StackTraceElement stackTraceElement : target.getStackTrace()) {
             if (CLEANER.isIn(stackTraceElement)) {
-                return stackTraceElement;
+                if (shouldSkip) {
+                    shouldSkip = false;
+                } else {
+                    return stackTraceElement;
+                }
             }
         }
         return null;

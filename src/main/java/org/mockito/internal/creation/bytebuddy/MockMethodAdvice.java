@@ -105,13 +105,11 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         } else {
             realMethod = new RealMethodCall(selfCallInfo, origin, instance, arguments);
         }
-        Throwable t = new Throwable();
-        t.setStackTrace(skipInlineMethodElement(t.getStackTrace()));
         return new ReturnValueWrapper(interceptor.doIntercept(instance,
                 origin,
                 arguments,
                 realMethod,
-                new LocationImpl(t)));
+                new LocationImpl(new Throwable(), true)));
     }
 
     @Override
@@ -220,21 +218,6 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             new ConditionalStackTraceFilter().filter(hideRecursiveCall(cause, new Throwable().getStackTrace().length, origin.getDeclaringClass()));
             throw cause;
         }
-    }
-
-    // With inline mocking, mocks for concrete classes are not subclassed, so elements of the stubbing methods are not filtered out.
-    // Therefore, if the method is inlined, skip the element.
-    private static StackTraceElement[] skipInlineMethodElement(StackTraceElement[] elements) {
-        List<StackTraceElement> list = new ArrayList<StackTraceElement>(elements.length);
-        for (int i = 0; i < elements.length; i++) {
-            StackTraceElement element = elements[i];
-            list.add(element);
-            if (element.getClassName().equals(MockMethodAdvice.class.getName()) && element.getMethodName().equals("handle")) {
-                // If the current element is MockMethodAdvice#handle(), the next is assumed to be an inlined method.
-                i++;
-            }
-        }
-        return list.toArray(new StackTraceElement[list.size()]);
     }
 
     private static class ReturnValueWrapper implements Callable<Object> {

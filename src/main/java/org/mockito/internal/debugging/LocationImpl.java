@@ -18,19 +18,19 @@ public class LocationImpl implements Location, Serializable {
     private String sourceFile;
 
     public LocationImpl() {
-        this(new Throwable());
+        this(new Throwable(), false);
     }
 
-    public LocationImpl(Throwable stackTraceHolder) {
-        this(stackTraceFilter, stackTraceHolder);
+    public LocationImpl(Throwable stackTraceHolder, boolean isInline) {
+        this(stackTraceFilter, stackTraceHolder, isInline);
     }
 
     public LocationImpl(StackTraceFilter stackTraceFilter) {
-        this(stackTraceFilter, new Throwable());
+        this(stackTraceFilter, new Throwable(), false);
     }
 
-    private LocationImpl(StackTraceFilter stackTraceFilter, Throwable stackTraceHolder) {
-        computeStackTraceInformation(stackTraceFilter, stackTraceHolder);
+    private LocationImpl(StackTraceFilter stackTraceFilter, Throwable stackTraceHolder, boolean isInline) {
+        computeStackTraceInformation(stackTraceFilter, stackTraceHolder, isInline);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class LocationImpl implements Location, Serializable {
      * mocks.
      */
     private void computeStackTraceInformation(
-        StackTraceFilter stackTraceFilter, Throwable stackTraceHolder) {
-        StackTraceElement filtered = stackTraceFilter.filterFirst(stackTraceHolder);
+        StackTraceFilter stackTraceFilter, Throwable stackTraceHolder, boolean isInline) {
+        StackTraceElement filtered = stackTraceFilter.filterFirst(stackTraceHolder, isInline);
 
         // there are corner cases where exception can have a null or empty stack trace
         // for example, a custom exception can override getStackTrace() method
