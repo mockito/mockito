@@ -87,7 +87,7 @@ public class StackTraceFilter implements Serializable {
                         (StackTraceElement)
                             GET_STACK_TRACE_ELEMENT.invoke(JAVA_LANG_ACCESS, target, i);
 
-                    if (!CLEANER.isIn(stackTraceElement)) {
+                    if (CLEANER.isIn(stackTraceElement)) {
                         return stackTraceElement;
                     }
                 } catch (Exception e) {
@@ -101,7 +101,7 @@ public class StackTraceFilter implements Serializable {
         // If we can't use the fast path of retrieving stackTraceElements, use the slow path by
         // iterating over the actual stacktrace
         for (StackTraceElement stackTraceElement : target.getStackTrace()) {
-            if (!CLEANER.isIn(stackTraceElement)) {
+            if (CLEANER.isIn(stackTraceElement)) {
                 return stackTraceElement;
             }
         }
