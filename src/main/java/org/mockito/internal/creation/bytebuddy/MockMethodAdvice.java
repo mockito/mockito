@@ -4,6 +4,16 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.ref.SoftReference;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.concurrent.Callable;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
@@ -20,19 +30,6 @@ import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.internal.invocation.mockref.MockWeakReference;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.ref.SoftReference;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
 
 public class MockMethodAdvice extends MockMethodDispatcher {
 
