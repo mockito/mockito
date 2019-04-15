@@ -3,8 +3,6 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 apply plugin: 'java'
 description = "End-to-end tests for Mockito and its extensions."
 
-sourceCompatibility = 1.8
-
 repositories {
     mavenLocal() //we depend on locally published mockito
 }

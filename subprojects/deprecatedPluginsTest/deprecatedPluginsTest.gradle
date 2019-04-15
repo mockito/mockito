@@ -3,8 +3,6 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 apply plugin: 'java'
 description = "End-to-end tests for deprecated Mockito plugins."
 
-sourceCompatibility = 1.8
-
 dependencies {
     testCompile project(":")
     testCompile libraries.junit4

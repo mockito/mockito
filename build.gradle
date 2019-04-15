@@ -7,7 +7,6 @@ buildscript {
 
     dependencies {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
-        classpath 'ru.vyarus:gradle-animalsniffer-plugin:1.5.0' //for 'java-compatibility-check.gradle'
         classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.6'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
@@ -35,7 +34,6 @@ allprojects {
 
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
-apply from: 'gradle/root/java-compatibility-check.gradle'
 apply from: 'gradle/java-library.gradle'
 apply from: 'gradle/license.gradle'
 apply from: 'gradle/root/coverage.gradle'
@@ -93,8 +91,8 @@ dependencies {
 }
 
 wrapper {
-    gradleVersion = '4.9'
-    distributionSha256Sum = 'e66e69dce8173dd2004b39ba93586a184628bc6c28461bc771d6835f7f9b0d28'
+    gradleVersion = '5.3.1'
+    distributionSha256Sum = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
 }
 
 //Posting Build scans to https://scans.gradle.com

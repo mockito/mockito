@@ -5,5 +5,4 @@ update_configs:
     directory: "/"
     update_schedule: "daily"
     # Redundant - default repository branch by default
-    target_branch: "release/2.x"
-
+    target_branch: "release/3.x"

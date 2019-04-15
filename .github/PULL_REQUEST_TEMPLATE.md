@@ -6,7 +6,7 @@
 > There may be a thorough review, with feedback -> code change loop.
 > 
 > Which branch : 
-> - On mockito 2.x, make your pull request target `release/2.x`
+> - On mockito 3.x (or 2.x), make your pull request target `release/3.x` (or `release/2.x`)
 > - On next mockito version make your pull request target `master`
 >
 > _This block can be removed_
@@ -15,7 +15,7 @@
 
 check list
 
- - [ ] Read the [contributing guide](https://github.com/mockito/mockito/blob/release/2.x/.github/CONTRIBUTING.md)
+ - [ ] Read the [contributing guide](https://github.com/mockito/mockito/blob/release/3.x/.github/CONTRIBUTING.md)
  - [ ] PR should be motivated, i.e. what does it fix, why, and if relevant how
  - [ ] If possible / relevant include an example in the description, that could help all readers
        including project members to get a better picture of the change

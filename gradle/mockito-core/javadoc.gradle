@@ -54,17 +54,15 @@ javadoc {
         <script type="text/javascript" src="{@docRoot}/js/index.js" async defer></script>
     """.replaceAll(/\r|\n|[ ]{8}/, ""))
     options.stylesheetFile rootProject.file("src/javadoc/stylesheet.css")
-    if (JavaVersion.current().isJava8Compatible()) {
-        options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('Xdoclint:none', '-quiet')
 
-        def minorVersion = System.getProperty("java.version") =~ /1.8.0_(\d*)/
+    def minorVersion = System.getProperty("java.version") =~ /1.8.0_(\d*)/
 
-        // Since JDK 8 version 121 scripts are not allowed in comments. However,
-        // earlier version throw an error if an unknown option is passed.
-        // Therefore only add this option if the JDK is actually correct.
-        if (minorVersion.size() > 0 && Integer.valueOf(minorVersion[0][1]) >= 121 || JavaVersion.current().isJava9Compatible()) {
-            options.addBooleanOption('-allow-script-in-comments', true)
-        }
+    // Since JDK 8 version 121 scripts are not allowed in comments. However,
+    // earlier version throw an error if an unknown option is passed.
+    // Therefore only add this option if the JDK is actually correct.
+    if (minorVersion.size() > 0 && Integer.valueOf(minorVersion[0][1]) >= 121 || JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('-allow-script-in-comments', true)
     }
 
     doLast {
