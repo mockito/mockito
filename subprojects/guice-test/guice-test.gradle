@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+description = "Test suite for Guice integration"
+
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+dependencies {
+    compile project.rootProject
+    testCompile libraries.junit4
+    testCompile libraries.assertj
+    testCompile 'com.google.inject:guice:4.2.2'
+}
+
+tasks.javadoc.enabled = false
+
