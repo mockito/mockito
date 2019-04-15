@@ -28,7 +28,7 @@ public class ReturnsMocks implements Answer<Object>, Serializable {
                 @Override
                 public Object apply(Class<?> type) {
                     if (type == null) {
-                        type = invocation.getMethod().getReturnType();
+                        return null;
                     }
 
                     return Mockito

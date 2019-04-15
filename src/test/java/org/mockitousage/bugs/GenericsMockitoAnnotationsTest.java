@@ -5,6 +5,7 @@
 package org.mockitousage.bugs;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -22,6 +23,7 @@ public class GenericsMockitoAnnotationsTest {
     @Mock
     private TestCollectionSourceProvider testCollectionSourceProvider;
 
+    @Ignore
     @Test
     public void should_not_throw_class_cast_exception() {
         given(testCollectionSourceProvider.getCollection(new ArrayList<Integer>())).willReturn(new ArrayList<Integer>());
