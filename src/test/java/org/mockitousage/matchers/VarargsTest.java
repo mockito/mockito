@@ -21,6 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
@@ -83,7 +84,7 @@ public class VarargsTest {
         Object arg = null;
         mock.varargs(arg);
 
-        verify(mock).varargs(eq(null));
+        verify(mock).varargs(ArgumentMatchers.<Object[]>eq(null));
     }
 
     @Test
@@ -91,7 +92,7 @@ public class VarargsTest {
         Object arg = null;
         mock.varargs(arg);
 
-        verify(mock).varargs(isNull());
+        verify(mock).varargs(ArgumentMatchers.<Object[]>isNull());
     }
 
     @Test
@@ -99,7 +100,7 @@ public class VarargsTest {
         Object[] argArray = null;
         mock.varargs(argArray);
 
-        verify(mock).varargs(isNull());
+        verify(mock).varargs(ArgumentMatchers.<Object[]>isNull());
     }
 
     @Test
@@ -122,21 +123,21 @@ public class VarargsTest {
     public void shouldMatchVarArgs_oneArgsOneAnyMatcher() {
         mock.varargs(1);
 
-        verify(mock).varargs(any()); // any() -> VarargMatcher
+        verify(mock).varargs(ArgumentMatchers.<Object[]>any()); // any() -> VarargMatcher
     }
 
     @Test
     public void shouldMatchVarArgs_twoArgsOneAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(any()); // any() -> VarargMatcher
+        verify(mock).varargs(ArgumentMatchers.<Object[]>any()); // any() -> VarargMatcher
     }
 
     @Test
     public void shouldMatchVarArgs_twoArgsTwoAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(any(), any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(), ArgumentMatchers.<Object>any()); // any() -> VarargMatcher
     }
 
     @Test
