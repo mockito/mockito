@@ -4,6 +4,9 @@ apply from: "$rootDir/gradle/java-library.gradle"
 apply from: "$rootDir/gradle/dependencies.gradle"
 
 dependencies {
+    compileOnly libraries.autoservice
+    annotationProcessor libraries.autoservice
+
     compile project.rootProject
     compile libraries.errorprone
 
