@@ -15,8 +15,7 @@ shipkit {
         'docs': 'Documentation'
     ]
 
-    // TODO: Enable 3.0.0 release
-    git.releasableBranchRegex = "release/2.x"  // 'release/2.x', 'release/3.x', etc.
+    git.releasableBranchRegex = "release/.+"  // 'release/2.x', 'release/3.x', etc.
 
     def buildNo = System.getenv("TRAVIS_BUILD_NUMBER")
     git.commitMessagePostfix = buildNo? "by CI build $buildNo\n\n[ci skip-release]" : "by local build\n\n[ci skip-release]"
