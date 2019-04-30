@@ -6,6 +6,7 @@ package org.mockito.errorprone.bugpatterns;
 
 import static com.google.errorprone.matchers.Matchers.packageStartsWith;
 
+import com.google.auto.service.AutoService;
 import com.google.errorprone.BugPattern;
 import com.google.errorprone.BugPattern.ProvidesFix;
 import com.google.errorprone.BugPattern.SeverityLevel;
@@ -23,6 +24,7 @@ import com.sun.tools.javac.code.Symbol;
  * {@link com.google.errorprone.bugpatterns.BugChecker} that detects usages of
  * org.mockito.internal.*
  */
+@AutoService(BugChecker.class)
 @BugPattern(
     name = "MockitoInternalUsage",
     summary = "org.mockito.internal.* is a private API and should not be used by clients",
