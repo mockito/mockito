@@ -6,6 +6,7 @@ package org.mockito.errorprone.bugpatterns;
 
 import static com.google.errorprone.matchers.Description.NO_MATCH;
 
+import com.google.auto.service.AutoService;
 import com.google.errorprone.BugPattern;
 import com.google.errorprone.BugPattern.SeverityLevel;
 import com.google.errorprone.VisitorState;
@@ -16,6 +17,7 @@ import com.google.errorprone.util.ASTHelpers;
 import com.sun.source.tree.ClassTree;
 
 /** Finds subclasses of @NotExtensible interfaces. */
+@AutoService(BugChecker.class)
 @BugPattern(
     name = "MockitoNotExtensible",
     summary = "Some types that are a part of Mockito public API are not intended to be extended.",
