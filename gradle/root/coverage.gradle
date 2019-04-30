@@ -22,15 +22,12 @@ task mockitoCoverage(type: JacocoReport) {
                 if (currentProject != rootProject) {   //already automatically enhanced in mockito main project as "java" plugin was applied before
                     applyTo test
                 }
+                test.jacoco.destinationFile = file("${currentProject.buildDir}/jacoco/test.exec")
             }
 
-            currentProject.tasks.withType(Test) { testTask ->
-                mockitoCoverage.dependsOn testTask
-            }
+            mockitoCoverage.executionData(files(test.jacoco.destinationFile).builtBy(test))
         }
     }
-
-    executionData(file("$buildDir/jacoco/test.exec"))
 
     reports {
         xml.enabled true
@@ -38,13 +35,14 @@ task mockitoCoverage(type: JacocoReport) {
         html.destination file("${buildDir}/jacocoHtml")
     }
 
-    afterEvaluate {
-      classDirectories = files(classDirectories.files.collect {
-        fileTree(
-          dir: it,
-          exclude: ['**/org/mockito/internal/util/concurrent/**']
-        )
-      })
+    doFirst {
+        classDirectories.from = classDirectories.files.collect {
+            fileTree(
+                dir: it,
+                exclude: ['**/org/mockito/internal/util/concurrent/**']
+            )
+        }
+        executionData.from = executionData.files.findAll { it.exists() }
     }
 
     doLast {
