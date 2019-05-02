@@ -7,7 +7,7 @@ package org.mockitousage.matchers;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockitoutil.TestBase;
 
 import static org.mockito.Matchers.refEq;

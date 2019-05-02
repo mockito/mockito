@@ -31,6 +31,11 @@ public class LocationImplTest extends TestBase {
             public StackTraceElement[] filter(StackTraceElement[] target, boolean keepTop) {
                 return new StackTraceElement[0];
             }
+
+            @Override
+            public StackTraceElement filterFirst(Throwable target, boolean isInline) {
+                return null;
+            }
         };
 
         //when

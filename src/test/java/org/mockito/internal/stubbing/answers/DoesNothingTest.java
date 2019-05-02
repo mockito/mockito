@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing.answers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
 import static org.mockitoutil.TestBase.getLastInvocation;
@@ -58,5 +59,16 @@ public class DoesNothingTest   {
         doesNothing().validateFor(invocation_Void);
     }
 
+    @Test
+    public void answer_returns_null_for_generic_parameter() {
+        SubclassWithGenericParameter mock = mock(SubclassWithGenericParameter.class);
+        doNothing().when(mock).methodReturningT();
+    }
 
+    static class SuperClassWithGenericParameter<T> {
+        T methodReturningT() {
+            return null;
+        }
+    }
+    static class SubclassWithGenericParameter extends SuperClassWithGenericParameter<Void> {}
 }

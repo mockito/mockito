@@ -25,7 +25,7 @@ import static org.mockito.Mockito.withSettings;
 /**
  * Returning deep stub implementation.
  *
- * Will return previously created mock if the invocation matches.
+ * <p>Will return previously created mock if the invocation matches.
  *
  * <p>Supports nested generic information, with this answer you can write code like this :
  *
@@ -37,6 +37,8 @@ import static org.mockito.Mockito.withSettings;
  * </code></pre>
  * </p>
  *
+ * <p>However this answer does not support generics information when the mock has been deserialized.
+ *
  * @see org.mockito.Mockito#RETURNS_DEEP_STUBS
  * @see org.mockito.Answers#RETURNS_DEEP_STUBS
  */
@@ -46,11 +48,20 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
         GenericMetadataSupport returnTypeGenericMetadata =
-                actualParameterizedType(invocation.getMock()).resolveGenericReturnType(invocation.getMethod());
+            actualParameterizedType(invocation.getMock()).resolveGenericReturnType(invocation.getMethod());
 
         Class<?> rawType = returnTypeGenericMetadata.rawType();
         if (!mockitoCore().isTypeMockable(rawType)) {
             return delegate().returnValueFor(rawType);
+        }
+
+        // When dealing with erased generics, we only receive the Object type as rawType. At this
+        // point, there is nothing to salvage for Mockito. Instead of trying to be smart and generate
+        // a mock that would potentially match the return signature, instead return `null`. This
+        // is valid per the CheckCast JVM instruction and is better than causing a ClassCastException
+        // on runtime.
+        if (rawType.equals(Object.class) && !returnTypeGenericMetadata.hasRawExtraInterfaces()) {
+            return null;
         }
 
         return deepStub(invocation, returnTypeGenericMetadata);
@@ -69,9 +80,9 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
         // record deep stub answer
         StubbedInvocationMatcher stubbing = recordDeepStubAnswer(
-                newDeepStubMock(returnTypeGenericMetadata, invocation.getMock()),
-                container
-        );
+            newDeepStubMock(returnTypeGenericMetadata, invocation.getMock()),
+            container
+                                                                );
 
         // deep stubbing creates a stubbing and immediately uses it
         // so the stubbing is actually used by the same invocation
@@ -88,24 +99,24 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
      * {@link ReturnsDeepStubs} answer in which we will store the returned type generic metadata.
      *
      * @param returnTypeGenericMetadata The metadata to use to create the new mock.
-     * @param parentMock The parent of the current deep stub mock.
+     * @param parentMock                The parent of the current deep stub mock.
      * @return The mock
      */
     private Object newDeepStubMock(GenericMetadataSupport returnTypeGenericMetadata, Object parentMock) {
         MockCreationSettings parentMockSettings = MockUtil.getMockSettings(parentMock);
         return mockitoCore().mock(
-                returnTypeGenericMetadata.rawType(),
-                withSettingsUsing(returnTypeGenericMetadata, parentMockSettings)
-        );
+            returnTypeGenericMetadata.rawType(),
+            withSettingsUsing(returnTypeGenericMetadata, parentMockSettings)
+                                 );
     }
 
     private MockSettings withSettingsUsing(GenericMetadataSupport returnTypeGenericMetadata, MockCreationSettings parentMockSettings) {
         MockSettings mockSettings = returnTypeGenericMetadata.hasRawExtraInterfaces() ?
-                withSettings().extraInterfaces(returnTypeGenericMetadata.rawExtraInterfaces())
-                : withSettings();
+                                    withSettings().extraInterfaces(returnTypeGenericMetadata.rawExtraInterfaces())
+                                                                                      : withSettings();
 
         return propagateSerializationSettings(mockSettings, parentMockSettings)
-                .defaultAnswer(returnsDeepStubsAnswerUsing(returnTypeGenericMetadata));
+            .defaultAnswer(returnsDeepStubsAnswerUsing(returnTypeGenericMetadata));
     }
 
     private MockSettings propagateSerializationSettings(MockSettings mockSettings, MockCreationSettings parentMockSettings) {
@@ -139,6 +150,15 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         protected GenericMetadataSupport actualParameterizedType(Object mock) {
             return returnTypeGenericMetadata;
         }
+
+        /**
+         * Generics support and serialization with deep stubs don't work together.
+         * <p>
+         * The issue is that GenericMetadataSupport is not serializable because
+         * the type elements inferred via reflection are not serializable. Supporting
+         * serialization would require to replace all types coming from the Java reflection
+         * with our own and still managing type equality with the JDK ones.
+         */
         private Object writeReplace() throws IOException {
             return Mockito.RETURNS_DEEP_STUBS;
         }
@@ -152,6 +172,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         DeeplyStubbedAnswer(Object mock) {
             this.mock = mock;
         }
+
         public Object answer(InvocationOnMock invocation) throws Throwable {
             return mock;
         }

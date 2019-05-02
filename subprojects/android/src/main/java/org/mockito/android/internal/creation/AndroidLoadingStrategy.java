@@ -16,7 +16,12 @@ import static org.mockito.internal.util.StringUtil.join;
 class AndroidLoadingStrategy implements SubclassLoader {
 
     @Override
-    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean codegen) {
+    public boolean isDisrespectingOpenness() {
+        return false;
+    }
+
+    @Override
+    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean localMock) {
         File target = AndroidTempFileLocator.target;
         if (target == null) {
             throw new MockitoException(join(

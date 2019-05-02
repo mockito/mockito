@@ -11,7 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
 
 public class DeepStubsSerializableTest {
@@ -45,7 +49,7 @@ public class DeepStubsSerializableTest {
         assertThat(deserialized_deep_stub.iterator().next().add("yes")).isEqualTo(true);
     }
 
-    @Test(expected = ClassCastException.class)
+    @Test
     public void should_discard_generics_metadata_when_serialized_then_disabling_deep_stubs_with_generics() throws Exception {
         // given
         ListContainer deep_stubbed = mock(ListContainer.class, withSettings().defaultAnswer(RETURNS_DEEP_STUBS).serializable());
@@ -53,10 +57,14 @@ public class DeepStubsSerializableTest {
 
         ListContainer deserialized_deep_stub = serializeAndBack(deep_stubbed);
 
-        // when stubbing on a deserialized mock
-        when(deserialized_deep_stub.iterator().next().get(42)).thenReturn("no");
-
-        // then revert to the default RETURNS_DEEP_STUBS and the code will raise a ClassCastException
+        try {
+            // when stubbing on a deserialized mock
+            // then revert to the default RETURNS_DEEP_STUBS and the code will raise a ClassCastException
+            when(deserialized_deep_stub.iterator().next().get(42)).thenReturn("no");
+            fail("Expected an exception to be thrown as deep stubs and serialization does not play well together");
+        } catch (NullPointerException e) {
+            assertThat(e).hasMessage(null);
+        }
     }
 
     static class SampleClass implements Serializable {

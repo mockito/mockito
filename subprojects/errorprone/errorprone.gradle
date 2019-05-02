@@ -1,0 +1,26 @@
+description = "ErrorProne plugins for Mockito"
+
+apply from: "$rootDir/gradle/java-library.gradle"
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+dependencies {
+    compileOnly libraries.autoservice
+    annotationProcessor libraries.autoservice
+
+    compile project.rootProject
+    compile libraries.errorprone
+
+    testCompile 'junit:junit:4.13-beta-1'
+    testCompile libraries.errorproneTestApi
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+test {
+    inputs.files(configurations.errorproneJavac).withNormalizer(ClasspathNormalizer)
+    jvmArgs += "-Xbootclasspath/p:${configurations.errorproneJavac.asPath}"
+
+    // ErrorProne can only run on JDK 8
+    it.enabled = !JavaVersion.current().isJava9Compatible()
+}

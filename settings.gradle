@@ -6,6 +6,9 @@ include 'kotlinReleaseCoroutinesTest'
 include 'android'
 include 'junit-jupiter'
 include 'junitJupiterExtensionTest'
+include 'module-test'
+include 'memory-test'
+include 'errorprone'
 
 rootProject.name = 'mockito'
 
@@ -18,3 +21,9 @@ rootProject.children.each { project ->
 }
 
 enableFeaturePreview('STABLE_PUBLISHING')
+
+buildCache {
+    local {
+        enabled = !System.getenv().containsKey("CI")
+    }
+}

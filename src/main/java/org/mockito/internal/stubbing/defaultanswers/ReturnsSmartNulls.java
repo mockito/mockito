@@ -8,8 +8,6 @@ import static org.mockito.internal.exceptions.Reporter.smartNullPointerException
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 
 import java.io.Serializable;
-import java.lang.reflect.Modifier;
-
 import org.mockito.Mockito;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.invocation.InvocationOnMock;
@@ -40,24 +38,34 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
 
     private final Answer<Object> delegate = new ReturnsMoreEmptyValues();
 
+    @Override
     public Object answer(final InvocationOnMock invocation) throws Throwable {
         Object defaultReturnValue = delegate.answer(invocation);
+
         if (defaultReturnValue != null) {
             return defaultReturnValue;
         }
-        Class<?> type = invocation.getMethod().getReturnType();
-        if (!type.isPrimitive() && !Modifier.isFinal(type.getModifiers())) {
-            final Location location = new LocationImpl();
-            return Mockito.mock(type, new ThrowsSmartNullPointer(invocation, location));
-        }
-        return null;
+
+        return RetrieveGenericsForDefaultAnswers.returnTypeForMockWithCorrectGenerics(invocation,
+            new RetrieveGenericsForDefaultAnswers.AnswerCallback() {
+                @Override
+                public Object apply(Class<?> type) {
+                    if (type == null) {
+                        return null;
+                    }
+
+                    return Mockito.mock(type, new ThrowsSmartNullPointer(invocation, new LocationImpl()));
+                }
+            });
     }
 
     private static class ThrowsSmartNullPointer implements Answer {
+
         private final InvocationOnMock unstubbedInvocation;
+
         private final Location location;
 
-        public ThrowsSmartNullPointer(InvocationOnMock unstubbedInvocation, Location location) {
+        ThrowsSmartNullPointer(InvocationOnMock unstubbedInvocation, Location location) {
             this.unstubbedInvocation = unstubbedInvocation;
             this.location = location;
         }
@@ -65,7 +73,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
         public Object answer(InvocationOnMock currentInvocation) throws Throwable {
             if (isToStringMethod(currentInvocation.getMethod())) {
                 return "SmartNull returned by this unstubbed method call on a mock:\n" +
-                        unstubbedInvocation.toString();
+                    unstubbedInvocation.toString();
             }
 
             throw smartNullPointerException(unstubbedInvocation.toString(), location);

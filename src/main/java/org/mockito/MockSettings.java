@@ -9,6 +9,7 @@ import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
@@ -43,6 +44,7 @@ import java.io.Serializable;
  * Firstly, to make it easy to add another mock setting when the demand comes.
  * Secondly, to enable combining together different mock settings without introducing zillions of overloaded mock() methods.
  */
+@NotExtensible
 public interface MockSettings extends Serializable {
 
     /**
@@ -202,6 +204,24 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      */
     MockSettings verboseLogging();
+
+    /**
+     * Add stubbing lookup listener to the mock object.
+     *
+     * Multiple listeners may be added and they will be notified orderly.
+     *
+     * For use cases and more info see {@link StubbingLookupListener}.
+     *
+     * Example:
+     * <pre class="code"><code class="java">
+     *  List mockWithListener = mock(List.class, withSettings().stubbingLookupListeners(new YourStubbingLookupListener()));
+     * </code></pre>
+     *
+     * @param listeners The stubbing lookup listeners to add. May not be null.
+     * @return settings instance so that you can fluently specify other settings
+     * @since 2.24.6
+     */
+    MockSettings stubbingLookupListeners(StubbingLookupListener... listeners);
 
     /**
      * Registers a listener for method invocations on this mock. The listener is

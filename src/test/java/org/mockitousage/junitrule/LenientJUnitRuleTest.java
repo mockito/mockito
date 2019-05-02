@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.quality.Strictness;
 import org.mockito.internal.junit.JUnitRule;
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
 

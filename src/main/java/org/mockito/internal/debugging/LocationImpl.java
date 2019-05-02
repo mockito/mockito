@@ -11,45 +11,51 @@ import org.mockito.invocation.Location;
 public class LocationImpl implements Location, Serializable {
 
     private static final long serialVersionUID = -9054861157390980624L;
-    //Limit the amount of objects being created, as this class is heavily instantiated:
-    private static final StackTraceFilter defaultStackTraceFilter = new StackTraceFilter();
+    // Limit the amount of objects being created, as this class is heavily instantiated:
+    private static final StackTraceFilter stackTraceFilter = new StackTraceFilter();
 
-    private final Throwable stackTraceHolder;
-    private final StackTraceFilter stackTraceFilter;
-    private final String sourceFile;
+    private String stackTraceLine;
+    private String sourceFile;
 
     public LocationImpl() {
-        this(defaultStackTraceFilter);
+        this(new Throwable(), false);
+    }
+
+    public LocationImpl(Throwable stackTraceHolder, boolean isInline) {
+        this(stackTraceFilter, stackTraceHolder, isInline);
     }
 
     public LocationImpl(StackTraceFilter stackTraceFilter) {
-        this(stackTraceFilter, new Throwable());
+        this(stackTraceFilter, new Throwable(), false);
     }
 
-    public LocationImpl(Throwable stackTraceHolder) {
-        this(defaultStackTraceFilter, stackTraceHolder);
-    }
-
-    private LocationImpl(StackTraceFilter stackTraceFilter, Throwable stackTraceHolder) {
-        this.stackTraceFilter = stackTraceFilter;
-        this.stackTraceHolder = stackTraceHolder;
-        if (stackTraceHolder.getStackTrace() == null || stackTraceHolder.getStackTrace().length == 0) {
-            //there are corner cases where exception can have a null or empty stack trace
-            //for example, a custom exception can override getStackTrace() method
-            this.sourceFile = "<unknown source file>";
-        } else {
-            this.sourceFile = stackTraceFilter.findSourceFile(stackTraceHolder.getStackTrace(), "<unknown source file>");
-        }
+    private LocationImpl(StackTraceFilter stackTraceFilter, Throwable stackTraceHolder, boolean isInline) {
+        computeStackTraceInformation(stackTraceFilter, stackTraceHolder, isInline);
     }
 
     @Override
     public String toString() {
-        //TODO SF perhaps store the results after invocation?
-        StackTraceElement[] filtered = stackTraceFilter.filter(stackTraceHolder.getStackTrace(), false);
-        if (filtered.length == 0) {
-            return "-> at <<unknown line>>";
+        return stackTraceLine;
+    }
+
+    /**
+     * Eagerly compute the stacktrace line from the stackTraceHolder. Storing the Throwable is
+     * memory-intensive for tests that have large stacktraces and have a lot of invocations on
+     * mocks.
+     */
+    private void computeStackTraceInformation(
+        StackTraceFilter stackTraceFilter, Throwable stackTraceHolder, boolean isInline) {
+        StackTraceElement filtered = stackTraceFilter.filterFirst(stackTraceHolder, isInline);
+
+        // there are corner cases where exception can have a null or empty stack trace
+        // for example, a custom exception can override getStackTrace() method
+        if (filtered == null) {
+            this.stackTraceLine = "-> at <<unknown line>>";
+            this.sourceFile = "<unknown source file>";
+        } else {
+            this.stackTraceLine = "-> at " + filtered.toString();
+            this.sourceFile = filtered.getFileName();
         }
-        return "-> at " + filtered[0].toString();
     }
 
     @Override

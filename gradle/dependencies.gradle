@@ -4,8 +4,9 @@ ext {
 
 def versions = [:]
 
-versions.bytebuddy = '1.9.3'
+versions.bytebuddy = '1.9.10'
 versions.junitJupiter = '5.1.1'
+versions.errorprone = '2.3.2'
 
 libraries.junit4 = 'junit:junit:4.12'
 libraries.junitJupiterApi = "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}"
@@ -13,12 +14,16 @@ libraries.junitPlatformLauncher = 'org.junit.platform:junit-platform-launcher:1.
 libraries.junitJupiterEngine = "org.junit.jupiter:junit-jupiter-engine:${versions.junitJupiter}"
 libraries.assertj = 'org.assertj:assertj-core:2.9.0'
 libraries.hamcrest = 'org.hamcrest:hamcrest-core:1.3'
+libraries.opentest4j = 'org.opentest4j:opentest4j:1.1.1'
 
 libraries.bytebuddy = "net.bytebuddy:byte-buddy:${versions.bytebuddy}"
 libraries.bytebuddyagent = "net.bytebuddy:byte-buddy-agent:${versions.bytebuddy}"
 libraries.bytebuddyandroid = "net.bytebuddy:byte-buddy-android:${versions.bytebuddy}"
 
-libraries.errorprone = 'com.google.errorprone:error_prone_core:2.3.1'
+libraries.errorprone = "com.google.errorprone:error_prone_core:${versions.errorprone}"
+libraries.errorproneTestApi = "com.google.errorprone:error_prone_test_helpers:${versions.errorprone}"
+
+libraries.autoservice = "com.google.auto.service:auto-service:1.0-rc5"
 
 // objenesis 3.x with full Java 11 support requires Java 8, bump version when Java 7 support is dropped
 libraries.objenesis = 'org.objenesis:objenesis:2.6'

@@ -7,15 +7,20 @@ package org.mockito.internal.stubbing.answers;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import org.mockito.internal.invocation.AbstractAwareMethod;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
+import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.mock.MockCreationSettings;
 
 public class InvocationInfo implements AbstractAwareMethod {
 
     private final Method method;
+    private final InvocationOnMock invocation;
 
     public InvocationInfo(InvocationOnMock theInvocation) {
         this.method = theInvocation.getMethod();
+        this.invocation = theInvocation;
     }
 
     public boolean isValidException(Throwable throwable) {
@@ -43,8 +48,12 @@ public class InvocationInfo implements AbstractAwareMethod {
      * E.g:  {@code void foo()} or {@code Void bar()}
      */
     public boolean isVoid() {
-        Class<?> returnType = this.method.getReturnType();
-        return returnType == Void.TYPE|| returnType == Void.class;
+        final MockCreationSettings mockSettings = MockUtil.getMockHandler(invocation.getMock())
+            .getMockSettings();
+        Class<?> returnType = GenericMetadataSupport.inferFrom(mockSettings.getTypeToMock())
+            .resolveGenericReturnType(this.method)
+            .rawType();
+        return returnType == Void.TYPE || returnType == Void.class;
     }
 
     public String printMethodReturnType() {

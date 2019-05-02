@@ -83,7 +83,7 @@ public class Reporter {
                 "Hints:",
                 " 1. missing thenReturn()",
                 " 2. you are trying to stub a final method, which is not supported",
-                " 3: you are stubbing the behaviour of another mock inside before 'thenReturn' instruction if completed",
+                " 3: you are stubbing the behaviour of another mock inside before 'thenReturn' instruction is completed",
                 ""
         ));
     }
@@ -699,8 +699,8 @@ public class Reporter {
         return new MockitoException(method + "() does not accept " + parameter + " See the Javadoc.");
     }
 
-    public static MockitoException invocationListenersRequiresAtLeastOneListener() {
-        return new MockitoException("invocationListeners() requires at least one listener");
+    public static MockitoException requiresAtLeastOneListener(String method) {
+        return new MockitoException(method + "() requires at least one listener");
     }
 
     public static MockitoException invocationListenerThrewException(InvocationListener listener, Throwable listenerThrowable) {
