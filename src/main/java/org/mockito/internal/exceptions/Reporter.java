@@ -299,17 +299,33 @@ public class Reporter {
         return join(description.toArray());
     }
 
-    public static AssertionError argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
-        String message = join("Argument(s) are different! Wanted:",
-                              wanted,
-                              new LocationImpl(),
-                              "Actual invocation has different arguments:",
-                              actual,
-                              actualLocation,
-                              ""
-        );
+    public static AssertionError argumentsAreDifferent(String wanted, List<String> actualCalls, List<Location> actualLocations) {
+        if (actualCalls == null || actualLocations == null || actualCalls.size() != actualLocations.size()) {
+            throw new IllegalArgumentException("actualCalls and actualLocations list must match");
+        }
 
-        return ExceptionFactory.createArgumentsAreDifferentException(message, wanted, actual);
+
+        StringBuilder actualBuilder = new StringBuilder();
+        StringBuilder messageBuilder = new StringBuilder();
+        messageBuilder.append("\n")
+            .append("Argument(s) are different! Wanted:\n")
+            .append(wanted)
+            .append("\n")
+            .append(new LocationImpl())
+            .append("\n")
+            .append("Actual invocations have different arguments:\n");
+
+        for (int i = 0; i < actualCalls.size(); i++) {
+            actualBuilder.append(actualCalls.get(i))
+                .append("\n");
+
+            messageBuilder.append(actualCalls.get(i))
+                .append("\n")
+                .append(actualLocations.get(i))
+                .append("\n");
+        }
+
+        return ExceptionFactory.createArgumentsAreDifferentException(messageBuilder.toString(), wanted, actualBuilder.toString());
     }
 
     public static MockitoAssertionError wantedButNotInvoked(DescribedInvocation wanted) {

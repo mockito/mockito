@@ -82,7 +82,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String actual =
                     "\n" +
-                    "Actual invocation has different arguments:" +
+                    "Actual invocations have different arguments:" +
                     "\n" +
                     "iMethods.varargs(1, 2);";
 
@@ -116,7 +116,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String actual =
                     "\n" +
-                    "Actual invocation has different arguments:" +
+                    "Actual invocations have different arguments:" +
                     "\n" +
                     "iMethods.varargs(" +
                     "\n" +

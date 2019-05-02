@@ -67,7 +67,7 @@ public class MissingInvocationCheckerTest extends TestBase {
 
         exception.expectMessage("Argument(s) are different! Wanted:");
         exception.expectMessage("mock.intArgumentMethod(2222);");
-        exception.expectMessage("Actual invocation has different arguments:");
+        exception.expectMessage("Actual invocations have different arguments:");
         exception.expectMessage("mock.intArgumentMethod(1111);");
 
         MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
@@ -82,7 +82,7 @@ public class MissingInvocationCheckerTest extends TestBase {
 
         exception.expectMessage("Argument(s) are different! Wanted:");
         exception.expectMessage("mock.intArgumentMethod(MyCoolPrint(2222));");
-        exception.expectMessage("Actual invocation has different arguments:");
+        exception.expectMessage("Actual invocations have different arguments:");
         exception.expectMessage("mock.intArgumentMethod(MyCoolPrint(1111));");
 
         MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
@@ -103,7 +103,7 @@ public class MissingInvocationCheckerTest extends TestBase {
     static class CustomInvocationBuilder extends InvocationBuilder {
         @Override
         protected Invocation createInvocation(MockReference<Object> mockRef, MockitoMethod mockitoMethod, final Object[] arguments,
-                                              RealMethod realMethod, Location location, int sequenceNumber) {
+            RealMethod realMethod, Location location, int sequenceNumber) {
             return new InterceptedInvocation(mockRef, mockitoMethod, arguments, realMethod, location, sequenceNumber) {
                 @Override
                 public List<ArgumentMatcher> getArgumentsAsMatchers() {
