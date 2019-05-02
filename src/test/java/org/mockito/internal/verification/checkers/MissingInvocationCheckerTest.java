@@ -5,7 +5,6 @@
 
 package org.mockito.internal.verification.checkers;
 
-import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -19,6 +18,9 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -101,7 +103,7 @@ public class MissingInvocationCheckerTest extends TestBase {
     static class CustomInvocationBuilder extends InvocationBuilder {
         @Override
         protected Invocation createInvocation(MockReference<Object> mockRef, MockitoMethod mockitoMethod, final Object[] arguments,
-                                              RealMethod realMethod, Location location, int sequenceNumber) {
+            RealMethod realMethod, Location location, int sequenceNumber) {
             return new InterceptedInvocation(mockRef, mockitoMethod, arguments, realMethod, location, sequenceNumber) {
                 @Override
                 public List<ArgumentMatcher> getArgumentsAsMatchers() {

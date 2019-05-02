@@ -308,20 +308,21 @@ public class Reporter {
         StringBuilder actualBuilder = new StringBuilder();
         StringBuilder messageBuilder = new StringBuilder();
         messageBuilder.append("\n")
-        .append("Argument(s) are different! Wanted:\n")
-        .append(wanted)
-        .append("\n")
-        .append(new LocationImpl())
-        .append("\n")
-        .append("Actual invocations have different arguments:\n");
+            .append("Argument(s) are different! Wanted:\n")
+            .append(wanted)
+            .append("\n")
+            .append(new LocationImpl())
+            .append("\n")
+            .append("Actual invocations have different arguments:\n");
+
         for (int i = 0; i < actualCalls.size(); i++) {
             actualBuilder.append(actualCalls.get(i))
                 .append("\n");
 
             messageBuilder.append(actualCalls.get(i))
-            .append("\n")
-            .append(actualLocations.get(i))
-            .append("\n");
+                .append("\n")
+                .append(actualLocations.get(i))
+                .append("\n");
         }
 
         return ExceptionFactory.createArgumentsAreDifferentException(messageBuilder.toString(), wanted, actualBuilder.toString());

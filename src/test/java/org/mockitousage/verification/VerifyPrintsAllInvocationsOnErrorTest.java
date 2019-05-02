@@ -6,7 +6,7 @@ package org.mockitousage.verification;
 
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
