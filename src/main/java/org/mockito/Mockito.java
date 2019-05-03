@@ -320,6 +320,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * verify(mockedList, never()).add("never happened");
  *
  * //verification using atLeast()/atMost()
+ * verify(mockedList, atMostOnce()).add("once");
  * verify(mockedList, atLeastOnce()).add("three times");
  * verify(mockedList, atLeast(2)).add("three times");
  * verify(mockedList, atMost(5)).add("three times");
@@ -2722,6 +2723,22 @@ public class Mockito extends ArgumentMatchers {
     @CheckReturnValue
     public static VerificationMode atLeast(int minNumberOfInvocations) {
         return VerificationModeFactory.atLeast(minNumberOfInvocations);
+    }
+
+    /**
+     * Allows at-most-once verification. E.g:
+     * <pre class="code"><code class="java">
+     *   verify(mock, atMostOnce()).someMethod("some arg");
+     * </code></pre>
+     * Alias to <code>atMost(1)</code>.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @return verification mode
+     */
+    @CheckReturnValue
+    public static VerificationMode atMostOnce() {
+        return VerificationModeFactory.atMostOnce();
     }
 
     /**

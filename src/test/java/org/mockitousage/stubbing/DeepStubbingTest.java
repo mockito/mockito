@@ -280,7 +280,7 @@ public class DeepStubbingTest extends TestBase {
 
         verify(person.getAddress("the docks").getStreet(), times(3)).getName();
         verify(person.getAddress("the docks").getStreet(Locale.CHINESE), never()).getName();
-        verify(person.getAddress("the docks").getStreet(Locale.ITALIAN), atMost(1)).getName();
+        verify(person.getAddress("the docks").getStreet(Locale.ITALIAN), atMostOnce()).getName();
     }
 
 
