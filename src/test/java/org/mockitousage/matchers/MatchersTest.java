@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -286,7 +286,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(anyLong())).thenReturn("6");
         when(mock.oneArg(anyShort())).thenReturn("7");
         when(mock.oneArg((String) anyObject())).thenReturn("8");
-        when(mock.oneArg(anyObject())).thenReturn("9");
+        when(mock.oneArg(Mockito.<Object>anyObject())).thenReturn("9");
         when(mock.oneArg(any(RandomAccess.class))).thenReturn("10");
 
         assertEquals("0", mock.oneArg(true));
@@ -594,14 +594,14 @@ public class MatchersTest extends TestBase {
     public void eq_matcher_and_nulls() {
         mock.simpleMethod((Object) null);
 
-        verify(mock).simpleMethod(eq(null));
+        verify(mock).simpleMethod(Mockito.<Object>eq(null));
     }
 
     @Test
     public void same_matcher_and_nulls() {
         mock.simpleMethod((Object) null);
 
-        verify(mock).simpleMethod(same(null));
+        verify(mock).simpleMethod(Mockito.<Object>same(null));
     }
 
     @Test

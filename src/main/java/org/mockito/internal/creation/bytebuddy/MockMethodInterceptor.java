@@ -46,13 +46,11 @@ public class MockMethodInterceptor implements Serializable {
                        Method invokedMethod,
                        Object[] arguments,
                        RealMethod realMethod) throws Throwable {
-        return doIntercept(
-                mock,
-                invokedMethod,
-                arguments,
-            realMethod,
-                new LocationImpl()
-        );
+        return doIntercept(mock,
+                           invokedMethod,
+                           arguments,
+                           realMethod,
+                           new LocationImpl());
     }
 
     Object doIntercept(Object mock,
@@ -108,11 +106,11 @@ public class MockMethodInterceptor implements Serializable {
                 return superCall.call();
             }
             return interceptor.doIntercept(
-                    mock,
-                    invokedMethod,
-                    arguments,
-                    new RealMethod.FromCallable(superCall)
-            );
+                mock,
+                invokedMethod,
+                arguments,
+                new RealMethod.FromCallable(superCall)
+                                          );
         }
 
         @SuppressWarnings("unused")
@@ -126,11 +124,11 @@ public class MockMethodInterceptor implements Serializable {
                 return stubValue;
             }
             return interceptor.doIntercept(
-                    mock,
-                    invokedMethod,
-                    arguments,
-                    RealMethod.IsIllegal.INSTANCE
-            );
+                mock,
+                invokedMethod,
+                arguments,
+                RealMethod.IsIllegal.INSTANCE
+                                          );
         }
     }
 }

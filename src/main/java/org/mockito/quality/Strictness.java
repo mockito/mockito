@@ -9,31 +9,31 @@ import org.mockito.MockitoSession;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.junit.JUnitRule;
+import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 
 /**
- * Configures the "strictness" of Mockito during a mocking session.
- * A session typically maps to a single test method invocation.
- * {@code Strictness} drives cleaner tests and better productivity.
- * The easiest way to leverage enhanced {@code Strictness} is using
- * Mockito's JUnit support ({@link MockitoRule} or {@link MockitoJUnitRunner}).
- * If you cannot use JUnit support {@link MockitoSession} is the way to go.
+ * Configures the "strictness" of Mockito, affecting the behavior of stubbings and verification.
+ * "Strict stubbing" is a new feature in Mockito 2 that drives cleaner tests and better productivity.
+ * The easiest way to leverage it is via Mockito's JUnit support ({@link MockitoJUnit}) or Mockito Session ({@link MockitoSession}).
  * <p>
- * How strictness level influences the behavior of the test (mocking session)?
+ * How strictness influences the behavior of the test?
  * <ol>
- *     <li>{@link Strictness#LENIENT} - no added behavior.
- *       The default of Mockito 1.x.
- *       Recommended only if you cannot use {@link #STRICT_STUBS} nor {@link #WARN}.</li>
- *     <li>{@link Strictness#WARN} - helps keeping tests clean and improves debuggability.
- *       Reports console warnings about unused stubs
- *       and stubbing argument mismatch (see {@link org.mockito.quality.MockitoHint}).
- *       The default behavior of Mockito 2.x when {@link JUnitRule} or {@link MockitoJUnitRunner} are used.</li>
- *       Recommended if you cannot use {@link #STRICT_STUBS}.
  *     <li>{@link Strictness#STRICT_STUBS} - ensures clean tests, reduces test code duplication, improves debuggability.
  *       Best combination of flexibility and productivity. Highly recommended.
  *       Planned as default for Mockito v3.
- *       See {@link #STRICT_STUBS} for the details.
+ *       Enable it via {@link MockitoRule}, {@link MockitoJUnitRunner} or {@link MockitoSession}.
+ *       See {@link #STRICT_STUBS} for the details.</li>
+ *     <li>{@link Strictness#LENIENT} - no added behavior.
+ *       The default of Mockito 1.x.
+ *       Recommended only if you cannot use {@link #STRICT_STUBS}</li>
+ *     <li>{@link Strictness#WARN} - cleaner tests but only if you read the console output.
+ *       Reports console warnings about unused stubs
+ *       and stubbing argument mismatch (see {@link org.mockito.quality.MockitoHint}).
+ *       The default behavior of Mockito 2.x when {@link JUnitRule} or {@link MockitoJUnitRunner} are used.
+ *       Recommended if you cannot use {@link #STRICT_STUBS}.
+ *       Introduced originally with Mockito 2 because console warnings was the only compatible way of adding such feature.</li>
  * </ol>
  *
  * @since 2.3.0
@@ -43,7 +43,7 @@ public enum Strictness {
 
     /**
      * No extra strictness. Mockito 1.x behavior.
-     * Recommended only if you cannot use {@link #STRICT_STUBS} nor {@link #WARN}.
+     * Recommended only if you cannot use {@link #STRICT_STUBS}.
      * <p>
      * For more information see {@link Strictness}.
      *
@@ -53,10 +53,10 @@ public enum Strictness {
     LENIENT,
 
     /**
-     * Helps keeping tests clean and improves debuggability.
+     * Helps keeping tests clean and improves debuggability only if you read the console output.
      * Extra warnings emitted to the console, see {@link MockitoHint}.
      * Default Mockito 2.x behavior.
-     * Recommended if you cannot use {@link #STRICT_STUBS}.
+     * Recommended only if you cannot use {@link #STRICT_STUBS} because console output is ignored most of the time.
      * <p>
      * For more information see {@link Strictness}.
      *
@@ -70,6 +70,7 @@ public enum Strictness {
      * Offers best combination of flexibility and productivity.
      * Highly recommended.
      * Planned as default for Mockito v3.
+     * Enable it via our JUnit support ({@link MockitoJUnit}) or {@link MockitoSession}.
      * <p>
      * Adds following behavior:
      *  <ul>
@@ -80,8 +81,7 @@ public enum Strictness {
      *      <li>Cleaner, more DRY tests ("Don't Repeat Yourself"):
      *          If you use {@link org.mockito.Mockito#verifyNoMoreInteractions(Object...)}
      *          you no longer need to explicitly verify stubbed invocations.
-     *          They are automatically verified for you. However if you have more invocations,
-     *          the test won't fail since it won't check that there are no more interactions on that stub.</li>
+     *          They are automatically verified for you.</li>
      *  </ul>
      *
      * For more information see {@link Strictness}.

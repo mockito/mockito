@@ -13,6 +13,6 @@ dependencies {
     testRuntime libraries.junitJupiterEngine
 }
 
-test {
+tasks.withType(Test) {
     useJUnitPlatform()
 }

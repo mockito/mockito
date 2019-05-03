@@ -521,6 +521,7 @@ public class ArgumentMatchers {
      * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
+    @Deprecated
     public static <T> List<T> anyListOf(Class<T> clazz) {
         return anyList();
     }
@@ -581,6 +582,7 @@ public class ArgumentMatchers {
      * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
+    @Deprecated
     public static <T> Set<T> anySetOf(Class<T> clazz) {
         return anySet();
     }
@@ -642,6 +644,7 @@ public class ArgumentMatchers {
      * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
+    @Deprecated
     public static <K, V> Map<K, V> anyMapOf(Class<K> keyClazz, Class<V> valueClazz) {
         return anyMap();
     }
@@ -702,6 +705,7 @@ public class ArgumentMatchers {
      * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
+    @Deprecated
     public static <T> Collection<T> anyCollectionOf(Class<T> clazz) {
         return anyCollection();
     }
@@ -764,6 +768,7 @@ public class ArgumentMatchers {
      * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
+    @Deprecated
     public static <T> Iterable<T> anyIterableOf(Class<T> clazz) {
         return anyIterable();
     }
@@ -988,6 +993,7 @@ public class ArgumentMatchers {
      * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
+    @Deprecated
     public static <T> T isNull(Class<T> clazz) {
         return isNull();
     }
@@ -1031,6 +1037,7 @@ public class ArgumentMatchers {
      * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
+    @Deprecated
     public static <T> T notNull(Class<T> clazz) {
         return notNull();
     }
@@ -1072,6 +1079,7 @@ public class ArgumentMatchers {
      * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
+    @Deprecated
     public static <T> T isNotNull(Class<T> clazz) {
         return notNull(clazz);
     }

@@ -12,12 +12,14 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.ValidableAnswer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,13 +30,16 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     private static final long serialVersionUID = -5334301962749537177L;
     private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<StubbedInvocationMatcher>();
-    private final List<Answer<?>> answersForStubbing = new ArrayList<Answer<?>>();
+    private final DoAnswerStyleStubbing doAnswerStyleStubbing;
     private final RegisteredInvocations registeredInvocations;
+    private final Strictness mockStrictness;
 
     private MatchableInvocation invocationForStubbing;
 
     public InvocationContainerImpl(MockCreationSettings mockSettings) {
         this.registeredInvocations = createRegisteredInvocations(mockSettings);
+        this.mockStrictness = mockSettings.isLenient() ? Strictness.LENIENT : null;
+        this.doAnswerStyleStubbing = new DoAnswerStyleStubbing();
     }
 
     public void setInvocationForPotentialStubbing(MatchableInvocation invocation) {
@@ -46,19 +51,19 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         this.invocationForStubbing = invocationMatcher;
     }
 
-    public void addAnswer(Answer answer) {
+    public void addAnswer(Answer answer, Strictness stubbingStrictness) {
         registeredInvocations.removeLast();
-        addAnswer(answer, false);
+        addAnswer(answer, false, stubbingStrictness);
     }
 
     public void addConsecutiveAnswer(Answer answer) {
-        addAnswer(answer, true);
+        addAnswer(answer, true, null);
     }
 
     /**
      * Adds new stubbed answer and returns the invocation matcher the answer was added to.
      */
-    public StubbedInvocationMatcher addAnswer(Answer answer, boolean isConsecutive) {
+    public StubbedInvocationMatcher addAnswer(Answer answer, boolean isConsecutive, Strictness stubbingStrictness) {
         Invocation invocation = invocationForStubbing.getInvocation();
         mockingProgress().stubbingCompleted();
         if (answer instanceof ValidableAnswer) {
@@ -69,7 +74,8 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
             if (isConsecutive) {
                 stubbed.getFirst().addAnswer(answer);
             } else {
-                stubbed.addFirst(new StubbedInvocationMatcher(invocationForStubbing, answer));
+                Strictness effectiveStrictness = stubbingStrictness != null ? stubbingStrictness : this.mockStrictness;
+                stubbed.addFirst(new StubbedInvocationMatcher(answer, invocationForStubbing, effectiveStrictness));
             }
             return stubbed.getFirst();
         }
@@ -84,6 +90,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
             for (StubbedInvocationMatcher s : stubbed) {
                 if (s.matches(invocation)) {
                     s.markStubUsed(invocation);
+                    //TODO we should mark stubbed at the point of stubbing, not at the point where the stub is being used
                     invocation.markStubbed(new StubInfoImpl(s));
                     return s;
                 }
@@ -93,12 +100,15 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return null;
     }
 
-    public void setAnswersForStubbing(List<Answer<?>> answers) {
-        answersForStubbing.addAll(answers);
+    /**
+     * Sets the answers declared with 'doAnswer' style.
+     */
+    public void setAnswersForStubbing(List<Answer<?>> answers, Strictness strictness) {
+        doAnswerStyleStubbing.setAnswers(answers, strictness);
     }
 
     public boolean hasAnswersForStubbing() {
-        return !answersForStubbing.isEmpty();
+        return !doAnswerStyleStubbing.isSet();
     }
 
     public boolean hasInvocationForPotentialStubbing() {
@@ -108,10 +118,10 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     public void setMethodForStubbing(MatchableInvocation invocation) {
         invocationForStubbing = invocation;
         assert hasAnswersForStubbing();
-        for (int i = 0; i < answersForStubbing.size(); i++) {
-            addAnswer(answersForStubbing.get(i), i != 0);
+        for (int i = 0; i < doAnswerStyleStubbing.getAnswers().size(); i++) {
+            addAnswer(doAnswerStyleStubbing.getAnswers().get(i), i != 0, doAnswerStyleStubbing.getStubbingStrictness());
         }
-        answersForStubbing.clear();
+        doAnswerStyleStubbing.clear();
     }
 
     @Override
@@ -127,8 +137,20 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         registeredInvocations.clear();
     }
 
-    public List<Stubbing> getStubbedInvocations() {
+    /**
+     * Stubbings in descending order, most recent first
+     */
+    public List<Stubbing> getStubbingsDescending() {
         return (List) stubbed;
+    }
+
+    /**
+     * Stubbings in ascending order, most recent last
+     */
+    public Collection<Stubbing> getStubbingsAscending() {
+        List<Stubbing> result = new LinkedList<Stubbing>(stubbed);
+        Collections.reverse(result);
+        return result;
     }
 
     public Object invokedMock() {

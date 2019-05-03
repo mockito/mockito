@@ -88,6 +88,7 @@ import org.mockito.session.MockitoSessionBuilder;
  * @since 2.7.0
  */
 @Incubating
+@NotExtensible
 public interface MockitoSession {
 
     /**

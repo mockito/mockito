@@ -5,7 +5,6 @@
 
 package org.mockito.internal.invocation;
 
-import static org.mockito.internal.invocation.ArgumentsProcessor.argumentsToMatchers;
 import static org.mockito.internal.invocation.MatcherApplicationStrategy.getMatcherApplicationStrategyFor;
 import static org.mockito.internal.invocation.TypeSafeMatching.matchesTypeSafe;
 
@@ -36,7 +35,7 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
     public InvocationMatcher(Invocation invocation, List<ArgumentMatcher> matchers) {
         this.invocation = invocation;
         if (matchers.isEmpty()) {
-            this.matchers = (List) argumentsToMatchers(invocation.getArguments());
+            this.matchers = (List) invocation.getArgumentsAsMatchers();
         } else {
             this.matchers = (List) matchers;
         }

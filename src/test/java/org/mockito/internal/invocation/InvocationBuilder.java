@@ -6,6 +6,7 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.Mockito;
+import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.internal.invocation.mockref.MockStrongReference;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.invocation.Invocation;
@@ -61,7 +62,7 @@ public class InvocationBuilder {
             }
         }
 
-        Invocation i = new InterceptedInvocation(new MockStrongReference<Object>(mock, false),
+        Invocation i = createInvocation(new MockStrongReference<Object>(mock, false),
             new SerializableMethod(method),
             args,
             NO_OP,
@@ -71,6 +72,11 @@ public class InvocationBuilder {
             i.markVerified();
         }
         return i;
+    }
+
+    protected Invocation createInvocation(MockReference<Object> mockRef, MockitoMethod mockitoMethod, Object[] arguments,
+                                          RealMethod realMethod, Location location, int sequenceNumber) {
+        return new InterceptedInvocation(mockRef, mockitoMethod, arguments, realMethod, location, sequenceNumber);
     }
 
     public InvocationBuilder method(String methodName) {
@@ -129,6 +135,9 @@ public class InvocationBuilder {
         this.location = new Location() {
             public String toString() {
                 return location;
+            }
+            public String getSourceFile() {
+                return "SomeClass";
             }
         };
         return this;

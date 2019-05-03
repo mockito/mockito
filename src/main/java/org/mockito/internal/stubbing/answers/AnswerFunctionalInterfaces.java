@@ -11,11 +11,13 @@ import org.mockito.stubbing.Answer2;
 import org.mockito.stubbing.Answer3;
 import org.mockito.stubbing.Answer4;
 import org.mockito.stubbing.Answer5;
+import org.mockito.stubbing.Answer6;
 import org.mockito.stubbing.VoidAnswer1;
 import org.mockito.stubbing.VoidAnswer2;
 import org.mockito.stubbing.VoidAnswer3;
 import org.mockito.stubbing.VoidAnswer4;
 import org.mockito.stubbing.VoidAnswer5;
+import org.mockito.stubbing.VoidAnswer6;
 
 /**
  * Functional interfaces to make it easy to implement answers in Java 8
@@ -232,6 +234,62 @@ public class AnswerFunctionalInterfaces {
                         (C)invocation.getArgument(2),
                         (D)invocation.getArgument(3),
                         (E)invocation.getArgument(4));
+                return null;
+            }
+        };
+    }
+
+    /**
+     * Construct an answer from a six parameter answer interface
+     *
+     * @param answer answer interface
+     * @param <T> return type
+     * @param <A> input parameter 1 type
+     * @param <B> input parameter 2 type
+     * @param <C> input parameter 3 type
+     * @param <D> input parameter 4 type
+     * @param <E> input parameter 5 type
+     * @param <F> input parameter 6 type
+     * @return a new answer object
+     */
+    public static <T, A, B, C, D, E, F> Answer<T> toAnswer(final Answer6<T, A, B, C, D, E, F> answer) {
+        return new Answer<T>() {
+            @SuppressWarnings("unchecked")
+            public T answer(InvocationOnMock invocation) throws Throwable {
+                return answer.answer(
+                        (A)invocation.getArgument(0),
+                        (B)invocation.getArgument(1),
+                        (C)invocation.getArgument(2),
+                        (D)invocation.getArgument(3),
+                        (E)invocation.getArgument(4),
+                        (F)invocation.getArgument(5));
+            }
+        };
+    }
+
+    /**
+     * Construct an answer from a five parameter answer interface
+
+     * @param answer answer interface
+     * @param <A> input parameter 1 type
+     * @param <B> input parameter 2 type
+     * @param <C> input parameter 3 type
+     * @param <D> input parameter 4 type
+     * @param <E> input parameter 5 type
+     * @param <F> input parameter 6 type
+     * @return a new answer object
+     */
+    public static <A, B, C, D, E, F> Answer<Void> toAnswer(final VoidAnswer6<A, B, C, D, E, F> answer) {
+        return new Answer<Void>() {
+            @SuppressWarnings("unchecked")
+            public Void answer(InvocationOnMock invocation) throws Throwable {
+                answer.answer(
+                        (A)invocation.getArgument(0),
+                        (B)invocation.getArgument(1),
+                        (C)invocation.getArgument(2),
+                        (D)invocation.getArgument(3),
+                        (E)invocation.getArgument(4),
+                        (F)invocation.getArgument(5));
                 return null;
             }
         };

@@ -17,8 +17,10 @@ import static org.mockito.internal.verification.argumentmatching.ArgumentMatchin
 import java.util.List;
 
 import org.mockito.internal.reporting.SmartPrinter;
+import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
 import org.mockito.invocation.MatchableInvocation;
 
 public class MissingInvocationChecker {
@@ -39,8 +41,15 @@ public class MissingInvocationChecker {
         }
 
         Integer[] indexesOfSuspiciousArgs = getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());
-        SmartPrinter smartPrinter = new SmartPrinter(wanted, similar, indexesOfSuspiciousArgs);
-        throw argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActual(), similar.getLocation());
+        SmartPrinter smartPrinter = new SmartPrinter(wanted, invocations, indexesOfSuspiciousArgs);
+        List<Location> actualLocations = ListUtil.convert(invocations, new ListUtil.Converter<Invocation, Location>() {
+            @Override
+            public Location convert(Invocation invocation) {
+                return invocation.getLocation();
+            }
+        });
+
+        throw argumentsAreDifferent(smartPrinter.getWanted(), smartPrinter.getActuals(), actualLocations);
 
     }
 

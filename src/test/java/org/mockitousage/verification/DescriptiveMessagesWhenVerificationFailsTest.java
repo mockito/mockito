@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -82,7 +82,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String actual =
                     "\n" +
-                    "Actual invocation has different arguments:" +
+                    "Actual invocations have different arguments:" +
                     "\n" +
                     "iMethods.varargs(1, 2);";
 
@@ -116,7 +116,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String actual =
                     "\n" +
-                    "Actual invocation has different arguments:" +
+                    "Actual invocations have different arguments:" +
                     "\n" +
                     "iMethods.varargs(" +
                     "\n" +

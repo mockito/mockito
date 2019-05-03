@@ -5,18 +5,21 @@
 package org.mockito.internal.stubbing;
 
 import org.mockito.invocation.Invocation;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static org.mockito.internal.exceptions.Reporter.incorrectUseOfApi;
-
 import java.util.List;
+
+import static org.mockito.internal.exceptions.Reporter.incorrectUseOfApi;
 
 public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
 
     private final InvocationContainerImpl invocationContainer;
+    private Strictness strictness;
 
     public OngoingStubbingImpl(InvocationContainerImpl invocationContainer) {
+        super(invocationContainer.invokedMock());
         this.invocationContainer = invocationContainer;
     }
 
@@ -26,13 +29,8 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
             throw incorrectUseOfApi();
         }
 
-        invocationContainer.addAnswer(answer);
+        invocationContainer.addAnswer(answer, strictness);
         return new ConsecutiveStubbing<T>(invocationContainer);
-    }
-
-    @Override
-    public OngoingStubbing<T> then(Answer<?> answer) {
-        return thenAnswer(answer);
     }
 
     public List<Invocation> getRegisteredInvocations() {
@@ -40,10 +38,8 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
         return invocationContainer.getInvocations();
     }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public <M> M getMock() {
-        return (M) invocationContainer.invokedMock();
+    public void setStrictness(Strictness strictness) {
+        this.strictness = strictness;
     }
 }
 

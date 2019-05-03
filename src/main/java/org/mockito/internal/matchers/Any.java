@@ -9,12 +9,9 @@ import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
 
-public class Any implements ArgumentMatcher<Object>, VarargMatcher ,Serializable {
+public class Any implements ArgumentMatcher<Object>, VarargMatcher, Serializable {
 
     public static final Any ANY = new Any();
-
-    private Any() {
-    }
 
     public boolean matches(Object actual) {
         return true;

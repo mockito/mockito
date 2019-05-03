@@ -16,11 +16,13 @@ import org.mockito.stubbing.Answer2;
 import org.mockito.stubbing.Answer3;
 import org.mockito.stubbing.Answer4;
 import org.mockito.stubbing.Answer5;
+import org.mockito.stubbing.Answer6;
 import org.mockito.stubbing.VoidAnswer1;
 import org.mockito.stubbing.VoidAnswer2;
 import org.mockito.stubbing.VoidAnswer3;
 import org.mockito.stubbing.VoidAnswer4;
 import org.mockito.stubbing.VoidAnswer5;
+import org.mockito.stubbing.VoidAnswer6;
 
 import static org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces.toAnswer;
 
@@ -486,6 +488,45 @@ public class AdditionalAnswers {
      */
     @Incubating
     public static <A, B, C, D, E> Answer<Void> answerVoid(VoidAnswer5<A, B, C, D, E> answer) {
+        return toAnswer(answer);
+    }
+
+    /**
+     * Creates an answer from a functional interface - allows for a strongly typed answer to be created
+     * idiomatically in Java 8
+     *
+     * @param answer interface to the answer - which is expected to return something
+     * @param <T> return type
+     * @param <A> input parameter type 1
+     * @param <B> input parameter type 2
+     * @param <C> input parameter type 3
+     * @param <D> input parameter type 4
+     * @param <E> input parameter type 5
+     * @param <F> input parameter type 6
+     * @return the answer object to use
+     * @since 2.26.0
+     */
+    @Incubating
+    public static <T, A, B, C, D, E, F> Answer<T> answer(Answer6<T, A, B, C, D, E, F> answer) {
+        return toAnswer(answer);
+    }
+
+    /**
+     * Creates an answer from a functional interface - allows for a strongly typed answer to be created
+     * idiomatically in Java 8
+     *
+     * @param answer interface to the answer - a void method
+     * @param <A> input parameter type 1
+     * @param <B> input parameter type 2
+     * @param <C> input parameter type 3
+     * @param <D> input parameter type 4
+     * @param <E> input parameter type 5
+     * @param <F> input parameter type 6
+     * @return the answer object to use
+     * @since 2.26.0
+     */
+    @Incubating
+    public static <A, B, C, D, E, F> Answer<Void> answerVoid(VoidAnswer6<A, B, C, D, E, F> answer) {
         return toAnswer(answer);
     }
 }

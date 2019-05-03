@@ -6,14 +6,23 @@ package org.mockito.internal.stubbing.defaultanswers;
 
 import org.junit.Test;
 import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.stubbing.defaultanswers.ReturnsGenericDeepStubsTest.WithGenerics;
 import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeFalse;
+import static org.mockito.Mockito.when;
 
 public class ReturnsMocksTest extends TestBase {
     private ReturnsMocks values = new ReturnsMocks();
+
+    interface AllInterface {
+        FooInterface getInterface();
+        BarClass getNormalClass();
+        Baz getFinalClass();
+        WithGenerics<String> withGenerics();
+    }
 
     interface FooInterface {
     }
@@ -25,21 +34,30 @@ public class ReturnsMocksTest extends TestBase {
     }
 
     @Test
-    public void should_return_mock_value_for_interface() throws Exception {
-        Object interfaceMock = values.returnValueFor(FooInterface.class);
+    public void should_return_mock_value_for_interface() throws Throwable {
+        Object interfaceMock = values.answer(invocationOf(AllInterface.class, "getInterface"));
         assertTrue(MockUtil.isMock(interfaceMock));
     }
 
     @Test
-    public void should_return_mock_value_for_class() throws Exception {
-        Object classMock = values.returnValueFor(BarClass.class);
+    public void should_return_mock_value_for_class() throws Throwable {
+        Object classMock = values.answer(invocationOf(AllInterface.class, "getNormalClass"));
         assertTrue(MockUtil.isMock(classMock));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
-    public void should_return_null_for_final_class_if_unsupported() throws Exception {
+    public void should_return_mock_value_for_generic_class() throws Throwable {
+        WithGenerics<String> classMock = (WithGenerics<String>) values.answer(invocationOf(AllInterface.class, "withGenerics"));
+        assertTrue(MockUtil.isMock(classMock));
+        when(classMock.execute()).thenReturn("return");
+        assertEquals("return", classMock.execute());
+    }
+
+    @Test
+    public void should_return_null_for_final_class_if_unsupported() throws Throwable {
         assumeFalse(Plugins.getMockMaker().isTypeMockable(Baz.class).mockable());
-        assertNull(values.returnValueFor(Baz.class));
+        assertNull(values.answer(invocationOf(AllInterface.class, "getFinalClass")));
     }
 
     @Test

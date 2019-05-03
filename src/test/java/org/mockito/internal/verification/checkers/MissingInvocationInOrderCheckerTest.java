@@ -12,7 +12,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.InOrderContextImpl;
@@ -77,7 +77,7 @@ public class MissingInvocationInOrderCheckerTest  {
 
 		exception.expectMessage("Argument(s) are different! Wanted:");
 		exception.expectMessage("mock.intArgumentMethod(2222);");
-		exception.expectMessage("Actual invocation has different arguments:");
+		exception.expectMessage("Actual invocations have different arguments:");
 		exception.expectMessage("mock.intArgumentMethod(1111);");
 
     	checkMissingInvocation(invocations, wanted, context);

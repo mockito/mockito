@@ -5,21 +5,17 @@ description = "End-to-end tests for Mockito and its extensions."
 
 sourceCompatibility = 1.8
 
-//so that we can depend on locally published mockito
-//and test end-to-end mockito jar resolution (for example, flesh out missing dependencies in pom file)
-[compileTestJava, ideaModule].each {
-    it.dependsOn ":publishToMavenLocal"
-}
-
 repositories {
     mavenLocal() //we depend on locally published mockito
 }
 
 dependencies {
-    testCompile "org.mockito:mockito-core:$version"
+    testCompile project.rootProject
+    testCompile project(":junit-jupiter")
     testCompile project(path: ':', configuration: 'testUtil')
     testCompile libraries.junit4
     testCompile libraries.assertj
+    testCompile libraries.junitJupiterApi
 }
 
 configurations.all {

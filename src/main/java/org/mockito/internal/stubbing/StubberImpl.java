@@ -8,6 +8,7 @@ import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.internal.util.MockUtil;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubber;
 
@@ -24,6 +25,12 @@ import static org.objenesis.ObjenesisHelper.newInstance;
 
 public class StubberImpl implements Stubber {
 
+    private final Strictness strictness;
+
+    public StubberImpl(Strictness strictness) {
+        this.strictness = strictness;
+    }
+
     private final List<Answer<?>> answers = new LinkedList<Answer<?>>();
 
     @Override
@@ -36,7 +43,7 @@ public class StubberImpl implements Stubber {
             throw notAMockPassedToWhenMethod();
         }
 
-        MockUtil.getInvocationContainer(mock).setAnswersForStubbing(answers);
+        MockUtil.getInvocationContainer(mock).setAnswersForStubbing(answers, strictness);
 
         return mock;
     }
@@ -80,12 +87,16 @@ public class StubberImpl implements Stubber {
             mockingProgress().reset();
             throw notAnException();
         }
-        Throwable e;
+        Throwable e = null;
         try {
             e = newInstance(toBeThrown);
-        } catch (RuntimeException instantiationError) {
-            mockingProgress().reset();
-            throw instantiationError;
+        } finally {
+            if (e == null) {
+                //this means that an exception or error was thrown when trying to create new instance
+                //we don't want 'catch' statement here because we want the exception to be thrown to the user
+                //however, we do want to clean up state (e.g. "stubbing started").
+                mockingProgress().reset();
+            }
         }
         return doThrow(e);
     }

@@ -4,7 +4,6 @@
  */
 package org.mockitousage.stubbing;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
@@ -17,7 +16,11 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Locale;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -73,6 +76,20 @@ public class DeepStubbingTest extends TestBase {
     }
 
     interface Second extends List<String> {}
+
+    class BaseClassGenerics<A, B> {}
+
+    class ReversedGenerics<A, B> extends BaseClassGenerics<A, B> {
+        ReversedGenerics<B, A> reverse() {
+            return null;
+        }
+
+        A finalMethod() {
+            return null;
+        }
+    }
+
+    class SuperOfReversedGenerics extends ReversedGenerics<String, Long> {}
 
     @Test
     public void myTest() throws Exception {
@@ -207,7 +224,7 @@ public class DeepStubbingTest extends TestBase {
     Person person = mock(Person.class, RETURNS_DEEP_STUBS);
 
     @Test
-    public void shouldStubbingBasicallyWorkFine() throws Exception {
+    public void shouldStubbingBasicallyWorkFine() {
         //given
         given(person.getAddress().getStreet().getName()).willReturn("Norymberska");
 
@@ -219,7 +236,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void shouldVerificationBasicallyWorkFine() throws Exception {
+    public void shouldVerificationBasicallyWorkFine() {
         //given
         person.getAddress().getStreet().getName();
 
@@ -228,7 +245,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void verification_work_with_argument_Matchers_in_nested_calls() throws Exception {
+    public void verification_work_with_argument_Matchers_in_nested_calls() {
         //given
         person.getAddress("111 Mock Lane").getStreet();
         person.getAddress("111 Mock Lane").getStreet(Locale.ITALIAN).getName();
@@ -240,7 +257,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void deep_stub_return_same_mock_instance_if_invocation_matchers_matches() throws Exception {
+    public void deep_stub_return_same_mock_instance_if_invocation_matchers_matches() {
         when(person.getAddress(anyString()).getStreet().getName()).thenReturn("deep");
 
         person.getAddress("the docks").getStreet().getName();
@@ -253,7 +270,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void times_never_atLeast_atMost_verificationModes_should_work() throws Exception {
+    public void times_never_atLeast_atMost_verificationModes_should_work() {
         when(person.getAddress(anyString()).getStreet().getName()).thenReturn("deep");
 
         person.getAddress("the docks").getStreet().getName();
@@ -268,7 +285,7 @@ public class DeepStubbingTest extends TestBase {
 
 
     @Test
-    public void inOrder_only_work_on_the_very_last_mock_but_it_works() throws Exception {
+    public void inOrder_only_work_on_the_very_last_mock_but_it_works() {
         when(person.getAddress(anyString()).getStreet().getName()).thenReturn("deep");
         when(person.getAddress(anyString()).getStreet(Locale.ITALIAN).getName()).thenReturn("deep");
         when(person.getAddress(anyString()).getStreet(Locale.CHINESE).getName()).thenReturn("deep");
@@ -290,7 +307,7 @@ public class DeepStubbingTest extends TestBase {
     }
 
     @Test
-    public void verificationMode_only_work_on_the_last_returned_mock() throws Exception {
+    public void verificationMode_only_work_on_the_last_returned_mock() {
         // 1st invocation on Address mock (stubbing)
         when(person.getAddress("the docks").getStreet().getName()).thenReturn("deep");
 
@@ -304,14 +321,14 @@ public class DeepStubbingTest extends TestBase {
             verify(person.getAddress("the docks"), times(1)).getStreet();
             fail();
         } catch (TooManyActualInvocations e) {
-            Assertions.assertThat(e.getMessage())
+            assertThat(e.getMessage())
                     .contains("Wanted 1 time")
                     .contains("But was 3 times");
         }
     }
 
     @Test
-    public void shouldFailGracefullyWhenClassIsFinal() throws Exception {
+    public void shouldFailGracefullyWhenClassIsFinal() {
         //when
         FinalClass value = new FinalClass();
         given(person.getFinalClass()).willReturn(value);
@@ -326,4 +343,14 @@ public class DeepStubbingTest extends TestBase {
         assertNull(first.getString());
         assertNull(first.getSecond().get(0));
     }
+
+    @Test
+    public void deep_stub_does_not_stack_overflow_on_reversed_generics() {
+        SuperOfReversedGenerics mock = mock(SuperOfReversedGenerics.class, RETURNS_DEEP_STUBS);
+
+        when((Object) mock.reverse().finalMethod()).thenReturn(5L);
+
+        assertThat(mock.reverse().finalMethod()).isEqualTo(5L);
+    }
+
 }

@@ -6,6 +6,8 @@ package org.mockito.junit;
 
 import org.junit.rules.MethodRule;
 import org.mockito.Incubating;
+import org.mockito.MockSettings;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
 import org.mockito.quality.MockitoHint;
@@ -104,7 +106,7 @@ public interface MockitoRule extends MethodRule {
      * The strictness, especially "strict stubs" ({@link Strictness#STRICT_STUBS})
      * helps debugging and keeping tests clean.
      * It's a new feature introduced in Mockito 2.3.
-     * Other levels of strictness - "Warn" - current default ({@link Strictness#WARN})
+     * Other levels of strictness - "warn" - ({@link Strictness#WARN})
      * and "lenient" ({@link MockitoRule#silent()}) strictness were already present in Mockito 2.1.0.
      * Version 2.3.0 introduces "strict stubs" ({@link Strictness#STRICT_STUBS}).
      *
@@ -115,21 +117,12 @@ public interface MockitoRule extends MethodRule {
      * }
      * </code></pre>
      *
-     * How strictness level influences the behavior of JUnit rule:
-     * <ol>
-     *     <li>{@link Strictness#LENIENT} - equivalent of {@link MockitoRule#silent()} -
-     *      no added behavior. The default of Mockito 1.x </li>
-     *     <li>{@link Strictness#WARN} - helps keeping tests clean and with debuggability.
-     *     Reports console warnings about unused stubs
-     *     and stubbing argument mismatches (see {@link MockitoHint}).
-     *     The default of Mockito 2.x</li>
-     *     <li>{@link Strictness#STRICT_STUBS} - ensures clean tests,
-     *     reduces test code duplication, improves debuggability.
-     *     See the details in the Javadoc for {@link Strictness#STRICT_STUBS}.
-     * </ol>
-     *
+     * See Javadoc for {@link Strictness} to learn how strictness influences the behavior of the JUnit rule.
+     * See {@link Strictness#STRICT_STUBS} to learn why is it recommended to use "strict stubbing".
+     * <p>
      * It is possible to tweak the strictness per test method.
      * Why would you need it? See the use cases in Javadoc for {@link PotentialStubbingProblem} class.
+     * In order to tweak strictness per stubbing see {@link Mockito#lenient()}, per mock see {@link MockSettings#lenient()}.
      *
      * <pre class="code"><code class="java">
      * public class ExampleTest {
@@ -146,7 +139,7 @@ public interface MockitoRule extends MethodRule {
      * }
      * </code></pre>
      *
-     * "Strict stubs" are tentatively planned to be the default for Mockito v3</li>
+     * "Strict stubs" are planned to be the default for Mockito v3</li>
      * We are very eager to hear feedback about "strict stubbing" feature, let us know by commenting on GitHub
      * <a href="https://github.com/mockito/mockito/issues/769">issue 769</a>.
      * Strict stubbing is an attempt to improve testability and productivity with Mockito. Tell us what you think!

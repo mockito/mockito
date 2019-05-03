@@ -1,0 +1,16 @@
+
+apply plugin: "net.ltgt.errorprone"
+
+if (JavaVersion.current() == JavaVersion.VERSION_1_8) {
+    dependencies {
+        errorproneJavac("com.google.errorprone:javac:9+181-r4173-1")
+    }
+}
+
+dependencies {
+    errorprone libraries.errorprone
+}
+
+tasks.named("compileTestJava").configure {
+    options.errorprone.errorproneArgs << "-Xep:MockitoCast:OFF"
+}

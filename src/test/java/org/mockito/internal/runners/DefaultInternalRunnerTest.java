@@ -45,10 +45,10 @@ public class DefaultInternalRunnerTest {
             .run(newNotifier(runListener));
 
         verify(runListener, times(1)).testFailure(any(Failure.class));
-        verify(runListener, never()).testFinished(any(Description.class));
-        verify(mockitoTestListener, never()).testFinished(any(TestFinishedEvent.class));
+        verify(runListener, times(1)).testFinished(any(Description.class));
+        verify(mockitoTestListener, only()).testFinished(any(TestFinishedEvent.class));
 
-        reset(runListener);
+        reset(runListener, mockitoTestListener);
 
         new DefaultInternalRunner(SuccessTest.class, supplier)
             .run(newNotifier(runListener));
@@ -67,7 +67,7 @@ public class DefaultInternalRunnerTest {
     public static final class SuccessTest {
 
         @Test
-        public void test() {
+        public void this_test_is_NOT_supposed_to_fail() {
             assertTrue(true);
         }
     }
@@ -78,7 +78,7 @@ public class DefaultInternalRunnerTest {
         private System system;
 
         @Test
-        public void test() {
+        public void this_test_is_supposed_to_fail() {
             assertNotNull(system);
         }
     }

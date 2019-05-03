@@ -8,10 +8,13 @@ import org.mockito.MockitoSession;
 import org.mockito.junit.MockitoJUnitRunner;
 
 /**
+ * Stubbing hints were introduced in Mockito 2 in order to improve debuggability while keeping backwards compatibility.
+ * As Mockito 2 evolved, hints are replaced by  "strict stubbing" API ({@link Strictness}).
+ * In Mockito 3 we won't be needing hints because {@link Strictness#STRICT_STUBS} will be the default for all mocks.
+ * <p>
+ * Why hints?
  * To improve productivity when writing Java tests
  * stubbing hints and warnings are printed to standard output.
- * See also "strict stubbing" API ({@link Strictness})
- * which drives cleaner tests and productivity more effectively than Mockito hints.
  * <p>
  * Hints contain clickable links that take you right to the line of code that contains a possible problem.
  * Those are hints - they not necessarily indicate real problems 100% of the time.

@@ -1,7 +1,18 @@
 apply plugin: "java"
 
 group = 'org.mockito'
-archivesBaseName = "mockito-" + project.name
+
+if (!archivesBaseName.startsWith("mockito-")) {
+    archivesBaseName = "mockito-" + project.name
+}
+
+generatePomFileForJavaLibraryPublication.doLast {
+    //validates the the pom has correct artifact id to avoid issues like #1444
+    def pom = new XmlSlurper().parse(destination)
+    assert pom.artifactId == archivesBaseName
+    assert pom.name == archivesBaseName
+}
+
 bintrayUpload.enabled = true
 
 sourceCompatibility = 1.6
@@ -15,6 +26,8 @@ test {
         showCauses true
     }
 }
+
+apply from: "$rootDir/gradle/retry-test.gradle"
 
 tasks.withType(Checkstyle) {
     reports {
