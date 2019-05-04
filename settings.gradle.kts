@@ -16,8 +16,12 @@ rootProject.children.forEach { project ->
     val projectDirName = "subprojects/${project.name}"
     project.projectDir = File(settingsDir, projectDirName)
     project.buildFileName = "${project.name}.gradle"
-    assert(project.projectDir.isDirectory)
-    assert(project.buildFile.isFile)
+    require(project.projectDir.isDirectory) {
+        "Project directory ${project.projectDir} for project ${project.name} does not exist."
+    }
+    require(project.buildFile.isFile) {
+        "Build file ${project.buildFile} for project ${project.name} does not exist."
+    }
 }
 
 enableFeaturePreview("STABLE_PUBLISHING")
