@@ -24,8 +24,6 @@ rootProject.children.forEach { project ->
     }
 }
 
-enableFeaturePreview("STABLE_PUBLISHING")
-
 buildCache {
     local {
         isEnabled = !System.getenv().containsKey("CI")
