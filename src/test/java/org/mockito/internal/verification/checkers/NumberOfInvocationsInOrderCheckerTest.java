@@ -61,7 +61,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportTooLittleInvocations() throws Exception {
+    public void shouldReportTooFewInvocations() throws Exception {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
 
@@ -89,7 +89,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportTooLittleActual() throws Exception {
+    public void shouldReportTooFewActual() throws Exception {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 

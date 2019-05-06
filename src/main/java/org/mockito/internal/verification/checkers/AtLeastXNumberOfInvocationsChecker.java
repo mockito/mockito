@@ -11,8 +11,8 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.MatchableInvocation;
 
-import static org.mockito.internal.exceptions.Reporter.tooLittleActualInvocations;
-import static org.mockito.internal.exceptions.Reporter.tooLittleActualInvocationsInOrder;
+import static org.mockito.internal.exceptions.Reporter.tooFewActualInvocations;
+import static org.mockito.internal.exceptions.Reporter.tooFewActualInvocationsInOrder;
 import static org.mockito.internal.invocation.InvocationMarker.markVerified;
 import static org.mockito.internal.invocation.InvocationMarker.markVerifiedInOrder;
 import static org.mockito.internal.invocation.InvocationsFinder.findAllMatchingUnverifiedChunks;
@@ -27,7 +27,7 @@ public class AtLeastXNumberOfInvocationsChecker {
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
             List<Location> allLocations = getAllLocations(actualInvocations);
-            throw tooLittleActualInvocations(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, allLocations);
+            throw tooFewActualInvocations(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, allLocations);
         }
 
         markVerified(actualInvocations, wanted);
@@ -40,7 +40,7 @@ public class AtLeastXNumberOfInvocationsChecker {
 
         if (wantedCount > actualCount) {
             List<Location> allLocations = getAllLocations(chunk);
-            throw tooLittleActualInvocationsInOrder(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, allLocations);
+            throw tooFewActualInvocationsInOrder(new AtLeastDiscrepancy(wantedCount, actualCount), wanted, allLocations);
         }
 
         markVerifiedInOrder(chunk, wanted, orderingContext);

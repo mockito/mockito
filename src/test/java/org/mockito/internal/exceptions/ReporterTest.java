@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.stubbing.answers.Returns;
@@ -24,9 +24,9 @@ import static org.mockito.Mockito.mock;
 
 public class ReporterTest extends TestBase {
 
-    @Test(expected = TooLittleActualInvocations.class)
+    @Test(expected = TooFewActualInvocations.class)
     public void should_let_passing_null_last_actual_stack_trace() throws Exception {
-        throw Reporter.tooLittleActualInvocations(new org.mockito.internal.reporting.Discrepancy(1, 2), new InvocationBuilder().toInvocation(), null);
+        throw Reporter.tooFewActualInvocations(new org.mockito.internal.reporting.Discrepancy(1, 2), new InvocationBuilder().toInvocation(), null);
     }
 
     @Test(expected = MockitoException.class)
