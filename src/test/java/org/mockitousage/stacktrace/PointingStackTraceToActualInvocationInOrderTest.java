@@ -111,7 +111,7 @@ public class PointingStackTraceToActualInvocationInOrderTest extends TestBase {
     }
 
     @Test
-    public void shouldPointToFourthMethodBecauseOfTooLittleActualInvocations() {
+    public void shouldPointToFourthMethodBecauseOfTooFewActualInvocations() {
         inOrder.verify(mock).simpleMethod(anyInt());
         inOrder.verify(mockTwo).simpleMethod(anyInt());
         inOrder.verify(mock).simpleMethod(anyInt());

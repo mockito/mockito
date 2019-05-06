@@ -79,7 +79,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
     }
 
     @Test
-    public void shouldPointToThirdChunkWhenTooLittleActualInvocations() {
+    public void shouldPointToThirdChunkWhenTooFewActualInvocations() {
         inOrder.verify(mock, times(2)).simpleMethod(anyInt());
         inOrder.verify(mockTwo, times(2)).simpleMethod(anyInt());
         inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());

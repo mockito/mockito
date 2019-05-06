@@ -14,8 +14,8 @@ import org.mockito.invocation.Location;
 import org.mockito.invocation.MatchableInvocation;
 
 import static org.mockito.internal.exceptions.Reporter.neverWantedButInvoked;
-import static org.mockito.internal.exceptions.Reporter.tooLittleActualInvocations;
-import static org.mockito.internal.exceptions.Reporter.tooLittleActualInvocationsInOrder;
+import static org.mockito.internal.exceptions.Reporter.tooFewActualInvocations;
+import static org.mockito.internal.exceptions.Reporter.tooFewActualInvocationsInOrder;
 import static org.mockito.internal.exceptions.Reporter.tooManyActualInvocations;
 import static org.mockito.internal.exceptions.Reporter.tooManyActualInvocationsInOrder;
 import static org.mockito.internal.invocation.InvocationMarker.markVerified;
@@ -36,7 +36,7 @@ public class NumberOfInvocationsChecker {
         int actualCount = actualInvocations.size();
         if (wantedCount > actualCount) {
             List<Location> allLocations = getAllLocations(actualInvocations);
-            throw tooLittleActualInvocations(new Discrepancy(wantedCount, actualCount), wanted, allLocations);
+            throw tooFewActualInvocations(new Discrepancy(wantedCount, actualCount), wanted, allLocations);
         }
         if (wantedCount == 0 && actualCount > 0) {
             throw neverWantedButInvoked(wanted, getAllLocations(actualInvocations));
@@ -55,7 +55,7 @@ public class NumberOfInvocationsChecker {
 
         if (wantedCount > actualCount) {
             List<Location> allLocations = getAllLocations(chunk);
-            throw tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, allLocations);
+            throw tooFewActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, allLocations);
         }
         if (wantedCount < actualCount) {
             throw tooManyActualInvocationsInOrder(wantedCount, actualCount, wanted, getAllLocations(chunk));
@@ -70,7 +70,7 @@ public class NumberOfInvocationsChecker {
         while( actualCount < wantedCount ){
             Invocation next = findFirstMatchingUnverifiedInvocation(invocations, wanted, context );
             if( next == null ){
-                throw tooLittleActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, Arrays.asList(lastLocation));
+                throw tooFewActualInvocationsInOrder(new Discrepancy(wantedCount, actualCount), wanted, Arrays.asList(lastLocation));
             }
             markVerified( next, wanted );
             context.markVerified( next );

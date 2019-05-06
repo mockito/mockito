@@ -7,7 +7,7 @@ package org.mockito.internal.verification.checkers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -39,7 +39,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest   {
     }
 
     @Test
-    public void shouldReportTooLittleInvocationsInOrder() {
+    public void shouldReportTooFewInvocationsInOrder() {
         InOrderContext context = new InOrderContextImpl();
         //given
         Invocation invocation = new InvocationBuilder().simpleMethod().toInvocation();
@@ -70,12 +70,12 @@ public class AtLeastXNumberOfInvocationsCheckerTest   {
     }
 
     @Test
-    public void shouldReportTooLittleInvocations() {
+    public void shouldReportTooFewInvocations() {
         //given
         Invocation invocation = new InvocationBuilder().simpleMethod().toInvocation();
         Invocation invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
 
-        exception.expect(TooLittleActualInvocations.class);
+        exception.expect(TooFewActualInvocations.class);
         exception.expectMessage("iMethods.simpleMethod()");
         exception.expectMessage("Wanted *at least* 2 times");
         exception.expectMessage("But was 1 time");

@@ -13,7 +13,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
 import org.mockitoutil.Stopwatch;
@@ -116,7 +116,7 @@ public class VerificationWithTimeoutTest {
             public void call() {
                 verify(mock, timeout(100).times(2)).oneArg('c');
             }
-        }).isInstanceOf(TooLittleActualInvocations.class);
+        }).isInstanceOf(TooFewActualInvocations.class);
     }
 
     @Test
@@ -150,7 +150,7 @@ public class VerificationWithTimeoutTest {
             public void call() {
                 verify(mock, timeout(100).atLeast(3)).oneArg('c');
             }
-        }).isInstanceOf(TooLittleActualInvocations.class);
+        }).isInstanceOf(TooFewActualInvocations.class);
     }
 
     @Test

@@ -28,7 +28,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectTooLittleActualInvocations() throws Exception {
+    public void shouldDetectTooFewActualInvocations() throws Exception {
         mock.clear();
         mock.clear();
 
@@ -36,7 +36,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, times(100)).clear();
             fail();
-        } catch (TooLittleActualInvocations e) {
+        } catch (TooFewActualInvocations e) {
             assertThat(e)
                 .hasMessageContaining("Wanted 100 times")
                 .hasMessageContaining("was 2");

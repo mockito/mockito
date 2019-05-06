@@ -59,7 +59,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     }
 
     @Test
-    public void shouldSayTooLittleInvocations() {
+    public void shouldSayTooFewInvocations() {
         mock.simpleMethod();
         verify(mock, times(2)).simpleMethod();
     }
@@ -81,7 +81,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     }
 
     @Test
-    public void shouldSayTooLittleInvocationsInOrder() {
+    public void shouldSayTooFewInvocationsInOrder() {
         mock.simpleMethod();
         mock.otherMethod();
         mock.otherMethod();
@@ -108,7 +108,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     }
 
     @Test
-    public void shouldSayTooLittleInvocationsInAtLeastModeInOrder() {
+    public void shouldSayTooFewInvocationsInAtLeastModeInOrder() {
         mock.simpleMethod();
 
         InOrder inOrder = inOrder(mock);
@@ -116,7 +116,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     }
 
     @Test
-    public void shouldSayTooLittleInvocationsInAtLeastMode() {
+    public void shouldSayTooFewInvocationsInAtLeastMode() {
         mock.simpleMethod();
 
         verify(mock, atLeast(2)).simpleMethod();
