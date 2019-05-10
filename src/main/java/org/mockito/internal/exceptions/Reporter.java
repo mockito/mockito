@@ -5,9 +5,28 @@
 
 package org.mockito.internal.exceptions;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.misusing.*;
+import org.mockito.exceptions.misusing.CannotStubVoidMethodWithReturnValue;
+import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
+import org.mockito.exceptions.misusing.FriendlyReminderException;
+import org.mockito.exceptions.misusing.InjectMocksException;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.misusing.NullInsteadOfMockException;
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
+import org.mockito.exceptions.misusing.RedundantListenerException;
+import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
+import org.mockito.exceptions.misusing.UnfinishedStubbingException;
+import org.mockito.exceptions.misusing.UnfinishedVerificationException;
+import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
+import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.exceptions.verification.MoreThanAllowedActualInvocations;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
@@ -27,12 +46,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.SerializableMode;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import static org.mockito.internal.reporting.Pluralizer.pluralize;
 import static org.mockito.internal.reporting.Pluralizer.were_exactly_x_interactions;
@@ -710,7 +723,7 @@ public class Reporter {
                 "threw an exception : " + listenerThrowable.getClass().getName() + listenerThrowable.getMessage()), listenerThrowable);
     }
 
-    public static MockitoException cannotInjectDependency(Field field, Object matchingMock, Exception details) {
+    public static MockitoException cannotInjectDependency(Field field, Object matchingMock, Throwable details) {
         return new MockitoException(join(
                 "Mockito couldn't inject mock dependency '" + MockUtil.getMockName(matchingMock) + "' on field ",
                 "'" + field + "'",
@@ -720,7 +733,7 @@ public class Reporter {
         ), details);
     }
 
-    private static String exceptionCauseMessageIfAvailable(Exception details) {
+    private static String exceptionCauseMessageIfAvailable(Throwable details) {
         if (details.getCause() == null) {
             return details.getMessage();
         }

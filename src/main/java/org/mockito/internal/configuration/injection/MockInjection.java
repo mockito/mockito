@@ -77,8 +77,18 @@ public class MockInjection {
             return this;
         }
 
+        public OngoingMockInjection tryStrictConstructorInjection() {
+            injectionStrategies.thenTry(new StrictConstructorInjection());
+            return this;
+        }
+
         public OngoingMockInjection tryPropertyOrFieldInjection() {
             injectionStrategies.thenTry(new PropertyAndSetterInjection());
+            return this;
+        }
+
+        public OngoingMockInjection tryLenientPropertyOrFieldInjection() {
+            injectionStrategies.thenTry(new LenientPropertyAndSetterInjection());
             return this;
         }
 

@@ -4,13 +4,12 @@
  */
 package org.mockito.internal.configuration.injection.scanner;
 
+import java.lang.reflect.Field;
+import java.util.Set;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldReader;
-
-import java.lang.reflect.Field;
-import java.util.Set;
 
 import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
@@ -42,7 +41,22 @@ public class MockScanner {
      * @param mocks Set of mocks
      */
     public void addPreparedMocks(Set<Object> mocks) {
-        mocks.addAll(scan());
+        scan(clazz, mocks);
+    }
+
+    /**
+     * Scan and prepare mocks for the whole hierarchy of given <code>testClassInstance</code>.
+     *
+     * @return A prepared set of mock
+     */
+    public Set<Object> scanHierarchy() {
+        final Set<Object> mocks = newMockSafeHashSet();
+        Class<?> currentClass = clazz;
+        while (currentClass != Object.class) {
+            scan(currentClass, mocks);
+            currentClass = currentClass.getSuperclass();
+        }
+        return mocks;
     }
 
     /**
@@ -50,8 +64,7 @@ public class MockScanner {
      *
      * @return A prepared set of mock
      */
-    private Set<Object> scan() {
-        Set<Object> mocks = newMockSafeHashSet();
+    private void scan(Class<?> clazz, Set<Object> mocks) {
         for (Field field : clazz.getDeclaredFields()) {
             // mock or spies only
             FieldReader fieldReader = new FieldReader(instance, field);
@@ -61,7 +74,6 @@ public class MockScanner {
                 mocks.add(mockInstance);
             }
         }
-        return mocks;
     }
 
     private Object preparedMock(Object instance, Field field) {

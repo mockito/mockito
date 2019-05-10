@@ -4,11 +4,10 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
-import org.mockito.internal.util.reflection.BeanPropertySetter;
-
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
+import org.mockito.internal.util.reflection.BeanPropertySetter;
 
 import static org.mockito.internal.exceptions.Reporter.cannotInjectDependency;
 import static org.mockito.internal.util.reflection.FieldSetter.setField;
@@ -36,7 +35,8 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
                             setField(injectee, candidateFieldToBeInjected,matchingMock);
                         }
                     } catch (RuntimeException e) {
-                        throw cannotInjectDependency(candidateFieldToBeInjected, matchingMock, e);
+                        final Throwable details = e.getCause() == null ? e : e.getCause();
+                        throw cannotInjectDependency(candidateFieldToBeInjected, matchingMock, details);
                     }
                     return matchingMock;
                 }

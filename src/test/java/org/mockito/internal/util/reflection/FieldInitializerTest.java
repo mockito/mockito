@@ -4,21 +4,25 @@
  */
 package org.mockito.internal.util.reflection;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 
-
-
+@SuppressWarnings("unchecked")
 public class FieldInitializerTest {
 
     private StaticClass alreadyInstantiated = new StaticClass();
@@ -30,60 +34,72 @@ public class FieldInitializerTest {
     private AbstractStaticClass abstractType;
     private Interface interfaceType;
     private InnerClassType innerClassType;
+    private EnumType enumType;
     private AbstractStaticClass instantiatedAbstractType = new ConcreteStaticClass();
     private Interface instantiatedInterfaceType =  new ConcreteStaticClass();
     private InnerClassType instantiatedInnerClassType = new InnerClassType();
+    private EnumType initializedEnumType = EnumType.INITIALIZED;
 
     @Test
     public void should_keep_same_instance_if_field_initialized() throws Exception {
         final StaticClass backupInstance = alreadyInstantiated;
-        FieldInitializer fieldInitializer = new FieldInitializer(this, field("alreadyInstantiated"));
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("alreadyInstantiated"), resolver);
         FieldInitializationReport report = fieldInitializer.initialize();
 
         assertSame(backupInstance, report.fieldInstance());
         assertFalse(report.fieldWasInitialized());
-        assertFalse(report.fieldWasInitializedUsingContructorArgs());
     }
 
     @Test
     public void should_instantiate_field_when_type_has_no_constructor() throws Exception {
-        FieldInitializer fieldInitializer = new FieldInitializer(this, field("noConstructor"));
+        final ConstructorResolver resolver = createNoArgsResolverMock(StaticClass.class);
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("noConstructor"), resolver);
         FieldInitializationReport report = fieldInitializer.initialize();
 
         assertNotNull(report.fieldInstance());
         assertTrue(report.fieldWasInitialized());
-        assertFalse(report.fieldWasInitializedUsingContructorArgs());
     }
 
     @Test
     public void should_instantiate_field_with_default_constructor() throws Exception {
-        FieldInitializer fieldInitializer = new FieldInitializer(this, field("defaultConstructor"));
+        final ConstructorResolver resolver = createNoArgsResolverMock(StaticClassWithDefaultConstructor.class);
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("defaultConstructor"), resolver);
         FieldInitializationReport report = fieldInitializer.initialize();
 
         assertNotNull(report.fieldInstance());
         assertTrue(report.fieldWasInitialized());
-        assertFalse(report.fieldWasInitializedUsingContructorArgs());
     }
 
     @Test
     public void should_instantiate_field_with_private_default_constructor() throws Exception {
-        FieldInitializer fieldInitializer = new FieldInitializer(this, field("privateDefaultConstructor"));
+        final ConstructorResolver resolver = createNoArgsResolverMock(StaticClassWithPrivateDefaultConstructor.class);
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("privateDefaultConstructor"), resolver);
         FieldInitializationReport report = fieldInitializer.initialize();
 
         assertNotNull(report.fieldInstance());
         assertTrue(report.fieldWasInitialized());
-        assertFalse(report.fieldWasInitializedUsingContructorArgs());
     }
 
-    @Test(expected = MockitoException.class)
-    public void should_fail_to_instantiate_field_if_no_default_constructor() throws Exception {
-        FieldInitializer fieldInitializer = new FieldInitializer(this, field("noDefaultConstructor"));
-        fieldInitializer.initialize();
+    @Test
+    public void should_not_instantiate_field_if_resolver_says_field_is_not_resolvable() throws Exception {
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        given(resolver.isResolvable()).willReturn(false);
+
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("noDefaultConstructor"), resolver);
+        FieldInitializationReport report = fieldInitializer.initialize();
+
+        assertThat(report).isNotNull();
+        assertThat(report.fieldIsInitialized()).isFalse();
+        assertThat(report.fieldInstance()).isNull();
+        assertThat(report.fieldWasInitialized()).isFalse();
     }
 
     @Test
     public void should_fail_to_instantiate_field_if_default_constructor_throws_exception() throws Exception {
-        FieldInitializer fieldInitializer = new FieldInitializer(this, field("throwingExDefaultConstructor"));
+        final ConstructorResolver resolver = createNoArgsResolverMock(StaticClassThrowingExceptionDefaultConstructor.class);
+        FieldInitializer fieldInitializer = new FieldInitializer(this, field("throwingExDefaultConstructor"), resolver);
         try {
             fieldInitializer.initialize();
             fail();
@@ -94,24 +110,54 @@ public class FieldInitializerTest {
         }
     }
 
+    @Test
+    public void should_fail_to_instantiate_field_if_resolver_throws_expcetion() throws Exception {
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        given(resolver.isResolvable()).willThrow(new MockitoException("resolver fails"));
+
+        try {
+            new FieldInitializer(this, field("noDefaultConstructor"), resolver).initialize();
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.getMessage()).contains("noDefaultConstructor").contains("resolver fails");
+        }
+    }
+
+    @Test
+    public void should_fail_if_an_argument_instance_type_do_not_match_wanted_type() throws Exception {
+        final ConstructorResolver resolver = createParameterizedResolverMock();
+        given(resolver.resolveArguments()).willReturn(new Object[] {new HashSet<String>()});
+
+        try {
+            new FieldInitializer(this, field("noDefaultConstructor"), resolver).initialize();
+            fail();
+        } catch (MockitoException e) {
+            assertThat(e.getMessage()).contains("ConstructorResolver").contains("incorrect types");
+        }
+    }
+
     @Test(expected = MockitoException.class)
     public void should_fail_for_abstract_field() throws Exception {
-        new FieldInitializer(this, field("abstractType"));
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        new FieldInitializer(this, field("abstractType"), resolver);
     }
 
     @Test
     public void should_not_fail_if_abstract_field_is_instantiated() throws Exception {
-        new FieldInitializer(this, field("instantiatedAbstractType"));
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        new FieldInitializer(this, field("instantiatedAbstractType"), resolver);
     }
 
     @Test(expected = MockitoException.class)
     public void should_fail_for_interface_field() throws Exception {
-        new FieldInitializer(this, field("interfaceType"));
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        new FieldInitializer(this, field("interfaceType"), resolver);
     }
 
     @Test
     public void should_not_fail_if_interface_field_is_instantiated() throws Exception {
-        new FieldInitializer(this, field("instantiatedInterfaceType"));
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        new FieldInitializer(this, field("instantiatedInterfaceType"), resolver);
     }
 
     @Test(expected = MockitoException.class)
@@ -126,7 +172,8 @@ public class FieldInitializerTest {
         TheTestWithLocalType testWithLocalType = new TheTestWithLocalType();
 
         // when
-        new FieldInitializer(testWithLocalType, testWithLocalType.getClass().getDeclaredField("field"));
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        new FieldInitializer(testWithLocalType, testWithLocalType.getClass().getDeclaredField("field"), resolver);
     }
 
     @Test
@@ -141,24 +188,37 @@ public class FieldInitializerTest {
         TheTestWithLocalType testWithLocalType = new TheTestWithLocalType();
 
         // when
-        new FieldInitializer(testWithLocalType, testWithLocalType.getClass().getDeclaredField("field"));
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        new FieldInitializer(testWithLocalType, testWithLocalType.getClass().getDeclaredField("field"), resolver);
     }
 
     @Test(expected = MockitoException.class)
     public void should_fail_for_inner_class_field() throws Exception {
-        new FieldInitializer(this, field("innerClassType"));
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        new FieldInitializer(this, field("innerClassType"), resolver);
     }
 
     @Test
     public void should_not_fail_if_inner_class_field_is_instantiated() throws Exception {
-        new FieldInitializer(this, field("instantiatedInnerClassType"));
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        new FieldInitializer(this, field("instantiatedInnerClassType"), resolver);
+    }
+
+    @Test(expected = MockitoException.class)
+    public void should_fail_for_enum_field() throws Exception {
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        new FieldInitializer(this, field("enumType"), resolver);
+    }
+
+    @Test
+    public void should_not_fail_if_enum_field_is_instantiated() throws Exception {
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        new FieldInitializer(this, field("initializedEnumType"), resolver);
     }
 
     @Test
     public void can_instantiate_class_with_parameterized_constructor() throws Exception {
-        ConstructorArgumentResolver resolver = given(mock(ConstructorArgumentResolver.class).resolveTypeInstances(any(Class.class)))
-                        .willReturn(new Object[]{null}).getMock();
-
+        final ConstructorResolver resolver = createParameterizedResolverMock();
         new FieldInitializer(this, field("noDefaultConstructor"), resolver).initialize();
 
         assertNotNull(noDefaultConstructor);
@@ -166,6 +226,23 @@ public class FieldInitializerTest {
 
     private Field field(String fieldName) throws NoSuchFieldException {
         return this.getClass().getDeclaredField(fieldName);
+    }
+
+    private ConstructorResolver createNoArgsResolverMock(Class<?> type) throws NoSuchMethodException {
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        final Constructor constructor = type.getDeclaredConstructor();
+        given(resolver.resolveConstructor()).willReturn(constructor);
+        given(resolver.isResolvable()).willReturn(true);
+        return resolver;
+    }
+
+    private ConstructorResolver createParameterizedResolverMock() throws NoSuchMethodException {
+        final ConstructorResolver resolver = mock(ConstructorResolver.class);
+        final Constructor constructor = StaticClassWithoutDefaultConstructor.class.getDeclaredConstructor(String.class);
+        given(resolver.resolveConstructor()).willReturn(constructor);
+        given(resolver.isResolvable()).willReturn(true);
+        given(resolver.resolveArguments()).willReturn(new Object[]{null});
+        return resolver;
     }
 
     static class StaticClass {
@@ -202,6 +279,10 @@ public class FieldInitializerTest {
 
     class InnerClassType {
         InnerClassType() { }
+    }
+
+    enum EnumType {
+        INITIALIZED
     }
 
 }

@@ -76,6 +76,12 @@ public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.
             clazz = clazz.getSuperclass();
         }
 
+        Set<Object> previousMocks;
+        do {
+            previousMocks = mocks;
+            new DefaultInjectionEngine().injectOngoingMocksOnFields(mockDependentFields, mocks, testClassInstance);
+            mocks = new MockScanner(testClassInstance, testClassInstance.getClass()).scanHierarchy();
+        } while (!previousMocks.equals(mocks));
         new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
     }
 
