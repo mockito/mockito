@@ -50,6 +50,12 @@ public interface VerificationAfterDelay extends VerificationMode {
     VerificationMode atLeast(int minNumberOfInvocations);
 
     /**
+     * Verifies that there is  most 1 invocation during the given period. This will wait the full period given,
+     * unless too many invocations occur (in which case there will be an immediate failure)
+     */
+    VerificationMode atMostOnce();
+
+    /**
      * Verifies that there is are most N invocations during the given period. This will wait the full period given,
      * unless too many invocations occur (in which case there will be an immediate failure)
      */

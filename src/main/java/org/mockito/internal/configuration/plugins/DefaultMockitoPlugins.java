@@ -9,6 +9,7 @@ import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.PluginSwitch;
 import org.mockito.plugins.StackTraceCleanerProvider;
@@ -29,6 +30,7 @@ class DefaultMockitoPlugins implements MockitoPlugins {
         DEFAULT_PLUGINS.put(InstantiatorProvider2.class.getName(), "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
         DEFAULT_PLUGINS.put(AnnotationEngine.class.getName(), "org.mockito.internal.configuration.InjectingAnnotationEngine");
         DEFAULT_PLUGINS.put(INLINE_ALIAS, "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
+        DEFAULT_PLUGINS.put(MockitoLogger.class.getName(), "org.mockito.internal.util.ConsoleMockitoLogger");
     }
 
     @Override

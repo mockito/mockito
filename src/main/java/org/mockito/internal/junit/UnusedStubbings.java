@@ -5,7 +5,7 @@
 package org.mockito.internal.junit;
 
 import org.mockito.internal.exceptions.Reporter;
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Stubbing;
 

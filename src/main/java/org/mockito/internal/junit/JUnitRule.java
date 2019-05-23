@@ -7,9 +7,10 @@ package org.mockito.internal.junit;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
 import org.mockito.internal.session.MockitoSessionLoggerAdapter;
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockito.junit.MockitoRule;
 
@@ -34,12 +35,16 @@ public class JUnitRule implements MockitoRule {
 	public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
-                session = Mockito.mockitoSession()
-                    .name(target.getClass().getSimpleName() + "." + method.getName())
-                    .strictness(strictness)
-                    .logger(new MockitoSessionLoggerAdapter(logger))
-                    .initMocks(target)
-                    .startMocking();
+                if (session == null) {
+                    session = Mockito.mockitoSession()
+                                     .name(target.getClass().getSimpleName() + "." + method.getName())
+                                     .strictness(strictness)
+                                     .logger(new MockitoSessionLoggerAdapter(logger))
+                                     .initMocks(target)
+                                     .startMocking();
+                } else {
+                    MockitoAnnotations.initMocks(target);
+                }
                 Throwable testFailure = evaluateSafely(base);
                 session.finishMocking(testFailure);
                 if (testFailure != null) {

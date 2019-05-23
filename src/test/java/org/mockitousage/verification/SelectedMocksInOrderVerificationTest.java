@@ -138,7 +138,7 @@ public class SelectedMocksInOrderVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldThrowTooLittleInvocationsForMockTwo() {
+    public void shouldThrowTooFewInvocationsForMockTwo() {
         InOrder inOrder = inOrder(mockTwo);
 
         try {

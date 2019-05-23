@@ -23,7 +23,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;

@@ -7,7 +7,7 @@
 > 
 > Which branch : 
 > - On mockito 2.x, make your pull request target `release/2.x`
-> - On next mockito version make your pull request target `master`
+> - On next mockito version make your pull request target `release/3.x`
 >
 > _This block can be removed_
 > _Something wrong in the template fix it here `.github/PULL_REQUEST_TEMPLATE.md`

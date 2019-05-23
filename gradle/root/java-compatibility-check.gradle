@@ -2,10 +2,11 @@
 //if we're skipping release, let's also skip checking compatibility (faster builds)
 if (project.hasProperty('checkJavaCompatibility') && !System.getenv("SKIP_RELEASE")) {
     allprojects { p ->
+        def isJava8 = p.name != 'junit-jupiter' && p.name != 'errorprone'
         plugins.withId('java') {
             p.apply plugin: 'ru.vyarus.animalsniffer'
             p.dependencies {
-                signature "org.codehaus.mojo.signature:java1${p.name != 'junit-jupiter' ? '6' : '8'}:1.0@signature"
+                signature "org.codehaus.mojo.signature:java1${isJava8 ? '6' : '8'}:1.0@signature"
             }
         }
     }

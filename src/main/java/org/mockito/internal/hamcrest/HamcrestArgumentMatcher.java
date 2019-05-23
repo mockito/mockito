@@ -26,7 +26,7 @@ public class HamcrestArgumentMatcher<T> implements ArgumentMatcher<T> {
     }
 
     public String toString() {
-        //TODO SF add unit tests and integ test coverage for describeTo()
+        //TODO SF add unit tests and integ test coverage for toString()
         return StringDescription.toString(matcher);
     }
 }

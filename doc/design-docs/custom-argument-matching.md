@@ -6,12 +6,12 @@ Custom argument matching via user-implemented matcher classes.
 
 ### Goals
 
-    * minimize compatibility issues by avoiding compile/runtime dependency to hamcrest
+    * Minimize compatibility issues by avoiding compile/runtime dependency to hamcrest
         * Hamcrest is very stable and useful library and we want to take advantage of it.
         There have been incompatible changes between hamcrest 1.1 and 1.3 that have impacted our users.
         Compile/runtime dependency on hamcrest might cause issues in future and reduce perceived quality of Mockito.
-    * provide interoperability with hamcrest so that users can still use existing hamcrest matchers
-    * minimize dependencies on 3rd party libraries
+    * Provide interoperability with hamcrest so that users can still use existing hamcrest matchers
+    * Minimize dependencies on 3rd party libraries
         * Mockito is a library and the less transitive dependencies it brings to client projects the better.
         This lowers the risk of version conflicts that may impact the users.
 
@@ -28,11 +28,11 @@ Custom argument matching via user-implemented matcher classes.
 
 ### Migration
     * All existing custom implementations of ArgumentMatcher will no longer compile. Steps to fix:
-        * use 'implements ArgumentMatcher' instead of 'extends ArgumentMatcher'
-        * refactor describeTo() method into toString() method
+        * Use 'implements ArgumentMatcher' instead of 'extends ArgumentMatcher'
+        * Refactor describeTo() method into toString() method
     * All locations where hamcrest matchers are passed to argThat() will no longer compile. Steps to fix:
-        * use org.mockito.hamcrest.MockitoHamcrest.argThat() instead of Mockito.argThat()
+        * Use org.mockito.hamcrest.MockitoHamcrest.argThat() instead of Mockito.argThat()
 
 ###  Test coverage
 
-    * integration test that uses custom argument matcher but does not have hamcrest on classpath
+    * Integration test that uses custom argument matcher but does not have hamcrest on classpath

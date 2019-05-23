@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.atMost;
+import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -37,7 +38,7 @@ public class AtMostXVerificationTest extends TestBase {
         verify(mock, atMost(3)).clear();
 
         try {
-            verify(mock, atMost(1)).clear();
+            verify(mock, atMostOnce()).clear();
             fail();
         } catch (MoreThanAllowedActualInvocations e) {}
     }
@@ -69,7 +70,7 @@ public class AtMostXVerificationTest extends TestBase {
         mock.clear();
 
         try {
-            verify(mock, atMost(1)).clear();
+            verify(mock, atMostOnce()).clear();
             fail();
         } catch (MoreThanAllowedActualInvocations e) {
             assertEquals("\nWanted at most 1 time but was 2", e.getMessage());
@@ -82,7 +83,7 @@ public class AtMostXVerificationTest extends TestBase {
         InOrder inOrder = inOrder(mock);
 
         try {
-            inOrder.verify(mock, atMost(1)).clear();
+            inOrder.verify(mock, atMostOnce()).clear();
             fail();
         } catch (MockitoException e) {
             assertEquals("AtMost is not implemented to work with InOrder", e.getMessage());

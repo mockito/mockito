@@ -16,7 +16,7 @@ import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -45,11 +45,11 @@ public class NumberOfInvocationsCheckerTest {
     public TestName testName = new TestName();
 
     @Test
-    public void shouldReportTooLittleActual() throws Exception {
+    public void shouldReportTooFewActual() throws Exception {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
-        exception.expect(TooLittleActualInvocations.class);
+        exception.expect(TooFewActualInvocations.class);
         exception.expectMessage("mock.simpleMethod()");
         exception.expectMessage("Wanted 100 times");
         exception.expectMessage("But was 2 times");
@@ -62,7 +62,7 @@ public class NumberOfInvocationsCheckerTest {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
-        exception.expect(TooLittleActualInvocations.class);
+        exception.expect(TooFewActualInvocations.class);
         exception.expectMessage("mock.simpleMethod()");
         exception.expectMessage("Wanted 100 times");
         exception.expectMessage("But was 2 times");
@@ -76,7 +76,7 @@ public class NumberOfInvocationsCheckerTest {
         invocations = emptyList();
         wanted = buildSimpleMethod().toInvocationMatcher();
 
-        exception.expect(TooLittleActualInvocations.class);
+        exception.expect(TooFewActualInvocations.class);
         exception.expectMessage("mock.simpleMethod()");
         exception.expectMessage("Wanted 100 times");
         exception.expectMessage("But was 0 times");

@@ -12,7 +12,7 @@ import org.mockito.exceptions.verification.MoreThanAllowedActualInvocations;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.SmartNullPointerException;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -83,7 +83,7 @@ public class Reporter {
                 "Hints:",
                 " 1. missing thenReturn()",
                 " 2. you are trying to stub a final method, which is not supported",
-                " 3: you are stubbing the behaviour of another mock inside before 'thenReturn' instruction if completed",
+                " 3: you are stubbing the behaviour of another mock inside before 'thenReturn' instruction is completed",
                 ""
         ));
     }
@@ -299,17 +299,33 @@ public class Reporter {
         return join(description.toArray());
     }
 
-    public static AssertionError argumentsAreDifferent(String wanted, String actual, Location actualLocation) {
-        String message = join("Argument(s) are different! Wanted:",
-                              wanted,
-                              new LocationImpl(),
-                              "Actual invocation has different arguments:",
-                              actual,
-                              actualLocation,
-                              ""
-        );
+    public static AssertionError argumentsAreDifferent(String wanted, List<String> actualCalls, List<Location> actualLocations) {
+        if (actualCalls == null || actualLocations == null || actualCalls.size() != actualLocations.size()) {
+            throw new IllegalArgumentException("actualCalls and actualLocations list must match");
+        }
 
-        return ExceptionFactory.createArgumentsAreDifferentException(message, wanted, actual);
+
+        StringBuilder actualBuilder = new StringBuilder();
+        StringBuilder messageBuilder = new StringBuilder();
+        messageBuilder.append("\n")
+            .append("Argument(s) are different! Wanted:\n")
+            .append(wanted)
+            .append("\n")
+            .append(new LocationImpl())
+            .append("\n")
+            .append("Actual invocations have different arguments:\n");
+
+        for (int i = 0; i < actualCalls.size(); i++) {
+            actualBuilder.append(actualCalls.get(i))
+                .append("\n");
+
+            messageBuilder.append(actualCalls.get(i))
+                .append("\n")
+                .append(actualLocations.get(i))
+                .append("\n");
+        }
+
+        return ExceptionFactory.createArgumentsAreDifferentException(messageBuilder.toString(), wanted, actualBuilder.toString());
     }
 
     public static MockitoAssertionError wantedButNotInvoked(DescribedInvocation wanted) {
@@ -403,9 +419,9 @@ public class Reporter {
         return sb.toString();
     }
 
-    private static String createTooLittleInvocationsMessage(org.mockito.internal.reporting.Discrepancy discrepancy,
-                                                            DescribedInvocation wanted,
-                                                            List<Location> locations) {
+    private static String createTooFewInvocationsMessage(org.mockito.internal.reporting.Discrepancy discrepancy,
+                                                         DescribedInvocation wanted,
+                                                         List<Location> locations) {
         return join(
                 wanted.toString(),
                 "Wanted " + discrepancy.getPluralizedWantedCount() + (discrepancy.getWantedCount() == 0 ? "." : ":"),
@@ -415,14 +431,14 @@ public class Reporter {
         );
     }
 
-    public static MockitoAssertionError tooLittleActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, List<Location> allLocations) {
-        String message = createTooLittleInvocationsMessage(discrepancy, wanted, allLocations);
+    public static MockitoAssertionError tooFewActualInvocations(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, List<Location> allLocations) {
+        String message = createTooFewInvocationsMessage(discrepancy, wanted, allLocations);
 
-        return new TooLittleActualInvocations(message);
+        return new TooFewActualInvocations(message);
     }
 
-    public static MockitoAssertionError tooLittleActualInvocationsInOrder(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, List<Location> locations) {
-        String message = createTooLittleInvocationsMessage(discrepancy, wanted, locations);
+    public static MockitoAssertionError tooFewActualInvocationsInOrder(org.mockito.internal.reporting.Discrepancy discrepancy, DescribedInvocation wanted, List<Location> locations) {
+        String message = createTooFewInvocationsMessage(discrepancy, wanted, locations);
 
         return new VerificationInOrderFailure(join(
                 "Verification in order failure:" + message
@@ -684,8 +700,8 @@ public class Reporter {
         return new MockitoException(method + "() does not accept " + parameter + " See the Javadoc.");
     }
 
-    public static MockitoException invocationListenersRequiresAtLeastOneListener() {
-        return new MockitoException("invocationListeners() requires at least one listener");
+    public static MockitoException requiresAtLeastOneListener(String method) {
+        return new MockitoException(method + "() requires at least one listener");
     }
 
     public static MockitoException invocationListenerThrewException(InvocationListener listener, Throwable listenerThrowable) {

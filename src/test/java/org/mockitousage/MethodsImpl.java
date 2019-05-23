@@ -237,6 +237,10 @@ public class MethodsImpl implements IMethods {
         return null;
     }
 
+    public String simpleMethod(String one, Integer two, Integer three, Integer four, Integer five, Integer six) {
+        return null;
+    }
+
     public String simpleMethod(String one, String[] two) {
         return null;
     }

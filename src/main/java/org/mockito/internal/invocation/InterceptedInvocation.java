@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
+import org.mockito.ArgumentMatcher;
 import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 import org.mockito.internal.reporting.PrintSettings;
@@ -13,8 +14,10 @@ import org.mockito.invocation.StubInfo;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
+import static org.mockito.internal.invocation.ArgumentsProcessor.argumentsToMatchers;
 
 public class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 
@@ -119,6 +122,28 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         return (T) arguments[index];
     }
 
+    public MockReference<Object> getMockRef() {
+        return mockRef;
+    }
+
+    public MockitoMethod getMockitoMethod() {
+        return mockitoMethod;
+    }
+
+    public RealMethod getRealMethod() {
+        return realMethod;
+    }
+
+    @Override
+    public List<ArgumentMatcher> getArgumentsAsMatchers() {
+        return argumentsToMatchers(getArguments());
+    }
+
+    @Override
+    public <T> T getArgument(int index, Class<T> clazz) {
+        return clazz.cast(arguments[index]);
+    }
+
     @Override
     public Object callRealMethod() throws Throwable {
         if (!realMethod.isInvokable()) {
@@ -149,7 +174,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     }
 
     public String toString() {
-        return new PrintSettings().print(ArgumentsProcessor.argumentsToMatchers(getArguments()), this);
+        return new PrintSettings().print(getArgumentsAsMatchers(), this);
     }
 
     public final static RealMethod NO_OP = new RealMethod() {

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import java.lang.reflect.Array;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
@@ -18,10 +19,21 @@ public class ClonesArguments implements Answer<Object> {
         Object[] arguments = invocation.getArguments();
         for (int i = 0; i < arguments.length; i++) {
             Object from = arguments[i];
-            Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(null);
-            Object newInstance = instantiator.newInstance(from.getClass());
-            new LenientCopyTool().copyToRealObject(from, newInstance);
-            arguments[i] = newInstance;
+            if (from != null) {
+                if (from.getClass().isArray()) {
+                    int len = Array.getLength(from);
+                    Object newInstance = Array.newInstance(from.getClass().getComponentType(), len);
+                    for (int j=0; j<len; ++j) {
+                        Array.set(newInstance, j, Array.get(from, j));
+                    }
+                    arguments[i] = newInstance;
+                } else {
+                    Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(null);
+                    Object newInstance = instantiator.newInstance(from.getClass());
+                    new LenientCopyTool().copyToRealObject(from, newInstance);
+                    arguments[i] = newInstance;
+                }
+            }
         }
         return new ReturnsEmptyValues().answer(invocation);
     }

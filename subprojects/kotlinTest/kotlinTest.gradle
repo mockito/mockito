@@ -12,6 +12,8 @@ kotlin {
     }
 }
 
+apply from: "$rootDir/gradle/dependencies.gradle"
+
 dependencies {
     testCompile project(":")
     testCompile libraries.junit4
