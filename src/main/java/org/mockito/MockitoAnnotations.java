@@ -46,7 +46,7 @@ import org.mockito.plugins.AnnotationEngine;
  * <p>
  * Read also about other annotations &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMocks}
  * <p>
- * <b><code>MockitoAnnotations.initMocks(this)</code></b> method has to called to initialize annotated fields.
+ * <b><code>MockitoAnnotations.initMocks(this)</code></b> method has to be called to initialize annotated fields.
  * <p>
  * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
  * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
