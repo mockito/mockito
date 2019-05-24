@@ -20,7 +20,6 @@ import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.jar.asm.ClassVisitor;
 import net.bytebuddy.jar.asm.MethodVisitor;
-import net.bytebuddy.jar.asm.Opcodes;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.OpenedClassReader;
@@ -311,7 +310,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         private static class MethodParameterStrippingMethodVisitor extends MethodVisitor {
 
             public MethodParameterStrippingMethodVisitor(MethodVisitor mv) {
-                super(Opcodes.ASM5, mv);
+                super(OpenedClassReader.ASM_API, mv);
             }
 
             @Override
