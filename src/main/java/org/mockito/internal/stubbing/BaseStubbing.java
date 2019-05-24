@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.stubbing;
 
+import org.mockito.creation.instance.Instantiator;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
@@ -12,7 +14,6 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import static org.mockito.internal.exceptions.Reporter.notAnException;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-import static org.objenesis.ObjenesisHelper.newInstance;
 
 public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 
@@ -74,7 +75,8 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
             mockingProgress().reset();
             throw notAnException();
         }
-        return thenThrow(newInstance(throwableType));
+        Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(null);
+        return thenThrow(instantiator.newInstance(throwableType));
     }
 
     @Override

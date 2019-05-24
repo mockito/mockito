@@ -15,13 +15,13 @@ import org.mockito.stubbing.Stubber;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mockito.internal.configuration.plugins.Plugins;
 import static org.mockito.internal.exceptions.Reporter.notAMockPassedToWhenMethod;
 import static org.mockito.internal.exceptions.Reporter.notAnException;
 import static org.mockito.internal.exceptions.Reporter.nullPassedToWhenMethod;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
 import static org.mockito.internal.util.MockUtil.isMock;
-import static org.objenesis.ObjenesisHelper.newInstance;
 
 public class StubberImpl implements Stubber {
 
@@ -89,7 +89,7 @@ public class StubberImpl implements Stubber {
         }
         Throwable e = null;
         try {
-            e = newInstance(toBeThrown);
+            e = Plugins.getInstantiatorProvider().getInstantiator(null).newInstance(toBeThrown);
         } finally {
             if (e == null) {
                 //this means that an exception or error was thrown when trying to create new instance
