@@ -11,7 +11,7 @@ import org.junit.runner.Result;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.JUnitResultAssert;
@@ -42,7 +42,7 @@ public class SilentRunnerTest extends TestBase {
                 SomeFailingFeature.class
         );
         //then
-        JUnitResultAssert.assertThat(result).fails(1, TooLittleActualInvocations.class);
+        JUnitResultAssert.assertThat(result).fails(1, TooFewActualInvocations.class);
     }
 
     @Test public void failing_test_in_constructor() {

@@ -4,6 +4,66 @@
  - 2019-04-25 - [5 commits](https://github.com/mockito/mockito/compare/v2.27.0...v3.0.0-beta.1) by [Tim van der Lippe](https://github.com/TimvdLippe) - published to [![Bintray](https://img.shields.io/badge/Bintray-3.0.0-beta.1-green.svg)](https://bintray.com/mockito/maven/mockito-development/3.0.0-beta.1)
  - No pull requests referenced in commit messages.
 
+#### 2.28.2
+ - 2019-05-29 - [1 commit](https://github.com/mockito/mockito/compare/v2.28.1...v2.28.2) by [Tim van der Lippe](https://github.com/TimvdLippe) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.28.2-green.svg)](https://bintray.com/mockito/maven/mockito/2.28.2)
+ - No pull requests referenced in commit messages.
+
+#### 2.28.1
+ - 2019-05-28 - [1 commit](https://github.com/mockito/mockito/compare/v2.28.0...v2.28.1) by [Tim van der Lippe](https://github.com/TimvdLippe) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.28.1-green.svg)](https://bintray.com/mockito/maven/mockito/2.28.1)
+ - No pull requests referenced in commit messages.
+
+#### 2.28.0
+ - 2019-05-28 - [3 commits](https://github.com/mockito/mockito/compare/v2.27.5...v2.28.0) by [Tim van der Lippe](https://github.com/TimvdLippe) (2), [Christoph Wagner](https://github.com/WagnerChristoph) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.28.0-green.svg)](https://bintray.com/mockito/maven/mockito/2.28.0)
+ - Add missing 'be' in javadoc [(#1720)](https://github.com/mockito/mockito/pull/1720)
+
+#### 2.27.5
+ - 2019-05-24 - [9 commits](https://github.com/mockito/mockito/compare/v2.27.4...v2.27.5) by 6 authors - published to [![Bintray](https://img.shields.io/badge/Bintray-2.27.5-green.svg)](https://bintray.com/mockito/maven/mockito/2.27.5)
+ - Commits: [Erhard Pointl](https://github.com/epeee) (3), [Jakub Vrána](https://github.com/vrana) (2), [David Genesis Geniza Cruz](https://github.com/davidgenesiscruz) (1), [Frank Pavageau](https://github.com/fpavageau) (1), [Ryan Pickett](https://github.com/hdpe) (1), [Tom Ball](https://github.com/tomball) (1)
+ - [Enhancements] Consider renaming TooLittleActualInvocations [(#1623)](https://github.com/mockito/mockito/issues/1623)
+ - Fixes #1717 : configure the MethodVisitor for Java 11 compatibility [(#1718)](https://github.com/mockito/mockito/pull/1718)
+ - Incompatibility between the inline mocks and JaCoCo 0.8.4 [(#1717)](https://github.com/mockito/mockito/issues/1717)
+ - Fixes #298: replaces Objenesis references from stubbing classes with plugin equivalents. [(#1715)](https://github.com/mockito/mockito/pull/1715)
+ - Fixes #1713: fix typo in Mockito.java javadoc [(#1714)](https://github.com/mockito/mockito/pull/1714)
+ - Typo in Mockito.java javadoc [(#1713)](https://github.com/mockito/mockito/issues/1713)
+ - Fixes #1623 : Rename TooLittleActualInvocations [(#1708)](https://github.com/mockito/mockito/pull/1708)
+ - Change master to release/3.x in pull request template [(#1707)](https://github.com/mockito/mockito/pull/1707)
+ - Fix a typo [(#1706)](https://github.com/mockito/mockito/pull/1706)
+ - Remove no longer relevant code from settings.gradle.kts [(#1705)](https://github.com/mockito/mockito/pull/1705)
+ - Migrate junitJupiterExtensionTest subproject to kotlin dsl [(#1704)](https://github.com/mockito/mockito/pull/1704)
+ - Use require instead of assert in settings.gradle.kts [(#1703)](https://github.com/mockito/mockito/pull/1703)
+ - ObjenesisHelper references in MockMaker-independent code [(#298)](https://github.com/mockito/mockito/issues/298)
+
+#### 2.27.4
+ - 2019-05-03 - [11 commits](https://github.com/mockito/mockito/compare/v2.27.2...v2.27.4) by 8 authors - published to [![Bintray](https://img.shields.io/badge/Bintray-2.27.4-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.27.4)
+ - Commits: [Tim van der Lippe](https://github.com/TimvdLippe) (4), [Erhard Pointl](https://github.com/epeee) (1), [Marc Philipp](https://github.com/marcphilipp) (1), [Marcono1234](https://github.com/Marcono1234) (1), shipkit-org (1), [TDurak](https://github.com/Ingvir) (1), tombrown52 (1), [önder sezgin](https://github.com/onderson) (1)
+ - Migrate settings.gradle to settings.gradle.kts [(#1702)](https://github.com/mockito/mockito/pull/1702)
+ - Show multiple invocations on argumentsAreDifferent [(#1701)](https://github.com/mockito/mockito/pull/1701)
+ - use of capital letter at the start as a small [(#1700)](https://github.com/mockito/mockito/pull/1700)
+ - Fix JaCoCo code coverage report [(#1699)](https://github.com/mockito/mockito/pull/1699)
+ - Fix ClonesArguments for null and arrays [(#1698)](https://github.com/mockito/mockito/pull/1698)
+ - Fix javadoc typo and use HTML list [(#1695)](https://github.com/mockito/mockito/pull/1695)
+ - Coverage report is broken since Gradle 5 [(#1689)](https://github.com/mockito/mockito/issues/1689)
+ - when mock is called multiple times, and verify fails, the error message reports only the first invocation [(#1542)](https://github.com/mockito/mockito/issues/1542)
+ - Fixes #1386: Adding atMostOnce(), rename ThreadVerifiesContinuoslyInteractingMockTest and one TODO [(#1387)](https://github.com/mockito/mockito/pull/1387)
+ - Add AtMostOnce(),rename one testClass and one TODO. [(#1386)](https://github.com/mockito/mockito/issues/1386)
+
+#### 2.27.3
+ - 2019-05-01 - [4 commits](https://github.com/mockito/mockito/compare/v2.27.2...v2.27.3) by 4 authors - published to [![Bintray](https://img.shields.io/badge/Bintray-2.27.3-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.27.3)
+ - Commits: [Marc Philipp](https://github.com/marcphilipp) (1), [Tim van der Lippe](https://github.com/TimvdLippe) (1), [tombrown52](https://github.com/tombrown52) (1), [önder sezgin](https://github.com/onderson) (1)
+ - use of capital letter at the start as a small [(#1700)](https://github.com/mockito/mockito/pull/1700)
+ - Fix JaCoCo code coverage report [(#1699)](https://github.com/mockito/mockito/pull/1699)
+ - Fix ClonesArguments for null and arrays [(#1698)](https://github.com/mockito/mockito/pull/1698)
+ - Coverage report is broken since Gradle 5 [(#1689)](https://github.com/mockito/mockito/issues/1689)
+
+#### 2.27.2
+ - 2019-04-30 - [4 commits](https://github.com/mockito/mockito/compare/v2.27.1...v2.27.2) by [Tim van der Lippe](https://github.com/TimvdLippe) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.27.2-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.27.2)
+ - Add ErrorProne MockitoInternalUsage checker [(#1690)](https://github.com/mockito/mockito/pull/1690)
+
+#### 2.27.1
+ - 2019-04-30 - [2 commits](https://github.com/mockito/mockito/compare/v2.27.0...v2.27.1) by [Stephan Schroevers](https://github.com/Stephan202) (1), [Tim van der Lippe](https://github.com/TimvdLippe) (1) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.27.1-green.svg)](https://bintray.com/mockito/maven/mockito-development/2.27.1)
+ - Make `MockitoNotExtensible` service-loadable [(#1693)](https://github.com/mockito/mockito/pull/1693)
+ - The new Error Prone plugin isn't service-loadable [(#1692)](https://github.com/mockito/mockito/issues/1692)
+
 #### 2.27.0
  - 2019-04-10 - [1 commit](https://github.com/mockito/mockito/compare/v2.26.2...v2.27.0) by [Tim van der Lippe](https://github.com/TimvdLippe) - published to [![Bintray](https://img.shields.io/badge/Bintray-2.27.0-green.svg)](https://bintray.com/mockito/maven/mockito/2.27.0)
  - No pull requests referenced in commit messages.

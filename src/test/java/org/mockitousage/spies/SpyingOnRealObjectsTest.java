@@ -10,7 +10,7 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitoutil.TestBase;
 
@@ -141,7 +141,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
         try {
             verify(spy, times(3)).add("one");
             fail();
-        } catch (TooLittleActualInvocations e) {}
+        } catch (TooFewActualInvocations e) {}
     }
 
     @Test

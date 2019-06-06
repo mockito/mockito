@@ -14,7 +14,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 //this test exposes the problem most of the time
-public class ThreadVerifiesContinuoslyInteractingMockTest extends TestBase {
+public class ThreadVerifiesContinuouslyInteractingMockTest extends TestBase {
 
     @Mock private IMethods mock;
 

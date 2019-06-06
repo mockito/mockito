@@ -8,7 +8,7 @@ package org.mockitousage.verification;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockitoutil.TestBase;
 
@@ -33,7 +33,7 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
         try {
             Mockito.verify(mock, times(100)).clear();
             fail();
-        } catch (TooLittleActualInvocations e) {
+        } catch (TooFewActualInvocations e) {
             assertThat(e)
                 .hasMessageContaining("mock.clear();")
                 .hasMessageContaining("Wanted 100 times")

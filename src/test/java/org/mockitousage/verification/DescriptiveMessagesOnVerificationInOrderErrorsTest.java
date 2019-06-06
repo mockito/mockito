@@ -97,7 +97,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
             inOrder.verify(one).simpleMethod(999);
             fail();
         } catch (org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent e) {
-            assertThat(e).hasMessageContaining("has different arguments");
+            assertThat(e).hasMessageContaining("have different arguments");
         }
     }
 
@@ -163,7 +163,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
     }
 
     @Test
-    public void shouldPrintTooLittleInvocations() {
+    public void shouldPrintTooFewInvocations() {
         two.simpleMethod(2);
 
         inOrder.verify(one, atLeastOnce()).simpleMethod(anyInt());

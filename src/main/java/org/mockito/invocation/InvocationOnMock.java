@@ -63,14 +63,16 @@ public interface InvocationOnMock extends Serializable {
      * In general, {@link #getArgument(int)} is the appropriate function to use. This particular
      * function is only necessary if you are doing one of the following things:
      *
-     * 1. You want to directly invoke a method on the result of {@link #getArgument(int)}.
-     * 2. You want to directly pas the result of the invocation into a function that accepts a generic parameter.
+     * <ol>
+     *  <li>You want to directly invoke a method on the result of {@link #getArgument(int)}.</li>
+     *  <li>You want to directly pass the result of the invocation into a function that accepts a generic parameter.</li>
+     * </ol>
      *
      * If you prefer to use {@link #getArgument(int)} instead, you can circumvent the compilation
      * issues by storing the intermediate result into a local variable with the correct type.
      *
      * @param index argument index
-     * @param clazz clazz to cast the argument to
+     * @param clazz class to cast the argument to
      * @return casted argument at the given index
      */
     <T> T getArgument(int index, Class<T> clazz);

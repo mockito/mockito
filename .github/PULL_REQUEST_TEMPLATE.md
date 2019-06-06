@@ -6,8 +6,8 @@
 > There may be a thorough review, with feedback -> code change loop.
 > 
 > Which branch : 
-> - On mockito 3.x (or 2.x), make your pull request target `release/3.x` (or `release/2.x`)
-> - On next mockito version make your pull request target `master`
+> - On mockito 3.x, make your pull request target `release/3.x`
+> - On mockito 2.x, make your pull request target `release/2.x` (2.x is in maintenance mode)
 >
 > _This block can be removed_
 > _Something wrong in the template fix it here `.github/PULL_REQUEST_TEMPLATE.md`

@@ -320,6 +320,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * verify(mockedList, never()).add("never happened");
  *
  * //verification using atLeast()/atMost()
+ * verify(mockedList, atMostOnce()).add("once");
  * verify(mockedList, atLeastOnce()).add("three times");
  * verify(mockedList, atLeast(2)).add("three times");
  * verify(mockedList, atMost(5)).add("three times");
@@ -693,7 +694,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Also it may reduce defect localization because if stubbed method was not called then no argument is captured.
  * <p>
  * In a way ArgumentCaptor is related to custom argument matchers (see javadoc for {@link ArgumentMatcher} class).
- * Both techniques can be used for making sure certain arguments where passed to mocks.
+ * Both techniques can be used for making sure certain arguments were passed to mocks.
  * However, ArgumentCaptor may be a better fit if:
  * <ul>
  * <li>custom argument matcher is not likely to be reused</li>
@@ -2555,7 +2556,7 @@ public class Mockito extends ArgumentMatchers {
      * If you want to find out more, read
      * <a href="https://github.com/mockito/mockito/wiki/Greedy-algorithm-of-verfication-InOrder">this wiki page</a>.
      * <p>
-     * As of Mockito 1.8.4 you can verifyNoMoreInvocations() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
+     * As of Mockito 1.8.4 you can verifyNoMoreInteractions() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
      * <p>
      * See examples in javadoc for {@link Mockito} class
      *
@@ -2725,6 +2726,22 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
+     * Allows at-most-once verification. E.g:
+     * <pre class="code"><code class="java">
+     *   verify(mock, atMostOnce()).someMethod("some arg");
+     * </code></pre>
+     * Alias to <code>atMost(1)</code>.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @return verification mode
+     */
+    @CheckReturnValue
+    public static VerificationMode atMostOnce() {
+        return VerificationModeFactory.atMostOnce();
+    }
+
+    /**
      * Allows at-most-x verification. E.g:
      * <pre class="code"><code class="java">
      *   verify(mock, atMost(3)).someMethod("some arg");
@@ -2765,7 +2782,7 @@ public class Mockito extends ArgumentMatchers {
      *   verify(mock, only()).someMethod();
      *   //above is a shorthand for following 2 lines of code:
      *   verify(mock).someMethod();
-     *   verifyNoMoreInvocations(mock);
+     *   verifyNoMoreInteractions(mock);
      * </code></pre>
      *
      * <p>
