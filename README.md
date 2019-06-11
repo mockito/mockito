@@ -1,12 +1,12 @@
 <a href="http://site.mockito.org">
-<img src="https://raw.githubusercontent.com/mockito/mockito/master/src/javadoc/org/mockito/logo.png"
-     srcset="https://raw.githubusercontent.com/mockito/mockito/master/src/javadoc/org/mockito/logo@2x.png 2x"
+<img src="https://raw.githubusercontent.com/mockito/mockito/release/2.x/src/javadoc/org/mockito/logo.png"
+     srcset="https://raw.githubusercontent.com/mockito/mockito/mockito/release/2.x/src/javadoc/org/mockito/logo@2x.png 2x"
      alt="Mockito" />
 </a>
 
 Most popular mocking framework for Java
 
-[![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=release/2.x)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito) [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/mockito/mockito/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=release/2.x)](https://travis-ci.org/mockito/mockito) [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito) [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/mockito/mockito/blob/release/2.x/LICENSE)
 
 [![latest release](https://img.shields.io/badge/release%20notes-2.x-yellow.svg)](https://github.com/mockito/mockito/blob/release/2.x/doc/release-notes/official.md)
 [![Bintray](https://api.bintray.com/packages/mockito/maven/mockito-development/images/download.svg)](https://bintray.com/mockito/maven)

@@ -14,7 +14,7 @@
 
 Which branch : 
 * On mockito 2.x, make your pull request target `release/2.x`
-* On next mockito version make your pull request target `master`
+* On next mockito version make your pull request target `release/3.x`
 
 ## Pull request criteria
 

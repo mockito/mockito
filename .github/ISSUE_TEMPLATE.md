@@ -20,6 +20,6 @@ check that
  - [ ] Provide versions (mockito / jdk / os / any other relevant information)
  - [ ] Provide a [Short, Self Contained, Correct (Compilable), Example](http://sscce.org) of the issue
        (same as any question on stackoverflow.com)
- - [ ] Read the [contributing guide](https://github.com/mockito/mockito/blob/master/.github/CONTRIBUTING.md)
+ - [ ] Read the [contributing guide](https://github.com/mockito/mockito/blob/release/2.x/.github/CONTRIBUTING.md)
 
 
