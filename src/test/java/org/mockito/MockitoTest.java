@@ -12,6 +12,7 @@ import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingPro
 import java.util.List;
 import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 
 @SuppressWarnings("unchecked")
@@ -45,6 +46,16 @@ public class MockitoTest {
     @Test(expected=NotAMockException.class)
     public void shouldValidateMockWhenVerifyingZeroInteractions() {
         Mockito.verifyZeroInteractions("notMock");
+    }
+
+    @Test(expected=NotAMockException.class)
+    public void shouldValidateMockWhenVerifyingNoInteractions() {
+        Mockito.verifyNoInteractions("notMock");
+    }
+
+    @Test(expected=NullInsteadOfMockException.class)
+    public void shouldValidateNullMockWhenVerifyingNoInteractions() {
+        Mockito.verifyNoInteractions(new Object[] { null });
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})

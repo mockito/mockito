@@ -269,6 +269,11 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
+    public void should_validate_that_mock_had_no_interactions() {
+        then(mock).shouldHaveNoInteractions();
+    }
+
+    @Test
     public void should_fail_when_mock_had_unwanted_interactions() {
         mock.booleanObjectReturningMethod();
 

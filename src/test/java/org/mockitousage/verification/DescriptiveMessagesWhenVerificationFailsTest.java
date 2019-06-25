@@ -211,6 +211,33 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
     }
 
     @Test
+    public void should_print_first_unexpected_invocation_when_verifying_no_interactions() {
+        mock.twoArgumentMethod(1, 2);
+        mock.threeArgumentMethod(1, "2", "3");
+
+        try {
+            verifyNoInteractions(mock);
+            fail();
+        } catch (NoInteractionsWanted e) {
+            String expected =
+                "\n" +
+                    "No interactions wanted here:" +
+                    "\n" +
+                    "-> at";
+
+            assertThat(e).hasMessageContaining(expected);
+
+            String expectedCause =
+                "\n" +
+                    "But found these interactions on mock '" + mock + "':" +
+                    "\n" +
+                    "-> at";
+
+            assertThat(e).hasMessageContaining(expectedCause);
+        }
+    }
+
+    @Test
     public void should_print_method_name_when_verifying_at_least_once() throws Exception {
         try {
             verify(mock, atLeastOnce()).twoArgumentMethod(1, 2);

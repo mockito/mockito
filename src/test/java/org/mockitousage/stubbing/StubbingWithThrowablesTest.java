@@ -13,8 +13,8 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -357,7 +357,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         when(mock.size()).thenThrow(new RuntimeException());
         doThrow(new RuntimeException()).when(mock).clone();
 
-        verifyZeroInteractions(mock);
+        verifyNoInteractions(mock);
 
         mock.add("test");
 
