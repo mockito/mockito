@@ -264,6 +264,11 @@ public class BasicVerificationInOrderTest extends TestBase {
         verifyZeroInteractions(mockOne);
     }
 
+    @Test(expected = NoInteractionsWanted.class)
+    public void shouldFailOnVerifyNoInteractions() {
+        verifyNoInteractions(mockOne);
+    }
+
     @SuppressWarnings({"all", "CheckReturnValue", "MockitoUsage"})
     @Test(expected = MockitoException.class)
     public void shouldScreamWhenNullPassed() {

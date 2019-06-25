@@ -21,6 +21,7 @@ import org.mockitoutil.TestBase;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -69,6 +70,17 @@ public class StackTraceFilteringTest extends TestBase {
             fail();
         } catch (NoInteractionsWanted e) {
             Assertions.assertThat(e).has(firstMethodInStackTrace("shouldFilterStackTraceOnVerifyZeroInteractions"));
+        }
+    }
+
+    @Test
+    public void shouldFilterStackTraceOnVerifyNoInteractions() {
+        mock.oneArg(true);
+        try {
+            verifyNoInteractions(mock);
+            fail();
+        } catch (NoInteractionsWanted e) {
+            Assertions.assertThat(e).has(firstMethodInStackTrace("shouldFilterStackTraceOnVerifyNoInteractions"));
         }
     }
 

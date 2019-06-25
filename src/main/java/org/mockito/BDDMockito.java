@@ -251,7 +251,9 @@ public class BDDMockito extends Mockito {
         /**
          * @see #verifyZeroInteractions(Object...)
          * @since 2.1.0
+         * @deprecated Since 3.x.x. Please migrate your code to {@link #shouldHaveNoInteractions()}
          */
+        @Deprecated
         void shouldHaveZeroInteractions();
 
         /**
@@ -259,6 +261,12 @@ public class BDDMockito extends Mockito {
          * @since 2.1.0
          */
         void shouldHaveNoMoreInteractions();
+
+        /**
+         * @see #verifyNoInteractions(Object...)
+         * @since 3.x.x
+         */
+        void shouldHaveNoInteractions();
     }
 
     private static class ThenImpl<T> implements Then<T> {
@@ -315,6 +323,14 @@ public class BDDMockito extends Mockito {
          */
         public void shouldHaveNoMoreInteractions() {
             verifyNoMoreInteractions(mock);
+        }
+
+        /**
+         * @see #verifyNoInteractions(Object...)
+         * @since 3.x.x
+         */
+        public void shouldHaveNoInteractions() {
+            verifyNoInteractions(mock);
         }
     }
 
