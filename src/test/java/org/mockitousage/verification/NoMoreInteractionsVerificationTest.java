@@ -58,6 +58,9 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
 
         verifyZeroInteractions(mock);
         verifyZeroInteractions(mock);
+
+        verifyNoInteractions(mock);
+        verifyNoInteractions(mock);
     }
 
     @Test
@@ -76,6 +79,16 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
 
         try {
             verifyNoMoreInteractions(mock);
+            fail();
+        } catch (NoInteractionsWanted e) {}
+    }
+
+    @Test
+    public void shouldFailNoInteractionsVerification() throws Exception {
+        mock.clear();
+
+        try {
+            verifyNoInteractions(mock);
             fail();
         } catch (NoInteractionsWanted e) {}
     }
@@ -122,6 +135,25 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         verifyNoMoreInteractions(list);
         try {
             verifyZeroInteractions(map);
+            fail();
+        } catch (NoInteractionsWanted e) {}
+    }
+
+    @Test
+    public void shouldVerifyOneMockButFailOnOtherVerifyNoInteractions() throws Exception {
+        List<String> list = mock(List.class);
+        Map<String, Integer> map = mock(Map.class);
+
+        list.add("one");
+        list.add("one");
+
+        map.put("one", 1);
+
+        verify(list, times(2)).add("one");
+
+        verifyNoMoreInteractions(list);
+        try {
+            verifyNoInteractions(map);
             fail();
         } catch (NoInteractionsWanted e) {}
     }

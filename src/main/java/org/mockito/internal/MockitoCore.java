@@ -43,6 +43,7 @@ import static org.mockito.internal.util.MockUtil.getMockHandler;
 import static org.mockito.internal.util.MockUtil.isMock;
 import static org.mockito.internal.util.MockUtil.resetMock;
 import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
+import static org.mockito.internal.verification.VerificationModeFactory.noInteractions;
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
 
 
@@ -129,6 +130,24 @@ public class MockitoCore {
                 assertNotStubOnlyMock(mock);
                 VerificationDataImpl data = new VerificationDataImpl(invocations, null);
                 noMoreInteractions().verify(data);
+            } catch (NotAMockException e) {
+                throw notAMockPassedToVerifyNoMoreInteractions();
+            }
+        }
+    }
+
+    public void verifyNoInteractions(Object... mocks) {
+        assertMocksNotEmpty(mocks);
+        mockingProgress().validateState();
+        for (Object mock : mocks) {
+            try {
+                if (mock == null) {
+                    throw nullPassedToVerifyNoMoreInteractions();
+                }
+                InvocationContainerImpl invocations = getInvocationContainer(mock);
+                assertNotStubOnlyMock(mock);
+                VerificationDataImpl data = new VerificationDataImpl(invocations, null);
+                noInteractions().verify(data);
             } catch (NotAMockException e) {
                 throw notAMockPassedToVerifyNoMoreInteractions();
             }
