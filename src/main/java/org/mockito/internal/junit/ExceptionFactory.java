@@ -21,29 +21,16 @@ public class ExceptionFactory {
         ExceptionFactoryImpl theFactory = null;
 
         try {
-            theFactory = new ExceptionFactoryImpl() {
-                @Override
-                public AssertionError create(String message, String wanted, String actual) {
-                    return new org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent(message, wanted, actual);
-                }
-            };
-        } catch (Throwable onlyIfOpenTestIsNotAvailable) {
+            Class.forName("org.opentest4j.AssertionFailedError");
+            theFactory = org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent::new;
+        } catch (ClassNotFoundException onlyIfOpenTestIsNotAvailable) {
             try {
-                theFactory = new ExceptionFactoryImpl() {
-                    @Override
-                    public AssertionError create(String message, String wanted, String actual) {
-                        return new org.mockito.exceptions.verification.junit.ArgumentsAreDifferent(message, wanted, actual);
-                    }
-                };
-            } catch (Throwable onlyIfJUnitIsNotAvailable) {
+                Class.forName("junit.framework.ComparisonFailure");
+                theFactory = org.mockito.exceptions.verification.junit.ArgumentsAreDifferent::new;
+            } catch (ClassNotFoundException onlyIfJUnitIsNotAvailable) {
             }
         }
-        factory = (theFactory == null) ? new ExceptionFactoryImpl() {
-            @Override
-            public AssertionError create(String message, String wanted, String actual) {
-                return new ArgumentsAreDifferent(message, wanted, actual);
-            }
-        } : theFactory;
+        factory = (theFactory == null) ? ArgumentsAreDifferent::new : theFactory;
     }
 
     /**
