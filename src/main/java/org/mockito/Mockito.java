@@ -1572,7 +1572,7 @@ public class Mockito extends ArgumentMatchers {
      * <code>ReturnsSmartNulls</code> first tries to return ordinary values (zeros, empty collections, empty string, etc.)
      * then it tries to return SmartNull. If the return type is final then plain <code>null</code> is returned.
      * <p>
-     * <code>ReturnsSmartNulls</code> will be probably the default return values strategy in Mockito 3.0.0
+     * <code>ReturnsSmartNulls</code> will be probably the default return values strategy in Mockito 4.0.0
      * <p>
      * Example:
      * <pre class="code"><code class="java">
