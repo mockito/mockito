@@ -216,7 +216,7 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     @Test
     public void should_provide_reason_for_vm_unsupported() {
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(int[].class);
-        assertThat(mockable.nonMockableReason()).isEqualTo("VM does  not support modification of given type");
+        assertThat(mockable.nonMockableReason()).isEqualTo("VM does not support modification of given type");
     }
 
     @Test
