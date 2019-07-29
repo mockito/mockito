@@ -17,8 +17,8 @@ dist: trusty
 
 matrix:
   include:
-  - jdk: oraclejdk8
-  - jdk: oraclejdk8
+  - jdk: openjdk8
+  - jdk: openjdk8
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
   - jdk: oraclejdk9
     env: SKIP_RELEASE=true
