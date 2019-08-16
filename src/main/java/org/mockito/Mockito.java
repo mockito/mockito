@@ -1500,7 +1500,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <h3 id="44">44. <a class="meaningful_link" href="#mockito_instantiator_provider_deprecation" name="mockito_instantiator_provider_deprecation">
  *       Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was
- *       replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</a></h3>
+ *       replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a></h3>
  *
  * <p>{@link org.mockito.plugins.InstantiatorProvider} returned an internal API. Hence it was deprecated and replaced
  * by {@link org.mockito.plugins.InstantiatorProvider2}. Old {@link org.mockito.plugins.InstantiatorProvider

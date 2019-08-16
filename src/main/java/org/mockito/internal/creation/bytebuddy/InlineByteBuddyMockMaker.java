@@ -301,7 +301,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
                 if (EXCLUDES.contains(type)) {
                     return "Cannot mock wrapper types, String.class or Class.class";
                 }
-                return "VM does not not support modification of given type";
+                return "VM does not support modification of given type";
             }
         };
     }
