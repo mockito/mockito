@@ -13,8 +13,6 @@ sudo: true
 
 language: java
 
-dist: trusty
-
 matrix:
   include:
   - jdk: openjdk8
