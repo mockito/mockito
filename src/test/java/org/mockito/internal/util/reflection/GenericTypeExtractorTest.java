@@ -38,6 +38,7 @@ public class GenericTypeExtractorTest extends TestBase {
 
     interface Crazy extends Serializable, IDeeper, Cloneable {}
     class Crazier extends EvenDeeper implements Crazy {}
+    class SecondGeneric implements Serializable, IBase<Integer> {}
 
     @Test public void finds_generic_type() {
         assertEquals(Integer.class, genericTypeOf(IntImpl.class, Base.class, IBase.class));
@@ -64,5 +65,7 @@ public class GenericTypeExtractorTest extends TestBase {
         assertEquals(Integer.class, genericTypeOf(IDeeper.class, Base.class, IBase.class));
         assertEquals(Integer.class, genericTypeOf(Crazy.class, Base.class, IBase.class));
         assertEquals(Integer.class, genericTypeOf(Crazier.class, Base.class, IBase.class));
+
+        assertEquals(Integer.class, genericTypeOf(SecondGeneric.class, Base.class, IBase.class));
     }
 }

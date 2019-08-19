@@ -61,7 +61,7 @@ public class GenericTypeExtractor {
         for (int i = 0; i < sourceClass.getInterfaces().length; i++) {
             Class<?> inter = sourceClass.getInterfaces()[i];
             if (inter == targetBaseInterface) {
-                return sourceClass.getGenericInterfaces()[0];
+                return sourceClass.getGenericInterfaces()[i];
             } else {
                 Type deeper = findGenericInterface(inter, targetBaseInterface);
                 if (deeper != null) {
