@@ -22,7 +22,7 @@ import org.mockito.junit.MockitoRule;
  * <ol>
  *     <li>{@link Strictness#STRICT_STUBS} - ensures clean tests, reduces test code duplication, improves debuggability.
  *       Best combination of flexibility and productivity. Highly recommended.
- *       Planned as default for Mockito v3.
+ *       Planned as default for Mockito v4.
  *       Enable it via {@link MockitoRule}, {@link MockitoJUnitRunner} or {@link MockitoSession}.
  *       See {@link #STRICT_STUBS} for the details.</li>
  *     <li>{@link Strictness#LENIENT} - no added behavior.
@@ -69,7 +69,7 @@ public enum Strictness {
      * Ensures clean tests, reduces test code duplication, improves debuggability.
      * Offers best combination of flexibility and productivity.
      * Highly recommended.
-     * Planned as default for Mockito v3.
+     * Planned as default for Mockito v4.
      * Enable it via our JUnit support ({@link MockitoJUnit}) or {@link MockitoSession}.
      * <p>
      * Adds following behavior:
