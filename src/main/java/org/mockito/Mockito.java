@@ -1881,6 +1881,24 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
+     * Creates stub object of given class or interface. A stub is distinct from a mock in that it does not verify interactions.
+     * <p>
+     * This factory method is a convenience for creating a mock with setting {@link MockSettings#stubOnly()}.
+     *
+     * <pre><code>
+     *     Foo stub = mock(Foo.class, withSettings().stubOnly());
+     * </code></pre>
+     *
+     * @param classToStub class or interface to mock
+     * @return stub object
+     * @since 3.0.8
+     */
+    @CheckReturnValue
+    public static <T> T stub(Class<T> classToStub) {
+        return mock(classToStub, withSettings().stubOnly());
+    }
+
+    /**
      * Creates a mock with some non-standard settings.
      * <p>
      * The number of configuration points for a mock grows

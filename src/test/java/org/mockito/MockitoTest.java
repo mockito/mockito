@@ -11,6 +11,7 @@ import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingPro
 
 import java.util.List;
 import org.junit.Test;
+import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
@@ -71,6 +72,12 @@ public class MockitoTest {
 
         //then
         assertThat(Mockito.RETURNS_DEFAULTS).isEqualTo(settings.getDefaultAnswer());
+    }
+
+    @Test(expected = CannotVerifyStubOnlyMock.class)
+    public void shouldThrowWhenVerifyingStubBehavior() {
+        final List stub = Mockito.stub(List.class);
+        Mockito.verifyNoInteractions(stub);
     }
 
 }
