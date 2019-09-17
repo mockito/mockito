@@ -135,7 +135,9 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
                 } finally {
                     outputStream.close();
                 }
-                instrumentation.appendToBootstrapClassLoaderSearch(new JarFile(boot));
+                try (JarFile jarfile = new JarFile(boot)) {
+                    instrumentation.appendToBootstrapClassLoaderSearch(jarfile);
+                }
                 try {
                     Class.forName("org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher", false, null);
                 } catch (ClassNotFoundException cnfe) {
