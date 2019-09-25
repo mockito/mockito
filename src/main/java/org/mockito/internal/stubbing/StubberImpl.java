@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.stubbing;
 
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
@@ -15,7 +16,6 @@ import org.mockito.stubbing.Stubber;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.internal.configuration.plugins.Plugins;
 import static org.mockito.internal.exceptions.Reporter.notAMockPassedToWhenMethod;
 import static org.mockito.internal.exceptions.Reporter.notAnException;
 import static org.mockito.internal.exceptions.Reporter.nullPassedToWhenMethod;
@@ -36,10 +36,12 @@ public class StubberImpl implements Stubber {
     @Override
     public <T> T when(T mock) {
         if (mock == null) {
+            mockingProgress().reset();
             throw nullPassedToWhenMethod();
         }
 
         if (!isMock(mock)) {
+            mockingProgress().reset();
             throw notAMockPassedToWhenMethod();
         }
 
