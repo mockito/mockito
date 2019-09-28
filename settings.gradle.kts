@@ -8,7 +8,8 @@ include("deprecatedPluginsTest",
     "junitJupiterExtensionTest",
     "module-test",
     "memory-test",
-    "errorprone")
+    "errorprone",
+    "junitJupiterParallelTest")
 
 rootProject.name = "mockito"
 

@@ -5,14 +5,20 @@
 package org.mockito.junit.jupiter;
 
 
-import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolutionException;
+import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.api.extension.TestInstancePostProcessor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
+import org.mockito.internal.configuration.MockAnnotationProcessor;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.session.MockitoSessionLoggerAdapter;
-import org.mockito.internal.configuration.MockAnnotationProcessor;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.quality.Strictness;
 
@@ -190,16 +196,24 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeEachCa
     private void collectParentTestInstances(ExtensionContext context, Set<Object> testInstances) {
         Optional<ExtensionContext> parent = context.getParent();
 
+        boolean firstParent = true;
         while (parent.isPresent() && parent.get() != context.getRoot()) {
             ExtensionContext parentContext = parent.get();
+            parent = parentContext.getParent();
+
+            if (firstParent) {
+                // Ignoring first parent avoids parallel execution issues
+                // We can ignore the first parent because it has the test instance that is already in 'testInstances'
+                // See how 'testInstances' is populated
+                firstParent = false;
+                continue;
+            }
 
             Object testInstance = parentContext.getStore(MOCKITO).remove(TEST_INSTANCE);
 
             if (testInstance != null) {
                 testInstances.add(testInstance);
             }
-
-            parent = parentContext.getParent();
         }
     }
 
