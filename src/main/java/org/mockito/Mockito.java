@@ -2820,14 +2820,13 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * Verification will be triggered after given amount of millis, allowing testing of async code.
+     * Verification will be triggered over and over until the given amount of millis, allowing testing of async code.
      * Useful when interactions with the mock object did not happened yet.
-     * Extensive use of after() method can be a code smell - there are better ways of testing concurrent code.
+     * Extensive use of {@code timeout()} method can be a code smell - there are better ways of testing concurrent code.
      * <p>
      * See also {@link #after(long)} method for testing async code.
      * Differences between {@code timeout()} and {@code after} are explained in Javadoc for {@link #after(long)}.
-     * <p>
-     * Extensive use of {@code timeout()} method can be a code smell - there are better ways of testing concurrent code.
+     *
      * <pre class="code"><code class="java">
      *   //passes when someMethod() is called no later than within 100 ms
      *   //exits immediately when verification is satisfied (e.g. may not wait full 100 ms)
@@ -2856,7 +2855,7 @@ public class Mockito extends ArgumentMatchers {
     /**
      * Verification will be triggered after given amount of millis, allowing testing of async code.
      * Useful when interactions with the mock object did not happened yet.
-     * Extensive use of after() method can be a code smell - there are better ways of testing concurrent code.
+     * Extensive use of {@code after()} method can be a code smell - there are better ways of testing concurrent code.
      * <p>
      * Not yet implemented to work with InOrder verification.
      * <p>
