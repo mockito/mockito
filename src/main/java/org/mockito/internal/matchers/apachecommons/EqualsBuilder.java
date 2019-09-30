@@ -2,9 +2,6 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
-//NON-STANDARD LICENCE HEADER HERE - THAT'S OK
-//Class comes from Apache Commons Lang, added some tiny changes
 package org.mockito.internal.matchers.apachecommons;
 
 import java.lang.reflect.AccessibleObject;
@@ -14,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+// Class comes from Apache Commons Lang, added some tiny changes
 /**
  * <p>Assists in implementing {@link Object#equals(Object)} methods.</p>
  *

@@ -1,9 +1,4 @@
 /*
- * Copyright (c) 2017 Mockito contributors
- * This program is made available under the terms of the MIT License.
- */
-
-/*
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
