@@ -5,24 +5,29 @@
 package org.mockito.junit.jupiter;
 
 
-import org.junit.jupiter.api.extension.*;
-import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoSession;
-import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.internal.session.MockitoSessionLoggerAdapter;
-import org.mockito.internal.configuration.MockAnnotationProcessor;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.quality.Strictness;
+import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 import java.lang.reflect.Parameter;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
-
-import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
-import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolutionException;
+import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.api.extension.TestInstancePostProcessor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoSession;
+import org.mockito.internal.configuration.MockAnnotationProcessor;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.session.MockitoSessionLoggerAdapter;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.quality.Strictness;
 
 /**
  * Extension that initializes mocks and handles strict stubbings. This extension is the JUnit Jupiter equivalent
@@ -188,19 +193,30 @@ public class MockitoExtension implements TestInstancePostProcessor, BeforeEachCa
     }
 
     private void collectParentTestInstances(ExtensionContext context, Set<Object> testInstances) {
-        Optional<ExtensionContext> parent = context.getParent();
+        Optional<ExtensionContext> initialParent = context.getParent();
 
-        while (parent.isPresent() && parent.get() != context.getRoot()) {
-            ExtensionContext parentContext = parent.get();
+        // Ignoring first parent avoids parallel execution issues
+        // We can ignore the first parent because it has the test instance that is already in 'testInstances'
+        // See how 'testInstances' is populated
+        initialParent.ifPresent(parent -> collectParentTestInstance(parent.getParent(), context, testInstances));
+    }
 
-            Object testInstance = parentContext.getStore(MOCKITO).remove(TEST_INSTANCE);
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private void collectParentTestInstance(
+        Optional<ExtensionContext> parent, ExtensionContext context,
+        Set<Object> testInstances) {
 
-            if (testInstance != null) {
-                testInstances.add(testInstance);
+        parent.ifPresent(currentParent -> {
+            if (currentParent != context.getRoot()) {
+                Object testInstance = currentParent.getStore(MOCKITO).remove(TEST_INSTANCE);
+
+                if (testInstance != null) {
+                    testInstances.add(testInstance);
+                }
+
+                collectParentTestInstance(currentParent.getParent(), context, testInstances);
             }
-
-            parent = parentContext.getParent();
-        }
+        });
     }
 
     /**
