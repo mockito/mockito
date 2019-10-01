@@ -83,13 +83,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * a parameterized constructor only or a no-arg constructor only, or both.
  * All these constructors can be package protected, protected or private, however
  * <u>Mockito cannot instantiate inner classes, local classes, abstract classes and of course interfaces.</u>
- * <u>Beware of private nest static classes too.</u>
+ * <u>Beware of private nested static classes too.</u>
  *
  * <p>The same stands for setters or fields, they can be declared with private
  * visibility, Mockito will see them through reflection.
  * However fields that are static or final will be ignored.</p>
  *
- * <p>So on the field that needs injection, for example constructor injection will happen here :</p>
+ * <p>So on the field that needs injection, for example constructor injection will happen here:</p>
  * <pre class="code"><code class="java">
  *   public class ArticleManager {
  *       ArticleManager(ArticleCalculator calculator, ArticleDatabase database) {
@@ -98,7 +98,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *   }
  * </code></pre>
  *
- * <p>Property setter injection will happen here :</p>
+ * <p>Property setter injection will happen here:</p>
  * <pre class="code"><code class="java">
  *   public class ArticleManager {
  *       // no-arg constructor
@@ -112,7 +112,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *   }
  * </code></pre>
  *
- * <p>Field injection will be used here :</p>
+ * <p>Field injection will be used here:</p>
  * <pre class="code"><code class="java">
  *   public class ArticleManager {
  *       private ArticleDatabase database;
