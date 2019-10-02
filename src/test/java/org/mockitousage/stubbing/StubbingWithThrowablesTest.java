@@ -263,7 +263,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldNotAllowDifferntCheckedException() throws Exception {
+    public void shouldNotAllowDifferentCheckedException() throws Exception {
         IMethods mock = mock(IMethods.class);
 
         exception.expect(MockitoException.class);

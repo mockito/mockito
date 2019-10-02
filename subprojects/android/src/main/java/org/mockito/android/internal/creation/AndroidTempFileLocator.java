@@ -71,10 +71,10 @@ class AndroidTempFileLocator {
             }
             String packageName = potential.substring(start, end);
             File dataDir = new File("/data/data/" + packageName);
-            if (isWriteableDirectory(dataDir)) {
+            if (isWritableDirectory(dataDir)) {
                 File cacheDir = new File(dataDir, "cache");
                 if (fileOrDirExists(cacheDir) || cacheDir.mkdir()) {
-                    if (isWriteableDirectory(cacheDir)) {
+                    if (isWritableDirectory(cacheDir)) {
                         results.add(cacheDir);
                     }
                 }
@@ -99,7 +99,7 @@ class AndroidTempFileLocator {
         return file.exists();
     }
 
-    private static boolean isWriteableDirectory(File file) {
+    private static boolean isWritableDirectory(File file) {
         return file.isDirectory() && file.canWrite();
     }
 }

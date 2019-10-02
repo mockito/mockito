@@ -75,7 +75,7 @@ public class InvalidUseOfMatchersTest {
     }
 
     @Test
-    public void should_scream_when_not_enough_matchers_inside_or_AddtionalMatcher() {
+    public void should_scream_when_not_enough_matchers_inside_or_AdditionalMatcher() {
         try {
             mock.simpleMethod(AdditionalMatchers.or(eq("jkl"), "asd"));
             fail();

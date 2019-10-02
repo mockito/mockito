@@ -524,7 +524,7 @@ public abstract class GenericMetadataSupport {
             try {
                 return Class.forName(stringBuilder.append("L").append(rawComponentType.getName()).append(";").toString(), false, rawComponentType.getClassLoader());
             } catch (ClassNotFoundException e) {
-                throw new IllegalStateException("This was not supposed to happend", e);
+                throw new IllegalStateException("This was not supposed to happen.", e);
             }
         }
     }

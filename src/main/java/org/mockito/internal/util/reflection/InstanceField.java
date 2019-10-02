@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 /**
  * Represents an accessible instance field.
  *
- * Contains the instance reference on which the field can be read adn write.
+ * Contains the instance reference on which the field can be read and write.
  */
 public class InstanceField {
     private final Field field;

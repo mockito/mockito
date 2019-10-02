@@ -81,7 +81,7 @@ public class StackTraceFilter implements Serializable {
             // The assumption here is that the CLEANER filter will not filter out every single
             // element. However, since we don't want to compute the full length of the stacktrace,
             // we don't know the upper boundary. Therefore, simply increment the counter and go as
-            // far as we have to go, assuming that we get there. If, in the rare occassion, we
+            // far as we have to go, assuming that we get there. If, in the rare occasion, we
             // don't, we fall back to the old slow path.
             while (true) {
                 try {
