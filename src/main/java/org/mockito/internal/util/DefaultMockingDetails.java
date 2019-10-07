@@ -86,4 +86,3 @@ public class DefaultMockingDetails implements MockingDetails {
         }
     }
 }
-

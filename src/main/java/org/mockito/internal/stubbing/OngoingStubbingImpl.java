@@ -42,5 +42,3 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
         this.strictness = strictness;
     }
 }
-
-

@@ -692,5 +692,3 @@ public abstract class GenericMetadataSupport {
     }
 
 }
-
-

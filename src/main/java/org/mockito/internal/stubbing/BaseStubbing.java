@@ -102,5 +102,3 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         return (M) this.strongMockRef;
     }
 }
-
-

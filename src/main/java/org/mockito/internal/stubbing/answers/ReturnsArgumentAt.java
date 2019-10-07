@@ -150,4 +150,3 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
 
     }
 }
-

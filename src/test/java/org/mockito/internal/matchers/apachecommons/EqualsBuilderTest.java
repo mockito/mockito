@@ -2,8 +2,6 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
-//Class comes from Apache Commons Lang, added some tiny changes
 package org.mockito.internal.matchers.apachecommons;
 
 import org.junit.Test;
@@ -14,6 +12,7 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
+// Class comes from Apache Commons Lang, added some tiny changes
 /**
  * @author <a href="mailto:sdowney@panix.com">Steve Downey</a>
  * @author <a href="mailto:scolebourne@joda.org">Stephen Colebourne</a>
