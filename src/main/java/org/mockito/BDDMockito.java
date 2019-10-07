@@ -251,7 +251,7 @@ public class BDDMockito extends Mockito {
         /**
          * @see #verifyZeroInteractions(Object...)
          * @since 2.1.0
-         * @deprecated Since 3.x.x. Please migrate your code to {@link #shouldHaveNoInteractions()}
+         * @deprecated Since 3.0.1. Please migrate your code to {@link #shouldHaveNoInteractions()}
          */
         @Deprecated
         void shouldHaveZeroInteractions();
@@ -264,7 +264,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see #verifyNoInteractions(Object...)
-         * @since 3.x.x
+         * @since 3.0.1
          */
         void shouldHaveNoInteractions();
     }
@@ -327,7 +327,7 @@ public class BDDMockito extends Mockito {
 
         /**
          * @see #verifyNoInteractions(Object...)
-         * @since 3.x.x
+         * @since 3.0.1
          */
         public void shouldHaveNoInteractions() {
             verifyNoInteractions(mock);
