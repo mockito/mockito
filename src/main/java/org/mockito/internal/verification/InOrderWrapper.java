@@ -29,9 +29,4 @@ public class InOrderWrapper implements VerificationMode {
         VerificationDataInOrderImpl dataInOrder = new VerificationDataInOrderImpl(inOrder, invocations, data.getTarget());
         mode.verifyInOrder(dataInOrder);
     }
-
-    @Override
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
-    }
 }

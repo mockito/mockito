@@ -35,9 +35,4 @@ public class NoMoreInteractions implements VerificationMode, VerificationInOrder
             throw noMoreInteractionsWantedInOrder(unverified);
         }
     }
-
-    @Override
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
-    }
 }

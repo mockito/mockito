@@ -4,7 +4,6 @@
  */
 package org.mockito.verification;
 
-import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.VerificationOverTimeImpl;
 import org.mockito.internal.verification.VerificationWrapper;
 
@@ -37,10 +36,5 @@ public class After extends VerificationWrapper<VerificationOverTimeImpl> impleme
     @Override
     protected VerificationMode copySelfWithNewVerificationMode(VerificationMode verificationMode) {
         return new After(wrappedVerification.copyWithVerificationMode(verificationMode));
-    }
-
-    @Override
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
     }
 }

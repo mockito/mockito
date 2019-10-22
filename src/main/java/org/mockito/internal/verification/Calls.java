@@ -46,8 +46,4 @@ public class Calls implements VerificationMode, VerificationInOrderMode {
         return "Wanted invocations count (non-greedy): " + wantedCount;
     }
 
-    @Override
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
-    }
 }

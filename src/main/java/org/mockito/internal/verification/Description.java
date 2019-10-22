@@ -43,9 +43,4 @@ public class Description implements VerificationMode {
             throw new MockitoAssertionError(e, description);
         }
     }
-
-    @Override
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
-    }
 }

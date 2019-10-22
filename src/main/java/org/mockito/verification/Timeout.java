@@ -7,7 +7,6 @@ package org.mockito.verification;
 import static org.mockito.internal.exceptions.Reporter.atMostAndNeverShouldNotBeUsedWithTimeout;
 
 import org.mockito.internal.util.Timer;
-import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.VerificationOverTimeImpl;
 import org.mockito.internal.verification.VerificationWrapper;
 
@@ -58,11 +57,6 @@ public class Timeout extends VerificationWrapper<VerificationOverTimeImpl> imple
 
     public VerificationMode never() {
         throw atMostAndNeverShouldNotBeUsedWithTimeout();
-    }
-
-    @Override
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
     }
 
 }
