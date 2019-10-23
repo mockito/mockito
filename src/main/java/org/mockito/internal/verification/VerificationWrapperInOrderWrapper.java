@@ -26,11 +26,6 @@ public class VerificationWrapperInOrderWrapper implements VerificationMode {
         delegate.verify(data);
     }
 
-    @Override
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
-    }
-
     private VerificationMode wrapInOrder(VerificationWrapper<?> verificationWrapper, VerificationMode verificationMode, InOrderImpl inOrder) {
         if (verificationMode instanceof VerificationInOrderMode) {
             final VerificationInOrderMode verificationInOrderMode = (VerificationInOrderMode)verificationMode;

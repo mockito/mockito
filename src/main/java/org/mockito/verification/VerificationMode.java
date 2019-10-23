@@ -5,6 +5,7 @@
 package org.mockito.verification;
 
 import org.mockito.Mockito;
+import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.internal.verification.api.VerificationData;
 
 /**
@@ -41,5 +42,7 @@ public interface VerificationMode {
      * @return VerificationMode
      * @since 2.1.0
      */
-    VerificationMode description(String description);
+    default VerificationMode description(String description) {
+        return VerificationModeFactory.description(this, description);
+    }
 }

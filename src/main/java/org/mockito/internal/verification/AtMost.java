@@ -41,11 +41,6 @@ public class AtMost implements VerificationMode {
         markVerified(found, wanted);
     }
 
-    @Override
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
-    }
-
     private void removeAlreadyVerified(List<Invocation> invocations) {
         for (Iterator<Invocation> iterator = invocations.iterator(); iterator.hasNext(); ) {
             Invocation i = iterator.next();

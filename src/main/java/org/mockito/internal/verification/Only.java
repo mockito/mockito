@@ -33,8 +33,4 @@ public class Only implements VerificationMode {
         }
         markVerified(chunk.get(0), target);
     }
-
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
-    }
 }

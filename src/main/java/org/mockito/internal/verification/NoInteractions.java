@@ -22,9 +22,4 @@ public class NoInteractions implements VerificationMode {
         }
     }
 
-    @Override
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
-    }
-
 }
