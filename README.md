@@ -22,7 +22,7 @@ Mockito [continuously delivers](https://github.com/mockito/mockito/wiki/Continuo
 Older 1.x and 2.x releases are available in
 [Central Repository](http://search.maven.org/#artifactdetails|org.mockito|mockito-core|1.10.19|jar)
 , [Bintray](https://bintray.com/mockito/maven/mockito/1.10.19/view)
-and [javadoc.io](http://javadoc.io/page/org.mockito/mockito-core/1.10.19/org/mockito/Mockito.html) (documentation).
+and [javadoc.io](http://javadoc.io/doc/org.mockito/mockito-core/1.10.19/org/mockito/Mockito.html) (documentation).
 
 ## More information
 

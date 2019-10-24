@@ -15,7 +15,7 @@ import org.mockito.quality.Strictness;
  * <li>
  *     <ul>JUnit Rules - see {@link MockitoRule}</ul>
  *     <ul>JUnit runners - see {@link MockitoJUnitRunner}</ul>
- *     <ul><a href="http://javadoc.io/page/org.mockito/mockito-junit-jupiter/latest/org/mockito/junit/jupiter/MockitoExtension.html">JUnit Jupiter extension</a></ul>
+ *     <ul><a href="http://javadoc.io/doc/org.mockito/mockito-junit-jupiter/latest/org/mockito/junit/jupiter/MockitoExtension.html">JUnit Jupiter extension</a></ul>
  * </li>
  *
  * @since 1.10.17
