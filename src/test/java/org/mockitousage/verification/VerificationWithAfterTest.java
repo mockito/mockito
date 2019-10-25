@@ -4,6 +4,14 @@
  */
 package org.mockitousage.verification;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.after;
+import static org.mockito.Mockito.verify;
+import static org.mockito.junit.MockitoJUnit.rule;
+import static org.mockitoutil.Stopwatch.createNotStarted;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.After;
@@ -18,13 +26,6 @@ import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
 import org.mockitoutil.Stopwatch;
 import org.mockitoutil.async.AsyncTesting;
-
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.after;
-import static org.mockito.Mockito.verify;
-import static org.mockito.junit.MockitoJUnit.rule;
-import static org.mockitoutil.Stopwatch.createNotStarted;
 
 public class VerificationWithAfterTest {
 

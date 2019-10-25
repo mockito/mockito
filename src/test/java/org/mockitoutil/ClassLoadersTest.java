@@ -4,17 +4,18 @@
  */
 package org.mockitoutil;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.mockito.Mockito;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockitoutil.ClassLoaders.currentClassLoader;
 import static org.mockitoutil.ClassLoaders.excludingClassLoader;
 import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
 import static org.mockitoutil.ClassLoaders.jdkClassLoader;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
+import org.mockito.Mockito;
 
 public class ClassLoadersTest {
 

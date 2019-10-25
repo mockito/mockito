@@ -4,6 +4,9 @@
  */
 package org.mockito;
 
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+import static org.mockito.internal.util.Primitives.defaultValue;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.Contains;
 import org.mockito.internal.matchers.EndsWith;
@@ -24,9 +28,6 @@ import org.mockito.internal.matchers.Same;
 import org.mockito.internal.matchers.StartsWith;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.internal.util.Primitives;
-
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-import static org.mockito.internal.util.Primitives.defaultValue;
 
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.

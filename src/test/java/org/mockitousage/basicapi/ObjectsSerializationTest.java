@@ -4,13 +4,13 @@
  */
 package org.mockitousage.basicapi;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.assertSame;
+import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
 
 import java.io.Serializable;
 
-import static org.junit.Assert.assertSame;
-import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("serial")
 public class ObjectsSerializationTest extends TestBase implements Serializable {

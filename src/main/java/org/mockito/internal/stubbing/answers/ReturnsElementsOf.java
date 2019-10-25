@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing.answers;
 
 import java.util.Collection;
 import java.util.LinkedList;
+
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;

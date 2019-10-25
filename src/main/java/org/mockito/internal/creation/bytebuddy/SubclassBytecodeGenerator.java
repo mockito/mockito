@@ -4,6 +4,26 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static java.lang.Thread.currentThread;
+
+import static net.bytebuddy.description.modifier.Visibility.PRIVATE;
+import static net.bytebuddy.dynamic.Transformer.ForMethod.withModifiers;
+import static net.bytebuddy.implementation.MethodDelegation.to;
+import static net.bytebuddy.implementation.attribute.MethodAttributeAppender.ForInstrumentedMethod.INCLUDING_RECEIVER;
+import static net.bytebuddy.matcher.ElementMatchers.*;
+import static org.mockito.internal.util.StringUtil.join;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Random;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.modifier.SynchronizationState;
@@ -20,25 +40,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.DispatcherDefaultingToRealMethod;
 import org.mockito.mock.SerializableMode;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Random;
-
-import static java.lang.Thread.currentThread;
-import static net.bytebuddy.description.modifier.Visibility.PRIVATE;
-import static net.bytebuddy.dynamic.Transformer.ForMethod.withModifiers;
-import static net.bytebuddy.implementation.MethodDelegation.to;
-import static net.bytebuddy.implementation.attribute.MethodAttributeAppender.ForInstrumentedMethod.INCLUDING_RECEIVER;
-import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.mockito.internal.util.StringUtil.join;
 
 class SubclassBytecodeGenerator implements BytecodeGenerator {
 

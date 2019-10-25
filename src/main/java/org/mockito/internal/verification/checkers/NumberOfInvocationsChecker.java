@@ -4,14 +4,6 @@
  */
 package org.mockito.internal.verification.checkers;
 
-import java.util.Arrays;
-import java.util.List;
-import org.mockito.internal.reporting.Discrepancy;
-import org.mockito.internal.verification.api.InOrderContext;
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.Location;
-import org.mockito.invocation.MatchableInvocation;
-
 import static org.mockito.internal.exceptions.Reporter.neverWantedButInvoked;
 import static org.mockito.internal.exceptions.Reporter.tooFewActualInvocations;
 import static org.mockito.internal.exceptions.Reporter.tooFewActualInvocationsInOrder;
@@ -23,6 +15,15 @@ import static org.mockito.internal.invocation.InvocationsFinder.findFirstMatchin
 import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 import static org.mockito.internal.invocation.InvocationsFinder.findMatchingChunk;
 import static org.mockito.internal.invocation.InvocationsFinder.getAllLocations;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.mockito.internal.reporting.Discrepancy;
+import org.mockito.internal.verification.api.InOrderContext;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
+import org.mockito.invocation.MatchableInvocation;
 
 public class NumberOfInvocationsChecker {
 

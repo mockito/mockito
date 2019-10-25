@@ -4,6 +4,15 @@
  */
 package org.mockitousage.verification;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.after;
+import static org.mockito.Mockito.verify;
+import static org.mockito.junit.MockitoJUnit.rule;
+import static org.mockitoutil.Stopwatch.createNotStarted;
+
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,14 +22,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
 import org.mockitoutil.Stopwatch;
-
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.after;
-import static org.mockito.Mockito.verify;
-import static org.mockito.junit.MockitoJUnit.rule;
-import static org.mockitoutil.Stopwatch.createNotStarted;
 
 public class VerificationWithAfterAndCaptorTest {
 

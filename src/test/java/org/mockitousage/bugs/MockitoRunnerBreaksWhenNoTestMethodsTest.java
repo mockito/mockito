@@ -4,8 +4,13 @@
  */
 package org.mockitousage.bugs;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.OutputStream;
 import java.io.PrintStream;
+
 import org.junit.Test;
 import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
@@ -14,10 +19,6 @@ import org.junit.runner.RunWith;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 
 // @Ignore("for demo only. this test cannot be enabled as it fails :)")

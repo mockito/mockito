@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.verification;
 
+import static java.util.Arrays.asList;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
@@ -16,10 +21,6 @@ import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 
 public class NoMoreInteractionsTest extends TestBase {
 

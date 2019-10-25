@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.plugins.MockitoLogger;
-import org.mockito.mock.MockCreationSettings;
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.MockitoLogger;
 
 /**
  * Reports stubbing argument mismatches to the supplied logger

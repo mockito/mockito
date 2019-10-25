@@ -4,18 +4,18 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 
 
 

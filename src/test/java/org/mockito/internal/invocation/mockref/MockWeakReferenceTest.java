@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.invocation.mockref;
 
+import static org.junit.Assert.fail;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
 
 public class MockWeakReferenceTest extends TestBase {
 

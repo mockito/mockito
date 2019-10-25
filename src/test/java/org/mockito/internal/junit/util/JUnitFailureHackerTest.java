@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.junit.util;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class JUnitFailureHackerTest extends TestBase {
 

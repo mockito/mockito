@@ -4,11 +4,11 @@
  */
 package org.mockitousage.bugs;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.EqualsWithDelta;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class EqualsWithDeltaTest {
 

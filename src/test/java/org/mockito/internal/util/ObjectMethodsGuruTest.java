@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.util;
 
-import org.junit.Test;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class ObjectMethodsGuruTest extends TestBase {
 

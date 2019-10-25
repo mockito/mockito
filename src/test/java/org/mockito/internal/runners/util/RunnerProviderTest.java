@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.runners.util;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.mockito.internal.runners.DefaultInternalRunner;
 import org.mockito.internal.runners.InternalRunner;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertNotNull;
 
 public class RunnerProviderTest extends TestBase {
 

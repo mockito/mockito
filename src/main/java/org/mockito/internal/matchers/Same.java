@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.matchers;
 
+import java.io.Serializable;
+
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.text.ValuePrinter;
-
-import java.io.Serializable;
 
 public class Same implements ArgumentMatcher<Object>, Serializable {
 

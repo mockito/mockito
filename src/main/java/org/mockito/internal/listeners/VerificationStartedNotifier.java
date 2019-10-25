@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.listeners;
 
+import java.util.List;
+import java.util.Set;
+
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 import org.mockito.internal.exceptions.Reporter;
@@ -11,9 +14,6 @@ import org.mockito.internal.matchers.text.ValuePrinter;
 import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
-
-import java.util.List;
-import java.util.Set;
 
 public class VerificationStartedNotifier {
 

@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.stubbing;
 
+import java.util.Comparator;
+
 import org.mockito.internal.invocation.InvocationComparator;
 import org.mockito.stubbing.Stubbing;
-
-import java.util.Comparator;
 
 /**
  * Compares stubbings based on {@link InvocationComparator}

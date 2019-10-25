@@ -7,6 +7,7 @@ package org.mockito.internal.stubbing.defaultanswers;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.GenericMetadataSupport;

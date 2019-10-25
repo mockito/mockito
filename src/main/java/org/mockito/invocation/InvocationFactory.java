@@ -4,13 +4,13 @@
  */
 package org.mockito.invocation;
 
-import org.mockito.Incubating;
-import org.mockito.MockitoFramework;
-import org.mockito.mock.MockCreationSettings;
-
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
+
+import org.mockito.Incubating;
+import org.mockito.MockitoFramework;
+import org.mockito.mock.MockCreationSettings;
 
 /**
  * Available via {@link MockitoFramework#getInvocationFactory()}.

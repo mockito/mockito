@@ -4,14 +4,14 @@
  */
 package org.mockitoutil;
 
-import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
-
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
 import static org.mockitoutil.TestBase.filterLineNo;
+
+import java.util.List;
+
+import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
 
 /**
  * Assertion utility for cleaner & easier to debug tests that inspect on JUnit's Result object

@@ -5,17 +5,17 @@
 package org.mockitousage.bugs.injection;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertSame;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertSame;
 
 @RunWith(MockitoJUnitRunner.class)
 public class Issue353InjectionMightNotHappenInCertainConfigurationTest {

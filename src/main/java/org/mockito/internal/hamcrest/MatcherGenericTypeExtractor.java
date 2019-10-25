@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.hamcrest;
 
+import static org.mockito.internal.util.reflection.GenericTypeExtractor.genericTypeOf;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Matcher;
-
-import static org.mockito.internal.util.reflection.GenericTypeExtractor.genericTypeOf;
 
 /**
  * Extracts generic type of matcher

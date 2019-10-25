@@ -4,9 +4,8 @@
  */
 package org.mockitousage.serialization;
 
-import org.junit.Test;
-import org.mockitousage.IMethods;
-import org.mockitoutil.SimpleSerializationUtil;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 
 import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
@@ -14,8 +13,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.withSettings;
+import org.junit.Test;
+import org.mockitousage.IMethods;
+import org.mockitoutil.SimpleSerializationUtil;
 
 public class ParallelSerializationTest {
 

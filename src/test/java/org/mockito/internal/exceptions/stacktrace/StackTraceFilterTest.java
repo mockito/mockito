@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.exceptions.stacktrace;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockitoutil.Conditions.onlyThoseClasses;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.base.TraceBuilder;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockitoutil.Conditions.onlyThoseClasses;
 
 public class StackTraceFilterTest extends TestBase {
 

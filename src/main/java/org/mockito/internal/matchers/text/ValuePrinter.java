@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.matchers.text;
 
+import static java.lang.String.valueOf;
+
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.Map;
-
-import static java.lang.String.valueOf;
 
 /**
  * Prints a Java object value in a way humans can read it neatly.

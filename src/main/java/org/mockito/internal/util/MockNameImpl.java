@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.util;
 
-import org.mockito.mock.MockName;
-
 import java.io.Serializable;
+
+import org.mockito.mock.MockName;
 
 public class MockNameImpl implements MockName, Serializable {
 

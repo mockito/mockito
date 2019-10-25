@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.mockito.Mockito.withSettings;
+
+import java.io.IOException;
+import java.io.Serializable;
+
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.internal.MockitoCore;
@@ -16,11 +21,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubbing;
-
-import java.io.IOException;
-import java.io.Serializable;
-
-import static org.mockito.Mockito.withSettings;
 
 /**
  * Returning deep stub implementation.

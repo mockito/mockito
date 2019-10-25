@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.stubbing;
 
-import org.mockito.quality.Strictness;
-import org.mockito.stubbing.Answer;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.mockito.quality.Strictness;
+import org.mockito.stubbing.Answer;
 
 /**
  * Holds answers declared using 'doAnswer' stubbing style.

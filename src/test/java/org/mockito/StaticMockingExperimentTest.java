@@ -4,19 +4,6 @@
  */
 package org.mockito;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.InvocationFactory;
-import org.mockito.invocation.MockHandler;
-import org.mockitoutil.TestBase;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -26,6 +13,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationFactory;
+import org.mockito.invocation.MockHandler;
+import org.mockitoutil.TestBase;
 
 /**
  * This test is an experimental use of Mockito API to simulate static mocking.

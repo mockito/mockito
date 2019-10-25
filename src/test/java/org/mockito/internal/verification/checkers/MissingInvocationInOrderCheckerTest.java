@@ -4,6 +4,12 @@
  */
 package org.mockito.internal.verification.checkers;
 
+import static java.util.Arrays.asList;
+
+import static org.mockito.internal.verification.checkers.MissingInvocationChecker.checkMissingInvocation;
+
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,11 +26,6 @@ import org.mockito.invocation.Invocation;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
-
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.mockito.internal.verification.checkers.MissingInvocationChecker.checkMissingInvocation;
 
 public class MissingInvocationInOrderCheckerTest  {
 

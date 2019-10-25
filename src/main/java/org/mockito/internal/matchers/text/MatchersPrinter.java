@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.matchers.text;
 
-import org.mockito.ArgumentMatcher;
-import org.mockito.internal.matchers.ContainsExtraTypeInfo;
-import org.mockito.internal.reporting.PrintSettings;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.mockito.ArgumentMatcher;
+import org.mockito.internal.matchers.ContainsExtraTypeInfo;
+import org.mockito.internal.reporting.PrintSettings;
 
 @SuppressWarnings("unchecked")
 public class MatchersPrinter {

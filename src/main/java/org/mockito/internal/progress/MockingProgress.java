@@ -5,6 +5,7 @@
 package org.mockito.internal.progress;
 
 import java.util.Set;
+
 import org.mockito.listeners.MockitoListener;
 import org.mockito.listeners.VerificationListener;
 import org.mockito.mock.MockCreationSettings;

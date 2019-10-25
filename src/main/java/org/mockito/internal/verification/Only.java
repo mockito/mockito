@@ -12,9 +12,9 @@ import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 
 import java.util.List;
 
-import org.mockito.invocation.MatchableInvocation;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MatchableInvocation;
 import org.mockito.verification.VerificationMode;
 
 public class Only implements VerificationMode {

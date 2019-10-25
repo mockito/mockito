@@ -4,20 +4,20 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.ArgumentMatcher;
-import org.mockito.internal.invocation.mockref.MockReference;
-import org.mockito.internal.exceptions.VerificationAwareInvocation;
-import org.mockito.internal.reporting.PrintSettings;
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.Location;
-import org.mockito.invocation.StubInfo;
+import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
+import static org.mockito.internal.invocation.ArgumentsProcessor.argumentsToMatchers;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.internal.exceptions.Reporter.cannotCallAbstractRealMethod;
-import static org.mockito.internal.invocation.ArgumentsProcessor.argumentsToMatchers;
+import org.mockito.ArgumentMatcher;
+import org.mockito.internal.exceptions.VerificationAwareInvocation;
+import org.mockito.internal.invocation.mockref.MockReference;
+import org.mockito.internal.reporting.PrintSettings;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
+import org.mockito.invocation.StubInfo;
 
 public class InterceptedInvocation implements Invocation, VerificationAwareInvocation {
 

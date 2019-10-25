@@ -4,9 +4,9 @@
  */
 package org.mockitousage.bugs.deepstubs;
 
-import org.junit.Test;
-
 import static org.mockito.Mockito.*;
+
+import org.junit.Test;
 
 public class DeepStubFailingWhenGenericNestedAsRawTypeTest {
 

@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class PluginFileReaderTest extends TestBase {
 

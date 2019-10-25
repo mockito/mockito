@@ -4,14 +4,21 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockitoutil.ClassLoaders.coverageTool;
+
+import java.io.Serializable;
+import java.util.List;
+
 import net.bytebuddy.ByteBuddy;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.handler.MockHandlerImpl;
-import org.mockito.invocation.InvocationContainer;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
@@ -20,13 +27,6 @@ import org.mockito.stubbing.Answer;
 import org.mockitoutil.ClassLoaders;
 import org.mockitoutil.SimpleSerializationUtil;
 import org.objenesis.ObjenesisStd;
-
-import java.io.Serializable;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockitoutil.ClassLoaders.coverageTool;
 
 public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
 

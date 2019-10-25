@@ -4,6 +4,8 @@
  */
 package org.mockito.runners;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -14,8 +16,6 @@ import org.junit.runners.model.InitializationError;
 import org.mockito.internal.runners.InternalRunner;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
 

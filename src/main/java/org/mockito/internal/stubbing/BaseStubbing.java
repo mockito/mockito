@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.stubbing;
 
+import static org.mockito.internal.exceptions.Reporter.notAnException;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
@@ -11,9 +14,6 @@ import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
-
-import static org.mockito.internal.exceptions.Reporter.notAnException;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 

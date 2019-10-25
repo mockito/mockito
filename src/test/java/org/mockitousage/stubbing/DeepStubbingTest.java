@@ -4,18 +4,6 @@
  */
 package org.mockitousage.stubbing;
 
-import org.junit.Test;
-import org.mockito.InOrder;
-import org.mockito.exceptions.verification.TooManyActualInvocations;
-import org.mockitoutil.TestBase;
-
-import javax.net.SocketFactory;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.util.List;
-import java.util.Locale;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -23,6 +11,19 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.List;
+import java.util.Locale;
+
+import javax.net.SocketFactory;
+
+import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockitoutil.TestBase;
 
 
 public class DeepStubbingTest extends TestBase {

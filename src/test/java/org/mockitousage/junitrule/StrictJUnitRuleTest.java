@@ -4,6 +4,14 @@
  */
 package org.mockitousage.junitrule;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static org.mockitoutil.TestBase.filterLineNo;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,14 +24,6 @@ import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitousage.strictness.ProductionCode;
 import org.mockitoutil.SafeJUnitRule;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.mockitoutil.TestBase.filterLineNo;
 
 public class StrictJUnitRuleTest {
 

@@ -4,11 +4,11 @@
  */
 package org.mockito.listeners;
 
+import java.util.Collection;
+
 import org.mockito.invocation.Invocation;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Stubbing;
-
-import java.util.Collection;
 
 /**
  * Represent an information about the looked up stubbing

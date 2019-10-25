@@ -4,9 +4,11 @@
  */
 package org.mockitousage.bugs;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import static java.util.Collections.synchronizedList;
+
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,10 +16,9 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 
-import static java.util.Collections.synchronizedList;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 @Ignore
 public class MultithreadedStubbingHalfManualTest {

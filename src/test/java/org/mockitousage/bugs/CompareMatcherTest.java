@@ -12,6 +12,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;

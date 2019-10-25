@@ -4,12 +4,13 @@
  */
 package org.mockito.internal.matchers;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.regex.Pattern;
+
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class MatchersToStringTest extends TestBase {
 

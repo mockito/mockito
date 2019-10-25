@@ -4,11 +4,11 @@
  */
 package org.mockitousage.bugs.deepstubs;
 
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
+
+import org.junit.Test;
 
 /**
  * In GH issue 99 : https://github.com/mockito/mockito/issues/99

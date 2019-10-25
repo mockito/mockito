@@ -4,15 +4,15 @@
  */
 package org.mockitousage.bugs;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 //see issue 184
 public class ShouldMocksCompareToBeConsistentWithEqualsTest extends TestBase {

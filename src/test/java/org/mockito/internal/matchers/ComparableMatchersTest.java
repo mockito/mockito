@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.matchers;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class ComparableMatchersTest extends TestBase {
 

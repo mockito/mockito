@@ -4,11 +4,11 @@
  */
 package org.mockitousage.bugs;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
-
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
+
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class ActualInvocationHasNullArgumentNPEBugTest extends TestBase {
 

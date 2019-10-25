@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.runners.util;
 
-import org.mockito.internal.runners.InternalRunner;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import org.mockito.internal.runners.InternalRunner;
 
 public class RunnerProvider {
 

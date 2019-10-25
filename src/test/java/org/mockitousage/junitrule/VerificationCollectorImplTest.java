@@ -4,6 +4,10 @@
  */
 package org.mockitousage.junitrule;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import static org.mockito.Mockito.*;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -13,10 +17,6 @@ import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.VerificationCollector;
 import org.mockitousage.IMethods;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
-import static org.mockito.Mockito.*;
 
 public class VerificationCollectorImplTest {
 

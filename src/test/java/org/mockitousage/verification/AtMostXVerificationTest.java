@@ -4,16 +4,6 @@
  */
 package org.mockitousage.verification;
 
-import org.junit.Test;
-import org.mockito.InOrder;
-import org.mockito.Mock;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.exceptions.verification.MoreThanAllowedActualInvocations;
-import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockitoutil.TestBase;
-
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -23,6 +13,16 @@ import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+
+import java.util.List;
+
+import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Mock;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.verification.MoreThanAllowedActualInvocations;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockitoutil.TestBase;
 
 public class AtMostXVerificationTest extends TestBase {
 

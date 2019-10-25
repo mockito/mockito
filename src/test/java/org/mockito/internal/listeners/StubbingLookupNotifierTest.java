@@ -4,6 +4,16 @@
  */
 package org.mockito.internal.listeners;
 
+import static org.assertj.core.util.Lists.emptyList;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.internal.listeners.StubbingLookupNotifier.notifyStubbedAnswerLookup;
+
+import java.util.Collection;
+import java.util.List;
+
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
@@ -12,16 +22,6 @@ import org.mockito.invocation.Invocation;
 import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.stubbing.Stubbing;
 import org.mockitoutil.TestBase;
-
-import java.util.Collection;
-import java.util.List;
-
-import static org.assertj.core.util.Lists.emptyList;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.internal.listeners.StubbingLookupNotifier.notifyStubbedAnswerLookup;
 
 public class StubbingLookupNotifierTest extends TestBase {
 

@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.verification;
 
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
 
 public class VerificationDataImplTest extends TestBase {
 

@@ -4,16 +4,16 @@
  */
 package org.mockitousage.performance;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class LoadsOfMocksTest extends TestBase {
 

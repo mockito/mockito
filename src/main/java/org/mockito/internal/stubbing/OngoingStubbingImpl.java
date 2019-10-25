@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.stubbing;
 
+import static org.mockito.internal.exceptions.Reporter.incorrectUseOfApi;
+
+import java.util.List;
+
 import org.mockito.invocation.Invocation;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
-
-import java.util.List;
-
-import static org.mockito.internal.exceptions.Reporter.incorrectUseOfApi;
 
 public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
 

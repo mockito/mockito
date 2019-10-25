@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.debugging;
 
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.invocation.Invocation;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.Invocation;
 
 public class WarningsFinder {
     private final List<Invocation> baseUnusedStubs;

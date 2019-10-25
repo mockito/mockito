@@ -4,6 +4,17 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import static java.util.Arrays.asList;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
+
+import java.io.File;
+import java.net.URL;
+import java.util.Collections;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -12,16 +23,6 @@ import org.mockito.Mock;
 import org.mockito.internal.util.io.IOUtil;
 import org.mockito.plugins.PluginSwitch;
 import org.mockitoutil.TestBase;
-
-import java.io.File;
-import java.net.URL;
-import java.util.Collections;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
 
 public class PluginFinderTest extends TestBase {
 

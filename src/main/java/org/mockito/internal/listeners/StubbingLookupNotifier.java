@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.listeners;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.StubbingLookupEvent;
 import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Stubbing;
-
-import java.util.Collection;
-import java.util.List;
 
 public class StubbingLookupNotifier {
 

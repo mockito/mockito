@@ -5,11 +5,11 @@
 package org.mockito.internal.debugging;
 
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class LoggingListenerTest extends TestBase {
 

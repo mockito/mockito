@@ -4,14 +4,14 @@
  */
 package org.mockitoutil;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
 import org.assertj.core.description.Description;
 import org.assertj.core.description.TextDescription;
 import org.hamcrest.CoreMatchers;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
 
 @SuppressWarnings("unchecked")
 public class Conditions {

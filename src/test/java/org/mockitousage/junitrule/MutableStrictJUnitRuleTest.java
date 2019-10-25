@@ -4,6 +4,8 @@
  */
 package org.mockitousage.junitrule;
 
+import static org.mockito.Mockito.when;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -14,8 +16,6 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.JUnitResultAssert;
-
-import static org.mockito.Mockito.when;
 
 public class MutableStrictJUnitRuleTest {
 

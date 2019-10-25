@@ -4,17 +4,17 @@
  */
 package org.mockito.internal.hamcrest;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.internal.hamcrest.MatcherGenericTypeExtractor.genericTypeOfMatcher;
+
+import java.io.Serializable;
+import java.util.HashMap;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import java.io.Serializable;
-import java.util.HashMap;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.internal.hamcrest.MatcherGenericTypeExtractor.genericTypeOfMatcher;
 
 public class MatcherGenericTypeExtractorTest extends TestBase {
 

@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.junit.Assert.*;
+import static org.junit.Assume.assumeFalse;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsGenericDeepStubsTest.WithGenerics;
 import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeFalse;
-import static org.mockito.Mockito.when;
 
 public class ReturnsMocksTest extends TestBase {
     private ReturnsMocks values = new ReturnsMocks();

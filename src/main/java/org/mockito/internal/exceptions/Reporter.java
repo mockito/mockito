@@ -4,6 +4,16 @@
  */
 package org.mockito.internal.exceptions;
 
+import static org.mockito.internal.reporting.Pluralizer.pluralize;
+import static org.mockito.internal.reporting.Pluralizer.were_exactly_x_interactions;
+import static org.mockito.internal.util.StringUtil.join;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.*;
@@ -26,16 +36,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.SerializableMode;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static org.mockito.internal.reporting.Pluralizer.pluralize;
-import static org.mockito.internal.reporting.Pluralizer.were_exactly_x_interactions;
-import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * Reports verification and misusing errors.

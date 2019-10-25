@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.verification;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.MockitoAnnotations.initMocks;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,11 +17,6 @@ import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockito.verification.VerificationMode;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 public class VerificationOverTimeImplTest {
     @Mock

@@ -4,6 +4,9 @@
  */
 package org.mockitousage.verification;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -12,9 +15,6 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBase {
 

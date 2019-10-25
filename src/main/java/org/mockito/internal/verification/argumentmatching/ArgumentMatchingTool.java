@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.verification.argumentmatching;
 
-import org.mockito.ArgumentMatcher;
-import org.mockito.internal.matchers.ContainsExtraTypeInfo;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import org.mockito.ArgumentMatcher;
+import org.mockito.internal.matchers.ContainsExtraTypeInfo;
 
 @SuppressWarnings("unchecked")
 public class ArgumentMatchingTool {

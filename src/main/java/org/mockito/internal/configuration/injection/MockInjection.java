@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.configuration.injection;
 
+import static org.mockito.internal.util.Checks.checkItemsNotNull;
+import static org.mockito.internal.util.Checks.checkNotNull;
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
+
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.mockito.internal.util.Checks.checkItemsNotNull;
-import static org.mockito.internal.util.Checks.checkNotNull;
-import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 /**
  * Internal injection configuration utility.

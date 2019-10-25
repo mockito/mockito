@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import static org.junit.Assert.*;
+import static org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.INLINE_ALIAS;
+
 import org.junit.Test;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker;
 import org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker;
@@ -13,9 +16,6 @@ import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockitoLogger;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.*;
-import static org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.INLINE_ALIAS;
 
 public class DefaultMockitoPluginsTest extends TestBase {
 

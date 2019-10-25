@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mockito.internal.creation.instance.InstantiatorProvider2Adapter;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider;
@@ -13,9 +16,6 @@ import org.mockito.plugins.MockitoLogger;
 import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.PluginSwitch;
 import org.mockito.plugins.StackTraceCleanerProvider;
-
-import java.util.HashMap;
-import java.util.Map;
 
 class DefaultMockitoPlugins implements MockitoPlugins {
 

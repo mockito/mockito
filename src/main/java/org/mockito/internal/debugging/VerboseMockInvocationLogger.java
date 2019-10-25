@@ -5,6 +5,7 @@
 package org.mockito.internal.debugging;
 
 import java.io.PrintStream;
+
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;

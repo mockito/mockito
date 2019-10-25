@@ -4,18 +4,18 @@
  */
 package org.mockito.internal.verification;
 
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.invocation.MatchableInvocation;
-import org.mockito.internal.verification.api.VerificationData;
-import org.mockito.invocation.Invocation;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MatchableInvocation;
 
 public class OnlyTest {
 

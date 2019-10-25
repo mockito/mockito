@@ -4,12 +4,12 @@
  */
 package org.mockitousage.stubbing;
 
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.delegatesTo;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
+
+import org.junit.Test;
 
 public class StubbingWithDelegateVarArgsTest {
 

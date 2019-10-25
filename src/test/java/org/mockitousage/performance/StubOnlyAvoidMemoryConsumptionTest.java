@@ -4,10 +4,10 @@
  */
 package org.mockitousage.performance;
 
+import static org.mockito.Mockito.*;
+
 import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.mockito.Mockito.*;
 
 public class StubOnlyAvoidMemoryConsumptionTest {
 

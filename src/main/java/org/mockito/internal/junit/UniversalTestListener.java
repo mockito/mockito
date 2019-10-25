@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.internal.creation.settings.CreationSettings;
-import org.mockito.internal.listeners.AutoCleanableListener;
-import org.mockito.plugins.MockitoLogger;
-import org.mockito.mock.MockCreationSettings;
-import org.mockito.quality.Strictness;
-
 import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.Map;
+
+import org.mockito.internal.creation.settings.CreationSettings;
+import org.mockito.internal.listeners.AutoCleanableListener;
+import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.MockitoLogger;
+import org.mockito.quality.Strictness;
 
 /**
  * Universal test listener that behaves accordingly to current setting of strictness.

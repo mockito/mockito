@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.debugging;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
 import org.mockito.Mockito;
 import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Stubbing;
-
-import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  * Prints invocations in human-readable, printable way

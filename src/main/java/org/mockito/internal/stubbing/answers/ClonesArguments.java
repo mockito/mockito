@@ -5,8 +5,9 @@
 package org.mockito.internal.stubbing.answers;
 
 import java.lang.reflect.Array;
-import org.mockito.internal.configuration.plugins.Plugins;
+
 import org.mockito.creation.instance.Instantiator;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockito.invocation.InvocationOnMock;

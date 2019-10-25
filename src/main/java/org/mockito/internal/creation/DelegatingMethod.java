@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.creation;
 
-import org.mockito.internal.invocation.MockitoMethod;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
+import org.mockito.internal.invocation.MockitoMethod;
 
 public class DelegatingMethod implements MockitoMethod {
 

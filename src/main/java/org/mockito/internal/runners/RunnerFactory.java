@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.runners;
 
+import static org.mockito.internal.runners.util.TestMethodsFinder.hasTestMethods;
+
+import java.lang.reflect.InvocationTargetException;
+
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.junit.MismatchReportingTestListener;
@@ -12,10 +16,6 @@ import org.mockito.internal.junit.NoOpTestListener;
 import org.mockito.internal.junit.StrictStubsRunnerTestListener;
 import org.mockito.internal.runners.util.RunnerProvider;
 import org.mockito.internal.util.Supplier;
-
-import java.lang.reflect.InvocationTargetException;
-
-import static org.mockito.internal.runners.util.TestMethodsFinder.hasTestMethods;
 
 /**
  * Creates instances of Mockito JUnit Runner in a safe way, e.g. detecting inadequate version of JUnit, etc.

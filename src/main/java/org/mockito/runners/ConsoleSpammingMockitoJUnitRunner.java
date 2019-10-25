@@ -4,6 +4,8 @@
  */
 package org.mockito.runners;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -14,11 +16,9 @@ import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.debugging.WarningsCollector;
-import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.InternalRunner;
+import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.plugins.MockitoLogger;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * @deprecated as of 2.1.0. Use the {@link org.mockito.junit.MockitoJUnitRunner} runner instead

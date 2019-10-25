@@ -4,6 +4,8 @@
  */
 package org.mockitousage.junitrunner;
 
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -16,8 +18,6 @@ import org.mockitousage.IMethods;
 import org.mockitousage.strictness.ProductionCode;
 import org.mockitoutil.JUnitResultAssert;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.when;
 
 public class StrictStubsRunnerTest extends TestBase {
 

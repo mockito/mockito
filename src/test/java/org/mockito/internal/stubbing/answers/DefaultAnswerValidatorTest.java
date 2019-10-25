@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
 import org.junit.Test;
 import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.internal.invocation.InvocationBuilder;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 public class DefaultAnswerValidatorTest {
 

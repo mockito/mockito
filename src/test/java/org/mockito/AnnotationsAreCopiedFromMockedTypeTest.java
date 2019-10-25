@@ -4,8 +4,10 @@
  */
 package org.mockito;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import static java.lang.annotation.ElementType.*;
+
+import static org.junit.Assume.assumeTrue;
+import static org.mockito.Mockito.mock;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
@@ -15,9 +17,8 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import static java.lang.annotation.ElementType.*;
-import static org.junit.Assume.assumeTrue;
-import static org.mockito.Mockito.mock;
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
 
 public class AnnotationsAreCopiedFromMockedTypeTest {
 

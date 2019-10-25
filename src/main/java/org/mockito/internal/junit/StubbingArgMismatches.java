@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.plugins.MockitoLogger;
-import org.mockito.invocation.Invocation;
-
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.mockito.invocation.Invocation;
+import org.mockito.plugins.MockitoLogger;
 
 /**
  * Contains stubbing arg mismatches, knows how to format them

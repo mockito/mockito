@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.invocation;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Stubbing;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @Deprecated
 public class UnusedStubsFinder {

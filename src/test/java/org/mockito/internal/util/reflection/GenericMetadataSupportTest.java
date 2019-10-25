@@ -4,7 +4,9 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -19,9 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.internal.util.reflection.GenericMetadataSupport.inferFrom;
+import org.junit.Test;
 
 public class GenericMetadataSupportTest {
 

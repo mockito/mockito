@@ -4,20 +4,21 @@
  */
 package org.mockitousage.internal.junit;
 
+import static java.util.Arrays.asList;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
+
+import java.util.Collection;
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.junit.UnusedStubbings;
 import org.mockito.internal.junit.UnusedStubbingsFinder;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.Collection;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 
 /**
  * This unit test lives in 'org.mockitousage' package for a reason.

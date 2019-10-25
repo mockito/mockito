@@ -4,17 +4,17 @@
  */
 package org.mockito.internal.invocation;
 
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+
 import org.mockito.internal.creation.DelegatingMethod;
-import org.mockito.internal.invocation.mockref.MockWeakReference;
 import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.invocation.mockref.MockWeakReference;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.Location;
 import org.mockito.mock.MockCreationSettings;
-
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 public class DefaultInvocationFactory implements InvocationFactory {
 

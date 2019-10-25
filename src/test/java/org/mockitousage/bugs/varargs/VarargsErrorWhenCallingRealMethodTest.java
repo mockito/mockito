@@ -4,11 +4,11 @@
  */
 package org.mockitousage.bugs.varargs;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class VarargsErrorWhenCallingRealMethodTest extends TestBase {
 

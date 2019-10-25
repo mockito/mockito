@@ -4,20 +4,21 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.Mockito;
-import org.mockito.internal.invocation.mockref.MockReference;
-import org.mockito.internal.invocation.mockref.MockStrongReference;
-import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.Location;
-import org.mockitousage.IMethods;
+import static java.util.Arrays.asList;
+
+import static org.mockito.internal.invocation.InterceptedInvocation.NO_OP;
 
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-import static org.mockito.internal.invocation.InterceptedInvocation.NO_OP;
+import org.mockito.Mockito;
+import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.invocation.mockref.MockReference;
+import org.mockito.internal.invocation.mockref.MockStrongReference;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
+import org.mockitousage.IMethods;
 
 /**
  * Build an invocation.

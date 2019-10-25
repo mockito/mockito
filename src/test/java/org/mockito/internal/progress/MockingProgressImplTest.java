@@ -4,6 +4,15 @@
  */
 package org.mockito.internal.progress;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
@@ -15,15 +24,6 @@ import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.listeners.MockitoListener;
 import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class MockingProgressImplTest extends TestBase {
 

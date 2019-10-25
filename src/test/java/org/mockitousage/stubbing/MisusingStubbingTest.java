@@ -4,12 +4,12 @@
  */
 package org.mockitousage.stubbing;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.validateMockitoUsage;
+
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class MisusingStubbingTest extends TestBase {
 

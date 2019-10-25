@@ -10,9 +10,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
 import org.mockito.internal.session.MockitoSessionLoggerAdapter;
+import org.mockito.junit.MockitoRule;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
-import org.mockito.junit.MockitoRule;
 
 /**
  * Internal implementation.

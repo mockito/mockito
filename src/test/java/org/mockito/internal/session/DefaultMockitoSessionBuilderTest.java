@@ -4,6 +4,15 @@
  */
 package org.mockito.internal.session;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
+import static org.mockito.quality.Strictness.WARN;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,15 +22,6 @@ import org.mockito.exceptions.misusing.UnfinishedMockingSessionException;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionLogger;
 import org.mockitoutil.ThrowableAssert;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
-import static org.mockito.quality.Strictness.WARN;
 
 public class DefaultMockitoSessionBuilderTest {
 

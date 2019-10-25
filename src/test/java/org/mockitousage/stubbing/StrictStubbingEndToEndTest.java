@@ -4,6 +4,13 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockitoutil.ConcurrentTesting.concurrently;
+import static org.mockitoutil.JUnitResultAssert.assertThat;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -18,13 +25,6 @@ import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitousage.strictness.ProductionCode;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static org.mockito.BDDMockito.given;
-import static org.mockitoutil.ConcurrentTesting.concurrently;
-import static org.mockitoutil.JUnitResultAssert.assertThat;
 
 public class StrictStubbingEndToEndTest {
 

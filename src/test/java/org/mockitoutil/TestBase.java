@@ -4,6 +4,12 @@
  */
 package org.mockitoutil;
 
+import static org.mockito.Mockito.mock;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+
 import org.assertj.core.api.Condition;
 import org.junit.After;
 import org.junit.Before;
@@ -11,19 +17,13 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockito.internal.invocation.mockref.MockStrongReference;
-import org.mockito.internal.invocation.InterceptedInvocation;
 import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.invocation.InterceptedInvocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.SerializableMethod;
+import org.mockito.internal.invocation.mockref.MockStrongReference;
 import org.mockito.invocation.Invocation;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-
-import static org.mockito.Mockito.mock;
 
 /**
  * the easiest way to make sure that tests clean up invalid state is to require

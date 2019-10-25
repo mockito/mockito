@@ -4,15 +4,16 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.mockito.internal.exceptions.Reporter.cannotStubWithNullThrowable;
+import static org.mockito.internal.exceptions.Reporter.checkedExceptionInvalid;
+
 import java.io.Serializable;
+
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.ValidableAnswer;
-
-import static org.mockito.internal.exceptions.Reporter.cannotStubWithNullThrowable;
-import static org.mockito.internal.exceptions.Reporter.checkedExceptionInvalid;
 
 /**
  * An answer that always throws the same throwable.

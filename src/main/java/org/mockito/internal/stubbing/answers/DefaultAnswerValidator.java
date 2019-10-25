@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import org.mockito.invocation.InvocationOnMock;
-
 import static org.mockito.internal.exceptions.Reporter.wrongTypeReturnedByDefaultAnswer;
+
+import org.mockito.invocation.InvocationOnMock;
 
 public abstract class DefaultAnswerValidator {
     public static void validateReturnValueFor(InvocationOnMock invocation, Object returnedValue) throws Throwable {

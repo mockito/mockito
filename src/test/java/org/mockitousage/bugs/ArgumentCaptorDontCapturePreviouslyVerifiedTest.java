@@ -4,14 +4,14 @@
  */
 package org.mockitousage.bugs;
 
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockitousage.IMethods;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockitousage.IMethods;
 
 public class ArgumentCaptorDontCapturePreviouslyVerifiedTest {
     @Test

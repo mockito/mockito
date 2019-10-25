@@ -4,17 +4,17 @@
  */
 package org.mockitousage.bugs;
 
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.stubbing.OngoingStubbing;
-
-import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.Map;
+
+import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.stubbing.OngoingStubbing;
 
 public class IOOBExceptionShouldNotBeThrownWhenNotCodingFluentlyTest {
 

@@ -4,14 +4,14 @@
  */
 package org.mockitousage.annotation;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class SpyInjectionTest extends TestBase {
 

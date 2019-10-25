@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+
+import java.util.*;
+
 import org.junit.Assume;
 import org.junit.Test;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
-
-import java.util.*;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 
 public class ReturnsEmptyValuesTest extends TestBase {
 

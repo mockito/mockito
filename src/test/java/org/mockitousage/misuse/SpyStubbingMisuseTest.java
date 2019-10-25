@@ -4,12 +4,12 @@
  */
 package org.mockitousage.misuse;
 
-import org.junit.Test;
-import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
+
+import org.junit.Test;
+import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 
 public class SpyStubbingMisuseTest {
 

@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.junit;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
@@ -11,10 +15,6 @@ import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.mock.MockCreationSettings;
-
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Reports unnecessary stubbings

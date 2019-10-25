@@ -4,17 +4,17 @@
  */
 package org.mockito.internal.progress;
 
-import org.junit.After;
-import org.junit.Test;
-import org.mockito.internal.verification.DummyVerificationMode;
-import org.mockitoutil.TestBase;
-
-import java.util.List;
-
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+
+import java.util.List;
+
+import org.junit.After;
+import org.junit.Test;
+import org.mockito.internal.verification.DummyVerificationMode;
+import org.mockitoutil.TestBase;
 
 public class ThreadSafeMockingProgressTest extends TestBase {
 

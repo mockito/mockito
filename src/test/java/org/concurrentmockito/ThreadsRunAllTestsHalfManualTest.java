@@ -4,6 +4,14 @@
  */
 package org.concurrentmockito;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -51,14 +59,6 @@ import org.mockitousage.stubbing.ReturningDefaultValuesTest;
 import org.mockitousage.stubbing.StubbingWithThrowablesTest;
 import org.mockitousage.verification.*;
 import org.mockitoutil.TestBase;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import static org.junit.Assert.assertEquals;
 
 public class ThreadsRunAllTestsHalfManualTest extends TestBase {
 

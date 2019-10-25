@@ -4,6 +4,10 @@
  */
 package org.mockitointegration;
 
+import static org.mockitoutil.ClassLoaders.coverageTool;
+
+import java.util.Set;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import org.hamcrest.Matcher;
@@ -13,10 +17,6 @@ import org.mockito.Mockito;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.Objenesis;
-
-import java.util.Set;
-
-import static org.mockitoutil.ClassLoaders.coverageTool;
 
 public class NoJUnitDependenciesTest {
 

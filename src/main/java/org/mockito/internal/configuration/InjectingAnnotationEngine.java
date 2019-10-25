@@ -4,15 +4,16 @@
  */
 package org.mockito.internal.configuration;
 
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
+
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
 import org.mockito.internal.configuration.injection.scanner.MockScanner;
 import org.mockito.plugins.AnnotationEngine;
-
-import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 /**
  * See {@link MockitoAnnotations}

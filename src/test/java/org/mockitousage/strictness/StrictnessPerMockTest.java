@@ -4,6 +4,15 @@
  */
 package org.mockitousage.strictness;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertNull;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.withSettings;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.After;
@@ -18,15 +27,6 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertNull;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockingDetails;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.withSettings;
 
 //TODO 792 also move other Strictness tests to this package (unless they already have good package)
 public class StrictnessPerMockTest {

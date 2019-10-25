@@ -4,12 +4,13 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static java.lang.Boolean.TRUE;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationBuilder;
-
-import static java.lang.Boolean.TRUE;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReturnsTest {
     @Test

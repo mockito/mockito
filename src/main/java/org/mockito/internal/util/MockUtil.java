@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.util;
 
+import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
+
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.configuration.plugins.Plugins;
@@ -15,8 +17,6 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockMaker.TypeMockability;
-
-import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
 
 @SuppressWarnings("unchecked")
 public class MockUtil {

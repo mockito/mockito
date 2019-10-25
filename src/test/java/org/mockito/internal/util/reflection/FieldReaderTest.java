@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unused")
 public class FieldReaderTest extends TestBase {

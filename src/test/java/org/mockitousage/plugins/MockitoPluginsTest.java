@@ -4,6 +4,9 @@
  */
 package org.mockitousage.plugins;
 
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.withSettings;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.creation.instance.Instantiator;
@@ -16,9 +19,6 @@ import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.PluginSwitch;
 import org.mockito.plugins.StackTraceCleanerProvider;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.withSettings;
 
 public class MockitoPluginsTest extends TestBase {
 

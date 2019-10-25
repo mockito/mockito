@@ -4,16 +4,16 @@
  */
 package org.mockito.internal.util;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.mock.MockCreationSettings;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class MockSettingsTest extends TestBase {
     @Test

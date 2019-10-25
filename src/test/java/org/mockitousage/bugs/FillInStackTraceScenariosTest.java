@@ -4,13 +4,13 @@
  */
 package org.mockitousage.bugs;
 
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.when;
 
 /**
  * These tests check that ThrowsException#answer throws an instance returned

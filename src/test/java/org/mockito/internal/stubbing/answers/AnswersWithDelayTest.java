@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.invocation.InvocationBuilder;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 import java.util.Date;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
+import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.invocation.InvocationBuilder;
 
 public class AnswersWithDelayTest {
     @Test

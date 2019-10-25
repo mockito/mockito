@@ -4,7 +4,13 @@
  */
 package org.mockito.internal.verification.checkers;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.List;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
@@ -22,10 +28,6 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
-
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NumberOfInvocationsCheckerTest {

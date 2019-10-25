@@ -4,15 +4,15 @@
  */
 package org.mockitousage.verification;
 
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
-
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 public class AtLeastXVerificationTest extends TestBase {
 

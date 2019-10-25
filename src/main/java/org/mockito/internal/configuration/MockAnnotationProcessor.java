@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.configuration;
 
+import java.lang.reflect.Field;
+
 import org.mockito.Mock;
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
-
-import java.lang.reflect.Field;
 
 /**
  * Instantiates a mock on a field annotated by {@link Mock}

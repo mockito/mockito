@@ -4,17 +4,6 @@
  */
 package org.mockitousage.stubbing;
 
-import org.junit.Test;
-import org.mockito.AdditionalAnswers;
-import org.mockito.Mockito;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockitousage.IMethods;
-import org.mockitousage.MethodsImpl;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -22,6 +11,17 @@ import static org.mockito.AdditionalAnswers.delegatesTo;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.junit.Test;
+import org.mockito.AdditionalAnswers;
+import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockitousage.IMethods;
+import org.mockitousage.MethodsImpl;
 
 @SuppressWarnings("unchecked")
 public class StubbingWithDelegateTest {

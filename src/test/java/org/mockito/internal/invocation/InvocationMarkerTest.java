@@ -4,16 +4,16 @@
  */
 package org.mockito.internal.invocation;
 
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.junit.Test;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockitoutil.TestBase;
-
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static org.junit.Assert.*;
 
 public class InvocationMarkerTest extends TestBase {
 

@@ -4,16 +4,16 @@
  */
 package org.mockitousage.bugs;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.mockito.Spy;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.verify;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verify;
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
+import org.mockito.Spy;
+import org.mockitoutil.TestBase;
 
 //see issue 216
 public class SpyShouldHaveNiceNameTest extends TestBase {

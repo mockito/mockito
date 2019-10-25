@@ -5,6 +5,7 @@
 package org.mockito.internal.junit.util;
 
 import java.lang.reflect.Field;
+
 import org.junit.runner.notification.Failure;
 import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
 

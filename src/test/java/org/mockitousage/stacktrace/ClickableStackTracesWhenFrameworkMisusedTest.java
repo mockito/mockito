@@ -4,6 +4,10 @@
  */
 package org.mockitousage.stacktrace;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,10 +16,6 @@ import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
 

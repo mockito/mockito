@@ -4,13 +4,13 @@
  */
 package org.mockitousage.bugs.varargs;
 
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockitoutil.TestBase;
-
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockitoutil.TestBase;
 
 public class VarargsAndAnyObjectPicksUpExtraInvocationsTest extends TestBase {
     public interface TableBuilder {

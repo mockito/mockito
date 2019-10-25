@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.util.collections;
 
-import org.mockito.internal.util.Checks;
+import static java.lang.reflect.Array.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import static java.lang.reflect.Array.*;
+import org.mockito.internal.util.Checks;
 
 /**
  * hashCode and equals safe hash based set.

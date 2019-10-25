@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class ForwardsInvocationsTest extends TestBase {
 

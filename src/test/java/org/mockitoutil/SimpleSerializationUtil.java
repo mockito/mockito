@@ -4,9 +4,9 @@
  */
 package org.mockitoutil;
 
-import java.io.*;
-
 import static org.junit.Assert.assertNotNull;
+
+import java.io.*;
 
 public abstract class SimpleSerializationUtil {
 

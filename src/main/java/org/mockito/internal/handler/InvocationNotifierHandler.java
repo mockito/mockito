@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.handler;
 
-import org.mockito.invocation.InvocationContainer;
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MockHandler;
-import org.mockito.listeners.InvocationListener;
-import org.mockito.mock.MockCreationSettings;
+import static org.mockito.internal.exceptions.Reporter.invocationListenerThrewException;
 
 import java.util.List;
 
-import static org.mockito.internal.exceptions.Reporter.invocationListenerThrewException;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
+import org.mockito.invocation.MockHandler;
+import org.mockito.listeners.InvocationListener;
+import org.mockito.mock.MockCreationSettings;
 
 /**
  * Handler, that call all listeners wanted for this mock, before delegating it

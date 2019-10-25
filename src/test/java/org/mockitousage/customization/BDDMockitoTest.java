@@ -4,6 +4,11 @@
  */
 package org.mockitousage.customization;
 
+import static org.junit.Assert.fail;
+import static org.mockito.BDDMockito.*;
+
+import java.util.Set;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -17,11 +22,6 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitousage.MethodsImpl;
 import org.mockitoutil.TestBase;
-
-import java.util.Set;
-
-import static org.junit.Assert.fail;
-import static org.mockito.BDDMockito.*;
 
 public class BDDMockitoTest extends TestBase {
 

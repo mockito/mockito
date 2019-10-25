@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.internal.util.reflection.GenericTypeExtractor.genericTypeOf;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.internal.util.reflection.GenericTypeExtractor.genericTypeOf;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class GenericTypeExtractorTest extends TestBase {
 

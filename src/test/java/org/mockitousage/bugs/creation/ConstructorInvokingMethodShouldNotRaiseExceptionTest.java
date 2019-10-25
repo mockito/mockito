@@ -4,13 +4,13 @@
  */
 package org.mockitousage.bugs.creation;
 
+import java.util.Random;
+
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-
-import java.util.Random;
 
 @RunWith(Enclosed.class)
 public class ConstructorInvokingMethodShouldNotRaiseExceptionTest {

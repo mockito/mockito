@@ -8,6 +8,7 @@ import static org.mockito.internal.verification.checkers.MissingInvocationChecke
 import static org.mockito.internal.verification.checkers.NumberOfInvocationsChecker.checkNumberOfInvocationsNonGreedy;
 
 import java.util.List;
+
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.internal.verification.api.VerificationDataInOrder;

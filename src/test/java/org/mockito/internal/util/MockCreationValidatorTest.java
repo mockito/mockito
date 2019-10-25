@@ -4,17 +4,18 @@
  */
 package org.mockito.internal.util;
 
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockitousage.IMethods;
+import static java.util.Arrays.asList;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockitousage.IMethods;
 
 @SuppressWarnings("unchecked")
 public class MockCreationValidatorTest {

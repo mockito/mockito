@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.plugins.MockitoLogger;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.StackTraceCleanerProvider;
 

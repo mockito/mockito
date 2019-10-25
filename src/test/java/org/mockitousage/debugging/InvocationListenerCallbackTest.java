@@ -4,16 +4,6 @@
  */
 package org.mockitousage.debugging;
 
-import org.assertj.core.api.Condition;
-import org.junit.Test;
-import org.mockito.InOrder;
-import org.mockito.invocation.DescribedInvocation;
-import org.mockito.listeners.InvocationListener;
-import org.mockito.listeners.MethodInvocationReport;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
@@ -23,6 +13,16 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.assertj.core.api.Condition;
+import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.invocation.DescribedInvocation;
+import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.MethodInvocationReport;
 
 
 /**

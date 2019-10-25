@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.exceptions.stacktrace;
 
-import java.lang.reflect.Method;
-import org.mockito.exceptions.stacktrace.StackTraceCleaner;
-import org.mockito.internal.configuration.plugins.Plugins;
-
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.mockito.exceptions.stacktrace.StackTraceCleaner;
+import org.mockito.internal.configuration.plugins.Plugins;
 
 public class StackTraceFilter implements Serializable {
 

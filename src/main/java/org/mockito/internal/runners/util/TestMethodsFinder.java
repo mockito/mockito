@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.runners.util;
 
-import org.junit.Test;
-
 import java.lang.reflect.Method;
+
+import org.junit.Test;
 
 public class TestMethodsFinder {
 

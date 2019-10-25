@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.creation.SuspendMethod;
-
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.creation.SuspendMethod;
 
 public class SerializableMethod implements Serializable, MockitoMethod {
 

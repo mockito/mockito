@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class GenericMasterTest {
 

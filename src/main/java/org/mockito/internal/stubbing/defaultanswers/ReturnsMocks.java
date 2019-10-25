@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import java.io.Serializable;
+
 import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.invocation.InvocationOnMock;

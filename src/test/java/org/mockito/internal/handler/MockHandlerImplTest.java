@@ -4,6 +4,16 @@
  */
 package org.mockito.internal.handler;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+
+import java.util.Arrays;
+
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
@@ -21,16 +31,6 @@ import org.mockito.invocation.Invocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 import org.mockitoutil.TestBase;
-
-import java.util.Arrays;
-
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MockHandlerImplTest extends TestBase {

@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.debugging;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,11 +17,6 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class VerboseMockInvocationLoggerTest {
 

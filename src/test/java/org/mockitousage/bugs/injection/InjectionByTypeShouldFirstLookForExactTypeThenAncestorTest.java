@@ -4,15 +4,15 @@
  */
 package org.mockitousage.bugs.injection;
 
+import static org.junit.Assert.*;
+
+import java.lang.reflect.Field;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.lang.reflect.Field;
-
-import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InjectionByTypeShouldFirstLookForExactTypeThenAncestorTest {

@@ -4,14 +4,14 @@
  */
 package org.mockitoutil;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 
 public class SafeJUnitRuleTest {
 

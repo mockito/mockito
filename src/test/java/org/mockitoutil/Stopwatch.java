@@ -4,13 +4,13 @@
  */
 package org.mockitoutil;
 
-import org.mockito.exceptions.base.MockitoAssertionError;
-
-import java.util.concurrent.TimeUnit;
-
 import static java.lang.String.format;
 import static java.lang.System.nanoTime;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
+import java.util.concurrent.TimeUnit;
+
+import org.mockito.exceptions.base.MockitoAssertionError;
 
 /**
  * This class can be uses as stopwatch to assert that a given time is elapsed or not.

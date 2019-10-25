@@ -4,12 +4,12 @@
  */
 package org.concurrentmockito;
 
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
 
 public class VerificationInOrderFromMultipleThreadsTest extends TestBase {
 

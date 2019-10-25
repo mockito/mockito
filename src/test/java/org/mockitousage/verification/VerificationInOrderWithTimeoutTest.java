@@ -4,6 +4,11 @@
  */
 package org.mockitousage.verification;
 
+import static org.mockito.Mockito.after;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.junit.MockitoJUnit.rule;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.After;
@@ -17,11 +22,6 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
 import org.mockitoutil.async.AsyncTesting;
-
-import static org.mockito.Mockito.after;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.junit.MockitoJUnit.rule;
 
 public class VerificationInOrderWithTimeoutTest {
 
