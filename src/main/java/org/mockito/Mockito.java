@@ -1509,7 +1509,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * <h3 id="45">45. <a class="meaningful_link" href="#junit5_mockito" name="junit5_mockito">New JUnit Jupiter (JUnit5+) extension</a></h3>
  *
  * For integration with JUnit Jupiter (JUnit5+), use the `org.mockito:mockito-junit-jupiter` artifact.
- * For more information about the usage of the integration, see <a href="http://javadoc.io/page/org.mockito/mockito-junit-jupiter/latest/org/mockito/junit/jupiter/MockitoExtension.html">the JavaDoc of <code>MockitoExtension</code></a>.
+ * For more information about the usage of the integration, see <a href="http://javadoc.io/doc/org.mockito/mockito-junit-jupiter/latest/org/mockito/junit/jupiter/MockitoExtension.html">the JavaDoc of <code>MockitoExtension</code></a>.
  *
  * <h3 id="46">46. <a class="meaningful_link" href="#mockito_lenient" name="mockito_lenient">
  *       New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0)</a></h3>
