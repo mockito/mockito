@@ -474,6 +474,11 @@ public abstract class ClassLoaders {
                     addFromFileBasedClassLoader(classes, uri);
                 } else if (uri.getScheme().equalsIgnoreCase(InMemoryClassLoader.SCHEME)) {
                     addFromInMemoryBasedClassLoader(classes, uri);
+                } else if (uri.getScheme().equalsIgnoreCase("jar")) {
+                    // Java 9+ returns "jar:file:" style urls for modules.
+                    // It's not a classes owned by mockito itself.
+                    // Just ignore it.
+                    continue;
                 } else {
                     throw new IllegalArgumentException(format("Given ClassLoader '%s' don't have reachable by File or vi ClassLoaders.inMemory", classLoader));
                 }
