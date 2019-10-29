@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2019 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.configuration;
 
 import org.junit.Assert;
@@ -27,7 +31,8 @@ public class InjectingAnnotationEngineTest extends I {
     */
     @Test
     public void injectMocks() {
-        Assert.assertNotNull(target.bar);
+        Assert.assertEquals(foo, target.getFoo());
+        Assert.assertNotNull(target.getBar());
     }
 
     public static class Target {
@@ -36,6 +41,10 @@ public class InjectingAnnotationEngineTest extends I {
 
         public Target(Foo foo) {
             this.foo = foo;
+        }
+
+        public Foo getFoo() {
+            return foo;
         }
 
         public Bar getBar() {
