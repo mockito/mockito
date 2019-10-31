@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
+import static org.mockitoutil.VmArgAssumptions.assumeVmArgPresent;
 
 import java.lang.reflect.Field;
 import java.util.Observable;
 
-import static org.mockitoutil.VmArgAssumptions.assumeVmArgPresent;
+import org.junit.Test;
 
 public class AccessibilityChangerTest {
 

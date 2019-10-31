@@ -4,6 +4,14 @@
  */
 package org.mockitousage.strictness;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.After;
 import org.junit.Before;
@@ -18,14 +26,6 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 public class StrictnessPerStubbingTest {
 

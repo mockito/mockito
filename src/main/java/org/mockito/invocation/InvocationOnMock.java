@@ -6,6 +6,7 @@ package org.mockito.invocation;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+
 import org.mockito.NotExtensible;
 
 /**

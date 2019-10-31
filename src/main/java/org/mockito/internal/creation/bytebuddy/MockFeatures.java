@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.mock.SerializableMode;
-
 import java.util.Collections;
 import java.util.Set;
+
+import org.mockito.mock.SerializableMode;
 
 class MockFeatures<T> {
 

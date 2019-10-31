@@ -9,6 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import java.util.List;
+
 import org.junit.Test;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.NullInsteadOfMockException;

@@ -4,6 +4,13 @@
  */
 package org.mockitousage.annotation;
 
+import static org.junit.Assert.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,13 +22,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
-import static org.junit.Assert.*;
 
 @SuppressWarnings({"unchecked", "unused"})
 public class MockInjectionUsingSetterOrPropertyTest extends TestBase {

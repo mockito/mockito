@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
@@ -11,9 +14,6 @@ import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 public class ReturnsArgumentAtTest {
     @Test

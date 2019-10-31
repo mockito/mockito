@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.exceptions;
 
+import static org.mockito.Mockito.mock;
+
+import java.lang.reflect.Field;
+import java.util.Collections;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
@@ -15,11 +20,6 @@ import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.lang.reflect.Field;
-import java.util.Collections;
-
-import static org.mockito.Mockito.mock;
 
 public class ReporterTest extends TestBase {
 

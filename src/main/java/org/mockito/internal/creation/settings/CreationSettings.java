@@ -4,14 +4,6 @@
  */
 package org.mockito.internal.creation.settings;
 
-import org.mockito.listeners.InvocationListener;
-import org.mockito.listeners.StubbingLookupListener;
-import org.mockito.listeners.VerificationStartedListener;
-import org.mockito.mock.MockCreationSettings;
-import org.mockito.mock.MockName;
-import org.mockito.mock.SerializableMode;
-import org.mockito.stubbing.Answer;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -19,6 +11,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.StubbingLookupListener;
+import org.mockito.listeners.VerificationStartedListener;
+import org.mockito.mock.MockCreationSettings;
+import org.mockito.mock.MockName;
+import org.mockito.mock.SerializableMode;
+import org.mockito.stubbing.Answer;
 
 public class CreationSettings<T> implements MockCreationSettings<T>, Serializable {
     private static final long serialVersionUID = -6789800638070123629L;

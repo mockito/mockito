@@ -4,18 +4,18 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod;
+import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
+
+import java.io.Serializable;
+import java.util.*;
+
 import org.mockito.internal.util.JavaEightUtil;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockName;
 import org.mockito.stubbing.Answer;
-
-import static org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod;
-import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * Default answer of every Mockito mock.

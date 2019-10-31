@@ -4,11 +4,8 @@
  */
 package org.mockitousage.annotation;
 
-import org.junit.Test;
-import org.mockito.*;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -16,8 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
+import org.mockito.*;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class CaptorAnnotationTest extends TestBase {
 

@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.invocation;
 
+import java.util.List;
+
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
-
-import java.util.List;
 
 public class InvocationMarker {
 

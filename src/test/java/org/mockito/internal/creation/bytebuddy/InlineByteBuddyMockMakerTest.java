@@ -4,6 +4,21 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static net.bytebuddy.ClassFileVersion.JAVA_V11;
+import static net.bytebuddy.ClassFileVersion.JAVA_V8;
+import static net.bytebuddy.matcher.ElementMatchers.named;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.Assume.assumeTrue;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.regex.Pattern;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.description.modifier.Visibility;
@@ -21,21 +36,6 @@ import org.mockito.internal.util.collections.Sets;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.regex.Pattern;
-
-import static net.bytebuddy.ClassFileVersion.JAVA_V8;
-import static net.bytebuddy.ClassFileVersion.JAVA_V11;
-import static net.bytebuddy.matcher.ElementMatchers.named;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.junit.Assume.assumeTrue;
 
 public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest<InlineByteBuddyMockMaker> {
 

@@ -4,16 +4,16 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class LenientCopyToolTest extends TestBase {

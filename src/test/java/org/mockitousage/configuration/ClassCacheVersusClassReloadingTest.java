@@ -5,13 +5,13 @@
 package org.mockitousage.configuration;
 
 
-import org.junit.Test;
-import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockitoutil.SimplePerRealmReloadingClassLoader;
+import static org.mockito.Mockito.mock;
 
 import java.util.concurrent.Callable;
 
-import static org.mockito.Mockito.mock;
+import org.junit.Test;
+import org.mockito.internal.configuration.ConfigurationAccess;
+import org.mockitoutil.SimplePerRealmReloadingClassLoader;
 
 public class ClassCacheVersusClassReloadingTest {
     // TODO refactor to use ClassLoaders

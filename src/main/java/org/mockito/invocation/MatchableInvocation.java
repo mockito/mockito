@@ -4,9 +4,9 @@
  */
 package org.mockito.invocation;
 
-import org.mockito.ArgumentMatcher;
-
 import java.util.List;
+
+import org.mockito.ArgumentMatcher;
 
 /**
  * <code>MatchableInvocation</code> wraps {@link Invocation} instance

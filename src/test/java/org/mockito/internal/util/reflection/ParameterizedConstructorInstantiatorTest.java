@@ -5,6 +5,18 @@
 package org.mockito.internal.util.reflection;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Observer;
+import java.util.Set;
+
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,18 +26,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 import org.mockito.internal.util.reflection.FieldInitializer.ParameterizedConstructorInstantiator;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.Observer;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
 
 @SuppressWarnings("unchecked")

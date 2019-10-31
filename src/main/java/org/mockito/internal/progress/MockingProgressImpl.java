@@ -4,6 +4,14 @@
  */
 package org.mockito.internal.progress;
 
+import static org.mockito.internal.exceptions.Reporter.unfinishedStubbing;
+import static org.mockito.internal.exceptions.Reporter.unfinishedVerificationException;
+
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
 import org.mockito.internal.debugging.LocationImpl;
@@ -17,14 +25,6 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
-
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import static org.mockito.internal.exceptions.Reporter.unfinishedStubbing;
-import static org.mockito.internal.exceptions.Reporter.unfinishedVerificationException;
 
 @SuppressWarnings("unchecked")
 public class MockingProgressImpl implements MockingProgress {

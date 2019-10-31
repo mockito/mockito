@@ -4,6 +4,11 @@
  */
 package org.mockitousage.stacktrace;
 
+import static org.mockito.Mockito.*;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,11 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
 
 @Ignore
 @RunWith(MockitoJUnitRunner.class)

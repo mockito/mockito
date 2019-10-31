@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.verification;
 
+import static junit.framework.TestCase.fail;
+import static org.mockito.Mockito.mock;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
@@ -13,9 +16,6 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static junit.framework.TestCase.fail;
-import static org.mockito.Mockito.mock;
 
 public class NoInteractionsTest extends TestBase {
 

@@ -4,11 +4,7 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.internal.invocation.finder.AllInvocationsFinder;
-import org.mockito.internal.stubbing.UnusedStubbingReporting;
-import org.mockito.internal.util.collections.ListUtil.Filter;
-import org.mockito.invocation.Invocation;
-import org.mockito.stubbing.Stubbing;
+import static org.mockito.internal.util.collections.ListUtil.filter;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,7 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.mockito.internal.util.collections.ListUtil.filter;
+import org.mockito.internal.invocation.finder.AllInvocationsFinder;
+import org.mockito.internal.stubbing.UnusedStubbingReporting;
+import org.mockito.internal.util.collections.ListUtil.Filter;
+import org.mockito.invocation.Invocation;
+import org.mockito.stubbing.Stubbing;
 
 /**
  * Finds unused stubbings

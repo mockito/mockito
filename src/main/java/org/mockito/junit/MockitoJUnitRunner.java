@@ -4,6 +4,8 @@
  */
 package org.mockito.junit;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -20,8 +22,6 @@ import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.StrictRunner;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
-
-import java.lang.reflect.InvocationTargetException;
 
 
 /**

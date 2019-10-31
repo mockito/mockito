@@ -4,6 +4,9 @@
  */
 package org.mockito.mock;
 
+import java.util.List;
+import java.util.Set;
+
 import org.mockito.Incubating;
 import org.mockito.MockSettings;
 import org.mockito.NotExtensible;
@@ -12,9 +15,6 @@ import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Informs about the mock settings. An immutable view of {@link org.mockito.MockSettings}.

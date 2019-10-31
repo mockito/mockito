@@ -4,15 +4,15 @@
  */
 package org.mockitousage.annotation;
 
+import static org.junit.Assert.fail;
+
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.*;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
-
-import static org.junit.Assert.fail;
 
 public class WrongSetOfAnnotationsTest extends TestBase {
 

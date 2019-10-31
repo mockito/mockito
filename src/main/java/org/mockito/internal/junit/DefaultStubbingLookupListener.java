@@ -4,6 +4,13 @@
  */
 package org.mockito.internal.junit;
 
+import static org.mockito.internal.stubbing.StrictnessSelector.determineStrictness;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.stubbing.UnusedStubbingReporting;
 import org.mockito.invocation.Invocation;
@@ -11,13 +18,6 @@ import org.mockito.listeners.StubbingLookupEvent;
 import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Stubbing;
-
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.mockito.internal.stubbing.StrictnessSelector.determineStrictness;
 
 /**
  * Default implementation of stubbing lookup listener.

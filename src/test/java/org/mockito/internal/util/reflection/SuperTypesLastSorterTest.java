@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.internal.util.reflection.SuperTypesLastSorter.sortSuperTypesLast;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.internal.util.reflection.SuperTypesLastSorter.sortSuperTypesLast;
+import org.junit.Test;
 
 @SuppressWarnings("unused")
 public class SuperTypesLastSorterTest {

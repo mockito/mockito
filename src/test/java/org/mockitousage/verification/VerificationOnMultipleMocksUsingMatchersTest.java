@@ -4,16 +4,16 @@
  */
 package org.mockitousage.verification;
 
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockitoutil.TestBase;
+import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.mockito.Mockito.*;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {

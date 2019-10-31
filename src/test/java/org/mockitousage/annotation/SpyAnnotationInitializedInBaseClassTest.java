@@ -4,18 +4,18 @@
  */
 package org.mockitousage.annotation;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.internal.util.MockUtil.isMock;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.internal.util.MockUtil;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.internal.util.MockUtil.isMock;
 
 @SuppressWarnings("unchecked")
 public class SpyAnnotationInitializedInBaseClassTest extends TestBase {

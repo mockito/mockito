@@ -4,6 +4,11 @@
  */
 package org.mockitousage.verification;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -11,11 +16,6 @@ import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.verify;
 
 public class FindingRedundantInvocationsInOrderTest extends TestBase {
 

@@ -4,16 +4,16 @@
  */
 package org.mockitousage.bugs;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import java.io.Serializable;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
-
-import java.io.Serializable;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 //see issue 101
 public class BridgeMethodsHitAgainTest extends TestBase {

@@ -4,6 +4,15 @@
  */
 package org.mockito.internal.invocation;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,15 +23,6 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
 
 
 public class InvocationsFinderTest extends TestBase {

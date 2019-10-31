@@ -4,6 +4,10 @@
  */
 package org.mockitousage.strictness;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
+
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,10 +15,6 @@ import org.mockito.Mock;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.StrictStubs.class)
 public class StrictnessPerStubbingWithRunnerTest {

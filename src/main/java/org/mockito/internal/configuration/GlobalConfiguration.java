@@ -5,6 +5,7 @@
 package org.mockito.internal.configuration;
 
 import java.io.Serializable;
+
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.configuration.IMockitoConfiguration;

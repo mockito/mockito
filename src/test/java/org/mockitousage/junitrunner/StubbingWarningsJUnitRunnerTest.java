@@ -4,6 +4,11 @@
  */
 package org.mockitousage.junitrunner;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockitoutil.JUnitResultAssert.assertThat;
+
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -14,11 +19,6 @@ import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockito.junit.TestableJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockitoutil.JUnitResultAssert.assertThat;
 
 public class StubbingWarningsJUnitRunnerTest extends TestBase {
 

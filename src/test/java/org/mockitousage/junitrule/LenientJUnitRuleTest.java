@@ -4,16 +4,16 @@
  */
 package org.mockitousage.junitrule;
 
+import static org.mockito.Mockito.when;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.quality.Strictness;
 import org.mockito.internal.junit.JUnitRule;
-import org.mockito.plugins.MockitoLogger;
 import org.mockito.junit.MockitoRule;
+import org.mockito.plugins.MockitoLogger;
+import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
-
-import static org.mockito.Mockito.when;
 
 public class LenientJUnitRuleTest {
 

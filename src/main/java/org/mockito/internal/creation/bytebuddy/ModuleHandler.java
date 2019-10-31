@@ -4,6 +4,13 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static net.bytebuddy.matcher.ElementMatchers.isTypeInitializer;
+import static org.mockito.internal.util.StringUtil.join;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Random;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Ownership;
 import net.bytebuddy.description.modifier.Visibility;
@@ -13,13 +20,6 @@ import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.StubMethod;
 import org.mockito.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Random;
-
-import static net.bytebuddy.matcher.ElementMatchers.isTypeInitializer;
-import static org.mockito.internal.util.StringUtil.join;
 
 abstract class ModuleHandler {
 

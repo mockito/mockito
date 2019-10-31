@@ -4,22 +4,22 @@
  */
 package org.mockito.internal;
 
+import static org.mockito.internal.exceptions.Reporter.inOrderRequiresFamiliarMock;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.internal.verification.InOrderWrapper;
 import org.mockito.internal.verification.VerificationModeFactory;
+import org.mockito.internal.verification.VerificationWrapper;
+import org.mockito.internal.verification.VerificationWrapperInOrderWrapper;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.internal.verification.api.VerificationInOrderMode;
 import org.mockito.invocation.Invocation;
 import org.mockito.verification.VerificationMode;
-import org.mockito.internal.verification.VerificationWrapper;
-import org.mockito.internal.verification.VerificationWrapperInOrderWrapper;
-
-import static org.mockito.internal.exceptions.Reporter.inOrderRequiresFamiliarMock;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Allows verifying in order. This class should not be exposed, hence default access.

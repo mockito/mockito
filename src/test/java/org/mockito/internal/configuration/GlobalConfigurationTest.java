@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.configuration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import net.bytebuddy.ByteBuddy;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
@@ -13,8 +15,6 @@ import org.mockito.configuration.AnnotationEngine;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.Objenesis;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class GlobalConfigurationTest {
     @Test

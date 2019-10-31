@@ -4,6 +4,12 @@
  */
 package org.mockitousage.verification;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,12 +19,6 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 public class BasicVerificationTest extends TestBase {
 

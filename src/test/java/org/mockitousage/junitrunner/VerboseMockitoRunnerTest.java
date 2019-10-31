@@ -4,6 +4,10 @@
  */
 package org.mockitousage.junitrunner;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
+
 import junit.framework.TestCase;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,10 +19,6 @@ import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
 import org.mockito.runners.VerboseMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
 
 //@RunWith(ConsoleSpammingMockitoJUnitRunner.class)
 @RunWith(VerboseMockitoJUnitRunner.class)

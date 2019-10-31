@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing.answers;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
 import org.mockito.internal.invocation.AbstractAwareMethod;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;

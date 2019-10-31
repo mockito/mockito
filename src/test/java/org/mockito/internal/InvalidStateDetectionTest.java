@@ -4,6 +4,10 @@
  */
 package org.mockito.internal;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -13,10 +17,6 @@ import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 /**
  * invalid state happens if:

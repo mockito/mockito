@@ -4,18 +4,18 @@
  */
 package org.mockitousage.verification;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.times;
+
+import java.util.LinkedList;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
 
 @SuppressWarnings("unchecked")
 public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase {

@@ -10,9 +10,9 @@ import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
-import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 
 /**
  * Mockito JUnit Rule helps keeping tests clean.

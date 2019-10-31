@@ -4,6 +4,16 @@
  */
 package org.mockitousage.annotation;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
+import java.util.AbstractCollection;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -23,16 +33,6 @@ import org.mockitousage.IMethods;
 import org.mockitousage.examples.use.ArticleCalculator;
 import org.mockitousage.examples.use.ArticleDatabase;
 import org.mockitousage.examples.use.ArticleManager;
-
-import java.util.AbstractCollection;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 public class MockInjectionUsingConstructorTest {
 

@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.verification;
 
-import org.mockito.invocation.Invocation;
-
 import java.util.List;
+
+import org.mockito.invocation.Invocation;
 
 
 public interface RegisteredInvocations {

@@ -5,12 +5,11 @@
 package org.mockitousage.basicapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class ReplacingObjectMethodsTest extends TestBase {
 

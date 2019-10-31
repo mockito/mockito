@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.configuration;
 
+import java.lang.reflect.Field;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.GenericMaster;
-
-import java.lang.reflect.Field;
 
 /**
  * Instantiate {@link ArgumentCaptor} a field annotated by &#64;Captor.

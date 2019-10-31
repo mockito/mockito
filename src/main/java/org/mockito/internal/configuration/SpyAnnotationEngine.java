@@ -4,11 +4,17 @@
  */
 package org.mockito.internal.configuration;
 
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.withSettings;
+import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
+import static org.mockito.internal.util.StringUtil.join;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -18,11 +24,6 @@ import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.plugins.AnnotationEngine;
-
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.withSettings;
-import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
-import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * Process fields annotated with &#64;Spy.

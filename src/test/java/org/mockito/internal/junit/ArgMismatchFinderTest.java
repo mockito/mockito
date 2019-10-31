@@ -4,14 +4,15 @@
  */
 package org.mockito.internal.junit;
 
+import static java.util.Arrays.asList;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 
 public class ArgMismatchFinderTest extends TestBase {
 

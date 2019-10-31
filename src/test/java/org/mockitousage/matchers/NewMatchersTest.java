@@ -4,18 +4,18 @@
  */
 package org.mockitousage.matchers;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class NewMatchersTest extends TestBase {

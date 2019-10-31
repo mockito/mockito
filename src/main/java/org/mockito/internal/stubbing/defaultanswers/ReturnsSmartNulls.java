@@ -8,6 +8,7 @@ import static org.mockito.internal.exceptions.Reporter.smartNullPointerException
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 
 import java.io.Serializable;
+
 import org.mockito.Mockito;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.invocation.InvocationOnMock;

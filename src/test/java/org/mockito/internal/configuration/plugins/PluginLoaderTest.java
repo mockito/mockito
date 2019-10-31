@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.when;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Rule;
@@ -13,11 +18,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.when;
 
 public class PluginLoaderTest {
 

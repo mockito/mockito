@@ -4,6 +4,19 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
@@ -14,19 +27,6 @@ import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.mockref.MockStrongReference;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
 
 public class ReturnsSmartNullsTest extends TestBase {
 

@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.internal.util.collections.Iterables;
-import org.mockito.plugins.PluginSwitch;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
+
+import org.mockito.internal.util.collections.Iterables;
+import org.mockito.plugins.PluginSwitch;
 
 class PluginInitializer {
 

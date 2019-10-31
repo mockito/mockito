@@ -4,6 +4,10 @@
  */
 package org.mockitousage.examples.use;
 
+import static org.mockito.Mockito.*;
+
+import java.util.Arrays;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -11,10 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
-import java.util.Arrays;
-
-import static org.mockito.Mockito.*;
 
 public class ExampleTest {
 

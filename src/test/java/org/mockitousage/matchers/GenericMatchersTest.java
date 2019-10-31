@@ -4,16 +4,16 @@
  */
 package org.mockitousage.matchers;
 
-import org.junit.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
-import org.mockitoutil.TestBase;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.when;
 
 import java.util.Date;
 import java.util.List;
 
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.when;
+import org.junit.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockitoutil.TestBase;
 
 public class GenericMatchersTest extends TestBase {
 

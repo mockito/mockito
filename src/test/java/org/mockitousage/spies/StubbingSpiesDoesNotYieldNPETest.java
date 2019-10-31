@@ -4,14 +4,14 @@
  */
 package org.mockitousage.spies;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.spy;
 
 import java.util.Collection;
 import java.util.Map;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.spy;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class StubbingSpiesDoesNotYieldNPETest extends TestBase {
 

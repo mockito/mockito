@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.matchers.text;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class MatcherToStringTest extends TestBase {
 

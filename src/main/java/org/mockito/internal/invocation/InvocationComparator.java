@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.invocation.Invocation;
-
 import java.util.Comparator;
+
+import org.mockito.invocation.Invocation;
 
 /**
  * Compares invocations based on the sequence number

@@ -5,6 +5,7 @@
 package org.mockito.internal.debugging;
 
 import java.io.Serializable;
+
 import org.mockito.internal.exceptions.stacktrace.StackTraceFilter;
 import org.mockito.invocation.Location;
 

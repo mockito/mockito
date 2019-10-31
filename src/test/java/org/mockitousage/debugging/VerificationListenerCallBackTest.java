@@ -4,6 +4,12 @@
  */
 package org.mockitousage.debugging;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+import java.lang.reflect.Method;
+
 import org.assertj.core.api.Condition;
 import org.junit.After;
 import org.junit.Test;
@@ -17,12 +23,6 @@ import org.mockito.listeners.VerificationListener;
 import org.mockito.verification.VerificationEvent;
 import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
-
-import java.lang.reflect.Method;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 public class VerificationListenerCallBackTest extends TestBase {
 

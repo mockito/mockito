@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.verification.checkers;
 
+import static java.util.Arrays.asList;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker.checkAtLeastNumberOfInvocations;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -14,10 +19,6 @@ import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
-
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker.checkAtLeastNumberOfInvocations;
 
 public class AtLeastXNumberOfInvocationsCheckerTest   {
 

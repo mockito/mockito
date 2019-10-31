@@ -4,23 +4,24 @@
  */
 package org.mockito.internal;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.stubbing.Stubbing;
-import org.mockito.invocation.Invocation;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static java.util.Arrays.asList;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.invocation.finder.AllInvocationsFinder.find;
 import static org.mockito.internal.invocation.finder.AllInvocationsFinder.findStubbings;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.invocation.Invocation;
+import org.mockito.stubbing.Stubbing;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class AllInvocationsFinderTest extends TestBase {
 

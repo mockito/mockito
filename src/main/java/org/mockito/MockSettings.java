@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import java.io.Serializable;
+
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.invocation.InvocationFactory;
@@ -15,8 +17,6 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
 
 /**
  * Allows mock creation with additional mock settings.

@@ -4,6 +4,12 @@
  */
 package org.mockito.internal.util;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.withSettings;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -11,12 +17,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.TestBase;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.withSettings;
 
 @SuppressWarnings("unchecked")
 public class MockUtilTest extends TestBase {

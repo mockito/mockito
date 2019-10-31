@@ -4,17 +4,17 @@
  */
 package org.mockito.internal.configuration;
 
-import org.junit.After;
-import org.junit.Test;
-import org.mockito.internal.configuration.injection.MockInjection;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Observer;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
+import org.junit.After;
+import org.junit.Test;
+import org.mockito.internal.configuration.injection.MockInjection;
 
 @SuppressWarnings("unchecked")
 public class MockInjectionTest {

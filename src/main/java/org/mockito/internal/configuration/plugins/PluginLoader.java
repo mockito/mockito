@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.plugins.PluginSwitch;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+
+import org.mockito.plugins.PluginSwitch;
 
 class PluginLoader {
 

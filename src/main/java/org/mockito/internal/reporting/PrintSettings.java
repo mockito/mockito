@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.reporting;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.text.MatchersPrinter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class PrintSettings {
 

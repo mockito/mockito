@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.handler;
 
+import static org.mockito.internal.matchers.Equality.areEqual;
+
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MethodInvocationReport;
-
-import static org.mockito.internal.matchers.Equality.areEqual;
 
 /**
  * Report on a method call

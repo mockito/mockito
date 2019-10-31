@@ -4,16 +4,16 @@
  */
 package org.mockitousage.serialization;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
+
+import java.io.Serializable;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.io.Serializable;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-import static org.mockitoutil.SimpleSerializationUtil.serializeAndBack;
 
 @RunWith(MockitoJUnitRunner.StrictStubs.class)
 public class StrictStubsSerializableTest {

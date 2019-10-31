@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.matchers;
 
-import org.junit.Test;
-import org.mockito.internal.matchers.text.MatchersPrinter;
-import org.mockito.internal.reporting.PrintSettings;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.mockito.internal.matchers.text.MatchersPrinter;
+import org.mockito.internal.reporting.PrintSettings;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class MatchersPrinterTest extends TestBase {

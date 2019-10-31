@@ -4,11 +4,6 @@
  */
 package org.mockitousage.spies;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockitoutil.TestBase;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
@@ -16,6 +11,11 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockitoutil.Conditions.methodsInStackTrace;
+
+import org.assertj.core.api.Assertions;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class PartialMockingWithSpiesTest extends TestBase {

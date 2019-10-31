@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.matchers;
 
-import org.mockito.ArgumentMatcher;
-
 import java.io.Serializable;
+
+import org.mockito.ArgumentMatcher;
 
 public class Null implements ArgumentMatcher<Object>, Serializable {
 

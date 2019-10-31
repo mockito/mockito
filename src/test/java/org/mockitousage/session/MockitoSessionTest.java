@@ -4,6 +4,14 @@
  */
 package org.mockitousage.session;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mockingDetails;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,14 +27,6 @@ import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.JUnitResultAssert;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mockingDetails;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class MockitoSessionTest extends TestBase {
 

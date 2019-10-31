@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
-import org.mockito.Answers;
+import static org.mockito.Mockito.mock;
 
 import java.util.Set;
 
-import static org.mockito.Mockito.mock;
+import org.junit.Test;
+import org.mockito.Answers;
 
 public class GenericArrayReturnTypeTest {
 

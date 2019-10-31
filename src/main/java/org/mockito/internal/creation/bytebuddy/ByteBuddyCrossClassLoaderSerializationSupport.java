@@ -4,6 +4,16 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.ForWriteReplace;
+import static org.mockito.internal.util.StringUtil.join;
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoSerializationIssue;
 import org.mockito.internal.configuration.plugins.Plugins;
@@ -12,16 +22,6 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
-
-import java.io.*;
-import java.lang.reflect.Field;
-import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import static org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.ForWriteReplace;
-import static org.mockito.internal.util.StringUtil.join;
-import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 /**
  * This is responsible for serializing a mock, it is enabled if the mock is implementing {@link Serializable}.

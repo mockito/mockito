@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.debugging;
 
+import static java.util.Arrays.asList;
+
+import java.util.List;
+
 import org.mockito.MockitoDebugger;
 import org.mockito.internal.invocation.UnusedStubsFinder;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 import org.mockito.invocation.Invocation;
-
-import java.util.List;
-
-import static java.util.Arrays.asList;
 
 public class MockitoDebuggerImpl implements MockitoDebugger {
 

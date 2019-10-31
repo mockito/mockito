@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import java.io.Serializable;
+
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
 
 public class TriesToReturnSelf implements Answer<Object>, Serializable{
 

@@ -4,17 +4,17 @@
  */
 package org.mockito;
 
-import org.junit.Test;
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.InvocationFactory;
-import org.mockitoutil.TestBase;
-
-import java.util.concurrent.Callable;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.withSettings;
+
+import java.util.concurrent.Callable;
+
+import org.junit.Test;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationFactory;
+import org.mockitoutil.TestBase;
 
 public class InvocationFactoryTest extends TestBase {
     static class TestClass {

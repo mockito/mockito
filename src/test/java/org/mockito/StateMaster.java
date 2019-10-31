@@ -4,9 +4,9 @@
  */
 package org.mockito;
 
-import org.mockito.listeners.MockitoListener;
-
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+
+import org.mockito.listeners.MockitoListener;
 
 public class StateMaster {
 

@@ -4,16 +4,16 @@
  */
 package org.mockitousage.bugs.injection;
 
+import static org.junit.Assert.assertNotSame;
+
+import java.util.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.*;
-
-import static org.junit.Assert.assertNotSame;
 
 // issue 262
 @RunWith(MockitoJUnitRunner.class)

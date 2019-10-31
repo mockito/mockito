@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.junit;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class StubbingArgMismatchesTest extends TestBase {
 

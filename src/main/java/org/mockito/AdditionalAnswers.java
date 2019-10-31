@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import static org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces.toAnswer;
+
 import java.util.Collection;
 
 import org.mockito.internal.stubbing.answers.AnswersWithDelay;
@@ -23,8 +25,6 @@ import org.mockito.stubbing.VoidAnswer3;
 import org.mockito.stubbing.VoidAnswer4;
 import org.mockito.stubbing.VoidAnswer5;
 import org.mockito.stubbing.VoidAnswer6;
-
-import static org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces.toAnswer;
 
 /**
  * Additional answers provides factory methods for answers.

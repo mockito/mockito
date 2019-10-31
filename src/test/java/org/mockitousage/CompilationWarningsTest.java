@@ -4,12 +4,12 @@
  */
 package org.mockitousage;
 
+import static org.mockito.BDDMockito.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-
-import static org.mockito.BDDMockito.*;
 
 
 public class CompilationWarningsTest {

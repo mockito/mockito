@@ -4,12 +4,12 @@
  */
 package org.concurrentmockito;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 //this test always passes but please keep looking sys err
 //this test should be run 10 times, manually

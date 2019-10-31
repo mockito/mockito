@@ -4,18 +4,18 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.RETURNS_DEFAULTS;
+import static org.mockito.Mockito.mock;
+
+import java.util.ArrayList;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
-
-import java.util.ArrayList;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.RETURNS_DEFAULTS;
-import static org.mockito.Mockito.mock;
 
 public class CallsRealMethodsTest {
 

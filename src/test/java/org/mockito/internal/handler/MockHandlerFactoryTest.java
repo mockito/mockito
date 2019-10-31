@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.handler;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
@@ -13,10 +17,6 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
 
 /**
  * by Szczepan Faber, created at: 5/22/12

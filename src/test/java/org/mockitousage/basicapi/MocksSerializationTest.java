@@ -4,6 +4,18 @@
  */
 package org.mockitousage.basicapi;
 
+import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
+import static org.mockito.Mockito.*;
+import static org.mockitoutil.SimpleSerializationUtil.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Observable;
+
 import net.bytebuddy.ClassFileVersion;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -16,18 +28,6 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.SimpleSerializationUtil;
 import org.mockitoutil.TestBase;
-
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectStreamException;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Observable;
-
-import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
-import static org.mockito.Mockito.*;
-import static org.mockitoutil.SimpleSerializationUtil.*;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MocksSerializationTest extends TestBase implements Serializable {

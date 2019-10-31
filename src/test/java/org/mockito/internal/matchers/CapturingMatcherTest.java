@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.matchers;
 
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockitoutil.TestBase;
-
-import java.util.Iterator;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import java.util.Iterator;
+
+import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockitoutil.TestBase;
 
 public class CapturingMatcherTest extends TestBase {
 

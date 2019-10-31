@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.matchers;
 
-import org.mockito.ArgumentMatcher;
-
 import static org.mockito.internal.exceptions.Reporter.noArgumentValueWasCaptured;
 
 import java.io.Serializable;
@@ -14,6 +12,8 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import org.mockito.ArgumentMatcher;
 
 @SuppressWarnings("unchecked")
 public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {

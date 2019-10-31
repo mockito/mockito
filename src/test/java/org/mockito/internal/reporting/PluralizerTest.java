@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.reporting;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class PluralizerTest extends TestBase {
 

@@ -4,12 +4,12 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Answers;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.withSettings;
 
 //Reproduces issue #1551
 public class SmartNullsGenericBugTest {

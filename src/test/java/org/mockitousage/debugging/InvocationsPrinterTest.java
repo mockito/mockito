@@ -4,14 +4,14 @@
  */
 package org.mockitousage.debugging;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.debugging.InvocationsPrinter;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 public class InvocationsPrinterTest extends TestBase {
 

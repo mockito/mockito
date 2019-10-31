@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.mockito.internal.util.Checks;
-
 import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+
+import org.mockito.internal.util.Checks;
 
 /**
  * Represents an accessible instance field.

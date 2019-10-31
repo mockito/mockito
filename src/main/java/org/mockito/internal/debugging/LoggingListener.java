@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.debugging;
 
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.invocation.Invocation;
+import static org.mockito.internal.util.StringUtil.join;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.mockito.internal.util.StringUtil.join;
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.invocation.Invocation;
 
 public class LoggingListener implements FindingsListener {
     private final boolean warnAboutUnstubbed;

@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.mock.SerializableMode;
-import org.mockitoutil.VmArgAssumptions;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.internal.creation.bytebuddy.MockFeatures.withMockFeatures;
+import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
+import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
 
 import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
@@ -16,10 +16,10 @@ import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.WeakHashMap;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.internal.creation.bytebuddy.MockFeatures.withMockFeatures;
-import static org.mockitoutil.ClassLoaders.inMemoryClassLoader;
-import static org.mockitoutil.SimpleClassGenerator.makeMarkerInterface;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.mock.SerializableMode;
+import org.mockitoutil.VmArgAssumptions;
 
 public class TypeCachingMockBytecodeGeneratorTest {
 

@@ -4,22 +4,23 @@
  */
 package org.mockitousage.constructor;
 
-import java.util.List;
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.mock.SerializableMode;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
+
+import java.util.List;
+
+import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.mock.SerializableMode;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class CreatingMocksWithConstructorTest extends TestBase {
 

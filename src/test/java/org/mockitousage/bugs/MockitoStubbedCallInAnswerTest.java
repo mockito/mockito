@@ -4,14 +4,14 @@
  */
 package org.mockitousage.bugs;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 
 /**
  * @see <a href="https://github.com/mockito/mockito/issues/1279">Issue #1279</a>

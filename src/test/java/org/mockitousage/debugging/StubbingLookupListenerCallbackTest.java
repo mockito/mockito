@@ -4,6 +4,15 @@
  */
 package org.mockitousage.debugging;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.InOrder;
@@ -13,15 +22,6 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockitousage.IMethods;
 import org.mockitoutil.ConcurrentTesting;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 public class StubbingLookupListenerCallbackTest extends TestBase {
 

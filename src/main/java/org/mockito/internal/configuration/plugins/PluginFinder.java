@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import java.io.InputStream;
+import java.net.URL;
+
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.io.IOUtil;
 import org.mockito.plugins.PluginSwitch;
-
-import java.io.InputStream;
-import java.net.URL;
 
 class PluginFinder {
 

@@ -4,20 +4,20 @@
  */
 package org.mockitousage.junitrule;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.quality.Strictness;
-import org.mockito.internal.junit.JUnitRule;
-import org.mockito.internal.util.SimpleMockitoLogger;
-import org.mockitousage.IMethods;
-import org.mockitoutil.ConcurrentTesting;
-import org.mockitoutil.SafeJUnitRule;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.mockitoutil.TestBase.filterLineNo;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.internal.junit.JUnitRule;
+import org.mockito.internal.util.SimpleMockitoLogger;
+import org.mockito.quality.Strictness;
+import org.mockitousage.IMethods;
+import org.mockitoutil.ConcurrentTesting;
+import org.mockitoutil.SafeJUnitRule;
 
 public class StubbingWarningsMultiThreadingTest {
 

@@ -4,16 +4,17 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockitoutil.TestBase.getLastInvocation;
+
 import java.lang.reflect.Method;
 import java.nio.charset.CharacterCodingException;
+
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockitoutil.TestBase.getLastInvocation;
 
 public class InvocationInfoTest {
 

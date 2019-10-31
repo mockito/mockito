@@ -4,17 +4,18 @@
  */
 package org.mockito.internal.verification.argumentmatching;
 
+import static java.util.Collections.singletonList;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.ContainsExtraTypeInfo;
 import org.mockito.internal.matchers.Equals;
 import org.mockitoutil.TestBase;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings({ "unchecked", "serial" })
 public class ArgumentMatchingToolTest extends TestBase {

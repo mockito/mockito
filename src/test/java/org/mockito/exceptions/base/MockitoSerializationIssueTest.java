@@ -4,12 +4,12 @@
  */
 package org.mockito.exceptions.base;
 
-import org.junit.Test;
-import org.mockito.internal.configuration.ConfigurationAccess;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
+import org.mockito.internal.configuration.ConfigurationAccess;
 
 public class MockitoSerializationIssueTest {
 

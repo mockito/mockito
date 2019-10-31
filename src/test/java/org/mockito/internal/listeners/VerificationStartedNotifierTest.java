@@ -4,20 +4,21 @@
  */
 package org.mockito.internal.listeners;
 
-import org.junit.Test;
-import org.mockito.MockingDetails;
-import org.mockitoutil.TestBase;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import static java.util.Collections.emptyList;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.withSettings;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.junit.Test;
+import org.mockito.MockingDetails;
+import org.mockitoutil.TestBase;
 
 public class VerificationStartedNotifierTest extends TestBase {
 

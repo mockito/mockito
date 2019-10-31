@@ -4,16 +4,16 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.mockito.Mockito.doThrow;
+
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
-
-import static org.mockito.Mockito.doThrow;
 
 //issue 1514
 @SuppressWarnings({ "serial", "unchecked", "rawtypes" })

@@ -5,9 +5,6 @@
 package org.mockito.internal.util.reflection;
 
 
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.util.Checks;
-
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -25,6 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.Checks;
 
 
 /**

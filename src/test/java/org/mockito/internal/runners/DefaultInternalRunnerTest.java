@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.runners;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
@@ -13,11 +18,6 @@ import org.mockito.Mock;
 import org.mockito.internal.junit.MockitoTestListener;
 import org.mockito.internal.junit.TestFinishedEvent;
 import org.mockito.internal.util.Supplier;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 public class DefaultInternalRunnerTest {
 

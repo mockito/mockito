@@ -4,16 +4,16 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.creation.instance.Instantiator;
-import org.mockito.internal.util.Platform;
-import org.mockito.invocation.MockHandler;
-import org.mockito.mock.MockCreationSettings;
+import static org.mockito.internal.util.StringUtil.join;
 
 import java.lang.reflect.Modifier;
 
-import static org.mockito.internal.util.StringUtil.join;
+import org.mockito.creation.instance.Instantiator;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.util.Platform;
+import org.mockito.invocation.MockHandler;
+import org.mockito.mock.MockCreationSettings;
 
 /**
  * Subclass based mock maker.

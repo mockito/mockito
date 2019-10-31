@@ -4,9 +4,9 @@
  */
 package org.mockitoutil;
 
-import org.objectweb.asm.ClassWriter;
-
 import static org.objectweb.asm.Opcodes.*;
+
+import org.objectweb.asm.ClassWriter;
 
 public class SimpleClassGenerator {
 

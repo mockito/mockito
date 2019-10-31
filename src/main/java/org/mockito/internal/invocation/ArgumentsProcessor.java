@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.invocation;
 
-import org.mockito.ArgumentMatcher;
-import org.mockito.internal.matchers.ArrayEquals;
-import org.mockito.internal.matchers.Equals;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.mockito.ArgumentMatcher;
+import org.mockito.internal.matchers.ArrayEquals;
+import org.mockito.internal.matchers.Equals;
 
 /**
  * by Szczepan Faber, created at: 3/31/12

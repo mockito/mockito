@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.internal.exceptions.Reporter;
-import org.mockito.plugins.MockitoLogger;
-import org.mockito.invocation.Invocation;
-import org.mockito.stubbing.Stubbing;
-
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.mockito.internal.exceptions.Reporter;
+import org.mockito.invocation.Invocation;
+import org.mockito.plugins.MockitoLogger;
+import org.mockito.stubbing.Stubbing;
 
 /**
  * Contains unused stubbings, knows how to format them

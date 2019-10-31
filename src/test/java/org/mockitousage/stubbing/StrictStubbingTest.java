@@ -4,6 +4,11 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockitoutil.ThrowableAssert.assertThat;
+
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -15,11 +20,6 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitousage.strictness.ProductionCode;
-
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockitoutil.ThrowableAssert.assertThat;
 
 public class StrictStubbingTest {
 

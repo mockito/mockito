@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.matchers;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.*;
 
 
 public class EqualsTest extends TestBase {

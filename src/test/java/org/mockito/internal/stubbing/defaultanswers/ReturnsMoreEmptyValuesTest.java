@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class ReturnsMoreEmptyValuesTest extends TestBase {
 

@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.handler;
 
+import static org.mockito.internal.listeners.StubbingLookupNotifier.notifyStubbedAnswerLookup;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
@@ -18,9 +21,6 @@ import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.verification.VerificationMode;
-
-import static org.mockito.internal.listeners.StubbingLookupNotifier.notifyStubbedAnswerLookup;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 /**
  * Invocation handler set on mock objects.

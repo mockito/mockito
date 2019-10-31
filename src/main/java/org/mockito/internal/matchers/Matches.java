@@ -6,6 +6,7 @@ package org.mockito.internal.matchers;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
+
 import org.mockito.ArgumentMatcher;
 
 public class Matches implements ArgumentMatcher<Object>, Serializable {

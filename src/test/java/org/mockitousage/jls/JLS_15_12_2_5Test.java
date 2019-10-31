@@ -4,13 +4,6 @@
  */
 package org.mockitousage.jls;
 
-import net.bytebuddy.ClassFileVersion;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
-
 import static net.bytebuddy.ClassFileVersion.JAVA_V6;
 import static net.bytebuddy.ClassFileVersion.JAVA_V7;
 import static net.bytebuddy.ClassFileVersion.JAVA_V8;
@@ -18,6 +11,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import net.bytebuddy.ClassFileVersion;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
 
 
 /**

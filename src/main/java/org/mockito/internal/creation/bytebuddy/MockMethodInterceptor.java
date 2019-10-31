@@ -4,6 +4,13 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static org.mockito.internal.invocation.DefaultInvocationFactory.createInvocation;
+
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+
 import net.bytebuddy.implementation.bind.annotation.AllArguments;
 import net.bytebuddy.implementation.bind.annotation.Argument;
 import net.bytebuddy.implementation.bind.annotation.BindingPriority;
@@ -18,13 +25,6 @@ import org.mockito.internal.invocation.RealMethod;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-
-import java.io.ObjectStreamException;
-import java.io.Serializable;
-import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
-
-import static org.mockito.internal.invocation.DefaultInvocationFactory.createInvocation;
 
 public class MockMethodInterceptor implements Serializable {
 

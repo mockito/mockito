@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.matchers.apachecommons;
 
-import org.mockito.ArgumentMatcher;
-
 import java.io.Serializable;
+
+import org.mockito.ArgumentMatcher;
 
 public class ReflectionEquals implements ArgumentMatcher<Object>, Serializable {
 

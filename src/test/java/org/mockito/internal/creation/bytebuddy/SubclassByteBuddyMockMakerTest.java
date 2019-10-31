@@ -4,16 +4,16 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import org.junit.Test;
-import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.plugins.MockMaker;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Observable;
 import java.util.Observer;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
+import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.plugins.MockMaker;
 
 public class SubclassByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest<SubclassByteBuddyMockMaker> {
 

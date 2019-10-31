@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.internal.util.io.IOUtil;
-
 import java.io.InputStream;
+
+import org.mockito.internal.util.io.IOUtil;
 
 class PluginFileReader {
 

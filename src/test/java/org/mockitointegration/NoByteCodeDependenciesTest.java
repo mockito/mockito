@@ -4,14 +4,14 @@
  */
 package org.mockitointegration;
 
+import static org.mockitoutil.ClassLoaders.coverageTool;
+
+import java.util.Set;
+
 import org.hamcrest.Matcher;
 import org.junit.*;
 import org.mockito.Mockito;
 import org.mockitoutil.ClassLoaders;
-
-import java.util.Set;
-
-import static org.mockitoutil.ClassLoaders.coverageTool;
 
 public class NoByteCodeDependenciesTest {
 

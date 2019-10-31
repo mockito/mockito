@@ -4,6 +4,8 @@
  */
 package org.mockitousage.verification;
 
+import static org.mockito.Mockito.*;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -14,8 +16,6 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.*;
 
 public class VerificationInOrderWithCallsTest extends TestBase {
 

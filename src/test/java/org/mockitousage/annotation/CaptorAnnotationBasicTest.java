@@ -4,19 +4,19 @@
  */
 package org.mockitousage.annotation;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.verify;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.verify;
 
 @SuppressWarnings("unchecked")
 public class CaptorAnnotationBasicTest extends TestBase {

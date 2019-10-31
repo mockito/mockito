@@ -4,6 +4,8 @@
  */
 package org.mockitousage.strictness;
 
+import static org.mockito.Mockito.when;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Rule;
@@ -14,8 +16,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
-
-import static org.mockito.Mockito.when;
 
 public class LenientMockAnnotationTest {
 

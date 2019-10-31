@@ -4,15 +4,16 @@
  */
 package org.mockitoutil.async;
 
-import org.junit.After;
-import org.junit.Test;
-import org.mockitoutil.Stopwatch;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockitoutil.Stopwatch.createNotStarted;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.junit.Assert.assertEquals;
-import static org.mockitoutil.Stopwatch.createNotStarted;
+import org.junit.After;
+import org.junit.Test;
+import org.mockitoutil.Stopwatch;
 
 public class AsyncTestingTest {
 

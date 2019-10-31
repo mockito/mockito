@@ -4,17 +4,17 @@
  */
 package org.mockito.internal.configuration.injection;
 
+import static org.mockito.Mockito.withSettings;
+import static org.mockito.internal.util.reflection.FieldSetter.setField;
+
+import java.lang.reflect.Field;
+import java.util.Set;
+
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldReader;
-
-import java.lang.reflect.Field;
-import java.util.Set;
-
-import static org.mockito.Mockito.withSettings;
-import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 /**
  * Handler for field annotated with &#64;InjectMocks and &#64;Spy.

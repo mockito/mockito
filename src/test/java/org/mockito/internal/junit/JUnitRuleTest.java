@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.junit;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mockingDetails;
+import static org.mockito.Mockito.when;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -12,10 +16,6 @@ import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.junit.MockitoJUnit;
 import org.mockitousage.IMethods;
 import org.mockitoutil.SafeJUnitRule;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mockingDetails;
-import static org.mockito.Mockito.when;
 
 public class JUnitRuleTest {
 

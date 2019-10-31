@@ -4,12 +4,12 @@
  */
 package org.mockitousage.verification;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 
 public class VerifyPrintsAllInvocationsOnErrorTest {

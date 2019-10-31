@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.invocation;
 
+import java.io.Serializable;
+
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
-
-import java.io.Serializable;
 
 public class StubInfoImpl implements StubInfo, Serializable {
     private static final long serialVersionUID = 2125827349332068867L;

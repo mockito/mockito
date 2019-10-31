@@ -4,6 +4,9 @@
  */
 package org.mockito.verification;
 
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -11,9 +14,6 @@ import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.util.Timer;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 public class TimeoutTest extends TestBase {
 

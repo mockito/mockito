@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.configuration.injection;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class SimpleArgumentResolverTest {
 

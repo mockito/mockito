@@ -4,12 +4,6 @@
  */
 package org.mockito.internal.verification.checkers;
 
-import java.util.List;
-import org.mockito.internal.verification.api.InOrderContext;
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.Location;
-import org.mockito.invocation.MatchableInvocation;
-
 import static org.mockito.internal.exceptions.Reporter.tooFewActualInvocations;
 import static org.mockito.internal.exceptions.Reporter.tooFewActualInvocationsInOrder;
 import static org.mockito.internal.invocation.InvocationMarker.markVerified;
@@ -17,6 +11,13 @@ import static org.mockito.internal.invocation.InvocationMarker.markVerifiedInOrd
 import static org.mockito.internal.invocation.InvocationsFinder.findAllMatchingUnverifiedChunks;
 import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 import static org.mockito.internal.invocation.InvocationsFinder.getAllLocations;
+
+import java.util.List;
+
+import org.mockito.internal.verification.api.InOrderContext;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
+import org.mockito.invocation.MatchableInvocation;
 
 public class AtLeastXNumberOfInvocationsChecker {
 

@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.session;
 
+import static java.util.Collections.emptyList;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.mockito.MockitoSession;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.framework.DefaultMockitoSession;
@@ -11,11 +16,6 @@ import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
 import org.mockito.session.MockitoSessionLogger;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.util.Collections.emptyList;
 
 public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
 

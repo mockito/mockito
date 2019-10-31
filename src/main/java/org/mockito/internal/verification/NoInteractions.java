@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.verification;
 
-import org.mockito.internal.verification.api.VerificationData;
-import org.mockito.invocation.Invocation;
-import org.mockito.verification.VerificationMode;
+import static org.mockito.internal.exceptions.Reporter.noInteractionsWanted;
 
 import java.util.List;
 
-import static org.mockito.internal.exceptions.Reporter.noInteractionsWanted;
+import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.invocation.Invocation;
+import org.mockito.verification.VerificationMode;
 
 public class NoInteractions implements VerificationMode {
 

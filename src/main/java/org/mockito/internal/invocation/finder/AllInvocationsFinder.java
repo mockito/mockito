@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.invocation.finder;
 
+import java.util.*;
+
 import org.mockito.internal.invocation.InvocationComparator;
-import org.mockito.stubbing.Stubbing;
 import org.mockito.internal.stubbing.StubbingComparator;
 import org.mockito.internal.util.DefaultMockingDetails;
 import org.mockito.invocation.Invocation;
-
-import java.util.*;
+import org.mockito.stubbing.Stubbing;
 
 public class AllInvocationsFinder {
 

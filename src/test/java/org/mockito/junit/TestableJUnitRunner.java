@@ -4,6 +4,8 @@
  */
 package org.mockito.junit;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.junit.runners.model.InitializationError;
 import org.mockito.internal.junit.MismatchReportingTestListener;
 import org.mockito.internal.junit.MockitoTestListener;
@@ -11,8 +13,6 @@ import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.StrictRunner;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockito.internal.util.Supplier;
-
-import java.lang.reflect.InvocationTargetException;
 
 public class TestableJUnitRunner extends MockitoJUnitRunner {
 

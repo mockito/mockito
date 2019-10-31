@@ -4,16 +4,16 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static org.mockito.internal.util.StringUtil.join;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import org.mockito.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.Platform;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import static org.mockito.internal.util.StringUtil.join;
 
 class SubclassInjectionLoader implements SubclassLoader {
 

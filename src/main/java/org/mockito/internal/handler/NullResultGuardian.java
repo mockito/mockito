@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.handler;
 
-import org.mockito.invocation.InvocationContainer;
+import static org.mockito.internal.util.Primitives.defaultValue;
+
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-
-import static org.mockito.internal.util.Primitives.defaultValue;
 
 /**
  * Protects the results from delegate MockHandler. Makes sure the results are valid.

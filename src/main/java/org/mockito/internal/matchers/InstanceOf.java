@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.matchers;
 
+import java.io.Serializable;
+
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.util.Primitives;
-
-import java.io.Serializable;
 
 
 public class InstanceOf implements ArgumentMatcher<Object>, Serializable {

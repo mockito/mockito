@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.matchers.apachecommons;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 // Class comes from Apache Commons Lang, added some tiny changes
 /**

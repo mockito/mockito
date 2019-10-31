@@ -4,16 +4,16 @@
  */
 package org.mockitousage.internal.debugging;
 
-import org.junit.Test;
-import org.mockito.internal.debugging.LocationImpl;
-import org.mockito.internal.exceptions.stacktrace.StackTraceFilter;
-import org.mockitoutil.TestBase;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.exceptions.stacktrace.StackTraceFilter;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("serial")
 public class LocationImplTest extends TestBase {

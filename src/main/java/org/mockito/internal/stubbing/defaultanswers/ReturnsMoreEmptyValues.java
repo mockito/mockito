@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing.defaultanswers;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;

@@ -5,12 +5,12 @@
 package org.mockito.internal.reporting;
 
 
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MatchableInvocation;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MatchableInvocation;
 
 /**
  * Makes sure both wanted and actual are printed consistently (single line or multiline)

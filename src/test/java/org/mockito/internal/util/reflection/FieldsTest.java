@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.internal.util.reflection.Fields.syntheticField;
 
 import java.lang.reflect.Field;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.internal.util.reflection.Fields.syntheticField;
+import org.junit.Test;
 
 public class FieldsTest {
 

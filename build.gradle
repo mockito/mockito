@@ -109,6 +109,8 @@ spotless {
         removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()
+
+        importOrder 'static java', 'static javax', 'static ', 'java', 'javax', ''
     }
 }
 

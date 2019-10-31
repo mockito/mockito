@@ -4,6 +4,18 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
+import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
+import static net.bytebuddy.matcher.ElementMatchers.*;
+import static org.mockito.internal.util.StringUtil.join;
+
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.security.ProtectionDomain;
+import java.util.*;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.Advice;
@@ -29,18 +41,6 @@ import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
-
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.Instrumentation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.security.ProtectionDomain;
-import java.util.*;
-
-import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
-import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
-import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.mockito.internal.util.StringUtil.join;
 
 public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTransformer {
 

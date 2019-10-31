@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.stubbing;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
@@ -15,10 +19,6 @@ import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 public class InvocationContainerImplStubbingTest extends TestBase {
 

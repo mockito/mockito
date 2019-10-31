@@ -4,6 +4,12 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+import java.io.IOException;
+
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Test;
@@ -15,12 +21,6 @@ import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitousage.MethodsImpl;
 import org.mockitoutil.TestBase;
-
-import java.io.IOException;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 @SuppressWarnings("serial")
 public class StubbingUsingDoReturnTest extends TestBase {

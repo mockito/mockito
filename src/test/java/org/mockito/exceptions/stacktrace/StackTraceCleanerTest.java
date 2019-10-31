@@ -4,10 +4,10 @@
  */
 package org.mockito.exceptions.stacktrace;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleaner;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class StackTraceCleanerTest {
 

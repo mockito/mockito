@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.invocation;
 
+import java.io.Serializable;
+import java.util.concurrent.Callable;
+
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.InvocationOnMock;
-
-import java.io.Serializable;
-import java.util.concurrent.Callable;
 
 /**
  * Interface that wraps a 'real' method of the mock object.

@@ -4,6 +4,9 @@
  */
 package org.mockitoutil;
 
+import static java.lang.String.format;
+import static java.util.Arrays.asList;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -32,12 +35,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
+
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 import org.objenesis.instantiator.ObjectInstantiator;
-
-import static java.lang.String.format;
-import static java.util.Arrays.asList;
 
 public abstract class ClassLoaders {
     protected ClassLoader parent = currentClassLoader();

@@ -4,10 +4,10 @@
  */
 package org.mockitousage.bugs;
 
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.*;
 
 //see bug 116
 public class AIOOBExceptionWithAtLeastTest extends TestBase {

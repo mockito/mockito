@@ -4,6 +4,14 @@
  */
 package org.mockitousage.verification;
 
+import static org.mockito.Mockito.after;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
+import static org.mockito.junit.MockitoJUnit.rule;
+import static org.mockitoutil.Stopwatch.createNotStarted;
+
+import java.util.concurrent.TimeUnit;
+
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.After;
@@ -17,14 +25,6 @@ import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
 import org.mockitoutil.Stopwatch;
 import org.mockitoutil.async.AsyncTesting;
-
-import java.util.concurrent.TimeUnit;
-
-import static org.mockito.Mockito.after;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.verify;
-import static org.mockito.junit.MockitoJUnit.rule;
-import static org.mockitoutil.Stopwatch.createNotStarted;
 
 public class VerificationWithTimeoutTest {
 

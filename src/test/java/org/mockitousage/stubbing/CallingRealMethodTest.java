@@ -4,12 +4,12 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 public class CallingRealMethodTest extends TestBase {
 

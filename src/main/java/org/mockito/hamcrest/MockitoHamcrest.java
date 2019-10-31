@@ -4,13 +4,13 @@
  */
 package org.mockito.hamcrest;
 
-import org.hamcrest.Matcher;
-import org.mockito.ArgumentMatcher;
-import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
-
 import static org.mockito.internal.hamcrest.MatcherGenericTypeExtractor.genericTypeOfMatcher;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.Primitives.defaultValue;
+
+import org.hamcrest.Matcher;
+import org.mockito.ArgumentMatcher;
+import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 
 /**
  * Allows matching arguments with hamcrest matchers.

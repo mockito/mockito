@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.stubbing;
 
+import java.io.Serializable;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.InvocationOnMock;
@@ -11,10 +15,6 @@ import org.mockito.invocation.MatchableInvocation;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubbing;
-
-import java.io.Serializable;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 @SuppressWarnings("unchecked")
 public class StubbedInvocationMatcher extends InvocationMatcher implements Serializable, Stubbing {

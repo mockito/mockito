@@ -4,6 +4,20 @@
  */
 package org.mockito.internal;
 
+import static org.mockito.internal.exceptions.Reporter.*;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+import static org.mockito.internal.util.MockUtil.createMock;
+import static org.mockito.internal.util.MockUtil.getInvocationContainer;
+import static org.mockito.internal.util.MockUtil.getMockHandler;
+import static org.mockito.internal.util.MockUtil.isMock;
+import static org.mockito.internal.util.MockUtil.resetMock;
+import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
+import static org.mockito.internal.verification.VerificationModeFactory.noInteractions;
+import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.MockingDetails;
@@ -31,20 +45,6 @@ import org.mockito.stubbing.LenientStubber;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.verification.VerificationMode;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.mockito.internal.exceptions.Reporter.*;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-import static org.mockito.internal.util.MockUtil.createMock;
-import static org.mockito.internal.util.MockUtil.getInvocationContainer;
-import static org.mockito.internal.util.MockUtil.getMockHandler;
-import static org.mockito.internal.util.MockUtil.isMock;
-import static org.mockito.internal.util.MockUtil.resetMock;
-import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
-import static org.mockito.internal.verification.VerificationModeFactory.noInteractions;
-import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
 
 
 @SuppressWarnings("unchecked")

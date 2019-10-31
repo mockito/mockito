@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.mockito.internal.util.Checks;
-import org.mockito.internal.util.collections.ListUtil;
-import org.mockito.internal.util.collections.ListUtil.Filter;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.mockito.internal.util.Checks;
+import org.mockito.internal.util.collections.ListUtil;
+import org.mockito.internal.util.collections.ListUtil.Filter;
 
 /**
  * Small fluent reflection tools to work with fields.

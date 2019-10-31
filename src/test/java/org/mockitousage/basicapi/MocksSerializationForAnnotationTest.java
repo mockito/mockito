@@ -4,6 +4,16 @@
  */
 package org.mockitousage.basicapi;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import static org.mockitoutil.SimpleSerializationUtil.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Observable;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -15,16 +25,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Observable;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static org.mockitoutil.SimpleSerializationUtil.*;
 
 @SuppressWarnings({"unchecked", "serial"})
 public class MocksSerializationForAnnotationTest extends TestBase implements Serializable {

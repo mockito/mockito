@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import net.bytebuddy.TypeCache;
-import org.mockito.mock.SerializableMode;
-
 import java.lang.ref.ReferenceQueue;
 import java.util.Set;
 import java.util.concurrent.Callable;
+
+import net.bytebuddy.TypeCache;
+import org.mockito.mock.SerializableMode;
 
 class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader> implements BytecodeGenerator {
 

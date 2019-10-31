@@ -4,12 +4,13 @@
  */
 package org.mockito.internal.util;
 
-import org.junit.Test;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static org.junit.Assert.assertEquals;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class StringUtilTest  {
 

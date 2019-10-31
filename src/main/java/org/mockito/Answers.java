@@ -5,11 +5,11 @@
 package org.mockito;
 
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
-import org.mockito.internal.stubbing.defaultanswers.TriesToReturnSelf;
 import org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMocks;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls;
+import org.mockito.internal.stubbing.defaultanswers.TriesToReturnSelf;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 

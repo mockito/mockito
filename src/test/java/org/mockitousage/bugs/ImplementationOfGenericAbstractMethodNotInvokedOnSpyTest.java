@@ -4,10 +4,10 @@
  */
 package org.mockitousage.bugs;
 
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
+
+import org.junit.Test;
 
 public class ImplementationOfGenericAbstractMethodNotInvokedOnSpyTest {
     public abstract class GenericAbstract<T> {

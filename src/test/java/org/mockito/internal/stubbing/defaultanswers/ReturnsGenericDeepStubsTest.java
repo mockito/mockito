@@ -4,8 +4,10 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
-import org.junit.Test;
-import org.mockitousage.examples.use.Article;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.Closeable;
 import java.util.Iterator;
@@ -14,10 +16,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.Test;
+import org.mockitousage.examples.use.Article;
 
 @SuppressWarnings("unused")
 public class ReturnsGenericDeepStubsTest {

@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.framework;
 
+import java.util.List;
+
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
@@ -13,8 +15,6 @@ import org.mockito.internal.junit.TestFinishedEvent;
 import org.mockito.internal.junit.UniversalTestListener;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
-
-import java.util.List;
 
 public class DefaultMockitoSession implements MockitoSession {
 

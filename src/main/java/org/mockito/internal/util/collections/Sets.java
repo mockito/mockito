@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.util.collections;
 
+import static java.util.Arrays.asList;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import static java.util.Arrays.asList;
 
 public abstract class Sets {
     public static Set<Object> newMockSafeHashSet(Iterable<Object> mocks) {

@@ -4,6 +4,22 @@
  */
 package org.mockito.internal.creation;
 
+import static java.util.Arrays.asList;
+
+import static org.mockito.internal.exceptions.Reporter.defaultAnswerDoesNotAcceptNullParameter;
+import static org.mockito.internal.exceptions.Reporter.extraInterfacesAcceptsOnlyInterfaces;
+import static org.mockito.internal.exceptions.Reporter.extraInterfacesDoesNotAcceptNullParameters;
+import static org.mockito.internal.exceptions.Reporter.extraInterfacesRequiresAtLeastOneInterface;
+import static org.mockito.internal.exceptions.Reporter.methodDoesNotAcceptParameter;
+import static org.mockito.internal.exceptions.Reporter.requiresAtLeastOneListener;
+import static org.mockito.internal.util.collections.Sets.newSet;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.mockito.MockSettings;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
@@ -17,21 +33,6 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static java.util.Arrays.asList;
-import static org.mockito.internal.exceptions.Reporter.defaultAnswerDoesNotAcceptNullParameter;
-import static org.mockito.internal.exceptions.Reporter.extraInterfacesAcceptsOnlyInterfaces;
-import static org.mockito.internal.exceptions.Reporter.extraInterfacesDoesNotAcceptNullParameters;
-import static org.mockito.internal.exceptions.Reporter.extraInterfacesRequiresAtLeastOneInterface;
-import static org.mockito.internal.exceptions.Reporter.methodDoesNotAcceptParameter;
-import static org.mockito.internal.exceptions.Reporter.requiresAtLeastOneListener;
-import static org.mockito.internal.util.collections.Sets.newSet;
 
 @SuppressWarnings("unchecked")
 public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSettings, MockCreationSettings<T> {

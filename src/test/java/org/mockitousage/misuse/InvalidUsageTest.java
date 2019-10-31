@@ -4,6 +4,9 @@
  */
 package org.mockitousage.misuse;
 
+import static org.junit.Assume.assumeFalse;
+import static org.mockito.Mockito.*;
+
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -12,9 +15,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assume.assumeFalse;
-import static org.mockito.Mockito.*;
 
 public class InvalidUsageTest extends TestBase {
 

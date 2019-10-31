@@ -4,25 +4,25 @@
  */
 package org.mockito.internal.verification.checkers;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
-import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockito.internal.invocation.*;
 import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 
 public class MissingInvocationCheckerTest extends TestBase {
 

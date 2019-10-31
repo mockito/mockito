@@ -4,22 +4,24 @@
  */
 package org.mockitousage.configuration;
 
+import static java.lang.annotation.ElementType.FIELD;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Set;
+
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.configuration.MockitoConfiguration;
 import org.mockito.internal.configuration.InjectingAnnotationEngine;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static java.lang.annotation.ElementType.FIELD;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
 
 
 /**

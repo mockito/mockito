@@ -5,12 +5,13 @@
 package org.mockito.internal.matchers.text;
 
 
-import java.util.LinkedHashMap;
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.internal.matchers.text.ValuePrinter.print;
+
+import java.util.LinkedHashMap;
+
+import org.junit.Test;
 
 public class ValuePrinterTest {
 

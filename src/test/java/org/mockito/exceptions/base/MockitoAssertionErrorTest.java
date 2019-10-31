@@ -4,11 +4,11 @@
  */
 package org.mockito.exceptions.base;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class MockitoAssertionErrorTest extends TestBase {
 

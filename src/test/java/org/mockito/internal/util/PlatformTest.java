@@ -4,11 +4,12 @@
  */
 package org.mockito.internal.util;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
 
 // Possible description on a IBM J9 VM (see #801)
 //

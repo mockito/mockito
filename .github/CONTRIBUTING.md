@@ -69,6 +69,8 @@ _If you are unsure about git you can have a look on our [git tips to have a clea
 
 This section is not about some kind of fruitless tabs vs spaces debate. It's about having the code readable, the project grows and it is not rare to read contributions from many different individuals. Each one of us has a different writing style, we are fine with this. Without enforcing we may be picky about it, however we think that this improves the readability of the code for everyone.
 
+**Note: `./gradlew spotlessApply` will fix most of these automatically for you and you don't need to worry about this at all. This is only to document the guidelines to make sure we keep consistent readable code.**
+
 _This includes IntelliJ IDEA instructions, however we are sure there's similar settings in all major IDEs._
 
 But first of all, make sure that : 
@@ -92,13 +94,13 @@ If you want to check if your code complies to the style guide, you can run:
 
 Imports must be sorted in the following order
 
+1. `import static java.*`
+1. `import static javax.*`
+1. `import static all other imports`
+1. blank line
 1. `import java.*`
-2. `import javax.*`
-3. `import all other imports`
-4. blank line
-5. `import static java.*`
-6. `import static javax.*`
-7. `import static all other imports`
+1. `import javax.*`
+1. `import all other imports`
 
 This order can be set in `IntelliJ setting > Editor > Code Style > Java > Imports > Import Layout`
 

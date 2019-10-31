@@ -4,6 +4,13 @@
  */
 package org.mockitousage.stubbing;
 
+import static java.util.Collections.singletonList;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockitoutil.TestBase.filterLineNo;
+
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -14,12 +21,6 @@ import org.mockito.internal.framework.DefaultMockitoSession;
 import org.mockito.internal.util.SimpleMockitoLogger;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
-
-import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.mockitoutil.TestBase.filterLineNo;
 
 public class StubbingWarningsTest {
 

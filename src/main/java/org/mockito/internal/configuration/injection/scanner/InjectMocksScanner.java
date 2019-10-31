@@ -4,16 +4,16 @@
  */
 package org.mockito.internal.configuration.injection.scanner;
 
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
 import static org.mockito.internal.exceptions.Reporter.unsupportedCombinationOfAnnotations;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 /**
  * Scan field for injection.

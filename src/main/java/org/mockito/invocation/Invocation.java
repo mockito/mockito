@@ -4,10 +4,10 @@
  */
 package org.mockito.invocation;
 
+import java.util.List;
+
 import org.mockito.ArgumentMatcher;
 import org.mockito.NotExtensible;
-
-import java.util.List;
 
 /**
  * A method call on a mock object. Contains all information and state needed for the Mockito framework to operate.
