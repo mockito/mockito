@@ -111,6 +111,17 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
     }
 
     /**
+     * @deprecated since 3.2.0
+     * Please migrate to JUnit Jupiter (aka JUnit5)
+     * - read about "junit-jupiter" in main documentation page at {@link Mockito}.
+     * If you are still on JUnit4, please use {@link MockitoRule}.
+     * Strict runner is not an equivalent of {@link Strictness#STRICT_MOCKS}.
+     * <p>
+     * The reason this runner is deprecated is that we are adding new features to improve Mockito strictness.
+     * Adding those features to Mockito Runner requires significant rework and the Runner API is really old.
+     * <p>
+     * Original javadoc of this method:
+     * <p>
      * Detects unused stubs and reports them as failures. Default behavior in Mockito 2.x.
      * To improve productivity and quality of tests please consider newer API, the {@link StrictStubs}.
      * <p>
@@ -119,6 +130,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
      *
      * @since 2.1.0
      */
+    @Deprecated
     public static class Strict extends MockitoJUnitRunner {
         public Strict(Class<?> klass) throws InvocationTargetException {
             super(new StrictRunner(new RunnerFactory().createStrict(klass), klass));

@@ -25,4 +25,11 @@ public class PluralizerTest extends TestBase {
         assertEquals("was exactly 1 interaction", Pluralizer.were_exactly_x_interactions(1));
         assertEquals("were exactly 100 interactions", Pluralizer.were_exactly_x_interactions(100));
     }
+
+    @Test
+    public void pluralizes_stubbings() {
+        assertEquals("are exactly 0 stubbings", Pluralizer.are_x_stubbings(0));
+        assertEquals("is exactly 1 stubbing", Pluralizer.are_x_stubbings(1));
+        assertEquals("are exactly 100 stubbings", Pluralizer.are_x_stubbings(100));
+    }
 }

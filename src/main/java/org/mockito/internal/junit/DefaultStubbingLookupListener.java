@@ -28,7 +28,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener, Serializa
     private static final long serialVersionUID = -6789800638070123629L;
 
     private Strictness currentStrictness;
-    private boolean mismatchesReported;
+    private boolean failureReported;
 
     DefaultStubbingLookupListener(Strictness strictness) {
         this.currentStrictness = strictness;
@@ -37,17 +37,21 @@ class DefaultStubbingLookupListener implements StubbingLookupListener, Serializa
     public void onStubbingLookup(StubbingLookupEvent event) {
         Strictness actualStrictness = determineStrictness(event.getStubbingFound(), event.getMockSettings(), currentStrictness);
 
-        if (actualStrictness != Strictness.STRICT_STUBS) {
+        if (actualStrictness != Strictness.STRICT_STUBS && actualStrictness != Strictness.STRICT_MOCKS) {
             return;
         }
 
         if (event.getStubbingFound() == null) {
-            //If stubbing was not found for invocation it means that either the mock invocation was not stubbed or
-            //we have a stubbing arg mismatch.
             List<Invocation> argMismatchStubbings = potentialArgMismatches(event.getInvocation(), event.getAllStubbings());
             if (!argMismatchStubbings.isEmpty()) {
-                mismatchesReported = true;
-                Reporter.potentialStubbingProblem(event.getInvocation(), argMismatchStubbings);
+                failureReported = true;
+                //If stubbing was not found for invocation it means that either the mock invocation was not stubbed or
+                //we have a stubbing arg mismatch.
+                Reporter.stubbingArgumentMismatch(event.getInvocation(), argMismatchStubbings);
+            } else if (actualStrictness == Strictness.STRICT_MOCKS && event.getInvocation().getRawReturnType() != Void.TYPE) {
+                failureReported = true;
+                //when there are no mismatches, we still need to report unstubbed, non-void call when the mode is STRICT_MOCKS
+                Reporter.unstubbedInvocation(event.getInvocation(), event.getAllStubbings());
             }
         } else {
             //when strict stubs are in use, every time a stub is realized in the code it is implicitly marked as verified
@@ -78,9 +82,9 @@ class DefaultStubbingLookupListener implements StubbingLookupListener, Serializa
     }
 
     /**
-     * Indicates that stubbing argument mismatch was reported
+     * Indicates that a failure was reported (example: stubbing argument mismatch was reported)
      */
-    boolean isMismatchesReported() {
-        return mismatchesReported;
+    boolean isFailureReported() {
+        return failureReported;
     }
 }

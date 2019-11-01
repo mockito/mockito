@@ -29,6 +29,7 @@ import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.junit.ExceptionFactory;
 import org.mockito.internal.matchers.LocalizedMatcher;
+import org.mockito.internal.reporting.Pluralizer;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
@@ -36,6 +37,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.SerializableMode;
+import org.mockito.stubbing.Stubbing;
 
 /**
  * Reports verification and misusing errors.
@@ -902,8 +904,8 @@ public class Reporter {
         throw formatUnncessaryStubbingException(null, unused);
     }
 
-    public static void potentialStubbingProblem(
-            Invocation actualInvocation, Collection<Invocation> argMismatchStubbings) {
+    public static void stubbingArgumentMismatch(Invocation actualInvocation,
+                                                Collection<Invocation> argMismatchStubbings) {
         StringBuilder stubbings = new StringBuilder();
         int count = 1;
         for (Invocation s : argMismatchStubbings) {
@@ -927,6 +929,44 @@ public class Reporter {
                 "  - stubbed method is intentionally invoked with different arguments by code under test",
                 "    Please use default or 'silent' JUnit Rule (equivalent of Strictness.LENIENT).",
                 "For more information see javadoc for PotentialStubbingProblem class."));
+    }
+
+    public static void unstubbedInvocation(Invocation invocation, Collection<Stubbing> allStubbings) {
+        String message = createMessage(invocation, allStubbings);
+        throw new UnstubbedInvocation(message);
+    }
+
+    private static String createMessage(Invocation invocation, Collection<Stubbing> allStubbings) {
+        //TODO unit test the message, but I'd like some code review feedback first.
+        String stubInfo;
+        if (allStubbings.isEmpty()) {
+            stubInfo = "There are no stubbings declared on this mock";
+        } else {
+            StringBuilder sb = new StringBuilder("There are ")
+                .append(Pluralizer.are_x_stubbings(allStubbings.size()))
+                .append(" declared on this mock:\n");
+            int counter = 1;
+
+            for (Stubbing s : allStubbings) {
+                sb.append(counter++).append(". ")
+                    .append(s.getInvocation().toString())
+                    .append(" (used: ").append(s.wasUsed()).append(")\n")
+                    .append(s.getInvocation().getLocation())
+                    .append("\n\n");
+            }
+            stubInfo = sb.substring(0, sb.length() - 2); //drop unnecessary line breaks
+        }
+
+        //TODO we should be able to detect "incorrect stubbing" scenario by using location.getSourceFile()
+        return join(
+            "Unstubbed invocation or incorrect stubbing: " + invocation.toString(),
+            invocation.getLocation(),
+            "'STRICT_MOCKS' require:",
+            "  - doReturn()/doThrow() API for stubbing - please ensure you are using the right API",
+            "  - all non-void invocations to be stubbed (e.g. declared in the test) - " +
+                "please stub this invocation in your test or reduce the strictness (see javadoc for Strictness).",
+            "",
+            stubInfo);
     }
 
     public static void redundantMockitoListener(String listenerType) {

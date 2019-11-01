@@ -16,15 +16,20 @@ import org.mockito.junit.MockitoRule;
 /**
  * Configures the "strictness" of Mockito, affecting the behavior of stubbings and verification.
  * "Strict stubbing" is a new feature in Mockito 2 that drives cleaner tests and better productivity.
- * The easiest way to leverage it is via Mockito's JUnit support ({@link MockitoJUnit}) or Mockito Session ({@link MockitoSession}).
+ * The easiest way to leverage it is via Mockito's JUnit4 support ({@link MockitoJUnit}),
+ * Mockito Session ({@link MockitoSession}) or {@code MockitoExtension} from "junit-jupiter" artifact.
  * <p>
  * How strictness influences the behavior of the test?
  * <ol>
  *     <li>{@link Strictness#STRICT_STUBS} - ensures clean tests, reduces test code duplication, improves debuggability.
  *       Best combination of flexibility and productivity. Highly recommended.
  *       Planned as default for Mockito v4.
- *       Enable it via {@link MockitoRule}, {@link MockitoJUnitRunner} or {@link MockitoSession}.
+ *       Enable it via {@link MockitoRule}, {@link MockitoJUnitRunner}, {@link MockitoSession}
+ *       or {@code MockitoExtension} from "junit-jupiter" artifact.
  *       See {@link #STRICT_STUBS} for the details.</li>
+ *     <li>{@link Strictness#STRICT_MOCKS} - enforces declaring stubbings for all <strong>non-void</strong> invocations.
+ *       Please prefer {@link #STRICT_STUBS} for cleaner tests.
+ *       Read more at {@link Strictness#STRICT_MOCKS}
  *     <li>{@link Strictness#LENIENT} - no added behavior.
  *       The default of Mockito 1.x.
  *       Recommended only if you cannot use {@link #STRICT_STUBS}</li>
@@ -70,7 +75,7 @@ public enum Strictness {
      * Offers best combination of flexibility and productivity.
      * Highly recommended.
      * Planned as default for Mockito v4.
-     * Enable it via our JUnit support ({@link MockitoJUnit}) or {@link MockitoSession}.
+     * Enable it via our JUnit4 support ({@link MockitoJUnit}) or {@link MockitoSession}.
      * <p>
      * Adds following behavior:
      *  <ul>
@@ -89,5 +94,49 @@ public enum Strictness {
      * @since 2.3.0
      */
     @Incubating
-    STRICT_STUBS;
+    STRICT_STUBS,
+
+    /**
+     * Enforces declaring stubbings for all <strong>non-void</strong> invocations.
+     * Please prefer {@link #STRICT_STUBS} for cleaner tests.
+     * If you are convinced you need {@code STRICT_MOCKS} mocking then read on.
+     * <p>
+     * This mode requires the developer to declare all stubbings for <strong>non-void</strong> methods
+     * invoked in the production code.
+     * Please remember that <strong>void methods</strong> are ignored and you are not required to stub them.
+     * <p>
+     * {@code STRICT_MOCKS} mocking is similar to traditional mocking with EasyMock,
+     * where undeclared invocations would fail early.
+     * {@code STRICT_MOCKS} mocking is useful for users migrating from EasyMock
+     * who are emotionally attached to stricter mocking.
+     * Mockito team recommends using {@link #STRICT_STUBS} which gets you the best of both worlds:
+     * clean tests and improved debuggability.
+     * {@code STRICT_MOCKS} mocking may increase brittleness of your tests
+     * and force you to declare additional stubbings that are irrelevant in given test method.
+     * This makes tests bigger and hence harder to read and comprehend.
+     * At times, {@code STRICT_MOCKS} mocking can be useful for troubleshooting tests or production code
+     * that is legacy or overcomplicated.
+     * <p>
+     * For discussion about {@code STRICT_MOCKS} mocking see ticket <a href="https://github.com/mockito/mockito/issues/1097">#1097</a>.
+     * <p>
+     * You can enable {@code STRICT_MOCKS} mocking via our JUnit4 support ({@link MockitoJUnit}) or {@link MockitoSession}
+     * or {@code MockitoExtension} from "junit-jupiter" artifact.
+     * JUnit Jupiter (JUnit5+) example:
+     * <pre class="code"><code class="java">
+     * <b>&#064;MockitoSettings(strictness = Strictness.STRICT_MOCKS)</b>
+     * public class ExampleTest {
+     *
+     *      &#064;Mock Foo mock;
+     *
+     *      &#064;Test
+     *      public void shouldDoSomething() {
+     *          // ...
+     *      }
+     * }
+     * </code></pre>
+     *
+     * @since 3.2.0
+     */
+    @Incubating
+    STRICT_MOCKS
 }

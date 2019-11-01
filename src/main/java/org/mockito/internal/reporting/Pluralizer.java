@@ -17,4 +17,12 @@ public class Pluralizer {
             return "were exactly " + x + " interactions";
         }
     }
+
+    public static String are_x_stubbings(int x) {
+        if (x == 1) {
+            return "is exactly 1 stubbing";
+        } else {
+            return "are exactly " + x + " stubbings";
+        }
+    }
 }

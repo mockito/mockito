@@ -43,11 +43,12 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
         //At this point, we don't need the mocks any more and we can mark all collected mocks for gc
         //TODO make it better, it's easy to forget to clean up mocks and we still create new instance of list that nobody will read, it's also duplicated
         //TODO clean up all other state, null out stubbingLookupListener
-        mocks = new IdentityHashMap<Object, MockCreationSettings>();
+        mocks = new IdentityHashMap<>();
 
         switch (currentStrictness) {
             case WARN: emitWarnings(logger, event, createdMocks); break;
             case STRICT_STUBS: reportUnusedStubs(event, createdMocks); break;
+            case STRICT_MOCKS: reportUnusedStubs(event, createdMocks); break;
             case LENIENT: break;
             default: throw new IllegalStateException("Unknown strictness: " + currentStrictness);
         }
@@ -55,7 +56,7 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
 
     private void reportUnusedStubs(TestFinishedEvent event, Collection<Object> mocks) {
         //If there is some other failure (or mismatches were detected) don't report another exception to avoid confusion
-        if (event.getFailure() == null && !stubbingLookupListener.isMismatchesReported()) {
+        if (event.getFailure() == null && !stubbingLookupListener.isFailureReported()) {
             UnusedStubbings unused = new UnusedStubbingsFinder().getUnusedStubbings(mocks);
             unused.reportUnused();
         }
