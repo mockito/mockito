@@ -243,7 +243,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * when(mockedList.get(anyInt())).thenReturn("element");
  *
  * //stubbing using custom matcher (let's say isValid() returns your own matcher implementation):
- * when(mockedList.contains(argThat(isValid()))).thenReturn("element");
+ * when(mockedList.contains(argThat(isValid()))).thenReturn(true);
  *
  * //following prints "element"
  * System.out.println(mockedList.get(999));
