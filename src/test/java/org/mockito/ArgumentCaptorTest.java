@@ -13,24 +13,24 @@ import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 
 public class ArgumentCaptorTest {
 
-	/**
-	 * Clean up the internal Mockito-Stubbing state
-	 */
-	@After
-	public void tearDown() {
-		try {
-			validateMockitoUsage();
-		} catch (InvalidUseOfMatchersException ignore) {
-		}
+    /**
+     * Clean up the internal Mockito-Stubbing state
+     */
+    @After
+    public void tearDown() {
+        try {
+            validateMockitoUsage();
+        } catch (InvalidUseOfMatchersException ignore) {
+        }
 
-	}
+    }
 
-	@Test
-	public void tell_handy_return_values_to_return_value_for() throws Exception {
+    @Test
+    public void tell_handy_return_values_to_return_value_for() throws Exception {
 
-		ArgumentCaptor<Object> captor = ArgumentCaptor.forClass(Object.class);
-		assertThat(captor.capture()).isNull();
+        ArgumentCaptor<Object> captor = ArgumentCaptor.forClass(Object.class);
+        assertThat(captor.capture()).isNull();
 
-	}
+    }
 
 }

@@ -131,16 +131,16 @@ public class NumberOfInvocationsCheckerTest {
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0);
     }
 
-	@Test
-	public void shouldMarkInvocationsAsVerified() throws Exception {
-		Invocation invocation = buildSimpleMethod().toInvocation();
-		assertThat(invocation.isVerified()).isFalse();
+    @Test
+    public void shouldMarkInvocationsAsVerified() throws Exception {
+        Invocation invocation = buildSimpleMethod().toInvocation();
+        assertThat(invocation.isVerified()).isFalse();
 
-		invocations = asList(invocation);
-		wanted = buildSimpleMethod().toInvocationMatcher();
-		NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1);
-		assertThat(invocation.isVerified()).isTrue();
-	}
+        invocations = asList(invocation);
+        wanted = buildSimpleMethod().toInvocationMatcher();
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1);
+        assertThat(invocation.isVerified()).isTrue();
+    }
 
     private InvocationBuilder buildSimpleMethod() {
         return new InvocationBuilder().mock(mock).simpleMethod();

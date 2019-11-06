@@ -16,8 +16,8 @@ import org.mockito.junit.MockitoRule;
 
 public class RuleTestWithParameterConstructorTest {
 
-	 @Rule
-	 public MockitoRule mockitoJUnitRule = MockitoJUnit.rule();
+     @Rule
+     public MockitoRule mockitoJUnitRule = MockitoJUnit.rule();
 
     @Mock
     private Injected injected;

@@ -40,10 +40,10 @@ public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
                     Mockito.reset(instance);
                 } else {
                     Object mock = Mockito.mock(instance.getClass(), withSettings()
-					    .spiedInstance(instance)
-					    .defaultAnswer(Mockito.CALLS_REAL_METHODS)
-					    .name(field.getName()));
-					setField(fieldOwner, field, mock);
+                        .spiedInstance(instance)
+                        .defaultAnswer(Mockito.CALLS_REAL_METHODS)
+                        .name(field.getName()));
+                    setField(fieldOwner, field, mock);
                 }
             } catch (Exception e) {
                 throw new MockitoException("Problems initiating spied field " + field.getName(), e);

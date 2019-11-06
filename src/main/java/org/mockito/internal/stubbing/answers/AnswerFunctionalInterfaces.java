@@ -25,7 +25,7 @@ import org.mockito.stubbing.VoidAnswer6;
  * @since 2.1.0
  */
 public class AnswerFunctionalInterfaces {
-	/**
+    /**
      * Hide constructor to avoid instantiation of class with only static methods
      */
     private AnswerFunctionalInterfaces() {

@@ -89,7 +89,7 @@ public class MockUtil {
         MockName mockName = getMockName(mock);
         //TODO SF hacky...
         MockCreationSettings mockSettings = getMockHandler(mock).getMockSettings();
-		if (mockName.isDefault() && mockSettings instanceof CreationSettings) {
+        if (mockName.isDefault() && mockSettings instanceof CreationSettings) {
             ((CreationSettings) mockSettings).setMockName(new MockNameImpl(newName));
         }
     }
