@@ -26,7 +26,7 @@ public class After extends VerificationWrapper<VerificationOverTimeImpl> impleme
      */
     @Deprecated
     public After(long delayMillis, VerificationMode verificationMode) {
-      this(Duration.ofMillis(delayMillis), verificationMode);
+        this(Duration.ofMillis(delayMillis), verificationMode);
     }
 
     /**

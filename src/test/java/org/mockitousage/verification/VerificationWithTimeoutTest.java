@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.junit.MockitoJUnit.rule;
 import static org.mockitoutil.Stopwatch.createNotStarted;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import org.assertj.core.api.Assertions;
@@ -58,6 +59,17 @@ public class VerificationWithTimeoutTest {
     }
 
     @Test
+    public void should_verify_with_timeout_duration() {
+        // when
+        async.runAfter(50, callMock('c'));
+        async.runAfter(500, callMock('c'));
+
+        // then
+        verify(mock, timeout(Duration.ofMillis(200)).only()).oneArg('c');
+        verify(mock).oneArg('c'); //sanity check
+    }
+
+    @Test
     public void should_verify_with_timeout_and_fail() {
         // when
         async.runAfter(200, callMock('c'));
@@ -67,6 +79,21 @@ public class VerificationWithTimeoutTest {
             @Override
             public void call() {
                 verify(mock, timeout(50).only()).oneArg('c');
+            }
+        }).isInstanceOf(AssertionError.class).hasMessageContaining("Wanted but not invoked");
+        //TODO let's have a specific exception vs. generic assertion error + message
+    }
+
+    @Test
+    public void should_verify_with_timeout_and_fail_duration() {
+        // when
+        async.runAfter(200, callMock('c'));
+
+        // then
+        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            @Override
+            public void call() {
+                verify(mock, timeout(Duration.ofMillis(50)).only()).oneArg('c');
             }
         }).isInstanceOf(AssertionError.class).hasMessageContaining("Wanted but not invoked");
         //TODO let's have a specific exception vs. generic assertion error + message

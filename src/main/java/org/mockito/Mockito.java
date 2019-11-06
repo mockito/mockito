@@ -2832,15 +2832,15 @@ public class Mockito extends ArgumentMatchers {
      * <pre class="code"><code class="java">
      *   //passes when someMethod() is called no later than within 100 ms
      *   //exits immediately when verification is satisfied (e.g. may not wait full 100 ms)
-     *   verify(mock, timeout(Duration.ofMillis(100))).someMethod();
+     *   verify(mock, timeout(100)).someMethod();
      *   //above is an alias to:
-     *   verify(mock, timeout(Duration.ofMillis(100)).times(1)).someMethod();
+     *   verify(mock, timeout(100).times(1)).someMethod();
      *
      *   //passes as soon as someMethod() has been called 2 times under 100 ms
-     *   verify(mock, timeout(Duration.ofMillis(100)).times(2)).someMethod();
+     *   verify(mock, timeout(100).times(2)).someMethod();
      *
      *   //equivalent: this also passes as soon as someMethod() has been called 2 times under 100 ms
-     *   verify(mock, timeout(Duration.ofMillis(100)).atLeast(2)).someMethod();
+     *   verify(mock, timeout(100).atLeast(2)).someMethod();
      * </code></pre>
      *
      * See examples in javadoc for {@link Mockito} class
@@ -2901,19 +2901,19 @@ public class Mockito extends ArgumentMatchers {
      *
      * <pre class="code"><code class="java">
      *   //passes after 100ms, if someMethod() has only been called once at that time.
-     *   verify(mock, after(Duration.ofMillis(100))).someMethod();
+     *   verify(mock, after(100)).someMethod();
      *   //above is an alias to:
-     *   verify(mock, after(Duration.ofMillis(100)).times(1)).someMethod();
+     *   verify(mock, after(100).times(1)).someMethod();
      *
      *   //passes if someMethod() is called <b>*exactly*</b> 2 times, as tested after 100 millis
-     *   verify(mock, after(Duration.ofMillis(100)).times(2)).someMethod();
+     *   verify(mock, after(100).times(2)).someMethod();
      *
      *   //passes if someMethod() has not been called, as tested after 100 millis
-     *   verify(mock, after(Duration.ofMillis(100)).never()).someMethod();
+     *   verify(mock, after(100).never()).someMethod();
      *
      *   //verifies someMethod() after a given time span using given verification mode
      *   //useful only if you have your own custom verification modes.
-     *   verify(mock, new After(Duration.ofMillis(100), yourOwnVerificationMode)).someMethod();
+     *   verify(mock, new After(100, yourOwnVerificationMode)).someMethod();
      * </code></pre>
      *
      * <strong>timeout() vs. after()</strong>
@@ -2925,12 +2925,12 @@ public class Mockito extends ArgumentMatchers {
      * <pre class="code"><code class="java">
      *   //1.
      *   mock.foo();
-     *   verify(mock, after(Duration.ofSeconds(1))).foo();
+     *   verify(mock, after(1000)).foo();
      *   //waits 1 second and succeeds
      *
      *   //2.
      *   mock.foo();
-     *   verify(mock, timeout(Duration.ofSeconds(1))).foo();
+     *   verify(mock, timeout(1000)).foo();
      *   //succeeds immediately
      * </code></pre>
      *
