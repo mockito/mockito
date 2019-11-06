@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.util;
 
+import java.time.Duration;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +20,7 @@ public class TimerTest extends TestBase {
     @Test
     public void should_return_true_if_task_is_in_acceptable_time_bounds() {
         //given
-        long duration = 10000L;
+        Duration duration = Duration.ofSeconds(10);
         Timer timer = new Timer(duration);
 
         //when
@@ -31,7 +33,7 @@ public class TimerTest extends TestBase {
     @Test
     public void should_return_false_when_time_run_out() throws Exception {
         //given
-        Timer timer = new Timer(0);
+        Timer timer = new Timer(Duration.ZERO);
         timer.start();
 
         //when
@@ -45,7 +47,7 @@ public class TimerTest extends TestBase {
     public void should_throw_friendly_reminder_exception_when_duration_is_negative() {
         expectedException.expect(FriendlyReminderException.class);
         expectedException.expectMessage("Don't panic! I'm just a friendly reminder!");
-        new Timer(-1);
+        new Timer(Duration.ofMillis(-1));
     }
 
     private void oneMillisecondPasses() throws InterruptedException {

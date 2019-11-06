@@ -35,7 +35,7 @@ public class VerificationWrapperInOrderWrapper implements VerificationMode {
         if (verificationMode instanceof VerificationOverTimeImpl) {
             final VerificationOverTimeImpl verificationOverTime = (VerificationOverTimeImpl)verificationMode;
             if (verificationOverTime.isReturnOnSuccess()) {
-                return new VerificationOverTimeImpl(verificationOverTime.getPollingPeriodMillis(),
+                return new VerificationOverTimeImpl(verificationOverTime.getPollingPeriod(),
                         verificationOverTime.getTimer().duration(),
                         wrapInOrder(verificationWrapper, verificationOverTime.getDelegate(), inOrder),
                         verificationOverTime.isReturnOnSuccess());
