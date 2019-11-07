@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import java.time.Duration;
+
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.InternalMockHandler;
@@ -886,15 +888,15 @@ import org.mockito.verification.VerificationWithTimeout;
  * <pre class="code"><code class="java">
  *   //passes when someMethod() is called no later than within 100 ms
  *   //exits immediately when verification is satisfied (e.g. may not wait full 100 ms)
- *   verify(mock, timeout(100)).someMethod();
+ *   verify(mock, timeout(Duration.ofMillis(100))).someMethod();
  *   //above is an alias to:
- *   verify(mock, timeout(100).times(1)).someMethod();
+ *   verify(mock, timeout(Duration.ofMillis(100)).times(1)).someMethod();
  *
  *   //passes as soon as someMethod() has been called 2 times under 100 ms
- *   verify(mock, timeout(100).times(2)).someMethod();
+ *   verify(mock, timeout(Duration.ofMillis(100)).times(2)).someMethod();
  *
  *   //equivalent: this also passes as soon as someMethod() has been called 2 times under 100 ms
- *   verify(mock, timeout(100).atLeast(2)).someMethod();
+ *   verify(mock, timeout(Duration.ofMillis(100)).atLeast(2)).someMethod();
  * </code></pre>
  *
  *
@@ -2846,10 +2848,45 @@ public class Mockito extends ArgumentMatchers {
      * @param millis - duration in milliseconds
      *
      * @return object that allows fluent specification of the verification (times(x), atLeast(y), etc.)
+     * @deprecated Use {@link #timeout(Duration)} instead.
      */
     @CheckReturnValue
+    @Deprecated
     public static VerificationWithTimeout timeout(long millis) {
-        return new Timeout(millis, VerificationModeFactory.times(1));
+      return timeout(Duration.ofMillis(millis));
+    }
+
+    /**
+     * Verification will be triggered over and over until the given amount of time, allowing testing of async code.
+     * Useful when interactions with the mock object did not happened yet.
+     * Extensive use of {@code timeout()} method can be a code smell - there are better ways of testing concurrent code.
+     * <p>
+     * See also {@link #after(Duration)} method for testing async code.
+     * Differences between {@code timeout()} and {@code after} are explained in Javadoc for {@link #after(Duration)}.
+     *
+     * <pre class="code"><code class="java">
+     *   //passes when someMethod() is called no later than within 100 ms
+     *   //exits immediately when verification is satisfied (e.g. may not wait full 100 ms)
+     *   verify(mock, timeout(Duration.ofMillis(100))).someMethod();
+     *   //above is an alias to:
+     *   verify(mock, timeout(Duration.ofMillis(100)).times(1)).someMethod();
+     *
+     *   //passes as soon as someMethod() has been called 2 times under 100 ms
+     *   verify(mock, timeout(Duration.ofMillis(100)).times(2)).someMethod();
+     *
+     *   //equivalent: this also passes as soon as someMethod() has been called 2 times under 100 ms
+     *   verify(mock, timeout(Duration.ofMillis(100)).atLeast(2)).someMethod();
+     * </code></pre>
+     *
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param timeout how long to wait before timing out
+     *
+     * @return object that allows fluent specification of the verification (times(x), atLeast(y), etc.)
+     */
+    @CheckReturnValue
+    public static VerificationWithTimeout timeout(Duration timeout) {
+        return new Timeout(timeout, VerificationModeFactory.times(1));
     }
 
     /**
@@ -2889,7 +2926,7 @@ public class Mockito extends ArgumentMatchers {
      *   //1.
      *   mock.foo();
      *   verify(mock, after(1000)).foo();
-     *   //waits 1000 millis and succeeds
+     *   //waits 1 second and succeeds
      *
      *   //2.
      *   mock.foo();
@@ -2902,10 +2939,68 @@ public class Mockito extends ArgumentMatchers {
      * @param millis - duration in milliseconds
      *
      * @return object that allows fluent specification of the verification
+     * @deprecated Use {@link #after(Duration)} instead.
      */
     @CheckReturnValue
+    @Deprecated
     public static VerificationAfterDelay after(long millis) {
-        return new After(millis, VerificationModeFactory.times(1));
+      return after(Duration.ofMillis(millis));
+    }
+
+    /**
+     * Verification will be triggered after given amount of time, allowing testing of async code.
+     * Useful when interactions with the mock object did not happened yet.
+     * Extensive use of {@code after()} method can be a code smell - there are better ways of testing concurrent code.
+     * <p>
+     * Not yet implemented to work with InOrder verification.
+     * <p>
+     * See also {@link #timeout(Duration)} method for testing async code.
+     * Differences between {@code timeout()} and {@code after()} are explained below.
+     *
+     * <pre class="code"><code class="java">
+     *   //passes after 100ms, if someMethod() has only been called once at that time.
+     *   verify(mock, after(Duration.ofMillis(100))).someMethod();
+     *   //above is an alias to:
+     *   verify(mock, after(Duration.ofMillis(100)).times(1)).someMethod();
+     *
+     *   //passes if someMethod() is called <b>*exactly*</b> 2 times, as tested after 100 millis
+     *   verify(mock, after(Duration.ofMillis(100)).times(2)).someMethod();
+     *
+     *   //passes if someMethod() has not been called, as tested after 100 millis
+     *   verify(mock, after(Duration.ofMillis(100)).never()).someMethod();
+     *
+     *   //verifies someMethod() after a given time span using given verification mode
+     *   //useful only if you have your own custom verification modes.
+     *   verify(mock, new After(Duration.ofMillis(100), yourOwnVerificationMode)).someMethod();
+     * </code></pre>
+     *
+     * <strong>timeout() vs. after()</strong>
+     * <ul>
+     *     <li>timeout() exits immediately with success when verification passes</li>
+     *     <li>after() awaits full duration to check if verification passes</li>
+     * </ul>
+     * Examples:
+     * <pre class="code"><code class="java">
+     *   //1.
+     *   mock.foo();
+     *   verify(mock, after(Duration.ofSeconds(1))).foo();
+     *   //waits 1 second and succeeds
+     *
+     *   //2.
+     *   mock.foo();
+     *   verify(mock, timeout(Duration.ofSeconds(1))).foo();
+     *   //succeeds immediately
+     * </code></pre>
+     *
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param delay how to to wait before triggering verification
+     *
+     * @return object that allows fluent specification of the verification
+     */
+    @CheckReturnValue
+    public static VerificationAfterDelay after(Duration delay) {
+        return new After(delay, VerificationModeFactory.times(1));
     }
 
     /**

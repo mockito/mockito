@@ -6,38 +6,42 @@ package org.mockito.internal.util;
 
 import static org.mockito.internal.exceptions.Reporter.cannotCreateTimerWithNegativeDurationTime;
 
+import java.time.Duration;
+import java.time.Instant;
+
 public class Timer {
 
-    private final long durationMillis;
-    private long startTime = -1;
+    private final Duration duration;
+    private Instant startTime = null;
 
-    public Timer(long durationMillis) {
-        validateInput(durationMillis);
-        this.durationMillis = durationMillis;
+    public Timer(Duration duration) {
+        validateInput(duration);
+        this.duration = duration;
     }
 
     /**
      * Informs whether the timer is still counting down.
      */
     public boolean isCounting() {
-        assert startTime != -1;
-        return System.currentTimeMillis() - startTime <= durationMillis;
+        assert startTime != null;
+        Duration elapsed = Duration.between(startTime, Instant.now());
+        return elapsed.compareTo(duration) <= 0;
     }
 
     /**
      * Starts the timer count down.
      */
     public void start() {
-        startTime = System.currentTimeMillis();
+        startTime = Instant.now();
     }
 
-    private void validateInput(long durationMillis) {
-        if (durationMillis < 0) {
-            throw cannotCreateTimerWithNegativeDurationTime(durationMillis);
+    private void validateInput(Duration duration) {
+        if (duration.isNegative()) {
+            throw cannotCreateTimerWithNegativeDurationTime(duration);
         }
     }
 
-    public long duration() {
-        return durationMillis;
+    public Duration duration() {
+        return duration;
     }
 }
