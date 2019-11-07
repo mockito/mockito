@@ -31,8 +31,8 @@ public class JUnitRule implements MockitoRule {
         this.strictness = strictness;
     }
 
-	@Override
-	public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
+    @Override
+    public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
                 if (session == null) {

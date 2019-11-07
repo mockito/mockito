@@ -152,7 +152,7 @@ public class InvalidStateDetectionTest extends TestBase {
         doThrow(new RuntimeException()).when(mock);
 
         try {
-        	doThrow(new RuntimeException()).when(mock).oneArg(true);
+            doThrow(new RuntimeException()).when(mock).oneArg(true);
             fail();
         } catch (UnfinishedStubbingException e) {}
 

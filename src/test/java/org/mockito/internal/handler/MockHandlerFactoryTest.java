@@ -30,7 +30,7 @@ public class MockHandlerFactoryTest extends TestBase {
     public void handle_result_must_not_be_null_for_primitives() throws Throwable {
         //given:
         MockCreationSettings<?> settings = (MockCreationSettings<?>) new MockSettingsImpl().defaultAnswer(new Returns(null));
-		MockHandler<?> handler = createMockHandler(settings);
+        MockHandler<?> handler = createMockHandler(settings);
 
         mock.intReturningMethod();
         Invocation invocation = super.getLastInvocation();
