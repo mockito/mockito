@@ -63,6 +63,7 @@ public class DefaultInternalRunner implements InternalRunner {
                             if (mockitoTestListener != null) {
                                 Mockito.framework().removeListener(mockitoTestListener);
                                 mockitoTestListener.testFinished(new DefaultTestFinishedEvent(target, description.getMethodName(), failure));
+                                mockitoTestListener = null;
                             }
                             Mockito.validateMockitoUsage();
                         } catch (Throwable t) {
