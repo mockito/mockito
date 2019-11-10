@@ -36,11 +36,13 @@ public class DefaultInternalRunner implements InternalRunner {
                 return new Statement() {
                     @Override
                     public void evaluate() throws Throwable {
-                        // get new test listener and add it to the framework
-                        mockitoTestListener = listenerSupplier.get();
-                        Mockito.framework().addListener(mockitoTestListener);
-                        // init annotated mocks before tests
-                        MockitoAnnotations.initMocks(target);
+                        if (mockitoTestListener == null) {
+                            // get new test listener and add it to the framework
+                            mockitoTestListener = listenerSupplier.get();
+                            Mockito.framework().addListener(mockitoTestListener);
+                            // init annotated mocks before tests
+                            MockitoAnnotations.initMocks(target);
+                        }
                         base.evaluate();
                     }
                 };
@@ -61,6 +63,7 @@ public class DefaultInternalRunner implements InternalRunner {
                             if (mockitoTestListener != null) {
                                 Mockito.framework().removeListener(mockitoTestListener);
                                 mockitoTestListener.testFinished(new DefaultTestFinishedEvent(target, description.getMethodName(), failure));
+                                mockitoTestListener = null;
                             }
                             Mockito.validateMockitoUsage();
                         } catch (Throwable t) {
