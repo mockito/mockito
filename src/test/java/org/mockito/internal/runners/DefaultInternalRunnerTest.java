@@ -9,11 +9,14 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.model.Statement;
 import org.mockito.Mock;
 import org.mockito.internal.junit.MockitoTestListener;
 import org.mockito.internal.junit.TestFinishedEvent;
@@ -34,9 +37,7 @@ public class DefaultInternalRunnerTest {
         new DefaultInternalRunner(SuccessTest.class, supplier)
             .run(newNotifier(runListener));
 
-        verify(runListener, never()).testFailure(any(Failure.class));
-        verify(runListener, times(1)).testFinished(any(Description.class));
-        verify(mockitoTestListener, only()).testFinished(any(TestFinishedEvent.class));
+        verifyTestFinishedSuccessfully();
     }
 
     @Test
@@ -53,6 +54,18 @@ public class DefaultInternalRunnerTest {
         new DefaultInternalRunner(SuccessTest.class, supplier)
             .run(newNotifier(runListener));
 
+        verifyTestFinishedSuccessfully();
+    }
+
+    @Test
+    public void does_not_fail_when_rule_invokes_statement_multiple_times() throws Exception {
+        new DefaultInternalRunner(TestWithRepeatingRule.class, supplier)
+            .run(newNotifier(runListener));
+
+        verifyTestFinishedSuccessfully();
+    }
+
+    private void verifyTestFinishedSuccessfully() throws Exception {
         verify(runListener, never()).testFailure(any(Failure.class));
         verify(runListener, times(1)).testFinished(any(Description.class));
         verify(mockitoTestListener, only()).testFinished(any(TestFinishedEvent.class));
@@ -64,7 +77,7 @@ public class DefaultInternalRunnerTest {
         return notifier;
     }
 
-    public static final class SuccessTest {
+    public static class SuccessTest {
 
         @Test
         public void this_test_is_NOT_supposed_to_fail() {
@@ -81,5 +94,17 @@ public class DefaultInternalRunnerTest {
         public void this_test_is_supposed_to_fail() {
             assertNotNull(system);
         }
+    }
+
+    public static final class TestWithRepeatingRule extends SuccessTest {
+
+        @Rule
+        public TestRule rule = (base, description) -> new Statement() {
+            @Override
+            public void evaluate() throws Throwable {
+                base.evaluate();
+                base.evaluate();
+            }
+        };
     }
 }
