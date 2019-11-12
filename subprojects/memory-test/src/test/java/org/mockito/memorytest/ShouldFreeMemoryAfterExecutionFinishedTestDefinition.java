@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ShouldFreeMemoryAfterExecutionFinishedTest {
+public class ShouldFreeMemoryAfterExecutionFinishedTestDefinition {
     private static final int ELEMENT_COUNT = 4_000_000;
 
     private MemoryHog memoryHog;
