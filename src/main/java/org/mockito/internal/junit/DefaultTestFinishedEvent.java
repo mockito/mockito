@@ -5,12 +5,12 @@
 package org.mockito.internal.junit;
 
 public class DefaultTestFinishedEvent implements TestFinishedEvent {
-    private final Object testClassInstance;
+    private final Class<?> testClass;
     private final String testMethodName;
     private final Throwable testFailure;
 
-    public DefaultTestFinishedEvent(Object testClassInstance, String testMethodName, Throwable testFailure) {
-        this.testClassInstance = testClassInstance;
+    public DefaultTestFinishedEvent(Class<?> testClass, String testMethodName, Throwable testFailure) {
+        this.testClass = testClass;
         this.testMethodName = testMethodName;
         this.testFailure = testFailure;
     }
@@ -22,6 +22,6 @@ public class DefaultTestFinishedEvent implements TestFinishedEvent {
 
     @Override
     public String getTestName() {
-        return testClassInstance.getClass().getSimpleName() + "." + testMethodName;
+        return testClass.getSimpleName() + "." + testMethodName;
     }
 }

@@ -27,11 +27,10 @@ public class DefaultInternalRunner implements InternalRunner {
     public DefaultInternalRunner(Class<?> testClass, final Supplier<MockitoTestListener> listenerSupplier) throws InitializationError {
         runner = new BlockJUnit4ClassRunner(testClass) {
 
-            public Object target;
             private MockitoTestListener mockitoTestListener;
 
             protected Statement withBefores(FrameworkMethod method, final Object target, Statement statement) {
-                this.target = target;
+
                 final Statement base = super.withBefores(method, target, statement);
                 return new Statement() {
                     @Override
@@ -62,7 +61,7 @@ public class DefaultInternalRunner implements InternalRunner {
                         try {
                             if (mockitoTestListener != null) {
                                 Mockito.framework().removeListener(mockitoTestListener);
-                                mockitoTestListener.testFinished(new DefaultTestFinishedEvent(target, description.getMethodName(), failure));
+                                mockitoTestListener.testFinished(new DefaultTestFinishedEvent(getTestClass().getJavaClass(), description.getMethodName(), failure));
                                 mockitoTestListener = null;
                             }
                             Mockito.validateMockitoUsage();
@@ -73,8 +72,10 @@ public class DefaultInternalRunner implements InternalRunner {
                         }
                     }
                 };
+
                 notifier.addListener(listener);
                 super.run(notifier);
+                notifier.removeListener(listener);
             }
         };
     }
