@@ -14,6 +14,9 @@ dependencies {
 tasks.javadoc.enabled = false
 
 test {
+    // Can be used to "mark" test classes that should only be run within test suites
+    exclude '**/*TestDefinition*'
+
     maxHeapSize = "128m"
     jvmArgs = ["-XX:MaxPermSize=128m"]
 }
