@@ -39,7 +39,7 @@ import org.mockito.junit.MockitoJUnitRunner;
  *     then, if there is several property of the same type, by the match of the property name and the mock name.
  *     <p><u>Note 1:</u> If you have properties with the same type (or same erasure), it's better to name all &#064;Mock
  *     annotated fields with the matching properties, otherwise Mockito might get confused and injection won't happen.</p>
- *     <p><u>Note 2:</u> If &#064;InjectMocks instance wasn't initialized before and have a no-arg constructor,
+ *     <p><u>Note 2:</u> If &#064;InjectMocks instance wasn't initialized before and has a no-arg constructor,
  *     then it will be initialized with this constructor.</p></li>
  *
  *     <li><strong>Field injection</strong>; mocks will first be resolved by type (if a single type match
