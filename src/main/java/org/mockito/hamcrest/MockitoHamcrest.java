@@ -44,7 +44,10 @@ import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
  * If you have an idea how to fix the problem, let us know via the mailing list or the issue tracker.
  *
  * @since 2.1.0
+ *
+ * @deprecated Use the regular {@link org.mockito.ArgumentMatchers#argThat(ArgumentMatcher)} instead
  */
+@Deprecated
 public class MockitoHamcrest {
 
     /**
@@ -55,7 +58,9 @@ public class MockitoHamcrest {
      * @param matcher decides whether argument matches
      * @return <code>null</code> or default value for primitive (0, false, etc.)
      * @since 2.1.0
+     * @deprecated Use {@link org.mockito.ArgumentMatchers#argThat(ArgumentMatcher)} instead
      */
+    @Deprecated
     @SuppressWarnings("unchecked")
     public static <T> T argThat(Matcher<T> matcher) {
         reportMatcher(matcher);
@@ -70,7 +75,9 @@ public class MockitoHamcrest {
      *
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
+     * @deprecated Use {@link org.mockito.ArgumentMatchers#charThat(ArgumentMatcher)} instead
      */
+    @Deprecated
     public static char charThat(Matcher<Character> matcher) {
         reportMatcher(matcher);
         return 0;
@@ -84,7 +91,9 @@ public class MockitoHamcrest {
      *
      * @param matcher decides whether argument matches
      * @return <code>false</code>.
+     * @deprecated Use {@link org.mockito.ArgumentMatchers#booleanThat(ArgumentMatcher)} instead
      */
+    @Deprecated
     public static boolean booleanThat(Matcher<Boolean> matcher) {
         reportMatcher(matcher);
         return false;
@@ -98,7 +107,9 @@ public class MockitoHamcrest {
      *
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
+     * @deprecated Use {@link org.mockito.ArgumentMatchers#byteThat(ArgumentMatcher)} instead
      */
+    @Deprecated
     public static byte byteThat(Matcher<Byte> matcher) {
         reportMatcher(matcher);
         return 0;
@@ -112,7 +123,9 @@ public class MockitoHamcrest {
      *
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
+     * @deprecated Use {@link org.mockito.ArgumentMatchers#shortThat(ArgumentMatcher)} instead
      */
+    @Deprecated
     public static short shortThat(Matcher<Short> matcher) {
         reportMatcher(matcher);
         return 0;
@@ -126,7 +139,9 @@ public class MockitoHamcrest {
      *
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
+     * @deprecated Use {@link org.mockito.ArgumentMatchers#intThat(ArgumentMatcher)} instead
      */
+    @Deprecated
     public static int intThat(Matcher<Integer> matcher) {
         reportMatcher(matcher);
         return 0;
@@ -140,7 +155,9 @@ public class MockitoHamcrest {
      *
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
+     * @deprecated Use {@link org.mockito.ArgumentMatchers#longThat(ArgumentMatcher)} instead
      */
+    @Deprecated
     public static long longThat(Matcher<Long> matcher) {
         reportMatcher(matcher);
         return 0;
@@ -154,7 +171,9 @@ public class MockitoHamcrest {
      *
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
+     * @deprecated Use {@link org.mockito.ArgumentMatchers#floatThat(ArgumentMatcher)} instead
      */
+    @Deprecated
     public static float floatThat(Matcher<Float> matcher) {
         reportMatcher(matcher);
         return 0;
@@ -168,7 +187,9 @@ public class MockitoHamcrest {
      *
      * @param matcher decides whether argument matches
      * @return <code>0</code>.
+     * @deprecated Use {@link org.mockito.ArgumentMatchers#doubleThat(ArgumentMatcher)} instead
      */
+    @Deprecated
     public static double doubleThat(Matcher<Double> matcher) {
         reportMatcher(matcher);
         return 0;
