@@ -15,12 +15,15 @@ import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
 import static org.mockito.internal.verification.VerificationModeFactory.noInteractions;
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.mockito.DoNotMock;
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.MockingDetails;
+import org.mockito.exceptions.misusing.DoNotMockException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
@@ -60,9 +63,30 @@ public class MockitoCore {
         }
         MockSettingsImpl impl = MockSettingsImpl.class.cast(settings);
         MockCreationSettings<T> creationSettings = impl.build(typeToMock);
+        checkDoNotMockAnnotation(creationSettings.getTypeToMock(), creationSettings);
         T mock = createMock(creationSettings);
         mockingProgress().mockingStarted(mock, creationSettings);
         return mock;
+    }
+
+    private void checkDoNotMockAnnotation(Class<?> typeToMock,
+        MockCreationSettings<?> creationSettings) {
+        ArrayList<Class<?>> unmockableTypes = new ArrayList<>(
+            creationSettings.getExtraInterfaces());
+
+        Class<?> mockTypeToCheck = typeToMock;
+        while (mockTypeToCheck != null && mockTypeToCheck != Object.class) {
+            unmockableTypes.add(mockTypeToCheck);
+            Class<?>[] interfaces = mockTypeToCheck.getInterfaces();
+            if (interfaces != null) {
+                unmockableTypes.addAll(Arrays.asList(interfaces));
+            }
+            mockTypeToCheck = mockTypeToCheck.getSuperclass();
+        }
+
+        if (unmockableTypes.stream().anyMatch(clazz -> clazz.isAnnotationPresent(DoNotMock.class))) {
+            throw new DoNotMockException(creationSettings.getTypeToMock() + " is annotated with @DoNoMock and can't be mocked.");
+        }
     }
 
     public <T> OngoingStubbing<T> when(T methodCall) {
