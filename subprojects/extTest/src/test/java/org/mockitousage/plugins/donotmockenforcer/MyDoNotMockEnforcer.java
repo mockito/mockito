@@ -10,7 +10,7 @@ import org.mockito.plugins.DoNotMockEnforcer;
 public class MyDoNotMockEnforcer implements DoNotMockEnforcer {
 
     @Override
-    public Optional<String> allowMockType(Class<?> type) {
+    public Optional<String> checkTypeForDoNotMockViolation(Class<?> type) {
         // Special case a type, because we want to opt-out of enforcing
         if (type.getName().endsWith("NotMockableButSpecialCased")) {
             return Optional.empty();

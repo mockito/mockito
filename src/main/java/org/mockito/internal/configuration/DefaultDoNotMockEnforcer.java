@@ -13,7 +13,7 @@ import org.mockito.plugins.DoNotMockEnforcer;
 public class DefaultDoNotMockEnforcer implements DoNotMockEnforcer {
 
     @Override
-    public Optional<String> allowMockType(Class<?> type) {
+    public Optional<String> checkTypeForDoNotMockViolation(Class<?> type) {
         return Arrays.stream(type.getAnnotations()).filter(
             annotation -> annotation.annotationType().getName().endsWith("org.mockito.DoNotMock"))
             .findFirst()

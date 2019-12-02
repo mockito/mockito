@@ -12,12 +12,14 @@ import java.util.Optional;
 public interface DoNotMockEnforcer {
 
     /**
-     * If this type is allowed to be mocked. Note that Mockito performs traversal of the type
-     * hierarchy. Implementations of this class should therefore not perform type traversal
-     * themselves but rely on Mockito.
+     * If this type is allowed to be mocked. Return an empty optional if the enforcer allows
+     * this type to be mocked. Return a message if there is a reason this type can not be mocked.
      *
-     * @param type The type to check.
-     * @return Whether this type can be mocked.
+     * Note that Mockito performs traversal of the type hierarchy. Implementations of this class
+     * should therefore not perform type traversal themselves but rely on Mockito.
+     *
+     * @param type The type to check
+     * @return Optional message if this type can not be mocked, or an empty optional if type can be mocked
      */
-    Optional<String> allowMockType(Class<?> type);
+    Optional<String> checkTypeForDoNotMockViolation(Class<?> type);
 }

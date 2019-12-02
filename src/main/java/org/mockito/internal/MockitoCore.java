@@ -89,7 +89,7 @@ public class MockitoCore {
             return;
         }
 
-        DO_NOT_MOCK_ENFORCER.allowMockType(type).ifPresent(message -> {
+        DO_NOT_MOCK_ENFORCER.checkTypeForDoNotMockViolation(type).ifPresent(message -> {
             throw new DoNotMockException(message);
         });
 
