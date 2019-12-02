@@ -51,6 +51,13 @@ public class DoNotMockTest {
     }
 
     @Test
+    public void can_not_mock_subclass_with_unmockable_interface_that_extends_non_mockable_interface() {
+        assertThatThrownBy(() -> {
+            SubclasOfSubInterfaceOfNotMockableInterface notMockable = mock(SubclasOfSubInterfaceOfNotMockableInterface.class);
+        }).isInstanceOf(DoNotMockException.class);
+    }
+
+    @Test
     public void thrown_exception_includes_non_mockable_reason() {
         assertThatThrownBy(() -> {
             NotMockable notMockable = mock(NotMockable.class);
@@ -92,6 +99,10 @@ public class DoNotMockTest {
     private static class DoubleSubclassOfInterface extends SubclassOfNotMockableInterface {}
 
     private static class SubclassOfNotMockableSuperclass extends NotMockable {}
+
+    private interface SubInterfaceOfNotMockableInterface extends NotMockableInterface {}
+
+    private static class SubclasOfSubInterfaceOfNotMockableInterface implements SubInterfaceOfNotMockableInterface {}
 
     private static class TestClass {
         @Mock private NotMockable notMockable;
