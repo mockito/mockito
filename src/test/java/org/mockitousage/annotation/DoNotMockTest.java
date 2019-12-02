@@ -50,6 +50,27 @@ public class DoNotMockTest {
         }).isInstanceOf(DoNotMockException.class);
     }
 
+    @Test
+    public void thrown_exception_includes_non_mockable_reason() {
+        assertThatThrownBy(() -> {
+            NotMockable notMockable = mock(NotMockable.class);
+        }).isInstanceOf(DoNotMockException.class).hasMessageContaining("Create a real instance instead");
+    }
+
+    @Test
+    public void thrown_exception_includes_special_non_mockable_reason() {
+        assertThatThrownBy(() -> {
+            NotMockableWithReason notMockable = mock(NotMockableWithReason.class);
+        }).isInstanceOf(DoNotMockException.class).hasMessageContaining("Special reason");
+    }
+
+    @Test
+    public void can_not_mock_class_with_custom_donotmock_annotation() {
+        assertThatThrownBy(() -> {
+            NotMockableWithDifferentAnnotation notMockable = mock(NotMockableWithDifferentAnnotation.class);
+        }).isInstanceOf(DoNotMockException.class);
+    }
+
     @DoNotMock
     private static class NotMockable {
 
@@ -59,6 +80,12 @@ public class DoNotMockTest {
     private interface NotMockableInterface {
 
     }
+
+    @org.mockitousage.annotation.org.mockito.DoNotMock
+    private static class NotMockableWithDifferentAnnotation {}
+
+    @DoNotMock("Special reason")
+    private interface NotMockableWithReason {}
 
     static class SubclassOfNotMockableInterface implements NotMockableInterface {}
 

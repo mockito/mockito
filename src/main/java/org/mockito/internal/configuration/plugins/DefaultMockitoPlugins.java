@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.mockito.internal.creation.instance.InstantiatorProvider2Adapter;
 import org.mockito.plugins.AnnotationEngine;
+import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MockMaker;
@@ -31,6 +32,7 @@ class DefaultMockitoPlugins implements MockitoPlugins {
         DEFAULT_PLUGINS.put(AnnotationEngine.class.getName(), "org.mockito.internal.configuration.InjectingAnnotationEngine");
         DEFAULT_PLUGINS.put(INLINE_ALIAS, "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
         DEFAULT_PLUGINS.put(MockitoLogger.class.getName(), "org.mockito.internal.util.ConsoleMockitoLogger");
+        DEFAULT_PLUGINS.put(DoNotMockEnforcer.class.getName(), "org.mockito.internal.configuration.DefaultDoNotMockEnforcer");
     }
 
     @Override

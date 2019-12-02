@@ -17,14 +17,18 @@ import static org.mockito.internal.verification.VerificationModeFactory.noMoreIn
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
-import org.mockito.DoNotMock;
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.MockingDetails;
 import org.mockito.exceptions.misusing.DoNotMockException;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
 import org.mockito.internal.listeners.VerificationStartedNotifier;
@@ -43,6 +47,7 @@ import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.LenientStubber;
 import org.mockito.stubbing.OngoingStubbing;
@@ -52,6 +57,9 @@ import org.mockito.verification.VerificationMode;
 
 @SuppressWarnings("unchecked")
 public class MockitoCore {
+
+    private static final DoNotMockEnforcer DO_NOT_MOCK_ENFORCER = Plugins.getDoNotMockEnforcer();
+    private static final Set<Class<?>> CHECKED_ENFORCER_CLASSES = Collections.synchronizedSet(new HashSet<>());
 
     public boolean isTypeMockable(Class<?> typeToMock) {
         return typeMockabilityOf(typeToMock).mockable();
@@ -71,22 +79,29 @@ public class MockitoCore {
 
     private void checkDoNotMockAnnotation(Class<?> typeToMock,
         MockCreationSettings<?> creationSettings) {
+        if (CHECKED_ENFORCER_CLASSES.contains(typeToMock)) {
+            return;
+        }
         ArrayList<Class<?>> unmockableTypes = new ArrayList<>(
             creationSettings.getExtraInterfaces());
 
         Class<?> mockTypeToCheck = typeToMock;
         while (mockTypeToCheck != null && mockTypeToCheck != Object.class) {
             unmockableTypes.add(mockTypeToCheck);
-            Class<?>[] interfaces = mockTypeToCheck.getInterfaces();
-            if (interfaces != null) {
-                unmockableTypes.addAll(Arrays.asList(interfaces));
-            }
+            unmockableTypes.addAll(Arrays.asList(mockTypeToCheck.getInterfaces()));
             mockTypeToCheck = mockTypeToCheck.getSuperclass();
         }
 
-        if (unmockableTypes.stream().anyMatch(clazz -> clazz.isAnnotationPresent(DoNotMock.class))) {
-            throw new DoNotMockException(creationSettings.getTypeToMock() + " is annotated with @DoNoMock and can't be mocked.");
-        }
+        unmockableTypes.stream()
+            .map(DO_NOT_MOCK_ENFORCER::allowMockType)
+            // TODO(timvdlippe): Switch to Optional::stream once we are on Java 9+
+            .flatMap(o -> o.map(Stream::of).orElseGet(Stream::empty))
+            .findFirst()
+            .ifPresent(message -> {
+                throw new DoNotMockException(message);
+            });
+
+        CHECKED_ENFORCER_CLASSES.add(typeToMock);
     }
 
     public <T> OngoingStubbing<T> when(T methodCall) {
