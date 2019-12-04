@@ -57,7 +57,7 @@ import org.mockito.verification.VerificationMode;
 public class MockitoCore {
 
     private static final DoNotMockEnforcer DO_NOT_MOCK_ENFORCER = Plugins.getDoNotMockEnforcer();
-    private static final Set<Class<?>> SAFE_DONOTMOCK_ENFORCED_CLASSES = Collections.synchronizedSet(new HashSet<>());
+    private static final Set<Class<?>> MOCKABLE_CLASSES = Collections.synchronizedSet(new HashSet<>());
 
     public boolean isTypeMockable(Class<?> typeToMock) {
         return typeMockabilityOf(typeToMock).mockable();
@@ -85,7 +85,7 @@ public class MockitoCore {
             return;
         }
 
-        if (SAFE_DONOTMOCK_ENFORCED_CLASSES.contains(type)) {
+        if (MOCKABLE_CLASSES.contains(type)) {
             return;
         }
 
@@ -96,7 +96,7 @@ public class MockitoCore {
         checkDoNotMockAnnotationForType(type.getSuperclass());
         Arrays.stream(type.getInterfaces()).forEach(MockitoCore::checkDoNotMockAnnotationForType);
 
-        SAFE_DONOTMOCK_ENFORCED_CLASSES.add(type);
+        MOCKABLE_CLASSES.add(type);
     }
 
     public <T> OngoingStubbing<T> when(T methodCall) {
