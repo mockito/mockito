@@ -40,7 +40,7 @@ public class StringUtilTest  {
     }
 
     @Test
-    public void join_has_preceeding_linebreak() throws Exception {
+    public void join_has_preceding_linebreak() throws Exception {
         assertThat(StringUtil.join("line1")).isEqualTo("\nline1");
     }
 
