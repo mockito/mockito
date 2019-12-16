@@ -10,7 +10,6 @@ import static org.mockito.internal.util.StringUtil.join;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -864,12 +863,12 @@ public class Reporter {
         return new MockitoException("Mocks instantiated with constructor cannot be combined with " + mode + " serialization mode.");
     }
 
-    public static MockitoException cannotCreateTimerWithNegativeDurationTime(Duration duration) {
+    public static MockitoException cannotCreateTimerWithNegativeDurationTime(long durationMillis) {
         return new FriendlyReminderException(join(
                 "",
                 "Don't panic! I'm just a friendly reminder!",
                 "It is impossible for time to go backward, therefore...",
-                "You cannot put negative value of duration: (" + duration + ")",
+                "You cannot put negative value of duration: (" + durationMillis + ")",
                 "as argument of timer methods (after(), timeout())",
                 ""
         ));
