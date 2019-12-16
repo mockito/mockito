@@ -7,8 +7,6 @@ package org.mockito.verification;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
-import java.time.Duration;
-
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -30,7 +28,7 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_pass_when_verification_passes() {
-        Timeout t = new Timeout(Duration.ofMillis(1), mode, timer);
+        Timeout t = new Timeout(1, mode, timer);
 
         when(timer.isCounting()).thenReturn(true);
         doNothing().when(mode).verify(data);
@@ -44,7 +42,7 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_fail_because_verification_fails() {
-        Timeout t = new Timeout(Duration.ofMillis(1), mode, timer);
+        Timeout t = new Timeout(1, mode, timer);
 
         when(timer.isCounting()).thenReturn(true, true, true, false);
         doThrow(error).
@@ -62,7 +60,7 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_pass_even_if_first_verification_fails() {
-        Timeout t = new Timeout(Duration.ofMillis(1), mode, timer);
+        Timeout t = new Timeout(1, mode, timer);
 
         when(timer.isCounting()).thenReturn(true, true, true, false);
         doThrow(error).
@@ -76,7 +74,7 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_try_to_verify_correct_number_of_times() {
-        Timeout t = new Timeout(Duration.ofMillis(10), mode, timer);
+        Timeout t = new Timeout(10, mode, timer);
 
         doThrow(error).when(mode).verify(data);
         when(timer.isCounting()).thenReturn(true, true, true, true, true, false);

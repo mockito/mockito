@@ -9,8 +9,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import java.time.Duration;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,8 +29,7 @@ public class VerificationOverTimeImplTest {
     @Before
     public void setUp() {
         initMocks(this);
-        impl = new VerificationOverTimeImpl(
-            Duration.ofMillis(10), Duration.ofSeconds(1), delegate, true);
+        impl = new VerificationOverTimeImpl(10, 1000, delegate, true);
     }
 
     @Test

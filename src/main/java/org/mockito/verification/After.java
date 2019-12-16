@@ -4,8 +4,6 @@
  */
 package org.mockito.verification;
 
-import java.time.Duration;
-
 import org.mockito.internal.verification.VerificationOverTimeImpl;
 import org.mockito.internal.verification.VerificationWrapper;
 
@@ -22,25 +20,13 @@ public class After extends VerificationWrapper<VerificationOverTimeImpl> impleme
      * <p>
      * Typically, you won't use this class explicitly. Instead use timeout() method on Mockito class.
      * See javadoc for {@link VerificationWithTimeout}
-     * @deprecated Use {@link After#After(Duration, VerificationMode)} instead.
      */
-    @Deprecated
     public After(long delayMillis, VerificationMode verificationMode) {
-        this(Duration.ofMillis(delayMillis), verificationMode);
+        this(10, delayMillis, verificationMode);
     }
 
-    /**
-     * See the javadoc for {@link VerificationAfterDelay}
-     * <p>
-     * Typically, you won't use this class explicitly. Instead use timeout() method on Mockito class.
-     * See javadoc for {@link VerificationWithTimeout}
-     */
-    public After(Duration delay, VerificationMode verificationMode) {
-        this(Duration.ofMillis(10), delay, verificationMode);
-    }
-
-    After(Duration pollingPeriod, Duration delay, VerificationMode verificationMode) {
-        this(new VerificationOverTimeImpl(pollingPeriod, delay, verificationMode, false));
+    After(long pollingPeriod, long delayMillis, VerificationMode verificationMode) {
+        this(new VerificationOverTimeImpl(pollingPeriod, delayMillis, verificationMode, false));
     }
 
     After(VerificationOverTimeImpl verificationOverTime) {
