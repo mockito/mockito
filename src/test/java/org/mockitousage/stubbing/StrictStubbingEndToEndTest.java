@@ -4,7 +4,10 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willReturn;
 import static org.mockitoutil.ConcurrentTesting.concurrently;
 import static org.mockitoutil.JUnitResultAssert.assertThat;
 
@@ -40,6 +43,42 @@ public class StrictStubbingEndToEndTest {
                 //both exceptions are reported to JUnit:
                 .fails("unnecessary_stubbing", IllegalStateException.class)
                 .fails("unnecessary_stubbing", UnnecessaryStubbingException.class);
+    }
+
+    @Test public void unnecessary_stubbing_with_eq_implicit_matchers() {
+        Result result = junit.run(UnnecessaryStubbingWithImplicitEqMatchers.class);
+        assertThat(result)
+            .fails("unnecessary_stubbing", UnnecessaryStubbingException.class);
+    }
+
+    @Test public void unnecessary_stubbing_with_eq_implicit_matchers_trailing_when_style() {
+        Result result = junit.run(UnnecessaryStubbingWithImplicitEqMatchersTrailingWhenStyle.class);
+        assertThat(result)
+            .fails("unnecessary_stubbing", UnnecessaryStubbingException.class);
+    }
+
+    @Test public void unnecessary_stubbing_any_matchers() {
+        Result result = junit.run(UnnecessaryStubbingAnyMatchers.class);
+        assertThat(result)
+            .fails("unnecessary_stubbing", UnnecessaryStubbingException.class);
+    }
+
+    @Test public void unnecessary_stubbing_mixed_matchers() {
+        Result result = junit.run(UnnecessaryStubbingMixedMatchers.class);
+        assertThat(result)
+            .fails("unnecessary_stubbing", UnnecessaryStubbingException.class);
+    }
+
+    @Test public void unnecessary_stubbing_mixed_matchers_stubs_only() {
+        Result result = junit.run(UnnecessaryStubbingMixedMatchersStubsOnly.class);
+        assertThat(result)
+            .fails("unnecessary_stubbing", UnnecessaryStubbingException.class);
+    }
+
+    @Test public void unnecessary_stubbing_mixed_matchers_trailing_when_style() {
+        Result result = junit.run(UnnecessaryStubbingMixedMatchersTrailingWhenStyle.class);
+        assertThat(result)
+            .fails("unnecessary_stubbing", UnnecessaryStubbingException.class);
     }
 
     @Test public void does_not_report_unused_stubbing_if_mismatch_reported() {
@@ -90,6 +129,106 @@ public class StrictStubbingEndToEndTest {
         @Test public void unnecessary_stubbing() {
             given(mock.simpleMethod("1")).willReturn("one");
             throw new IllegalStateException();
+        }
+    }
+
+    public static class UnnecessaryStubbingWithImplicitEqMatchers {
+        @Mock IMethods mock;
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
+
+        @After public void after() {
+            mockito.finishMocking();
+        }
+
+        @Test public void unnecessary_stubbing() {
+            given(mock.simpleMethod("1")).willReturn("one");
+            given(mock.simpleMethod("2")).willReturn("three");
+            given(mock.simpleMethod("1")).willReturn("two");
+            given(mock.simpleMethod("1")).willReturn("four");
+
+            mock.simpleMethod("1");
+            mock.simpleMethod("2");
+        }
+    }
+
+    public static class UnnecessaryStubbingWithImplicitEqMatchersTrailingWhenStyle {
+        @Mock IMethods mock;
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
+
+        @After public void after() {
+            mockito.finishMocking();
+        }
+
+        @Test public void unnecessary_stubbing() {
+            willReturn("one").given(mock).simpleMethod("1");
+            willReturn("three").given(mock).simpleMethod("2");
+            willReturn("two").given(mock).simpleMethod("1");
+            willReturn("four").given(mock).simpleMethod("1");
+
+            mock.simpleMethod("1");
+            mock.simpleMethod("2");
+        }
+    }
+
+    public static class UnnecessaryStubbingAnyMatchers {
+        @Mock IMethods mock;
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
+
+        @After public void after() {
+            mockito.finishMocking();
+        }
+
+        @Test public void unnecessary_stubbing() {
+            given(mock.simpleMethod((String) any())).willReturn("one");
+            given(mock.simpleMethod(anyString())).willReturn("three");
+
+            mock.simpleMethod("1");
+        }
+    }
+
+    public static class UnnecessaryStubbingMixedMatchers {
+        @Mock IMethods mock;
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
+
+        @After public void after() {
+            mockito.finishMocking();
+        }
+
+        @Test public void unnecessary_stubbing() {
+            given(mock.simpleMethod(anyString())).willReturn("one");
+            given(mock.simpleMethod("foo")).willReturn("three");
+
+            mock.simpleMethod("1");
+        }
+    }
+
+    public static class UnnecessaryStubbingMixedMatchersStubsOnly {
+        @Mock IMethods mock;
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
+
+        @After public void after() {
+            mockito.finishMocking();
+        }
+
+        @Test public void unnecessary_stubbing() {
+            given(mock.simpleMethod(anyString())).willReturn("one");
+            given(mock.simpleMethod("foo")).willReturn("three");
+        }
+    }
+
+    public static class UnnecessaryStubbingMixedMatchersTrailingWhenStyle {
+        @Mock IMethods mock;
+        MockitoSession mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
+
+        @After public void after() {
+            mockito.finishMocking();
+        }
+
+        @Test public void unnecessary_stubbing() {
+            willReturn("one").given(mock).simpleMethod(anyString());
+            willReturn("three").given(mock).simpleMethod("foo");
+
+            mock.simpleMethod("1");
         }
     }
 
