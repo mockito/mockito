@@ -59,7 +59,7 @@ public class TypeSafeMatching implements ArgumentMatcherAction {
      * {@link ArgumentMatcher#matches(Object)}
      */
     private static boolean isMatchesMethod(Method method) {
-        if (method.getParameterTypes().length != 1) {
+        if (method.getParameterCount() != 1) {
             return false;
         }
         if (method.isBridge()) {
