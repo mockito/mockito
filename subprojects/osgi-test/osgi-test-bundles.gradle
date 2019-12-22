@@ -1,0 +1,38 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath libraries.bndGradle
+    }
+}
+
+description = "Test bundles for OSGi tests"
+
+sourceSets {
+    testBundle
+    otherBundle
+}
+
+dependencies {
+    testBundleCompile project.rootProject
+    testBundleCompile sourceSets.otherBundle.output
+}
+
+import aQute.bnd.gradle.Bundle
+
+task testBundle(type: Bundle) {
+    from sourceSets.testBundle.output
+}
+
+task otherBundle(type: Bundle) {
+    from sourceSets.otherBundle.output
+}
+
+tasks.withType(Bundle) {
+    archiveAppendix = name
+    bnd = """
+Bundle-SymbolicName: $name
+-exportcontents: *
+"""
+}
