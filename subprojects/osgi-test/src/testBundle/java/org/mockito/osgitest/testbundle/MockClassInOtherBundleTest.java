@@ -4,19 +4,19 @@
  */
 package org.mockito.osgitest.testbundle;
 
+import org.junit.Test;
 import org.mockito.osgitest.otherbundle.Methods;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class MockClassInOtherBundleTest implements Runnable {
+public class MockClassInOtherBundleTest {
 
-    @Override
-    public void run() {
+    @Test
+    public void test() {
         Methods methods = mock(Methods.class);
         when(methods.intReturningMethod()).thenReturn(42);
-        if (methods.intReturningMethod() != 42) {
-            throw new AssertionError();
-        }
+        assertEquals(42, methods.intReturningMethod());
     }
 }

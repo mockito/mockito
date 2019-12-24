@@ -4,7 +4,9 @@
  */
 package org.mockito.osgitest;
 
-import org.junit.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.model.RunnerBuilder;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -20,14 +22,16 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.AfterClass;
 
 import static org.junit.Assert.fail;
 
-public class OsgiTest {
+@RunWith(OsgiTest.class)
+public class OsgiTest extends Suite {
 
     private static final FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
     private static final String STORAGE_TEMPDIR_NAME = "osgi-test-storage";
-    private static final List<String> EXTRA_SYSTEMPACKAGES = Arrays.asList("sun.misc", "sun.reflect");
+    private static final List<String> EXTRA_SYSTEMPACKAGES = Arrays.asList("org.junit", "sun.misc", "sun.reflect");
 
     private static final List<Path> TEST_RUNTIME_BUNDLES = splitPaths(System.getProperty("testRuntimeBundles"));
     private static final String TEST_BUNDLE_SYMBOLIC_NAME = "testBundle";
@@ -38,8 +42,11 @@ public class OsgiTest {
     private static Framework framework;
     private static Bundle testBundle;
 
-    @BeforeClass
-    public static void setUp() throws IOException, BundleException {
+    public OsgiTest(Class<?> osgiTestClass, RunnerBuilder builder) throws Exception {
+        super(builder, osgiTestClass, setUpClasses());
+    }
+
+    private static Class<?>[] setUpClasses() throws Exception {
         frameworkStorage = Files.createTempDirectory(STORAGE_TEMPDIR_NAME);
         Map<String, String> configuration = new HashMap<>();
         configuration.put(Constants.FRAMEWORK_STORAGE, frameworkStorage.toString());
@@ -62,10 +69,25 @@ public class OsgiTest {
             fail("Test bundle not found.");
         }
         framework.start();
+        try {
+            // Manual start to get a better exception if the bundle cannot be resolved
+            testBundle.start();
+        } catch (BundleException e) {
+            throw new IllegalStateException("Failed to start test bundle.", e);
+        }
+        return getTestClasses();
+    }
+
+    private static Class<?>[] getTestClasses() throws Exception {
+        return new Class<?>[] {
+            loadTestClass("SimpleMockTest"),
+            loadTestClass("MockNonPublicClassFailsTest"),
+            loadTestClass("MockClassInOtherBundleTest")
+        };
     }
 
     @AfterClass
-    public static void tearDown() throws IOException, BundleException, InterruptedException {
+    public static void tearDown() throws Exception {
         try {
             if (framework != null) {
                 framework.stop();
@@ -78,23 +100,8 @@ public class OsgiTest {
         }
     }
 
-    @Test
-    public void testSimpleMock() throws BundleException, InterruptedException, ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
-        createTestRunnable("SimpleMockTest").run();
-    }
-
-    @Test
-    public void testMockNonPublicClassFails() throws BundleException, InterruptedException, ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
-        createTestRunnable("MockNonPublicClassFailsTest").run();
-    }
-
-    @Test
-    public void testMockClassInOtherBundle() throws BundleException, InterruptedException, ClassNotFoundException, IllegalAccessException, InstantiationException, IOException {
-        createTestRunnable("MockClassInOtherBundleTest").run();
-    }
-
-    private Runnable createTestRunnable(String className) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        return (Runnable) testBundle.loadClass("org.mockito.osgitest.testbundle." + className).newInstance();
+    private static Class<?> loadTestClass(String className) throws Exception {
+        return testBundle.loadClass("org.mockito.osgitest.testbundle." + className);
     }
 
     private static List<Path> splitPaths(String paths) {

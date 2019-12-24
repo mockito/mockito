@@ -4,21 +4,18 @@
  */
 package org.mockito.osgitest.testbundle;
 
+import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 
 import static org.mockito.Mockito.mock;
 
-public class MockNonPublicClassFailsTest implements Runnable {
+public class MockNonPublicClassFailsTest {
 
     static class NonPublicClass {}
 
-    @Override
-    public void run() {
-        try {
-            NonPublicClass nonPublicClass = mock(NonPublicClass.class);
-            throw new AssertionError();
-        } catch(MockitoException e) {
+    @Test(expected = MockitoException.class)
+    public void test() {
             // Expected: The type is not public and its mock class is loaded by a different class loader.
-        }
+            NonPublicClass nonPublicClass = mock(NonPublicClass.class);
     }
 }

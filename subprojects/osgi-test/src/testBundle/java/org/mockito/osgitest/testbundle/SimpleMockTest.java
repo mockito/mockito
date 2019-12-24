@@ -4,19 +4,20 @@
  */
 package org.mockito.osgitest.testbundle;
 
+import org.junit.Test;
+
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SimpleMockTest implements Runnable {
+public class SimpleMockTest {
 
-    @Override
-    public void run() {
+    @Test
+    public void test() {
         List list = mock(List.class);
         when(list.get(0)).thenReturn("a");
-        if (!list.get(0).equals("a")) {
-            throw new AssertionError();
-        }
+        assertEquals("a", list.get(0));
     }
 }
