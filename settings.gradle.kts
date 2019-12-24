@@ -9,7 +9,8 @@ include("deprecatedPluginsTest",
     "module-test",
     "memory-test",
     "errorprone",
-    "junitJupiterParallelTest")
+    "junitJupiterParallelTest",
+    "osgi-test")
 
 rootProject.name = "mockito"
 
