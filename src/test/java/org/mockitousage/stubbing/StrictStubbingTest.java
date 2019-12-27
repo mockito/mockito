@@ -4,11 +4,16 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockitoutil.ThrowableAssert.assertThat;
 
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -98,5 +103,69 @@ public class StrictStubbingTest {
                 mockito.finishMocking();
             }
         }).throwsException(UnnecessaryStubbingException.class);
+    }
+
+    private static void assertUnusedStubbingsWhen(ThrowableAssert.ThrowingCallable shouldRaiseThrowable, int unusedStubbingsCount) {
+        Assertions.assertThatThrownBy(shouldRaiseThrowable)
+            .isInstanceOf(UnnecessaryStubbingException.class)
+            .hasMessageContaining(unusedStubbingsCount + " unnecessary stubbing");
+    }
+
+    @Test public void repeated_unnecessary_stubbing() {
+        given(mock.simpleMethod("1")).willReturn("one");
+        given(mock.simpleMethod("2")).willReturn("three");
+        given(mock.simpleMethod("1")).willReturn("two");  //repeat 1x
+        given(mock.simpleMethod("1")).willReturn("four"); //repeat 2x
+
+        mock.simpleMethod("1");
+        mock.simpleMethod("2");
+
+        assertUnusedStubbingsWhen(() -> mockito.finishMocking(), 2);
+    }
+
+    @Test public void repeated_unnecessary_stubbing_willReturn() {
+        willReturn("one").given(mock).simpleMethod("1");
+        willReturn("three").given(mock).simpleMethod("2");
+        willReturn("two").given(mock).simpleMethod("1");
+        willReturn("four").given(mock).simpleMethod("1");
+
+        mock.simpleMethod("1");
+        mock.simpleMethod("2");
+
+        assertUnusedStubbingsWhen(() -> mockito.finishMocking(), 2);
+    }
+
+    @Test public void unnecessary_stubbing_with_any_matchers() {
+        given(mock.simpleMethod((String) any())).willReturn("one");
+        given(mock.simpleMethod(anyString())).willReturn("three");
+
+        mock.simpleMethod("1");
+
+        assertUnusedStubbingsWhen(() -> mockito.finishMocking(), 1);
+    }
+
+    @Test public void unnecessary_stubbing_with_mixed_matchers() {
+        given(mock.simpleMethod(anyString())).willReturn("one");
+        given(mock.simpleMethod("foo")).willReturn("three");
+
+        mock.simpleMethod("1");
+
+        assertUnusedStubbingsWhen(() -> mockito.finishMocking(), 1);
+    }
+
+    @Test public void unnecessary_stubbing_with_stubs_only() {
+        given(mock.simpleMethod(anyString())).willReturn("one");
+        given(mock.simpleMethod("foo")).willReturn("three");
+
+        assertUnusedStubbingsWhen(() -> mockito.finishMocking(), 2);
+    }
+
+    @Test public void unnecessary_stubbing_with_mixed_matchers_willReturn() {
+        willReturn("one").given(mock).simpleMethod(anyString());
+        willReturn("three").given(mock).simpleMethod("foo");
+
+        mock.simpleMethod("1");
+
+        assertUnusedStubbingsWhen(() -> mockito.finishMocking(), 1);
     }
 }
