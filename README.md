@@ -4,7 +4,7 @@
      alt="Mockito" />
 </a>
 
-Most popular mocking framework for Java
+Most popular mocking framework for Java right now
 
 [![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=release/3.x)](https://travis-ci.org/mockito/mockito)
 [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito)
