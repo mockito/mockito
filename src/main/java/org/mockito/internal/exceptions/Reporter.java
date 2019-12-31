@@ -5,6 +5,7 @@
 package org.mockito.internal.exceptions;
 
 import static org.mockito.internal.reporting.Pluralizer.pluralize;
+import static org.mockito.internal.reporting.Pluralizer.stubbings;
 import static org.mockito.internal.reporting.Pluralizer.were_exactly_x_interactions;
 import static org.mockito.internal.util.StringUtil.join;
 
@@ -882,9 +883,9 @@ public class Reporter {
 
     public static UnnecessaryStubbingException formatUnncessaryStubbingException(Class<?> testClass, Collection<Invocation> unnecessaryStubbings) {
         StringBuilder stubbings = new StringBuilder();
-        int count = 1;
+        int count = 0;
         for (Invocation u : unnecessaryStubbings) {
-            stubbings.append("\n  ").append(count++).append(". ").append(u.getLocation());
+            stubbings.append("\n  ").append(++count).append(". ").append(u.getLocation());
         }
         String heading = (testClass != null)?
                 "Unnecessary stubbings detected in test class: " + testClass.getSimpleName() :
@@ -893,7 +894,7 @@ public class Reporter {
         return new UnnecessaryStubbingException(join(
                 heading,
                 "Clean & maintainable test code requires zero unnecessary code.",
-                "Following stubbings are unnecessary (click to navigate to relevant line of code):" + stubbings,
+                "There are " + count + " unnecessary " + stubbings(count) + " (click to navigate to relevant line of code):" + stubbings,
                 "Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class."
         ));
     }

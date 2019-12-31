@@ -50,7 +50,7 @@ public class UnusedStubsExceptionMessageTest extends TestBase {
         assertEquals("\n" +
                         "Unnecessary stubbings detected in test class: HasUnnecessaryStubs\n" +
                         "Clean & maintainable test code requires zero unnecessary code.\n" +
-                        "Following stubbings are unnecessary (click to navigate to relevant line of code):\n" +
+                        "There are 2 unnecessary stubbings (click to navigate to relevant line of code):\n" +
                         "  1. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:0)\n" +
                         "  2. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:0)\n" +
                         "Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.",
