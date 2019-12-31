@@ -101,10 +101,9 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
     }
 
     private boolean wantedArgIndexIsVarargAndSameTypeAsReturnType(Method method, int argumentPosition) {
-        Class<?>[] parameterTypes = method.getParameterTypes();
         return method.isVarArgs() &&
-              argumentPosition == /* vararg index */ parameterTypes.length - 1 &&
-              method.getReturnType().isAssignableFrom(parameterTypes[argumentPosition]);
+              argumentPosition == /* vararg index */ method.getParameterCount() - 1 &&
+              method.getReturnType().isAssignableFrom(method.getParameterTypes()[argumentPosition]);
     }
 
     private boolean wantedArgumentPositionIsValidForInvocation(InvocationOnMock invocation, int argumentPosition) {
