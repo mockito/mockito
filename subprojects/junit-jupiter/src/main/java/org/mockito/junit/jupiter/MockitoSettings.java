@@ -7,6 +7,7 @@ package org.mockito.junit.jupiter;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.quality.Strictness;
 
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -15,6 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Annotation that can configure Mockito as invoked by the {@link MockitoExtension}.
  */
 @ExtendWith(MockitoExtension.class)
+@Inherited
 @Retention(RUNTIME)
 public @interface MockitoSettings {
 
