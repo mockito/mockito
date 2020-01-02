@@ -118,6 +118,26 @@ class StrictnessTest {
         assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
     }
 
+    @MockitoSettings(strictness = Strictness.WARN)
+    static class BaseWarnStubs {}
+
+    static class InheritedWarnStubs extends BaseWarnStubs {
+        @Mock
+        private Function<Integer, String> rootMock;
+
+        @Test
+        void should_execute_successfully_on_warn_stubs_inherited_from_base_class() {
+            Mockito.when(rootMock.apply(10)).thenReturn("Foo");
+        }
+    }
+
+    @Test
+    void inherits_strictness_from_base_class() {
+        TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(InheritedWarnStubs.class);
+
+        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+    }
+
     private TestExecutionResult invokeTestClassAndRetrieveMethodResult(Class<?> clazz) {
         LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
             .selectors(
