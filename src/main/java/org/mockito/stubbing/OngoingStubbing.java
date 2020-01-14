@@ -5,6 +5,7 @@
 package org.mockito.stubbing;
 
 import org.mockito.Mockito;
+import org.mockito.NotExtensible;
 
 /**
  * Simply put: "<b>When</b> the x method is called <b>then</b> return y". E.g:
@@ -31,6 +32,7 @@ import org.mockito.Mockito;
  *
  * See examples in javadoc for {@link Mockito#when}
  */
+@NotExtensible
 public interface OngoingStubbing<T> {
 
     /**
