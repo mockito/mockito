@@ -14,18 +14,14 @@ import org.mockito.junit.MockitoRule;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 
-/**
- * Internal implementation.
- */
+/** Internal implementation. */
 public class JUnitRule implements MockitoRule {
 
     private final MockitoLogger logger;
     private Strictness strictness;
     private MockitoSession session;
 
-    /**
-     * @param strictness how strict mocking / stubbing is concerned
-     */
+    /** @param strictness how strict mocking / stubbing is concerned */
     public JUnitRule(MockitoLogger logger, Strictness strictness) {
         this.logger = logger;
         this.strictness = strictness;
@@ -33,15 +29,20 @@ public class JUnitRule implements MockitoRule {
 
     @Override
     public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
+        return createStatement(base, target.getClass().getSimpleName() + "." + method.getName(), target);
+    }
+
+    protected Statement createStatement(final Statement base, final String methodName, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
                 if (session == null) {
-                    session = Mockito.mockitoSession()
-                                     .name(target.getClass().getSimpleName() + "." + method.getName())
-                                     .strictness(strictness)
-                                     .logger(new MockitoSessionLoggerAdapter(logger))
-                                     .initMocks(target)
-                                     .startMocking();
+                    session =
+                        Mockito.mockitoSession()
+                            .name(methodName)
+                            .strictness(strictness)
+                            .logger(new MockitoSessionLoggerAdapter(logger))
+                            .initMocks(target)
+                            .startMocking();
                 } else {
                     MockitoAnnotations.initMocks(target);
                 }
