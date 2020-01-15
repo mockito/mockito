@@ -12,7 +12,7 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.junit.MockitoTestRule;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
 import org.mockitoutil.JUnitResultAssert;
@@ -42,7 +42,7 @@ public class MutableStrictJUnitTestRuleTest {
     }
 
     public static class LenientByDefault {
-        @Rule public MockitoRule mockito = MockitoJUnit.rule(this).strictness(Strictness.LENIENT);
+        @Rule public MockitoTestRule mockito = MockitoJUnit.rule(this).strictness(Strictness.LENIENT);
         @Mock IMethods mock;
 
         @Test public void unused_stub() throws Throwable {
@@ -58,7 +58,7 @@ public class MutableStrictJUnitTestRuleTest {
     }
 
     public static class StrictByDefault {
-        @Rule public MockitoRule mockito = MockitoJUnit.rule(this).strictness(Strictness.STRICT_STUBS);
+        @Rule public MockitoTestRule mockito = MockitoJUnit.rule(this).strictness(Strictness.STRICT_STUBS);
         @Mock IMethods mock;
 
         @Test public void unused_stub() throws Throwable {

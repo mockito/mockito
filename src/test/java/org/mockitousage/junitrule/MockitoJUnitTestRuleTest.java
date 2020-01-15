@@ -12,16 +12,16 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
+import org.mockito.junit.MockitoTestRule;
 
 public class MockitoJUnitTestRuleTest {
 
     @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule(this);
+    public MockitoTestRule mockitoRule = MockitoJUnit.rule(this);
 
     // Fixes #1578: Protect against multiple execution.
     @Rule
-    public MockitoRule mockitoRule2 = mockitoRule;
+    public MockitoTestRule mockitoRule2 = mockitoRule;
 
     @Mock
     private Injected injected;

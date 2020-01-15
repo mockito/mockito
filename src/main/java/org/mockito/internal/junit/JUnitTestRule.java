@@ -11,7 +11,7 @@ import org.mockito.junit.MockitoTestRule;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 
-public class JUnitTestRule extends JUnitRule implements MockitoTestRule {
+public class JUnitTestRule extends AbstractJUnitRule implements MockitoTestRule {
 
     private final Object testInstance;
 
@@ -26,5 +26,14 @@ public class JUnitTestRule extends JUnitRule implements MockitoTestRule {
             throw new MockitoException("JUnitTestRule can not be used as a @ClassRule.");
         }
         return createStatement(base, description.getDisplayName(), this.testInstance);
+    }
+
+    public MockitoTestRule silent() {
+        return strictness(Strictness.LENIENT);
+    }
+
+    public MockitoTestRule strictness(Strictness strictness) {
+        super.setStrictness(strictness);
+        return this;
     }
 }
