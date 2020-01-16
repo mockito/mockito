@@ -11,7 +11,7 @@ import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 
 /** Internal implementation. */
-public class JUnitRule extends AbstractJUnitRule implements MockitoRule {
+public final class JUnitRule extends AbstractJUnitRule implements MockitoRule {
 
     /** @param strictness how strict mocking / stubbing is concerned */
     public JUnitRule(MockitoLogger logger, Strictness strictness) {

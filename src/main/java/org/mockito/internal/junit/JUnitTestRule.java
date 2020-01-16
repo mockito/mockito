@@ -11,7 +11,7 @@ import org.mockito.junit.MockitoTestRule;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 
-public class JUnitTestRule extends AbstractJUnitRule implements MockitoTestRule {
+public final class JUnitTestRule extends AbstractJUnitRule implements MockitoTestRule {
 
     private final Object testInstance;
 

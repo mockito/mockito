@@ -12,7 +12,7 @@ import org.mockito.internal.session.MockitoSessionLoggerAdapter;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 
-public class AbstractJUnitRule {
+abstract class AbstractJUnitRule {
 
   private final MockitoLogger logger;
   private MockitoSession session;
