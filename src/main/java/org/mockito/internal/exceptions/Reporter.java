@@ -784,17 +784,16 @@ public class Reporter {
     }
 
     private static StringBuilder possibleArgumentTypesOf(InvocationOnMock invocation) {
-        Method method = invocation.getMethod();
-        if (method.getParameterCount() == 0) {
+        Class<?>[] parameterTypes = invocation.getMethod().getParameterTypes();
+        if (parameterTypes.length == 0) {
             return new StringBuilder("the method has no arguments.\n");
         }
 
-        Class<?>[] parameterTypes = method.getParameterTypes();
         StringBuilder stringBuilder = new StringBuilder("the possible argument indexes for this method are :\n");
         for (int i = 0, parameterTypesLength = parameterTypes.length; i < parameterTypesLength; i++) {
             stringBuilder.append("    [").append(i);
 
-            if (method.isVarArgs() && i == parameterTypesLength - 1) {
+            if (invocation.getMethod().isVarArgs() && i == parameterTypesLength - 1) {
                 stringBuilder.append("+] ").append(parameterTypes[i].getComponentType().getSimpleName()).append("  <- Vararg").append("\n");
             } else {
                 stringBuilder.append("] ").append(parameterTypes[i].getSimpleName()).append("\n");

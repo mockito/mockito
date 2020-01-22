@@ -229,7 +229,7 @@ public class FieldInitializer {
         private final ConstructorArgumentResolver argResolver;
         private final Comparator<Constructor<?>> byParameterNumber = new Comparator<Constructor<?>>() {
             public int compare(Constructor<?> constructorA, Constructor<?> constructorB) {
-                int argLengths = constructorB.getParameterCount() - constructorA.getParameterCount();
+                int argLengths = constructorB.getParameterTypes().length - constructorA.getParameterTypes().length;
                 if (argLengths == 0) {
                     int constructorAMockableParamsSize = countMockableParams(constructorA);
                     int constructorBMockableParamsSize = countMockableParams(constructorB);
@@ -287,7 +287,7 @@ public class FieldInitializer {
         }
 
         private void checkParameterized(Constructor<?> constructor, Field field) {
-            if (constructor.getParameterCount() == 0) {
+            if(constructor.getParameterTypes().length == 0) {
                 throw new MockitoException("the field " + field.getName() + " of type " + field.getType() + " has no parameterized constructor");
             }
         }

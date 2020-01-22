@@ -40,7 +40,8 @@ public class ConstructorInstantiator implements Instantiator {
         List<Constructor<?>> matchingConstructors = new LinkedList<Constructor<?>>();
         try {
             for (Constructor<?> constructor : cls.getDeclaredConstructors()) {
-                if (constructorParamsMatch(constructor, params)) {
+                Class<?>[] types = constructor.getParameterTypes();
+                if (paramsMatch(types, params)) {
                     evaluateConstructor(matchingConstructors, constructor);
                 }
             }
@@ -115,11 +116,10 @@ public class ConstructorInstantiator implements Instantiator {
             ), null);
     }
 
-    private static boolean constructorParamsMatch(Constructor<?> constructor, Object[] params) {
-        if (params.length != constructor.getParameterCount()) {
+    private static boolean paramsMatch(Class<?>[] types, Object[] params) {
+        if (params.length != types.length) {
             return false;
         }
-        Class<?>[] types = constructor.getParameterTypes();
         for (int i = 0; i < params.length; i++) {
             if (params[i] == null) {
                 if (types[i].isPrimitive()) {
