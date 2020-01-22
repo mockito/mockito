@@ -6,3 +6,9 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
+
+[{*.yml,*.yaml}]
+indent_size = 2
+ij_continuation_indent_size = 2
+ij_yaml_keep_indents_on_empty_lines = false
+ij_yaml_keep_line_breaks = true
