@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoTestRule;
 public class MockitoJUnitTestRuleTest {
 
     @Rule
-    public MockitoTestRule mockitoRule = MockitoJUnit.rule(this);
+    public MockitoTestRule mockitoRule = MockitoJUnit.testRule(this);
 
     // Fixes #1578: Protect against multiple execution.
     @Rule

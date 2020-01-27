@@ -20,7 +20,6 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.quality.Strictness;
 import org.mockitousage.IMethods;
-import org.mockitousage.junitrule.MutableStrictJUnitTestRuleTest.StrictByDefault;
 import org.mockitoutil.JUnitResultAssert;
 
 public class JUnitTestRuleIntegratesWithRuleChainTest {
@@ -28,16 +27,6 @@ public class JUnitTestRuleIntegratesWithRuleChainTest {
     JUnitCore runner = new JUnitCore();
 
     @Test public void rule_can_be_changed_to_strict() {
-        //when
-        Result result = runner.run(MutableStrictJUnitTestRuleTest.LenientByDefault.class);
-
-        //then
-        JUnitResultAssert.assertThat(result)
-            .succeeds(1)
-            .fails(1, RuntimeException.class);
-    }
-
-    @Test public void rule_can_be_changed_to_lenient() {
         //when
         Result result = runner.run(StrictByDefault.class);
 
@@ -47,10 +36,19 @@ public class JUnitTestRuleIntegratesWithRuleChainTest {
             .fails(1, RuntimeException.class);
     }
 
+    @Test public void rule_can_be_changed_to_lenient() {
+        //when
+        Result result = runner.run(LenientByDefault.class);
+
+        //then
+        JUnitResultAssert.assertThat(result)
+            .isSuccessful();
+    }
+
     public static class LenientByDefault {
         @Rule
         public final RuleChain chain = RuleChain.outerRule(
-            MockitoJUnit.rule(this)
+            MockitoJUnit.testRule(this)
         ).around((base, description) -> new Statement() {
             @Override
             public void evaluate() throws Throwable {
@@ -75,7 +73,7 @@ public class JUnitTestRuleIntegratesWithRuleChainTest {
     public static class StrictByDefault {
         @Rule
         public final RuleChain chain = RuleChain.outerRule(
-            MockitoJUnit.rule(this).strictness(Strictness.STRICT_STUBS)
+            MockitoJUnit.testRule(this).strictness(Strictness.STRICT_STUBS)
         ).around((base, description) -> new Statement() {
             @Override
             public void evaluate() throws Throwable {
@@ -98,6 +96,7 @@ public class JUnitTestRuleIntegratesWithRuleChainTest {
 
         @Test public void unused_stub() throws Throwable {
             when(mock.simpleMethod()).thenReturn("1");
+            assertThat(called.get()).isTrue();
         }
     }
 }

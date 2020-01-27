@@ -12,13 +12,13 @@ import org.mockito.internal.session.MockitoSessionLoggerAdapter;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 
-abstract class AbstractJUnitRule {
+class JUnitSessionStore {
 
   private final MockitoLogger logger;
   private MockitoSession session;
   protected Strictness strictness;
 
-  AbstractJUnitRule(MockitoLogger logger, Strictness strictness) {
+  JUnitSessionStore(MockitoLogger logger, Strictness strictness) {
     this.logger = logger;
     this.strictness = strictness;
   }

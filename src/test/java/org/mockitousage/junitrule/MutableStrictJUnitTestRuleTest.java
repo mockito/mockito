@@ -42,7 +42,7 @@ public class MutableStrictJUnitTestRuleTest {
     }
 
     public static class LenientByDefault {
-        @Rule public MockitoTestRule mockito = MockitoJUnit.rule(this).strictness(Strictness.LENIENT);
+        @Rule public MockitoTestRule mockito = MockitoJUnit.testRule(this).strictness(Strictness.LENIENT);
         @Mock IMethods mock;
 
         @Test public void unused_stub() throws Throwable {
@@ -58,7 +58,7 @@ public class MutableStrictJUnitTestRuleTest {
     }
 
     public static class StrictByDefault {
-        @Rule public MockitoTestRule mockito = MockitoJUnit.rule(this).strictness(Strictness.STRICT_STUBS);
+        @Rule public MockitoTestRule mockito = MockitoJUnit.testRule(this).strictness(Strictness.STRICT_STUBS);
         @Mock IMethods mock;
 
         @Test public void unused_stub() throws Throwable {

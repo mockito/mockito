@@ -6,26 +6,23 @@ package org.mockito.internal.junit;
 
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoTestRule;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 
-public final class JUnitTestRule extends AbstractJUnitRule implements MockitoTestRule {
+public final class JUnitTestRule implements MockitoTestRule {
 
     private final Object testInstance;
+    private final JUnitSessionStore sessionStore;
 
     public JUnitTestRule(MockitoLogger logger, Strictness strictness, Object testInstance) {
-        super(logger, strictness);
+        this.sessionStore = new JUnitSessionStore(logger, strictness);
         this.testInstance = testInstance;
     }
 
     @Override
     public Statement apply(Statement base, Description description) {
-        if (description.isSuite()) {
-            throw new MockitoException("JUnitTestRule can not be used as a @ClassRule.");
-        }
-        return createStatement(base, description.getDisplayName(), this.testInstance);
+        return sessionStore.createStatement(base, description.getDisplayName(), this.testInstance);
     }
 
     public MockitoTestRule silent() {
@@ -33,7 +30,7 @@ public final class JUnitTestRule extends AbstractJUnitRule implements MockitoTes
     }
 
     public MockitoTestRule strictness(Strictness strictness) {
-        super.setStrictness(strictness);
+        sessionStore.setStrictness(strictness);
         return this;
     }
 }

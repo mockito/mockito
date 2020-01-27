@@ -11,16 +11,18 @@ import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 
 /** Internal implementation. */
-public final class JUnitRule extends AbstractJUnitRule implements MockitoRule {
+public final class JUnitRule implements MockitoRule {
+
+    private final JUnitSessionStore sessionStore;
 
     /** @param strictness how strict mocking / stubbing is concerned */
     public JUnitRule(MockitoLogger logger, Strictness strictness) {
-        super(logger, strictness);
+        this.sessionStore = new JUnitSessionStore(logger, strictness);
     }
 
     @Override
     public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
-        return createStatement(base, target.getClass().getSimpleName() + "." + method.getName(), target);
+        return sessionStore.createStatement(base, target.getClass().getSimpleName() + "." + method.getName(), target);
     }
 
     public MockitoRule silent() {
@@ -28,7 +30,7 @@ public final class JUnitRule extends AbstractJUnitRule implements MockitoRule {
     }
 
     public MockitoRule strictness(Strictness strictness) {
-        super.setStrictness(strictness);
+        sessionStore.setStrictness(strictness);
         return this;
     }
 }
