@@ -4,7 +4,6 @@
  */
 package org.mockito.plugins;
 
-import java.util.Optional;
 
 /**
  * Enforcer that is applied to every type in the type hierarchy of the class-to-be-mocked.
@@ -21,5 +20,5 @@ public interface DoNotMockEnforcer {
      * @param type The type to check
      * @return Optional message if this type can not be mocked, or an empty optional if type can be mocked
      */
-    Optional<String> checkTypeForDoNotMockViolation(Class<?> type);
+    String checkTypeForDoNotMockViolation(Class<?> type);
 }

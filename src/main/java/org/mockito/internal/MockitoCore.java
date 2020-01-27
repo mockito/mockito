@@ -77,7 +77,9 @@ public class MockitoCore {
 
     private void checkDoNotMockAnnotation(Class<?> typeToMock, MockCreationSettings<?> creationSettings) {
         checkDoNotMockAnnotationForType(typeToMock);
-        creationSettings.getExtraInterfaces().forEach(MockitoCore::checkDoNotMockAnnotationForType);
+        for (Class<?> aClass : creationSettings.getExtraInterfaces()) {
+            checkDoNotMockAnnotationForType(aClass);
+        }
     }
 
     private static void checkDoNotMockAnnotationForType(Class<?> type) {
@@ -89,12 +91,15 @@ public class MockitoCore {
             return;
         }
 
-        DO_NOT_MOCK_ENFORCER.checkTypeForDoNotMockViolation(type).ifPresent(message -> {
-            throw new DoNotMockException(message);
-        });
+        String warning = DO_NOT_MOCK_ENFORCER.checkTypeForDoNotMockViolation(type);
+        if (warning != null) {
+            throw new DoNotMockException(warning);
+        }
 
         checkDoNotMockAnnotationForType(type.getSuperclass());
-        Arrays.stream(type.getInterfaces()).forEach(MockitoCore::checkDoNotMockAnnotationForType);
+        for (Class<?> aClass : type.getInterfaces()) {
+            checkDoNotMockAnnotationForType(aClass);
+        }
 
         MOCKABLE_CLASSES.add(type);
     }

@@ -4,8 +4,7 @@
  */
 package org.mockito.internal.configuration;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.lang.annotation.Annotation;
 
 import org.mockito.DoNotMock;
 import org.mockito.plugins.DoNotMockEnforcer;
@@ -13,16 +12,19 @@ import org.mockito.plugins.DoNotMockEnforcer;
 public class DefaultDoNotMockEnforcer implements DoNotMockEnforcer {
 
     @Override
-    public Optional<String> checkTypeForDoNotMockViolation(Class<?> type) {
-        return Arrays.stream(type.getAnnotations()).filter(
-            annotation -> annotation.annotationType().getName().endsWith("org.mockito.DoNotMock"))
-            .findFirst()
-            .map(annotation -> {
-                String exceptionMessage = type + " is annotated with org.mockito.@DoNoMock and can't be mocked.";
+    public String checkTypeForDoNotMockViolation(Class<?> type) {
+        for (Annotation annotation : type.getAnnotations()) {
+            if (annotation.annotationType().getName().endsWith("org.mockito.DoNotMock")) {
+                String exceptionMessage =
+                    type + " is annotated with org.mockito.@DoNoMock and can't be mocked.";
                 if (DoNotMock.class.equals(annotation.annotationType())) {
                     exceptionMessage += " " + type.getAnnotation(DoNotMock.class).value();
                 }
+
                 return exceptionMessage;
-            });
+            }
+        }
+
+        return null;
     }
 }
