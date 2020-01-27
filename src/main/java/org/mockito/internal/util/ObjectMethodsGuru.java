@@ -24,7 +24,7 @@ public class ObjectMethodsGuru{
     public static boolean isCompareToMethod(Method method) {
         return Comparable.class.isAssignableFrom(method.getDeclaringClass())
                 && "compareTo".equals(method.getName())
-                && method.getParameterCount() == 1
+                && method.getParameterTypes().length == 1
                 && method.getParameterTypes()[0] == method.getDeclaringClass();
     }
 }

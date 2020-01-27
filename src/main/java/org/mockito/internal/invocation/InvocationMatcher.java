@@ -111,7 +111,7 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
         Method m1 = invocation.getMethod();
         Method m2 = candidate.getMethod();
 
-        if (m1.getName() != null && m1.getName().equals(m2.getName()) && m1.getParameterCount() == m2.getParameterCount()) {
+        if (m1.getName() != null && m1.getName().equals(m2.getName())) {
             /* Avoid unnecessary cloning */
             Class<?>[] params1 = m1.getParameterTypes();
             Class<?>[] params2 = m2.getParameterTypes();
