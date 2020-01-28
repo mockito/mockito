@@ -4,7 +4,6 @@
  */
 package org.mockitousage.plugins.donotmockenforcer;
 
-import java.util.Optional;
 import org.mockito.plugins.DoNotMockEnforcer;
 
 public class MyDoNotMockEnforcer implements DoNotMockEnforcer {
