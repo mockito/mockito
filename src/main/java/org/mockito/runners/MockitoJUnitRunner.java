@@ -15,7 +15,7 @@ import org.junit.runner.notification.RunNotifier;
 /**
  * Runner moved to a new place see {@link org.mockito.junit.MockitoJUnitRunner}
  *
- * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner}, this class will be removed with Mockito 3
+ * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner}, this class will be removed with Mockito 4
  */
 @Deprecated
 public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {

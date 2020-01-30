@@ -17,8 +17,6 @@ import org.mockito.mock.MockCreationSettings;
 /**
  * Handler, that call all listeners wanted for this mock, before delegating it
  * to the parameterized handler.
- *
- * Also imposterize MockHandlerImpl, delegate all call of InternalMockHandler to the real mockHandler
  */
 class InvocationNotifierHandler<T> implements MockHandler<T> {
 
