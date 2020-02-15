@@ -125,4 +125,43 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             fail();
         } catch (VerificationInOrderFailure e) {}
     }
+
+    @Test
+    public void shouldAllowVerifyingInteractionOnceHappened() throws Exception {
+        mock.add("one");
+
+        mock.add("two");
+        mock.add("two");
+
+        verify(mock, once()).add("one");
+
+        try {
+            verify(mock, once()).add("two");
+            fail();
+        } catch (TooManyActualInvocations e) {
+            assertThat(e)
+                .hasMessageContaining("Wanted 1 time")
+                .hasMessageContaining("But was 2 times");
+        }
+    }
+
+    @Test
+    public void shouldAllowVerifyingInteractionTwiceHappened() throws Exception {
+
+        mock.add("twice");
+        mock.add("twice");
+
+        mock.add("one");
+
+        verify(mock, twice()).add("twice");
+
+        try {
+            verify(mock, twice()).add("one");
+            fail();
+        } catch (TooFewActualInvocations e) {
+            assertThat(e)
+                .hasMessageContaining("Wanted 2 times")
+                .hasMessageContaining("was 1");
+        }
+    }
 }

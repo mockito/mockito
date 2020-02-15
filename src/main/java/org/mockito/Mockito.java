@@ -2715,6 +2715,49 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
+     * Alias to <code>times(1)</code>, see {@link Mockito#times(int)}
+     * <p>
+     * Verifies that interaction did not happen. E.g:
+     * <pre class="code"><code class="java">
+     *   verify(mock, once()).someMethod();
+     * </code></pre>
+     *
+     * <p>
+     * If you want to verify there were one interaction with the mock
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @return verification mode
+     */
+
+    @CheckReturnValue
+    public static VerificationMode once() {
+        return times(1);
+    }
+
+
+    /**
+     * Alias to <code>times(2)</code>, see {@link Mockito#times(int)}
+     * <p>
+     * Verifies that interaction did not happen. E.g:
+     * <pre class="code"><code class="java">
+     *   verify(mock, twice()).someMethod();
+     * </code></pre>
+     *
+     * <p>
+     * If you want to verify there were two interactions with the mock
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @return verification mode
+     */
+
+    @CheckReturnValue
+    public static VerificationMode twice() {
+        return times(2);
+    }
+
+    /**
      * Allows at-least-once verification. E.g:
      * <pre class="code"><code class="java">
      *   verify(mock, atLeastOnce()).someMethod("some arg");
