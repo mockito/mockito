@@ -81,8 +81,7 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
     StubInfo stubInfo();
 
     /**
-     * Marks this invocation as stubbed. Passing null resets the invocation state back to not
-     * stubbed.
+     * Marks this invocation as stubbed.
      *
      * @param stubInfo the information about stubbing.
      */
