@@ -140,7 +140,7 @@ public class StrictJUnitRuleTest {
                 assertEquals(filterLineNo("\n" +
                         "Unnecessary stubbings detected.\n" +
                         "Clean & maintainable test code requires zero unnecessary code.\n" +
-                        "There are 2 unnecessary stubbings (click to navigate to relevant line of code):\n" +
+                        "Following stubbings are unnecessary (click to navigate to relevant line of code):\n" +
                         "  1. -> at org.mockitousage.junitrule.StrictJUnitRuleTest.unused_stubs_with_multiple_mocks(StrictJUnitRuleTest.java:0)\n" +
                         "  2. -> at org.mockitousage.junitrule.StrictJUnitRuleTest.unused_stubs_with_multiple_mocks(StrictJUnitRuleTest.java:0)\n" +
                         "Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class."), filterLineNo(t.getMessage()));

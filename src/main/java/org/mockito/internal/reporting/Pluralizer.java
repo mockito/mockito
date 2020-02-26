@@ -17,8 +17,4 @@ public class Pluralizer {
             return "were exactly " + x + " interactions";
         }
     }
-
-    public static String stubbings(int number) {
-        return number == 1 ? "stubbing" : "stubbings";
-    }
 }

@@ -52,29 +52,8 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     public void addAnswer(Answer answer, Strictness stubbingStrictness) {
-        unmarkLastUsedStubIfNecessary();
-
         registeredInvocations.removeLast();
         addAnswer(answer, false, stubbingStrictness);
-    }
-
-    /**
-     *  A stubbed call is marked as used when the method call is stubbed again, because the second
-     *  stub looks like an actual usage of the first stubbed call. When the second stub is set up,
-     *  the previous one is marked as unused again.
-     */
-    private void unmarkLastUsedStubIfNecessary() {
-        synchronized (stubbed) {
-            Invocation invocation = invocationForStubbing.getInvocation();
-
-            for (StubbedInvocationMatcher s : stubbed) {
-                if (s.matches(invocation)) {
-                    s.markStubUsed(null);
-                    invocation.markStubbed(null);
-                    return;
-                }
-            }
-        }
     }
 
     public void addConsecutiveAnswer(Answer answer) {

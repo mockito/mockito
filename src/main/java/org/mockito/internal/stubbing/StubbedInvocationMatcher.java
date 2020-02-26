@@ -43,10 +43,6 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Seria
         answers.add(answer);
     }
 
-    /**
-     * Marks the stub as used by the passed invocation. Passing null marks the stub as unused.
-     * @param usedAt The invocation which uses this stub
-     */
     public void markStubUsed(DescribedInvocation usedAt) {
         this.usedAt = usedAt;
     }
