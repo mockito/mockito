@@ -33,10 +33,11 @@ import org.mockito.exceptions.base.MockitoException;
  * when(translator.translate("one")).thenReturn("jeden"); // <- stubbing realized during code execution
  * when(translator.translate("two")).thenReturn("dwa"); // <- stubbing never realized
  * ...
+ * </code>
  * </pre>
  * Notice that one of the stubbed methods were never realized in the code under test, during test execution.
  * The stray stubbing might be an oversight of the developer, the artifact of copy-paste
- * or the effect not understanding the test/code.
+ * or the effect of not understanding the test/code.
  * Either way, the developer ends up with unnecessary test code.
  * In order to keep the codebase clean & maintainable it is necessary to remove unnecessary code.
  * Otherwise tests are harder to read and reason about.
