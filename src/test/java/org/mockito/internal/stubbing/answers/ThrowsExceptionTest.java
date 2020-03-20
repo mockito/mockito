@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing.answers;
 
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class ThrowsExceptionTest {
         } catch (Throwable throwable) {
             // then
             throwable.printStackTrace();
-            assertThat(throwableToRaise.getStackTrace()[0].getClassName()).isEqualTo(ThrowsException.class.getName());
+            assertThat(throwableToRaise.getStackTrace()[0].getClassName()).isEqualTo(AbstractThrowsException.class.getName());
             assertThat(throwableToRaise.getStackTrace()[0].getMethodName()).isEqualTo("answer");
         }
     }
@@ -92,6 +93,23 @@ public class ThrowsExceptionTest {
     public void should_pass_RuntimeExceptions() throws Throwable {
         new ThrowsException(new Error()).validateFor(createMethodInvocation());
         new ThrowsException(new RuntimeException()).validateFor(createMethodInvocation());
+    }
+
+    @Test
+    public void should_return_expected_throwable() {
+        Throwable expected = new Exception();
+        ThrowsException throwsException = new ThrowsException(expected);
+
+        assertSame(expected, throwsException.getThrowable());
+    }
+
+    @Test
+    public void should_return_same_throwable() {
+        ThrowsException throwsException = new ThrowsException(new Exception());
+
+        Throwable first = throwsException.getThrowable();
+        Throwable second = throwsException.getThrowable();
+        assertSame(first, second);
     }
 
     /** Creates Invocation of a "canThrowException" method call. */

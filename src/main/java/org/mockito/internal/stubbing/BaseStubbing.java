@@ -7,11 +7,10 @@ package org.mockito.internal.stubbing;
 import static org.mockito.internal.exceptions.Reporter.notAnException;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
-import org.mockito.creation.instance.Instantiator;
-import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.internal.stubbing.answers.ThrowsExceptionForClassType;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -75,8 +74,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
             mockingProgress().reset();
             throw notAnException();
         }
-        Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(null);
-        return thenThrow(instantiator.newInstance(throwableType));
+        return thenAnswer(new ThrowsExceptionForClassType(throwableType));
     }
 
     @Override
