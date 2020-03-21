@@ -14,10 +14,10 @@ import static org.mockito.internal.util.MockUtil.isMock;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
+import org.mockito.internal.stubbing.answers.ThrowsExceptionForClassType;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
@@ -89,18 +89,7 @@ public class StubberImpl implements Stubber {
             mockingProgress().reset();
             throw notAnException();
         }
-        Throwable e = null;
-        try {
-            e = Plugins.getInstantiatorProvider().getInstantiator(null).newInstance(toBeThrown);
-        } finally {
-            if (e == null) {
-                //this means that an exception or error was thrown when trying to create new instance
-                //we don't want 'catch' statement here because we want the exception to be thrown to the user
-                //however, we do want to clean up state (e.g. "stubbing started").
-                mockingProgress().reset();
-            }
-        }
-        return doThrow(e);
+        return doAnswer(new ThrowsExceptionForClassType(toBeThrown));
     }
 
     @Override

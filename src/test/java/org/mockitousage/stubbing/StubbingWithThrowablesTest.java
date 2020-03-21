@@ -6,6 +6,7 @@ package org.mockitousage.stubbing;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -90,6 +91,30 @@ public class StubbingWithThrowablesTest extends TestBase {
                 mock.clear();
             }
         }).isInstanceOf(ExceptionOne.class);
+    }
+
+    @Test
+    public void throws_new_exception_consecutively_from_class() {
+        when(mock.add(null)).thenThrow(NaughtyException.class);
+
+        NaughtyException first =  Assertions.catchThrowableOfType(() -> mock.add(null),
+                                                                  NaughtyException.class);
+        NaughtyException second = Assertions.catchThrowableOfType(() -> mock.add(null),
+                                                                  NaughtyException.class);
+
+        assertNotSame(first, second);
+    }
+
+    @Test
+    public void throws_new_exception_consecutively_from_class_with_doThrow() {
+        doThrow(NaughtyException.class).when(mock).add(null);
+
+        NaughtyException first =  Assertions.catchThrowableOfType(() -> mock.add(null),
+                                                                  NaughtyException.class);
+        NaughtyException second = Assertions.catchThrowableOfType(() -> mock.add(null),
+                                                                  NaughtyException.class);
+
+        assertNotSame(first, second);
     }
 
     @Test
