@@ -64,6 +64,12 @@ allprojects { proj ->
         options.addStringOption('charSet', 'UTF-8')
         options.setSource('8')
     }
+
+    tasks.withType(AbstractArchiveTask) {
+        preserveFileTimestamps = false
+        reproducibleFileOrder = true
+    }
+
     apply plugin: 'checkstyle'
     checkstyle {
        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
