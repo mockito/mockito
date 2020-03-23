@@ -1100,7 +1100,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * Mockito introduces serialization across classloader.
  *
- * Like with any other form of serialization, all types in the mock hierarchy have to serializable, inclusing answers.
+ * Like with any other form of serialization, all types in the mock hierarchy have to serializable, including answers.
  * As this serialization mode require considerably more work, this is an opt-in setting.
  *
  * <pre class="code"><code class="java">
