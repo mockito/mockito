@@ -1,0 +1,67 @@
+import java.security.DigestInputStream
+import java.security.MessageDigest
+
+/*
+ * The `checkReproducibility` task compares two sets of checksums, generated
+ * in two independent builds, from non-javadoc output archives.
+ *
+ * This task ensures that a change has not regressed the reproducibility of
+ * the Mockito project and its subprojects.
+ */
+
+task checkReproducibility {
+    doLast {
+        def first = new File("checksums-1.txt").text.split('\n')
+        def second = new File("checksums-2.txt").text.split('\n')
+
+        assert first.sort() == second.sort()
+    }
+}
+
+task getChecksums1(type: GradleBuild) {
+    tasks = ['clean', 'assemble']
+    startParameter.projectProperties = ['build-id': "1"]
+}
+
+task getChecksums2(type: GradleBuild) {
+    tasks = ['clean', 'assemble']
+    startParameter.projectProperties = ['build-id': "2"]
+}
+
+getChecksums2.dependsOn(getChecksums1)
+checkReproducibility.dependsOn(getChecksums2)
+
+if (project.hasProperty('build-id')) {
+
+    String id = project.getProperty('build-id')
+
+    File checksums = new File("checksums-${id}.txt")
+    checksums.delete()
+
+    afterEvaluate {
+
+        ([project] + subprojects).each { p ->
+
+            p.tasks.withType(AbstractArchiveTask) { task ->
+
+                if (!task.name.contains('javadoc')) {
+                    task.doLast {
+                        File output = task.archiveFile.get().getAsFile()
+
+                        checksums << "${output.name},${calculateHash(output)}\n"
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+static def calculateHash(File file) {
+    file.withInputStream {
+        new DigestInputStream(it, MessageDigest.getInstance("SHA-256")).withStream {
+            it.eachByte {}
+            it.messageDigest.digest().encodeHex() as String
+        }
+    }
+}
