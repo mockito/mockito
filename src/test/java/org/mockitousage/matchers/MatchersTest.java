@@ -608,7 +608,7 @@ public class MatchersTest extends TestBase {
     public void nullable_matcher() throws Exception {
         // imagine a Stream.of(...).map(c -> mock.oneArg(c))...
         mock.oneArg((Character) null);
-        mock.oneArg(Character.valueOf('€'));
+        mock.oneArg(Character.valueOf('\u20AC'));
 
         verify(mock, times(2)).oneArg(nullable(Character.class));
     }
