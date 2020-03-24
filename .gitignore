@@ -21,3 +21,6 @@ out
 classes
 .gradletasknamecache
 *.log
+
+# Used to check reproducibility of Mockito jars
+checksums/

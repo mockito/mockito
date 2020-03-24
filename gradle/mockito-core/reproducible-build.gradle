@@ -11,8 +11,8 @@ import java.security.MessageDigest
 
 task checkReproducibility {
     doLast {
-        def first = new File("checksums-1.txt").text.split('\n')
-        def second = new File("checksums-2.txt").text.split('\n')
+        def first = new File("checksums", "checksums-1.txt").text.split('\n')
+        def second = new File("checksums", "checksums-2.txt").text.split('\n')
 
         assert first.sort() == second.sort()
     }
@@ -35,7 +35,9 @@ if (project.hasProperty('build-id')) {
 
     String id = project.getProperty('build-id')
 
-    File checksums = new File("checksums-${id}.txt")
+    mkdir "checksums"
+
+    File checksums = new File("checksums", "checksums-${id}.txt")
     checksums.delete()
 
     afterEvaluate {
