@@ -1,3 +1,12 @@
+import java.nio.file.attribute.FileTime
+import java.util.jar.Attributes
+import java.util.jar.JarEntry
+import java.util.jar.JarFile
+import java.util.jar.JarOutputStream
+import java.util.jar.Manifest
+
+import static java.util.Calendar.FEBRUARY
+
 apply plugin: 'osgi'
 
 afterEvaluate {
@@ -31,5 +40,88 @@ afterEvaluate {
 
             attributes 'Automatic-Module-Name': 'org.mockito'
         }
+
+        jar.doLast {
+            JarFile originalJar = new JarFile(jar.archivePath)
+
+            new RemoveOsgiLastModifiedHeader(originalJar)
+                .transform()
+                .renameTo jar.archivePath
+        }
+
     }
+}
+
+
+/*
+ * The OSGi plugin in Gradle 5.3 has a known issue (https://github.com/gradle/gradle/issues/6187) where it embeds
+ * a Manifest entry "Bnd-LastModified" (set to the last modified time of the build directory) even if you ask it not to
+ * using `-noextraheaders` or `-removeheaders`.
+ *
+ * It cannot be pinned or removed, and is a source of non-determinism in the build.
+ *
+ * This class addresses the problem by rewriting the JAR and removing that entry from the Manifest. A side-effect of this
+ * is having to set `lastModifiedTime` for each entry to a fixed value, else this would also introduce non-determinism.
+ *
+ * The fixed value is the same as the default value for Gradle's fixed timestamps, and the rationale behind it is detailed
+ * in https://github.com/gradle/gradle/blob/58538513a3bff3b7015718976fe1304e23f40694/subprojects/core/src/main/java/org/gradle/api/internal/file/archive/ZipCopyAction.java#L42-L57
+ */
+
+class RemoveOsgiLastModifiedHeader {
+    private final long CONSTANT_TIME_FOR_ZIP_ENTRIES = new GregorianCalendar(1980, FEBRUARY, 1, 0, 0, 0).timeInMillis
+
+    private final JarFile artifact
+
+    RemoveOsgiLastModifiedHeader(JarFile artifact) {
+        this.artifact = artifact
+    }
+
+    File transform() {
+        File temp = File.createTempFile("temp",".jar")
+
+        temp.withOutputStream { os ->
+            JarOutputStream stream = new JarOutputStream(os)
+
+            this.artifact
+                .entries()
+                .sort { it.name }
+                .each { JarEntry entry ->
+
+                    stream.putNextEntry(newJarEntry(entry))
+
+                    if (entry.name == "META-INF/MANIFEST.MF") {
+                        newManifest(entry).write(stream)
+                    } else {
+                        stream << this.artifact.getInputStream(entry)
+                    }
+
+                    stream.closeEntry()
+                }
+
+            stream.finish()
+        }
+
+        temp
+    }
+
+    Manifest newManifest(JarEntry entry) {
+        Manifest manifest = new Manifest()
+
+        manifest.read(this.artifact.getInputStream(entry))
+
+        manifest
+            .getMainAttributes()
+            .remove(new Attributes.Name("Bnd-LastModified"))
+
+        manifest
+    }
+
+    JarEntry newJarEntry(JarEntry original) {
+        JarEntry newEntry = new JarEntry(original.name)
+
+        newEntry.setLastModifiedTime(FileTime.fromMillis(CONSTANT_TIME_FOR_ZIP_ENTRIES))
+
+        newEntry
+    }
+
 }
