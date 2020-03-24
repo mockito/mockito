@@ -42,6 +42,15 @@ import org.mockito.stubbing.Answer;
  * Returns an {@code java.util.stream.Stream#empty() empty Stream} for Stream. Similarly for primitive stream variants.
  * </li>
  * <li>
+ * Returns an {@code java.time.Duration.ZERO zero Duration} for empty Duration and {@code java.time.Period.ZERO zero Period} for empty Period.
+ * </li>
+ * <li>
+ * Returns an {@code java.time.Instant.EPOCH epoch Instant} for empty Instant. Similarly EPOCH (UTC where possible) for empty {@code java.time.LocalDate LocalDate}, {@code java.time.LocalDateTime LocalDateTime}, {@code java.time.OffsetDateTime OffsetDateTime}, {@code java.time.ZonedDateTime ZonedDateTime}
+ * </li>
+ * <li>
+ * Returns an {@code java.time.LocalTime.MIN min LocalTime} for empty LocalTime and similarly for {@code java.time.OffsetTime OffsetTime} with UTC zone offset.
+ * </li>
+ * <li>
  * Returns null for everything else
  * </li>
  * </ul>
@@ -125,6 +134,24 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return JavaEightUtil.emptyIntStream();
         } else if ("java.util.stream.LongStream".equals(type.getName())) {
             return JavaEightUtil.emptyLongStream();
+        } else if ("java.time.Duration".equals(type.getName())) {
+            return JavaEightUtil.emptyDuration();
+        } else if ("java.time.Period".equals(type.getName())) {
+            return JavaEightUtil.emptyPeriod();
+        } else if ("java.time.Instant".equals(type.getName())) {
+            return JavaEightUtil.emptyInstant();
+        } else if ("java.time.LocalDate".equals(type.getName())) {
+            return JavaEightUtil.emptyLocalDate();
+        } else if ("java.time.LocalDateTime".equals(type.getName())) {
+            return JavaEightUtil.emptyLocalDateTime();
+        } else if ("java.time.LocalTime".equals(type.getName())) {
+            return JavaEightUtil.emptyLocalTime();
+        } else if ("java.time.OffsetDateTime".equals(type.getName())) {
+            return JavaEightUtil.emptyOffsetDateTime();
+        } else if ("java.time.OffsetTime".equals(type.getName())) {
+            return JavaEightUtil.emptyOffsetTime();
+        } else if ("java.time.ZonedDateTime".equals(type.getName())) {
+            return JavaEightUtil.emptyZonedDateTime();
         }
 
         //Let's not care about the rest of collections.
