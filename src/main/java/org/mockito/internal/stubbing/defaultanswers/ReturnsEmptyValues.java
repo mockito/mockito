@@ -138,20 +138,6 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return JavaEightUtil.emptyDuration();
         } else if ("java.time.Period".equals(type.getName())) {
             return JavaEightUtil.emptyPeriod();
-        } else if ("java.time.Instant".equals(type.getName())) {
-            return JavaEightUtil.emptyInstant();
-        } else if ("java.time.LocalDate".equals(type.getName())) {
-            return JavaEightUtil.emptyLocalDate();
-        } else if ("java.time.LocalDateTime".equals(type.getName())) {
-            return JavaEightUtil.emptyLocalDateTime();
-        } else if ("java.time.LocalTime".equals(type.getName())) {
-            return JavaEightUtil.emptyLocalTime();
-        } else if ("java.time.OffsetDateTime".equals(type.getName())) {
-            return JavaEightUtil.emptyOffsetDateTime();
-        } else if ("java.time.OffsetTime".equals(type.getName())) {
-            return JavaEightUtil.emptyOffsetTime();
-        } else if ("java.time.ZonedDateTime".equals(type.getName())) {
-            return JavaEightUtil.emptyZonedDateTime();
         }
 
         //Let's not care about the rest of collections.
