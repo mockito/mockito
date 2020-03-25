@@ -158,6 +158,22 @@ public class ReturnsEmptyValuesTest extends TestBase {
         assertEquals("count of empty " + streamFqcn, 0L, count);
     }
 
+    @Test
+    public void should_return_empty_duration() throws Exception {
+        //given
+        final String fqcn = "java.time.Duration";
+        final Class<?> durationClass = getClassOrSkipTest(fqcn);
+
+        // when
+        final Object duration = values.returnValueFor(durationClass);
+        final int nano = (Integer) durationClass.getMethod("getNano").invoke(duration);
+        final long seconds = (Long) durationClass.getMethod("getSeconds").invoke(duration);
+
+        // then
+        assertEquals("nano of empty " + fqcn, 0, nano);
+        assertEquals("seconds of empty " + fqcn, 0L, seconds);
+    }
+
     /**
      * Tries to load the given class. If the class is not found, the complete test is skipped.
      */

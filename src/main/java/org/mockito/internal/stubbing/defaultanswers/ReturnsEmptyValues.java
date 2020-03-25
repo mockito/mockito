@@ -42,6 +42,9 @@ import org.mockito.stubbing.Answer;
  * Returns an {@code java.util.stream.Stream#empty() empty Stream} for Stream. Similarly for primitive stream variants.
  * </li>
  * <li>
+ * Returns an {@code java.time.Duration.ZERO zero Duration} for empty Duration and {@code java.time.Period.ZERO zero Period} for empty Period.
+ * </li>
+ * <li>
  * Returns null for everything else
  * </li>
  * </ul>
@@ -125,6 +128,10 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return JavaEightUtil.emptyIntStream();
         } else if ("java.util.stream.LongStream".equals(type.getName())) {
             return JavaEightUtil.emptyLongStream();
+        } else if ("java.time.Duration".equals(type.getName())) {
+            return JavaEightUtil.emptyDuration();
+        } else if ("java.time.Period".equals(type.getName())) {
+            return JavaEightUtil.emptyPeriod();
         }
 
         //Let's not care about the rest of collections.
