@@ -45,12 +45,6 @@ import org.mockito.stubbing.Answer;
  * Returns an {@code java.time.Duration.ZERO zero Duration} for empty Duration and {@code java.time.Period.ZERO zero Period} for empty Period.
  * </li>
  * <li>
- * Returns an {@code java.time.Instant.EPOCH epoch Instant} for empty Instant. Similarly EPOCH (UTC where possible) for empty {@code java.time.LocalDate LocalDate}, {@code java.time.LocalDateTime LocalDateTime}, {@code java.time.OffsetDateTime OffsetDateTime}, {@code java.time.ZonedDateTime ZonedDateTime}
- * </li>
- * <li>
- * Returns an {@code java.time.LocalTime.MIN min LocalTime} for empty LocalTime and similarly for {@code java.time.OffsetTime OffsetTime} with UTC zone offset.
- * </li>
- * <li>
  * Returns null for everything else
  * </li>
  * </ul>

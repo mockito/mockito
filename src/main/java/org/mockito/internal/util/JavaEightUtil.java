@@ -22,13 +22,6 @@ public final class JavaEightUtil {
     private static Object emptyOptionalLong;
     private static Object emptyDuration;
     private static Object emptyPeriod;
-    private static Object emptyInstant;
-    private static Object emptyLocalDate;
-    private static Object emptyLocalDateTime;
-    private static Object emptyLocalTime;
-    private static Object emptyOffsetDateTime;
-    private static Object emptyOffsetTime;
-    private static Object emptyZonedDateTime;
 
     private JavaEightUtil() {
         // utility class
