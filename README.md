@@ -9,6 +9,7 @@ Most popular mocking framework for Java
 [![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=release/3.x)](https://travis-ci.org/mockito/mockito)
 [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/mockito/mockito/blob/release/3.x/LICENSE)
+[![Gradle Status](https://gradleupdate.appspot.com/mockito/mockito/status.svg)](https://gradleupdate.appspot.com/mockito/mockito/status)
 
 [![Release Notes](https://img.shields.io/badge/release%20notes-3.x-yellow.svg)](https://github.com/mockito/mockito/blob/release/3.x/doc/release-notes/official.md)
 [![Maven Central](https://img.shields.io/maven-central/v/org.mockito/mockito-core.svg)](https://search.maven.org/artifact/org.mockito/mockito-core/)
