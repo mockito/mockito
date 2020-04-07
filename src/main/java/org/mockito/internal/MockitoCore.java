@@ -15,6 +15,7 @@ import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
 import static org.mockito.internal.verification.VerificationModeFactory.noInteractions;
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -62,6 +63,11 @@ public class MockitoCore {
         MockCreationSettings<T> creationSettings = impl.build(typeToMock);
         T mock = createMock(creationSettings);
         mockingProgress().mockingStarted(mock, creationSettings);
+        
+        if(typeToMock.isAnnotation()) {
+            configureMockWithAnnotationDefaults(typeToMock, mock);
+        }
+        
         return mock;
     }
 
@@ -233,5 +239,19 @@ public class MockitoCore {
 
     public LenientStubber lenient() {
         return new DefaultLenientStubber();
+    }
+    
+    private <T> void configureMockWithAnnotationDefaults(Class<T> typeToMock, T mock) {
+        for (Method m : typeToMock.getDeclaredMethods()) {
+            Object defaultValueOfAnnotationMethod = m.getDefaultValue();
+            if (defaultValueOfAnnotationMethod != null) {
+                try {
+                    when(m.invoke(mock)).thenReturn(defaultValueOfAnnotationMethod);
+                } catch (ReflectiveOperationException e) {
+                    throw new IllegalStateException("Could setup mock with default value "
+                            + defaultValueOfAnnotationMethod + " from annotation class " + typeToMock);
+                }
+            }
+        }
     }
 }
