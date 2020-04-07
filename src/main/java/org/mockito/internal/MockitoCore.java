@@ -63,11 +63,11 @@ public class MockitoCore {
         MockCreationSettings<T> creationSettings = impl.build(typeToMock);
         T mock = createMock(creationSettings);
         mockingProgress().mockingStarted(mock, creationSettings);
-        
+
         if(typeToMock.isAnnotation()) {
             configureMockWithAnnotationDefaults(typeToMock, mock);
         }
-        
+
         return mock;
     }
 
@@ -240,7 +240,7 @@ public class MockitoCore {
     public LenientStubber lenient() {
         return new DefaultLenientStubber();
     }
-    
+
     private <T> void configureMockWithAnnotationDefaults(Class<T> typeToMock, T mock) {
         for (Method m : typeToMock.getDeclaredMethods()) {
             Object defaultValueOfAnnotationMethod = m.getDefaultValue();
