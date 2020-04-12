@@ -159,7 +159,8 @@ public class ArgumentMatchers {
      * @see #any(Class)
      * @see #notNull()
      * @see #notNull(Class)
-     * @deprecated This will be removed in Mockito 3.0 (which will be java 8 only)
+     * @deprecated This will be removed in Mockito 4.0 This method is only used for generic
+     * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
     @Deprecated
     public static <T> T anyObject() {
@@ -519,7 +520,7 @@ public class ArgumentMatchers {
      * @see #anyList()
      * @see #isNull()
      * @see #isNull(Class)
-     * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
+     * @deprecated With Java 8 this method will be removed in Mockito 4.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
     @Deprecated
@@ -580,7 +581,7 @@ public class ArgumentMatchers {
      * @see #anySet()
      * @see #isNull()
      * @see #isNull(Class)
-     * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
+     * @deprecated With Java 8 this method will be removed in Mockito 4.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
     @Deprecated
@@ -642,7 +643,7 @@ public class ArgumentMatchers {
      * @see #anyMap()
      * @see #isNull()
      * @see #isNull(Class)
-     * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
+     * @deprecated With Java 8 this method will be removed in Mockito 4.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
     @Deprecated
@@ -703,7 +704,7 @@ public class ArgumentMatchers {
      * @see #anyCollection()
      * @see #isNull()
      * @see #isNull(Class)
-     * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
+     * @deprecated With Java 8 this method will be removed in Mockito 4.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
     @Deprecated
@@ -766,7 +767,7 @@ public class ArgumentMatchers {
      * @see #isNull()
      * @see #isNull(Class)
      * @since 2.1.0
-     * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
+     * @deprecated With Java 8 this method will be removed in Mockito 4.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
     @Deprecated
@@ -991,7 +992,7 @@ public class ArgumentMatchers {
      * @see #isNull()
      * @see #isNotNull()
      * @see #isNotNull(Class)
-     * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
+     * @deprecated With Java 8 this method will be removed in Mockito 4.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
     @Deprecated
@@ -1035,7 +1036,7 @@ public class ArgumentMatchers {
      * @see #isNotNull()
      * @see #isNull()
      * @see #isNull(Class)
-     * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
+     * @deprecated With Java 8 this method will be removed in Mockito 4.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
     @Deprecated
@@ -1077,7 +1078,7 @@ public class ArgumentMatchers {
      *
      * @param clazz Type to avoid casting
      * @return <code>null</code>.
-     * @deprecated With Java 8 this method will be removed in Mockito 3.0. This method is only used for generic
+     * @deprecated With Java 8 this method will be removed in Mockito 4.0. This method is only used for generic
      * friendliness to avoid casting, this is not anymore needed in Java 8.
      */
     @Deprecated

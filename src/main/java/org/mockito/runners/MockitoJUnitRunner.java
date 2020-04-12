@@ -23,7 +23,7 @@ public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {
     /**
      * Silent runner moved to a new place see {@link org.mockito.junit.MockitoJUnitRunner.Silent}
      *
-     * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner.Silent}, this class will be removed with Mockito 3
+     * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner.Silent}, this class will be removed with Mockito 4
      */
     @Deprecated
     public static class Silent extends MockitoJUnitRunner {
@@ -35,7 +35,7 @@ public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {
     /**
      * Silent runner moved to a new place see {@link org.mockito.junit.MockitoJUnitRunner.Strict}
      *
-     * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner.Strict}, this class will be removed with Mockito 3
+     * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner.Strict}, this class will be removed with Mockito 4
      */
     @Deprecated
     public static class Strict extends MockitoJUnitRunner {
