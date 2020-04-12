@@ -12,7 +12,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 /**
- * It's likely this implementation will be used by default by every Mockito 3.0.0 mock.
+ * It's likely this implementation will be used by default by every Mockito 4.0.0 mock.
  * <p>
  * Currently <b>used only</b> by {@link Mockito#RETURNS_SMART_NULLS}
  * <p>

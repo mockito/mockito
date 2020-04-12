@@ -21,7 +21,7 @@ import org.mockito.MockitoAnnotations;
  * <code>org.mockito.configuration.MockitoConfiguration</code> will be chosen instead of the one in the file.
 
  * @deprecated Please use {@link org.mockito.plugins.AnnotationEngine} instead,
- *             this interface will probably be removed in mockito 3.
+ *             this interface will probably be removed in mockito 4.
  */
 @Deprecated
 public interface AnnotationEngine extends org.mockito.plugins.AnnotationEngine {

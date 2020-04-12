@@ -354,7 +354,7 @@ public class BDDMockito extends Mockito {
         /**
          * See original {@link Stubber#doNothing()}.
          *
-         * This method will be removed in version 3.0.0
+         * This method will be removed in version 4.0.0
          *
          * @since 1.8.0
          * @deprecated as of 2.1.0 please use {@link #willDoNothing()} instead
