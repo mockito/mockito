@@ -121,7 +121,7 @@ public class ArgumentMatchers {
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
      *
-     * This is an alias of: {@link #anyObject()} and {@link #any(java.lang.Class)}
+     * This is an alias of: {@link #anyObject()}
      * </p>
      *
      * <p>
@@ -150,7 +150,7 @@ public class ArgumentMatchers {
      * Matches anything, including <code>null</code>.
      *
      * <p>
-     * This is an alias of: {@link #any()} and {@link #any(java.lang.Class)}.
+     * This is an alias of: {@link #any()}.
      * See examples in javadoc for {@link ArgumentMatchers} class.
      * </p>
      *
