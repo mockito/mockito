@@ -512,6 +512,14 @@ public class MatchersTest extends TestBase {
     }
 
     @Test
+    public void matches_Pattern_matcher_in_subregion() {
+        when(mock.oneArg(matches(Pattern.compile("[a-z]")))).thenReturn("1");
+
+        assertEquals("1", mock.oneArg("3a45"));
+        assertEquals(null, mock.oneArg("3445"));
+    }
+
+    @Test
     public void contains_matcher() {
         when(mock.oneArg(contains("ell"))).thenReturn("1");
         when(mock.oneArg(contains("ld"))).thenReturn("2");
