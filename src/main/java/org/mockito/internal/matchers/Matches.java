@@ -22,7 +22,7 @@ public class Matches implements ArgumentMatcher<Object>, Serializable {
     }
 
     public boolean matches(Object actual) {
-        return (actual instanceof String) && pattern.matcher((String) actual).matches();
+        return (actual instanceof String) && pattern.matcher((String) actual).find();
     }
 
     public String toString() {
