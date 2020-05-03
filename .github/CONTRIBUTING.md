@@ -188,3 +188,7 @@ We found vertical alignment helping when reading the code, for that reason we wa
     1. For parameter `Throws list` choose : `Do not wrap`
     2. For sub-parameter `Align when multiline` tick the checkbox
 
+## Gradle Tips
+
+1. It is possible to run `./gradlew dependencyUpdates` to find out of date dependencies, including tools. Note that this
+    may show beta or alpha dependencies.

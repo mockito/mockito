@@ -18,6 +18,7 @@ plugins {
     id 'com.gradle.build-scan' version '2.2.1'
     id "com.diffplug.gradle.spotless" version "3.24.3"
     id 'eclipse'
+    id 'com.github.ben-manes.versions' version '0.28.0'
 }
 
 description = 'Mockito mock objects library core API and implementation'
