@@ -99,8 +99,9 @@ dependencies {
 }
 
 wrapper {
-    gradleVersion = '5.3.1'
-    distributionSha256Sum = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+    gradleVersion = '5.6.4'
+    distributionSha256Sum = '1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d'
+    distributionType = 'all'
 }
 
 //Posting Build scans to https://scans.gradle.com
