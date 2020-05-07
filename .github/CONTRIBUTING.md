@@ -12,7 +12,7 @@
 
 # Contributing to Mockito
 
-Which branch : 
+Which branch :
 * On mockito 3.x (or 2.x), make your pull request target `release/3.x` (or `release/2.x`)
 * On next mockito version make your pull request target `release/3.x`
 
@@ -73,7 +73,7 @@ This section is not about some kind of fruitless tabs vs spaces debate. It's abo
 
 _This includes IntelliJ IDEA instructions, however we are sure there's similar settings in all major IDEs._
 
-But first of all, make sure that : 
+But first of all, make sure that :
 
 * Don't use tabs, only spaces
 * Character encoding is **UTF-8**
@@ -100,6 +100,7 @@ Imports must be sorted in the following order
 1. blank line
 1. `import java.*`
 1. `import javax.*`
+1. blank line
 1. `import all other imports`
 
 This order can be set in `IntelliJ setting > Editor > Code Style > Java > Imports > Import Layout`
@@ -108,8 +109,8 @@ Also make sure that
 * One blank lines before imports.
 * One blank lines after imports.
 * Never import with wildcard `*`
-   * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Class count to use import with '*'` to `100`     
-   * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Names count to use import static with '*'` to `100`     
+   * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Class count to use import with '*'` to `100`
+   * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Names count to use import static with '*'` to `100`
 
 ### Alignment
 
@@ -164,7 +165,7 @@ We found vertical alignment helping when reading the code, for that reason we wa
 
     ```java
     @Mock(answer = Answers.RETURNS_DEFAULTS,
-          serializable = true, 
+          serializable = true,
           extraInterfaces = { List.class, YetAnotherInterface.class })
     ```
 
