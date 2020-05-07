@@ -16,13 +16,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.NameBasedCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.TerminalMockCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFilter;
-import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 
@@ -66,13 +66,6 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
             new TypeBasedCandidateFilter(
                     new NameBasedCandidateFilter(
                             new TerminalMockCandidateFilter()));
-
-    private final ListUtil.Filter<Field> notFinalOrStatic = new ListUtil.Filter<Field>() {
-        public boolean isOut(Field object) {
-            return Modifier.isFinal(object.getModifiers()) || Modifier.isStatic(object.getModifiers());
-        }
-    };
-
 
     public boolean processInjection(Field injectMocksField, Object injectMocksFieldOwner, Set<Object> mockCandidates) {
         FieldInitializationReport report = initializeInjectMocksField(injectMocksField, injectMocksFieldOwner);
@@ -129,9 +122,11 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
     }
 
     private List<Field> orderedInstanceFieldsFrom(Class<?> awaitingInjectionClazz) {
-        List<Field> declaredFields = Arrays.asList(awaitingInjectionClazz.getDeclaredFields());
-        declaredFields = ListUtil.filter(declaredFields, notFinalOrStatic);
-
-        return sortSuperTypesLast(declaredFields);
+        return sortSuperTypesLast(
+            Arrays
+                .stream(awaitingInjectionClazz.getDeclaredFields())
+                .filter(object -> !Modifier.isFinal(object.getModifiers()) && !Modifier.isStatic(object.getModifiers()))
+                .collect(Collectors.toList())
+        );
     }
 }

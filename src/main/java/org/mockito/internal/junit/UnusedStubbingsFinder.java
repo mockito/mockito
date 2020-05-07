@@ -4,18 +4,15 @@
  */
 package org.mockito.internal.junit;
 
-import static org.mockito.internal.util.collections.ListUtil.filter;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 import org.mockito.internal.stubbing.UnusedStubbingReporting;
-import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Stubbing;
 
@@ -29,15 +26,13 @@ public class UnusedStubbingsFinder {
      * Stubbings explicitily marked as LENIENT are not included.
      */
     public UnusedStubbings getUnusedStubbings(Iterable<Object> mocks) {
-        Set<Stubbing> stubbings = AllInvocationsFinder.findStubbings(mocks);
-
-        List<Stubbing> unused = filter(stubbings, new Filter<Stubbing>() {
-            public boolean isOut(Stubbing s) {
-                return !UnusedStubbingReporting.shouldBeReported(s);
-            }
-        });
-
-        return new UnusedStubbings(unused);
+        return new UnusedStubbings(
+            AllInvocationsFinder
+                .findStubbings(mocks)
+                .stream()
+                .filter(UnusedStubbingReporting::shouldBeReported)
+                .collect(Collectors.toList())
+        );
     }
 
     /**
@@ -55,7 +50,7 @@ public class UnusedStubbingsFinder {
 
         //1st pass, collect all the locations of the stubbings that were used
         //note that those are _not_ locations where the stubbings was used
-        Set<String> locationsOfUsedStubbings = new HashSet<String>();
+        Set<String> locationsOfUsedStubbings = new HashSet<>();
         for (Stubbing s : stubbings) {
             if (!UnusedStubbingReporting.shouldBeReported(s)) {
                 String location = s.getInvocation().getLocation().toString();
@@ -67,7 +62,7 @@ public class UnusedStubbingsFinder {
         //If the location matches we assume the stubbing was used in at least one test method
         //Also, using map to deduplicate reported unused stubbings
         // if unused stubbing appear in the setup method / constructor we don't want to report it per each test case
-        Map<String, Invocation> out = new LinkedHashMap<String, Invocation>();
+        Map<String, Invocation> out = new LinkedHashMap<>();
         for (Stubbing s : stubbings) {
             String location = s.getInvocation().getLocation().toString();
             if (!locationsOfUsedStubbings.contains(location)) {

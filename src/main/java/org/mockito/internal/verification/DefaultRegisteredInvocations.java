@@ -9,16 +9,15 @@ import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.mockito.internal.util.collections.ListUtil;
-import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.invocation.Invocation;
 
 
 public class DefaultRegisteredInvocations implements RegisteredInvocations, Serializable {
 
     private static final long serialVersionUID = -2674402327380736290L;
-    private final LinkedList<Invocation> invocations = new LinkedList<Invocation>();
+    private final LinkedList<Invocation> invocations = new LinkedList<>();
 
     public void add(Invocation invocation) {
         synchronized (invocations) {
@@ -38,10 +37,13 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
     public List<Invocation> getAll() {
         List<Invocation> copiedList;
         synchronized (invocations) {
-            copiedList = new LinkedList<Invocation>(invocations) ;
+            copiedList = new LinkedList<>(invocations);
         }
 
-        return ListUtil.filter(copiedList, new RemoveToString());
+        return copiedList
+            .stream()
+            .filter(invocation -> !isToStringMethod(invocation.getMethod()))
+            .collect(Collectors.toList());
     }
 
     public void clear() {
@@ -53,12 +55,6 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
     public boolean isEmpty() {
         synchronized (invocations) {
             return invocations.isEmpty();
-        }
-    }
-
-    private static class RemoveToString implements Filter<Invocation> {
-        public boolean isOut(Invocation invocation) {
-            return isToStringMethod(invocation.getMethod());
         }
     }
 
