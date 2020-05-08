@@ -5,6 +5,13 @@
 package org.mockito.junit.jupiter;
 
 
+import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
+
+import java.lang.reflect.Parameter;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -20,13 +27,6 @@ import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.session.MockitoSessionLoggerAdapter;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.quality.Strictness;
-
-import java.lang.reflect.Parameter;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
-import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 /**
  * Extension that initializes mocks and handles strict stubbings. This extension is the JUnit Jupiter equivalent
@@ -178,7 +178,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
     @Override
     public void afterEach(ExtensionContext context) {
         context.getStore(MOCKITO).remove(SESSION, MockitoSession.class)
-                .finishMocking();
+                .finishMocking(context.getExecutionException().orElse(null));
     }
 
     @Override
@@ -186,7 +186,6 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
         return parameterContext.isAnnotated(Mock.class);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
         final Parameter parameter = parameterContext.getParameter();

@@ -4,6 +4,12 @@
  */
 package org.mockitousage;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
+
+import java.util.function.Function;
+
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,21 +23,15 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
-import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-
-import java.util.function.Function;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
  * Test that runs the inner test using a launcher {@see #invokeTestClassAndRetrieveMethodResult}.
  * We then assert on the actual test run output, to see if test actually failed as a result
  * of our extension.
  */
-@SuppressWarnings("ConstantConditions")
 class StrictnessTest {
 
     @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -51,6 +51,28 @@ class StrictnessTest {
 
         assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
         assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
+    }
+
+    @MockitoSettings(strictness = Strictness.STRICT_STUBS)
+    static class StrictStubsNotReportedOnTestFailure {
+        @Mock
+        private Function<Integer, String> rootMock;
+
+        @Test
+        void should_not_throw_exception_on_strict_stubs_because_of_test_failure() {
+            Mockito.when(rootMock.apply(10)).thenReturn("Foo");
+            fail("Test failed");
+        }
+    }
+
+    @Test
+    void session_does_not_check_for_strict_stubs_on_test_failure() {
+        TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(StrictStubsNotReportedOnTestFailure.class);
+
+        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
+        Throwable throwable = result.getThrowable().get();
+        assertThat(throwable).isInstanceOf(AssertionError.class);
+        assertThat(throwable.getSuppressed()).isEmpty();
     }
 
     @MockitoSettings(strictness = Strictness.STRICT_STUBS)
