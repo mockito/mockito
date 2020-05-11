@@ -4,12 +4,6 @@
  */
 package org.mockitousage;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
-
-import java.util.function.Function;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +20,11 @@ import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+
+import java.util.function.Function;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
  * Test that runs the inner test using a launcher {@see #invokeTestClassAndRetrieveMethodResult}.
@@ -53,6 +52,9 @@ class StrictnessTest {
         assertThat(result.getThrowable().get()).isInstanceOf(UnnecessaryStubbingException.class);
     }
 
+    static class MyAssertionError extends AssertionError {
+    }
+
     @MockitoSettings(strictness = Strictness.STRICT_STUBS)
     static class StrictStubsNotReportedOnTestFailure {
         @Mock
@@ -61,7 +63,7 @@ class StrictnessTest {
         @Test
         void should_not_throw_exception_on_strict_stubs_because_of_test_failure() {
             Mockito.when(rootMock.apply(10)).thenReturn("Foo");
-            fail("Test failed");
+            throw new MyAssertionError();
         }
     }
 
@@ -71,7 +73,7 @@ class StrictnessTest {
 
         assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.FAILED);
         Throwable throwable = result.getThrowable().get();
-        assertThat(throwable).isInstanceOf(AssertionError.class);
+        assertThat(throwable).isInstanceOf(MyAssertionError.class);
         assertThat(throwable.getSuppressed()).isEmpty();
     }
 
