@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
-//see issue 62
+// see issue 62
 public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
 
     interface VarargMethod {

@@ -36,7 +36,8 @@ public class DefaultMockitoFrameworkTest extends TestBase {
 
     private DefaultMockitoFramework framework = new DefaultMockitoFramework();
 
-    @After public void clearListeners() {
+    @After
+    public void clearListeners() {
         new StateMaster().clearMockitoListeners();
     }
 
@@ -52,7 +53,7 @@ public class DefaultMockitoFrameworkTest extends TestBase {
 
     @Test
     public void ok_to_remove_unknown_listener() {
-        //it is safe to remove listener that was not added before
+        // it is safe to remove listener that was not added before
         framework.removeListener(new MockitoListener() {});
     }
 
@@ -60,26 +61,26 @@ public class DefaultMockitoFrameworkTest extends TestBase {
     public void ok_to_remove_listener_multiple_times() {
         MockitoListener listener = new MockitoListener() {};
 
-        //when
+        // when
         framework.addListener(listener);
 
-        //then it is ok to:
+        // then it is ok to:
         framework.removeListener(listener);
         framework.removeListener(listener);
     }
 
     @Test
     public void adds_creation_listener() {
-        //given creation listener is added
+        // given creation listener is added
         MockCreationListener listener = mock(MockCreationListener.class);
         framework.addListener(listener);
 
-        //when
+        // when
         MockSettings settings = withSettings().name("my list");
         List mock = mock(List.class, settings);
         Set mock2 = mock(Set.class);
 
-        //then
+        // then
         verify(listener).onMockCreated(eq(mock), any(MockCreationSettings.class));
         verify(listener).onMockCreated(eq(mock2), any(MockCreationSettings.class));
         verifyNoMoreInteractions(listener);
@@ -88,84 +89,88 @@ public class DefaultMockitoFrameworkTest extends TestBase {
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void removes_creation_listener() {
-        //given creation listener is added
+        // given creation listener is added
         MockCreationListener listener = mock(MockCreationListener.class);
         framework.addListener(listener);
 
-        //and hooked up correctly
+        // and hooked up correctly
         mock(List.class);
         verify(listener).onMockCreated(ArgumentMatchers.any(), any(MockCreationSettings.class));
 
-        //when
+        // when
         framework.removeListener(listener);
         mock(Set.class);
 
-        //then
+        // then
         verifyNoMoreInteractions(listener);
     }
 
-    @Test public void prevents_duplicate_listeners_of_the_same_type() {
-        //given creation listener is added
+    @Test
+    public void prevents_duplicate_listeners_of_the_same_type() {
+        // given creation listener is added
         framework.addListener(new MyListener());
 
-        assertThat(new Runnable() {
-            @Override
-            public void run() {
-                framework.addListener(new MyListener());
-            }
-        })  .throwsException(RedundantListenerException.class)
-            .throwsMessage("\n" +
-                    "Problems adding Mockito listener.\n" +
-                    "Listener of type 'MyListener' has already been added and not removed.\n" +
-                    "It indicates that previous listener was not removed according to the API.\n" +
-                    "When you add a listener, don't forget to remove the listener afterwards:\n" +
-                    "  Mockito.framework().removeListener(myListener);\n" +
-                    "For more information, see the javadoc for RedundantListenerException class.");
+        assertThat(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                framework.addListener(new MyListener());
+                            }
+                        })
+                .throwsException(RedundantListenerException.class)
+                .throwsMessage(
+                        "\n"
+                                + "Problems adding Mockito listener.\n"
+                                + "Listener of type 'MyListener' has already been added and not removed.\n"
+                                + "It indicates that previous listener was not removed according to the API.\n"
+                                + "When you add a listener, don't forget to remove the listener afterwards:\n"
+                                + "  Mockito.framework().removeListener(myListener);\n"
+                                + "For more information, see the javadoc for RedundantListenerException class.");
     }
 
     @Test
     public void clearing_all_mocks_is_safe_regardless_of_mock_maker_type() {
         List mock = mock(List.class);
 
-        //expect
+        // expect
         assertTrue(mockingDetails(mock).isMock());
         framework.clearInlineMocks();
     }
 
     @Test
     public void clears_all_mocks() {
-        //clearing mocks only works with inline mocking
+        // clearing mocks only works with inline mocking
         assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
 
-        //given
+        // given
         List list1 = mock(List.class);
         assertTrue(mockingDetails(list1).isMock());
         List list2 = mock(List.class);
         assertTrue(mockingDetails(list2).isMock());
 
-        //when
+        // when
         framework.clearInlineMocks();
 
-        //then
+        // then
         assertFalse(mockingDetails(list1).isMock());
         assertFalse(mockingDetails(list2).isMock());
     }
 
     @Test
     public void clears_mock() {
-        //clearing mocks only works with inline mocking
+        // clearing mocks only works with inline mocking
         assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
 
-        //given
+        // given
         List list1 = mock(List.class);
         assertTrue(mockingDetails(list1).isMock());
         List list2 = mock(List.class);
         assertTrue(mockingDetails(list2).isMock());
 
-        //when
+        // when
         framework.clearInlineMock(list1);
 
-        //then
+        // then
         assertFalse(mockingDetails(list1).isMock());
         assertTrue(mockingDetails(list2).isMock());
     }

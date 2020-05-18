@@ -34,9 +34,9 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
             fail();
         } catch (TooFewActualInvocations e) {
             assertThat(e)
-                .hasMessageContaining("mock.clear();")
-                .hasMessageContaining("Wanted 100 times")
-                .hasMessageContaining("was 3");
+                    .hasMessageContaining("mock.clear();")
+                    .hasMessageContaining("Wanted 100 times")
+                    .hasMessageContaining("was 3");
         }
     }
 
@@ -53,9 +53,9 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
             fail();
         } catch (TooManyActualInvocations e) {
             assertThat(e)
-                .hasMessageContaining("mock.clear();")
-                .hasMessageContaining("Wanted 1 time")
-                .hasMessageContaining("was 4");
+                    .hasMessageContaining("mock.clear();")
+                    .hasMessageContaining("Wanted 1 time")
+                    .hasMessageContaining("was 4");
         }
     }
 }

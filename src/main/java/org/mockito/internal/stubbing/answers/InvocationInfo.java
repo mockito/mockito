@@ -38,7 +38,8 @@ public class InvocationInfo implements AbstractAwareMethod {
 
     public boolean isValidReturnType(Class<?> clazz) {
         if (method.getReturnType().isPrimitive() || clazz.isPrimitive()) {
-            return Primitives.primitiveTypeOf(clazz) == Primitives.primitiveTypeOf(method.getReturnType());
+            return Primitives.primitiveTypeOf(clazz)
+                    == Primitives.primitiveTypeOf(method.getReturnType());
         } else {
             return method.getReturnType().isAssignableFrom(clazz);
         }
@@ -49,11 +50,12 @@ public class InvocationInfo implements AbstractAwareMethod {
      * E.g:  {@code void foo()} or {@code Void bar()}
      */
     public boolean isVoid() {
-        final MockCreationSettings mockSettings = MockUtil.getMockHandler(invocation.getMock())
-            .getMockSettings();
-        Class<?> returnType = GenericMetadataSupport.inferFrom(mockSettings.getTypeToMock())
-            .resolveGenericReturnType(this.method)
-            .rawType();
+        final MockCreationSettings mockSettings =
+                MockUtil.getMockHandler(invocation.getMock()).getMockSettings();
+        Class<?> returnType =
+                GenericMetadataSupport.inferFrom(mockSettings.getTypeToMock())
+                        .resolveGenericReturnType(this.method)
+                        .rawType();
         return returnType == Void.TYPE || returnType == Void.class;
     }
 

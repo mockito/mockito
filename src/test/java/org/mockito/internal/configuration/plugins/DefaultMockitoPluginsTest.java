@@ -23,12 +23,16 @@ public class DefaultMockitoPluginsTest extends TestBase {
 
     @Test
     public void provides_plugins() throws Exception {
-        assertEquals("org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker",
-            plugins.getDefaultPluginClass(INLINE_ALIAS));
+        assertEquals(
+                "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker",
+                plugins.getDefaultPluginClass(INLINE_ALIAS));
         assertEquals(InlineByteBuddyMockMaker.class, plugins.getInlineMockMaker().getClass());
-        assertEquals(ByteBuddyMockMaker.class, plugins.getDefaultPlugin(MockMaker.class).getClass());
+        assertEquals(
+                ByteBuddyMockMaker.class, plugins.getDefaultPlugin(MockMaker.class).getClass());
         assertNotNull(plugins.getDefaultPlugin(InstantiatorProvider.class));
         assertNotNull(plugins.getDefaultPlugin(InstantiatorProvider2.class));
-        assertEquals(ConsoleMockitoLogger.class, plugins.getDefaultPlugin(MockitoLogger.class).getClass());
+        assertEquals(
+                ConsoleMockitoLogger.class,
+                plugins.getDefaultPlugin(MockitoLogger.class).getClass());
     }
 }

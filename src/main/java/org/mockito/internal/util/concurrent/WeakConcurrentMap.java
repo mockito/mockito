@@ -22,7 +22,8 @@ import java.util.concurrent.atomic.AtomicLong;
  * This class does not implement the {@link java.util.Map} interface because this implementation is incompatible
  * with the map contract. While iterating over a map's entries, any key that has not passed iteration is referenced non-weakly.
  */
-public class WeakConcurrentMap<K, V> extends ReferenceQueue<K> implements Runnable, Iterable<Map.Entry<K, V>> {
+public class WeakConcurrentMap<K, V> extends ReferenceQueue<K>
+        implements Runnable, Iterable<Map.Entry<K, V>> {
 
     private static final AtomicLong ID = new AtomicLong();
 

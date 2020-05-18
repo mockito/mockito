@@ -18,18 +18,18 @@ public class ActualInvocationHasNullArgumentNPEBugTest extends TestBase {
 
     @Test
     public void shouldAllowPassingNullArgument() {
-        //given
+        // given
         Fun mockFun = mock(Fun.class);
         when(mockFun.doFun((String) anyObject())).thenReturn("value");
 
-        //when
+        // when
         mockFun.doFun(null);
 
-        //then
+        // then
         try {
             verify(mockFun).doFun("hello");
-        } catch(AssertionError r) {
-            //it's ok, we just want to reproduce the bug
+        } catch (AssertionError r) {
+            // it's ok, we just want to reproduce the bug
             return;
         }
         fail();

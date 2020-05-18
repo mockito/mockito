@@ -35,7 +35,8 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings({"unchecked", "serial"})
 public class MockHandlerImplTest extends TestBase {
 
-    private StubbedInvocationMatcher stubbedInvocationMatcher = mock(StubbedInvocationMatcher.class);
+    private StubbedInvocationMatcher stubbedInvocationMatcher =
+            mock(StubbedInvocationMatcher.class);
     private Invocation invocation = mock(Invocation.class);
 
     @Test
@@ -45,11 +46,13 @@ public class MockHandlerImplTest extends TestBase {
         @SuppressWarnings("rawtypes")
         MockHandlerImpl<?> handler = new MockHandlerImpl(new MockSettingsImpl());
         mockingProgress().verificationStarted(VerificationModeFactory.atLeastOnce());
-        handler.matchersBinder = new MatchersBinder() {
-            public InvocationMatcher bindMatchers(ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
-                throw new InvalidUseOfMatchersException();
-            }
-        };
+        handler.matchersBinder =
+                new MatchersBinder() {
+                    public InvocationMatcher bindMatchers(
+                            ArgumentMatcherStorage argumentMatcherStorage, Invocation invocation) {
+                        throw new InvalidUseOfMatchersException();
+                    }
+                };
 
         try {
             // when
@@ -63,12 +66,14 @@ public class MockHandlerImplTest extends TestBase {
         assertNull(mockingProgress().pullVerificationMode());
     }
 
-
     @Test(expected = MockitoException.class)
-    public void should_throw_mockito_exception_when_invocation_handler_throws_anything() throws Throwable {
+    public void should_throw_mockito_exception_when_invocation_handler_throws_anything()
+            throws Throwable {
         // given
         InvocationListener throwingListener = mock(InvocationListener.class);
-        doThrow(new Throwable()).when(throwingListener).reportInvocation(any(MethodInvocationReport.class));
+        doThrow(new Throwable())
+                .when(throwingListener)
+                .reportInvocation(any(MethodInvocationReport.class));
         MockHandlerImpl<?> handler = create_correctly_stubbed_handler(throwingListener);
 
         // when
@@ -82,12 +87,16 @@ public class MockHandlerImplTest extends TestBase {
         given(mockSettings.getDefaultAnswer()).willReturn(new Returns(AWrongType.WRONG_TYPE));
 
         @SuppressWarnings("unused") // otherwise cast is not done
-        String there_should_not_be_a_CCE_here = (String) handler.handle(
-                new InvocationBuilder().method(Object.class.getDeclaredMethod("toString")).toInvocation()
-        );
+        String there_should_not_be_a_CCE_here =
+                (String)
+                        handler.handle(
+                                new InvocationBuilder()
+                                        .method(Object.class.getDeclaredMethod("toString"))
+                                        .toInvocation());
     }
 
-    private MockHandlerImpl<?> create_correctly_stubbed_handler(InvocationListener throwingListener) {
+    private MockHandlerImpl<?> create_correctly_stubbed_handler(
+            InvocationListener throwingListener) {
         MockHandlerImpl<?> handler = create_handler_with_listeners(throwingListener);
         stub_ordinary_invocation_with_given_return_value(handler);
         return handler;
@@ -97,18 +106,18 @@ public class MockHandlerImplTest extends TestBase {
         stub_ordinary_invocation_with_invocation_matcher(handler, stubbedInvocationMatcher);
     }
 
-
-    private void stub_ordinary_invocation_with_invocation_matcher(MockHandlerImpl<?> handler, StubbedInvocationMatcher value) {
+    private void stub_ordinary_invocation_with_invocation_matcher(
+            MockHandlerImpl<?> handler, StubbedInvocationMatcher value) {
         handler.invocationContainer = mock(InvocationContainerImpl.class);
         given(handler.invocationContainer.findAnswerFor(any(Invocation.class))).willReturn(value);
     }
-
 
     private MockHandlerImpl<?> create_handler_with_listeners(InvocationListener... listener) {
         @SuppressWarnings("rawtypes")
         MockHandlerImpl<?> handler = new MockHandlerImpl(mock(MockSettingsImpl.class));
         handler.matchersBinder = mock(MatchersBinder.class);
-        given(handler.getMockSettings().getInvocationListeners()).willReturn(Arrays.asList(listener));
+        given(handler.getMockSettings().getInvocationListeners())
+                .willReturn(Arrays.asList(listener));
         return handler;
     }
 

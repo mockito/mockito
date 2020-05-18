@@ -15,11 +15,12 @@ public class RunnerProviderTest extends TestBase {
 
     @Test
     public void shouldCreateRunnerInstance() throws Throwable {
-        //given
+        // given
         RunnerProvider provider = new RunnerProvider();
-        //when
-        InternalRunner runner = provider.newInstance(DefaultInternalRunner.class.getName(), this.getClass(), null);
-        //then
+        // when
+        InternalRunner runner =
+                provider.newInstance(DefaultInternalRunner.class.getName(), this.getClass(), null);
+        // then
         assertNotNull(runner);
     }
 }

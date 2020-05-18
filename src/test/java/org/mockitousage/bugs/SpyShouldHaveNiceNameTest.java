@@ -15,20 +15,20 @@ import org.junit.Test;
 import org.mockito.Spy;
 import org.mockitoutil.TestBase;
 
-//see issue 216
+// see issue 216
 public class SpyShouldHaveNiceNameTest extends TestBase {
 
     @Spy List<Integer> veryCoolSpy = new LinkedList<Integer>();
 
     @Test
     public void shouldPrintNiceName() {
-        //when
+        // when
         veryCoolSpy.add(1);
 
         try {
             verify(veryCoolSpy).add(2);
             fail();
-        } catch(AssertionError e) {
+        } catch (AssertionError e) {
             Assertions.assertThat(e.getMessage()).contains("veryCoolSpy");
         }
     }

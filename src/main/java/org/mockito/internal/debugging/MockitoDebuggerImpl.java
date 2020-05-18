@@ -21,13 +21,13 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
      * TODO: when MockitoDebugger is deleted, delete this implementation, too
      */
     @Deprecated
-    public String printInvocations(Object ... mocks) {
+    public String printInvocations(Object... mocks) {
         String out = "";
         List<Invocation> invocations = AllInvocationsFinder.find(asList(mocks));
         out += line("********************************");
         out += line("*** Mockito interactions log ***");
         out += line("********************************");
-        for(Invocation i:invocations) {
+        for (Invocation i : invocations) {
             out += line(i.toString());
             out += line(" invoked: " + i.getLocation());
             if (i.stubInfo() != null) {
@@ -43,7 +43,7 @@ public class MockitoDebuggerImpl implements MockitoDebugger {
         out += line("***       Unused stubs       ***");
         out += line("********************************");
 
-        for(Invocation i:invocations) {
+        for (Invocation i : invocations) {
             out += line(i.toString());
             out += line(" stubbed: " + i.getLocation());
         }

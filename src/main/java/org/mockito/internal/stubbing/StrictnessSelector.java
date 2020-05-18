@@ -25,7 +25,8 @@ public class StrictnessSelector {
      *
      * @return actual strictness, can be null.
      */
-    public static Strictness determineStrictness(Stubbing stubbing, MockCreationSettings mockSettings, Strictness testLevelStrictness) {
+    public static Strictness determineStrictness(
+            Stubbing stubbing, MockCreationSettings mockSettings, Strictness testLevelStrictness) {
         if (stubbing != null && stubbing.getStrictness() != null) {
             return stubbing.getStrictness();
         }

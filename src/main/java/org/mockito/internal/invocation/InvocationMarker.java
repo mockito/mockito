@@ -12,7 +12,7 @@ import org.mockito.invocation.MatchableInvocation;
 
 public class InvocationMarker {
 
-    private InvocationMarker(){}
+    private InvocationMarker() {}
 
     public static void markVerified(List<Invocation> invocations, MatchableInvocation wanted) {
         for (Invocation invocation : invocations) {
@@ -25,7 +25,8 @@ public class InvocationMarker {
         wanted.captureArgumentsFrom(invocation);
     }
 
-    public static void markVerifiedInOrder(List<Invocation> chunk, MatchableInvocation wanted, InOrderContext context) {
+    public static void markVerifiedInOrder(
+            List<Invocation> chunk, MatchableInvocation wanted, InOrderContext context) {
         markVerified(chunk, wanted);
 
         for (Invocation i : chunk) {

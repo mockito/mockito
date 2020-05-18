@@ -9,7 +9,6 @@ import java.io.Serializable;
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.util.Primitives;
 
-
 public class InstanceOf implements ArgumentMatcher<Object>, Serializable {
 
     private final Class<?> clazz;
@@ -25,8 +24,8 @@ public class InstanceOf implements ArgumentMatcher<Object>, Serializable {
     }
 
     public boolean matches(Object actual) {
-        return (actual != null) &&
-                (Primitives.isAssignableFromWrapper(actual.getClass(), clazz)
+        return (actual != null)
+                && (Primitives.isAssignableFromWrapper(actual.getClass(), clazz)
                         || clazz.isAssignableFrom(actual.getClass()));
     }
 
@@ -44,6 +43,4 @@ public class InstanceOf implements ArgumentMatcher<Object>, Serializable {
             super(clazz, describedAs);
         }
     }
-
-
 }

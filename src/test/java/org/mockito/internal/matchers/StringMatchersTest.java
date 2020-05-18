@@ -73,5 +73,4 @@ public class StringMatchersTest {
     public void nullDoesNotMatchRegex() {
         assertFalse(new Find("eleph.nt").matches(null));
     }
-
 }

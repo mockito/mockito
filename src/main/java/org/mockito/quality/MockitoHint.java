@@ -75,5 +75,4 @@ import org.mockito.junit.MockitoJUnitRunner;
  *
  * @since 2.1.0
  */
-public interface MockitoHint {
-}
+public interface MockitoHint {}

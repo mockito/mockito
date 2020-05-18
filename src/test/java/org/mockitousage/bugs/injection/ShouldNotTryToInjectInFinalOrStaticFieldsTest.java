@@ -30,12 +30,10 @@ public class ShouldNotTryToInjectInFinalOrStaticFieldsTest {
     @InjectMocks private ExampleService exampleService = new ExampleService();
 
     @Test
-    public void dont_fail_with_CONSTANTS() throws Exception {
-    }
+    public void dont_fail_with_CONSTANTS() throws Exception {}
 
     @Test
     public void dont_inject_in_final() {
         assertNotSame(unrelatedSet, exampleService.aSet);
     }
-
 }

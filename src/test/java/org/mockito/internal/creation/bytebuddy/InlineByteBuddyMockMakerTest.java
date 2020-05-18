@@ -37,7 +37,8 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 
-public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest<InlineByteBuddyMockMaker> {
+public class InlineByteBuddyMockMakerTest
+        extends AbstractByteBuddyMockMakerTest<InlineByteBuddyMockMaker> {
 
     public InlineByteBuddyMockMakerTest() {
         super(new InlineByteBuddyMockMaker());
@@ -51,7 +52,8 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     @Test
     public void should_create_mock_from_final_class() throws Exception {
         MockCreationSettings<FinalClass> settings = settingsFor(FinalClass.class);
-        FinalClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<FinalClass>(settings));
+        FinalClass proxy =
+                mockMaker.createMock(settings, new MockHandlerImpl<FinalClass>(settings));
         assertThat(proxy.foo()).isEqualTo("bar");
     }
 
@@ -64,16 +66,21 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void should_create_mock_from_abstract_class_with_final_method() throws Exception {
-        MockCreationSettings<FinalMethodAbstractType> settings = settingsFor(FinalMethodAbstractType.class);
-        FinalMethodAbstractType proxy = mockMaker.createMock(settings, new MockHandlerImpl<FinalMethodAbstractType>(settings));
+        MockCreationSettings<FinalMethodAbstractType> settings =
+                settingsFor(FinalMethodAbstractType.class);
+        FinalMethodAbstractType proxy =
+                mockMaker.createMock(
+                        settings, new MockHandlerImpl<FinalMethodAbstractType>(settings));
         assertThat(proxy.foo()).isEqualTo("bar");
         assertThat(proxy.bar()).isEqualTo("bar");
     }
 
     @Test
     public void should_create_mock_from_final_class_with_interface_methods() throws Exception {
-        MockCreationSettings<FinalMethod> settings = settingsFor(FinalMethod.class, SampleInterface.class);
-        FinalMethod proxy = mockMaker.createMock(settings, new MockHandlerImpl<FinalMethod>(settings));
+        MockCreationSettings<FinalMethod> settings =
+                settingsFor(FinalMethod.class, SampleInterface.class);
+        FinalMethod proxy =
+                mockMaker.createMock(settings, new MockHandlerImpl<FinalMethod>(settings));
         assertThat(proxy.foo()).isEqualTo("bar");
         assertThat(((SampleInterface) proxy).bar()).isEqualTo("bar");
     }
@@ -81,7 +88,8 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     @Test
     public void should_detect_non_overridden_generic_method_of_supertype() throws Exception {
         MockCreationSettings<GenericSubClass> settings = settingsFor(GenericSubClass.class);
-        GenericSubClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
+        GenericSubClass proxy =
+                mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
         assertThat(proxy.value()).isEqualTo("bar");
     }
 
@@ -126,10 +134,12 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     }
 
     @Test
-    public void should_fail_at_creating_a_mock_of_a_final_class_with_explicit_serialization() throws Exception {
-        MockCreationSettings<FinalClass> settings = new CreationSettings<FinalClass>()
-                .setTypeToMock(FinalClass.class)
-                .setSerializableMode(SerializableMode.BASIC);
+    public void should_fail_at_creating_a_mock_of_a_final_class_with_explicit_serialization()
+            throws Exception {
+        MockCreationSettings<FinalClass> settings =
+                new CreationSettings<FinalClass>()
+                        .setTypeToMock(FinalClass.class)
+                        .setSerializableMode(SerializableMode.BASIC);
 
         try {
             mockMaker.createMock(settings, new MockHandlerImpl<FinalClass>(settings));
@@ -143,10 +153,12 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     }
 
     @Test
-    public void should_fail_at_creating_a_mock_of_a_final_class_with_extra_interfaces() throws Exception {
-        MockCreationSettings<FinalClass> settings = new CreationSettings<FinalClass>()
-                .setTypeToMock(FinalClass.class)
-                .setExtraInterfaces(Sets.<Class<?>>newSet(List.class));
+    public void should_fail_at_creating_a_mock_of_a_final_class_with_extra_interfaces()
+            throws Exception {
+        MockCreationSettings<FinalClass> settings =
+                new CreationSettings<FinalClass>()
+                        .setTypeToMock(FinalClass.class)
+                        .setExtraInterfaces(Sets.<Class<?>>newSet(List.class));
 
         try {
             mockMaker.createMock(settings, new MockHandlerImpl<FinalClass>(settings));
@@ -181,48 +193,57 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void should_remove_recursive_self_call_from_stack_trace() throws Exception {
-        StackTraceElement[] stack = new StackTraceElement[]{
-                new StackTraceElement("foo", "", "", -1),
-                new StackTraceElement(SampleInterface.class.getName(), "", "", -1),
-                new StackTraceElement("qux", "", "", -1),
-                new StackTraceElement("bar", "", "", -1),
-                new StackTraceElement("baz", "", "", -1)
-        };
+        StackTraceElement[] stack =
+                new StackTraceElement[] {
+                    new StackTraceElement("foo", "", "", -1),
+                    new StackTraceElement(SampleInterface.class.getName(), "", "", -1),
+                    new StackTraceElement("qux", "", "", -1),
+                    new StackTraceElement("bar", "", "", -1),
+                    new StackTraceElement("baz", "", "", -1)
+                };
 
         Throwable throwable = new Throwable();
         throwable.setStackTrace(stack);
         throwable = MockMethodAdvice.hideRecursiveCall(throwable, 2, SampleInterface.class);
 
-        assertThat(throwable.getStackTrace()).isEqualTo(new StackTraceElement[]{
-                new StackTraceElement("foo", "", "", -1),
-                new StackTraceElement("bar", "", "", -1),
-                new StackTraceElement("baz", "", "", -1)
-        });
+        assertThat(throwable.getStackTrace())
+                .isEqualTo(
+                        new StackTraceElement[] {
+                            new StackTraceElement("foo", "", "", -1),
+                            new StackTraceElement("bar", "", "", -1),
+                            new StackTraceElement("baz", "", "", -1)
+                        });
     }
 
     @Test
     public void should_handle_missing_or_inconsistent_stack_trace() throws Exception {
         Throwable throwable = new Throwable();
         throwable.setStackTrace(new StackTraceElement[0]);
-        assertThat(MockMethodAdvice.hideRecursiveCall(throwable, 0, SampleInterface.class)).isSameAs(throwable);
+        assertThat(MockMethodAdvice.hideRecursiveCall(throwable, 0, SampleInterface.class))
+                .isSameAs(throwable);
     }
 
     @Test
     public void should_provide_reason_for_wrapper_class() {
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(Integer.class);
-        assertThat(mockable.nonMockableReason()).isEqualTo("Cannot mock wrapper types, String.class or Class.class");
+        assertThat(mockable.nonMockableReason())
+                .isEqualTo("Cannot mock wrapper types, String.class or Class.class");
     }
 
     @Test
     public void should_provide_reason_for_vm_unsupported() {
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(int[].class);
-        assertThat(mockable.nonMockableReason()).isEqualTo("VM does not support modification of given type");
+        assertThat(mockable.nonMockableReason())
+                .isEqualTo("VM does not support modification of given type");
     }
 
     @Test
     public void should_mock_method_of_package_private_class() throws Exception {
-        MockCreationSettings<NonPackagePrivateSubClass> settings = settingsFor(NonPackagePrivateSubClass.class);
-        NonPackagePrivateSubClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<NonPackagePrivateSubClass>(settings));
+        MockCreationSettings<NonPackagePrivateSubClass> settings =
+                settingsFor(NonPackagePrivateSubClass.class);
+        NonPackagePrivateSubClass proxy =
+                mockMaker.createMock(
+                        settings, new MockHandlerImpl<NonPackagePrivateSubClass>(settings));
         assertThat(proxy.value()).isEqualTo("bar");
     }
 
@@ -230,14 +251,16 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     public void is_type_mockable_excludes_String() {
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(String.class);
         assertThat(mockable.mockable()).isFalse();
-        assertThat(mockable.nonMockableReason()).contains("Cannot mock wrapper types, String.class or Class.class");
+        assertThat(mockable.nonMockableReason())
+                .contains("Cannot mock wrapper types, String.class or Class.class");
     }
 
     @Test
     public void is_type_mockable_excludes_Class() {
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(Class.class);
         assertThat(mockable.mockable()).isFalse();
-        assertThat(mockable.nonMockableReason()).contains("Cannot mock wrapper types, String.class or Class.class");
+        assertThat(mockable.nonMockableReason())
+                .contains("Cannot mock wrapper types, String.class or Class.class");
     }
 
     @Test
@@ -249,11 +272,11 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void is_type_mockable_allows_anonymous() {
-        Observer anonymous = new Observer() {
-            @Override
-            public void update(Observable o, Object arg) {
-            }
-        };
+        Observer anonymous =
+                new Observer() {
+                    @Override
+                    public void update(Observable o, Object arg) {}
+                };
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(anonymous.getClass());
         assertThat(mockable.mockable()).isTrue();
         assertThat(mockable.nonMockableReason()).contains("");
@@ -277,35 +300,44 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     public void test_parameters_retention() throws Exception {
         assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(JAVA_V8));
 
-        Class<?> typeWithParameters = new ByteBuddy()
-                .subclass(Object.class)
-                .defineMethod("foo", void.class, Visibility.PUBLIC)
-                .withParameter(String.class, "bar")
-                .intercept(StubMethod.INSTANCE)
-                .make()
-                .load(null)
-                .getLoaded();
+        Class<?> typeWithParameters =
+                new ByteBuddy()
+                        .subclass(Object.class)
+                        .defineMethod("foo", void.class, Visibility.PUBLIC)
+                        .withParameter(String.class, "bar")
+                        .intercept(StubMethod.INSTANCE)
+                        .make()
+                        .load(null)
+                        .getLoaded();
 
         MockCreationSettings<?> settings = settingsFor(typeWithParameters);
         @SuppressWarnings("unchecked")
         Object proxy = mockMaker.createMock(settings, new MockHandlerImpl(settings));
 
         assertThat(proxy.getClass()).isEqualTo(typeWithParameters);
-        assertThat(new TypeDescription.ForLoadedType(typeWithParameters).getDeclaredMethods().filter(named("foo"))
-                .getOnly().getParameters().getOnly().getName()).isEqualTo("bar");
+        assertThat(
+                        new TypeDescription.ForLoadedType(typeWithParameters)
+                                .getDeclaredMethods()
+                                .filter(named("foo"))
+                                .getOnly()
+                                .getParameters()
+                                .getOnly()
+                                .getName())
+                .isEqualTo("bar");
     }
 
     @Test
     public void test_constant_dynamic_compatibility() throws Exception {
         assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(JAVA_V11));
 
-        Class<?> typeWithCondy = new ByteBuddy()
-                .subclass(Callable.class)
-                .method(named("call"))
-                .intercept(FixedValue.value(JavaConstant.Dynamic.ofNullConstant()))
-                .make()
-                .load(null)
-                .getLoaded();
+        Class<?> typeWithCondy =
+                new ByteBuddy()
+                        .subclass(Callable.class)
+                        .method(named("call"))
+                        .intercept(FixedValue.value(JavaConstant.Dynamic.ofNullConstant()))
+                        .make()
+                        .load(null)
+                        .getLoaded();
 
         MockCreationSettings<?> settings = settingsFor(typeWithCondy);
         @SuppressWarnings("unchecked")
@@ -317,35 +349,39 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     @Test
     public void test_clear_mock_clears_handler() {
         MockCreationSettings<GenericSubClass> settings = settingsFor(GenericSubClass.class);
-        GenericSubClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
+        GenericSubClass proxy =
+                mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
         assertThat(mockMaker.getHandler(proxy)).isNotNull();
 
-        //when
+        // when
         mockMaker.clearMock(proxy);
 
-        //then
+        // then
         assertThat(mockMaker.getHandler(proxy)).isNull();
     }
 
     @Test
     public void test_clear_all_mock_clears_handler() {
         MockCreationSettings<GenericSubClass> settings = settingsFor(GenericSubClass.class);
-        GenericSubClass proxy1 = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
+        GenericSubClass proxy1 =
+                mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
         assertThat(mockMaker.getHandler(proxy1)).isNotNull();
 
         settings = settingsFor(GenericSubClass.class);
-        GenericSubClass proxy2 = mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
+        GenericSubClass proxy2 =
+                mockMaker.createMock(settings, new MockHandlerImpl<GenericSubClass>(settings));
         assertThat(mockMaker.getHandler(proxy1)).isNotNull();
 
-        //when
+        // when
         mockMaker.clearAllMocks();
 
-        //then
+        // then
         assertThat(mockMaker.getHandler(proxy1)).isNull();
         assertThat(mockMaker.getHandler(proxy2)).isNull();
     }
 
-    private static <T> MockCreationSettings<T> settingsFor(Class<T> type, Class<?>... extraInterfaces) {
+    private static <T> MockCreationSettings<T> settingsFor(
+            Class<T> type, Class<?>... extraInterfaces) {
         MockSettingsImpl<T> mockSettings = new MockSettingsImpl<T>();
         mockSettings.setTypeToMock(type);
         mockSettings.defaultAnswer(new Returns("bar"));
@@ -355,9 +391,12 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
 
     @Test
     public void testMockDispatcherIsRelocated() throws Exception {
-        assertThat(InlineByteBuddyMockMaker.class.getClassLoader()
-            .getResource("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.raw"))
-            .isNotNull();
+        assertThat(
+                        InlineByteBuddyMockMaker.class
+                                .getClassLoader()
+                                .getResource(
+                                        "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.raw"))
+                .isNotNull();
     }
 
     private static final class FinalClass {
@@ -368,7 +407,6 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
     }
 
     private enum EnumClass {
-
         INSTANCE;
 
         public String foo() {
@@ -421,6 +459,5 @@ public class InlineByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest
         }
     }
 
-    public static class GenericSubClass extends GenericClass<String> {
-    }
+    public static class GenericSubClass extends GenericClass<String> {}
 }

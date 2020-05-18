@@ -80,7 +80,6 @@ public class MockScanner {
     }
 
     private boolean isMockOrSpy(Object instance) {
-        return MockUtil.isMock(instance)
-                || MockUtil.isSpy(instance);
+        return MockUtil.isMock(instance) || MockUtil.isSpy(instance);
     }
 }

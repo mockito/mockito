@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.reporting;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,14 +21,24 @@ public class SmartPrinter {
     private final String wanted;
     private final List<String> actuals;
 
-    public SmartPrinter(MatchableInvocation wanted, Invocation actual, Integer ... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
-        this(wanted, Collections.singletonList(actual), indexesOfMatchersToBeDescribedWithExtraTypeInfo);
+    public SmartPrinter(
+            MatchableInvocation wanted,
+            Invocation actual,
+            Integer... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
+        this(
+                wanted,
+                Collections.singletonList(actual),
+                indexesOfMatchersToBeDescribedWithExtraTypeInfo);
     }
 
-    public SmartPrinter(MatchableInvocation wanted, List<Invocation> allActualInvocations, Integer ... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
+    public SmartPrinter(
+            MatchableInvocation wanted,
+            List<Invocation> allActualInvocations,
+            Integer... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
         PrintSettings printSettings = new PrintSettings();
         printSettings.setMultiline(isMultiLine(wanted, allActualInvocations));
-        printSettings.setMatchersToBeDescribedWithExtraTypeInfo(indexesOfMatchersToBeDescribedWithExtraTypeInfo);
+        printSettings.setMatchersToBeDescribedWithExtraTypeInfo(
+                indexesOfMatchersToBeDescribedWithExtraTypeInfo);
 
         this.wanted = printSettings.print(wanted);
 
@@ -48,7 +57,8 @@ public class SmartPrinter {
         return actuals;
     }
 
-    private static boolean isMultiLine(MatchableInvocation wanted, List<Invocation> allActualInvocations) {
+    private static boolean isMultiLine(
+            MatchableInvocation wanted, List<Invocation> allActualInvocations) {
         boolean isWantedMultiline = wanted.toString().contains("\n");
         boolean isAnyActualMultiline = false;
         for (Invocation invocation : allActualInvocations) {

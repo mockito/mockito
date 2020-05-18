@@ -15,11 +15,9 @@ import org.mockitoutil.TestBase;
 
 public class ByteBuddyMockMakerTest extends TestBase {
 
-    @InjectMocks
-    private ByteBuddyMockMaker mockMaker = new ByteBuddyMockMaker();
+    @InjectMocks private ByteBuddyMockMaker mockMaker = new ByteBuddyMockMaker();
 
-    @Mock
-    private ClassCreatingMockMaker delegate;
+    @Mock private ClassCreatingMockMaker delegate;
 
     @Test
     public void should_delegate_call() {

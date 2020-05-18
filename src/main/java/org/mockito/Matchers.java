@@ -9,5 +9,4 @@ package org.mockito;
  * <code>org.hamcrest.Matchers</code> class. This class will likely be removed in version 4.0.
  */
 @Deprecated
-public class Matchers extends ArgumentMatchers {
-}
+public class Matchers extends ArgumentMatchers {}

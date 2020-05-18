@@ -55,13 +55,20 @@ public class HashCodeAndEqualsMockWrapper {
         return new HashCodeAndEqualsMockWrapper(mock);
     }
 
-    @Override public String toString() {
-        return "HashCodeAndEqualsMockWrapper{" +
-                "mockInstance=" + (MockUtil.isMock(mockInstance) ? MockUtil.getMockName(mockInstance) : typeInstanceString()) +
-                '}';
+    @Override
+    public String toString() {
+        return "HashCodeAndEqualsMockWrapper{"
+                + "mockInstance="
+                + (MockUtil.isMock(mockInstance)
+                        ? MockUtil.getMockName(mockInstance)
+                        : typeInstanceString())
+                + '}';
     }
 
     private String typeInstanceString() {
-        return mockInstance.getClass().getSimpleName() + "(" + System.identityHashCode(mockInstance) + ")";
+        return mockInstance.getClass().getSimpleName()
+                + "("
+                + System.identityHashCode(mockInstance)
+                + ")";
     }
 }

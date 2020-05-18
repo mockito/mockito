@@ -12,7 +12,10 @@ public class FieldInitializationReport {
     private final boolean wasInitialized;
     private final boolean wasInitializedUsingConstructorArgs;
 
-    public FieldInitializationReport(Object fieldInstance, boolean wasInitialized, boolean wasInitializedUsingConstructorArgs) {
+    public FieldInitializationReport(
+            Object fieldInstance,
+            boolean wasInitialized,
+            boolean wasInitializedUsingConstructorArgs) {
         this.fieldInstance = fieldInstance;
         this.wasInitialized = wasInitialized;
         this.wasInitializedUsingConstructorArgs = wasInitializedUsingConstructorArgs;

@@ -28,7 +28,8 @@ public class StrictRunner implements InternalRunner {
     }
 
     public void run(RunNotifier notifier) {
-        //TODO need to be able to opt in for full stack trace instead of just relying on the stack trace filter
+        // TODO need to be able to opt in for full stack trace instead of just relying on the stack
+        // trace filter
         UnnecessaryStubbingsReporter reporter = new UnnecessaryStubbingsReporter();
         FailureDetector listener = new FailureDetector();
 
@@ -42,10 +43,12 @@ public class StrictRunner implements InternalRunner {
         }
 
         if (!filterRequested && listener.isSuccessful()) {
-            //only report when:
-            //1. if all tests from given test have ran (filter requested is false)
-            //   Otherwise we would report unnecessary stubs even if the user runs just single test from the class
-            //2. tests are successful (we don't want to add an extra failure on top of any existing failure, to avoid confusion)
+            // only report when:
+            // 1. if all tests from given test have ran (filter requested is false)
+            //   Otherwise we would report unnecessary stubs even if the user runs just single test
+            // from the class
+            // 2. tests are successful (we don't want to add an extra failure on top of any existing
+            // failure, to avoid confusion)
             reporter.validateUnusedStubs(testClass, notifier);
         }
     }

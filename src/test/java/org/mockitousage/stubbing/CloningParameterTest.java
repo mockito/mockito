@@ -55,14 +55,14 @@ public class CloningParameterTest extends TestBase {
         EmailSender emailSender = mock(EmailSender.class, new ClonesArguments());
 
         // 1. Pass an array into a mock that "ClonesArguments"
-        Person[] ccList = new Person[] { new Person("Wes") };
+        Person[] ccList = new Person[] {new Person("Wes")};
         emailSender.sendGroupEmail(1, ccList);
 
         // 2. Mutate the array
         ccList[0] = new Person("Joe");
 
         // 3. Verify that the mock made a copy of the array
-        verify(emailSender).sendGroupEmail(1, new Person[] { new Person("Wes") });
+        verify(emailSender).sendGroupEmail(1, new Person[] {new Person("Wes")});
     }
 
     @Test
@@ -71,10 +71,10 @@ public class CloningParameterTest extends TestBase {
         EmailSender emailSender = mock(EmailSender.class, new ClonesArguments());
 
         // 1. Pass a null into a mock that "ClonesArguments"
-        emailSender.sendEmail(1, (Person)null);
+        emailSender.sendEmail(1, (Person) null);
 
         // 2. Verify that the null argument was captured
-        verify(emailSender).sendEmail(eq(1), (Person)isNull());
+        verify(emailSender).sendEmail(eq(1), (Person) isNull());
     }
 
     public class Person {
@@ -102,29 +102,21 @@ public class CloningParameterTest extends TestBase {
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
+            if (this == obj) return true;
+            if (obj == null) return false;
+            if (getClass() != obj.getClass()) return false;
             Person other = (Person) obj;
-            if (!getOuterType().equals(other.getOuterType()))
-                return false;
-            if (emailSent != other.emailSent)
-                return false;
+            if (!getOuterType().equals(other.getOuterType())) return false;
+            if (emailSent != other.emailSent) return false;
             if (name == null) {
-                if (other.name != null)
-                    return false;
-            } else if (!name.equals(other.name))
-                return false;
+                if (other.name != null) return false;
+            } else if (!name.equals(other.name)) return false;
             return true;
         }
 
         private CloningParameterTest getOuterType() {
             return CloningParameterTest.this;
         }
-
     }
 
     public interface EmailSender {
@@ -134,6 +126,5 @@ public class CloningParameterTest extends TestBase {
         void sendGroupEmail(int i, Person[] persons);
 
         List<?> getAllEmails(Person person);
-
     }
 }

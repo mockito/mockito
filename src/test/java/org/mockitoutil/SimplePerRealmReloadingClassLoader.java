@@ -18,7 +18,7 @@ import java.util.concurrent.Callable;
  */
 public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
 
-    private final Map<String,Class<?>> classHashMap = new HashMap<String, Class<?>>();
+    private final Map<String, Class<?>> classHashMap = new HashMap<String, Class<?>>();
     private ReloadClassPredicate reloadClassPredicate;
 
     public SimplePerRealmReloadingClassLoader(ReloadClassPredicate reloadClassPredicate) {
@@ -26,16 +26,17 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
         this.reloadClassPredicate = reloadClassPredicate;
     }
 
-    public SimplePerRealmReloadingClassLoader(ClassLoader parentClassLoader, ReloadClassPredicate reloadClassPredicate) {
+    public SimplePerRealmReloadingClassLoader(
+            ClassLoader parentClassLoader, ReloadClassPredicate reloadClassPredicate) {
         super(getPossibleClassPathsUrls(), parentClassLoader);
         this.reloadClassPredicate = reloadClassPredicate;
     }
 
     private static URL[] getPossibleClassPathsUrls() {
-        return new URL[]{
-                obtainClassPath(),
-                obtainClassPath("org.mockito.Mockito"),
-                obtainClassPath("net.bytebuddy.ByteBuddy")
+        return new URL[] {
+            obtainClassPath(),
+            obtainClassPath("org.mockito.Mockito"),
+            obtainClassPath("net.bytebuddy.ByteBuddy")
         };
     }
 
@@ -46,7 +47,11 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
 
     private static URL obtainClassPath(String className) {
         String path = className.replace('.', '/') + ".class";
-        String url = SimplePerRealmReloadingClassLoader.class.getClassLoader().getResource(path).toExternalForm();
+        String url =
+                SimplePerRealmReloadingClassLoader.class
+                        .getClassLoader()
+                        .getResource(path)
+                        .toExternalForm();
 
         try {
             return new URL(url.substring(0, url.length() - path.length()));
@@ -55,14 +60,12 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
         }
     }
 
-
-
     @Override
     public Class<?> loadClass(String qualifiedClassName) throws ClassNotFoundException {
-        if(reloadClassPredicate.acceptReloadOf(qualifiedClassName)) {
+        if (reloadClassPredicate.acceptReloadOf(qualifiedClassName)) {
             // return customLoadClass(qualifiedClassName);
-//            Class<?> loadedClass = findLoadedClass(qualifiedClassName);
-            if(!classHashMap.containsKey(qualifiedClassName)) {
+            //            Class<?> loadedClass = findLoadedClass(qualifiedClassName);
+            if (!classHashMap.containsKey(qualifiedClassName)) {
                 Class<?> foundClass = findClass(qualifiedClassName);
                 saveFoundClass(qualifiedClassName, foundClass);
                 return foundClass;
@@ -77,17 +80,16 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
         classHashMap.put(qualifiedClassName, foundClass);
     }
 
-
     private Class<?> useParentClassLoaderFor(String qualifiedName) throws ClassNotFoundException {
         return super.loadClass(qualifiedName);
     }
-
 
     public Object doInRealm(String callableCalledInClassLoaderRealm) throws Exception {
         ClassLoader current = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(this);
-            Object instance = this.loadClass(callableCalledInClassLoaderRealm).getConstructor().newInstance();
+            Object instance =
+                    this.loadClass(callableCalledInClassLoaderRealm).getConstructor().newInstance();
             if (instance instanceof Callable) {
                 Callable<?> callableInRealm = (Callable<?>) instance;
                 return callableInRealm.call();
@@ -95,15 +97,22 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
         } finally {
             Thread.currentThread().setContextClassLoader(current);
         }
-        throw new IllegalArgumentException("qualified name '" + callableCalledInClassLoaderRealm + "' should represent a class implementing Callable");
+        throw new IllegalArgumentException(
+                "qualified name '"
+                        + callableCalledInClassLoaderRealm
+                        + "' should represent a class implementing Callable");
     }
 
-
-    public Object doInRealm(String callableCalledInClassLoaderRealm, Class<?>[] argTypes, Object[] args) throws Exception {
+    public Object doInRealm(
+            String callableCalledInClassLoaderRealm, Class<?>[] argTypes, Object[] args)
+            throws Exception {
         ClassLoader current = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(this);
-            Object instance = this.loadClass(callableCalledInClassLoaderRealm).getConstructor(argTypes).newInstance(args);
+            Object instance =
+                    this.loadClass(callableCalledInClassLoaderRealm)
+                            .getConstructor(argTypes)
+                            .newInstance(args);
             if (instance instanceof Callable) {
                 Callable<?> callableInRealm = (Callable<?>) instance;
                 return callableInRealm.call();
@@ -112,9 +121,11 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
             Thread.currentThread().setContextClassLoader(current);
         }
 
-        throw new IllegalArgumentException("qualified name '" + callableCalledInClassLoaderRealm + "' should represent a class implementing Callable");
+        throw new IllegalArgumentException(
+                "qualified name '"
+                        + callableCalledInClassLoaderRealm
+                        + "' should represent a class implementing Callable");
     }
-
 
     public interface ReloadClassPredicate {
         boolean acceptReloadOf(String qualifiedName);

@@ -36,7 +36,7 @@ public class BasicVerificationTest extends TestBase {
         verifyNoMoreInteractions(mock);
     }
 
-    @Test(expected=WantedButNotInvoked.class)
+    @Test(expected = WantedButNotInvoked.class)
     public void shouldFailVerification() throws Exception {
         verify(mock).clear();
     }
@@ -48,12 +48,14 @@ public class BasicVerificationTest extends TestBase {
 
         verify(mock).clear();
 
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                verify(mock).add("bar");
-            }
-        }).isInstanceOf(ArgumentsAreDifferent.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() {
+                                verify(mock).add("bar");
+                            }
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class);
     }
 
     @Test
@@ -68,7 +70,8 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mockTwo, atLeastOnce()).add("foo");
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 
     @Test
@@ -83,7 +86,8 @@ public class BasicVerificationTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -97,7 +101,8 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mock).clear();
             fail();
-        } catch (TooManyActualInvocations e) {}
+        } catch (TooManyActualInvocations e) {
+        }
     }
 
     @Test
@@ -109,7 +114,6 @@ public class BasicVerificationTest extends TestBase {
         verify(mock).add("test");
     }
 
-
     @Test
     public void shouldDetectWhenOverloadedMethodCalled() throws Exception {
         IMethods mockThree = mock(IMethods.class);
@@ -118,6 +122,7 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mockThree).varargs((String[]) new String[] {});
             fail();
-        } catch(WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 }

@@ -20,24 +20,27 @@ public class ConditionalStackTraceFilterTest extends TestBase {
     public void shouldNotFilterWhenConfigurationSaysNo() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
 
-        Throwable t = new TraceBuilder().classes(
-                "org.test.MockitoSampleTest",
-                "org.mockito.Mockito"
-        ).toThrowable();
+        Throwable t =
+                new TraceBuilder()
+                        .classes("org.test.MockitoSampleTest", "org.mockito.Mockito")
+                        .toThrowable();
 
         filter.filter(t);
 
-        Assertions.assertThat(t).has(onlyThoseClassesInStackTrace("org.mockito.Mockito", "org.test.MockitoSampleTest"));
+        Assertions.assertThat(t)
+                .has(
+                        onlyThoseClassesInStackTrace(
+                                "org.mockito.Mockito", "org.test.MockitoSampleTest"));
     }
 
     @Test
     public void shouldFilterWhenConfigurationSaysYes() {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
 
-        Throwable t = new TraceBuilder().classes(
-                "org.test.MockitoSampleTest",
-                "org.mockito.Mockito"
-        ).toThrowable();
+        Throwable t =
+                new TraceBuilder()
+                        .classes("org.test.MockitoSampleTest", "org.mockito.Mockito")
+                        .toThrowable();
 
         filter.filter(t);
 

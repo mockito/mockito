@@ -41,7 +41,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).get(0);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 
     @Test
@@ -51,7 +52,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).clear();
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -61,7 +63,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).get(999);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 
     @Test
@@ -71,7 +74,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).get(2);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -81,5 +85,4 @@ public class OnlyVerificationTest extends TestBase {
         verify(mock, only()).clear();
         verify(mock2, only()).get(0);
     }
-
 }

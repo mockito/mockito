@@ -19,19 +19,19 @@ public class ReturnsMocksTest extends TestBase {
 
     interface AllInterface {
         FooInterface getInterface();
+
         BarClass getNormalClass();
+
         Baz getFinalClass();
+
         WithGenerics<String> withGenerics();
     }
 
-    interface FooInterface {
-    }
+    interface FooInterface {}
 
-    class BarClass {
-    }
+    class BarClass {}
 
-    final class Baz {
-    }
+    final class Baz {}
 
     @Test
     public void should_return_mock_value_for_interface() throws Throwable {
@@ -48,7 +48,9 @@ public class ReturnsMocksTest extends TestBase {
     @SuppressWarnings("unchecked")
     @Test
     public void should_return_mock_value_for_generic_class() throws Throwable {
-        WithGenerics<String> classMock = (WithGenerics<String>) values.answer(invocationOf(AllInterface.class, "withGenerics"));
+        WithGenerics<String> classMock =
+                (WithGenerics<String>)
+                        values.answer(invocationOf(AllInterface.class, "withGenerics"));
         assertTrue(MockUtil.isMock(classMock));
         when(classMock.execute()).thenReturn("return");
         assertEquals("return", classMock.execute());
@@ -63,10 +65,14 @@ public class ReturnsMocksTest extends TestBase {
     @Test
     public void should_return_the_usual_default_values_for_primitives() throws Throwable {
         ReturnsMocks answer = new ReturnsMocks();
-        assertEquals(false, answer.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
-        assertEquals((char) 0, answer.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
-        assertEquals((byte) 0, answer.answer(invocationOf(HasPrimitiveMethods.class, "byteMethod")));
-        assertEquals((short) 0, answer.answer(invocationOf(HasPrimitiveMethods.class, "shortMethod")));
+        assertEquals(
+                false, answer.answer(invocationOf(HasPrimitiveMethods.class, "booleanMethod")));
+        assertEquals(
+                (char) 0, answer.answer(invocationOf(HasPrimitiveMethods.class, "charMethod")));
+        assertEquals(
+                (byte) 0, answer.answer(invocationOf(HasPrimitiveMethods.class, "byteMethod")));
+        assertEquals(
+                (short) 0, answer.answer(invocationOf(HasPrimitiveMethods.class, "shortMethod")));
         assertEquals(0, answer.answer(invocationOf(HasPrimitiveMethods.class, "intMethod")));
         assertEquals(0L, answer.answer(invocationOf(HasPrimitiveMethods.class, "longMethod")));
         assertEquals(0f, answer.answer(invocationOf(HasPrimitiveMethods.class, "floatMethod")));
@@ -76,12 +82,14 @@ public class ReturnsMocksTest extends TestBase {
     @SuppressWarnings("unused")
     interface StringMethods {
         String stringMethod();
+
         String[] stringArrayMethod();
     }
 
     @Test
     public void should_return_empty_array() throws Throwable {
-        String[] ret = (String[]) values.answer(invocationOf(StringMethods.class, "stringArrayMethod"));
+        String[] ret =
+                (String[]) values.answer(invocationOf(StringMethods.class, "stringArrayMethod"));
 
         assertTrue(ret.getClass().isArray());
         assertTrue(ret.length == 0);

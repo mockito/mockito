@@ -21,10 +21,14 @@ public class UsingVarargsTest extends TestBase {
 
     private interface IVarArgs {
         void withStringVarargs(int value, String... s);
+
         String withStringVarargsReturningString(int value, String... s);
+
         void withObjectVarargs(int value, Object... o);
+
         boolean withBooleanVarargs(int value, boolean... b);
-        int foo(Object ... objects);
+
+        int foo(Object... objects);
     }
 
     @Mock IVarArgs mock;
@@ -82,7 +86,8 @@ public class UsingVarargsTest extends TestBase {
         try {
             verify(mock).withStringVarargs(2, "1", "2", "79", "4");
             fail();
-        } catch (ArgumentsAreDifferent e) {}
+        } catch (ArgumentsAreDifferent e) {
+        }
     }
 
     @Test
@@ -96,7 +101,8 @@ public class UsingVarargsTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -110,7 +116,8 @@ public class UsingVarargsTest extends TestBase {
         try {
             verify(mock).withBooleanVarargs(3, true, true, true, true);
             fail();
-        } catch (ArgumentsAreDifferent e) {}
+        } catch (ArgumentsAreDifferent e) {
+        }
     }
 
     @Test
@@ -135,41 +142,42 @@ public class UsingVarargsTest extends TestBase {
 
     interface MixedVarargs {
         String doSomething(String one, String... varargs);
+
         String doSomething(String one, String two, String... varargs);
     }
 
     @SuppressWarnings("all")
     @Test
-    //See bug #31
+    // See bug #31
     public void shouldStubCorrectlyWhenMixedVarargsUsed() {
         MixedVarargs mixedVarargs = mock(MixedVarargs.class);
-        when(mixedVarargs.doSomething("hello", (String[])null)).thenReturn("hello");
-        when(mixedVarargs.doSomething("goodbye", (String[])null)).thenReturn("goodbye");
+        when(mixedVarargs.doSomething("hello", (String[]) null)).thenReturn("hello");
+        when(mixedVarargs.doSomething("goodbye", (String[]) null)).thenReturn("goodbye");
 
-        String result = mixedVarargs.doSomething("hello",(String[]) null);
+        String result = mixedVarargs.doSomething("hello", (String[]) null);
         assertEquals("hello", result);
 
-        verify(mixedVarargs).doSomething("hello", (String[])null);
+        verify(mixedVarargs).doSomething("hello", (String[]) null);
     }
 
     @SuppressWarnings("all")
     @Test
     public void shouldStubCorrectlyWhenDoubleStringAndMixedVarargsUsed() {
         MixedVarargs mixedVarargs = mock(MixedVarargs.class);
-        when(mixedVarargs.doSomething("one", "two", (String[])null)).thenReturn("hello");
-        when(mixedVarargs.doSomething("1", "2", (String[])null)).thenReturn("goodbye");
+        when(mixedVarargs.doSomething("one", "two", (String[]) null)).thenReturn("hello");
+        when(mixedVarargs.doSomething("1", "2", (String[]) null)).thenReturn("goodbye");
 
-        String result = mixedVarargs.doSomething("one", "two", (String[])null);
+        String result = mixedVarargs.doSomething("one", "two", (String[]) null);
         assertEquals("hello", result);
     }
 
     @Test
-    //See bug #157
+    // See bug #157
     public void shouldMatchEasilyEmptyVararg() throws Exception {
-        //when
+        // when
         when(mock.foo(anyVararg())).thenReturn(-1);
 
-        //then
+        // then
         assertEquals(-1, mock.foo());
     }
 }

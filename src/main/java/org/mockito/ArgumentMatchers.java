@@ -775,8 +775,6 @@ public class ArgumentMatchers {
         return anyIterable();
     }
 
-
-
     /**
      * <code>boolean</code> argument that is equal to the given value.
      *
@@ -907,8 +905,7 @@ public class ArgumentMatchers {
      */
     public static <T> T eq(T value) {
         reportMatcher(new Equals(value));
-        if (value == null)
-            return null;
+        if (value == null) return null;
         return (T) Primitives.defaultValue(value.getClass());
     }
 
@@ -954,8 +951,7 @@ public class ArgumentMatchers {
      */
     public static <T> T same(T value) {
         reportMatcher(new Same(value));
-        if (value == null)
-            return null;
+        if (value == null) return null;
         return (T) Primitives.defaultValue(value.getClass());
     }
 
@@ -1086,7 +1082,6 @@ public class ArgumentMatchers {
         return notNull(clazz);
     }
 
-
     /**
      * Argument that is either <code>null</code> or of the given type.
      *
@@ -1099,7 +1094,7 @@ public class ArgumentMatchers {
      */
     public static <T> T nullable(Class<T> clazz) {
         AdditionalMatchers.or(isNull(), isA(clazz));
-        return  (T) Primitives.defaultValue(clazz);
+        return (T) Primitives.defaultValue(clazz);
     }
 
     /**

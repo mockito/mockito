@@ -29,9 +29,7 @@ public class AccessibilityChangerTest {
         new AccessibilityChanger().safelyDisableAccess(field("whatever"));
     }
 
-
     private Field field(String fieldName) throws NoSuchFieldException {
         return this.getClass().getDeclaredField(fieldName);
     }
-
 }

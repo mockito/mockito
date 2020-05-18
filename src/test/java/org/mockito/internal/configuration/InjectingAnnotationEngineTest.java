@@ -12,16 +12,13 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
-class I { }
+class I {}
 
 @RunWith(MockitoJUnitRunner.class)
 public class InjectingAnnotationEngineTest extends I {
-    @InjectMocks
-    Target target;
-    @Mock
-    Foo foo;
-    @Spy
-    Bar bar = new Bar();
+    @InjectMocks Target target;
+    @Mock Foo foo;
+    @Spy Bar bar = new Bar();
 
     /*
      If the test case has super classes, the @InjectMocks field has a field that not listed in the constructor argument
@@ -52,9 +49,7 @@ public class InjectingAnnotationEngineTest extends I {
         }
     }
 
-    public static class Foo {
-    }
+    public static class Foo {}
 
-    public static class Bar {
-    }
+    public static class Bar {}
 }

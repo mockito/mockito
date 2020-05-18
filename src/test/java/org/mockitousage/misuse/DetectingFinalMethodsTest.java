@@ -31,7 +31,8 @@ public class DetectingFinalMethodsTest extends TestBase {
         try {
             verify(withFinal).foo();
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (UnfinishedVerificationException e) {
+        }
     }
 
     @Test
@@ -41,6 +42,7 @@ public class DetectingFinalMethodsTest extends TestBase {
         try {
             when(withFinal.foo()).thenReturn(null);
             fail();
-        } catch (MissingMethodInvocationException e) {}
+        } catch (MissingMethodInvocationException e) {
+        }
     }
 }

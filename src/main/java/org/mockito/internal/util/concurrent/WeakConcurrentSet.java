@@ -84,7 +84,9 @@ public class WeakConcurrentSet<V> implements Runnable, Iterable<V> {
      * ({@link Cleaner#MANUAL}).
      */
     public enum Cleaner {
-        THREAD, INLINE, MANUAL
+        THREAD,
+        INLINE,
+        MANUAL
     }
 
     /**

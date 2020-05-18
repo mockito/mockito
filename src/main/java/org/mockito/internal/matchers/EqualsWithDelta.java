@@ -28,8 +28,7 @@ public class EqualsWithDelta implements ArgumentMatcher<Number>, Serializable {
         }
 
         return wanted.doubleValue() - delta.doubleValue() <= actual.doubleValue()
-                && actual.doubleValue() <= wanted.doubleValue()
-                        + delta.doubleValue();
+                && actual.doubleValue() <= wanted.doubleValue() + delta.doubleValue();
     }
 
     public String toString() {

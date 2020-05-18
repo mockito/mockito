@@ -22,18 +22,20 @@ import org.mockito.internal.util.reflection.BeanPropertySetter;
  * </ul>
  */
 public class TerminalMockCandidateFilter implements MockCandidateFilter {
-    public OngoingInjector filterCandidate(final Collection<Object> mocks,
-                                           final Field candidateFieldToBeInjected,
-                                           final List<Field> allRemainingCandidateFields,
-                                           final Object injectee) {
-        if(mocks.size() == 1) {
+    public OngoingInjector filterCandidate(
+            final Collection<Object> mocks,
+            final Field candidateFieldToBeInjected,
+            final List<Field> allRemainingCandidateFields,
+            final Object injectee) {
+        if (mocks.size() == 1) {
             final Object matchingMock = mocks.iterator().next();
 
             return new OngoingInjector() {
                 public Object thenInject() {
                     try {
-                        if (!new BeanPropertySetter(injectee, candidateFieldToBeInjected).set(matchingMock)) {
-                            setField(injectee, candidateFieldToBeInjected,matchingMock);
+                        if (!new BeanPropertySetter(injectee, candidateFieldToBeInjected)
+                                .set(matchingMock)) {
+                            setField(injectee, candidateFieldToBeInjected, matchingMock);
                         }
                     } catch (RuntimeException e) {
                         throw cannotInjectDependency(candidateFieldToBeInjected, matchingMock, e);
@@ -44,6 +46,5 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
         }
 
         return OngoingInjector.nop;
-
     }
 }

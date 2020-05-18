@@ -24,15 +24,16 @@ public class LoggingListener implements FindingsListener {
     }
 
     public void foundStubCalledWithDifferentArgs(Invocation unused, InvocationMatcher unstubbed) {
-        //TODO there is not good reason we should get Invocation and InvocationMatcher here
+        // TODO there is not good reason we should get Invocation and InvocationMatcher here
         // we should pass 2 InvocationMatchers and testing is easier
-        // it's also confusing that unstubbed invocation is passed as InvocationMatcher (should be rather Invocation)
+        // it's also confusing that unstubbed invocation is passed as InvocationMatcher (should be
+        // rather Invocation)
 
-        //this information comes in pairs
+        // this information comes in pairs
         String index = Integer.toString(indexOfNextPair(argMismatchStubs.size()));
-        //making sure indentation is correct
+        // making sure indentation is correct
         String padding = index.replaceAll("\\d", " ");
-        argMismatchStubs.add(index +   ". Stubbed " + unused.getLocation());
+        argMismatchStubs.add(index + ". Stubbed " + unused.getLocation());
         argMismatchStubs.add(padding + "  Invoked " + unstubbed.getInvocation().getLocation());
     }
 
@@ -46,7 +47,8 @@ public class LoggingListener implements FindingsListener {
 
     public void foundUnstubbed(InvocationMatcher unstubbed) {
         if (warnAboutUnstubbed) {
-            unstubbedCalls.add((unstubbedCalls.size() + 1) + ". " + unstubbed.getInvocation().getLocation());
+            unstubbedCalls.add(
+                    (unstubbedCalls.size() + 1) + ". " + unstubbed.getInvocation().getLocation());
         }
     }
 
@@ -56,11 +58,13 @@ public class LoggingListener implements FindingsListener {
         }
 
         List<String> lines = new LinkedList<String>();
-        lines.add("[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):");
+        lines.add(
+                "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):");
 
         if (!argMismatchStubs.isEmpty()) {
             lines.add("[Mockito]");
-            lines.add("[Mockito] Argument mismatch between stubbing and actual invocation (is stubbing correct in the test?):");
+            lines.add(
+                    "[Mockito] Argument mismatch between stubbing and actual invocation (is stubbing correct in the test?):");
             lines.add("[Mockito]");
             addOrderedList(lines, argMismatchStubs);
         }
@@ -74,7 +78,8 @@ public class LoggingListener implements FindingsListener {
 
         if (!unstubbedCalls.isEmpty()) {
             lines.add("[Mockito]");
-            lines.add("[Mockito] Unstubbed method invocations (perhaps missing stubbing in the test?):");
+            lines.add(
+                    "[Mockito] Unstubbed method invocations (perhaps missing stubbing in the test?):");
             lines.add("[Mockito]");
             addOrderedList(lines, unstubbedCalls);
         }

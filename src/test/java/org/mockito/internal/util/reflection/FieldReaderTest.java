@@ -20,17 +20,17 @@ public class FieldReaderTest extends TestBase {
 
     @Test
     public void shouldKnowWhenNull() throws Exception {
-        //when
+        // when
         FieldReader reader = new FieldReader(new Foo(), Foo.class.getDeclaredField("isNull"));
-        //then
+        // then
         assertTrue(reader.isNull());
     }
 
     @Test
     public void shouldKnowWhenNotNull() throws Exception {
-        //when
+        // when
         FieldReader reader = new FieldReader(new Foo(), Foo.class.getDeclaredField("notNull"));
-        //then
+        // then
         assertFalse(reader.isNull());
     }
 }

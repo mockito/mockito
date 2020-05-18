@@ -154,13 +154,15 @@ public class InvalidStateDetectionTest extends TestBase {
         try {
             doThrow(new RuntimeException()).when(mock).oneArg(true);
             fail();
-        } catch (UnfinishedStubbingException e) {}
+        } catch (UnfinishedStubbingException e) {
+        }
 
         doThrow(new RuntimeException()).when(mock).oneArg(true);
         try {
             mock.oneArg(true);
             fail();
-        } catch (RuntimeException e) {}
+        } catch (RuntimeException e) {
+        }
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
@@ -172,7 +174,8 @@ public class InvalidStateDetectionTest extends TestBase {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (UnfinishedVerificationException e) {
+        }
 
         verify(mock).simpleMethod();
     }
@@ -257,7 +260,7 @@ public class InvalidStateDetectionTest extends TestBase {
         } catch (Exception e) {
             assertEquals(expected, e.getClass());
         }
-        //Make sure state is cleaned up
+        // Make sure state is cleaned up
         new StateMaster().validate();
     }
 }

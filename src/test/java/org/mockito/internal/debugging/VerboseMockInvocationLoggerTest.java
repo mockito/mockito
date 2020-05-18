@@ -57,7 +57,8 @@ public class VerboseMockInvocationLoggerTest {
     @Test
     public void should_print_invocation_with_exception() {
         // when
-        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
+        listener.reportInvocation(
+                new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
 
         // then
         assertThat(printed())
@@ -87,13 +88,16 @@ public class VerboseMockInvocationLoggerTest {
     @Test
     public void should_log_count_of_interactions() {
         // when & then
-        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
+        listener.reportInvocation(
+                new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
         assertThat(printed()).contains("#1");
 
-        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
+        listener.reportInvocation(
+                new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
         assertThat(printed()).contains("#2");
 
-        listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
+        listener.reportInvocation(
+                new NotifiedMethodInvocationReport(invocation, new ThirdPartyException()));
         assertThat(printed()).contains("#3");
     }
 

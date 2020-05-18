@@ -26,5 +26,6 @@ public interface SubclassLoader {
      * @param localMock   {@code true} if the mock is loaded within the runtime package of the mocked type.
      * @return An appropriate class loading strategy.
      */
-    ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean localMock);
+    ClassLoadingStrategy<ClassLoader> resolveStrategy(
+            Class<?> mockedType, ClassLoader classLoader, boolean localMock);
 }

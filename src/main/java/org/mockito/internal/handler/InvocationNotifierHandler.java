@@ -33,18 +33,18 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
             Object returnedValue = mockHandler.handle(invocation);
             notifyMethodCall(invocation, returnedValue);
             return returnedValue;
-        } catch (Throwable t){
+        } catch (Throwable t) {
             notifyMethodCallException(invocation, t);
             throw t;
         }
     }
 
-
     private void notifyMethodCall(Invocation invocation, Object returnValue) {
         for (InvocationListener listener : invocationListeners) {
             try {
-                listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, returnValue));
-            } catch(Throwable listenerThrowable) {
+                listener.reportInvocation(
+                        new NotifiedMethodInvocationReport(invocation, returnValue));
+            } catch (Throwable listenerThrowable) {
                 throw invocationListenerThrewException(listener, listenerThrowable);
             }
         }
@@ -53,8 +53,9 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
     private void notifyMethodCallException(Invocation invocation, Throwable exception) {
         for (InvocationListener listener : invocationListeners) {
             try {
-                listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, exception));
-            } catch(Throwable listenerThrowable) {
+                listener.reportInvocation(
+                        new NotifiedMethodInvocationReport(invocation, exception));
+            } catch (Throwable listenerThrowable) {
                 throw invocationListenerThrewException(listener, listenerThrowable);
             }
         }
@@ -67,5 +68,4 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
     public InvocationContainer getInvocationContainer() {
         return mockHandler.getInvocationContainer();
     }
-
 }

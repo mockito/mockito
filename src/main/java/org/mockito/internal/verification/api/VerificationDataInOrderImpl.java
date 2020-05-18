@@ -15,7 +15,8 @@ public class VerificationDataInOrderImpl implements VerificationDataInOrder {
     private final List<Invocation> allInvocations;
     private final MatchableInvocation wanted;
 
-    public VerificationDataInOrderImpl(InOrderContext inOrder, List<Invocation> allInvocations, MatchableInvocation wanted) {
+    public VerificationDataInOrderImpl(
+            InOrderContext inOrder, List<Invocation> allInvocations, MatchableInvocation wanted) {
         this.inOrder = inOrder;
         this.allInvocations = allInvocations;
         this.wanted = wanted;

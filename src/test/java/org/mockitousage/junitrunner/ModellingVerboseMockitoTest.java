@@ -18,7 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-//@RunWith(ConsoleSpammingMockitoJUnitRunner.class)
+// @RunWith(ConsoleSpammingMockitoJUnitRunner.class)
 @RunWith(MockitoJUnitRunner.class)
 @Ignore
 public class ModellingVerboseMockitoTest extends TestBase {
@@ -36,22 +36,23 @@ public class ModellingVerboseMockitoTest extends TestBase {
         when(mock.otherMethod()).thenReturn("foo");
         when(mock.booleanObjectReturningMethod()).thenReturn(false);
 
-        //TODO: stubbed with those args here -> stubbed with certain args here
+        // TODO: stubbed with those args here -> stubbed with certain args here
         String ret = mock.simpleMethod(2);
 
         assertEquals("foo", ret);
-        //TODO: should show message from actual failure not at the bottom but at least below 'the actual failure is ...'
+        // TODO: should show message from actual failure not at the bottom but at least below 'the
+        // actual failure is ...'
     }
 
     @Test
     public void shouldNotLogAnythingWhenNoWarnings() throws Exception {
-        //stub
+        // stub
         when(mock.simpleMethod()).thenReturn("foo");
-        //use stub:
+        // use stub:
         mock.simpleMethod();
-        //verify:
+        // verify:
         verify(mock).simpleMethod();
-        //should be no warnings:
+        // should be no warnings:
         fail();
     }
 }

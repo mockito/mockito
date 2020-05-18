@@ -47,5 +47,4 @@ public interface InlineMockMaker extends MockMaker {
      */
     @Incubating
     void clearAllMocks();
-
 }

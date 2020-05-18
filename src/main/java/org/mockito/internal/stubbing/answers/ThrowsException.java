@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-
 import java.io.Serializable;
 
 import org.mockito.invocation.InvocationOnMock;
@@ -31,5 +30,4 @@ public class ThrowsException extends AbstractThrowsException implements Serializ
     protected Throwable getThrowable() {
         return throwable;
     }
-
 }

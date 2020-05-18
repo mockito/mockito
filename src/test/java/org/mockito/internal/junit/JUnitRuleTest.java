@@ -22,7 +22,8 @@ public class JUnitRuleTest {
     @Rule public SafeJUnitRule rule = new SafeJUnitRule(MockitoJUnit.rule());
     @Mock IMethods mock;
 
-    @Test public void injects_into_test_case() throws Throwable {
+    @Test
+    public void injects_into_test_case() throws Throwable {
         assertTrue(mockingDetails(mock).isMock());
     }
 
@@ -42,9 +43,9 @@ public class JUnitRuleTest {
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void does_not_check_invalid_mockito_usage_on_failure() throws Throwable {
-        //This intended behavior is questionable
-        //However, it was like that since the beginning of JUnit rule support
-        //Users never questioned this behavior. Hence, let's stick to it unless we have more data
+        // This intended behavior is questionable
+        // However, it was like that since the beginning of JUnit rule support
+        // Users never questioned this behavior. Hence, let's stick to it unless we have more data
         rule.expectFailure(RuntimeException.class, "foo");
 
         Mockito.when(mock.simpleMethod()); // <--- unfinished stubbing

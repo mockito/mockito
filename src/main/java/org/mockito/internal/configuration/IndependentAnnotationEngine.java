@@ -27,8 +27,11 @@ import org.mockito.plugins.AnnotationEngine;
  * @see MockitoAnnotations
  */
 @SuppressWarnings("unchecked")
-public class IndependentAnnotationEngine implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
-    private final Map<Class<? extends Annotation>, FieldAnnotationProcessor<?>> annotationProcessorMap = new HashMap<Class<? extends Annotation>, FieldAnnotationProcessor<?>>();
+public class IndependentAnnotationEngine
+        implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
+    private final Map<Class<? extends Annotation>, FieldAnnotationProcessor<?>>
+            annotationProcessorMap =
+                    new HashMap<Class<? extends Annotation>, FieldAnnotationProcessor<?>>();
 
     public IndependentAnnotationEngine() {
         registerAnnotationProcessor(Mock.class, new MockAnnotationProcessor());
@@ -41,7 +44,8 @@ public class IndependentAnnotationEngine implements AnnotationEngine, org.mockit
 
     private <A extends Annotation> FieldAnnotationProcessor<A> forAnnotation(A annotation) {
         if (annotationProcessorMap.containsKey(annotation.annotationType())) {
-            return (FieldAnnotationProcessor<A>) annotationProcessorMap.get(annotation.annotationType());
+            return (FieldAnnotationProcessor<A>)
+                    annotationProcessorMap.get(annotation.annotationType());
         }
         return new FieldAnnotationProcessor<A>() {
             public Object process(A annotation, Field field) {
@@ -50,7 +54,8 @@ public class IndependentAnnotationEngine implements AnnotationEngine, org.mockit
         };
     }
 
-    private <A extends Annotation> void registerAnnotationProcessor(Class<A> annotationClass, FieldAnnotationProcessor<A> fieldAnnotationProcessor) {
+    private <A extends Annotation> void registerAnnotationProcessor(
+            Class<A> annotationClass, FieldAnnotationProcessor<A> fieldAnnotationProcessor) {
         annotationProcessorMap.put(annotationClass, fieldAnnotationProcessor);
     }
 
@@ -59,16 +64,20 @@ public class IndependentAnnotationEngine implements AnnotationEngine, org.mockit
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             boolean alreadyAssigned = false;
-            for(Annotation annotation : field.getAnnotations()) {
+            for (Annotation annotation : field.getAnnotations()) {
                 Object mock = createMockFor(annotation, field);
                 if (mock != null) {
                     throwIfAlreadyAssigned(field, alreadyAssigned);
                     alreadyAssigned = true;
                     try {
-                        setField(testInstance, field,mock);
+                        setField(testInstance, field, mock);
                     } catch (Exception e) {
-                        throw new MockitoException("Problems setting field " + field.getName() + " annotated with "
-                                + annotation, e);
+                        throw new MockitoException(
+                                "Problems setting field "
+                                        + field.getName()
+                                        + " annotated with "
+                                        + annotation,
+                                e);
                     }
                 }
             }
@@ -80,5 +89,4 @@ public class IndependentAnnotationEngine implements AnnotationEngine, org.mockit
             throw moreThanOneAnnotationNotAllowed(field.getName());
         }
     }
-
 }

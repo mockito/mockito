@@ -64,7 +64,8 @@ public class ExampleTest {
         when(mockCalculator.countNumberOfRelatedArticles(articleTwo)).thenReturn(12);
         when(mockCalculator.countNumberOfRelatedArticles(articleThree)).thenReturn(0);
 
-        when(mockDatabase.getArticlesFor("Guardian")).thenReturn(Arrays.asList(articleOne, articleTwo, articleThree));
+        when(mockDatabase.getArticlesFor("Guardian"))
+                .thenReturn(Arrays.asList(articleOne, articleTwo, articleThree));
 
         articleManager.updateRelatedArticlesCounters("Guardian");
 
@@ -81,7 +82,8 @@ public class ExampleTest {
         when(mockCalculator.countNumberOfRelatedArticles(articleOne)).thenReturn(1);
         when(mockCalculator.countNumberOfRelatedArticles(articleTwo)).thenReturn(12);
 
-        when(mockDatabase.getArticlesFor("Guardian")).thenReturn(Arrays.asList(articleOne, articleTwo));
+        when(mockDatabase.getArticlesFor("Guardian"))
+                .thenReturn(Arrays.asList(articleOne, articleTwo));
 
         articleManager.updateRelatedArticlesCounters("Guardian");
 

@@ -40,7 +40,8 @@ class PluginInitializer {
         }
 
         try {
-            String classOrAlias = new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
+            String classOrAlias =
+                    new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
             if (classOrAlias != null) {
                 if (classOrAlias.equals(alias)) {
                     classOrAlias = plugins.getDefaultPluginClass(alias);
@@ -52,7 +53,7 @@ class PluginInitializer {
             return null;
         } catch (Exception e) {
             throw new IllegalStateException(
-                "Failed to load " + service + " implementation declared in " + resources, e);
+                    "Failed to load " + service + " implementation declared in " + resources, e);
         }
     }
 }

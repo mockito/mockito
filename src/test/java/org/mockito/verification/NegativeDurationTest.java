@@ -11,8 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.FriendlyReminderException;
 
 public class NegativeDurationTest {
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    @Rule public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void should_throw_exception_when_duration_is_negative_for_timeout_method() {

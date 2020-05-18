@@ -43,7 +43,7 @@ public class Plugins {
      * current classpath.</p>
      */
     public static InstantiatorProvider2 getInstantiatorProvider() {
-      return registry.getInstantiatorProvider();
+        return registry.getInstantiatorProvider();
     }
 
     /**

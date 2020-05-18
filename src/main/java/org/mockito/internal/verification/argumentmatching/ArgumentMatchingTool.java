@@ -13,11 +13,12 @@ import org.mockito.internal.matchers.ContainsExtraTypeInfo;
 @SuppressWarnings("unchecked")
 public class ArgumentMatchingTool {
 
-    private ArgumentMatchingTool(){}
+    private ArgumentMatchingTool() {}
     /**
      * Suspiciously not matching arguments are those that don't match, the toString() representation is the same but types are different.
      */
-    public static Integer[] getSuspiciouslyNotMatchingArgsIndexes(List<ArgumentMatcher> matchers, Object[] arguments) {
+    public static Integer[] getSuspiciouslyNotMatchingArgsIndexes(
+            List<ArgumentMatcher> matchers, Object[] arguments) {
         if (matchers.size() != arguments.length) {
             return new Integer[0];
         }

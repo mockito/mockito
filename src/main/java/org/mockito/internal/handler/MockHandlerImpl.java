@@ -47,19 +47,17 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
     public Object handle(Invocation invocation) throws Throwable {
         if (invocationContainer.hasAnswersForStubbing()) {
             // stubbing voids with doThrow() or doAnswer() style
-            InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
-                    mockingProgress().getArgumentMatcherStorage(),
-                    invocation
-            );
+            InvocationMatcher invocationMatcher =
+                    matchersBinder.bindMatchers(
+                            mockingProgress().getArgumentMatcherStorage(), invocation);
             invocationContainer.setMethodForStubbing(invocationMatcher);
             return null;
         }
         VerificationMode verificationMode = mockingProgress().pullVerificationMode();
 
-        InvocationMatcher invocationMatcher = matchersBinder.bindMatchers(
-                mockingProgress().getArgumentMatcherStorage(),
-                invocation
-        );
+        InvocationMatcher invocationMatcher =
+                matchersBinder.bindMatchers(
+                        mockingProgress().getArgumentMatcherStorage(), invocation);
 
         mockingProgress().validateState();
 
@@ -68,11 +66,13 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
             // We need to check if verification was started on the correct mock
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
             if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
-                VerificationDataImpl data = new VerificationDataImpl(invocationContainer, invocationMatcher);
+                VerificationDataImpl data =
+                        new VerificationDataImpl(invocationContainer, invocationMatcher);
                 verificationMode.verify(data);
                 return null;
             } else {
-                // this means there is an invocation on a different mock. Re-adding verification mode
+                // this means there is an invocation on a different mock. Re-adding verification
+                // mode
                 // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
                 mockingProgress().verificationStarted(verificationMode);
             }
@@ -86,8 +86,11 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         // look for existing answer for this invocation
         StubbedInvocationMatcher stubbing = invocationContainer.findAnswerFor(invocation);
         // TODO #793 - when completed, we should be able to get rid of the casting below
-        notifyStubbedAnswerLookup(invocation, stubbing, invocationContainer.getStubbingsAscending(),
-                                  (CreationSettings) mockSettings);
+        notifyStubbedAnswerLookup(
+                invocation,
+                stubbing,
+                invocationContainer.getStubbingsAscending(),
+                (CreationSettings) mockSettings);
 
         if (stubbing != null) {
             stubbing.captureArgumentsFrom(invocation);
@@ -95,19 +98,21 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
             try {
                 return stubbing.answer(invocation);
             } finally {
-                //Needed so that we correctly isolate stubbings in some scenarios
-                //see MockitoStubbedCallInAnswerTest or issue #1279
+                // Needed so that we correctly isolate stubbings in some scenarios
+                // see MockitoStubbedCallInAnswerTest or issue #1279
                 mockingProgress().reportOngoingStubbing(ongoingStubbing);
             }
         } else {
             Object ret = mockSettings.getDefaultAnswer().answer(invocation);
             DefaultAnswerValidator.validateReturnValueFor(invocation, ret);
 
-            //Mockito uses it to redo setting invocation for potential stubbing in case of partial mocks / spies.
-            //Without it, the real method inside 'when' might have delegated to other self method
-            //and overwrite the intended stubbed method with a different one.
-            //This means we would be stubbing a wrong method.
-            //Typically this would led to runtime exception that validates return type with stubbed method signature.
+            // Mockito uses it to redo setting invocation for potential stubbing in case of partial
+            // mocks / spies.
+            // Without it, the real method inside 'when' might have delegated to other self method
+            // and overwrite the intended stubbed method with a different one.
+            // This means we would be stubbing a wrong method.
+            // Typically this would led to runtime exception that validates return type with stubbed
+            // method signature.
             invocationContainer.resetInvocationForPotentialStubbing(invocationMatcher);
             return ret;
         }

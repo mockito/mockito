@@ -25,9 +25,10 @@ public class ListUtil {
         return filtered;
     }
 
-    public static <From, To> LinkedList<To> convert(Collection<From> collection, Converter<From, To> converter) {
+    public static <From, To> LinkedList<To> convert(
+            Collection<From> collection, Converter<From, To> converter) {
         LinkedList<To> converted = new LinkedList<To>();
-        for (From f: collection) {
+        for (From f : collection) {
             converted.add(converter.convert(f));
         }
         return converted;

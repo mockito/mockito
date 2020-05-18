@@ -34,9 +34,7 @@ public class InvalidUseOfMatchersTest {
             when(mock.threeArgumentMethod(1, eq("2"), "3")).thenReturn(null);
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertThat(e.getMessage())
-                    .contains("3 matchers expected")
-                    .contains("1 recorded");
+            assertThat(e.getMessage()).contains("3 matchers expected").contains("1 recorded");
         }
     }
 
@@ -92,9 +90,7 @@ public class InvalidUseOfMatchersTest {
             mock.threeArgumentMethod(1, "asd", eq("asd"));
             fail();
         } catch (InvalidUseOfMatchersException e) {
-            assertThat(e.getMessage())
-                    .contains("3 matchers expected")
-                    .contains("1 recorded");
+            assertThat(e.getMessage()).contains("3 matchers expected").contains("1 recorded");
         }
     }
 
@@ -102,19 +98,19 @@ public class InvalidUseOfMatchersTest {
     public void should_mention_matcher_when_misuse_detected() {
         // Given
 
-
         // When
         Result run = new JUnitCore().run(ObjectMatcherMisuseOnPrimitiveSite.class);
 
         // Then
 
         assertThat(run.getFailures()).hasSize(2);
-        assertThat(run.getFailures().get(0).getException()).isInstanceOf(NullPointerException.class)
-                                                           .hasMessage(null);
-        assertThat(run.getFailures().get(1).getException()).isInstanceOf(InvalidUseOfMatchersException.class)
-                                                           .hasMessageContaining("primitive alternatives");
+        assertThat(run.getFailures().get(0).getException())
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage(null);
+        assertThat(run.getFailures().get(1).getException())
+                .isInstanceOf(InvalidUseOfMatchersException.class)
+                .hasMessageContaining("primitive alternatives");
         new StateMaster().reset();
-
     }
 
     @RunWith(MockitoJUnitRunner.class)
@@ -122,10 +118,9 @@ public class InvalidUseOfMatchersTest {
         @Test
         public void fails_with_NPE() {
             IMethods mock = Mockito.mock(IMethods.class);
-            doNothing().when(mock)
-                       .twoArgumentMethod(eq(73),
-                                          (Integer) any()); // <= Raise NPE on this call site
+            doNothing()
+                    .when(mock)
+                    .twoArgumentMethod(eq(73), (Integer) any()); // <= Raise NPE on this call site
         }
-
     }
 }

@@ -14,7 +14,7 @@ public class TestMethodsFinder {
 
     public static boolean hasTestMethods(Class<?> klass) {
         Method[] methods = klass.getMethods();
-        for(Method m:methods) {
+        for (Method m : methods) {
             if (m.isAnnotationPresent(Test.class)) {
                 return true;
             }

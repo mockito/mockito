@@ -31,7 +31,7 @@ public class BridgeMethodPuzzleTest extends TestBase {
 
     private class Sub extends Super<String> {
         @Override
-        public String say(String t)  {
+        public String say(String t) {
             return "Dummy says: " + t;
         }
     }
@@ -48,8 +48,8 @@ public class BridgeMethodPuzzleTest extends TestBase {
 
     @Test
     public void shouldVerifyCorrectlyWhenBridgeMethodCalled() throws Exception {
-        //Super has following erasure: say(Object) which differs from Dummy.say(String)
-        //mock has to detect it and do the super.say()
+        // Super has following erasure: say(Object) which differs from Dummy.say(String)
+        // mock has to detect it and do the super.say()
         Sub s = mock(Sub.class);
         Super<String> s_down = s;
         s_down.say("Hello");
@@ -59,8 +59,8 @@ public class BridgeMethodPuzzleTest extends TestBase {
 
     @Test
     public void shouldVerifyCorrectlyWhenBridgeMethodVerified() throws Exception {
-        //Super has following erasure: say(Object) which differs from Dummy.say(String)
-        //mock has to detect it and do the super.say()
+        // Super has following erasure: say(Object) which differs from Dummy.say(String)
+        // mock has to detect it and do the super.say()
         Sub s = mock(Sub.class);
         Super<String> s_down = s;
         s.say("Hello");

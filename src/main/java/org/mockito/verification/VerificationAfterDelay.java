@@ -6,7 +6,6 @@ package org.mockito.verification;
 
 import org.mockito.Mockito;
 
-
 /**
  * VerificationAfterDelay is a {@link VerificationMode} that allows combining existing verification modes with an initial delay, e.g.
  * <pre class="code"><code class="java">
@@ -65,5 +64,4 @@ public interface VerificationAfterDelay extends VerificationMode {
      * period given, unless another method is invoked (in which case there will be an immediate failure)
      */
     VerificationMode only();
-
 }

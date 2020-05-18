@@ -26,7 +26,8 @@ public class BeanPropertySetter {
      * @param propertyField The field that should be accessed with the setter
      * @param reportNoSetterFound Allow the set method to raise an Exception if the setter cannot be found
      */
-    public BeanPropertySetter(final Object target, final Field propertyField, boolean reportNoSetterFound) {
+    public BeanPropertySetter(
+            final Object target, final Field propertyField, boolean reportNoSetterFound) {
         this.field = propertyField;
         this.target = target;
         this.reportNoSetterFound = reportNoSetterFound;
@@ -59,13 +60,31 @@ public class BeanPropertySetter {
             writeMethod.invoke(target, value);
             return true;
         } catch (InvocationTargetException e) {
-            throw new RuntimeException("Setter '" + writeMethod + "' of '" + target + "' with value '" + value + "' threw exception : '" + e.getTargetException() + "'", e);
+            throw new RuntimeException(
+                    "Setter '"
+                            + writeMethod
+                            + "' of '"
+                            + target
+                            + "' with value '"
+                            + value
+                            + "' threw exception : '"
+                            + e.getTargetException()
+                            + "'",
+                    e);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Access not authorized on field '" + field + "' of object '" + target + "' with value: '" + value + "'", e);
+            throw new RuntimeException(
+                    "Access not authorized on field '"
+                            + field
+                            + "' of object '"
+                            + target
+                            + "' with value: '"
+                            + value
+                            + "'",
+                    e);
         } catch (NoSuchMethodException e) {
             reportNoSetterFound();
         } finally {
-            if(writeMethod != null) {
+            if (writeMethod != null) {
                 changer.safelyDisableAccess(writeMethod);
             }
         }
@@ -90,9 +109,13 @@ public class BeanPropertySetter {
     }
 
     private void reportNoSetterFound() {
-        if(reportNoSetterFound) {
-            throw new RuntimeException("Problems setting value on object: [" + target + "] for property : [" + field.getName() + "], setter not found");
+        if (reportNoSetterFound) {
+            throw new RuntimeException(
+                    "Problems setting value on object: ["
+                            + target
+                            + "] for property : ["
+                            + field.getName()
+                            + "], setter not found");
         }
     }
-
 }

@@ -24,17 +24,19 @@ public class ReturnsMocks implements Answer<Object>, Serializable {
             return defaultReturnValue;
         }
 
-        return RetrieveGenericsForDefaultAnswers.returnTypeForMockWithCorrectGenerics(invocation,
-            new RetrieveGenericsForDefaultAnswers.AnswerCallback() {
-                @Override
-                public Object apply(Class<?> type) {
-                    if (type == null) {
-                        return null;
-                    }
+        return RetrieveGenericsForDefaultAnswers.returnTypeForMockWithCorrectGenerics(
+                invocation,
+                new RetrieveGenericsForDefaultAnswers.AnswerCallback() {
+                    @Override
+                    public Object apply(Class<?> type) {
+                        if (type == null) {
+                            return null;
+                        }
 
-                    return Mockito
-                        .mock(type, new MockSettingsImpl<Object>().defaultAnswer(ReturnsMocks.this));
-                }
-            });
+                        return Mockito.mock(
+                                type,
+                                new MockSettingsImpl<Object>().defaultAnswer(ReturnsMocks.this));
+                    }
+                });
     }
 }

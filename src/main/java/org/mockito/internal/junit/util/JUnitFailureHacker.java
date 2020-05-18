@@ -16,13 +16,17 @@ public class JUnitFailureHacker {
         if (isEmpty(warnings)) {
             return;
         }
-        //TODO: this has to protect the use in case jUnit changes and this internal state logic fails
+        // TODO: this has to protect the use in case jUnit changes and this internal state logic
+        // fails
         Throwable throwable = (Throwable) getInternalState(failure, "fThrownException");
 
-        String newMessage = "contains both: actual test failure *and* Mockito warnings.\n" +
-                warnings + "\n *** The actual failure is because of: ***\n";
+        String newMessage =
+                "contains both: actual test failure *and* Mockito warnings.\n"
+                        + warnings
+                        + "\n *** The actual failure is because of: ***\n";
 
-        ExceptionIncludingMockitoWarnings e = new ExceptionIncludingMockitoWarnings(newMessage, throwable);
+        ExceptionIncludingMockitoWarnings e =
+                new ExceptionIncludingMockitoWarnings(newMessage, throwable);
         e.setStackTrace(throwable.getStackTrace());
         setInternalState(failure, "fThrownException", e);
     }
@@ -38,7 +42,9 @@ public class JUnitFailureHacker {
             f.setAccessible(true);
             return f.get(target);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to get internal state on a private field. Please report to mockito mailing list.", e);
+            throw new RuntimeException(
+                    "Unable to get internal state on a private field. Please report to mockito mailing list.",
+                    e);
         }
     }
 
@@ -49,7 +55,9 @@ public class JUnitFailureHacker {
             f.setAccessible(true);
             f.set(target, value);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to set internal state on a private field. Please report to mockito mailing list.", e);
+            throw new RuntimeException(
+                    "Unable to set internal state on a private field. Please report to mockito mailing list.",
+                    e);
         }
     }
 
@@ -61,9 +69,11 @@ public class JUnitFailureHacker {
         }
         if (f == null) {
             throw new RuntimeException(
-                    "You want me to get this field: '" + field +
-                            "' on this class: '" + clazz.getSimpleName() +
-                            "' but this field is not declared within the hierarchy of this class!");
+                    "You want me to get this field: '"
+                            + field
+                            + "' on this class: '"
+                            + clazz.getSimpleName()
+                            + "' but this field is not declared within the hierarchy of this class!");
         }
         return f;
     }

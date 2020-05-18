@@ -22,24 +22,19 @@ import org.mockitoutil.TestBase;
 public class CaptorAnnotationTest extends TestBase {
 
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface NotAMock {
-    }
+    public @interface NotAMock {}
 
-    @Captor
-    final ArgumentCaptor<String> finalCaptor = ArgumentCaptor.forClass(String.class);
+    @Captor final ArgumentCaptor<String> finalCaptor = ArgumentCaptor.forClass(String.class);
 
-    @Captor
-    ArgumentCaptor<List<List<String>>> genericsCaptor;
+    @Captor ArgumentCaptor<List<List<String>>> genericsCaptor;
 
     @SuppressWarnings("rawtypes")
     @Captor
     ArgumentCaptor nonGenericCaptorIsAllowed;
 
-    @Mock
-    MockInterface mockInterface;
+    @Mock MockInterface mockInterface;
 
-    @NotAMock
-    Set<?> notAMock;
+    @NotAMock Set<?> notAMock;
 
     public interface MockInterface {
         void testMe(String simple, List<List<String>> genericList);
@@ -66,12 +61,10 @@ public class CaptorAnnotationTest extends TestBase {
 
         assertEquals(argForFinalCaptor, finalCaptor.getValue());
         assertEquals(argForGenericsCaptor, genericsCaptor.getValue());
-
     }
 
     public static class WrongType {
-        @Captor
-        List<?> wrongType;
+        @Captor List<?> wrongType;
     }
 
     @Test
@@ -79,13 +72,12 @@ public class CaptorAnnotationTest extends TestBase {
         try {
             MockitoAnnotations.initMocks(new WrongType());
             fail();
-        } catch (MockitoException e) {}
+        } catch (MockitoException e) {
+        }
     }
 
     public static class ToManyAnnotations {
-        @Captor
-        @Mock
-        ArgumentCaptor<List> missingGenericsField;
+        @Captor @Mock ArgumentCaptor<List> missingGenericsField;
     }
 
     @Test
@@ -95,8 +87,8 @@ public class CaptorAnnotationTest extends TestBase {
             fail();
         } catch (MockitoException e) {
             assertThat(e)
-                .hasMessageContaining("missingGenericsField")
-                .hasMessageContaining("multiple Mockito annotations");
+                    .hasMessageContaining("missingGenericsField")
+                    .hasMessageContaining("multiple Mockito annotations");
         }
     }
 
@@ -120,8 +112,7 @@ public class CaptorAnnotationTest extends TestBase {
     }
 
     class SuperBase {
-        @Captor
-        private ArgumentCaptor<IMethods> mock;
+        @Captor private ArgumentCaptor<IMethods> mock;
 
         public ArgumentCaptor<IMethods> getSuperBaseCaptor() {
             return mock;
@@ -129,8 +120,7 @@ public class CaptorAnnotationTest extends TestBase {
     }
 
     class Base extends SuperBase {
-        @Captor
-        private ArgumentCaptor<IMethods> mock;
+        @Captor private ArgumentCaptor<IMethods> mock;
 
         public ArgumentCaptor<IMethods> getBaseCaptor() {
             return mock;
@@ -138,8 +128,7 @@ public class CaptorAnnotationTest extends TestBase {
     }
 
     class Sub extends Base {
-        @Captor
-        private ArgumentCaptor<IMethods> mock;
+        @Captor private ArgumentCaptor<IMethods> mock;
 
         public ArgumentCaptor<IMethods> getCaptor() {
             return mock;

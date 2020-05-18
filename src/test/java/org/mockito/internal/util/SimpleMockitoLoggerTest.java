@@ -13,11 +13,11 @@ public class SimpleMockitoLoggerTest extends TestBase {
 
     @Test
     public void shouldLog() throws Exception {
-        //given
+        // given
         SimpleMockitoLogger logger = new SimpleMockitoLogger();
-        //when
+        // when
         logger.log("foo");
-        //then
+        // then
         assertEquals("foo", logger.getLoggedInfo());
     }
 }

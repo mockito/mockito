@@ -19,12 +19,10 @@ import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockito.verification.VerificationMode;
 
 public class VerificationOverTimeImplTest {
-    @Mock
-    private VerificationMode delegate;
+    @Mock private VerificationMode delegate;
     private VerificationOverTimeImpl impl;
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
+    @Rule public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setUp() {

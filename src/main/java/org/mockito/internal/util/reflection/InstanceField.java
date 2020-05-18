@@ -50,7 +50,7 @@ public class InstanceField {
      * @see FieldSetter
      */
     public void set(Object value) {
-        setField(instance, field,value);
+        setField(instance, field, value);
     }
 
     /**

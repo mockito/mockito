@@ -9,7 +9,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-//see issue 221
+// see issue 221
 public class NPEOnAnyClassMatcherAutounboxTest extends TestBase {
 
     interface Foo {

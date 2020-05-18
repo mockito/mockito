@@ -145,15 +145,20 @@ public class CustomMatchersTest extends TestBase {
         mock.simpleMethod("foo");
 
         try {
-            verify(mock).simpleMethod((String) argThat(new ArgumentMatcher<Object>() {
-                public boolean matches(Object argument) {
-                    return false;
-                }}));
+            verify(mock)
+                    .simpleMethod(
+                            (String)
+                                    argThat(
+                                            new ArgumentMatcher<Object>() {
+                                                public boolean matches(Object argument) {
+                                                    return false;
+                                                }
+                                            }));
             fail();
         } catch (AssertionError e) {
             assertThat(e)
-                .hasMessageContaining("<custom argument matcher>")
-                .hasMessageContaining("foo");
+                    .hasMessageContaining("<custom argument matcher>")
+                    .hasMessageContaining("foo");
         }
     }
 }

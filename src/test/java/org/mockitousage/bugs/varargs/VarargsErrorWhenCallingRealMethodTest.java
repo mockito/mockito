@@ -13,7 +13,7 @@ import org.mockitoutil.TestBase;
 public class VarargsErrorWhenCallingRealMethodTest extends TestBase {
 
     class Foo {
-        int blah(String a, String b, Object ... c) {
+        int blah(String a, String b, Object... c) {
             return 1;
         }
     }

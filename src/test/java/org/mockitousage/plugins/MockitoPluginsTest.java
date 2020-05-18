@@ -40,7 +40,8 @@ public class MockitoPluginsTest extends TestBase {
     @Test
     public void instantiator_provider_backwards_compatibility() {
         InstantiatorProvider provider = plugins.getDefaultPlugin(InstantiatorProvider.class);
-        Instantiator instantiator = provider.getInstantiator(withSettings().build(MockitoPluginsTest.class));
+        Instantiator instantiator =
+                provider.getInstantiator(withSettings().build(MockitoPluginsTest.class));
 
         assertNotNull(instantiator.newInstance(MockitoPluginsTest.class));
     }

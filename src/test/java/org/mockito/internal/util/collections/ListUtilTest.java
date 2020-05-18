@@ -21,11 +21,14 @@ public class ListUtilTest extends TestBase {
     @Test
     public void shouldFilterList() throws Exception {
         List<String> list = asList("one", "x", "two", "x", "three");
-        List<String> filtered = ListUtil.filter(list, new Filter<String>() {
-            public boolean isOut(String object) {
-                return object == "x";
-            }
-        });
+        List<String> filtered =
+                ListUtil.filter(
+                        list,
+                        new Filter<String>() {
+                            public boolean isOut(String object) {
+                                return object == "x";
+                            }
+                        });
 
         Assertions.assertThat(filtered).containsSequence("one", "two", "three");
     }

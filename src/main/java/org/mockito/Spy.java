@@ -105,4 +105,4 @@ import org.mockito.junit.MockitoJUnitRunner;
 @Retention(RUNTIME)
 @Target(FIELD)
 @Documented
-public @interface Spy { }
+public @interface Spy {}

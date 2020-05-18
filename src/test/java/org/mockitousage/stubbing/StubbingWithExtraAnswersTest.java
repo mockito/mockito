@@ -25,26 +25,28 @@ public class StubbingWithExtraAnswersTest extends TestBase {
 
     @Test
     public void shouldWorkAsStandardMockito() throws Exception {
-        //when
+        // when
         List<Integer> list = asList(1, 2, 3);
-        when(mock.objectReturningMethodNoArgs()).thenAnswer(AdditionalAnswers.returnsElementsOf(list));
+        when(mock.objectReturningMethodNoArgs())
+                .thenAnswer(AdditionalAnswers.returnsElementsOf(list));
 
-        //then
+        // then
         assertEquals(1, mock.objectReturningMethodNoArgs());
         assertEquals(2, mock.objectReturningMethodNoArgs());
         assertEquals(3, mock.objectReturningMethodNoArgs());
-        //last element is returned continuously
+        // last element is returned continuously
         assertEquals(3, mock.objectReturningMethodNoArgs());
         assertEquals(3, mock.objectReturningMethodNoArgs());
     }
 
     @Test
     public void shouldReturnNullIfNecessary() throws Exception {
-        //when
+        // when
         List<Integer> list = asList(1, null);
-        when(mock.objectReturningMethodNoArgs()).thenAnswer(AdditionalAnswers.returnsElementsOf(list));
+        when(mock.objectReturningMethodNoArgs())
+                .thenAnswer(AdditionalAnswers.returnsElementsOf(list));
 
-        //then
+        // then
         assertEquals(1, mock.objectReturningMethodNoArgs());
         assertEquals(null, mock.objectReturningMethodNoArgs());
         assertEquals(null, mock.objectReturningMethodNoArgs());
@@ -53,10 +55,11 @@ public class StubbingWithExtraAnswersTest extends TestBase {
     @Test
     public void shouldScreamWhenNullPassed() throws Exception {
         try {
-            //when
+            // when
             AdditionalAnswers.returnsElementsOf(null);
-            //then
+            // then
             fail();
-        } catch (MockitoException e) {}
+        } catch (MockitoException e) {
+        }
     }
 }

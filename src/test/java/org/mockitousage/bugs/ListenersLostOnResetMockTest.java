@@ -4,7 +4,6 @@
  */
 package org.mockitousage.bugs;
 
-
 import static org.mockito.Mockito.*;
 
 import java.util.List;

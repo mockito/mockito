@@ -16,7 +16,7 @@ public class ThreadsShareAMockTest extends TestBase {
 
     @Test
     public void shouldAllowVerifyingInThreads() throws Exception {
-        for(int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             performTest();
         }
     }
@@ -25,12 +25,13 @@ public class ThreadsShareAMockTest extends TestBase {
         mock = mock(IMethods.class);
         final Thread[] listeners = new Thread[3];
         for (int i = 0; i < listeners.length; i++) {
-            listeners[i] = new Thread() {
-                @Override
-                public void run() {
-                    mock.simpleMethod("foo");
-                }
-            };
+            listeners[i] =
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            mock.simpleMethod("foo");
+                        }
+                    };
             listeners[i].start();
         }
         for (Thread listener : listeners) {

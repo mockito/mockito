@@ -20,5 +20,4 @@ public class ConsecutiveStubbing<T> extends BaseStubbing<T> {
         invocationContainer.addConsecutiveAnswer(answer);
         return this;
     }
-
 }

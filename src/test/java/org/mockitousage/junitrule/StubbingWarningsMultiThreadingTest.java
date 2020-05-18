@@ -25,45 +25,50 @@ public class StubbingWarningsMultiThreadingTest {
     @Rule public SafeJUnitRule rule = new SafeJUnitRule(new JUnitRule(logger, Strictness.WARN));
     @Mock IMethods mock;
 
-    @Test public void using_stubbing_from_different_thread() throws Throwable {
-        //expect no warnings
-        rule.expectSuccess(new Runnable() {
-            public void run() {
-                assertTrue(logger.getLoggedInfo().isEmpty());
-            }
-        });
+    @Test
+    public void using_stubbing_from_different_thread() throws Throwable {
+        // expect no warnings
+        rule.expectSuccess(
+                new Runnable() {
+                    public void run() {
+                        assertTrue(logger.getLoggedInfo().isEmpty());
+                    }
+                });
 
-        //when stubbing is declared
+        // when stubbing is declared
         when(mock.simpleMethod()).thenReturn("1");
-        //and used from a different thread
-        ConcurrentTesting.inThread(new Runnable() {
+        // and used from a different thread
+        ConcurrentTesting.inThread(
+                new Runnable() {
                     public void run() {
                         mock.simpleMethod();
                     }
                 });
     }
 
-    @Test public void unused_stub_from_different_thread() throws Throwable {
-        //expect warnings
-        rule.expectSuccess(new Runnable() {
-            public void run() {
-                assertEquals(
-                    "[MockitoHint] StubbingWarningsMultiThreadingTest.unused_stub_from_different_thread (see javadoc for MockitoHint):\n" +
-                    "[MockitoHint] 1. Unused -> at org.mockitousage.junitrule.StubbingWarningsMultiThreadingTest.unused_stub_from_different_thread(StubbingWarningsMultiThreadingTest.java:0)\n",
-                        filterLineNo(logger.getLoggedInfo()));
-            }
-        });
+    @Test
+    public void unused_stub_from_different_thread() throws Throwable {
+        // expect warnings
+        rule.expectSuccess(
+                new Runnable() {
+                    public void run() {
+                        assertEquals(
+                                "[MockitoHint] StubbingWarningsMultiThreadingTest.unused_stub_from_different_thread (see javadoc for MockitoHint):\n"
+                                        + "[MockitoHint] 1. Unused -> at org.mockitousage.junitrule.StubbingWarningsMultiThreadingTest.unused_stub_from_different_thread(StubbingWarningsMultiThreadingTest.java:0)\n",
+                                filterLineNo(logger.getLoggedInfo()));
+                    }
+                });
 
-        //when stubbings are declared
+        // when stubbings are declared
         when(mock.simpleMethod(1)).thenReturn("1");
         when(mock.simpleMethod(2)).thenReturn("2");
 
-        //and one of the stubbings is used from a different thread
-        ConcurrentTesting.inThread(new Runnable() {
-            public void run() {
-                mock.simpleMethod(1);
-            }
-        });
+        // and one of the stubbings is used from a different thread
+        ConcurrentTesting.inThread(
+                new Runnable() {
+                    public void run() {
+                        mock.simpleMethod(1);
+                    }
+                });
     }
-
 }

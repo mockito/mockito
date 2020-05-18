@@ -18,7 +18,7 @@ public class AccessibilityChanger {
         try {
             accessibleObject.setAccessible(wasAccessible);
         } catch (Throwable t) {
-            //ignore
+            // ignore
         }
     }
 

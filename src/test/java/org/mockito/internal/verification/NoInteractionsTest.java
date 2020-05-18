@@ -21,23 +21,21 @@ public class NoInteractionsTest extends TestBase {
 
     @Test
     public void noInteractionsExceptionMessageShouldDescribeMock() {
-        //given
+        // given
         NoInteractions n = new NoInteractions();
         IMethods mock = mock(IMethods.class, "a mock");
         InvocationMatcher i = new InvocationBuilder().mock(mock).toInvocationMatcher();
 
-        InvocationContainerImpl invocations =
-            new InvocationContainerImpl(new MockSettingsImpl());
+        InvocationContainerImpl invocations = new InvocationContainerImpl(new MockSettingsImpl());
         invocations.setInvocationForPotentialStubbing(i);
 
         try {
-            //when
+            // when
             n.verify(new VerificationDataImpl(invocations, null));
-            //then
+            // then
             fail();
         } catch (NoInteractionsWanted e) {
             Assertions.assertThat(e.toString()).contains(mock.toString());
         }
     }
-
 }
