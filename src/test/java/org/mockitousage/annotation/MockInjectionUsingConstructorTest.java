@@ -5,7 +5,10 @@
 package org.mockitousage.annotation;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -212,8 +215,4 @@ public class MockInjectionUsingConstructorTest {
 
         assertThat(testClass.f).isSameAs(original);
     }
-
-
-
-
 }

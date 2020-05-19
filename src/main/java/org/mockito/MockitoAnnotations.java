@@ -54,17 +54,17 @@ import org.mockito.plugins.AnnotationEngine;
 public class MockitoAnnotations {
 
     /**
-     * Initializes objects annotated with Mockito annotations for given testClass:
+     * Initializes objects annotated with Mockito annotations for given testInstance:
      *  &#064;{@link org.mockito.Mock}, &#064;{@link Spy}, &#064;{@link Captor}, &#064;{@link InjectMocks}
      * <p>
      * See examples in javadoc for {@link MockitoAnnotations} class.
      */
-    public static void initMocks(Object testClass) {
-        if (testClass == null) {
-            throw new MockitoException("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class");
+    public static void initMocks(Object testInstance) {
+        if (testInstance == null) {
+            throw new MockitoException("testInstance cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class");
         }
 
         AnnotationEngine annotationEngine = new GlobalConfiguration().tryGetPluginAnnotationEngine();
-        annotationEngine.process(testClass.getClass(), testClass);
+        annotationEngine.process(testInstance.getClass(), testInstance);
     }
 }

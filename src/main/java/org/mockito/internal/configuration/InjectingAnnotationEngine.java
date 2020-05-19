@@ -6,10 +6,13 @@ package org.mockito.internal.configuration;
 
 import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.mockito.InjectMocks;
+import org.mockito.InjectMocksNewInstance;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
 import org.mockito.internal.configuration.injection.scanner.MockScanner;
@@ -41,12 +44,13 @@ public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.
     public void process(Class<?> clazz, Object testInstance) {
         processIndependentAnnotations(testInstance.getClass(), testInstance);
         processInjectMocks(testInstance.getClass(), testInstance);
+        injectMocks(testInstance, InjectMocksNewInstance.class, true);
     }
 
     private void processInjectMocks(final Class<?> clazz, final Object testInstance) {
         Class<?> classContext = clazz;
         while (classContext != Object.class) {
-            injectMocks(testInstance);
+            injectMocks(testInstance, InjectMocks.class, false);
             classContext = classContext.getSuperclass();
         }
     }
@@ -73,19 +77,19 @@ public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.
      * @param testClassInstance
      *            Test class, usually <code>this</code>
      */
-    public void injectMocks(final Object testClassInstance) {
+    public void injectMocks(final Object testClassInstance, Class<? extends Annotation> annotationClass, boolean force) {
         Class<?> clazz = testClassInstance.getClass();
         Set<Field> mockDependentFields = new HashSet<Field>();
         Set<Object> mocks = newMockSafeHashSet();
 
         while (clazz != Object.class) {
-            new InjectMocksScanner(clazz).addTo(mockDependentFields);
+            new InjectMocksScanner(clazz, annotationClass).addTo(mockDependentFields);
             new MockScanner(testClassInstance, clazz).addPreparedMocks(mocks);
             onInjection(testClassInstance, clazz, mockDependentFields, mocks);
             clazz = clazz.getSuperclass();
         }
 
-        new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
+        new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClassInstance, force);
     }
 
     protected void onInjection(Object testClassInstance, Class<?> clazz, Set<Field> mockDependentFields, Set<Object> mocks) {

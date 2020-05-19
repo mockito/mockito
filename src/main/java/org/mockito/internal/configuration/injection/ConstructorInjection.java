@@ -37,12 +37,16 @@ import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgument
  */
 public class ConstructorInjection extends MockInjectionStrategy {
 
-    public ConstructorInjection() { }
+    private final boolean force;
+
+    public ConstructorInjection(boolean force) {
+        this.force = force;
+    }
 
     public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
         try {
             SimpleArgumentResolver simpleArgumentResolver = new SimpleArgumentResolver(mockCandidates);
-            FieldInitializationReport report = new FieldInitializer(fieldOwner, field, simpleArgumentResolver).initialize();
+            FieldInitializationReport report = new FieldInitializer(fieldOwner, field, simpleArgumentResolver).initialize(force);
 
             return report.fieldWasInitializedUsingContructorArgs();
         } catch (MockitoException e) {

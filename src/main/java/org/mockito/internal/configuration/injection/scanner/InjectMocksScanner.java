@@ -20,14 +20,17 @@ import org.mockito.Mock;
  */
 public class InjectMocksScanner {
     private final Class<?> clazz;
+    private final Class<? extends Annotation> annotationClass;
 
     /**
      * Create a new InjectMocksScanner for the given clazz on the given instance
      *
      * @param clazz    Current class in the hierarchy of the test
+     * @param annotationClass
      */
-    public InjectMocksScanner(Class<?> clazz) {
+    public InjectMocksScanner(Class<?> clazz, Class<? extends Annotation> annotationClass) {
         this.clazz = clazz;
+        this.annotationClass = annotationClass;
     }
 
 
@@ -50,7 +53,7 @@ public class InjectMocksScanner {
         Set<Field> mockDependentFields = new HashSet<Field>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
-            if (null != field.getAnnotation(InjectMocks.class)) {
+            if (null != field.getAnnotation(annotationClass)) {
                 assertNoAnnotations(field, Mock.class, Captor.class);
                 mockDependentFields.add(field);
             }
@@ -59,10 +62,11 @@ public class InjectMocksScanner {
         return mockDependentFields;
     }
 
-    private static void assertNoAnnotations(Field field, Class<? extends Annotation>... annotations) {
+    @SafeVarargs
+    private final void assertNoAnnotations(Field field, Class<? extends Annotation>... annotations) {
         for (Class<? extends Annotation> annotation : annotations) {
             if (field.isAnnotationPresent(annotation)) {
-                throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(), InjectMocks.class.getSimpleName());
+                throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(), annotationClass.getSimpleName());
             }
         }
     }

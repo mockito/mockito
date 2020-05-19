@@ -85,11 +85,15 @@ public class FieldInitializer {
      * @return Actual field instance.
      */
     public FieldInitializationReport initialize() {
+        return initialize(false);
+    }
+
+    public FieldInitializationReport initialize(boolean force) {
         final AccessibilityChanger changer = new AccessibilityChanger();
         changer.enableAccess(field);
 
         try {
-            return acquireFieldInstance();
+            return acquireFieldInstance(force);
         } catch(IllegalAccessException e) {
             throw new MockitoException("Problems initializing field '" + field.getName() + "' of type '" + field.getType().getSimpleName() + "'", e);
         } finally {
@@ -128,10 +132,9 @@ public class FieldInitializer {
         }
     }
 
-
-    private FieldInitializationReport acquireFieldInstance() throws IllegalAccessException {
+    private FieldInitializationReport acquireFieldInstance(boolean force) throws IllegalAccessException {
         Object fieldInstance = field.get(fieldOwner);
-        if(fieldInstance != null) {
+        if (fieldInstance != null && !force) {
             return new FieldInitializationReport(fieldInstance, false, false);
         }
 

@@ -16,11 +16,11 @@ import org.mockito.internal.configuration.injection.MockInjection;
  */
 public class DefaultInjectionEngine {
 
-    public void injectMocksOnFields(Set<Field> needingInjection, Set<Object> mocks, Object testClassInstance) {
+    public void injectMocksOnFields(Set<Field> needingInjection, Set<Object> mocks, Object testClassInstance, boolean force) {
         MockInjection.onFields(needingInjection, testClassInstance)
                 .withMocks(mocks)
-                .tryConstructorInjection()
-                .tryPropertyOrFieldInjection()
+                .tryConstructorInjection(force)
+                .tryPropertyOrFieldInjection(force)
                 .handleSpyAnnotation()
                 .apply();
     }

@@ -28,7 +28,7 @@ public class ConstructorInjectionTest {
 
     @Before
     public void initialize_dependencies() {
-        underTest = new ConstructorInjection();
+        underTest = new ConstructorInjection(false);
     }
 
     @Test

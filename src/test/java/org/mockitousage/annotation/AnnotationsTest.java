@@ -4,7 +4,10 @@
  */
 package org.mockitousage.annotation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 
 import java.lang.annotation.Retention;
@@ -58,7 +61,7 @@ public class AnnotationsTest extends TestBase {
             MockitoAnnotations.initMocks(null);
             fail();
         } catch (MockitoException e) {
-            assertEquals("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class",
+            assertEquals("testInstance cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class",
                     e.getMessage());
         }
     }

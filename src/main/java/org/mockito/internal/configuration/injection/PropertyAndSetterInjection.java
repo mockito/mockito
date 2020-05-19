@@ -73,6 +73,11 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         }
     };
 
+    private final boolean force;
+
+    public PropertyAndSetterInjection(boolean force) {
+        this.force = force;
+    }
 
     public boolean processInjection(Field injectMocksField, Object injectMocksFieldOwner, Set<Object> mockCandidates) {
         FieldInitializationReport report = initializeInjectMocksField(injectMocksField, injectMocksFieldOwner);
@@ -90,7 +95,7 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     private FieldInitializationReport initializeInjectMocksField(Field field, Object fieldOwner) {
         try {
-            return new FieldInitializer(fieldOwner, field).initialize();
+            return new FieldInitializer(fieldOwner, field).initialize(force);
         } catch (MockitoException e) {
             if(e.getCause() instanceof InvocationTargetException) {
                 Throwable realCause = e.getCause().getCause();

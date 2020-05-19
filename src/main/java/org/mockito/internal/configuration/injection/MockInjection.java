@@ -72,12 +72,20 @@ public class MockInjection {
         }
 
         public OngoingMockInjection tryConstructorInjection() {
-            injectionStrategies.thenTry(new ConstructorInjection());
+            return tryConstructorInjection(false);
+        }
+
+        public OngoingMockInjection tryConstructorInjection(boolean force) {
+            injectionStrategies.thenTry(new ConstructorInjection(force));
             return this;
         }
 
         public OngoingMockInjection tryPropertyOrFieldInjection() {
-            injectionStrategies.thenTry(new PropertyAndSetterInjection());
+            return tryPropertyOrFieldInjection(false);
+        }
+
+        public OngoingMockInjection tryPropertyOrFieldInjection(boolean force) {
+            injectionStrategies.thenTry(new PropertyAndSetterInjection(force));
             return this;
         }
 
