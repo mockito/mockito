@@ -6,6 +6,7 @@ package org.mockitousage.stubbing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
@@ -22,6 +23,7 @@ import javax.net.SocketFactory;
 
 import org.junit.Test;
 import org.mockito.InOrder;
+import org.mockito.MockSettings;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockitoutil.TestBase;
 
@@ -220,6 +222,20 @@ public class DeepStubbingTest extends TestBase {
         assertEquals(b, sf.createSocket("google.com", 80).getPort());
         assertEquals(c, sf.createSocket("stackoverflow.com", 8080).getPort());
         assertEquals(a, sf.createSocket("stackoverflow.com", 80).getPort());
+    }
+
+    @Test
+    public void unnamed_to_string() {
+        SocketFactory sf = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        assertNotNull(sf.toString());
+    }
+
+    @Test
+    public void named_to_string() {
+        MockSettings settings = withSettings().name("name of mock")
+                                              .defaultAnswer(RETURNS_DEEP_STUBS);
+        SocketFactory sf = mock(SocketFactory.class, settings);
+        assertEquals("name of mock", sf.toString());
     }
 
     Person person = mock(Person.class, RETURNS_DEEP_STUBS);
