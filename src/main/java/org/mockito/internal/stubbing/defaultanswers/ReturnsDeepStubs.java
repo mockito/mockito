@@ -52,7 +52,11 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
         Class<?> rawType = returnTypeGenericMetadata.rawType();
         if (!mockitoCore().isTypeMockable(rawType)) {
-            return delegate().returnValueFor(rawType);
+            if (invocation.getMethod().getReturnType().equals(rawType)) {
+                return delegate().answer(invocation);
+            } else {
+                return delegate().returnValueFor(rawType);
+            }
         }
 
         // When dealing with erased generics, we only receive the Object type as rawType. At this
