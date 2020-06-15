@@ -50,7 +50,7 @@ script:
   # We are using && below on purpose
   # ciPerformRelease must run only when the entire build has completed
   # This guarantees that no release steps are executed when the build or tests fail
-  - ./gradlew spotlessCheck && ./gradlew build idea -s && ./gradlew checkReproducibility && ./gradlew ciPerformRelease
+  - ./gradlew spotlessCheck && ./gradlew build idea -s && ./check_reproducibility.sh && ./gradlew ciPerformRelease
 
 after_success:
   #Generates coverage report:
