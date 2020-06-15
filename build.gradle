@@ -15,10 +15,10 @@ buildscript {
 }
 
 plugins {
-    id 'com.gradle.build-scan' version '2.2.1'
     id "com.diffplug.gradle.spotless" version "3.24.3"
     id 'eclipse'
     id 'com.github.ben-manes.versions' version '0.28.0'
+    id 'biz.aQute.bnd.builder' version '5.1.0'
 }
 
 description = 'Mockito mock objects library core API and implementation'
@@ -102,12 +102,6 @@ dependencies {
 wrapper {
     gradleVersion = '5.3.1'
     distributionSha256Sum = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
-}
-
-//Posting Build scans to https://scans.gradle.com
-buildScan {
-    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-    termsOfServiceAgree = 'yes'
 }
 
 spotless {
