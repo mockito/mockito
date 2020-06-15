@@ -30,6 +30,7 @@ matrix:
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
   - jdk: openjdk11
     script: ./gradlew spotlessCheck
+    after_success: true
 
 branches:
   #Don't build tags
