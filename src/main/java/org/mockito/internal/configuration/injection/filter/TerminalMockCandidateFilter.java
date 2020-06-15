@@ -29,17 +29,15 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
         if(mocks.size() == 1) {
             final Object matchingMock = mocks.iterator().next();
 
-            return new OngoingInjector() {
-                public Object thenInject() {
-                    try {
-                        if (!new BeanPropertySetter(injectee, candidateFieldToBeInjected).set(matchingMock)) {
-                            setField(injectee, candidateFieldToBeInjected,matchingMock);
-                        }
-                    } catch (RuntimeException e) {
-                        throw cannotInjectDependency(candidateFieldToBeInjected, matchingMock, e);
+            return () -> {
+                try {
+                    if (!new BeanPropertySetter(injectee, candidateFieldToBeInjected).set(matchingMock)) {
+                        setField(injectee, candidateFieldToBeInjected,matchingMock);
                     }
-                    return matchingMock;
+                } catch (RuntimeException e) {
+                    throw cannotInjectDependency(candidateFieldToBeInjected, matchingMock, e);
                 }
+                return matchingMock;
             };
         }
 

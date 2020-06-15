@@ -67,11 +67,8 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
                     new NameBasedCandidateFilter(
                             new TerminalMockCandidateFilter()));
 
-    private final ListUtil.Filter<Field> notFinalOrStatic = new ListUtil.Filter<Field>() {
-        public boolean isOut(Field object) {
-            return Modifier.isFinal(object.getModifiers()) || Modifier.isStatic(object.getModifiers());
-        }
-    };
+    private final ListUtil.Filter<Field> notFinalOrStatic = object -> Modifier.isFinal(object.getModifiers()) ||
+        Modifier.isStatic(object.getModifiers());
 
 
     public boolean processInjection(Field injectMocksField, Object injectMocksFieldOwner, Set<Object> mockCandidates) {
