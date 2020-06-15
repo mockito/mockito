@@ -20,19 +20,13 @@ matrix:
   - jdk: openjdk8
   - jdk: openjdk8
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
-  - jdk: openjdk9
-    env: SKIP_RELEASE=true
-  - jdk: openjdk9
-    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
-  - jdk: openjdk9
-    env: SKIP_RELEASE=true SIMULATE_JAVA11=true
-  - jdk: openjdk10
-    env: SKIP_RELEASE=true
-  - jdk: openjdk10
-    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
   - jdk: openjdk11
     env: SKIP_RELEASE=true
   - jdk: openjdk11
+    env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+  - jdk: openjdk14
+    env: SKIP_RELEASE=true
+  - jdk: openjdk14
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
 
 branches:
