@@ -36,7 +36,6 @@ rootProject.children.forEach { project ->
 
 plugins {
   id("com.gradle.enterprise").version("3.3.4")
-  //id("biz.aQute.bnd.builder").version("5.1.0")
 }
 
 //Posting Build scans to https://scans.gradle.com
