@@ -7,49 +7,36 @@ import java.util.jar.Manifest
 
 import static java.util.Calendar.FEBRUARY
 
-apply plugin: 'osgi'
+apply plugin: 'biz.aQute.bnd.builder'
 
-afterEvaluate {
-    tasks.matching { it.name == 'jar' }.all { jar ->
-        jar.manifest {
-            classpath = project.configurations.runtime
+jar {
+    classpath = project.configurations.runtime
+    bnd(
+        'Bundle-Name': 'Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.',
+        'Bundle-SymbolicName': 'org.mockito.mockito-core',
+        'Bundl-version': project.version.replace('-', '.'),
+        '-versionpolicy': '[${version;==;${@}},${version;+;${@}})',
+        'Export-Package': "!org.mockito.internal.*,org.mockito.*;version=${version}",
+        'Import-Package': [
+                'net.bytebuddy.*;version="[1.6.0,2.0)"',
+                'junit.*;resolution:=optional',
+                'org.junit.*;resolution:=optional',
+                'org.hamcrest;resolution:=optional',
+                'org.objenesis;version="[2.5,3.0)"',
+                'org.opentest4j.*;resolution:=optional',
+                'org.mockito.*'
+        ].join(','),
+        '-removeheaders': 'Private-Package',
+        'Automatic-Module-Name': 'org.mockito'
+    )
+}
 
-            instruction '-versionpolicy', '[${version;==;${@}},${version;+;${@}})'
+jar.doLast {
+    JarFile originalJar = new JarFile(jar.archivePath)
 
-            name = 'Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.'
-            symbolicName = 'org.mockito.mockito-core'
-            version = project.version.replace('-', '.')
-
-            instruction 'Export-Package',
-                    '!org.mockito.internal.*',
-                    "org.mockito.*;version=${version}"
-
-            instruction 'Import-Package',
-                    'net.bytebuddy.*;version="[1.6.0,2.0)"',
-                    'junit.*;resolution:=optional',
-                    'org.junit.*;resolution:=optional',
-                    'org.hamcrest;resolution:=optional',
-                    'org.objenesis;version="[2.5,3.0)"',
-                    'org.opentest4j.*;resolution:=optional',
-                    'org.mockito.*'
-
-            instruction 'Private-Package',
-                    'org.mockito.*'
-
-            instruction '-removeheaders', 'Private-Package'
-
-            attributes 'Automatic-Module-Name': 'org.mockito'
-        }
-
-        jar.doLast {
-            JarFile originalJar = new JarFile(jar.archivePath)
-
-            new RemoveOsgiLastModifiedHeader(originalJar)
-                .transform()
-                .renameTo jar.archivePath
-        }
-
-    }
+    new RemoveOsgiLastModifiedHeader(originalJar)
+        .transform()
+        .renameTo jar.archivePath
 }
 
 

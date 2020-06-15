@@ -4,7 +4,7 @@
  */
 package org.mockito.kotlin
 
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.core.IsEqual
 import org.junit.Assert.assertThat
 import org.junit.Test
