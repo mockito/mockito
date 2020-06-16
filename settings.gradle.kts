@@ -34,6 +34,18 @@ rootProject.children.forEach { project ->
     }
 }
 
+plugins {
+  id("com.gradle.enterprise").version("3.3.4")
+}
+
+//Posting Build scans to https://scans.gradle.com
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
+    }
+}
+
 buildCache {
     local {
         isEnabled = !System.getenv().containsKey("CI")

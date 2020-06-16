@@ -34,15 +34,10 @@ libraries.osgi = 'org.osgi:osgi.core:7.0.0'
 libraries.equinox = 'org.eclipse.platform:org.eclipse.osgi:3.15.0'
 libraries.bndGradle =  'biz.aQute.bnd:biz.aQute.bnd.gradle:4.3.1'
 
-def kotlinVersion = '1.2.10'
-def kotlinVersion_1_3 = '1.3.0-rc-57'
+def kotlinVersion = '1.3.72'
 libraries.kotlin = [
     version: kotlinVersion,
-    version_1_3: kotlinVersion_1_3,
 
     stdlib: "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
-    coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3',
-
-    stdlib_1_3:  "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion_1_3",
-    releaseCoroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.26.1-eap13"
+    coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7',
 ]
