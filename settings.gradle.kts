@@ -1,3 +1,7 @@
+plugins {
+  id("com.gradle.enterprise").version("3.3.4")
+}
+
 include("deprecatedPluginsTest",
     "inline",
     "extTest",
@@ -32,10 +36,6 @@ rootProject.children.forEach { project ->
     require(project.buildFile.isFile) {
         "Build file ${project.buildFile} for project ${project.name} does not exist."
     }
-}
-
-plugins {
-  "id"("com.gradle.enterprise").version("3.3.4")
 }
 
 //Posting Build scans to https://scans.gradle.com
