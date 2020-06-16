@@ -28,6 +28,9 @@ matrix:
     env: SKIP_RELEASE=true
   - jdk: openjdk14
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+  - jdk: openjdk8
+    script: ./check_reproducibility.sh
+    after_success: true
 
 branches:
   #Don't build tags
@@ -44,9 +47,9 @@ script:
   # We are using && below on purpose
   # ciPerformRelease must run only when the entire build has completed
   # This guarantees that no release steps are executed when the build or tests fail
-  - ./gradlew spotlessCheck && ./gradlew build idea -s && ./gradlew checkReproducibility && ./gradlew ciPerformRelease
+  - ./gradlew spotlessCheck && ./gradlew build idea -s && ./gradlew ciPerformRelease
 
 after_success:
   #Generates coverage report:
-  - ./gradlew coverageReport -Pjacoco -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
+  - ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
   - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
