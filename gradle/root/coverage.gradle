@@ -1,7 +1,12 @@
 task mockitoCoverage(type: JacocoReport) {
 
     allprojects { currentProject ->
-        if (currentProject.name in ['android', 'errorprone']) {
+        // These tests do not have a `test` task.
+        if (currentProject.name in ['android']) {
+            return
+        }
+        // We only run these tests on Java 9+
+        if (currentProject.name in ['module-test', 'errorprone'] && JavaVersion.current() == JavaVersion.VERSION_1_8) {
             return
         }
         plugins.withId("java") {
