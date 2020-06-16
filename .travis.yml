@@ -57,5 +57,5 @@ script:
 
 after_success:
   #Generates coverage report:
-  - ./gradlew coverageReport -Pjacoco -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
+  - ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
   - bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
