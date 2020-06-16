@@ -35,7 +35,7 @@ rootProject.children.forEach { project ->
 }
 
 plugins {
-  id("com.gradle.enterprise").version("3.3.4")
+  "id"("com.gradle.enterprise").version("3.3.4")
 }
 
 //Posting Build scans to https://scans.gradle.com
