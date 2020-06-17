@@ -272,6 +272,7 @@ public class GenericMetadataSupportTest {
                   ).isEmpty();
     }
 
+    @SuppressWarnings("EqualsHashCode")
     private ParameterizedType parameterizedTypeOf(final Class<?> rawType, final Class<?> ownerType, final Type... actualTypeArguments) {
         return new ParameterizedType() {
             @Override
