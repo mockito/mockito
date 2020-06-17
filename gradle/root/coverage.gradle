@@ -1,16 +1,18 @@
-if (!project.hasProperty("jacoco")) {
-    //JaCoCo plugin prevents using Build Cache. We will enable jacoco configuration only when specific property is supplied
-    //TODO remove this workaround when we migrate to Gradle 5.0 (https://github.com/gradle/gradle/issues/5269)
-    logger.info "JaCoCo code coverage will not be configured because 'jacoco' project property is not present."
-    return //don't evaluate this Gradle file any further
-} else {
-    logger.lifecycle "Configuring JaCoCo code coverage because 'jacoco' project property is present."
-}
-
-//TODO: Standard JaCoCo coverage doesn't work in Android module
 task mockitoCoverage(type: JacocoReport) {
 
     allprojects { currentProject ->
+        // These tests do not have a `test` task.
+        if (currentProject.name in ['android']) {
+            return
+        }
+        // We only run these tests on Java 9+
+        if (currentProject.name in ['module-test'] && !JavaVersion.current().isJava9Compatible()) {
+            return
+        }
+        // We only run these tests on Java 8
+        if (currentProject.name in ['errorprone'] && JavaVersion.current().isJava9Compatible()) {
+            return
+        }
         plugins.withId("java") {
             mockitoCoverage.sourceSets currentProject.sourceSets.main
 
