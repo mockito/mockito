@@ -24,6 +24,7 @@ public class IdentitySetTest {
         assertFalse(set.contains(new Object()));
     }
 
+    @SuppressWarnings("EqualsHashCode")
     class Fake {
         @Override
         public boolean equals(Object obj) {

@@ -340,6 +340,7 @@ public class MatchersTest extends TestBase {
         verify(mock).objectArgMethod(new int[]{1, 2});
     }
 
+    @SuppressWarnings("ReturnValueIgnored")
     @Test(expected = ArgumentsAreDifferent.class)
     public void array_equals_should_throw_ArgumentsAreDifferentException_for_non_matching_arguments() {
         List<Object> list = Mockito.mock(List.class);
