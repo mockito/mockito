@@ -1,3 +1,7 @@
+plugins {
+  id("com.gradle.enterprise").version("3.3.4")
+}
+
 include("deprecatedPluginsTest",
     "inline",
     "extTest",
@@ -31,6 +35,14 @@ rootProject.children.forEach { project ->
     }
     require(project.buildFile.isFile) {
         "Build file ${project.buildFile} for project ${project.name} does not exist."
+    }
+}
+
+//Posting Build scans to https://scans.gradle.com
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
     }
 }
 

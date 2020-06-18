@@ -31,6 +31,7 @@ public class EqualityTest extends TestBase {
         assertFalse(areEqual(new int[] {1}, new double[] {1.0}));
     }
 
+    @SuppressWarnings("EqualsHashCode")
     private final class BadEquals {
         @Override
         public boolean equals(Object oth) {
