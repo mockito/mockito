@@ -59,7 +59,7 @@ public class MockitoHamcrest {
     @SuppressWarnings("unchecked")
     public static <T> T argThat(Matcher<T> matcher) {
         reportMatcher(matcher);
-        return  (T) defaultValue(genericTypeOfMatcher(matcher.getClass()));
+        return (T) defaultValue(genericTypeOfMatcher(matcher.getClass()));
     }
 
     /**
@@ -175,6 +175,8 @@ public class MockitoHamcrest {
     }
 
     private static <T> void reportMatcher(Matcher<T> matcher) {
-        mockingProgress().getArgumentMatcherStorage().reportMatcher(new HamcrestArgumentMatcher<T>(matcher));
+        mockingProgress()
+                .getArgumentMatcherStorage()
+                .reportMatcher(new HamcrestArgumentMatcher<T>(matcher));
     }
 }

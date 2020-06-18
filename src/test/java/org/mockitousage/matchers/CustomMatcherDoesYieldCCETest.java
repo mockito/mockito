@@ -17,8 +17,7 @@ import org.mockitoutil.TestBase;
 
 public class CustomMatcherDoesYieldCCETest extends TestBase {
 
-    @Mock
-    private IMethods mock;
+    @Mock private IMethods mock;
 
     @Test
     public void shouldNotThrowCCE() {

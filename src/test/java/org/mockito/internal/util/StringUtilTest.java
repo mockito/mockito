@@ -12,14 +12,17 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class StringUtilTest  {
+public class StringUtilTest {
 
     @Test
     public void decamelizes_matcher() throws Exception {
-        assertEquals("<Sentence with strong language>", StringUtil.decamelizeMatcher("SentenceWithStrongLanguage"));
+        assertEquals(
+                "<Sentence with strong language>",
+                StringUtil.decamelizeMatcher("SentenceWithStrongLanguage"));
         assertEquals("<W e i r d o 1>", StringUtil.decamelizeMatcher("WEIRDO1"));
         assertEquals("<_>", StringUtil.decamelizeMatcher("_"));
-        assertEquals("<Has exactly 3 elements>", StringUtil.decamelizeMatcher("HasExactly3Elements"));
+        assertEquals(
+                "<Has exactly 3 elements>", StringUtil.decamelizeMatcher("HasExactly3Elements"));
         assertEquals("<custom argument matcher>", StringUtil.decamelizeMatcher(""));
     }
 
@@ -36,7 +39,7 @@ public class StringUtilTest  {
 
     @Test
     public void joins_two_lines() throws Exception {
-        assertThat(StringUtil.join("line1","line2")).hasLineCount(3);
+        assertThat(StringUtil.join("line1", "line2")).hasLineCount(3);
     }
 
     @Test
@@ -51,8 +54,7 @@ public class StringUtilTest  {
 
     @Test
     public void joins_with_line_prefix() throws Exception {
-        assertEquals("Hey!\n" +
-            " - a\n" +
-            " - b", StringUtil.join("Hey!\n", " - ", asList("a", "b")));
+        assertEquals(
+                "Hey!\n" + " - a\n" + " - b", StringUtil.join("Hey!\n", " - ", asList("a", "b")));
     }
 }

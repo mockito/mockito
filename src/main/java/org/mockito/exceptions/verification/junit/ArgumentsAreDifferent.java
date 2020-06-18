@@ -9,7 +9,6 @@ import static org.mockito.internal.util.StringUtil.removeFirstLine;
 import junit.framework.ComparisonFailure;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 
-
 public class ArgumentsAreDifferent extends ComparisonFailure {
 
     private static final long serialVersionUID = 1L;

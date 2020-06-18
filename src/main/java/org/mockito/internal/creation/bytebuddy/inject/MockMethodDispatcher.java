@@ -11,10 +11,13 @@ import java.util.concurrent.ConcurrentMap;
 
 public abstract class MockMethodDispatcher {
 
-    private static final ConcurrentMap<String, MockMethodDispatcher> INSTANCE = new ConcurrentHashMap<String, MockMethodDispatcher>();
+    private static final ConcurrentMap<String, MockMethodDispatcher> INSTANCE =
+            new ConcurrentHashMap<String, MockMethodDispatcher>();
 
     public static MockMethodDispatcher get(String identifier, Object mock) {
-        if (mock == INSTANCE) { // Avoid endless loop if ConcurrentHashMap was redefined to check for being a mock.
+        if (mock
+                == INSTANCE) { // Avoid endless loop if ConcurrentHashMap was redefined to check for
+            // being a mock.
             return null;
         } else {
             return INSTANCE.get(identifier);
@@ -25,7 +28,8 @@ public abstract class MockMethodDispatcher {
         INSTANCE.putIfAbsent(identifier, dispatcher);
     }
 
-    public abstract Callable<?> handle(Object instance, Method origin, Object[] arguments) throws Throwable;
+    public abstract Callable<?> handle(Object instance, Method origin, Object[] arguments)
+            throws Throwable;
 
     public abstract boolean isMock(Object instance);
 

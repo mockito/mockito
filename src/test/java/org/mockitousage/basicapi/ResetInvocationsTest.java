@@ -15,11 +15,9 @@ import org.mockitoutil.TestBase;
 
 public class ResetInvocationsTest extends TestBase {
 
-    @Mock
-    IMethods methods;
+    @Mock IMethods methods;
 
-    @Mock
-    IMethods moarMethods;
+    @Mock IMethods moarMethods;
 
     @Test
     public void reset_invocations_should_reset_only_invocations() {
@@ -51,6 +49,6 @@ public class ResetInvocationsTest extends TestBase {
 
     @Test(expected = NotAMockException.class)
     public void resettingNullIsSafe() {
-        clearInvocations(new Object[]{null});
+        clearInvocations(new Object[] {null});
     }
 }

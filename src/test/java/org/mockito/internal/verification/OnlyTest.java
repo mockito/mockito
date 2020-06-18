@@ -46,30 +46,33 @@ public class OnlyTest {
 
     @Test
     public void shouldMarkAsVerified() {
-        //given
+        // given
         Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
 
-        //when
+        // when
         only.verify(new VerificationDataStub(new InvocationMatcher(invocation), invocation));
 
-        //then
+        // then
         assertTrue(invocation.isVerified());
     }
 
     @Test
     public void shouldNotMarkAsVerifiedWhenAssertionFailed() {
-        //given
+        // given
         Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
 
-        //when
+        // when
         try {
-            only.verify(new VerificationDataStub(new InvocationBuilder().toInvocationMatcher(), invocation));
+            only.verify(
+                    new VerificationDataStub(
+                            new InvocationBuilder().toInvocationMatcher(), invocation));
             fail();
-        } catch (MockitoAssertionError e) {}
+        } catch (MockitoAssertionError e) {
+        }
 
-        //then
+        // then
         assertFalse(invocation.isVerified());
     }
 }

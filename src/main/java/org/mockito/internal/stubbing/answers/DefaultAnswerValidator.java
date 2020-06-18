@@ -9,7 +9,8 @@ import static org.mockito.internal.exceptions.Reporter.wrongTypeReturnedByDefaul
 import org.mockito.invocation.InvocationOnMock;
 
 public abstract class DefaultAnswerValidator {
-    public static void validateReturnValueFor(InvocationOnMock invocation, Object returnedValue) throws Throwable {
+    public static void validateReturnValueFor(InvocationOnMock invocation, Object returnedValue)
+            throws Throwable {
         InvocationInfo invocationInfo = new InvocationInfo(invocation);
         if (returnedValue != null && !invocationInfo.isValidReturnType(returnedValue.getClass())) {
             throw wrongTypeReturnedByDefaultAnswer(

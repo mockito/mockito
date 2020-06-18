@@ -15,14 +15,11 @@ import org.mockito.junit.MockitoRule;
 
 public class InvalidTargetMockitoJUnitRuleTest {
 
-    @Rule
-    public MockitoRule mockitoJUnitRule = MockitoJUnit.rule();
+    @Rule public MockitoRule mockitoJUnitRule = MockitoJUnit.rule();
 
-    @Mock
-    private Injected injected;
+    @Mock private Injected injected;
 
-    @InjectMocks
-    private InjectInto injectInto;
+    @InjectMocks private InjectInto injectInto;
 
     @Test
     public void shouldInjectWithInvalidReference() throws Exception {
@@ -30,7 +27,7 @@ public class InvalidTargetMockitoJUnitRuleTest {
         assertNotNull("Test object created", injectInto);
     }
 
-    public static class Injected { }
+    public static class Injected {}
 
     public static class InjectInto {
         private Injected injected;

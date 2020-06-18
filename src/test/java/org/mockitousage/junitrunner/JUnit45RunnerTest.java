@@ -35,7 +35,7 @@ public class JUnit45RunnerTest {
     }
 
     @Test
-    public void shouldFilterTestMethodsCorrectly() throws Exception{
+    public void shouldFilterTestMethodsCorrectly() throws Exception {
         MockitoJUnitRunner runner = new MockitoJUnitRunner(this.getClass());
 
         runner.filter(methodNameContains("shouldInitMocksUsingRunner"));

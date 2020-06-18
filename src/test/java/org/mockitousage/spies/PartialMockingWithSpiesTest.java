@@ -27,6 +27,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
 
     class InheritMe {
         private String inherited = "100$";
+
         protected String getInherited() {
             return inherited;
         }
@@ -89,13 +90,14 @@ public class PartialMockingWithSpiesTest extends TestBase {
     public void shouldAllowStubbingWithThrowablesMethodsThatDelegateToOtherMethods() {
         // when
         doThrow(new RuntimeException("appetite for destruction"))
-            .when(spy).getNameButDelegateToMethodThatThrows();
+                .when(spy)
+                .getNameButDelegateToMethodThatThrows();
 
         // then
         try {
             spy.getNameButDelegateToMethodThatThrows();
             fail();
-        } catch(Exception e) {
+        } catch (Exception e) {
             assertEquals("appetite for destruction", e.getMessage());
         }
     }
@@ -108,15 +110,16 @@ public class PartialMockingWithSpiesTest extends TestBase {
             fail();
         } catch (Throwable t) {
             // then
-            Assertions.assertThat(t).has(methodsInStackTrace(
-                    "throwSomeException",
-                    "getNameButDelegateToMethodThatThrows",
-                    "shouldStackTraceGetFilteredOnUserExceptions"
-                    ));
+            Assertions.assertThat(t)
+                    .has(
+                            methodsInStackTrace(
+                                    "throwSomeException",
+                                    "getNameButDelegateToMethodThatThrows",
+                                    "shouldStackTraceGetFilteredOnUserExceptions"));
         }
     }
 
-//    @Test //manual verification
+    //    @Test //manual verification
     public void verifyTheStackTrace() {
         spy.getNameButDelegateToMethodThatThrows();
     }

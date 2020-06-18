@@ -41,6 +41,4 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     public boolean enableClassCache() {
         return true;
     }
-
-
 }

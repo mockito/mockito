@@ -25,5 +25,4 @@ public interface ArgumentMatcherStorage {
     void validateState();
 
     void reset();
-
 }

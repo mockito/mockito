@@ -41,7 +41,6 @@ public final class JavaEightUtil {
         return emptyOptional = invokeNullaryFactoryMethod("java.util.Optional", "empty");
     }
 
-
     /**
      * Creates an empty OptionalDouble using reflection to stay backwards-compatible with older JDKs.
      *
@@ -53,7 +52,8 @@ public final class JavaEightUtil {
             return emptyOptionalDouble;
         }
 
-        return emptyOptionalDouble = invokeNullaryFactoryMethod("java.util.OptionalDouble", "empty");
+        return emptyOptionalDouble =
+                invokeNullaryFactoryMethod("java.util.OptionalDouble", "empty");
     }
 
     /**
@@ -124,7 +124,6 @@ public final class JavaEightUtil {
         return invokeNullaryFactoryMethod("java.util.stream.LongStream", "empty");
     }
 
-
     /**
      * Creates an empty Duration using reflection to stay backwards-compatible with older JDKs.
      *
@@ -168,10 +167,9 @@ public final class JavaEightUtil {
             // already been verified
         } catch (final Exception e) {
             throw new InstantiationException(
-                String.format("Could not create %s#%s(): %s", fqcn, methodName, e), e);
+                    String.format("Could not create %s#%s(): %s", fqcn, methodName, e), e);
         }
     }
-
 
     /**
      * Gets a value of the classes' field using reflection to stay backwards-compatible with older JDKs.
@@ -189,7 +187,7 @@ public final class JavaEightUtil {
             // already been verified
         } catch (Exception e) {
             throw new InstantiationException(
-                String.format("Could not get %s#%s(): %s", fqcn, fieldName, e), e);
+                    String.format("Could not get %s#%s(): %s", fqcn, fieldName, e), e);
         }
     }
 
@@ -205,8 +203,7 @@ public final class JavaEightUtil {
             // any exception is really unexpected since the type name has
             // already been verified
         } catch (ClassNotFoundException e) {
-            throw new InstantiationException(
-                String.format("Could not find %s: %s", fqcn, e), e);
+            throw new InstantiationException(String.format("Could not find %s: %s", fqcn, e), e);
         }
     }
 
@@ -218,13 +215,14 @@ public final class JavaEightUtil {
      * @param parameterClasses The list of parameters.
      * @return The Method object that matches the specified name and parameterTypes.
      */
-    private static Method getMethod(final String fqcn, final String methodName, final Class<?>... parameterClasses) {
+    private static Method getMethod(
+            final String fqcn, final String methodName, final Class<?>... parameterClasses) {
         try {
             final Class<?> type = getClass(fqcn);
             return type.getMethod(methodName, parameterClasses);
         } catch (Exception e) {
             throw new InstantiationException(
-                String.format("Could not find %s#%s(): %s", fqcn, methodName, e), e);
+                    String.format("Could not find %s#%s(): %s", fqcn, methodName, e), e);
         }
     }
 }

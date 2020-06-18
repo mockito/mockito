@@ -16,7 +16,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 
-public class DoesNothingTest   {
+public class DoesNothingTest {
 
     private IMethods mock;
     private Invocation invocation_Void;
@@ -24,7 +24,7 @@ public class DoesNothingTest   {
     private Invocation invocation_String;
 
     @Before
-    public void init(){
+    public void init() {
         mock = mock(IMethods.class);
 
         mock.voidMethod();
@@ -45,12 +45,12 @@ public class DoesNothingTest   {
     }
 
     @Test(expected = MockitoException.class)
-    public void validateFor_nonVoidReturnType_shouldFail()   {
+    public void validateFor_nonVoidReturnType_shouldFail() {
         doesNothing().validateFor(invocation_String);
     }
 
     @Test
-    public void validateFor_voidReturnType_shouldPass()   {
+    public void validateFor_voidReturnType_shouldPass() {
         doesNothing().validateFor(invocation_void);
     }
 
@@ -70,5 +70,6 @@ public class DoesNothingTest   {
             return null;
         }
     }
+
     static class SubclassWithGenericParameter extends SuperClassWithGenericParameter<Void> {}
 }

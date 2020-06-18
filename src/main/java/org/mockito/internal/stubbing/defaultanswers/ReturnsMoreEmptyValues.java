@@ -65,7 +65,7 @@ public class ReturnsMoreEmptyValues implements Answer<Object>, Serializable {
     Object returnValueFor(Class<?> type) {
         if (type == String.class) {
             return "";
-        }  else if (type.isArray()) {
+        } else if (type.isArray()) {
             Class<?> componentType = type.getComponentType();
             return Array.newInstance(componentType, 0);
         }

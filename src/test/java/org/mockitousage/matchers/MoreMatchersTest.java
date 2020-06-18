@@ -48,25 +48,29 @@ public class MoreMatchersTest extends TestBase {
 
         mock.simpleMethod((String) null);
 
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                verify(mock).simpleMethod(isA(String.class));
-            }
-        }).isInstanceOf(ArgumentsAreDifferent.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() {
+                                verify(mock).simpleMethod(isA(String.class));
+                            }
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class);
 
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                verify(mock).simpleMethod(any(String.class));
-            }
-        }).isInstanceOf(ArgumentsAreDifferent.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() {
+                                verify(mock).simpleMethod(any(String.class));
+                            }
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class);
     }
 
     @Test
     public void should_help_out_with_unnecessary_casting_of_lists() {
-        //Below yields compiler warning:
-        //when(mock.listArgMethod(anyList())).thenReturn("list");
+        // Below yields compiler warning:
+        // when(mock.listArgMethod(anyList())).thenReturn("list");
         when(mock.listArgMethod(anyListOf(String.class))).thenReturn("list");
 
         assertEquals("list", mock.listArgMethod(new LinkedList<String>()));
@@ -75,8 +79,8 @@ public class MoreMatchersTest extends TestBase {
 
     @Test
     public void should_help_out_with_unnecessary_casting_of_sets() {
-        //Below yields compiler warning:
-        //when(mock.setArgMethod(anySet())).thenReturn("set");
+        // Below yields compiler warning:
+        // when(mock.setArgMethod(anySet())).thenReturn("set");
         when(mock.setArgMethod(anySetOf(String.class))).thenReturn("set");
 
         assertEquals("set", mock.setArgMethod(new HashSet<String>()));
@@ -85,8 +89,8 @@ public class MoreMatchersTest extends TestBase {
 
     @Test
     public void should_help_out_with_unnecessary_casting_of_maps() {
-        //Below yields compiler warning:
-        //when(mock.setArgMethod(anySet())).thenReturn("set");
+        // Below yields compiler warning:
+        // when(mock.setArgMethod(anySet())).thenReturn("set");
         when(mock.forMap(anyMapOf(String.class, String.class))).thenReturn("map");
 
         assertEquals("map", mock.forMap(new HashMap<String, String>()));
@@ -95,8 +99,8 @@ public class MoreMatchersTest extends TestBase {
 
     @Test
     public void should_help_out_with_unnecessary_casting_of_collections() {
-        //Below yields compiler warning:
-        //when(mock.setArgMethod(anySet())).thenReturn("set");
+        // Below yields compiler warning:
+        // when(mock.setArgMethod(anySet())).thenReturn("set");
         when(mock.collectionArgMethod(anyCollectionOf(String.class))).thenReturn("collection");
 
         assertEquals("collection", mock.collectionArgMethod(new ArrayList<String>()));
@@ -105,8 +109,8 @@ public class MoreMatchersTest extends TestBase {
 
     @Test
     public void should_help_out_with_unnecessary_casting_of_iterables() {
-        //Below yields compiler warning:
-        //when(mock.setArgMethod(anySet())).thenReturn("set");
+        // Below yields compiler warning:
+        // when(mock.setArgMethod(anySet())).thenReturn("set");
         when(mock.iterableArgMethod(anyIterableOf(String.class))).thenReturn("iterable");
 
         assertEquals("iterable", mock.iterableArgMethod(new ArrayList<String>()));
@@ -123,5 +127,4 @@ public class MoreMatchersTest extends TestBase {
         assertEquals("string", mock.objectArgMethod("foo"));
         assertEquals("string", mock.objectArgMethod("foo"));
     }
-
 }

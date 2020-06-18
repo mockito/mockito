@@ -93,7 +93,8 @@ public class StubberImpl implements Stubber {
     }
 
     @Override
-    public Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
+    public Stubber doThrow(
+            Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
         Stubber stubber = doThrow(toBeThrown);
 
         if (nextToBeThrown == null) {
@@ -105,7 +106,6 @@ public class StubberImpl implements Stubber {
             stubber = stubber.doThrow(next);
         }
         return stubber;
-
     }
 
     @Override

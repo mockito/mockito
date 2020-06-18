@@ -24,15 +24,19 @@ public class UnnecessaryStubbingsReporter implements MockCreationListener {
     private List<Object> mocks = new LinkedList<Object>();
 
     public void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
-        Collection<Invocation> unused = new UnusedStubbingsFinder().getUnusedStubbingsByLocation(mocks);
+        Collection<Invocation> unused =
+                new UnusedStubbingsFinder().getUnusedStubbingsByLocation(mocks);
         if (unused.isEmpty()) {
-            return; //whoa!!! All stubbings were used!
+            return; // whoa!!! All stubbings were used!
         }
 
-        //Oups, there are unused stubbings
-        Description unnecessaryStubbings = Description.createTestDescription(testClass, "unnecessary Mockito stubbings");
-        notifier.fireTestFailure(new Failure(unnecessaryStubbings,
-                Reporter.formatUnncessaryStubbingException(testClass, unused)));
+        // Oups, there are unused stubbings
+        Description unnecessaryStubbings =
+                Description.createTestDescription(testClass, "unnecessary Mockito stubbings");
+        notifier.fireTestFailure(
+                new Failure(
+                        unnecessaryStubbings,
+                        Reporter.formatUnncessaryStubbingException(testClass, unused)));
     }
 
     @Override

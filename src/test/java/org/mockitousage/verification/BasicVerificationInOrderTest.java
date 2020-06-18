@@ -271,6 +271,6 @@ public class BasicVerificationInOrderTest extends TestBase {
     @SuppressWarnings({"all", "CheckReturnValue", "MockitoUsage"})
     @Test(expected = MockitoException.class)
     public void shouldScreamWhenNullPassed() {
-        inOrder((Object[])null);
+        inOrder((Object[]) null);
     }
 }

@@ -6,7 +6,6 @@ package org.mockito.exceptions.base;
 
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 
-
 /**
  * Raised by mockito to emit an error either due to Mockito, or due to the User.
  * All exception classes that inherit from this class will have the stack trace filtered.

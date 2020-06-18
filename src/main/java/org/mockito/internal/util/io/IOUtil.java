@@ -36,7 +36,7 @@ public class IOUtil {
         BufferedReader r = new BufferedReader(new InputStreamReader(is));
         String line;
         try {
-            while((line = r.readLine()) != null) {
+            while ((line = r.readLine()) != null) {
                 out.add(line);
             }
         } catch (IOException e) {
@@ -54,7 +54,7 @@ public class IOUtil {
         try {
             close(closeable);
         } catch (MockitoException ignored) {
-            //ignore, for backwards compatibility
+            // ignore, for backwards compatibility
         }
     }
 

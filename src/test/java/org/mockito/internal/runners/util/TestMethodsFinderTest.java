@@ -13,7 +13,8 @@ import org.mockitoutil.TestBase;
 public class TestMethodsFinderTest extends TestBase {
 
     public static class HasTests {
-        @Test public void someTest() {}
+        @Test
+        public void someTest() {}
     }
 
     static class DoesNotHaveTests {

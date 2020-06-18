@@ -31,7 +31,7 @@ public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
         FieldReader fieldReader = new FieldReader(fieldOwner, field);
 
         // TODO refoctor : code duplicated in SpyAnnotationEngine
-        if(!fieldReader.isNull() && field.isAnnotationPresent(Spy.class)) {
+        if (!fieldReader.isNull() && field.isAnnotationPresent(Spy.class)) {
             try {
                 Object instance = fieldReader.read();
                 if (MockUtil.isMock(instance)) {
@@ -39,10 +39,13 @@ public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
                     // B. protect against multiple use of MockitoAnnotations.initMocks()
                     Mockito.reset(instance);
                 } else {
-                    Object mock = Mockito.mock(instance.getClass(), withSettings()
-                        .spiedInstance(instance)
-                        .defaultAnswer(Mockito.CALLS_REAL_METHODS)
-                        .name(field.getName()));
+                    Object mock =
+                            Mockito.mock(
+                                    instance.getClass(),
+                                    withSettings()
+                                            .spiedInstance(instance)
+                                            .defaultAnswer(Mockito.CALLS_REAL_METHODS)
+                                            .name(field.getName()));
                     setField(fieldOwner, field, mock);
                 }
             } catch (Exception e) {

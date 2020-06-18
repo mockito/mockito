@@ -23,17 +23,17 @@ public class DefaultMockingDetails implements MockingDetails {
 
     private final Object toInspect;
 
-    public DefaultMockingDetails(Object toInspect){
+    public DefaultMockingDetails(Object toInspect) {
         this.toInspect = toInspect;
     }
 
     @Override
-    public boolean isMock(){
+    public boolean isMock() {
         return MockUtil.isMock(toInspect);
     }
 
     @Override
-    public boolean isSpy(){
+    public boolean isSpy() {
         return MockUtil.isSpy(toInspect);
     }
 
@@ -80,9 +80,13 @@ public class DefaultMockingDetails implements MockingDetails {
 
     private void assertGoodMock() {
         if (toInspect == null) {
-            throw new NotAMockException("Argument passed to Mockito.mockingDetails() should be a mock, but is null!");
+            throw new NotAMockException(
+                    "Argument passed to Mockito.mockingDetails() should be a mock, but is null!");
         } else if (!isMock()) {
-            throw new NotAMockException("Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of " + toInspect.getClass() + "!");
+            throw new NotAMockException(
+                    "Argument passed to Mockito.mockingDetails() should be a mock, but is an instance of "
+                            + toInspect.getClass()
+                            + "!");
         }
     }
 }

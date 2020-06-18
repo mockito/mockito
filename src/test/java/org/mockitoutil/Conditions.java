@@ -23,10 +23,11 @@ public class Conditions {
                 StackTraceElement[] trace = traceElements.getStackTrace();
 
                 Assertions.assertThat(trace.length)
-                          .describedAs("Number of classes does not match.\nExpected: %s\nGot: %s",
-                                       Arrays.toString(classes),
-                                       Arrays.toString(traceElements.getStackTrace()))
-                          .isEqualTo(classes.length);
+                        .describedAs(
+                                "Number of classes does not match.\nExpected: %s\nGot: %s",
+                                Arrays.toString(classes),
+                                Arrays.toString(traceElements.getStackTrace()))
+                        .isEqualTo(classes.length);
 
                 for (int i = 0; i < trace.length; i++) {
                     Assertions.assertThat(trace[i].getClassName()).isEqualTo(classes[i]);
@@ -43,10 +44,10 @@ public class Conditions {
             @Override
             public boolean matches(StackTraceElement[] traceElements) {
                 Assertions.assertThat(traceElements.length)
-                          .describedAs("Number of classes does not match.\nExpected: %s\nGot: %s",
-                                       Arrays.toString(classes),
-                                       Arrays.toString(traceElements))
-                          .isEqualTo(classes.length);
+                        .describedAs(
+                                "Number of classes does not match.\nExpected: %s\nGot: %s",
+                                Arrays.toString(classes), Arrays.toString(traceElements))
+                        .isEqualTo(classes.length);
 
                 for (int i = 0; i < traceElements.length; i++) {
                     Assertions.assertThat(traceElements[i].getClassName()).isEqualTo(classes[i]);
@@ -61,7 +62,8 @@ public class Conditions {
         return methodInStackTraceAt(0, method);
     }
 
-    public static Condition<Throwable> methodInStackTraceAt(final int stackTraceIndex, final String method) {
+    public static Condition<Throwable> methodInStackTraceAt(
+            final int stackTraceIndex, final String method) {
         return new Condition<Throwable>() {
             private String actualMethodAtIndex;
 
@@ -74,7 +76,9 @@ public class Conditions {
 
             @Override
             public Description description() {
-                return new TextDescription("Method at index: %d\nexpected to be: %s\nbut is: %s", stackTraceIndex, method, actualMethodAtIndex);
+                return new TextDescription(
+                        "Method at index: %d\nexpected to be: %s\nbut is: %s",
+                        stackTraceIndex, method, actualMethodAtIndex);
             }
         };
     }
@@ -111,12 +115,12 @@ public class Conditions {
             public boolean matches(Throwable value) {
                 StackTraceElement[] trace = value.getStackTrace();
                 for (int i = 0; i < methods.length; i++) {
-                    Assertions.assertThat(trace[i].getMethodName()).describedAs("Expected methods[%d] to be in the stack trace.", i).isEqualTo(methods[i]);
+                    Assertions.assertThat(trace[i].getMethodName())
+                            .describedAs("Expected methods[%d] to be in the stack trace.", i)
+                            .isEqualTo(methods[i]);
                 }
                 return true;
             }
         };
     }
-
-
 }

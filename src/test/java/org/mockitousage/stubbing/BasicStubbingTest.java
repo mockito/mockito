@@ -33,7 +33,8 @@ public class BasicStubbingTest extends TestBase {
 
         assertEquals(200, mock.objectReturningMethod(200));
         assertEquals(100, mock.objectReturningMethod(666));
-        assertEquals("default behavior should return null", null, mock.objectReturningMethod("blah"));
+        assertEquals(
+                "default behavior should return null", null, mock.objectReturningMethod("blah"));
     }
 
     @Test
@@ -45,7 +46,8 @@ public class BasicStubbingTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -79,9 +81,10 @@ public class BasicStubbingTest extends TestBase {
         try {
             when("").thenReturn("");
             fail();
-        } catch (MissingMethodInvocationException e) {}
+        } catch (MissingMethodInvocationException e) {
+        }
 
-        //anything that can cause state validation
+        // anything that can cause state validation
         verifyZeroInteractions(mock);
     }
 
@@ -91,9 +94,10 @@ public class BasicStubbingTest extends TestBase {
         try {
             when("").thenReturn("");
             fail();
-        } catch (MissingMethodInvocationException e) {}
+        } catch (MissingMethodInvocationException e) {
+        }
 
-        //anything that can cause state validation
+        // anything that can cause state validation
         verifyNoInteractions(mock);
     }
 
@@ -127,12 +131,16 @@ public class BasicStubbingTest extends TestBase {
 
         assertEquals(200, localMock.objectReturningMethod(200));
         assertEquals(100, localMock.objectReturningMethod(666));
-        assertEquals("default behavior should return null", null, localMock.objectReturningMethod("blah"));
+        assertEquals(
+                "default behavior should return null",
+                null,
+                localMock.objectReturningMethod("blah"));
 
         try {
             verify(localMock, atLeastOnce()).objectReturningMethod(eq(200));
             fail();
-        } catch (CannotVerifyStubOnlyMock e) {}
+        } catch (CannotVerifyStubOnlyMock e) {
+        }
     }
 
     @SuppressWarnings("MockitoUsage")
@@ -144,9 +152,11 @@ public class BasicStubbingTest extends TestBase {
             verify(localMock); // throws exception before method invocation
             fail();
         } catch (CannotVerifyStubOnlyMock e) {
-            assertEquals("\n" +
-                "Argument \"iMethods\" passed to verify is a stubOnly() mock which cannot be verified.\n" +
-                "If you intend to verify invocations on this mock, don't use stubOnly() in its MockSettings.", e.getMessage());
+            assertEquals(
+                    "\n"
+                            + "Argument \"iMethods\" passed to verify is a stubOnly() mock which cannot be verified.\n"
+                            + "If you intend to verify invocations on this mock, don't use stubOnly() in its MockSettings.",
+                    e.getMessage());
         }
     }
 
@@ -157,7 +167,8 @@ public class BasicStubbingTest extends TestBase {
         try {
             verifyNoMoreInteractions(localMock);
             fail();
-        } catch (CannotVerifyStubOnlyMock e) {}
+        } catch (CannotVerifyStubOnlyMock e) {
+        }
     }
 
     @Test
@@ -167,6 +178,7 @@ public class BasicStubbingTest extends TestBase {
         try {
             inOrder(localMock);
             fail();
-        } catch (CannotVerifyStubOnlyMock e) {}
+        } catch (CannotVerifyStubOnlyMock e) {
+        }
     }
 }

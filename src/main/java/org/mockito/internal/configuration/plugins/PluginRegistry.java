@@ -15,25 +15,28 @@ import org.mockito.plugins.StackTraceCleanerProvider;
 
 class PluginRegistry {
 
-    private final PluginSwitch pluginSwitch = new PluginLoader(new DefaultPluginSwitch())
-            .loadPlugin(PluginSwitch.class);
+    private final PluginSwitch pluginSwitch =
+            new PluginLoader(new DefaultPluginSwitch()).loadPlugin(PluginSwitch.class);
 
-    private final MockMaker mockMaker = new PluginLoader(pluginSwitch, DefaultMockitoPlugins.INLINE_ALIAS)
-            .loadPlugin(MockMaker.class);
+    private final MockMaker mockMaker =
+            new PluginLoader(pluginSwitch, DefaultMockitoPlugins.INLINE_ALIAS)
+                    .loadPlugin(MockMaker.class);
 
-    private final StackTraceCleanerProvider stackTraceCleanerProvider = new PluginLoader(pluginSwitch)
-            .loadPlugin(StackTraceCleanerProvider.class);
+    private final StackTraceCleanerProvider stackTraceCleanerProvider =
+            new PluginLoader(pluginSwitch).loadPlugin(StackTraceCleanerProvider.class);
 
     private final InstantiatorProvider2 instantiatorProvider;
 
-    private final AnnotationEngine annotationEngine = new PluginLoader(pluginSwitch)
-            .loadPlugin(AnnotationEngine.class);
+    private final AnnotationEngine annotationEngine =
+            new PluginLoader(pluginSwitch).loadPlugin(AnnotationEngine.class);
 
-    private final MockitoLogger mockitoLogger = new PluginLoader(pluginSwitch)
-            .loadPlugin(MockitoLogger.class);
+    private final MockitoLogger mockitoLogger =
+            new PluginLoader(pluginSwitch).loadPlugin(MockitoLogger.class);
 
     PluginRegistry() {
-        Object impl = new PluginLoader(pluginSwitch).loadPlugin(InstantiatorProvider2.class, InstantiatorProvider.class);
+        Object impl =
+                new PluginLoader(pluginSwitch)
+                        .loadPlugin(InstantiatorProvider2.class, InstantiatorProvider.class);
         if (impl instanceof InstantiatorProvider) {
             instantiatorProvider = new InstantiatorProviderAdapter((InstantiatorProvider) impl);
         } else {
@@ -45,7 +48,7 @@ class PluginRegistry {
      * The implementation of the stack trace cleaner
      */
     StackTraceCleanerProvider getStackTraceCleanerProvider() {
-        //TODO we should throw some sensible exception if this is null.
+        // TODO we should throw some sensible exception if this is null.
         return stackTraceCleanerProvider;
     }
 

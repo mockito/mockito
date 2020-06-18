@@ -65,11 +65,15 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         this(loader, null, any());
     }
 
-    public SubclassBytecodeGenerator(Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
+    public SubclassBytecodeGenerator(
+            Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
         this(new SubclassInjectionLoader(), readReplace, matcher);
     }
 
-    protected SubclassBytecodeGenerator(SubclassLoader loader, Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
+    protected SubclassBytecodeGenerator(
+            SubclassLoader loader,
+            Implementation readReplace,
+            ElementMatcher<? super MethodDescription> matcher) {
         this.loader = loader;
         this.readReplace = readReplace;
         this.matcher = matcher;
@@ -80,28 +84,40 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
 
     @Override
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
-        ClassLoader classLoader = new MultipleParentClassLoader.Builder()
-            .appendMostSpecific(getAllTypes(features.mockedType))
-            .appendMostSpecific(features.interfaces)
-            .appendMostSpecific(currentThread().getContextClassLoader())
-            .appendMostSpecific(MockAccess.class)
-            .build();
+        ClassLoader classLoader =
+                new MultipleParentClassLoader.Builder()
+                        .appendMostSpecific(getAllTypes(features.mockedType))
+                        .appendMostSpecific(features.interfaces)
+                        .appendMostSpecific(currentThread().getContextClassLoader())
+                        .appendMostSpecific(MockAccess.class)
+                        .build();
 
-        // If Mockito does not need to create a new class loader and if a mock is not based on a JDK type, we attempt
-        // to define the mock class in the user runtime package to allow for mocking package private types and methods.
-        // This also requires that we are able to access the package of the mocked class either by override or explicit
+        // If Mockito does not need to create a new class loader and if a mock is not based on a JDK
+        // type, we attempt
+        // to define the mock class in the user runtime package to allow for mocking package private
+        // types and methods.
+        // This also requires that we are able to access the package of the mocked class either by
+        // override or explicit
         // privilege given by the target package being opened to Mockito.
-        boolean localMock = classLoader == features.mockedType.getClassLoader()
-            && features.serializableMode != SerializableMode.ACROSS_CLASSLOADERS
-            && !isComingFromJDK(features.mockedType)
-            && (loader.isDisrespectingOpenness() || handler.isOpened(features.mockedType, MockAccess.class));
+        boolean localMock =
+                classLoader == features.mockedType.getClassLoader()
+                        && features.serializableMode != SerializableMode.ACROSS_CLASSLOADERS
+                        && !isComingFromJDK(features.mockedType)
+                        && (loader.isDisrespectingOpenness()
+                                || handler.isOpened(features.mockedType, MockAccess.class));
         String typeName;
-        if (localMock || loader instanceof MultipleParentClassLoader && !isComingFromJDK(features.mockedType)) {
+        if (localMock
+                || loader instanceof MultipleParentClassLoader
+                        && !isComingFromJDK(features.mockedType)) {
             typeName = features.mockedType.getName();
         } else {
-            typeName = InjectionBase.class.getPackage().getName() + "." + features.mockedType.getSimpleName();
+            typeName =
+                    InjectionBase.class.getPackage().getName()
+                            + "."
+                            + features.mockedType.getSimpleName();
         }
-        String name = String.format("%s$%s$%d", typeName, "MockitoMock", Math.abs(random.nextInt()));
+        String name =
+                String.format("%s$%s$%d", typeName, "MockitoMock", Math.abs(random.nextInt()));
 
         if (localMock) {
             handler.adjustModuleGraph(features.mockedType, MockAccess.class, false, true);
@@ -115,8 +131,10 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             while (exported && it.hasNext()) {
                 exported = handler.isExported(it.next());
             }
-            // We check if all mocked types are exported without qualification to avoid generating a hook type.
-            // unless this is necessary. We expect this to be the case for most mocked types what makes this a
+            // We check if all mocked types are exported without qualification to avoid generating a
+            // hook type.
+            // unless this is necessary. We expect this to be the case for most mocked types what
+            // makes this a
             // worthy performance optimization.
             if (exported) {
                 assertVisibility(features.mockedType);
@@ -134,45 +152,55 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             }
         }
 
-        DynamicType.Builder<T> builder = byteBuddy.subclass(features.mockedType)
-            .name(name)
-            .ignoreAlso(isGroovyMethod())
-            .annotateType(features.stripAnnotations
-                ? new Annotation[0]
-                : features.mockedType.getAnnotations())
-            .implement(new ArrayList<Type>(features.interfaces))
-            .method(matcher)
-            .intercept(dispatcher)
-            .transform(withModifiers(SynchronizationState.PLAIN))
-            .attribute(features.stripAnnotations
-                ? MethodAttributeAppender.NoOp.INSTANCE
-                : INCLUDING_RECEIVER)
-            .method(isHashCode())
-            .intercept(hashCode)
-            .method(isEquals())
-            .intercept(equals)
-            .serialVersionUid(42L)
-            .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
-            .implement(MockAccess.class)
-            .intercept(FieldAccessor.ofBeanProperty());
+        DynamicType.Builder<T> builder =
+                byteBuddy
+                        .subclass(features.mockedType)
+                        .name(name)
+                        .ignoreAlso(isGroovyMethod())
+                        .annotateType(
+                                features.stripAnnotations
+                                        ? new Annotation[0]
+                                        : features.mockedType.getAnnotations())
+                        .implement(new ArrayList<Type>(features.interfaces))
+                        .method(matcher)
+                        .intercept(dispatcher)
+                        .transform(withModifiers(SynchronizationState.PLAIN))
+                        .attribute(
+                                features.stripAnnotations
+                                        ? MethodAttributeAppender.NoOp.INSTANCE
+                                        : INCLUDING_RECEIVER)
+                        .method(isHashCode())
+                        .intercept(hashCode)
+                        .method(isEquals())
+                        .intercept(equals)
+                        .serialVersionUid(42L)
+                        .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
+                        .implement(MockAccess.class)
+                        .intercept(FieldAccessor.ofBeanProperty());
         if (features.serializableMode == SerializableMode.ACROSS_CLASSLOADERS) {
-            builder = builder.implement(CrossClassLoaderSerializableMock.class)
-                .intercept(writeReplace);
+            builder =
+                    builder.implement(CrossClassLoaderSerializableMock.class)
+                            .intercept(writeReplace);
         }
         if (readReplace != null) {
-            builder = builder.defineMethod("readObject", void.class, Visibility.PRIVATE)
-                .withParameters(ObjectInputStream.class)
-                .throwing(ClassNotFoundException.class, IOException.class)
-                .intercept(readReplace);
+            builder =
+                    builder.defineMethod("readObject", void.class, Visibility.PRIVATE)
+                            .withParameters(ObjectInputStream.class)
+                            .throwing(ClassNotFoundException.class, IOException.class)
+                            .intercept(readReplace);
         }
         if (name.startsWith(CODEGEN_PACKAGE) || classLoader instanceof MultipleParentClassLoader) {
-            builder = builder.ignoreAlso(isPackagePrivate()
-                .or(returns(isPackagePrivate()))
-                .or(hasParameters(whereAny(hasType(isPackagePrivate())))));
+            builder =
+                    builder.ignoreAlso(
+                            isPackagePrivate()
+                                    .or(returns(isPackagePrivate()))
+                                    .or(hasParameters(whereAny(hasType(isPackagePrivate())))));
         }
         return builder.make()
-            .load(classLoader, loader.resolveStrategy(features.mockedType, classLoader, localMock))
-            .getLoaded();
+                .load(
+                        classLoader,
+                        loader.resolveStrategy(features.mockedType, classLoader, localMock))
+                .getLoaded();
     }
 
     private <T> Collection<Class<? super T>> getAllTypes(Class<T> type) {
@@ -194,20 +222,24 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         // Comes from the manifest entry :
         // Implementation-Title: Java Runtime Environment
         // This entry is not necessarily present in every jar of the JDK
-        return type.getPackage() != null && "Java Runtime Environment".equalsIgnoreCase(type.getPackage().getImplementationTitle())
-            || type.getName().startsWith("java.")
-            || type.getName().startsWith("javax.");
+        return type.getPackage() != null
+                        && "Java Runtime Environment"
+                                .equalsIgnoreCase(type.getPackage().getImplementationTitle())
+                || type.getName().startsWith("java.")
+                || type.getName().startsWith("javax.");
     }
 
     private static void assertVisibility(Class<?> type) {
         if (!Modifier.isPublic(type.getModifiers())) {
-            throw new MockitoException(join("Cannot create mock for " + type,
-                "",
-                "The type is not public and its mock class is loaded by a different class loader.",
-                "This can have multiple reasons:",
-                " - You are mocking a class with additional interfaces of another class loader",
-                " - Mockito is loaded by a different class loader than the mocked type (e.g. with OSGi)",
-                " - The thread's context class loader is different than the mock's class loader"));
+            throw new MockitoException(
+                    join(
+                            "Cannot create mock for " + type,
+                            "",
+                            "The type is not public and its mock class is loaded by a different class loader.",
+                            "This can have multiple reasons:",
+                            " - You are mocking a class with additional interfaces of another class loader",
+                            " - Mockito is loaded by a different class loader than the mocked type (e.g. with OSGi)",
+                            " - The thread's context class loader is different than the mock's class loader"));
         }
     }
 }

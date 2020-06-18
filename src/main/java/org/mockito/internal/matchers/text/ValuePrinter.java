@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class ValuePrinter {
 
-    private ValuePrinter(){}
+    private ValuePrinter() {}
 
     /**
      * Prints given value so that it is neatly readable by humans.
@@ -51,21 +51,26 @@ public class ValuePrinter {
             return printMap((Map<?, ?>) value);
         }
         if (value.getClass().isArray()) {
-            return printValues("[", ", ", "]", new Iterator<Object>() {
-                private int currentIndex = 0;
+            return printValues(
+                    "[",
+                    ", ",
+                    "]",
+                    new Iterator<Object>() {
+                        private int currentIndex = 0;
 
-                public boolean hasNext() {
-                    return currentIndex < Array.getLength(value);
-                }
+                        public boolean hasNext() {
+                            return currentIndex < Array.getLength(value);
+                        }
 
-                public Object next() {
-                    return Array.get(value, currentIndex++);
-                }
+                        public Object next() {
+                            return Array.get(value, currentIndex++);
+                        }
 
-                public void remove() {
-                    throw new UnsupportedOperationException("cannot remove items from an array");
-                }
-            });
+                        public void remove() {
+                            throw new UnsupportedOperationException(
+                                    "cannot remove items from an array");
+                        }
+                    });
         }
         if (value instanceof FormattedText) {
             return (((FormattedText) value).getText());
@@ -74,7 +79,7 @@ public class ValuePrinter {
         return descriptionOf(value);
     }
 
-    private static String printMap(Map<?,?> map) {
+    private static String printMap(Map<?, ?> map) {
         StringBuilder result = new StringBuilder();
         Iterator<? extends Map.Entry<?, ?>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -97,19 +102,20 @@ public class ValuePrinter {
      *
      * @return neatly formatted value list
      */
-    public static String printValues(String start, String separator, String end, Iterator<?> values) {
-        if(start == null){
+    public static String printValues(
+            String start, String separator, String end, Iterator<?> values) {
+        if (start == null) {
             start = "(";
         }
-        if (separator == null){
+        if (separator == null) {
             separator = ",";
         }
-        if (end == null){
+        if (end == null) {
             end = ")";
         }
 
         StringBuilder sb = new StringBuilder(start);
-        while(values.hasNext()) {
+        while (values.hasNext()) {
             sb.append(print(values.next()));
             if (values.hasNext()) {
                 sb.append(separator);
@@ -144,8 +150,7 @@ public class ValuePrinter {
     private static String descriptionOf(Object value) {
         try {
             return valueOf(value);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return value.getClass().getName() + "@" + Integer.toHexString(value.hashCode());
         }
     }

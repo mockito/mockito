@@ -80,7 +80,8 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         }
         if (matcherStack.size() < subMatchersCount) {
             List<LocalizedMatcher> lastMatchers = resetStack();
-            throw incorrectUseOfAdditionalMatchers(additionalMatcherName, subMatchersCount, lastMatchers);
+            throw incorrectUseOfAdditionalMatchers(
+                    additionalMatcherName, subMatchersCount, lastMatchers);
         }
     }
 
@@ -93,5 +94,4 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         reset();
         return lastMatchers;
     }
-
 }

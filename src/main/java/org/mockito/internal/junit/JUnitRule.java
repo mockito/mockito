@@ -21,8 +21,10 @@ public final class JUnitRule implements MockitoRule {
     }
 
     @Override
-    public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
-        return sessionStore.createStatement(base, target.getClass().getSimpleName() + "." + method.getName(), target);
+    public Statement apply(
+            final Statement base, final FrameworkMethod method, final Object target) {
+        return sessionStore.createStatement(
+                base, target.getClass().getSimpleName() + "." + method.getName(), target);
     }
 
     public MockitoRule silent() {

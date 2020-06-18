@@ -21,5 +21,4 @@ public class NoInteractions implements VerificationMode {
             throw noInteractionsWanted(invocations.get(0).getMock(), (List) invocations);
         }
     }
-
 }

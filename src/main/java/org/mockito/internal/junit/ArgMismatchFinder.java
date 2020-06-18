@@ -20,9 +20,13 @@ class ArgMismatchFinder {
                 continue;
             }
             for (Stubbing stubbing : AllInvocationsFinder.findStubbings(mocks)) {
-                //method name & mock matches
-                if (!stubbing.wasUsed() && stubbing.getInvocation().getMock() == i.getMock()
-                        && stubbing.getInvocation().getMethod().getName().equals(i.getMethod().getName())) {
+                // method name & mock matches
+                if (!stubbing.wasUsed()
+                        && stubbing.getInvocation().getMock() == i.getMock()
+                        && stubbing.getInvocation()
+                                .getMethod()
+                                .getName()
+                                .equals(i.getMethod().getName())) {
                     mismatches.add(i, stubbing.getInvocation());
                 }
             }

@@ -22,8 +22,8 @@ public abstract class AbstractThrowsException implements Answer<Object>, Validab
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Throwable throwable = getThrowable();
         if (throwable == null) {
-            throw new IllegalStateException("throwable is null: " +
-                "you shall not call #answer if #validateFor fails!");
+            throw new IllegalStateException(
+                    "throwable is null: " + "you shall not call #answer if #validateFor fails!");
         }
         if (MockUtil.isMock(throwable)) {
             throw throwable;
@@ -31,7 +31,7 @@ public abstract class AbstractThrowsException implements Answer<Object>, Validab
         Throwable t = throwable.fillInStackTrace();
 
         if (t == null) {
-            //Custom exceptions sometimes return null, see #866
+            // Custom exceptions sometimes return null, see #866
             throw throwable;
         }
         filter.filter(t);

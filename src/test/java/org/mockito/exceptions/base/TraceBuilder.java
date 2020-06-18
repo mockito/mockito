@@ -38,12 +38,12 @@ public class TraceBuilder {
         return toTraceList().toArray(new StackTraceElement[0]);
     }
 
-    public TraceBuilder classes(String ... classes) {
+    public TraceBuilder classes(String... classes) {
         this.classes = classes;
         return this;
     }
 
-    public TraceBuilder methods(String ... methods) {
+    public TraceBuilder methods(String... methods) {
         this.methods = methods;
         return this;
     }

@@ -28,10 +28,10 @@ class MatcherToString {
      */
     static String toString(ArgumentMatcher<?> matcher) {
         Class<?> cls = matcher.getClass();
-        while(cls != Object.class) {
+        while (cls != Object.class) {
             Method[] methods = cls.getDeclaredMethods();
             for (Method m : methods) {
-                if(isToStringMethod(m)) {
+                if (isToStringMethod(m)) {
                     return matcher.toString();
                 }
             }
@@ -39,6 +39,4 @@ class MatcherToString {
         }
         return decamelizeMatcher(matcher.getClass().getSimpleName());
     }
-
-
 }

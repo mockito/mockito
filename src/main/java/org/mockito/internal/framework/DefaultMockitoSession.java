@@ -21,11 +21,15 @@ public class DefaultMockitoSession implements MockitoSession {
     private final String name;
     private final UniversalTestListener listener;
 
-    public DefaultMockitoSession(List<Object> testClassInstances, String name, Strictness strictness, MockitoLogger logger) {
+    public DefaultMockitoSession(
+            List<Object> testClassInstances,
+            String name,
+            Strictness strictness,
+            MockitoLogger logger) {
         this.name = name;
         listener = new UniversalTestListener(strictness, logger);
         try {
-            //So that the listener can capture mock creation events
+            // So that the listener can capture mock creation events
             Mockito.framework().addListener(listener);
         } catch (RedundantListenerException e) {
             Reporter.unfinishedMockingSession();
@@ -35,7 +39,7 @@ public class DefaultMockitoSession implements MockitoSession {
                 MockitoAnnotations.initMocks(testClassInstance);
             }
         } catch (RuntimeException e) {
-            //clean up in case 'initMocks' fails
+            // clean up in case 'initMocks' fails
             listener.setListenerDirty();
             throw e;
         }
@@ -53,26 +57,28 @@ public class DefaultMockitoSession implements MockitoSession {
 
     @Override
     public void finishMocking(final Throwable failure) {
-        //Cleaning up the state, we no longer need the listener hooked up
-        //The listener implements MockCreationListener and at this point
-        //we no longer need to listen on mock creation events. We are wrapping up the session
+        // Cleaning up the state, we no longer need the listener hooked up
+        // The listener implements MockCreationListener and at this point
+        // we no longer need to listen on mock creation events. We are wrapping up the session
         Mockito.framework().removeListener(listener);
 
-        //Emit test finished event so that validation such as strict stubbing can take place
-        listener.testFinished(new TestFinishedEvent() {
-            @Override
-            public Throwable getFailure() {
-                return failure;
-            }
-            @Override
-            public String getTestName() {
-                return name;
-            }
-        });
+        // Emit test finished event so that validation such as strict stubbing can take place
+        listener.testFinished(
+                new TestFinishedEvent() {
+                    @Override
+                    public Throwable getFailure() {
+                        return failure;
+                    }
 
-        //Validate only when there is no test failure to avoid reporting multiple problems
+                    @Override
+                    public String getTestName() {
+                        return name;
+                    }
+                });
+
+        // Validate only when there is no test failure to avoid reporting multiple problems
         if (failure == null) {
-            //Finally, validate user's misuse of Mockito framework.
+            // Finally, validate user's misuse of Mockito framework.
             Mockito.validateMockitoUsage();
         }
     }

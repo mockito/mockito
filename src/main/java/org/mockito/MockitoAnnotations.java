@@ -61,10 +61,12 @@ public class MockitoAnnotations {
      */
     public static void initMocks(Object testClass) {
         if (testClass == null) {
-            throw new MockitoException("testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class");
+            throw new MockitoException(
+                    "testClass cannot be null. For info how to use @Mock annotations see examples in javadoc for MockitoAnnotations class");
         }
 
-        AnnotationEngine annotationEngine = new GlobalConfiguration().tryGetPluginAnnotationEngine();
+        AnnotationEngine annotationEngine =
+                new GlobalConfiguration().tryGetPluginAnnotationEngine();
         annotationEngine.process(testClass.getClass(), testClass);
     }
 }

@@ -12,14 +12,16 @@ import org.junit.Test;
 public class ThrowsExceptionForClassTypeTest {
     @Test
     public void should_return_throwable_of_expected_class() {
-        ThrowsExceptionForClassType throwsExceptionForClassType = new ThrowsExceptionForClassType(Exception.class);
+        ThrowsExceptionForClassType throwsExceptionForClassType =
+                new ThrowsExceptionForClassType(Exception.class);
 
         assertSame(Exception.class, throwsExceptionForClassType.getThrowable().getClass());
     }
 
     @Test
     public void should_return_different_throwables() {
-        ThrowsExceptionForClassType throwsExceptionForClassType = new ThrowsExceptionForClassType(Exception.class);
+        ThrowsExceptionForClassType throwsExceptionForClassType =
+                new ThrowsExceptionForClassType(Exception.class);
 
         Throwable first = throwsExceptionForClassType.getThrowable();
         Throwable second = throwsExceptionForClassType.getThrowable();

@@ -48,7 +48,8 @@ public class AbstractThrowsExceptionTest {
 
         Throwable throwable = Assertions.catchThrowable(() -> ate.answer(createMethodInvocation()));
         assertNotNull("Should have raised an exception.", throwable);
-        assertThat(throwable.getStackTrace()[0].getClassName()).isEqualTo(AbstractThrowsException.class.getName());
+        assertThat(throwable.getStackTrace()[0].getClassName())
+                .isEqualTo(AbstractThrowsException.class.getName());
         assertThat(throwable.getStackTrace()[0].getMethodName()).isEqualTo("answer");
     }
 
@@ -56,8 +57,9 @@ public class AbstractThrowsExceptionTest {
     public void should_invalidate_null_throwable() {
         AbstractThrowsException ate = instantiateFixture(null);
 
-        Throwable throwable = Assertions.catchThrowableOfType(() -> ate.validateFor(createMethodInvocation()),
-                                                              MockitoException.class);
+        Throwable throwable =
+                Assertions.catchThrowableOfType(
+                        () -> ate.validateFor(createMethodInvocation()), MockitoException.class);
         assertNotNull("Should have raised a MockitoException.", throwable);
         assertEquals(cannotStubWithNullThrowable().getMessage(), throwable.getMessage());
     }
@@ -66,10 +68,13 @@ public class AbstractThrowsExceptionTest {
     public void should_throw_illegal_state_exception_if_null_answer() {
         AbstractThrowsException ate = instantiateFixture(null);
 
-        Throwable throwable = Assertions.catchThrowableOfType(() -> ate.answer(createMethodInvocation()),
-                                                              IllegalStateException.class);
+        Throwable throwable =
+                Assertions.catchThrowableOfType(
+                        () -> ate.answer(createMethodInvocation()), IllegalStateException.class);
         assertNotNull("Should have raised a IllegalStateException.", throwable);
-        assertEquals("throwable is null: you shall not call #answer if #validateFor fails!", throwable.getMessage());
+        assertEquals(
+                "throwable is null: you shall not call #answer if #validateFor fails!",
+                throwable.getMessage());
     }
 
     @Test
@@ -82,8 +87,9 @@ public class AbstractThrowsExceptionTest {
         AbstractThrowsException ate = instantiateFixture(new IOException());
         Throwable comparison = ate.getThrowable();
 
-        Throwable throwable = Assertions.catchThrowableOfType(() -> ate.validateFor(createMethodInvocation()),
-                                                              MockitoException.class);
+        Throwable throwable =
+                Assertions.catchThrowableOfType(
+                        () -> ate.validateFor(createMethodInvocation()), MockitoException.class);
         assertNotNull("Should have raised a MockitoException.", throwable);
         assertEquals(checkedExceptionInvalid(comparison).getMessage(), throwable.getMessage());
     }
@@ -110,9 +116,7 @@ public class AbstractThrowsExceptionTest {
 
     /** Creates Invocation of a "canThrowException" method call. */
     private static Invocation createMethodInvocation() {
-        return new InvocationBuilder()
-            .method("canThrowException")
-            .toInvocation();
+        return new InvocationBuilder().method("canThrowException").toInvocation();
     }
 
     @Test

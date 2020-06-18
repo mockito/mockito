@@ -82,7 +82,8 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBa
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -94,7 +95,8 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBa
         try {
             verifyNoMoreInteractions(mockOne, mockTwo, mockThree);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -115,10 +117,11 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBa
         try {
             inOrder.verify(mockOne, atLeastOnce()).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void shouldScreamWhenUnfamiliarMockPassedToInOrderObject() {
         inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(1);
     }

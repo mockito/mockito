@@ -29,13 +29,13 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         } else {
             mockSettings.name(annotation.name());
         }
-        if(annotation.serializable()){
+        if (annotation.serializable()) {
             mockSettings.serializable();
         }
-        if(annotation.stubOnly()){
+        if (annotation.stubOnly()) {
             mockSettings.stubOnly();
         }
-        if(annotation.lenient()){
+        if (annotation.lenient()) {
             mockSettings.lenient();
         }
 

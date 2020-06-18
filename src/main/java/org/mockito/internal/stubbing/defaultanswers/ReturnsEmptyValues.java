@@ -53,7 +53,6 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = 1998191268711234347L;
 
-
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
@@ -62,14 +61,18 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             Object mock = invocation.getMock();
             MockName name = MockUtil.getMockName(mock);
             if (name.isDefault()) {
-                return "Mock for " + MockUtil.getMockSettings(mock).getTypeToMock().getSimpleName() + ", hashCode: " + mock.hashCode();
+                return "Mock for "
+                        + MockUtil.getMockSettings(mock).getTypeToMock().getSimpleName()
+                        + ", hashCode: "
+                        + mock.hashCode();
             } else {
                 return name.toString();
             }
         } else if (isCompareToMethod(invocation.getMethod())) {
-            //see issue 184.
-            //mocks by default should return 0 if references are the same, otherwise some other value because they are not the same. Hence we return 1 (anything but 0 is good).
-            //Only for compareTo() method by the Comparable interface
+            // see issue 184.
+            // mocks by default should return 0 if references are the same, otherwise some other
+            // value because they are not the same. Hence we return 1 (anything but 0 is good).
+            // Only for compareTo() method by the Comparable interface
             return invocation.getMock() == invocation.getArgument(0) ? 0 : 1;
         }
 
@@ -80,8 +83,9 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     Object returnValueFor(Class<?> type) {
         if (Primitives.isPrimitiveOrWrapper(type)) {
             return Primitives.defaultValue(type);
-            //new instances are used instead of Collections.emptyList(), etc.
-            //to avoid UnsupportedOperationException if code under test modifies returned collection
+            // new instances are used instead of Collections.emptyList(), etc.
+            // to avoid UnsupportedOperationException if code under test modifies returned
+            // collection
         } else if (type == Iterable.class) {
             return new ArrayList<Object>(0);
         } else if (type == Collection.class) {
@@ -134,7 +138,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return JavaEightUtil.emptyPeriod();
         }
 
-        //Let's not care about the rest of collections.
+        // Let's not care about the rest of collections.
         return null;
     }
 }

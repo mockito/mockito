@@ -31,6 +31,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
 
     class Tested {
         Dependency dependency;
+
         public void setDependency(Dependency dependency) {
             this.dependency = dependency;
         }
@@ -40,15 +41,15 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
 
     @Test
     public void shouldInjectMocksIfThereIsNoUserDefinedEngine() throws Exception {
-        //given
+        // given
         AnnotationEngine defaultEngine = new DefaultMockitoConfiguration().getAnnotationEngine();
         ConfigurationAccess.getConfig().overrideAnnotationEngine(defaultEngine);
         SimpleTestCase test = new SimpleTestCase();
 
-        //when
+        // when
         MockitoAnnotations.initMocks(test);
 
-        //then
+        // then
         assertNotNull(test.mock);
         assertNotNull(test.tested.dependency);
         assertSame(test.mock, test.tested.dependency);
@@ -56,15 +57,17 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
 
     @Test
     public void shouldRespectUsersEngine() throws Exception {
-        //given
-        AnnotationEngine customizedEngine = new IndependentAnnotationEngine() { /**/ };
+        // given
+        AnnotationEngine customizedEngine = new IndependentAnnotationEngine() {
+                    /**/
+                };
         ConfigurationAccess.getConfig().overrideAnnotationEngine(customizedEngine);
         SimpleTestCase test = new SimpleTestCase();
 
-        //when
+        // when
         MockitoAnnotations.initMocks(test);
 
-        //then
+        // then
         assertNotNull(test.mock);
         assertNull(test.tested.dependency);
     }

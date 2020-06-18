@@ -103,23 +103,31 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
             try {
                 instrumentation = ByteBuddyAgent.install();
                 if (!instrumentation.isRetransformClassesSupported()) {
-                    throw new IllegalStateException(join(
-                            "Byte Buddy requires retransformation for creating inline mocks. This feature is unavailable on the current VM.",
-                            "",
-                            "You cannot use this mock maker on this VM"));
+                    throw new IllegalStateException(
+                            join(
+                                    "Byte Buddy requires retransformation for creating inline mocks. This feature is unavailable on the current VM.",
+                                    "",
+                                    "You cannot use this mock maker on this VM"));
                 }
                 File boot = File.createTempFile("mockitoboot", ".jar");
                 boot.deleteOnExit();
                 JarOutputStream outputStream = new JarOutputStream(new FileOutputStream(boot));
                 try {
-                    String source = "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher";
-                    InputStream inputStream = InlineByteBuddyMockMaker.class.getClassLoader().getResourceAsStream(source + ".raw");
+                    String source =
+                            "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher";
+                    InputStream inputStream =
+                            InlineByteBuddyMockMaker.class
+                                    .getClassLoader()
+                                    .getResourceAsStream(source + ".raw");
                     if (inputStream == null) {
-                        throw new IllegalStateException(join(
-                                "The MockMethodDispatcher class file is not locatable: " + source + ".raw",
-                                "",
-                                "The class loader responsible for looking up the resource: " + InlineByteBuddyMockMaker.class.getClassLoader()
-                        ));
+                        throw new IllegalStateException(
+                                join(
+                                        "The MockMethodDispatcher class file is not locatable: "
+                                                + source
+                                                + ".raw",
+                                        "",
+                                        "The class loader responsible for looking up the resource: "
+                                                + InlineByteBuddyMockMaker.class.getClassLoader()));
                     }
                     outputStream.putNextEntry(new JarEntry(source + ".class"));
                     try {
@@ -139,19 +147,27 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
                     instrumentation.appendToBootstrapClassLoaderSearch(jarfile);
                 }
                 try {
-                    Class.forName("org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher", false, null);
+                    Class.forName(
+                            "org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher",
+                            false,
+                            null);
                 } catch (ClassNotFoundException cnfe) {
-                    throw new IllegalStateException(join(
-                            "Mockito failed to inject the MockMethodDispatcher class into the bootstrap class loader",
-                            "",
-                            "It seems like your current VM does not support the instrumentation API correctly."), cnfe);
+                    throw new IllegalStateException(
+                            join(
+                                    "Mockito failed to inject the MockMethodDispatcher class into the bootstrap class loader",
+                                    "",
+                                    "It seems like your current VM does not support the instrumentation API correctly."),
+                            cnfe);
                 }
             } catch (IOException ioe) {
-                throw new IllegalStateException(join(
-                        "Mockito could not self-attach a Java agent to the current VM. This feature is required for inline mocking.",
-                        "This error occured due to an I/O error during the creation of this agent: " + ioe,
-                        "",
-                        "Potentially, the current VM does not support the instrumentation API correctly"), ioe);
+                throw new IllegalStateException(
+                        join(
+                                "Mockito could not self-attach a Java agent to the current VM. This feature is required for inline mocking.",
+                                "This error occured due to an I/O error during the creation of this agent: "
+                                        + ioe,
+                                "",
+                                "Potentially, the current VM does not support the instrumentation API correctly"),
+                        ioe);
             }
         } catch (Throwable throwable) {
             instrumentation = null;
@@ -163,16 +179,23 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
 
     private final BytecodeGenerator bytecodeGenerator;
 
-    private final WeakConcurrentMap<Object, MockMethodInterceptor> mocks = new WeakConcurrentMap.WithInlinedExpunction<Object, MockMethodInterceptor>();
+    private final WeakConcurrentMap<Object, MockMethodInterceptor> mocks =
+            new WeakConcurrentMap.WithInlinedExpunction<Object, MockMethodInterceptor>();
 
     public InlineByteBuddyMockMaker() {
         if (INITIALIZATION_ERROR != null) {
-            throw new MockitoInitializationException(join(
-                    "Could not initialize inline Byte Buddy mock maker. (This mock maker is not supported on Android.)",
-                    ToolProvider.getSystemJavaCompiler() == null ? "Are you running a JRE instead of a JDK? The inline mock maker needs to be run on a JDK.\n" : "",
-                    Platform.describe()), INITIALIZATION_ERROR);
+            throw new MockitoInitializationException(
+                    join(
+                            "Could not initialize inline Byte Buddy mock maker. (This mock maker is not supported on Android.)",
+                            ToolProvider.getSystemJavaCompiler() == null
+                                    ? "Are you running a JRE instead of a JDK? The inline mock maker needs to be run on a JDK.\n"
+                                    : "",
+                            Platform.describe()),
+                    INITIALIZATION_ERROR);
         }
-        bytecodeGenerator = new TypeCachingBytecodeGenerator(new InlineBytecodeGenerator(INSTRUMENTATION, mocks), true);
+        bytecodeGenerator =
+                new TypeCachingBytecodeGenerator(
+                        new InlineBytecodeGenerator(INSTRUMENTATION, mocks), true);
     }
 
     @Override
@@ -182,77 +205,85 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
         Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(settings);
         try {
             T instance = instantiator.newInstance(type);
-            MockMethodInterceptor mockMethodInterceptor = new MockMethodInterceptor(handler, settings);
+            MockMethodInterceptor mockMethodInterceptor =
+                    new MockMethodInterceptor(handler, settings);
             mocks.put(instance, mockMethodInterceptor);
             if (instance instanceof MockAccess) {
                 ((MockAccess) instance).setMockitoInterceptor(mockMethodInterceptor);
             }
             return instance;
         } catch (org.mockito.creation.instance.InstantiationException e) {
-            throw new MockitoException("Unable to create mock instance of type '" + type.getSimpleName() + "'", e);
+            throw new MockitoException(
+                    "Unable to create mock instance of type '" + type.getSimpleName() + "'", e);
         }
     }
 
     @Override
     public <T> Class<? extends T> createMockType(MockCreationSettings<T> settings) {
         try {
-            return bytecodeGenerator.mockClass(MockFeatures.withMockFeatures(
-                    settings.getTypeToMock(),
-                    settings.getExtraInterfaces(),
-                    settings.getSerializableMode(),
-                    settings.isStripAnnotations()
-            ));
+            return bytecodeGenerator.mockClass(
+                    MockFeatures.withMockFeatures(
+                            settings.getTypeToMock(),
+                            settings.getExtraInterfaces(),
+                            settings.getSerializableMode(),
+                            settings.isStripAnnotations()));
         } catch (Exception bytecodeGenerationFailed) {
             throw prettifyFailure(settings, bytecodeGenerationFailed);
         }
     }
 
-    private <T> RuntimeException prettifyFailure(MockCreationSettings<T> mockFeatures, Exception generationFailed) {
+    private <T> RuntimeException prettifyFailure(
+            MockCreationSettings<T> mockFeatures, Exception generationFailed) {
         if (mockFeatures.getTypeToMock().isArray()) {
-            throw new MockitoException(join(
-                    "Arrays cannot be mocked: " + mockFeatures.getTypeToMock() + ".",
-                    ""
-            ), generationFailed);
+            throw new MockitoException(
+                    join("Arrays cannot be mocked: " + mockFeatures.getTypeToMock() + ".", ""),
+                    generationFailed);
         }
         if (Modifier.isFinal(mockFeatures.getTypeToMock().getModifiers())) {
-            throw new MockitoException(join(
-                    "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
-                    "Can not mock final classes with the following settings :",
-                    " - explicit serialization (e.g. withSettings().serializable())",
-                    " - extra interfaces (e.g. withSettings().extraInterfaces(...))",
-                    "",
-                    "You are seeing this disclaimer because Mockito is configured to create inlined mocks.",
-                    "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",
-                    "",
-                    "Underlying exception : " + generationFailed
-            ), generationFailed);
+            throw new MockitoException(
+                    join(
+                            "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
+                            "Can not mock final classes with the following settings :",
+                            " - explicit serialization (e.g. withSettings().serializable())",
+                            " - extra interfaces (e.g. withSettings().extraInterfaces(...))",
+                            "",
+                            "You are seeing this disclaimer because Mockito is configured to create inlined mocks.",
+                            "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",
+                            "",
+                            "Underlying exception : " + generationFailed),
+                    generationFailed);
         }
         if (Modifier.isPrivate(mockFeatures.getTypeToMock().getModifiers())) {
-            throw new MockitoException(join(
-                    "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
-                    "Most likely it is a private class that is not visible by Mockito",
-                    "",
-                    "You are seeing this disclaimer because Mockito is configured to create inlined mocks.",
-                    "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",
-                    ""
-            ), generationFailed);
+            throw new MockitoException(
+                    join(
+                            "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
+                            "Most likely it is a private class that is not visible by Mockito",
+                            "",
+                            "You are seeing this disclaimer because Mockito is configured to create inlined mocks.",
+                            "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",
+                            ""),
+                    generationFailed);
         }
-        throw new MockitoException(join(
-                "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
-                "",
-                "If you're not sure why you're getting this error, please report to the mailing list.",
-                "",
-                Platform.warnForVM(
-                        "IBM J9 VM", "Early IBM virtual machine are known to have issues with Mockito, please upgrade to an up-to-date version.\n",
-                        "Hotspot", Platform.isJava8BelowUpdate45() ? "Java 8 early builds have bugs that were addressed in Java 1.8.0_45, please update your JDK!\n" : ""
-                ),
-                Platform.describe(),
-                "",
-                "You are seeing this disclaimer because Mockito is configured to create inlined mocks.",
-                "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",
-                "",
-                "Underlying exception : " + generationFailed
-        ), generationFailed);
+        throw new MockitoException(
+                join(
+                        "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
+                        "",
+                        "If you're not sure why you're getting this error, please report to the mailing list.",
+                        "",
+                        Platform.warnForVM(
+                                "IBM J9 VM",
+                                "Early IBM virtual machine are known to have issues with Mockito, please upgrade to an up-to-date version.\n",
+                                "Hotspot",
+                                Platform.isJava8BelowUpdate45()
+                                        ? "Java 8 early builds have bugs that were addressed in Java 1.8.0_45, please update your JDK!\n"
+                                        : ""),
+                        Platform.describe(),
+                        "",
+                        "You are seeing this disclaimer because Mockito is configured to create inlined mocks.",
+                        "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",
+                        "",
+                        "Underlying exception : " + generationFailed),
+                generationFailed);
     }
 
     @Override
@@ -267,7 +298,8 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
 
     @Override
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
-        MockMethodInterceptor mockMethodInterceptor = new MockMethodInterceptor(newHandler, settings);
+        MockMethodInterceptor mockMethodInterceptor =
+                new MockMethodInterceptor(newHandler, settings);
         mocks.put(mock, mockMethodInterceptor);
         if (mock instanceof MockAccess) {
             ((MockAccess) mock).setMockitoInterceptor(mockMethodInterceptor);
@@ -307,5 +339,4 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
             }
         };
     }
-
 }

@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 
-
 public class VerifyPrintsAllInvocationsOnErrorTest {
 
     @Test
@@ -22,13 +21,11 @@ public class VerifyPrintsAllInvocationsOnErrorTest {
         try {
             Mockito.verify(mockBuilder).with("key1", "wrongValue");
             fail();
-        }
-        catch (ArgumentsAreDifferent e) {
+        } catch (ArgumentsAreDifferent e) {
             assertThat(e).hasMessageContaining("exampleBuilder.with(\"key1\", \"val1\")");
             assertThat(e).hasMessageContaining("exampleBuilder.with(\"key2\", \"val2\"");
         }
     }
-
 
     private static class ExampleBuilder {
         public ExampleBuilder with(String key, String val) {

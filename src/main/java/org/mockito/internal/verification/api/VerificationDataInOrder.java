@@ -16,5 +16,4 @@ public interface VerificationDataInOrder {
     MatchableInvocation getWanted();
 
     InOrderContext getOrderingContext();
-
 }

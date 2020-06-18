@@ -10,10 +10,8 @@ import org.junit.rules.ExpectedException;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.VerificationModeFactory;
 
-
-public class TimesTest  {
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
+public class TimesTest {
+    @Rule public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void shouldNotAllowNegativeNumberOfInvocations() throws Exception {

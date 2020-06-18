@@ -16,5 +16,5 @@ public interface MockitoDebugger {
      * An instance of {@code MockingDetails} can be retrieved via {@link Mockito#mockingDetails(Object)}.
      */
     @Deprecated
-    String printInvocations(Object ... mocks);
+    String printInvocations(Object... mocks);
 }

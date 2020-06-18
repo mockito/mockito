@@ -11,7 +11,6 @@ import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 
-
 /**
  * Runner moved to a new place see {@link org.mockito.junit.MockitoJUnitRunner}
  *

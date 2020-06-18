@@ -14,7 +14,6 @@ import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.invocation.Invocation;
 
-
 public class DefaultRegisteredInvocations implements RegisteredInvocations, Serializable {
 
     private static final long serialVersionUID = -2674402327380736290L;
@@ -27,9 +26,10 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
     }
 
     public void removeLast() {
-        //TODO: add specific test for synchronization of this block (it is tested by InvocationContainerImplTest at the moment)
+        // TODO: add specific test for synchronization of this block (it is tested by
+        // InvocationContainerImplTest at the moment)
         synchronized (invocations) {
-            if (! invocations.isEmpty()) {
+            if (!invocations.isEmpty()) {
                 invocations.removeLast();
             }
         }
@@ -38,7 +38,7 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
     public List<Invocation> getAll() {
         List<Invocation> copiedList;
         synchronized (invocations) {
-            copiedList = new LinkedList<Invocation>(invocations) ;
+            copiedList = new LinkedList<Invocation>(invocations);
         }
 
         return ListUtil.filter(copiedList, new RemoveToString());
@@ -61,5 +61,4 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
             return isToStringMethod(invocation.getMethod());
         }
     }
-
 }

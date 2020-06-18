@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
-//see issue 191
+// see issue 191
 public class ShouldAllowInlineMockCreationTest extends TestBase {
 
     @Mock List list;

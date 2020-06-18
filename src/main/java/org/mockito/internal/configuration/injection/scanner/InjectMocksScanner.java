@@ -30,7 +30,6 @@ public class InjectMocksScanner {
         this.clazz = clazz;
     }
 
-
     /**
      * Add the fields annotated by @{@link InjectMocks}
      *
@@ -59,10 +58,12 @@ public class InjectMocksScanner {
         return mockDependentFields;
     }
 
-    private static void assertNoAnnotations(Field field, Class<? extends Annotation>... annotations) {
+    private static void assertNoAnnotations(
+            Field field, Class<? extends Annotation>... annotations) {
         for (Class<? extends Annotation> annotation : annotations) {
             if (field.isAnnotationPresent(annotation)) {
-                throw unsupportedCombinationOfAnnotations(annotation.getSimpleName(), InjectMocks.class.getSimpleName());
+                throw unsupportedCombinationOfAnnotations(
+                        annotation.getSimpleName(), InjectMocks.class.getSimpleName());
             }
         }
     }

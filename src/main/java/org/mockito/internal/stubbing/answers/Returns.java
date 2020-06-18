@@ -34,11 +34,15 @@ public class Returns implements Answer<Object>, ValidableAnswer, Serializable {
         }
 
         if (returnsNull() && invocationInfo.returnsPrimitive()) {
-            throw wrongTypeOfReturnValue(invocationInfo.printMethodReturnType(), "null", invocationInfo.getMethodName());
+            throw wrongTypeOfReturnValue(
+                    invocationInfo.printMethodReturnType(), "null", invocationInfo.getMethodName());
         }
 
         if (!returnsNull() && !invocationInfo.isValidReturnType(returnType())) {
-            throw wrongTypeOfReturnValue(invocationInfo.printMethodReturnType(), printReturnType(), invocationInfo.getMethodName());
+            throw wrongTypeOfReturnValue(
+                    invocationInfo.printMethodReturnType(),
+                    printReturnType(),
+                    invocationInfo.getMethodName());
         }
     }
 

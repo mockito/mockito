@@ -275,7 +275,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * If you are using argument matchers, <b>all arguments</b> have to be provided
  * by matchers.
  * <p>
- The following example shows verification but the same applies to stubbing:
+ * The following example shows verification but the same applies to stubbing:
  *
  * <pre class="code"><code class="java">
  *   verify(mock).someMethod(anyInt(), anyString(), <b>eq("third argument")</b>);
@@ -1834,9 +1834,7 @@ public class Mockito extends ArgumentMatchers {
      */
     @CheckReturnValue
     public static <T> T mock(Class<T> classToMock, String name) {
-        return mock(classToMock, withSettings()
-                .name(name)
-                .defaultAnswer(RETURNS_DEFAULTS));
+        return mock(classToMock, withSettings().name(name).defaultAnswer(RETURNS_DEFAULTS));
     }
 
     /**
@@ -1989,9 +1987,9 @@ public class Mockito extends ArgumentMatchers {
      */
     @CheckReturnValue
     public static <T> T spy(T object) {
-        return MOCKITO_CORE.mock((Class<T>) object.getClass(), withSettings()
-                .spiedInstance(object)
-                .defaultAnswer(CALLS_REAL_METHODS));
+        return MOCKITO_CORE.mock(
+                (Class<T>) object.getClass(),
+                withSettings().spiedInstance(object).defaultAnswer(CALLS_REAL_METHODS));
     }
 
     /**
@@ -2024,9 +2022,8 @@ public class Mockito extends ArgumentMatchers {
     @Incubating
     @CheckReturnValue
     public static <T> T spy(Class<T> classToSpy) {
-        return MOCKITO_CORE.mock(classToSpy, withSettings()
-                .useConstructor()
-                .defaultAnswer(CALLS_REAL_METHODS));
+        return MOCKITO_CORE.mock(
+                classToSpy, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
     }
 
     /**
@@ -2178,7 +2175,7 @@ public class Mockito extends ArgumentMatchers {
      * @param <T> The Type of the mocks
      * @param mocks to be reset
      */
-    public static <T> void reset(T ... mocks) {
+    public static <T> void reset(T... mocks) {
         MOCKITO_CORE.reset(mocks);
     }
 
@@ -2193,7 +2190,7 @@ public class Mockito extends ArgumentMatchers {
      * @param <T> The type of the mocks
      * @param mocks The mocks to clear the invocations for
      */
-    public static <T> void clearInvocations(T ... mocks) {
+    public static <T> void clearInvocations(T... mocks) {
         MOCKITO_CORE.clearInvocations(mocks);
     }
 
@@ -2339,13 +2336,14 @@ public class Mockito extends ArgumentMatchers {
      * @return stubber - to select a method for stubbing
      * @since 2.1.0
      */
-    // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation
-    @SuppressWarnings ({"unchecked", "varargs"})
+    // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array
+    // creation
+    @SuppressWarnings({"unchecked", "varargs"})
     @CheckReturnValue
-    public static Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... toBeThrownNext) {
+    public static Stubber doThrow(
+            Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... toBeThrownNext) {
         return MOCKITO_CORE.stubber().doThrow(toBeThrown, toBeThrownNext);
     }
-
 
     /**
      * Use <code>doCallRealMethod()</code> when you want to call the real implementation of a method.
@@ -2794,8 +2792,8 @@ public class Mockito extends ArgumentMatchers {
      * @return  verification mode
      */
     @CheckReturnValue
-    public static VerificationMode calls( int wantedNumberOfInvocations ){
-        return VerificationModeFactory.calls( wantedNumberOfInvocations );
+    public static VerificationMode calls(int wantedNumberOfInvocations) {
+        return VerificationModeFactory.calls(wantedNumberOfInvocations);
     }
 
     /**

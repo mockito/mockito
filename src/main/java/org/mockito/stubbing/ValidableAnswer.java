@@ -88,5 +88,4 @@ public interface ValidableAnswer {
      * @since 2.3.8
      */
     void validateFor(InvocationOnMock invocation);
-
 }

@@ -26,5 +26,4 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface NotExtensible {
-}
+public @interface NotExtensible {}

@@ -26,11 +26,11 @@ public class MockUtil {
     private MockUtil() {}
 
     public static TypeMockability typeMockabilityOf(Class<?> type) {
-      return mockMaker.isTypeMockable(type);
+        return mockMaker.isTypeMockable(type);
     }
 
     public static <T> T createMock(MockCreationSettings<T> settings) {
-        MockHandler mockHandler =  createMockHandler(settings);
+        MockHandler mockHandler = createMockHandler(settings);
 
         T mock = mockMaker.createMock(settings, mockHandler);
 
@@ -67,16 +67,21 @@ public class MockUtil {
     }
 
     public static boolean isSpy(Object mock) {
-        return isMock(mock) && getMockSettings(mock).getDefaultAnswer() == Mockito.CALLS_REAL_METHODS;
+        return isMock(mock)
+                && getMockSettings(mock).getDefaultAnswer() == Mockito.CALLS_REAL_METHODS;
     }
 
     public static boolean isMock(Object mock) {
-        // TODO SF (perf tweak) in our codebase we call mockMaker.getHandler() multiple times unnecessarily
-        // This is not ideal because getHandler() can be expensive (reflective calls inside mock maker)
-        // The frequent pattern in the codebase are separate calls to: 1) isMock(mock) then 2) getMockHandler(mock)
+        // TODO SF (perf tweak) in our codebase we call mockMaker.getHandler() multiple times
+        // unnecessarily
+        // This is not ideal because getHandler() can be expensive (reflective calls inside mock
+        // maker)
+        // The frequent pattern in the codebase are separate calls to: 1) isMock(mock) then 2)
+        // getMockHandler(mock)
         // We could replace it with using mockingDetails().isMock()
         // Let's refactor the codebase and use new mockingDetails() in all relevant places.
-        // Potentially we could also move other methods to MockitoMock, some other candidates: getInvocationContainer, isSpy, etc.
+        // Potentially we could also move other methods to MockitoMock, some other candidates:
+        // getInvocationContainer, isSpy, etc.
         // This also allows us to reuse our public API MockingDetails
         return mock != null && mockMaker.getHandler(mock) != null;
     }
@@ -87,7 +92,7 @@ public class MockUtil {
 
     public static void maybeRedefineMockName(Object mock, String newName) {
         MockName mockName = getMockName(mock);
-        //TODO SF hacky...
+        // TODO SF hacky...
         MockCreationSettings mockSettings = getMockHandler(mock).getMockSettings();
         if (mockName.isDefault() && mockSettings instanceof CreationSettings) {
             ((CreationSettings) mockSettings).setMockName(new MockNameImpl(newName));

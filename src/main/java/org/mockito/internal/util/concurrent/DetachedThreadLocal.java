@@ -19,20 +19,22 @@ public class DetachedThreadLocal<T> implements Runnable {
         switch (cleaner) {
             case THREAD:
             case MANUAL:
-                map = new WeakConcurrentMap<Thread, T>(cleaner == Cleaner.THREAD) {
-                    @Override
-                    protected T defaultValue(Thread key) {
-                        return DetachedThreadLocal.this.initialValue(key);
-                    }
-                };
+                map =
+                        new WeakConcurrentMap<Thread, T>(cleaner == Cleaner.THREAD) {
+                            @Override
+                            protected T defaultValue(Thread key) {
+                                return DetachedThreadLocal.this.initialValue(key);
+                            }
+                        };
                 break;
             case INLINE:
-                map = new WeakConcurrentMap.WithInlinedExpunction<Thread, T>() {
-                    @Override
-                    protected T defaultValue(Thread key) {
-                        return DetachedThreadLocal.this.initialValue(key);
-                    }
-                };
+                map =
+                        new WeakConcurrentMap.WithInlinedExpunction<Thread, T>() {
+                            @Override
+                            protected T defaultValue(Thread key) {
+                                return DetachedThreadLocal.this.initialValue(key);
+                            }
+                        };
                 break;
             default:
                 throw new AssertionError();
@@ -133,6 +135,8 @@ public class DetachedThreadLocal<T> implements Runnable {
      * ({@link Cleaner#MANUAL}).
      */
     public enum Cleaner {
-        THREAD, INLINE, MANUAL
+        THREAD,
+        INLINE,
+        MANUAL
     }
 }

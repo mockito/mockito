@@ -15,21 +15,24 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
 
-//issue 1514
-@SuppressWarnings({ "serial", "unchecked", "rawtypes" })
+// issue 1514
+@SuppressWarnings({"serial", "unchecked", "rawtypes"})
 public class StubbingWithBadThrowablesTest extends TestBase {
 
     @Mock List mock;
 
     @Test
     public void handles_bad_exception() {
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() {
-                doThrow(UninstantiableException.class).when(mock).clear();
-            }
-        }).isInstanceOf(InstantiationError.class); //because the exception cannot be instantiated
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                doThrow(UninstantiableException.class).when(mock).clear();
+                            }
+                        })
+                .isInstanceOf(
+                        InstantiationError.class); // because the exception cannot be instantiated
 
-        //ensure that the state is cleaned
+        // ensure that the state is cleaned
         Mockito.validateMockitoUsage();
     }
 
