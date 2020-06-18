@@ -117,11 +117,6 @@ spotless {
             com.google.googlejavaformat.java.Formatter formatter = new com.google.googlejavaformat.java.Formatter(options)
             return { source -> formatter.formatSource(source) }
         }
-
-        endWithNewline()
-        indentWithSpaces(4)
-
-        importOrder 'static java', 'static javax', 'static ', 'java', 'javax', ''
     }
 }
 

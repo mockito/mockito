@@ -231,8 +231,8 @@ public class DeepStubbingTest extends TestBase {
 
     @Test
     public void named_to_string() {
-        MockSettings settings = withSettings().name("name of mock")
-                                              .defaultAnswer(RETURNS_DEEP_STUBS);
+        MockSettings settings =
+                withSettings().name("name of mock").defaultAnswer(RETURNS_DEEP_STUBS);
         SocketFactory sf = mock(SocketFactory.class, settings);
         assertEquals("name of mock", sf.toString());
     }
