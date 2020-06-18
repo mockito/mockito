@@ -9,7 +9,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
  * This annotation is not supposed to be used by Mockito end-users. Instead, we
  * use it to annotate methods for Static Analysis tools, including FindBugs and ErrorProne.
@@ -21,12 +20,6 @@ import java.lang.annotation.Target;
  * @see <a href="http://errorprone.info/bugpattern/CheckReturnValue">ErrorProne check</a>
  * @since 2.11.4
  */
-@Target({
-    ElementType.CONSTRUCTOR,
-    ElementType.METHOD,
-    ElementType.PACKAGE,
-    ElementType.TYPE
-})
+@Target({ElementType.CONSTRUCTOR, ElementType.METHOD, ElementType.PACKAGE, ElementType.TYPE})
 @Retention(RetentionPolicy.CLASS)
-public @interface CheckReturnValue {
-}
+public @interface CheckReturnValue {}

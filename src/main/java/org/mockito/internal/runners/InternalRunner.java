@@ -17,5 +17,4 @@ public interface InternalRunner extends Filterable {
     void run(RunNotifier notifier);
 
     Description getDescription();
-
 }

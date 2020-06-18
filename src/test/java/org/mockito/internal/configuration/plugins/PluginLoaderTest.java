@@ -31,10 +31,10 @@ public class PluginLoaderTest {
     public void loads_plugin() {
         when(initializer.loadImpl(FooPlugin.class)).thenReturn(new FooPlugin());
 
-        //when
+        // when
         FooPlugin plugin = loader.loadPlugin(FooPlugin.class);
 
-        //then
+        // then
         assertNotNull(plugin);
     }
 
@@ -44,10 +44,10 @@ public class PluginLoaderTest {
         BarPlugin expected = new BarPlugin();
         willReturn(expected).given(initializer).loadImpl(BarPlugin.class);
 
-        //when
+        // when
         Object plugin = loader.loadPlugin(FooPlugin.class, BarPlugin.class);
 
-        //then
+        // then
         assertSame(plugin, expected);
     }
 
@@ -58,10 +58,10 @@ public class PluginLoaderTest {
         FooPlugin expected = new FooPlugin();
         willReturn(expected).given(plugins).getDefaultPlugin(FooPlugin.class);
 
-        //when
+        // when
         Object plugin = loader.loadPlugin(FooPlugin.class, BarPlugin.class);
 
-        //then
+        // then
         assertSame(plugin, expected);
     }
 
@@ -70,21 +70,26 @@ public class PluginLoaderTest {
         RuntimeException cause = new RuntimeException("Boo!");
         when(initializer.loadImpl(Foo.class)).thenThrow(cause);
 
-        //when
+        // when
         final Foo plugin = loader.loadPlugin(Foo.class);
 
-        //then
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                plugin.toString(); //call any method on the plugin
-            }
-        }).isInstanceOf(IllegalStateException.class)
-            .hasMessage("Could not initialize plugin: interface org.mockito.internal.configuration.plugins.PluginLoaderTest$Foo (alternate: null)")
-            .hasCause(cause);
+        // then
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                plugin.toString(); // call any method on the plugin
+                            }
+                        })
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage(
+                        "Could not initialize plugin: interface org.mockito.internal.configuration.plugins.PluginLoaderTest$Foo (alternate: null)")
+                .hasCause(cause);
     }
 
     static class FooPlugin {}
+
     static class BarPlugin {}
+
     static interface Foo {}
 }

@@ -34,7 +34,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void makeSureStateIsValidatedInTheVeryFirstTestThanksToTheRunner() {
-        //mess up the state:
+        // mess up the state:
         verify(mock);
     }
 

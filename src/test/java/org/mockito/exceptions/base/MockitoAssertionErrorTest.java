@@ -29,7 +29,8 @@ public class MockitoAssertionErrorTest extends TestBase {
     @Test
     public void should_prepend_message_to_original() {
         MockitoAssertionError original = new MockitoAssertionError("original message");
-        MockitoAssertionError errorWithPrependedMessage = new MockitoAssertionError(original, "new message");
+        MockitoAssertionError errorWithPrependedMessage =
+                new MockitoAssertionError(original, "new message");
         assertEquals("new message\noriginal message", errorWithPrependedMessage.getMessage());
     }
 }

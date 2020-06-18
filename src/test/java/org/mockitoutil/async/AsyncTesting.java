@@ -15,8 +15,8 @@ import java.util.LinkedList;
  */
 public class AsyncTesting {
 
-    //Sanity limit of threas. Increase it if justified.
-    private final static int MAX_THREADS = 4;
+    // Sanity limit of threas. Increase it if justified.
+    private static final int MAX_THREADS = 4;
 
     private final LinkedList<Exception> problems = new LinkedList<Exception>();
     private final LinkedList<Thread> threads = new LinkedList<Thread>();
@@ -32,22 +32,28 @@ public class AsyncTesting {
      */
     public void runAfter(final int delayMillis, final Runnable runnable) {
         if (threads.size() == MAX_THREADS) {
-            throw new RuntimeException("Please don't schedule any more threads. Figure out how to test the code with minimum amount of threads");
+            throw new RuntimeException(
+                    "Please don't schedule any more threads. Figure out how to test the code with minimum amount of threads");
         }
-        Thread t = new Thread() {
-            public void run() {
-                try {
-                    Thread.sleep(delayMillis);
-                    runnable.run();
-                } catch (Exception e) {
-                    boolean cleanStop = e instanceof InterruptedException && stopping;
-                    if (!cleanStop) {
-                        problems.add(e);
+        Thread t =
+                new Thread() {
+                    public void run() {
+                        try {
+                            Thread.sleep(delayMillis);
+                            runnable.run();
+                        } catch (Exception e) {
+                            boolean cleanStop = e instanceof InterruptedException && stopping;
+                            if (!cleanStop) {
+                                problems.add(e);
+                            }
+                        }
                     }
-                }
-            }
-        };
-        System.out.println("[AsyncTesting] Starting thread that will execute the runnable after " + delayMillis + " millis. Threads so far: " + threads.size());
+                };
+        System.out.println(
+                "[AsyncTesting] Starting thread that will execute the runnable after "
+                        + delayMillis
+                        + " millis. Threads so far: "
+                        + threads.size());
         threads.add(t);
         t.start();
     }
@@ -58,8 +64,11 @@ public class AsyncTesting {
      */
     public void cleanUp() {
         stopping = true;
-        System.out.println("[AsyncTesting] Interrupting and waiting for " + threads.size() + " threads to complete...");
-        while(!threads.isEmpty()) {
+        System.out.println(
+                "[AsyncTesting] Interrupting and waiting for "
+                        + threads.size()
+                        + " threads to complete...");
+        while (!threads.isEmpty()) {
             Thread t = threads.removeFirst();
             try {
                 t.interrupt();
@@ -69,7 +78,9 @@ public class AsyncTesting {
             }
         }
         if (!problems.isEmpty()) {
-            throw new RuntimeException("Caught " + problems.size() + " exception(s). First one is included as cause", problems.getFirst());
+            throw new RuntimeException(
+                    "Caught " + problems.size() + " exception(s). First one is included as cause",
+                    problems.getFirst());
         }
     }
 }

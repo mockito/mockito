@@ -23,15 +23,15 @@ public class InOrderImplTest extends TestBase {
 
     @Test
     public void shouldMarkVerifiedInOrder() throws Exception {
-        //given
+        // given
         InOrderImpl impl = new InOrderImpl(singletonList(mock));
         Invocation i = new InvocationBuilder().toInvocation();
         assertFalse(impl.isVerified(i));
 
-        //when
+        // when
         impl.markVerified(i);
 
-        //then
+        // then
         assertTrue(impl.isVerified(i));
     }
 }

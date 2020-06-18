@@ -48,7 +48,7 @@ public class ArrayEquals extends Equals {
     }
 
     private String appendArray(Object[] array) {
-        //TODO SF overlap with ValuePrinter
+        // TODO SF overlap with ValuePrinter
         StringBuilder out = new StringBuilder("[");
         for (int i = 0; i < array.length; i++) {
             out.append(new Equals(array[i]).toString());

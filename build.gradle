@@ -11,6 +11,8 @@ buildscript {
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
         classpath 'org.shipkit:shipkit:2.1.6'
+
+        classpath 'com.google.googlejavaformat:google-java-format:1.8'
     }
 }
 
@@ -104,15 +106,23 @@ wrapper {
 }
 
 spotless {
+    // We run the check separately on Travis, so don't run this by default
+    enforceCheck = false
+
     java {
         licenseHeaderFile rootProject.file('config/spotless/spotless.header')
 
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        endWithNewline()
-        indentWithSpaces(4)
+        customLazyGroovy('google-java-format') {
+            com.google.googlejavaformat.java.JavaFormatterOptions options = new com.google.googlejavaformat.java.JavaFormatterOptions.Builder()
+                    .style(com.google.googlejavaformat.java.JavaFormatterOptions.Style.AOSP)
+                    .formatJavadoc(false)
+                    .build()
+            com.google.googlejavaformat.java.Formatter formatter = new com.google.googlejavaformat.java.Formatter(options)
+            return { source -> formatter.formatSource(source) }
+        }
 
-        importOrder 'static java', 'static javax', 'static ', 'java', 'javax', ''
+        // This test contains emulation of same-line stubbings. The formatter would put them on a separate line.
+        targetExclude 'src/test/java/org/mockitousage/internal/junit/UnusedStubbingsFinderTest.java'
     }
 }
 

@@ -64,8 +64,9 @@ public interface OngoingStubbing<T> {
      *
      * @return object that allows stubbing consecutive calls
      */
-    // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation warnings (on call site)
-    @SuppressWarnings ({"unchecked", "varargs"})
+    // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array
+    // creation warnings (on call site)
+    @SuppressWarnings({"unchecked", "varargs"})
     OngoingStubbing<T> thenReturn(T value, T... values);
 
     /**
@@ -146,9 +147,11 @@ public interface OngoingStubbing<T> {
      * @return object that allows stubbing consecutive calls
      * @since 2.1.0
      */
-    // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation warnings (on call site)
-    @SuppressWarnings ({"unchecked", "varargs"})
-    OngoingStubbing<T> thenThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown);
+    // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array
+    // creation warnings (on call site)
+    @SuppressWarnings({"unchecked", "varargs"})
+    OngoingStubbing<T> thenThrow(
+            Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown);
 
     /**
      * Sets the real implementation to be called when the method is called on a mock object.
@@ -236,5 +239,4 @@ public interface OngoingStubbing<T> {
      * @since 1.9.0
      */
     <M> M getMock();
-
 }

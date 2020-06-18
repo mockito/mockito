@@ -44,5 +44,4 @@ public class InjectMocksShouldTryPropertySettersFirstBeforeFieldAccessTest {
             propertySetterUsed = true;
         }
     }
-
 }

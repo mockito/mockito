@@ -17,36 +17,35 @@ public class VarargsAndAnyObjectPicksUpExtraInvocationsTest extends TestBase {
         void newRow(String trAttributes, String... cells);
     }
 
-    @Mock
-    TableBuilder table;
+    @Mock TableBuilder table;
 
     @Test
     public void shouldVerifyCorrectlyWithAnyVarargs() {
-        //when
+        // when
         table.newRow("qux", "foo", "bar", "baz");
         table.newRow("abc", "def");
 
-        //then
+        // then
         verify(table, times(2)).newRow(anyString(), (String[]) anyVararg());
     }
 
     @Test
     public void shouldVerifyCorrectlyNumberOfInvocationsUsingAnyVarargAndEqualArgument() {
-        //when
+        // when
         table.newRow("x", "foo", "bar", "baz");
         table.newRow("x", "def");
 
-        //then
+        // then
         verify(table, times(2)).newRow(eq("x"), (String[]) anyVararg());
     }
 
     @Test
     public void shouldVerifyCorrectlyNumberOfInvocationsWithVarargs() {
-        //when
+        // when
         table.newRow("qux", "foo", "bar", "baz");
         table.newRow("abc", "def");
 
-        //then
+        // then
         verify(table).newRow(anyString(), eq("foo"), anyString(), anyString());
         verify(table).newRow(anyString(), anyString());
     }

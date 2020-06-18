@@ -40,7 +40,7 @@ public class LenientCopyTool {
                 accessibilityChanger.enableAccess(field);
                 fieldCopier.copyValue(from, mock, field);
             } catch (Throwable t) {
-                //Ignore - be lenient - if some field cannot be copied then let's be it
+                // Ignore - be lenient - if some field cannot be copied then let's be it
             } finally {
                 accessibilityChanger.safelyDisableAccess(field);
             }

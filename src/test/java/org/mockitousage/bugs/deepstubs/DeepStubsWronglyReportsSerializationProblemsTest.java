@@ -16,13 +16,15 @@ import org.junit.Test;
 public class DeepStubsWronglyReportsSerializationProblemsTest {
 
     @Test
-    public void should_not_raise_a_mockito_exception_about_serialization_when_accessing_deep_stub() {
-        NotSerializableShouldBeMocked the_deep_stub = mock(ToBeDeepStubbed.class, RETURNS_DEEP_STUBS).getSomething();
+    public void
+            should_not_raise_a_mockito_exception_about_serialization_when_accessing_deep_stub() {
+        NotSerializableShouldBeMocked the_deep_stub =
+                mock(ToBeDeepStubbed.class, RETURNS_DEEP_STUBS).getSomething();
         assertThat(the_deep_stub).isNotNull();
     }
 
     public static class ToBeDeepStubbed {
-        public ToBeDeepStubbed() { }
+        public ToBeDeepStubbed() {}
 
         public NotSerializableShouldBeMocked getSomething() {
             return null;
@@ -30,7 +32,6 @@ public class DeepStubsWronglyReportsSerializationProblemsTest {
     }
 
     public static class NotSerializableShouldBeMocked {
-        NotSerializableShouldBeMocked(String mandatory_param) { }
+        NotSerializableShouldBeMocked(String mandatory_param) {}
     }
-
 }

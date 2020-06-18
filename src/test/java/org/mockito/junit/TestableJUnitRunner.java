@@ -16,18 +16,27 @@ import org.mockito.internal.util.Supplier;
 
 public class TestableJUnitRunner extends MockitoJUnitRunner {
 
-    private final static ThreadLocal<SimpleMockitoLogger> LOGGER = new ThreadLocal<SimpleMockitoLogger>() {
-        protected SimpleMockitoLogger initialValue() {
-            return new SimpleMockitoLogger();
-        }
-    };
+    private static final ThreadLocal<SimpleMockitoLogger> LOGGER =
+            new ThreadLocal<SimpleMockitoLogger>() {
+                protected SimpleMockitoLogger initialValue() {
+                    return new SimpleMockitoLogger();
+                }
+            };
 
-    public TestableJUnitRunner(Class<?> klass) throws InvocationTargetException, InitializationError {
-        super(new StrictRunner(new RunnerFactory().create(klass, new Supplier<MockitoTestListener>() {
-            public MockitoTestListener get() {
-                return new MismatchReportingTestListener(LOGGER.get());
-            }
-        }), klass));
+    public TestableJUnitRunner(Class<?> klass)
+            throws InvocationTargetException, InitializationError {
+        super(
+                new StrictRunner(
+                        new RunnerFactory()
+                                .create(
+                                        klass,
+                                        new Supplier<MockitoTestListener>() {
+                                            public MockitoTestListener get() {
+                                                return new MismatchReportingTestListener(
+                                                        LOGGER.get());
+                                            }
+                                        }),
+                        klass));
     }
 
     public static SimpleMockitoLogger refreshedLogger() {

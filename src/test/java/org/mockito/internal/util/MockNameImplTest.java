@@ -13,30 +13,31 @@ public class MockNameImplTest extends TestBase {
 
     @Test
     public void shouldProvideTheNameForClass() throws Exception {
-        //when
+        // when
         String name = new MockNameImpl(null, SomeClass.class).toString();
-        //then
+        // then
         assertEquals("someClass", name);
     }
 
     @Test
     public void shouldProvideTheNameForAnonymousClass() throws Exception {
-        //given
+        // given
         SomeInterface anonymousInstance = new SomeInterface() {};
-        //when
+        // when
         String name = new MockNameImpl(null, anonymousInstance.getClass()).toString();
-        //then
+        // then
         assertEquals("someInterface", name);
     }
 
     @Test
     public void shouldProvideTheGivenName() throws Exception {
-        //when
+        // when
         String name = new MockNameImpl("The Hulk", SomeClass.class).toString();
-        //then
+        // then
         assertEquals("The Hulk", name);
     }
 
     private class SomeClass {}
+
     private class SomeInterface {}
 }

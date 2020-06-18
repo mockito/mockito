@@ -28,5 +28,4 @@ public class VmArgAssumptions {
         }
         return false;
     }
-
 }

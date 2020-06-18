@@ -33,8 +33,7 @@ public class HamcrestMatchersTest extends TestBase {
         }
     }
 
-    @Mock
-    private IMethods mock;
+    @Mock private IMethods mock;
 
     @Test
     public void stubs_with_hamcrest_matcher() {
@@ -59,6 +58,7 @@ public class HamcrestMatchersTest extends TestBase {
         public boolean matches(Object o) {
             return true;
         }
+
         public void describeTo(Description description) {}
     }
 
@@ -92,6 +92,7 @@ public class HamcrestMatchersTest extends TestBase {
         public boolean matches(Object o) {
             return true;
         }
+
         public void describeTo(Description description) {}
     }
 
@@ -109,11 +110,14 @@ public class HamcrestMatchersTest extends TestBase {
 
     @Test
     public void coexists_with_mockito_matcher() {
-        when(mock.simpleMethod(Mockito.argThat(new ArgumentMatcher<String>() {
-            public boolean matches(String argument) {
-                return true;
-            }
-        }))).thenReturn("x");
+        when(mock.simpleMethod(
+                        Mockito.argThat(
+                                new ArgumentMatcher<String>() {
+                                    public boolean matches(String argument) {
+                                        return true;
+                                    }
+                                })))
+                .thenReturn("x");
 
         assertEquals("x", mock.simpleMethod("x"));
     }

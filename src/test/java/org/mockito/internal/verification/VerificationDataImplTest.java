@@ -16,10 +16,12 @@ public class VerificationDataImplTest extends TestBase {
 
     @Test
     public void shouldToStringBeNotVerifiable() throws Exception {
-        InvocationMatcher toString = new InvocationBuilder().method("toString").toInvocationMatcher();
+        InvocationMatcher toString =
+                new InvocationBuilder().method("toString").toInvocationMatcher();
         try {
             new VerificationDataImpl(null, toString);
             fail();
-        } catch (MockitoException e) {}
+        } catch (MockitoException e) {
+        }
     }
 }

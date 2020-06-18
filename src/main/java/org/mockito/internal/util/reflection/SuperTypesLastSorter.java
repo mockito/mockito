@@ -17,8 +17,7 @@ import java.util.List;
  */
 public class SuperTypesLastSorter {
 
-    private SuperTypesLastSorter() {
-    }
+    private SuperTypesLastSorter() {}
 
     /**
      * Return a new collection with the fields sorted first by name,
@@ -54,11 +53,11 @@ public class SuperTypesLastSorter {
         return fields;
     }
 
-
-    private static final Comparator<Field> compareFieldsByName = new Comparator<Field>() {
-        @Override
-        public int compare(Field o1, Field o2) {
-            return o1.getName().compareTo(o2.getName());
-        }
-    };
+    private static final Comparator<Field> compareFieldsByName =
+            new Comparator<Field>() {
+                @Override
+                public int compare(Field o1, Field o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            };
 }

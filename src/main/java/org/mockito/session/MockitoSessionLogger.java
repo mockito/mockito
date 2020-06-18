@@ -28,5 +28,4 @@ public interface MockitoSessionLogger {
      */
     @Incubating
     void log(String hint);
-
 }

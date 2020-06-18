@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
 
-
 public class Contains implements ArgumentMatcher<String>, Serializable {
 
     private final String substring;

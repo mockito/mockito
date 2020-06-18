@@ -28,7 +28,7 @@ public class ParentTestMockInjectionTest {
     }
 
     @Ignore
-    public static abstract class BaseTest {
+    public abstract static class BaseTest {
         @Mock protected DaoA daoFromParent;
     }
 
@@ -59,13 +59,11 @@ public class ParentTestMockInjectionTest {
         }
     }
 
-
     public static class DaoA {
-        public void doQuery() { }
+        public void doQuery() {}
     }
 
     public static class DaoB {
-        public void doQuery() { }
+        public void doQuery() {}
     }
-
 }

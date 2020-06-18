@@ -30,5 +30,4 @@ public interface MockitoTestRule extends TestRule {
      */
     @Incubating
     MockitoTestRule strictness(Strictness strictness);
-
 }

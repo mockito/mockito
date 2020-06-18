@@ -29,6 +29,7 @@ public class LenientCopyToolTest extends TestBase {
         @SuppressWarnings("unused")
         // required because static fields needs to be excluded from copying
         private static int staticField = -100;
+
         private int privateField = -100;
         private transient int privateTransientField = -100;
         String defaultField = "-100";
@@ -41,8 +42,7 @@ public class LenientCopyToolTest extends TestBase {
         }
     }
 
-    public static class SomeOtherObject {
-    }
+    public static class SomeOtherObject {}
 
     private SomeObject from = new SomeObject(100);
     private SomeObject to = mock(SomeObject.class);
@@ -113,48 +113,49 @@ public class LenientCopyToolTest extends TestBase {
 
     @Test
     public void shouldCopyValuesOfInheritedFields() throws Exception {
-        //given
+        // given
         ((InheritMe) from).privateInherited = "foo";
         ((InheritMe) from).protectedInherited = "bar";
 
-        assertThat(((InheritMe) to).privateInherited).isNotEqualTo(((InheritMe) from).privateInherited);
+        assertThat(((InheritMe) to).privateInherited)
+                .isNotEqualTo(((InheritMe) from).privateInherited);
 
-        //when
+        // when
         tool.copyToMock(from, to);
 
-        //then
+        // then
         assertEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
     }
 
     @Test
     public void shouldEnableAndThenDisableAccessibility() throws Exception {
-        //given
+        // given
         Field privateField = SomeObject.class.getDeclaredField("privateField");
         assertFalse(privateField.isAccessible());
 
-        //when
+        // when
         tool.copyToMock(from, to);
 
-        //then
+        // then
         privateField = SomeObject.class.getDeclaredField("privateField");
         assertFalse(privateField.isAccessible());
     }
 
     @Test
     public void shouldContinueEvenIfThereAreProblemsCopyingSingleFieldValue() throws Exception {
-        //given
+        // given
         tool.fieldCopier = mock(FieldCopier.class);
 
-        doNothing().
-        doThrow(new IllegalAccessException()).
-        doNothing().
-        when(tool.fieldCopier).
-        copyValue(anyObject(), anyObject(), any(Field.class));
+        doNothing()
+                .doThrow(new IllegalAccessException())
+                .doNothing()
+                .when(tool.fieldCopier)
+                .copyValue(anyObject(), anyObject(), any(Field.class));
 
-        //when
+        // when
         tool.copyToMock(from, to);
 
-        //then
+        // then
         verify(tool.fieldCopier, atLeast(3)).copyValue(any(), any(), any(Field.class));
     }
 
@@ -180,6 +181,5 @@ public class LenientCopyToolTest extends TestBase {
         assertEquals(from.privateTransientField, to.privateTransientField);
         assertEquals(from.protectedField, to.protectedField);
         assertEquals(from.protectedInherited, to.protectedInherited);
-
     }
 }

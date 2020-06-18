@@ -18,22 +18,21 @@ import org.mockitoutil.TestBase;
 public class MockSettingsTest extends TestBase {
     @Test
     public void public_api_for_creating_settings() throws Exception {
-        //when
-        MockCreationSettings<List> settings = Mockito.withSettings()
-            .name("dummy")
-            .build(List.class);
+        // when
+        MockCreationSettings<List> settings =
+                Mockito.withSettings().name("dummy").build(List.class);
 
-        //then
+        // then
         assertEquals(List.class, settings.getTypeToMock());
         assertEquals("dummy", settings.getMockName().toString());
     }
+
     @Test
     public void test_without_annotations() throws Exception {
-        MockCreationSettings<List> settings = Mockito.withSettings()
-            .withoutAnnotations()
-            .build(List.class);
+        MockCreationSettings<List> settings =
+                Mockito.withSettings().withoutAnnotations().build(List.class);
 
-        CreationSettings copy = new CreationSettings((CreationSettings)settings);
+        CreationSettings copy = new CreationSettings((CreationSettings) settings);
 
         assertEquals(List.class, settings.getTypeToMock());
         assertEquals(List.class, copy.getTypeToMock());

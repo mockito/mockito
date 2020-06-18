@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-//issue 151
+// issue 151
 public class StubbingMocksThatAreConfiguredToReturnMocksTest extends TestBase {
 
     @Test

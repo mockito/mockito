@@ -26,16 +26,17 @@ class PluginFinder {
                 s = resource.openStream();
                 String pluginClassName = new PluginFileReader().readPluginClass(s);
                 if (pluginClassName == null) {
-                    //For backwards compatibility
-                    //If the resource does not have plugin class name we're ignoring it
+                    // For backwards compatibility
+                    // If the resource does not have plugin class name we're ignoring it
                     continue;
                 }
                 if (!pluginSwitch.isEnabled(pluginClassName)) {
                     continue;
                 }
                 return pluginClassName;
-            } catch(Exception e) {
-                throw new MockitoException("Problems reading plugin implementation from: " + resource, e);
+            } catch (Exception e) {
+                throw new MockitoException(
+                        "Problems reading plugin implementation from: " + resource, e);
             } finally {
                 IOUtil.closeQuietly(s);
             }

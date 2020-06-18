@@ -31,7 +31,7 @@ import org.mockito.mock.MockCreationSettings;
  *         A file "<code>mockito-extensions/org.mockito.plugins.MockMaker</code>". The content of this file is
  *         exactly a <strong>one</strong> line with the qualified name:
  *         <code>org.awesome.mockito.AwesomeMockMaker</code>.
-*      </li>
+ *      </li>
  * </ol>
  * </p>
  *
@@ -64,10 +64,7 @@ public interface MockMaker {
      * @return The mock instance.
      * @since 1.9.5
      */
-    <T> T createMock(
-            MockCreationSettings<T> settings,
-            MockHandler handler
-    );
+    <T> T createMock(MockCreationSettings<T> settings, MockHandler handler);
 
     /**
      * Returns the handler for the {@code mock}. <b>Do not</b> provide your own implementations at this time
@@ -95,11 +92,7 @@ public interface MockMaker {
      * @param settings The mock settings - should you need to access some of the mock creation details.
      * @since 1.9.5
      */
-    void resetMock(
-            Object mock,
-            MockHandler newHandler,
-            MockCreationSettings settings
-    );
+    void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings);
 
     /**
      * Indicates if the given type can be mocked by this mockmaker.

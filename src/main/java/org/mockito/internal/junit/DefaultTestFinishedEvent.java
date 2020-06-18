@@ -9,7 +9,8 @@ public class DefaultTestFinishedEvent implements TestFinishedEvent {
     private final String testMethodName;
     private final Throwable testFailure;
 
-    public DefaultTestFinishedEvent(Object testClassInstance, String testMethodName, Throwable testFailure) {
+    public DefaultTestFinishedEvent(
+            Object testClassInstance, String testMethodName, Throwable testFailure) {
         this.testClassInstance = testClassInstance;
         this.testMethodName = testMethodName;
         this.testFailure = testFailure;

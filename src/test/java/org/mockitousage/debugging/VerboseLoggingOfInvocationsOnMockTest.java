@@ -123,8 +123,8 @@ public class VerboseLoggingOfInvocationsOnMockTest {
     @Test
     public void shouldPrintRealInvocationOnSpyToStdOut() {
         // given
-        FooImpl fooSpy = mock(FooImpl.class,
-                withSettings().spiedInstance(new FooImpl()).verboseLogging());
+        FooImpl fooSpy =
+                mock(FooImpl.class, withSettings().spiedInstance(new FooImpl()).verboseLogging());
         doCallRealMethod().when(fooSpy).doSomething("Klipsch");
 
         // when
@@ -142,8 +142,7 @@ public class VerboseLoggingOfInvocationsOnMockTest {
     public void usage() {
         // given
         Foo foo = mock(Foo.class, withSettings().verboseLogging());
-        given(foo.giveMeSomeString("Apple")).willReturn(
-                "earbuds");
+        given(foo.giveMeSomeString("Apple")).willReturn("earbuds");
 
         // when
         foo.giveMeSomeString("Shure");
@@ -160,8 +159,7 @@ public class VerboseLoggingOfInvocationsOnMockTest {
     }
 
     private static class UnrelatedClass {
-        void unrelatedMethod(String anotherStringValue) {
-        }
+        void unrelatedMethod(String anotherStringValue) {}
     }
 
     /**
@@ -177,7 +175,6 @@ public class VerboseLoggingOfInvocationsOnMockTest {
             return null;
         }
 
-        public void doSomething(String param) {
-        }
+        public void doSomething(String param) {}
     }
 }

@@ -62,7 +62,6 @@ public interface InOrder {
      */
     <T> T verify(T mock, VerificationMode mode);
 
-
     /**
      * Verifies that no more interactions happened <b>in order</b>.
      * Different from {@link Mockito#verifyNoMoreInteractions(Object...)} because the order of verification matters.

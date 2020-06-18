@@ -20,42 +20,44 @@ public class LocationImplTest extends TestBase {
 
     @Test
     public void shouldLocationNotContainGetStackTraceMethod() {
-        assertThat(new LocationImpl().toString()).contains("shouldLocationNotContainGetStackTraceMethod");
+        assertThat(new LocationImpl().toString())
+                .contains("shouldLocationNotContainGetStackTraceMethod");
     }
 
     @Test
     public void shouldBeSafeInCaseForSomeReasonFilteredStackTraceIsEmpty() {
-        //given
-        StackTraceFilter filterReturningEmptyArray = new StackTraceFilter() {
-            @Override
-            public StackTraceElement[] filter(StackTraceElement[] target, boolean keepTop) {
-                return new StackTraceElement[0];
-            }
+        // given
+        StackTraceFilter filterReturningEmptyArray =
+                new StackTraceFilter() {
+                    @Override
+                    public StackTraceElement[] filter(StackTraceElement[] target, boolean keepTop) {
+                        return new StackTraceElement[0];
+                    }
 
-            @Override
-            public StackTraceElement filterFirst(Throwable target, boolean isInline) {
-                return null;
-            }
-        };
+                    @Override
+                    public StackTraceElement filterFirst(Throwable target, boolean isInline) {
+                        return null;
+                    }
+                };
 
-        //when
+        // when
         String loc = new LocationImpl(filterReturningEmptyArray).toString();
 
-        //then
+        // then
         assertEquals("-> at <<unknown line>>", loc);
     }
 
     @Test
     public void provides_location_class() {
-        //when
+        // when
         final List<String> files = new ArrayList<String>();
-        new Runnable() { //anonymous inner class adds stress to the check
+        new Runnable() { // anonymous inner class adds stress to the check
             public void run() {
                 files.add(new LocationImpl().getSourceFile());
             }
         }.run();
 
-        //then
+        // then
         assertEquals("LocationImplTest.java", files.get(0));
     }
 }

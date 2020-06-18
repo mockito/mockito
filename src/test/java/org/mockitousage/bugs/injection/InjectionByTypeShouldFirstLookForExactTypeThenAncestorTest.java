@@ -22,7 +22,10 @@ public class InjectionByTypeShouldFirstLookForExactTypeThenAncestorTest {
     @Mock private Bean mockedBean;
 
     @InjectMocks private Service illegalInjectionExample = new Service();
-    @InjectMocks private ServiceWithReversedOrder reversedOrderService = new ServiceWithReversedOrder();
+
+    @InjectMocks
+    private ServiceWithReversedOrder reversedOrderService = new ServiceWithReversedOrder();
+
     @InjectMocks private WithNullObjectField withNullObjectField = new WithNullObjectField();
 
     @Test
@@ -63,7 +66,7 @@ public class InjectionByTypeShouldFirstLookForExactTypeThenAncestorTest {
         public final Object mockShouldNotGoInHere = REFERENCE;
     }
 
-    class WithNullObjectField{
+    class WithNullObjectField {
         Bean injectMePlease;
         Object keepMeNull = null;
     }

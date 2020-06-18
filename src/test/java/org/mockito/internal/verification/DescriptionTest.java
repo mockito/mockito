@@ -19,11 +19,9 @@ import org.mockito.verification.VerificationMode;
 
 public class DescriptionTest {
 
-    @Mock
-    private VerificationMode mockVerificationMode;
+    @Mock private VerificationMode mockVerificationMode;
 
-    @Mock
-    private VerificationData mockVerificationData;
+    @Mock private VerificationData mockVerificationData;
 
     @Before
     public void setUp() {

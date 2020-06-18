@@ -53,15 +53,16 @@ public class MockingProgressImplTest extends TestBase {
         try {
             mockingProgress.verificationStarted(VerificationModeFactory.atLeastOnce());
             fail();
-        } catch (MockitoException e) {}
+        } catch (MockitoException e) {
+        }
     }
 
     @Test
     public void shouldNotifyListenerSafely() throws Exception {
-        //when
+        // when
         mockingProgress.addListener(null);
 
-        //then no exception is thrown:
+        // then no exception is thrown:
         mockingProgress.mockingStarted(null, null);
     }
 
@@ -72,36 +73,39 @@ public class MockingProgressImplTest extends TestBase {
 
         final Set<MockitoListener> listeners = new LinkedHashSet<MockitoListener>();
 
-        //when
+        // when
         MockingProgressImpl.addListener(listener1, listeners);
 
-        //then
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() {
-                MockingProgressImpl.addListener(listener2, listeners);
-            }
-        }).isInstanceOf(RedundantListenerException.class);
+        // then
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                MockingProgressImpl.addListener(listener2, listeners);
+                            }
+                        })
+                .isInstanceOf(RedundantListenerException.class);
     }
 
     @Test
     public void should_clean_up_listeners_automatically() {
         MockitoListener someListener = mock(MockitoListener.class);
         MyListener cleanListener = mock(MyListener.class);
-        MyListener dirtyListener = when(mock(MyListener.class).isListenerDirty()).thenReturn(true).getMock();
+        MyListener dirtyListener =
+                when(mock(MyListener.class).isListenerDirty()).thenReturn(true).getMock();
 
         Set<MockitoListener> listeners = new LinkedHashSet<MockitoListener>();
 
-        //when
+        // when
         MockingProgressImpl.addListener(someListener, listeners);
         MockingProgressImpl.addListener(dirtyListener, listeners);
 
-        //then
+        // then
         Assertions.assertThat(listeners).containsExactlyInAnyOrder(someListener, dirtyListener);
 
-        //when
+        // when
         MockingProgressImpl.addListener(cleanListener, listeners);
 
-        //then dirty listener was removed automatically
+        // then dirty listener was removed automatically
         Assertions.assertThat(listeners).containsExactlyInAnyOrder(someListener, cleanListener);
     }
 

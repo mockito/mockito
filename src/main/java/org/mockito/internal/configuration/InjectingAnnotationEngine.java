@@ -18,7 +18,8 @@ import org.mockito.plugins.AnnotationEngine;
 /**
  * See {@link MockitoAnnotations}
  */
-public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
+public class InjectingAnnotationEngine
+        implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
     private final AnnotationEngine delegate = new IndependentAnnotationEngine();
     private final AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
 
@@ -54,15 +55,14 @@ public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.
     private void processIndependentAnnotations(final Class<?> clazz, final Object testInstance) {
         Class<?> classContext = clazz;
         while (classContext != Object.class) {
-            //this will create @Mocks, @Captors, etc:
+            // this will create @Mocks, @Captors, etc:
             delegate.process(classContext, testInstance);
-            //this will create @Spies:
+            // this will create @Spies:
             spyAnnotationEngine.process(classContext, testInstance);
 
             classContext = classContext.getSuperclass();
         }
     }
-
 
     /**
      * Initializes mock/spies dependencies for objects annotated with
@@ -85,11 +85,13 @@ public class InjectingAnnotationEngine implements AnnotationEngine, org.mockito.
             clazz = clazz.getSuperclass();
         }
 
-        new DefaultInjectionEngine().injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
+        new DefaultInjectionEngine()
+                .injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
     }
 
-    protected void onInjection(Object testClassInstance, Class<?> clazz, Set<Field> mockDependentFields, Set<Object> mocks) {
-
-    }
-
+    protected void onInjection(
+            Object testClassInstance,
+            Class<?> clazz,
+            Set<Field> mockDependentFields,
+            Set<Object> mocks) {}
 }

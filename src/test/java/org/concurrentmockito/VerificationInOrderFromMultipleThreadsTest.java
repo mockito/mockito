@@ -17,19 +17,23 @@ public class VerificationInOrderFromMultipleThreadsTest extends TestBase {
     public void shouldVerifyInOrderWhenMultipleThreadsInteractWithMock() throws Exception {
         final Foo testInf = mock(Foo.class);
 
-        Thread threadOne = new Thread(new Runnable(){
-            public void run() {
-                testInf.methodOne();
-            }
-        });
+        Thread threadOne =
+                new Thread(
+                        new Runnable() {
+                            public void run() {
+                                testInf.methodOne();
+                            }
+                        });
         threadOne.start();
         threadOne.join();
 
-        Thread threadTwo = new Thread(new Runnable(){
-            public void run() {
-                testInf.methodTwo();
-            }
-        });
+        Thread threadTwo =
+                new Thread(
+                        new Runnable() {
+                            public void run() {
+                                testInf.methodTwo();
+                            }
+                        });
         threadTwo.start();
         threadTwo.join();
 
@@ -40,6 +44,7 @@ public class VerificationInOrderFromMultipleThreadsTest extends TestBase {
 
     public interface Foo {
         void methodOne();
+
         void methodTwo();
     }
 }

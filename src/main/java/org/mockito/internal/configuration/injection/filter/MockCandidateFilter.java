@@ -13,6 +13,5 @@ public interface MockCandidateFilter {
             Collection<Object> mocks,
             Field candidateFieldToBeInjected,
             List<Field> allRemainingCandidateFields,
-            Object injectee
-    );
+            Object injectee);
 }

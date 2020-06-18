@@ -10,7 +10,6 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-
 public class PrimitivesTest {
     @Test
     public void should_not_return_null_for_primitives_wrappers() throws Exception {

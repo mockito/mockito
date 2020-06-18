@@ -11,7 +11,7 @@ import org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleaner;
 
 public class StackTraceCleanerTest {
 
-    private DefaultStackTraceCleaner cleaner= new DefaultStackTraceCleaner();
+    private DefaultStackTraceCleaner cleaner = new DefaultStackTraceCleaner();
 
     @Test
     public void allow_or_disallow_mockito_mockito_objects_in_stacktrace() throws Exception {
@@ -34,11 +34,15 @@ public class StackTraceCleanerTest {
     }
 
     private void assertAcceptedInStackTrace(String className) {
-        assertThat(cleaner.isIn(stackTraceElementWith(className))).describedAs("Must be accepted in stacktrace %s", className).isTrue();
+        assertThat(cleaner.isIn(stackTraceElementWith(className)))
+                .describedAs("Must be accepted in stacktrace %s", className)
+                .isTrue();
     }
 
     private void assertRejectedInStackTrace(String className) {
-        assertThat(cleaner.isIn(stackTraceElementWith(className))).describedAs("Must be rejected in stacktrace %s", className).isFalse();
+        assertThat(cleaner.isIn(stackTraceElementWith(className)))
+                .describedAs("Must be rejected in stacktrace %s", className)
+                .isFalse();
     }
 
     private StackTraceElement stackTraceElementWith(String className) {

@@ -34,20 +34,21 @@ public class GenericTypeExtractor {
      *                            it will be used for generic type extraction
      * @return generic interface if found, Object.class if not found.
      */
-    public static Class<?> genericTypeOf(Class<?> rootClass, Class<?> targetBaseClass, Class<?> targetBaseInterface) {
-        //looking for candidates in the hierarchy of rootClass
+    public static Class<?> genericTypeOf(
+            Class<?> rootClass, Class<?> targetBaseClass, Class<?> targetBaseInterface) {
+        // looking for candidates in the hierarchy of rootClass
         Class<?> match = rootClass;
-        while(match != Object.class) {
-            //check the super class first
+        while (match != Object.class) {
+            // check the super class first
             if (match.getSuperclass() == targetBaseClass) {
                 return extractGeneric(match.getGenericSuperclass());
             }
-            //check the interfaces (recursively)
+            // check the interfaces (recursively)
             Type genericInterface = findGenericInterface(match, targetBaseInterface);
             if (genericInterface != null) {
                 return extractGeneric(genericInterface);
             }
-            //recurse the hierarchy
+            // recurse the hierarchy
             match = match.getSuperclass();
         }
         return Object.class;

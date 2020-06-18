@@ -61,10 +61,10 @@ public class StubbingLookupNotifierTest extends TestBase {
 
         @Override
         public boolean matches(StubbingLookupNotifier.Event argument) {
-            return invocation == argument.getInvocation() &&
-                stubbingFound == argument.getStubbingFound() &&
-                allStubbings == argument.getAllStubbings() &&
-                creationSettings == argument.getMockSettings();
+            return invocation == argument.getInvocation()
+                    && stubbingFound == argument.getStubbingFound()
+                    && allStubbings == argument.getAllStubbings()
+                    && creationSettings == argument.getMockSettings();
         }
     }
 }

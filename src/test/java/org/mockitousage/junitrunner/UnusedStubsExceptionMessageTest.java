@@ -19,9 +19,10 @@ import org.mockitoutil.TestBase;
 
 public class UnusedStubsExceptionMessageTest extends TestBase {
 
-    //Moving the code around this class is tricky and may cause the test to fail
-    //We're asserting on full exception message which contains line numbers
-    //Let's leave it for now, updating the test is cheap and if it turns out hindrance we can make the assertion smarter.
+    // Moving the code around this class is tricky and may cause the test to fail
+    // We're asserting on full exception message which contains line numbers
+    // Let's leave it for now, updating the test is cheap and if it turns out hindrance we can make
+    // the assertion smarter.
     @RunWith(MockitoJUnitRunner.class)
     public static class HasUnnecessaryStubs {
         IMethods mock1 = when(mock(IMethods.class).simpleMethod(1)).thenReturn("1").getMock();
@@ -43,17 +44,18 @@ public class UnusedStubsExceptionMessageTest extends TestBase {
     @Test
     public void lists_all_unused_stubs_cleanly() {
         JUnitCore runner = new JUnitCore();
-        //when
+        // when
         Result result = runner.run(HasUnnecessaryStubs.class);
-        //then
+        // then
         Failure failure = result.getFailures().get(0);
-        assertEquals("\n" +
-                        "Unnecessary stubbings detected in test class: HasUnnecessaryStubs\n" +
-                        "Clean & maintainable test code requires zero unnecessary code.\n" +
-                        "Following stubbings are unnecessary (click to navigate to relevant line of code):\n" +
-                        "  1. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:0)\n" +
-                        "  2. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:0)\n" +
-                        "Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.",
-            filterLineNo(failure.getException().getMessage()));
+        assertEquals(
+                "\n"
+                        + "Unnecessary stubbings detected in test class: HasUnnecessaryStubs\n"
+                        + "Clean & maintainable test code requires zero unnecessary code.\n"
+                        + "Following stubbings are unnecessary (click to navigate to relevant line of code):\n"
+                        + "  1. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:0)\n"
+                        + "  2. -> at org.mockitousage.junitrunner.UnusedStubsExceptionMessageTest$HasUnnecessaryStubs.<init>(UnusedStubsExceptionMessageTest.java:0)\n"
+                        + "Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.",
+                filterLineNo(failure.getException().getMessage()));
     }
 }

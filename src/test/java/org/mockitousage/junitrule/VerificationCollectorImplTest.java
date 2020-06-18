@@ -72,21 +72,27 @@ public class VerificationCollectorImplTest {
 
         methods.intArgumentMethod(6);
         methods.longArg(8L);
-        methods.forShort((short)6);
+        methods.forShort((short) 6);
 
         verify(methods).intArgumentMethod(8);
-        verify(methods).longArg(longThat(new ArgumentMatcher<Long>() {
-            @Override
-            public boolean matches(Long argument) {
-                throw new AssertionError("custom error message");
-            }
-        }));
-        verify(methods).forShort(shortThat(new ArgumentMatcher<Short>() {
-            @Override
-            public boolean matches(Short argument) {
-                return false;
-            }
-        }));
+        verify(methods)
+                .longArg(
+                        longThat(
+                                new ArgumentMatcher<Long>() {
+                                    @Override
+                                    public boolean matches(Long argument) {
+                                        throw new AssertionError("custom error message");
+                                    }
+                                }));
+        verify(methods)
+                .forShort(
+                        shortThat(
+                                new ArgumentMatcher<Short>() {
+                                    @Override
+                                    public boolean matches(Short argument) {
+                                        return false;
+                                    }
+                                }));
 
         try {
             collector.collectAndReport();
@@ -139,17 +145,19 @@ public class VerificationCollectorImplTest {
         Result result = runner.run(VerificationCollectorRuleInner.class);
 
         assertThat(result.getFailureCount()).as("failureCount").isEqualTo(2);
-        assertThat(result.getFailures().get(0).getMessage()).as("failure1").contains("1. Wanted but not invoked:");
-        assertThat(result.getFailures().get(1).getMessage()).as("failure2")
-            .contains("1. Argument(s) are different! Wanted:")
-            .contains("2. Wanted but not invoked:");
+        assertThat(result.getFailures().get(0).getMessage())
+                .as("failure1")
+                .contains("1. Wanted but not invoked:");
+        assertThat(result.getFailures().get(1).getMessage())
+                .as("failure2")
+                .contains("1. Argument(s) are different! Wanted:")
+                .contains("2. Wanted but not invoked:");
     }
 
     // This class is picked up when running a test suite using an IDE. It fails on purpose.
     public static class VerificationCollectorRuleInner {
 
-        @Rule
-        public VerificationCollector collector = MockitoJUnit.collector();
+        @Rule public VerificationCollector collector = MockitoJUnit.collector();
 
         @Test
         public void should_fail() {

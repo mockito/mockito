@@ -21,21 +21,22 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
 
     @Test
     public void shouldShowAllInteractionsOnMockWhenOrdinaryVerificationFail() throws Exception {
-        //given
+        // given
         firstInteraction();
         secondInteraction();
 
-        verify(mock).otherMethod(); //verify 1st interaction
+        verify(mock).otherMethod(); // verify 1st interaction
         try {
-            //when
+            // when
             verify(mock).simpleMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-            //then
+            // then
             assertThat(e)
-                .hasMessageContaining("However, there were exactly 2 interactions with this mock")
-                .hasMessageContaining("firstInteraction(")
-                .hasMessageContaining("secondInteraction(");
+                    .hasMessageContaining(
+                            "However, there were exactly 2 interactions with this mock")
+                    .hasMessageContaining("firstInteraction(")
+                    .hasMessageContaining("secondInteraction(");
         }
     }
 
@@ -48,7 +49,9 @@ public class OrdinaryVerificationPrintsAllInteractionsTest extends TestBase {
             verify(mock).simpleMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-            assertThat(e.getMessage()).contains("firstInteraction(").doesNotContain("differentMockInteraction(");
+            assertThat(e.getMessage())
+                    .contains("firstInteraction(")
+                    .doesNotContain("differentMockInteraction(");
         }
     }
 

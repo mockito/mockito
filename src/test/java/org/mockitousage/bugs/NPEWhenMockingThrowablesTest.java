@@ -21,13 +21,14 @@ public class NPEWhenMockingThrowablesTest extends TestBase {
         private static final long serialVersionUID = 1L;
     }
 
-    //issue 70
+    // issue 70
     @Test
     public void shouldNotThrowNPE() {
         when(mock.simpleMethod()).thenThrow(mock2);
         try {
             mock.simpleMethod();
             fail();
-        } catch(DummyException e) {}
+        } catch (DummyException e) {
+        }
     }
 }

@@ -67,9 +67,9 @@ public class MultithreadedStubbingHalfManualTest {
     }
 
     @Test
-    //this problem shows at 4 out of 5 executions
-    //it is not strictly a bug because Mockito does not support simultanous stubbing (see FAQ)
-    //however I decided to synchronize some calls in order to make the exceptions nicer
+    // this problem shows at 4 out of 5 executions
+    // it is not strictly a bug because Mockito does not support simultanous stubbing (see FAQ)
+    // however I decided to synchronize some calls in order to make the exceptions nicer
     public void tryToRevealTheProblem() {
         ToMock toMock = mock(ToMock.class);
         for (int i = 0; i < 100; i++) {
@@ -77,8 +77,8 @@ public class MultithreadedStubbingHalfManualTest {
 
             // Repeated mocking
             when(toMock.getValue(i)).thenReturn(j);
-            //TODO make it also showing errors for doReturn()
-//            doReturn(j).when(toMock).getValue(i);
+            // TODO make it also showing errors for doReturn()
+            //            doReturn(j).when(toMock).getValue(i);
 
             while (true) {
                 try {
@@ -91,7 +91,7 @@ public class MultithreadedStubbingHalfManualTest {
             }
 
             try {
-                Thread.sleep(10 / ((i % 10) + 1)); //NOPMD
+                Thread.sleep(10 / ((i % 10) + 1)); // NOPMD
             } catch (InterruptedException e) {
             }
         }

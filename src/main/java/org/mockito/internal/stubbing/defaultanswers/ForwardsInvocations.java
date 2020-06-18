@@ -23,10 +23,10 @@ import org.mockito.stubbing.Answer;
 public class ForwardsInvocations implements Answer<Object>, Serializable {
     private static final long serialVersionUID = -8343690268123254910L;
 
-    private Object delegatedObject = null ;
+    private Object delegatedObject = null;
 
     public ForwardsInvocations(Object delegatedObject) {
-        this.delegatedObject = delegatedObject ;
+        this.delegatedObject = delegatedObject;
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -35,8 +35,10 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
         try {
             Method delegateMethod = getDelegateMethod(mockMethod);
 
-            if (!compatibleReturnTypes(mockMethod.getReturnType(), delegateMethod.getReturnType())) {
-                throw delegatedMethodHasWrongReturnType(mockMethod, delegateMethod, invocation.getMock(), delegatedObject);
+            if (!compatibleReturnTypes(
+                    mockMethod.getReturnType(), delegateMethod.getReturnType())) {
+                throw delegatedMethodHasWrongReturnType(
+                        mockMethod, delegateMethod, invocation.getMock(), delegatedObject);
             }
 
             Object[] rawArguments = ((Invocation) invocation).getRawArguments();
@@ -47,7 +49,8 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
             }
             return delegateMethod.invoke(delegatedObject, rawArguments);
         } catch (NoSuchMethodException e) {
-            throw delegatedMethodDoesNotExistOnDelegate(mockMethod, invocation.getMock(), delegatedObject);
+            throw delegatedMethodDoesNotExistOnDelegate(
+                    mockMethod, invocation.getMock(), delegatedObject);
         } catch (InvocationTargetException e) {
             // propagate the original exception from the delegate
             throw e.getCause();
@@ -60,7 +63,9 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
             return mockMethod;
         } else {
             // Return method of delegate object with the same signature as mockMethod.
-            return delegatedObject.getClass().getMethod(mockMethod.getName(), mockMethod.getParameterTypes());
+            return delegatedObject
+                    .getClass()
+                    .getMethod(mockMethod.getName(), mockMethod.getParameterTypes());
         }
     }
 

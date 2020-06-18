@@ -7,7 +7,8 @@ package org.mockito.internal.verification;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
 
-public abstract class VerificationWrapper<WrapperType extends VerificationMode> implements VerificationMode {
+public abstract class VerificationWrapper<WrapperType extends VerificationMode>
+        implements VerificationMode {
 
     protected final WrapperType wrappedVerification;
 
@@ -19,10 +20,12 @@ public abstract class VerificationWrapper<WrapperType extends VerificationMode> 
         wrappedVerification.verify(data);
     }
 
-    protected abstract VerificationMode copySelfWithNewVerificationMode(VerificationMode verificationMode);
+    protected abstract VerificationMode copySelfWithNewVerificationMode(
+            VerificationMode verificationMode);
 
     public VerificationMode times(int wantedNumberOfInvocations) {
-        return copySelfWithNewVerificationMode(VerificationModeFactory.times(wantedNumberOfInvocations));
+        return copySelfWithNewVerificationMode(
+                VerificationModeFactory.times(wantedNumberOfInvocations));
     }
 
     public VerificationMode never() {
@@ -34,7 +37,8 @@ public abstract class VerificationWrapper<WrapperType extends VerificationMode> 
     }
 
     public VerificationMode atLeast(int minNumberOfInvocations) {
-        return copySelfWithNewVerificationMode(VerificationModeFactory.atLeast(minNumberOfInvocations));
+        return copySelfWithNewVerificationMode(
+                VerificationModeFactory.atLeast(minNumberOfInvocations));
     }
 
     public VerificationMode atMostOnce() {
@@ -42,11 +46,11 @@ public abstract class VerificationWrapper<WrapperType extends VerificationMode> 
     }
 
     public VerificationMode atMost(int maxNumberOfInvocations) {
-        return copySelfWithNewVerificationMode(VerificationModeFactory.atMost(maxNumberOfInvocations));
+        return copySelfWithNewVerificationMode(
+                VerificationModeFactory.atMost(maxNumberOfInvocations));
     }
 
     public VerificationMode only() {
         return copySelfWithNewVerificationMode(VerificationModeFactory.only());
     }
-
 }

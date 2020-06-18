@@ -20,27 +20,28 @@ public class JUnitFailureHackerTest extends TestBase {
 
     @Test
     public void shouldReplaceException() throws Exception {
-        //given
+        // given
         RuntimeException actualExc = new RuntimeException("foo");
         Failure failure = new Failure(Description.EMPTY, actualExc);
 
-        //when
+        // when
         hacker.appendWarnings(failure, "unused stubbing");
 
-        //then
+        // then
         assertEquals(ExceptionIncludingMockitoWarnings.class, failure.getException().getClass());
         assertEquals(actualExc, failure.getException().getCause());
-        Assertions.assertThat(actualExc.getStackTrace()).isEqualTo(failure.getException().getStackTrace());
+        Assertions.assertThat(actualExc.getStackTrace())
+                .isEqualTo(failure.getException().getStackTrace());
     }
 
     @Test
     public void shouldAppendWarning() throws Exception {
         Failure failure = new Failure(Description.EMPTY, new RuntimeException("foo"));
 
-        //when
+        // when
         hacker.appendWarnings(failure, "unused stubbing blah");
 
-        //then
+        // then
         assertThat(failure.getException()).hasMessageContaining("unused stubbing blah");
     }
 
@@ -49,10 +50,10 @@ public class JUnitFailureHackerTest extends TestBase {
         RuntimeException ex = new RuntimeException("foo");
         Failure failure = new Failure(Description.EMPTY, ex);
 
-        //when
+        // when
         hacker.appendWarnings(failure, "");
 
-        //then
+        // then
         assertEquals(ex, failure.getException());
     }
 
@@ -61,10 +62,10 @@ public class JUnitFailureHackerTest extends TestBase {
         RuntimeException ex = new RuntimeException("foo");
         Failure failure = new Failure(Description.EMPTY, ex);
 
-        //when
+        // when
         hacker.appendWarnings(failure, null);
 
-        //then
+        // then
         assertEquals(ex, failure.getException());
     }
 
@@ -72,10 +73,10 @@ public class JUnitFailureHackerTest extends TestBase {
     public void shouldPrintTheWarningSoICanSeeIt() throws Exception {
         Failure failure = new Failure(Description.EMPTY, new RuntimeException("foo"));
 
-        //when
+        // when
         hacker.appendWarnings(failure, "unused stubbing blah");
 
-        //then
+        // then
         System.out.println(failure.getException());
     }
 }

@@ -40,6 +40,7 @@ public class OverloadingPuzzleTest extends TestBase {
         try {
             verify(sub).say("Hello");
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 }

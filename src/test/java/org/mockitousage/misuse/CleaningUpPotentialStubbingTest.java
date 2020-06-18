@@ -45,10 +45,11 @@ public class CleaningUpPotentialStubbingTest extends TestBase {
 
     private void assertOngoingStubbingIsReset() {
         try {
-            //In real, there might be a call to real object or a final method call
-            //I'm modelling it with null
+            // In real, there might be a call to real object or a final method call
+            // I'm modelling it with null
             when(null).thenReturn("anything");
             fail();
-        } catch (MissingMethodInvocationException e) {}
+        } catch (MissingMethodInvocationException e) {
+        }
     }
 }

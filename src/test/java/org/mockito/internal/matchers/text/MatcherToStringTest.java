@@ -22,6 +22,7 @@ public class MatcherToStringTest extends TestBase {
         public boolean matches(Object argument) {
             return false;
         }
+
         public String toString() {
             return "*my custom description*";
         }
@@ -35,8 +36,13 @@ public class MatcherToStringTest extends TestBase {
 
     @Test
     public void better_toString_for_matchers() {
-        assertEquals("<Matcher without description>", MatcherToString.toString(new MatcherWithoutDescription()));
-        assertEquals("*my custom description*", MatcherToString.toString(new MatcherWithDescription()));
-        assertEquals("*my custom description*", MatcherToString.toString(new MatcherWithInheritedDescription()));
+        assertEquals(
+                "<Matcher without description>",
+                MatcherToString.toString(new MatcherWithoutDescription()));
+        assertEquals(
+                "*my custom description*", MatcherToString.toString(new MatcherWithDescription()));
+        assertEquals(
+                "*my custom description*",
+                MatcherToString.toString(new MatcherWithInheritedDescription()));
     }
 }

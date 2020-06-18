@@ -39,7 +39,8 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verify(mock, atMostOnce()).clear();
             fail();
-        } catch (MoreThanAllowedActualInvocations e) {}
+        } catch (MoreThanAllowedActualInvocations e) {
+        }
     }
 
     @Test
@@ -50,7 +51,8 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verify(mock, atMost(0)).add(anyString());
             fail();
-        } catch (MoreThanAllowedActualInvocations e) {}
+        } catch (MoreThanAllowedActualInvocations e) {
+        }
     }
 
     @Test
@@ -108,7 +110,7 @@ public class AtMostXVerificationTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch(NoInteractionsWanted e) {
+        } catch (NoInteractionsWanted e) {
             assertThat(e).hasMessageContaining("undesiredInteraction(");
         }
     }

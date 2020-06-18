@@ -25,7 +25,7 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
 
     @Override
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
-        if(!invocationContainer.hasInvocationForPotentialStubbing()) {
+        if (!invocationContainer.hasInvocationForPotentialStubbing()) {
             throw incorrectUseOfApi();
         }
 
@@ -34,7 +34,7 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
     }
 
     public List<Invocation> getRegisteredInvocations() {
-        //TODO interface for tests
+        // TODO interface for tests
         return invocationContainer.getInvocations();
     }
 

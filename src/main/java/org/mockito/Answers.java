@@ -24,7 +24,7 @@ import org.mockito.stubbing.Answer;
  * </code></pre>
  * <b>This is not the full list</b> of Answers available in Mockito. Some interesting answers can be found in org.mockito.stubbing.answers package.
  */
-public enum Answers implements Answer<Object>{
+public enum Answers implements Answer<Object> {
     /**
      * The default configured answer of every mock.
      *
@@ -52,7 +52,6 @@ public enum Answers implements Answer<Object>{
      */
     RETURNS_MOCKS(new ReturnsMocks()),
 
-
     /**
      * An answer that returns <strong>deep stubs</strong> (not mocks).
      *
@@ -78,8 +77,7 @@ public enum Answers implements Answer<Object>{
      *
      * @see org.mockito.Mockito#RETURNS_SELF
      */
-    RETURNS_SELF(new TriesToReturnSelf())
-    ;
+    RETURNS_SELF(new TriesToReturnSelf());
 
     private final Answer<Object> implementation;
 

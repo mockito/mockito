@@ -20,13 +20,13 @@ import org.mockito.Mock;
  */
 public class GenericsMockitoAnnotationsTest {
 
-    @Mock
-    private TestCollectionSourceProvider testCollectionSourceProvider;
+    @Mock private TestCollectionSourceProvider testCollectionSourceProvider;
 
     @Ignore
     @Test
     public void should_not_throw_class_cast_exception() {
-        given(testCollectionSourceProvider.getCollection(new ArrayList<Integer>())).willReturn(new ArrayList<Integer>());
+        given(testCollectionSourceProvider.getCollection(new ArrayList<Integer>()))
+                .willReturn(new ArrayList<Integer>());
     }
 
     static class TestCollectionSourceProvider {

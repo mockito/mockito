@@ -27,7 +27,6 @@ public class FinalHashCodeAndEqualsRaiseNPEInInitMocksTest {
     }
 
     private static class ConstructorCharsetHolder {
-        public ConstructorCharsetHolder(Charset charset) {
-        }
+        public ConstructorCharsetHolder(Charset charset) {}
     }
 }

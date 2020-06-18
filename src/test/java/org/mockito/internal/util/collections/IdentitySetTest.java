@@ -8,18 +8,17 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-
 public class IdentitySetTest {
 
     IdentitySet set = new IdentitySet();
 
     @Test
     public void shouldWork() throws Exception {
-        //when
+        // when
         Object o = new Object();
         set.add(o);
 
-        //then
+        // then
         assertTrue(set.contains(o));
         assertFalse(set.contains(new Object()));
     }
@@ -34,16 +33,15 @@ public class IdentitySetTest {
 
     @Test
     public void shouldWorkEvenIfEqualsTheSame() throws Exception {
-        //given
+        // given
         assertEquals(new Fake(), new Fake());
         Fake fake = new Fake();
 
-        //when
+        // when
         set.add(fake);
 
-        //then
+        // then
         assertTrue(set.contains(fake));
         assertFalse(set.contains(new Fake()));
     }
-
 }

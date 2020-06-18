@@ -38,8 +38,8 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertThat(e)
-                .hasMessageContaining("-> at ")
-                .hasMessageContaining("misplacedArgumentMatcherHere(");
+                    .hasMessageContaining("-> at ")
+                    .hasMessageContaining("misplacedArgumentMatcherHere(");
         }
     }
 
@@ -57,8 +57,8 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
             fail();
         } catch (UnfinishedStubbingException e) {
             assertThat(e)
-                .hasMessageContaining("-> at ")
-                .hasMessageContaining("unfinishedStubbingHere(");
+                    .hasMessageContaining("-> at ")
+                    .hasMessageContaining("unfinishedStubbingHere(");
         }
     }
 

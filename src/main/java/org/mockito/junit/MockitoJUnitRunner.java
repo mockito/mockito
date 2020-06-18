@@ -23,7 +23,6 @@ import org.mockito.internal.runners.StrictRunner;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 
-
 /**
  * Mockito JUnit Runner keeps tests clean and improves debugging experience.
  * Make sure to try out {@link MockitoJUnitRunner.StrictStubs} which automatically
@@ -150,7 +149,8 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
     private final InternalRunner runner;
 
     public MockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
-        //by default, StrictRunner is used. We can change that potentially based on feedback from users
+        // by default, StrictRunner is used. We can change that potentially based on feedback from
+        // users
         this(new StrictRunner(new RunnerFactory().createStrict(klass), klass));
     }
 
@@ -169,7 +169,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
     }
 
     public void filter(Filter filter) throws NoTestsRemainException {
-        //filter is required because without it UnrootedTests show up in Eclipse
+        // filter is required because without it UnrootedTests show up in Eclipse
         runner.filter(filter);
     }
 }

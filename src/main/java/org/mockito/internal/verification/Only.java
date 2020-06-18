@@ -23,7 +23,7 @@ public class Only implements VerificationMode {
     public void verify(VerificationData data) {
         MatchableInvocation target = data.getTarget();
         List<Invocation> invocations = data.getAllInvocations();
-        List<Invocation> chunk = findInvocations(invocations,target);
+        List<Invocation> chunk = findInvocations(invocations, target);
         if (invocations.size() != 1 && !chunk.isEmpty()) {
             Invocation unverified = findFirstUnverified(invocations);
             throw noMoreInteractionsWanted(unverified, (List) invocations);

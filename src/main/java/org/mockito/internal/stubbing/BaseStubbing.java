@@ -16,8 +16,8 @@ import org.mockito.stubbing.OngoingStubbing;
 
 public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 
-
-    // Keep strong ref to mock preventing premature garbage collection when using 'One-liner stubs'. See #1541.
+    // Keep strong ref to mock preventing premature garbage collection when using 'One-liner stubs'.
+    // See #1541.
     private final Object strongMockRef;
 
     BaseStubbing(Object mock) {
@@ -39,7 +39,8 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
         OngoingStubbing<T> stubbing = thenReturn(value);
         if (values == null) {
             // For no good reason we're configuring null answer here
-            // This has been like that since forever, so let's keep it for compatibility (unless users complain)
+            // This has been like that since forever, so let's keep it for compatibility (unless
+            // users complain)
             return stubbing.thenReturn(null);
         }
         for (T v : values) {
@@ -78,7 +79,8 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
     }
 
     @Override
-    public OngoingStubbing<T> thenThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
+    public OngoingStubbing<T> thenThrow(
+            Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
         if (nextToBeThrown == null) {
             return thenThrow((Class<Throwable>) null);
         }

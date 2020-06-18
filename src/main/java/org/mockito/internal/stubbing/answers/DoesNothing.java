@@ -20,12 +20,12 @@ public class DoesNothing implements Answer<Object>, ValidableAnswer, Serializabl
 
     private DoesNothing() {}
 
-    public static DoesNothing doesNothing(){
+    public static DoesNothing doesNothing() {
         return SINGLETON;
     }
 
     @Override
-    public Object answer(InvocationOnMock invocation){
+    public Object answer(InvocationOnMock invocation) {
         return null;
     }
 

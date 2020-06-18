@@ -10,7 +10,7 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-public class TriesToReturnSelf implements Answer<Object>, Serializable{
+public class TriesToReturnSelf implements Answer<Object>, Serializable {
 
     private final ReturnsEmptyValues defaultReturn = new ReturnsEmptyValues();
 
@@ -25,5 +25,4 @@ public class TriesToReturnSelf implements Answer<Object>, Serializable{
 
         return defaultReturn.returnValueFor(methodReturnType);
     }
-
 }

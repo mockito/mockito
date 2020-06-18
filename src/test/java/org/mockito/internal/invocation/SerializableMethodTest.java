@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-
 public class SerializableMethodTest extends TestBase {
 
     private MockitoMethod method;
@@ -70,6 +69,6 @@ public class SerializableMethodTest extends TestBase {
         assertFalse(new SerializableMethod(testBaseToStringMethod).equals(method));
     }
 
-    //TODO: add tests for generated equals() method
+    // TODO: add tests for generated equals() method
 
 }

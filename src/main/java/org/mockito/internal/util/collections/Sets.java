@@ -18,9 +18,10 @@ public abstract class Sets {
         return HashCodeAndEqualsSafeSet.of(mocks);
     }
 
-    public static <T> Set<T> newSet(T ... elements) {
+    public static <T> Set<T> newSet(T... elements) {
         if (elements == null) {
-            throw new IllegalArgumentException("Expected an array of elements (or empty array) but received a null.");
+            throw new IllegalArgumentException(
+                    "Expected an array of elements (or empty array) but received a null.");
         }
         return new LinkedHashSet<T>(asList(elements));
     }

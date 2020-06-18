@@ -29,7 +29,8 @@ public class ExplicitFrameworkValidationTest extends TestBase {
         try {
             Mockito.validateMockitoUsage();
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (UnfinishedVerificationException e) {
+        }
     }
 
     @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
@@ -39,7 +40,8 @@ public class ExplicitFrameworkValidationTest extends TestBase {
         try {
             Mockito.validateMockitoUsage();
             fail();
-        } catch (UnfinishedStubbingException e) {}
+        } catch (UnfinishedStubbingException e) {
+        }
     }
 
     @Test
@@ -48,6 +50,7 @@ public class ExplicitFrameworkValidationTest extends TestBase {
         try {
             Mockito.validateMockitoUsage();
             fail();
-        } catch (InvalidUseOfMatchersException e) {}
+        } catch (InvalidUseOfMatchersException e) {
+        }
     }
 }

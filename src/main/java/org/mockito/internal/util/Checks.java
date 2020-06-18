@@ -14,7 +14,7 @@ public class Checks {
     }
 
     public static <T> T checkNotNull(T value, String checkedValue, String additionalMessage) {
-        if(value == null) {
+        if (value == null) {
             String message = checkedValue + " should not be null";
             if (additionalMessage != null) {
                 message += ". " + additionalMessage;
