@@ -106,6 +106,9 @@ wrapper {
 }
 
 spotless {
+    // We run the check separately on Travis, so don't run this by default
+    enforceCheck = false
+
     java {
         licenseHeaderFile rootProject.file('config/spotless/spotless.header')
 

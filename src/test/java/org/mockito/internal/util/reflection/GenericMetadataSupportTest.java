@@ -408,6 +408,7 @@ public class GenericMetadataSupportTest {
                 return ownerType;
             }
 
+            @SuppressWarnings("EqualsHashCode")
             public boolean equals(Object other) {
                 if (other instanceof ParameterizedType) {
                     ParameterizedType otherParamType = (ParameterizedType) other;
