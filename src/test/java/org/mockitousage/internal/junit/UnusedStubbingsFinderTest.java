@@ -125,8 +125,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
     public void stubbing_used_by_location() throws Exception {
         // when
         // Emulating stubbing in the same location by putting stubbing in the same line:
-        when(mock1.simpleMethod(1)).thenReturn("1");
-        when(mock2.simpleMethod(1)).thenReturn("1");
+        when(mock1.simpleMethod(1)).thenReturn("1"); when(mock2.simpleMethod(1)).thenReturn("1");
         // End of emulation
         mock1.simpleMethod(1);
 
@@ -140,8 +139,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
     public void deduplicates_stubbings_by_location() throws Exception {
         // when
         // Emulating stubbing in the same location by putting stubbing in the same line:
-        when(mock1.simpleMethod(1)).thenReturn("1");
-        when(mock2.simpleMethod(1)).thenReturn("1");
+        when(mock1.simpleMethod(1)).thenReturn("1"); when(mock2.simpleMethod(1)).thenReturn("1");
         // End of emulation
 
         // when
