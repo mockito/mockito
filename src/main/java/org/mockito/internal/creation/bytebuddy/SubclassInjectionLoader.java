@@ -21,7 +21,7 @@ class SubclassInjectionLoader implements SubclassLoader {
             join(
                     "The current JVM does not support any class injection mechanism.",
                     "",
-                    "Currently, Mockito supports injection via neither by method handle lookups or using sun.misc.Unsafe",
+                    "Currently, Mockito supports injection via either by method handle lookups or using sun.misc.Unsafe",
                     "Neither seems to be available on your current JVM.");
 
     private final SubclassLoader loader;
