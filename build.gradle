@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
-        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.6'
+        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:1.1.0'
 
         //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
         classpath 'org.shipkit:shipkit:2.1.6'
