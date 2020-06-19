@@ -18,7 +18,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
 
     @Test(expected = MockitoException.class)
     public void should_not_allow_Mock_and_Spy() throws Exception {
-        MockitoAnnotations.initMocks(
+        MockitoAnnotations.openMocks(
                 new Object() {
                     @Mock @Spy List<?> mock;
                 });
@@ -27,7 +27,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
     @Test
     public void should_not_allow_Spy_and_InjectMocks_on_interfaces() throws Exception {
         try {
-            MockitoAnnotations.initMocks(
+            MockitoAnnotations.openMocks(
                     new Object() {
                         @InjectMocks @Spy List<?> mock;
                     });
@@ -39,7 +39,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
 
     @Test
     public void should_allow_Spy_and_InjectMocks() throws Exception {
-        MockitoAnnotations.initMocks(
+        MockitoAnnotations.openMocks(
                 new Object() {
                     @InjectMocks @Spy WithDependency mock;
                 });
@@ -51,7 +51,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
 
     @Test(expected = MockitoException.class)
     public void should_not_allow_Mock_and_InjectMocks() throws Exception {
-        MockitoAnnotations.initMocks(
+        MockitoAnnotations.openMocks(
                 new Object() {
                     @InjectMocks @Mock List<?> mock;
                 });
@@ -59,7 +59,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
 
     @Test(expected = MockitoException.class)
     public void should_not_allow_Captor_and_Mock() throws Exception {
-        MockitoAnnotations.initMocks(
+        MockitoAnnotations.openMocks(
                 new Object() {
                     @Mock @Captor ArgumentCaptor<?> captor;
                 });
@@ -67,7 +67,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
 
     @Test(expected = MockitoException.class)
     public void should_not_allow_Captor_and_Spy() throws Exception {
-        MockitoAnnotations.initMocks(
+        MockitoAnnotations.openMocks(
                 new Object() {
                     @Spy @Captor ArgumentCaptor<?> captor;
                 });
@@ -75,7 +75,7 @@ public class WrongSetOfAnnotationsTest extends TestBase {
 
     @Test(expected = MockitoException.class)
     public void should_not_allow_Captor_and_InjectMocks() throws Exception {
-        MockitoAnnotations.initMocks(
+        MockitoAnnotations.openMocks(
                 new Object() {
                     @InjectMocks @Captor ArgumentCaptor<?> captor;
                 });

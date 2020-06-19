@@ -40,14 +40,23 @@ public class DefaultInternalRunner implements InternalRunner {
                         return new Statement() {
                             @Override
                             public void evaluate() throws Throwable {
+                                AutoCloseable closeable;
                                 if (mockitoTestListener == null) {
                                     // get new test listener and add it to the framework
                                     mockitoTestListener = listenerSupplier.get();
                                     Mockito.framework().addListener(mockitoTestListener);
                                     // init annotated mocks before tests
-                                    MockitoAnnotations.initMocks(target);
+                                    closeable = MockitoAnnotations.openMocks(target);
+                                } else {
+                                    closeable = null;
                                 }
-                                base.evaluate();
+                                try {
+                                    base.evaluate();
+                                } finally {
+                                    if (closeable != null) {
+                                        closeable.close();
+                                    }
+                                }
                             }
                         };
                     }

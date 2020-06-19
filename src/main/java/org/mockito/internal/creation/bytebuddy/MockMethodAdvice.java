@@ -13,6 +13,7 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import net.bytebuddy.asm.Advice;
@@ -30,11 +31,13 @@ import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.internal.invocation.mockref.MockWeakReference;
+import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 
 public class MockMethodAdvice extends MockMethodDispatcher {
 
     private final WeakConcurrentMap<Object, MockMethodInterceptor> interceptors;
+    private final DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics;
 
     private final String identifier;
 
@@ -44,8 +47,11 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             new WeakConcurrentMap.WithInlinedExpunction<Class<?>, SoftReference<MethodGraph>>();
 
     public MockMethodAdvice(
-            WeakConcurrentMap<Object, MockMethodInterceptor> interceptors, String identifier) {
+            WeakConcurrentMap<Object, MockMethodInterceptor> interceptors,
+            DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics,
+            String identifier) {
         this.interceptors = interceptors;
+        this.mockedStatics = mockedStatics;
         this.identifier = identifier;
     }
 
@@ -121,6 +127,24 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     }
 
     @Override
+    public Callable<?> handleStatic(Class<?> type, Method origin, Object[] arguments)
+            throws Throwable {
+        Map<Class<?>, MockMethodInterceptor> interceptors = mockedStatics.get();
+        if (interceptors == null || !interceptors.containsKey(type)) {
+            return null;
+        }
+        return new ReturnValueWrapper(
+                interceptors
+                        .get(type)
+                        .doIntercept(
+                                type,
+                                origin,
+                                arguments,
+                                new StaticMethodCall(selfCallInfo, type, origin, arguments),
+                                new LocationImpl(new Throwable(), true)));
+    }
+
+    @Override
     public boolean isMock(Object instance) {
         // We need to exclude 'interceptors.target' explicitly to avoid a recursive check on whether
         // the map is a mock object what requires reading from the map.
@@ -129,7 +153,16 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     @Override
     public boolean isMocked(Object instance) {
-        return selfCallInfo.checkSuperCall(instance) && isMock(instance);
+        return selfCallInfo.checkSelfCall(instance) && isMock(instance);
+    }
+
+    @Override
+    public boolean isMockedStatic(Class<?> type) {
+        if (!selfCallInfo.checkSelfCall(type)) {
+            return false;
+        }
+        Map<Class<?>, ?> interceptors = mockedStatics.get();
+        return interceptors != null && interceptors.containsKey(type);
     }
 
     @Override
@@ -230,6 +263,39 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         }
     }
 
+    private static class StaticMethodCall implements RealMethod {
+
+        private final SelfCallInfo selfCallInfo;
+
+        private final Class<?> type;
+
+        private final Method origin;
+
+        private final Object[] arguments;
+
+        private StaticMethodCall(
+                SelfCallInfo selfCallInfo, Class<?> type, Method origin, Object[] arguments) {
+            this.selfCallInfo = selfCallInfo;
+            this.type = type;
+            this.origin = origin;
+            this.arguments = arguments;
+        }
+
+        @Override
+        public boolean isInvokable() {
+            return true;
+        }
+
+        @Override
+        public Object invoke() throws Throwable {
+            if (!Modifier.isPublic(type.getModifiers() & origin.getModifiers())) {
+                origin.setAccessible(true);
+            }
+            selfCallInfo.set(type);
+            return tryInvoke(origin, null, arguments);
+        }
+    }
+
     private static Object tryInvoke(Method origin, Object instance, Object[] arguments)
             throws Throwable {
         try {
@@ -268,7 +334,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             return current;
         }
 
-        boolean checkSuperCall(Object value) {
+        boolean checkSelfCall(Object value) {
             if (value == get()) {
                 set(null);
                 return false;
@@ -320,6 +386,36 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                 @Advice.Enter boolean skipped) {
             if (skipped) {
                 equals = self == other;
+            }
+        }
+    }
+
+    static class ForStatic {
+
+        @SuppressWarnings("unused")
+        @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
+        private static Callable<?> enter(
+                @Identifier String identifier,
+                @Advice.Origin Class<?> type,
+                @Advice.Origin Method origin,
+                @Advice.AllArguments Object[] arguments)
+                throws Throwable {
+            MockMethodDispatcher dispatcher = MockMethodDispatcher.getStatic(identifier, type);
+            if (dispatcher == null || !dispatcher.isMockedStatic(type)) {
+                return null;
+            } else {
+                return dispatcher.handleStatic(type, origin, arguments);
+            }
+        }
+
+        @SuppressWarnings({"unused", "UnusedAssignment"})
+        @Advice.OnMethodExit
+        private static void exit(
+                @Advice.Return(readOnly = false, typing = Assigner.Typing.DYNAMIC) Object returned,
+                @Advice.Enter Callable<?> mocked)
+                throws Throwable {
+            if (mocked != null) {
+                returned = mocked.call();
             }
         }
     }

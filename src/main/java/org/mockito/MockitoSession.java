@@ -67,7 +67,7 @@ import org.mockito.session.MockitoSessionBuilder;
  * <p>
  * Why to use {@code MockitoSession}?
  * What's the difference between {@code MockitoSession}, {@link MockitoJUnitRunner}, {@link MockitoRule}
- * and traditional {@link MockitoAnnotations#initMocks(Object)}?
+ * and traditional {@link MockitoAnnotations#openMocks(Object)}?
  * <p>
  * Great questions!
  * There is no need to use {@code MockitoSession} if you already use {@link MockitoJUnitRunner} or {@link MockitoRule}.
@@ -78,7 +78,7 @@ import org.mockito.session.MockitoSessionBuilder;
  * You can automatically take advantage of strict stubbing ({@link Strictness}),
  * automatic initialization of annotated mocks ({@link MockitoAnnotations}),
  * and extra validation ({@link Mockito#validateMockitoUsage()}).
- * If you use Mockito annotations with {@link MockitoAnnotations#initMocks(Object)}
+ * If you use Mockito annotations with {@link MockitoAnnotations#openMocks(Object)}
  * but not Mockito runner/rule please try out Mockito's JUnit support (runner or rule) or
  * start using {@code MockitoSession}. You'll get cleaner tests and better productivity.
  * <p>

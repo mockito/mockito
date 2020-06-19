@@ -341,6 +341,21 @@ public interface MockSettings extends Serializable {
     <T> MockCreationSettings<T> build(Class<T> typeToMock);
 
     /**
+     * Creates immutable view of mock settings used later by Mockito, for use within a static mocking.
+     * Framework integrators can use this method to create instances of creation settings
+     * and use them in advanced use cases, for example to create invocations with {@link InvocationFactory},
+     * or to implement custom {@link MockHandler}.
+     * Since {@link MockCreationSettings} is {@link NotExtensible}, Mockito public API needs a creation method for this type.
+     *
+     * @param classToMock class to mock
+     * @param <T> type to mock
+     * @return immutable view of mock settings
+     * @since 2.10.0
+     */
+    @Incubating
+    <T> MockCreationSettings<T> buildStatic(Class<T> classToMock);
+
+    /**
      * Lenient mocks bypass "strict stubbing" validation (see {@link Strictness#STRICT_STUBS}).
      * When mock is declared as lenient none of its stubbings will be checked for potential stubbing problems such as
      * 'unnecessary stubbing' ({@link UnnecessaryStubbingException}) or for 'stubbing argument mismatch' {@link PotentialStubbingProblem}.

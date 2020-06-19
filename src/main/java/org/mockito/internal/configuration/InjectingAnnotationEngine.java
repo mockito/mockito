@@ -7,9 +7,12 @@ package org.mockito.internal.configuration;
 import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
 import org.mockito.internal.configuration.injection.scanner.MockScanner;
@@ -39,29 +42,41 @@ public class InjectingAnnotationEngine
      *
      * @see org.mockito.plugins.AnnotationEngine#process(Class, Object)
      */
-    public void process(Class<?> clazz, Object testInstance) {
-        processIndependentAnnotations(testInstance.getClass(), testInstance);
-        processInjectMocks(testInstance.getClass(), testInstance);
+    public AutoCloseable process(Class<?> clazz, Object testInstance) {
+        List<AutoCloseable> closeables = new ArrayList<>();
+        closeables.addAll(processIndependentAnnotations(testInstance.getClass(), testInstance));
+        closeables.addAll(processInjectMocks(testInstance.getClass(), testInstance));
+        return () -> {
+            for (AutoCloseable closeable : closeables) {
+                closeable.close();
+            }
+        };
     }
 
-    private void processInjectMocks(final Class<?> clazz, final Object testInstance) {
+    private List<AutoCloseable> processInjectMocks(
+            final Class<?> clazz, final Object testInstance) {
+        List<AutoCloseable> closeables = new ArrayList<>();
         Class<?> classContext = clazz;
         while (classContext != Object.class) {
-            injectMocks(testInstance);
+            closeables.add(injectMocks(testInstance));
             classContext = classContext.getSuperclass();
         }
+        return closeables;
     }
 
-    private void processIndependentAnnotations(final Class<?> clazz, final Object testInstance) {
+    private List<AutoCloseable> processIndependentAnnotations(
+            final Class<?> clazz, final Object testInstance) {
+        List<AutoCloseable> closeables = new ArrayList<>();
         Class<?> classContext = clazz;
         while (classContext != Object.class) {
             // this will create @Mocks, @Captors, etc:
-            delegate.process(classContext, testInstance);
+            closeables.add(delegate.process(classContext, testInstance));
             // this will create @Spies:
-            spyAnnotationEngine.process(classContext, testInstance);
+            closeables.add(spyAnnotationEngine.process(classContext, testInstance));
 
             classContext = classContext.getSuperclass();
         }
+        return closeables;
     }
 
     /**
@@ -73,7 +88,7 @@ public class InjectingAnnotationEngine
      * @param testClassInstance
      *            Test class, usually <code>this</code>
      */
-    public void injectMocks(final Object testClassInstance) {
+    private AutoCloseable injectMocks(final Object testClassInstance) {
         Class<?> clazz = testClassInstance.getClass();
         Set<Field> mockDependentFields = new HashSet<Field>();
         Set<Object> mocks = newMockSafeHashSet();
@@ -87,6 +102,14 @@ public class InjectingAnnotationEngine
 
         new DefaultInjectionEngine()
                 .injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
+
+        return () -> {
+            for (Object mock : mocks) {
+                if (mock instanceof MockedStatic<?>) {
+                    ((MockedStatic<?>) mock).closeOnDemand();
+                }
+            }
+        };
     }
 
     protected void onInjection(

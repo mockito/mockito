@@ -11,6 +11,7 @@ import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingPro
 import java.util.List;
 
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
@@ -62,6 +63,12 @@ public class MockitoTest {
     @Test(expected = NotAMockException.class)
     public void shouldValidateMockWhenCreatingInOrderObject() {
         Mockito.inOrder("notMock");
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test(expected = MockitoException.class)
+    public void shouldGiveExplantionOnStaticMockingWithoutInlineMockMaker() {
+        Mockito.mockStatic(Object.class);
     }
 
     @Test

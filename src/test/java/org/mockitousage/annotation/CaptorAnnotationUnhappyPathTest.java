@@ -30,7 +30,7 @@ public class CaptorAnnotationUnhappyPathTest extends TestBase {
     public void shouldFailIfCaptorHasWrongType() throws Exception {
         try {
             // when
-            MockitoAnnotations.initMocks(this);
+            MockitoAnnotations.openMocks(this);
             fail();
         } catch (MockitoException e) {
             // then

@@ -20,7 +20,7 @@ public class ConstructorInvokingMethodShouldNotRaiseExceptionTest {
 
         @Test
         public void should_be_able_to_create_spy() throws Exception {
-            MockitoAnnotations.initMocks(this);
+            MockitoAnnotations.openMocks(this);
         }
 
         private static class HasConstructorInvokingMethod {
@@ -37,7 +37,7 @@ public class ConstructorInvokingMethodShouldNotRaiseExceptionTest {
 
         @Test
         public void should_be_able_to_create_spy() throws Exception {
-            MockitoAnnotations.initMocks(this);
+            MockitoAnnotations.openMocks(this);
         }
 
         private static class HasConstructorInvokingMethod {
@@ -58,7 +58,7 @@ public class ConstructorInvokingMethodShouldNotRaiseExceptionTest {
 
         @Test
         public void should_be_able_to_create_spy() throws Exception {
-            MockitoAnnotations.initMocks(this);
+            MockitoAnnotations.openMocks(this);
         }
 
         private static class HasConstructorInvokingMethod {

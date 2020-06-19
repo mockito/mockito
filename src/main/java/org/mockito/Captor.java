@@ -15,9 +15,16 @@ import java.lang.annotation.*;
  *
  *    &#64;Captor ArgumentCaptor&lt;AsyncCallback&lt;Foo&gt;&gt; captor;
  *
+ *    private AutoCloseable closeable;
+ *
  *    &#64;Before
- *    public void init(){
- *       MockitoAnnotations.initMocks(this);
+ *    public void open() {
+ *       MockitoAnnotations.openMocks(this);
+ *    }
+ *
+ *    &#64;After
+ *    public void release() throws Exception {
+ *       closeable.close();
  *    }
  *
  *    &#64;Test public void shouldDoSomethingUseful() {

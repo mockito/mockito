@@ -71,8 +71,14 @@ import org.mockito.junit.MockitoJUnitRunner;
  *
  *   public class SampleBaseTestCase {
  *
- *       &#064;Before public void initMocks() {
- *           MockitoAnnotations.initMocks(this);
+ *       private AutoCloseable closeable;
+ *
+ *       &#064;Before public void openMocks() {
+ *           closeable = MockitoAnnotations.openMocks(this);
+ *       }
+ *
+ *       &#064;After public void releaseMocks() throws Exception {
+ *           closeable.close();
  *       }
  *   }
  * </code></pre>
@@ -141,11 +147,11 @@ import org.mockito.junit.MockitoJUnitRunner;
  * </p>
  *
  * <p>
- * <strong><code>MockitoAnnotations.initMocks(this)</code></strong> method has to be called to initialize annotated objects.
- * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
- * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
- * <strong>Instead</strong> you can also put initMocks() in your JUnit runner (&#064;RunWith) or use the built-in
- * {@link MockitoJUnitRunner}.
+ * <strong><code>MockitoAnnotations.openMocks(this)</code></strong> method has to be called to initialize annotated objects.
+ * In above example, <code>openMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
+ * For JUnit3 <code>openMocks()</code> can go to <code>setup()</code> method of a base class.
+ * <strong>Instead</strong> you can also put openMocks() in your JUnit runner (&#064;RunWith) or use the built-in
+ * {@link MockitoJUnitRunner}. Also, make sure to release any mocks after disposing your test class with a corresponding hook.
  * </p>
  *
  * <p>
@@ -155,7 +161,7 @@ import org.mockito.junit.MockitoJUnitRunner;
  *
  * @see Mock
  * @see Spy
- * @see MockitoAnnotations#initMocks(Object)
+ * @see MockitoAnnotations#openMocks(Object)
  * @see MockitoJUnitRunner
  * @since 1.8.3
  */

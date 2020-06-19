@@ -7,7 +7,7 @@ package org.mockitousage.annotation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.AbstractCollection;
 import java.util.List;
@@ -46,7 +46,7 @@ public class MockInjectionUsingConstructorTest {
 
     @Before
     public void before() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class MockInjectionUsingConstructorTest {
             throws Exception {
 
         try {
-            MockitoAnnotations.initMocks(new ATest());
+            MockitoAnnotations.openMocks(new ATest());
             fail();
         } catch (MockitoException e) {
             assertThat(e.getMessage())
@@ -147,7 +147,7 @@ public class MockInjectionUsingConstructorTest {
         exception.expectMessage(
                 "Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'IMethods' is an interface");
 
-        initMocks(new TestCase());
+        openMocks(new TestCase());
     }
 
     @Test
@@ -160,7 +160,7 @@ public class MockInjectionUsingConstructorTest {
         exception.expectMessage(
                 "Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'TimeUnit' is an enum");
 
-        initMocks(new TestCase());
+        openMocks(new TestCase());
     }
 
     @Test
@@ -173,7 +173,7 @@ public class MockInjectionUsingConstructorTest {
         exception.expectMessage(
                 "Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'AbstractCollection' is an abstract class");
 
-        initMocks(new TestCase());
+        openMocks(new TestCase());
     }
 
     @Test
@@ -188,7 +188,7 @@ public class MockInjectionUsingConstructorTest {
         exception.expectMessage(
                 "Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'InnerClass' is an inner non static class");
 
-        initMocks(new TestCase());
+        openMocks(new TestCase());
     }
 
     static class StaticInnerClass {}
@@ -200,7 +200,7 @@ public class MockInjectionUsingConstructorTest {
         }
 
         TestCase testClass = new TestCase();
-        initMocks(testClass);
+        openMocks(testClass);
 
         assertThat(testClass.f).isInstanceOf(StaticInnerClass.class);
     }
@@ -213,7 +213,7 @@ public class MockInjectionUsingConstructorTest {
 
         TestCase testClass = new TestCase();
         StaticInnerClass original = testClass.f;
-        initMocks(testClass);
+        openMocks(testClass);
 
         assertThat(testClass.f).isSameAs(original);
     }

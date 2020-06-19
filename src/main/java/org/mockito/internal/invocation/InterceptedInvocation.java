@@ -123,18 +123,6 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         return (T) arguments[index];
     }
 
-    public MockReference<Object> getMockRef() {
-        return mockRef;
-    }
-
-    public MockitoMethod getMockitoMethod() {
-        return mockitoMethod;
-    }
-
-    public RealMethod getRealMethod() {
-        return realMethod;
-    }
-
     @Override
     public List<ArgumentMatcher> getArgumentsAsMatchers() {
         return argumentsToMatchers(getArguments());

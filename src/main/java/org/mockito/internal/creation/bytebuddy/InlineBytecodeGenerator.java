@@ -38,6 +38,7 @@ import net.bytebuddy.utility.OpenedClassReader;
 import net.bytebuddy.utility.RandomString;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
+import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
@@ -63,7 +64,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
     private final Instrumentation instrumentation;
     private final ByteBuddy byteBuddy;
-    private final WeakConcurrentSet<Class<?>> mocked;
+    private final WeakConcurrentSet<Class<?>> mocked, flatMocked;
     private final BytecodeGenerator subclassEngine;
     private final AsmVisitorWrapper mockTransformer;
 
@@ -73,7 +74,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
     public InlineBytecodeGenerator(
             Instrumentation instrumentation,
-            WeakConcurrentMap<Object, MockMethodInterceptor> mocks) {
+            WeakConcurrentMap<Object, MockMethodInterceptor> mocks,
+            DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics) {
         preload();
         this.instrumentation = instrumentation;
         byteBuddy =
@@ -81,7 +83,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                         .with(TypeValidation.DISABLED)
                         .with(Implementation.Context.Disabled.Factory.INSTANCE)
                         .with(MethodGraph.Compiler.ForDeclaredMethods.INSTANCE);
-        mocked = new WeakConcurrentSet<Class<?>>(WeakConcurrentSet.Cleaner.INLINE);
+        mocked = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.INLINE);
+        flatMocked = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.INLINE);
         String identifier = RandomString.make();
         subclassEngine =
                 new TypeCachingBytecodeGenerator(
@@ -110,6 +113,11 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                                 Advice.withCustomMapping()
                                         .bind(MockMethodAdvice.Identifier.class, identifier)
                                         .to(MockMethodAdvice.class))
+                        .method(
+                                isStatic(),
+                                Advice.withCustomMapping()
+                                        .bind(MockMethodAdvice.Identifier.class, identifier)
+                                        .to(MockMethodAdvice.ForStatic.class))
                         .method(
                                 isHashCode(),
                                 Advice.withCustomMapping()
@@ -141,7 +149,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         this.getModule = getModule;
         this.canRead = canRead;
         this.redefineModule = redefineModule;
-        MockMethodDispatcher.set(identifier, new MockMethodAdvice(mocks, identifier));
+        MockMethodDispatcher.set(
+                identifier, new MockMethodAdvice(mocks, mockedStatics, identifier));
         instrumentation.addTransformer(this, true);
     }
 
@@ -182,27 +191,46 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
         checkSupportedCombination(subclassingRequired, features);
 
+        Set<Class<?>> types = new HashSet<>();
+        types.add(features.mockedType);
+        types.addAll(features.interfaces);
         synchronized (this) {
-            triggerRetransformation(features);
+            triggerRetransformation(types, false);
         }
 
         return subclassingRequired ? subclassEngine.mockClass(features) : features.mockedType;
     }
 
-    private <T> void triggerRetransformation(MockFeatures<T> features) {
-        Set<Class<?>> types = new HashSet<Class<?>>();
-        Class<?> type = features.mockedType;
-        do {
-            if (mocked.add(type)) {
-                types.add(type);
-                addInterfaces(types, type.getInterfaces());
+    @Override
+    public void mockClassStatic(Class<?> type) {
+        triggerRetransformation(Collections.singleton(type), true);
+    }
+
+    private <T> void triggerRetransformation(Set<Class<?>> types, boolean flat) {
+        Set<Class<?>> targets = new HashSet<Class<?>>();
+
+        for (Class<?> type : types) {
+            if (flat) {
+                if (!mocked.contains(type) && flatMocked.add(type)) {
+                    targets.add(type);
+                }
+            } else {
+                do {
+                    if (mocked.add(type)) {
+                        if (!flatMocked.remove(type)) {
+                            targets.add(type);
+                        }
+                        addInterfaces(targets, type.getInterfaces());
+                    }
+                    type = type.getSuperclass();
+                } while (type != null);
             }
-            type = type.getSuperclass();
-        } while (type != null);
-        if (!types.isEmpty()) {
+        }
+
+        if (!targets.isEmpty()) {
             try {
-                assureCanReadMockito(types);
-                instrumentation.retransformClasses(types.toArray(new Class<?>[types.size()]));
+                assureCanReadMockito(targets);
+                instrumentation.retransformClasses(targets.toArray(new Class<?>[targets.size()]));
                 Throwable throwable = lastException;
                 if (throwable != null) {
                     throw new IllegalStateException(
@@ -215,10 +243,11 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             throwable);
                 }
             } catch (Exception exception) {
-                for (Class<?> failed : types) {
+                for (Class<?> failed : targets) {
                     mocked.remove(failed);
+                    flatMocked.remove(failed);
                 }
-                throw new MockitoException("Could not modify all classes " + types, exception);
+                throw new MockitoException("Could not modify all classes " + targets, exception);
             } finally {
                 lastException = null;
             }
@@ -281,7 +310,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
     private void addInterfaces(Set<Class<?>> types, Class<?>[] interfaces) {
         for (Class<?> type : interfaces) {
             if (mocked.add(type)) {
-                types.add(type);
+                if (!flatMocked.remove(type)) {
+                    types.add(type);
+                }
                 addInterfaces(types, type.getInterfaces());
             }
         }
@@ -296,6 +327,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             byte[] classfileBuffer) {
         if (classBeingRedefined == null
                 || !mocked.contains(classBeingRedefined)
+                        && !flatMocked.contains(classBeingRedefined)
                 || EXCLUDES.contains(classBeingRedefined)) {
             return null;
         } else {

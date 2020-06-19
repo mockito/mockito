@@ -53,7 +53,7 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
     @Before
     public void enforces_new_instances() {
         // initMocks called in TestBase Before method, so instances are not the same
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -81,40 +81,40 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
 
     @Test
     public void should_inject_mocks_if_annotated() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         assertSame(list, superUnderTest.getAList());
     }
 
     @Test
     public void should_not_inject_if_not_annotated() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         assertNull(superUnderTestWithoutInjection.getAList());
     }
 
     @Test
     public void should_inject_mocks_for_class_hierarchy_if_annotated() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         assertSame(list, baseUnderTest.getAList());
         assertSame(map, baseUnderTest.getAMap());
     }
 
     @Test
     public void should_inject_mocks_by_name() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         assertSame(histogram1, subUnderTest.getHistogram1());
         assertSame(histogram2, subUnderTest.getHistogram2());
     }
 
     @Test
     public void should_inject_spies() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         assertSame(searchTree, otherBaseUnderTest.getSearchTree());
     }
 
     @Test
     public void
             should_insert_into_field_with_matching_name_when_multiple_fields_of_same_type_exists_in_injectee() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         assertNull("not injected, no mock named 'candidate1'", hasTwoFieldsWithSameType.candidate1);
         assertNotNull(
                 "injected, there's a mock named 'candidate2'", hasTwoFieldsWithSameType.candidate2);
@@ -137,7 +137,7 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
                     @InjectMocks ThrowingConstructor failingConstructor;
                 };
         try {
-            MockitoAnnotations.initMocks(failing);
+            MockitoAnnotations.openMocks(failing);
             fail();
         } catch (MockitoException e) {
             Assertions.assertThat(e.getMessage())

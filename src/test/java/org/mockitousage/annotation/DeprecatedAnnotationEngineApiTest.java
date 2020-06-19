@@ -47,7 +47,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
         SimpleTestCase test = new SimpleTestCase();
 
         // when
-        MockitoAnnotations.initMocks(test);
+        MockitoAnnotations.openMocks(test);
 
         // then
         assertNotNull(test.mock);
@@ -65,7 +65,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
         SimpleTestCase test = new SimpleTestCase();
 
         // when
-        MockitoAnnotations.initMocks(test);
+        MockitoAnnotations.openMocks(test);
 
         // then
         assertNotNull(test.mock);

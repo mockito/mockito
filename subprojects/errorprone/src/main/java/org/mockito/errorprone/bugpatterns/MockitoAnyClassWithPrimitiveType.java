@@ -12,7 +12,7 @@ import com.google.errorprone.BugPattern;
 import com.google.errorprone.bugpatterns.BugChecker;
 import com.google.errorprone.matchers.Matcher;
 import com.google.errorprone.matchers.Matchers;
-import com.google.errorprone.matchers.method.MethodMatchers.MethodNameMatcher;
+import com.sun.source.tree.ExpressionTree;
 import com.sun.source.tree.MethodInvocationTree;
 import com.sun.tools.javac.code.Type;
 
@@ -42,7 +42,7 @@ public class MockitoAnyClassWithPrimitiveType extends AbstractMockitoAnyForPrimi
   };
 
   // Match against the any() or any(Class) methods.
-  private static final MethodNameMatcher GENERIC_ANY =
+  private static final Matcher<ExpressionTree> GENERIC_ANY =
       Matchers.staticMethod().onClassAny(CLASS_NAMES).named("any");
 
   @Override

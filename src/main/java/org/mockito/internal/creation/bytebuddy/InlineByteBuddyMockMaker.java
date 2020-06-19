@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Modifier;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
@@ -26,6 +29,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.Platform;
+import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
@@ -182,6 +186,9 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
     private final WeakConcurrentMap<Object, MockMethodInterceptor> mocks =
             new WeakConcurrentMap.WithInlinedExpunction<Object, MockMethodInterceptor>();
 
+    private final DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics =
+            new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.INLINE);
+
     public InlineByteBuddyMockMaker() {
         if (INITIALIZATION_ERROR != null) {
             throw new MockitoInitializationException(
@@ -195,7 +202,7 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
         }
         bytecodeGenerator =
                 new TypeCachingBytecodeGenerator(
-                        new InlineBytecodeGenerator(INSTRUMENTATION, mocks), true);
+                        new InlineBytecodeGenerator(INSTRUMENTATION, mocks, mockedStatics), true);
     }
 
     @Override
@@ -288,7 +295,13 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
 
     @Override
     public MockHandler getHandler(Object mock) {
-        MockMethodInterceptor interceptor = mocks.get(mock);
+        MockMethodInterceptor interceptor;
+        if (mock instanceof Class<?>) {
+            Map<Class<?>, MockMethodInterceptor> interceptors = mockedStatics.get();
+            interceptor = interceptors != null ? interceptors.get(mock) : null;
+        } else {
+            interceptor = mocks.get(mock);
+        }
         if (interceptor == null) {
             return null;
         } else {
@@ -300,19 +313,41 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
         MockMethodInterceptor mockMethodInterceptor =
                 new MockMethodInterceptor(newHandler, settings);
-        mocks.put(mock, mockMethodInterceptor);
-        if (mock instanceof MockAccess) {
-            ((MockAccess) mock).setMockitoInterceptor(mockMethodInterceptor);
+        if (mock instanceof Class<?>) {
+            Map<Class<?>, MockMethodInterceptor> interceptors = mockedStatics.get();
+            if (interceptors == null || !interceptors.containsKey(mock)) {
+                throw new MockitoException(
+                        "Cannot reset "
+                                + mock
+                                + " which is not currently registered as a static mock");
+            }
+            interceptors.put((Class<?>) mock, mockMethodInterceptor);
+        } else {
+            if (!mocks.containsKey(mock)) {
+                throw new MockitoException(
+                        "Cannot reset " + mock + " which is not currently registered as a mock");
+            }
+            mocks.put(mock, mockMethodInterceptor);
+            if (mock instanceof MockAccess) {
+                ((MockAccess) mock).setMockitoInterceptor(mockMethodInterceptor);
+            }
         }
     }
 
     @Override
     public void clearMock(Object mock) {
-        mocks.remove(mock);
+        if (mock instanceof Class<?>) {
+            for (Map<Class<?>, ?> entry : mockedStatics.getBackingMap().target.values()) {
+                entry.remove(mock);
+            }
+        } else {
+            mocks.remove(mock);
+        }
     }
 
     @Override
     public void clearAllMocks() {
+        mockedStatics.getBackingMap().clear();
         mocks.clear();
     }
 
@@ -338,5 +373,80 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
                 return "VM does not support modification of given type";
             }
         };
+    }
+
+    @Override
+    public <T> StaticMockControl<T> createStaticMock(
+            Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
+        if (type == ConcurrentHashMap.class) {
+            throw new MockitoException(
+                    "It is not possible to mock static methods of ConcurrentHashMap "
+                            + "to avoid infinitive loops within Mockito's implementation of static mock handling");
+        }
+
+        bytecodeGenerator.mockClassStatic(type);
+
+        Map<Class<?>, MockMethodInterceptor> interceptors = mockedStatics.get();
+        if (interceptors == null) {
+            interceptors = new WeakHashMap<>();
+            mockedStatics.set(interceptors);
+        }
+
+        return new InlineStaticMockControl<>(type, interceptors, settings, handler);
+    }
+
+    private static class InlineStaticMockControl<T> implements StaticMockControl<T> {
+
+        private final Class<T> type;
+
+        private final Map<Class<?>, MockMethodInterceptor> interceptors;
+
+        private final MockCreationSettings<T> settings;
+        private final MockHandler handler;
+
+        private InlineStaticMockControl(
+                Class<T> type,
+                Map<Class<?>, MockMethodInterceptor> interceptors,
+                MockCreationSettings<T> settings,
+                MockHandler handler) {
+            this.type = type;
+            this.interceptors = interceptors;
+            this.settings = settings;
+            this.handler = handler;
+        }
+
+        @Override
+        public Class<T> getType() {
+            return type;
+        }
+
+        @Override
+        public void enable() {
+            if (interceptors.putIfAbsent(type, new MockMethodInterceptor(handler, settings))
+                    != null) {
+                throw new MockitoException(
+                        join(
+                                "For "
+                                        + type.getName()
+                                        + ", static mocking is already registered in the current thread",
+                                "",
+                                "To create a new mock, the existing static mock registration must be deregistered"));
+            }
+        }
+
+        @Override
+        public void disable() {
+            if (interceptors.remove(type) == null) {
+                throw new MockitoException(
+                        join(
+                                "Could not deregister "
+                                        + type.getName()
+                                        + " as a static mock since it is not currently registered",
+                                "",
+                                "To register a static mock, use Mockito.mockStatic("
+                                        + type.getSimpleName()
+                                        + ".class)"));
+            }
+        }
     }
 }

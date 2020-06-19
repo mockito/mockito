@@ -59,6 +59,8 @@ public class GlobalConfigurationTest {
 
     private static class CustomAnnotationEngine implements AnnotationEngine {
         @Override
-        public void process(Class<?> clazz, Object testInstance) {}
+        public AutoCloseable process(Class<?> clazz, Object testInstance) {
+            return new NoAction();
+        }
     }
 }

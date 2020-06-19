@@ -43,7 +43,7 @@ public class CaptorAnnotationTest extends TestBase {
     @Test
     public void testNormalUsage() {
 
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
 
         // check if assigned correctly
         assertNotNull(finalCaptor);
@@ -70,7 +70,7 @@ public class CaptorAnnotationTest extends TestBase {
     @Test
     public void shouldScreamWhenWrongTypeForCaptor() {
         try {
-            MockitoAnnotations.initMocks(new WrongType());
+            MockitoAnnotations.openMocks(new WrongType());
             fail();
         } catch (MockitoException e) {
         }
@@ -83,7 +83,7 @@ public class CaptorAnnotationTest extends TestBase {
     @Test
     public void shouldScreamWhenMoreThanOneMockitoAnnotation() {
         try {
-            MockitoAnnotations.initMocks(new ToManyAnnotations());
+            MockitoAnnotations.openMocks(new ToManyAnnotations());
             fail();
         } catch (MockitoException e) {
             assertThat(e)
@@ -95,7 +95,7 @@ public class CaptorAnnotationTest extends TestBase {
     @Test
     public void shouldScreamWhenInitializingCaptorsForNullClass() throws Exception {
         try {
-            MockitoAnnotations.initMocks(null);
+            MockitoAnnotations.openMocks(null);
             fail();
         } catch (MockitoException e) {
         }
@@ -104,7 +104,7 @@ public class CaptorAnnotationTest extends TestBase {
     @Test
     public void shouldLookForAnnotatedCaptorsInSuperClasses() throws Exception {
         Sub sub = new Sub();
-        MockitoAnnotations.initMocks(sub);
+        MockitoAnnotations.openMocks(sub);
 
         assertNotNull(sub.getCaptor());
         assertNotNull(sub.getBaseCaptor());

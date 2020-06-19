@@ -37,7 +37,7 @@ import org.mockito.quality.Strictness;
  *       To opt-out from this feature, use {@code}&#064;RunWith(MockitoJUnitRunner.Silent.class){@code}
  *   <li>
  *      Initializes mocks annotated with {@link Mock},
- *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary.
+ *      so that explicit usage of {@link MockitoAnnotations#openMocks(Object)} is not necessary.
  *      Mocks are initialized before each test method.
  *   <li>
  *      Validates framework usage after each test method. See javadoc for {@link Mockito#validateMockitoUsage()}.

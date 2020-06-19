@@ -19,7 +19,7 @@ public class ParentTestMockInjectionTest {
     @Test
     public void injectMocksShouldInjectMocksFromTestSuperClasses() {
         ImplicitTest it = new ImplicitTest();
-        MockitoAnnotations.initMocks(it);
+        MockitoAnnotations.openMocks(it);
 
         assertNotNull(it.daoFromParent);
         assertNotNull(it.daoFromSub);
@@ -40,7 +40,7 @@ public class ParentTestMockInjectionTest {
 
         @Before
         public void setup() {
-            MockitoAnnotations.initMocks(this);
+            MockitoAnnotations.openMocks(this);
         }
 
         @Test

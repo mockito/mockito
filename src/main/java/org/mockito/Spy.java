@@ -25,9 +25,14 @@ import org.mockito.junit.MockitoJUnitRunner;
  *    &#64;Spy Foo spyOnFoo = new Foo("argument");
  *    //Instance for spying is created by mockito via reflection (only default constructors supported):
  *    &#64;Spy Bar spyOnBar;
+ *    private AutoCloseable closeable;
  *    &#64;Before
- *    public void init(){
- *       MockitoAnnotations.initMocks(this);
+ *    public void init() {
+ *       closeable = MockitoAnnotations.openMocks(this);
+ *    }
+ *    &#64;After
+ *    public void release() throws Exception {
+ *       closeable.close();
  *    }
  *    ...
  * }
@@ -84,12 +89,13 @@ import org.mockito.junit.MockitoJUnitRunner;
  * </ol>
  *
  * <p>
- * <strong>One last warning :</strong> if you call <code>MockitoAnnotations.initMocks(this)</code> in a
+ * <strong>One last warning :</strong> if you call <code>MockitoAnnotations.openMocks(this)</code> in a
  * super class <strong>constructor</strong> then this will not work. It is because fields
  * in subclass are only instantiated after super class constructor has returned.
  * It's better to use &#64;Before.
- * <strong>Instead</strong> you can also put initMocks() in your JUnit runner (&#064;RunWith) or use the built-in
- * {@link MockitoJUnitRunner}.
+ * <strong>Instead</strong> you can also put openMocks() in your JUnit runner (&#064;RunWith) or use the built-in
+ * {@link MockitoJUnitRunner}. Also, make sure to release any mocks after disposing your test class with a
+ * corresponding hook.
  * </p>
  *
  * <p>Note that the spy won't have any annotations of the spied type, because CGLIB won't rewrite them.
@@ -98,7 +104,7 @@ import org.mockito.junit.MockitoJUnitRunner;
  * @see Mockito#spy(Object)
  * @see Mock
  * @see InjectMocks
- * @see MockitoAnnotations#initMocks(Object)
+ * @see MockitoAnnotations#openMocks(Object)
  * @see MockitoJUnitRunner
  * @since 1.8.3
  */

@@ -58,7 +58,7 @@ public class TestBase {
 
     @Before
     public void init() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     public static void makeStackTracesClean() {

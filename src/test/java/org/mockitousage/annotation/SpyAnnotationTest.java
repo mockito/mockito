@@ -66,7 +66,7 @@ public class SpyAnnotationTest extends TestBase {
         }
 
         WithSpy withSpy = new WithSpy();
-        MockitoAnnotations.initMocks(withSpy);
+        MockitoAnnotations.openMocks(withSpy);
         when(withSpy.list.size()).thenReturn(3);
         assertEquals(3, withSpy.list.size());
     }
@@ -79,7 +79,7 @@ public class SpyAnnotationTest extends TestBase {
         WithSpy withSpy = new WithSpy();
 
         // when
-        MockitoAnnotations.initMocks(withSpy);
+        MockitoAnnotations.openMocks(withSpy);
 
         // then
         verify(withSpy.list, never()).clear();
@@ -92,7 +92,7 @@ public class SpyAnnotationTest extends TestBase {
         }
 
         try {
-            MockitoAnnotations.initMocks(new FailingSpy());
+            MockitoAnnotations.openMocks(new FailingSpy());
             fail();
         } catch (MockitoException e) {
             assertThat(e.getMessage())
@@ -109,7 +109,7 @@ public class SpyAnnotationTest extends TestBase {
         }
 
         try {
-            MockitoAnnotations.initMocks(new FailingSpy());
+            MockitoAnnotations.openMocks(new FailingSpy());
             fail();
         } catch (MockitoException e) {
             assertThat(e.getMessage()).contains("Unable to create mock instance");
@@ -128,7 +128,7 @@ public class SpyAnnotationTest extends TestBase {
             }
         }
         SpyAbstractClass withSpy = new SpyAbstractClass();
-        MockitoAnnotations.initMocks(withSpy);
+        MockitoAnnotations.openMocks(withSpy);
         assertEquals(Arrays.asList("a"), withSpy.asSingletonList("a"));
     }
 
@@ -157,7 +157,7 @@ public class SpyAnnotationTest extends TestBase {
             }
         }
         WithMockAndSpy outer = new WithMockAndSpy();
-        MockitoAnnotations.initMocks(outer);
+        MockitoAnnotations.openMocks(outer);
         when(outer.strength.strength()).thenReturn("strength");
         assertEquals("inner strength", outer.strength.fullStrength());
     }
@@ -176,7 +176,7 @@ public class SpyAnnotationTest extends TestBase {
             @Spy private Outer.Inner inner;
         }
         try {
-            MockitoAnnotations.initMocks(new WithSpy());
+            MockitoAnnotations.openMocks(new WithSpy());
             fail();
         } catch (MockitoException e) {
             assertThat(e).hasMessageContaining("@Spy annotation can only initialize inner classes");
@@ -186,7 +186,7 @@ public class SpyAnnotationTest extends TestBase {
     @Test
     public void should_report_private_inner_not_supported() throws Exception {
         try {
-            MockitoAnnotations.initMocks(new WithInnerPrivate());
+            MockitoAnnotations.openMocks(new WithInnerPrivate());
             fail();
         } catch (MockitoException e) {
             // Currently fails at instantiation time, because the mock subclass don't have the
@@ -201,7 +201,7 @@ public class SpyAnnotationTest extends TestBase {
     @Test
     public void should_report_private_abstract_inner_not_supported() throws Exception {
         try {
-            MockitoAnnotations.initMocks(new WithInnerPrivateAbstract());
+            MockitoAnnotations.openMocks(new WithInnerPrivateAbstract());
             fail();
         } catch (MockitoException e) {
             assertThat(e)
@@ -217,7 +217,7 @@ public class SpyAnnotationTest extends TestBase {
     @Test
     public void should_report_private_static_abstract_inner_not_supported() throws Exception {
         try {
-            MockitoAnnotations.initMocks(new WithInnerPrivateStaticAbstract());
+            MockitoAnnotations.openMocks(new WithInnerPrivateStaticAbstract());
             fail();
         } catch (MockitoException e) {
             assertThat(e)

@@ -105,6 +105,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *      <a href="#45">45. New JUnit Jupiter (JUnit5+) extension</a><br/>
  *      <a href="#46">46. New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0)</a><br/>
  *      <a href="#47">47. New API for clearing mock state in inline mocking (Since 2.25.0)</a><br/>
+ *      <a href="#48">48. New API for mocking static methods (Since 3.4.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -461,7 +462,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * runner:
  *
  * <pre class="code"><code class="java">
- * MockitoAnnotations.initMocks(testClass);
+ * MockitoAnnotations.openMocks(testClass);
  * </code></pre>
  *
  * You can use built-in runner: {@link MockitoJUnitRunner} or a rule: {@link MockitoRule}.
@@ -863,7 +864,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * should only use partial mocks as a last resort. See point 16 about partial mocks.
  *
  * <p>
- * All new annotations are <b>*only*</b> processed on {@link MockitoAnnotations#initMocks(Object)}.
+ * All new annotations are <b>*only*</b> processed on {@link MockitoAnnotations#openMocks(Object)}.
  * Just like for &#064;{@link Mock} annotation you can use the built-in runner: {@link MockitoJUnitRunner} or rule:
  * {@link MockitoRule}.
  * <p>
@@ -907,7 +908,7 @@ import org.mockito.verification.VerificationWithTimeout;
  * Mockito will now try to instantiate &#064;{@link Spy} and will instantiate &#064;{@link InjectMocks} fields
  * using <b>constructor</b> injection, <b>setter</b> injection, or <b>field</b> injection.
  * <p>
- * To take advantage of this feature you need to use {@link MockitoAnnotations#initMocks(Object)}, {@link MockitoJUnitRunner}
+ * To take advantage of this feature you need to use {@link MockitoAnnotations#openMocks(Object)}, {@link MockitoJUnitRunner}
  * or {@link MockitoRule}.
  * <p>
  * Read more about available tricks and the rules of injection in the javadoc for {@link InjectMocks}
@@ -1144,7 +1145,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <ul>
  *     <li>Annotating the JUnit test class with a <code>&#064;{@link org.junit.runner.RunWith}({@link MockitoJUnitRunner}.class)</code></li>
- *     <li>Invoking <code>{@link MockitoAnnotations#initMocks(Object)}</code> in the <code>&#064;{@link org.junit.Before}</code> method</li>
+ *     <li>Invoking <code>{@link MockitoAnnotations#openMocks(Object)}</code> in the <code>&#064;{@link org.junit.Before}</code> method</li>
  * </ul>
  *
  * Now you can choose to use a rule :
@@ -1541,6 +1542,29 @@ import org.mockito.verification.VerificationWithTimeout;
  * Hence, we introduced a new API to explicitly clear mock state (only make sense in inline mocking!).
  * See example usage in {@link MockitoFramework#clearInlineMocks()}.
  * If you have feedback or a better idea how to solve the problem please reach out.
+ *
+ *
+ * <h3 id="48">48. <a class="meaningful_link" href="#static_mocks" name="static_mocks">Mocking static methods</a> (since 3.4.0)</h3>
+ *
+ * When using the <a href="#0.2">inline mock maker</a>, it is possible to mock static method invocations within the current
+ * thread and a user-defined scope. This way, Mockito assures that concurrently and sequentially running tests do not interfere.
+ *
+ * To make sure a static mock remains temporary, it is recommended to define the scope within a try-with-resources construct.
+ * In the following example, the <code>Foo</code> type's static method would return <code>foo</code> unless mocked:
+ *
+ * <pre class="code"><code class="java">
+ * assertEquals("foo", Foo.method());
+ * try (MockedStatic<Foo> mocked = mockStatic(Foo.class)) {
+ * mocked.when(Foo::method).thenReturn("bar");
+ * assertEquals("bar", Foo.method());
+ * mocked.verify(Foo::method);
+ * }
+ * assertEquals("foo", Foo.method());
+ * </code></pre>
+ *
+ * Due to the defined scope of the static mock, it returns to its original behvior once the scope is released. To define mock
+ * behavior and to verify static method invocations, use the <code>MockedStatic</code> that is returned.
+ * <p>
  */
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
@@ -2024,6 +2048,73 @@ public class Mockito extends ArgumentMatchers {
     public static <T> T spy(Class<T> classToSpy) {
         return MOCKITO_CORE.mock(
                 classToSpy, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+    }
+
+    /**
+     * Creates a thread-local mock controller for all static methods of the given class or interface.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param classToMock class or interface of which static mocks should be mocked.
+     * @return mock controller
+     */
+    @Incubating
+    @CheckReturnValue
+    public static <T> MockedStatic<T> mockStatic(Class<T> classToMock) {
+        return mockStatic(classToMock, withSettings());
+    }
+
+    /**
+     * Creates a thread-local mock controller for all static methods of the given class or interface.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param classToMock class or interface of which static mocks should be mocked.
+     * @param defaultAnswer the default answer when invoking static methods.
+     * @return mock controller
+     */
+    @Incubating
+    @CheckReturnValue
+    public static <T> MockedStatic<T> mockStatic(Class<T> classToMock, Answer defaultAnswer) {
+        return mockStatic(classToMock, withSettings().defaultAnswer(defaultAnswer));
+    }
+
+    /**
+     * Creates a thread-local mock controller for all static methods of the given class or interface.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param classToMock class or interface of which static mocks should be mocked.
+     * @param name the name of the mock to use in error messages.
+     * @return mock controller
+     */
+    @Incubating
+    @CheckReturnValue
+    public static <T> MockedStatic<T> mockStatic(Class<T> classToMock, String name) {
+        return mockStatic(classToMock, withSettings().name(name));
+    }
+
+    /**
+     * Creates a thread-local mock controller for all static methods of the given class or interface.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param classToMock class or interface of which static mocks should be mocked.
+     * @param mockSettings the settings to use where only name and default answer are considered.
+     * @return mock controller
+     */
+    @Incubating
+    @CheckReturnValue
+    public static <T> MockedStatic<T> mockStatic(Class<T> classToMock, MockSettings mockSettings) {
+        return MOCKITO_CORE.mockStatic(classToMock, mockSettings);
     }
 
     /**

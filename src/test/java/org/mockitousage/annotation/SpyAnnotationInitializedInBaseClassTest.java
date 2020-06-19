@@ -32,7 +32,7 @@ public class SpyAnnotationInitializedInBaseClassTest extends TestBase {
         // given
         SubClass subClass = new SubClass();
         // when
-        MockitoAnnotations.initMocks(subClass);
+        MockitoAnnotations.openMocks(subClass);
         // then
         assertTrue(MockUtil.isMock(subClass.list));
     }
@@ -45,7 +45,7 @@ public class SpyAnnotationInitializedInBaseClassTest extends TestBase {
 
     @Before
     public void before() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Spy List spyInBaseclass = new LinkedList();
