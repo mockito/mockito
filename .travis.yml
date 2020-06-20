@@ -30,7 +30,7 @@ matrix:
     env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
     # Run Spotless as a separate job on JDK 11 (which is required for google-java-format)
   - jdk: openjdk11
-    name: "Verify code formatting with Spotless"
+    name: "Verify code formatting with Spotless. Run './gradlew spotlessApply' locally if this job fails."
     script: ./gradlew spotlessCheck
     # Do not upload a coverage report, as we don't run the tests for this job
     after_success: true
