@@ -51,4 +51,28 @@ public class DescriptionTest {
             assertEquals(expectedResult, e.getMessage());
         }
     }
+
+    /**
+     * Test of verify method, of class Description. This test validates that the custom message is prepended to the
+     * error message when verification fails and throws a Throwable which is not a MockitoAssertionError.
+     */
+    @Test
+    public void verification_failure_throwing_AssertionError_should_prepend_expected_message() {
+        String failureMessage = "message should be prepended to the original message";
+        String exceptionMessage = "original error message";
+        String expectedResult = failureMessage + "\n" + exceptionMessage;
+        AssertionError error = new AssertionError(exceptionMessage);
+        doThrow(error).when(mockVerificationMode).verify(mockVerificationData);
+
+        Description instance = new Description(mockVerificationMode, failureMessage);
+
+        try {
+            instance.verify(mockVerificationData);
+            verify(mockVerificationMode).verify(mockVerificationData);
+            fail("Should not have made it this far");
+
+        } catch (MockitoAssertionError e) {
+            assertEquals(expectedResult, e.getMessage());
+        }
+    }
 }

@@ -41,6 +41,8 @@ public class Description implements VerificationMode {
 
         } catch (MockitoAssertionError e) {
             throw new MockitoAssertionError(e, description);
+        } catch (AssertionError e) {
+            throw new MockitoAssertionError(e, description);
         }
     }
 }
