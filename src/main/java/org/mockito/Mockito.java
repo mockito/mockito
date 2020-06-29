@@ -455,6 +455,9 @@ import org.mockito.verification.VerificationWithTimeout;
  *       &#064;Mock private UserProvider userProvider;
  *
  *       private ArticleManager manager;
+ *
+ *       @org.junit.jupiter.api.Test
+ *       void testSomethingInJunit5(@Mock ArticleDatabase database) {
  * </code></pre>
  *
  * <b>Important!</b> This needs to be somewhere in the base class or a test
