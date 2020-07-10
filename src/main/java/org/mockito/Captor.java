@@ -19,7 +19,7 @@ import java.lang.annotation.*;
  *
  *    &#64;Before
  *    public void open() {
- *       MockitoAnnotations.openMocks(this);
+ *       closeable = MockitoAnnotations.openMocks(this);
  *    }
  *
  *    &#64;After
