@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.mockito.MockSettings;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.util.Checks;
@@ -232,6 +233,11 @@ public class MockSettingsImpl<T> extends CreationSettings<T>
     }
 
     @Override
+    public <T> MockCreationSettings<T> buildStatic(Class<T> classToMock) {
+        return validatedStaticSettings(classToMock, (CreationSettings<T>) this);
+    }
+
+    @Override
     public MockSettings lenient() {
         this.lenient = true;
         return this;
@@ -254,9 +260,31 @@ public class MockSettingsImpl<T> extends CreationSettings<T>
         // TODO do we really need to copy the entire settings every time we create mock object? it
         // does not seem necessary.
         CreationSettings<T> settings = new CreationSettings<T>(source);
-        settings.setMockName(new MockNameImpl(source.getName(), typeToMock));
+        settings.setMockName(new MockNameImpl(source.getName(), typeToMock, false));
         settings.setTypeToMock(typeToMock);
         settings.setExtraInterfaces(prepareExtraInterfaces(source));
+        return settings;
+    }
+
+    private static <T> CreationSettings<T> validatedStaticSettings(
+            Class<T> classToMock, CreationSettings<T> source) {
+
+        if (classToMock.isPrimitive()) {
+            throw new MockitoException(
+                    "Cannot create static mock of primitive type " + classToMock);
+        }
+        if (!source.getExtraInterfaces().isEmpty()) {
+            throw new MockitoException(
+                    "Cannot specify additional interfaces for static mock of " + classToMock);
+        }
+        if (source.getSpiedInstance() != null) {
+            throw new MockitoException(
+                    "Cannot specify spied instance for static mock of " + classToMock);
+        }
+
+        CreationSettings<T> settings = new CreationSettings<T>(source);
+        settings.setMockName(new MockNameImpl(source.getName(), classToMock, true));
+        settings.setTypeToMock(classToMock);
         return settings;
     }
 

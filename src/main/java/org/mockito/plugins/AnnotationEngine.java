@@ -13,7 +13,7 @@ package org.mockito.plugins;
  * or replace mockito default engine.
  *
  * <p>
- * If you are interested then see implementations or source code of {@link org.mockito.MockitoAnnotations#initMocks(Object)}
+ * If you are interested then see implementations or source code of {@link org.mockito.MockitoAnnotations#openMocks(Object)}
  *
  * <p>This plugin mechanism supersedes the {@link org.mockito.configuration.IMockitoConfiguration}
  * in regard of switching mockito components.
@@ -25,5 +25,11 @@ public interface AnnotationEngine {
      * @param clazz Class where to extract field information, check implementation for details
      * @param testInstance Test instance
      */
-    void process(Class<?> clazz, Object testInstance);
+    AutoCloseable process(Class<?> clazz, Object testInstance);
+
+    class NoAction implements AutoCloseable {
+
+        @Override
+        public void close() {}
+    }
 }

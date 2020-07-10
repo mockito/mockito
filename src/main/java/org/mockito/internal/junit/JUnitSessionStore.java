@@ -26,6 +26,7 @@ class JUnitSessionStore {
     Statement createStatement(final Statement base, final String methodName, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
+                AutoCloseable closeable;
                 if (session == null) {
                     session =
                             Mockito.mockitoSession()
@@ -34,11 +35,15 @@ class JUnitSessionStore {
                                     .logger(new MockitoSessionLoggerAdapter(logger))
                                     .initMocks(target)
                                     .startMocking();
+                    closeable = null;
                 } else {
-                    MockitoAnnotations.initMocks(target);
+                    closeable = MockitoAnnotations.openMocks(target);
                 }
                 Throwable testFailure = evaluateSafely(base);
                 session.finishMocking(testFailure);
+                if (closeable != null) {
+                    closeable.close();
+                }
                 if (testFailure != null) {
                     throw testFailure;
                 }

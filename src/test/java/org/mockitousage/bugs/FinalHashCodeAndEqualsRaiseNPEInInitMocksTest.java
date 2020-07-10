@@ -19,7 +19,7 @@ public class FinalHashCodeAndEqualsRaiseNPEInInitMocksTest {
 
     @Test
     public void dont_raise_NullPointerException() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     private static class FieldCharsetHolder {

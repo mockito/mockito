@@ -38,7 +38,7 @@ public class AnnotationsTest extends TestBase {
 
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class AnnotationsTest extends TestBase {
     @Test
     public void shouldScreamWhenInitializingMocksForNullClass() throws Exception {
         try {
-            MockitoAnnotations.initMocks(null);
+            MockitoAnnotations.openMocks(null);
             fail();
         } catch (MockitoException e) {
             assertEquals(
@@ -67,7 +67,7 @@ public class AnnotationsTest extends TestBase {
     @Test
     public void shouldLookForAnnotatedMocksInSuperClasses() throws Exception {
         Sub sub = new Sub();
-        MockitoAnnotations.initMocks(sub);
+        MockitoAnnotations.openMocks(sub);
 
         assertNotNull(sub.getMock());
         assertNotNull(sub.getBaseMock());

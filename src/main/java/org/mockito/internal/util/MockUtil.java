@@ -102,4 +102,10 @@ public class MockUtil {
     public static MockCreationSettings getMockSettings(Object mock) {
         return getMockHandler(mock).getMockSettings();
     }
+
+    public static <T> MockMaker.StaticMockControl<T> createStaticMock(
+            Class<T> type, MockCreationSettings<T> settings) {
+        MockHandler<T> handler = createMockHandler(settings);
+        return mockMaker.createStaticMock(type, settings, handler);
+    }
 }

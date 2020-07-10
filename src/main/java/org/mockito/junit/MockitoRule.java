@@ -37,7 +37,7 @@ import org.mockito.quality.Strictness;
  *      See also {@link MockitoHint}.
  *   <li>
  *      Initializes mocks annotated with {@link org.mockito.Mock},
- *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary.
+ *      so that explicit usage of {@link MockitoAnnotations#openMocks(Object)} is not necessary.
  *      Mocks are initialized before each test method.
  *   <li>
  *      Validates framework usage after each test method. See javadoc for {@link org.mockito.Mockito#validateMockitoUsage()}.

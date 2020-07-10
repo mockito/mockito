@@ -4,13 +4,14 @@
  */
 package org.mockito.junit.jupiter;
 
-
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 import java.lang.reflect.Parameter;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.internal.configuration.MockAnnotationProcessor;
@@ -117,7 +119,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
 
     private final static Namespace MOCKITO = create("org.mockito");
 
-    private final static String SESSION = "session";
+    private final static String SESSION = "session", MOCKS = "mocks";
 
     private final Strictness strictness;
 
@@ -150,6 +152,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
             .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
             .startMocking();
 
+        context.getStore(MOCKITO).put(MOCKS, new HashSet<>());
         context.getStore(MOCKITO).put(SESSION, session);
     }
 
@@ -176,19 +179,30 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
      * @param context the current extension context; never {@code null}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void afterEach(ExtensionContext context) {
+        context.getStore(MOCKITO).remove(MOCKS, Set.class).forEach(mock -> ((MockedStatic<?>) mock).closeOnDemand());
         context.getStore(MOCKITO).remove(SESSION, MockitoSession.class)
                 .finishMocking(context.getExecutionException().orElse(null));
     }
 
     @Override
-    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext context) throws ParameterResolutionException {
         return parameterContext.isAnnotated(Mock.class);
     }
 
     @Override
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+    @SuppressWarnings("unchecked")
+    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext context) throws ParameterResolutionException {
         final Parameter parameter = parameterContext.getParameter();
-        return MockAnnotationProcessor.processAnnotationForMock(parameterContext.findAnnotation(Mock.class).get(), parameter.getType(), parameter.getName());
+        Object mock = MockAnnotationProcessor.processAnnotationForMock(
+            parameterContext.findAnnotation(Mock.class).get(),
+            parameter.getType(),
+            parameter::getParameterizedType,
+            parameter.getName());
+        if (mock instanceof MockedStatic<?>) {
+            context.getStore(MOCKITO).get(MOCKS, Set.class).add(mock);
+        }
+        return mock;
     }
 }

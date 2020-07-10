@@ -36,7 +36,7 @@ public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
                 Object instance = fieldReader.read();
                 if (MockUtil.isMock(instance)) {
                     // A. instance has been spied earlier
-                    // B. protect against multiple use of MockitoAnnotations.initMocks()
+                    // B. protect against multiple use of MockitoAnnotations.openMocks()
                     Mockito.reset(instance);
                 } else {
                     Object mock =

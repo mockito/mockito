@@ -7,7 +7,7 @@ package org.mockito.internal.verification;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,7 +26,7 @@ public class VerificationOverTimeImplTest {
 
     @Before
     public void setUp() {
-        initMocks(this);
+        openMocks(this);
         impl = new VerificationOverTimeImpl(10, 1000, delegate, true);
     }
 

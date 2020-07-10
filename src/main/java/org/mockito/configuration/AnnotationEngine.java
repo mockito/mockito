@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 /**
  * Configures mock creation logic behind &#064;Mock, &#064;Captor and &#064;Spy annotations
  * <p>
- * If you are interested then see implementations or source code of {@link MockitoAnnotations#initMocks(Object)}
+ * If you are interested then see implementations or source code of {@link MockitoAnnotations#openMocks(Object)}
  *
  * <p>This interface can be used to configure a different annotation engine through
  * {@link org.mockito.configuration.IMockitoConfiguration}, however this mechanism is being superseded by the new

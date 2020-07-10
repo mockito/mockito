@@ -5,8 +5,11 @@
 package org.mockito.plugins;
 
 import org.mockito.Incubating;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+
+import static org.mockito.internal.util.StringUtil.*;
 
 /**
  * The facility to create mocks.
@@ -109,6 +112,36 @@ public interface MockMaker {
     TypeMockability isTypeMockable(Class<?> type);
 
     /**
+     * If you want to provide your own implementation of {@code MockMaker} this method should:
+     * <ul>
+     *     <li>Alter the supplied class to only change its behavior in the current thread.</li>
+     *     <li>Only alters the static method's behavior after being enabled.</li>
+     *     <li>Stops the altered behavior when disabled.</li>
+     * </ul>
+     *
+     * @param settings Mock creation settings like type to mock, extra interfaces and so on.
+     * @param handler See {@link org.mockito.invocation.MockHandler}.
+     *                <b>Do not</b> provide your own implementation at this time. Make sure your implementation of
+     *                {@link #getHandler(Object)} will return this instance.
+     * @param <T> Type of the mock to return, actually the <code>settings.getTypeToMock</code>.
+     * @return A control for the static mock.
+     * @since 3.4.0
+     */
+    @Incubating
+    default <T> StaticMockControl<T> createStaticMock(
+            Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
+        throw new MockitoException(
+                join(
+                        "The used MockMaker "
+                                + getClass().getSimpleName()
+                                + " does not support the creation of static mocks",
+                        "",
+                        "Mockito's inline mock maker supports static mocks based on the Instrumentation API.",
+                        "You can simply enable this mock mode, by placing the 'mockito-inline' artifact where you are currently using 'mockito-core'.",
+                        "Note that Mockito's inline mock maker is not supported on Android."));
+    }
+
+    /**
      * Carries the mockability information
      *
      * @since 2.1.0
@@ -124,5 +157,15 @@ public interface MockMaker {
          * informs why type is not mockable
          */
         String nonMockableReason();
+    }
+
+    @Incubating
+    interface StaticMockControl<T> {
+
+        Class<T> getType();
+
+        void enable();
+
+        void disable();
     }
 }

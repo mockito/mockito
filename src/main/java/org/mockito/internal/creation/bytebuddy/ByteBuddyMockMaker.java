@@ -45,4 +45,10 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
     public TypeMockability isTypeMockable(Class<?> type) {
         return defaultByteBuddyMockMaker.isTypeMockable(type);
     }
+
+    @Override
+    public <T> StaticMockControl<T> createStaticMock(
+            Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
+        return defaultByteBuddyMockMaker.createStaticMock(type, settings, handler);
+    }
 }

@@ -354,7 +354,7 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
             should_be_able_to_serialize_type_that_implements_Serializable_but_but_dont_declare_a_no_arg_constructor()
                     throws Exception {
         TestClassThatHoldValidField testClass = new TestClassThatHoldValidField();
-        MockitoAnnotations.initMocks(testClass);
+        MockitoAnnotations.openMocks(testClass);
 
         serializeAndBack(testClass.serializableAndNoDefaultConstructor);
     }

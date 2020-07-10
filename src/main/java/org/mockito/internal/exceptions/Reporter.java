@@ -147,7 +147,7 @@ public class Reporter {
                         "    verify(mock, times(10)).someMethod();",
                         "    verify(mock, atLeastOnce()).someMethod();",
                         "    not: verify(mock.someMethod());",
-                        "Also, if you use @Mock annotation don't miss initMocks()"));
+                        "Also, if you use @Mock annotation don't miss openMocks()"));
     }
 
     public static MockitoException notAMockPassedToWhenMethod() {
@@ -164,7 +164,7 @@ public class Reporter {
                         "Argument passed to when() is null!",
                         "Example of correct stubbing:",
                         "    doThrow(new RuntimeException()).when(mock).someMethod();",
-                        "Also, if you use @Mock annotation don't miss initMocks()"));
+                        "Also, if you use @Mock annotation don't miss openMocks()"));
     }
 
     public static MockitoException mocksHaveToBePassedToVerifyNoMoreInteractions() {
@@ -740,7 +740,7 @@ public class Reporter {
                         "Examples of correct usage of @Spy:",
                         "   @Spy List mock = new LinkedList();",
                         "   @Spy Foo foo; //only if Foo has parameterless constructor",
-                        "   //also, don't forget about MockitoAnnotations.initMocks();",
+                        "   //also, don't forget about MockitoAnnotations.openMocks();",
                         ""),
                 details);
     }

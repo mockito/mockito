@@ -4,11 +4,10 @@
  */
 package org.mockito.internal.framework;
 
-import java.util.List;
-
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.RedundantListenerException;
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.junit.TestFinishedEvent;
@@ -16,10 +15,15 @@ import org.mockito.internal.junit.UniversalTestListener;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DefaultMockitoSession implements MockitoSession {
 
     private final String name;
     private final UniversalTestListener listener;
+
+    private final List<AutoCloseable> closeables = new ArrayList<>();
 
     public DefaultMockitoSession(
             List<Object> testClassInstances,
@@ -36,10 +40,12 @@ public class DefaultMockitoSession implements MockitoSession {
         }
         try {
             for (Object testClassInstance : testClassInstances) {
-                MockitoAnnotations.initMocks(testClassInstance);
+                closeables.add(MockitoAnnotations.openMocks(testClassInstance));
             }
         } catch (RuntimeException e) {
-            // clean up in case 'initMocks' fails
+            release();
+
+            // clean up in case 'openMocks' fails
             listener.setListenerDirty();
             throw e;
         }
@@ -52,11 +58,15 @@ public class DefaultMockitoSession implements MockitoSession {
 
     @Override
     public void finishMocking() {
+        release();
+
         finishMocking(null);
     }
 
     @Override
     public void finishMocking(final Throwable failure) {
+        release();
+
         // Cleaning up the state, we no longer need the listener hooked up
         // The listener implements MockCreationListener and at this point
         // we no longer need to listen on mock creation events. We are wrapping up the session
@@ -80,6 +90,16 @@ public class DefaultMockitoSession implements MockitoSession {
         if (failure == null) {
             // Finally, validate user's misuse of Mockito framework.
             Mockito.validateMockitoUsage();
+        }
+    }
+
+    private void release() {
+        for (AutoCloseable closeable : closeables) {
+            try {
+                closeable.close();
+            } catch (Exception e) {
+                throw new MockitoException("Failed to release mocks", e);
+            }
         }
     }
 }
