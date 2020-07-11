@@ -2058,6 +2058,12 @@ public class Mockito extends ArgumentMatchers {
      * The returned object's {@link MockedStatic#close()} method must be called upon completing the
      * test or the mock will remain active on the current thread.
      * <p>
+     * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
+     * classes used by custom class loaders used to executed the block with the mocked class. A mock
+     * maker might forbid mocking static methods of know classes that are known to cause problems.
+     * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
+     * explicitly forbidden.
+     * <p>
      * See examples in javadoc for {@link Mockito} class
      *
      * @param classToMock class or interface of which static mocks should be mocked.
@@ -2073,6 +2079,12 @@ public class Mockito extends ArgumentMatchers {
      * Creates a thread-local mock controller for all static methods of the given class or interface.
      * The returned object's {@link MockedStatic#close()} method must be called upon completing the
      * test or the mock will remain active on the current thread.
+     * <p>
+     * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
+     * classes used by custom class loaders used to executed the block with the mocked class. A mock
+     * maker might forbid mocking static methods of know classes that are known to cause problems.
+     * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
+     * explicitly forbidden.
      * <p>
      * See examples in javadoc for {@link Mockito} class
      *
@@ -2091,6 +2103,12 @@ public class Mockito extends ArgumentMatchers {
      * The returned object's {@link MockedStatic#close()} method must be called upon completing the
      * test or the mock will remain active on the current thread.
      * <p>
+     * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
+     * classes used by custom class loaders used to executed the block with the mocked class. A mock
+     * maker might forbid mocking static methods of know classes that are known to cause problems.
+     * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
+     * explicitly forbidden.
+     * <p>
      * See examples in javadoc for {@link Mockito} class
      *
      * @param classToMock class or interface of which static mocks should be mocked.
@@ -2107,6 +2125,12 @@ public class Mockito extends ArgumentMatchers {
      * Creates a thread-local mock controller for all static methods of the given class or interface.
      * The returned object's {@link MockedStatic#close()} method must be called upon completing the
      * test or the mock will remain active on the current thread.
+     * <p>
+     * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
+     * classes used by custom class loaders used to executed the block with the mocked class. A mock
+     * maker might forbid mocking static methods of know classes that are known to cause problems.
+     * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
+     * explicitly forbidden.
      * <p>
      * See examples in javadoc for {@link Mockito} class
      *

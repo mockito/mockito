@@ -158,6 +158,11 @@ public final class MockedStaticImpl<T> implements MockedStatic<T> {
     }
 
     @Override
+    public boolean isClosed() {
+        return closed;
+    }
+
+    @Override
     public void close() {
         assertNotClosed();
 
@@ -180,5 +185,10 @@ public final class MockedStaticImpl<T> implements MockedStatic<T> {
                             location.toString(),
                             "is already resolved and cannot longer be used"));
         }
+    }
+
+    @Override
+    public String toString() {
+        return "static mock for " + control.getType().getTypeName();
     }
 }

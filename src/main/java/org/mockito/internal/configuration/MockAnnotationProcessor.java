@@ -58,21 +58,25 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         }
     }
 
-    private static Class<?> inferStaticMock(Type type, String name) {
+    static Class<?> inferStaticMock(Type type, String name) {
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
-            return (Class<?>) parameterizedType.getRawType();
-        } else {
-            throw new MockitoException(
-                    join(
-                            "Mockito cannot infer a static mock from a raw type for " + name,
-                            "",
-                            "Instead of @Mock MockedStatic you need to specify a parameterized type",
-                            "For example, if you would like to mock static methods of Sample.class, specify",
-                            "",
-                            "@Mock MockedStatic<Sample>",
-                            "",
-                            "as the type parameter"));
+            Type[] arguments = parameterizedType.getActualTypeArguments();
+            if (arguments.length == 1) {
+                if (arguments[0] instanceof Class<?>) {
+                    return (Class<?>) arguments[0];
+                }
+            }
         }
+        throw new MockitoException(
+                join(
+                        "Mockito cannot infer a static mock from a raw type for " + name,
+                        "",
+                        "Instead of @Mock MockedStatic you need to specify a parameterized type",
+                        "For example, if you would like to mock static methods of Sample.class, specify",
+                        "",
+                        "@Mock MockedStatic<Sample>",
+                        "",
+                        "as the type parameter. If the type is parameterized, it should be specified as raw type."));
     }
 }
