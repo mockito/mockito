@@ -58,6 +58,16 @@ public class InlineByteBuddyMockMakerTest
     }
 
     @Test
+    public void should_create_mock_from_non_constructable_class() throws Exception {
+        MockCreationSettings<NonConstructableClass> settings =
+                settingsFor(NonConstructableClass.class);
+        NonConstructableClass proxy =
+                mockMaker.createMock(
+                        settings, new MockHandlerImpl<NonConstructableClass>(settings));
+        assertThat(proxy.foo()).isEqualTo("bar");
+    }
+
+    @Test
     public void should_create_mock_from_final_class_in_the_JDK() throws Exception {
         MockCreationSettings<Pattern> settings = settingsFor(Pattern.class);
         Pattern proxy = mockMaker.createMock(settings, new MockHandlerImpl<Pattern>(settings));
@@ -400,6 +410,17 @@ public class InlineByteBuddyMockMakerTest
     }
 
     private static final class FinalClass {
+
+        public String foo() {
+            return "foo";
+        }
+    }
+
+    private static class NonConstructableClass {
+
+        private NonConstructableClass() {
+            throw new AssertionError();
+        }
 
         public String foo() {
             return "foo";

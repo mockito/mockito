@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
 import java.util.*;
+import java.util.function.BooleanSupplier;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
@@ -75,7 +76,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
     public InlineBytecodeGenerator(
             Instrumentation instrumentation,
             WeakConcurrentMap<Object, MockMethodInterceptor> mocks,
-            DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics) {
+            DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics,
+            BooleanSupplier isMockConstruction) {
         preload();
         this.instrumentation = instrumentation;
         byteBuddy =
@@ -118,6 +120,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                                 Advice.withCustomMapping()
                                         .bind(MockMethodAdvice.Identifier.class, identifier)
                                         .to(MockMethodAdvice.ForStatic.class))
+                        .constructor(any(), new MockMethodAdvice.ConstructorShortcut(identifier))
                         .method(
                                 isHashCode(),
                                 Advice.withCustomMapping()
@@ -150,7 +153,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         this.canRead = canRead;
         this.redefineModule = redefineModule;
         MockMethodDispatcher.set(
-                identifier, new MockMethodAdvice(mocks, mockedStatics, identifier));
+                identifier,
+                new MockMethodAdvice(mocks, mockedStatics, identifier, isMockConstruction));
         instrumentation.addTransformer(this, true);
     }
 

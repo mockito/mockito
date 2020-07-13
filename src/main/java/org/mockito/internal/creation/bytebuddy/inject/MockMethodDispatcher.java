@@ -36,6 +36,11 @@ public abstract class MockMethodDispatcher {
         DISPATCHERS.putIfAbsent(identifier, dispatcher);
     }
 
+    @SuppressWarnings("unused")
+    public static boolean isConstructorMock(String identifier, Class<?> type) {
+        return DISPATCHERS.get(identifier).isConstructorMock(type);
+    }
+
     public abstract Callable<?> handle(Object instance, Method origin, Object[] arguments)
             throws Throwable;
 
@@ -49,4 +54,6 @@ public abstract class MockMethodDispatcher {
     public abstract boolean isMockedStatic(Class<?> type);
 
     public abstract boolean isOverridden(Object instance, Method origin);
+
+    public abstract boolean isConstructorMock(Class<?> type);
 }

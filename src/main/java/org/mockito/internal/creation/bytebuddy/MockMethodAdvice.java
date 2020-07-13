@@ -15,14 +15,25 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.function.BooleanSupplier;
 
+import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.Advice;
+import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.scaffold.MethodGraph;
+import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.bind.annotation.Argument;
 import net.bytebuddy.implementation.bind.annotation.This;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
+import net.bytebuddy.jar.asm.Label;
+import net.bytebuddy.jar.asm.MethodVisitor;
+import net.bytebuddy.jar.asm.Opcodes;
+import net.bytebuddy.jar.asm.Type;
+import net.bytebuddy.pool.TypePool;
+import net.bytebuddy.utility.OpenedClassReader;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
 import org.mockito.internal.debugging.LocationImpl;
@@ -33,6 +44,8 @@ import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.internal.invocation.mockref.MockWeakReference;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
+
+import static net.bytebuddy.matcher.ElementMatchers.*;
 
 public class MockMethodAdvice extends MockMethodDispatcher {
 
@@ -46,13 +59,17 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     private final WeakConcurrentMap<Class<?>, SoftReference<MethodGraph>> graphs =
             new WeakConcurrentMap.WithInlinedExpunction<Class<?>, SoftReference<MethodGraph>>();
 
+    private final BooleanSupplier isMockConstruction;
+
     public MockMethodAdvice(
             WeakConcurrentMap<Object, MockMethodInterceptor> interceptors,
             DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics,
-            String identifier) {
+            String identifier,
+            BooleanSupplier isMockConstruction) {
         this.interceptors = interceptors;
         this.mockedStatics = mockedStatics;
         this.identifier = identifier;
+        this.isMockConstruction = isMockConstruction;
     }
 
     @SuppressWarnings("unused")
@@ -181,6 +198,11 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                         .asDefined()
                         .getDeclaringType()
                         .represents(origin.getDeclaringClass());
+    }
+
+    @Override
+    public boolean isConstructorMock(Class<?> type) {
+        return isMockConstruction.getAsBoolean();
     }
 
     private static class RealMethodCall implements RealMethod {
@@ -341,6 +363,133 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             } else {
                 return true;
             }
+        }
+    }
+
+    static class ConstructorShortcut
+            implements AsmVisitorWrapper.ForDeclaredMethods.MethodVisitorWrapper {
+
+        private final String identifier;
+
+        ConstructorShortcut(String identifier) {
+            this.identifier = identifier;
+        }
+
+        @Override
+        public MethodVisitor wrap(
+                TypeDescription instrumentedType,
+                MethodDescription instrumentedMethod,
+                MethodVisitor methodVisitor,
+                Implementation.Context implementationContext,
+                TypePool typePool,
+                int writerFlags,
+                int readerFlags) {
+            if (instrumentedMethod.isConstructor() && !instrumentedType.represents(Object.class)) {
+                MethodList<MethodDescription.InDefinedShape> constructors =
+                        instrumentedType
+                                .getSuperClass()
+                                .asErasure()
+                                .getDeclaredMethods()
+                                .filter(isConstructor().and(not(isPrivate())));
+                int arguments = Integer.MAX_VALUE;
+                boolean visible = false;
+                MethodDescription.InDefinedShape current = null;
+                for (MethodDescription.InDefinedShape constructor : constructors) {
+                    if (constructor.getParameters().size() < arguments
+                            && (!visible || constructor.isPackagePrivate())) {
+                        current = constructor;
+                        visible = constructor.isPackagePrivate();
+                    }
+                }
+                if (current != null) {
+                    final MethodDescription.InDefinedShape selected = current;
+                    return new MethodVisitor(OpenedClassReader.ASM_API, methodVisitor) {
+                        @Override
+                        public void visitCode() {
+                            super.visitCode();
+                            /*
+                             * The byte code that is added to the start of the method is roughly equivalent to:
+                             *
+                             * if (MockMethodDispatcher.isConstructorMock(<identifier>, Current.class) {
+                             *   super(<default arguments>);
+                             *   return;
+                             * }
+                             *
+                             * This avoids the invocation of the original constructor chain but fullfils the
+                             * verifier requirement to invoke a super constructor.
+                             */
+                            Label label = new Label();
+                            super.visitLdcInsn(identifier);
+                            if (implementationContext
+                                    .getClassFileVersion()
+                                    .isAtLeast(ClassFileVersion.JAVA_V5)) {
+                                super.visitLdcInsn(Type.getType(instrumentedType.getDescriptor()));
+                            } else {
+                                super.visitLdcInsn(instrumentedType.getName());
+                                super.visitMethodInsn(
+                                        Opcodes.INVOKESTATIC,
+                                        Type.getInternalName(Class.class),
+                                        "forName",
+                                        Type.getMethodDescriptor(
+                                                Type.getType(Class.class),
+                                                Type.getType(String.class)),
+                                        false);
+                            }
+                            super.visitMethodInsn(
+                                    Opcodes.INVOKESTATIC,
+                                    Type.getInternalName(MockMethodDispatcher.class),
+                                    "isConstructorMock",
+                                    Type.getMethodDescriptor(
+                                            Type.BOOLEAN_TYPE,
+                                            Type.getType(String.class),
+                                            Type.getType(Class.class)),
+                                    false);
+                            super.visitInsn(Opcodes.ICONST_0);
+                            super.visitJumpInsn(Opcodes.IF_ICMPEQ, label);
+                            super.visitVarInsn(Opcodes.ALOAD, 0);
+                            for (TypeDescription type :
+                                    selected.getParameters().asTypeList().asErasures()) {
+                                if (type.represents(boolean.class)
+                                        || type.represents(byte.class)
+                                        || type.represents(short.class)
+                                        || type.represents(char.class)
+                                        || type.represents(int.class)) {
+                                    super.visitInsn(Opcodes.ICONST_0);
+                                } else if (type.represents(long.class)) {
+                                    super.visitInsn(Opcodes.LCONST_0);
+                                } else if (type.represents(float.class)) {
+                                    super.visitInsn(Opcodes.FCONST_0);
+                                } else if (type.represents(double.class)) {
+                                    super.visitInsn(Opcodes.DCONST_0);
+                                } else {
+                                    super.visitInsn(Opcodes.ACONST_NULL);
+                                }
+                            }
+                            super.visitMethodInsn(
+                                    Opcodes.INVOKESPECIAL,
+                                    selected.getDeclaringType().getInternalName(),
+                                    selected.getInternalName(),
+                                    selected.getDescriptor(),
+                                    false);
+                            super.visitInsn(Opcodes.RETURN);
+                            super.visitLabel(label);
+                            if (implementationContext
+                                    .getClassFileVersion()
+                                    .isAtLeast(ClassFileVersion.JAVA_V6)) {
+                                super.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+                            }
+                        }
+
+                        @Override
+                        public void visitMaxs(int maxStack, int maxLocals) {
+                            super.visitMaxs(
+                                    Math.max(maxStack, Math.max(3, selected.getStackSize())),
+                                    maxLocals);
+                        }
+                    };
+                }
+            }
+            return methodVisitor;
         }
     }
 

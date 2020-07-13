@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.jar.JarOutputStream;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
 import org.mockito.Incubating;
+import org.mockito.creation.instance.InstantiationException;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
@@ -93,7 +95,8 @@ import static org.mockito.internal.util.StringUtil.*;
  * support this feature.
  */
 @Incubating
-public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineMockMaker {
+public class InlineByteBuddyMockMaker
+        implements ClassCreatingMockMaker, InlineMockMaker, Instantiator {
 
     private static final Instrumentation INSTRUMENTATION;
 
@@ -188,6 +191,8 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
     private final DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics =
             new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.INLINE);
 
+    private final ThreadLocal<Boolean> mockConstruction = ThreadLocal.withInitial(() -> false);
+
     public InlineByteBuddyMockMaker() {
         if (INITIALIZATION_ERROR != null) {
             String detail;
@@ -223,16 +228,25 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
         }
         bytecodeGenerator =
                 new TypeCachingBytecodeGenerator(
-                        new InlineBytecodeGenerator(INSTRUMENTATION, mocks, mockedStatics), true);
+                        new InlineBytecodeGenerator(
+                                INSTRUMENTATION, mocks, mockedStatics, mockConstruction::get),
+                        true);
     }
 
     @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         Class<? extends T> type = createMockType(settings);
 
-        Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(settings);
         try {
-            T instance = instantiator.newInstance(type);
+            T instance;
+            try {
+                // We attempt to use the "native" mock maker first that avoids Objenesis and Unsafe
+                instance = newInstance(type);
+            } catch (InstantiationException ignored) {
+                Instantiator instantiator =
+                        Plugins.getInstantiatorProvider().getInstantiator(settings);
+                instance = instantiator.newInstance(type);
+            }
             MockMethodInterceptor mockMethodInterceptor =
                     new MockMethodInterceptor(handler, settings);
             mocks.put(instance, mockMethodInterceptor);
@@ -422,6 +436,64 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
         }
 
         return new InlineStaticMockControl<>(type, interceptors, settings, handler);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T newInstance(Class<T> cls) throws InstantiationException {
+        Constructor<?>[] constructors = cls.getDeclaredConstructors();
+        if (constructors.length == 0) {
+            throw new InstantiationException(cls.getTypeName() + " does not define a constructor");
+        }
+        Constructor<?> selected = constructors[0];
+        for (Constructor<?> constructor : constructors) {
+            if (Modifier.isPublic(constructor.getModifiers())) {
+                selected = constructor;
+                break;
+            }
+        }
+        Class<?>[] types = selected.getParameterTypes();
+        Object[] arguments = new Object[types.length];
+        int index = 0;
+        for (Class<?> type : types) {
+            arguments[index++] = makeStandardArgument(type);
+        }
+        try {
+            if (!Modifier.isPublic(selected.getModifiers())
+                    || !Modifier.isPublic(cls.getModifiers())) {
+                selected.setAccessible(true);
+            }
+            mockConstruction.set(true);
+            try {
+                return (T) selected.newInstance(arguments);
+            } finally {
+                mockConstruction.set(false);
+            }
+        } catch (Exception e) {
+            throw new InstantiationException("Could not instantiate " + cls.getTypeName(), e);
+        }
+    }
+
+    private Object makeStandardArgument(Class<?> type) {
+        if (type == boolean.class) {
+            return false;
+        } else if (type == byte.class) {
+            return (byte) 0;
+        } else if (type == short.class) {
+            return (short) 0;
+        } else if (type == char.class) {
+            return (char) 0;
+        } else if (type == int.class) {
+            return 0;
+        } else if (type == long.class) {
+            return 0L;
+        } else if (type == float.class) {
+            return 0f;
+        } else if (type == double.class) {
+            return 0d;
+        } else {
+            return null;
+        }
     }
 
     private static class InlineStaticMockControl<T> implements StaticMockControl<T> {
