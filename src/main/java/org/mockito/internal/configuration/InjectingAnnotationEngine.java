@@ -12,8 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
+import org.mockito.ScopedMock;
 import org.mockito.internal.configuration.injection.scanner.InjectMocksScanner;
 import org.mockito.internal.configuration.injection.scanner.MockScanner;
 import org.mockito.plugins.AnnotationEngine;
@@ -119,8 +119,8 @@ public class InjectingAnnotationEngine
 
         return () -> {
             for (Object mock : mocks) {
-                if (mock instanceof MockedStatic<?>) {
-                    ((MockedStatic<?>) mock).closeOnDemand();
+                if (mock instanceof ScopedMock) {
+                    ((ScopedMock) mock).closeOnDemand();
                 }
             }
         };

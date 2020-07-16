@@ -4,8 +4,7 @@
  */
 package org.mockito.internal.util;
 
-import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
-
+import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.configuration.plugins.Plugins;
@@ -17,6 +16,10 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockMaker.TypeMockability;
+
+import java.util.function.Function;
+
+import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
 
 @SuppressWarnings("unchecked")
 public class MockUtil {
@@ -107,5 +110,15 @@ public class MockUtil {
             Class<T> type, MockCreationSettings<T> settings) {
         MockHandler<T> handler = createMockHandler(settings);
         return mockMaker.createStaticMock(type, settings, handler);
+    }
+
+    public static <T> MockMaker.ConstructionMockControl<T> createConstructionMock(
+            Class<T> type,
+            Function<MockedConstruction.Context, MockCreationSettings<T>> settingsFactory,
+            MockedConstruction.MockInitializer<T> mockInitializer) {
+        Function<MockedConstruction.Context, MockHandler<T>> handlerFactory =
+                context -> createMockHandler(settingsFactory.apply(context));
+        return mockMaker.createConstructionMock(
+                type, settingsFactory, handlerFactory, mockInitializer);
     }
 }

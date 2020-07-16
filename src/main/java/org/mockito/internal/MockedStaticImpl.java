@@ -4,8 +4,6 @@
  */
 package org.mockito.internal;
 
-import org.mockito.Incubating;
-import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
@@ -29,21 +27,6 @@ import static org.mockito.internal.util.MockUtil.*;
 import static org.mockito.internal.util.StringUtil.*;
 import static org.mockito.internal.verification.VerificationModeFactory.*;
 
-/**
- * Represents an active mock of a type's static methods. The mocking only affects the thread
- * on which this static mock was created and it is not safe to use this object from another
- * thread. The static mock is released when this object's {@link MockedStaticImpl#close()} method
- * is invoked. If this object is never closed, the static mock will remain active on the
- * initiating thread. It is therefore recommended to create this object within a try-with-resources
- * statement unless when managed explicitly, for example by using a JUnit rule or extension.
- * <p>
- * If the {@link Mock} annotation is used on fields or method parameters of this type, a static mock
- * is created instead of a regular mock. The static mock is activated and released upon completing any
- * relevant test.
- *
- * @param <T> The type being mocked.
- */
-@Incubating
 public final class MockedStaticImpl<T> implements MockedStatic<T> {
 
     private final MockMaker.StaticMockControl<T> control;

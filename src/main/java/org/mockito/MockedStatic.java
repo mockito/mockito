@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
  * @param <T> The type being mocked.
  */
 @Incubating
-public interface MockedStatic<T> extends AutoCloseable {
+public interface MockedStatic<T> extends ScopedMock {
 
     /**
      * See {@link Mockito#when(Object)}.
@@ -62,24 +62,6 @@ public interface MockedStatic<T> extends AutoCloseable {
      * See {@link Mockito#verifyNoInteractions(Object...)}.
      */
     void verifyNoInteractions();
-
-    /**
-     * Checks if this mock is closed.
-     *
-     * @return {@code true} if this mock is closed.
-     */
-    boolean isClosed();
-
-    /**
-     * Releases this static mock and throws a {@link org.mockito.exceptions.base.MockitoException} if closed already.
-     */
-    @Override
-    void close();
-
-    /**
-     * Releases this static mock and is non-operational if already released.
-     */
-    void closeOnDemand();
 
     interface Verification {
 

@@ -208,6 +208,12 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         throw new MockitoException("The subclass byte code generator cannot create static mocks");
     }
 
+    @Override
+    public void mockClassConstruction(Class<?> type) {
+        throw new MockitoException(
+                "The subclass byte code generator cannot create construction mocks");
+    }
+
     private <T> Collection<Class<? super T>> getAllTypes(Class<T> type) {
         Collection<Class<? super T>> supertypes = new LinkedList<Class<? super T>>();
         supertypes.add(type);

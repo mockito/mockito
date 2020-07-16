@@ -4,18 +4,17 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
-import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
-import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.mockito.internal.util.StringUtil.join;
-
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
-import java.util.*;
-import java.util.function.BooleanSupplier;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
@@ -43,6 +42,11 @@ import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
+
+import static net.bytebuddy.implementation.MethodDelegation.*;
+import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.*;
+import static net.bytebuddy.matcher.ElementMatchers.*;
+import static org.mockito.internal.util.StringUtil.*;
 
 public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTransformer {
 
@@ -77,7 +81,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             Instrumentation instrumentation,
             WeakConcurrentMap<Object, MockMethodInterceptor> mocks,
             DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics,
-            BooleanSupplier isMockConstruction) {
+            Predicate<Class<?>> isMockConstruction,
+            ConstructionCallback onConstruction) {
         preload();
         this.instrumentation = instrumentation;
         byteBuddy =
@@ -154,7 +159,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         this.redefineModule = redefineModule;
         MockMethodDispatcher.set(
                 identifier,
-                new MockMethodAdvice(mocks, mockedStatics, identifier, isMockConstruction));
+                new MockMethodAdvice(
+                        mocks, mockedStatics, identifier, isMockConstruction, onConstruction));
         instrumentation.addTransformer(this, true);
     }
 
@@ -206,8 +212,13 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
     }
 
     @Override
-    public void mockClassStatic(Class<?> type) {
+    public synchronized void mockClassStatic(Class<?> type) {
         triggerRetransformation(Collections.singleton(type), true);
+    }
+
+    @Override
+    public synchronized void mockClassConstruction(Class<?> type) {
+        triggerRetransformation(Collections.singleton(type), false);
     }
 
     private <T> void triggerRetransformation(Set<Class<?>> types, boolean flat) {

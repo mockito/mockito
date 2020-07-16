@@ -11,20 +11,23 @@ import java.io.InputStream;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
 import net.bytebuddy.agent.ByteBuddyAgent;
 import org.mockito.Incubating;
+import org.mockito.MockedConstruction;
 import org.mockito.creation.instance.InstantiationException;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
+import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
@@ -191,7 +194,10 @@ public class InlineByteBuddyMockMaker
     private final DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics =
             new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.INLINE);
 
-    private final ThreadLocal<Boolean> mockConstruction = ThreadLocal.withInitial(() -> false);
+    private final DetachedThreadLocal<Map<Class<?>, BiConsumer<Object, MockedConstruction.Context>>>
+            mockedConstruction = new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.INLINE);
+
+    private final ThreadLocal<Boolean> mockitoConstruction = ThreadLocal.withInitial(() -> false);
 
     public InlineByteBuddyMockMaker() {
         if (INITIALIZATION_ERROR != null) {
@@ -226,10 +232,57 @@ public class InlineByteBuddyMockMaker
                             Platform.describe()),
                     INITIALIZATION_ERROR);
         }
+
+        ThreadLocal<Class<?>> currentConstruction = new ThreadLocal<>();
+        ThreadLocal<Boolean> isSuspended = ThreadLocal.withInitial(() -> false);
+        Predicate<Class<?>> isMockConstruction =
+                type -> {
+                    if (isSuspended.get()) {
+                        return false;
+                    } else if (mockitoConstruction.get() || currentConstruction.get() != null) {
+                        return true;
+                    }
+                    Map<Class<?>, ?> interceptors = mockedConstruction.get();
+                    if (interceptors != null && interceptors.containsKey(type)) {
+                        currentConstruction.set(type);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                };
+        ConstructionCallback onConstruction =
+                (type, object, arguments, parameterTypeNames) -> {
+                    if (mockitoConstruction.get() || currentConstruction.get() != type) {
+                        return;
+                    }
+                    currentConstruction.remove();
+                    isSuspended.set(true);
+                    try {
+                        Map<Class<?>, BiConsumer<Object, MockedConstruction.Context>> interceptors =
+                                mockedConstruction.get();
+                        if (interceptors != null) {
+                            BiConsumer<Object, MockedConstruction.Context> interceptor =
+                                    interceptors.get(type);
+                            if (interceptor != null) {
+                                interceptor.accept(
+                                        object,
+                                        new InlineConstructionMockContext(
+                                                arguments, object.getClass(), parameterTypeNames));
+                            }
+                        }
+                    } finally {
+                        isSuspended.set(false);
+                    }
+                };
+
         bytecodeGenerator =
                 new TypeCachingBytecodeGenerator(
                         new InlineBytecodeGenerator(
-                                INSTRUMENTATION, mocks, mockedStatics, mockConstruction::get),
+                                INSTRUMENTATION,
+                                mocks,
+                                mockedStatics,
+                                isMockConstruction,
+                                onConstruction),
                         true);
     }
 
@@ -439,6 +492,35 @@ public class InlineByteBuddyMockMaker
     }
 
     @Override
+    public <T> ConstructionMockControl<T> createConstructionMock(
+            Class<T> type,
+            Function<MockedConstruction.Context, MockCreationSettings<T>> settingsFactory,
+            Function<MockedConstruction.Context, MockHandler<T>> handlerFactory,
+            MockedConstruction.MockInitializer<T> mockInitializer) {
+        if (type == Object.class) {
+            throw new MockitoException(
+                    "It is not possible to mock construction of the Object class "
+                            + "to avoid inference with default object constructor chains");
+        } else if (type.isPrimitive() || Modifier.isAbstract(type.getModifiers())) {
+            throw new MockitoException(
+                    "It is not possible to construct primitive types or abstract types: "
+                            + type.getTypeName());
+        }
+
+        bytecodeGenerator.mockClassConstruction(type);
+
+        Map<Class<?>, BiConsumer<Object, MockedConstruction.Context>> interceptors =
+                mockedConstruction.get();
+        if (interceptors == null) {
+            interceptors = new WeakHashMap<>();
+            mockedConstruction.set(interceptors);
+        }
+
+        return new InlineConstructionMockControl<>(
+                type, settingsFactory, handlerFactory, mockInitializer, interceptors);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T newInstance(Class<T> cls) throws InstantiationException {
         Constructor<?>[] constructors = cls.getDeclaredConstructors();
@@ -463,11 +545,11 @@ public class InlineByteBuddyMockMaker
                     || !Modifier.isPublic(cls.getModifiers())) {
                 selected.setAccessible(true);
             }
-            mockConstruction.set(true);
+            mockitoConstruction.set(true);
             try {
                 return (T) selected.newInstance(arguments);
             } finally {
-                mockConstruction.set(false);
+                mockitoConstruction.set(false);
             }
         } catch (Exception e) {
             throw new InstantiationException("Could not instantiate " + cls.getTypeName(), e);
@@ -503,6 +585,7 @@ public class InlineByteBuddyMockMaker
         private final Map<Class<?>, MockMethodInterceptor> interceptors;
 
         private final MockCreationSettings<T> settings;
+
         private final MockHandler handler;
 
         private InlineStaticMockControl(
@@ -548,6 +631,169 @@ public class InlineByteBuddyMockMaker
                                         + type.getSimpleName()
                                         + ".class)"));
             }
+        }
+    }
+
+    private class InlineConstructionMockControl<T> implements ConstructionMockControl<T> {
+
+        private final Class<T> type;
+
+        private final Function<MockedConstruction.Context, MockCreationSettings<T>> settingsFactory;
+        private final Function<MockedConstruction.Context, MockHandler<T>> handlerFactory;
+
+        private final MockedConstruction.MockInitializer<T> mockInitializer;
+
+        private final Map<Class<?>, BiConsumer<Object, MockedConstruction.Context>> interceptors;
+
+        private final List<Object> all = new ArrayList<>();
+        private int count;
+
+        private InlineConstructionMockControl(
+                Class<T> type,
+                Function<MockedConstruction.Context, MockCreationSettings<T>> settingsFactory,
+                Function<MockedConstruction.Context, MockHandler<T>> handlerFactory,
+                MockedConstruction.MockInitializer<T> mockInitializer,
+                Map<Class<?>, BiConsumer<Object, MockedConstruction.Context>> interceptors) {
+            this.type = type;
+            this.settingsFactory = settingsFactory;
+            this.handlerFactory = handlerFactory;
+            this.mockInitializer = mockInitializer;
+            this.interceptors = interceptors;
+        }
+
+        @Override
+        public Class<T> getType() {
+            return type;
+        }
+
+        @Override
+        public void enable() {
+            if (interceptors.putIfAbsent(
+                            type,
+                            (object, context) -> {
+                                ((InlineConstructionMockContext) context).count = ++count;
+                                MockMethodInterceptor interceptor =
+                                        new MockMethodInterceptor(
+                                                handlerFactory.apply(context),
+                                                settingsFactory.apply(context));
+                                mocks.put(object, interceptor);
+                                try {
+                                    @SuppressWarnings("unchecked")
+                                    T cast = (T) object;
+                                    mockInitializer.prepare(cast, context);
+                                } catch (Throwable t) {
+                                    mocks.remove(object); // TODO: filter stack trace?
+                                    throw new MockitoException(
+                                            "Could not initialize mocked construction", t);
+                                }
+                                all.add(object);
+                            })
+                    != null) {
+                throw new MockitoException(
+                        join(
+                                "For "
+                                        + type.getName()
+                                        + ", static mocking is already registered in the current thread",
+                                "",
+                                "To create a new mock, the existing static mock registration must be deregistered"));
+            }
+        }
+
+        @Override
+        public void disable() {
+            if (interceptors.remove(type) == null) {
+                throw new MockitoException(
+                        join(
+                                "Could not deregister "
+                                        + type.getName()
+                                        + " as a static mock since it is not currently registered",
+                                "",
+                                "To register a static mock, use Mockito.mockStatic("
+                                        + type.getSimpleName()
+                                        + ".class)"));
+            }
+            all.clear();
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public List<T> getMocks() {
+            return (List<T>) all;
+        }
+    }
+
+    private static class InlineConstructionMockContext implements MockedConstruction.Context {
+
+        private static final Map<String, Class<?>> PRIMITIVES = new HashMap<>();
+
+        static {
+            PRIMITIVES.put(boolean.class.getTypeName(), boolean.class);
+            PRIMITIVES.put(byte.class.getTypeName(), byte.class);
+            PRIMITIVES.put(short.class.getTypeName(), short.class);
+            PRIMITIVES.put(char.class.getTypeName(), char.class);
+            PRIMITIVES.put(int.class.getTypeName(), int.class);
+            PRIMITIVES.put(long.class.getTypeName(), long.class);
+            PRIMITIVES.put(float.class.getTypeName(), float.class);
+            PRIMITIVES.put(double.class.getTypeName(), double.class);
+        }
+
+        private int count;
+
+        private final Object[] arguments;
+        private final Class<?> type;
+        private final String[] parameterTypeNames;
+
+        private InlineConstructionMockContext(
+                Object[] arguments, Class<?> type, String[] parameterTypeNames) {
+            this.arguments = arguments;
+            this.type = type;
+            this.parameterTypeNames = parameterTypeNames;
+        }
+
+        @Override
+        public int getCount() {
+            if (count == 0) {
+                throw new MockitoConfigurationException(
+                        "mocked construction context is not initialized");
+            }
+            return count;
+        }
+
+        @Override
+        public Constructor<?> constructor() {
+            Class<?>[] parameterTypes = new Class<?>[parameterTypeNames.length];
+            int index = 0;
+            for (String parameterTypeName : parameterTypeNames) {
+                if (PRIMITIVES.containsKey(parameterTypeName)) {
+                    parameterTypes[index++] = PRIMITIVES.get(parameterTypeName);
+                } else {
+                    try {
+                        parameterTypes[index++] =
+                                Class.forName(parameterTypeName, false, type.getClassLoader());
+                    } catch (ClassNotFoundException e) {
+                        throw new MockitoException(
+                                "Could not find parameter of type " + parameterTypeName, e);
+                    }
+                }
+            }
+            try {
+                return type.getDeclaredConstructor(parameterTypes);
+            } catch (NoSuchMethodException e) {
+                throw new MockitoException(
+                        join(
+                                "Could not resolve constructor of type",
+                                "",
+                                type.getTypeName(),
+                                "",
+                                "with arguments of types",
+                                Arrays.toString(parameterTypes)),
+                        e);
+            }
+        }
+
+        @Override
+        public List<?> arguments() {
+            return Collections.unmodifiableList(Arrays.asList(arguments));
         }
     }
 }
