@@ -382,6 +382,13 @@ public class InlineByteBuddyMockMaker implements ClassCreatingMockMaker, InlineM
             throw new MockitoException(
                     "It is not possible to mock static methods of ConcurrentHashMap "
                             + "to avoid infinitive loops within Mockito's implementation of static mock handling");
+        } else if (type == Thread.class
+                || type == System.class
+                || ClassLoader.class.isAssignableFrom(type)) {
+            throw new MockitoException(
+                    "It is not possible to mock static methods of "
+                            + type.getTypeName()
+                            + "to avoid interfering with the class loading mechanism");
         }
 
         bytecodeGenerator.mockClassStatic(type);

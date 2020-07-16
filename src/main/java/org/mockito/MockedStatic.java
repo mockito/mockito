@@ -63,6 +63,16 @@ public interface MockedStatic<T> extends AutoCloseable {
      */
     void verifyNoInteractions();
 
+    /**
+     * Checks if this mock is closed.
+     *
+     * @return {@code true} if this mock is closed.
+     */
+    boolean isClosed();
+
+    /**
+     * Releases this static mock and throws a {@link org.mockito.exceptions.base.MockitoException} if closed already.
+     */
     @Override
     void close();
 

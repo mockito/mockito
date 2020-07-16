@@ -10,6 +10,7 @@ include("deprecatedPluginsTest",
     "android",
     "junit-jupiter",
     "junitJupiterExtensionTest",
+    "junitJupiterInlineMockMakerExtensionTest",
     "module-test",
     "memory-test",
     "errorprone",
@@ -18,7 +19,7 @@ include("deprecatedPluginsTest",
 
 rootProject.name = "mockito"
 
-val koltinBuildScriptProject = hashSetOf("junitJupiterExtensionTest")
+val koltinBuildScriptProject = hashSetOf("junitJupiterExtensionTest", "junitJupiterInlineMockMakerExtensionTest")
 
 fun buildFileExtensionFor(projectName: String) =
     if (projectName in koltinBuildScriptProject) ".gradle.kts" else ".gradle"
