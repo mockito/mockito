@@ -753,8 +753,7 @@ public class InlineByteBuddyMockMaker
         @Override
         public int getCount() {
             if (count == 0) {
-                throw new MockitoConfigurationException(
-                        "mocked construction context is not initialized");
+                throw new MockitoConfigurationException("mocked construction context is not initialized");
             }
             return count;
         }
@@ -768,8 +767,7 @@ public class InlineByteBuddyMockMaker
                     parameterTypes[index++] = PRIMITIVES.get(parameterTypeName);
                 } else {
                     try {
-                        parameterTypes[index++] =
-                                Class.forName(parameterTypeName, false, type.getClassLoader());
+                        parameterTypes[index++] = Class.forName(parameterTypeName, false, type.getClassLoader());
                     } catch (ClassNotFoundException e) {
                         throw new MockitoException(
                                 "Could not find parameter of type " + parameterTypeName, e);
