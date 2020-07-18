@@ -58,7 +58,7 @@ public class InjectingAnnotationEngine
         List<AutoCloseable> closeables = new ArrayList<>();
         Class<?> classContext = clazz;
         while (classContext != Object.class) {
-            closeables.add(injectMocks(testInstance));
+            closeables.add(injectCloseableMocks(testInstance));
             classContext = classContext.getSuperclass();
         }
         return closeables;
@@ -80,6 +80,20 @@ public class InjectingAnnotationEngine
     }
 
     /**
+     * Required by PowerMockito and retained to avoid API breakage despite being internal API.
+     *
+     * @deprecated Use {@link InjectingAnnotationEngine#injectCloseableMocks(Object)}.
+     */
+    @Deprecated
+    public void injectMocks(Object testClassInstance) {
+        try {
+            injectCloseableMocks(testClassInstance).close();
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /**
      * Initializes mock/spies dependencies for objects annotated with
      * &#064;InjectMocks for given testClassInstance.
      * <p>
@@ -88,7 +102,7 @@ public class InjectingAnnotationEngine
      * @param testClassInstance
      *            Test class, usually <code>this</code>
      */
-    private AutoCloseable injectMocks(final Object testClassInstance) {
+    private AutoCloseable injectCloseableMocks(final Object testClassInstance) {
         Class<?> clazz = testClassInstance.getClass();
         Set<Field> mockDependentFields = new HashSet<Field>();
         Set<Object> mocks = newMockSafeHashSet();
