@@ -7,6 +7,7 @@ package org.mockito.internal.verification;
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class DefaultRegisteredInvocations implements RegisteredInvocations, Seri
     public List<Invocation> getAll() {
         List<Invocation> copiedList;
         synchronized (invocations) {
-            copiedList = new LinkedList<Invocation>(invocations);
+            copiedList = new ArrayList<>(invocations);
         }
 
         return ListUtil.filter(copiedList, new RemoveToString());

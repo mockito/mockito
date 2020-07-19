@@ -7,8 +7,8 @@ package org.mockito.internal.progress;
 import static org.mockito.internal.exceptions.Reporter.unfinishedStubbing;
 import static org.mockito.internal.exceptions.Reporter.unfinishedVerificationException;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -173,7 +173,7 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     static void addListener(MockitoListener listener, Set<MockitoListener> listeners) {
-        List<MockitoListener> delete = new LinkedList<MockitoListener>();
+        List<MockitoListener> delete = new ArrayList<>();
         for (MockitoListener existing : listeners) {
             if (existing.getClass().equals(listener.getClass())) {
                 if (existing instanceof AutoCleanableListener

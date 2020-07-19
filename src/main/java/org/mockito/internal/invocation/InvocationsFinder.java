@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.internal.util.collections.ListUtil;
@@ -63,7 +63,7 @@ public class InvocationsFinder {
 
     private static List<Invocation> getFirstMatchingChunk(
             MatchableInvocation wanted, List<Invocation> unverified) {
-        List<Invocation> firstChunk = new LinkedList<Invocation>();
+        List<Invocation> firstChunk = new ArrayList<>();
         for (Invocation invocation : unverified) {
             if (wanted.matches(invocation)) {
                 firstChunk.add(invocation);
@@ -127,19 +127,19 @@ public class InvocationsFinder {
 
     public static Invocation findPreviousVerifiedInOrder(
             List<Invocation> invocations, InOrderContext context) {
-        LinkedList<Invocation> verifiedOnly =
+        List<Invocation> verifiedOnly =
                 ListUtil.filter(invocations, new RemoveUnverifiedInOrder(context));
 
         if (verifiedOnly.isEmpty()) {
             return null;
         } else {
-            return verifiedOnly.getLast();
+            return verifiedOnly.get(verifiedOnly.size() - 1);
         }
     }
 
     private static List<Invocation> removeVerifiedInOrder(
             List<Invocation> invocations, InOrderContext orderingContext) {
-        List<Invocation> unverified = new LinkedList<Invocation>();
+        List<Invocation> unverified = new ArrayList<>();
         for (Invocation i : invocations) {
             if (orderingContext.isVerified(i)) {
                 unverified.clear();
@@ -151,7 +151,7 @@ public class InvocationsFinder {
     }
 
     public static List<Location> getAllLocations(List<Invocation> invocations) {
-        List<Location> locations = new LinkedList<Location>();
+        List<Location> locations = new ArrayList<>(invocations.size());
         for (Invocation invocation : invocations) {
             locations.add(invocation.getLocation());
         }

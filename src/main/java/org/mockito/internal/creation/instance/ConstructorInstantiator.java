@@ -8,8 +8,8 @@ import static org.mockito.internal.util.StringUtil.join;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.creation.instance.InstantiationException;
@@ -39,7 +39,7 @@ public class ConstructorInstantiator implements Instantiator {
     }
 
     private <T> T withParams(Class<T> cls, Object... params) {
-        List<Constructor<?>> matchingConstructors = new LinkedList<Constructor<?>>();
+        List<Constructor<?>> matchingConstructors = new ArrayList<>();
         try {
             for (Constructor<?> constructor : cls.getDeclaredConstructors()) {
                 Class<?>[] types = constructor.getParameterTypes();

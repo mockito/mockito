@@ -7,6 +7,7 @@ package org.mockito.internal.stubbing;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -157,7 +158,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
      * Stubbings in ascending order, most recent last
      */
     public Collection<Stubbing> getStubbingsAscending() {
-        List<Stubbing> result = new LinkedList<Stubbing>(stubbed);
+        List<Stubbing> result = new ArrayList<>(stubbed);
         Collections.reverse(result);
         return result;
     }

@@ -11,7 +11,7 @@ import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingPro
 import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
 import static org.mockito.internal.util.MockUtil.isMock;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
@@ -31,7 +31,7 @@ public class StubberImpl implements Stubber {
         this.strictness = strictness;
     }
 
-    private final List<Answer<?>> answers = new LinkedList<Answer<?>>();
+    private final List<Answer<?>> answers = new ArrayList<>();
 
     @Override
     public <T> T when(T mock) {

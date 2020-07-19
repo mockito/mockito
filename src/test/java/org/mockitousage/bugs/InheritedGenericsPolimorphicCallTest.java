@@ -11,8 +11,8 @@ import static org.mockito.Mockito.verify;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
@@ -52,7 +52,7 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
     @Test
     public void shouldWorkExactlyAsJavaProxyWould() {
         // given
-        final List<Method> methods = new LinkedList<Method>();
+        final List<Method> methods = new ArrayList<>();
         InvocationHandler handler =
                 new InvocationHandler() {
                     public Object invoke(Object proxy, Method method, Object[] args)

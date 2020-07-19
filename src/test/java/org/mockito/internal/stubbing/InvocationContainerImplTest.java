@@ -8,7 +8,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class InvocationContainerImplTest {
     InvocationContainerImpl containerStubOnly =
             new InvocationContainerImpl((MockCreationSettings) new MockSettingsImpl().stubOnly());
     Invocation invocation = new InvocationBuilder().toInvocation();
-    LinkedList<Throwable> exceptions = new LinkedList<Throwable>();
+    List<Throwable> exceptions = new ArrayList<>();
 
     @Test
     public void should_be_thread_safe() throws Throwable {
@@ -78,7 +79,7 @@ public class InvocationContainerImplTest {
 
         // then
         if (exceptions.size() != 0) {
-            throw exceptions.getFirst();
+            throw exceptions.get(0);
         }
     }
 

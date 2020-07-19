@@ -8,9 +8,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -26,7 +26,7 @@ import org.mockitoutil.TestBase;
 
 public class InvocationsFinderTest extends TestBase {
 
-    private LinkedList<Invocation> invocations = new LinkedList<Invocation>();
+    private final List<Invocation> invocations = new ArrayList<>();
     private Invocation simpleMethodInvocation;
     private Invocation simpleMethodInvocationTwo;
     private Invocation differentMethodInvocation;

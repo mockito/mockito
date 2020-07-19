@@ -345,7 +345,7 @@ public class MethodsImpl implements IMethods {
         return null;
     }
 
-    public LinkedList<String> linkedListReturningMethod() {
+    public List<String> linkedListReturningMethod() {
         return null;
     }
 

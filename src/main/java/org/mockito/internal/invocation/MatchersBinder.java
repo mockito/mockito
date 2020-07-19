@@ -7,7 +7,7 @@ package org.mockito.internal.invocation;
 import static org.mockito.internal.exceptions.Reporter.invalidUseOfMatchers;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.ArgumentMatcher;
@@ -23,7 +23,7 @@ public class MatchersBinder implements Serializable {
         List<LocalizedMatcher> lastMatchers = argumentMatcherStorage.pullLocalizedMatchers();
         validateMatchers(invocation, lastMatchers);
 
-        List<ArgumentMatcher> matchers = new LinkedList<ArgumentMatcher>();
+        List<ArgumentMatcher> matchers = new ArrayList<>(lastMatchers.size());
         for (LocalizedMatcher m : lastMatchers) {
             matchers.add(m.getMatcher());
         }

@@ -4,8 +4,8 @@
  */
 package org.mockito.internal.junit;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.internal.exceptions.Reporter;
@@ -52,12 +52,9 @@ public class UnusedStubbings {
             return;
         }
 
-        List<Invocation> invocations = new LinkedList<Invocation>();
+        List<Invocation> invocations = new ArrayList<>(unused.size());
         for (Stubbing stubbing : unused) {
             invocations.add(stubbing.getInvocation());
-        }
-        if (invocations.isEmpty()) {
-            return;
         }
 
         Reporter.unncessaryStubbingException(invocations);

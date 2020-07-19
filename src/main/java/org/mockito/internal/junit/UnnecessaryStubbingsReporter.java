@@ -4,8 +4,8 @@
  */
 package org.mockito.internal.junit;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.runner.Description;
@@ -21,7 +21,7 @@ import org.mockito.mock.MockCreationSettings;
  */
 public class UnnecessaryStubbingsReporter implements MockCreationListener {
 
-    private List<Object> mocks = new LinkedList<Object>();
+    private List<Object> mocks = new ArrayList<>();
 
     public void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
         Collection<Invocation> unused =

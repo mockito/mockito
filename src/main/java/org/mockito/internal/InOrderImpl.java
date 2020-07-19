@@ -6,7 +6,7 @@ package org.mockito.internal;
 
 import static org.mockito.internal.exceptions.Reporter.inOrderRequiresFamiliarMock;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.InOrder;
@@ -27,7 +27,7 @@ import org.mockito.verification.VerificationMode;
 public class InOrderImpl implements InOrder, InOrderContext {
 
     private final MockitoCore mockitoCore = new MockitoCore();
-    private final List<Object> mocksToBeVerifiedInOrder = new LinkedList<Object>();
+    private final List<Object> mocksToBeVerifiedInOrder = new ArrayList<>();
     private final InOrderContext inOrderContext = new InOrderContextImpl();
 
     public List<Object> getMocksToBeVerifiedInOrder() {

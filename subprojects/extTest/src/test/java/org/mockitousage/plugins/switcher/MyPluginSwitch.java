@@ -4,14 +4,14 @@
  */
 package org.mockitousage.plugins.switcher;
 
-import org.mockito.plugins.PluginSwitch;
-
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.mockito.plugins.PluginSwitch;
 
 public class MyPluginSwitch implements PluginSwitch {
 
-    static List<String> invokedFor = new LinkedList<String>();
+    static List<String> invokedFor = new ArrayList<>();
 
     public boolean isEnabled(String pluginClassName) {
         invokedFor.add(pluginClassName);

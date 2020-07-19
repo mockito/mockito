@@ -4,12 +4,11 @@
  */
 package org.mockito.internal.util.collections;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
-@SuppressWarnings("unchecked")
 public class IdentitySet {
 
-    private final LinkedList list = new LinkedList();
+    private final ArrayList<Object> list = new ArrayList<>();
 
     public boolean contains(Object o) {
         for (Object existing : list) {

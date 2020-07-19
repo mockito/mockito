@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.verification.argumentmatching;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.ArgumentMatcher;
@@ -23,7 +23,7 @@ public class ArgumentMatchingTool {
             return new Integer[0];
         }
 
-        List<Integer> suspicious = new LinkedList<Integer>();
+        List<Integer> suspicious = new ArrayList<>();
         int i = 0;
         for (ArgumentMatcher m : matchers) {
             if (m instanceof ContainsExtraTypeInfo

@@ -4,8 +4,8 @@
  */
 package org.mockito.internal.matchers.text;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.ArgumentMatcher;
@@ -27,7 +27,7 @@ public class MatchersPrinter {
 
     private Iterator<FormattedText> applyPrintSettings(
             List<ArgumentMatcher> matchers, PrintSettings printSettings) {
-        List<FormattedText> out = new LinkedList<FormattedText>();
+        List<FormattedText> out = new ArrayList<>();
         int i = 0;
         for (final ArgumentMatcher matcher : matchers) {
             if (matcher instanceof ContainsExtraTypeInfo && printSettings.extraTypeInfoFor(i)) {

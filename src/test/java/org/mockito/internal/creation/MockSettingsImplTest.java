@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -156,7 +157,7 @@ public class MockSettingsImplTest extends TestBase {
                         new ThrowableAssert.ThrowingCallable() {
                             public void call() {
                                 mockSettingsImpl.addListeners(
-                                        new Object[] {}, new LinkedList<Object>(), "myListeners");
+                                        new Object[] {}, new ArrayList<Object>(), "myListeners");
                             }
                         })
                 .hasMessageContaining("myListeners() requires at least one listener");
@@ -165,7 +166,7 @@ public class MockSettingsImplTest extends TestBase {
                         new ThrowableAssert.ThrowingCallable() {
                             public void call() {
                                 mockSettingsImpl.addListeners(
-                                        null, new LinkedList<Object>(), "myListeners");
+                                        null, new ArrayList<Object>(), "myListeners");
                             }
                         })
                 .hasMessageContaining("myListeners() does not accept null vararg array");
@@ -175,7 +176,7 @@ public class MockSettingsImplTest extends TestBase {
                             public void call() {
                                 mockSettingsImpl.addListeners(
                                         new Object[] {null},
-                                        new LinkedList<Object>(),
+                                        new ArrayList<Object>(),
                                         "myListeners");
                             }
                         })

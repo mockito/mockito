@@ -30,7 +30,7 @@ public class AllInvocationsFinder {
             invocationsInOrder.addAll(fromSingleMock);
         }
 
-        return new LinkedList<Invocation>(invocationsInOrder);
+        return new ArrayList<>(invocationsInOrder);
     }
 
     /**

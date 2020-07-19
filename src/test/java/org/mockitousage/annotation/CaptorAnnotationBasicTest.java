@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.verify;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -95,7 +95,7 @@ public class CaptorAnnotationBasicTest extends TestBase {
     @Test
     public void shouldCaptureGenericList() {
         // given
-        List<String> list = new LinkedList<String>();
+        List<String> list = new ArrayList<>();
         mock.listArgMethod(list);
 
         // when

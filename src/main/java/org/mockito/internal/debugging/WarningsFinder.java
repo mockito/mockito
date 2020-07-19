@@ -4,8 +4,8 @@
  */
 package org.mockito.internal.debugging;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -21,9 +21,8 @@ public class WarningsFinder {
     }
 
     public void find(FindingsListener findingsListener) {
-        List<Invocation> unusedStubs = new LinkedList<Invocation>(this.baseUnusedStubs);
-        List<InvocationMatcher> allInvocations =
-                new LinkedList<InvocationMatcher>(this.baseAllInvocations);
+        List<Invocation> unusedStubs = new ArrayList<>(this.baseUnusedStubs);
+        List<InvocationMatcher> allInvocations = new ArrayList<>(this.baseAllInvocations);
 
         Iterator<Invocation> unusedIterator = unusedStubs.iterator();
         while (unusedIterator.hasNext()) {

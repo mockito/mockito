@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.debugging;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -18,7 +18,7 @@ public class WarningsCollector {
     private final List<Object> createdMocks;
 
     public WarningsCollector() {
-        createdMocks = new LinkedList<Object>();
+        createdMocks = new ArrayList<>();
     }
 
     public String getWarnings() {

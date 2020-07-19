@@ -5,10 +5,9 @@
 package org.mockito.internal.util.collections;
 
 import static java.util.Arrays.asList;
-
 import static org.junit.Assert.assertTrue;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -35,7 +34,7 @@ public class ListUtilTest extends TestBase {
 
     @Test
     public void shouldReturnEmptyIfEmptyListGiven() throws Exception {
-        List<Object> list = new LinkedList<Object>();
+        List<Object> list = new ArrayList<>();
         List<Object> filtered = ListUtil.filter(list, null);
         assertTrue(filtered.isEmpty());
     }

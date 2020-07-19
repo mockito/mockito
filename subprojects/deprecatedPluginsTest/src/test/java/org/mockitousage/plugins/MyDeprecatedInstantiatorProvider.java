@@ -4,14 +4,14 @@
  */
 package org.mockitousage.plugins;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.mockito.Mockito;
 import org.mockito.internal.creation.instance.InstantiationException;
 import org.mockito.internal.creation.instance.Instantiator;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.InstantiatorProvider;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class MyDeprecatedInstantiatorProvider implements InstantiatorProvider {
@@ -25,7 +25,7 @@ public class MyDeprecatedInstantiatorProvider implements InstantiatorProvider {
         }
 
         if (invokedFor.get() == null) {
-            invokedFor.set(new LinkedList<>());
+            invokedFor.set(new ArrayList<>());
         }
         invokedFor.get().add(settings.getTypeToMock());
 

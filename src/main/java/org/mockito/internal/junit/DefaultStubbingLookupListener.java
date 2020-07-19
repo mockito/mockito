@@ -7,8 +7,8 @@ package org.mockito.internal.junit;
 import static org.mockito.internal.stubbing.StrictnessSelector.determineStrictness;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.internal.exceptions.Reporter;
@@ -64,7 +64,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener, Serializa
 
     private static List<Invocation> potentialArgMismatches(
             Invocation invocation, Collection<Stubbing> stubbings) {
-        List<Invocation> matchingStubbings = new LinkedList<Invocation>();
+        List<Invocation> matchingStubbings = new ArrayList<>();
         for (Stubbing s : stubbings) {
             if (UnusedStubbingReporting.shouldBeReported(s)
                     && s.getInvocation()

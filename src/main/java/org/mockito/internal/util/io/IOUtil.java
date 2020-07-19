@@ -4,9 +4,16 @@
  */
 package org.mockito.internal.util.io;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.exceptions.base.MockitoException;
@@ -32,7 +39,7 @@ public class IOUtil {
     }
 
     public static Collection<String> readLines(InputStream is) {
-        List<String> out = new LinkedList<String>();
+        List<String> out = new ArrayList<>();
         BufferedReader r = new BufferedReader(new InputStreamReader(is));
         String line;
         try {

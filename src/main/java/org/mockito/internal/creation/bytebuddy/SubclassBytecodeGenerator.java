@@ -21,7 +21,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Random;
 
 import net.bytebuddy.ByteBuddy;
@@ -215,7 +214,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     }
 
     private <T> Collection<Class<? super T>> getAllTypes(Class<T> type) {
-        Collection<Class<? super T>> supertypes = new LinkedList<Class<? super T>>();
+        Collection<Class<? super T>> supertypes = new ArrayList<>();
         supertypes.add(type);
         Class<? super T> superType = type;
         while (superType != null) {

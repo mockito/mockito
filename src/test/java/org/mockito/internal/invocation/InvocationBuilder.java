@@ -5,11 +5,10 @@
 package org.mockito.internal.invocation;
 
 import static java.util.Arrays.asList;
-
 import static org.mockito.internal.invocation.InterceptedInvocation.NO_OP;
 
 import java.lang.reflect.Method;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.Mockito;
@@ -45,7 +44,7 @@ public class InvocationBuilder {
     public Invocation toInvocation() {
         if (method == null) {
             if (argTypes == null) {
-                argTypes = new LinkedList<Class<?>>();
+                argTypes = new ArrayList<>();
                 for (Object arg : args) {
                     if (arg == null) {
                         argTypes.add(Object.class);

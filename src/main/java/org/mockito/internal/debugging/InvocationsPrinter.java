@@ -5,7 +5,7 @@
 package org.mockito.internal.debugging;
 
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.List;
 
 import org.mockito.Mockito;
 import org.mockito.internal.util.collections.ListUtil;
@@ -37,7 +37,7 @@ public class InvocationsPrinter {
             }
         }
 
-        LinkedList<Stubbing> unused =
+        List<Stubbing> unused =
                 ListUtil.filter(
                         stubbings,
                         new ListUtil.Filter<Stubbing>() {

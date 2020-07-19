@@ -89,7 +89,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
         } else if (type == Iterable.class) {
             return new ArrayList<Object>(0);
         } else if (type == Collection.class) {
-            return new LinkedList<Object>();
+            return new ArrayList<>();
         } else if (type == Set.class) {
             return new HashSet<Object>();
         } else if (type == HashSet.class) {
@@ -101,7 +101,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
         } else if (type == LinkedHashSet.class) {
             return new LinkedHashSet<Object>();
         } else if (type == List.class) {
-            return new LinkedList<Object>();
+            return new ArrayList<Object>();
         } else if (type == LinkedList.class) {
             return new LinkedList<Object>();
         } else if (type == ArrayList.class) {

@@ -7,9 +7,9 @@ package org.mockito.internal.util.collections;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Observer;
 
@@ -96,7 +96,7 @@ public class HashCodeAndEqualsSafeSetTest {
     public void can_iterate() throws Exception {
         HashCodeAndEqualsSafeSet mocks = HashCodeAndEqualsSafeSet.of(mock1, mock(Observer.class));
 
-        LinkedList<Object> accumulator = new LinkedList<Object>();
+        ArrayList<Object> accumulator = new ArrayList<>();
         for (Object mock : mocks) {
             accumulator.add(mock);
         }

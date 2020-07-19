@@ -6,9 +6,9 @@ package org.concurrentmockito;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -152,7 +152,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
     }
 
     public static Set<Class<?>> runInMultipleThreads(int numberOfThreads) throws Exception {
-        List<AllTestsRunner> threads = new LinkedList<AllTestsRunner>();
+        List<AllTestsRunner> threads = new ArrayList<>();
         for (int i = 1; i <= numberOfThreads; i++) {
             threads.add(new AllTestsRunner());
         }

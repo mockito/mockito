@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.invocation;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.internal.util.MockUtil;
@@ -20,7 +20,7 @@ public class UnusedStubsFinder {
      * @param mocks full list of mocks
      */
     public List<Invocation> find(List<?> mocks) {
-        List<Invocation> unused = new LinkedList<Invocation>();
+        List<Invocation> unused = new ArrayList<>();
         for (Object mock : mocks) {
             List<Stubbing> fromSingleMock =
                     MockUtil.getInvocationContainer(mock).getStubbingsDescending();

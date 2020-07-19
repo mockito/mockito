@@ -4,8 +4,8 @@
  */
 package org.mockito.exceptions.base;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public class TraceBuilder {
@@ -22,7 +22,7 @@ public class TraceBuilder {
     private List<StackTraceElement> toTraceList() {
         assert methods.length == 0 || classes.length == 0;
 
-        List<StackTraceElement> trace = new LinkedList<StackTraceElement>();
+        List<StackTraceElement> trace = new ArrayList<>();
         for (String method : methods) {
             trace.add(new StackTraceElement("SomeClass", method, "SomeClass.java", 50));
         }

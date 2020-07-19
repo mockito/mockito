@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.util.collections;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,7 +18,7 @@ public class Iterables {
      * Converts enumeration into iterable
      */
     public static <T> Iterable<T> toIterable(Enumeration<T> in) {
-        List<T> out = new LinkedList<T>();
+        List<T> out = new ArrayList<>();
         while (in.hasMoreElements()) {
             out.add(in.nextElement());
         }

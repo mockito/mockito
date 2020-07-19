@@ -9,9 +9,9 @@ import static org.mockito.internal.invocation.TypeSafeMatching.matchesTypeSafe;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.ArgumentMatcher;
@@ -47,7 +47,7 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
     }
 
     public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {
-        LinkedList<InvocationMatcher> out = new LinkedList<InvocationMatcher>();
+        ArrayList<InvocationMatcher> out = new ArrayList<>(invocations.size());
         for (Invocation i : invocations) {
             out.add(new InvocationMatcher(i));
         }

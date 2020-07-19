@@ -4,8 +4,8 @@
  */
 package org.mockito.internal.reporting;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.ArgumentMatcher;
@@ -18,7 +18,7 @@ public class PrintSettings {
 
     public static final int MAX_LINE_LENGTH = 45;
     private boolean multiline;
-    private List<Integer> withTypeInfo = new LinkedList<Integer>();
+    private List<Integer> withTypeInfo = new ArrayList<>();
 
     public void setMultiline(boolean multiline) {
         this.multiline = multiline;

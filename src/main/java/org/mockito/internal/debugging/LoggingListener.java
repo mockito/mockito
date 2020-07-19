@@ -6,7 +6,7 @@ package org.mockito.internal.debugging;
 
 import static org.mockito.internal.util.StringUtil.join;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -15,9 +15,9 @@ import org.mockito.invocation.Invocation;
 public class LoggingListener implements FindingsListener {
     private final boolean warnAboutUnstubbed;
 
-    private final List<String> argMismatchStubs = new LinkedList<String>();
-    private final List<String> unusedStubs = new LinkedList<String>();
-    private final List<String> unstubbedCalls = new LinkedList<String>();
+    private final List<String> argMismatchStubs = new ArrayList<>();
+    private final List<String> unusedStubs = new ArrayList<>();
+    private final List<String> unstubbedCalls = new ArrayList<>();
 
     public LoggingListener(boolean warnAboutUnstubbed) {
         this.warnAboutUnstubbed = warnAboutUnstubbed;
@@ -57,7 +57,7 @@ public class LoggingListener implements FindingsListener {
             return "";
         }
 
-        List<String> lines = new LinkedList<String>();
+        List<String> lines = new ArrayList<>();
         lines.add(
                 "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):");
 

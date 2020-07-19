@@ -183,7 +183,7 @@ public interface IMethods {
 
     List<String> listReturningMethod(Object... objects);
 
-    LinkedList<String> linkedListReturningMethod();
+    List<String> linkedListReturningMethod();
 
     String toString();
 

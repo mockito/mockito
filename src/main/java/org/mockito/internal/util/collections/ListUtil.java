@@ -4,8 +4,9 @@
  */
 package org.mockito.internal.util.collections;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Basic list/collection operators.
@@ -15,8 +16,8 @@ import java.util.LinkedList;
  */
 public class ListUtil {
 
-    public static <T> LinkedList<T> filter(Collection<T> collection, Filter<T> filter) {
-        LinkedList<T> filtered = new LinkedList<T>();
+    public static <T> List<T> filter(Collection<T> collection, Filter<T> filter) {
+        ArrayList<T> filtered = new ArrayList<>();
         for (T t : collection) {
             if (!filter.isOut(t)) {
                 filtered.add(t);
@@ -25,9 +26,9 @@ public class ListUtil {
         return filtered;
     }
 
-    public static <From, To> LinkedList<To> convert(
+    public static <From, To> List<To> convert(
             Collection<From> collection, Converter<From, To> converter) {
-        LinkedList<To> converted = new LinkedList<To>();
+        ArrayList<To> converted = new ArrayList<>();
         for (From f : collection) {
             converted.add(converter.convert(f));
         }

@@ -7,7 +7,6 @@ package org.mockito.internal.creation.settings;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -40,7 +39,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
             new CopyOnWriteArrayList<StubbingLookupListener>();
 
     protected List<VerificationStartedListener> verificationStartedListeners =
-            new LinkedList<VerificationStartedListener>();
+            new ArrayList<VerificationStartedListener>();
     protected boolean stubOnly;
     protected boolean stripAnnotations;
     private boolean useConstructor;
