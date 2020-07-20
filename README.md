@@ -27,7 +27,7 @@ The maintainers of org.mockito:mockito-core and thousands of other packages are 
 
 ## Development
 
-Mockito [continuously delivers](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview) improvements using Shipkit library (http://shipkit.org). See the [latest release notes](https://github.com/mockito/mockito/blob/release/3.x/doc/release-notes/official.md) and [latest documentation](http://javadoc.io/page/org.mockito/mockito-core/2/org/mockito/Mockito.html). Docs in javadoc.io are available 24h after release. Read also about [semantic versioning in Mockito](https://github.com/mockito/mockito/wiki/Semantic-Versioning). **Note: not every version is published to Maven Central.**
+Mockito [continuously delivers](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview) improvements using Shipkit library (http://shipkit.org). See the [latest release notes](https://github.com/mockito/mockito/blob/release/3.x/doc/release-notes/official.md) and [latest documentation](http://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html). Docs in javadoc.io are available 24h after release. Read also about [semantic versioning in Mockito](https://github.com/mockito/mockito/wiki/Semantic-Versioning). **Note: not every version is published to Maven Central.**
 
 Older 1.x and 2.x releases are available in
 [Central Repository](http://search.maven.org/#artifactdetails|org.mockito|mockito-core|1.10.19|jar)
