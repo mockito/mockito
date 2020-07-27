@@ -11,20 +11,14 @@ import static org.mockito.Mockito.times;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
 public final class StaticMockTest {
-
-    @Rule // Adding rule to assert properly managed life-cycle for static mocks
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Test
     public void testStaticMockSimple() {

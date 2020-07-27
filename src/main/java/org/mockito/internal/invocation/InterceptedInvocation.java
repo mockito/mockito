@@ -141,6 +141,30 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         return realMethod.invoke();
     }
 
+    /**
+     * @deprecated Not used by Mockito but by mockito-scala
+     */
+    @Deprecated
+    public MockReference<Object> getMockRef() {
+        return mockRef;
+    }
+
+    /**
+     * @deprecated Not used by Mockito but by mockito-scala
+     */
+    @Deprecated
+    public MockitoMethod getMockitoMethod() {
+        return mockitoMethod;
+    }
+
+    /**
+     * @deprecated Not used by Mockito but by mockito-scala
+     */
+    @Deprecated
+    public RealMethod getRealMethod() {
+        return realMethod;
+    }
+
     @Override
     public int hashCode() {
         // TODO SF we need to provide hash code implementation so that there are no unexpected,

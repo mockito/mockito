@@ -159,6 +159,15 @@ public class MockingProgressImpl implements MockingProgress {
         validateMostStuff();
     }
 
+    public void mockingStarted(Class<?> mock, MockCreationSettings settings) {
+        for (MockitoListener listener : listeners) {
+            if (listener instanceof MockCreationListener) {
+                ((MockCreationListener) listener).onStaticMockCreated(mock, settings);
+            }
+        }
+        validateMostStuff();
+    }
+
     public void addListener(MockitoListener listener) {
         addListener(listener, listeners);
     }
