@@ -2227,7 +2227,7 @@ public class Mockito extends ArgumentMatchers {
      * Although it is possible to verify a stubbed invocation, usually <b>it's just redundant</b>.
      * Let's say you've stubbed <code>foo.bar()</code>.
      * If your code cares what <code>foo.bar()</code> returns then something else breaks(often before even <code>verify()</code> gets executed).
-     * If your code doesn't care what <code>get(0)</code> returns then it should not be stubbed.
+     * If your code doesn't care what <code>foo.bar()</code> returns then it should not be stubbed.
      *
      * <p>
      * See examples in javadoc for {@link Mockito} class
