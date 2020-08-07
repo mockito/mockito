@@ -5,7 +5,6 @@
 package org.mockito.internal.configuration;
 
 import static org.mockito.internal.exceptions.Reporter.moreThanOneAnnotationNotAllowed;
-import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -19,7 +18,9 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.plugins.AnnotationEngine;
+import org.mockito.plugins.MemberAccessor;
 
 /**
  * Initializes fields annotated with &#64;{@link org.mockito.Mock} or &#64;{@link org.mockito.Captor}.
@@ -76,8 +77,9 @@ public class IndependentAnnotationEngine
                 if (mock != null) {
                     throwIfAlreadyAssigned(field, alreadyAssigned);
                     alreadyAssigned = true;
+                    final MemberAccessor accessor = Plugins.getMemberAccessor();
                     try {
-                        setField(testInstance, field, mock);
+                        accessor.set(field, testInstance, mock);
                     } catch (Exception e) {
                         for (MockedStatic<?> mockedStatic : mockedStatics) {
                             mockedStatic.close();

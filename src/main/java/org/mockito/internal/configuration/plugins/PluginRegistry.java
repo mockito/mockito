@@ -5,13 +5,7 @@
 package org.mockito.internal.configuration.plugins;
 
 import org.mockito.internal.creation.instance.InstantiatorProviderAdapter;
-import org.mockito.plugins.AnnotationEngine;
-import org.mockito.plugins.InstantiatorProvider;
-import org.mockito.plugins.InstantiatorProvider2;
-import org.mockito.plugins.MockMaker;
-import org.mockito.plugins.MockitoLogger;
-import org.mockito.plugins.PluginSwitch;
-import org.mockito.plugins.StackTraceCleanerProvider;
+import org.mockito.plugins.*;
 
 class PluginRegistry {
 
@@ -21,6 +15,10 @@ class PluginRegistry {
     private final MockMaker mockMaker =
             new PluginLoader(pluginSwitch, DefaultMockitoPlugins.INLINE_ALIAS)
                     .loadPlugin(MockMaker.class);
+
+    private final MemberAccessor memberAccessor =
+            new PluginLoader(pluginSwitch, DefaultMockitoPlugins.MODULE_ALIAS)
+                    .loadPlugin(MemberAccessor.class);
 
     private final StackTraceCleanerProvider stackTraceCleanerProvider =
             new PluginLoader(pluginSwitch).loadPlugin(StackTraceCleanerProvider.class);
@@ -60,6 +58,16 @@ class PluginRegistry {
      */
     MockMaker getMockMaker() {
         return mockMaker;
+    }
+
+    /**
+     * Returns the implementation of the member accessor available for the current runtime.
+     *
+     * <p>Returns {@link org.mockito.internal.util.reflection.ReflectionMemberAccessor} if no
+     * {@link org.mockito.plugins.MockMaker} extension exists or is visible in the current classpath.</p>
+     */
+    MemberAccessor getMemberAccessor() {
+        return memberAccessor;
     }
 
     /**

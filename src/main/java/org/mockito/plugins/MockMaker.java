@@ -9,7 +9,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 
-import static org.mockito.internal.util.StringUtil.*;
+import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * The facility to create mocks.

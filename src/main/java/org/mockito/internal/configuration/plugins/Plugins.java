@@ -4,12 +4,7 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.plugins.AnnotationEngine;
-import org.mockito.plugins.InstantiatorProvider2;
-import org.mockito.plugins.MockMaker;
-import org.mockito.plugins.MockitoLogger;
-import org.mockito.plugins.MockitoPlugins;
-import org.mockito.plugins.StackTraceCleanerProvider;
+import org.mockito.plugins.*;
 
 /**
  * Access to Mockito behavior that can be reconfigured by plugins
@@ -33,6 +28,16 @@ public class Plugins {
      */
     public static MockMaker getMockMaker() {
         return registry.getMockMaker();
+    }
+
+    /**
+     * Returns the implementation of the member accessor available for the current runtime.
+     *
+     * <p>Returns default member accessor if no
+     * {@link org.mockito.plugins.MemberAccessor} extension exists or is visible in the current classpath.</p>
+     */
+    public static MemberAccessor getMemberAccessor() {
+        return registry.getMemberAccessor();
     }
 
     /**
