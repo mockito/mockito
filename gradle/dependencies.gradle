@@ -25,8 +25,7 @@ libraries.errorproneTestApi = "com.google.errorprone:error_prone_test_helpers:${
 
 libraries.autoservice = "com.google.auto.service:auto-service:1.0-rc5"
 
-// objenesis 3.x with full Java 11 support requires Java 8, bump version when Java 7 support is dropped
-libraries.objenesis = 'org.objenesis:objenesis:2.6'
+libraries.objenesis = 'org.objenesis:objenesis:3.1'
 
 libraries.asm = 'org.ow2.asm:asm:7.0'
 
