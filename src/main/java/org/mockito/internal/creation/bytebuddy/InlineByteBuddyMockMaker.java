@@ -199,6 +199,8 @@ public class InlineByteBuddyMockMaker
 
     private final ThreadLocal<Boolean> mockitoConstruction = ThreadLocal.withInitial(() -> false);
 
+    private final ThreadLocal<Object> currentSpied = new ThreadLocal<>();
+
     public InlineByteBuddyMockMaker() {
         if (INITIALIZATION_ERROR != null) {
             String detail;
@@ -252,8 +254,10 @@ public class InlineByteBuddyMockMaker
                 };
         ConstructionCallback onConstruction =
                 (type, object, arguments, parameterTypeNames) -> {
-                    if (mockitoConstruction.get() || currentConstruction.get() != type) {
-                        return;
+                    if (mockitoConstruction.get()) {
+                        return currentSpied.get();
+                    } else if (currentConstruction.get() != type) {
+                        return null;
                     }
                     currentConstruction.remove();
                     isSuspended.set(true);
@@ -273,6 +277,7 @@ public class InlineByteBuddyMockMaker
                     } finally {
                         isSuspended.set(false);
                     }
+                    return null;
                 };
 
         bytecodeGenerator =
@@ -288,6 +293,27 @@ public class InlineByteBuddyMockMaker
 
     @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+        return doCreateMock(settings, handler, false);
+    }
+
+    @Override
+    public <T> Optional<T> createSpy(
+            MockCreationSettings<T> settings, MockHandler handler, T object) {
+        if (object == null) {
+            throw new MockitoConfigurationException("Spy instance must not be null");
+        }
+        currentSpied.set(object);
+        try {
+            return Optional.ofNullable(doCreateMock(settings, handler, true));
+        } finally {
+            currentSpied.remove();
+        }
+    }
+
+    private <T> T doCreateMock(
+            MockCreationSettings<T> settings,
+            MockHandler handler,
+            boolean nullOnNonInlineConstruction) {
         Class<? extends T> type = createMockType(settings);
 
         try {
@@ -296,6 +322,9 @@ public class InlineByteBuddyMockMaker
                 // We attempt to use the "native" mock maker first that avoids Objenesis and Unsafe
                 instance = newInstance(type);
             } catch (InstantiationException ignored) {
+                if (nullOnNonInlineConstruction) {
+                    return null;
+                }
                 Instantiator instantiator =
                         Plugins.getInstantiatorProvider().getInstantiator(settings);
                 instance = instantiator.newInstance(type);
@@ -753,7 +782,8 @@ public class InlineByteBuddyMockMaker
         @Override
         public int getCount() {
             if (count == 0) {
-                throw new MockitoConfigurationException("mocked construction context is not initialized");
+                throw new MockitoConfigurationException(
+                        "mocked construction context is not initialized");
             }
             return count;
         }
@@ -767,7 +797,8 @@ public class InlineByteBuddyMockMaker
                     parameterTypes[index++] = PRIMITIVES.get(parameterTypeName);
                 } else {
                     try {
-                        parameterTypes[index++] = Class.forName(parameterTypeName, false, type.getClassLoader());
+                        parameterTypes[index++] =
+                                Class.forName(parameterTypeName, false, type.getClassLoader());
                     } catch (ClassNotFoundException e) {
                         throw new MockitoException(
                                 "Could not find parameter of type " + parameterTypeName, e);
