@@ -35,11 +35,21 @@ public class MockUtil {
     public static <T> T createMock(MockCreationSettings<T> settings) {
         MockHandler mockHandler = createMockHandler(settings);
 
-        T mock = mockMaker.createMock(settings, mockHandler);
-
         Object spiedInstance = settings.getSpiedInstance();
+
+        T mock;
         if (spiedInstance != null) {
-            new LenientCopyTool().copyToMock(spiedInstance, mock);
+            mock =
+                    mockMaker
+                            .createSpy(settings, mockHandler, (T) spiedInstance)
+                            .orElseGet(
+                                    () -> {
+                                        T instance = mockMaker.createMock(settings, mockHandler);
+                                        new LenientCopyTool().copyToMock(spiedInstance, instance);
+                                        return instance;
+                                    });
+        } else {
+            mock = mockMaker.createMock(settings, mockHandler);
         }
 
         return mock;

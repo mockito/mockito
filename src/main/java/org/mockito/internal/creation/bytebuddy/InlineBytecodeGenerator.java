@@ -350,8 +350,12 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                 return byteBuddy
                         .redefine(
                                 classBeingRedefined,
+                                //        new ClassFileLocator.Compound(
                                 ClassFileLocator.Simple.of(
-                                        classBeingRedefined.getName(), classfileBuffer))
+                                        classBeingRedefined.getName(), classfileBuffer)
+                                //            ,ClassFileLocator.ForClassLoader.ofSystemLoader()
+                                //        )
+                                )
                         // Note: The VM erases parameter meta data from the provided class file
                         // (bug). We just add this information manually.
                         .visit(new ParameterWritingVisitorWrapper(classBeingRedefined))

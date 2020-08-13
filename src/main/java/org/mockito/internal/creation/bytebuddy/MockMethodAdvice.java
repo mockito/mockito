@@ -13,6 +13,7 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
@@ -20,6 +21,8 @@ import java.util.function.Predicate;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.asm.AsmVisitorWrapper;
+import net.bytebuddy.description.field.FieldDescription;
+import net.bytebuddy.description.field.FieldList;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.method.ParameterDescription;
@@ -28,6 +31,7 @@ import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.bind.annotation.Argument;
 import net.bytebuddy.implementation.bind.annotation.This;
+import net.bytebuddy.implementation.bytecode.StackSize;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
 import net.bytebuddy.jar.asm.Label;
 import net.bytebuddy.jar.asm.MethodVisitor;
@@ -166,9 +170,9 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     }
 
     @Override
-    public void handleConstruction(
+    public Object handleConstruction(
             Class<?> type, Object object, Object[] arguments, String[] parameterTypeNames) {
-        onConstruction.accept(type, object, arguments, parameterTypeNames);
+        return onConstruction.apply(type, object, arguments, parameterTypeNames);
     }
 
     @Override
@@ -423,10 +427,13 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                              *
                              * if (MockMethodDispatcher.isConstructorMock(<identifier>, Current.class) {
                              *   super(<default arguments>);
-                             *   MockMethodDispatcher.handleConstruction(Current.class,
+                             *   Current o = (Current) MockMethodDispatcher.handleConstruction(Current.class,
                              *       this,
                              *       new Object[] {argument1, argument2, ...},
                              *       new String[] {argumentType1, argumentType2, ...});
+                             *   if (o != null) {
+                             *     this.field = o.field; // for each declared field
+                             *   }
                              *   return;
                              * }
                              *
@@ -549,19 +556,72 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                                     Type.getInternalName(MockMethodDispatcher.class),
                                     "handleConstruction",
                                     Type.getMethodDescriptor(
-                                            Type.VOID_TYPE,
+                                            Type.getType(Object.class),
                                             Type.getType(String.class),
                                             Type.getType(Class.class),
                                             Type.getType(Object.class),
                                             Type.getType(Object[].class),
                                             Type.getType(String[].class)),
                                     false);
+                            FieldList<FieldDescription.InDefinedShape> fields =
+                                    instrumentedType.getDeclaredFields().filter(not(isStatic()));
+                            super.visitTypeInsn(
+                                    Opcodes.CHECKCAST, instrumentedType.getInternalName());
+                            super.visitInsn(Opcodes.DUP);
+                            Label noSpy = new Label();
+                            super.visitJumpInsn(Opcodes.IFNULL, noSpy);
+                            for (FieldDescription field : fields) {
+                                super.visitInsn(Opcodes.DUP);
+                                super.visitFieldInsn(
+                                        Opcodes.GETFIELD,
+                                        instrumentedType.getInternalName(),
+                                        field.getInternalName(),
+                                        field.getDescriptor());
+                                super.visitVarInsn(Opcodes.ALOAD, 0);
+                                super.visitInsn(
+                                        field.getType().getStackSize() == StackSize.DOUBLE
+                                                ? Opcodes.DUP_X2
+                                                : Opcodes.DUP_X1);
+                                super.visitInsn(Opcodes.POP);
+                                super.visitFieldInsn(
+                                        Opcodes.PUTFIELD,
+                                        instrumentedType.getInternalName(),
+                                        field.getInternalName(),
+                                        field.getDescriptor());
+                            }
+                            super.visitLabel(noSpy);
+                            if (implementationContext
+                                    .getClassFileVersion()
+                                    .isAtLeast(ClassFileVersion.JAVA_V6)) {
+                                Object[] locals =
+                                        toFrames(
+                                                instrumentedType.getInternalName(),
+                                                instrumentedMethod
+                                                        .getParameters()
+                                                        .asTypeList()
+                                                        .asErasures());
+                                super.visitFrame(
+                                        Opcodes.F_FULL,
+                                        locals.length,
+                                        locals,
+                                        1,
+                                        new Object[] {instrumentedType.getInternalName()});
+                            }
+                            super.visitInsn(Opcodes.POP);
                             super.visitInsn(Opcodes.RETURN);
                             super.visitLabel(label);
                             if (implementationContext
                                     .getClassFileVersion()
                                     .isAtLeast(ClassFileVersion.JAVA_V6)) {
-                                super.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
+                                Object[] locals =
+                                        toFrames(
+                                                Opcodes.UNINITIALIZED_THIS,
+                                                instrumentedMethod
+                                                        .getParameters()
+                                                        .asTypeList()
+                                                        .asErasures());
+                                super.visitFrame(
+                                        Opcodes.F_FULL, locals.length, locals, 0, new Object[0]);
                             }
                         }
 
@@ -582,6 +642,32 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                 }
             }
             return methodVisitor;
+        }
+
+        private static Object[] toFrames(Object self, List<TypeDescription> types) {
+            Object[] frames = new Object[1 + types.size()];
+            frames[0] = self;
+            int index = 0;
+            for (TypeDescription type : types) {
+                Object frame;
+                if (type.represents(boolean.class)
+                        || type.represents(byte.class)
+                        || type.represents(short.class)
+                        || type.represents(char.class)
+                        || type.represents(int.class)) {
+                    frame = Opcodes.INTEGER;
+                } else if (type.represents(long.class)) {
+                    frame = Opcodes.LONG;
+                } else if (type.represents(float.class)) {
+                    frame = Opcodes.FLOAT;
+                } else if (type.represents(double.class)) {
+                    frame = Opcodes.DOUBLE;
+                } else {
+                    frame = type.getInternalName();
+                }
+                frames[++index] = frame;
+            }
+            return frames;
         }
     }
 

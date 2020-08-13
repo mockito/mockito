@@ -11,11 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.Assume.assumeTrue;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
@@ -55,6 +51,29 @@ public class InlineByteBuddyMockMakerTest
         FinalClass proxy =
                 mockMaker.createMock(settings, new MockHandlerImpl<FinalClass>(settings));
         assertThat(proxy.foo()).isEqualTo("bar");
+    }
+
+    @Test
+    public void should_create_mock_from_final_spy() throws Exception {
+        MockCreationSettings<FinalSpy> settings = settingsFor(FinalSpy.class);
+        Optional<FinalSpy> proxy =
+                mockMaker.createSpy(
+                        settings,
+                        new MockHandlerImpl<>(settings),
+                        new FinalSpy("value", true, (byte) 1, (short) 1, (char) 1, 1, 1L, 1f, 1d));
+        assertThat(proxy)
+                .hasValueSatisfying(
+                        spy -> {
+                            assertThat(spy.aString).isEqualTo("value");
+                            assertThat(spy.aBoolean).isTrue();
+                            assertThat(spy.aByte).isEqualTo((byte) 1);
+                            assertThat(spy.aShort).isEqualTo((short) 1);
+                            assertThat(spy.aChar).isEqualTo((char) 1);
+                            assertThat(spy.anInt).isEqualTo(1);
+                            assertThat(spy.aLong).isEqualTo(1L);
+                            assertThat(spy.aFloat).isEqualTo(1f);
+                            assertThat(spy.aDouble).isEqualTo(1d);
+                        });
     }
 
     @Test
@@ -413,6 +432,40 @@ public class InlineByteBuddyMockMakerTest
 
         public String foo() {
             return "foo";
+        }
+    }
+
+    private static final class FinalSpy {
+
+        private final String aString;
+        private final boolean aBoolean;
+        private final byte aByte;
+        private final short aShort;
+        private final char aChar;
+        private final int anInt;
+        private final long aLong;
+        private final float aFloat;
+        private final double aDouble;
+
+        private FinalSpy(
+                String aString,
+                boolean aBoolean,
+                byte aByte,
+                short aShort,
+                char aChar,
+                int anInt,
+                long aLong,
+                float aFloat,
+                double aDouble) {
+            this.aString = aString;
+            this.aBoolean = aBoolean;
+            this.aByte = aByte;
+            this.aShort = aShort;
+            this.aChar = aChar;
+            this.anInt = anInt;
+            this.aLong = aLong;
+            this.aFloat = aFloat;
+            this.aDouble = aDouble;
         }
     }
 

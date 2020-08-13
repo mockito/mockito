@@ -9,6 +9,7 @@ import org.mockito.MockedConstruction;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -26,6 +27,12 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
     @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         return defaultByteBuddyMockMaker.createMock(settings, handler);
+    }
+
+    @Override
+    public <T> Optional<T> createSpy(
+            MockCreationSettings<T> settings, MockHandler handler, T object) {
+        return defaultByteBuddyMockMaker.createSpy(settings, handler, object);
     }
 
     @Override

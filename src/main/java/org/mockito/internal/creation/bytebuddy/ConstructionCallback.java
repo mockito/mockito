@@ -6,5 +6,5 @@ package org.mockito.internal.creation.bytebuddy;
 
 public interface ConstructionCallback {
 
-    void accept(Class<?> type, Object object, Object[] arguments, String[] parameterTypeNames);
+    Object apply(Class<?> type, Object object, Object[] arguments, String[] parameterTypeNames);
 }
