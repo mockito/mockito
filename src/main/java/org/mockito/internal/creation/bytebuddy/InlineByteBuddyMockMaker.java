@@ -35,6 +35,7 @@ import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.InlineMockMaker;
+import org.mockito.plugins.MemberAccessor;
 
 import static org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.*;
 import static org.mockito.internal.util.StringUtil.*;
@@ -569,14 +570,11 @@ public class InlineByteBuddyMockMaker
         for (Class<?> type : types) {
             arguments[index++] = makeStandardArgument(type);
         }
+        MemberAccessor accessor = Plugins.getMemberAccessor();
         try {
-            if (!Modifier.isPublic(selected.getModifiers())
-                    || !Modifier.isPublic(cls.getModifiers())) {
-                selected.setAccessible(true);
-            }
             mockitoConstruction.set(true);
             try {
-                return (T) selected.newInstance(arguments);
+                return (T) accessor.newInstance(selected, arguments);
             } finally {
                 mockitoConstruction.set(false);
             }

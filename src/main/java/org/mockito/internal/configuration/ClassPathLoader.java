@@ -64,7 +64,7 @@ public class ClassPathLoader {
         }
 
         try {
-            return (IMockitoConfiguration) configClass.newInstance();
+            return (IMockitoConfiguration) configClass.getDeclaredConstructor().newInstance();
         } catch (ClassCastException e) {
             throw new MockitoConfigurationException(
                     "MockitoConfiguration class must implement "

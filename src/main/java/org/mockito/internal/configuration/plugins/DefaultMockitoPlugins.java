@@ -79,7 +79,7 @@ class DefaultMockitoPlugins implements MockitoPlugins {
             // Default implementation. Use our own ClassLoader instead of the context
             // ClassLoader, as the default implementation is assumed to be part of
             // Mockito and may not be available via the context ClassLoader.
-            return pluginType.cast(Class.forName(className).newInstance());
+            return pluginType.cast(Class.forName(className).getDeclaredConstructor().newInstance());
         } catch (Exception e) {
             throw new IllegalStateException(
                     "Internal problem occurred, please report it. "

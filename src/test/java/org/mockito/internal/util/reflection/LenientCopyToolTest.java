@@ -6,7 +6,6 @@ package org.mockito.internal.util.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Field;
@@ -126,20 +125,6 @@ public class LenientCopyToolTest extends TestBase {
 
         // then
         assertEquals(((InheritMe) from).privateInherited, ((InheritMe) to).privateInherited);
-    }
-
-    @Test
-    public void shouldEnableAndThenDisableAccessibility() throws Exception {
-        // given
-        Field privateField = SomeObject.class.getDeclaredField("privateField");
-        assertFalse(privateField.isAccessible());
-
-        // when
-        tool.copyToMock(from, to);
-
-        // then
-        privateField = SomeObject.class.getDeclaredField("privateField");
-        assertFalse(privateField.isAccessible());
     }
 
     @Test

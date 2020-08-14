@@ -165,7 +165,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
                         classpath_with_objenesis);
 
         // when
-        mock_maker_class_loaded_fine_until.newInstance();
+        mock_maker_class_loaded_fine_until.getConstructor().newInstance();
 
         // then everything went fine
     }
