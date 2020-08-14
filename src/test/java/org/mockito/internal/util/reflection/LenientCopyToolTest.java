@@ -13,6 +13,7 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 
 import org.junit.Test;
+import org.mockito.plugins.MemberAccessor;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -144,19 +145,20 @@ public class LenientCopyToolTest extends TestBase {
     @Test
     public void shouldContinueEvenIfThereAreProblemsCopyingSingleFieldValue() throws Exception {
         // given
-        tool.fieldCopier = mock(FieldCopier.class);
+        tool.accessor = mock(MemberAccessor.class);
 
         doNothing()
-                .doThrow(new IllegalAccessException())
+                .doThrow(new IllegalStateException())
                 .doNothing()
-                .when(tool.fieldCopier)
-                .copyValue(anyObject(), anyObject(), any(Field.class));
+                .when(tool.accessor)
+                .set(any(Field.class), anyObject(), anyObject());
 
         // when
         tool.copyToMock(from, to);
 
         // then
-        verify(tool.fieldCopier, atLeast(3)).copyValue(any(), any(), any(Field.class));
+        verify(tool.accessor, atLeast(3)).get(any(Field.class), any());
+        verify(tool.accessor, atLeast(3)).set(any(Field.class), any(), any());
     }
 
     @Test

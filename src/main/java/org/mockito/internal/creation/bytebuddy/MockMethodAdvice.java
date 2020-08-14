@@ -40,6 +40,7 @@ import net.bytebuddy.jar.asm.Type;
 import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.OpenedClassReader;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
@@ -49,6 +50,7 @@ import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.internal.invocation.mockref.MockWeakReference;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
+import org.mockito.plugins.MemberAccessor;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
@@ -244,10 +246,6 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
         @Override
         public Object invoke() throws Throwable {
-            if (!Modifier.isPublic(
-                    origin.getDeclaringClass().getModifiers() & origin.getModifiers())) {
-                origin.setAccessible(true);
-            }
             selfCallInfo.set(instanceRef.get());
             return tryInvoke(origin, instanceRef.get(), arguments);
         }
@@ -279,10 +277,6 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         @Override
         public Object invoke() throws Throwable {
             Method method = origin.getJavaMethod();
-            if (!Modifier.isPublic(
-                    method.getDeclaringClass().getModifiers() & method.getModifiers())) {
-                method.setAccessible(true);
-            }
             MockMethodDispatcher mockMethodDispatcher =
                     MockMethodDispatcher.get(identifier, instanceRef.get());
             if (!(mockMethodDispatcher instanceof MockMethodAdvice)) {
@@ -324,9 +318,6 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
         @Override
         public Object invoke() throws Throwable {
-            if (!Modifier.isPublic(type.getModifiers() & origin.getModifiers())) {
-                origin.setAccessible(true);
-            }
             selfCallInfo.set(type);
             return tryInvoke(origin, null, arguments);
         }
@@ -334,8 +325,9 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     private static Object tryInvoke(Method origin, Object instance, Object[] arguments)
             throws Throwable {
+        MemberAccessor accessor = Plugins.getMemberAccessor();
         try {
-            return origin.invoke(instance, arguments);
+            return accessor.invoke(origin, instance, arguments);
         } catch (InvocationTargetException exception) {
             Throwable cause = exception.getCause();
             new ConditionalStackTraceFilter()

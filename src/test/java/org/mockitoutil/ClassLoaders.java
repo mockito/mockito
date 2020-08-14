@@ -36,6 +36,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.plugins.MemberAccessor;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 import org.objenesis.instantiator.ObjectInstantiator;
@@ -167,9 +169,8 @@ public abstract class ClassLoaders {
                         continue;
                     }
                     if (declaredField.getType() == field.getType()) { // don't copy this
-                        field.setAccessible(true);
-                        declaredField.setAccessible(true);
-                        declaredField.set(reloaded, field.get(task));
+                        MemberAccessor accessor = Plugins.getMemberAccessor();
+                        accessor.set(declaredField, reloaded, accessor.get(field, task));
                     }
                 }
 

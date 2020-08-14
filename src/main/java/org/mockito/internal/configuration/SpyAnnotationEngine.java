@@ -22,8 +22,10 @@ import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.plugins.AnnotationEngine;
+import org.mockito.plugins.MemberAccessor;
 
 /**
  * Process fields annotated with &#64;Spy.
@@ -50,23 +52,23 @@ public class SpyAnnotationEngine
     @Override
     public AutoCloseable process(Class<?> context, Object testInstance) {
         Field[] fields = context.getDeclaredFields();
+        MemberAccessor accessor = Plugins.getMemberAccessor();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Spy.class)
                     && !field.isAnnotationPresent(InjectMocks.class)) {
                 assertNoIncompatibleAnnotations(Spy.class, field, Mock.class, Captor.class);
-                field.setAccessible(true);
                 Object instance;
                 try {
-                    instance = field.get(testInstance);
+                    instance = accessor.get(field, testInstance);
                     if (MockUtil.isMock(instance)) {
                         // instance has been spied earlier
                         // for example happens when MockitoAnnotations.openMocks is called two
                         // times.
                         Mockito.reset(instance);
                     } else if (instance != null) {
-                        field.set(testInstance, spyInstance(field, instance));
+                        accessor.set(field, testInstance, spyInstance(field, instance));
                     } else {
-                        field.set(testInstance, spyNewInstance(testInstance, field));
+                        accessor.set(field, testInstance, spyNewInstance(testInstance, field));
                     }
                 } catch (Exception e) {
                     throw new MockitoException(
@@ -123,8 +125,8 @@ public class SpyAnnotationEngine
 
         Constructor<?> constructor = noArgConstructorOf(type);
         if (Modifier.isPrivate(constructor.getModifiers())) {
-            constructor.setAccessible(true);
-            return Mockito.mock(type, settings.spiedInstance(constructor.newInstance()));
+            MemberAccessor accessor = Plugins.getMemberAccessor();
+            return Mockito.mock(type, settings.spiedInstance(accessor.newInstance(constructor)));
         } else {
             return Mockito.mock(type, settings.useConstructor());
         }

@@ -4,15 +4,7 @@
  */
 package org.mockito.moduletest;
 
-import java.util.concurrent.locks.Lock;
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.loading.ClassInjector;
-import net.bytebuddy.implementation.FixedValue;
-import net.bytebuddy.jar.asm.ClassWriter;
-import net.bytebuddy.jar.asm.ModuleVisitor;
-import net.bytebuddy.jar.asm.Opcodes;
-import net.bytebuddy.utility.OpenedClassReader;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -22,33 +14,19 @@ import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.io.IOException;
-import java.lang.module.Configuration;
-import java.lang.module.ModuleDescriptor;
-import java.lang.module.ModuleFinder;
-import java.lang.module.ModuleReader;
-import java.lang.module.ModuleReference;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
-import java.util.stream.Stream;
+import java.util.concurrent.locks.Lock;
 
-import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assume.assumeThat;
+import static org.mockito.moduletest.ModuleUtil.layer;
+import static org.mockito.moduletest.ModuleUtil.modularJar;
 
 @RunWith(Parameterized.class)
 public class ModuleHandlingTest {
@@ -71,7 +49,7 @@ public class ModuleHandlingTest {
         assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
 
         Path jar = modularJar(true, true, true);
-        ModuleLayer layer = layer(jar, true);
+        ModuleLayer layer = layer(jar, true, namedModules);
 
         ClassLoader loader = layer.findLoader("mockito.test");
         Class<?> type = loader.loadClass("sample.MyCallable");
@@ -97,7 +75,7 @@ public class ModuleHandlingTest {
         assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
 
         Path jar = modularJar(true, true, true);
-        ModuleLayer layer = layer(jar, true);
+        ModuleLayer layer = layer(jar, true, namedModules);
 
         ClassLoader loader = layer.findLoader("mockito.test");
         Class<?> type = loader.loadClass("java.util.concurrent.locks.Lock");
@@ -125,7 +103,7 @@ public class ModuleHandlingTest {
         assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(true));
 
         Path jar = modularJar(false, false, false);
-        ModuleLayer layer = layer(jar, false);
+        ModuleLayer layer = layer(jar, false, namedModules);
 
         ClassLoader loader = layer.findLoader("mockito.test");
         Class<?> type = loader.loadClass("sample.MyCallable");
@@ -145,7 +123,7 @@ public class ModuleHandlingTest {
         assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
 
         Path jar = modularJar(false, true, true);
-        ModuleLayer layer = layer(jar, true);
+        ModuleLayer layer = layer(jar, true, namedModules);
 
         ClassLoader loader = layer.findLoader("mockito.test");
         Class<?> type = loader.loadClass("sample.MyCallable");
@@ -171,7 +149,7 @@ public class ModuleHandlingTest {
         assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
 
         Path jar = modularJar(true, true, true);
-        ModuleLayer layer = layer(jar, false);
+        ModuleLayer layer = layer(jar, false, namedModules);
 
         ClassLoader loader = layer.findLoader("mockito.test");
         Class<?> type = loader.loadClass("sample.MyCallable");
@@ -197,7 +175,7 @@ public class ModuleHandlingTest {
         assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
 
         Path jar = modularJar(true, false, true);
-        ModuleLayer layer = layer(jar, false);
+        ModuleLayer layer = layer(jar, false, namedModules);
 
         ClassLoader loader = layer.findLoader("mockito.test");
         Class<?> type = loader.loadClass("sample.MyCallable");
@@ -223,7 +201,7 @@ public class ModuleHandlingTest {
         assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
 
         Path jar = modularJar(true, true, false);
-        ModuleLayer layer = layer(jar, false);
+        ModuleLayer layer = layer(jar, false, namedModules);
 
         ClassLoader loader = layer.findLoader("mockito.test");
         Class<?> type = loader.loadClass("sample.MyCallable");
@@ -252,7 +230,7 @@ public class ModuleHandlingTest {
         assumeThat(!Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable(), is(true));
 
         Path jar = modularJar(false, false, false);
-        ModuleLayer layer = layer(jar, false);
+        ModuleLayer layer = layer(jar, false, namedModules);
 
         ClassLoader loader = layer.findLoader("mockito.test");
         Class<?> type = loader.loadClass("sample.MyCallable");
@@ -279,7 +257,7 @@ public class ModuleHandlingTest {
         assumeThat(!Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable(), is(false));
 
         Path jar = modularJar(false, false, false);
-        ModuleLayer layer = layer(jar, false);
+        ModuleLayer layer = layer(jar, false, namedModules);
 
         ClassLoader loader = layer.findLoader("mockito.test");
         Class<?> type = loader.loadClass("sample.MyCallable");
@@ -297,121 +275,5 @@ public class ModuleHandlingTest {
         } finally {
             Thread.currentThread().setContextClassLoader(contextLoader);
         }
-    }
-
-    private static Path modularJar(boolean isPublic, boolean isExported, boolean isOpened) throws IOException {
-        Path jar = Files.createTempFile("sample-module", ".jar");
-        try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jar))) {
-            out.putNextEntry(new JarEntry("module-info.class"));
-            out.write(moduleInfo(isExported, isOpened));
-            out.closeEntry();
-            out.putNextEntry(new JarEntry("sample/MyCallable.class"));
-            out.write(type(isPublic));
-            out.closeEntry();
-        }
-        return jar;
-    }
-
-    private static byte[] type(boolean isPublic) {
-        return new ByteBuddy()
-            .subclass(Callable.class)
-            .name("sample.MyCallable")
-            .merge(isPublic ? Visibility.PUBLIC : Visibility.PACKAGE_PRIVATE)
-            .method(named("call"))
-            .intercept(FixedValue.value("foo"))
-            .make()
-            .getBytes();
-    }
-
-    private static byte[] moduleInfo(boolean isExported, boolean isOpened) {
-        ClassWriter classWriter = new ClassWriter(OpenedClassReader.ASM_API);
-        classWriter.visit(Opcodes.V9, Opcodes.ACC_MODULE, "module-info", null, null, null);
-        ModuleVisitor mv = classWriter.visitModule("mockito.test", 0, null);
-        mv.visitRequire("java.base", Opcodes.ACC_MANDATED, null);
-        mv.visitPackage("sample");
-        if (isExported) {
-            mv.visitExport("sample", 0);
-        }
-        if (isOpened) {
-            mv.visitOpen("sample", 0);
-        }
-        mv.visitEnd();
-        classWriter.visitEnd();
-        return classWriter.toByteArray();
-    }
-
-    private ModuleLayer layer(Path jar, boolean canRead) throws MalformedURLException {
-        Set<String> modules = new HashSet<>();
-        modules.add("mockito.test");
-        ModuleFinder moduleFinder = ModuleFinder.of(jar);
-        if (namedModules) {
-            modules.add("org.mockito");
-            modules.add("net.bytebuddy");
-            modules.add("net.bytebuddy.agent");
-            // We do not list all packages but only roots and packages that interact with the mock where
-            // we attempt to validate an interaction of two modules. This is of course a bit hacky as those
-            // libraries would normally be entirely encapsulated in an automatic module with all their classes
-            // but it is sufficient for the test and saves us a significant amount of code.
-            moduleFinder = ModuleFinder.compose(moduleFinder,
-                automaticModule("org.mockito", "org.mockito", "org.mockito.internal.creation.bytebuddy"),
-                automaticModule("net.bytebuddy", "net.bytebuddy"),
-                automaticModule("net.bytebuddy.agent", "net.bytebuddy.agent"));
-        }
-        Configuration configuration = Configuration.resolve(
-            moduleFinder,
-            Collections.singletonList(ModuleLayer.boot().configuration()),
-            ModuleFinder.of(),
-            modules
-        );
-        ClassLoader classLoader = new ReplicatingClassLoader(jar);
-        ModuleLayer.Controller controller = ModuleLayer.defineModules(
-            configuration,
-            Collections.singletonList(ModuleLayer.boot()),
-            module -> classLoader
-        );
-        if (canRead) {
-            controller.addReads(
-                controller.layer().findModule("mockito.test").orElseThrow(IllegalStateException::new),
-                Mockito.class.getModule()
-            );
-        }
-        return controller.layer();
-    }
-
-    private static ModuleFinder automaticModule(String moduleName, String... packages) {
-        ModuleDescriptor descriptor = ModuleDescriptor.newAutomaticModule(moduleName)
-            .packages(new HashSet<>(Arrays.asList(packages)))
-            .build();
-        ModuleReference reference = new ModuleReference(descriptor, null) {
-            @Override
-            public ModuleReader open() {
-                return new ModuleReader() {
-                    @Override
-                    public Optional<URI> find(String name) {
-                        return Optional.empty();
-                    }
-
-                    @Override
-                    public Stream<String> list() {
-                        return Stream.empty();
-                    }
-
-                    @Override
-                    public void close() {
-                    }
-                };
-            }
-        };
-        return new ModuleFinder() {
-            @Override
-            public Optional<ModuleReference> find(String name) {
-                return name.equals(moduleName) ? Optional.of(reference) : Optional.empty();
-            }
-
-            @Override
-            public Set<ModuleReference> findAll() {
-                return Collections.singleton(reference);
-            }
-        };
     }
 }

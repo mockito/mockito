@@ -6,7 +6,6 @@ package org.mockito.internal.creation.bytebuddy;
 
 import static org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.ForWriteReplace;
 import static org.mockito.internal.util.StringUtil.join;
-import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -22,6 +21,7 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
+import org.mockito.plugins.MemberAccessor;
 
 /**
  * This is responsible for serializing a mock, it is enabled if the mock is implementing {@link Serializable}.
@@ -318,8 +318,14 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
         private void hackClassNameToMatchNewlyCreatedClass(
                 ObjectStreamClass descInstance, Class<?> proxyClass) throws ObjectStreamException {
             try {
+                MemberAccessor accessor = Plugins.getMemberAccessor();
                 Field classNameField = descInstance.getClass().getDeclaredField("name");
-                setField(descInstance, classNameField, proxyClass.getCanonicalName());
+                try {
+                    accessor.set(classNameField, descInstance, proxyClass.getCanonicalName());
+                } catch (IllegalAccessException e) {
+                    throw new MockitoSerializationIssue(
+                            "Access to " + classNameField + " was denied", e);
+                }
             } catch (NoSuchFieldException nsfe) {
                 throw new MockitoSerializationIssue(
                         join(

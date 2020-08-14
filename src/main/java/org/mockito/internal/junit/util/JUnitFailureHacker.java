@@ -7,7 +7,9 @@ package org.mockito.internal.junit.util;
 import java.lang.reflect.Field;
 
 import org.junit.runner.notification.Failure;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
+import org.mockito.plugins.MemberAccessor;
 
 @Deprecated
 public class JUnitFailureHacker {
@@ -36,11 +38,11 @@ public class JUnitFailureHacker {
     }
 
     private static Object getInternalState(Object target, String field) {
+        MemberAccessor accessor = Plugins.getMemberAccessor();
         Class<?> c = target.getClass();
         try {
             Field f = getFieldFromHierarchy(c, field);
-            f.setAccessible(true);
-            return f.get(target);
+            return accessor.get(f, target);
         } catch (Exception e) {
             throw new RuntimeException(
                     "Unable to get internal state on a private field. Please report to mockito mailing list.",
@@ -49,11 +51,11 @@ public class JUnitFailureHacker {
     }
 
     private static void setInternalState(Object target, String field, Object value) {
+        MemberAccessor accessor = Plugins.getMemberAccessor();
         Class<?> c = target.getClass();
         try {
             Field f = getFieldFromHierarchy(c, field);
-            f.setAccessible(true);
-            f.set(target, value);
+            accessor.set(f, target, value);
         } catch (Exception e) {
             throw new RuntimeException(
                     "Unable to set internal state on a private field. Please report to mockito mailing list.",
