@@ -36,11 +36,31 @@ public abstract class MockMethodDispatcher {
         DISPATCHERS.putIfAbsent(identifier, dispatcher);
     }
 
+    @SuppressWarnings("unused")
+    public static boolean isConstructorMock(String identifier, Class<?> type) {
+        return DISPATCHERS.get(identifier).isConstructorMock(type);
+    }
+
+    @SuppressWarnings("unused")
+    public static Object handleConstruction(
+            String identifier,
+            Class<?> type,
+            Object object,
+            Object[] arguments,
+            String[] parameterTypeNames) {
+        return DISPATCHERS
+                .get(identifier)
+                .handleConstruction(type, object, arguments, parameterTypeNames);
+    }
+
     public abstract Callable<?> handle(Object instance, Method origin, Object[] arguments)
             throws Throwable;
 
     public abstract Callable<?> handleStatic(Class<?> type, Method origin, Object[] arguments)
             throws Throwable;
+
+    public abstract Object handleConstruction(
+            Class<?> type, Object object, Object[] arguments, String[] parameterTypeNames);
 
     public abstract boolean isMock(Object instance);
 
@@ -49,4 +69,6 @@ public abstract class MockMethodDispatcher {
     public abstract boolean isMockedStatic(Class<?> type);
 
     public abstract boolean isOverridden(Object instance, Method origin);
+
+    public abstract boolean isConstructorMock(Class<?> type);
 }

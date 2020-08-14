@@ -26,24 +26,28 @@ public class MockAnnotationProcessorTest {
     @Test
     public void testNonGeneric() throws Exception {
         Class<?> type =
-                MockAnnotationProcessor.inferStaticMock(
+                MockAnnotationProcessor.inferParameterizedType(
                         MockAnnotationProcessorTest.class
                                 .getDeclaredField("nonGeneric")
                                 .getGenericType(),
-                        "nonGeneric");
+                        "nonGeneric",
+                        "Sample");
         assertThat(type).isEqualTo(Void.class);
     }
 
     @Test(expected = MockitoException.class)
     public void testGeneric() throws Exception {
-        MockAnnotationProcessor.inferStaticMock(
+        MockAnnotationProcessor.inferParameterizedType(
                 MockAnnotationProcessorTest.class.getDeclaredField("generic").getGenericType(),
-                "generic");
+                "generic",
+                "Sample");
     }
 
     @Test(expected = MockitoException.class)
     public void testRaw() throws Exception {
-        MockAnnotationProcessor.inferStaticMock(
-                MockAnnotationProcessorTest.class.getDeclaredField("raw").getGenericType(), "raw");
+        MockAnnotationProcessor.inferParameterizedType(
+                MockAnnotationProcessorTest.class.getDeclaredField("raw").getGenericType(),
+                "raw",
+                "Sample");
     }
 }

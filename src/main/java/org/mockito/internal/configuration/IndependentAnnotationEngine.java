@@ -16,8 +16,8 @@ import java.util.Map;
 
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
+import org.mockito.ScopedMock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.plugins.AnnotationEngine;
 
@@ -64,14 +64,14 @@ public class IndependentAnnotationEngine
 
     @Override
     public AutoCloseable process(Class<?> clazz, Object testInstance) {
-        List<MockedStatic<?>> mockedStatics = new ArrayList<>();
+        List<ScopedMock> scopedMocks = new ArrayList<>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             boolean alreadyAssigned = false;
             for (Annotation annotation : field.getAnnotations()) {
                 Object mock = createMockFor(annotation, field);
-                if (mock instanceof MockedStatic<?>) {
-                    mockedStatics.add((MockedStatic<?>) mock);
+                if (mock instanceof ScopedMock) {
+                    scopedMocks.add((ScopedMock) mock);
                 }
                 if (mock != null) {
                     throwIfAlreadyAssigned(field, alreadyAssigned);
@@ -79,8 +79,8 @@ public class IndependentAnnotationEngine
                     try {
                         setField(testInstance, field, mock);
                     } catch (Exception e) {
-                        for (MockedStatic<?> mockedStatic : mockedStatics) {
-                            mockedStatic.close();
+                        for (ScopedMock scopedMock : scopedMocks) {
+                            scopedMock.close();
                         }
                         throw new MockitoException(
                                 "Problems setting field "
@@ -93,8 +93,8 @@ public class IndependentAnnotationEngine
             }
         }
         return () -> {
-            for (MockedStatic<?> mockedStatic : mockedStatics) {
-                mockedStatic.closeOnDemand();
+            for (ScopedMock scopedMock : scopedMocks) {
+                scopedMock.closeOnDemand();
             }
         };
     }

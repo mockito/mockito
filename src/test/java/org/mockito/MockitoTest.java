@@ -71,6 +71,12 @@ public class MockitoTest {
         Mockito.mockStatic(Object.class);
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test(expected = MockitoException.class)
+    public void shouldGiveExplantionOnConstructionMockingWithoutInlineMockMaker() {
+        Mockito.mockConstruction(Object.class);
+    }
+
     @Test
     public void shouldStartingMockSettingsContainDefaultBehavior() {
         // when

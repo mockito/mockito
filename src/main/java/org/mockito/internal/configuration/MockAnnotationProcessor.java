@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 
 import org.mockito.Mock;
 import org.mockito.MockSettings;
+import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
@@ -52,13 +53,21 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         mockSettings.defaultAnswer(annotation.answer());
 
         if (type == MockedStatic.class) {
-            return Mockito.mockStatic(inferStaticMock(genericType.get(), name), mockSettings);
+            return Mockito.mockStatic(
+                    inferParameterizedType(
+                            genericType.get(), name, MockedStatic.class.getSimpleName()),
+                    mockSettings);
+        } else if (type == MockedConstruction.class) {
+            return Mockito.mockConstruction(
+                    inferParameterizedType(
+                            genericType.get(), name, MockedConstruction.class.getSimpleName()),
+                    mockSettings);
         } else {
             return Mockito.mock(type, mockSettings);
         }
     }
 
-    static Class<?> inferStaticMock(Type type, String name) {
+    static Class<?> inferParameterizedType(Type type, String name, String sort) {
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type[] arguments = parameterizedType.getActualTypeArguments();
@@ -72,11 +81,11 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
                 join(
                         "Mockito cannot infer a static mock from a raw type for " + name,
                         "",
-                        "Instead of @Mock MockedStatic you need to specify a parameterized type",
-                        "For example, if you would like to mock static methods of Sample.class, specify",
+                        "Instead of @Mock " + sort + " you need to specify a parameterized type",
+                        "For example, if you would like to mock Sample.class, specify",
                         "",
-                        "@Mock MockedStatic<Sample>",
+                        "@Mock " + sort + "<Sample>",
                         "",
-                        "as the type parameter. If the type is parameterized, it should be specified as raw type."));
+                        "as the type parameter. If the type is itself parameterized, it should be specified as raw type."));
     }
 }
