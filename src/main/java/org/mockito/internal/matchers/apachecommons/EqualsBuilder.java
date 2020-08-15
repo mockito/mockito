@@ -4,7 +4,9 @@
  */
 package org.mockito.internal.matchers.apachecommons;
 
-import java.lang.reflect.AccessibleObject;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.plugins.MemberAccessor;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -253,19 +255,15 @@ class EqualsBuilder {
             return false;
         }
         EqualsBuilder equalsBuilder = new EqualsBuilder();
-        try {
-            reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);
-            while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
-                testClass = testClass.getSuperclass();
-                reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);
-            }
-        } catch (IllegalArgumentException e) {
-            // In this case, we tried to test a subclass vs. a superclass and
-            // the subclass has ivars or the ivars are transient and
-            // we are testing transients.
-            // If a subclass has ivars that we are trying to test them, we get an
-            // exception and we know that the objects are not equal.
+        if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {
             return false;
+        }
+        while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
+            testClass = testClass.getSuperclass();
+            if (reflectionAppend(
+                    lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {
+                return false;
+            }
         }
         return equalsBuilder.isEquals();
     }
@@ -281,7 +279,7 @@ class EqualsBuilder {
      * @param useTransients  whether to test transient fields
      * @param excludeFields  array of field names to exclude from testing
      */
-    private static void reflectionAppend(
+    private static boolean reflectionAppend(
             Object lhs,
             Object rhs,
             Class<?> clazz,
@@ -293,7 +291,7 @@ class EqualsBuilder {
                 excludeFields != null
                         ? Arrays.asList(excludeFields)
                         : Collections.<String>emptyList();
-        AccessibleObject.setAccessible(fields, true);
+        MemberAccessor accessor = Plugins.getMemberAccessor();
         for (int i = 0; i < fields.length && builder.isEquals; i++) {
             Field f = fields[i];
             if (!excludedFieldList.contains(f.getName())
@@ -301,14 +299,18 @@ class EqualsBuilder {
                     && (useTransients || !Modifier.isTransient(f.getModifiers()))
                     && (!Modifier.isStatic(f.getModifiers()))) {
                 try {
-                    builder.append(f.get(lhs), f.get(rhs));
-                } catch (IllegalAccessException e) {
-                    // this can't happen. Would get a Security exception instead
-                    // throw a runtime exception in case the impossible happens.
-                    throw new InternalError("Unexpected IllegalAccessException");
+                    builder.append(accessor.get(f, lhs), accessor.get(f, rhs));
+                } catch (RuntimeException | IllegalAccessException ignored) {
+                    // In this case, we tried to test a subclass vs. a superclass and
+                    // the subclass has ivars or the ivars are transient and we are
+                    // testing transients. If a subclass has ivars that we are trying
+                    // to test them, we get an exception and we know that the objects
+                    // are not equal.
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     // -------------------------------------------------------------------------

@@ -6,13 +6,13 @@ package org.mockito.internal.util.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 
 import org.junit.Test;
+import org.mockito.plugins.MemberAccessor;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -128,35 +128,22 @@ public class LenientCopyToolTest extends TestBase {
     }
 
     @Test
-    public void shouldEnableAndThenDisableAccessibility() throws Exception {
-        // given
-        Field privateField = SomeObject.class.getDeclaredField("privateField");
-        assertFalse(privateField.isAccessible());
-
-        // when
-        tool.copyToMock(from, to);
-
-        // then
-        privateField = SomeObject.class.getDeclaredField("privateField");
-        assertFalse(privateField.isAccessible());
-    }
-
-    @Test
     public void shouldContinueEvenIfThereAreProblemsCopyingSingleFieldValue() throws Exception {
         // given
-        tool.fieldCopier = mock(FieldCopier.class);
+        tool.accessor = mock(MemberAccessor.class);
 
         doNothing()
-                .doThrow(new IllegalAccessException())
+                .doThrow(new IllegalStateException())
                 .doNothing()
-                .when(tool.fieldCopier)
-                .copyValue(anyObject(), anyObject(), any(Field.class));
+                .when(tool.accessor)
+                .set(any(Field.class), anyObject(), anyObject());
 
         // when
         tool.copyToMock(from, to);
 
         // then
-        verify(tool.fieldCopier, atLeast(3)).copyValue(any(), any(), any(Field.class));
+        verify(tool.accessor, atLeast(3)).get(any(Field.class), any());
+        verify(tool.accessor, atLeast(3)).set(any(Field.class), any(), any());
     }
 
     @Test

@@ -11,8 +11,10 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.plugins.MemberAccessor;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -41,13 +43,9 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
                         mockMethod, delegateMethod, invocation.getMock(), delegatedObject);
             }
 
+            MemberAccessor accessor = Plugins.getMemberAccessor();
             Object[] rawArguments = ((Invocation) invocation).getRawArguments();
-            try {
-                delegateMethod.setAccessible(true);
-            } catch (SecurityException ignore) {
-                // try to invoke anyway
-            }
-            return delegateMethod.invoke(delegatedObject, rawArguments);
+            return accessor.invoke(delegateMethod, delegatedObject, rawArguments);
         } catch (NoSuchMethodException e) {
             throw delegatedMethodDoesNotExistOnDelegate(
                     mockMethod, invocation.getMock(), delegatedObject);

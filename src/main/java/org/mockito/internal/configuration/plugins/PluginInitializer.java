@@ -47,7 +47,7 @@ class PluginInitializer {
                     classOrAlias = plugins.getDefaultPluginClass(alias);
                 }
                 Class<?> pluginClass = loader.loadClass(classOrAlias);
-                Object plugin = pluginClass.newInstance();
+                Object plugin = pluginClass.getDeclaredConstructor().newInstance();
                 return service.cast(plugin);
             }
             return null;

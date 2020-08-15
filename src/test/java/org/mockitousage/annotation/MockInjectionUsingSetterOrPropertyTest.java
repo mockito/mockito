@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.assertj.core.api.Assertions;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -50,10 +51,19 @@ public class MockInjectionUsingSetterOrPropertyTest extends TestBase {
 
     @Spy private TreeSet<String> searchTree = new TreeSet<String>();
 
+    private AutoCloseable session;
+
     @Before
     public void enforces_new_instances() {
-        // initMocks called in TestBase Before method, so instances are not the same
-        MockitoAnnotations.openMocks(this);
+        // openMocks called in TestBase Before method, so instances are not the same
+        session = MockitoAnnotations.openMocks(this);
+    }
+
+    @After
+    public void close_new_instances() throws Exception {
+        if (session != null) {
+            session.close();
+        }
     }
 
     @Test

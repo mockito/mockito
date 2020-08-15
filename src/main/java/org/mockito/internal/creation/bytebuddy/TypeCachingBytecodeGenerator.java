@@ -62,6 +62,11 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
         bytecodeGenerator.mockClassStatic(type);
     }
 
+    @Override
+    public void mockClassConstruction(Class<?> type) {
+        bytecodeGenerator.mockClassConstruction(type);
+    }
+
     private static class MockitoMockKey extends TypeCache.SimpleKey {
 
         private final SerializableMode serializableMode;

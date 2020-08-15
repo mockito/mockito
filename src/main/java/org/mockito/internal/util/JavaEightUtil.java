@@ -181,7 +181,7 @@ public final class JavaEightUtil {
     private static Object getStaticFieldValue(final String fqcn, final String fieldName) {
         try {
             final Class<?> type = getClass(fqcn);
-            final Field field = type.getDeclaredField(fieldName);
+            final Field field = type.getField(fieldName);
             return field.get(null);
             // any exception is really unexpected since the type name has
             // already been verified

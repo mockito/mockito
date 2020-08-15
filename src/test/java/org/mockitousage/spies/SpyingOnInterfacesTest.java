@@ -106,7 +106,7 @@ public class SpyingOnInterfacesTest extends TestBase {
                         .load(iFace.getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
                         .getLoaded();
 
-        Object object = spy(impl.newInstance());
+        Object object = spy(impl.getConstructor().newInstance());
 
         // when
         Assertions.assertThat(impl.getMethod("foo").invoke(object)).isEqualTo((Object) "bar");

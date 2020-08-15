@@ -5,7 +5,6 @@
 package org.mockito.internal.configuration.injection;
 
 import static org.mockito.Mockito.withSettings;
-import static org.mockito.internal.util.reflection.FieldSetter.setField;
 
 import java.lang.reflect.Field;
 import java.util.Set;
@@ -13,8 +12,10 @@ import java.util.Set;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.FieldReader;
+import org.mockito.plugins.MemberAccessor;
 
 /**
  * Handler for field annotated with &#64;InjectMocks and &#64;Spy.
@@ -25,6 +26,8 @@ import org.mockito.internal.util.reflection.FieldReader;
  * </p>
  */
 public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
+
+    private final MemberAccessor accessor = Plugins.getMemberAccessor();
 
     @Override
     protected boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
@@ -46,7 +49,7 @@ public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
                                             .spiedInstance(instance)
                                             .defaultAnswer(Mockito.CALLS_REAL_METHODS)
                                             .name(field.getName()));
-                    setField(fieldOwner, field, mock);
+                    accessor.set(field, fieldOwner, mock);
                 }
             } catch (Exception e) {
                 throw new MockitoException("Problems initiating spied field " + field.getName(), e);

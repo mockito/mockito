@@ -5,8 +5,12 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import org.mockito.Incubating;
+import org.mockito.MockedConstruction;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * ByteBuddy MockMaker.
@@ -23,6 +27,12 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
     @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         return defaultByteBuddyMockMaker.createMock(settings, handler);
+    }
+
+    @Override
+    public <T> Optional<T> createSpy(
+            MockCreationSettings<T> settings, MockHandler handler, T object) {
+        return defaultByteBuddyMockMaker.createSpy(settings, handler, object);
     }
 
     @Override
@@ -50,5 +60,15 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
     public <T> StaticMockControl<T> createStaticMock(
             Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
         return defaultByteBuddyMockMaker.createStaticMock(type, settings, handler);
+    }
+
+    @Override
+    public <T> ConstructionMockControl<T> createConstructionMock(
+            Class<T> type,
+            Function<MockedConstruction.Context, MockCreationSettings<T>> settingsFactory,
+            Function<MockedConstruction.Context, MockHandler<T>> handlerFactory,
+            MockedConstruction.MockInitializer<T> mockInitializer) {
+        return defaultByteBuddyMockMaker.createConstructionMock(
+                type, settingsFactory, handlerFactory, mockInitializer);
     }
 }

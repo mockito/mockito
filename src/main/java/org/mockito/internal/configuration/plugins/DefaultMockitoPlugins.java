@@ -8,19 +8,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.mockito.internal.creation.instance.InstantiatorProvider2Adapter;
-import org.mockito.plugins.AnnotationEngine;
-import org.mockito.plugins.InstantiatorProvider;
-import org.mockito.plugins.InstantiatorProvider2;
-import org.mockito.plugins.MockMaker;
-import org.mockito.plugins.MockitoLogger;
-import org.mockito.plugins.MockitoPlugins;
-import org.mockito.plugins.PluginSwitch;
-import org.mockito.plugins.StackTraceCleanerProvider;
+import org.mockito.plugins.*;
 
 class DefaultMockitoPlugins implements MockitoPlugins {
 
     private static final Map<String, String> DEFAULT_PLUGINS = new HashMap<String, String>();
     static final String INLINE_ALIAS = "mock-maker-inline";
+    static final String MODULE_ALIAS = "member-accessor-module";
 
     static {
         // Keep the mapping: plugin interface name -> plugin implementation class name
@@ -41,6 +35,11 @@ class DefaultMockitoPlugins implements MockitoPlugins {
                 INLINE_ALIAS, "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
         DEFAULT_PLUGINS.put(
                 MockitoLogger.class.getName(), "org.mockito.internal.util.ConsoleMockitoLogger");
+        DEFAULT_PLUGINS.put(
+                MemberAccessor.class.getName(),
+                "org.mockito.internal.util.reflection.ReflectionMemberAccessor");
+        DEFAULT_PLUGINS.put(
+                MODULE_ALIAS, "org.mockito.internal.util.reflection.ModuleMemberAccessor");
     }
 
     @Override
@@ -80,7 +79,7 @@ class DefaultMockitoPlugins implements MockitoPlugins {
             // Default implementation. Use our own ClassLoader instead of the context
             // ClassLoader, as the default implementation is assumed to be part of
             // Mockito and may not be available via the context ClassLoader.
-            return pluginType.cast(Class.forName(className).newInstance());
+            return pluginType.cast(Class.forName(className).getDeclaredConstructor().newInstance());
         } catch (Exception e) {
             throw new IllegalStateException(
                     "Internal problem occurred, please report it. "

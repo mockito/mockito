@@ -41,6 +41,10 @@ public class NoByteCodeDependenciesTest {
         pureMockitoAPIClasses.remove("org.mockito.internal.exceptions.stacktrace.StackTraceFilter");
         pureMockitoAPIClasses.remove("org.mockito.internal.util.MockUtil");
 
+        // Remove instrumentation-based member accessor which is optional.
+        pureMockitoAPIClasses.remove(
+                "org.mockito.internal.util.reflection.InstrumentationMemberAccessor");
+
         for (String pureMockitoAPIClass : pureMockitoAPIClasses) {
             checkDependency(classLoader_without_bytecode_libraries, pureMockitoAPIClass);
         }

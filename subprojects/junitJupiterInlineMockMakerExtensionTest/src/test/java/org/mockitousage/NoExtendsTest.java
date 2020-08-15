@@ -4,10 +4,9 @@
  */
 package org.mockitousage;
 
-import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 
 import static org.assertj.core.api.Assertions.*;
@@ -15,11 +14,29 @@ import static org.assertj.core.api.Assertions.*;
 class NoExtendsTest {
 
     @Mock
-    private MockedStatic<UUID> mock;
+    private MockedStatic<Dummy> staticMethod;
+
+    @Mock
+    private MockedConstruction<Dummy> construction;
 
     @Test
-    void runs() {
-        mock.when(UUID::randomUUID).thenReturn(new UUID(123, 456));
-        assertThat(UUID.randomUUID()).isEqualTo(new UUID(123, 456));
+    void runsStaticMethods() {
+        assertThat(Dummy.foo()).isNull();
+    }
+
+    @Test
+    void runsConstruction() {
+        assertThat(new Dummy().bar()).isNull();
+    }
+
+    static class Dummy {
+
+        static String foo() {
+            return "foo";
+        }
+
+        String bar() {
+            return "foo";
+        }
     }
 }
