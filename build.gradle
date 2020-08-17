@@ -21,6 +21,7 @@ plugins {
     id 'eclipse'
     id 'com.github.ben-manes.versions' version '0.28.0'
     id 'biz.aQute.bnd.builder' version '5.1.0'
+    id 'ru.vyarus.animalsniffer' version '1.5.1'
 }
 
 description = 'Mockito mock objects library core API and implementation'
@@ -98,6 +99,14 @@ dependencies {
     testRuntime configurations.compileOnly
 
     testUtil sourceSets.test.output
+
+    signature 'org.codehaus.mojo.signature:java18:1.0@signature'
+    signature 'net.sf.androidscents.signature:android-api-level-24:7.0_r2@signature'
+}
+
+animalsniffer {
+    sourceSets = [sourceSets.main]
+    annotation = 'org.mockito.internal.SuppressSignatureCheck'
 }
 
 wrapper {

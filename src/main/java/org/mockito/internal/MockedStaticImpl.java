@@ -172,6 +172,6 @@ public final class MockedStaticImpl<T> implements MockedStatic<T> {
 
     @Override
     public String toString() {
-        return "static mock for " + control.getType().getTypeName();
+        return "static mock for " + control.getType().getName();
     }
 }

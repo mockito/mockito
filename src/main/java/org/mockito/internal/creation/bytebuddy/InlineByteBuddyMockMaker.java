@@ -28,6 +28,7 @@ import org.mockito.creation.instance.Instantiator;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
+import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
@@ -99,6 +100,7 @@ import static org.mockito.internal.util.StringUtil.*;
  * support this feature.
  */
 @Incubating
+@SuppressSignatureCheck
 public class InlineByteBuddyMockMaker
         implements ClassCreatingMockMaker, InlineMockMaker, Instantiator {
 
@@ -506,7 +508,7 @@ public class InlineByteBuddyMockMaker
                 || ClassLoader.class.isAssignableFrom(type)) {
             throw new MockitoException(
                     "It is not possible to mock static methods of "
-                            + type.getTypeName()
+                            + type.getName()
                             + " to avoid interfering with class loading what leads to infinite loops");
         }
 
@@ -534,7 +536,7 @@ public class InlineByteBuddyMockMaker
         } else if (type.isPrimitive() || Modifier.isAbstract(type.getModifiers())) {
             throw new MockitoException(
                     "It is not possible to construct primitive types or abstract types: "
-                            + type.getTypeName());
+                            + type.getName());
         }
 
         bytecodeGenerator.mockClassConstruction(type);
@@ -555,7 +557,7 @@ public class InlineByteBuddyMockMaker
     public <T> T newInstance(Class<T> cls) throws InstantiationException {
         Constructor<?>[] constructors = cls.getDeclaredConstructors();
         if (constructors.length == 0) {
-            throw new InstantiationException(cls.getTypeName() + " does not define a constructor");
+            throw new InstantiationException(cls.getName() + " does not define a constructor");
         }
         Constructor<?> selected = constructors[0];
         for (Constructor<?> constructor : constructors) {
@@ -579,7 +581,7 @@ public class InlineByteBuddyMockMaker
                 mockitoConstruction.set(false);
             }
         } catch (Exception e) {
-            throw new InstantiationException("Could not instantiate " + cls.getTypeName(), e);
+            throw new InstantiationException("Could not instantiate " + cls.getName(), e);
         }
     }
 
@@ -754,14 +756,14 @@ public class InlineByteBuddyMockMaker
         private static final Map<String, Class<?>> PRIMITIVES = new HashMap<>();
 
         static {
-            PRIMITIVES.put(boolean.class.getTypeName(), boolean.class);
-            PRIMITIVES.put(byte.class.getTypeName(), byte.class);
-            PRIMITIVES.put(short.class.getTypeName(), short.class);
-            PRIMITIVES.put(char.class.getTypeName(), char.class);
-            PRIMITIVES.put(int.class.getTypeName(), int.class);
-            PRIMITIVES.put(long.class.getTypeName(), long.class);
-            PRIMITIVES.put(float.class.getTypeName(), float.class);
-            PRIMITIVES.put(double.class.getTypeName(), double.class);
+            PRIMITIVES.put(boolean.class.getName(), boolean.class);
+            PRIMITIVES.put(byte.class.getName(), byte.class);
+            PRIMITIVES.put(short.class.getName(), short.class);
+            PRIMITIVES.put(char.class.getName(), char.class);
+            PRIMITIVES.put(int.class.getName(), int.class);
+            PRIMITIVES.put(long.class.getName(), long.class);
+            PRIMITIVES.put(float.class.getName(), float.class);
+            PRIMITIVES.put(double.class.getName(), double.class);
         }
 
         private int count;
@@ -810,7 +812,7 @@ public class InlineByteBuddyMockMaker
                         join(
                                 "Could not resolve constructor of type",
                                 "",
-                                type.getTypeName(),
+                                type.getName(),
                                 "",
                                 "with arguments of types",
                                 Arrays.toString(parameterTypes)),

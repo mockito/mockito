@@ -9,6 +9,7 @@ import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.MethodCall;
 import org.mockito.exceptions.base.MockitoInitializationException;
+import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.plugins.MemberAccessor;
 
 import java.lang.instrument.Instrumentation;
@@ -21,6 +22,7 @@ import java.util.*;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.mockito.internal.util.StringUtil.join;
 
+@SuppressSignatureCheck
 class InstrumentationMemberAccessor implements MemberAccessor {
 
     private static final Map<Class<?>, Class<?>> WRAPPERS = new HashMap<>();
