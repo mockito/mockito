@@ -8,4 +8,4 @@ import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.CLASS)
 @Documented
-public @interface SuppressSignatureCheck { }
+public @interface SuppressSignatureCheck {}

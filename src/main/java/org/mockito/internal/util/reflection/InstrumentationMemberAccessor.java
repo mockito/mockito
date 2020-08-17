@@ -69,6 +69,13 @@ class InstrumentationMemberAccessor implements MemberAccessor {
                                                             "setAccessible", boolean.class))
                                             .onArgument(0)
                                             .withArgument(1))
+                            .method(named("invokeWithArguments"))
+                            .intercept(
+                                    MethodCall.invoke(
+                                                    MethodHandle.class.getMethod(
+                                                            "invokeWithArguments", Object[].class))
+                                            .onArgument(0)
+                                            .withArgument(1))
                             .make()
                             .load(
                                     InstrumentationMemberAccessor.class.getClassLoader(),
@@ -146,17 +153,20 @@ class InstrumentationMemberAccessor implements MemberAccessor {
         }
         assureArguments(constructor, null, null, arguments, constructor.getParameterTypes());
         try {
-            Object module = getModule.bindTo(constructor.getDeclaringClass()).invokeWithArguments();
+            Object module =
+                    DISPATCHER.invokeWithArguments(
+                            getModule.bindTo(constructor.getDeclaringClass()));
             String packageName = constructor.getDeclaringClass().getPackage().getName();
             assureOpen(module, packageName);
             MethodHandle handle =
                     ((MethodHandles.Lookup)
-                                    privateLookupIn.invokeExact(
+                                    DISPATCHER.invokeWithArguments(
+                                            privateLookupIn,
                                             constructor.getDeclaringClass(),
                                             DISPATCHER.getLookup()))
                             .unreflectConstructor(constructor);
             try {
-                return handle.invokeWithArguments(arguments);
+                return DISPATCHER.invokeWithArguments(handle, arguments);
             } catch (Throwable t) {
                 throw new InvocationTargetException(t);
             }
@@ -182,19 +192,22 @@ class InstrumentationMemberAccessor implements MemberAccessor {
                 arguments,
                 method.getParameterTypes());
         try {
-            Object module = getModule.bindTo(method.getDeclaringClass()).invokeWithArguments();
+            Object module =
+                    DISPATCHER.invokeWithArguments(getModule.bindTo(method.getDeclaringClass()));
             String packageName = method.getDeclaringClass().getPackage().getName();
             assureOpen(module, packageName);
             MethodHandle handle =
                     ((MethodHandles.Lookup)
-                                    privateLookupIn.invokeExact(
-                                            method.getDeclaringClass(), DISPATCHER.getLookup()))
+                                    DISPATCHER.invokeWithArguments(
+                                            privateLookupIn,
+                                            method.getDeclaringClass(),
+                                            DISPATCHER.getLookup()))
                             .unreflect(method);
             if (!Modifier.isStatic(method.getModifiers())) {
                 handle = handle.bindTo(target);
             }
             try {
-                return handle.invokeWithArguments(arguments);
+                return DISPATCHER.invokeWithArguments(handle, arguments);
             } catch (Throwable t) {
                 throw new InvocationTargetException(t);
             }
@@ -221,18 +234,21 @@ class InstrumentationMemberAccessor implements MemberAccessor {
                 new Object[0],
                 new Class<?>[0]);
         try {
-            Object module = getModule.bindTo(field.getDeclaringClass()).invokeWithArguments();
+            Object module =
+                    DISPATCHER.invokeWithArguments(getModule.bindTo(field.getDeclaringClass()));
             String packageName = field.getDeclaringClass().getPackage().getName();
             assureOpen(module, packageName);
             MethodHandle handle =
                     ((MethodHandles.Lookup)
-                                    privateLookupIn.invokeExact(
-                                            field.getDeclaringClass(), DISPATCHER.getLookup()))
+                                    DISPATCHER.invokeWithArguments(
+                                            privateLookupIn,
+                                            field.getDeclaringClass(),
+                                            DISPATCHER.getLookup()))
                             .unreflectGetter(field);
             if (!Modifier.isStatic(field.getModifiers())) {
                 handle = handle.bindTo(target);
             }
-            return handle.invokeWithArguments();
+            return DISPATCHER.invokeWithArguments(handle);
         } catch (Throwable t) {
             throw new IllegalStateException("Could not read " + field + " on " + target, t);
         }
@@ -248,7 +264,8 @@ class InstrumentationMemberAccessor implements MemberAccessor {
                 new Class<?>[] {field.getType()});
         boolean illegalAccess = false;
         try {
-            Object module = getModule.bindTo(field.getDeclaringClass()).invokeWithArguments();
+            Object module =
+                    DISPATCHER.invokeWithArguments(getModule.bindTo(field.getDeclaringClass()));
             String packageName = field.getDeclaringClass().getPackage().getName();
             assureOpen(module, packageName);
             // Method handles do not allow setting final fields where setAccessible(true)
@@ -270,13 +287,15 @@ class InstrumentationMemberAccessor implements MemberAccessor {
             try {
                 MethodHandle handle =
                         ((MethodHandles.Lookup)
-                                        privateLookupIn.invokeExact(
-                                                field.getDeclaringClass(), DISPATCHER.getLookup()))
+                                        DISPATCHER.invokeWithArguments(
+                                                privateLookupIn,
+                                                field.getDeclaringClass(),
+                                                DISPATCHER.getLookup()))
                                 .unreflectSetter(field);
                 if (!Modifier.isStatic(field.getModifiers())) {
                     handle = handle.bindTo(target);
                 }
-                handle.invokeWithArguments(value);
+                DISPATCHER.invokeWithArguments(handle, value);
             } finally {
                 if (isFinal) {
                     DISPATCHER.setAccessible(field, false);
@@ -292,17 +311,18 @@ class InstrumentationMemberAccessor implements MemberAccessor {
     }
 
     private void assureOpen(Object module, String packageName) throws Throwable {
-        if (!(Boolean) isOpen.invokeWithArguments(module, packageName, DISPATCHER.getModule())) {
-            redefineModule
-                    .bindTo(INSTRUMENTATION)
-                    .invokeWithArguments(
-                            module,
-                            Collections.emptySet(),
-                            Collections.emptyMap(),
-                            Collections.singletonMap(
-                                    packageName, Collections.singleton(DISPATCHER.getModule())),
-                            Collections.emptySet(),
-                            Collections.emptyMap());
+        if (!(Boolean)
+                DISPATCHER.invokeWithArguments(
+                        isOpen, module, packageName, DISPATCHER.getModule())) {
+            DISPATCHER.invokeWithArguments(
+                    redefineModule.bindTo(INSTRUMENTATION),
+                    module,
+                    Collections.emptySet(),
+                    Collections.emptyMap(),
+                    Collections.singletonMap(
+                            packageName, Collections.singleton(DISPATCHER.getModule())),
+                    Collections.emptySet(),
+                    Collections.emptyMap());
         }
     }
 
@@ -361,5 +381,10 @@ class InstrumentationMemberAccessor implements MemberAccessor {
         Object getModule();
 
         void setAccessible(AccessibleObject target, boolean value);
+
+        // Used to avoid invoke/invokeExact being exposed to Android where this class should
+        // never be loaded. Since the invocation happens from the generated code, the Android
+        // build pipeline does not fail.
+        Object invokeWithArguments(MethodHandle handle, Object... arguments) throws Throwable;
     }
 }
