@@ -37,6 +37,7 @@ import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.OpenedClassReader;
 import net.bytebuddy.utility.RandomString;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
@@ -48,6 +49,7 @@ import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotatio
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static org.mockito.internal.util.StringUtil.*;
 
+@SuppressSignatureCheck
 public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTransformer {
 
     private static final String PRELOAD = "org.mockito.inline.preload";
