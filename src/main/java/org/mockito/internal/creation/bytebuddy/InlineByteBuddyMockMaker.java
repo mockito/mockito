@@ -259,7 +259,9 @@ public class InlineByteBuddyMockMaker
         ConstructionCallback onConstruction =
                 (type, object, arguments, parameterTypeNames) -> {
                     if (mockitoConstruction.get()) {
-                        return currentSpied.get();
+                        Object spy = currentSpied.get();
+                        // Avoid that exceptions during spy creation cause class cast exceptions.
+                        return type.isInstance(spy) ? spy : null;
                     } else if (currentConstruction.get() != type) {
                         return null;
                     }
