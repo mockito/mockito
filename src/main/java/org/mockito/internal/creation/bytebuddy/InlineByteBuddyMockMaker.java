@@ -30,6 +30,7 @@ import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.creation.instance.ConstructorInstantiator;
 import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
@@ -258,7 +259,9 @@ public class InlineByteBuddyMockMaker
         ConstructionCallback onConstruction =
                 (type, object, arguments, parameterTypeNames) -> {
                     if (mockitoConstruction.get()) {
-                        return currentSpied.get();
+                        Object spy = currentSpied.get();
+                        // Avoid that exceptions during spy creation cause class cast exceptions.
+                        return type.isInstance(spy) ? spy : null;
                     } else if (currentConstruction.get() != type) {
                         return null;
                     }
@@ -321,16 +324,25 @@ public class InlineByteBuddyMockMaker
 
         try {
             T instance;
-            try {
-                // We attempt to use the "native" mock maker first that avoids Objenesis and Unsafe
-                instance = newInstance(type);
-            } catch (InstantiationException ignored) {
-                if (nullOnNonInlineConstruction) {
-                    return null;
+            if (settings.isUsingConstructor()) {
+                instance =
+                        new ConstructorInstantiator(
+                                        settings.getOuterClassInstance() != null,
+                                        settings.getConstructorArgs())
+                                .newInstance(type);
+            } else {
+                try {
+                    // We attempt to use the "native" mock maker first that avoids
+                    // Objenesis and Unsafe
+                    instance = newInstance(type);
+                } catch (InstantiationException ignored) {
+                    if (nullOnNonInlineConstruction) {
+                        return null;
+                    }
+                    Instantiator instantiator =
+                            Plugins.getInstantiatorProvider().getInstantiator(settings);
+                    instance = instantiator.newInstance(type);
                 }
-                Instantiator instantiator =
-                        Plugins.getInstantiatorProvider().getInstantiator(settings);
-                instance = instantiator.newInstance(type);
             }
             MockMethodInterceptor mockMethodInterceptor =
                     new MockMethodInterceptor(handler, settings);
