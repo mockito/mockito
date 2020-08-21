@@ -31,6 +31,13 @@ public class ModuleMemberAccessor implements MemberAccessor {
     }
 
     @Override
+    public Object newInstance(
+            Constructor<?> constructor, OnConstruction onConstruction, Object... arguments)
+            throws InstantiationException, InvocationTargetException, IllegalAccessException {
+        return delegate.newInstance(constructor, onConstruction, arguments);
+    }
+
+    @Override
     public Object invoke(Method method, Object target, Object... arguments)
             throws InvocationTargetException, IllegalAccessException {
         return delegate.invoke(method, target, arguments);

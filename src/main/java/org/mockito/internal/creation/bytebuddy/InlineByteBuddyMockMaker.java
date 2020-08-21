@@ -260,8 +260,18 @@ public class InlineByteBuddyMockMaker
                 (type, object, arguments, parameterTypeNames) -> {
                     if (mockitoConstruction.get()) {
                         Object spy = currentSpied.get();
-                        // Avoid that exceptions during spy creation cause class cast exceptions.
-                        return type.isInstance(spy) ? spy : null;
+                        if (spy == null) {
+                            return null;
+                        } else if (type.isInstance(spy)) {
+                            return spy;
+                        } else {
+                            // Unexpected construction of non-spied object
+                            throw new MockitoException(
+                                    "Unexpected spy for "
+                                            + type.getName()
+                                            + " on instance of "
+                                            + object.getClass().getName());
+                        }
                     } else if (currentConstruction.get() != type) {
                         return null;
                     }
@@ -586,12 +596,18 @@ public class InlineByteBuddyMockMaker
         }
         MemberAccessor accessor = Plugins.getMemberAccessor();
         try {
-            mockitoConstruction.set(true);
-            try {
-                return (T) accessor.newInstance(selected, arguments);
-            } finally {
-                mockitoConstruction.set(false);
-            }
+            return (T)
+                    accessor.newInstance(
+                            selected,
+                            callback -> {
+                                mockitoConstruction.set(true);
+                                try {
+                                    return callback.newInstance();
+                                } finally {
+                                    mockitoConstruction.set(false);
+                                }
+                            },
+                            arguments);
         } catch (Exception e) {
             throw new InstantiationException("Could not instantiate " + cls.getName(), e);
         }

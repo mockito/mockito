@@ -14,9 +14,16 @@ public class ReflectionMemberAccessor implements MemberAccessor {
     @Override
     public Object newInstance(Constructor<?> constructor, Object... arguments)
             throws InstantiationException, InvocationTargetException, IllegalAccessException {
+        return newInstance(constructor, ConstructionDispatcher::newInstance, arguments);
+    }
+
+    @Override
+    public Object newInstance(
+            Constructor<?> constructor, OnConstruction onConstruction, Object... arguments)
+            throws InstantiationException, InvocationTargetException, IllegalAccessException {
         silentSetAccessible(constructor, true);
         try {
-            return constructor.newInstance(arguments);
+            return onConstruction.invoke(() -> constructor.newInstance(arguments));
         } catch (InvocationTargetException
                 | IllegalAccessException
                 | InstantiationException

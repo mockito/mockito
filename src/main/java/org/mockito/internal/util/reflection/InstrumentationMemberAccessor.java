@@ -18,6 +18,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.mockito.internal.util.StringUtil.join;
@@ -147,6 +148,13 @@ class InstrumentationMemberAccessor implements MemberAccessor {
     @Override
     public Object newInstance(Constructor<?> constructor, Object... arguments)
             throws InstantiationException, InvocationTargetException {
+        return newInstance(constructor, ConstructionDispatcher::newInstance, arguments);
+    }
+
+    @Override
+    public Object newInstance(
+            Constructor<?> constructor, OnConstruction onConstruction, Object... arguments)
+            throws InstantiationException, InvocationTargetException {
         if (Modifier.isAbstract(constructor.getDeclaringClass().getModifiers())) {
             throw new InstantiationException(
                     "Cannot instantiate abstract " + constructor.getDeclaringClass().getTypeName());
@@ -165,10 +173,21 @@ class InstrumentationMemberAccessor implements MemberAccessor {
                                             constructor.getDeclaringClass(),
                                             DISPATCHER.getLookup()))
                             .unreflectConstructor(constructor);
-            try {
-                return DISPATCHER.invokeWithArguments(handle, arguments);
-            } catch (Throwable t) {
-                throw new InvocationTargetException(t);
+            AtomicBoolean thrown = new AtomicBoolean();
+            Object value =
+                    onConstruction.invoke(
+                            () -> {
+                                try {
+                                    return DISPATCHER.invokeWithArguments(handle, arguments);
+                                } catch (Throwable throwable) {
+                                    thrown.set(true);
+                                    return throwable;
+                                }
+                            });
+            if (thrown.get()) {
+                throw new InvocationTargetException((Throwable) value);
+            } else {
+                return value;
             }
         } catch (InvocationTargetException e) {
             throw e;
