@@ -17,8 +17,8 @@ public abstract class MockMethodDispatcher {
             // Do not use Mockito classes in here as this is executed on the boot loader.
             throw new IllegalStateException(
                     MockMethodDispatcher.class.getName()
-                            + " is not loaded by the bootstrap class loader but by "
-                            + classLoader.toString()
+                            + " is not loaded by the bootstrap class loader but by an instance of "
+                            + classLoader.getClass().getName()
                             + ".\n\nThis causes the inline mock maker to not work as expected. "
                             + "Please contact the maintainer of this class loader implementation "
                             + "to assure that this class is never loaded by another class loader. "
