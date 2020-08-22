@@ -11,6 +11,22 @@ import java.util.concurrent.ConcurrentMap;
 
 public abstract class MockMethodDispatcher {
 
+    static {
+        ClassLoader classLoader = MockMethodDispatcher.class.getClassLoader();
+        if (classLoader != null) {
+            // Do not use Mockito classes in here as this is executed on the boot loader.
+            throw new IllegalStateException(
+                    MockMethodDispatcher.class.getName()
+                            + " is not loaded by the bootstrap class loader but by "
+                            + classLoader.toString()
+                            + ".\n\nThis causes the inline mock maker to not work as expected. "
+                            + "Please contact the maintainer of this class loader implementation "
+                            + "to assure that this class is never loaded by another class loader. "
+                            + "The bootstrap class loader must always be queried first for this "
+                            + "class for Mockito's inline mock maker to function correctly.");
+        }
+    }
+
     private static final ConcurrentMap<String, MockMethodDispatcher> DISPATCHERS =
             new ConcurrentHashMap<>();
 
