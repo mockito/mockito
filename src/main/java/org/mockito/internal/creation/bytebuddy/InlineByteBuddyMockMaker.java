@@ -265,12 +265,18 @@ public class InlineByteBuddyMockMaker
                         } else if (type.isInstance(spy)) {
                             return spy;
                         } else {
-                            // Unexpected construction of non-spied object
-                            throw new MockitoException(
-                                    "Unexpected spy for "
-                                            + type.getName()
-                                            + " on instance of "
-                                            + object.getClass().getName());
+                            isSuspended.set(true);
+                            try {
+                                // Unexpected construction of non-spied object
+                                throw new MockitoException(
+                                        "Unexpected spy for "
+                                                + type.getName()
+                                                + " on instance of "
+                                                + object.getClass().getName(),
+                                        object instanceof Throwable ? (Throwable) object : null);
+                            } finally {
+                                isSuspended.set(false);
+                            }
                         }
                     } else if (currentConstruction.get() != type) {
                         return null;
