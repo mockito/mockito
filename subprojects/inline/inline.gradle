@@ -13,6 +13,8 @@ tasks.javadoc.enabled = false
 test.maxHeapSize = "256m"
 retryTest.maxHeapSize = "256m"
 
-test {
-    jvmArgs '--illegal-access=debug'
+if (JavaVersion.current().java9Compatible) {
+    test {
+        jvmArgs '--illegal-access=deny'
+    }
 }
