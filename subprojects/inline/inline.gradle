@@ -12,3 +12,7 @@ tasks.javadoc.enabled = false
 //required by the "StressTest.java" and "OneLinerStubStressTest.java"
 test.maxHeapSize = "256m"
 retryTest.maxHeapSize = "256m"
+
+test {
+    jvmArgs '--illegal-access=debug'
+}

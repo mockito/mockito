@@ -95,6 +95,7 @@ class InstrumentationMemberAccessor implements MemberAccessor {
         INITIALIZATION_ERROR = throwable;
     }
 
+    @SuppressWarnings("unused")
     private final MethodHandle getModule, isOpen, redefineModule, privateLookupIn;
 
     InstrumentationMemberAccessor() {
@@ -116,7 +117,7 @@ class InstrumentationMemberAccessor implements MemberAccessor {
                             .findVirtual(
                                     module,
                                     "isOpen",
-                                    MethodType.methodType(boolean.class, String.class, module));
+                                    MethodType.methodType(boolean.class, String.class));
             redefineModule =
                     MethodHandles.publicLookup()
                             .findVirtual(
@@ -330,9 +331,12 @@ class InstrumentationMemberAccessor implements MemberAccessor {
     }
 
     private void assureOpen(Object module, String packageName) throws Throwable {
-        if (!(Boolean)
-                DISPATCHER.invokeWithArguments(
-                        isOpen, module, packageName, DISPATCHER.getModule())) {
+        // It would be more reliable to check if a module's package already is opened to
+        // the dispatcher module from before. Unfortunately, there is no reliable check
+        // for doing so since the isOpen(String, Module) method always returns true
+        // if the second argument is an unnamed module. Therefore, for now, we need
+        // to reopen packages even if they are already opened to the dispatcher module.
+        if (!(Boolean) DISPATCHER.invokeWithArguments(isOpen, module, packageName)) {
             DISPATCHER.invokeWithArguments(
                     redefineModule.bindTo(INSTRUMENTATION),
                     module,
