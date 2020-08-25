@@ -206,6 +206,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         Set<Class<?>> types = new HashSet<>();
         types.add(features.mockedType);
         types.addAll(features.interfaces);
+
         synchronized (this) {
             triggerRetransformation(types, false);
         }
@@ -223,17 +224,26 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         triggerRetransformation(Collections.singleton(type), false);
     }
 
+    private static void assureInitialization(Class<?> type) {
+        try {
+            Class.forName(type.getName(), true, type.getClassLoader());
+        } catch (Throwable ignore) {
+        }
+    }
+
     private <T> void triggerRetransformation(Set<Class<?>> types, boolean flat) {
         Set<Class<?>> targets = new HashSet<Class<?>>();
 
         for (Class<?> type : types) {
             if (flat) {
                 if (!mocked.contains(type) && flatMocked.add(type)) {
+                    assureInitialization(type);
                     targets.add(type);
                 }
             } else {
                 do {
                     if (mocked.add(type)) {
+                        assureInitialization(type);
                         if (!flatMocked.remove(type)) {
                             targets.add(type);
                         }
