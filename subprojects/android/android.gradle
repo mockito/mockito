@@ -3,7 +3,9 @@ description = "Mockito for Android"
 apply from: "$rootDir/gradle/java-library.gradle"
 
 dependencies {
-    compile project.rootProject
+    compile(project.rootProject) {
+        exclude group: 'org.objenesis', module: 'objenesis'
+    }
     compile libraries.bytebuddyandroid
     compile libraries.objenesis2
 }
