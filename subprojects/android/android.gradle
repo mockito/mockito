@@ -5,6 +5,7 @@ apply from: "$rootDir/gradle/java-library.gradle"
 dependencies {
     compile project.rootProject
     compile libraries.bytebuddyandroid
+    compile libraries.objenesis2
 }
 
 tasks.javadoc.enabled = false
