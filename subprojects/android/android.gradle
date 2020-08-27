@@ -9,7 +9,7 @@ dependencies {
     compile libraries.bytebuddyandroid
     compile(libraries.objenesis2) {
         version {
-            strictly '2.6'
+            strictly '[2.6, 3.0['
         }
         because(
             '\n' +
@@ -17,11 +17,14 @@ dependencies {
                 '---------------------------------------\\   /--------------------------------------\n' +
                 '----------------------------------------\\ /---------------------------------------\n' +
                 '-----------------------------------------V----------------------------------------\n' +
-                'Objenesis 3.x version has method that is not supported by android api 25 and below.\n' +
+                'Objenesis 3.x does not work with android api 25 and below.\n' +
                 'If you have mockito-android or mockito-kotlin, exclude mockito-core from them.\n' +
                 'implementation("com.nhaarman.mockitokotlin2:mockito-kotlin") {\n' +
                 '    exlcude group: "org.mockito", module: "mockito-core"\n' +
                 '}\n' +
+                'For more information please check; \n' +
+                '    https://github.com/mockito/mockito/pull/2024\n' +
+                '    https://github.com/mockito/mockito/pull/2007\n' +
                 '-----------------------------------------A----------------------------------------\n' +
                 '----------------------------------------/ \\---------------------------------------\n' +
                 '---------------------------------------/   \\--------------------------------------\n' +
