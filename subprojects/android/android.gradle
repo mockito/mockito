@@ -21,7 +21,7 @@ dependencies {
                 'If you have mockito-core dependency with mockito-android, remove mockito-core.\n' +
                 'If you have mockito-kotlin, exclude mockito-core.\n' +
                 'implementation("com.nhaarman.mockitokotlin2:mockito-kotlin") {\n' +
-                '    exlcude group: "org.mockito", module: "mockito-core"\n' +
+                '    exclude group: "org.mockito", module: "mockito-core"\n' +
                 '}\n' +
                 'For more information please check; \n' +
                 '    https://github.com/mockito/mockito/pull/2024\n' +
