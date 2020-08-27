@@ -19,7 +19,7 @@ dependencies {
                 '-----------------------------------------V----------------------------------------\n' +
                 'Objenesis 3.x version has method that is not supported by android api 25 and below.\n' +
                 'If you have mockito-android or mockito-kotlin, exclude mockito-core from them.\n' +
-                'implementation("org.mockito:mockito-core") {\n' +
+                'implementation("com.nhaarman.mockitokotlin2:mockito-kotlin") {\n' +
                 '    exlcude group: "org.mockito", module: "mockito-core"\n' +
                 '}\n' +
                 '-----------------------------------------A----------------------------------------\n' +
