@@ -33,7 +33,7 @@ public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
     protected boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
         FieldReader fieldReader = new FieldReader(fieldOwner, field);
 
-        // TODO refoctor : code duplicated in SpyAnnotationEngine
+        // TODO refactor : code duplicated in SpyAnnotationEngine
         if (!fieldReader.isNull() && field.isAnnotationPresent(Spy.class)) {
             try {
                 Object instance = fieldReader.read();

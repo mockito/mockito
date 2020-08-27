@@ -48,7 +48,7 @@ Things we pay attention in a PR :
 
   For that matter it's possible to commit [_semantic_ changes](http://lemike-de.tumblr.com/post/79041908218/semantic-commits). _Tests are an asset, so is history_.
 
-  _Exemple gratia_:
+  _Example gratia_:
 
   ```
   Fixes #73 : The new feature
