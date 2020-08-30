@@ -128,7 +128,9 @@ import java.util.function.Function;
  *
  * You can continue to run the same unit tests on a regular VM by using the `mockito-core` artifact in your "testCompile" scope as shown
  * above. Be aware that you cannot use the <a href="#39">inline mock maker</a> on Android due to limitations in the Android VM.
- *
+ * <p>
+ * Note that for better <a href="https://developer.android.com/studio/write/java8-support">Java 8 and Android support</a> you need to update the Android plugin to 3.0.0 (or higher) and set the minSdkVersion to 26 to support method handles.
+ * </p>
  * If you encounter issues with mocking on Android, please open an issue
  * <a href="https://github.com/mockito/mockito/issues/new">on the official issue tracker</a>.
  * Do provide the version of Android you are working on and dependencies of your project.
