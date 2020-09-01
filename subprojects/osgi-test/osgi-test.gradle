@@ -23,7 +23,7 @@ configurations {
 dependencies {
     testRuntimeBundles project.rootProject
     testRuntimeBundles libraries.bytebuddy
-    testRuntimeBundles libraries.objenesis
+    testRuntimeBundles libraries.objenesis3
     testRuntimeBundles tasks.testBundle.outputs.files
     testRuntimeBundles tasks.otherBundle.outputs.files
 }
