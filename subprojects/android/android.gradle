@@ -13,10 +13,8 @@ dependencies {
         }
         because(
             '\n' +
-                '--------------------------------------\\     /-------------------------------------\n' +
-                '---------------------------------------\\   /--------------------------------------\n' +
-                '----------------------------------------\\ /---------------------------------------\n' +
-                '-----------------------------------------V----------------------------------------\n' +
+                'MOCKITO DEPENDENCY PROBLEM:\n' +
+                '\n' +
                 'Mockito core uses Objenesis 3.x and Objenesis 3.x does not work with android api 25 and below.\n' +
                 'If you have mockito-core dependency with mockito-android, remove mockito-core.\n' +
                 'If you have mockito-kotlin, exclude mockito-core.\n' +
@@ -25,11 +23,7 @@ dependencies {
                 '}\n' +
                 'For more information please check; \n' +
                 '    https://github.com/mockito/mockito/pull/2024\n' +
-                '    https://github.com/mockito/mockito/pull/2007\n' +
-                '-----------------------------------------A----------------------------------------\n' +
-                '----------------------------------------/ \\---------------------------------------\n' +
-                '---------------------------------------/   \\--------------------------------------\n' +
-                '--------------------------------------/     \\-------------------------------------\n'
+                '    https://github.com/mockito/mockito/pull/2007\n'
         )
     }
 }
