@@ -7,6 +7,8 @@ package org.mockito.internal.configuration.plugins;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Collections;
+import java.util.List;
 
 import org.mockito.plugins.PluginSwitch;
 
@@ -88,6 +90,34 @@ class PluginLoader {
                                     t);
                         }
                     });
+        }
+    }
+
+    /**
+     * Scans the classpath for given {@code pluginType} and returns a list of its instances.
+     *
+     * @return An list of {@code pluginType} or an empty list if none was found.
+     */
+    @SuppressWarnings("unchecked")
+    <T> List<T> loadPlugins(final Class<T> pluginType) {
+        try {
+            return initializer.loadImpls(pluginType);
+        } catch (final Throwable t) {
+            return Collections.singletonList(
+                    (T)
+                            Proxy.newProxyInstance(
+                                    pluginType.getClassLoader(),
+                                    new Class<?>[] {pluginType},
+                                    new InvocationHandler() {
+                                        @Override
+                                        public Object invoke(
+                                                Object proxy, Method method, Object[] args)
+                                                throws Throwable {
+                                            throw new IllegalStateException(
+                                                    "Could not initialize plugin: " + pluginType,
+                                                    t);
+                                        }
+                                    }));
         }
     }
 }

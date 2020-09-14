@@ -73,7 +73,7 @@ public class DefaultMockingDetails implements MockingDetails {
         return toInspect;
     }
 
-    private MockHandler<Object> mockHandler() {
+    private MockHandler<?> mockHandler() {
         assertGoodMock();
         return MockUtil.getMockHandler(toInspect);
     }
