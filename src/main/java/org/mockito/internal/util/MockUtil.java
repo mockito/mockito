@@ -56,11 +56,12 @@ public class MockUtil {
         return mock;
     }
 
-    public static <T> void resetMock(T mock) {
+    public static void resetMock(Object mock) {
         MockHandler oldHandler = getMockHandler(mock);
         MockCreationSettings settings = oldHandler.getMockSettings();
         MockHandler newHandler = createMockHandler(settings);
 
+        mock = resolve(mock);
         mockMaker.resetMock(mock, newHandler, settings);
     }
 
@@ -110,6 +111,9 @@ public class MockUtil {
     }
 
     private static Object resolve(Object mock) {
+        if (mock instanceof Class<?>) { // static mocks are resolved by definition
+            return mock;
+        }
         for (MockResolver mockResolver : Plugins.getMockResolvers()) {
             mock = mockResolver.resolve(mock);
         }
