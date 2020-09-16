@@ -396,6 +396,13 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                                 .asErasure()
                                 .getDeclaredMethods()
                                 .filter(isConstructor().and(not(isPrivate())));
+                MethodList<MethodDescription.InDefinedShape> nonSynthetics =
+                        constructors.filter(not(isSynthetic()));
+                // Prefer non-synthetic constructors as a workaround to synthetic Robolectric
+                // generated constructors not being visited by AsmVisitorWrapper.ForDeclaredMethods.
+                if (nonSynthetics.size() > 0) {
+                    constructors = nonSynthetics;
+                }
                 int arguments = Integer.MAX_VALUE;
                 boolean visible = false;
                 MethodDescription.InDefinedShape current = null;
