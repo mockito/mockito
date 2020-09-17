@@ -91,7 +91,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                 new ByteBuddy()
                         .with(TypeValidation.DISABLED)
                         .with(Implementation.Context.Disabled.Factory.INSTANCE)
-                        .with(MethodGraph.Compiler.ForDeclaredMethods.INSTANCE);
+                        .with(MethodGraph.Compiler.ForDeclaredMethods.INSTANCE)
+                        .ignore(isSynthetic().and(not(isConstructor())).or(isDefaultFinalizer()));
         mocked = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.INLINE);
         flatMocked = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.INLINE);
         String identifier = RandomString.make();
