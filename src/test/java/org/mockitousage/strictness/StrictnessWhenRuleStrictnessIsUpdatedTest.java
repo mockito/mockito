@@ -5,6 +5,8 @@
 package org.mockitousage.strictness;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.lenientBDD;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -32,13 +34,11 @@ public class StrictnessWhenRuleStrictnessIsUpdatedTest {
 
         // then previous mock is strict:
         when(mock.simpleMethod(1)).thenReturn("1");
-        assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            public void call() {
-                                ProductionCode.simpleMethod(mock, 2);
-                            }
-                        })
-                .isInstanceOf(PotentialStubbingProblem.class);
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                ProductionCode.simpleMethod(mock, 2);
+            }
+        }).isInstanceOf(PotentialStubbingProblem.class);
 
         // but the new mock is lenient, even though the rule is not:
         final IMethods lenientMock = mock(IMethods.class, withSettings().lenient());
@@ -53,16 +53,51 @@ public class StrictnessWhenRuleStrictnessIsUpdatedTest {
 
         // then previous mock is strict:
         when(mock.simpleMethod(1)).thenReturn("1");
-        assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            public void call() {
-                                ProductionCode.simpleMethod(mock, 2);
-                            }
-                        })
-                .isInstanceOf(PotentialStubbingProblem.class);
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                ProductionCode.simpleMethod(mock, 2);
+            }
+        }).isInstanceOf(PotentialStubbingProblem.class);
 
         // but the new mock is lenient, even though the rule is not:
         lenient().when(mock.simpleMethod(1)).thenReturn("1");
+        mock.simpleMethod(100);
+    }
+
+    @Test
+    public void bdd_strictness_per_mock() {
+        // when
+        rule.strictness(Strictness.STRICT_STUBS);
+
+        // then previous mock is strict:
+        given(mock.simpleMethod(1)).willReturn("1");
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                ProductionCode.simpleMethod(mock, 2);
+            }
+        }).isInstanceOf(PotentialStubbingProblem.class);
+
+        // but the new mock is lenient, even though the rule is not:
+        final IMethods lenientMock = mock(IMethods.class, withSettings().lenient());
+        when(lenientMock.simpleMethod(1)).thenReturn("1");
+        lenientMock.simpleMethod(100);
+    }
+
+    @Test
+    public void bdd_strictness_per_stubbing() {
+        // when
+        rule.strictness(Strictness.STRICT_STUBS);
+
+        // then previous mock is strict:
+        given(mock.simpleMethod(1)).willReturn("1");
+        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
+            public void call() {
+                ProductionCode.simpleMethod(mock, 2);
+            }
+        }).isInstanceOf(PotentialStubbingProblem.class);
+
+        // but the new mock is lenient, even though the rule is not:
+        lenientBDD().given(mock.simpleMethod(1)).willReturn("1");
         mock.simpleMethod(100);
     }
 }
