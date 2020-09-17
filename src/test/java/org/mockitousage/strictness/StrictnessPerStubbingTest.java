@@ -53,12 +53,14 @@ public class StrictnessPerStubbingTest {
         mock.differentMethod("200");
 
         // but on strict stubbing, we cannot:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                ProductionCode.simpleMethod(mock, "100");
-            }
-        }).isInstanceOf(PotentialStubbingProblem.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                ProductionCode.simpleMethod(mock, "100");
+                            }
+                        })
+                .isInstanceOf(PotentialStubbingProblem.class);
     }
 
     @Test
@@ -100,18 +102,22 @@ public class StrictnessPerStubbingTest {
         mock.simpleMethod(200);
 
         // and stubbing works, too:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -126,18 +132,22 @@ public class StrictnessPerStubbingTest {
         mock.simpleMethod(200);
 
         // and stubbing works, too:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -152,18 +162,22 @@ public class StrictnessPerStubbingTest {
         mock.simpleMethod(200);
 
         // and stubbing works, too:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalStateException.class);
     }
 
     static class Counter {
@@ -197,12 +211,14 @@ public class StrictnessPerStubbingTest {
 
         // then no stubbing exception and real method is called if we call stubbed method with
         // different arg:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                spy.scream("2");
-            }
-        }).hasMessage("2");
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                spy.scream("2");
+                            }
+                        })
+                .hasMessage("2");
 
         // and we do nothing when stubbing called with correct arg:
         spy.scream("1");
@@ -227,12 +243,13 @@ public class StrictnessPerStubbingTest {
         lenient().when(mock.differentMethod("2")).thenReturn("2");
 
         // then unnecessary stubbing flags method only on the strict stubbing:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                mockito.finishMocking();
-            }
-        })
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                mockito.finishMocking();
+                            }
+                        })
                 .isInstanceOf(UnnecessaryStubbingException.class)
                 .hasMessageContaining("1. -> ")
                 // good enough to prove that we're flagging just one unnecessary stubbing:
@@ -261,17 +278,18 @@ public class StrictnessPerStubbingTest {
 
         // then 'verifyNoMoreInteractions' flags the lenient stubbing (called with different arg)
         // and reports it with [?] in the exception message
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                verifyNoMoreInteractions(mock);
-            }
-        })
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                verifyNoMoreInteractions(mock);
+                            }
+                        })
                 .isInstanceOf(NoInteractionsWanted.class)
                 .hasMessageContaining("1. ->")
                 .hasMessageContaining("2. [?]->");
-                // TODO 792: assertion duplicated with StrictnessPerMockTest
-                // and we should use assertions based on content of the exception rather than the string
+        // TODO 792: assertion duplicated with StrictnessPerMockTest
+        // and we should use assertions based on content of the exception rather than the string
     }
 
     @Test
@@ -284,19 +302,20 @@ public class StrictnessPerStubbingTest {
         mock.differentMethod("200");
 
         // but on strict stubbing, we cannot:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                ProductionCode.simpleMethod(mock, "100");
-            }
-        }).isInstanceOf(PotentialStubbingProblem.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                ProductionCode.simpleMethod(mock, "100");
+                            }
+                        })
+                .isInstanceOf(PotentialStubbingProblem.class);
     }
 
     @Test
     public void bdd_willReturn_syntax() {
         // when
-        lenientBDD().willReturn("2").willReturn("3")
-                .given(mock).simpleMethod(1);
+        lenientBDD().willReturn("2").willReturn("3").given(mock).simpleMethod(1);
 
         // then on lenient stubbing, we can call it with different argument:
         mock.simpleMethod(200);
@@ -309,8 +328,7 @@ public class StrictnessPerStubbingTest {
     @Test
     public void bdd_willReturn_varargs_syntax() {
         // when
-        lenientBDD().willReturn("2", "3")
-                .given(mock).simpleMethod(1);
+        lenientBDD().willReturn("2", "3").given(mock).simpleMethod(1);
 
         // then on lenient stubbing, we can call it with different argument with no exception:
         mock.simpleMethod(200);
@@ -328,24 +346,29 @@ public class StrictnessPerStubbingTest {
         lenientBDD()
                 .willThrow(IllegalArgumentException.class)
                 .willThrow(IllegalStateException.class)
-                .given(mock).simpleMethod(1);
+                .given(mock)
+                .simpleMethod(1);
 
         // then on lenient stubbing, we can call it with different argument with no exception:
         mock.simpleMethod(200);
 
         // and stubbing works, too:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -353,24 +376,29 @@ public class StrictnessPerStubbingTest {
         // when
         lenientBDD()
                 .willThrow(IllegalArgumentException.class, IllegalStateException.class)
-                .given(mock).simpleMethod(1);
+                .given(mock)
+                .simpleMethod(1);
 
         // then on lenient stubbing, we can call it with different argument with no exception:
         mock.simpleMethod(200);
 
         // and stubbing works, too:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -378,24 +406,29 @@ public class StrictnessPerStubbingTest {
         // when
         lenientBDD()
                 .willThrow(new IllegalArgumentException(), new IllegalStateException())
-                .given(mock).simpleMethod(1);
+                .given(mock)
+                .simpleMethod(1);
 
         // then on lenient stubbing, we can call it with different argument with no exception:
         mock.simpleMethod(200);
 
         // and stubbing works, too:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -417,13 +450,16 @@ public class StrictnessPerStubbingTest {
         final Counter spy = spy(Counter.class);
         lenientBDD().willDoNothing().given(spy).scream("1");
 
-        // then no stubbing exception and real method is called if we call stubbed method with different arg:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                spy.scream("2");
-            }
-        }).hasMessage("2");
+        // then no stubbing exception and real method is called if we call stubbed method with
+        // different arg:
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                spy.scream("2");
+                            }
+                        })
+                .hasMessage("2");
 
         // and we do nothing when stubbing called with correct arg:
         spy.scream("1");
@@ -448,16 +484,17 @@ public class StrictnessPerStubbingTest {
         lenientBDD().given(mock.differentMethod("2")).willReturn("2");
 
         // then unnecessary stubbing flags method only on the strict stubbing:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                mockito.finishMocking();
-            }
-        })
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                mockito.finishMocking();
+                            }
+                        })
                 .isInstanceOf(UnnecessaryStubbingException.class)
                 .hasMessageContaining("1. -> ")
-                //good enough to prove that we're flagging just one unnecessary stubbing:
-                //TODO 792: this assertion is duplicated with StrictnessPerMockTest
+                // good enough to prove that we're flagging just one unnecessary stubbing:
+                // TODO 792: this assertion is duplicated with StrictnessPerMockTest
                 .isNot(TestBase.hasMessageContaining("2. ->"));
     }
 
@@ -482,17 +519,18 @@ public class StrictnessPerStubbingTest {
 
         // then 'verifyNoMoreInteractions' flags the lenient stubbing (called with different arg)
         // and reports it with [?] in the exception message
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                verifyNoMoreInteractions(mock);
-            }
-        })
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                verifyNoMoreInteractions(mock);
+                            }
+                        })
                 .isInstanceOf(NoInteractionsWanted.class)
                 .hasMessageContaining("1. ->")
                 .hasMessageContaining("2. [?]->");
-                //TODO 792: assertion duplicated with StrictnessPerMockTest
-                // and we should use assertions based on content of the exception rather than the string
+        // TODO 792: assertion duplicated with StrictnessPerMockTest
+        // and we should use assertions based on content of the exception rather than the string
     }
 
     @After

@@ -33,11 +33,13 @@ public class StrictnessPerStubbingWithRunnerTest {
         mock.differentMethod("200");
 
         // but on strict stubbing, we cannot:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() {
-                ProductionCode.simpleMethod(mock, "100");
-            }
-        }).isInstanceOf(PotentialStubbingProblem.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                ProductionCode.simpleMethod(mock, "100");
+                            }
+                        })
+                .isInstanceOf(PotentialStubbingProblem.class);
 
         // let's use the strict stubbing so that it is not reported as failure by the runner:
         mock.simpleMethod("1");
@@ -59,11 +61,13 @@ public class StrictnessPerStubbingWithRunnerTest {
         mock.differentMethod("200");
 
         // but on strict stubbing, we cannot:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() {
-                ProductionCode.simpleMethod(mock, "100");
-            }
-        }).isInstanceOf(PotentialStubbingProblem.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                ProductionCode.simpleMethod(mock, "100");
+                            }
+                        })
+                .isInstanceOf(PotentialStubbingProblem.class);
 
         // let's use the strict stubbing so that it is not reported as failure by the runner:
         mock.simpleMethod("1");

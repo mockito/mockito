@@ -581,7 +581,9 @@ public class BDDMockito extends Mockito {
          * see original {@link org.mockito.internal.stubbing.DefaultLenientStubber#doThrow(Class, Class[])}
          * @since 3.5.11
          */
-        public BDDStubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
+        public BDDStubber willThrow(
+                Class<? extends Throwable> toBeThrown,
+                Class<? extends Throwable>... nextToBeThrown) {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown, nextToBeThrown));
         }
 
