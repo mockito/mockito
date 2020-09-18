@@ -19,7 +19,7 @@ task mockitoCoverage(type: JacocoReport) {
             apply plugin: "jacoco"
 
             jacoco {
-                toolVersion = '0.8.5'
+                toolVersion = '0.8.6'
 
                 if (currentProject != rootProject) {   //already automatically enhanced in mockito main project as "java" plugin was applied before
                     applyTo test
