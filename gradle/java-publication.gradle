@@ -1,0 +1,91 @@
+//Sources/javadoc artifacts required by Maven module publications
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    include "LICENSE"
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from tasks.javadoc
+    include "LICENSE"
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+//Gradle Maven publishing plugin configuration (https://docs.gradle.org/current/userguide/publishing_maven.html)
+apply plugin: "maven-publish"
+publishing {
+    publications {
+        javaLibrary(MavenPublication) { //name of the publication
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            artifactId = project.archivesBaseName
+
+            pom {
+                name = artifactId
+                description = "Most popular mocking framework for unit tests written in Java"
+                url = "https://github.com/mockito/mockito"
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://github.com/mockito/mockito/blob/release/3.x/LICENSE'
+                    }
+                }
+                developers {
+                    ['mockitoguy:Szczepan Faber', 'bric3:Brice Dutheil', 'raphw:Rafael Winterhalter',
+                     'TimvdLippe:Tim van der Lippe'].each { devData ->
+                        developer {
+                            def devInfo = devData.split(':')
+                            id = devInfo[0]
+                            name = devInfo[1]
+                            url = 'https://github.com/' + devInfo[0]
+                            roles = ["Core developer"]
+                        }
+                    }
+                }
+                scm {
+                    url = 'https://github.com/mockito/mockito.git'
+                }
+            }
+        }
+    }
+
+    //useful for testing - running "publish" will create artifacts/pom in a local dir
+    repositories { maven { url = "$buildDir/repo" } }
+}
+
+//fleshes out problems with Maven pom generation when building
+tasks.build.dependsOn("publishJavaLibraryPublicationToMavenLocal");
+
+//Bintray Gradle plugin configuration (https://github.com/bintray/gradle-bintray-plugin)
+//Plugin jars are added to the buildscript classpath in the root build.gradle file
+apply plugin: "com.jfrog.bintray"
+
+bintray {
+    user = 'szczepiq'
+    key = System.getenv('BINTRAY_API_KEY')
+    publish = true
+    dryRun = project.hasProperty("bintrayDryRun")
+    publications = ['javaLibrary']
+
+    pkg {
+        repo = 'examples'
+        userOrg = 'shipkit'
+        name = "shipkit-demo"
+        licenses = ['MIT']
+        labels = ['continuous delivery', 'release automation', 'mockito', 'shipkit']
+        vcsUrl = "https://github.com/shipkit/shipkit-demo.git"
+
+        version {
+            name = project.version
+            vcsTag = "v$name"
+            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
+        }
+    }
+}

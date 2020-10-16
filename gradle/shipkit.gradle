@@ -1,26 +1,19 @@
-shipkit {
-    gitHub.repository = "mockito/mockito"
-    gitHub.readOnlyAuthToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"
+apply plugin: "org.shipkit.shipkit-auto-version"
+apply plugin: "org.shipkit.shipkit-changelog"
+apply plugin: "org.shipkit.shipkit-gh-release"
 
-    releaseNotes.file = "doc/release-notes/official.md"
-    releaseNotes.labelMapping = [
-        '1.* incompatible': 'Incompatible changes with previous major version (v1.x)',
-        'java-9': "Java 9 support",
-        'java-8': "Java 8 support",
-        'new feature': "New features",
-        'BDD': 'Behavior-Driven Development support',
-        'bug': "Bugfixes",
-        'enhancement': "Enhancements",
-        'android': "Android support",
-        'docs': 'Documentation'
-    ]
+tasks.named("generateChangelog") {
+    previousRevision = "v" + project.ext.'shipkit-auto-version.previous-version'
+    readOnlyToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"
+    repository = "mockito/mockito"
+}
 
-    git.releasableBranchRegex = "release/.+"  // 'release/2.x', 'release/3.x', etc.
-
-    def buildNo = System.getenv("TRAVIS_BUILD_NUMBER")
-    git.commitMessagePostfix = buildNo? "by CI build $buildNo\n\n[ci skip-release]" : "by local build\n\n[ci skip-release]"
-
-    team.developers = ['mockitoguy:Szczepan Faber', 'bric3:Brice Dutheil', 'raphw:Rafael Winterhalter', 'TimvdLippe:Tim van der Lippe']
+tasks.named("githubRelease") {
+    def genTask = tasks.named("generateChangelog").get()
+    dependsOn genTask
+    repository = genTask.repository
+    changelog = genTask.outputFile
+    writeToken = System.getenv("GH_WRITE_TOKEN")
 }
 
 /**
@@ -30,44 +23,38 @@ shipkit {
  */
 boolean centralRelease = shouldReleaseToCentral(project)
 
-afterEvaluate {
-    //using afterEvaluate because 'assertReleaseNeeded' task is added after 'shipkit.gradle' file is evaluated by Gradle
-   [assertReleaseNeeded, releaseNeeded].each {
-        it.skipComparePublications = centralRelease
-    }
-}
 
-allprojects {
-    plugins.withId("org.shipkit.bintray") {
-        bintray {
-            pkg {
-                repo = 'maven' //https://bintray.com/mockito/maven
-
-                //We need to use some user id here, because the Bintray key is associated with the user
-                //However, any user id is good, so longer the user has necessary privileges to the repository
-                user = 'szczepiq' //https://bintray.com/szczepiq
-
-                userOrg = 'mockito' //https://bintray.com/mockito
-                name = 'mockito' //https://bintray.com/mockito/maven/mockito
-                licenses = ['MIT']
-                labels = ['mocks', 'tdd', 'unit tests']
-                publish = true //can be changed to 'false' for testing
-
-                //See our Bintray packages at https://bintray.com/mockito/maven
-                name = centralRelease? "mockito" : "mockito-development"
-
-                version {
-                    //Notable versions are automatically synced to Maven Central repository (https://oss.sonatype.org/)
-                    mavenCentralSync {
-                        sync = centralRelease
-                        user = System.env.NEXUS_TOKEN_USER
-                        password = System.env.NEXUS_TOKEN_PWD
-                    }
-                }
-            }
-        }
-    }
-}
+//allprojects {
+//    plugins.withId("org.shipkit.bintray") {
+//        bintray {
+//            pkg {
+//                repo = 'maven' //https://bintray.com/mockito/maven
+//
+//                //We need to use some user id here, because the Bintray key is associated with the user
+//                //However, any user id is good, so longer the user has necessary privileges to the repository
+//                user = 'szczepiq' //https://bintray.com/szczepiq
+//
+//                userOrg = 'mockito' //https://bintray.com/mockito
+//                name = 'mockito' //https://bintray.com/mockito/maven/mockito
+//                licenses = ['MIT']
+//                labels = ['mocks', 'tdd', 'unit tests']
+//                publish = true //can be changed to 'false' for testing
+//
+//                //See our Bintray packages at https://bintray.com/mockito/maven
+//                name = centralRelease? "mockito" : "mockito-development"
+//
+//                version {
+//                    //Notable versions are automatically synced to Maven Central repository (https://oss.sonatype.org/)
+//                    mavenCentralSync {
+//                        sync = centralRelease
+//                        user = System.env.NEXUS_TOKEN_USER
+//                        password = System.env.NEXUS_TOKEN_PWD
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 /**
  * Finds out if we should release to Maven Central.
@@ -82,8 +69,9 @@ static boolean shouldReleaseToCentral(project) {
  - project property 'maven-central-release' exists: $centralReleaseByProjectProperty
  - Maven Central release is enabled: $centralRelease"""
     project.logger.info(message)
-    project.afterEvaluate {
-        project.tasks.performRelease.doLast { logger.lifecycle(message) }
-    }
+//TODO?
+//    project.afterEvaluate {
+//        project.tasks.performRelease.doLast { logger.lifecycle(message) }
+//    }
     return centralRelease
 }
