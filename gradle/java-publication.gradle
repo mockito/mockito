@@ -1,14 +1,23 @@
 //Sources/javadoc artifacts required by Maven module publications
+def licenseSpec = copySpec {
+    from project.rootDir
+    include "LICENSE"
+}
+
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
-    include "LICENSE"
+    with licenseSpec
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from tasks.javadoc
-    include "LICENSE"
+    with licenseSpec
+}
+
+jar {
+    with licenseSpec
 }
 
 artifacts {
