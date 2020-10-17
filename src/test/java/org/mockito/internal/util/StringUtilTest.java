@@ -15,15 +15,16 @@ import org.junit.Test;
 public class StringUtilTest {
 
     @Test
-    public void decamelizes_matcher() throws Exception {
+    public void decamelizes_matcher_name() throws Exception {
         assertEquals(
                 "<Sentence with strong language>",
-                StringUtil.decamelizeMatcher("SentenceWithStrongLanguage"));
-        assertEquals("<W e i r d o 1>", StringUtil.decamelizeMatcher("WEIRDO1"));
-        assertEquals("<_>", StringUtil.decamelizeMatcher("_"));
+                StringUtil.decamelizeMatcherName("SentenceWithStrongLanguage"));
+        assertEquals("<W e i r d o 1>", StringUtil.decamelizeMatcherName("WEIRDO1"));
+        assertEquals("<_>", StringUtil.decamelizeMatcherName("_"));
         assertEquals(
-                "<Has exactly 3 elements>", StringUtil.decamelizeMatcher("HasExactly3Elements"));
-        assertEquals("<custom argument matcher>", StringUtil.decamelizeMatcher(""));
+                "<Has exactly 3 elements>",
+                StringUtil.decamelizeMatcherName("HasExactly3Elements"));
+        assertEquals("<custom argument matcher>", StringUtil.decamelizeMatcherName(""));
     }
 
     @Test

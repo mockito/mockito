@@ -60,7 +60,7 @@ public class StringUtil {
         return out.substring(0, out.length() - 1); // lose last EOL
     }
 
-    public static String decamelizeMatcher(String className) {
+    public static String decamelizeMatcherName(String className) {
         if (className.length() == 0) {
             return "<custom argument matcher>";
         }
