@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers.text;
 
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
-import static org.mockito.internal.util.StringUtil.decamelizeMatcher;
+import static org.mockito.internal.util.StringUtil.decamelizeMatcherName;
 
 import java.lang.reflect.Method;
 
@@ -37,6 +37,17 @@ class MatcherToString {
             }
             cls = cls.getSuperclass();
         }
-        return decamelizeMatcher(matcher.getClass().getSimpleName());
+
+        String matcherName;
+        Class<?> matcherClass = matcher.getClass();
+        // Lambdas have non-empty getSimpleName() (despite being synthetic)
+        // but that name is not useful for user
+        if (matcherClass.isSynthetic()) {
+            matcherName = "";
+        } else {
+            matcherName = matcherClass.getSimpleName();
+        }
+
+        return decamelizeMatcherName(matcherName);
     }
 }
