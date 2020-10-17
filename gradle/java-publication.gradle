@@ -29,12 +29,19 @@ publishing {
 
             pom {
                 name = artifactId
-                description = "Most popular mocking framework for unit tests written in Java"
+                description = project.description
+
+                //Gradle does not write 'jar' packaging to the pom (unlike other packaging types).
+                //This is OK because 'jar' is implicit/default:
+                // https://maven.apache.org/guides/introduction/introduction-to-the-pom.html#minimal-pom
+                packaging = project.tasks.jar.extension
+
                 url = "https://github.com/mockito/mockito"
                 licenses {
                     license {
-                        name = 'MIT'
+                        name = 'The MIT License'
                         url = 'https://github.com/mockito/mockito/blob/release/3.x/LICENSE'
+                        distribution = 'repo'
                     }
                 }
                 developers {
@@ -51,6 +58,14 @@ publishing {
                 }
                 scm {
                     url = 'https://github.com/mockito/mockito.git'
+                }
+                issueManagement {
+                    url = 'https://github.com/mockito/mockito/issues'
+                    system = 'GitHub issues'
+                }
+                ciManagement {
+                    url = 'https://travis-ci.org/mockito/mockito'
+                    system = 'TravisCI'
                 }
             }
         }
