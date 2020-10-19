@@ -400,6 +400,9 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                 boolean packagePrivate = true;
                 MethodDescription.InDefinedShape current = null;
                 for (MethodDescription.InDefinedShape constructor : constructors) {
+                    // We are choosing the shortest constructor with regards to arguments.
+                    // Yet, we prefer a non-package-private constructor since they require
+                    // the super class to be on the same class loader.
                     if (constructor.getParameters().size() < arguments
                             && (packagePrivate || !constructor.isPackagePrivate())) {
                         arguments = constructor.getParameters().size();

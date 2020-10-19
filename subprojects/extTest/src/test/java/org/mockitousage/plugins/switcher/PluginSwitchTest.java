@@ -7,6 +7,7 @@ package org.mockitousage.plugins.switcher;
 import org.junit.Test;
 import org.mockitousage.plugins.instantiator.MyInstantiatorProvider2;
 import org.mockitousage.plugins.logger.MyMockitoLogger;
+import org.mockitousage.plugins.resolver.MyMockResolver;
 import org.mockitousage.plugins.stacktrace.MyStackTraceCleanerProvider;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class PluginSwitchTest {
         assertEquals(MyPluginSwitch.invokedFor, asList(MyMockMaker.class.getName(),
             MyStackTraceCleanerProvider.class.getName(),
             MyMockitoLogger.class.getName(),
+            MyMockResolver.class.getName(),
             MyInstantiatorProvider2.class.getName()));
     }
 

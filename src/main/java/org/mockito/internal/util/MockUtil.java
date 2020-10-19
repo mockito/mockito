@@ -16,6 +16,7 @@ import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockMaker.TypeMockability;
+import org.mockito.plugins.MockResolver;
 
 import java.util.function.Function;
 
@@ -55,21 +56,25 @@ public class MockUtil {
         return mock;
     }
 
-    public static <T> void resetMock(T mock) {
+    public static void resetMock(Object mock) {
         MockHandler oldHandler = getMockHandler(mock);
         MockCreationSettings settings = oldHandler.getMockSettings();
         MockHandler newHandler = createMockHandler(settings);
 
+        mock = resolve(mock);
         mockMaker.resetMock(mock, newHandler, settings);
     }
 
-    public static <T> MockHandler<T> getMockHandler(T mock) {
+    public static MockHandler<?> getMockHandler(Object mock) {
         if (mock == null) {
             throw new NotAMockException("Argument should be a mock, but is null!");
         }
 
-        if (isMock(mock)) {
-            return mockMaker.getHandler(mock);
+        mock = resolve(mock);
+
+        MockHandler handler = mockMaker.getHandler(mock);
+        if (handler != null) {
+            return handler;
         } else {
             throw new NotAMockException("Argument should be a mock, but is: " + mock.getClass());
         }
@@ -96,7 +101,23 @@ public class MockUtil {
         // Potentially we could also move other methods to MockitoMock, some other candidates:
         // getInvocationContainer, isSpy, etc.
         // This also allows us to reuse our public API MockingDetails
-        return mock != null && mockMaker.getHandler(mock) != null;
+        if (mock == null) {
+            return false;
+        }
+
+        mock = resolve(mock);
+
+        return mockMaker.getHandler(mock) != null;
+    }
+
+    private static Object resolve(Object mock) {
+        if (mock instanceof Class<?>) { // static mocks are resolved by definition
+            return mock;
+        }
+        for (MockResolver mockResolver : Plugins.getMockResolvers()) {
+            mock = mockResolver.resolve(mock);
+        }
+        return mock;
     }
 
     public static MockName getMockName(Object mock) {
