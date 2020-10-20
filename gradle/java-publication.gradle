@@ -87,33 +87,6 @@ publishing {
 //fleshes out problems with Maven pom generation when building
 tasks.build.dependsOn("publishJavaLibraryPublicationToMavenLocal")
 
-/**
- * Mockito team does not publish to Maven Central every release as requested by the community.
- * We publish to maven central only some versions. All versions are published to Bintray on every change.
- * See https://github.com/mockito/mockito/issues/911
- */
-def centralRelease = shouldReleaseToCentral(project)
-
-/**
- * Finds out if we should release to Maven Central.
- * To test this logic, run build with '-i' (info logging) and inspect the build output.
- */
-static boolean shouldReleaseToCentral(project) {
-    return false
-//    boolean centralReleaseByCommit = System.getenv("TRAVIS_COMMIT_MESSAGE")?.contains("[ci maven-central-release]")
-//    boolean centralReleaseByProjectProperty = project.hasProperty("maven-central-release")
-//    boolean centralRelease = centralReleaseByCommit || centralReleaseByProjectProperty
-//    def message = """Release was using following settings:
-// - commit message contains '[ci maven-central-release]': $centralReleaseByCommit
-// - project property 'maven-central-release' exists: $centralReleaseByProjectProperty
-// - Maven Central release is enabled: $centralRelease"""
-//    project.logger.info(message)
-//    project.afterEvaluate {
-//        project.tasks.bintrayUpload.doLast { logger.lifecycle(message) }
-//    }
-//    return centralRelease
-}
-
 //Bintray Gradle plugin configuration (https://github.com/bintray/gradle-bintray-plugin)
 //Plugin jars are added to the buildscript classpath in the root build.gradle file
 apply plugin: "com.jfrog.bintray"
@@ -132,7 +105,7 @@ bintray {
         userOrg = 'mockito' //https://bintray.com/mockito
 
         //See our Bintray packages at https://bintray.com/mockito/maven
-        name = centralRelease? "mockito" : "mockito-development"
+        name = project.rootProject.ext.mavenCentralRelease? "mockito" : "mockito-development"
 
         licenses = ['MIT']
         labels = ['mocks', 'tdd', 'unit tests']
@@ -144,7 +117,7 @@ bintray {
 
             //Notable versions are automatically synced to Maven Central repository (https://oss.sonatype.org/)
             mavenCentralSync {
-                sync = centralRelease
+                sync = project.rootProject.ext.mavenCentralRelease
                 user = System.env.NEXUS_TOKEN_USER
                 password = System.env.NEXUS_TOKEN_PWD
             }

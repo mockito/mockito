@@ -15,3 +15,29 @@ tasks.named("githubRelease") {
     changelog = genTask.outputFile
     writeToken = System.getenv("GH_WRITE_TOKEN")
 }
+
+/**
+ * Mockito team does not publish to Maven Central every release as requested by the community.
+ * We publish to maven central only some versions. All versions are published to Bintray on every change.
+ * See https://github.com/mockito/mockito/issues/911
+ */
+ext.mavenCentralRelease = shouldReleaseToCentral(project)
+
+/**
+ * Finds out if we should release to Maven Central.
+ * To test this logic, run build with '-i' (info logging) and inspect the build output.
+ */
+static boolean shouldReleaseToCentral(project) {
+    boolean centralReleaseByCommit = System.getenv("TRAVIS_COMMIT_MESSAGE")?.contains("[ci maven-central-release]")
+    boolean centralReleaseByProjectProperty = project.hasProperty("maven-central-release")
+    boolean centralRelease = centralReleaseByCommit || centralReleaseByProjectProperty
+    def message = """Bintray publish was using following settings:
+ - commit message contains '[ci maven-central-release]': $centralReleaseByCommit
+ - project property 'maven-central-release' exists: $centralReleaseByProjectProperty
+ - Maven Central release is enabled: $centralRelease"""
+    project.logger.info(message)
+    project.afterEvaluate {
+        project.tasks.bintrayPublish.doLast { logger.lifecycle(message) }
+    }
+    return centralRelease
+}
