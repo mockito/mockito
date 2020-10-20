@@ -6,6 +6,8 @@ package org.mockito.internal.configuration.plugins;
 
 import org.mockito.plugins.*;
 
+import java.util.List;
+
 /**
  * Access to Mockito behavior that can be reconfigured by plugins
  */
@@ -69,6 +71,15 @@ public class Plugins {
      */
     public static MockitoLogger getMockitoLogger() {
         return registry.getMockitoLogger();
+    }
+
+    /**
+     * Returns a list of available mock resolvers if any.
+     *
+     * @return A list of available mock resolvers or an empty list if none are registered.
+     */
+    public static List<MockResolver> getMockResolvers() {
+        return registry.getMockResolvers();
     }
 
     /**

@@ -85,7 +85,7 @@ public interface MockMaker {
      *                {@link #getHandler(Object)} will return this instance.
      * @param instance  The object to spy upon.
      * @param <T> Type of the mock to return, actually the <code>settings.getTypeToMock</code>.
-     * @return
+     * @return The spy instance, if this mock maker supports direct spy creation.
      * @since 3.5.0
      */
     default <T> Optional<T> createSpy(

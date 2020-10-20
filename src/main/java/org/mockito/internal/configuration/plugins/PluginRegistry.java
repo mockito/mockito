@@ -7,6 +7,8 @@ package org.mockito.internal.configuration.plugins;
 import org.mockito.internal.creation.instance.InstantiatorProviderAdapter;
 import org.mockito.plugins.*;
 
+import java.util.List;
+
 class PluginRegistry {
 
     private final PluginSwitch pluginSwitch =
@@ -30,6 +32,9 @@ class PluginRegistry {
 
     private final MockitoLogger mockitoLogger =
             new PluginLoader(pluginSwitch).loadPlugin(MockitoLogger.class);
+
+    private final List<MockResolver> mockResolvers =
+            new PluginLoader(pluginSwitch).loadPlugins(MockResolver.class);
 
     PluginRegistry() {
         Object impl =
@@ -99,5 +104,14 @@ class PluginRegistry {
      */
     MockitoLogger getMockitoLogger() {
         return mockitoLogger;
+    }
+
+    /**
+     * Returns a list of available mock resolvers if any.
+     *
+     * @return A list of available mock resolvers or an empty list if none are registered.
+     */
+    List<MockResolver> getMockResolvers() {
+        return mockResolvers;
     }
 }

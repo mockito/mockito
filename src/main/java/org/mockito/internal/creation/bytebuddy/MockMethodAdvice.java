@@ -397,13 +397,17 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                                 .getDeclaredMethods()
                                 .filter(isConstructor().and(not(isPrivate())));
                 int arguments = Integer.MAX_VALUE;
-                boolean visible = false;
+                boolean packagePrivate = true;
                 MethodDescription.InDefinedShape current = null;
                 for (MethodDescription.InDefinedShape constructor : constructors) {
+                    // We are choosing the shortest constructor with regards to arguments.
+                    // Yet, we prefer a non-package-private constructor since they require
+                    // the super class to be on the same class loader.
                     if (constructor.getParameters().size() < arguments
-                            && (!visible || constructor.isPackagePrivate())) {
+                            && (packagePrivate || !constructor.isPackagePrivate())) {
+                        arguments = constructor.getParameters().size();
+                        packagePrivate = constructor.isPackagePrivate();
                         current = constructor;
-                        visible = constructor.isPackagePrivate();
                     }
                 }
                 if (current != null) {

@@ -9,7 +9,7 @@ dependencies {
     compile libraries.bytebuddyandroid
     compile(libraries.objenesis2) {
         version {
-            strictly '[2.6, 3.0['
+            strictly '2.6'
         }
         because(
             '\n' +
