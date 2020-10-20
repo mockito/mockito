@@ -8,7 +8,7 @@ import static java.util.Arrays.asList;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.lenientBDD;
+import static org.mockito.BDDMockito.leniently;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -155,7 +155,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
     public void bdd_unused_and_lenient_stubbings() throws Exception {
         given(mock1.simpleMethod(1)).willReturn("1");
         given(mock1.simpleMethod(2)).willReturn("2");
-        lenientBDD().given(mock2.simpleMethod(3)).willReturn("3");
+        leniently().given(mock2.simpleMethod(3)).willReturn("3");
 
         mock1.simpleMethod(1);
 
@@ -172,7 +172,7 @@ public class UnusedStubbingsFinderTest extends TestBase {
         given(mock1.simpleMethod(1)).willReturn("1");
         given(mock2.simpleMethod(2)).willReturn("2");
         given(mock2.simpleMethod(3)).willReturn("3");
-        lenientBDD().given(mock2.differentMethod()).willReturn("4"); //will not be included in results
+        leniently().given(mock2.differentMethod()).willReturn("4"); //will not be included in results
 
         mock2.simpleMethod(2);
 

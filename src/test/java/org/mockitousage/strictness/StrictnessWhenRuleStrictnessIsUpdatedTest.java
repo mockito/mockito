@@ -6,7 +6,7 @@ package org.mockitousage.strictness;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.lenientBDD;
+import static org.mockito.BDDMockito.leniently;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -105,7 +105,7 @@ public class StrictnessWhenRuleStrictnessIsUpdatedTest {
                 .isInstanceOf(PotentialStubbingProblem.class);
 
         // but the new mock is lenient, even though the rule is not:
-        lenientBDD().given(mock.simpleMethod(1)).willReturn("1");
+        leniently().given(mock.simpleMethod(1)).willReturn("1");
         mock.simpleMethod(100);
     }
 }

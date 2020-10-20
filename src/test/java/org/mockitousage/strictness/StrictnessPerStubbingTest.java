@@ -7,7 +7,7 @@ package org.mockitousage.strictness;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.lenientBDD;
+import static org.mockito.BDDMockito.leniently;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -296,7 +296,7 @@ public class StrictnessPerStubbingTest {
     public void bdd_potential_stubbing_problem() {
         // when
         given(mock.simpleMethod("1")).willReturn("1");
-        lenientBDD().given(mock.differentMethod("2")).willReturn("2");
+        leniently().given(mock.differentMethod("2")).willReturn("2");
 
         // then on lenient stubbing, we can call it with different argument:
         mock.differentMethod("200");
@@ -315,7 +315,7 @@ public class StrictnessPerStubbingTest {
     @Test
     public void bdd_willReturn_syntax() {
         // when
-        lenientBDD().willReturn("2").willReturn("3").given(mock).simpleMethod(1);
+        leniently().willReturn("2").willReturn("3").given(mock).simpleMethod(1);
 
         // then on lenient stubbing, we can call it with different argument:
         mock.simpleMethod(200);
@@ -328,7 +328,7 @@ public class StrictnessPerStubbingTest {
     @Test
     public void bdd_willReturn_varargs_syntax() {
         // when
-        lenientBDD().willReturn("2", "3").given(mock).simpleMethod(1);
+        leniently().willReturn("2", "3").given(mock).simpleMethod(1);
 
         // then on lenient stubbing, we can call it with different argument with no exception:
         mock.simpleMethod(200);
@@ -343,7 +343,7 @@ public class StrictnessPerStubbingTest {
     @Test
     public void bdd_willThrow_syntax() {
         // when
-        lenientBDD()
+        leniently()
                 .willThrow(IllegalArgumentException.class)
                 .willThrow(IllegalStateException.class)
                 .given(mock)
@@ -374,7 +374,7 @@ public class StrictnessPerStubbingTest {
     @Test
     public void bdd_willThrow_vararg_syntax() {
         // when
-        lenientBDD()
+        leniently()
                 .willThrow(IllegalArgumentException.class, IllegalStateException.class)
                 .given(mock)
                 .simpleMethod(1);
@@ -404,7 +404,7 @@ public class StrictnessPerStubbingTest {
     @Test
     public void bdd_willThrow_instance_vararg_syntax() {
         // when
-        lenientBDD()
+        leniently()
                 .willThrow(new IllegalArgumentException(), new IllegalStateException())
                 .given(mock)
                 .simpleMethod(1);
@@ -435,7 +435,7 @@ public class StrictnessPerStubbingTest {
     public void bdd_willCallRealMethod_syntax() {
         // when
         Counter mock = mock(Counter.class);
-        lenientBDD().willCallRealMethod().given(mock).increment(1);
+        leniently().willCallRealMethod().given(mock).increment(1);
 
         // then no exception and default return value if we call it with different arg:
         assertEquals(0, mock.increment(0));
@@ -448,7 +448,7 @@ public class StrictnessPerStubbingTest {
     public void bdd_willDoNothing_syntax() {
         // when
         final Counter spy = spy(Counter.class);
-        lenientBDD().willDoNothing().given(spy).scream("1");
+        leniently().willDoNothing().given(spy).scream("1");
 
         // then no stubbing exception and real method is called if we call stubbed method with
         // different arg:
@@ -468,7 +468,7 @@ public class StrictnessPerStubbingTest {
     @Test
     public void bdd_willAnswer_syntax() {
         // when
-        lenientBDD().willAnswer(AdditionalAnswers.returnsFirstArg()).given(mock).simpleMethod("1");
+        leniently().willAnswer(AdditionalAnswers.returnsFirstArg()).given(mock).simpleMethod("1");
 
         // then on lenient stubbing, we can call it with different argument:
         mock.simpleMethod("200");
@@ -481,7 +481,7 @@ public class StrictnessPerStubbingTest {
     public void bdd_unnecessary_stubbing() {
         // when
         when(mock.simpleMethod("1")).thenReturn("1");
-        lenientBDD().given(mock.differentMethod("2")).willReturn("2");
+        leniently().given(mock.differentMethod("2")).willReturn("2");
 
         // then unnecessary stubbing flags method only on the strict stubbing:
         assertThatThrownBy(
@@ -501,7 +501,7 @@ public class StrictnessPerStubbingTest {
     @Test
     public void bdd_unnecessary_stubbing_with_doReturn() {
         // when
-        lenientBDD().willReturn("2").given(mock).differentMethod("2");
+        leniently().willReturn("2").given(mock).differentMethod("2");
 
         // then no exception is thrown:
         mockito.finishMocking();
@@ -511,7 +511,7 @@ public class StrictnessPerStubbingTest {
     public void bdd_verify_no_more_invocations() {
         // when
         when(mock.simpleMethod("1")).thenReturn("1");
-        lenientBDD().given(mock.differentMethod("2")).willReturn("2");
+        leniently().given(mock.differentMethod("2")).willReturn("2");
 
         // and:
         mock.simpleMethod("1");
