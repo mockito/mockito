@@ -5,6 +5,7 @@
 package org.mockitousage.stubbing;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.AdditionalAnswers.delegatesTo;
@@ -97,15 +98,15 @@ public class StubbingWithDelegateTest {
     }
 
     @Test
-    public void null_wrapper_dont_throw_exception_from_org_mockito_package() throws Exception {
+    public void null_wrapper_dont_throw_exception_from_org_mockito_package() {
         IMethods methods = mock(IMethods.class, delegatesTo(new MethodsImpl()));
 
-        try {
-            byte b = methods.byteObjectReturningMethod(); // real method returns null
-            fail();
-        } catch (Exception e) {
-            assertThat(e.toString()).doesNotContain("org.mockito");
-        }
+        assertThatThrownBy(
+                        () -> {
+                            @SuppressWarnings("unused")
+                            byte b = methods.byteObjectReturningMethod();
+                        })
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test

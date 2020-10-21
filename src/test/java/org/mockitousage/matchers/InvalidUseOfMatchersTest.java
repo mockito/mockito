@@ -105,8 +105,7 @@ public class InvalidUseOfMatchersTest {
 
         assertThat(run.getFailures()).hasSize(2);
         assertThat(run.getFailures().get(0).getException())
-                .isInstanceOf(NullPointerException.class)
-                .hasMessage(null);
+                .isInstanceOf(NullPointerException.class);
         assertThat(run.getFailures().get(1).getException())
                 .isInstanceOf(InvalidUseOfMatchersException.class)
                 .hasMessageContaining("primitive alternatives");
