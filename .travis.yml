@@ -52,10 +52,12 @@ install:
  - true
 
 script:
-  # We are using && below on purpose
-  # ciPerformRelease must run only when the entire build has completed
-  # This guarantees that no release steps are executed when the build or tests fail
-  - ./gradlew build idea -s && ./gradlew ciPerformRelease
+  # To validate changes, we run building and bintray upload in dry run, and idea task. This happens on every build, even PRs.
+  # To publish, we perform github release and perform bintray upload (no dry run). This only for main branch builds.
+  - >
+    ./gradlew build bintrayUpload idea --scan -PbintrayDryRun
+    && if [ -z "$SKIP_RELEASE" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_BRANCH" = "release/3.x" ];
+      then ./gradlew githubRelease bintrayUpload --scan; fi
 
 after_success:
   #Generates coverage report:

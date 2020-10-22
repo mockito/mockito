@@ -96,7 +96,7 @@ bintray {
     //However, any user id is good, so longer the user has necessary privileges to the repository
     user = 'szczepiq' //https://bintray.com/szczepiq
     key = System.getenv('BINTRAY_API_KEY')
-    publish = false //can be changed to 'false' for testing
+    publish = true //can be changed to 'false' for testing
     dryRun = project.hasProperty("bintrayDryRun")
     publications = ['javaLibrary']
 
