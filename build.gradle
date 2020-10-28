@@ -9,8 +9,10 @@ buildscript {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
         classpath 'net.ltgt.gradle:gradle-errorprone-plugin:1.2.1'
 
-        //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
-        classpath 'org.shipkit:shipkit:2.1.6'
+        //Using buildscript.classpath so that we can resolve plugins from maven local, during local testing
+        classpath "org.shipkit:shipkit-auto-version:0.0.+"
+        classpath "org.shipkit:shipkit-changelog:0.0.+"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+"
 
         classpath 'com.google.googlejavaformat:google-java-format:1.8'
     }
@@ -29,13 +31,7 @@ description = 'Mockito mock objects library core API and implementation'
 apply plugin: 'base'
 archivesBaseName = "mockito-core"
 
-apply plugin: "org.shipkit.java"
-allprojects {
-    plugins.withId("java") {
-        //Only upload specific modules we select
-        bintrayUpload.enabled = false
-    }
-}
+apply from: 'gradle/shipkit.gradle'
 
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
