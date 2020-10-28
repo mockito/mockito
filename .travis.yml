@@ -57,7 +57,7 @@ script:
   - >
     ./gradlew build bintrayUpload idea --scan -PbintrayDryRun
     && if [ -z "$SKIP_RELEASE" ] && [ "$TRAVIS_PULL_REQUEST" = "false" ] && [ "$TRAVIS_BRANCH" = "release/3.x" ];
-      then ./gradlew githubRelease bintrayUpload --scan; fi
+      then ./gradlew bintrayUpload githubRelease --scan; fi
 
 after_success:
   #Generates coverage report:
