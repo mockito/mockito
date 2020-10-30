@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         java: [8, 11, 14]
+        mock-maker: ['mock-maker-default', 'mock-maker-inline']
 
     steps:
     - uses: actions/checkout@v2 # https://github.com/actions/checkout
@@ -23,5 +24,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
-    - name: Build
+    - name: Build on Java ${{ matrix.java }} with ${{ matrix.mock-maker }}
       run: ./gradlew build -x animalSnifferMain
+      env:
+        MOCK_MAKER: ${{ matrix.mock-maker }}
