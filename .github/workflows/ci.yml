@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [8, 11, 14]
-        mock-maker: ['mock-maker-default', 'mock-maker-inline']
+        java: [8, 11] # TODO: [8, 11, 14]
+        mock-maker: ['mock-maker-default'] # TODO: ['mock-maker-default', 'mock-maker-inline']
     steps:  
     - uses: actions/checkout@v2 # https://github.com/actions/checkout
       with:
@@ -24,9 +24,14 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
     - name: Build on Java ${{ matrix.java }} with ${{ matrix.mock-maker }}
-      run: ./gradlew build -x animalSnifferMain
+      run: ./gradlew build -x animalSnifferMain --scan # TODO: animalSniffer
       env:
         MOCK_MAKER: ${{ matrix.mock-maker }}
+    - name: Upload coverage report
+      if: matrix.java == 8 && matrix.mock-maker = 'mock-maker-default'
+      run: |
+        ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
+        bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
   release:
     runs-on: ubuntu-latest
     needs: [build]
@@ -40,5 +45,4 @@ jobs:
       with:
         java-version: 8
     - name: Build and publish
-      run: ./gradlew bintrayUpload githubRelease --scan -x animalSnifferMain -m
-      
+      run: ./gradlew bintrayUpload githubRelease --scan -m
