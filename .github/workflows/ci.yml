@@ -35,7 +35,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     needs: [build]
-    if: success() && github.event_name == 'push' && github.ref == 'release/3.x'
+    if: github.event_name == 'push' && github.ref == 'release/3.x'
     steps:
     - uses: actions/checkout@v2 # https://github.com/actions/checkout
       with:
