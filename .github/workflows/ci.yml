@@ -28,7 +28,7 @@ jobs:
       env:
         MOCK_MAKER: ${{ matrix.mock-maker }}
     - name: Upload coverage report
-      if: matrix.java == 8 && matrix.mock-maker = 'mock-maker-default'
+      if: matrix.java == 8 && matrix.mock-maker == 'mock-maker-default'
       run: |
         ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
         bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
