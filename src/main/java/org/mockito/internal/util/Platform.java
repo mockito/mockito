@@ -61,7 +61,7 @@ public abstract class Platform {
                             "",
                             "The regular Byte Buddy mock makers cannot generate code on an Android VM!",
                             "To resolve this, please use the 'mockito-android' dependency for your application:",
-                            "http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22mockito-android%22%20g%3A%22org.mockito%22",
+                            "https://search.maven.org/artifact/org.mockito/mockito-android",
                             "",
                             description);
         }

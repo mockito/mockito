@@ -46,7 +46,7 @@ import org.mockito.quality.Strictness;
  *      It drives cleaner tests and improves debugging experience.
  *      The only reason this feature is not turned on by default
  *      is because it would have been an incompatible change
- *      and Mockito strictly follows <a href="http://semver.org">semantic versioning</a>.
+ *      and Mockito strictly follows <a href="https://semver.org">semantic versioning</a>.
  * </ul>
  *
  * Runner is completely optional - there are other ways you can get &#064;Mock working, for example by writing a base class.

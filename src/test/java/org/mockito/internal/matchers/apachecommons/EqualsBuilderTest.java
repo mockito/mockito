@@ -1064,7 +1064,7 @@ public class EqualsBuilderTest extends TestBase {
     }
 
     /**
-     * Test from http://issues.apache.org/bugzilla/show_bug.cgi?id=33067
+     * Test from https://issues.apache.org/jira/browse/LANG-42
      */
     @Test
     public void testNpeForNullElement() {
@@ -1072,7 +1072,7 @@ public class EqualsBuilderTest extends TestBase {
         Object[] x2 = new Object[] {new Integer(1), new Integer(2), new Integer(3)};
 
         // causes an NPE in 2.0 according to:
-        // http://issues.apache.org/bugzilla/show_bug.cgi?id=33067
+        // https://issues.apache.org/jira/browse/LANG-42
         new EqualsBuilder().append(x1, x2);
     }
 

@@ -4,7 +4,7 @@
 > 
 > If this is about mockito usage, the better way is to reach out to
 > 
->  - stackoverflow : http://stackoverflow.com/questions/tagged/mockito
+>  - stackoverflow : https://stackoverflow.com/questions/tagged/mockito
 >  - the mailing-list  : https://groups.google.com/forum/#!forum/mockito / mockito@googlegroups.com
 >    (Note mailing-list is moderated to avoid spam)
 >
