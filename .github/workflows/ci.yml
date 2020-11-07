@@ -52,7 +52,7 @@ jobs:
       with:
         java-version: 8
     - name: Build and publish
-      run: ./gradlew bintrayUpload githubRelease --scan -PbintrayDryRun # TODO remove -PbintrayDryRun
+      run: ./gradlew bintrayUpload githubRelease --scan -m # TODO remove -m
       env:
         GH_WRITE_TOKEN: ${{secrets.GH_WRITE_TOKEN}}
         BINTRAY_API_KEY: ${{secrets.BINTRAY_API_KEY}}
