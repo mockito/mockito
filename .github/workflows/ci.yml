@@ -23,8 +23,12 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
+    - name: "Check reproducibility of artifacts"
+      # Run on a single job, with the version of java used for releases
+      if: matrix.java == 8 && matrix.mock-maker == 'mock-maker-default'
+      run: ./check_reproducibility.sh
     - name: "Verify code formatting with Spotless. Run './gradlew spotlessApply' locally if this job fails."
-      #We want to run spotless check only in a single job
+      # Run on a single job, with java version compatible with spotless
       if: matrix.java == 11 && matrix.mock-maker == 'mock-maker-default'
       run: ./gradlew spotlessCheck
     - name: Build on Java ${{ matrix.java }} with ${{ matrix.mock-maker }}
