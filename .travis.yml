@@ -1,0 +1,58 @@
+# More details on how to configure the Travis build
+# https://docs.travis-ci.com/user/customizing-the-build/
+
+# Speed up build by leveraging travis caches
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+# Enabling container based infrastructure hoping it will help the build speed <= this didn't work well, so it's reverted
+# see https://docs.travis-ci.com/user/migrating-from-legacy/ and https://docs.travis-ci.com/user/ci-environment
+sudo: true
+
+language: java
+
+dist: trusty
+
+matrix:
+  include:
+    - jdk: openjdk8
+    - jdk: openjdk8
+      env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+    - jdk: openjdk11
+      env: SKIP_RELEASE=true
+    - jdk: openjdk11
+      env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+    - jdk: openjdk14
+      env: SKIP_RELEASE=true
+    - jdk: openjdk14
+      env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
+      # Run Spotless as a separate job on JDK 11 (which is required for google-java-format)
+    - jdk: openjdk11
+      name: "Verify code formatting with Spotless. Run './gradlew spotlessApply' locally if this job fails."
+      script: ./gradlew spotlessCheck
+      # Do not upload a coverage report, as we don't run the tests for this job
+      after_success: true
+    - jdk: openjdk8
+      name: "Check reproducibility of jars"
+      script: ./check_reproducibility.sh
+      # Do not upload a coverage report, as we don't run the tests for this job
+      after_success: true
+
+branches:
+  #Don't build tags
+  except:
+    - /^v\d/
+
+#Below skips the installation step completely (https://docs.travis-ci.com/user/customizing-the-build/#Skipping-the-Installation-Step)
+#We need it because otherwise Travis CI injects an awkward './gradlew assemble' step into the CI workflow
+#We want to control and decide what Gradle tasks are executed
+install:
+  - true
+
+script:
+  # To validate changes, we run building and bintray upload in dry run, and idea task. This happens on every build, even PRs.
+  # To publish, we perform github release and perform bintray upload (no dry run). This only for main branch builds.
+  - >
+    ./gradlew build bintrayUpload idea --scan -PbintrayDryRun
