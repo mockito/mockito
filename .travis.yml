@@ -1,5 +1,13 @@
-# More details on how to configure the Travis build
-# https://docs.travis-ci.com/user/customizing-the-build/
+#
+#   TRAVIS BUILD IS DEPRECATED
+#
+#   WE ARE MOVING TO GH ACTIONS
+#
+#   PLEASE DO NOT UPDATE THIS FILE ANY MORE
+#
+#   This file can be removed once we have enough builds with GH Actions, likely Jan'21
+#   See: https://github.com/mockito/mockito/issues/2080
+#
 
 # Speed up build by leveraging travis caches
 cache:
