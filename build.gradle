@@ -111,7 +111,7 @@ wrapper {
 }
 
 spotless {
-    // We run the check separately on Travis, so don't run this by default
+    // We run the check separately on CI, so don't run this by default
     enforceCheck = false
 
     java {

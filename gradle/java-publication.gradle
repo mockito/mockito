@@ -73,8 +73,8 @@ publishing {
                     system = 'GitHub issues'
                 }
                 ciManagement {
-                    url = 'https://travis-ci.org/mockito/mockito'
-                    system = 'TravisCI'
+                    url = 'https://github.com/mockito/mockito/actions'
+                    system = 'GH Actions'
                 }
             }
         }
