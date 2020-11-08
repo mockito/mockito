@@ -1,5 +1,4 @@
-# Experimental/WIP CI build (attempting to migrate from Travis CI)
-name: WIP CI build
+name: CI
 
 on:
   push:
@@ -22,38 +21,41 @@ jobs:
         java: [8, 11, 14]
         mock-maker: ['mock-maker-default', 'mock-maker-inline']
     
-    # Build steps
+    # All build steps
     steps:
+
     - name: 1. Check out code
       uses: actions/checkout@v2 # https://github.com/actions/checkout
       with:
-        fetch-depth: '0' #  # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
-  
+        fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
+
     - name: 2. Set up Java ${{ matrix.java }}
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
-        
+
+    # TODO: add step for gradle wrapper validation and remove the other workflow
+
     - name: 3. Build and check reproducibility of artifacts (single job only)
       # Run on a single job, with the version of java used for releases
       if: matrix.java == 8 && matrix.mock-maker == 'mock-maker-default'
       run: ./check_reproducibility.sh
-      
+
     - name: 4. Spotless check (single job only). Run './gradlew spotlessApply' locally if this job fails.
       # Run on a single job, with java version compatible with spotless
       if: matrix.java == 11 && matrix.mock-maker == 'mock-maker-default'
       run: ./gradlew spotlessCheck
-      
+
     - name: 5. Build on Java ${{ matrix.java }} with ${{ matrix.mock-maker }}
       run: ./gradlew build bintrayUpload idea --scan -PbintrayDryRun
       env:
         MOCK_MAKER: ${{ matrix.mock-maker }}
-        
+
     - name: 6. Upload coverage report
       run: |
         ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml || echo "Code coverage failed"
         bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
-        
+
   # 
   # Release job, only for pushes to the main branch
   #        
@@ -62,13 +64,16 @@ jobs:
     needs: [build] # build job must pass before we can release
     if: github.event_name == 'push' && github.ref == 'refs/heads/release/3.x'
     steps:
-    - uses: actions/checkout@v2 # https://github.com/actions/checkout
+    - name: Check out code
+      uses: actions/checkout@v2 # https://github.com/actions/checkout
       with:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
+    
     - name: Set up Java 8
       uses: actions/setup-java@v1
       with:
         java-version: 8
+    
     - name: Build and publish
       run: ./gradlew bintrayUpload githubRelease --scan -m # TODO remove -m
       env:
