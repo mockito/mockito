@@ -6,7 +6,7 @@
 
 Most popular mocking framework for Java
 
-[![Build Status](https://travis-ci.org/mockito/mockito.svg?branch=release/3.x)](https://travis-ci.org/mockito/mockito)
+[![CI](https://github.com/mockito/mockito/workflows/CI/badge.svg)](https://github.com/mockito/mockito/actions?query=workflow%3ACI)
 [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/mockito/mockito/blob/release/3.x/LICENSE)
 
@@ -64,7 +64,7 @@ Then, _open_ the generated *.ipr file in IDEA.
 ## How to release new version?
 
 Mockito [implements Continuous Delivery model](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview).
-Every change on main branch (for example merging a pull request) triggers a release build on Travis CI.
+Every change on the main branch (for example merging a pull request) triggers a release build on CI.
 The build publishes new version if specific criteria are met: all tests green, no 'ci skip release' used in commit message, see the build log for more information.
 Every new version is published to ["mockito/maven" Bintray repository](https://bintray.com/mockito/maven).
 New versions that Mockito team deems "notable" are additionally published to [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.mockito%22) and [JCenter](https://bintray.com/bintray/jcenter).
