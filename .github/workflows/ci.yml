@@ -2,10 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [ release/3.x ]
     tags-ignore: [v*]
   pull_request:
-    branches: [ release/3.x ]
 
 jobs:
   
