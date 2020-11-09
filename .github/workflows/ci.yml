@@ -2,8 +2,10 @@ name: CI
 
 on:
   push:
-    tags-ignore: [v*]
+    branches: ['**']
+    tags-ignore: [v*] # release tags are automatically generated after a successful CI build, no need to run CI against them
   pull_request:
+    branches: ['**']
 
 jobs:
   
