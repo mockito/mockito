@@ -73,11 +73,7 @@ public class DeepStubsSerializableTest {
 
         ListContainer deserialized_deep_stub = serializeAndBack(deep_stubbed);
 
-        assertThatThrownBy(
-                        () ->
-                                when(deserialized_deep_stub.iterator().next().get(42))
-                                        .thenReturn("no"))
-                .isInstanceOf(NullPointerException.class);
+        assertThat(deserialized_deep_stub.iterator().next()).isNull();
     }
 
     static class SampleClass implements Serializable {
