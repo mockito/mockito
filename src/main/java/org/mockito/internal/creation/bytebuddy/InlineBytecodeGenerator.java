@@ -228,32 +228,51 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
     private static void assureInitialization(Class<?> type) {
         try {
             Class.forName(type.getName(), true, type.getClassLoader());
-        } catch (Throwable ignore) {
+        } catch (ExceptionInInitializerError e) {
+            throw new MockitoException(
+                    join(
+                            "Cannot instrument class that could not be initialized.",
+                            "",
+                            "A class that is not initializable would always fail during instrumentation.",
+                            "Static initializers are never mocked by Mockito to avoid permanent disintegration of classes."),
+                    e.getException());
+        } catch (Throwable ignored) {
         }
     }
 
     private <T> void triggerRetransformation(Set<Class<?>> types, boolean flat) {
         Set<Class<?>> targets = new HashSet<Class<?>>();
 
-        for (Class<?> type : types) {
-            if (flat) {
-                if (!mocked.contains(type) && flatMocked.add(type)) {
-                    assureInitialization(type);
-                    targets.add(type);
-                }
-            } else {
-                do {
-                    if (mocked.add(type)) {
+        try {
+            for (Class<?> type : types) {
+                if (flat) {
+                    if (!mocked.contains(type) && flatMocked.add(type)) {
                         assureInitialization(type);
-                        if (!flatMocked.remove(type)) {
-                            targets.add(type);
-                        }
-                        addInterfaces(targets, type.getInterfaces());
+                        targets.add(type);
                     }
-                    type = type.getSuperclass();
-                } while (type != null);
+                } else {
+                    do {
+                        if (mocked.add(type)) {
+                            assureInitialization(type);
+                            if (!flatMocked.remove(type)) {
+                                targets.add(type);
+                            }
+                            addInterfaces(targets, type.getInterfaces());
+                        }
+                        type = type.getSuperclass();
+                    } while (type != null);
+                }
             }
+        } catch (Throwable t) {
+            for (Class<?> target : targets) {
+                mocked.remove(target);
+                flatMocked.remove(target);
+            }
+            throw t;
         }
+
+        // The object type does not ever need instrumentation.
+        targets.remove(Object.class);
 
         if (!targets.isEmpty()) {
             try {
