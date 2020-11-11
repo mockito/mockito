@@ -10,7 +10,7 @@ export SOURCE_DATE_EPOCH=$(date +%s)
 function calculate_checksums() {
     OUTPUT=checksums/$1
 
-    ./gradlew --no-build-cache clean assemble --parallel
+    ./gradlew --no-build-cache clean assemble
 
     find ./build -name '*.jar' \
         | grep '/build/libs/' \
