@@ -4,18 +4,6 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.Instrumentation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.security.ProtectionDomain;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.Advice;
@@ -44,10 +32,18 @@ import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
 
-import static net.bytebuddy.implementation.MethodDelegation.*;
-import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.*;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.security.ProtectionDomain;
+import java.util.*;
+import java.util.function.Predicate;
+
+import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
+import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
 import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.mockito.internal.util.StringUtil.*;
+import static org.mockito.internal.util.StringUtil.join;
 
 @SuppressSignatureCheck
 public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTransformer {
@@ -70,9 +66,13 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             String.class));
 
     private final Instrumentation instrumentation;
+
     private final ByteBuddy byteBuddy;
+
     private final WeakConcurrentSet<Class<?>> mocked, flatMocked;
+
     private final BytecodeGenerator subclassEngine;
+
     private final AsmVisitorWrapper mockTransformer;
 
     private final Method getModule, canRead, redefineModule;
@@ -230,11 +230,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             Class.forName(type.getName(), true, type.getClassLoader());
         } catch (ExceptionInInitializerError e) {
             throw new MockitoException(
-                    join(
-                            "Cannot instrument class that could not be initialized.",
-                            "",
-                            "A class that is not initializable would always fail during instrumentation.",
-                            "Static initializers are never mocked by Mockito to avoid permanent disintegration of classes."),
+                    "Cannot instrument "
+                            + type
+                            + " because it or one of its supertypes could not be initialized",
                     e.getException());
         } catch (Throwable ignored) {
         }
