@@ -32,9 +32,9 @@ matrix:
       env: SKIP_RELEASE=true
     - jdk: openjdk11
       env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
-    - jdk: openjdk14
+    - jdk: openjdk15
       env: SKIP_RELEASE=true
-    - jdk: openjdk14
+    - jdk: openjdk15
       env: SKIP_RELEASE=true MOCK_MAKER=mock-maker-inline
       # Run Spotless as a separate job on JDK 11 (which is required for google-java-format)
     - jdk: openjdk11
