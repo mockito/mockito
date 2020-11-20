@@ -6,14 +6,14 @@ if (!archivesBaseName.startsWith("mockito-")) {
     archivesBaseName = "mockito-" + project.name
 }
 
+apply from: "$rootDir/gradle/java-publication.gradle"
+
 generatePomFileForJavaLibraryPublication.doLast {
     //validates the the pom has correct artifact id to avoid issues like #1444
     def pom = new XmlSlurper().parse(destination)
     assert pom.artifactId == archivesBaseName
     assert pom.name == archivesBaseName
 }
-
-bintrayUpload.enabled = true
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

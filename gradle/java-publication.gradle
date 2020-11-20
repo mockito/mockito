@@ -1,0 +1,126 @@
+//Sources/javadoc artifacts required by Maven module publications
+def licenseSpec = copySpec {
+    from project.rootDir
+    include "LICENSE"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    with licenseSpec
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from tasks.javadoc
+    with licenseSpec
+}
+
+jar {
+    with licenseSpec
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+//Gradle Maven publishing plugin configuration (https://docs.gradle.org/current/userguide/publishing_maven.html)
+apply plugin: "maven-publish"
+publishing {
+    publications {
+        javaLibrary(MavenPublication) { //name of the publication
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            artifactId = project.archivesBaseName
+
+            pom {
+                name = artifactId
+                description = project.description
+
+                //Gradle does not write 'jar' packaging to the pom (unlike other packaging types).
+                //This is OK because 'jar' is implicit/default:
+                // https://maven.apache.org/guides/introduction/introduction-to-the-pom.html#minimal-pom
+                packaging = project.tasks.jar.extension
+
+                url = "https://github.com/mockito/mockito"
+                licenses {
+                    license {
+                        name = 'The MIT License'
+                        url = 'https://github.com/mockito/mockito/blob/release/3.x/LICENSE'
+                        distribution = 'repo'
+                    }
+                }
+                developers {
+                    ['mockitoguy:Szczepan Faber', 'bric3:Brice Dutheil', 'raphw:Rafael Winterhalter',
+                     'TimvdLippe:Tim van der Lippe'].each { devData ->
+                        developer {
+                            def devInfo = devData.split(':')
+                            id = devInfo[0]
+                            name = devInfo[1]
+                            url = 'https://github.com/' + devInfo[0]
+                            roles = ["Core developer"]
+                        }
+                    }
+                }
+                scm {
+                    url = 'https://github.com/mockito/mockito.git'
+                }
+                issueManagement {
+                    url = 'https://github.com/mockito/mockito/issues'
+                    system = 'GitHub issues'
+                }
+                ciManagement {
+                    url = 'https://github.com/mockito/mockito/actions'
+                    system = 'GH Actions'
+                }
+            }
+        }
+    }
+
+    //useful for testing - running "publish" will create artifacts/pom in a local dir
+    repositories { maven { url = "$buildDir/repo" } }
+}
+
+//fleshes out problems with Maven pom generation when building
+tasks.build.dependsOn("publishJavaLibraryPublicationToMavenLocal")
+
+//Bintray Gradle plugin configuration (https://github.com/bintray/gradle-bintray-plugin)
+//Plugin jars are added to the buildscript classpath in the root build.gradle file
+apply plugin: "com.jfrog.bintray"
+
+bintray {
+    //We need to use some user id here, because the Bintray key is associated with the user
+    //However, any user id is good, so longer the user has necessary privileges to the repository
+    user = 'szczepiq' //https://bintray.com/szczepiq
+    key = System.getenv('BINTRAY_API_KEY')
+    publish = true //can be changed to 'false' for testing
+    dryRun = project.hasProperty("bintrayDryRun")
+    publications = ['javaLibrary']
+
+    pkg {
+        repo = 'maven' //https://bintray.com/mockito/maven
+        userOrg = 'mockito' //https://bintray.com/mockito
+
+        //See our Bintray packages at https://bintray.com/mockito/maven
+        name = project.rootProject.ext.mavenCentralRelease? "mockito" : "mockito-development"
+
+        licenses = ['MIT']
+        labels = ['mocks', 'tdd', 'unit tests']
+        vcsUrl = "https://github.com/mockito/mockito.git"
+
+        version {
+            name = project.version
+            vcsTag = "v$project.version"
+
+            //Notable versions are automatically synced to Maven Central repository (https://oss.sonatype.org/)
+            mavenCentralSync {
+                sync = project.rootProject.ext.mavenCentralRelease
+                user = System.env.NEXUS_TOKEN_USER
+                password = System.env.NEXUS_TOKEN_PWD
+            }
+        }
+    }
+}

@@ -14,7 +14,7 @@ jar {
     bnd(
         'Bundle-Name': 'Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.',
         'Bundle-SymbolicName': 'org.mockito.mockito-core',
-        'Bundle-version': project.version.replace('-', '.'),
+        'Bundle-Version': project.version.replace('-', '.'),
         '-versionpolicy': '[${version;==;${@}},${version;+;${@}})',
         'Export-Package': "!org.mockito.internal.*,org.mockito.*;version=${version}",
         'Import-Package': [

@@ -4,18 +4,6 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.Instrumentation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.security.ProtectionDomain;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.asm.Advice;
@@ -44,10 +32,18 @@ import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
 
-import static net.bytebuddy.implementation.MethodDelegation.*;
-import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.*;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.security.ProtectionDomain;
+import java.util.*;
+import java.util.function.Predicate;
+
+import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
+import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
 import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.mockito.internal.util.StringUtil.*;
+import static org.mockito.internal.util.StringUtil.join;
 
 @SuppressSignatureCheck
 public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTransformer {
@@ -70,9 +66,13 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             String.class));
 
     private final Instrumentation instrumentation;
+
     private final ByteBuddy byteBuddy;
+
     private final WeakConcurrentSet<Class<?>> mocked, flatMocked;
+
     private final BytecodeGenerator subclassEngine;
+
     private final AsmVisitorWrapper mockTransformer;
 
     private final Method getModule, canRead, redefineModule;
@@ -228,32 +228,49 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
     private static void assureInitialization(Class<?> type) {
         try {
             Class.forName(type.getName(), true, type.getClassLoader());
-        } catch (Throwable ignore) {
+        } catch (ExceptionInInitializerError e) {
+            throw new MockitoException(
+                    "Cannot instrument "
+                            + type
+                            + " because it or one of its supertypes could not be initialized",
+                    e.getException());
+        } catch (Throwable ignored) {
         }
     }
 
     private <T> void triggerRetransformation(Set<Class<?>> types, boolean flat) {
         Set<Class<?>> targets = new HashSet<Class<?>>();
 
-        for (Class<?> type : types) {
-            if (flat) {
-                if (!mocked.contains(type) && flatMocked.add(type)) {
-                    assureInitialization(type);
-                    targets.add(type);
-                }
-            } else {
-                do {
-                    if (mocked.add(type)) {
+        try {
+            for (Class<?> type : types) {
+                if (flat) {
+                    if (!mocked.contains(type) && flatMocked.add(type)) {
                         assureInitialization(type);
-                        if (!flatMocked.remove(type)) {
-                            targets.add(type);
-                        }
-                        addInterfaces(targets, type.getInterfaces());
+                        targets.add(type);
                     }
-                    type = type.getSuperclass();
-                } while (type != null);
+                } else {
+                    do {
+                        if (mocked.add(type)) {
+                            assureInitialization(type);
+                            if (!flatMocked.remove(type)) {
+                                targets.add(type);
+                            }
+                            addInterfaces(targets, type.getInterfaces());
+                        }
+                        type = type.getSuperclass();
+                    } while (type != null);
+                }
             }
+        } catch (Throwable t) {
+            for (Class<?> target : targets) {
+                mocked.remove(target);
+                flatMocked.remove(target);
+            }
+            throw t;
         }
+
+        // The object type does not ever need instrumentation.
+        targets.remove(Object.class);
 
         if (!targets.isEmpty()) {
             try {
