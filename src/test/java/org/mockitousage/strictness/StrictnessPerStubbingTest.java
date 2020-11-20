@@ -92,12 +92,10 @@ public class StrictnessPerStubbingTest {
         ProductionCode.simpleMethod(mock, 200);
 
         // and stubbing works, too:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -112,12 +110,10 @@ public class StrictnessPerStubbingTest {
         ProductionCode.simpleMethod(mock, 200);
 
         // and stubbing works, too:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -132,12 +128,10 @@ public class StrictnessPerStubbingTest {
         ProductionCode.simpleMethod(mock, 200);
 
         // and stubbing works, too:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalStateException.class);
     }
 
     static class Counter {
@@ -154,7 +148,7 @@ public class StrictnessPerStubbingTest {
     public void doCallRealMethod_syntax() {
         // when
         Counter mock = mock(Counter.class);
-        //TODO: removing lenient does not make the test fail
+        // TODO: removing lenient does not make the test fail
         lenient().doCallRealMethod().when(mock).increment(1);
 
         // then no exception and default return value if we call it with different arg:
@@ -168,13 +162,12 @@ public class StrictnessPerStubbingTest {
     public void doNothing_syntax() {
         // when
         final Counter spy = spy(Counter.class);
-        //TODO: removing lenient does not make the test fail
+        // TODO: removing lenient does not make the test fail
         lenient().doNothing().when(spy).scream("1");
 
         // then no stubbing exception and real method is called if we call stubbed method with
         // different arg:
-        assertThatThrownBy(() -> spy.scream("2"))
-                .hasMessage("2");
+        assertThatThrownBy(() -> spy.scream("2")).hasMessage("2");
 
         // and we do nothing when stubbing called with correct arg:
         spy.scream("1");
@@ -289,12 +282,10 @@ public class StrictnessPerStubbingTest {
         ProductionCode.simpleMethod(mock, 200);
 
         // and stubbing works, too:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -309,12 +300,10 @@ public class StrictnessPerStubbingTest {
         ProductionCode.simpleMethod(mock, 200);
 
         // and stubbing works, too:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -329,8 +318,7 @@ public class StrictnessPerStubbingTest {
         ProductionCode.simpleMethod(mock, 200);
 
         // and stubbing works, too:
-        assertThatThrownBy(() -> mock.simpleMethod(1))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> mock.simpleMethod(1)).isInstanceOf(IllegalArgumentException.class);
 
         // testing consecutive call:
         assertThatThrownBy(
@@ -346,7 +334,7 @@ public class StrictnessPerStubbingTest {
     public void bdd_willCallRealMethod_syntax() {
         // when
         Counter mock = mock(Counter.class);
-        //TODO: removing 'leniently()' from here does not make this test fail.
+        // TODO: removing 'leniently()' from here does not make this test fail.
         leniently().willCallRealMethod().given(mock).increment(1);
 
         // then no exception and default return value if we call it with different arg:
@@ -360,13 +348,12 @@ public class StrictnessPerStubbingTest {
     public void bdd_willDoNothing_syntax() {
         // when
         final Counter spy = spy(Counter.class);
-        //TODO: removing 'leniently()' from here does not make this test fail.
+        // TODO: removing 'leniently()' from here does not make this test fail.
         leniently().willDoNothing().given(spy).scream("1");
 
         // then no stubbing exception and real method is called if we call stubbed method with
         // different arg:
-        assertThatThrownBy(() -> spy.scream("2"))
-                .hasMessage("2");
+        assertThatThrownBy(() -> spy.scream("2")).hasMessage("2");
 
         // and we do nothing when stubbing called with correct arg:
         spy.scream("1");
@@ -421,12 +408,12 @@ public class StrictnessPerStubbingTest {
         // then 'verifyNoMoreInteractions' flags the lenient stubbing (called with different arg)
         // and reports it with [?] in the exception message
         assertThatThrownBy(
-                new ThrowableAssert.ThrowingCallable() {
-                    @Override
-                    public void call() throws Throwable {
-                        verifyNoMoreInteractions(mock);
-                    }
-                })
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                verifyNoMoreInteractions(mock);
+                            }
+                        })
                 .isInstanceOf(NoInteractionsWanted.class)
                 .hasMessageContaining("1. ->")
                 .hasMessageContaining("2. [?]->");
