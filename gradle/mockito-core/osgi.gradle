@@ -71,7 +71,8 @@ class RemoveOsgiLastModifiedHeader {
 
             this.artifact
                 .entries()
-                .sort { it.name }
+                // Keep META-INF folder at the beginning to avoid https://github.com/mockito/mockito/issues/2108
+                .sort { (it.name.startsWith("META-INF") ? "A/" + it.name : "B/" + it.name) }
                 .each { JarEntry entry ->
 
                     stream.putNextEntry(newJarEntry(entry))
