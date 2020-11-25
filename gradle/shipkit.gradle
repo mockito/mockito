@@ -28,7 +28,7 @@ ext.mavenCentralRelease = shouldReleaseToCentral(project)
  * To test this logic, run build with '-i' (info logging) and inspect the build output.
  */
 static boolean shouldReleaseToCentral(project) {
-    boolean centralReleaseByCommit = System.getenv("TRAVIS_COMMIT_MESSAGE")?.contains("[ci maven-central-release]")
+    boolean centralReleaseByCommit = 'true' == System.getenv("MAVEN_CENTRAL_RELEASE")
     boolean centralReleaseByProjectProperty = project.hasProperty("maven-central-release")
     boolean centralRelease = centralReleaseByCommit || centralReleaseByProjectProperty
     def message = """Bintray publish was using following settings:
