@@ -23,7 +23,7 @@ libraries.bytebuddyandroid = "net.bytebuddy:byte-buddy-android:${versions.bytebu
 libraries.errorprone = "com.google.errorprone:error_prone_core:${versions.errorprone}"
 libraries.errorproneTestApi = "com.google.errorprone:error_prone_test_helpers:${versions.errorprone}"
 
-libraries.autoservice = "com.google.auto.service:auto-service:1.0-rc5"
+libraries.autoservice = "com.google.auto.service:auto-service:1.0-rc7"
 
 // objenesis 3.x fails on android instrumentation test compile. https://github.com/mockito/mockito/issues/2007
 libraries.objenesis2 = 'org.objenesis:objenesis:2.6'
