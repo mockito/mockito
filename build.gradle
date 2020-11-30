@@ -19,7 +19,7 @@ buildscript {
 }
 
 plugins {
-    id "com.diffplug.gradle.spotless" version "3.24.3"
+    id "com.diffplug.gradle.spotless" version "5.8.2"
     id 'eclipse'
     id 'com.github.ben-manes.versions' version '0.28.0'
     id 'biz.aQute.bnd.builder' version '5.1.0'
