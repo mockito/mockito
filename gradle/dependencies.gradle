@@ -8,7 +8,7 @@ versions.bytebuddy = '1.10.18'
 versions.junitJupiter = '5.4.2'
 versions.errorprone = '2.4.0'
 
-libraries.junit4 = 'junit:junit:4.12'
+libraries.junit4 = 'junit:junit:4.13.1'
 libraries.junitJupiterApi = "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}"
 libraries.junitPlatformLauncher = 'org.junit.platform:junit-platform-launcher:1.7.0'
 libraries.junitJupiterEngine = "org.junit.jupiter:junit-jupiter-engine:${versions.junitJupiter}"
