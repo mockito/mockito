@@ -6,8 +6,8 @@
 
 **If looking for support**
 
-* Search / Ask question on [stackoverflow](http://stackoverflow.com/questions/tagged/mockito)
-* Go to the [mockito mailing-list](http://groups.google.com/group/mockito) (moderated)
+* Search / Ask question on [stackoverflow](https://stackoverflow.com/questions/tagged/mockito)
+* Go to the [mockito mailing-list](https://groups.google.com/group/mockito) (moderated)
 * Issues should always have a [Short, Self Contained, Correct (Compilable), Example](http://sscce.org) (same as any question on stackoverflow.com)
 
 # Contributing to Mockito
@@ -46,7 +46,7 @@ Things we pay attention in a PR :
 * On pull requests, please document the change, what it brings, what is the benefit.
 * **Clean commit history** in the topic branch in your fork of the repository, even during review. That means that commits are _rebased_ and _squashed_ if necessary, so that each commit clearly changes one things and there are no extraneous fix-ups.
 
-  For that matter it's possible to commit [_semantic_ changes](http://lemike-de.tumblr.com/post/79041908218/semantic-commits). _Tests are an asset, so is history_.
+  For that matter it's possible to commit [_semantic_ changes](https://lemike-de.tumblr.com/post/79041908218/semantic-commits). _Tests are an asset, so is history_.
 
   _Example gratia_:
 
@@ -80,7 +80,7 @@ But first of all, make sure that :
 * Line ending character is unix-style **`LF`**
 * New line is added at end of file: `IntelliJ setting > Editor > General > Ensure line feed at file end on save`
 
-For most editors, this should be automatically enforced by [EditorConfig](http://editorconfig.org/).
+For most editors, this should be automatically enforced by [EditorConfig](https://editorconfig.org/).
 Check if your editor has a built-in plugin or if you need to download one.
 IntelliJ has a built-in plugin, for Eclipse you need to download [this plugin](https://github.com/ncjones/editorconfig-eclipse#readme).
 

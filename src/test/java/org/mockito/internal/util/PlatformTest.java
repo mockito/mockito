@@ -68,13 +68,13 @@ public class PlatformTest {
     public void should_parse_open_jdk_string_and_report_wether_below_or_nut_update_45() {
         // Given
         // Sources :
-        //  - http://www.oracle.com/technetwork/java/javase/versioning-naming-139433.html
-        //  - http://www.oracle.com/technetwork/java/javase/jdk7-naming-418744.html
-        //  - http://www.oracle.com/technetwork/java/javase/jdk8-naming-2157130.html
+        //  - https://www.oracle.com/java/technologies/javase/versioning-naming.html
+        //  - https://www.oracle.com/java/technologies/javase/jdk7-naming.html
+        //  - https://www.oracle.com/java/technologies/javase/jdk8-naming.html
         //  -
-        // http://stackoverflow.com/questions/35844985/how-do-we-get-sr-and-fp-of-ibm-jre-using-java
+        // https://stackoverflow.com/questions/35844985/how-do-we-get-sr-and-fp-of-ibm-jre-using-java
         //  -
-        // http://www.ibm.com/support/knowledgecenter/SSYKE2_6.0.0/com.ibm.java.doc.user.win32.60/user/java_version_check.html
+        // https://www.ibm.com/support/knowledgecenter/SSYKE2_8.0.0/com.ibm.java.80.doc/user/build_number.html
         Map<String, Boolean> versions =
                 new HashMap<String, Boolean>() {
                     {
@@ -103,7 +103,7 @@ public class PlatformTest {
 
         // Given
         // Sources :
-        //  - http://openjdk.java.net/jeps/223 (Java 9)
+        //  - https://openjdk.java.net/jeps/223 (Java 9)
         //
         // System Property                 Existing      Proposed
         // ------------------------------- ------------  --------

@@ -95,7 +95,7 @@ import static org.mockito.internal.util.StringUtil.*;
  * Note that inline mocks require a Java agent to be attached. Mockito will attempt an attachment of a Java agent upon
  * loading the mock maker for creating inline mocks. Such runtime attachment is only possible when using a JVM that
  * is part of a JDK or when using a Java 9 VM. When running on a non-JDK VM prior to Java 9, it is however possible to
- * manually add the <a href="http://bytebuddy.net">Byte Buddy Java agent jar</a> using the <code>-javaagent</code>
+ * manually add the <a href="https://bytebuddy.net">Byte Buddy Java agent jar</a> using the <code>-javaagent</code>
  * parameter upon starting the JVM. Furthermore, the inlining mock maker requires the VM to support class retransformation
  * (also known as HotSwap). All major VM distributions such as HotSpot (OpenJDK), J9 (IBM/Websphere) or Zing (Azul)
  * support this feature.

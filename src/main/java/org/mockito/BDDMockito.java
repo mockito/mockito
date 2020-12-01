@@ -13,7 +13,7 @@ import org.mockito.verification.VerificationMode;
  * Behavior Driven Development style of writing tests uses <b>//given //when //then</b> comments as fundamental parts of your test methods.
  * This is exactly how we write our tests and we warmly encourage you to do so!
  * <p>
- * Start learning about BDD here: <a href="http://en.wikipedia.org/wiki/Behavior_Driven_Development">http://en.wikipedia.org/wiki/Behavior_Driven_Development</a>
+ * Start learning about BDD here: <a href="https://en.wikipedia.org/wiki/Behavior-driven_development">https://en.wikipedia.org/wiki/Behavior-driven_development</a>
  * <p>
  * The problem is that current stubbing api with canonical role of <b>when</b> word does not integrate nicely with <b>//given //when //then</b> comments.
  * It's because stubbing belongs to <b>given</b> component of the test and not to the <b>when</b> component of the test.

@@ -38,7 +38,7 @@ import java.util.function.Function;
  * The Mockito library enables mock creation, verification and stubbing.
  *
  * <p>
- * This javadoc content is also available on the <a href="http://mockito.org">http://mockito.org</a> web page.
+ * This javadoc content is also available on the <a href="https://site.mockito.org/">https://site.mockito.org/</a> web page.
  * All documentation is kept in javadocs because it guarantees consistency between what's on the web and what's in the source code.
  * It allows access to documentation straight from the IDE even if you work offline.
  * It motivates Mockito developers to keep documentation up-to-date with the code that they write,
@@ -104,7 +104,7 @@ import java.util.function.Function;
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
  *
  * In order to continue improving Mockito and further improve the unit testing experience, we want you to upgrade to 2.1.0!
- * Mockito follows <a href="http://semver.org/">semantic versioning</a> and contains breaking changes only on major version upgrades.
+ * Mockito follows <a href="https://semver.org/">semantic versioning</a> and contains breaking changes only on major version upgrades.
  * In the lifecycle of a library, breaking changes are necessary
  * to roll out a set of brand new features that alter the existing behavior or even change the API.
  * For a comprehensive guide on the new release including incompatible changes,
@@ -767,7 +767,7 @@ import java.util.function.Function;
  * <a href="https://github.com/mockito/mockito/wiki/FAQ">https://github.com/mockito/mockito/wiki/FAQ</a>
  * <p>
  * In case of questions you may also post to mockito mailing list:
- * <a href="http://groups.google.com/group/mockito">http://groups.google.com/group/mockito</a>
+ * <a href="https://groups.google.com/group/mockito">https://groups.google.com/group/mockito</a>
  * <p>
  * Next, you should know that Mockito validates if you use it correctly <b>all the time</b>.
  * However, there's a gotcha so please read the javadoc for {@link Mockito#validateMockitoUsage()}
@@ -780,7 +780,7 @@ import java.util.function.Function;
  * Behavior Driven Development style of writing tests uses <b>//given //when //then</b> comments as fundamental parts of your test methods.
  * This is exactly how we write our tests and we warmly encourage you to do so!
  * <p>
- * Start learning about BDD here: <a href="http://en.wikipedia.org/wiki/Behavior_Driven_Development">http://en.wikipedia.org/wiki/Behavior_Driven_Development</a>
+ * Start learning about BDD here: <a href="https://en.wikipedia.org/wiki/Behavior-driven_development">https://en.wikipedia.org/wiki/Behavior-driven_development</a>
  * <p>
  * The problem is that current stubbing api with canonical role of <b>when</b> word does not integrate nicely with <b>//given //when //then</b> comments.
  * It's because stubbing belongs to <b>given</b> component of the test and not to the <b>when</b> component of the test.
@@ -823,7 +823,7 @@ import java.util.function.Function;
  *   List serializableMock = mock(List.class, withSettings().serializable());
  * </code></pre>
  * <p>
- * The mock can be serialized assuming all the normal <a href='http://java.sun.com/j2se/1.5.0/docs/api/java/io/Serializable.html'>
+ * The mock can be serialized assuming all the normal <a href='https://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html'>
  * serialization requirements</a> are met by the class.
  * <p>
  * Making a real object spy serializable is a bit more effort as the spy(...) method does not have an overloaded version
@@ -1357,7 +1357,7 @@ import java.util.function.Function;
  *     </li>
  *     <li>This mock maker has been designed around Java Agent runtime attachment ; this require a compatible JVM,
  *     that is part of the JDK (or Java 9 VM). When running on a non-JDK VM prior to Java 9, it is however possible to
- *     manually add the <a href="http://bytebuddy.net">Byte Buddy Java agent jar</a> using the <code>-javaagent</code>
+ *     manually add the <a href="https://bytebuddy.net">Byte Buddy Java agent jar</a> using the <code>-javaagent</code>
  *     parameter upon starting the JVM.
  *     </li>
  * </ul>
@@ -1506,7 +1506,7 @@ import java.util.function.Function;
  * <h3 id="45">45. <a class="meaningful_link" href="#junit5_mockito" name="junit5_mockito">New JUnit Jupiter (JUnit5+) extension</a></h3>
  *
  * For integration with JUnit Jupiter (JUnit5+), use the `org.mockito:mockito-junit-jupiter` artifact.
- * For more information about the usage of the integration, see <a href="http://javadoc.io/doc/org.mockito/mockito-junit-jupiter/latest/org/mockito/junit/jupiter/MockitoExtension.html">the JavaDoc of <code>MockitoExtension</code></a>.
+ * For more information about the usage of the integration, see <a href="https://javadoc.io/doc/org.mockito/mockito-junit-jupiter/latest/org/mockito/junit/jupiter/MockitoExtension.html">the JavaDoc of <code>MockitoExtension</code></a>.
  *
  * <h3 id="46">46. <a class="meaningful_link" href="#mockito_lenient" name="mockito_lenient">
  *       New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0)</a></h3>
@@ -3189,7 +3189,7 @@ public class Mockito extends ArgumentMatchers {
     /**
      * First of all, in case of any trouble, I encourage you to read the Mockito FAQ: <a href="https://github.com/mockito/mockito/wiki/FAQ">https://github.com/mockito/mockito/wiki/FAQ</a>
      * <p>
-     * In case of questions you may also post to mockito mailing list: <a href="http://groups.google.com/group/mockito">http://groups.google.com/group/mockito</a>
+     * In case of questions you may also post to mockito mailing list: <a href="https://groups.google.com/group/mockito">https://groups.google.com/group/mockito</a>
      * <p>
      * <code>validateMockitoUsage()</code> <b>explicitly validates</b> the framework state to detect invalid use of Mockito.
      * However, this feature is optional <b>because Mockito validates the usage all the time...</b> but there is a gotcha so read on.

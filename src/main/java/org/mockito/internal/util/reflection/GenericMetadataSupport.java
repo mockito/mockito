@@ -197,7 +197,7 @@ public abstract class GenericMetadataSupport {
      */
     private BoundedType boundsOf(WildcardType wildCard) {
         /*
-         *  According to JLS(http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.5.1):
+         *  According to JLS(https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.5.1):
          *  - Lower and upper can't coexist: (for instance, this is not allowed:
          *    <? extends List<String> & super MyInterface>)
          *  - Multiple concrete type bounds are not supported (for instance, this is not allowed:
@@ -594,9 +594,9 @@ public abstract class GenericMetadataSupport {
      * Type representing bounds of a type
      *
      * @see TypeVarBoundedType
-     * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.4">https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.4</a>
      * @see WildCardBoundedType
-     * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.5.1">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.5.1</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.5.1">https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.5.1</a>
      */
     public interface BoundedType extends Type {
         Type firstBound();
@@ -622,7 +622,7 @@ public abstract class GenericMetadataSupport {
      * </code></pre>
      * </p>
      *
-     * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.4">https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.4</a>
      */
     public static class TypeVarBoundedType implements BoundedType {
         private final TypeVariable<?> typeVariable;
@@ -689,7 +689,7 @@ public abstract class GenericMetadataSupport {
      * <p>The JLS says that lower bound and upper bound are mutually exclusive, and that multiple bounds
      * are not allowed.
      *
-     * @see <a href="http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4">http://docs.oracle.com/javase/specs/jls/se5.0/html/typesValues.html#4.4</a>
+     * @see <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.4">https://docs.oracle.com/javase/specs/jls/se8/html/jls-4.html#jls-4.4</a>
      */
     public static class WildCardBoundedType implements BoundedType {
         private final WildcardType wildcard;
