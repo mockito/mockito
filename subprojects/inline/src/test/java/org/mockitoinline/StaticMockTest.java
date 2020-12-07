@@ -166,10 +166,27 @@ public final class StaticMockTest {
         }
     }
 
+    @Test
+    public void testStaticMockVoid() {
+        try (MockedStatic<Dummy> dummy = Mockito.mockStatic(Dummy.class)) {
+            Dummy.fooVoid("bar");
+            assertNull(Dummy.var1);
+            dummy.verify(()->Dummy.fooVoid("bar"));
+        }
+        Dummy.fooVoid("bar");
+        assertEquals("bar", Dummy.var1);
+    }
+
     static class Dummy {
+
+        static String var1 = null;
 
         static String foo() {
             return "foo";
+        }
+
+        static void fooVoid(String var2) {
+            var1 = var2;
         }
     }
 }
