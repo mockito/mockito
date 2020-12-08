@@ -93,7 +93,7 @@ jobs:
       run: ./gradlew bintrayUpload githubRelease --scan
       env:
         MAVEN_CENTRAL_RELEASE: ${{contains(toJSON(github.event.commits.*.message), '[ci maven-central-release]')}}
-        GH_WRITE_TOKEN: ${{secrets.GH_WRITE_TOKEN}}
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         BINTRAY_API_KEY: ${{secrets.BINTRAY_API_KEY}}
         NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
         NEXUS_TOKEN_PWD: ${{secrets.NEXUS_TOKEN_PWD}}
