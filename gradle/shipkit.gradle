@@ -4,7 +4,7 @@ apply plugin: "org.shipkit.shipkit-gh-release"
 
 tasks.named("generateChangelog") {
     previousRevision = "v" + project.ext.'shipkit-auto-version.previous-version'
-    readOnlyToken = "a0a4c0f41c200f7c653323014d6a72a127764e17"
+    readOnlyToken = System.getenv("GITHUB_TOKEN")
     repository = "mockito/mockito"
 }
 
@@ -13,7 +13,7 @@ tasks.named("githubRelease") {
     dependsOn genTask
     repository = genTask.repository
     changelog = genTask.outputFile
-    writeToken = System.getenv("GH_WRITE_TOKEN")
+    writeToken = System.getenv("GITHUB_TOKEN")
 }
 
 /**
