@@ -1371,9 +1371,11 @@ import java.util.function.Function;
  *
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
- *     <li>Strict stubbing with JUnit Rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
- *     <li>Strict stubbing with JUnit Runner - {@link MockitoJUnitRunner.StrictStubs}</li>
- *     <li>Strict stubbing if you cannot use runner/rule (like TestNG) - {@link MockitoSession}</li>
+ *     <li>Strict stubbing with JUnit4 Rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
+ *     <li>Strict stubbing with JUnit4 Runner - {@link MockitoJUnitRunner.Strict}</li>
+ *     <li>Strict stubbing with JUnit5 Extension - <code>org.mockito.junit.jupiter.MockitoExtension</code></li>
+ *     <li>Strict stubbing with TestNG Listener <a href="https://github.com/mockito/mockito-testng">MockitoTestNGListener</a></li>
+ *     <li>Strict stubbing if you cannot use runner/rule - {@link MockitoSession}</li>
  *     <li>Unnecessary stubbing detection with {@link MockitoJUnitRunner}</li>
  *     <li>Stubbing argument mismatch warnings, documented in {@link MockitoHint}</li>
  * </ul>

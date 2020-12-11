@@ -69,7 +69,7 @@ import org.mockito.quality.Strictness;
  * </code></pre>
  *
  * If you would like to take advantage of Mockito JUnit runner features
- * but you cannot use the runner because, for example, you use TestNG, there is a solution!
+ * but you cannot use the runner there is a solution!
  * {@link MockitoSession} API is intended to offer cleaner tests and improved debuggability
  * to users that cannot use Mockito's built-in JUnit support (runner or the rule).
  */

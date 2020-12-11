@@ -27,7 +27,6 @@ import org.mockito.session.MockitoSessionBuilder;
  * otherwise {@link UnfinishedMockingSessionException} is triggered when the next session is created.
  * <p>
  * {@code MockitoSession} is useful when you cannot use {@link MockitoJUnitRunner} or {@link MockitoRule}.
- * For example, you work with TestNG instead of JUnit.
  * Another example is when different JUnit runner is in use (Jukito, Springockito)
  * and it cannot be combined with Mockito's own runner.
  * <p>
@@ -74,7 +73,7 @@ import org.mockito.session.MockitoSessionBuilder;
  * If you are JUnit user who does not leverage Mockito rule or runner we strongly recommend to do so.
  * Both the runner and the rule support strict stubbing which can really help driving cleaner tests.
  * See {@link MockitoJUnitRunner.StrictStubs} and {@link MockitoRule#strictness(Strictness)}.
- * If you cannot use Mockito's JUnit support (for example, you are on TestNG) {@code MockitoSession} exactly is for you!
+ * If you cannot use Mockito's JUnit support {@code MockitoSession} exactly is for you!
  * You can automatically take advantage of strict stubbing ({@link Strictness}),
  * automatic initialization of annotated mocks ({@link MockitoAnnotations}),
  * and extra validation ({@link Mockito#validateMockitoUsage()}).
