@@ -3,7 +3,7 @@ apply plugin: "org.shipkit.shipkit-changelog"
 apply plugin: "org.shipkit.shipkit-gh-release"
 
 tasks.named("generateChangelog") {
-    previousRevision = "v" + project.ext.'shipkit-auto-version.previous-version'
+    previousRevision = project.ext.'shipkit-auto-version.previous-tag'
     readOnlyToken = System.getenv("GITHUB_TOKEN")
     repository = "mockito/mockito"
 }
