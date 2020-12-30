@@ -25,6 +25,10 @@ artifacts {
     archives javadocJar
 }
 
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+}
+
 //Gradle Maven publishing plugin configuration (https://docs.gradle.org/current/userguide/publishing_maven.html)
 apply plugin: "maven-publish"
 publishing {
