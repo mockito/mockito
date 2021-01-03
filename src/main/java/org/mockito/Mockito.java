@@ -1582,7 +1582,7 @@ import java.util.function.Function;
  * </code></pre>
  *
  * Due to the defined scope of the mocked construction, object construction returns to its original behavior once the scope is
- * released. To define mock behavior and to verify static method invocations, use the <code>MockedConstruction</code> that is returned.
+ * released. To define mock behavior and to verify method invocations, use the <code>MockedConstruction</code> that is returned.
  * <p>
  */
 @SuppressWarnings("unchecked")
