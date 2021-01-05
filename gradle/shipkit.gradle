@@ -1,6 +1,6 @@
 apply plugin: "org.shipkit.shipkit-auto-version"
 apply plugin: "org.shipkit.shipkit-changelog"
-apply plugin: "org.shipkit.shipkit-gh-release"
+apply plugin: "org.shipkit.shipkit-github-release"
 
 tasks.named("generateChangelog") {
     previousRevision = project.ext.'shipkit-auto-version.previous-tag'
