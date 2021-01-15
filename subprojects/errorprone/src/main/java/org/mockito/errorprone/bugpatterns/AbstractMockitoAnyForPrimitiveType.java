@@ -70,7 +70,7 @@ public abstract class AbstractMockitoAnyForPrimitiveType extends BugChecker
     }
     if (argumentIndex == -1) {
       throw new IllegalStateException(
-          "Cannot find argument " + tree + " in argument list from " + parentTree);
+          "Cannot find argument " + state.getSourceForNode(tree) + " in argument list from " + state.getSourceForNode(parentTree));
     }
 
     Type parameterType = getParameterType(parentMethod, argumentIndex);
