@@ -193,6 +193,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
          * @return A deserialized instance of the Mockito mock.
          * @throws java.io.ObjectStreamException
          */
+        @SuppressWarnings("BanSerializableRead")
         private Object readResolve() throws ObjectStreamException {
             try {
                 ByteArrayInputStream bis = new ByteArrayInputStream(serializedMock);
@@ -267,6 +268,7 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
          * @throws ClassNotFoundException
          */
         @Override
+        @SuppressWarnings("BanSerializableRead")
         protected Class<?> resolveClass(ObjectStreamClass desc)
                 throws IOException, ClassNotFoundException {
             if (notMarkedAsAMockitoMock(readObject())) {

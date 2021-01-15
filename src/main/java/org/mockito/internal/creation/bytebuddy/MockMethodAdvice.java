@@ -744,7 +744,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     public static class ForReadObject {
 
-        @SuppressWarnings("unused")
+        @SuppressWarnings({"unused", "BanSerializableRead"})
         public static void doReadObject(
                 @Identifier String identifier,
                 @This MockAccess thiz,
