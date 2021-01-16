@@ -61,6 +61,11 @@ public final class MockedStaticImpl<T> implements MockedStatic<T> {
 
     @Override
     public void verify(VerificationMode mode, Verification verification) {
+        verify(verification, mode);
+    }
+
+    @Override
+    public void verify(Verification verification, VerificationMode mode) {
         assertNotClosed();
 
         MockingDetails mockingDetails = Mockito.mockingDetails(control.getType());

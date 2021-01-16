@@ -35,13 +35,20 @@ public interface MockedStatic<T> extends ScopedMock {
      * See {@link Mockito#verify(Object)}.
      */
     default void verify(Verification verification) {
-        verify(times(1), verification);
+        verify(verification, times(1));
     }
 
     /**
      * See {@link Mockito#verify(Object, VerificationMode)}.
+     *
+     * @deprecated Please use {@link MockedStatic#verify(Verification, VerificationMode) instead
      */
     void verify(VerificationMode mode, Verification verification);
+
+    /**
+     * See {@link Mockito#verify(Object, VerificationMode)}.
+     */
+    void verify(Verification verification, VerificationMode mode);
 
     /**
      * See {@link Mockito#reset(Object[])}.
