@@ -1573,14 +1573,14 @@ import java.util.function.Function;
  * In the following example, the <code>Foo</code> type's construction would generate a mock:
  *
  * <pre class="code"><code class="java">
- * assertEquals("foo", Foo.method());
+ * assertEquals("foo", new Foo().method());
  * try (MockedConstruction<Foo> mocked = mockConstruction(Foo.class)) {
  * Foo foo = new Foo();
  * when(foo.method()).thenReturn("bar");
  * assertEquals("bar", foo.method());
  * verify(foo).method();
  * }
- * assertEquals("foo", foo.method());
+ * assertEquals("foo", new Foo().method());
  * </code></pre>
  *
  * Due to the defined scope of the mocked construction, object construction returns to its original behavior once the scope is
