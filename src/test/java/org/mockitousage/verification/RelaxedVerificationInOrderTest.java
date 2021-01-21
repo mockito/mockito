@@ -122,7 +122,7 @@ public class RelaxedVerificationInOrderTest extends TestBase {
 
     @Test(expected = VerificationInOrderFailure.class)
     public void shouldFailVerificationOfNonFirstChunk() {
-        inOrder.verify(mockTwo, times(1)).simpleMethod(2);
+        inOrder.verify(mockTwo, once()).simpleMethod(2);
     }
 
     @Test

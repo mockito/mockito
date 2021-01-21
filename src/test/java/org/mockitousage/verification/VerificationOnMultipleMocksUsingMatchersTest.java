@@ -52,7 +52,7 @@ public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {
         map.put("one", 1);
 
         verify(list, times(2)).add("one");
-        verify(list, times(1)).add("two");
+        verify(list, once()).add("two");
         verify(list, times(0)).add("three");
 
         verify(map, times(2)).put(anyObject(), anyInt());

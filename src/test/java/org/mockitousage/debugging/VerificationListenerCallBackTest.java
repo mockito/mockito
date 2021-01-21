@@ -6,10 +6,13 @@ package org.mockitousage.debugging;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
-
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.framework;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.once;
+import static org.mockito.Mockito.verify;
 import java.lang.reflect.Method;
-
 import org.assertj.core.api.Condition;
 import org.junit.After;
 import org.junit.Test;
@@ -25,7 +28,6 @@ import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
 
 public class VerificationListenerCallBackTest extends TestBase {
-
     @After
     public void clearListeners() {
         new StateMaster().clearMockitoListeners();
@@ -133,7 +135,7 @@ public class VerificationListenerCallBackTest extends TestBase {
 
         // then
         assertThat(listener.mock).isNotNull();
-        assertThat(listener.mode).isEqualToComparingFieldByField(times(1));
+        assertThat(listener.mode).isEqualToComparingFieldByField(once());
     }
 
     public static class VerificationListenerSample {
@@ -147,8 +149,11 @@ public class VerificationListenerCallBackTest extends TestBase {
 
     private static class RememberingListener implements VerificationListener {
         Object mock;
+
         VerificationMode mode;
+
         VerificationData data;
+
         Throwable cause;
 
         @Override
@@ -162,14 +167,12 @@ public class VerificationListenerCallBackTest extends TestBase {
 
     private static class RememberingListener2 extends RememberingListener {}
 
-    private static Condition<RememberingListener> notifiedFor(
-            final Object mock, final VerificationMode mode, final Method wantedMethod) {
+    private static Condition<RememberingListener> notifiedFor(final Object mock, final VerificationMode mode, final Method wantedMethod) {
         return new Condition<RememberingListener>() {
             public boolean matches(RememberingListener listener) {
                 assertThat(listener.mock).isEqualTo(mock);
                 assertThat(listener.mode).isEqualTo(mode);
-                assertThat(listener.data.getTarget().getInvocation().getMethod())
-                        .isEqualTo(wantedMethod);
+                assertThat(listener.data.getTarget().getInvocation().getMethod()).isEqualTo(wantedMethod);
 
                 return true;
             }

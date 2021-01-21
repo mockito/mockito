@@ -147,7 +147,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
         // then
         IMethods readObject = deserializeMock(serialized, IMethods.class);
-        verify(readObject, times(1)).objectArgMethod("");
+        verify(readObject, once()).objectArgMethod("");
     }
 
     @Test

@@ -325,7 +325,7 @@ public class DeepStubbingTest extends TestBase {
                         person.getAddress("the docks").getStreet(),
                         person.getAddress("the docks").getStreet(Locale.CHINESE),
                         person.getAddress("the docks").getStreet(Locale.ITALIAN));
-        inOrder.verify(person.getAddress("the docks").getStreet(), times(1)).getName();
+        inOrder.verify(person.getAddress("the docks").getStreet(), once()).getName();
         inOrder.verify(person.getAddress("the docks").getStreet()).getLongName();
         inOrder.verify(person.getAddress("the docks").getStreet(Locale.ITALIAN), atLeast(1))
                 .getName();
@@ -344,7 +344,7 @@ public class DeepStubbingTest extends TestBase {
         verify(person.getAddress("the docks").getStreet()).getName();
 
         try {
-            verify(person.getAddress("the docks"), times(1)).getStreet();
+            verify(person.getAddress("the docks"), once()).getStreet();
             fail();
         } catch (TooManyActualInvocations e) {
             assertThat(e.getMessage()).contains("Wanted 1 time").contains("But was 3 times");

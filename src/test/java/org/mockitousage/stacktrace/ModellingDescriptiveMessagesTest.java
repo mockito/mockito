@@ -67,7 +67,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     public void shouldSayTooManyInvocations() {
         mock.simpleMethod();
         mock.simpleMethod();
-        verify(mock, times(1)).simpleMethod();
+        verify(mock, once()).simpleMethod();
     }
 
     @Test
@@ -96,7 +96,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         mock.otherMethod();
 
         InOrder inOrder = inOrder(mock);
-        inOrder.verify(mock, times(1)).otherMethod();
+        inOrder.verify(mock, once()).otherMethod();
     }
 
     @Test

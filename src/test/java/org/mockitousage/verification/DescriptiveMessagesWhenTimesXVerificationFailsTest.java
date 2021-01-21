@@ -6,6 +6,7 @@ package org.mockitousage.verification;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.once;
 import static org.mockito.Mockito.times;
 
 import java.util.LinkedList;
@@ -49,7 +50,7 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
 
         Mockito.verify(mock, times(4)).clear();
         try {
-            Mockito.verify(mock, times(1)).clear();
+            Mockito.verify(mock, once()).clear();
             fail();
         } catch (TooManyActualInvocations e) {
             assertThat(e)

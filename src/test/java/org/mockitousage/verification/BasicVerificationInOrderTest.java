@@ -6,7 +6,6 @@ package org.mockitousage.verification;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -19,10 +18,12 @@ import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
 public class BasicVerificationInOrderTest extends TestBase {
-
     private IMethods mockOne;
+
     private IMethods mockTwo;
+
     private IMethods mockThree;
+
     private InOrder inOrder;
 
     @Before
@@ -98,19 +99,19 @@ public class BasicVerificationInOrderTest extends TestBase {
         }
     }
 
-    @Test(expected = VerificationInOrderFailure.class)
+    @Test (expected = VerificationInOrderFailure.class)
     public void shouldFailOnFirstMethodBecauseOneInvocationWanted() {
         inOrder.verify(mockOne, times(0)).simpleMethod(1);
     }
 
-    @Test(expected = VerificationInOrderFailure.class)
+    @Test (expected = VerificationInOrderFailure.class)
     public void shouldFailOnFirstMethodBecauseOneInvocationWantedAgain() {
         inOrder.verify(mockOne, times(2)).simpleMethod(1);
     }
 
     @Test
     public void shouldFailOnSecondMethodBecauseFourInvocationsWanted() {
-        inOrder.verify(mockOne, times(1)).simpleMethod(1);
+        inOrder.verify(mockOne, once()).simpleMethod(1);
         try {
             inOrder.verify(mockTwo, times(4)).simpleMethod(2);
             fail();
@@ -120,7 +121,7 @@ public class BasicVerificationInOrderTest extends TestBase {
 
     @Test
     public void shouldFailOnSecondMethodBecauseTwoInvocationsWantedAgain() {
-        inOrder.verify(mockOne, times(1)).simpleMethod(1);
+        inOrder.verify(mockOne, once()).simpleMethod(1);
         try {
             inOrder.verify(mockTwo, times(0)).simpleMethod(2);
             fail();
@@ -156,12 +157,12 @@ public class BasicVerificationInOrderTest extends TestBase {
 
     /* ------------- */
 
-    @Test(expected = ArgumentsAreDifferent.class)
+    @Test (expected = ArgumentsAreDifferent.class)
     public void shouldFailOnFirstMethodBecauseDifferentArgsWanted() {
         inOrder.verify(mockOne).simpleMethod(100);
     }
 
-    @Test(expected = WantedButNotInvoked.class)
+    @Test (expected = WantedButNotInvoked.class)
     public void shouldFailOnFirstMethodBecauseDifferentMethodWanted() {
         inOrder.verify(mockOne).oneArg(true);
     }
@@ -178,7 +179,7 @@ public class BasicVerificationInOrderTest extends TestBase {
 
     @Test
     public void shouldFailOnSecondMethodBecauseDifferentMethodWanted() {
-        inOrder.verify(mockOne, times(1)).simpleMethod(1);
+        inOrder.verify(mockOne, once()).simpleMethod(1);
         try {
             inOrder.verify(mockTwo, times(2)).oneArg(true);
             fail();
@@ -258,18 +259,18 @@ public class BasicVerificationInOrderTest extends TestBase {
         }
     }
 
-    @Test(expected = NoInteractionsWanted.class)
+    @Test (expected = NoInteractionsWanted.class)
     public void shouldFailOnVerifyZeroInteractions() {
         verifyZeroInteractions(mockOne);
     }
 
-    @Test(expected = NoInteractionsWanted.class)
+    @Test (expected = NoInteractionsWanted.class)
     public void shouldFailOnVerifyNoInteractions() {
         verifyNoInteractions(mockOne);
     }
 
-    @SuppressWarnings({"all", "CheckReturnValue", "MockitoUsage"})
-    @Test(expected = MockitoException.class)
+    @SuppressWarnings ({ "all", "CheckReturnValue", "MockitoUsage" })
+    @Test (expected = MockitoException.class)
     public void shouldScreamWhenNullPassed() {
         inOrder((Object[]) null);
     }

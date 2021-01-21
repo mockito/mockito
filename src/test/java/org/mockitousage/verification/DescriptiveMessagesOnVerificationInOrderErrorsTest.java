@@ -139,7 +139,7 @@ public class DescriptiveMessagesOnVerificationInOrderErrorsTest extends TestBase
         inOrder.verify(one).simpleMethod(1);
         inOrder.verify(one).simpleMethod(11);
         try {
-            inOrder.verify(two, times(1)).simpleMethod(2);
+            inOrder.verify(two, once()).simpleMethod(2);
             fail();
         } catch (VerificationInOrderFailure e) {
             String expectedMessage =

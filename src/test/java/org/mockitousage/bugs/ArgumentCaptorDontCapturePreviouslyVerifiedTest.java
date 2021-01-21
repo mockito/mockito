@@ -6,6 +6,7 @@ package org.mockitousage.bugs;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.once;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -20,7 +21,7 @@ public class ArgumentCaptorDontCapturePreviouslyVerifiedTest {
 
         mock.oneArg("first");
         ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
-        verify(mock, times(1)).oneArg(argument.capture());
+        verify(mock, once()).oneArg(argument.capture());
         assertThat(argument.getAllValues()).hasSize(1);
 
         // additional interactions

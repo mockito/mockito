@@ -34,7 +34,7 @@ public class NewMatchersTest extends TestBase {
         assertEquals("matched", mock.forList(Arrays.asList("x", "y")));
         assertEquals(null, mock.forList(null));
 
-        verify(mock, times(1)).forList(anyListOf(String.class));
+        verify(mock, once()).forList(anyListOf(String.class));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class NewMatchersTest extends TestBase {
         assertEquals("matched", mock.forCollection(Arrays.asList("x", "y")));
         assertEquals(null, mock.forCollection(null));
 
-        verify(mock, times(1)).forCollection(anyCollectionOf(String.class));
+        verify(mock, once()).forCollection(anyCollectionOf(String.class));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class NewMatchersTest extends TestBase {
         assertEquals("matched", mock.forMap(new HashMap<String, String>()));
         assertEquals(null, mock.forMap(null));
 
-        verify(mock, times(1)).forMap(anyMapOf(String.class, String.class));
+        verify(mock, once()).forMap(anyMapOf(String.class, String.class));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class NewMatchersTest extends TestBase {
         assertEquals("matched", mock.forSet(new HashSet<String>()));
         assertEquals(null, mock.forSet(null));
 
-        verify(mock, times(1)).forSet(anySetOf(String.class));
+        verify(mock, once()).forSet(anySetOf(String.class));
     }
 
     @Test
@@ -74,6 +74,6 @@ public class NewMatchersTest extends TestBase {
         assertEquals("matched", mock.forIterable(new HashSet<String>()));
         assertEquals(null, mock.forIterable(null));
 
-        verify(mock, times(1)).forIterable(anyIterableOf(String.class));
+        verify(mock, once()).forIterable(anyIterableOf(String.class));
     }
 }

@@ -47,7 +47,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
 
         verify(mock, times(2)).clear();
         try {
-            verify(mock, times(1)).clear();
+            verify(mock, once()).clear();
             fail();
         } catch (TooManyActualInvocations e) {
             assertThat(e).hasMessageContaining("Wanted 1 time").hasMessageContaining("was 2 times");

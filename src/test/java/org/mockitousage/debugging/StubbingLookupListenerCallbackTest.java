@@ -157,7 +157,7 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
 
         // then
         verify(listener, times(2)).onStubbingLookup(any(StubbingLookupEvent.class));
-        verify(listener2, times(1)).onStubbingLookup(any(StubbingLookupEvent.class));
+        verify(listener2, once()).onStubbingLookup(any(StubbingLookupEvent.class));
     }
 
     @Test

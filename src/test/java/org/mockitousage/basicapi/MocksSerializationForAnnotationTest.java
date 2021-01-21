@@ -147,7 +147,7 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
 
         // then
         IMethods readObject = deserializeMock(serialized, IMethods.class);
-        verify(readObject, times(1)).objectArgMethod("");
+        verify(readObject, once()).objectArgMethod("");
     }
 
     @Test

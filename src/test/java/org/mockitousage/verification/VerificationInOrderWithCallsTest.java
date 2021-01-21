@@ -377,7 +377,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         InOrder verifier = inOrder(mockOne);
 
         // When
-        verifier.verify(mockOne, times(1)).oneArg(1);
+        verifier.verify(mockOne, once()).oneArg(1);
         verifier.verify(mockOne, calls(2)).oneArg(2);
         verifier.verify(mockOne, calls(1)).oneArg(1);
 
@@ -413,7 +413,7 @@ public class VerificationInOrderWithCallsTest extends TestBase {
         // When
         verifier.verify(mockOne, calls(1)).oneArg(1);
         verifier.verify(mockOne, times(2)).oneArg(2);
-        verifier.verify(mockOne, times(1)).oneArg(1);
+        verifier.verify(mockOne, once()).oneArg(1);
 
         // Then - no exception thrown
     }
