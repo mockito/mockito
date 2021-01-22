@@ -10,9 +10,7 @@ import static org.mockito.internal.util.StringUtil.join;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
@@ -408,14 +406,17 @@ public class Reporter {
     }
 
     public static MockitoAssertionError neverWantedButInvoked(
-            DescribedInvocation wanted, List<Location> invocations) {
+            DescribedInvocation wanted, List<Invocation> invocations) {
+        Map<Location, Object[]> locationArgs = new HashMap<>();
+        invocations.forEach(inv -> locationArgs.put(inv.getLocation(), inv.getArguments()));
+
         return new NeverWantedButInvoked(
                 join(
                         wanted.toString(),
                         "Never wanted here:",
                         new LocationImpl(),
                         "But invoked here:",
-                        createAllLocationsMessage(invocations)));
+                        createAllLocationsArgsMessage(locationArgs)));
     }
 
     public static MockitoAssertionError tooManyActualInvocationsInOrder(
@@ -436,6 +437,24 @@ public class Reporter {
         for (Location location : locations) {
             sb.append(location).append("\n");
         }
+        return sb.toString();
+    }
+
+    private static String createAllLocationsArgsMessage(Map<Location, Object[]> locationArgs) {
+        if (locationArgs == null || locationArgs.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        locationArgs.forEach(
+                (location, args) -> {
+                    if (location == null) {
+                        return;
+                    }
+                    sb.append(location)
+                            .append(" with next arguments: ")
+                            .append(Arrays.toString(args))
+                            .append("\n");
+                });
         return sb.toString();
     }
 

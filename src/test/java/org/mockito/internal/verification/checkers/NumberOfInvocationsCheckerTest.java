@@ -9,6 +9,7 @@ import static java.util.Collections.emptyList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.hamcrest.BaseMatcher;
@@ -116,16 +117,17 @@ public class NumberOfInvocationsCheckerTest {
     }
 
     @Test
-    public void shouldReportNeverWantedButInvoked() throws Exception {
-        Invocation first = buildSimpleMethod().toInvocation();
+    public void shouldReportNeverWantedButInvokedWithArgs() throws Exception {
+        Invocation invocation = buildSimpleMethodWithArgs("arg1").toInvocation();
 
-        invocations = asList(first);
-        wanted = buildSimpleMethod().toInvocationMatcher();
+        invocations = Collections.singletonList(invocation);
+        wanted = buildSimpleMethodWithArgs("arg1").toInvocationMatcher();
 
         exception.expect(NeverWantedButInvoked.class);
         exception.expectMessage("Never wanted here");
         exception.expectMessage("But invoked here");
-        exception.expectMessage("" + first.getLocation());
+        exception.expectMessage("" + invocation.getLocation());
+        exception.expectMessage("with next arguments: [arg1]");
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0);
     }
@@ -143,6 +145,10 @@ public class NumberOfInvocationsCheckerTest {
 
     private InvocationBuilder buildSimpleMethod() {
         return new InvocationBuilder().mock(mock).simpleMethod();
+    }
+
+    private InvocationBuilder buildSimpleMethodWithArgs(String arg) {
+        return new InvocationBuilder().mock(mock).simpleMethod().args(arg);
     }
 
     private static BaseMatcher<String> containsTimes(String value, int amount) {
