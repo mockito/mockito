@@ -11,4 +11,6 @@ public interface BytecodeGenerator {
     void mockClassConstruction(Class<?> type);
 
     void mockClassStatic(Class<?> type);
+
+    default void clearAllCaches() {}
 }

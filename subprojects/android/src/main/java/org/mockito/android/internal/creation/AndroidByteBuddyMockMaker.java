@@ -53,4 +53,9 @@ public class AndroidByteBuddyMockMaker implements MockMaker {
     public TypeMockability isTypeMockable(Class<?> type) {
         return delegate.isTypeMockable(type);
     }
+
+    @Override
+    public void clearAllCaches() {
+        delegate.clearAllCaches();
+    }
 }

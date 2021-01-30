@@ -7,6 +7,8 @@ package org.mockito.internal.creation.bytebuddy;
 import java.lang.ref.ReferenceQueue;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import net.bytebuddy.TypeCache;
 import org.mockito.mock.SerializableMode;
@@ -20,6 +22,8 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
 
     private final TypeCache<MockitoMockKey> typeCache;
 
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
     public TypeCachingBytecodeGenerator(BytecodeGenerator bytecodeGenerator, boolean weak) {
         this.bytecodeGenerator = bytecodeGenerator;
         typeCache =
@@ -30,6 +34,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
     @SuppressWarnings("unchecked")
     @Override
     public <T> Class<T> mockClass(final MockFeatures<T> params) {
+        lock.readLock().lock();
         try {
             ClassLoader classLoader = params.mockedType.getClassLoader();
             return (Class<T>)
@@ -54,6 +59,8 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
             } else {
                 throw exception;
             }
+        } finally {
+            lock.readLock().unlock();
         }
     }
 
@@ -65,6 +72,17 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
     @Override
     public void mockClassConstruction(Class<?> type) {
         bytecodeGenerator.mockClassConstruction(type);
+    }
+
+    @Override
+    public void clearAllCaches() {
+        lock.writeLock().lock();
+        try {
+            typeCache.clear();
+            bytecodeGenerator.clearAllCaches();
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     private static class MockitoMockKey extends TypeCache.SimpleKey {

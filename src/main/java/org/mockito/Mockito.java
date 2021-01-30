@@ -2462,6 +2462,17 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
+     * Clears all mocks, type caches and instrumentations.
+     * <p>
+     * By clearing Mockito's state, previously created mocks might begin to malfunction. This option can be used if
+     * Mockito's caches take up too much space or if the inline mock maker's instrumentation is causing performance
+     * issues in code where mocks are no longer used. Normally, you would not need to use this option.
+     */
+    public static void clearAllCaches() {
+        MOCKITO_CORE.clearAllCaches();
+    }
+
+    /**
      * Use this method in order to only clear invocations, when stubbing is non-trivial. Use-cases can be:
      * <ul>
      *     <li>You are using a dependency injection framework to inject your mocks.</li>

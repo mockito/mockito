@@ -34,6 +34,7 @@ import org.mockito.mock.SerializableMode;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
+import java.lang.instrument.UnmodifiableClassException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
@@ -396,6 +397,28 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                 lastException = throwable;
                 return null;
             }
+        }
+    }
+
+    @Override
+    public synchronized void clearAllCaches() {
+        Set<Class<?>> types = new HashSet<>();
+        mocked.forEach(types::add);
+        if (types.isEmpty()) {
+            return;
+        }
+        mocked.clear();
+        flatMocked.clear();
+        try {
+            instrumentation.retransformClasses(types.toArray(new Class<?>[0]));
+        } catch (UnmodifiableClassException e) {
+            throw new MockitoException(
+                    join(
+                            "Failed to reset mocks.",
+                            "",
+                            "This should not influence the working of Mockito.",
+                            "But if the reset intends to remove mocking code to improve performance, it is still impacted."),
+                    e);
         }
     }
 
