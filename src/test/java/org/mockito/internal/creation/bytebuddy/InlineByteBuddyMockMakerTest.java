@@ -228,7 +228,8 @@ public class InlineByteBuddyMockMakerTest
         MockSettingsImpl<Object> mockSettings = new MockSettingsImpl<Object>();
         mockSettings.setTypeToMock(Object.class);
         mockSettings.defaultAnswer(new Returns("foo"));
-        Object proxy = mockMaker.createMock(mockSettings, new MockHandlerImpl<Object>(mockSettings));
+        Object proxy =
+                mockMaker.createMock(mockSettings, new MockHandlerImpl<Object>(mockSettings));
 
         assertThat(proxy.toString()).isEqualTo("foo");
     }
