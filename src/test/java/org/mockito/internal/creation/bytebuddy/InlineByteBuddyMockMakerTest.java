@@ -220,6 +220,20 @@ public class InlineByteBuddyMockMakerTest
         assertThat(proxy.toString()).isEqualTo("foo");
     }
 
+    /**
+     * @see <a href="https://github.com/mockito/mockito/issues/2154">https://github.com/mockito/mockito/issues/2154</a>
+     */
+    @Test
+    public void should_mock_class_to_string() {
+        MockSettingsImpl<Object> mockSettings = new MockSettingsImpl<Object>();
+        mockSettings.setTypeToMock(Object.class);
+        mockSettings.defaultAnswer(new Returns("foo"));
+        Object proxy =
+                mockMaker.createMock(mockSettings, new MockHandlerImpl<Object>(mockSettings));
+
+        assertThat(proxy.toString()).isEqualTo("foo");
+    }
+
     @Test
     public void should_remove_recursive_self_call_from_stack_trace() throws Exception {
         StackTraceElement[] stack =
