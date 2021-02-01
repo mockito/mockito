@@ -269,9 +269,6 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             throw t;
         }
 
-        // The object type does not ever need instrumentation.
-        targets.remove(Object.class);
-
         if (!targets.isEmpty()) {
             try {
                 assureCanReadMockito(targets);
