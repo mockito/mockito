@@ -35,7 +35,7 @@ libraries.osgi = 'org.osgi:osgi.core:8.0.0'
 libraries.equinox = 'org.eclipse.platform:org.eclipse.osgi:3.16.100'
 libraries.bndGradle =  'biz.aQute.bnd:biz.aQute.bnd.gradle:5.2.0'
 
-def kotlinVersion = '1.4.21-2'
+def kotlinVersion = '1.4.30'
 libraries.kotlin = [
     version: kotlinVersion,
 
