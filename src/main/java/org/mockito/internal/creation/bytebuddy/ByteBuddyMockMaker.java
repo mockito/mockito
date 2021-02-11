@@ -71,4 +71,9 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
         return defaultByteBuddyMockMaker.createConstructionMock(
                 type, settingsFactory, handlerFactory, mockInitializer);
     }
+
+    @Override
+    public void clearAllCaches() {
+        defaultByteBuddyMockMaker.clearAllCaches();
+    }
 }

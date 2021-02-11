@@ -179,4 +179,9 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
             }
         };
     }
+
+    @Override
+    public void clearAllCaches() {
+        cachingMockBytecodeGenerator.clearAllCaches();
+    }
 }

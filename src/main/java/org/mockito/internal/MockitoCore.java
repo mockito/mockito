@@ -15,6 +15,7 @@ import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubberImpl;
 import org.mockito.internal.util.DefaultMockingDetails;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.internal.verification.VerificationModeFactory;
@@ -278,5 +279,9 @@ public class MockitoCore {
 
     public LenientStubber lenient() {
         return new DefaultLenientStubber();
+    }
+
+    public void clearAllCaches() {
+        MockUtil.clearAllCaches();
     }
 }
