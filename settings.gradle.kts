@@ -5,6 +5,7 @@ plugins {
 include("deprecatedPluginsTest",
     "inline",
     "extTest",
+    "groovyTest",
     "kotlinTest",
     "kotlinReleaseCoroutinesTest",
     "android",

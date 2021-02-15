@@ -1,0 +1,11 @@
+apply plugin: 'groovy'
+
+description = "Integration test for using Mockito from Groovy."
+
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+dependencies {
+    testCompile project(":")
+    testCompile libraries.groovy
+    testCompile libraries.junit4
+}
