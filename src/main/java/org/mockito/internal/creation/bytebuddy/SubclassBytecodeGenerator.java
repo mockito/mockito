@@ -226,7 +226,8 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     }
 
     private static ElementMatcher<MethodDescription> isGroovyMethod() {
-        return isDeclaredBy(named("groovy.lang.GroovyObjectSupport"));
+        return isDeclaredBy(named("groovy.lang.GroovyObjectSupport"))
+                .or(isAnnotatedWith(named("groovy.transform.Internal")));
     }
 
     private boolean isComingFromJDK(Class<?> type) {
