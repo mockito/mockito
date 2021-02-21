@@ -28,6 +28,12 @@ jobs:
       matrix:
         java: [8, 11, 15]
         mock-maker: ['mock-maker-default', 'mock-maker-inline']
+        experimental: [ false ]
+        include:
+          - java: 16-ea
+            experimental: true
+          - java: 17-ea
+            experimental: true
 
     # All build steps
     # SINGLE-MATRIX-JOB means that the step does not need to be executed on every job in the matrix
