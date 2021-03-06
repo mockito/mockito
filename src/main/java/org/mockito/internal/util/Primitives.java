@@ -4,16 +4,15 @@
  */
 package org.mockito.internal.util;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public class Primitives {
 
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPES =
-            new HashMap<Class<?>, Class<?>>();
-    private static final Map<Class<?>, Object> PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES =
-            new HashMap<Class<?>, Object>();
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPES;
+    private static final Map<Class<?>, Object> PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES;
 
     /**
      * Returns the primitive type of the given class.
@@ -63,33 +62,38 @@ public class Primitives {
     }
 
     static {
-        PRIMITIVE_TYPES.put(Boolean.class, Boolean.TYPE);
-        PRIMITIVE_TYPES.put(Character.class, Character.TYPE);
-        PRIMITIVE_TYPES.put(Byte.class, Byte.TYPE);
-        PRIMITIVE_TYPES.put(Short.class, Short.TYPE);
-        PRIMITIVE_TYPES.put(Integer.class, Integer.TYPE);
-        PRIMITIVE_TYPES.put(Long.class, Long.TYPE);
-        PRIMITIVE_TYPES.put(Float.class, Float.TYPE);
-        PRIMITIVE_TYPES.put(Double.class, Double.TYPE);
+        Map<Class<?>, Class<?>> mutablePrimitiveTypes = new HashMap<>();
+        mutablePrimitiveTypes.put(Boolean.class, Boolean.TYPE);
+        mutablePrimitiveTypes.put(Character.class, Character.TYPE);
+        mutablePrimitiveTypes.put(Byte.class, Byte.TYPE);
+        mutablePrimitiveTypes.put(Short.class, Short.TYPE);
+        mutablePrimitiveTypes.put(Integer.class, Integer.TYPE);
+        mutablePrimitiveTypes.put(Long.class, Long.TYPE);
+        mutablePrimitiveTypes.put(Float.class, Float.TYPE);
+        mutablePrimitiveTypes.put(Double.class, Double.TYPE);
+        PRIMITIVE_TYPES = Collections.unmodifiableMap(mutablePrimitiveTypes);
     }
 
     static {
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Boolean.class, false);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Character.class, '\u0000');
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Byte.class, (byte) 0);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Short.class, (short) 0);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Integer.class, 0);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Long.class, 0L);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Float.class, 0F);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(Double.class, 0D);
+        Map<Class<?>, Object> mutablePrimitiveOrWrapperDefaultValues = new HashMap<>();
+        mutablePrimitiveOrWrapperDefaultValues.put(Boolean.class, false);
+        mutablePrimitiveOrWrapperDefaultValues.put(Character.class, '\u0000');
+        mutablePrimitiveOrWrapperDefaultValues.put(Byte.class, (byte) 0);
+        mutablePrimitiveOrWrapperDefaultValues.put(Short.class, (short) 0);
+        mutablePrimitiveOrWrapperDefaultValues.put(Integer.class, 0);
+        mutablePrimitiveOrWrapperDefaultValues.put(Long.class, 0L);
+        mutablePrimitiveOrWrapperDefaultValues.put(Float.class, 0F);
+        mutablePrimitiveOrWrapperDefaultValues.put(Double.class, 0D);
 
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(boolean.class, false);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(char.class, '\u0000');
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(byte.class, (byte) 0);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(short.class, (short) 0);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(int.class, 0);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(long.class, 0L);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(float.class, 0F);
-        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(double.class, 0D);
+        mutablePrimitiveOrWrapperDefaultValues.put(boolean.class, false);
+        mutablePrimitiveOrWrapperDefaultValues.put(char.class, '\u0000');
+        mutablePrimitiveOrWrapperDefaultValues.put(byte.class, (byte) 0);
+        mutablePrimitiveOrWrapperDefaultValues.put(short.class, (short) 0);
+        mutablePrimitiveOrWrapperDefaultValues.put(int.class, 0);
+        mutablePrimitiveOrWrapperDefaultValues.put(long.class, 0L);
+        mutablePrimitiveOrWrapperDefaultValues.put(float.class, 0F);
+        mutablePrimitiveOrWrapperDefaultValues.put(double.class, 0D);
+        PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES =
+                Collections.unmodifiableMap(mutablePrimitiveOrWrapperDefaultValues);
     }
 }
