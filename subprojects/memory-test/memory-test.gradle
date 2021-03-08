@@ -14,6 +14,6 @@ dependencies {
 tasks.javadoc.enabled = false
 
 test {
-    maxHeapSize = "128m"
-    jvmArgs = ["-XX:MaxPermSize=128m"]
+    maxHeapSize = "64m"
+    jvmArgs = ["-XX:MaxMetaspaceSize=64m"]
 }

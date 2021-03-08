@@ -14,19 +14,14 @@ import org.junit.Test;
 
 public class ShouldNotStarveMemoryOnLargeStackTraceInvocationsTest {
 
-    private static final int STACK_TRACE_DEPTH = 1000;
+    private static final int STACK_TRACE_DEPTH = 10000;
     private static final int INVOCATIONS_ON_STACK_TRACE_LEVEL = 100;
 
     private static boolean supported = false;
 
     static {
         try {
-            Class.forName("sun.misc.SharedSecrets")
-                .getMethod("getJavaLangAccess")
-                .invoke(null);
-            Class.forName("sun.misc.JavaLangAccess")
-                .getMethod("getStackTraceElement", Throwable.class, int.class);
-
+            Class.forName("java.lang.StackWalker").getMethod("getInstance").invoke(null);
             supported = true;
         } catch (Exception ignored) {
         }

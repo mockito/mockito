@@ -5,10 +5,15 @@
 package org.mockito.internal.exceptions.stacktrace;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.stacktrace.StackTraceCleaner;
 import org.mockito.internal.configuration.plugins.Plugins;
 
@@ -20,18 +25,22 @@ public class StackTraceFilter implements Serializable {
             Plugins.getStackTraceCleanerProvider()
                     .getStackTraceCleaner(new DefaultStackTraceCleaner());
 
-    private static Object JAVA_LANG_ACCESS;
-    private static Method GET_STACK_TRACE_ELEMENT;
+    private static Object STACK_WALKER_INSTANCE;
+    private static Method WALK_METHOD;
+    private static Method TO_STACKTRACE_ELEMENT;
+    private static Method DROP_WHILE;
 
     static {
         try {
-            JAVA_LANG_ACCESS =
-                    Class.forName("sun.misc.SharedSecrets")
-                            .getMethod("getJavaLangAccess")
-                            .invoke(null);
-            GET_STACK_TRACE_ELEMENT =
-                    Class.forName("sun.misc.JavaLangAccess")
-                            .getMethod("getStackTraceElement", Throwable.class, int.class);
+            STACK_WALKER_INSTANCE =
+                    Class.forName("java.lang.StackWalker").getMethod("getInstance").invoke(null);
+            WALK_METHOD = Class.forName("java.lang.StackWalker").getMethod("walk", Function.class);
+            TO_STACKTRACE_ELEMENT =
+                    Class.forName("java.lang.StackWalker.StackFrame")
+                            .getMethod("toStackTraceElement");
+            DROP_WHILE =
+                    Class.forName("java.util.stream.Stream")
+                            .getMethod("dropWhile", Predicate.class);
         } catch (Exception ignored) {
             // Use the slow computational path for filtering stacktraces if fast path does not exist
             // in JVM
@@ -60,47 +69,26 @@ public class StackTraceFilter implements Serializable {
     /**
      * This filtering strategy makes use of a fast-path computation to retrieve stackTraceElements
      * from a Stacktrace of a Throwable. It does so, by taking advantage of {@link
-     * sun.misc.SharedSecrets} and {@link sun.misc.JavaLangAccess}.
+     * java.lang.StackWalker}.
      *
-     * <p>The {@link sun.misc.SharedSecrets} provides a method to obtain an instance of an {@link
-     * sun.misc.JavaLangAccess}. The latter class has a method to fast-path into {@link
-     * Throwable#getStackTrace()} and retrieve a single {@link StackTraceElement}. This prevents the
-     * JVM from having to generate a full stacktrace, which could potentially be expensive if
-     * stacktraces become very large.
+     * <p>The {@link java.lang.StackWalker} provides a method to efficiently walk a stacktrace,
+     * without requiring to compute the full stacktrace. This prevents the JVM from having to
+     * generate a full stacktrace, which could potentially be expensive if stacktraces become
+     * very large.
      *
      * @param target The throwable target to find the first {@link StackTraceElement} that should
      *     not be filtered out per {@link StackTraceFilter#CLEANER}.
      * @return The first {@link StackTraceElement} outside of the {@link StackTraceFilter#CLEANER}
      */
     public StackTraceElement filterFirst(Throwable target, boolean isInline) {
-        boolean shouldSkip = isInline;
+        AtomicBoolean shouldSkip = new AtomicBoolean(isInline);
 
-        if (GET_STACK_TRACE_ELEMENT != null) {
-            int i = 0;
-
-            // The assumption here is that the CLEANER filter will not filter out every single
-            // element. However, since we don't want to compute the full length of the stacktrace,
-            // we don't know the upper boundary. Therefore, simply increment the counter and go as
-            // far as we have to go, assuming that we get there. If, in the rare occasion, we
-            // don't, we fall back to the old slow path.
-            while (true) {
-                try {
-                    StackTraceElement stackTraceElement =
-                            (StackTraceElement)
-                                    GET_STACK_TRACE_ELEMENT.invoke(JAVA_LANG_ACCESS, target, i);
-
-                    if (CLEANER.isIn(stackTraceElement)) {
-                        if (shouldSkip) {
-                            shouldSkip = false;
-                        } else {
-                            return stackTraceElement;
-                        }
-                    }
-                } catch (Exception e) {
-                    // Fall back to slow path
-                    break;
-                }
-                i++;
+        if (STACK_WALKER_INSTANCE != null) {
+            try {
+                WALK_METHOD.invoke(
+                        STACK_WALKER_INSTANCE, getFirstNonMockitoStackTraceElement(shouldSkip));
+            } catch (IllegalAccessException | InvocationTargetException ignored) {
+                // Fall back to slow path
             }
         }
 
@@ -108,8 +96,8 @@ public class StackTraceFilter implements Serializable {
         // iterating over the actual stacktrace
         for (StackTraceElement stackTraceElement : target.getStackTrace()) {
             if (CLEANER.isIn(stackTraceElement)) {
-                if (shouldSkip) {
-                    shouldSkip = false;
+                if (shouldSkip.get()) {
+                    shouldSkip.set(false);
                 } else {
                     return stackTraceElement;
                 }
@@ -118,16 +106,51 @@ public class StackTraceFilter implements Serializable {
         return null;
     }
 
-    /**
-     * Finds the source file of the target stack trace.
-     * Returns the default value if source file cannot be found.
-     */
-    public String findSourceFile(StackTraceElement[] target, String defaultValue) {
-        for (StackTraceElement e : target) {
-            if (CLEANER.isIn(e)) {
-                return e.getFileName();
+    private Function<Stream<Object>, StackTraceElement> getFirstNonMockitoStackTraceElement(
+            AtomicBoolean shouldSkip) {
+        return (Stream<Object> s) ->
+                removeMockitoStackTraceElements(shouldSkip, s)
+                        .map(StackTraceFilter::getStackTraceElement)
+                        .findFirst()
+                        .orElseThrow(
+                                () -> {
+                                    throw new MockitoException(
+                                            "Internal error occurred. Mockito was unable to find the first non-Mockito stackframe.");
+                                });
+    }
+
+    private Stream<Object> removeMockitoStackTraceElements(
+            AtomicBoolean shouldSkip, Stream<Object> s) {
+        try {
+            return (Stream<Object>)
+                    DROP_WHILE.invoke(
+                            s,
+                            (Predicate<Object>) frame -> shouldDropStackFrame(frame, shouldSkip));
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new MockitoException(
+                    "Internal error occurred. Mockito was unable to find the first non-Mockito stackframe.",
+                    e);
+        }
+    }
+
+    private static StackTraceElement getStackTraceElement(Object frame) {
+        try {
+            return (StackTraceElement) TO_STACKTRACE_ELEMENT.invoke(frame);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new MockitoException(
+                    "Internal error occurred. Mockito was unable to find the first non-Mockito stackframe.",
+                    e);
+        }
+    }
+
+    private static boolean shouldDropStackFrame(Object frame, AtomicBoolean shouldSkip) {
+        if (CLEANER.isIn(getStackTraceElement(frame))) {
+            if (shouldSkip.get()) {
+                shouldSkip.set(false);
+            } else {
+                return false;
             }
         }
-        return defaultValue;
+        return true;
     }
 }
