@@ -43,6 +43,7 @@ public interface MockedStatic<T> extends ScopedMock {
      *
      * @deprecated Please use {@link MockedStatic#verify(Verification, VerificationMode) instead
      */
+    @Deprecated
     void verify(VerificationMode mode, Verification verification);
 
     /**
