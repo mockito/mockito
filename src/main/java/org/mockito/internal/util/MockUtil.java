@@ -120,7 +120,7 @@ public class MockUtil {
         return mock;
     }
 
-    public static boolean areSameMocks(Object mockA, Object mockB){
+    public static boolean areSameMocks(Object mockA, Object mockB) {
         return mockA == mockB || resolve(mockA) == resolve(mockB);
     }
 

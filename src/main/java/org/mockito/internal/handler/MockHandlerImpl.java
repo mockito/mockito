@@ -66,7 +66,9 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         if (verificationMode != null) {
             // We need to check if verification was started on the correct mock
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
-            if (MockUtil.areSameMocks(((MockAwareVerificationMode) verificationMode).getMock(), invocation.getMock())) {
+            if (MockUtil.areSameMocks(
+                    ((MockAwareVerificationMode) verificationMode).getMock(),
+                    invocation.getMock())) {
                 VerificationDataImpl data =
                         new VerificationDataImpl(invocationContainer, invocationMatcher);
                 verificationMode.verify(data);
