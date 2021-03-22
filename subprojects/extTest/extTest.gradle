@@ -14,6 +14,12 @@ dependencies {
     testCompile libraries.junit4
     testCompile libraries.assertj
     testCompile libraries.junitJupiterApi
+    testRuntime libraries.junitJupiterEngine
+    testRuntime libraries.junitVintageEngine
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
 }
 
 configurations.all {
