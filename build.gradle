@@ -11,7 +11,7 @@ buildscript {
 
         //Using buildscript.classpath so that we can resolve plugins from maven local, during local testing
         classpath "org.shipkit:shipkit-auto-version:1.1.1"
-        classpath "org.shipkit:shipkit-changelog:1.1.10"
+        classpath "org.shipkit:shipkit-changelog:1.1.11"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+"
 
         classpath 'com.google.googlejavaformat:google-java-format:1.9'
