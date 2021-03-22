@@ -14,6 +14,7 @@ import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.stubbing.answers.DefaultAnswerValidator;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.MockAwareVerificationMode;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockito.invocation.Invocation;
@@ -65,7 +66,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         if (verificationMode != null) {
             // We need to check if verification was started on the correct mock
             // - see VerifyingWithAnExtraCallToADifferentMockTest (bug 138)
-            if (((MockAwareVerificationMode) verificationMode).getMock() == invocation.getMock()) {
+            if (MockUtil.areSameMocks(((MockAwareVerificationMode) verificationMode).getMock(), invocation.getMock())) {
                 VerificationDataImpl data =
                         new VerificationDataImpl(invocationContainer, invocationMatcher);
                 verificationMode.verify(data);

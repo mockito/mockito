@@ -120,6 +120,10 @@ public class MockUtil {
         return mock;
     }
 
+    public static boolean areSameMocks(Object mockA, Object mockB){
+        return mockA == mockB || resolve(mockA) == resolve(mockB);
+    }
+
     public static MockName getMockName(Object mock) {
         return getMockHandler(mock).getMockSettings().getMockName();
     }
