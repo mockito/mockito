@@ -2539,7 +2539,7 @@ public class Mockito extends ArgumentMatchers {
      * This method has the same behavior as {@link #verifyNoMoreInteractions(Object...)}.
      *
      * @param mocks to be verified
-     * @deprecated Since 3.0.1. Please migrate your code to {@link #verifyNoInteractions(Object...)}
+     * @deprecated Since 3.0.1. Please migrate your code to {@link #verifyNoMoreInteractions(Object...)}
      */
     @Deprecated
     public static void verifyZeroInteractions(Object... mocks) {
