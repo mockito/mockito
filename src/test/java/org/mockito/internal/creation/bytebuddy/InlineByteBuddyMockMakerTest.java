@@ -250,10 +250,8 @@ public class InlineByteBuddyMockMakerTest
         settings.defaultAnswer(Answers.CALLS_REAL_METHODS);
 
         Optional<ExceptionThrowingClass> proxy =
-            mockMaker.createSpy(
-                settings,
-                new MockHandlerImpl<>(settings),
-                new ExceptionThrowingClass());
+                mockMaker.createSpy(
+                        settings, new MockHandlerImpl<>(settings), new ExceptionThrowingClass());
 
         StackTraceElement[] returnedStack = null;
         try {
@@ -592,9 +590,11 @@ public class InlineByteBuddyMockMakerTest
             }
             return null;
         }
+
         public void throwException() throws IOException {
             internalThrowException(1);
         }
+
         void internalThrowException(int test) throws IOException {
             // some lines of code, so the exception is not thrown in the first line of the method
             int i = 0;

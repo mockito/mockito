@@ -347,11 +347,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             }
 
             new ConditionalStackTraceFilter()
-                    .filter(
-                            hideRecursiveCall(
-                                    cause,
-                                    skip,
-                                    origin.getDeclaringClass()));
+                    .filter(hideRecursiveCall(cause, skip, origin.getDeclaringClass()));
             throw cause;
         }
     }
