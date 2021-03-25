@@ -9,9 +9,17 @@ import static net.bytebuddy.ClassFileVersion.JAVA_V8;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assume.assumeTrue;
 
-import java.util.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
 
@@ -23,6 +31,7 @@ import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.implementation.StubMethod;
 import net.bytebuddy.utility.JavaConstant;
 import org.junit.Test;
+import org.mockito.Answers;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.settings.CreationSettings;
@@ -232,6 +241,31 @@ public class InlineByteBuddyMockMakerTest
                 mockMaker.createMock(mockSettings, new MockHandlerImpl<Object>(mockSettings));
 
         assertThat(proxy.toString()).isEqualTo("foo");
+    }
+
+    @Test
+    public void should_leave_causing_stack() throws Exception {
+        MockSettingsImpl<ExceptionThrowingClass> settings = new MockSettingsImpl<>();
+        settings.setTypeToMock(ExceptionThrowingClass.class);
+        settings.defaultAnswer(Answers.CALLS_REAL_METHODS);
+
+        Optional<ExceptionThrowingClass> proxy =
+            mockMaker.createSpy(
+                settings,
+                new MockHandlerImpl<>(settings),
+                new ExceptionThrowingClass());
+
+        StackTraceElement[] returnedStack = null;
+        try {
+            proxy.get().throwException();
+        } catch (IOException ex) {
+            returnedStack = ex.getStackTrace();
+        }
+
+        assertNotNull("Stack trace from mockito expected", returnedStack);
+
+        assertEquals(ExceptionThrowingClass.class.getName(), returnedStack[0].getClassName());
+        assertEquals("internalThrowException", returnedStack[0].getMethodName());
     }
 
     @Test
@@ -548,4 +582,25 @@ public class InlineByteBuddyMockMakerTest
     }
 
     public static class GenericSubClass extends GenericClass<String> {}
+
+    public static class ExceptionThrowingClass {
+        public IOException getException() {
+            try {
+                throwException();
+            } catch (IOException ex) {
+                return ex;
+            }
+            return null;
+        }
+        public void throwException() throws IOException {
+            internalThrowException(1);
+        }
+        void internalThrowException(int test) throws IOException {
+            // some lines of code, so the exception is not thrown in the first line of the method
+            int i = 0;
+            if (test != i) {
+                throw new IOException("fatal");
+            }
+        }
+    }
 }

@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static net.bytebuddy.matcher.ElementMatchers.isConstructor;
+import static net.bytebuddy.matcher.ElementMatchers.isPrivate;
+import static net.bytebuddy.matcher.ElementMatchers.isStatic;
+import static net.bytebuddy.matcher.ElementMatchers.not;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -38,6 +43,7 @@ import net.bytebuddy.jar.asm.Opcodes;
 import net.bytebuddy.jar.asm.Type;
 import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.OpenedClassReader;
+
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
@@ -51,8 +57,6 @@ import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.plugins.MemberAccessor;
 
-import static net.bytebuddy.matcher.ElementMatchers.*;
-
 public class MockMethodAdvice extends MockMethodDispatcher {
 
     private final WeakConcurrentMap<Object, MockMethodInterceptor> interceptors;
@@ -63,7 +67,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     private final SelfCallInfo selfCallInfo = new SelfCallInfo();
     private final MethodGraph.Compiler compiler = MethodGraph.Compiler.Default.forJavaHierarchy();
     private final WeakConcurrentMap<Class<?>, SoftReference<MethodGraph>> graphs =
-            new WeakConcurrentMap.WithInlinedExpunction<Class<?>, SoftReference<MethodGraph>>();
+            new WeakConcurrentMap.WithInlinedExpunction<>();
 
     private final Predicate<Class<?>> isMockConstruction;
     private final ConstructionCallback onConstruction;
@@ -203,7 +207,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         MethodGraph methodGraph = reference == null ? null : reference.get();
         if (methodGraph == null) {
             methodGraph = compiler.compile(new TypeDescription.ForLoadedType(instance.getClass()));
-            graphs.put(instance.getClass(), new SoftReference<MethodGraph>(methodGraph));
+            graphs.put(instance.getClass(), new SoftReference<>(methodGraph));
         }
         MethodGraph.Node node =
                 methodGraph.locate(
@@ -234,7 +238,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                 SelfCallInfo selfCallInfo, Method origin, Object instance, Object[] arguments) {
             this.selfCallInfo = selfCallInfo;
             this.origin = origin;
-            this.instanceRef = new MockWeakReference<Object>(instance);
+            this.instanceRef = new MockWeakReference<>(instance);
             this.arguments = arguments;
         }
 
@@ -264,7 +268,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                 String identifier, Method origin, Object instance, Object[] arguments) {
             this.origin = new SerializableMethod(origin);
             this.identifier = identifier;
-            this.instanceRef = new MockWeakReference<Object>(instance);
+            this.instanceRef = new MockWeakReference<>(instance);
             this.arguments = arguments;
         }
 
@@ -329,11 +333,24 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             return accessor.invoke(origin, instance, arguments);
         } catch (InvocationTargetException exception) {
             Throwable cause = exception.getCause();
+            StackTraceElement[] tmpStack = new Throwable().getStackTrace();
+
+            int skip = tmpStack.length;
+            // if there is a suitable instance, do not skip the root-cause for the exception
+            if (instance != null) {
+                skip = 0;
+                String causingClassName = instance.getClass().getName();
+                StackTraceElement stackFrame;
+                do {
+                    stackFrame = tmpStack[skip++];
+                } while (stackFrame.getClassName().startsWith(causingClassName));
+            }
+
             new ConditionalStackTraceFilter()
                     .filter(
                             hideRecursiveCall(
                                     cause,
-                                    new Throwable().getStackTrace().length,
+                                    skip,
                                     origin.getDeclaringClass()));
             throw cause;
         }
