@@ -1,4 +1,3 @@
-apply plugin: "org.shipkit.shipkit-auto-version"
 apply plugin: "org.shipkit.shipkit-changelog"
 apply plugin: "org.shipkit.shipkit-github-release"
 
@@ -41,4 +40,17 @@ static boolean shouldReleaseToCentral(project) {
         project.tasks.bintrayPublish.doLast { logger.lifecycle(message) }
     }
     return centralRelease
+}
+
+//TODO: remove bintray and rename this file to release.gradle
+if (version.endsWith("-SNAPSHOT")) {
+    tasks.named("githubRelease") {
+        //snapshot versions do not produce changelog / GitHub releases
+        enabled = false
+    }
+//TODO enable below when nexus publish plugin is applied
+//    tasks.named("closeAndReleaseStagingRepository") {
+//        //snapshot binaries are available in Sonatype without the need to close the staging repo
+//        enabled = false
+//    }
 }
