@@ -80,7 +80,7 @@ jobs:
 
     steps:
 
-    - name: Check out code
+      - name: Check out code
       uses: actions/checkout@v2 # https://github.com/actions/checkout
       with:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
@@ -91,11 +91,9 @@ jobs:
         distribution: 'adopt'
         java-version: 8
 
-    - name: Build and publish to Bintray/MavenCentral
+    - name: Build and release
       run: ./gradlew bintrayUpload githubRelease --scan
       env:
-        MAVEN_CENTRAL_RELEASE: ${{contains(toJSON(github.event.commits.*.message), '[ci maven-central-release]')}}
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        BINTRAY_API_KEY: ${{secrets.BINTRAY_API_KEY}}
         NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
         NEXUS_TOKEN_PWD: ${{secrets.NEXUS_TOKEN_PWD}}

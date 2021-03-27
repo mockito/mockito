@@ -10,9 +10,8 @@ Most popular mocking framework for Java
 [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/mockito/mockito/blob/release/3.x/LICENSE)
 
-[![Release Notes](https://img.shields.io/badge/release%20notes-3.x-yellow.svg)](https://github.com/mockito/mockito/blob/release/3.x/doc/release-notes/official.md)
+[![Release Notes](https://img.shields.io/badge/release%20notes-3.x-yellow.svg)](https://github.com/mockito/mockito/releases/)
 [![Maven Central](https://img.shields.io/maven-central/v/org.mockito/mockito-core.svg)](https://search.maven.org/artifact/org.mockito/mockito-core/)
-[![Bintray](https://img.shields.io/bintray/v/mockito/maven/mockito-development)](https://bintray.com/mockito/maven/mockito/_latestVersion)
 [![Javadoc](https://www.javadoc.io/badge/org.mockito/mockito-core.svg)](https://www.javadoc.io/doc/org.mockito/mockito-core)
 
 
@@ -23,15 +22,25 @@ Still on Mockito 1.x? See [what's new](https://github.com/mockito/mockito/wiki/W
 
 Available as part of the Tidelift Subscription
 
-The maintainers of org.mockito:mockito-core and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/maven-org-mockito-mockito-core?utm_source=maven-org-mockito-mockito-core&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
+The maintainers of org.mockito:mockito-core and thousands of other packages are working with Tidelift to deliver
+commercial support and maintenance for the open source dependencies you use to build your applications. Save time,
+reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use.
+[Learn more.](https://tidelift.com/subscription/pkg/maven-org-mockito-mockito-core?utm_source=maven-org-mockito-mockito-core&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
 
 ## Development
 
-Mockito [continuously delivers](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview) improvements using Shipkit library (http://shipkit.org). See the [latest release notes](https://github.com/mockito/mockito/blob/release/3.x/doc/release-notes/official.md) and [latest documentation](https://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html). Docs in javadoc.io are available 24h after release. Read also about [semantic versioning in Mockito](https://github.com/mockito/mockito/wiki/Semantic-Versioning). **Note: not every version is published to Maven Central.**
+Mockito publishes every change as a `-SNAPSHOT` version to a public Sonatype repository. Roughly once a month, we
+publish a new minor or patch version to Maven Central. For release automation we use Shipkit
+library (http://shipkit.org), Gradle Nexus [Publish Plugin](https://github.com/gradle-nexus/publish-plugin), and
+Allegro's [Axion Release Plugin](https://github.com/allegro/axion-release-plugin). Fully automated releases are awesome,
+and you should do that for your libraries, too!
+See the [latest release notes](https://github.com/mockito/mockito/releases/)
+and [latest documentation](https://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html). Docs in
+javadoc.io are available 24h after release. Read also
+about [semantic versioning in Mockito](https://github.com/mockito/mockito/wiki/Semantic-Versioning).
 
 Older 1.x and 2.x releases are available in
 [Central Repository](https://search.maven.org/artifact/org.mockito/mockito-core/1.10.19/jar)
-, [Bintray](https://bintray.com/mockito/maven/mockito/1.10.19/view)
 and [javadoc.io](https://javadoc.io/doc/org.mockito/mockito-core/1.10.19/org/mockito/Mockito.html) (documentation).
 
 ## More information
