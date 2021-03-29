@@ -1,19 +1,18 @@
-> Hey, 
-> 
-> Thanks for the contribution, this is awesome.
-> As you may have read, project members have somehow an opinionated view on what and how should be
-> Mockito, e.g. we don't want mockito to be a feature bloat.
-> There may be a thorough review, with feedback -> code change loop.
-> 
-> Which branch : 
-> - On mockito 3.x, make your pull request target `release/3.x`
-> - On mockito 2.x, make your pull request target `release/2.x` (2.x is in maintenance mode)
->
-> _This block can be removed_
-> _Something wrong in the template fix it here `.github/PULL_REQUEST_TEMPLATE.md`
-
-
-check list
+<!-- Hey, 
+Thanks for the contribution, this is awesome.
+As you may have read, project members have somehow an opinionated view on what and how should be
+Mockito, e.g. we don't want mockito to be a feature bloat.
+There may be a thorough review, with feedback -> code change loop.
+-->
+<!--
+Which branch : 
+- On mockito 3.x, make your pull request target `release/3.x`
+- On mockito 2.x, make your pull request target `release/2.x` (2.x is in maintenance mode)
+-->
+<!--
+If you have a suggestion for this template you can fix it in the .github/PULL_REQUEST_TEMPLATE.md file
+-->
+## Checklist
 
  - [ ] Read the [contributing guide](https://github.com/mockito/mockito/blob/release/3.x/.github/CONTRIBUTING.md)
  - [ ] PR should be motivated, i.e. what does it fix, why, and if relevant how
