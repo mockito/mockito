@@ -31,8 +31,6 @@ import org.mockito.session.MockitoSessionLogger;
 import org.mockito.stubbing.*;
 import org.mockito.verification.*;
 
-import java.util.function.Function;
-
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
  * The Mockito library enables mock creation, verification and stubbing.
@@ -2261,8 +2259,7 @@ public class Mockito extends ArgumentMatchers {
     @Incubating
     @CheckReturnValue
     public static <T> MockedConstruction<T> mockConstruction(
-            Class<T> classToMock,
-            Function<MockedConstruction.Context, MockSettings> mockSettingsFactory) {
+            Class<T> classToMock, MockSettings.MockSettingsFactory mockSettingsFactory) {
         return mockConstruction(classToMock, mockSettingsFactory, (mock, context) -> {});
     }
 
@@ -2303,7 +2300,7 @@ public class Mockito extends ArgumentMatchers {
     @CheckReturnValue
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock,
-            Function<MockedConstruction.Context, MockSettings> mockSettingsFactory,
+            MockSettings.MockSettingsFactory mockSettingsFactory,
             MockedConstruction.MockInitializer<T> mockInitializer) {
         return MOCKITO_CORE.mockConstruction(classToMock, mockSettingsFactory, mockInitializer);
     }

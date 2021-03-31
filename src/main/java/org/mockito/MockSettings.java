@@ -368,4 +368,9 @@ public interface MockSettings extends Serializable {
      */
     @Incubating
     MockSettings lenient();
+
+    @FunctionalInterface
+    interface MockSettingsFactory {
+        MockSettings apply(MockedConstruction.Context context);
+    }
 }

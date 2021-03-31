@@ -82,7 +82,7 @@ public class MockitoCore {
 
     public <T> MockedConstruction<T> mockConstruction(
             Class<T> typeToMock,
-            Function<MockedConstruction.Context, ? extends MockSettings> settingsFactory,
+            MockSettings.MockSettingsFactory settingsFactory,
             MockedConstruction.MockInitializer<T> mockInitializer) {
         Function<MockedConstruction.Context, MockCreationSettings<T>> creationSettings =
                 context -> {
