@@ -14,7 +14,7 @@ buildscript {
         classpath "org.shipkit:shipkit-changelog:1.1.13"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+"
 
-        classpath 'com.google.googlejavaformat:google-java-format:1.9'
+        classpath 'com.google.googlejavaformat:google-java-format:1.10.0'
     }
 }
 
