@@ -8,7 +8,6 @@ import static com.google.errorprone.matchers.Matchers.packageStartsWith;
 
 import com.google.auto.service.AutoService;
 import com.google.errorprone.BugPattern;
-import com.google.errorprone.BugPattern.ProvidesFix;
 import com.google.errorprone.BugPattern.SeverityLevel;
 import com.google.errorprone.VisitorState;
 import com.google.errorprone.bugpatterns.BugChecker;
@@ -38,8 +37,7 @@ import com.sun.tools.javac.code.Symbol;
             + " https://www.javadoc.io/doc/org.mockito/mockito-core/. If you believe that there"
             + " is no replacement available in the public API for your use-case, contact the"
             + " Mockito team at https://github.com/mockito/mockito/issues.",
-    severity = SeverityLevel.WARNING,
-    providesFix = ProvidesFix.REQUIRES_HUMAN_ATTENTION)
+    severity = SeverityLevel.WARNING)
 public class MockitoInternalUsage extends BugChecker implements MemberSelectTreeMatcher {
 
   private static final Matcher<Tree> INSIDE_MOCKITO = packageStartsWith("org.mockito");
