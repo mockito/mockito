@@ -117,16 +117,22 @@ public class PluginFinderTest extends TestBase {
 
     @Test
     public void problems_loading_impl() throws Exception {
+        String fileName = "xxx";
+        File f = tmp.newFile(fileName);
+
+        // when
+        IOUtil.writeText("Bar", f);
+
         when(switcher.isEnabled(anyString())).thenThrow(new RuntimeException("Boo!"));
 
         try {
             // when
-            finder.findPluginClass(asList(new File("xxx").toURI().toURL()));
+            finder.findPluginClass(asList(f.toURI().toURL()));
             // then
             fail();
         } catch (Exception e) {
-            assertThat(e).hasMessageContaining("xxx");
-            e.getCause().getMessage().equals("Boo!");
+            assertThat(e).hasMessageContaining(fileName);
+            assertThat(e.getCause()).hasMessage("Boo!");
         }
     }
 }
