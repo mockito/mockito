@@ -126,8 +126,24 @@ public class NumberOfInvocationsCheckerTest {
         exception.expect(NeverWantedButInvoked.class);
         exception.expectMessage("Never wanted here");
         exception.expectMessage("But invoked here");
-        exception.expectMessage("" + invocation.getLocation());
-        exception.expectMessage("with next arguments: [arg1]");
+        exception.expectMessage("" + invocation.getLocation() + " with arguments: [arg1]");
+
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0);
+    }
+
+    @Test
+    public void shouldReportNeverWantedButInvokedWithArgs_multipleInvocations() throws Exception {
+        Invocation first = buildSimpleMethodWithArgs("arg1").toInvocation();
+        Invocation second = buildSimpleMethodWithArgs("arg1").toInvocation();
+
+        invocations = asList(first, second);
+        wanted = buildSimpleMethodWithArgs("arg1").toInvocationMatcher();
+
+        exception.expect(NeverWantedButInvoked.class);
+        exception.expectMessage("Never wanted here");
+        exception.expectMessage("But invoked here");
+        exception.expectMessage("" + first.getLocation() + " with arguments: [arg1]");
+        exception.expectMessage("" + second.getLocation() + " with arguments: [arg1]");
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0);
     }
@@ -149,6 +165,10 @@ public class NumberOfInvocationsCheckerTest {
 
     private InvocationBuilder buildSimpleMethodWithArgs(String arg) {
         return new InvocationBuilder().mock(mock).simpleMethod().args(arg);
+    }
+
+    private InvocationBuilder buildDifferentMethodWithArgs(String arg) {
+        return new InvocationBuilder().mock(mock).differentMethod().args(arg);
     }
 
     private static BaseMatcher<String> containsTimes(String value, int amount) {

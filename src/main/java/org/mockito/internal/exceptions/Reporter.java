@@ -407,8 +407,6 @@ public class Reporter {
 
     public static MockitoAssertionError neverWantedButInvoked(
             DescribedInvocation wanted, List<Invocation> invocations) {
-        Map<Location, Object[]> locationArgs = new HashMap<>();
-        invocations.forEach(inv -> locationArgs.put(inv.getLocation(), inv.getArguments()));
 
         return new NeverWantedButInvoked(
                 join(
@@ -416,7 +414,7 @@ public class Reporter {
                         "Never wanted here:",
                         new LocationImpl(),
                         "But invoked here:",
-                        createAllLocationsArgsMessage(locationArgs)));
+                        createAllLocationsArgsMessage(invocations)));
     }
 
     public static MockitoAssertionError tooManyActualInvocationsInOrder(
@@ -440,21 +438,18 @@ public class Reporter {
         return sb.toString();
     }
 
-    private static String createAllLocationsArgsMessage(Map<Location, Object[]> locationArgs) {
-        if (locationArgs == null || locationArgs.isEmpty()) {
-            return "";
-        }
+    private static String createAllLocationsArgsMessage(List<Invocation> invocations) {
         StringBuilder sb = new StringBuilder();
-        locationArgs.forEach(
-                (location, args) -> {
-                    if (location == null) {
-                        return;
-                    }
-                    sb.append(location)
-                            .append(" with next arguments: ")
-                            .append(Arrays.toString(args))
-                            .append("\n");
-                });
+        for (Invocation invocation : invocations) {
+            Location location = invocation.getLocation();
+            if (location == null) {
+                continue;
+            }
+            sb.append(location)
+                    .append(" with arguments: ")
+                    .append(Arrays.toString(invocation.getArguments()))
+                    .append("\n");
+        }
         return sb.toString();
     }
 
