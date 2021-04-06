@@ -39,8 +39,9 @@ jobs:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
     - name: 2. Set up Java ${{ matrix.java }}
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
+        distribution: 'adopt'
         java-version: ${{ matrix.java }}
 
     - name: 3. Validate Gradle wrapper
@@ -85,8 +86,9 @@ jobs:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
     - name: Set up Java 8
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
+        distribution: 'adopt'
         java-version: 8
 
     - name: Build and publish to Bintray/MavenCentral
