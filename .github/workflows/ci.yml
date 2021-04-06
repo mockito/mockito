@@ -39,7 +39,7 @@ jobs:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
     - name: 2. Set up Java ${{ matrix.java }}
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.java }}
 
@@ -85,7 +85,7 @@ jobs:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
     - name: Set up Java 8
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         java-version: 8
 
