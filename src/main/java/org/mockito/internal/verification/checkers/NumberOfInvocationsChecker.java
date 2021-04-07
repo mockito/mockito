@@ -40,7 +40,7 @@ public class NumberOfInvocationsChecker {
                     new Discrepancy(wantedCount, actualCount), wanted, allLocations);
         }
         if (wantedCount == 0 && actualCount > 0) {
-            throw neverWantedButInvoked(wanted, getAllLocations(actualInvocations));
+            throw neverWantedButInvoked(wanted, actualInvocations);
         }
         if (wantedCount < actualCount) {
             throw tooManyActualInvocations(

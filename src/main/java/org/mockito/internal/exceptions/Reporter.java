@@ -10,9 +10,7 @@ import static org.mockito.internal.util.StringUtil.join;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
@@ -408,14 +406,15 @@ public class Reporter {
     }
 
     public static MockitoAssertionError neverWantedButInvoked(
-            DescribedInvocation wanted, List<Location> invocations) {
+            DescribedInvocation wanted, List<Invocation> invocations) {
+
         return new NeverWantedButInvoked(
                 join(
                         wanted.toString(),
                         "Never wanted here:",
                         new LocationImpl(),
                         "But invoked here:",
-                        createAllLocationsMessage(invocations)));
+                        createAllLocationsArgsMessage(invocations)));
     }
 
     public static MockitoAssertionError tooManyActualInvocationsInOrder(
@@ -435,6 +434,21 @@ public class Reporter {
         StringBuilder sb = new StringBuilder();
         for (Location location : locations) {
             sb.append(location).append("\n");
+        }
+        return sb.toString();
+    }
+
+    private static String createAllLocationsArgsMessage(List<Invocation> invocations) {
+        StringBuilder sb = new StringBuilder();
+        for (Invocation invocation : invocations) {
+            Location location = invocation.getLocation();
+            if (location == null) {
+                continue;
+            }
+            sb.append(location)
+                    .append(" with arguments: ")
+                    .append(Arrays.toString(invocation.getArguments()))
+                    .append("\n");
         }
         return sb.toString();
     }

@@ -9,6 +9,7 @@ import static java.util.Collections.emptyList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.hamcrest.BaseMatcher;
@@ -116,16 +117,33 @@ public class NumberOfInvocationsCheckerTest {
     }
 
     @Test
-    public void shouldReportNeverWantedButInvoked() throws Exception {
-        Invocation first = buildSimpleMethod().toInvocation();
+    public void shouldReportNeverWantedButInvokedWithArgs() throws Exception {
+        Invocation invocation = buildSimpleMethodWithArgs("arg1").toInvocation();
 
-        invocations = asList(first);
-        wanted = buildSimpleMethod().toInvocationMatcher();
+        invocations = Collections.singletonList(invocation);
+        wanted = buildSimpleMethodWithArgs("arg1").toInvocationMatcher();
 
         exception.expect(NeverWantedButInvoked.class);
         exception.expectMessage("Never wanted here");
         exception.expectMessage("But invoked here");
-        exception.expectMessage("" + first.getLocation());
+        exception.expectMessage("" + invocation.getLocation() + " with arguments: [arg1]");
+
+        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0);
+    }
+
+    @Test
+    public void shouldReportNeverWantedButInvokedWithArgs_multipleInvocations() throws Exception {
+        Invocation first = buildSimpleMethodWithArgs("arg1").toInvocation();
+        Invocation second = buildSimpleMethodWithArgs("arg1").toInvocation();
+
+        invocations = asList(first, second);
+        wanted = buildSimpleMethodWithArgs("arg1").toInvocationMatcher();
+
+        exception.expect(NeverWantedButInvoked.class);
+        exception.expectMessage("Never wanted here");
+        exception.expectMessage("But invoked here");
+        exception.expectMessage("" + first.getLocation() + " with arguments: [arg1]");
+        exception.expectMessage("" + second.getLocation() + " with arguments: [arg1]");
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0);
     }
@@ -143,6 +161,14 @@ public class NumberOfInvocationsCheckerTest {
 
     private InvocationBuilder buildSimpleMethod() {
         return new InvocationBuilder().mock(mock).simpleMethod();
+    }
+
+    private InvocationBuilder buildSimpleMethodWithArgs(String arg) {
+        return new InvocationBuilder().mock(mock).simpleMethod().args(arg);
+    }
+
+    private InvocationBuilder buildDifferentMethodWithArgs(String arg) {
+        return new InvocationBuilder().mock(mock).differentMethod().args(arg);
     }
 
     private static BaseMatcher<String> containsTimes(String value, int amount) {
