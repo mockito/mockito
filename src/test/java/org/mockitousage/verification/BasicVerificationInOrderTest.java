@@ -278,23 +278,27 @@ public class BasicVerificationInOrderTest extends TestBase {
     }
 
     @Test
-    public void shouldThrowNullPassedToVerifyException(){
+    public void shouldThrowNullPassedToVerifyException() {
         try {
             inOrder.verify(null);
             fail();
         } catch (NullInsteadOfMockException e) {
-            assertThat(e).hasMessageContaining("Argument passed to verify() should be a mock but is null!");
+            assertThat(e)
+                    .hasMessageContaining(
+                            "Argument passed to verify() should be a mock but is null!");
         }
     }
 
     @Test
-    public void shouldThrowNotAMockPassedToVerifyException(){
+    public void shouldThrowNotAMockPassedToVerifyException() {
         Object object = new Object();
         try {
             inOrder.verify(object);
             fail();
         } catch (NotAMockException e) {
-            assertThat(e).hasMessageContaining("Argument passed to verify() is of type Object and is not a mock!");
+            assertThat(e)
+                    .hasMessageContaining(
+                            "Argument passed to verify() is of type Object and is not a mock!");
         }
     }
 }
