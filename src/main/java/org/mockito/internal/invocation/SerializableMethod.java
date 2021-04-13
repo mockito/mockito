@@ -70,9 +70,8 @@ public class SerializableMethod implements Serializable, MockitoMethod {
             return method;
         } catch (SecurityException e) {
             String message =
-                    ## TODO: It is generally preferable to use %n, which will produce the platform-specific line separator.
                     String.format(
-                            "The method %1$s.%2$s is probably private or protected and cannot be mocked.\n"
+                            "The method %1$s.%2$s is probably private or protected and cannot be mocked.%n"
                                     + "Please report this as a defect with an example of how to reproduce it.",
                             declaringClass, methodName);
             throw new MockitoException(message, e);
