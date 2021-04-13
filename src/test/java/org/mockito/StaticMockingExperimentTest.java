@@ -232,8 +232,8 @@ public class StaticMockingExperimentTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-            // TODO: Correct empty catch block
-        } catch (NoInteractionsWanted e) {
+         
+        } catch (NoInteractionsWanted ignored) {
         }
     }
 
