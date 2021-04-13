@@ -32,6 +32,7 @@ import org.mockito.stubbing.Answer;
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("unchecked")
 public class InvocationNotifierHandlerTest {
+    // TODO: Remove UnusedPrivateField
     private static final String SOME_LOCATION = "some location";
     private static final RuntimeException SOME_EXCEPTION = new RuntimeException();
     private static final OutOfMemoryError SOME_ERROR = new OutOfMemoryError();
