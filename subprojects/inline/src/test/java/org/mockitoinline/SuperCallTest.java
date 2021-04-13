@@ -24,7 +24,7 @@ public final class SuperCallTest {
         public void foo() {
             bar("baz");
         }
-
+        // TODO: Remove unecessary return.
         // Also fails if public.
         void bar(String s) {
             return;
