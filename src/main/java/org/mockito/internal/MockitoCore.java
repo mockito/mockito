@@ -255,8 +255,7 @@ public class MockitoCore {
      */
     public Invocation getLastInvocation() {
         OngoingStubbingImpl ongoingStubbing =
-            #TODO: Remove unecessary parantheses.
-                ((OngoingStubbingImpl) mockingProgress().pullOngoingStubbing());
+                (OngoingStubbingImpl) mockingProgress().pullOngoingStubbing();
         List<Invocation> allInvocations = ongoingStubbing.getRegisteredInvocations();
         return allInvocations.get(allInvocations.size() - 1);
     }
