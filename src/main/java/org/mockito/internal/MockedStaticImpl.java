@@ -47,7 +47,7 @@ public final class MockedStaticImpl<T> implements MockedStatic<T> {
             verification.apply();
         } catch (Throwable ignored) {
         }
-
+// TODO: Local variable could be final
         MockingProgress mockingProgress = mockingProgress();
         mockingProgress.stubbingStarted();
         @SuppressWarnings("unchecked")
