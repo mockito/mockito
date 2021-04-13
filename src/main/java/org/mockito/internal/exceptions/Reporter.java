@@ -298,10 +298,12 @@ public class Reporter {
                         new LocationImpl(),
                         ""));
     }
-    #TODO: Update for loop to use braces
+
     private static Object locationsOf(Collection<LocalizedMatcher> matchers) {
         List<String> description = new ArrayList<String>();
-        for (LocalizedMatcher matcher : matchers) description.add(matcher.getLocation().toString());
+        for (LocalizedMatcher matcher : matchers) {
+            description.add(matcher.getLocation().toString());
+        }
         return join(description.toArray());
     }
 
