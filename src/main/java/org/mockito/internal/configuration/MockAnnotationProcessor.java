@@ -72,8 +72,8 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type[] arguments = parameterizedType.getActualTypeArguments();
             if (arguments.length == 1) {
-                \\ TODO: Nested If Statement
                 if (arguments[0] instanceof Class<?>) {
+                } else {
                     return (Class<?>) arguments[0];
                 }
             }
