@@ -132,8 +132,7 @@ abstract class ModuleHandler {
                 synchronized (this) {
                     String name;
                     int suffix = injectonBaseSuffix;
-                    ## TODO: Simplify code to While loop instead of do.
-                    do {
+                    while {
                         name =
                                 packageName
                                         + "."
