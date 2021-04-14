@@ -6,6 +6,7 @@ package org.mockito.moduletest;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FixedValue;
 import net.bytebuddy.jar.asm.ClassWriter;
 import net.bytebuddy.jar.asm.ModuleVisitor;
@@ -30,23 +31,31 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 public class ModuleUtil {
 
     public static Path modularJar(boolean isPublic, boolean isExported, boolean isOpened) throws IOException {
+        return modularJar(isPublic, isExported, isOpened, false);
+    }
+    public static Path modularJar(boolean isPublic, boolean isExported, boolean isOpened, boolean addField) throws IOException {
         Path jar = Files.createTempFile("sample-module", ".jar");
         try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jar))) {
             out.putNextEntry(new JarEntry("module-info.class"));
             out.write(moduleInfo(isExported, isOpened));
             out.closeEntry();
             out.putNextEntry(new JarEntry("sample/MyCallable.class"));
-            out.write(type(isPublic));
+            out.write(type(isPublic, addField));
             out.closeEntry();
         }
         return jar;
     }
 
-    private static byte[] type(boolean isPublic) {
-        return new ByteBuddy()
+    private static byte[] type(boolean isPublic, boolean addField) {
+        DynamicType.Builder<?> typeBuilder = new ByteBuddy()
             .subclass(Callable.class)
             .name("sample.MyCallable")
-            .merge(isPublic ? Visibility.PUBLIC : Visibility.PACKAGE_PRIVATE)
+            .merge(isPublic ? Visibility.PUBLIC : Visibility.PACKAGE_PRIVATE);
+        if (addField) {
+            typeBuilder = typeBuilder
+                .defineField("runnable", Runnable.class, Opcodes.ACC_PRIVATE | Opcodes.ACC_FINAL);
+        }
+        return typeBuilder
             .method(named("call"))
             .intercept(FixedValue.value("foo"))
             .make()

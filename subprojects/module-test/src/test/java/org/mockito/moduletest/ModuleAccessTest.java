@@ -5,6 +5,8 @@
 package org.mockito.moduletest;
 
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.ModuleMemberAccessor;
 import org.mockito.internal.util.reflection.ReflectionMemberAccessor;
 
@@ -68,4 +70,25 @@ public class ModuleAccessTest {
             Thread.currentThread().setContextClassLoader(contextLoader);
         }
     }
+
+    @Test
+    public void cannot_read_unopened_private_field_but_exception_includes_cause() throws Exception {
+        Path jar = modularJar(true, true, false, true);
+        ModuleLayer layer = layer(jar, true, true);
+
+        ClassLoader loader = layer.findLoader("mockito.test");
+        Class<?> type = loader.loadClass("sample.MyCallable");
+
+        @SuppressWarnings("unchecked")
+        Callable<String> testInstance = (Callable<String>) type.getDeclaredConstructor().newInstance();
+        try {
+            Mockito.mockitoSession()
+                .initMocks(testInstance)
+                .startMocking();
+            fail("Expected MockitoException caused by IllegalAccessException");
+        } catch (MockitoException ex) {
+            assertThat(ex.getCause()).isInstanceOf(IllegalAccessException.class);
+        }
+    }
+
 }
