@@ -30,7 +30,7 @@ public class FieldReader {
             return accessor.get(field, target);
         } catch (Exception e) {
             throw new MockitoException(
-                    "Cannot read state from field: " + field + ", on instance: " + target);
+                    "Cannot read state from field: " + field + ", on instance: " + target, e);
         }
     }
 }
