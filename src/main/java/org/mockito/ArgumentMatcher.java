@@ -61,7 +61,7 @@ package org.mockito;
  *
  * List mock = mock(List.class);
  *
- * when(mock.addAll(argThat(new ListOfTwoElements))).thenReturn(true);
+ * when(mock.addAll(argThat(new ListOfTwoElements()))).thenReturn(true);
  *
  * mock.addAll(Arrays.asList(&quot;one&quot;, &quot;two&quot;));
  *
