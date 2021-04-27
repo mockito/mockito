@@ -28,6 +28,7 @@ public class DefaultInvocationFactory implements InvocationFactory {
         return createInvocation(target, settings, method, superMethod, args);
     }
 
+    @Override
     public Invocation createInvocation(
             Object target,
             MockCreationSettings settings,

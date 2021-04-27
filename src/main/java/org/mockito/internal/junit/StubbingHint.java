@@ -25,7 +25,8 @@ class StubbingHint {
         }
     }
 
+    @Override
     public String toString() {
-        return hint.toString() + "\n";
+        return hint + "\n";
     }
 }

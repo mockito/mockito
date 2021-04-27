@@ -52,6 +52,7 @@ public class ReturnsMoreEmptyValues implements Answer<Object>, Serializable {
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Object ret = delegate.answer(invocation);
         if (ret != null) {

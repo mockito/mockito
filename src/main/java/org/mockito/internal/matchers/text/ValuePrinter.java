@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.matchers.text;
 
-import static java.lang.String.valueOf;
-
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.Map;
@@ -58,6 +56,7 @@ public class ValuePrinter {
                     new Iterator<Object>() {
                         private int currentIndex = 0;
 
+                        @Override
                         public boolean hasNext() {
                             return currentIndex < Array.getLength(value);
                         }
@@ -89,7 +88,7 @@ public class ValuePrinter {
                 result.append(", ");
             }
         }
-        return "{" + result.toString() + "}";
+        return "{" + result + "}";
     }
 
     /**
@@ -149,8 +148,8 @@ public class ValuePrinter {
 
     private static String descriptionOf(Object value) {
         try {
-            return valueOf(value);
-        } catch (Exception e) {
+            return String.valueOf(value);
+        } catch (RuntimeException e) {
             return value.getClass().getName() + "@" + Integer.toHexString(value.hashCode());
         }
     }

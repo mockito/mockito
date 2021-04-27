@@ -25,6 +25,7 @@ class JUnitSessionStore {
 
     Statement createStatement(final Statement base, final String methodName, final Object target) {
         return new Statement() {
+            @Override
             public void evaluate() throws Throwable {
                 AutoCloseable closeable;
                 if (session == null) {

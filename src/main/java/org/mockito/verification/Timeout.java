@@ -53,10 +53,12 @@ public class Timeout extends VerificationWrapper<VerificationOverTimeImpl>
         return new Timeout(wrappedVerification.copyWithVerificationMode(newVerificationMode));
     }
 
+    @Override
     public VerificationMode atMost(int maxNumberOfInvocations) {
         throw atMostAndNeverShouldNotBeUsedWithTimeout();
     }
 
+    @Override
     public VerificationMode never() {
         throw atMostAndNeverShouldNotBeUsedWithTimeout();
     }

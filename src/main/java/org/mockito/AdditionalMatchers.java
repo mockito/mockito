@@ -38,7 +38,7 @@ import org.mockito.internal.matchers.LessThan;
  * Scroll down to see all methods - full list of matchers.
  */
 @SuppressWarnings("ALL")
-public class AdditionalMatchers {
+public final class AdditionalMatchers {
 
     /**
      * argument greater than or equal the given value.
@@ -1054,4 +1054,6 @@ public class AdditionalMatchers {
     private static void reportMatcher(ArgumentMatcher<?> matcher) {
         mockingProgress().getArgumentMatcherStorage().reportMatcher(matcher);
     }
+
+    private AdditionalMatchers() {}
 }

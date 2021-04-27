@@ -73,7 +73,9 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
     }
 
     private int inferWantedArgumentPosition(InvocationOnMock invocation) {
-        if (wantedArgumentPosition == LAST_ARGUMENT) return invocation.getArguments().length - 1;
+        if (wantedArgumentPosition == LAST_ARGUMENT) {
+            return invocation.getArguments().length - 1;
+        }
 
         return wantedArgumentPosition;
     }

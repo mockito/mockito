@@ -23,6 +23,7 @@ import org.mockito.plugins.MemberAccessor;
  * </ul>
  */
 public class TerminalMockCandidateFilter implements MockCandidateFilter {
+    @Override
     public OngoingInjector filterCandidate(
             final Collection<Object> mocks,
             final Field candidateFieldToBeInjected,

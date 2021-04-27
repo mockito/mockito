@@ -5,12 +5,21 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import static java.lang.Thread.currentThread;
-
 import static net.bytebuddy.description.modifier.Visibility.PRIVATE;
 import static net.bytebuddy.dynamic.Transformer.ForMethod.withModifiers;
 import static net.bytebuddy.implementation.MethodDelegation.to;
 import static net.bytebuddy.implementation.attribute.MethodAttributeAppender.ForInstrumentedMethod.INCLUDING_RECEIVER;
-import static net.bytebuddy.matcher.ElementMatchers.*;
+import static net.bytebuddy.matcher.ElementMatchers.any;
+import static net.bytebuddy.matcher.ElementMatchers.hasParameters;
+import static net.bytebuddy.matcher.ElementMatchers.hasType;
+import static net.bytebuddy.matcher.ElementMatchers.isAnnotatedWith;
+import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
+import static net.bytebuddy.matcher.ElementMatchers.isEquals;
+import static net.bytebuddy.matcher.ElementMatchers.isHashCode;
+import static net.bytebuddy.matcher.ElementMatchers.isPackagePrivate;
+import static net.bytebuddy.matcher.ElementMatchers.named;
+import static net.bytebuddy.matcher.ElementMatchers.returns;
+import static net.bytebuddy.matcher.ElementMatchers.whereAny;
 import static org.mockito.internal.util.StringUtil.join;
 
 import java.io.IOException;
@@ -23,7 +32,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
-
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.modifier.SynchronizationState;
@@ -107,8 +115,8 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                                 || handler.isOpened(features.mockedType, MockAccess.class));
         String typeName;
         if (localMock
-                || loader instanceof MultipleParentClassLoader
-                        && !isComingFromJDK(features.mockedType)) {
+                || (loader instanceof MultipleParentClassLoader
+                        && !isComingFromJDK(features.mockedType))) {
             typeName = features.mockedType.getName();
         } else {
             typeName =
@@ -215,7 +223,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     }
 
     private <T> Collection<Class<? super T>> getAllTypes(Class<T> type) {
-        Collection<Class<? super T>> supertypes = new LinkedList<Class<? super T>>();
+        Collection<Class<? super T>> supertypes = new LinkedList<>();
         supertypes.add(type);
         Class<? super T> superType = type;
         while (superType != null) {
@@ -234,9 +242,9 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         // Comes from the manifest entry :
         // Implementation-Title: Java Runtime Environment
         // This entry is not necessarily present in every jar of the JDK
-        return type.getPackage() != null
+        return (type.getPackage() != null
                         && "Java Runtime Environment"
-                                .equalsIgnoreCase(type.getPackage().getImplementationTitle())
+                                .equalsIgnoreCase(type.getPackage().getImplementationTitle()))
                 || type.getName().startsWith("java.")
                 || type.getName().startsWith("javax.");
     }

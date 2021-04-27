@@ -14,7 +14,7 @@ import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockCreationSettings;
 
-class RetrieveGenericsForDefaultAnswers {
+final class RetrieveGenericsForDefaultAnswers {
 
     private static final MockitoCore MOCKITO_CORE = new MockitoCore();
 
@@ -139,4 +139,6 @@ class RetrieveGenericsForDefaultAnswers {
     interface AnswerCallback {
         Object apply(Class<?> type);
     }
+
+    private RetrieveGenericsForDefaultAnswers() {}
 }

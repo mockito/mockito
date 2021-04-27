@@ -30,7 +30,9 @@ public class TypeSafeMatching implements ArgumentMatcherAction {
      * {@link ClassCastException}.
      */
     private static boolean isCompatible(ArgumentMatcher<?> argumentMatcher, Object argument) {
-        if (argument == null) return true;
+        if (argument == null) {
+            return true;
+        }
 
         Class<?> expectedArgumentType = getArgumentType(argumentMatcher);
 

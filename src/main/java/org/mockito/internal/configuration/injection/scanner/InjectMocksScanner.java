@@ -46,7 +46,7 @@ public class InjectMocksScanner {
      */
     @SuppressWarnings("unchecked")
     private Set<Field> scan() {
-        Set<Field> mockDependentFields = new HashSet<Field>();
+        Set<Field> mockDependentFields = new HashSet<>();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             if (null != field.getAnnotation(InjectMocks.class)) {

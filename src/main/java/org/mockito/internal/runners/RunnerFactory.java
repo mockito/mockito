@@ -22,9 +22,7 @@ import org.mockito.internal.util.Supplier;
  */
 public class RunnerFactory {
 
-    /**
-     * Creates silent runner implementation
-     */
+    /** Creates silent runner implementation */
     public InternalRunner create(Class<?> klass) throws InvocationTargetException {
         return create(
                 klass,

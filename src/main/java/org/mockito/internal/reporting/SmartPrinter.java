@@ -42,7 +42,7 @@ public class SmartPrinter {
 
         this.wanted = printSettings.print(wanted);
 
-        List<String> actuals = new ArrayList<String>();
+        List<String> actuals = new ArrayList<>();
         for (Invocation actual : allActualInvocations) {
             actuals.add(printSettings.print(actual));
         }

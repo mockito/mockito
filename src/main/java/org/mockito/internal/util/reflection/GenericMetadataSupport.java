@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.Checks;
 
@@ -70,11 +69,8 @@ public abstract class GenericMetadataSupport {
 
     // public static MockitoLogger logger = new ConsoleMockitoLogger();
 
-    /**
-     * Represents actual type variables resolved for current class.
-     */
-    protected Map<TypeVariable<?>, Type> contextualActualTypeParameters =
-            new HashMap<TypeVariable<?>, Type>();
+    /** Represents actual type variables resolved for current class. */
+    protected Map<TypeVariable<?>, Type> contextualActualTypeParameters = new HashMap<>();
 
     /**
      * Registers the type variables for the given type and all of its superclasses and superinterfaces.
@@ -245,8 +241,7 @@ public abstract class GenericMetadataSupport {
      */
     public Map<TypeVariable<?>, Type> actualTypeArguments() {
         TypeVariable<?>[] typeParameters = rawType().getTypeParameters();
-        LinkedHashMap<TypeVariable<?>, Type> actualTypeArguments =
-                new LinkedHashMap<TypeVariable<?>, Type>();
+        LinkedHashMap<TypeVariable<?>, Type> actualTypeArguments = new LinkedHashMap<>();
 
         for (TypeVariable<?> typeParameter : typeParameters) {
 
@@ -503,9 +498,10 @@ public abstract class GenericMetadataSupport {
          * @return Returns an array with the extracted raw types of {@link #extraInterfaces()}.
          * @see #extractRawTypeOf(java.lang.reflect.Type)
          */
+        @Override
         public Class<?>[] rawExtraInterfaces() {
             List<Type> extraInterfaces = extraInterfaces();
-            List<Class<?>> rawExtraInterfaces = new ArrayList<Class<?>>();
+            List<Class<?>> rawExtraInterfaces = new ArrayList<>();
             for (Type extraInterface : extraInterfaces) {
                 Class<?> rawInterface = extractRawTypeOf(extraInterface);
                 // avoid interface collision with actual raw type (with typevariables, resolution ca
@@ -634,6 +630,7 @@ public abstract class GenericMetadataSupport {
         /**
          * @return either a class or an interface (parameterized or not), if no bounds declared Object is returned.
          */
+        @Override
         public Type firstBound() {
             return typeVariable.getBounds()[0]; //
         }
@@ -645,6 +642,7 @@ public abstract class GenericMetadataSupport {
          * @return other bounds for this type, these bounds can only be only interfaces as the JLS says,
          * empty array if no other bound declared.
          */
+        @Override
         public Type[] interfaceBounds() {
             Type[] interfaceBounds = new Type[typeVariable.getBounds().length - 1];
             System.arraycopy(
@@ -658,8 +656,12 @@ public abstract class GenericMetadataSupport {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             return typeVariable.equals(((TypeVarBoundedType) o).typeVariable);
         }
@@ -698,9 +700,8 @@ public abstract class GenericMetadataSupport {
             this.wildcard = wildcard;
         }
 
-        /**
-         * @return The first bound, either a type or a reference to a TypeVariable
-         */
+        /** @return The first bound, either a type or a reference to a TypeVariable */
+        @Override
         public Type firstBound() {
             Type[] lowerBounds = wildcard.getLowerBounds();
             Type[] upperBounds = wildcard.getUpperBounds();
@@ -708,17 +709,20 @@ public abstract class GenericMetadataSupport {
             return lowerBounds.length != 0 ? lowerBounds[0] : upperBounds[0];
         }
 
-        /**
-         * @return An empty array as, wildcard don't support multiple bounds.
-         */
+        /** @return An empty array as, wildcard don't support multiple bounds. */
+        @Override
         public Type[] interfaceBounds() {
             return new Type[0];
         }
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             return wildcard.equals(((TypeVarBoundedType) o).typeVariable);
         }

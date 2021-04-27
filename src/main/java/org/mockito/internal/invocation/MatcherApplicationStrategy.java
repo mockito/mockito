@@ -74,7 +74,9 @@ public class MatcherApplicationStrategy {
      *         </ul>
      */
     public boolean forEachMatcherAndArgument(ArgumentMatcherAction action) {
-        if (matchingType == ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS) return false;
+        if (matchingType == ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS) {
+            return false;
+        }
 
         Object[] arguments = invocation.getArguments();
         for (int i = 0; i < arguments.length; i++) {

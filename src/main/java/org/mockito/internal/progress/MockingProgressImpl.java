@@ -35,7 +35,7 @@ public class MockingProgressImpl implements MockingProgress {
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
     private VerificationStrategy verificationStrategy;
-    private final Set<MockitoListener> listeners = new LinkedHashSet<MockitoListener>();
+    private final Set<MockitoListener> listeners = new LinkedHashSet<>();
 
     public MockingProgressImpl() {
         this.verificationStrategy = getDefaultVerificationStrategy();
@@ -43,16 +43,19 @@ public class MockingProgressImpl implements MockingProgress {
 
     public static VerificationStrategy getDefaultVerificationStrategy() {
         return new VerificationStrategy() {
+            @Override
             public VerificationMode maybeVerifyLazily(VerificationMode mode) {
                 return mode;
             }
         };
     }
 
+    @Override
     public void reportOngoingStubbing(OngoingStubbing ongoingStubbing) {
         this.ongoingStubbing = ongoingStubbing;
     }
 
+    @Override
     public OngoingStubbing<?> pullOngoingStubbing() {
         OngoingStubbing<?> temp = ongoingStubbing;
         ongoingStubbing = null;
@@ -61,8 +64,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     @Override
     public Set<VerificationListener> verificationListeners() {
-        final LinkedHashSet<VerificationListener> verificationListeners =
-                new LinkedHashSet<VerificationListener>();
+        final LinkedHashSet<VerificationListener> verificationListeners = new LinkedHashSet<>();
 
         for (MockitoListener listener : listeners) {
             if (listener instanceof VerificationListener) {
@@ -73,19 +75,23 @@ public class MockingProgressImpl implements MockingProgress {
         return verificationListeners;
     }
 
+    @Override
     public void verificationStarted(VerificationMode verify) {
         validateState();
         resetOngoingStubbing();
         verificationMode = new Localized(verify);
     }
 
-    /* (non-Javadoc)
+    /**
+     * (non-Javadoc)
+     *
      * @see org.mockito.internal.progress.MockingProgress#resetOngoingStubbing()
      */
     public void resetOngoingStubbing() {
         ongoingStubbing = null;
     }
 
+    @Override
     public VerificationMode pullVerificationMode() {
         if (verificationMode == null) {
             return null;
@@ -96,11 +102,13 @@ public class MockingProgressImpl implements MockingProgress {
         return temp;
     }
 
+    @Override
     public void stubbingStarted() {
         validateState();
         stubbingInProgress = new LocationImpl();
     }
 
+    @Override
     public void validateState() {
         validateMostStuff();
 
@@ -127,10 +135,12 @@ public class MockingProgressImpl implements MockingProgress {
         getArgumentMatcherStorage().validateState();
     }
 
+    @Override
     public void stubbingCompleted() {
         stubbingInProgress = null;
     }
 
+    @Override
     public String toString() {
         return "ongoingStubbing: "
                 + ongoingStubbing
@@ -140,16 +150,19 @@ public class MockingProgressImpl implements MockingProgress {
                 + stubbingInProgress;
     }
 
+    @Override
     public void reset() {
         stubbingInProgress = null;
         verificationMode = null;
         getArgumentMatcherStorage().reset();
     }
 
+    @Override
     public ArgumentMatcherStorage getArgumentMatcherStorage() {
         return argumentMatcherStorage;
     }
 
+    @Override
     public void mockingStarted(Object mock, MockCreationSettings settings) {
         for (MockitoListener listener : listeners) {
             if (listener instanceof MockCreationListener) {
@@ -159,6 +172,7 @@ public class MockingProgressImpl implements MockingProgress {
         validateMostStuff();
     }
 
+    @Override
     public void mockingStarted(Class<?> mock, MockCreationSettings settings) {
         for (MockitoListener listener : listeners) {
             if (listener instanceof MockCreationListener) {
@@ -168,12 +182,13 @@ public class MockingProgressImpl implements MockingProgress {
         validateMostStuff();
     }
 
+    @Override
     public void addListener(MockitoListener listener) {
         addListener(listener, listeners);
     }
 
     static void addListener(MockitoListener listener, Set<MockitoListener> listeners) {
-        List<MockitoListener> delete = new LinkedList<MockitoListener>();
+        List<MockitoListener> delete = new LinkedList<>();
         for (MockitoListener existing : listeners) {
             if (existing.getClass().equals(listener.getClass())) {
                 if (existing instanceof AutoCleanableListener
@@ -189,24 +204,26 @@ public class MockingProgressImpl implements MockingProgress {
             }
         }
         // delete dirty listeners so they don't occupy state/memory and don't receive notifications
-        for (MockitoListener toDelete : delete) {
-            listeners.remove(toDelete);
-        }
+        listeners.removeAll(delete);
         listeners.add(listener);
     }
 
+    @Override
     public void removeListener(MockitoListener listener) {
         this.listeners.remove(listener);
     }
 
+    @Override
     public void setVerificationStrategy(VerificationStrategy strategy) {
         this.verificationStrategy = strategy;
     }
 
+    @Override
     public VerificationMode maybeVerifyLazily(VerificationMode mode) {
         return this.verificationStrategy.maybeVerifyLazily(mode);
     }
 
+    @Override
     public void clearListeners() {
         listeners.clear();
     }

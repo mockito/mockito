@@ -15,7 +15,7 @@ import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 
-public class VerificationStartedNotifier {
+public final class VerificationStartedNotifier {
 
     public static Object notifyVerificationStarted(
             List<VerificationStartedListener> listeners, MockingDetails originalMockingDetails) {
@@ -38,6 +38,7 @@ public class VerificationStartedNotifier {
             this.mock = originalMockingDetails.getMock();
         }
 
+        @Override
         public void setMock(Object mock) {
             if (mock == null) {
                 throw Reporter.methodDoesNotAcceptParameter(
@@ -58,6 +59,7 @@ public class VerificationStartedNotifier {
             this.mock = mock;
         }
 
+        @Override
         public Object getMock() {
             return mock;
         }
@@ -94,4 +96,6 @@ public class VerificationStartedNotifier {
             }
         }
     }
+
+    private VerificationStartedNotifier() {}
 }

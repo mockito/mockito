@@ -18,7 +18,7 @@ public class PrintSettings {
 
     public static final int MAX_LINE_LENGTH = 45;
     private boolean multiline;
-    private List<Integer> withTypeInfo = new LinkedList<Integer>();
+    private List<Integer> withTypeInfo = new LinkedList<>();
 
     public void setMultiline(boolean multiline) {
         this.multiline = multiline;

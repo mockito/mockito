@@ -39,6 +39,7 @@ public class ConstructorInjection extends MockInjectionStrategy {
 
     public ConstructorInjection() {}
 
+    @Override
     public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
         try {
             SimpleArgumentResolver simpleArgumentResolver =
@@ -67,8 +68,9 @@ public class ConstructorInjection extends MockInjectionStrategy {
             this.objects = objects;
         }
 
+        @Override
         public Object[] resolveTypeInstances(Class<?>... argTypes) {
-            List<Object> argumentInstances = new ArrayList<Object>(argTypes.length);
+            List<Object> argumentInstances = new ArrayList<>(argTypes.length);
             for (Class<?> argType : argTypes) {
                 argumentInstances.add(objectThatIsAssignableFrom(argType));
             }
@@ -77,7 +79,9 @@ public class ConstructorInjection extends MockInjectionStrategy {
 
         private Object objectThatIsAssignableFrom(Class<?> argType) {
             for (Object object : objects) {
-                if (argType.isAssignableFrom(object.getClass())) return object;
+                if (argType.isAssignableFrom(object.getClass())) {
+                    return object;
+                }
             }
             return null;
         }

@@ -10,18 +10,20 @@ import org.mockito.ArgumentMatcher;
 
 @SuppressWarnings({"unchecked", "serial", "rawtypes"})
 public class And implements ArgumentMatcher<Object>, Serializable {
-    private ArgumentMatcher m1;
-    private ArgumentMatcher m2;
+    private final ArgumentMatcher m1;
+    private final ArgumentMatcher m2;
 
     public And(ArgumentMatcher<?> m1, ArgumentMatcher<?> m2) {
         this.m1 = m1;
         this.m2 = m2;
     }
 
+    @Override
     public boolean matches(Object actual) {
         return m1.matches(actual) && m2.matches(actual);
     }
 
+    @Override
     public String toString() {
         return "and(" + m1 + ", " + m2 + ")";
     }

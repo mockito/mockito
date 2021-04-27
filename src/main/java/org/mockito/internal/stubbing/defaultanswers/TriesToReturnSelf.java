@@ -14,6 +14,7 @@ public class TriesToReturnSelf implements Answer<Object>, Serializable {
 
     private final ReturnsEmptyValues defaultReturn = new ReturnsEmptyValues();
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Class<?> methodReturnType = invocation.getMethod().getReturnType();
         Object mock = invocation.getMock();

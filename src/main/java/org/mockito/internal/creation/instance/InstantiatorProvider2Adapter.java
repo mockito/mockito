@@ -22,7 +22,7 @@ public class InstantiatorProvider2Adapter implements InstantiatorProvider {
     public Instantiator getInstantiator(final MockCreationSettings<?> settings) {
         return new Instantiator() {
             @Override
-            public <T> T newInstance(Class<T> cls) throws InstantiationException {
+            public <T> T newInstance(Class<T> cls) {
                 try {
                     return provider.getInstantiator(settings).newInstance(cls);
                 } catch (org.mockito.creation.instance.InstantiationException e) {

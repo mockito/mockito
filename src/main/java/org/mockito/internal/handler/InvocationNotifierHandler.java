@@ -28,6 +28,7 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
         this.invocationListeners = settings.getInvocationListeners();
     }
 
+    @Override
     public Object handle(Invocation invocation) throws Throwable {
         try {
             Object returnedValue = mockHandler.handle(invocation);
@@ -61,10 +62,12 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
         }
     }
 
+    @Override
     public MockCreationSettings<T> getMockSettings() {
         return mockHandler.getMockSettings();
     }
 
+    @Override
     public InvocationContainer getInvocationContainer() {
         return mockHandler.getInvocationContainer();
     }

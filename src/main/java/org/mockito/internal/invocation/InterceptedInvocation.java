@@ -25,7 +25,8 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     private final MockReference<Object> mockRef;
     private final MockitoMethod mockitoMethod;
-    private final Object[] arguments, rawArguments;
+    private final Object[] arguments;
+    private final Object[] rawArguments;
     private final RealMethod realMethod;
 
     private final int sequenceNumber;
@@ -124,13 +125,13 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     }
 
     @Override
-    public List<ArgumentMatcher> getArgumentsAsMatchers() {
-        return argumentsToMatchers(getArguments());
+    public <T> T getArgument(int index, Class<T> clazz) {
+        return clazz.cast(arguments[index]);
     }
 
     @Override
-    public <T> T getArgument(int index, Class<T> clazz) {
-        return clazz.cast(arguments[index]);
+    public List<ArgumentMatcher> getArgumentsAsMatchers() {
+        return argumentsToMatchers(getArguments());
     }
 
     @Override
@@ -174,7 +175,7 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || !o.getClass().equals(this.getClass())) {
+        if (!(o instanceof InterceptedInvocation)) {
             return false;
         }
         InterceptedInvocation other = (InterceptedInvocation) o;
@@ -187,12 +188,14 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         return Arrays.equals(arguments, this.arguments);
     }
 
+    @Override
     public String toString() {
         return new PrintSettings().print(getArgumentsAsMatchers(), this);
     }
 
     public static final RealMethod NO_OP =
             new RealMethod() {
+                @Override
                 public boolean isInvokable() {
                     return false;
                 }

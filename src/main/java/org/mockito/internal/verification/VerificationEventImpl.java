@@ -22,18 +22,22 @@ public class VerificationEventImpl implements VerificationEvent {
         this.cause = cause;
     }
 
+    @Override
     public Object getMock() {
         return mock;
     }
 
+    @Override
     public VerificationMode getMode() {
         return mode;
     }
 
+    @Override
     public VerificationData getData() {
         return data;
     }
 
+    @Override
     public Throwable getVerificationError() {
         return cause;
     }

@@ -47,6 +47,7 @@ public class MockNameImpl implements MockName, Serializable {
         return className + ".class";
     }
 
+    @Override
     public boolean isDefault() {
         return defaultName;
     }

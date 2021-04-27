@@ -18,7 +18,7 @@ public class WarningsCollector {
     private final List<Object> createdMocks;
 
     public WarningsCollector() {
-        createdMocks = new LinkedList<Object>();
+        createdMocks = new LinkedList<>();
     }
 
     public String getWarnings() {

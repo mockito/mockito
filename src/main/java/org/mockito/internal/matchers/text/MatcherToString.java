@@ -11,10 +11,8 @@ import java.lang.reflect.Method;
 
 import org.mockito.ArgumentMatcher;
 
-/**
- * Provides better toString() text for matcher that don't have toString() method declared.
- */
-class MatcherToString {
+/** Provides better toString() text for matcher that don't have toString() method declared. */
+final class MatcherToString {
 
     /**
      * Attempts to provide more descriptive toString() for given matcher.
@@ -50,4 +48,6 @@ class MatcherToString {
 
         return decamelizeMatcherName(matcherName);
     }
+
+    private MatcherToString() {}
 }

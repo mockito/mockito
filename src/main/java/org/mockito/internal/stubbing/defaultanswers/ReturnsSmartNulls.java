@@ -73,10 +73,11 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
             this.location = location;
         }
 
+        @Override
         public Object answer(InvocationOnMock currentInvocation) throws Throwable {
             if (isToStringMethod(currentInvocation.getMethod())) {
                 return "SmartNull returned by this unstubbed method call on a mock:\n"
-                        + unstubbedInvocation.toString();
+                        + unstubbedInvocation;
             }
 
             throw smartNullPointerException(unstubbedInvocation.toString(), location);

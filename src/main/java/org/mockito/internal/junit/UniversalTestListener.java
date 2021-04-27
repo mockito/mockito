@@ -6,8 +6,6 @@ package org.mockito.internal.junit;
 
 import java.util.Collection;
 import java.util.IdentityHashMap;
-import java.util.Map;
-
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.listeners.AutoCleanableListener;
 import org.mockito.mock.MockCreationSettings;
@@ -24,9 +22,8 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
     private Strictness currentStrictness;
     private final MockitoLogger logger;
 
-    private Map<Object, MockCreationSettings> mocks =
-            new IdentityHashMap<Object, MockCreationSettings>();
-    private DefaultStubbingLookupListener stubbingLookupListener;
+    private IdentityHashMap mocks = new IdentityHashMap<Object, MockCreationSettings>();
+    private final DefaultStubbingLookupListener stubbingLookupListener;
     private boolean listenerDirty;
 
     public UniversalTestListener(Strictness initialStrictness, MockitoLogger logger) {
@@ -47,7 +44,7 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
         // TODO make it better, it's easy to forget to clean up mocks and we still create new
         // instance of list that nobody will read, it's also duplicated
         // TODO clean up all other state, null out stubbingLookupListener
-        mocks = new IdentityHashMap<Object, MockCreationSettings>();
+        mocks = new IdentityHashMap<>();
 
         switch (currentStrictness) {
             case WARN:

@@ -30,6 +30,7 @@ public class VerboseMockInvocationLogger implements InvocationListener {
         this.printStream = printStream;
     }
 
+    @Override
     public void reportInvocation(MethodInvocationReport methodInvocationReport) {
         printHeader();
         printStubInfo(methodInvocationReport);
@@ -73,13 +74,13 @@ public class VerboseMockInvocationLogger implements InvocationListener {
     }
 
     private void printInvocation(DescribedInvocation invocation) {
-        printStream.println(invocation.toString());
+        printStream.println(invocation);
         //        printStream.println("Handling method call on a mock/spy.");
-        printlnIndented("invoked: " + invocation.getLocation().toString());
+        printlnIndented("invoked: " + invocation.getLocation());
     }
 
     private void printFooter() {
-        printStream.println("");
+        printStream.println();
     }
 
     private void printlnIndented(String message) {

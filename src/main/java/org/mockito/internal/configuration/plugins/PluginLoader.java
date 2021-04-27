@@ -58,11 +58,11 @@ class PluginLoader {
      * @return An object of either {@code preferredPluginType} or {@code alternatePluginType}
      */
     @SuppressWarnings("unchecked")
-    <PreferredType, AlternateType> Object loadPlugin(
-            final Class<PreferredType> preferredPluginType,
+    <PreferredT, AlternateType> Object loadPlugin(
+            final Class<PreferredT> preferredPluginType,
             final Class<AlternateType> alternatePluginType) {
         try {
-            PreferredType preferredPlugin = initializer.loadImpl(preferredPluginType);
+            PreferredT preferredPlugin = initializer.loadImpl(preferredPluginType);
             if (preferredPlugin != null) {
                 return preferredPlugin;
             } else if (alternatePluginType != null) {

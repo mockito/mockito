@@ -94,6 +94,7 @@ public enum Answers implements Answer<Object> {
         return this;
     }
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return implementation.answer(invocation);
     }

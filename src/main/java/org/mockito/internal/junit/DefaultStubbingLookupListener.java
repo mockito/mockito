@@ -34,6 +34,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener, Serializa
         this.currentStrictness = strictness;
     }
 
+    @Override
     public void onStubbingLookup(StubbingLookupEvent event) {
         Strictness actualStrictness =
                 determineStrictness(
@@ -64,7 +65,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener, Serializa
 
     private static List<Invocation> potentialArgMismatches(
             Invocation invocation, Collection<Stubbing> stubbings) {
-        List<Invocation> matchingStubbings = new LinkedList<Invocation>();
+        List<Invocation> matchingStubbings = new LinkedList<>();
         for (Stubbing s : stubbings) {
             if (UnusedStubbingReporting.shouldBeReported(s)
                     && s.getInvocation()

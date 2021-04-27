@@ -42,6 +42,7 @@ public class InjectingAnnotationEngine
      *
      * @see org.mockito.plugins.AnnotationEngine#process(Class, Object)
      */
+    @Override
     public AutoCloseable process(Class<?> clazz, Object testInstance) {
         List<AutoCloseable> closeables = new ArrayList<>();
         closeables.addAll(processIndependentAnnotations(testInstance.getClass(), testInstance));
@@ -104,7 +105,7 @@ public class InjectingAnnotationEngine
      */
     private AutoCloseable injectCloseableMocks(final Object testClassInstance) {
         Class<?> clazz = testClassInstance.getClass();
-        Set<Field> mockDependentFields = new HashSet<Field>();
+        Set<Field> mockDependentFields = new HashSet<>();
         Set<Object> mocks = newMockSafeHashSet();
 
         while (clazz != Object.class) {

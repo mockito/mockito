@@ -4,6 +4,14 @@
  */
 package org.mockito.internal;
 
+import static org.mockito.internal.exceptions.Reporter.missingMethodInvocation;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+import static org.mockito.internal.util.MockUtil.getInvocationContainer;
+import static org.mockito.internal.util.MockUtil.resetMock;
+import static org.mockito.internal.util.StringUtil.join;
+import static org.mockito.internal.verification.VerificationModeFactory.noInteractions;
+import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
+
 import org.mockito.MockedStatic;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
@@ -20,12 +28,6 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.plugins.MockMaker;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
-
-import static org.mockito.internal.exceptions.Reporter.*;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.*;
-import static org.mockito.internal.util.MockUtil.*;
-import static org.mockito.internal.util.StringUtil.*;
-import static org.mockito.internal.verification.VerificationModeFactory.*;
 
 public final class MockedStaticImpl<T> implements MockedStatic<T> {
 

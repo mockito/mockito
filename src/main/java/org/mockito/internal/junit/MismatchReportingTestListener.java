@@ -17,19 +17,20 @@ import org.mockito.plugins.MockitoLogger;
 public class MismatchReportingTestListener implements MockitoTestListener {
 
     private final MockitoLogger logger;
-    private List<Object> mocks = new LinkedList<Object>();
+    private List<Object> mocks = new LinkedList<>();
 
     public MismatchReportingTestListener(MockitoLogger logger) {
         this.logger = logger;
     }
 
+    @Override
     public void testFinished(TestFinishedEvent event) {
         Collection<Object> createdMocks = mocks;
         // At this point, we don't need the mocks any more and we can mark all collected mocks for
         // gc
         // TODO make it better, it's easy to forget to clean up mocks and we still create new
         // instance of list that nobody will read, it's also duplicated
-        mocks = new LinkedList<Object>();
+        mocks = new LinkedList<>();
 
         if (event.getFailure() != null) {
             // print unused stubbings only when test succeeds to avoid reporting multiple problems
@@ -40,6 +41,7 @@ public class MismatchReportingTestListener implements MockitoTestListener {
         }
     }
 
+    @Override
     public void onMockCreated(Object mock, MockCreationSettings settings) {
         this.mocks.add(mock);
     }

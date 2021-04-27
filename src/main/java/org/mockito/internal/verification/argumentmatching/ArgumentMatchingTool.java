@@ -23,7 +23,7 @@ public class ArgumentMatchingTool {
             return new Integer[0];
         }
 
-        List<Integer> suspicious = new LinkedList<Integer>();
+        List<Integer> suspicious = new LinkedList<>();
         int i = 0;
         for (ArgumentMatcher m : matchers) {
             if (m instanceof ContainsExtraTypeInfo
@@ -46,6 +46,6 @@ public class ArgumentMatchingTool {
     }
 
     private static boolean toStringEquals(ArgumentMatcher m, Object arg) {
-        return m.toString().equals(arg == null ? "null" : arg.toString());
+        return m.toString().equals(String.valueOf(arg));
     }
 }

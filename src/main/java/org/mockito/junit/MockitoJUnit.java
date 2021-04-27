@@ -22,7 +22,7 @@ import org.mockito.quality.Strictness;
  *
  * @since 1.10.17
  */
-public class MockitoJUnit {
+public final class MockitoJUnit {
 
     /**
      * Creates rule instance that initiates &#064;Mocks
@@ -60,4 +60,6 @@ public class MockitoJUnit {
     public static VerificationCollector collector() {
         return new VerificationCollectorImpl();
     }
+
+    private MockitoJUnit() {}
 }

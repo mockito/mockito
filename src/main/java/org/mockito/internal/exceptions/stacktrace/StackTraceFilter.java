@@ -47,7 +47,7 @@ public class StackTraceFilter implements Serializable {
     public StackTraceElement[] filter(StackTraceElement[] target, boolean keepTop) {
         // TODO: profile
         // TODO: investigate "keepTop" commit history - no effect!
-        final List<StackTraceElement> filtered = new ArrayList<StackTraceElement>();
+        final List<StackTraceElement> filtered = new ArrayList<>();
         for (StackTraceElement element : target) {
             if (CLEANER.isIn(element)) {
                 filtered.add(element);

@@ -27,7 +27,7 @@ public class MatchersPrinter {
 
     private Iterator<FormattedText> applyPrintSettings(
             List<ArgumentMatcher> matchers, PrintSettings printSettings) {
-        List<FormattedText> out = new LinkedList<FormattedText>();
+        List<FormattedText> out = new LinkedList<>();
         int i = 0;
         for (final ArgumentMatcher matcher : matchers) {
             if (matcher instanceof ContainsExtraTypeInfo && printSettings.extraTypeInfoFor(i)) {

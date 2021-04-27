@@ -77,6 +77,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
      *
      * @throws MockitoAssertionError if the delegate verification mode does not succeed before the timeout
      */
+    @Override
     public void verify(VerificationData data) {
         AssertionError error = null;
 
@@ -90,8 +91,6 @@ public class VerificationOverTimeImpl implements VerificationMode {
                 } else {
                     error = null;
                 }
-            } catch (MockitoAssertionError e) {
-                error = handleVerifyException(e);
             } catch (AssertionError e) {
                 error = handleVerifyException(e);
             }

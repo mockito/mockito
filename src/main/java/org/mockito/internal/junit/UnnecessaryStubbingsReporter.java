@@ -21,7 +21,7 @@ import org.mockito.mock.MockCreationSettings;
  */
 public class UnnecessaryStubbingsReporter implements MockCreationListener {
 
-    private List<Object> mocks = new LinkedList<Object>();
+    private final List<Object> mocks = new LinkedList<Object>();
 
     public void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
         Collection<Invocation> unused =

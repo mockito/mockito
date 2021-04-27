@@ -129,8 +129,12 @@ public class InstanceField {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         InstanceField that = (InstanceField) o;
         return field.equals(that.field) && instance.equals(that.instance);

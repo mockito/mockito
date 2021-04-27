@@ -7,15 +7,16 @@ package org.mockito.internal.verification;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
 
-public abstract class VerificationWrapper<WrapperType extends VerificationMode>
+public abstract class VerificationWrapper<WrapperT extends VerificationMode>
         implements VerificationMode {
 
-    protected final WrapperType wrappedVerification;
+    protected final WrapperT wrappedVerification;
 
-    public VerificationWrapper(WrapperType wrappedVerification) {
+    public VerificationWrapper(WrapperT wrappedVerification) {
         this.wrappedVerification = wrappedVerification;
     }
 
+    @Override
     public void verify(VerificationData data) {
         wrappedVerification.verify(data);
     }

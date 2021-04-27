@@ -31,14 +31,15 @@ import org.mockito.internal.util.Checks;
  */
 public class HashCodeAndEqualsSafeSet implements Set<Object> {
 
-    private final HashSet<HashCodeAndEqualsMockWrapper> backingHashSet =
-            new HashSet<HashCodeAndEqualsMockWrapper>();
+    private final HashSet<HashCodeAndEqualsMockWrapper> backingHashSet = new HashSet<>();
 
+    @Override
     public Iterator<Object> iterator() {
         return new Iterator<Object>() {
             private final Iterator<HashCodeAndEqualsMockWrapper> iterator =
                     backingHashSet.iterator();
 
+            @Override
             public boolean hasNext() {
                 return iterator.hasNext();
             }
@@ -53,26 +54,32 @@ public class HashCodeAndEqualsSafeSet implements Set<Object> {
         };
     }
 
+    @Override
     public int size() {
         return backingHashSet.size();
     }
 
+    @Override
     public boolean isEmpty() {
         return backingHashSet.isEmpty();
     }
 
+    @Override
     public boolean contains(Object mock) {
         return backingHashSet.contains(HashCodeAndEqualsMockWrapper.of(mock));
     }
 
+    @Override
     public boolean add(Object mock) {
         return backingHashSet.add(HashCodeAndEqualsMockWrapper.of(mock));
     }
 
+    @Override
     public boolean remove(Object mock) {
         return backingHashSet.remove(HashCodeAndEqualsMockWrapper.of(mock));
     }
 
+    @Override
     public void clear() {
         backingHashSet.clear();
     }
@@ -101,6 +108,15 @@ public class HashCodeAndEqualsSafeSet implements Set<Object> {
     }
 
     @SuppressWarnings("unchecked")
+    public <T> T[] toArray(T[] typedArray) {
+        T[] array =
+                typedArray.length >= size()
+                        ? typedArray
+                        : (T[]) newInstance(typedArray.getClass().getComponentType(), size());
+        return unwrapTo(array);
+    }
+
+    @SuppressWarnings("unchecked")
     private <T> T[] unwrapTo(T[] array) {
         Iterator<Object> iterator = iterator();
         for (int i = 0, objectsLength = array.length; i < objectsLength; i++) {
@@ -111,34 +127,28 @@ public class HashCodeAndEqualsSafeSet implements Set<Object> {
         return array;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T[] toArray(T[] typedArray) {
-        T[] array =
-                typedArray.length >= size()
-                        ? typedArray
-                        : (T[]) newInstance(typedArray.getClass().getComponentType(), size());
-        return unwrapTo(array);
-    }
-
     public boolean removeAll(Collection<?> mocks) {
         return backingHashSet.removeAll(asWrappedMocks(mocks));
     }
 
+    @Override
     public boolean containsAll(Collection<?> mocks) {
         return backingHashSet.containsAll(asWrappedMocks(mocks));
     }
 
+    @Override
     public boolean addAll(Collection<?> mocks) {
         return backingHashSet.addAll(asWrappedMocks(mocks));
     }
 
+    @Override
     public boolean retainAll(Collection<?> mocks) {
         return backingHashSet.retainAll(asWrappedMocks(mocks));
     }
 
     private HashSet<HashCodeAndEqualsMockWrapper> asWrappedMocks(Collection<?> mocks) {
         Checks.checkNotNull(mocks, "Passed collection should notify() be null");
-        HashSet<HashCodeAndEqualsMockWrapper> hashSet = new HashSet<HashCodeAndEqualsMockWrapper>();
+        HashSet<HashCodeAndEqualsMockWrapper> hashSet = new HashSet<>();
         for (Object mock : mocks) {
             assert !(mock instanceof HashCodeAndEqualsMockWrapper) : "WRONG";
             hashSet.add(HashCodeAndEqualsMockWrapper.of(mock));

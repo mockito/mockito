@@ -19,7 +19,7 @@ import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.MatchableInvocation;
 
-public class AtLeastXNumberOfInvocationsChecker {
+public final class AtLeastXNumberOfInvocationsChecker {
 
     public static void checkAtLeastNumberOfInvocations(
             List<Invocation> invocations, MatchableInvocation wanted, int wantedCount) {
@@ -53,4 +53,6 @@ public class AtLeastXNumberOfInvocationsChecker {
 
         markVerifiedInOrder(chunk, wanted, orderingContext);
     }
+
+    private AtLeastXNumberOfInvocationsChecker() {}
 }

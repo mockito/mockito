@@ -17,15 +17,12 @@ import org.mockito.plugins.MockitoLogger;
  */
 class StubbingArgMismatches {
 
-    final Map<Invocation, Set<Invocation>> mismatches =
-            new LinkedHashMap<Invocation, Set<Invocation>>();
+    final Map<Invocation, Set<Invocation>> mismatches = new LinkedHashMap<>();
 
     public void add(Invocation invocation, Invocation stubbing) {
-        Set<Invocation> matchingInvocations = mismatches.get(stubbing);
-        if (matchingInvocations == null) {
-            matchingInvocations = new LinkedHashSet<Invocation>();
-            mismatches.put(stubbing, matchingInvocations);
-        }
+        Set<Invocation> matchingInvocations =
+                mismatches.computeIfAbsent(
+                        stubbing, (Invocation k) -> new LinkedHashSet<Invocation>());
         matchingInvocations.add(invocation);
     }
 
@@ -50,6 +47,7 @@ class StubbingArgMismatches {
         return mismatches.size();
     }
 
+    @Override
     public String toString() {
         return "" + mismatches;
     }

@@ -12,10 +12,12 @@ public class Any implements ArgumentMatcher<Object>, VarargMatcher, Serializable
 
     public static final Any ANY = new Any();
 
+    @Override
     public boolean matches(Object actual) {
         return true;
     }
 
+    @Override
     public String toString() {
         return "<any>";
     }

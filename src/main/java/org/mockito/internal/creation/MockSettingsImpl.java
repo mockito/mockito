@@ -157,7 +157,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T>
         if (outerClassInstance == null) {
             return constructorArgs;
         }
-        List<Object> resultArgs = new ArrayList<Object>(constructorArgs.length + 1);
+        List<Object> resultArgs = new ArrayList<>(constructorArgs.length + 1);
         resultArgs.add(outerClassInstance);
         resultArgs.addAll(asList(constructorArgs));
         return resultArgs.toArray(new Object[constructorArgs.length + 1]);
@@ -228,13 +228,13 @@ public class MockSettingsImpl<T> extends CreationSettings<T>
     }
 
     @Override
-    public <T> MockCreationSettings<T> build(Class<T> typeToMock) {
-        return validatedSettings(typeToMock, (CreationSettings<T>) this);
+    public <T2> MockCreationSettings<T2> build(Class<T2> typeToMock) {
+        return validatedSettings(typeToMock, (CreationSettings<T2>) this);
     }
 
     @Override
-    public <T> MockCreationSettings<T> buildStatic(Class<T> classToMock) {
-        return validatedStaticSettings(classToMock, (CreationSettings<T>) this);
+    public <T2> MockCreationSettings<T2> buildStatic(Class<T2> classToMock) {
+        return validatedStaticSettings(classToMock, (CreationSettings<T2>) this);
     }
 
     @Override
@@ -289,7 +289,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T>
     }
 
     private static Set<Class<?>> prepareExtraInterfaces(CreationSettings settings) {
-        Set<Class<?>> interfaces = new HashSet<Class<?>>(settings.getExtraInterfaces());
+        Set<Class<?>> interfaces = new HashSet<>(settings.getExtraInterfaces());
         if (settings.isSerializable()) {
             interfaces.add(Serializable.class);
         }

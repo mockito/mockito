@@ -193,6 +193,7 @@ public class FieldInitializer {
             this.field = field;
         }
 
+        @Override
         public FieldInitializationReport instantiate() {
             final MemberAccessor invoker = Plugins.getMemberAccessor();
             try {
@@ -214,16 +215,14 @@ public class FieldInitializer {
                         "the default constructor of type '"
                                 + field.getType().getSimpleName()
                                 + "' has raised an exception (see the stack trace for cause): "
-                                + e.getTargetException().toString(),
+                                + e.getTargetException(),
                         e);
             } catch (InstantiationException e) {
                 throw new MockitoException(
-                        "InstantiationException (see the stack trace for cause): " + e.toString(),
-                        e);
+                        "InstantiationException (see the stack trace for cause): " + e, e);
             } catch (IllegalAccessException e) {
                 throw new MockitoException(
-                        "IllegalAccessException (see the stack trace for cause): " + e.toString(),
-                        e);
+                        "IllegalAccessException (see the stack trace for cause): " + e, e);
             }
         }
     }
@@ -244,6 +243,7 @@ public class FieldInitializer {
         private final ConstructorArgumentResolver argResolver;
         private final Comparator<Constructor<?>> byParameterNumber =
                 new Comparator<Constructor<?>>() {
+                    @Override
                     public int compare(Constructor<?> constructorA, Constructor<?> constructorB) {
                         int argLengths =
                                 constructorB.getParameterTypes().length
@@ -278,6 +278,7 @@ public class FieldInitializer {
             this.argResolver = argumentResolver;
         }
 
+        @Override
         public FieldInitializationReport instantiate() {
             final MemberAccessor accessor = Plugins.getMemberAccessor();
             Constructor<?> constructor = biggestConstructor(field.getType());
@@ -299,16 +300,14 @@ public class FieldInitializer {
                         "the constructor of type '"
                                 + field.getType().getSimpleName()
                                 + "' has raised an exception (see the stack trace for cause): "
-                                + e.getTargetException().toString(),
+                                + e.getTargetException(),
                         e);
             } catch (InstantiationException e) {
                 throw new MockitoException(
-                        "InstantiationException (see the stack trace for cause): " + e.toString(),
-                        e);
+                        "InstantiationException (see the stack trace for cause): " + e, e);
             } catch (IllegalAccessException e) {
                 throw new MockitoException(
-                        "IllegalAccessException (see the stack trace for cause): " + e.toString(),
-                        e);
+                        "IllegalAccessException (see the stack trace for cause): " + e, e);
             }
         }
 

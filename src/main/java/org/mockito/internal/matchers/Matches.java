@@ -21,11 +21,13 @@ public class Matches implements ArgumentMatcher<Object>, Serializable {
         this.pattern = pattern;
     }
 
+    @Override
     public boolean matches(Object actual) {
         return (actual instanceof String) && pattern.matcher((String) actual).find();
     }
 
+    @Override
     public String toString() {
-        return "matches(\"" + pattern.pattern().replaceAll("\\\\", "\\\\\\\\") + "\")";
+        return "matches(\"" + pattern.pattern().replace("\\", "\\\\") + "\")";
     }
 }

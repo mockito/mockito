@@ -12,6 +12,7 @@ public class DefaultInstantiatorProvider implements InstantiatorProvider2 {
 
     private static final Instantiator INSTANCE = new ObjenesisInstantiator();
 
+    @Override
     public Instantiator getInstantiator(MockCreationSettings<?> settings) {
         if (settings != null && settings.getConstructorArgs() != null) {
             return new ConstructorInstantiator(

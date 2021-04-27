@@ -45,7 +45,7 @@ import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
  *
  * @since 2.1.0
  */
-public class MockitoHamcrest {
+public final class MockitoHamcrest {
 
     /**
      * Allows matching arguments with hamcrest matchers.
@@ -179,4 +179,6 @@ public class MockitoHamcrest {
                 .getArgumentMatcherStorage()
                 .reportMatcher(new HamcrestArgumentMatcher<T>(matcher));
     }
+
+    private MockitoHamcrest() {}
 }

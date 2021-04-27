@@ -4,6 +4,8 @@
  */
 package org.mockito.internal;
 
+import static org.mockito.internal.exceptions.Reporter.inOrderRequiresFamiliarMock;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,7 +31,7 @@ import static org.mockito.internal.exceptions.Reporter.*;
 public class InOrderImpl implements InOrder, InOrderContext {
 
     private final MockitoCore mockitoCore = new MockitoCore();
-    private final List<Object> mocksToBeVerifiedInOrder = new LinkedList<Object>();
+    private final List<Object> mocksToBeVerifiedInOrder = new LinkedList<>();
     private final InOrderContext inOrderContext = new InOrderContextImpl();
 
     public List<Object> getMocksToBeVerifiedInOrder() {
@@ -40,10 +42,12 @@ public class InOrderImpl implements InOrder, InOrderContext {
         this.mocksToBeVerifiedInOrder.addAll(mocksToBeVerifiedInOrder);
     }
 
+    @Override
     public <T> T verify(T mock) {
         return this.verify(mock, VerificationModeFactory.times(1));
     }
 
+    @Override
     public <T> T verify(T mock, VerificationMode mode) {
         if (mock == null) {
             throw nullPassedToVerify();
@@ -65,14 +69,17 @@ public class InOrderImpl implements InOrder, InOrderContext {
         return mockitoCore.verify(mock, new InOrderWrapper((VerificationInOrderMode) mode, this));
     }
 
+    @Override
     public boolean isVerified(Invocation i) {
         return inOrderContext.isVerified(i);
     }
 
+    @Override
     public void markVerified(Invocation i) {
         inOrderContext.markVerified(i);
     }
 
+    @Override
     public void verifyNoMoreInteractions() {
         mockitoCore.verifyNoMoreInteractionsInOrder(mocksToBeVerifiedInOrder, this);
     }

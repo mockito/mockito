@@ -19,6 +19,7 @@ import org.mockito.verification.VerificationMode;
 
 public class NoMoreInteractions implements VerificationMode, VerificationInOrderMode {
 
+    @Override
     @SuppressWarnings("unchecked")
     public void verify(VerificationData data) {
         Invocation unverified = findFirstUnverified(data.getAllInvocations());
@@ -27,6 +28,7 @@ public class NoMoreInteractions implements VerificationMode, VerificationInOrder
         }
     }
 
+    @Override
     public void verifyInOrder(VerificationDataInOrder data) {
         List<Invocation> invocations = data.getAllInvocations();
         Invocation unverified = findFirstUnverifiedInOrder(data.getOrderingContext(), invocations);

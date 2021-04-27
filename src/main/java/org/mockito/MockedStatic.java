@@ -4,10 +4,10 @@
  */
 package org.mockito;
 
+import static org.mockito.Mockito.times;
+
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
-
-import static org.mockito.Mockito.*;
 
 /**
  * Represents an active mock of a type's static methods. The mocking only affects the thread

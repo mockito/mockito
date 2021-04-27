@@ -4,10 +4,17 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.internal.creation.instance.InstantiatorProviderAdapter;
-import org.mockito.plugins.*;
-
 import java.util.List;
+import org.mockito.internal.creation.instance.InstantiatorProviderAdapter;
+import org.mockito.plugins.AnnotationEngine;
+import org.mockito.plugins.InstantiatorProvider;
+import org.mockito.plugins.InstantiatorProvider2;
+import org.mockito.plugins.MemberAccessor;
+import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.MockResolver;
+import org.mockito.plugins.MockitoLogger;
+import org.mockito.plugins.PluginSwitch;
+import org.mockito.plugins.StackTraceCleanerProvider;
 
 class PluginRegistry {
 

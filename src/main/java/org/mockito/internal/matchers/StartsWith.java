@@ -16,10 +16,12 @@ public class StartsWith implements ArgumentMatcher<String>, Serializable {
         this.prefix = prefix;
     }
 
+    @Override
     public boolean matches(String actual) {
         return actual != null && actual.startsWith(prefix);
     }
 
+    @Override
     public String toString() {
         return "startsWith(\"" + prefix + "\")";
     }

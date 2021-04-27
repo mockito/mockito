@@ -33,6 +33,7 @@ public class DefaultInternalRunner implements InternalRunner {
                     public Object target;
                     private MockitoTestListener mockitoTestListener;
 
+                    @Override
                     protected Statement withBefores(
                             FrameworkMethod method, final Object target, Statement statement) {
                         this.target = target;
@@ -101,14 +102,17 @@ public class DefaultInternalRunner implements InternalRunner {
                 };
     }
 
+    @Override
     public void run(final RunNotifier notifier) {
         runner.run(notifier);
     }
 
+    @Override
     public Description getDescription() {
         return runner.getDescription();
     }
 
+    @Override
     public void filter(Filter filter) throws NoTestsRemainException {
         runner.filter(filter);
     }

@@ -24,7 +24,7 @@ public class SuperTypesLastSorter {
      * then with any fields moved after their supertypes.
      */
     public static List<Field> sortSuperTypesLast(Collection<? extends Field> unsortedFields) {
-        List<Field> fields = new ArrayList<Field>(unsortedFields);
+        List<Field> fields = new ArrayList<>(unsortedFields);
 
         Collections.sort(fields, compareFieldsByName);
 
@@ -54,10 +54,7 @@ public class SuperTypesLastSorter {
     }
 
     private static final Comparator<Field> compareFieldsByName =
-            new Comparator<Field>() {
-                @Override
-                public int compare(Field o1, Field o2) {
-                    return o1.getName().compareTo(o2.getName());
-                }
+            (Field o1, Field o2) -> {
+                return o1.getName().compareTo(o2.getName());
             };
 }

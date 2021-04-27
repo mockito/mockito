@@ -25,10 +25,12 @@ public final class JUnitTestRule implements MockitoTestRule {
         return sessionStore.createStatement(base, description.getDisplayName(), this.testInstance);
     }
 
+    @Override
     public MockitoTestRule silent() {
         return strictness(Strictness.LENIENT);
     }
 
+    @Override
     public MockitoTestRule strictness(Strictness strictness) {
         sessionStore.setStrictness(strictness);
         return this;

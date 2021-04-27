@@ -20,7 +20,7 @@ public class UnusedStubsFinder {
      * @param mocks full list of mocks
      */
     public List<Invocation> find(List<?> mocks) {
-        List<Invocation> unused = new LinkedList<Invocation>();
+        List<Invocation> unused = new LinkedList<>();
         for (Object mock : mocks) {
             List<Stubbing> fromSingleMock =
                     MockUtil.getInvocationContainer(mock).getStubbingsDescending();

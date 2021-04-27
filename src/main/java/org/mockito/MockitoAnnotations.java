@@ -4,12 +4,12 @@
  */
 package org.mockito;
 
+import static org.mockito.internal.util.StringUtil.join;
+
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.plugins.AnnotationEngine;
-
-import static org.mockito.internal.util.StringUtil.*;
 
 /**
  * MockitoAnnotations.openMocks(this); initializes fields annotated with Mockito annotations.
@@ -61,7 +61,7 @@ import static org.mockito.internal.util.StringUtil.*;
  * If static method mocks are used, it is required to close the initialization. Additionally, if using third-party
  * mock-makers, other life-cycles might be handled by the open-release routine.
  */
-public class MockitoAnnotations {
+public final class MockitoAnnotations {
 
     /**
      * Initializes objects annotated with Mockito annotations for given testClass:
@@ -107,4 +107,6 @@ public class MockitoAnnotations {
                     e);
         }
     }
+
+    private MockitoAnnotations() {}
 }

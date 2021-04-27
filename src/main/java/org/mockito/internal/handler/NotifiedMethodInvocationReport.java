@@ -44,31 +44,41 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
         this.throwable = throwable;
     }
 
+    @Override
     public DescribedInvocation getInvocation() {
         return invocation;
     }
 
+    @Override
     public Object getReturnedValue() {
         return returnedValue;
     }
 
+    @Override
     public Throwable getThrowable() {
         return throwable;
     }
 
+    @Override
     public boolean threwException() {
         return throwable != null;
     }
 
+    @Override
     public String getLocationOfStubbing() {
         return (invocation.stubInfo() == null)
                 ? null
                 : invocation.stubInfo().stubbedAt().toString();
     }
 
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         NotifiedMethodInvocationReport that = (NotifiedMethodInvocationReport) o;
 
@@ -77,6 +87,7 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
                 && areEqual(throwable, that.throwable);
     }
 
+    @Override
     public int hashCode() {
         int result = invocation != null ? invocation.hashCode() : 0;
         result = 31 * result + (returnedValue != null ? returnedValue.hashCode() : 0);

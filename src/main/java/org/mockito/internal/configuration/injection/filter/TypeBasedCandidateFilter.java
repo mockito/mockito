@@ -17,12 +17,13 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
         this.next = next;
     }
 
+    @Override
     public OngoingInjector filterCandidate(
             final Collection<Object> mocks,
             final Field candidateFieldToBeInjected,
             final List<Field> allRemainingCandidateFields,
             final Object injectee) {
-        List<Object> mockTypeMatches = new ArrayList<Object>();
+        List<Object> mockTypeMatches = new ArrayList<>();
         for (Object mock : mocks) {
             if (candidateFieldToBeInjected.getType().isAssignableFrom(mock.getClass())) {
                 mockTypeMatches.add(mock);

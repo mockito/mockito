@@ -39,6 +39,7 @@ public class AnswerFunctionalInterfaces {
      */
     public static <T, A> Answer<T> toAnswer(final Answer1<T, A> answer) {
         return new Answer<T>() {
+            @Override
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
                 return answer.answer((A) invocation.getArgument(0));
@@ -54,6 +55,7 @@ public class AnswerFunctionalInterfaces {
      */
     public static <A> Answer<Void> toAnswer(final VoidAnswer1<A> answer) {
         return new Answer<Void>() {
+            @Override
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 answer.answer((A) invocation.getArgument(0));
@@ -72,6 +74,7 @@ public class AnswerFunctionalInterfaces {
      */
     public static <T, A, B> Answer<T> toAnswer(final Answer2<T, A, B> answer) {
         return new Answer<T>() {
+            @Override
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
                 return answer.answer((A) invocation.getArgument(0), (B) invocation.getArgument(1));
@@ -88,6 +91,7 @@ public class AnswerFunctionalInterfaces {
      */
     public static <A, B> Answer<Void> toAnswer(final VoidAnswer2<A, B> answer) {
         return new Answer<Void>() {
+            @Override
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 answer.answer((A) invocation.getArgument(0), (B) invocation.getArgument(1));
@@ -107,6 +111,7 @@ public class AnswerFunctionalInterfaces {
      */
     public static <T, A, B, C> Answer<T> toAnswer(final Answer3<T, A, B, C> answer) {
         return new Answer<T>() {
+            @Override
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
                 return answer.answer(
@@ -127,6 +132,7 @@ public class AnswerFunctionalInterfaces {
      */
     public static <A, B, C> Answer<Void> toAnswer(final VoidAnswer3<A, B, C> answer) {
         return new Answer<Void>() {
+            @Override
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 answer.answer(
@@ -150,6 +156,7 @@ public class AnswerFunctionalInterfaces {
      */
     public static <T, A, B, C, D> Answer<T> toAnswer(final Answer4<T, A, B, C, D> answer) {
         return new Answer<T>() {
+            @Override
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
                 return answer.answer(
@@ -172,6 +179,7 @@ public class AnswerFunctionalInterfaces {
      */
     public static <A, B, C, D> Answer<Void> toAnswer(final VoidAnswer4<A, B, C, D> answer) {
         return new Answer<Void>() {
+            @Override
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 answer.answer(
@@ -197,6 +205,7 @@ public class AnswerFunctionalInterfaces {
      */
     public static <T, A, B, C, D, E> Answer<T> toAnswer(final Answer5<T, A, B, C, D, E> answer) {
         return new Answer<T>() {
+            @Override
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
                 return answer.answer(
@@ -221,6 +230,7 @@ public class AnswerFunctionalInterfaces {
      */
     public static <A, B, C, D, E> Answer<Void> toAnswer(final VoidAnswer5<A, B, C, D, E> answer) {
         return new Answer<Void>() {
+            @Override
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 answer.answer(
@@ -250,6 +260,7 @@ public class AnswerFunctionalInterfaces {
     public static <T, A, B, C, D, E, F> Answer<T> toAnswer(
             final Answer6<T, A, B, C, D, E, F> answer) {
         return new Answer<T>() {
+            @Override
             @SuppressWarnings("unchecked")
             public T answer(InvocationOnMock invocation) throws Throwable {
                 return answer.answer(
@@ -278,6 +289,7 @@ public class AnswerFunctionalInterfaces {
     public static <A, B, C, D, E, F> Answer<Void> toAnswer(
             final VoidAnswer6<A, B, C, D, E, F> answer) {
         return new Answer<Void>() {
+            @Override
             @SuppressWarnings("unchecked")
             public Void answer(InvocationOnMock invocation) throws Throwable {
                 answer.answer(
