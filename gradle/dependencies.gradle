@@ -41,5 +41,5 @@ libraries.kotlin = [
     version: kotlinVersion,
 
     stdlib: "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
-    coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt',
+    coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3-native-mt',
 ]
