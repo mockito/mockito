@@ -28,8 +28,6 @@ libraries.autoservice = "com.google.auto.service:auto-service:1.0"
 
 libraries.objenesis = 'org.objenesis:objenesis:3.2'
 
-libraries.asm = 'org.ow2.asm:asm:7.0'
-
 libraries.osgi = 'org.osgi:osgi.core:8.0.0'
 libraries.equinox = 'org.eclipse.platform:org.eclipse.osgi:3.16.200'
 libraries.bndGradle =  'biz.aQute.bnd:biz.aQute.bnd.gradle:5.2.0'

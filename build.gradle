@@ -86,8 +86,6 @@ dependencies {
     compileOnly libraries.junit4, libraries.hamcrest, libraries.opentest4j
     compile libraries.objenesis
 
-    testCompile libraries.asm
-
     testCompile libraries.assertj
 
     //putting 'provided' dependencies on test compile and runtime classpath
