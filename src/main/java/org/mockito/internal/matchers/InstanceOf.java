@@ -12,7 +12,7 @@ import org.mockito.internal.util.Primitives;
 public class InstanceOf implements ArgumentMatcher<Object>, Serializable {
 
     private final Class<?> clazz;
-    private String description;
+    private final String description;
 
     public InstanceOf(Class<?> clazz) {
         this(clazz, "isA(" + clazz.getCanonicalName() + ")");
@@ -23,12 +23,14 @@ public class InstanceOf implements ArgumentMatcher<Object>, Serializable {
         this.description = describedAs;
     }
 
+    @Override
     public boolean matches(Object actual) {
         return (actual != null)
                 && (Primitives.isAssignableFromWrapper(actual.getClass(), clazz)
                         || clazz.isAssignableFrom(actual.getClass()));
     }
 
+    @Override
     public String toString() {
         return description;
     }

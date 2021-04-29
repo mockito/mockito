@@ -15,6 +15,7 @@ import org.mockito.internal.util.reflection.GenericMaster;
  * Instantiate {@link ArgumentCaptor} a field annotated by &#64;Captor.
  */
 public class CaptorAnnotationProcessor implements FieldAnnotationProcessor<Captor> {
+    @Override
     public Object process(Captor annotation, Field field) {
         Class<?> type = field.getType();
         if (!ArgumentCaptor.class.isAssignableFrom(type)) {

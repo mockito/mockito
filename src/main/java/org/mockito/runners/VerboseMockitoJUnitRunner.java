@@ -70,6 +70,7 @@ public class VerboseMockitoJUnitRunner extends Runner implements Filterable {
         return runner.getDescription();
     }
 
+    @Override
     public void filter(Filter filter) throws NoTestsRemainException {
         // filter is required because without it UnrootedTests show up in Eclipse
         runner.filter(filter);

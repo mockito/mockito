@@ -6,7 +6,6 @@ package org.mockito.internal.creation.bytebuddy;
 
 import java.lang.ref.ReferenceQueue;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -16,7 +15,7 @@ import org.mockito.mock.SerializableMode;
 class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
         implements BytecodeGenerator {
 
-    private final Object BOOTSTRAP_LOCK = new Object();
+    private static final Object BOOTSTRAP_LOCK = new Object();
 
     private final BytecodeGenerator bytecodeGenerator;
 
@@ -27,7 +26,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
     public TypeCachingBytecodeGenerator(BytecodeGenerator bytecodeGenerator, boolean weak) {
         this.bytecodeGenerator = bytecodeGenerator;
         typeCache =
-                new TypeCache.WithInlineExpunction<MockitoMockKey>(
+                new TypeCache.WithInlineExpunction<>(
                         weak ? TypeCache.Sort.WEAK : TypeCache.Sort.SOFT);
     }
 
@@ -45,12 +44,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
                                     params.interfaces,
                                     params.serializableMode,
                                     params.stripAnnotations),
-                            new Callable<Class<?>>() {
-                                @Override
-                                public Class<?> call() throws Exception {
-                                    return bytecodeGenerator.mockClass(params);
-                                }
-                            },
+                            () -> bytecodeGenerator.mockClass(params),
                             BOOTSTRAP_LOCK);
         } catch (IllegalArgumentException exception) {
             Throwable cause = exception.getCause();
@@ -102,9 +96,15 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
 
         @Override
         public boolean equals(Object object) {
-            if (this == object) return true;
-            if (object == null || getClass() != object.getClass()) return false;
-            if (!super.equals(object)) return false;
+            if (this == object) {
+                return true;
+            }
+            if (object == null || getClass() != object.getClass()) {
+                return false;
+            }
+            if (!super.equals(object)) {
+                return false;
+            }
             MockitoMockKey that = (MockitoMockKey) object;
             return stripAnnotations == that.stripAnnotations
                     && serializableMode.equals(that.serializableMode);

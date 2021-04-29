@@ -14,7 +14,7 @@ import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Stubbing;
 
-public class StubbingLookupNotifier {
+public final class StubbingLookupNotifier {
 
     public static void notifyStubbedAnswerLookup(
             Invocation invocation,
@@ -69,4 +69,6 @@ public class StubbingLookupNotifier {
             return mockSettings;
         }
     }
+
+    private StubbingLookupNotifier() {}
 }

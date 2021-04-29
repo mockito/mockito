@@ -31,6 +31,7 @@ public class ForwardsInvocations implements Answer<Object>, Serializable {
         this.delegatedObject = delegatedObject;
     }
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Method mockMethod = invocation.getMethod();
 

@@ -24,6 +24,7 @@ public class InOrderWrapper implements VerificationMode {
         this.inOrder = inOrder;
     }
 
+    @Override
     public void verify(VerificationData data) {
         List<Invocation> invocations =
                 VerifiableInvocationsFinder.find(inOrder.getMocksToBeVerifiedInOrder());

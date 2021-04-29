@@ -95,8 +95,17 @@ class InstrumentationMemberAccessor implements MemberAccessor {
         INITIALIZATION_ERROR = throwable;
     }
 
-    @SuppressWarnings("unused")
-    private final MethodHandle getModule, isOpen, redefineModule, privateLookupIn;
+    @SuppressWarnings(value = "unused")
+    private final MethodHandle getModule;
+
+    @SuppressWarnings(value = "unused")
+    private final MethodHandle isOpen;
+
+    @SuppressWarnings(value = "unused")
+    private final MethodHandle redefineModule;
+
+    @SuppressWarnings(value = "unused")
+    private final MethodHandle privateLookupIn;
 
     InstrumentationMemberAccessor() {
         if (INITIALIZATION_ERROR != null) {

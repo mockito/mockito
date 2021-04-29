@@ -37,30 +37,37 @@ public class SerializableMethod implements Serializable, MockitoMethod {
         isAbstract = (method.getModifiers() & Modifier.ABSTRACT) != 0;
     }
 
+    @Override
     public String getName() {
         return methodName;
     }
 
+    @Override
     public Class<?> getReturnType() {
         return returnType;
     }
 
+    @Override
     public Class<?>[] getParameterTypes() {
         return parameterTypes;
     }
 
+    @Override
     public Class<?>[] getExceptionTypes() {
         return exceptionTypes;
     }
 
+    @Override
     public boolean isVarArgs() {
         return isVarArgs;
     }
 
+    @Override
     public boolean isAbstract() {
         return isAbstract;
     }
 
+    @Override
     public Method getJavaMethod() {
         if (method != null) {
             return method;
@@ -92,20 +99,40 @@ public class SerializableMethod implements Serializable, MockitoMethod {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
         SerializableMethod other = (SerializableMethod) obj;
         if (declaringClass == null) {
-            if (other.declaringClass != null) return false;
-        } else if (!declaringClass.equals(other.declaringClass)) return false;
+            if (other.declaringClass != null) {
+                return false;
+            }
+        } else if (!declaringClass.equals(other.declaringClass)) {
+            return false;
+        }
         if (methodName == null) {
-            if (other.methodName != null) return false;
-        } else if (!methodName.equals(other.methodName)) return false;
-        if (!Arrays.equals(parameterTypes, other.parameterTypes)) return false;
+            if (other.methodName != null) {
+                return false;
+            }
+        } else if (!methodName.equals(other.methodName)) {
+            return false;
+        }
+        if (!Arrays.equals(parameterTypes, other.parameterTypes)) {
+            return false;
+        }
         if (returnType == null) {
-            if (other.returnType != null) return false;
-        } else if (!returnType.equals(other.returnType)) return false;
+            if (other.returnType != null) {
+                return false;
+            }
+        } else if (!returnType.equals(other.returnType)) {
+            return false;
+        }
         return true;
     }
 }

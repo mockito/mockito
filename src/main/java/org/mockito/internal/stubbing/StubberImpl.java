@@ -31,7 +31,7 @@ public class StubberImpl implements Stubber {
         this.strictness = strictness;
     }
 
-    private final List<Answer<?>> answers = new LinkedList<Answer<?>>();
+    private final List<Answer<?>> answers = new LinkedList<>();
 
     @Override
     public <T> T when(T mock) {

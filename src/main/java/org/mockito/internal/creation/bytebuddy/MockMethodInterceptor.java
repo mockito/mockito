@@ -100,12 +100,14 @@ public class MockMethodInterceptor implements Serializable {
         return serializationSupport;
     }
 
-    public static class ForHashCode {
+    public static final class ForHashCode {
 
         @SuppressWarnings("unused")
         public static int doIdentityHashCode(@This Object thiz) {
             return System.identityHashCode(thiz);
         }
+
+        private ForHashCode() {}
     }
 
     public static class ForEquals {
@@ -116,11 +118,13 @@ public class MockMethodInterceptor implements Serializable {
         }
     }
 
-    public static class ForWriteReplace {
+    public static final class ForWriteReplace {
 
         public static Object doWriteReplace(@This MockAccess thiz) throws ObjectStreamException {
             return thiz.getMockitoInterceptor().getSerializationSupport().writeReplace(thiz);
         }
+
+        private ForWriteReplace() {}
     }
 
     public static class DispatcherDefaultingToRealMethod {

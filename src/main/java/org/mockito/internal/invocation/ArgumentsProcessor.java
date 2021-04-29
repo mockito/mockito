@@ -12,20 +12,16 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.ArrayEquals;
 import org.mockito.internal.matchers.Equals;
 
-/**
- * by Szczepan Faber, created at: 3/31/12
- */
-public class ArgumentsProcessor {
+/** by Szczepan Faber, created at: 3/31/12 */
+public final class ArgumentsProcessor {
     // drops hidden synthetic parameters (last continuation parameter from Kotlin suspending
     // functions)
     // and expands varargs
     public static Object[] expandArgs(MockitoMethod method, Object[] args) {
         int nParams = method.getParameterTypes().length;
-        if (args != null && args.length > nParams)
-            args =
-                    Arrays.copyOf(
-                            args,
-                            nParams); // drop extra args (currently -- Kotlin continuation synthetic
+        if (args != null && args.length > nParams) {
+            args = Arrays.copyOf(args, nParams);
+        } // drop extra args (currently -- Kotlin continuation synthetic
         // arg)
         return expandVarArgs(method.isVarArgs(), args);
     }
@@ -35,7 +31,7 @@ public class ArgumentsProcessor {
     private static Object[] expandVarArgs(final boolean isVarArgs, final Object[] args) {
         if (!isVarArgs
                 || isNullOrEmpty(args)
-                || args[args.length - 1] != null && !args[args.length - 1].getClass().isArray()) {
+                || (args[args.length - 1] != null && !args[args.length - 1].getClass().isArray())) {
             return args == null ? new Object[0] : args;
         }
 
@@ -59,7 +55,7 @@ public class ArgumentsProcessor {
     }
 
     public static List<ArgumentMatcher> argumentsToMatchers(Object[] arguments) {
-        List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>(arguments.length);
+        List<ArgumentMatcher> matchers = new ArrayList<>(arguments.length);
         for (Object arg : arguments) {
             if (arg != null && arg.getClass().isArray()) {
                 matchers.add(new ArrayEquals(arg));
@@ -69,4 +65,6 @@ public class ArgumentsProcessor {
         }
         return matchers;
     }
+
+    private ArgumentsProcessor() {}
 }

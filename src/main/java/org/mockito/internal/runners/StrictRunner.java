@@ -27,6 +27,7 @@ public class StrictRunner implements InternalRunner {
         this.testClass = testClass;
     }
 
+    @Override
     public void run(RunNotifier notifier) {
         // TODO need to be able to opt in for full stack trace instead of just relying on the stack
         // trace filter
@@ -53,10 +54,12 @@ public class StrictRunner implements InternalRunner {
         }
     }
 
+    @Override
     public Description getDescription() {
         return runner.getDescription();
     }
 
+    @Override
     public void filter(Filter filter) throws NoTestsRemainException {
         filterRequested = true;
         runner.filter(filter);

@@ -22,6 +22,7 @@ public class Returns implements Answer<Object>, ValidableAnswer, Serializable {
         this.value = value;
     }
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return value;
     }

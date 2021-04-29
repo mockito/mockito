@@ -17,11 +17,13 @@ public class Find implements ArgumentMatcher<String>, Serializable {
         this.regex = regex;
     }
 
+    @Override
     public boolean matches(String actual) {
         return actual != null && Pattern.compile(regex).matcher(actual).find();
     }
 
+    @Override
     public String toString() {
-        return "find(\"" + regex.replaceAll("\\\\", "\\\\\\\\") + "\")";
+        return "find(\"" + regex.replace("\\", "\\\\") + "\")";
     }
 }

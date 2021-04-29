@@ -39,8 +39,6 @@ public class Description implements VerificationMode {
         try {
             verification.verify(data);
 
-        } catch (MockitoAssertionError e) {
-            throw new MockitoAssertionError(e, description);
         } catch (AssertionError e) {
             throw new MockitoAssertionError(e, description);
         }

@@ -19,7 +19,7 @@ import org.mockito.session.MockitoSessionLogger;
 
 public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
 
-    private List<Object> testClassInstances = new ArrayList<Object>();
+    private final List<Object> testClassInstances = new ArrayList<Object>();
     private String name;
     private Strictness strictness;
     private MockitoSessionLogger logger;
@@ -69,7 +69,7 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
             effectiveTestClassInstances = emptyList();
             effectiveName = this.name == null ? "<Unnamed Session>" : this.name;
         } else {
-            effectiveTestClassInstances = new ArrayList<Object>(testClassInstances);
+            effectiveTestClassInstances = new ArrayList<>(testClassInstances);
             Object lastTestClassInstance = testClassInstances.get(testClassInstances.size() - 1);
             effectiveName =
                     this.name == null ? lastTestClassInstance.getClass().getName() : this.name;

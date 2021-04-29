@@ -9,6 +9,7 @@ import org.mockito.plugins.MemberAccessor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -297,7 +298,7 @@ class EqualsBuilder {
             if (!excludedFieldList.contains(f.getName())
                     && (f.getName().indexOf('$') == -1)
                     && (useTransients || !Modifier.isTransient(f.getModifiers()))
-                    && (!Modifier.isStatic(f.getModifiers()))) {
+                    && !Modifier.isStatic(f.getModifiers())) {
                 try {
                     builder.append(accessor.get(f, lhs), accessor.get(f, rhs));
                 } catch (RuntimeException | IllegalAccessException ignored) {
@@ -350,9 +351,8 @@ class EqualsBuilder {
         }
         Class<?> lhsClass = lhs.getClass();
         if (!lhsClass.isArray()) {
-            if (lhs instanceof java.math.BigDecimal && rhs instanceof java.math.BigDecimal) {
-                isEquals =
-                        (((java.math.BigDecimal) lhs).compareTo((java.math.BigDecimal) rhs) == 0);
+            if (lhs instanceof BigDecimal && rhs instanceof BigDecimal) {
+                isEquals = (((BigDecimal) lhs).compareTo((BigDecimal) rhs) == 0);
             } else {
                 // The simple case, not an array, just test the element
                 isEquals = lhs.equals(rhs);

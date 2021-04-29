@@ -16,7 +16,7 @@ import org.mockito.stubbing.Answer;
  */
 class DoAnswerStyleStubbing implements Serializable {
 
-    private final List<Answer<?>> answers = new ArrayList<Answer<?>>();
+    private final List<Answer<?>> answers = new ArrayList<>();
     private Strictness stubbingStrictness;
 
     void setAnswers(List<Answer<?>> answers, Strictness stubbingStrictness) {

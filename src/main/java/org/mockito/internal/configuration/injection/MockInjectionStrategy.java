@@ -17,6 +17,7 @@ public abstract class MockInjectionStrategy {
      */
     public static MockInjectionStrategy nop() {
         return new MockInjectionStrategy() {
+            @Override
             protected boolean processInjection(
                     Field field, Object fieldOwner, Set<Object> mockCandidates) {
                 return false;

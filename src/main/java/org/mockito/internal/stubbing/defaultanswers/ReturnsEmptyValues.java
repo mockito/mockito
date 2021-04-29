@@ -8,8 +8,20 @@ import static org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod;
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 
 import java.io.Serializable;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import org.mockito.internal.util.JavaEightUtil;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
@@ -56,6 +68,7 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
+    @Override
     public Object answer(InvocationOnMock invocation) {
         if (isToStringMethod(invocation.getMethod())) {
             Object mock = invocation.getMock();
@@ -87,35 +100,35 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             // to avoid UnsupportedOperationException if code under test modifies returned
             // collection
         } else if (type == Iterable.class) {
-            return new ArrayList<Object>(0);
+            return new ArrayList<>(0);
         } else if (type == Collection.class) {
-            return new LinkedList<Object>();
+            return new LinkedList<>();
         } else if (type == Set.class) {
-            return new HashSet<Object>();
+            return new HashSet<>();
         } else if (type == HashSet.class) {
-            return new HashSet<Object>();
+            return new HashSet<>();
         } else if (type == SortedSet.class) {
-            return new TreeSet<Object>();
+            return new TreeSet<>();
         } else if (type == TreeSet.class) {
-            return new TreeSet<Object>();
+            return new TreeSet<>();
         } else if (type == LinkedHashSet.class) {
-            return new LinkedHashSet<Object>();
+            return new LinkedHashSet<>();
         } else if (type == List.class) {
-            return new LinkedList<Object>();
+            return new LinkedList<>();
         } else if (type == LinkedList.class) {
-            return new LinkedList<Object>();
+            return new LinkedList<>();
         } else if (type == ArrayList.class) {
-            return new ArrayList<Object>();
+            return new ArrayList<>();
         } else if (type == Map.class) {
-            return new HashMap<Object, Object>();
+            return new HashMap<>();
         } else if (type == HashMap.class) {
-            return new HashMap<Object, Object>();
+            return new HashMap<>();
         } else if (type == SortedMap.class) {
-            return new TreeMap<Object, Object>();
+            return new TreeMap<>();
         } else if (type == TreeMap.class) {
-            return new TreeMap<Object, Object>();
+            return new TreeMap<>();
         } else if (type == LinkedHashMap.class) {
-            return new LinkedHashMap<Object, Object>();
+            return new LinkedHashMap<>();
         } else if ("java.util.Optional".equals(type.getName())) {
             return JavaEightUtil.emptyOptional();
         } else if ("java.util.OptionalDouble".equals(type.getName())) {

@@ -7,10 +7,8 @@ package org.mockito.internal.util.reflection;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-/**
- * Attempts to extract generic type of given target base class or target interface
- */
-public class GenericTypeExtractor {
+/** Attempts to extract generic type of given target base class or target interface */
+public final class GenericTypeExtractor {
 
     /**
      * Extract generic type of root class either from the target base class or from target base interface.
@@ -86,4 +84,6 @@ public class GenericTypeExtractor {
         }
         return Object.class;
     }
+
+    private GenericTypeExtractor() {}
 }

@@ -34,12 +34,13 @@ public class ConstructorInstantiator implements Instantiator {
         this.constructorArgs = constructorArgs;
     }
 
+    @Override
     public <T> T newInstance(Class<T> cls) {
         return withParams(cls, constructorArgs);
     }
 
     private <T> T withParams(Class<T> cls, Object... params) {
-        List<Constructor<?>> matchingConstructors = new LinkedList<Constructor<?>>();
+        List<Constructor<?>> matchingConstructors = new LinkedList<>();
         try {
             for (Constructor<?> constructor : cls.getDeclaredConstructors()) {
                 Class<?>[] types = constructor.getParameterTypes();
@@ -54,7 +55,7 @@ public class ConstructorInstantiator implements Instantiator {
         } catch (Exception e) {
             throw paramsException(cls, e);
         }
-        if (matchingConstructors.size() == 0) {
+        if (matchingConstructors.isEmpty()) {
             throw noMatchingConstructor(cls);
         } else {
             throw multipleMatchingConstructors(cls, matchingConstructors);

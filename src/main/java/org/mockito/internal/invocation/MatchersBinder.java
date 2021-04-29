@@ -23,7 +23,7 @@ public class MatchersBinder implements Serializable {
         List<LocalizedMatcher> lastMatchers = argumentMatcherStorage.pullLocalizedMatchers();
         validateMatchers(invocation, lastMatchers);
 
-        List<ArgumentMatcher> matchers = new LinkedList<ArgumentMatcher>();
+        List<ArgumentMatcher> matchers = new LinkedList<>();
         for (LocalizedMatcher m : lastMatchers) {
             matchers.add(m.getMatcher());
         }

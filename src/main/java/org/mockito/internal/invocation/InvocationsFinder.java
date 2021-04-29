@@ -63,7 +63,7 @@ public class InvocationsFinder {
 
     private static List<Invocation> getFirstMatchingChunk(
             MatchableInvocation wanted, List<Invocation> unverified) {
-        List<Invocation> firstChunk = new LinkedList<Invocation>();
+        List<Invocation> firstChunk = new LinkedList<>();
         for (Invocation invocation : unverified) {
             if (wanted.matches(invocation)) {
                 firstChunk.add(invocation);
@@ -139,7 +139,7 @@ public class InvocationsFinder {
 
     private static List<Invocation> removeVerifiedInOrder(
             List<Invocation> invocations, InOrderContext orderingContext) {
-        List<Invocation> unverified = new LinkedList<Invocation>();
+        List<Invocation> unverified = new LinkedList<>();
         for (Invocation i : invocations) {
             if (orderingContext.isVerified(i)) {
                 unverified.clear();
@@ -151,7 +151,7 @@ public class InvocationsFinder {
     }
 
     public static List<Location> getAllLocations(List<Invocation> invocations) {
-        List<Location> locations = new LinkedList<Location>();
+        List<Location> locations = new LinkedList<>();
         for (Invocation invocation : invocations) {
             locations.add(invocation.getLocation());
         }
@@ -165,6 +165,7 @@ public class InvocationsFinder {
             this.wanted = wanted;
         }
 
+        @Override
         public boolean isOut(Invocation invocation) {
             return !wanted.matches(invocation);
         }
@@ -177,6 +178,7 @@ public class InvocationsFinder {
             this.orderingContext = orderingContext;
         }
 
+        @Override
         public boolean isOut(Invocation invocation) {
             return !orderingContext.isVerified(invocation);
         }

@@ -6,7 +6,7 @@ package org.mockito.internal.verification;
 
 import org.mockito.verification.VerificationMode;
 
-public class VerificationModeFactory {
+public final class VerificationModeFactory {
 
     public static VerificationMode atLeastOnce() {
         return atLeast(1);
@@ -54,4 +54,6 @@ public class VerificationModeFactory {
     public static VerificationMode description(VerificationMode mode, String description) {
         return new Description(mode, description);
     }
+
+    private VerificationModeFactory() {}
 }

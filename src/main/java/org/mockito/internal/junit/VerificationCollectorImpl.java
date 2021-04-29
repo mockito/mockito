@@ -27,6 +27,7 @@ public class VerificationCollectorImpl implements VerificationCollector {
         this.resetBuilder();
     }
 
+    @Override
     public Statement apply(final Statement base, final Description description) {
         return new Statement() {
             @Override
@@ -60,10 +61,12 @@ public class VerificationCollectorImpl implements VerificationCollector {
         }
     }
 
+    @Override
     public VerificationCollector assertLazily() {
         mockingProgress()
                 .setVerificationStrategy(
                         new VerificationStrategy() {
+                            @Override
                             public VerificationMode maybeVerifyLazily(VerificationMode mode) {
                                 return new VerificationWrapper(mode);
                             }
@@ -94,6 +97,7 @@ public class VerificationCollectorImpl implements VerificationCollector {
             this.delegate = delegate;
         }
 
+        @Override
         public void verify(VerificationData data) {
             try {
                 this.delegate.verify(data);
@@ -102,6 +106,7 @@ public class VerificationCollectorImpl implements VerificationCollector {
             }
         }
 
+        @Override
         public VerificationMode description(String description) {
             throw new IllegalStateException("Should not fail in this mode");
         }

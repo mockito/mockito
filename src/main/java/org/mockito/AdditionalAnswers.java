@@ -39,7 +39,7 @@ import org.mockito.stubbing.VoidAnswer6;
  * @since 1.9.5
  */
 @SuppressWarnings("unchecked")
-public class AdditionalAnswers {
+public final class AdditionalAnswers {
     /**
      * Returns the first parameter of an invocation.
      *
@@ -529,4 +529,6 @@ public class AdditionalAnswers {
     public static <A, B, C, D, E, F> Answer<Void> answerVoid(VoidAnswer6<A, B, C, D, E, F> answer) {
         return toAnswer(answer);
     }
+
+    private AdditionalAnswers() {}
 }

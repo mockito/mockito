@@ -4,6 +4,8 @@
  */
 package org.mockito.internal;
 
+import static org.mockito.internal.util.StringUtil.join;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -12,8 +14,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.invocation.Location;
 import org.mockito.plugins.MockMaker;
-
-import static org.mockito.internal.util.StringUtil.*;
 
 public final class MockedConstructionImpl<T> implements MockedConstruction<T> {
 

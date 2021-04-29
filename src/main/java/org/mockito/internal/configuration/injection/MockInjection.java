@@ -16,12 +16,9 @@ import java.util.Set;
 /**
  * Internal injection configuration utility.
  *
- * <p>
- * Allow the user of this class to configure the way the injection of mocks will happen.
- * </p>
- *
+ * <p>Allow the user of this class to configure the way the injection of mocks will happen.
  */
-public class MockInjection {
+public final class MockInjection {
 
     /**
      * Create a new configuration setup for a field
@@ -51,7 +48,7 @@ public class MockInjection {
      * Ongoing configuration of the mock injector.
      */
     public static class OngoingMockInjection {
-        private final Set<Field> fields = new HashSet<Field>();
+        private final Set<Field> fields = new HashSet<>();
         private final Set<Object> mocks = newMockSafeHashSet();
         private final Object fieldOwner;
         private final MockInjectionStrategy injectionStrategies = MockInjectionStrategy.nop();
@@ -93,4 +90,6 @@ public class MockInjection {
             }
         }
     }
+
+    private MockInjection() {}
 }

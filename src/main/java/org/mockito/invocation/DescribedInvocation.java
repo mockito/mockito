@@ -14,6 +14,7 @@ public interface DescribedInvocation {
      *
      * @return the description of this invocation.
      */
+    @Override
     String toString();
 
     /**

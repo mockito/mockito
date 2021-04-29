@@ -6,13 +6,20 @@ package org.mockito.internal.configuration.plugins;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.mockito.internal.creation.instance.InstantiatorProvider2Adapter;
-import org.mockito.plugins.*;
+import org.mockito.plugins.AnnotationEngine;
+import org.mockito.plugins.InstantiatorProvider;
+import org.mockito.plugins.InstantiatorProvider2;
+import org.mockito.plugins.MemberAccessor;
+import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.MockitoLogger;
+import org.mockito.plugins.MockitoPlugins;
+import org.mockito.plugins.PluginSwitch;
+import org.mockito.plugins.StackTraceCleanerProvider;
 
 class DefaultMockitoPlugins implements MockitoPlugins {
 
-    private static final Map<String, String> DEFAULT_PLUGINS = new HashMap<String, String>();
+    private static final Map<String, String> DEFAULT_PLUGINS = new HashMap<>();
     static final String INLINE_ALIAS = "mock-maker-inline";
     static final String MODULE_ALIAS = "member-accessor-module";
 

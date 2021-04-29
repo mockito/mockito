@@ -4,7 +4,35 @@
  */
 package org.mockito.internal;
 
-import org.mockito.*;
+import static org.mockito.internal.exceptions.Reporter.missingMethodInvocation;
+import static org.mockito.internal.exceptions.Reporter.mocksHaveToBePassedToVerifyNoMoreInteractions;
+import static org.mockito.internal.exceptions.Reporter.mocksHaveToBePassedWhenCreatingInOrder;
+import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerify;
+import static org.mockito.internal.exceptions.Reporter.notAMockPassedToVerifyNoMoreInteractions;
+import static org.mockito.internal.exceptions.Reporter.notAMockPassedWhenCreatingInOrder;
+import static org.mockito.internal.exceptions.Reporter.nullPassedToVerify;
+import static org.mockito.internal.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
+import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInOrder;
+import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
+import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
+import static org.mockito.internal.util.MockUtil.createConstructionMock;
+import static org.mockito.internal.util.MockUtil.createMock;
+import static org.mockito.internal.util.MockUtil.createStaticMock;
+import static org.mockito.internal.util.MockUtil.getInvocationContainer;
+import static org.mockito.internal.util.MockUtil.getMockHandler;
+import static org.mockito.internal.util.MockUtil.isMock;
+import static org.mockito.internal.util.MockUtil.resetMock;
+import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
+import static org.mockito.internal.verification.VerificationModeFactory.noInteractions;
+import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
+
+import java.util.Arrays;
+import java.util.List;
+import org.mockito.InOrder;
+import org.mockito.MockSettings;
+import org.mockito.MockedConstruction;
+import org.mockito.MockedStatic;
+import org.mockito.MockingDetails;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
@@ -36,12 +64,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import static org.mockito.internal.exceptions.Reporter.*;
-import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-import static org.mockito.internal.util.MockUtil.*;
-import static org.mockito.internal.verification.VerificationModeFactory.noInteractions;
-import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
-
 @SuppressWarnings("unchecked")
 public class MockitoCore {
 
@@ -50,14 +72,14 @@ public class MockitoCore {
     }
 
     public <T> T mock(Class<T> typeToMock, MockSettings settings) {
-        if (!MockSettingsImpl.class.isInstance(settings)) {
+        if (!(settings instanceof MockSettingsImpl)) {
             throw new IllegalArgumentException(
                     "Unexpected implementation of '"
                             + settings.getClass().getCanonicalName()
                             + "'\n"
                             + "At the moment, you cannot provide your own implementations of that class.");
         }
-        MockSettingsImpl impl = MockSettingsImpl.class.cast(settings);
+        MockSettingsImpl impl = (MockSettingsImpl) settings;
         MockCreationSettings<T> creationSettings = impl.build(typeToMock);
         T mock = createMock(creationSettings);
         mockingProgress().mockingStarted(mock, creationSettings);

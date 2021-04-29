@@ -47,7 +47,7 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
     }
 
     public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {
-        LinkedList<InvocationMatcher> out = new LinkedList<InvocationMatcher>();
+        LinkedList<InvocationMatcher> out = new LinkedList<>();
         for (Invocation i : invocations) {
             out.add(new InvocationMatcher(i));
         }

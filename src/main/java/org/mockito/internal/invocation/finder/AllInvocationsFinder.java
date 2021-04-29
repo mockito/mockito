@@ -4,8 +4,11 @@
  */
 package org.mockito.internal.invocation.finder;
 
-import java.util.*;
-
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import org.mockito.internal.invocation.InvocationComparator;
 import org.mockito.internal.stubbing.StubbingComparator;
 import org.mockito.internal.util.DefaultMockingDetails;
@@ -23,14 +26,14 @@ public class AllInvocationsFinder {
      * @return invocations
      */
     public static List<Invocation> find(Iterable<?> mocks) {
-        Set<Invocation> invocationsInOrder = new TreeSet<Invocation>(new InvocationComparator());
+        Set<Invocation> invocationsInOrder = new TreeSet<>(new InvocationComparator());
         for (Object mock : mocks) {
             Collection<Invocation> fromSingleMock =
                     new DefaultMockingDetails(mock).getInvocations();
             invocationsInOrder.addAll(fromSingleMock);
         }
 
-        return new LinkedList<Invocation>(invocationsInOrder);
+        return new LinkedList<>(invocationsInOrder);
     }
 
     /**
@@ -40,7 +43,7 @@ public class AllInvocationsFinder {
      * @return stubbings
      */
     public static Set<Stubbing> findStubbings(Iterable<?> mocks) {
-        Set<Stubbing> stubbings = new TreeSet<Stubbing>(new StubbingComparator());
+        Set<Stubbing> stubbings = new TreeSet<>(new StubbingComparator());
         for (Object mock : mocks) {
             // TODO due to the limited scope of static mocks they cannot be processed
             //  it would rather be required to trigger this stubbing control upon releasing

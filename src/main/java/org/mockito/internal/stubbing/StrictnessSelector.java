@@ -11,7 +11,7 @@ import org.mockito.stubbing.Stubbing;
 /**
  * Helps determining the actual strictness given that it can be configured in multiple ways (at mock, at stubbing, in rule)
  */
-public class StrictnessSelector {
+public final class StrictnessSelector {
 
     /**
      * Determines the actual strictness in the following importance order:
@@ -37,4 +37,6 @@ public class StrictnessSelector {
 
         return testLevelStrictness;
     }
+
+    private StrictnessSelector() {}
 }

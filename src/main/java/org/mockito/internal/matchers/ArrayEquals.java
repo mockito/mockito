@@ -13,6 +13,7 @@ public class ArrayEquals extends Equals {
         super(wanted);
     }
 
+    @Override
     public boolean matches(Object actual) {
         Object wanted = getWanted();
         if (wanted == null || actual == null) {
@@ -39,6 +40,7 @@ public class ArrayEquals extends Equals {
         return false;
     }
 
+    @Override
     public String toString() {
         if (getWanted() != null && getWanted().getClass().isArray()) {
             return appendArray(createObjectArray(getWanted()));
@@ -51,7 +53,7 @@ public class ArrayEquals extends Equals {
         // TODO SF overlap with ValuePrinter
         StringBuilder out = new StringBuilder("[");
         for (int i = 0; i < array.length; i++) {
-            out.append(new Equals(array[i]).toString());
+            out.append(new Equals(array[i]));
             if (i != array.length - 1) {
                 out.append(", ");
             }

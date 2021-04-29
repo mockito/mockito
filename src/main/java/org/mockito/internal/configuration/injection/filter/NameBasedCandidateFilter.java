@@ -18,6 +18,7 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
         this.next = next;
     }
 
+    @Override
     public OngoingInjector filterCandidate(
             final Collection<Object> mocks,
             final Field candidateFieldToBeInjected,
@@ -42,7 +43,7 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
 
     private List<Object> selectMatchingName(
             Collection<Object> mocks, Field candidateFieldToBeInjected) {
-        List<Object> mockNameMatches = new ArrayList<Object>();
+        List<Object> mockNameMatches = new ArrayList<>();
         for (Object mock : mocks) {
             if (candidateFieldToBeInjected.getName().equals(getMockName(mock).toString())) {
                 mockNameMatches.add(mock);

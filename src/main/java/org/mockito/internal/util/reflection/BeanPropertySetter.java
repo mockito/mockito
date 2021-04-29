@@ -101,7 +101,7 @@ public class BeanPropertySetter {
     private String setterName(String fieldName) {
         return new StringBuilder(SET_PREFIX)
                 .append(fieldName.substring(0, 1).toUpperCase(Locale.ENGLISH))
-                .append(fieldName.substring(1))
+                .append(fieldName, 1, fieldName.length())
                 .toString();
     }
 

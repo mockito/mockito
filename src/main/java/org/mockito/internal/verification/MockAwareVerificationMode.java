@@ -24,14 +24,12 @@ public class MockAwareVerificationMode implements VerificationMode {
         this.listeners = listeners;
     }
 
+    @Override
     public void verify(VerificationData data) {
         try {
             mode.verify(data);
             notifyListeners(new VerificationEventImpl(mock, mode, data, null));
-        } catch (RuntimeException e) {
-            notifyListeners(new VerificationEventImpl(mock, mode, data, e));
-            throw e;
-        } catch (Error e) {
+        } catch (RuntimeException | Error e) {
             notifyListeners(new VerificationEventImpl(mock, mode, data, e));
             throw e;
         }

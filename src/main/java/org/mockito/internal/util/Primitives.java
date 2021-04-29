@@ -8,12 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class Primitives {
+public final class Primitives {
 
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPES =
-            new HashMap<Class<?>, Class<?>>();
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPES = new HashMap<>();
     private static final Map<Class<?>, Object> PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES =
-            new HashMap<Class<?>, Object>();
+            new HashMap<>();
 
     /**
      * Returns the primitive type of the given class.
@@ -92,4 +91,6 @@ public class Primitives {
         PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(float.class, 0F);
         PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(double.class, 0D);
     }
+
+    private Primitives() {}
 }

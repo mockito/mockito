@@ -30,7 +30,7 @@ public class InvocationsPrinter {
             if (x == 1) {
                 sb.append("[Mockito] Interactions of: ").append(mock).append("\n");
             }
-            sb.append(" ").append(x++).append(". ").append(i.toString()).append("\n");
+            sb.append(" ").append(x++).append(". ").append(i).append("\n");
             sb.append("  ").append(i.getLocation()).append("\n");
             if (i.stubInfo() != null) {
                 sb.append("   - stubbed ").append(i.stubInfo().stubbedAt()).append("\n");
@@ -41,6 +41,7 @@ public class InvocationsPrinter {
                 ListUtil.filter(
                         stubbings,
                         new ListUtil.Filter<Stubbing>() {
+                            @Override
                             public boolean isOut(Stubbing s) {
                                 return s.wasUsed();
                             }

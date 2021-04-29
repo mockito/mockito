@@ -45,6 +45,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         this.invocationContainer = new InvocationContainerImpl(mockSettings);
     }
 
+    @Override
     public Object handle(Invocation invocation) throws Throwable {
         if (invocationContainer.hasAnswersForStubbing()) {
             // stubbing voids with doThrow() or doAnswer() style
@@ -121,10 +122,12 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         }
     }
 
+    @Override
     public MockCreationSettings<T> getMockSettings() {
         return mockSettings;
     }
 
+    @Override
     public InvocationContainer getInvocationContainer() {
         return invocationContainer;
     }

@@ -59,6 +59,7 @@ public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {
         return super.getDescription();
     }
 
+    @Override
     @Deprecated
     public void filter(Filter filter) throws NoTestsRemainException {
         super.filter(filter);

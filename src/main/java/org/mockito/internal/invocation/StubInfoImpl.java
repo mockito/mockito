@@ -18,6 +18,7 @@ public class StubInfoImpl implements StubInfo, Serializable {
         this.stubbedAt = stubbedAt;
     }
 
+    @Override
     public Location stubbedAt() {
         return stubbedAt.getLocation();
     }

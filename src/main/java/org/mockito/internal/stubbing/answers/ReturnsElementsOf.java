@@ -40,11 +40,13 @@ public class ReturnsElementsOf implements Answer<Object> {
                     "ReturnsElementsOf does not accept null as constructor argument.\n"
                             + "Please pass a collection instance");
         }
-        this.elements = new LinkedList<Object>(elements);
+        this.elements = new LinkedList<>(elements);
     }
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        if (elements.size() == 1) return elements.get(0);
-        else return elements.poll();
+        if (elements.size() == 1) {
+            return elements.get(0);
+        } else return elements.poll();
     }
 }

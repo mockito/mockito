@@ -34,8 +34,7 @@ import org.mockito.plugins.MemberAccessor;
 public class IndependentAnnotationEngine
         implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
     private final Map<Class<? extends Annotation>, FieldAnnotationProcessor<?>>
-            annotationProcessorMap =
-                    new HashMap<Class<? extends Annotation>, FieldAnnotationProcessor<?>>();
+            annotationProcessorMap = new HashMap<>();
 
     public IndependentAnnotationEngine() {
         registerAnnotationProcessor(Mock.class, new MockAnnotationProcessor());
@@ -52,6 +51,7 @@ public class IndependentAnnotationEngine
                     annotationProcessorMap.get(annotation.annotationType());
         }
         return new FieldAnnotationProcessor<A>() {
+            @Override
             public Object process(A annotation, Field field) {
                 return null;
             }

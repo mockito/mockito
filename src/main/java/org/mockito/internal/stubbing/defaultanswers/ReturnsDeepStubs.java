@@ -46,6 +46,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = -7105341425736035847L;
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         GenericMetadataSupport returnTypeGenericMetadata =
                 actualParameterizedType(invocation.getMock())
@@ -192,6 +193,7 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
             this.mock = mock;
         }
 
+        @Override
         public Object answer(InvocationOnMock invocation) throws Throwable {
             return mock;
         }

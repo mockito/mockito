@@ -140,7 +140,8 @@ public class SpyAnnotationEngine
             throw new MockitoException(
                     "Please ensure that the type '"
                             + type.getSimpleName()
-                            + "' has a no-arg constructor.");
+                            + "' has a no-arg constructor.",
+                    e);
         }
         return constructor;
     }

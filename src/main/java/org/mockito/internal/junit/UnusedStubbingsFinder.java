@@ -35,6 +35,7 @@ public class UnusedStubbingsFinder {
                 filter(
                         stubbings,
                         new Filter<Stubbing>() {
+                            @Override
                             public boolean isOut(Stubbing s) {
                                 return !UnusedStubbingReporting.shouldBeReported(s);
                             }
@@ -58,7 +59,7 @@ public class UnusedStubbingsFinder {
 
         // 1st pass, collect all the locations of the stubbings that were used
         // note that those are _not_ locations where the stubbings was used
-        Set<String> locationsOfUsedStubbings = new HashSet<String>();
+        Set<String> locationsOfUsedStubbings = new HashSet<>();
         for (Stubbing s : stubbings) {
             if (!UnusedStubbingReporting.shouldBeReported(s)) {
                 String location = s.getInvocation().getLocation().toString();
@@ -71,7 +72,7 @@ public class UnusedStubbingsFinder {
         // Also, using map to deduplicate reported unused stubbings
         // if unused stubbing appear in the setup method / constructor we don't want to report it
         // per each test case
-        Map<String, Invocation> out = new LinkedHashMap<String, Invocation>();
+        Map<String, Invocation> out = new LinkedHashMap<>();
         for (Stubbing s : stubbings) {
             String location = s.getInvocation().getLocation().toString();
             if (!locationsOfUsedStubbings.contains(location)) {

@@ -21,11 +21,11 @@ public class WeakConcurrentSet<V> implements Runnable, Iterable<V> {
     public WeakConcurrentSet(Cleaner cleaner) {
         switch (cleaner) {
             case INLINE:
-                target = new WeakConcurrentMap.WithInlinedExpunction<V, Boolean>();
+                target = new WeakConcurrentMap.WithInlinedExpunction<>();
                 break;
             case THREAD:
             case MANUAL:
-                target = new WeakConcurrentMap<V, Boolean>(cleaner == Cleaner.THREAD);
+                target = new WeakConcurrentMap<>(cleaner == Cleaner.THREAD);
                 break;
             default:
                 throw new AssertionError();

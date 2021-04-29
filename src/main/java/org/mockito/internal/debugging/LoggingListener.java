@@ -15,14 +15,15 @@ import org.mockito.invocation.Invocation;
 public class LoggingListener implements FindingsListener {
     private final boolean warnAboutUnstubbed;
 
-    private final List<String> argMismatchStubs = new LinkedList<String>();
-    private final List<String> unusedStubs = new LinkedList<String>();
-    private final List<String> unstubbedCalls = new LinkedList<String>();
+    private final List<String> argMismatchStubs = new LinkedList<>();
+    private final List<String> unusedStubs = new LinkedList<>();
+    private final List<String> unstubbedCalls = new LinkedList<>();
 
     public LoggingListener(boolean warnAboutUnstubbed) {
         this.warnAboutUnstubbed = warnAboutUnstubbed;
     }
 
+    @Override
     public void foundStubCalledWithDifferentArgs(Invocation unused, InvocationMatcher unstubbed) {
         // TODO there is not good reason we should get Invocation and InvocationMatcher here
         // we should pass 2 InvocationMatchers and testing is easier
@@ -41,10 +42,12 @@ public class LoggingListener implements FindingsListener {
         return (collectionSize / 2) + 1;
     }
 
+    @Override
     public void foundUnusedStub(Invocation unused) {
         unusedStubs.add((unusedStubs.size() + 1) + ". " + unused.getLocation());
     }
 
+    @Override
     public void foundUnstubbed(InvocationMatcher unstubbed) {
         if (warnAboutUnstubbed) {
             unstubbedCalls.add(
@@ -57,7 +60,7 @@ public class LoggingListener implements FindingsListener {
             return "";
         }
 
-        List<String> lines = new LinkedList<String>();
+        List<String> lines = new LinkedList<>();
         lines.add(
                 "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):");
 

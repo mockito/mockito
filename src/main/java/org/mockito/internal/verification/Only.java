@@ -19,6 +19,7 @@ import org.mockito.verification.VerificationMode;
 
 public class Only implements VerificationMode {
 
+    @Override
     @SuppressWarnings("unchecked")
     public void verify(VerificationData data) {
         MatchableInvocation target = data.getTarget();

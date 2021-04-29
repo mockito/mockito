@@ -25,6 +25,7 @@ public interface OngoingInjector {
      */
     OngoingInjector nop =
             new OngoingInjector() {
+                @Override
                 public Object thenInject() {
                     return null;
                 }

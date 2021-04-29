@@ -19,6 +19,7 @@ public abstract class AbstractThrowsException implements Answer<Object>, Validab
 
     protected abstract Throwable getThrowable();
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Throwable throwable = getThrowable();
         if (throwable == null) {

@@ -11,7 +11,6 @@ import static org.mockito.internal.util.StringUtil.join;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
-
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.*;
@@ -300,8 +299,10 @@ public class Reporter {
     }
 
     private static Object locationsOf(Collection<LocalizedMatcher> matchers) {
-        List<String> description = new ArrayList<String>();
-        for (LocalizedMatcher matcher : matchers) description.add(matcher.getLocation().toString());
+        List<String> description = new ArrayList<>();
+        for (LocalizedMatcher matcher : matchers) {
+            description.add(matcher.getLocation().toString());
+        }
         return join(description.toArray());
     }
 
@@ -349,12 +350,11 @@ public class Reporter {
             allInvocations = "Actually, there were zero interactions with this mock.\n";
         } else {
             StringBuilder sb =
-                    new StringBuilder(
-                            "\nHowever, there "
-                                    + were_exactly_x_interactions(invocations.size())
-                                    + " with this mock:\n");
+                    new StringBuilder("\nHowever, there ")
+                            .append(were_exactly_x_interactions(invocations.size()))
+                            .append(" with this mock:\n");
             for (DescribedInvocation i : invocations) {
-                sb.append(i.toString()).append("\n").append(i.getLocation()).append("\n\n");
+                sb.append(i).append("\n").append(i.getLocation()).append("\n\n");
             }
             allInvocations = sb.toString();
         }
@@ -519,7 +519,7 @@ public class Reporter {
         ScenarioPrinter scenarioPrinter = new ScenarioPrinter();
         String scenario = scenarioPrinter.print(invocations);
 
-        List<Location> locations = new ArrayList<Location>();
+        List<Location> locations = new ArrayList<>();
         for (VerificationAwareInvocation invocation : invocations) {
             locations.add(invocation.getLocation());
         }
@@ -537,7 +537,7 @@ public class Reporter {
     public static MockitoException cannotMockClass(Class<?> clazz, String reason) {
         return new MockitoException(
                 join(
-                        "Cannot mock/spy " + clazz.toString(),
+                        "Cannot mock/spy " + clazz,
                         "Mockito cannot mock/spy because :",
                         " - " + reason));
     }

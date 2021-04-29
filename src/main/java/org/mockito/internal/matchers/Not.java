@@ -17,10 +17,12 @@ public class Not implements ArgumentMatcher<Object>, Serializable {
         this.matcher = matcher;
     }
 
+    @Override
     public boolean matches(Object actual) {
         return !matcher.matches(actual);
     }
 
+    @Override
     public String toString() {
         return "not(" + matcher + ")";
     }

@@ -951,7 +951,9 @@ public class ArgumentMatchers {
      */
     public static <T> T same(T value) {
         reportMatcher(new Same(value));
-        if (value == null) return null;
+        if (value == null) {
+            return null;
+        }
         return (T) Primitives.defaultValue(value.getClass());
     }
 
@@ -1094,7 +1096,7 @@ public class ArgumentMatchers {
      */
     public static <T> T nullable(Class<T> clazz) {
         AdditionalMatchers.or(isNull(), isA(clazz));
-        return (T) Primitives.defaultValue(clazz);
+        return Primitives.defaultValue(clazz);
     }
 
     /**

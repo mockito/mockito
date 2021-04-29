@@ -55,7 +55,7 @@ public class LocationImpl implements Location, Serializable {
             this.stackTraceLine = "-> at <<unknown line>>";
             this.sourceFile = "<unknown source file>";
         } else {
-            this.stackTraceLine = "-> at " + filtered.toString();
+            this.stackTraceLine = "-> at " + filtered;
             this.sourceFile = filtered.getFileName();
         }
     }

@@ -68,12 +68,14 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     private final ListUtil.Filter<Field> notFinalOrStatic =
             new ListUtil.Filter<Field>() {
+                @Override
                 public boolean isOut(Field object) {
                     return Modifier.isFinal(object.getModifiers())
                             || Modifier.isStatic(object.getModifiers());
                 }
             };
 
+    @Override
     public boolean processInjection(
             Field injectMocksField, Object injectMocksFieldOwner, Set<Object> mockCandidates) {
         FieldInitializationReport report =

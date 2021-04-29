@@ -19,7 +19,7 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     private static final long serialVersionUID = -2860353062105505938L;
 
     private static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION =
-            new ThreadLocal<IMockitoConfiguration>();
+            new ThreadLocal<>();
 
     // back door for testing
     IMockitoConfiguration getIt() {
@@ -59,14 +59,17 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
         return configuration.getAnnotationEngine();
     }
 
+    @Override
     public boolean cleansStackTrace() {
         return GLOBAL_CONFIGURATION.get().cleansStackTrace();
     }
 
+    @Override
     public boolean enableClassCache() {
         return GLOBAL_CONFIGURATION.get().enableClassCache();
     }
 
+    @Override
     public Answer<Object> getDefaultAnswer() {
         return GLOBAL_CONFIGURATION.get().getDefaultAnswer();
     }

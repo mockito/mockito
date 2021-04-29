@@ -17,10 +17,12 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
         this.wanted = wanted;
     }
 
+    @Override
     public boolean matches(Object actual) {
         return Equality.areEqual(this.wanted, actual);
     }
 
+    @Override
     public String toString() {
         return describe(wanted);
     }
@@ -35,11 +37,11 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || !this.getClass().equals(o.getClass())) {
+        if (!(o instanceof Equals)) {
             return false;
         }
         Equals other = (Equals) o;
-        return this.wanted == null && other.wanted == null
+        return (this.wanted == null && other.wanted == null)
                 || this.wanted != null && this.wanted.equals(other.wanted);
     }
 
@@ -48,10 +50,12 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
         return 1;
     }
 
+    @Override
     public String toStringWithType() {
         return "(" + wanted.getClass().getSimpleName() + ") " + describe(wanted);
     }
 
+    @Override
     public boolean typeMatches(Object target) {
         return wanted != null && target != null && target.getClass() == wanted.getClass();
     }

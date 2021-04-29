@@ -27,10 +27,12 @@ public final class JUnitRule implements MockitoRule {
                 base, target.getClass().getSimpleName() + "." + method.getName(), target);
     }
 
+    @Override
     public MockitoRule silent() {
         return strictness(Strictness.LENIENT);
     }
 
+    @Override
     public MockitoRule strictness(Strictness strictness) {
         sessionStore.setStrictness(strictness);
         return this;

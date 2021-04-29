@@ -18,10 +18,12 @@ public class Or implements ArgumentMatcher<Object>, Serializable {
         this.m2 = m2;
     }
 
+    @Override
     public boolean matches(Object actual) {
         return m1.matches(actual) || m2.matches(actual);
     }
 
+    @Override
     public String toString() {
         return "or(" + m1 + ", " + m2 + ")";
     }

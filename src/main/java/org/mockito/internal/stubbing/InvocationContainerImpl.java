@@ -29,8 +29,7 @@ import org.mockito.stubbing.ValidableAnswer;
 public class InvocationContainerImpl implements InvocationContainer, Serializable {
 
     private static final long serialVersionUID = -5334301962749537177L;
-    private final LinkedList<StubbedInvocationMatcher> stubbed =
-            new LinkedList<StubbedInvocationMatcher>();
+    private final LinkedList<StubbedInvocationMatcher> stubbed = new LinkedList<>();
     private final DoAnswerStyleStubbing doAnswerStyleStubbing;
     private final RegisteredInvocations registeredInvocations;
     private final Strictness mockStrictness;
@@ -57,13 +56,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         addAnswer(answer, false, stubbingStrictness);
     }
 
-    public void addConsecutiveAnswer(Answer answer) {
-        addAnswer(answer, true, null);
-    }
-
-    /**
-     * Adds new stubbed answer and returns the invocation matcher the answer was added to.
-     */
+    /** Adds new stubbed answer and returns the invocation matcher the answer was added to. */
     public StubbedInvocationMatcher addAnswer(
             Answer answer, boolean isConsecutive, Strictness stubbingStrictness) {
         Invocation invocation = invocationForStubbing.getInvocation();
@@ -84,6 +77,10 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
             }
             return stubbed.getFirst();
         }
+    }
+
+    public void addConsecutiveAnswer(Answer answer) {
+        addAnswer(answer, true, null);
     }
 
     Object answerTo(Invocation invocation) throws Throwable {
@@ -157,7 +154,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
      * Stubbings in ascending order, most recent last
      */
     public Collection<Stubbing> getStubbingsAscending() {
-        List<Stubbing> result = new LinkedList<Stubbing>(stubbed);
+        List<Stubbing> result = new LinkedList<>(stubbed);
         Collections.reverse(result);
         return result;
     }
