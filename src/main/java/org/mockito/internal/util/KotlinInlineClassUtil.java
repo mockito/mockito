@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.util;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import org.mockito.internal.stubbing.BaseStubbing;
 import org.mockito.internal.stubbing.OngoingStubbingImpl;
 import org.mockito.invocation.MatchableInvocation;
@@ -18,7 +16,7 @@ public class KotlinInlineClassUtil {
     // underlying type.
     // So, `thenReturn` calls fails, because of non-compatible types.
     public static boolean isInlineClassWithAssignableUnderlyingType(
-            @NotNull Class<?> inlineClass, @NotNull Class<?> underlyingType) {
+            Class<?> inlineClass, Class<?> underlyingType) {
         Method boxImpl = findBoxImplMethod(inlineClass);
         if (boxImpl == null) return false;
 
@@ -32,12 +30,11 @@ public class KotlinInlineClassUtil {
         }
     }
 
-    private static boolean isInlineClass(@NotNull Class<?> inlineClass) {
+    private static boolean isInlineClass(Class<?> inlineClass) {
         return findBoxImplMethod(inlineClass) != null;
     }
 
-    @Nullable
-    private static Method findBoxImplMethod(@NotNull Class<?> inlineClass) {
+    private static Method findBoxImplMethod(Class<?> inlineClass) {
         // All inline classes have 'box-impl' method, which accepts
         // underlying type and returns inline class.
         for (Method declaredMethod : inlineClass.getDeclaredMethods()) {
@@ -48,8 +45,7 @@ public class KotlinInlineClassUtil {
         return null;
     }
 
-    @Nullable
-    private static Object unboxInlineClass(@NotNull Object boxedValue)
+    private static Object unboxInlineClass(Object boxedValue)
             throws InvocationTargetException, IllegalAccessException {
         Class<?> inlineClass = boxedValue.getClass();
         Method unboxImpl = null;
@@ -65,14 +61,13 @@ public class KotlinInlineClassUtil {
         return unboxImpl.invoke(boxedValue);
     }
 
-    private static boolean returnsBoxedInlineClass(@NotNull BaseStubbing<?> stubbing) {
+    private static boolean returnsBoxedInlineClass(BaseStubbing<?> stubbing) {
         Class<?> returnType = getReturnTypeOfInvocation(stubbing);
         if (returnType == null) return false;
         return isInlineClass(returnType);
     }
 
-    @Nullable
-    private static Class<?> getReturnTypeOfInvocation(@NotNull BaseStubbing<?> stubbing) {
+    private static Class<?> getReturnTypeOfInvocation(BaseStubbing<?> stubbing) {
         if (!(stubbing instanceof OngoingStubbingImpl<?>)) {
             return null;
         }
@@ -84,15 +79,13 @@ public class KotlinInlineClassUtil {
         return invocationForStubbing.getInvocation().getRawReturnType();
     }
 
-    private static boolean returnsUnderlyingTypeOf(
-            @NotNull BaseStubbing<?> stubbing, @NotNull Object value) {
+    private static boolean returnsUnderlyingTypeOf(BaseStubbing<?> stubbing, Object value) {
         Class<?> returnType = getReturnTypeOfInvocation(stubbing);
         if (returnType == null) return false;
         return isInlineClassWithAssignableUnderlyingType(value.getClass(), returnType);
     }
 
-    public static Object unboxUnderlyingValueIfNeeded(
-            @NotNull BaseStubbing<?> stubbing, @Nullable Object value) {
+    public static Object unboxUnderlyingValueIfNeeded(BaseStubbing<?> stubbing, Object value) {
         if (value != null
                 && isInlineClass(value.getClass())
                 && !returnsBoxedInlineClass(stubbing)
