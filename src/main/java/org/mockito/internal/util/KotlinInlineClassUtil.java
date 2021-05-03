@@ -17,32 +17,14 @@ public class KotlinInlineClassUtil {
     // So, `thenReturn` calls fails, because of non-compatible types.
     public static boolean isInlineClassWithAssignableUnderlyingType(
             Class<?> inlineClass, Class<?> underlyingType) {
-        Method boxImpl = findBoxImplMethod(inlineClass);
-        if (boxImpl == null) return false;
-
-        Class<?> parameterType = boxImpl.getParameterTypes()[0];
-
-        if (parameterType.isPrimitive() && underlyingType.isPrimitive()) {
-            return Primitives.primitiveTypeOf(parameterType)
-                    == Primitives.primitiveTypeOf(underlyingType);
-        } else {
-            return parameterType.isAssignableFrom(underlyingType);
+        try {
+            // All inline classes have 'box-impl' method, which accepts
+            // underlying type and returns inline class.
+            inlineClass.getDeclaredMethod("box-impl", underlyingType);
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
         }
-    }
-
-    private static boolean isInlineClass(Class<?> inlineClass) {
-        return findBoxImplMethod(inlineClass) != null;
-    }
-
-    private static Method findBoxImplMethod(Class<?> inlineClass) {
-        // All inline classes have 'box-impl' method, which accepts
-        // underlying type and returns inline class.
-        for (Method declaredMethod : inlineClass.getDeclaredMethods()) {
-            if (declaredMethod.getName().equals("box-impl")) {
-                return declaredMethod;
-            }
-        }
-        return null;
     }
 
     private static Object unboxInlineClass(Object boxedValue)
@@ -61,12 +43,6 @@ public class KotlinInlineClassUtil {
         return unboxImpl.invoke(boxedValue);
     }
 
-    private static boolean returnsBoxedInlineClass(BaseStubbing<?> stubbing) {
-        Class<?> returnType = getReturnTypeOfInvocation(stubbing);
-        if (returnType == null) return false;
-        return isInlineClass(returnType);
-    }
-
     private static Class<?> getReturnTypeOfInvocation(BaseStubbing<?> stubbing) {
         if (!(stubbing instanceof OngoingStubbingImpl<?>)) {
             return null;
@@ -79,23 +55,23 @@ public class KotlinInlineClassUtil {
         return invocationForStubbing.getInvocation().getRawReturnType();
     }
 
-    private static boolean returnsUnderlyingTypeOf(BaseStubbing<?> stubbing, Object value) {
-        Class<?> returnType = getReturnTypeOfInvocation(stubbing);
-        if (returnType == null) return false;
-        return isInlineClassWithAssignableUnderlyingType(value.getClass(), returnType);
-    }
-
     public static Object unboxUnderlyingValueIfNeeded(BaseStubbing<?> stubbing, Object value) {
-        if (value != null
-                && isInlineClass(value.getClass())
-                && !returnsBoxedInlineClass(stubbing)
-                && returnsUnderlyingTypeOf(stubbing, value)) {
-            try {
-                return KotlinInlineClassUtil.unboxInlineClass(value);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                // Do nothing. Fall through
+        if (value != null) {
+            Class<?> returnType = getReturnTypeOfInvocation(stubbing);
+            if (returnType == null) return value;
+            Class<?> valueType = value.getClass();
+            if (valueType.isAssignableFrom(returnType)) return value;
+
+            if (isInlineClassWithAssignableUnderlyingType(valueType, returnType)) {
+                try {
+                    return unboxInlineClass(value);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    return value;
+                }
+            } else {
+                return value;
             }
         }
-        return value;
+        return null;
     }
 }
