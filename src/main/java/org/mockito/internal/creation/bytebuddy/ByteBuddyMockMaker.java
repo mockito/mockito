@@ -6,6 +6,7 @@ package org.mockito.internal.creation.bytebuddy;
 
 import org.mockito.Incubating;
 import org.mockito.MockedConstruction;
+import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 
@@ -22,44 +23,57 @@ import java.util.function.Function;
  * The programmatic API could look like {@code mock(Final.class, withSettings().finalClasses())}.
  */
 public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
-    private ClassCreatingMockMaker defaultByteBuddyMockMaker = new SubclassByteBuddyMockMaker();
+    private final SubclassByteBuddyMockMaker subclassByteBuddyMockMaker;
+
+    public ByteBuddyMockMaker() {
+        try {
+            subclassByteBuddyMockMaker = new SubclassByteBuddyMockMaker();
+        } catch (NoClassDefFoundError e) {
+            Reporter.missingByteBuddyDependency(e);
+            throw e;
+        }
+    }
+
+    ByteBuddyMockMaker(SubclassByteBuddyMockMaker subclassByteBuddyMockMaker) {
+        this.subclassByteBuddyMockMaker = subclassByteBuddyMockMaker;
+    }
 
     @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
-        return defaultByteBuddyMockMaker.createMock(settings, handler);
+        return subclassByteBuddyMockMaker.createMock(settings, handler);
     }
 
     @Override
     public <T> Optional<T> createSpy(
             MockCreationSettings<T> settings, MockHandler handler, T object) {
-        return defaultByteBuddyMockMaker.createSpy(settings, handler, object);
+        return subclassByteBuddyMockMaker.createSpy(settings, handler, object);
     }
 
     @Override
     public <T> Class<? extends T> createMockType(MockCreationSettings<T> creationSettings) {
-        return defaultByteBuddyMockMaker.createMockType(creationSettings);
+        return subclassByteBuddyMockMaker.createMockType(creationSettings);
     }
 
     @Override
     public MockHandler getHandler(Object mock) {
-        return defaultByteBuddyMockMaker.getHandler(mock);
+        return subclassByteBuddyMockMaker.getHandler(mock);
     }
 
     @Override
     public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
-        defaultByteBuddyMockMaker.resetMock(mock, newHandler, settings);
+        subclassByteBuddyMockMaker.resetMock(mock, newHandler, settings);
     }
 
     @Override
     @Incubating
     public TypeMockability isTypeMockable(Class<?> type) {
-        return defaultByteBuddyMockMaker.isTypeMockable(type);
+        return subclassByteBuddyMockMaker.isTypeMockable(type);
     }
 
     @Override
     public <T> StaticMockControl<T> createStaticMock(
             Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
-        return defaultByteBuddyMockMaker.createStaticMock(type, settings, handler);
+        return subclassByteBuddyMockMaker.createStaticMock(type, settings, handler);
     }
 
     @Override
@@ -68,12 +82,12 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
             Function<MockedConstruction.Context, MockCreationSettings<T>> settingsFactory,
             Function<MockedConstruction.Context, MockHandler<T>> handlerFactory,
             MockedConstruction.MockInitializer<T> mockInitializer) {
-        return defaultByteBuddyMockMaker.createConstructionMock(
+        return subclassByteBuddyMockMaker.createConstructionMock(
                 type, settingsFactory, handlerFactory, mockInitializer);
     }
 
     @Override
     public void clearAllCaches() {
-        defaultByteBuddyMockMaker.clearAllCaches();
+        subclassByteBuddyMockMaker.clearAllCaches();
     }
 }
