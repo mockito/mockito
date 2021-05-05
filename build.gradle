@@ -10,7 +10,7 @@ buildscript {
         classpath 'net.ltgt.gradle:gradle-errorprone-plugin:2.0.1'
 
         //Using buildscript.classpath so that we can resolve plugins from maven local, during local testing
-        classpath "org.shipkit:shipkit-auto-version:1.1.8"
+        classpath "org.shipkit:shipkit-auto-version:1.1.9"
         classpath "org.shipkit:shipkit-changelog:1.1.15"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+"
 
