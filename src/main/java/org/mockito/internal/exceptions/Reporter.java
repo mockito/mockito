@@ -13,6 +13,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.exceptions.misusing.*;
 import org.mockito.exceptions.verification.MoreThanAllowedActualInvocations;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
@@ -1107,5 +1108,20 @@ public class Reporter {
                         "Unfinished mocking session detected.",
                         "Previous MockitoSession was not concluded with 'finishMocking()'.",
                         "For examples of correct usage see javadoc for MockitoSession class."));
+    }
+
+    public static void missingByteBuddyDependency(Throwable t) {
+        if (t instanceof NoClassDefFoundError
+                && t.getMessage() != null
+                && t.getMessage().startsWith("net/bytebuddy/")) {
+            throw new MockitoInitializationException(
+                    join(
+                            "It seems like you are running Mockito with an incomplete or inconsistent class path. Byte Buddy could not be loaded.",
+                            "",
+                            "Byte Buddy is available on Maven Central as 'net.bytebuddy:byte-buddy' with the module name 'net.bytebuddy'.",
+                            "For the inline mock maker, 'net.bytebuddy:byte-buddy-agent' with the module name 'net.bytebuddy.agent' is also required.",
+                            "Normally, your IDE or build tool (such as Maven or Gradle) should take care of your class path completion but "),
+                    t);
+        }
     }
 }

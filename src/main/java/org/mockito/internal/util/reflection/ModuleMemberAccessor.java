@@ -17,10 +17,22 @@ public class ModuleMemberAccessor implements MemberAccessor {
     private final MemberAccessor delegate;
 
     public ModuleMemberAccessor() {
-        if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V9)) {
-            delegate = new InstrumentationMemberAccessor();
-        } else {
+        MemberAccessor delegate;
+        try {
+            delegate = delegate();
+        } catch (Throwable ignored) {
+            // Fallback in case Byte Buddy is not used as a mock maker and not available on the
+            // class loader.
             delegate = new ReflectionMemberAccessor();
+        }
+        this.delegate = delegate;
+    }
+
+    private static MemberAccessor delegate() {
+        if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V9)) {
+            return new InstrumentationMemberAccessor();
+        } else {
+            return new ReflectionMemberAccessor();
         }
     }
 

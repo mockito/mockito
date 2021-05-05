@@ -46,9 +46,9 @@ public class NoJUnitDependenciesTest {
         // loaded.
         checkDependency(
                 classLoader_without_JUnit,
-                "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
+                "org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker");
         pureMockitoAPIClasses.remove(
-                "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
+                "org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker");
 
         for (String pureMockitoAPIClass : pureMockitoAPIClasses) {
             checkDependency(classLoader_without_JUnit, pureMockitoAPIClass);
