@@ -9,7 +9,6 @@ import static org.mockito.internal.exceptions.Reporter.incorrectUseOfApi;
 import java.util.List;
 
 import org.mockito.invocation.Invocation;
-import org.mockito.invocation.MatchableInvocation;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
@@ -37,11 +36,6 @@ public class OngoingStubbingImpl<T> extends BaseStubbing<T> {
     public List<Invocation> getRegisteredInvocations() {
         // TODO interface for tests
         return invocationContainer.getInvocations();
-    }
-
-    // TODO: Hack for Kotlin inline classes
-    public MatchableInvocation getInvocationForStubbing() {
-        return invocationContainer.getInvocationForStubbing();
     }
 
     public void setStrictness(Strictness strictness) {

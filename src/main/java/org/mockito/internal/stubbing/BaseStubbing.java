@@ -11,7 +11,6 @@ import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
 import org.mockito.internal.stubbing.answers.ThrowsExceptionForClassType;
-import org.mockito.internal.util.KotlinInlineClassUtil;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -32,8 +31,7 @@ public abstract class BaseStubbing<T> implements OngoingStubbing<T> {
 
     @Override
     public OngoingStubbing<T> thenReturn(T value) {
-        return thenAnswer(
-                new Returns(KotlinInlineClassUtil.unboxUnderlyingValueIfNeeded(this, value)));
+        return thenAnswer(new Returns(value));
     }
 
     @Override

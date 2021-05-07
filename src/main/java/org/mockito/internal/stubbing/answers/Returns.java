@@ -24,7 +24,7 @@ public class Returns implements Answer<Object>, ValidableAnswer, Serializable {
     }
 
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        return value;
+        return KotlinInlineClassUtil.unboxUnderlyingValueIfNeeded(invocation, value);
     }
 
     @Override

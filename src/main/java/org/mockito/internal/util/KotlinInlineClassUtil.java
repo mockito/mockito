@@ -4,20 +4,34 @@
  */
 package org.mockito.internal.util;
 
-import org.mockito.internal.stubbing.BaseStubbing;
-import org.mockito.internal.stubbing.OngoingStubbingImpl;
-import org.mockito.invocation.MatchableInvocation;
+import org.mockito.internal.stubbing.answers.InvocationInfo;
+import org.mockito.invocation.InvocationOnMock;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class KotlinInlineClassUtil {
+    private static Class<Annotation> jvmInlineAnnotation;
+
+    static {
+        try {
+            jvmInlineAnnotation = (Class<Annotation>) Class.forName("kotlin.jvm.JvmInline");
+        } catch (ClassNotFoundException e) {
+            // Do nothing: kotlin is pre 1.5.0
+        }
+    }
+
     // When mocking function, returning inline class, its return type is
     // underlying type.
     // So, `thenReturn` calls fails, because of non-compatible types.
     public static boolean isInlineClassWithAssignableUnderlyingType(
             Class<?> inlineClass, Class<?> underlyingType) {
         try {
+            // Since 1.5.0 inline classes have @JvmInline annotation
+            if (jvmInlineAnnotation == null
+                    || !inlineClass.isAnnotationPresent(jvmInlineAnnotation)) return false;
+
             // All inline classes have 'box-impl' method, which accepts
             // underlying type and returns inline class.
             inlineClass.getDeclaredMethod("box-impl", underlyingType);
@@ -27,47 +41,28 @@ public class KotlinInlineClassUtil {
         }
     }
 
-    private static Object unboxInlineClass(Object boxedValue)
-            throws InvocationTargetException, IllegalAccessException {
+    private static Object unboxInlineClassIfPossible(Object boxedValue) {
         Class<?> inlineClass = boxedValue.getClass();
-        Method unboxImpl = null;
-        for (Method declaredMethod : inlineClass.getDeclaredMethods()) {
-            if (declaredMethod.getName().equals("unbox-impl")) {
-                unboxImpl = declaredMethod;
-                break;
-            }
+        try {
+            Method unboxImpl = inlineClass.getDeclaredMethod("unbox-impl");
+            return unboxImpl.invoke(boxedValue);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            return boxedValue;
         }
-
-        assert unboxImpl != null : inlineClass.getName() + " is not a Kotlin inline class";
-
-        return unboxImpl.invoke(boxedValue);
     }
 
-    private static Class<?> getReturnTypeOfInvocation(BaseStubbing<?> stubbing) {
-        if (!(stubbing instanceof OngoingStubbingImpl<?>)) {
-            return null;
-        }
-        // TODO: Hack to get return type of method
-        OngoingStubbingImpl<?> ongoingStubbing = (OngoingStubbingImpl<?>) stubbing;
-        if (ongoingStubbing.getRegisteredInvocations().size() == 0) return null;
+    public static Object unboxUnderlyingValueIfNeeded(InvocationOnMock invocation, Object value) {
+        // Short path - Kotlin 1.5+ is not present.
+        if (jvmInlineAnnotation == null) return value;
 
-        MatchableInvocation invocationForStubbing = ongoingStubbing.getInvocationForStubbing();
-        return invocationForStubbing.getInvocation().getRawReturnType();
-    }
-
-    public static Object unboxUnderlyingValueIfNeeded(BaseStubbing<?> stubbing, Object value) {
         if (value != null) {
-            Class<?> returnType = getReturnTypeOfInvocation(stubbing);
-            if (returnType == null) return value;
             Class<?> valueType = value.getClass();
+            InvocationInfo invocationInfo = new InvocationInfo(invocation);
+            Class<?> returnType = invocationInfo.getMethod().getReturnType();
             if (valueType.isAssignableFrom(returnType)) return value;
 
             if (isInlineClassWithAssignableUnderlyingType(valueType, returnType)) {
-                try {
-                    return unboxInlineClass(value);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    return value;
-                }
+                return unboxInlineClassIfPossible(value);
             } else {
                 return value;
             }
