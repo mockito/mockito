@@ -4,10 +4,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito.*
 
-inline class IC(val i: Int)
-inline class ICN(val i: Int?)
-inline class SC(val s: String)
-inline class SCN(val s: String?)
+@JvmInline
+value class IC(val i: Int)
+@JvmInline
+value class ICN(val i: Int?)
+@JvmInline
+value class SC(val s: String)
+@JvmInline
+value class SCN(val s: String?)
 
 class InlineClassTest {
     interface I {
