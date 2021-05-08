@@ -1032,6 +1032,15 @@ public class Reporter {
                         "This may happen with doThrow(Class)|thenThrow(Class) family of methods if passing null parameter."));
     }
 
+    public static MockitoException inlineClassWithoutUnboxImpl(
+            Class<?> inlineClass, Exception details) {
+        return new MockitoException(
+                join(
+                        "Kotlin inline class should have unbox-impl() method,",
+                        "but " + inlineClass + " does not."),
+                details);
+    }
+
     public static UnnecessaryStubbingException formatUnncessaryStubbingException(
             Class<?> testClass, Collection<Invocation> unnecessaryStubbings) {
         StringBuilder stubbings = new StringBuilder();

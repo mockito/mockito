@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.util;
 
+import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.stubbing.answers.InvocationInfo;
 import org.mockito.invocation.InvocationOnMock;
 
@@ -34,6 +35,11 @@ public class KotlinInlineClassUtil {
 
             // All inline classes have 'box-impl' method, which accepts
             // underlying type and returns inline class.
+            // Make sure that the current inline class is also the class that is compatible with the
+            // underlying type.
+            // If we don't make this check, then we would potentially pass a mock of inline type A
+            // into a method
+            // that accepts inline type B.
             inlineClass.getDeclaredMethod("box-impl", underlyingType);
             return true;
         } catch (NoSuchMethodException e) {
@@ -47,26 +53,25 @@ public class KotlinInlineClassUtil {
             Method unboxImpl = inlineClass.getDeclaredMethod("unbox-impl");
             return unboxImpl.invoke(boxedValue);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            return boxedValue;
+            throw Reporter.inlineClassWithoutUnboxImpl(inlineClass, e);
         }
     }
 
     public static Object unboxUnderlyingValueIfNeeded(InvocationOnMock invocation, Object value) {
         // Short path - Kotlin 1.5+ is not present.
-        if (jvmInlineAnnotation == null) return value;
-
-        if (value != null) {
-            Class<?> valueType = value.getClass();
-            InvocationInfo invocationInfo = new InvocationInfo(invocation);
-            Class<?> returnType = invocationInfo.getMethod().getReturnType();
-            if (valueType.isAssignableFrom(returnType)) return value;
-
-            if (isInlineClassWithAssignableUnderlyingType(valueType, returnType)) {
-                return unboxInlineClassIfPossible(value);
-            } else {
-                return value;
-            }
+        if (value == null || jvmInlineAnnotation == null) {
+            return value;
         }
-        return null;
+
+        Class<?> valueType = value.getClass();
+        InvocationInfo invocationInfo = new InvocationInfo(invocation);
+        Class<?> returnType = invocationInfo.getMethod().getReturnType();
+        if (valueType.isAssignableFrom(returnType)) return value;
+
+        if (isInlineClassWithAssignableUnderlyingType(valueType, returnType)) {
+            return unboxInlineClassIfPossible(value);
+        } else {
+            return value;
+        }
     }
 }
