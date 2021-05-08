@@ -9,6 +9,7 @@ import static org.mockito.internal.exceptions.Reporter.wrongTypeOfReturnValue;
 
 import java.io.Serializable;
 
+import org.mockito.internal.util.KotlinInlineClassUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.ValidableAnswer;
@@ -24,7 +25,7 @@ public class Returns implements Answer<Object>, ValidableAnswer, Serializable {
 
     @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        return value;
+        return KotlinInlineClassUtil.unboxUnderlyingValueIfNeeded(invocation, value);
     }
 
     @Override
@@ -39,7 +40,10 @@ public class Returns implements Answer<Object>, ValidableAnswer, Serializable {
                     invocationInfo.printMethodReturnType(), "null", invocationInfo.getMethodName());
         }
 
-        if (!returnsNull() && !invocationInfo.isValidReturnType(returnType())) {
+        if (!returnsNull()
+                && !invocationInfo.isValidReturnType(returnType())
+                && !KotlinInlineClassUtil.isInlineClassWithAssignableUnderlyingType(
+                        returnType(), invocationInfo.getMethod().getReturnType())) {
             throw wrongTypeOfReturnValue(
                     invocationInfo.printMethodReturnType(),
                     printReturnType(),
