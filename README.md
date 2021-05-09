@@ -63,8 +63,8 @@ To build locally:
 
      ./gradlew build
 
-To develop in IntelliJ IDEA you can use built-in Gradle import wizard in IDEA.
-Alternatively generate the importable IDEA metadata files using:
+To develop in IntelliJ IDEA you can use built-in Gradle import wizard in IDEA. Alternatively generate the importable
+IDEA metadata files using:
 
      ./gradlew idea
 
@@ -72,23 +72,14 @@ Then, _open_ the generated *.ipr file in IDEA.
 
 ## How to release new version?
 
-Mockito [implements Continuous Delivery model](https://github.com/mockito/mockito/wiki/Continuous-Delivery-Overview).
-Every change on the main branch (for example merging a pull request) triggers a release build on CI.
-The build publishes new version if specific criteria are met: all tests green, no 'ci skip release' used in commit message, see the build log for more information.
-Every new version is published to ["mockito/maven" Bintray repository](https://bintray.com/mockito/maven).
-New versions that Mockito team deems "notable" are additionally published to [Maven Central](https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.mockito%22) and [JCenter](https://bintray.com/bintray/jcenter).
-We used to publish every version to Maven Central but we changed this strategy based on feedback from the community ([#911](https://github.com/mockito/mockito/issues/911)).
+1. Every change on the main development branch is released as -SNAPSHOT version to Sonatype snapshot repo
+   at https://s01.oss.sonatype.org/content/repositories/snapshots/org/mockito/mockito-core.
+2. In order to release a non-snapshot version to Maven Central push an annotated tag, for example:
 
-* Q: What's new in Mockito release model?
+```
+git tag -a -m "Release 3.4.5" v3.4.5
+git push origin v3.4.5
+```
 
-  A: In Q2 2017 we implemented [Mockito Continuous Delivery Pipeline 2.0](https://github.com/mockito/mockito/issues/911).
-  Not every version is published to Maven Central.
-
-* Q: How to publish to Maven Central?
-
-  A: Include "[ci maven-central-release]" in the **merge** commit when merging the PR.
-  **Hint**: To signify a new feature consider updating version to next minor/major, like: "2.8.0", "2.9.0", "3.0.0".
-
-* Q: How to promote already released version to a notable version?
-
-  A: It isn't automated at the moment. [What's the use case?](https://github.com/mockito/mockito/issues/911)
+3. At the moment, you **may not create releases from GitHub Web UI**. Doing so will make the CI build fail because the
+   CI creates the changelog and posts to GitHub releases. We'll support this in the future.
