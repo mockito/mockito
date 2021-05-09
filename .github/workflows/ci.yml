@@ -81,9 +81,9 @@ jobs:
     steps:
 
       - name: Check out code
-      uses: actions/checkout@v2 # https://github.com/actions/checkout
-      with:
-        fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
+        uses: actions/checkout@v2 # https://github.com/actions/checkout
+        with:
+          fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
     - name: Set up Java 8
       uses: actions/setup-java@v2

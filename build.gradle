@@ -8,12 +8,12 @@ buildscript {
         classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
         classpath 'net.ltgt.gradle:gradle-errorprone-plugin:2.0.1'
 
-        classpath "io.github.gradle-nexus:publish-plugin:1.+"
-        classpath 'org.shipkit:shipkit-changelog:1.+'
+        classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
+        classpath 'org.shipkit:shipkit-changelog:1.1.15'
 
         classpath 'com.google.googlejavaformat:google-java-format:1.10.0'
 
-        classpath 'pl.allegro.tech.build:axion-release-plugin:1.+'
+        classpath 'pl.allegro.tech.build:axion-release-plugin:1.13.2'
     }
 }
 
