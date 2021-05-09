@@ -94,8 +94,8 @@ jobs:
       - name: Build and release
         run: ./gradlew githubRelease publishToSonatype closeAndReleaseStagingRepository releaseSummary
         env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
-        NEXUS_TOKEN_PWD: ${{secrets.NEXUS_TOKEN_PWD}}
-        PGP_KEY: ${{secrets.PGP_KEY}}
-        PGP_PWD: ${{secrets.PGP_PWD}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
+          NEXUS_TOKEN_PWD: ${{secrets.NEXUS_TOKEN_PWD}}
+          PGP_KEY: ${{secrets.PGP_KEY}}
+          PGP_PWD: ${{secrets.PGP_PWD}}
