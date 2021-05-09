@@ -32,7 +32,8 @@ nexusPublishing {
     }
 }
 
-if (version.endsWith("-SNAPSHOT")) {
+def isSnapshot = version.endsWith("-SNAPSHOT")
+if (isSnapshot) {
     tasks.named("githubRelease") {
         //snapshot versions do not produce changelog / GitHub releases
         enabled = false
@@ -40,5 +41,20 @@ if (version.endsWith("-SNAPSHOT")) {
     tasks.named("closeAndReleaseStagingRepository") {
         //snapshot binaries are available in Sonatype without the need to close the staging repo
         enabled = false
+    }
+}
+
+tasks.register("releaseSummary") {
+    doLast {
+        if (isSnapshot) {
+            println "RELEASE SUMMARY\n" +
+                "  SNAPSHOTS released to: https://s01.oss.sonatype.org/content/repositories/snapshots/org/mockito/mockito-core\n" +
+                "  Release to Maven Central: SKIPPED FOR SNAPSHOTS\n" +
+                "  Github releases: SKIPPED FOR SNAPSHOTS"
+        } else {
+            println "RELEASE SUMMARY\n" +
+                "  Release to Maven Central (available in few hours): https://repo1.maven.org/maven2/org/mockito/mockito-core/\n" +
+                "  Github releases: https://github.com/mockito/mockito/releases"
+        }
     }
 }

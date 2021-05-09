@@ -92,7 +92,7 @@ jobs:
         java-version: 8
 
     - name: Build and release
-      run: ./gradlew githubRelease publishToSonatype closeAndReleaseStagingRepository
+      run: ./gradlew githubRelease publishToSonatype closeAndReleaseStagingRepository releaseSummary
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
