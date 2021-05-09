@@ -33,7 +33,7 @@ tasks.withType(GenerateModuleMetadata) {
 apply plugin: "maven-publish"
 publishing {
     publications {
-        javaLibrary(MavenPublication) { //name of the publication
+        javaLibrary(MavenPublication) {
             from components.java
             artifact sourcesJar
             artifact javadocJar
@@ -90,3 +90,11 @@ publishing {
 
 //fleshes out problems with Maven pom generation when building
 tasks.build.dependsOn("publishJavaLibraryPublicationToMavenLocal")
+
+apply plugin: 'signing' //https://docs.gradle.org/current/userguide/signing_plugin.html
+signing {
+    if (System.getenv('PGP_KEY')) {
+        useInMemoryPgpKeys(System.getenv('PGP_KEY'), System.getenv('PGP_PWD'))
+        sign publishing.publications.javaLibrary
+    }
+}

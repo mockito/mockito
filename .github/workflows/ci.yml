@@ -57,7 +57,7 @@ jobs:
       run: ./gradlew spotlessCheck
 
     - name: 6. Build on Java ${{ matrix.java }} with ${{ matrix.mock-maker }}
-      run: ./gradlew build bintrayUpload idea --scan -PbintrayDryRun
+      run: ./gradlew build idea --scan
       env:
         MOCK_MAKER: ${{ matrix.mock-maker }}
 
@@ -92,8 +92,10 @@ jobs:
         java-version: 8
 
     - name: Build and release
-      run: ./gradlew bintrayUpload githubRelease --scan
+      run: ./gradlew githubRelease publishToSonatype closeAndReleaseStagingRepository
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
         NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
         NEXUS_TOKEN_PWD: ${{secrets.NEXUS_TOKEN_PWD}}
+        PGP_KEY: ${{secrets.PGP_KEY}}
+        PGP_PWD: ${{secrets.PGP_PWD}}

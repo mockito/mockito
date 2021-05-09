@@ -2,7 +2,7 @@ apply plugin: "org.shipkit.shipkit-changelog"
 apply plugin: "org.shipkit.shipkit-github-release"
 
 tasks.named("generateChangelog") {
-    previousRevision = project.ext.'shipkit-auto-version.previous-tag'
+    previousRevision = 'HEAD' //TODO, this will generate empty release notes
     githubToken = System.getenv("GITHUB_TOKEN")
     repository = "mockito/mockito"
 }
@@ -14,6 +14,22 @@ tasks.named("githubRelease") {
     changelog = genTask.outputFile
     newTagRevision = System.getenv("GITHUB_SHA")
     githubToken = System.getenv("GITHUB_TOKEN")
+}
+
+apply plugin: 'io.github.gradle-nexus.publish-plugin'
+nexusPublishing {
+    repositories {
+        if (System.getenv('NEXUS_TOKEN_PWD')) {
+            sonatype {
+                // Publishing to: https://s01.oss.sonatype.org (faster instance)
+                nexusUrl = uri('https://s01.oss.sonatype.org/service/local/')
+                snapshotRepositoryUrl = uri('https://s01.oss.sonatype.org/content/repositories/snapshots/')
+
+                username = System.getenv('NEXUS_TOKEN_USER')
+                password = System.getenv('NEXUS_TOKEN_PWD')
+            }
+        }
+    }
 }
 
 if (version.endsWith("-SNAPSHOT")) {
