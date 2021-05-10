@@ -1,9 +1,8 @@
-apply plugin: "org.shipkit.shipkit-auto-version"
 apply plugin: "org.shipkit.shipkit-changelog"
 apply plugin: "org.shipkit.shipkit-github-release"
 
 tasks.named("generateChangelog") {
-    previousRevision = project.ext.'shipkit-auto-version.previous-tag'
+    previousRevision = 'HEAD' //TODO, this will generate empty release notes
     githubToken = System.getenv("GITHUB_TOKEN")
     repository = "mockito/mockito"
 }
@@ -17,28 +16,45 @@ tasks.named("githubRelease") {
     githubToken = System.getenv("GITHUB_TOKEN")
 }
 
-/**
- * Mockito team does not publish to Maven Central every release as requested by the community.
- * We publish to maven central only some versions. All versions are published to Bintray on every change.
- * See https://github.com/mockito/mockito/issues/911
- */
-ext.mavenCentralRelease = shouldReleaseToCentral(project)
+apply plugin: 'io.github.gradle-nexus.publish-plugin'
+nexusPublishing {
+    repositories {
+        if (System.getenv('NEXUS_TOKEN_PWD')) {
+            sonatype {
+                // Publishing to: https://s01.oss.sonatype.org (faster instance)
+                nexusUrl = uri('https://s01.oss.sonatype.org/service/local/')
+                snapshotRepositoryUrl = uri('https://s01.oss.sonatype.org/content/repositories/snapshots/')
 
-/**
- * Finds out if we should release to Maven Central.
- * To test this logic, run build with '-i' (info logging) and inspect the build output.
- */
-static boolean shouldReleaseToCentral(project) {
-    boolean centralReleaseByCommit = 'true' == System.getenv("MAVEN_CENTRAL_RELEASE")
-    boolean centralReleaseByProjectProperty = project.hasProperty("maven-central-release")
-    boolean centralRelease = centralReleaseByCommit || centralReleaseByProjectProperty
-    def message = """Bintray publish was using following settings:
- - commit message contains '[ci maven-central-release]': $centralReleaseByCommit
- - project property 'maven-central-release' exists: $centralReleaseByProjectProperty
- - Maven Central release is enabled: $centralRelease"""
-    project.logger.info(message)
-    project.afterEvaluate {
-        project.tasks.bintrayPublish.doLast { logger.lifecycle(message) }
+                username = System.getenv('NEXUS_TOKEN_USER')
+                password = System.getenv('NEXUS_TOKEN_PWD')
+            }
+        }
     }
-    return centralRelease
+}
+
+def isSnapshot = version.endsWith("-SNAPSHOT")
+if (isSnapshot) {
+    tasks.named("githubRelease") {
+        //snapshot versions do not produce changelog / GitHub releases
+        enabled = false
+    }
+    tasks.named("closeAndReleaseStagingRepository") {
+        //snapshot binaries are available in Sonatype without the need to close the staging repo
+        enabled = false
+    }
+}
+
+tasks.register("releaseSummary") {
+    doLast {
+        if (isSnapshot) {
+            println "RELEASE SUMMARY\n" +
+                "  SNAPSHOTS released to: https://s01.oss.sonatype.org/content/repositories/snapshots/org/mockito/mockito-core\n" +
+                "  Release to Maven Central: SKIPPED FOR SNAPSHOTS\n" +
+                "  Github releases: SKIPPED FOR SNAPSHOTS"
+        } else {
+            println "RELEASE SUMMARY\n" +
+                "  Release to Maven Central (available in few hours): https://repo1.maven.org/maven2/org/mockito/mockito-core/\n" +
+                "  Github releases: https://github.com/mockito/mockito/releases"
+        }
+    }
 }

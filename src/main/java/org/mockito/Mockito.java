@@ -28,17 +28,13 @@ import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
 import org.mockito.session.MockitoSessionLogger;
-
-import java.util.function.Function;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.LenientStubber;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
-import org.mockito.verification.After;
-import org.mockito.verification.Timeout;
-import org.mockito.verification.VerificationAfterDelay;
-import org.mockito.verification.VerificationMode;
-import org.mockito.verification.VerificationWithTimeout;
+import org.mockito.verification.*;
+
+import java.util.function.Function;
 
 /**
  * <p align="left"><img src="logo.png" srcset="logo@2x.png 2x" alt="Mockito logo"/></p>
@@ -125,7 +121,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <pre class="code"><code>
  * repositories {
- *   jcenter()
+ *   mavenCentral()
  * }
  * dependencies {
  *   testCompile "org.mockito:mockito-core:+"
@@ -147,7 +143,7 @@ import org.mockito.verification.VerificationWithTimeout;
  *
  * <pre class="code"><code>
  * repositories {
- *   jcenter()
+ *   mavenCentral()
  * }
  * dependencies {
  *   testCompile "org.mockito:mockito-inline:+"

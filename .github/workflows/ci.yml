@@ -10,7 +10,7 @@ name: CI
 on:
   push:
     branches: ['release/3.x']
-    tags-ignore: [v*] # release tags are automatically generated after a successful CI build, no need to run CI against them
+    tags: [v*]
   pull_request:
     branches: ['**']
 
@@ -57,7 +57,7 @@ jobs:
       run: ./gradlew spotlessCheck
 
     - name: 6. Build on Java ${{ matrix.java }} with ${{ matrix.mock-maker }}
-      run: ./gradlew build bintrayUpload idea --scan -PbintrayDryRun
+      run: ./gradlew build idea --scan
       env:
         MOCK_MAKER: ${{ matrix.mock-maker }}
 
@@ -74,28 +74,28 @@ jobs:
     needs: [build] # build job must pass before we can release
 
     if: github.event_name == 'push'
-        && github.ref == 'refs/heads/release/3.x'
+        && (github.ref == 'refs/heads/release/3.x' || startsWith(github.ref, 'refs/tags/v'))
         && github.repository == 'mockito/mockito'
         && !contains(toJSON(github.event.commits.*.message), '[skip release]')
 
     steps:
 
-    - name: Check out code
-      uses: actions/checkout@v2 # https://github.com/actions/checkout
-      with:
-        fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
+      - name: Check out code
+        uses: actions/checkout@v2 # https://github.com/actions/checkout
+        with:
+          fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
-    - name: Set up Java 8
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'adopt'
-        java-version: 8
+      - name: Set up Java 8
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 8
 
-    - name: Build and publish to Bintray/MavenCentral
-      run: ./gradlew bintrayUpload githubRelease --scan
-      env:
-        MAVEN_CENTRAL_RELEASE: ${{contains(toJSON(github.event.commits.*.message), '[ci maven-central-release]')}}
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        BINTRAY_API_KEY: ${{secrets.BINTRAY_API_KEY}}
-        NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
-        NEXUS_TOKEN_PWD: ${{secrets.NEXUS_TOKEN_PWD}}
+      - name: Build and release
+        run: ./gradlew githubRelease publishToSonatype closeAndReleaseStagingRepository releaseSummary
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
+          NEXUS_TOKEN_PWD: ${{secrets.NEXUS_TOKEN_PWD}}
+          PGP_KEY: ${{secrets.PGP_KEY}}
+          PGP_PWD: ${{secrets.PGP_PWD}}
