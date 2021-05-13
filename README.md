@@ -1,6 +1,6 @@
 <a href="https://site.mockito.org">
-<img src="https://raw.githubusercontent.com/mockito/mockito/release/3.x/src/javadoc/org/mockito/logo.png"
-     srcset="https://raw.githubusercontent.com/mockito/mockito/release/3.x/src/javadoc/org/mockito/logo@2x.png 2x"
+<img src="https://raw.githubusercontent.com/mockito/mockito/main/src/javadoc/org/mockito/logo.png"
+     srcset="https://raw.githubusercontent.com/mockito/mockito/main/src/javadoc/org/mockito/logo@2x.png 2x"
      alt="Mockito" />
 </a>
 
@@ -8,7 +8,7 @@ Most popular mocking framework for Java
 
 [![CI](https://github.com/mockito/mockito/workflows/CI/badge.svg)](https://github.com/mockito/mockito/actions?query=workflow%3ACI)
 [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito)
-[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/mockito/mockito/blob/release/3.x/LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/mockito/mockito/blob/main/LICENSE)
 
 [![Release Notes](https://img.shields.io/badge/release%20notes-3.x-yellow.svg)](https://github.com/mockito/mockito/releases/)
 [![Maven Central](https://img.shields.io/maven-central/v/org.mockito/mockito-core.svg)](https://search.maven.org/artifact/org.mockito/mockito-core/)
@@ -47,7 +47,7 @@ and [javadoc.io](https://javadoc.io/doc/org.mockito/mockito-core/1.10.19/org/moc
 
 All you want to know about Mockito is hosted at [The Mockito Site](https://site.mockito.org) which is [Open Source](https://github.com/mockito/mockito.github.io) and likes [pull requests](https://github.com/mockito/mockito.github.io/pulls), too.
 
-Want to contribute? Take a look at the [Contributing Guide](https://github.com/mockito/mockito/blob/release/3.x/.github/CONTRIBUTING.md).
+Want to contribute? Take a look at the [Contributing Guide](https://github.com/mockito/mockito/blob/main/.github/CONTRIBUTING.md).
 
 Enjoy Mockito!
 

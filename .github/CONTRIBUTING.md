@@ -12,10 +12,6 @@
 
 # Contributing to Mockito
 
-Which branch :
-* On mockito 3.x (or 2.x), make your pull request target `release/3.x` (or `release/2.x`)
-* On next mockito version make your pull request target `release/3.x`
-
 ## Pull request criteria
 
 * **At least one commit message** in the PR starts with `Fixes #id : ` where `id` is an [issue tracker](https://github.com/mockito/mockito/issues) id. This allows automated release notes generation. Also GitHub will track the issue and [close it](https://github.com/blog/1386-closing-issues-via-commit-messages) when the PR is merged.

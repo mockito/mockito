@@ -1,9 +1,9 @@
 > Hey,
-> 
+>
 > First thanks for reporting, in order to help us to classify issue can you make sure the following check boxes are checked ?
-> 
+>
 > If this is about mockito usage, the better way is to reach out to
-> 
+>
 >  - stackoverflow : https://stackoverflow.com/questions/tagged/mockito
 >  - the mailing-list  : https://groups.google.com/forum/#!forum/mockito / mockito@googlegroups.com
 >    (Note mailing-list is moderated to avoid spam)
@@ -20,6 +20,6 @@ check that
  - [ ] Provide versions (mockito / jdk / os / any other relevant information)
  - [ ] Provide a [Short, Self Contained, Correct (Compilable), Example](http://sscce.org) of the issue
        (same as any question on stackoverflow.com)
- - [ ] Read the [contributing guide](https://github.com/mockito/mockito/blob/release/3.x/.github/CONTRIBUTING.md)
+ - [ ] Read the [contributing guide](https://github.com/mockito/mockito/blob/main/.github/CONTRIBUTING.md)
 
 
