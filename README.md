@@ -31,9 +31,8 @@ reduce risk, and improve code health, while paying the maintainers of the exact 
 
 Mockito publishes every change as a `-SNAPSHOT` version to a public Sonatype repository. Roughly once a month, we
 publish a new minor or patch version to Maven Central. For release automation we use Shipkit
-library (http://shipkit.org), Gradle Nexus [Publish Plugin](https://github.com/gradle-nexus/publish-plugin), and
-Allegro's [Axion Release Plugin](https://github.com/allegro/axion-release-plugin). Fully automated releases are awesome,
-and you should do that for your libraries, too!
+library (http://shipkit.org), Gradle Nexus [Publish Plugin](https://github.com/gradle-nexus/publish-plugin).
+Fully automated releases are awesome, and you should do that for your libraries, too!
 See the [latest release notes](https://github.com/mockito/mockito/releases/)
 and [latest documentation](https://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html). Docs in
 javadoc.io are available 24h after release. Read also

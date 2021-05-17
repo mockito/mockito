@@ -1,10 +1,11 @@
-apply plugin: "org.shipkit.shipkit-changelog"
-apply plugin: "org.shipkit.shipkit-github-release"
+apply plugin: 'org.shipkit.shipkit-auto-version'
+apply plugin: 'org.shipkit.shipkit-changelog'
+apply plugin: 'org.shipkit.shipkit-github-release'
 
-tasks.named("generateChangelog") {
-    previousRevision = 'HEAD' //TODO, this will generate empty release notes
-    githubToken = System.getenv("GITHUB_TOKEN")
-    repository = "mockito/mockito"
+tasks.named('generateChangelog') {
+    previousRevision = project.ext.'shipkit-auto-version.previous-tag'
+    githubToken = System.getenv('GITHUB_TOKEN')
+    repository = 'mockito/mockito'
 }
 
 tasks.named("githubRelease") {
