@@ -10,7 +10,7 @@ versions.errorprone = '2.6.0'
 
 libraries.junit4 = 'junit:junit:4.13.2'
 libraries.junitJupiterApi = "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}"
-libraries.junitPlatformLauncher = 'org.junit.platform:junit-platform-launcher:1.7.1'
+libraries.junitPlatformLauncher = 'org.junit.platform:junit-platform-launcher:1.7.2'
 libraries.junitJupiterEngine = "org.junit.jupiter:junit-jupiter-engine:${versions.junitJupiter}"
 libraries.junitVintageEngine = "org.junit.vintage:junit-vintage-engine:${versions.junitJupiter}"
 libraries.assertj = 'org.assertj:assertj-core:3.19.0'
