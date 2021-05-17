@@ -40,7 +40,7 @@ public class StubbingWithCustomAnswerTest extends TestBase {
         RecordCall recordCall = new RecordCall();
         Set<?> mockedSet = (Set<?>) when(mock(Set.class).isEmpty()).then(recordCall).getMock();
 
-        mockedSet.isEmpty();
+        boolean unused = mockedSet.isEmpty();
 
         assertTrue(recordCall.isCalled());
     }
