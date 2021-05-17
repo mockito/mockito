@@ -43,7 +43,7 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
 
     @Test
     public void shouldVerificationWorks() {
-        iterable.iterator();
+        MyIterator<String> unused = iterable.iterator();
 
         verify(iterable).iterator();
         verify((Iterable<String>) iterable).iterator();
@@ -70,8 +70,8 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
                                 handler);
 
         // when
-        iterable.iterator();
-        ((Iterable<String>) iterable).iterator();
+        MyIterator<String> unused = iterable.iterator();
+        Iterator<String> unused2 = ((Iterable<String>) iterable).iterator();
 
         // then
         assertEquals(2, methods.size());
