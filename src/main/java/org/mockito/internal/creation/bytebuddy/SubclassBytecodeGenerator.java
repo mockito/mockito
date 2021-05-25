@@ -92,8 +92,9 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
 
     private static boolean needsSamePackageClassLoader(MockFeatures<?> features) {
         if (!Modifier.isPublic(features.mockedType.getModifiers())
-            || !features.mockedType.isInterface()) {
-            // The mocked type is package private or is not an interface and thus may contain package
+                || !features.mockedType.isInterface()) {
+            // The mocked type is package private or is not an interface and thus may contain
+            // package
             // private methods.
             return true;
         }
@@ -107,13 +108,15 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
 
     @Override
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
-        MultipleParentClassLoader.Builder loaderBuilder = new MultipleParentClassLoader.Builder()
-            .append(features.mockedType)
-            .append(features.interfaces)
-            .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
-            .append(MockMethodInterceptor.class,
-                MockMethodInterceptor.ForHashCode.class,
-                MockMethodInterceptor.ForEquals.class);
+        MultipleParentClassLoader.Builder loaderBuilder =
+                new MultipleParentClassLoader.Builder()
+                        .append(features.mockedType)
+                        .append(features.interfaces)
+                        .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
+                        .append(
+                                MockMethodInterceptor.class,
+                                MockMethodInterceptor.ForHashCode.class,
+                                MockMethodInterceptor.ForEquals.class);
         ClassLoader contextLoader = currentThread().getContextClassLoader();
         boolean shouldIncludeContextLoader = true;
         if (needsSamePackageClassLoader(features)) {

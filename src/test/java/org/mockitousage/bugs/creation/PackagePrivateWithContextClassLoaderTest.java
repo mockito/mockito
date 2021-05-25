@@ -25,23 +25,16 @@ public class PackagePrivateWithContextClassLoaderTest {
         }
     }
 
-    public interface PublicInterface {
+    public interface PublicInterface {}
 
-    }
+    interface PackagePrivateInterface {}
 
-    interface PackagePrivateInterface {
-
-    }
-
-    static class PackagePrivateClass {
-
-    }
+    static class PackagePrivateClass {}
 
     @Before
     public void setUp() {
         oldContextClassloader = Thread.currentThread().getContextClassLoader();
-        Thread.currentThread().setContextClassLoader(new ClassLoader(oldContextClassloader) {
-        });
+        Thread.currentThread().setContextClassLoader(new ClassLoader(oldContextClassloader) {});
     }
 
     @After
@@ -68,7 +61,10 @@ public class PackagePrivateWithContextClassLoaderTest {
 
     @Test
     public void should_be_able_to_mock_package_private_extra_interface() throws Exception {
-        PackagePrivateInterface mock = (PackagePrivateInterface) mock(PublicInterface.class,
-            withSettings().extraInterfaces(PackagePrivateInterface.class));
+        PackagePrivateInterface mock =
+                (PackagePrivateInterface)
+                        mock(
+                                PublicInterface.class,
+                                withSettings().extraInterfaces(PackagePrivateInterface.class));
     }
 }
