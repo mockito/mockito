@@ -66,6 +66,21 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         random = new Random();
     }
 
+    private static boolean needsSamePackageClassLoader(MockFeatures<?> features) {
+        if (!Modifier.isPublic(features.mockedType.getModifiers())
+            || !features.mockedType.isInterface()) {
+            // The mocked type is package private or is not an interface and thus may contain package
+            // private methods.
+            return true;
+        }
+        for (Class<?> iface : features.interfaces) {
+            if (!Modifier.isPublic(iface.getModifiers())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
         DynamicType.Builder<T> builder =
@@ -100,14 +115,33 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                     .throwing(ClassNotFoundException.class, IOException.class)
                     .intercept(readReplace);
         }
-        ClassLoader classLoader = new MultipleParentClassLoader.Builder()
+        MultipleParentClassLoader.Builder loaderBuilder = new MultipleParentClassLoader.Builder()
             .append(features.mockedType)
             .append(features.interfaces)
-            .append(currentThread().getContextClassLoader())
             .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
             .append(MockMethodInterceptor.class,
                 MockMethodInterceptor.ForHashCode.class,
-                MockMethodInterceptor.ForEquals.class).build(MockMethodInterceptor.class.getClassLoader());
+                MockMethodInterceptor.ForEquals.class);
+        ClassLoader contextLoader = currentThread().getContextClassLoader();
+        boolean shouldIncludeContextLoader = true;
+        if (needsSamePackageClassLoader(features)) {
+            // For the generated class to access package-private methods, it must be defined by the
+            // same classloader as its type. All the other added classloaders are required to load
+            // the type; if the context classloader is a child of the mocked type's defining
+            // classloader, it will break a mock that would have worked. Check if the context class
+            // loader is a child of the classloader we'd otherwise use, and possibly skip it.
+            ClassLoader candidateLoader = loaderBuilder.build();
+            for (ClassLoader parent = contextLoader; parent != null; parent = parent.getParent()) {
+                if (parent == candidateLoader) {
+                    shouldIncludeContextLoader = false;
+                    break;
+                }
+            }
+        }
+        if (shouldIncludeContextLoader) {
+            loaderBuilder = loaderBuilder.append(contextLoader);
+        }
+        ClassLoader classLoader = loaderBuilder.build(MockMethodInterceptor.class.getClassLoader());
         if (classLoader != features.mockedType.getClassLoader()) {
             assertVisibility(features.mockedType);
             for (Class<?> iFace : features.interfaces) {
