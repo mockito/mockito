@@ -2,19 +2,19 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.stubbing;
 
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -22,6 +22,9 @@ import java.io.Reader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,20 +35,93 @@ import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({ "serial", "unchecked", "rawtypes" })
+@SuppressWarnings({"serial", "unchecked", "rawtypes"})
 public class StubbingWithThrowablesTest extends TestBase {
 
     private LinkedList mock;
 
     private Map mockTwo;
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
+    @Rule public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setup() {
         mock = mock(LinkedList.class);
         mockTwo = mock(HashMap.class);
+    }
+
+    @Test
+    public void throws_same_exception_consecutively() {
+        when(mock.add("")).thenThrow(new ExceptionOne());
+
+        // 1st invocation
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mock.add("");
+                            }
+                        })
+                .isInstanceOf(ExceptionOne.class);
+
+        mock.add("1");
+
+        // 2nd invocation
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mock.add("");
+                            }
+                        })
+                .isInstanceOf(ExceptionOne.class);
+    }
+
+    @Test
+    public void throws_same_exception_consecutively_with_doThrow() {
+        doThrow(new ExceptionOne()).when(mock).clear();
+
+        // 1st invocation
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mock.clear();
+                            }
+                        })
+                .isInstanceOf(ExceptionOne.class);
+
+        mock.add("1");
+
+        // 2nd invocation
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mock.clear();
+                            }
+                        })
+                .isInstanceOf(ExceptionOne.class);
+    }
+
+    @Test
+    public void throws_new_exception_consecutively_from_class() {
+        when(mock.add(null)).thenThrow(NaughtyException.class);
+
+        NaughtyException first =
+                Assertions.catchThrowableOfType(() -> mock.add(null), NaughtyException.class);
+        NaughtyException second =
+                Assertions.catchThrowableOfType(() -> mock.add(null), NaughtyException.class);
+
+        assertNotSame(first, second);
+    }
+
+    @Test
+    public void throws_new_exception_consecutively_from_class_with_doThrow() {
+        doThrow(NaughtyException.class).when(mock).add(null);
+
+        NaughtyException first =
+                Assertions.catchThrowableOfType(() -> mock.add(null), NaughtyException.class);
+        NaughtyException second =
+                Assertions.catchThrowableOfType(() -> mock.add(null), NaughtyException.class);
+
+        assertNotSame(first, second);
     }
 
     @Test
@@ -55,7 +131,6 @@ public class StubbingWithThrowablesTest extends TestBase {
 
         exception.expect(sameInstance(expected));
         mock.add("throw");
-
     }
 
     @Test
@@ -67,7 +142,6 @@ public class StubbingWithThrowablesTest extends TestBase {
         exception.expect(sameInstance(expected));
 
         mock.clear();
-
     }
 
     @Test
@@ -81,7 +155,8 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation() throws Exception {
+    public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation()
+            throws Exception {
         when(mock.size()).thenThrow(new ExceptionOne());
 
         exception.expect(ExceptionOne.class);
@@ -219,7 +294,7 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldNotAllowDifferntCheckedException() throws Exception {
+    public void shouldNotAllowDifferentCheckedException() throws Exception {
         IMethods mock = mock(IMethods.class);
 
         exception.expect(MockitoException.class);
@@ -313,7 +388,7 @@ public class StubbingWithThrowablesTest extends TestBase {
         when(mock.size()).thenThrow(new RuntimeException());
         doThrow(new RuntimeException()).when(mock).clone();
 
-        verifyZeroInteractions(mock);
+        verifyNoInteractions(mock);
 
         mock.add("test");
 
@@ -336,20 +411,15 @@ public class StubbingWithThrowablesTest extends TestBase {
         }
     }
 
-    private class ExceptionOne extends RuntimeException {
-    }
+    private class ExceptionOne extends RuntimeException {}
 
-    private class ExceptionTwo extends RuntimeException {
-    }
+    private class ExceptionTwo extends RuntimeException {}
 
-    private class ExceptionThree extends RuntimeException {
-    }
+    private class ExceptionThree extends RuntimeException {}
 
-    private class ExceptionFour extends RuntimeException {
-    }
+    private class ExceptionFour extends RuntimeException {}
 
-    private class CheckedException extends Exception {
-    }
+    private class CheckedException extends Exception {}
 
     public class NaughtyException extends RuntimeException {
         public NaughtyException() {

@@ -4,19 +4,21 @@
  */
 package org.mockito.internal.runners.util;
 
-import org.mockito.internal.runners.InternalRunner;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.mockito.internal.runners.InternalRunner;
+
 public class RunnerProvider {
 
-    public InternalRunner newInstance(String runnerClassName, Object ... constructorArgs) throws Exception {
+    public InternalRunner newInstance(String runnerClassName, Object... constructorArgs)
+            throws Exception {
         Constructor<?> constructor;
         try {
             Class<?> runnerClass = Class.forName(runnerClassName);
             if (runnerClass.getConstructors().length != 1) {
-                throw new IllegalArgumentException("Expected " + runnerClassName + " to have exactly one constructor.");
+                throw new IllegalArgumentException(
+                        "Expected " + runnerClassName + " to have exactly one constructor.");
             }
             constructor = runnerClass.getConstructors()[0];
         } catch (Exception e) {

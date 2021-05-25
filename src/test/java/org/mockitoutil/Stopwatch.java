@@ -9,6 +9,7 @@ import static java.lang.System.nanoTime;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 import java.util.concurrent.TimeUnit;
+
 import org.mockito.exceptions.base.MockitoAssertionError;
 
 /**
@@ -24,8 +25,7 @@ public class Stopwatch {
     /**
      * To create an instance use {@link #createNotStarted()}
      */
-    private Stopwatch() {
-    }
+    private Stopwatch() {}
 
     /**
      * Return a new and not started {@link Stopwatch}.
@@ -46,7 +46,9 @@ public class Stopwatch {
         long expectedNanos = unit.toNanos(expected);
 
         if (elapsedNanos <= expectedNanos)
-            fail("Expected that more than %dms elapsed! But was: %dms", expectedNanos, elapsedNanos);
+            fail(
+                    "Expected that more than %dms elapsed! But was: %dms",
+                    expectedNanos, elapsedNanos);
     }
 
     public void assertElapsedTimeIsLessThan(long expected, TimeUnit unit) {
@@ -54,16 +56,33 @@ public class Stopwatch {
         long expectedNanos = unit.toNanos(expected);
 
         if (elapsedNanos >= expectedNanos)
-            fail("Expected that less than %dms elapsed! But was: %dms", expectedNanos, elapsedNanos);
+            fail(
+                    "Expected that less than %dms elapsed! But was: %dms",
+                    expectedNanos, elapsedNanos);
     }
 
     private long elapsedNanos() {
-        if (startNanos == null)
-            throw new IllegalStateException("This stop watch is not started!");
+        if (startNanos == null) throw new IllegalStateException("This stop watch is not started!");
         return nanoTime() - startNanos;
     }
 
     private static void fail(String message, long expectedNanos, long elapsedNanos) {
-        throw new MockitoAssertionError(format(message, NANOSECONDS.toMillis(expectedNanos), NANOSECONDS.toMillis(elapsedNanos)));
+        throw new MockitoAssertionError(
+                format(
+                        message,
+                        NANOSECONDS.toMillis(expectedNanos),
+                        NANOSECONDS.toMillis(elapsedNanos)));
+    }
+
+    /**
+     * Waits for specific amount of millis using 'Thread.sleep()'.
+     * Rethrows InterruptedException.
+     */
+    public void waitFor(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -5,6 +5,7 @@
 package org.mockito.internal.configuration;
 
 import java.io.Serializable;
+
 import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.configuration.IMockitoConfiguration;
@@ -17,15 +18,16 @@ import org.mockito.stubbing.Answer;
 public class GlobalConfiguration implements IMockitoConfiguration, Serializable {
     private static final long serialVersionUID = -2860353062105505938L;
 
-    private static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION = new ThreadLocal<IMockitoConfiguration>();
+    private static final ThreadLocal<IMockitoConfiguration> GLOBAL_CONFIGURATION =
+            new ThreadLocal<>();
 
-    //back door for testing
+    // back door for testing
     IMockitoConfiguration getIt() {
         return GLOBAL_CONFIGURATION.get();
     }
 
     public GlobalConfiguration() {
-        //Configuration should be loaded only once but I cannot really test it
+        // Configuration should be loaded only once but I cannot really test it
         if (GLOBAL_CONFIGURATION.get() == null) {
             GLOBAL_CONFIGURATION.set(createConfig());
         }
@@ -57,16 +59,17 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
         return configuration.getAnnotationEngine();
     }
 
-
-
+    @Override
     public boolean cleansStackTrace() {
         return GLOBAL_CONFIGURATION.get().cleansStackTrace();
     }
 
+    @Override
     public boolean enableClassCache() {
         return GLOBAL_CONFIGURATION.get().enableClassCache();
     }
 
+    @Override
     public Answer<Object> getDefaultAnswer() {
         return GLOBAL_CONFIGURATION.get().getDefaultAnswer();
     }

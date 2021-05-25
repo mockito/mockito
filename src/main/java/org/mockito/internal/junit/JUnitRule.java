@@ -6,69 +6,35 @@ package org.mockito.internal.junit;
 
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
-import org.mockito.Mockito;
-import org.mockito.MockitoSession;
-import org.mockito.internal.session.MockitoSessionLoggerAdapter;
-import org.mockito.internal.util.MockitoLogger;
-import org.mockito.quality.Strictness;
 import org.mockito.junit.MockitoRule;
+import org.mockito.plugins.MockitoLogger;
+import org.mockito.quality.Strictness;
 
-/**
- * Internal implementation.
- */
-public class JUnitRule implements MockitoRule {
+/** Internal implementation. */
+public final class JUnitRule implements MockitoRule {
 
-    private final MockitoLogger logger;
-    private Strictness strictness;
-    private MockitoSession session;
+    private final JUnitSessionStore sessionStore;
 
-    /**
-     * @param strictness how strict mocking / stubbing is concerned
-     */
+    /** @param strictness how strict mocking / stubbing is concerned */
     public JUnitRule(MockitoLogger logger, Strictness strictness) {
-        this.logger = logger;
-        this.strictness = strictness;
+        this.sessionStore = new JUnitSessionStore(logger, strictness);
     }
 
-	@Override
-	public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
-        return new Statement() {
-            public void evaluate() throws Throwable {
-                session = Mockito.mockitoSession()
-                    .name(target.getClass().getSimpleName() + "." + method.getName())
-                    .strictness(strictness)
-                    .logger(new MockitoSessionLoggerAdapter(logger))
-                    .initMocks(target)
-                    .startMocking();
-                Throwable testFailure = evaluateSafely(base);
-                session.finishMocking(testFailure);
-                if (testFailure != null) {
-                    throw testFailure;
-                }
-            }
-
-            private Throwable evaluateSafely(Statement base) {
-                try {
-                    base.evaluate();
-                    return null;
-                } catch (Throwable throwable) {
-                    return throwable;
-                }
-            }
-        };
+    @Override
+    public Statement apply(
+            final Statement base, final FrameworkMethod method, final Object target) {
+        return sessionStore.createStatement(
+                base, target.getClass().getSimpleName() + "." + method.getName(), target);
     }
 
+    @Override
     public MockitoRule silent() {
         return strictness(Strictness.LENIENT);
     }
 
+    @Override
     public MockitoRule strictness(Strictness strictness) {
-        this.strictness = strictness;
-        // session is null when this method is called during initialization of
-        // the @Rule field of the test class
-        if (session != null) {
-            session.setStrictness(strictness);
-        }
+        sessionStore.setStrictness(strictness);
         return this;
     }
 }

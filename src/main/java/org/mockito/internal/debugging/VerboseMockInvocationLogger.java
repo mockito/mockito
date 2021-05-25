@@ -2,10 +2,10 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.debugging;
 
 import java.io.PrintStream;
+
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
@@ -30,6 +30,7 @@ public class VerboseMockInvocationLogger implements InvocationListener {
         this.printStream = printStream;
     }
 
+    @Override
     public void reportInvocation(MethodInvocationReport methodInvocationReport) {
         printHeader();
         printStubInfo(methodInvocationReport);
@@ -40,11 +41,21 @@ public class VerboseMockInvocationLogger implements InvocationListener {
 
     private void printReturnedValueOrThrowable(MethodInvocationReport methodInvocationReport) {
         if (methodInvocationReport.threwException()) {
-            String message = methodInvocationReport.getThrowable().getMessage() == null ? "" : " with message " + methodInvocationReport.getThrowable().getMessage();
-            printlnIndented("has thrown: " + methodInvocationReport.getThrowable().getClass() + message);
+            String message =
+                    methodInvocationReport.getThrowable().getMessage() == null
+                            ? ""
+                            : " with message " + methodInvocationReport.getThrowable().getMessage();
+            printlnIndented(
+                    "has thrown: " + methodInvocationReport.getThrowable().getClass() + message);
         } else {
-            String type = (methodInvocationReport.getReturnedValue() == null) ? "" : " (" + methodInvocationReport.getReturnedValue().getClass().getName() + ")";
-            printlnIndented("has returned: \"" + methodInvocationReport.getReturnedValue() + "\"" + type);
+            String type =
+                    (methodInvocationReport.getReturnedValue() == null)
+                            ? ""
+                            : " ("
+                                    + methodInvocationReport.getReturnedValue().getClass().getName()
+                                    + ")";
+            printlnIndented(
+                    "has returned: \"" + methodInvocationReport.getReturnedValue() + "\"" + type);
         }
     }
 
@@ -56,21 +67,23 @@ public class VerboseMockInvocationLogger implements InvocationListener {
 
     private void printHeader() {
         mockInvocationsCounter++;
-        printStream.println("############ Logging method invocation #" + mockInvocationsCounter + " on mock/spy ########");
+        printStream.println(
+                "############ Logging method invocation #"
+                        + mockInvocationsCounter
+                        + " on mock/spy ########");
     }
 
     private void printInvocation(DescribedInvocation invocation) {
-        printStream.println(invocation.toString());
-//        printStream.println("Handling method call on a mock/spy.");
-        printlnIndented("invoked: " + invocation.getLocation().toString());
+        printStream.println(invocation);
+        //        printStream.println("Handling method call on a mock/spy.");
+        printlnIndented("invoked: " + invocation.getLocation());
     }
 
     private void printFooter() {
-        printStream.println("");
+        printStream.println();
     }
 
     private void printlnIndented(String message) {
         printStream.println("   " + message);
     }
-
 }

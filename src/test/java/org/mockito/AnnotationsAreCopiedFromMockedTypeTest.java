@@ -4,8 +4,10 @@
  */
 package org.mockito;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import static java.lang.annotation.ElementType.*;
+
+import static org.junit.Assume.assumeTrue;
+import static org.mockito.Mockito.mock;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
@@ -15,18 +17,21 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import static java.lang.annotation.ElementType.*;
-import static org.junit.Assume.assumeTrue;
-import static org.mockito.Mockito.mock;
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
 
 public class AnnotationsAreCopiedFromMockedTypeTest {
 
     @Test
     public void mock_should_have_annotations_copied_from_mocked_type_at_class_level() {
-        AnnotationWithDefaultValue onClassDefaultValue = mock(OnClass.class).getClass().getAnnotation(AnnotationWithDefaultValue.class);
-        AnnotationWithCustomValue onClassCustomValue = mock(OnClass.class).getClass().getAnnotation(AnnotationWithCustomValue.class);
+        AnnotationWithDefaultValue onClassDefaultValue =
+                mock(OnClass.class).getClass().getAnnotation(AnnotationWithDefaultValue.class);
+        AnnotationWithCustomValue onClassCustomValue =
+                mock(OnClass.class).getClass().getAnnotation(AnnotationWithCustomValue.class);
 
-        assumeTrue("Annotation copying does not apply for inline mocks", mock(OnClass.class).getClass() != OnClass.class);
+        assumeTrue(
+                "Annotation copying does not apply for inline mocks",
+                mock(OnClass.class).getClass() != OnClass.class);
 
         Assertions.assertThat(onClassDefaultValue.value()).isEqualTo("yup");
         Assertions.assertThat(onClassCustomValue.value()).isEqualTo("yay");
@@ -34,8 +39,12 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
 
     @Test
     public void mock_should_have_annotations_copied_from_mocked_type_on_methods() {
-        AnnotationWithDefaultValue onClassDefaultValue = method("method", mock(OnMethod.class)).getAnnotation(AnnotationWithDefaultValue.class);
-        AnnotationWithCustomValue onClassCustomValue = method("method", mock(OnMethod.class)).getAnnotation(AnnotationWithCustomValue.class);
+        AnnotationWithDefaultValue onClassDefaultValue =
+                method("method", mock(OnMethod.class))
+                        .getAnnotation(AnnotationWithDefaultValue.class);
+        AnnotationWithCustomValue onClassCustomValue =
+                method("method", mock(OnMethod.class))
+                        .getAnnotation(AnnotationWithCustomValue.class);
 
         Assertions.assertThat(onClassDefaultValue.value()).isEqualTo("yup");
         Assertions.assertThat(onClassCustomValue.value()).isEqualTo("yay");
@@ -43,8 +52,12 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
 
     @Test
     public void mock_should_have_annotations_copied_from_mocked_type_on_method_parameters() {
-        AnnotationWithDefaultValue onClassDefaultValue = firstParamOf(method("method", mock(OnMethod.class))).getAnnotation(AnnotationWithDefaultValue.class);
-        AnnotationWithCustomValue onClassCustomValue = firstParamOf(method("method", mock(OnMethod.class))).getAnnotation(AnnotationWithCustomValue.class);
+        AnnotationWithDefaultValue onClassDefaultValue =
+                firstParamOf(method("method", mock(OnMethod.class)))
+                        .getAnnotation(AnnotationWithDefaultValue.class);
+        AnnotationWithCustomValue onClassCustomValue =
+                firstParamOf(method("method", mock(OnMethod.class)))
+                        .getAnnotation(AnnotationWithCustomValue.class);
 
         Assertions.assertThat(onClassDefaultValue.value()).isEqualTo("yup");
         Assertions.assertThat(onClassCustomValue.value()).isEqualTo("yay");
@@ -63,7 +76,7 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
             @SuppressWarnings("unchecked")
             public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
                 for (Annotation firstParamAnnotation : firstParamAnnotations) {
-                    if (annotationClass.isAssignableFrom(firstParamAnnotation.getClass())) {
+                    if (annotationClass.isAssignableFrom(firstParamAnnotation.annotationType())) {
                         return (T) firstParamAnnotation;
                     }
                 }
@@ -84,7 +97,7 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
 
     private Method method(String methodName, Object mock) {
         for (Method method : mock.getClass().getDeclaredMethods()) {
-            if(methodName.equals(method.getName())) {
+            if (methodName.equals(method.getName())) {
                 return method;
             }
         }
@@ -93,7 +106,7 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
 
     private Field field(String fieldName, Object mock) {
         for (Field field : mock.getClass().getDeclaredFields()) {
-            if(fieldName.equals(field.getName())) {
+            if (fieldName.equals(field.getName())) {
                 return field;
             }
         }
@@ -102,17 +115,15 @@ public class AnnotationsAreCopiedFromMockedTypeTest {
 
     @AnnotationWithDefaultValue
     @AnnotationWithCustomValue("yay")
-    public class OnClass { }
-
+    public class OnClass {}
 
     public class OnMethod {
         @AnnotationWithDefaultValue
         @AnnotationWithCustomValue("yay")
         public String method(
-                @AnnotationWithDefaultValue
-                @AnnotationWithCustomValue("yay")
-                String ignored
-        ) { return ""; }
+                @AnnotationWithDefaultValue @AnnotationWithCustomValue("yay") String ignored) {
+            return "";
+        }
     }
 
     @Retention(RetentionPolicy.RUNTIME)

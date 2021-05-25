@@ -2,18 +2,17 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.matchers;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 public class VerificationAndStubbingUsingMatchersTest extends TestBase {
     private IMethods one;
@@ -45,7 +44,8 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         try {
             three.simpleMethod("test three again");
             fail();
-        } catch (RuntimeException e) {}
+        } catch (RuntimeException e) {
+        }
     }
 
     @Test
@@ -56,7 +56,8 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         try {
             one.oneArg(true);
             fail();
-        } catch (RuntimeException e) {}
+        } catch (RuntimeException e) {
+        }
 
         one.simpleMethod(100);
         two.simpleMethod("test Mockito");
@@ -75,6 +76,7 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         try {
             verify(three).varargsObject(eq(10), eq("first arg"), startsWith("third"));
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 }

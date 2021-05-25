@@ -40,7 +40,7 @@ import org.mockito.internal.matchers.CapturingMatcher;
  *
  * <p>
  * In a way ArgumentCaptor is related to custom argument matchers (see javadoc for {@link ArgumentMatcher} class).
- * Both techniques can be used for making sure certain arguments where passed to mocks.
+ * Both techniques can be used for making sure certain arguments were passed to mocks.
  * However, ArgumentCaptor may be a better fit if:
  * <ul>
  * <li>custom argument matcher is not likely to be reused</li>
@@ -49,7 +49,7 @@ import org.mockito.internal.matchers.CapturingMatcher;
  * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
  *
  * <p>
- * This utility class <strong>*don't do any type checks*</strong>, the generic signatures are only there to avoid casting
+ * This utility class <strong>*doesn't do any type checks*</strong>. The generic signatures are only there to avoid casting
  * in your code.
  * <p>
  * There is an <strong>annotation</strong> that you might find useful: &#64;{@link Captor}
@@ -60,7 +60,6 @@ import org.mockito.internal.matchers.CapturingMatcher;
  * @since 1.8.0
  */
 public class ArgumentCaptor<T> {
-
 
     private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
     private final Class<? extends T> clazz;
@@ -136,7 +135,7 @@ public class ArgumentCaptor<T> {
     /**
      * Build a new <code>ArgumentCaptor</code>.
      * <p>
-     * Note that an <code>ArgumentCaptor</code> <b>*don't do any type checks*</b>, it is only there to avoid casting
+     * Note that an <code>ArgumentCaptor</code> <b>*doesn't do any type checks*</b>. It is only there to avoid casting
      * in your code. This might however change (type checks could be added) in a
      * future major release.
      *
@@ -145,7 +144,7 @@ public class ArgumentCaptor<T> {
      * @param <U> Type of object captured by the newly built ArgumentCaptor
      * @return A new ArgumentCaptor
      */
-    public static <U,S extends U> ArgumentCaptor<U> forClass(Class<S> clazz) {
+    public static <U, S extends U> ArgumentCaptor<U> forClass(Class<S> clazz) {
         return new ArgumentCaptor<U>(clazz);
     }
 }

@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class PluginFileReaderTest extends TestBase {
 
@@ -20,12 +20,12 @@ public class PluginFileReaderTest extends TestBase {
 
     @Test
     public void no_class_in_resource() throws IOException {
-        //no class
+        // no class
         assertNull(reader.readPluginClass(impl("")));
         assertNull(reader.readPluginClass(impl("  ")));
         assertNull(reader.readPluginClass(impl(" \n ")));
 
-        //commented out
+        // commented out
         assertNull(reader.readPluginClass(impl("#foo")));
         assertNull(reader.readPluginClass(impl("  # foo  ")));
         assertNull(reader.readPluginClass(impl("  # # # java.langString # ")));
@@ -41,7 +41,8 @@ public class PluginFileReaderTest extends TestBase {
         assertEquals("java.lang.String", reader.readPluginClass(impl("java.lang.String")));
         assertEquals("x", reader.readPluginClass(impl("x")));
         assertEquals("x y z", reader.readPluginClass(impl(" x y z ")));
-        assertEquals("foo.Foo", reader.readPluginClass(impl(" #my class\n  foo.Foo \n #other class ")));
+        assertEquals(
+                "foo.Foo", reader.readPluginClass(impl(" #my class\n  foo.Foo \n #other class ")));
         assertEquals("foo.Foo", reader.readPluginClass(impl("foo.Foo  # cool class")));
     }
 }

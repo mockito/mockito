@@ -2,39 +2,41 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.progress;
 
+import static java.util.Collections.emptyList;
+
+import static org.mockito.internal.exceptions.Reporter.incorrectUseOfAdditionalMatchers;
+import static org.mockito.internal.exceptions.Reporter.misplacedArgumentMatcher;
+import static org.mockito.internal.exceptions.Reporter.reportNoSubMatchersFound;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.And;
 import org.mockito.internal.matchers.LocalizedMatcher;
 import org.mockito.internal.matchers.Not;
 import org.mockito.internal.matchers.Or;
 
-import static java.util.Collections.emptyList;
-import static org.mockito.internal.exceptions.Reporter.incorrectUseOfAdditionalMatchers;
-import static org.mockito.internal.exceptions.Reporter.misplacedArgumentMatcher;
-import static org.mockito.internal.exceptions.Reporter.reportNoSubMatchersFound;
-
-import java.util.*;
-
 public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
 
     private static final int TWO_SUB_MATCHERS = 2;
     private static final int ONE_SUB_MATCHER = 1;
-    private final Stack<LocalizedMatcher> matcherStack = new Stack<LocalizedMatcher>();
+    private final Stack<LocalizedMatcher> matcherStack = new Stack<>();
 
+    @Override
     public void reportMatcher(ArgumentMatcher<?> matcher) {
         matcherStack.push(new LocalizedMatcher(matcher));
     }
 
+    @Override
     public List<LocalizedMatcher> pullLocalizedMatchers() {
         if (matcherStack.isEmpty()) {
             return emptyList();
         }
 
-        List<LocalizedMatcher> lastMatchers = resetStack();
-        return lastMatchers;
+        return resetStack();
     }
 
     public void reportAnd() {
@@ -46,6 +48,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         reportMatcher(new And(m1, m2));
     }
 
+    @Override
     public void reportOr() {
         assertStateFor("Or(?)", TWO_SUB_MATCHERS);
 
@@ -55,6 +58,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         reportMatcher(new Or(m1, m2));
     }
 
+    @Override
     public void reportNot() {
         assertStateFor("Not(?)", ONE_SUB_MATCHER);
 
@@ -63,6 +67,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         reportMatcher(new Not(m));
     }
 
+    @Override
     public void validateState() {
         if (!matcherStack.isEmpty()) {
             List<LocalizedMatcher> lastMatchers = resetStack();
@@ -70,6 +75,7 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         }
     }
 
+    @Override
     public void reset() {
         matcherStack.clear();
     }
@@ -80,7 +86,8 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
         }
         if (matcherStack.size() < subMatchersCount) {
             List<LocalizedMatcher> lastMatchers = resetStack();
-            throw incorrectUseOfAdditionalMatchers(additionalMatcherName, subMatchersCount, lastMatchers);
+            throw incorrectUseOfAdditionalMatchers(
+                    additionalMatcherName, subMatchersCount, lastMatchers);
         }
     }
 
@@ -89,9 +96,8 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     }
 
     private List<LocalizedMatcher> resetStack() {
-        ArrayList<LocalizedMatcher> lastMatchers = new ArrayList<LocalizedMatcher>(matcherStack);
+        ArrayList<LocalizedMatcher> lastMatchers = new ArrayList<>(matcherStack);
         reset();
         return lastMatchers;
     }
-
 }

@@ -2,11 +2,9 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.exceptions.base;
 
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
-
 
 /**
  * Raised by mockito to emit an error either due to Mockito, or due to the User.

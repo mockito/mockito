@@ -4,6 +4,14 @@
  */
 package org.concurrentmockito;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -52,14 +60,6 @@ import org.mockitousage.stubbing.StubbingWithThrowablesTest;
 import org.mockitousage.verification.*;
 import org.mockitoutil.TestBase;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import static org.junit.Assert.assertEquals;
-
 public class ThreadsRunAllTestsHalfManualTest extends TestBase {
 
     private static class AllTestsRunner extends Thread {
@@ -67,74 +67,74 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
         private Set<Class<?>> failed = new HashSet<Class<?>>();
 
         public void run() {
-            Result result = JUnitCore.runClasses(
-                    EqualsTest.class,
-                    ListUtilTest.class,
-                    MockingProgressImplTest.class,
-                    TimesTest.class,
-                    MockHandlerImplTest.class,
-                    AllInvocationsFinderTest.class,
-                    ReturnsEmptyValuesTest.class,
-                    NumberOfInvocationsCheckerTest.class,
-                    DefaultRegisteredInvocationsTest.class,
-                    MissingInvocationCheckerTest.class,
-                    NumberOfInvocationsInOrderCheckerTest.class,
-                    MissingInvocationInOrderCheckerTest.class,
-                    TypeCachingMockBytecodeGeneratorTest.class,
-                    InvocationMatcherTest.class,
-                    InvocationsFinderTest.class,
-                    MockitoTest.class,
-                    MockUtilTest.class,
-                    ReporterTest.class,
-                    MockitoAssertionErrorTest.class,
-                    MockitoExceptionTest.class,
-                    StackTraceFilteringTest.class,
-                    BridgeMethodPuzzleTest.class,
-                    OverloadingPuzzleTest.class,
-                    InvalidUsageTest.class,
-                    UsingVarargsTest.class,
-                    CustomMatchersTest.class,
-                    ComparableMatchersTest.class,
-                    InvalidUseOfMatchersTest.class,
-                    MatchersTest.class,
-                    MatchersToStringTest.class,
-                    VerificationAndStubbingUsingMatchersTest.class,
-                    BasicStubbingTest.class,
-                    ReturningDefaultValuesTest.class,
-                    StubbingWithThrowablesTest.class,
-                    AtMostXVerificationTest.class,
-                    BasicVerificationTest.class,
-                    ExactNumberOfTimesVerificationTest.class,
-                    VerificationInOrderTest.class,
-                    NoMoreInteractionsVerificationTest.class,
-                    SelectedMocksInOrderVerificationTest.class,
-                    VerificationOnMultipleMocksUsingMatchersTest.class,
-                    VerificationUsingMatchersTest.class,
-                    RelaxedVerificationInOrderTest.class,
-                    DescriptiveMessagesWhenVerificationFailsTest.class,
-                    DescriptiveMessagesWhenTimesXVerificationFailsTest.class,
-                    BasicVerificationInOrderTest.class,
-                    VerificationInOrderMixedWithOrdiraryVerificationTest.class,
-                    DescriptiveMessagesOnVerificationInOrderErrorsTest.class,
-                    InvalidStateDetectionTest.class,
-                    ReplacingObjectMethodsTest.class,
-                    ClickableStackTracesTest.class,
-                    ExampleTest.class,
-                    PointingStackTraceToActualInvocationTest.class,
-                    VerificationInOrderFromMultipleThreadsTest.class,
-                    ResetTest.class,
-                    ReturnsGenericDeepStubsTest.class
-                );
+            Result result =
+                    JUnitCore.runClasses(
+                            EqualsTest.class,
+                            ListUtilTest.class,
+                            MockingProgressImplTest.class,
+                            TimesTest.class,
+                            MockHandlerImplTest.class,
+                            AllInvocationsFinderTest.class,
+                            ReturnsEmptyValuesTest.class,
+                            NumberOfInvocationsCheckerTest.class,
+                            DefaultRegisteredInvocationsTest.class,
+                            MissingInvocationCheckerTest.class,
+                            NumberOfInvocationsInOrderCheckerTest.class,
+                            MissingInvocationInOrderCheckerTest.class,
+                            TypeCachingMockBytecodeGeneratorTest.class,
+                            InvocationMatcherTest.class,
+                            InvocationsFinderTest.class,
+                            MockitoTest.class,
+                            MockUtilTest.class,
+                            ReporterTest.class,
+                            MockitoAssertionErrorTest.class,
+                            MockitoExceptionTest.class,
+                            StackTraceFilteringTest.class,
+                            BridgeMethodPuzzleTest.class,
+                            OverloadingPuzzleTest.class,
+                            InvalidUsageTest.class,
+                            UsingVarargsTest.class,
+                            CustomMatchersTest.class,
+                            ComparableMatchersTest.class,
+                            InvalidUseOfMatchersTest.class,
+                            MatchersTest.class,
+                            MatchersToStringTest.class,
+                            VerificationAndStubbingUsingMatchersTest.class,
+                            BasicStubbingTest.class,
+                            ReturningDefaultValuesTest.class,
+                            StubbingWithThrowablesTest.class,
+                            AtMostXVerificationTest.class,
+                            BasicVerificationTest.class,
+                            ExactNumberOfTimesVerificationTest.class,
+                            VerificationInOrderTest.class,
+                            NoMoreInteractionsVerificationTest.class,
+                            SelectedMocksInOrderVerificationTest.class,
+                            VerificationOnMultipleMocksUsingMatchersTest.class,
+                            VerificationUsingMatchersTest.class,
+                            RelaxedVerificationInOrderTest.class,
+                            DescriptiveMessagesWhenVerificationFailsTest.class,
+                            DescriptiveMessagesWhenTimesXVerificationFailsTest.class,
+                            BasicVerificationInOrderTest.class,
+                            VerificationInOrderMixedWithOrdiraryVerificationTest.class,
+                            DescriptiveMessagesOnVerificationInOrderErrorsTest.class,
+                            InvalidStateDetectionTest.class,
+                            ReplacingObjectMethodsTest.class,
+                            ClickableStackTracesTest.class,
+                            ExampleTest.class,
+                            PointingStackTraceToActualInvocationTest.class,
+                            VerificationInOrderFromMultipleThreadsTest.class,
+                            ResetTest.class,
+                            ReturnsGenericDeepStubsTest.class);
 
-                if (!result.wasSuccessful()) {
-                    System.err.println("Thread[" + Thread.currentThread().getId() + "]: error!");
-                    List<Failure> failures = result.getFailures();
-                    System.err.println(failures.size());
-                    for (Failure failure : failures) {
-                        System.err.println(failure.getTrace());
-                        failed.add(failure.getDescription().getTestClass());
-                    }
+            if (!result.wasSuccessful()) {
+                System.err.println("Thread[" + Thread.currentThread().getId() + "]: error!");
+                List<Failure> failures = result.getFailures();
+                System.err.println(failures.size());
+                for (Failure failure : failures) {
+                    System.err.println(failure.getTrace());
+                    failed.add(failure.getDescription().getTestClass());
                 }
+            }
         }
 
         public Set<Class<?>> getFailed() {
@@ -144,8 +144,11 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
 
     @Test
     public void shouldRunInMultipleThreads() throws Exception {
-        //this test ALWAYS fails if there is a single failing unit
-        assertEquals("Run in multiple thread failed for tests", Collections.emptySet(), runInMultipleThreads(3));
+        // this test ALWAYS fails if there is a single failing unit
+        assertEquals(
+                "Run in multiple thread failed for tests",
+                Collections.emptySet(),
+                runInMultipleThreads(3));
     }
 
     public static Set<Class<?>> runInMultipleThreads(int numberOfThreads) throws Exception {
@@ -172,7 +175,14 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
         long before = System.currentTimeMillis();
         Set<Class<?>> failed = runInMultipleThreads(numberOfThreads);
         long after = System.currentTimeMillis();
-        long executionTime = (after-before)/1000;
-        System.out.println("Finished tests in " + numberOfThreads + " threads in " + executionTime + " seconds. (" + failed.size() + " tests failed)");
+        long executionTime = (after - before) / 1000;
+        System.out.println(
+                "Finished tests in "
+                        + numberOfThreads
+                        + " threads in "
+                        + executionTime
+                        + " seconds. ("
+                        + failed.size()
+                        + " tests failed)");
     }
 }

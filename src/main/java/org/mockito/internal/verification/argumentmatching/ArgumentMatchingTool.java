@@ -4,25 +4,26 @@
  */
 package org.mockito.internal.verification.argumentmatching;
 
-import org.mockito.ArgumentMatcher;
-import org.mockito.internal.matchers.ContainsExtraTypeInfo;
-
 import java.util.LinkedList;
 import java.util.List;
+
+import org.mockito.ArgumentMatcher;
+import org.mockito.internal.matchers.ContainsExtraTypeInfo;
 
 @SuppressWarnings("unchecked")
 public class ArgumentMatchingTool {
 
-    private ArgumentMatchingTool(){}
+    private ArgumentMatchingTool() {}
     /**
      * Suspiciously not matching arguments are those that don't match, the toString() representation is the same but types are different.
      */
-    public static Integer[] getSuspiciouslyNotMatchingArgsIndexes(List<ArgumentMatcher> matchers, Object[] arguments) {
+    public static Integer[] getSuspiciouslyNotMatchingArgsIndexes(
+            List<ArgumentMatcher> matchers, Object[] arguments) {
         if (matchers.size() != arguments.length) {
             return new Integer[0];
         }
 
-        List<Integer> suspicious = new LinkedList<Integer>();
+        List<Integer> suspicious = new LinkedList<>();
         int i = 0;
         for (ArgumentMatcher m : matchers) {
             if (m instanceof ContainsExtraTypeInfo
@@ -45,6 +46,6 @@ public class ArgumentMatchingTool {
     }
 
     private static boolean toStringEquals(ArgumentMatcher m, Object arg) {
-        return m.toString().equals(arg == null ? "null" : arg.toString());
+        return m.toString().equals(String.valueOf(arg));
     }
 }

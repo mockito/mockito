@@ -4,15 +4,19 @@
  */
 package org.mockito;
 
+import java.io.Serializable;
+
+import org.mockito.exceptions.misusing.PotentialStubbingProblem;
+import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
-
-import java.io.Serializable;
 
 /**
  * Allows mock creation with additional mock settings.
@@ -40,6 +44,7 @@ import java.io.Serializable;
  * Firstly, to make it easy to add another mock setting when the demand comes.
  * Secondly, to enable combining together different mock settings without introducing zillions of overloaded mock() methods.
  */
+@NotExtensible
 public interface MockSettings extends Serializable {
 
     /**
@@ -201,6 +206,24 @@ public interface MockSettings extends Serializable {
     MockSettings verboseLogging();
 
     /**
+     * Add stubbing lookup listener to the mock object.
+     *
+     * Multiple listeners may be added and they will be notified orderly.
+     *
+     * For use cases and more info see {@link StubbingLookupListener}.
+     *
+     * Example:
+     * <pre class="code"><code class="java">
+     *  List mockWithListener = mock(List.class, withSettings().stubbingLookupListeners(new YourStubbingLookupListener()));
+     * </code></pre>
+     *
+     * @param listeners The stubbing lookup listeners to add. May not be null.
+     * @return settings instance so that you can fluently specify other settings
+     * @since 2.24.6
+     */
+    MockSettings stubbingLookupListeners(StubbingLookupListener... listeners);
+
+    /**
      * Registers a listener for method invocations on this mock. The listener is
      * notified every time a method on this mock is called.
      * <p>
@@ -316,4 +339,33 @@ public interface MockSettings extends Serializable {
      */
     @Incubating
     <T> MockCreationSettings<T> build(Class<T> typeToMock);
+
+    /**
+     * Creates immutable view of mock settings used later by Mockito, for use within a static mocking.
+     * Framework integrators can use this method to create instances of creation settings
+     * and use them in advanced use cases, for example to create invocations with {@link InvocationFactory},
+     * or to implement custom {@link MockHandler}.
+     * Since {@link MockCreationSettings} is {@link NotExtensible}, Mockito public API needs a creation method for this type.
+     *
+     * @param classToMock class to mock
+     * @param <T> type to mock
+     * @return immutable view of mock settings
+     * @since 2.10.0
+     */
+    @Incubating
+    <T> MockCreationSettings<T> buildStatic(Class<T> classToMock);
+
+    /**
+     * Lenient mocks bypass "strict stubbing" validation (see {@link Strictness#STRICT_STUBS}).
+     * When mock is declared as lenient none of its stubbings will be checked for potential stubbing problems such as
+     * 'unnecessary stubbing' ({@link UnnecessaryStubbingException}) or for 'stubbing argument mismatch' {@link PotentialStubbingProblem}.
+     *
+     * <pre class="code"><code class="java">
+     *   Foo mock = mock(Foo.class, withSettings.lenient());
+     * </code></pre>
+     *
+     * For more information and an elaborate example, see {@link Mockito#lenient()}.
+     */
+    @Incubating
+    MockSettings lenient();
 }

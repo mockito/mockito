@@ -14,6 +14,7 @@ import static org.mockito.Mockito.mock;
 
 public class InstantiatorProviderTest {
 
+    @SuppressWarnings("CheckReturnValue")
     @Test
     public void uses_custom_instantiator_provider() {
         //given mocking works:

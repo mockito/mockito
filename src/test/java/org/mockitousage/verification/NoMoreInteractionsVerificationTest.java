@@ -2,22 +2,21 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.verification;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class NoMoreInteractionsVerificationTest extends TestBase {
@@ -58,6 +57,9 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
 
         verifyZeroInteractions(mock);
         verifyZeroInteractions(mock);
+
+        verifyNoInteractions(mock);
+        verifyNoInteractions(mock);
     }
 
     @Test
@@ -67,7 +69,8 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         try {
             verifyZeroInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -77,7 +80,19 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
+    }
+
+    @Test
+    public void shouldFailNoInteractionsVerification() throws Exception {
+        mock.clear();
+
+        try {
+            verifyNoInteractions(mock);
+            fail();
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -123,12 +138,33 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         try {
             verifyZeroInteractions(map);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
+    }
+
+    @Test
+    public void shouldVerifyOneMockButFailOnOtherVerifyNoInteractions() throws Exception {
+        List<String> list = mock(List.class);
+        Map<String, Integer> map = mock(Map.class);
+
+        list.add("one");
+        list.add("one");
+
+        map.put("one", 1);
+
+        verify(list, times(2)).add("one");
+
+        verifyNoMoreInteractions(list);
+        try {
+            verifyNoInteractions(map);
+            fail();
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @SuppressWarnings("all")
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void verifyNoMoreInteractionsShouldScreamWhenNullPassed() throws Exception {
-        verifyNoMoreInteractions((Object[])null);
+        verifyNoMoreInteractions((Object[]) null);
     }
 }

@@ -4,27 +4,26 @@
  */
 package org.mockito.internal.verification;
 
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.description;
+import static org.mockito.Mockito.verify;
+
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.base.MockitoAssertionError;
 
-import java.util.List;
-
-import static org.junit.Assert.assertTrue;
-import static org.assertj.core.api.Assertions.fail;
-import static org.mockito.Mockito.description;
-import static org.mockito.Mockito.verify;
-
 public class VerificationWithDescriptionTest {
 
-    @Mock
-    private List<?> mock;
+    @Mock private List<?> mock;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

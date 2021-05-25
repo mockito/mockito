@@ -4,53 +4,55 @@
  */
 package org.mockito.internal.invocation;
 
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.junit.Test;
 import org.mockito.internal.verification.InOrderContextImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockitoutil.TestBase;
 
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static org.junit.Assert.*;
-
 public class InvocationMarkerTest extends TestBase {
 
     @Test
     public void shouldMarkInvocationAsVerified() {
-        //given
+        // given
         Invocation i = new InvocationBuilder().toInvocation();
         InvocationMatcher im = new InvocationBuilder().toInvocationMatcher();
         assertFalse(i.isVerified());
 
-        //when
+        // when
         InvocationMarker.markVerified(Arrays.asList(i), im);
 
-        //then
+        // then
         assertTrue(i.isVerified());
     }
 
     @Test
     public void shouldCaptureArguments() {
-        //given
+        // given
         Invocation i = new InvocationBuilder().toInvocation();
         final AtomicReference<Invocation> box = new AtomicReference<Invocation>();
-        MatchableInvocation c = new InvocationMatcher(i) {
-            public void captureArgumentsFrom(Invocation i) {
-                box.set(i);
-            }};
+        MatchableInvocation c =
+                new InvocationMatcher(i) {
+                    public void captureArgumentsFrom(Invocation i) {
+                        box.set(i);
+                    }
+                };
 
-        //when
+        // when
         InvocationMarker.markVerified(Arrays.asList(i), c);
 
-        //then
+        // then
         assertEquals(i, box.get());
     }
 
     @Test
     public void shouldMarkInvocationsAsVerifiedInOrder() {
-        //given
+        // given
         InOrderContextImpl context = new InOrderContextImpl();
 
         Invocation i = new InvocationBuilder().toInvocation();
@@ -58,10 +60,10 @@ public class InvocationMarkerTest extends TestBase {
         assertFalse(context.isVerified(i));
         assertFalse(i.isVerified());
 
-        //when
+        // when
         InvocationMarker.markVerifiedInOrder(Arrays.asList(i), im, context);
 
-        //then
+        // then
         assertTrue(context.isVerified(i));
         assertTrue(i.isVerified());
     }

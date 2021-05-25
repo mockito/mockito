@@ -2,8 +2,14 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.matchers;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -12,13 +18,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 public class CapturingArgumentsTest extends TestBase {
 
@@ -43,7 +42,7 @@ public class CapturingArgumentsTest extends TestBase {
             this.service = service;
         }
 
-        public void email(Integer ... personId) {
+        public void email(Integer... personId) {
             for (Integer i : personId) {
                 Person person = new Person(i);
                 service.sendEmailTo(person);
@@ -62,26 +61,26 @@ public class CapturingArgumentsTest extends TestBase {
     @SuppressWarnings("deprecation")
     @Test
     public void should_allow_assertions_on_captured_argument() {
-        //given
+        // given
         ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
 
-        //when
+        // when
         bulkEmailService.email(12);
 
-        //then
+        // then
         verify(emailService).sendEmailTo(argument.capture());
         assertEquals(12, argument.getValue().getAge());
     }
 
     @Test
     public void should_allow_assertions_on_all_captured_arguments() {
-        //given
+        // given
         ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
 
-        //when
+        // when
         bulkEmailService.email(11, 12);
 
-        //then
+        // then
         verify(emailService, times(2)).sendEmailTo(argument.capture());
         assertEquals(11, argument.getAllValues().get(0).getAge());
         assertEquals(12, argument.getAllValues().get(1).getAge());
@@ -89,84 +88,84 @@ public class CapturingArgumentsTest extends TestBase {
 
     @Test
     public void should_allow_assertions_on_last_argument() {
-        //given
+        // given
         ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
 
-        //when
+        // when
         bulkEmailService.email(11, 12, 13);
 
-        //then
+        // then
         verify(emailService, times(3)).sendEmailTo(argument.capture());
         assertEquals(13, argument.getValue().getAge());
     }
 
     @Test
     public void should_print_captor_matcher() {
-        //given
+        // given
         ArgumentCaptor<Person> person = ArgumentCaptor.forClass(Person.class);
 
         try {
-            //when
+            // when
             verify(emailService).sendEmailTo(person.capture());
             fail();
-        } catch(WantedButNotInvoked e) {
-            //then
+        } catch (WantedButNotInvoked e) {
+            // then
             assertThat(e).hasMessageContaining("<Capturing argument>");
         }
     }
 
     @Test
     public void should_allow_assertions_on_captured_null() {
-        //given
+        // given
         ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
 
-        //when
+        // when
         emailService.sendEmailTo(null);
 
-        //then
+        // then
         verify(emailService).sendEmailTo(argument.capture());
         assertEquals(null, argument.getValue());
     }
 
     @Test
-    public void should_allow_construction_of_captor_for_parameterized_type_in_a_convenient_way()  {
-        //the test passes if this expression compiles
+    public void should_allow_construction_of_captor_for_parameterized_type_in_a_convenient_way() {
+        // the test passes if this expression compiles
         @SuppressWarnings("unchecked")
         ArgumentCaptor<List<Person>> argument = ArgumentCaptor.forClass(List.class);
         assertNotNull(argument);
     }
 
     @Test
-    public void should_allow_construction_of_captor_for_a_more_specific_type()  {
-        //the test passes if this expression compiles
+    public void should_allow_construction_of_captor_for_a_more_specific_type() {
+        // the test passes if this expression compiles
         ArgumentCaptor<List<?>> argument = ArgumentCaptor.forClass(ArrayList.class);
         assertNotNull(argument);
     }
 
     @Test
     public void should_allow_capturing_for_stubbing() {
-        //given
+        // given
         ArgumentCaptor<Person> argument = ArgumentCaptor.forClass(Person.class);
         when(emailService.sendEmailTo(argument.capture())).thenReturn(false);
 
-        //when
+        // when
         emailService.sendEmailTo(new Person(10));
 
-        //then
+        // then
         assertEquals(10, argument.getValue().getAge());
     }
 
     @Test
     public void should_capture_when_stubbing_only_when_entire_invocation_matches() {
-        //given
+        // given
         ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
         when(mock.simpleMethod(argument.capture(), eq(2))).thenReturn("blah");
 
-        //when
+        // when
         mock.simpleMethod("foo", 200);
         mock.simpleMethod("bar", 2);
 
-        //then
+        // then
         Assertions.assertThat(argument.getAllValues()).containsOnly("bar");
     }
 
@@ -176,19 +175,20 @@ public class CapturingArgumentsTest extends TestBase {
         try {
             argument.getValue();
             fail();
-        } catch (MockitoException expected) { }
+        } catch (MockitoException expected) {
+        }
     }
 
     @Test
     public void should_capture_when_full_arg_list_matches() throws Exception {
-        //given
+        // given
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
 
-        //when
+        // when
         mock.simpleMethod("foo", 1);
         mock.simpleMethod("bar", 2);
 
-        //then
+        // then
         verify(mock).simpleMethod(captor.capture(), eq(1));
         assertEquals(1, captor.getAllValues().size());
         assertEquals("foo", captor.getValue());
@@ -196,26 +196,26 @@ public class CapturingArgumentsTest extends TestBase {
 
     @Test
     public void should_capture_int_by_creating_captor_with_primitive_wrapper() {
-        //given
+        // given
         ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
 
-        //when
+        // when
         mock.intArgumentMethod(10);
 
-        //then
+        // then
         verify(mock).intArgumentMethod(argument.capture());
         assertEquals(10, (int) argument.getValue());
     }
 
     @Test
     public void should_capture_int_by_creating_captor_with_primitive() throws Exception {
-        //given
+        // given
         ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(int.class);
 
-        //when
+        // when
         mock.intArgumentMethod(10);
 
-        //then
+        // then
         verify(mock).intArgumentMethod(argument.capture());
         assertEquals(10, (int) argument.getValue());
     }
@@ -235,7 +235,8 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_byte_vararg_by_creating_captor_with_primitive_wrapper() throws Exception {
+    public void should_capture_byte_vararg_by_creating_captor_with_primitive_wrapper()
+            throws Exception {
         // given
         ArgumentCaptor<Byte> argumentCaptor = ArgumentCaptor.forClass(Byte.class);
 
@@ -273,11 +274,13 @@ public class CapturingArgumentsTest extends TestBase {
         // then
         verify(mock, times(2)).mixedVarargs(any(), argumentCaptor.capture());
 
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c", "again ?!");
+        Assertions.assertThat(argumentCaptor.getAllValues())
+                .containsExactly("a", "b", "c", "again ?!");
     }
 
     @Test
-    public void should_capture_one_arg_even_when_using_vararg_captor_on_nonvararg_method() throws Exception {
+    public void should_capture_one_arg_even_when_using_vararg_captor_on_nonvararg_method()
+            throws Exception {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -299,7 +302,12 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         // this is only for backwards compatibility. It does not make sense in real to do so.
-        verify(mock).mixedVarargs(any(), argumentCaptor.capture(), argumentCaptor.capture(), argumentCaptor.capture());
+        verify(mock)
+                .mixedVarargs(
+                        any(),
+                        argumentCaptor.capture(),
+                        argumentCaptor.capture(),
+                        argumentCaptor.capture());
         Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c");
     }
 

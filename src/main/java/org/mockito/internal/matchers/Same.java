@@ -2,13 +2,12 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.matchers;
+
+import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.text.ValuePrinter;
-
-import java.io.Serializable;
 
 public class Same implements ArgumentMatcher<Object>, Serializable {
 
@@ -18,10 +17,12 @@ public class Same implements ArgumentMatcher<Object>, Serializable {
         this.wanted = wanted;
     }
 
+    @Override
     public boolean matches(Object actual) {
         return wanted == actual;
     }
 
+    @Override
     public String toString() {
         return "same(" + ValuePrinter.print(wanted) + ")";
     }

@@ -2,7 +2,6 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.exceptions.base;
 
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
@@ -45,6 +44,18 @@ public class MockitoAssertionError extends AssertionError {
         super(message + "\n" + error.getMessage());
         super.setStackTrace(error.getStackTrace());
         unfilteredStackTrace = error.getUnfilteredStackTrace();
+    }
+
+    /**
+     * Creates a copy of the given assertion error with the custom failure message prepended.
+     * @param error The assertion error to copy
+     * @param message The custom message to prepend
+     * @since 3.3.13
+     */
+    public MockitoAssertionError(AssertionError error, String message) {
+        super(message + "\n" + error.getMessage());
+        unfilteredStackTrace = error.getStackTrace();
+        super.setStackTrace(unfilteredStackTrace);
     }
 
     public StackTraceElement[] getUnfilteredStackTrace() {

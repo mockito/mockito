@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.util.reflection;
 
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.plugins.MemberAccessor;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,7 +29,8 @@ public class BeanPropertySetter {
      * @param propertyField The field that should be accessed with the setter
      * @param reportNoSetterFound Allow the set method to raise an Exception if the setter cannot be found
      */
-    public BeanPropertySetter(final Object target, final Field propertyField, boolean reportNoSetterFound) {
+    public BeanPropertySetter(
+            final Object target, final Field propertyField, boolean reportNoSetterFound) {
         this.field = propertyField;
         this.target = target;
         this.reportNoSetterFound = reportNoSetterFound;
@@ -50,24 +54,36 @@ public class BeanPropertySetter {
      */
     public boolean set(final Object value) {
 
-        AccessibilityChanger changer = new AccessibilityChanger();
+        MemberAccessor accessor = Plugins.getMemberAccessor();
         Method writeMethod = null;
         try {
             writeMethod = target.getClass().getMethod(setterName(field.getName()), field.getType());
-
-            changer.enableAccess(writeMethod);
-            writeMethod.invoke(target, value);
+            accessor.invoke(writeMethod, target, value);
             return true;
         } catch (InvocationTargetException e) {
-            throw new RuntimeException("Setter '" + writeMethod + "' of '" + target + "' with value '" + value + "' threw exception : '" + e.getTargetException() + "'", e);
+            throw new RuntimeException(
+                    "Setter '"
+                            + writeMethod
+                            + "' of '"
+                            + target
+                            + "' with value '"
+                            + value
+                            + "' threw exception : '"
+                            + e.getTargetException()
+                            + "'",
+                    e);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Access not authorized on field '" + field + "' of object '" + target + "' with value: '" + value + "'", e);
+            throw new RuntimeException(
+                    "Access not authorized on field '"
+                            + field
+                            + "' of object '"
+                            + target
+                            + "' with value: '"
+                            + value
+                            + "'",
+                    e);
         } catch (NoSuchMethodException e) {
             reportNoSetterFound();
-        } finally {
-            if(writeMethod != null) {
-                changer.safelyDisableAccess(writeMethod);
-            }
         }
 
         reportNoSetterFound();
@@ -85,14 +101,18 @@ public class BeanPropertySetter {
     private String setterName(String fieldName) {
         return new StringBuilder(SET_PREFIX)
                 .append(fieldName.substring(0, 1).toUpperCase(Locale.ENGLISH))
-                .append(fieldName.substring(1))
+                .append(fieldName, 1, fieldName.length())
                 .toString();
     }
 
     private void reportNoSetterFound() {
-        if(reportNoSetterFound) {
-            throw new RuntimeException("Problems setting value on object: [" + target + "] for property : [" + field.getName() + "], setter not found");
+        if (reportNoSetterFound) {
+            throw new RuntimeException(
+                    "Problems setting value on object: ["
+                            + target
+                            + "] for property : ["
+                            + field.getName()
+                            + "], setter not found");
         }
     }
-
 }

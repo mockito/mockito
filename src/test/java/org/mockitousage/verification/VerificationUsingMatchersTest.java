@@ -2,17 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.verification;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -21,6 +11,15 @@ import static org.mockito.AdditionalMatchers.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 public class VerificationUsingMatchersTest extends TestBase {
 
@@ -68,7 +67,9 @@ public class VerificationUsingMatchersTest extends TestBase {
         mock.threeArgumentMethod(11, "", "01234");
 
         try {
-            verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
+            verify(mock)
+                    .threeArgumentMethod(
+                            and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
             fail();
         } catch (ArgumentsAreDifferent e) {
         }
@@ -76,7 +77,9 @@ public class VerificationUsingMatchersTest extends TestBase {
         mock.threeArgumentMethod(8, new Object(), "01234");
 
         try {
-            verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
+            verify(mock)
+                    .threeArgumentMethod(
+                            and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
             fail();
         } catch (ArgumentsAreDifferent e) {
         }
@@ -84,13 +87,17 @@ public class VerificationUsingMatchersTest extends TestBase {
         mock.threeArgumentMethod(8, "", "no match");
 
         try {
-            verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
+            verify(mock)
+                    .threeArgumentMethod(
+                            and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
             fail();
         } catch (ArgumentsAreDifferent e) {
         }
 
         mock.threeArgumentMethod(8, "", "123");
 
-        verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
+        verify(mock)
+                .threeArgumentMethod(
+                        and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
     }
 }

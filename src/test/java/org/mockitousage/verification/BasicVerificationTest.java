@@ -2,21 +2,23 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.verification;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+import java.util.List;
+
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
-
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 public class BasicVerificationTest extends TestBase {
 
@@ -34,7 +36,7 @@ public class BasicVerificationTest extends TestBase {
         verifyNoMoreInteractions(mock);
     }
 
-    @Test(expected=WantedButNotInvoked.class)
+    @Test(expected = WantedButNotInvoked.class)
     public void shouldFailVerification() throws Exception {
         verify(mock).clear();
     }
@@ -45,10 +47,15 @@ public class BasicVerificationTest extends TestBase {
         mock.add("foo");
 
         verify(mock).clear();
-        try {
-            verify(mock).add("bar");
-            fail();
-        } catch (AssertionError expected) {}
+
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() {
+                                verify(mock).add("bar");
+                            }
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class);
     }
 
     @Test
@@ -63,7 +70,8 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mockTwo, atLeastOnce()).add("foo");
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 
     @Test
@@ -78,7 +86,8 @@ public class BasicVerificationTest extends TestBase {
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -92,7 +101,8 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mock).clear();
             fail();
-        } catch (TooManyActualInvocations e) {}
+        } catch (TooManyActualInvocations e) {
+        }
     }
 
     @Test
@@ -104,7 +114,6 @@ public class BasicVerificationTest extends TestBase {
         verify(mock).add("test");
     }
 
-
     @Test
     public void shouldDetectWhenOverloadedMethodCalled() throws Exception {
         IMethods mockThree = mock(IMethods.class);
@@ -113,6 +122,7 @@ public class BasicVerificationTest extends TestBase {
         try {
             verify(mockThree).varargs((String[]) new String[] {});
             fail();
-        } catch(WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 }

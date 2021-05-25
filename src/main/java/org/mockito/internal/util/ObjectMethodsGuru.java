@@ -5,19 +5,19 @@
 package org.mockito.internal.util;
 
 import java.lang.reflect.Method;
+
 import org.mockito.internal.creation.DelegatingMethod;
 import org.mockito.internal.invocation.MockitoMethod;
 
-public class ObjectMethodsGuru{
+public class ObjectMethodsGuru {
 
-    private ObjectMethodsGuru() {
-    }
+    private ObjectMethodsGuru() {}
 
     public static boolean isToStringMethod(Method method) {
         MockitoMethod m = new DelegatingMethod(method);
-        return m.getReturnType() == String.class &&
-               m.getParameterTypes().length == 0 &&
-               "toString".equals(m.getName());
+        return m.getReturnType() == String.class
+                && m.getParameterTypes().length == 0
+                && "toString".equals(m.getName());
     }
 
     public static boolean isCompareToMethod(Method method) {

@@ -4,19 +4,19 @@
  */
 package org.mockitousage.junitrule;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.quality.Strictness;
-import org.mockito.internal.junit.JUnitRule;
-import org.mockito.internal.util.SimpleMockitoLogger;
-import org.mockitousage.IMethods;
-import org.mockitoutil.SafeJUnitRule;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.mockitoutil.TestBase.filterLineNo;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.internal.junit.JUnitRule;
+import org.mockito.internal.util.SimpleMockitoLogger;
+import org.mockito.quality.Strictness;
+import org.mockitousage.IMethods;
+import org.mockitoutil.SafeJUnitRule;
 
 public class StubbingWarningsJUnitRuleTest {
 
@@ -26,49 +26,53 @@ public class StubbingWarningsJUnitRuleTest {
 
     @Test
     public void no_unused_stubs_reported_on_failure() throws Throwable {
-        //expect
-        rule.expectFailure(new SafeJUnitRule.FailureAssert() {
-            public void doAssert(Throwable t) {
-                assertEquals("x", t.getMessage());
-                assertTrue(logger.getLoggedInfo().isEmpty());
-            }
-        });
+        // expect
+        rule.expectFailure(
+                new SafeJUnitRule.FailureAssert() {
+                    public void doAssert(Throwable t) {
+                        assertEquals("x", t.getMessage());
+                        assertTrue(logger.getLoggedInfo().isEmpty());
+                    }
+                });
 
-        //when
+        // when
         declareStubbing(mock);
         throw new AssertionError("x");
     }
 
     @Test
     public void stubbing_arg_mismatch_on_failure() throws Throwable {
-        //expect
-        rule.expectFailure(new SafeJUnitRule.FailureAssert() {
-            public void doAssert(Throwable t) {
-                assertEquals("x", t.getMessage());
-                assertEquals(
-                    "[MockitoHint] StubbingWarningsJUnitRuleTest.stubbing_arg_mismatch_on_failure (see javadoc for MockitoHint):\n" +
-                    "[MockitoHint] 1. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                    "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
-                        filterLineNo(logger.getLoggedInfo()));
-            }
-        });
+        // expect
+        rule.expectFailure(
+                new SafeJUnitRule.FailureAssert() {
+                    public void doAssert(Throwable t) {
+                        assertEquals("x", t.getMessage());
+                        assertEquals(
+                                "[MockitoHint] StubbingWarningsJUnitRuleTest.stubbing_arg_mismatch_on_failure (see javadoc for MockitoHint):\n"
+                                        + "[MockitoHint] 1. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n"
+                                        + "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
+                                filterLineNo(logger.getLoggedInfo()));
+                    }
+                });
 
-        //when
+        // when
         declareStubbingWithArg(mock, "a");
         useStubbingWithArg(mock, "b");
         throw new AssertionError("x");
     }
 
-    @Test public void no_stubbing_arg_mismatch_when_no_mismatch_on_fail() throws Throwable {
-        //expect
-        rule.expectFailure(new SafeJUnitRule.FailureAssert() {
-            public void doAssert(Throwable t) {
-                assertEquals("x", t.getMessage());
-                assertTrue(logger.getLoggedInfo().isEmpty());
-            }
-        });
+    @Test
+    public void no_stubbing_arg_mismatch_when_no_mismatch_on_fail() throws Throwable {
+        // expect
+        rule.expectFailure(
+                new SafeJUnitRule.FailureAssert() {
+                    public void doAssert(Throwable t) {
+                        assertEquals("x", t.getMessage());
+                        assertTrue(logger.getLoggedInfo().isEmpty());
+                    }
+                });
 
-        //when
+        // when
         declareStubbingWithArg(mock, "a");
         useStubbingWithArg(mock, "a");
         throw new AssertionError("x");
@@ -76,37 +80,39 @@ public class StubbingWarningsJUnitRuleTest {
 
     @Test
     public void no_stubbing_warning_on_pass() throws Throwable {
-        //expect
-        rule.expectSuccess(new Runnable() {
-            public void run() {
-                assertTrue(logger.isEmpty());
-            }
-        });
+        // expect
+        rule.expectSuccess(
+                new Runnable() {
+                    public void run() {
+                        assertTrue(logger.isEmpty());
+                    }
+                });
 
-        //when
+        // when
         declareStubbingWithArg(mock, "a");
         useStubbingWithArg(mock, "a");
     }
 
     @Test
     public void multiple_stubbing_arg_mismatch_on_failure() throws Throwable {
-        //expect
-        rule.expectFailure(new SafeJUnitRule.FailureAssert() {
-            public void doAssert(Throwable t) {
-                assertEquals("x", t.getMessage());
-                assertEquals(
-                    "[MockitoHint] StubbingWarningsJUnitRuleTest.multiple_stubbing_arg_mismatch_on_failure (see javadoc for MockitoHint):\n" +
-                    "[MockitoHint] 1. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                    "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                    "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                    "[MockitoHint] 2. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                    "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                    "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
-                        filterLineNo(logger.getLoggedInfo()));
-            }
-        });
+        // expect
+        rule.expectFailure(
+                new SafeJUnitRule.FailureAssert() {
+                    public void doAssert(Throwable t) {
+                        assertEquals("x", t.getMessage());
+                        assertEquals(
+                                "[MockitoHint] StubbingWarningsJUnitRuleTest.multiple_stubbing_arg_mismatch_on_failure (see javadoc for MockitoHint):\n"
+                                        + "[MockitoHint] 1. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n"
+                                        + "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n"
+                                        + "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n"
+                                        + "[MockitoHint] 2. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n"
+                                        + "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n"
+                                        + "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
+                                filterLineNo(logger.getLoggedInfo()));
+                    }
+                });
 
-        //when
+        // when
         declareStubbingWithArg(mock, "a");
         declareStubbingWithArg(mock, "b");
 
@@ -118,19 +124,20 @@ public class StubbingWarningsJUnitRuleTest {
 
     @Test
     public void reports_only_mismatching_stubs() throws Throwable {
-        //expect
-        rule.expectFailure(new SafeJUnitRule.FailureAssert() {
-            public void doAssert(Throwable t) {
-            assertEquals("x", t.getMessage());
-            assertEquals(
-                "[MockitoHint] StubbingWarningsJUnitRuleTest.reports_only_mismatching_stubs (see javadoc for MockitoHint):\n" +
-                "[MockitoHint] 1. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n" +
-                "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
-                    filterLineNo(logger.getLoggedInfo()));
-            }
-        });
+        // expect
+        rule.expectFailure(
+                new SafeJUnitRule.FailureAssert() {
+                    public void doAssert(Throwable t) {
+                        assertEquals("x", t.getMessage());
+                        assertEquals(
+                                "[MockitoHint] StubbingWarningsJUnitRuleTest.reports_only_mismatching_stubs (see javadoc for MockitoHint):\n"
+                                        + "[MockitoHint] 1. Unused... -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n"
+                                        + "[MockitoHint]  ...args ok? -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.useStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
+                                filterLineNo(logger.getLoggedInfo()));
+                    }
+                });
 
-        //when
+        // when
         declareStubbingWithArg(mock, "a"); // <-- used
         declareStubbingWithArg(mock, "b"); // <-- unused
 
@@ -142,15 +149,16 @@ public class StubbingWarningsJUnitRuleTest {
 
     @Test
     public void no_mismatch_when_stub_was_used() throws Throwable {
-        //expect
-        rule.expectFailure(new SafeJUnitRule.FailureAssert() {
-            public void doAssert(Throwable t) {
-                assertEquals("x", t.getMessage());
-                assertTrue(logger.getLoggedInfo().isEmpty());
-            }
-        });
+        // expect
+        rule.expectFailure(
+                new SafeJUnitRule.FailureAssert() {
+                    public void doAssert(Throwable t) {
+                        assertEquals("x", t.getMessage());
+                        assertTrue(logger.getLoggedInfo().isEmpty());
+                    }
+                });
 
-        //when
+        // when
         declareStubbingWithArg(mock, "a");
 
         useStubbingWithArg(mock, "a");
@@ -161,35 +169,36 @@ public class StubbingWarningsJUnitRuleTest {
 
     @Test
     public void no_stubbing_arg_mismatch_on_pass() throws Throwable {
-        //expect
-        rule.expectSuccess(new Runnable() {
-            public void run() {
-                assertEquals(
-                    "[MockitoHint] StubbingWarningsJUnitRuleTest.no_stubbing_arg_mismatch_on_pass (see javadoc for MockitoHint):\n" +
-                    "[MockitoHint] 1. Unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
-                        filterLineNo(logger.getLoggedInfo()));
-            }
-        });
+        // expect
+        rule.expectSuccess(
+                new Runnable() {
+                    public void run() {
+                        assertEquals(
+                                "[MockitoHint] StubbingWarningsJUnitRuleTest.no_stubbing_arg_mismatch_on_pass (see javadoc for MockitoHint):\n"
+                                        + "[MockitoHint] 1. Unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbingWithArg(StubbingWarningsJUnitRuleTest.java:0)\n",
+                                filterLineNo(logger.getLoggedInfo()));
+                    }
+                });
 
-        //when
+        // when
         declareStubbingWithArg(mock, "a");
         useStubbingWithArg(mock, "b");
     }
 
     @Test
     public void warns_about_unused_stubs_when_passed() throws Throwable {
-        //expect
-        rule.expectSuccess(new Runnable() {
-            public void run() {
-                assertEquals(
-                    "[MockitoHint] StubbingWarningsJUnitRuleTest.warns_about_unused_stubs_when_passed (see javadoc for MockitoHint):\n" +
-                    "[MockitoHint] 1. Unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbing(StubbingWarningsJUnitRuleTest.java:0)\n",
-                        filterLineNo(logger.getLoggedInfo()));
+        // expect
+        rule.expectSuccess(
+                new Runnable() {
+                    public void run() {
+                        assertEquals(
+                                "[MockitoHint] StubbingWarningsJUnitRuleTest.warns_about_unused_stubs_when_passed (see javadoc for MockitoHint):\n"
+                                        + "[MockitoHint] 1. Unused -> at org.mockitousage.junitrule.StubbingWarningsJUnitRuleTest.declareStubbing(StubbingWarningsJUnitRuleTest.java:0)\n",
+                                filterLineNo(logger.getLoggedInfo()));
+                    }
+                });
 
-            }
-        });
-
-        //when
+        // when
         declareStubbing(mock);
     }
 

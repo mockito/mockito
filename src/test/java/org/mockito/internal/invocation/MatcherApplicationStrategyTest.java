@@ -5,22 +5,27 @@
 package org.mockito.internal.invocation;
 
 import static java.util.Arrays.asList;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.internal.invocation.MatcherApplicationStrategy.getMatcherApplicationStrategyFor;
 import static org.mockito.internal.matchers.Any.ANY;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
+import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.InstanceOf;
+import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -28,8 +33,7 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings("unchecked")
 public class MatcherApplicationStrategyTest extends TestBase {
 
-    @Mock
-    IMethods mock;
+    @Mock IMethods mock;
     private Invocation invocation;
     private List matchers;
 
@@ -47,7 +51,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals("1"));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(RETURN_ALWAYS_FALSE);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(RETURN_ALWAYS_FALSE);
 
         // then
         assertFalse(match);
@@ -60,7 +66,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals("1"));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
 
         // then
         assertTrue(match);
@@ -73,7 +81,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals("1"));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
 
         // then
         assertFalse(match);
@@ -86,7 +96,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals("1"), new Equals("2"));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
 
         // then
         assertFalse(match);
@@ -99,7 +111,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals("1"), Any.ANY, new InstanceOf(String.class));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
 
         // then
         assertTrue(match);
@@ -112,7 +126,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(ANY);
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
 
         // then
         assertTrue(match);
@@ -125,7 +141,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals(1));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
 
         // then
         assertFalse(match);
@@ -138,7 +156,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals(1), ANY);
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
 
         // then
         assertTrue(match);
@@ -151,7 +171,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals(1));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
 
         // then
         assertFalse(match);
@@ -166,11 +188,11 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals(null), ANY);
 
         // when
-        getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        getMatcherApplicationStrategyFor(invocation, matchers)
+                .forEachMatcherAndArgument(recordAction);
 
         // then
         recordAction.assertContainsExactly(new Equals(null), ANY, ANY);
-
     }
 
     @Test
@@ -180,10 +202,34 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(ANY);
 
         // when
-        getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        getMatcherApplicationStrategyFor(invocation, matchers)
+                .forEachMatcherAndArgument(recordAction);
 
         // then
         recordAction.assertContainsExactly(ANY, ANY);
+    }
+
+    @Test
+    public void shouldMatchAnyVarargEvenIfMatcherIsWrappedInHamcrestMatcher() {
+        // given
+        invocation = varargs("1", "2");
+        HamcrestArgumentMatcher argumentMatcher = new HamcrestArgumentMatcher(new IntMatcher());
+        matchers = asList(argumentMatcher);
+
+        // when
+        getMatcherApplicationStrategyFor(invocation, matchers)
+                .forEachMatcherAndArgument(recordAction);
+
+        // then
+        recordAction.assertContainsExactly(argumentMatcher, argumentMatcher);
+    }
+
+    class IntMatcher extends BaseMatcher<Integer> implements VarargMatcher {
+        public boolean matches(Object o) {
+            return true;
+        }
+
+        public void describeTo(Description description) {}
     }
 
     private Invocation mixedVarargs(Object a, String... s) {
@@ -214,18 +260,19 @@ public class MatcherApplicationStrategyTest extends TestBase {
         }
     }
 
-    private static final ArgumentMatcherAction RETURN_ALWAYS_TRUE = new ArgumentMatcherAction() {
-        @Override
-        public boolean apply(ArgumentMatcher<?> matcher, Object argument) {
-            return true;
-        }
-    };
+    private static final ArgumentMatcherAction RETURN_ALWAYS_TRUE =
+            new ArgumentMatcherAction() {
+                @Override
+                public boolean apply(ArgumentMatcher<?> matcher, Object argument) {
+                    return true;
+                }
+            };
 
-    private static final ArgumentMatcherAction RETURN_ALWAYS_FALSE = new ArgumentMatcherAction() {
-        @Override
-        public boolean apply(ArgumentMatcher<?> matcher, Object argument) {
-            return false;
-        }
-    };
-
+    private static final ArgumentMatcherAction RETURN_ALWAYS_FALSE =
+            new ArgumentMatcherAction() {
+                @Override
+                public boolean apply(ArgumentMatcher<?> matcher, Object argument) {
+                    return false;
+                }
+            };
 }

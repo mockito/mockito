@@ -2,8 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.verification;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,10 +15,6 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 public class VerificationInOrderTest extends TestBase {
 
@@ -48,7 +47,8 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 
     @Test
@@ -78,7 +78,8 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, atLeastOnce()).simpleMethod();
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 
     @Test
@@ -97,6 +98,7 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 }

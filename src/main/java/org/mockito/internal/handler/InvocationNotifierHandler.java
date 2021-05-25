@@ -4,21 +4,19 @@
  */
 package org.mockito.internal.handler;
 
-import org.mockito.invocation.InvocationContainer;
+import static org.mockito.internal.exceptions.Reporter.invocationListenerThrewException;
+
+import java.util.List;
+
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 
-import java.util.List;
-
-import static org.mockito.internal.exceptions.Reporter.invocationListenerThrewException;
-
 /**
  * Handler, that call all listeners wanted for this mock, before delegating it
  * to the parameterized handler.
- *
- * Also imposterize MockHandlerImpl, delegate all call of InternalMockHandler to the real mockHandler
  */
 class InvocationNotifierHandler<T> implements MockHandler<T> {
 
@@ -30,23 +28,24 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
         this.invocationListeners = settings.getInvocationListeners();
     }
 
+    @Override
     public Object handle(Invocation invocation) throws Throwable {
         try {
             Object returnedValue = mockHandler.handle(invocation);
             notifyMethodCall(invocation, returnedValue);
             return returnedValue;
-        } catch (Throwable t){
+        } catch (Throwable t) {
             notifyMethodCallException(invocation, t);
             throw t;
         }
     }
 
-
     private void notifyMethodCall(Invocation invocation, Object returnValue) {
         for (InvocationListener listener : invocationListeners) {
             try {
-                listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, returnValue));
-            } catch(Throwable listenerThrowable) {
+                listener.reportInvocation(
+                        new NotifiedMethodInvocationReport(invocation, returnValue));
+            } catch (Throwable listenerThrowable) {
                 throw invocationListenerThrewException(listener, listenerThrowable);
             }
         }
@@ -55,19 +54,21 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
     private void notifyMethodCallException(Invocation invocation, Throwable exception) {
         for (InvocationListener listener : invocationListeners) {
             try {
-                listener.reportInvocation(new NotifiedMethodInvocationReport(invocation, exception));
-            } catch(Throwable listenerThrowable) {
+                listener.reportInvocation(
+                        new NotifiedMethodInvocationReport(invocation, exception));
+            } catch (Throwable listenerThrowable) {
                 throw invocationListenerThrewException(listener, listenerThrowable);
             }
         }
     }
 
+    @Override
     public MockCreationSettings<T> getMockSettings() {
         return mockHandler.getMockSettings();
     }
 
+    @Override
     public InvocationContainer getInvocationContainer() {
         return mockHandler.getInvocationContainer();
     }
-
 }

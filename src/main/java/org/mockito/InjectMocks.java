@@ -4,14 +4,14 @@
  */
 package org.mockito;
 
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.mockito.junit.MockitoJUnitRunner;
-
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Mark a field on which injection should be performed.
@@ -39,7 +39,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *     then, if there is several property of the same type, by the match of the property name and the mock name.
  *     <p><u>Note 1:</u> If you have properties with the same type (or same erasure), it's better to name all &#064;Mock
  *     annotated fields with the matching properties, otherwise Mockito might get confused and injection won't happen.</p>
- *     <p><u>Note 2:</u> If &#064;InjectMocks instance wasn't initialized before and have a no-arg constructor,
+ *     <p><u>Note 2:</u> If &#064;InjectMocks instance wasn't initialized before and has a no-arg constructor,
  *     then it will be initialized with this constructor.</p></li>
  *
  *     <li><strong>Field injection</strong>; mocks will first be resolved by type (if a single type match
@@ -71,8 +71,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  *   public class SampleBaseTestCase {
  *
- *       &#064;Before public void initMocks() {
- *           MockitoAnnotations.initMocks(this);
+ *       private AutoCloseable closeable;
+ *
+ *       &#064;Before public void openMocks() {
+ *           closeable = MockitoAnnotations.openMocks(this);
+ *       }
+ *
+ *       &#064;After public void releaseMocks() throws Exception {
+ *           closeable.close();
  *       }
  *   }
  * </code></pre>
@@ -83,13 +89,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * a parameterized constructor only or a no-arg constructor only, or both.
  * All these constructors can be package protected, protected or private, however
  * <u>Mockito cannot instantiate inner classes, local classes, abstract classes and of course interfaces.</u>
- * <u>Beware of private nest static classes too.</u>
+ * <u>Beware of private nested static classes too.</u>
  *
  * <p>The same stands for setters or fields, they can be declared with private
  * visibility, Mockito will see them through reflection.
  * However fields that are static or final will be ignored.</p>
  *
- * <p>So on the field that needs injection, for example constructor injection will happen here :</p>
+ * <p>So on the field that needs injection, for example constructor injection will happen here:</p>
  * <pre class="code"><code class="java">
  *   public class ArticleManager {
  *       ArticleManager(ArticleCalculator calculator, ArticleDatabase database) {
@@ -98,7 +104,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *   }
  * </code></pre>
  *
- * <p>Property setter injection will happen here :</p>
+ * <p>Property setter injection will happen here:</p>
  * <pre class="code"><code class="java">
  *   public class ArticleManager {
  *       // no-arg constructor
@@ -112,7 +118,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *   }
  * </code></pre>
  *
- * <p>Field injection will be used here :</p>
+ * <p>Field injection will be used here:</p>
  * <pre class="code"><code class="java">
  *   public class ArticleManager {
  *       private ArticleDatabase database;
@@ -141,11 +147,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * </p>
  *
  * <p>
- * <strong><code>MockitoAnnotations.initMocks(this)</code></strong> method has to be called to initialize annotated objects.
- * In above example, <code>initMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
- * For JUnit3 <code>initMocks()</code> can go to <code>setup()</code> method of a base class.
- * <strong>Instead</strong> you can also put initMocks() in your JUnit runner (&#064;RunWith) or use the built-in
- * {@link MockitoJUnitRunner}.
+ * <strong><code>MockitoAnnotations.openMocks(this)</code></strong> method has to be called to initialize annotated objects.
+ * In above example, <code>openMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
+ * For JUnit3 <code>openMocks()</code> can go to <code>setup()</code> method of a base class.
+ * <strong>Instead</strong> you can also put openMocks() in your JUnit runner (&#064;RunWith) or use the built-in
+ * {@link MockitoJUnitRunner}. Also, make sure to release any mocks after disposing your test class with a corresponding hook.
  * </p>
  *
  * <p>
@@ -155,7 +161,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * @see Mock
  * @see Spy
- * @see MockitoAnnotations#initMocks(Object)
+ * @see MockitoAnnotations#openMocks(Object)
  * @see MockitoJUnitRunner
  * @since 1.8.3
  */

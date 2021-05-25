@@ -4,49 +4,45 @@
  */
 package org.mockito.internal.junit;
 
-import junit.framework.ComparisonFailure;
 import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 
 public class ExceptionFactory {
 
-    private final static boolean hasJUnit = canLoadJunitClass();
+    private ExceptionFactory() {}
 
-    private ExceptionFactory() {
+    private static interface ExceptionFactoryImpl {
+        AssertionError create(String message, String wanted, String actual);
     }
 
-    /**
-     * If JUnit is used, an AssertionError is returned that extends from JUnit {@link ComparisonFailure} and hence provide a better IDE support as the comparison result is comparable
-     */
-    public static AssertionError createArgumentsAreDifferentException(String message, String wanted, String actual) {
-        if (hasJUnit) {
-            return createJUnitArgumentsAreDifferent(message, wanted, actual);
-        }
-        return new ArgumentsAreDifferent(message);
-    }
+    private static final ExceptionFactoryImpl factory;
 
-    private static AssertionError createJUnitArgumentsAreDifferent(String message, String wanted, String actual) {
-        return JUnitArgsAreDifferent.create(message, wanted, actual);
-    }
+    static {
+        ExceptionFactoryImpl theFactory = null;
 
-    private static boolean canLoadJunitClass() {
         try {
-            JUnitArgsAreDifferent.create("message", "wanted", "actual");
-        } catch (NoClassDefFoundError onlyIfJUnitIsNotAvailable) {
-            return false;
+            Class.forName("org.opentest4j.AssertionFailedError");
+            theFactory = org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent::new;
+        } catch (ClassNotFoundException onlyIfOpenTestIsNotAvailable) {
+            try {
+                Class.forName("junit.framework.ComparisonFailure");
+                theFactory = org.mockito.exceptions.verification.junit.ArgumentsAreDifferent::new;
+            } catch (ClassNotFoundException onlyIfJUnitIsNotAvailable) {
+            }
         }
-        return true;
+        factory = (theFactory == null) ? ArgumentsAreDifferent::new : theFactory;
     }
 
     /**
-     * Don't inline this class! It allows create the JUnit-ArgumentsAreDifferent exception without the need to use reflection.
-     * <p>
-     * If JUnit is not available a call to {@link #create(String, String, String)} will throw a {@link NoClassDefFoundError}.
-     * The {@link NoClassDefFoundError} will be thrown by the class loader cause the JUnit class {@link ComparisonFailure}
-     * can't be loaded which is a upper class of ArgumentsAreDifferent.
+     * Returns an AssertionError that describes the fact that the arguments of an invocation are different.
+     * If {@link org.opentest4j.AssertionFailedError} is on the class path (used by JUnit 5 and others),
+     * it returns a class that extends it. Otherwise, if {@link junit.framework.ComparisonFailure} is on the
+     * class path (shipped with JUnit 3 and 4), it will return a class that extends that. This provides
+     * better IDE support as the comparison result can be opened in a visual diff. If neither are available,
+     * it returns an instance of
+     * {@link org.mockito.exceptions.verification.ArgumentsAreDifferent}.
      */
-    private static class JUnitArgsAreDifferent {
-        static AssertionError create(String message, String wanted, String actual) {
-            return new org.mockito.exceptions.verification.junit.ArgumentsAreDifferent(message, wanted, actual);
-        }
+    public static AssertionError createArgumentsAreDifferentException(
+            String message, String wanted, String actual) {
+        return factory.create(message, wanted, actual);
     }
 }

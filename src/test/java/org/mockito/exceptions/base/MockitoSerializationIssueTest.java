@@ -2,15 +2,14 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.exceptions.base;
 
-import org.junit.Test;
-import org.mockito.internal.configuration.ConfigurationAccess;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
+import org.mockito.internal.configuration.ConfigurationAccess;
 
 public class MockitoSerializationIssueTest {
 
@@ -20,11 +19,14 @@ public class MockitoSerializationIssueTest {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
 
         // when
-        MockitoSerializationIssue issue = new MockitoSerializationIssue("msg", new Exception("cause"));
+        MockitoSerializationIssue issue =
+                new MockitoSerializationIssue("msg", new Exception("cause"));
 
         // then
-        assertThat(Arrays.toString(issue.getUnfilteredStackTrace())).contains("MockitoSerializationIssueTest");
-        assertThat(Arrays.toString(issue.getStackTrace())).doesNotContain("MockitoSerializationIssueTest");
+        assertThat(Arrays.toString(issue.getUnfilteredStackTrace()))
+                .contains("MockitoSerializationIssueTest");
+        assertThat(Arrays.toString(issue.getStackTrace()))
+                .doesNotContain("MockitoSerializationIssueTest");
     }
 
     @Test
@@ -33,10 +35,13 @@ public class MockitoSerializationIssueTest {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
 
         // when
-        MockitoSerializationIssue issue = new MockitoSerializationIssue("msg", new Exception("cause"));
+        MockitoSerializationIssue issue =
+                new MockitoSerializationIssue("msg", new Exception("cause"));
 
         // then
-        assertThat(Arrays.toString(issue.getUnfilteredStackTrace())).contains("MockitoSerializationIssueTest");
-        assertThat(Arrays.toString(issue.getStackTrace())).contains("MockitoSerializationIssueTest");
+        assertThat(Arrays.toString(issue.getUnfilteredStackTrace()))
+                .contains("MockitoSerializationIssueTest");
+        assertThat(Arrays.toString(issue.getStackTrace()))
+                .contains("MockitoSerializationIssueTest");
     }
 }

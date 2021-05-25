@@ -6,17 +6,17 @@ package org.mockitousage.bugs;
 
 import static org.junit.Assert.fail;
 
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-//see bug 190
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+// see bug 190
 public class ShouldNotDeadlockAnswerExecutionTest {
 
     @Test
@@ -91,7 +91,6 @@ public class ShouldNotDeadlockAnswerExecutionTest {
 
             return null;
         }
-
     }
 
     static class ServiceRunner implements Runnable {
@@ -105,14 +104,10 @@ public class ShouldNotDeadlockAnswerExecutionTest {
         public void run() {
             service.verySlowMethod();
         }
-
     }
 
     interface Service {
 
         String verySlowMethod();
-
     }
-
 }
-

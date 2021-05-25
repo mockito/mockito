@@ -7,6 +7,7 @@ package org.mockito.internal.hamcrest;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.mockito.ArgumentMatcher;
+import org.mockito.internal.matchers.VarargMatcher;
 
 public class HamcrestArgumentMatcher<T> implements ArgumentMatcher<T> {
 
@@ -16,12 +17,18 @@ public class HamcrestArgumentMatcher<T> implements ArgumentMatcher<T> {
         this.matcher = matcher;
     }
 
+    @Override
     public boolean matches(Object argument) {
         return this.matcher.matches(argument);
     }
 
+    public boolean isVarargMatcher() {
+        return matcher instanceof VarargMatcher;
+    }
+
+    @Override
     public String toString() {
-        //TODO SF add unit tests and integ test coverage for describeTo()
+        // TODO SF add unit tests and integ test coverage for toString()
         return StringDescription.toString(matcher);
     }
 }

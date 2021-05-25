@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.reporting;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
@@ -16,22 +19,51 @@ import org.mockito.invocation.MatchableInvocation;
 public class SmartPrinter {
 
     private final String wanted;
-    private final String actual;
+    private final List<String> actuals;
 
-    public SmartPrinter(MatchableInvocation wanted, Invocation actual, Integer ... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
+    public SmartPrinter(
+            MatchableInvocation wanted,
+            Invocation actual,
+            Integer... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
+        this(
+                wanted,
+                Collections.singletonList(actual),
+                indexesOfMatchersToBeDescribedWithExtraTypeInfo);
+    }
+
+    public SmartPrinter(
+            MatchableInvocation wanted,
+            List<Invocation> allActualInvocations,
+            Integer... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
         PrintSettings printSettings = new PrintSettings();
-        printSettings.setMultiline(wanted.toString().contains("\n") || actual.toString().contains("\n"));
-        printSettings.setMatchersToBeDescribedWithExtraTypeInfo(indexesOfMatchersToBeDescribedWithExtraTypeInfo);
+        printSettings.setMultiline(isMultiLine(wanted, allActualInvocations));
+        printSettings.setMatchersToBeDescribedWithExtraTypeInfo(
+                indexesOfMatchersToBeDescribedWithExtraTypeInfo);
 
         this.wanted = printSettings.print(wanted);
-        this.actual = printSettings.print(actual);
+
+        List<String> actuals = new ArrayList<>();
+        for (Invocation actual : allActualInvocations) {
+            actuals.add(printSettings.print(actual));
+        }
+        this.actuals = Collections.unmodifiableList(actuals);
     }
 
     public String getWanted() {
         return wanted;
     }
 
-    public String getActual() {
-        return actual;
+    public List<String> getActuals() {
+        return actuals;
+    }
+
+    private static boolean isMultiLine(
+            MatchableInvocation wanted, List<Invocation> allActualInvocations) {
+        boolean isWantedMultiline = wanted.toString().contains("\n");
+        boolean isAnyActualMultiline = false;
+        for (Invocation invocation : allActualInvocations) {
+            isAnyActualMultiline |= invocation.toString().contains("\n");
+        }
+        return isWantedMultiline || isAnyActualMultiline;
     }
 }

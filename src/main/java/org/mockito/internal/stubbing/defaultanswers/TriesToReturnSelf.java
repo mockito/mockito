@@ -4,16 +4,17 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import java.io.Serializable;
+
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.io.Serializable;
-
-public class TriesToReturnSelf implements Answer<Object>, Serializable{
+public class TriesToReturnSelf implements Answer<Object>, Serializable {
 
     private final ReturnsEmptyValues defaultReturn = new ReturnsEmptyValues();
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Class<?> methodReturnType = invocation.getMethod().getReturnType();
         Object mock = invocation.getMock();
@@ -25,5 +26,4 @@ public class TriesToReturnSelf implements Answer<Object>, Serializable{
 
         return defaultReturn.returnValueFor(methodReturnType);
     }
-
 }

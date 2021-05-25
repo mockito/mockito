@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.util;
 
+import org.mockito.plugins.MockitoLogger;
+
 public class SimpleMockitoLogger implements MockitoLogger {
 
     private StringBuilder loggedInfo = new StringBuilder();
@@ -27,7 +29,8 @@ public class SimpleMockitoLogger implements MockitoLogger {
 
     public void assertEmpty() {
         if (loggedInfo.length() != 0) {
-            throw new AssertionError("Expected the logger to be empty but it has:\n" + loggedInfo.toString());
+            throw new AssertionError(
+                    "Expected the logger to be empty but it has:\n" + loggedInfo.toString());
         }
     }
 }

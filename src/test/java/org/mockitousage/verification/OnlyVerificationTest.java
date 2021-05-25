@@ -2,21 +2,20 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.verification;
+
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitoutil.TestBase;
-
-import java.util.List;
-
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.only;
-import static org.mockito.Mockito.verify;
 
 public class OnlyVerificationTest extends TestBase {
 
@@ -42,7 +41,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).get(0);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 
     @Test
@@ -52,7 +52,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).clear();
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -62,7 +63,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).get(999);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 
     @Test
@@ -72,7 +74,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).get(2);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -82,5 +85,4 @@ public class OnlyVerificationTest extends TestBase {
         verify(mock, only()).clear();
         verify(mock2, only()).get(0);
     }
-
 }

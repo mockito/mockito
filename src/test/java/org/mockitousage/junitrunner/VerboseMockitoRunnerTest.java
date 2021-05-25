@@ -4,6 +4,10 @@
  */
 package org.mockitousage.junitrunner;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
+
 import junit.framework.TestCase;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,13 +20,9 @@ import org.mockito.runners.VerboseMockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
-
-//@RunWith(ConsoleSpammingMockitoJUnitRunner.class)
+// @RunWith(ConsoleSpammingMockitoJUnitRunner.class)
 @RunWith(VerboseMockitoJUnitRunner.class)
-//TODO
+// TODO
 public class VerboseMockitoRunnerTest extends TestBase {
 
     @Mock private IMethods mock;
@@ -52,15 +52,15 @@ public class VerboseMockitoRunnerTest extends TestBase {
         public void _test() {
             IMethods mock = mock(IMethods.class);
 
-            //some stubbing
+            // some stubbing
             when(mock.simpleMethod(1)).thenReturn("foo");
             when(mock.otherMethod()).thenReturn("foo");
             when(mock.booleanObjectReturningMethod()).thenReturn(false);
 
-            //stub called with different args:
+            // stub called with different args:
             String ret = mock.simpleMethod(2);
 
-            //assertion fails due to stub called with different args
+            // assertion fails due to stub called with different args
             assertEquals("foo", ret);
         }
     }
@@ -72,9 +72,9 @@ public class VerboseMockitoRunnerTest extends TestBase {
     @Test
     @Ignore
     public void shouldContainWarnings() throws Exception {
-        //when
+        // when
         Result result = new JUnitCore().run(new ContainsWarnings());
-        //then
+        // then
         assertEquals(1, result.getFailures().size());
         Throwable exception = result.getFailures().get(0).getException();
         assertTrue(exception instanceof ExceptionIncludingMockitoWarnings);

@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.progress;
 
+import java.util.List;
+
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.LocalizedMatcher;
-
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public interface ArgumentMatcherStorage {
@@ -25,5 +25,4 @@ public interface ArgumentMatcherStorage {
     void validateState();
 
     void reset();
-
 }

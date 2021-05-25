@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.debugging;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.UnusedStubsFinder;
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 import org.mockito.invocation.Invocation;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @Deprecated
 public class WarningsCollector {
@@ -18,7 +18,7 @@ public class WarningsCollector {
     private final List<Object> createdMocks;
 
     public WarningsCollector() {
-        createdMocks = new LinkedList<Object>();
+        createdMocks = new LinkedList<>();
     }
 
     public String getWarnings() {

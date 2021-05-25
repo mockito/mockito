@@ -2,10 +2,10 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.progress;
 
 import java.util.Set;
+
 import org.mockito.listeners.MockitoListener;
 import org.mockito.listeners.VerificationListener;
 import org.mockito.mock.MockCreationSettings;
@@ -42,6 +42,8 @@ public interface MockingProgress {
     ArgumentMatcherStorage getArgumentMatcherStorage();
 
     void mockingStarted(Object mock, MockCreationSettings settings);
+
+    void mockingStarted(Class<?> mock, MockCreationSettings settings);
 
     void addListener(MockitoListener listener);
 

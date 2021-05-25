@@ -2,16 +2,15 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.bugs;
-
-import org.junit.Test;
-import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-//see issue 101
+import org.junit.Test;
+import org.mockitoutil.TestBase;
+
+// see issue 101
 public class CovariantOverrideTest extends TestBase {
 
     public interface ReturnsObject {

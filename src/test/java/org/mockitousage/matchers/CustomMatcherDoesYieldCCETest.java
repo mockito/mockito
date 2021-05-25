@@ -4,21 +4,20 @@
  */
 package org.mockitousage.matchers;
 
-import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.Mock;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
-
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 
+import org.junit.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Mock;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
+
 public class CustomMatcherDoesYieldCCETest extends TestBase {
 
-    @Mock
-    private IMethods mock;
+    @Mock private IMethods mock;
 
     @Test
     public void shouldNotThrowCCE() {

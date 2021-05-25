@@ -4,16 +4,17 @@
  */
 package org.mockito.internal;
 
+import static java.util.Collections.singletonList;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class InOrderImplTest extends TestBase {
@@ -22,15 +23,15 @@ public class InOrderImplTest extends TestBase {
 
     @Test
     public void shouldMarkVerifiedInOrder() throws Exception {
-        //given
+        // given
         InOrderImpl impl = new InOrderImpl(singletonList(mock));
         Invocation i = new InvocationBuilder().toInvocation();
         assertFalse(impl.isVerified(i));
 
-        //when
+        // when
         impl.markVerified(i);
 
-        //then
+        // then
         assertTrue(impl.isVerified(i));
     }
 }

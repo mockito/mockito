@@ -4,16 +4,6 @@
  */
 package org.mockitousage.debugging;
 
-import org.assertj.core.api.Condition;
-import org.junit.Test;
-import org.mockito.InOrder;
-import org.mockito.invocation.DescribedInvocation;
-import org.mockito.listeners.InvocationListener;
-import org.mockito.listeners.MethodInvocationReport;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
@@ -24,6 +14,15 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.withSettings;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.assertj.core.api.Condition;
+import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.invocation.DescribedInvocation;
+import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.MethodInvocationReport;
 
 /**
  * Ensures that custom listeners can be registered and will be called every time
@@ -113,7 +112,8 @@ public class InvocationListenerCallbackTest {
         }
     }
 
-    private static Condition<RememberingListener> notifiedFor(final Object returned, final String location) {
+    private static Condition<RememberingListener> notifiedFor(
+            final Object returned, final String location) {
         return new Condition<RememberingListener>() {
             public boolean matches(RememberingListener toBeAsserted) {
                 assertThat(toBeAsserted.returnValue).isEqualTo(returned);
@@ -142,9 +142,9 @@ public class InvocationListenerCallbackTest {
             this.invocation = mcr.getInvocation();
             this.returnValue = mcr.getReturnedValue();
             this.locationOfStubbing = mcr.getLocationOfStubbing();
-            listenerContainer.add(this); //so that we can assert on order
+            listenerContainer.add(this); // so that we can assert on order
         }
     }
 
-    private static class OvenNotWorking extends RuntimeException { }
+    private static class OvenNotWorking extends RuntimeException {}
 }

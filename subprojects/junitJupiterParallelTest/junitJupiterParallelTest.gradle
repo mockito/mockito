@@ -1,0 +1,15 @@
+description = "Tests that require fine tuned parallel settings for JUnit Jupiter (bug #1630)"
+
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+apply plugin: "java"
+
+dependencies {
+    testImplementation libraries.junitJupiterApi
+    testImplementation project(":junit-jupiter")
+    testRuntime libraries.junitJupiterEngine
+}
+
+test {
+    useJUnitPlatform()
+}

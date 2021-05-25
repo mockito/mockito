@@ -5,16 +5,16 @@
 package org.mockito.runners;
 
 import java.lang.reflect.InvocationTargetException;
+
 import org.junit.runner.Description;
 import org.junit.runner.manipulation.Filter;
 import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.RunNotifier;
 
-
 /**
  * Runner moved to a new place see {@link org.mockito.junit.MockitoJUnitRunner}
  *
- * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner}, this class will be removed with Mockito 3
+ * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner}, this class will be removed with Mockito 4
  */
 @Deprecated
 public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {
@@ -22,7 +22,7 @@ public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {
     /**
      * Silent runner moved to a new place see {@link org.mockito.junit.MockitoJUnitRunner.Silent}
      *
-     * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner.Silent}, this class will be removed with Mockito 3
+     * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner.Silent}, this class will be removed with Mockito 4
      */
     @Deprecated
     public static class Silent extends MockitoJUnitRunner {
@@ -34,7 +34,7 @@ public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {
     /**
      * Silent runner moved to a new place see {@link org.mockito.junit.MockitoJUnitRunner.Strict}
      *
-     * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner.Strict}, this class will be removed with Mockito 3
+     * @deprecated Moved to {@link org.mockito.junit.MockitoJUnitRunner.Strict}, this class will be removed with Mockito 4
      */
     @Deprecated
     public static class Strict extends MockitoJUnitRunner {
@@ -59,6 +59,7 @@ public class MockitoJUnitRunner extends org.mockito.junit.MockitoJUnitRunner {
         return super.getDescription();
     }
 
+    @Override
     @Deprecated
     public void filter(Filter filter) throws NoTestsRemainException {
         super.filter(filter);

@@ -4,6 +4,10 @@
  */
 package org.mockitointegration;
 
+import static org.mockitoutil.ClassLoaders.coverageTool;
+
+import java.util.Set;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import org.hamcrest.Matcher;
@@ -14,45 +18,51 @@ import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.Objenesis;
 
-import java.util.Set;
-
-import static org.mockitoutil.ClassLoaders.coverageTool;
-
 public class NoJUnitDependenciesTest {
 
     @Test
     public void pure_mockito_should_not_depend_JUnit___ByteBuddy() throws Exception {
-        Assume.assumeTrue("ByteBuddyMockMaker".equals(Plugins.getMockMaker().getClass().getSimpleName()));
+        Assume.assumeTrue(
+                "ByteBuddyMockMaker".equals(Plugins.getMockMaker().getClass().getSimpleName()));
 
-        ClassLoader classLoader_without_JUnit = ClassLoaders.excludingClassLoader()
-                .withCodeSourceUrlOf(
-                        Mockito.class,
-                        Matcher.class,
-                        ByteBuddy.class,
-                        ByteBuddyAgent.class,
-                        Objenesis.class
-                )
-                .withCodeSourceUrlOf(coverageTool())
-                .without("junit", "org.junit")
-                .build();
+        ClassLoader classLoader_without_JUnit =
+                ClassLoaders.excludingClassLoader()
+                        .withCodeSourceUrlOf(
+                                Mockito.class,
+                                Matcher.class,
+                                ByteBuddy.class,
+                                ByteBuddyAgent.class,
+                                Objenesis.class)
+                        .withCodeSourceUrlOf(coverageTool())
+                        .without("junit", "org.junit", "org.opentest4j")
+                        .build();
 
-        Set<String> pureMockitoAPIClasses = ClassLoaders.in(classLoader_without_JUnit).omit("runners", "junit", "JUnit").listOwnedClasses();
+        Set<String> pureMockitoAPIClasses =
+                ClassLoaders.in(classLoader_without_JUnit)
+                        .omit("runners", "junit", "JUnit", "opentest4j")
+                        .listOwnedClasses();
 
-        // The later class is required to be initialized before any inline mock maker classes can be loaded.
-        checkDependency(classLoader_without_JUnit, "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
-        pureMockitoAPIClasses.remove("org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
+        // The later class is required to be initialized before any inline mock maker classes can be
+        // loaded.
+        checkDependency(
+                classLoader_without_JUnit,
+                "org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker");
+        pureMockitoAPIClasses.remove(
+                "org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker");
 
         for (String pureMockitoAPIClass : pureMockitoAPIClasses) {
             checkDependency(classLoader_without_JUnit, pureMockitoAPIClass);
         }
     }
 
-    private void checkDependency(ClassLoader classLoader_without_JUnit, String pureMockitoAPIClass) throws ClassNotFoundException {
+    private void checkDependency(ClassLoader classLoader_without_JUnit, String pureMockitoAPIClass)
+            throws ClassNotFoundException {
         try {
             Class.forName(pureMockitoAPIClass, true, classLoader_without_JUnit);
         } catch (Throwable e) {
             e.printStackTrace();
-            throw new AssertionError(String.format("'%s' has some dependency to JUnit", pureMockitoAPIClass));
+            throw new AssertionError(
+                    String.format("'%s' has some dependency to JUnit", pureMockitoAPIClass));
         }
     }
 }

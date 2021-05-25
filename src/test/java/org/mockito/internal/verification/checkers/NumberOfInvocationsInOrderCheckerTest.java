@@ -2,11 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.verification.checkers;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -35,14 +35,12 @@ public class NumberOfInvocationsInOrderCheckerTest {
 
     private IMethods mock;
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
+    @Rule public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setup() {
         context = new InOrderContextImpl();
         mock = mock(IMethods.class, "mock");
-
     }
 
     @Test
@@ -61,7 +59,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportTooLittleInvocations() throws Exception {
+    public void shouldReportTooFewInvocations() throws Exception {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
 
@@ -89,9 +87,10 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportTooLittleActual() throws Exception {
+    public void shouldReportTooFewActual() throws Exception {
         wanted = buildSimpleMethod().toInvocationMatcher();
-        invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
+        invocations =
+                asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
         exception.expect(VerificationInOrderFailure.class);
         exception.expectMessage("mock.simpleMethod()");
@@ -102,18 +101,18 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportWithLastInvocationStackTrace() throws Exception {
+    public void shouldReportWithAllInvocationsStackTrace() throws Exception {
         wanted = buildSimpleMethod().toInvocationMatcher();
-        invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
+        invocations =
+                asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
         exception.expect(VerificationInOrderFailure.class);
         exception.expectMessage("mock.simpleMethod()");
         exception.expectMessage("Wanted 100 times");
         exception.expectMessage("But was 2 times");
-        exception.expectMessage(containsTimes("-> at", 2));
+        exception.expectMessage(containsTimes("-> at", 3));
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
-
     }
 
     @Test
@@ -168,7 +167,7 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expect(VerificationInOrderFailure.class);
         exception.expectMessage("mock.simpleMethod()");
         exception.expectMessage("Wanted 0 times");
-        exception.expectMessage("But was 1 time. Undesired invocation");
+        exception.expectMessage("But was 1 time:");
         exception.expectMessage("" + first.getLocation());
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0, context);
@@ -218,7 +217,6 @@ public class NumberOfInvocationsInOrderCheckerTest {
         public void describeTo(Description description) {
             description.appendText("containing '" + expected + "' exactly " + amount + " times");
         }
-
     }
 
     private InvocationBuilder buildSimpleMethod() {

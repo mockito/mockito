@@ -4,13 +4,13 @@
  */
 package org.mockito.invocation;
 
-import org.mockito.Incubating;
-import org.mockito.MockitoFramework;
-import org.mockito.mock.MockCreationSettings;
-
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
+
+import org.mockito.Incubating;
+import org.mockito.MockitoFramework;
+import org.mockito.mock.MockCreationSettings;
 
 /**
  * Available via {@link MockitoFramework#getInvocationFactory()}.
@@ -47,7 +47,12 @@ public interface InvocationFactory {
      * @since 2.10.0
      */
     @Deprecated
-    Invocation createInvocation(Object target, MockCreationSettings settings, Method method, Callable realMethod, Object... args);
+    Invocation createInvocation(
+            Object target,
+            MockCreationSettings settings,
+            Method method,
+            Callable realMethod,
+            Object... args);
 
     /**
      * Behavior of the real method.
@@ -73,5 +78,10 @@ public interface InvocationFactory {
      * @since 2.14.0
      */
     @Incubating
-    Invocation createInvocation(Object target, MockCreationSettings settings, Method method, RealMethodBehavior realMethod, Object... args);
+    Invocation createInvocation(
+            Object target,
+            MockCreationSettings settings,
+            Method method,
+            RealMethodBehavior realMethod,
+            Object... args);
 }

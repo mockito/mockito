@@ -2,13 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.spies;
-
-import org.assertj.core.api.Assertions;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -17,6 +11,11 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockitoutil.Conditions.methodsInStackTrace;
+
+import org.assertj.core.api.Assertions;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class PartialMockingWithSpiesTest extends TestBase {
@@ -28,6 +27,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
 
     class InheritMe {
         private String inherited = "100$";
+
         protected String getInherited() {
             return inherited;
         }
@@ -90,13 +90,14 @@ public class PartialMockingWithSpiesTest extends TestBase {
     public void shouldAllowStubbingWithThrowablesMethodsThatDelegateToOtherMethods() {
         // when
         doThrow(new RuntimeException("appetite for destruction"))
-            .when(spy).getNameButDelegateToMethodThatThrows();
+                .when(spy)
+                .getNameButDelegateToMethodThatThrows();
 
         // then
         try {
             spy.getNameButDelegateToMethodThatThrows();
             fail();
-        } catch(Exception e) {
+        } catch (Exception e) {
             assertEquals("appetite for destruction", e.getMessage());
         }
     }
@@ -109,15 +110,16 @@ public class PartialMockingWithSpiesTest extends TestBase {
             fail();
         } catch (Throwable t) {
             // then
-            Assertions.assertThat(t).has(methodsInStackTrace(
-                    "throwSomeException",
-                    "getNameButDelegateToMethodThatThrows",
-                    "shouldStackTraceGetFilteredOnUserExceptions"
-                    ));
+            Assertions.assertThat(t)
+                    .has(
+                            methodsInStackTrace(
+                                    "throwSomeException",
+                                    "getNameButDelegateToMethodThatThrows",
+                                    "shouldStackTraceGetFilteredOnUserExceptions"));
         }
     }
 
-//    @Test //manual verification
+    //    @Test //manual verification
     public void verifyTheStackTrace() {
         spy.getNameButDelegateToMethodThatThrows();
     }

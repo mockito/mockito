@@ -5,11 +5,11 @@
 package org.mockito;
 
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
-import org.mockito.internal.stubbing.defaultanswers.TriesToReturnSelf;
 import org.mockito.internal.stubbing.defaultanswers.GloballyConfiguredAnswer;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsDeepStubs;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMocks;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsSmartNulls;
+import org.mockito.internal.stubbing.defaultanswers.TriesToReturnSelf;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -24,7 +24,7 @@ import org.mockito.stubbing.Answer;
  * </code></pre>
  * <b>This is not the full list</b> of Answers available in Mockito. Some interesting answers can be found in org.mockito.stubbing.answers package.
  */
-public enum Answers implements Answer<Object>{
+public enum Answers implements Answer<Object> {
     /**
      * The default configured answer of every mock.
      *
@@ -52,7 +52,6 @@ public enum Answers implements Answer<Object>{
      */
     RETURNS_MOCKS(new ReturnsMocks()),
 
-
     /**
      * An answer that returns <strong>deep stubs</strong> (not mocks).
      *
@@ -78,8 +77,7 @@ public enum Answers implements Answer<Object>{
      *
      * @see org.mockito.Mockito#RETURNS_SELF
      */
-    RETURNS_SELF(new TriesToReturnSelf())
-    ;
+    RETURNS_SELF(new TriesToReturnSelf());
 
     private final Answer<Object> implementation;
 
@@ -96,6 +94,7 @@ public enum Answers implements Answer<Object>{
         return this;
     }
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return implementation.answer(invocation);
     }

@@ -2,8 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.bugs.injection;
+
+import static org.junit.Assert.assertNotSame;
+
+import java.util.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,10 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.*;
-
-import static org.junit.Assert.assertNotSame;
 
 // issue 262
 @RunWith(MockitoJUnitRunner.class)
@@ -31,12 +30,10 @@ public class ShouldNotTryToInjectInFinalOrStaticFieldsTest {
     @InjectMocks private ExampleService exampleService = new ExampleService();
 
     @Test
-    public void dont_fail_with_CONSTANTS() throws Exception {
-    }
+    public void dont_fail_with_CONSTANTS() throws Exception {}
 
     @Test
     public void dont_inject_in_final() {
         assertNotSame(unrelatedSet, exampleService.aSet);
     }
-
 }

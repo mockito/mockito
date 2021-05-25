@@ -2,8 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 import org.junit.After;
 import org.junit.Test;
@@ -14,10 +17,6 @@ import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 /**
  * invalid state happens if:
@@ -46,6 +45,7 @@ public class InvalidStateDetectionTest extends TestBase {
         super.resetState();
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldDetectUnfinishedStubbing() {
         when(mock.simpleMethod());
@@ -67,9 +67,13 @@ public class InvalidStateDetectionTest extends TestBase {
         detectsAndCleansUp(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
 
         when(mock.simpleMethod());
+        detectsAndCleansUp(new OnVerifyNoInteractions(), UnfinishedStubbingException.class);
+
+        when(mock.simpleMethod());
         detectsAndCleansUp(new OnDoAnswer(), UnfinishedStubbingException.class);
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldDetectUnfinishedDoAnswerStubbing() {
         doAnswer(null);
@@ -91,9 +95,13 @@ public class InvalidStateDetectionTest extends TestBase {
         detectsAndCleansUp(new OnVerifyNoMoreInteractions(), UnfinishedStubbingException.class);
 
         doAnswer(null);
+        detectsAndCleansUp(new OnVerifyNoInteractions(), UnfinishedStubbingException.class);
+
+        doAnswer(null);
         detectsAndCleansUp(new OnDoAnswer(), UnfinishedStubbingException.class);
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldDetectUnfinishedVerification() {
         verify(mock);
@@ -110,6 +118,9 @@ public class InvalidStateDetectionTest extends TestBase {
 
         verify(mock);
         detectsAndCleansUp(new OnVerifyNoMoreInteractions(), UnfinishedVerificationException.class);
+
+        verify(mock);
+        detectsAndCleansUp(new OnVerifyNoInteractions(), UnfinishedVerificationException.class);
 
         verify(mock);
         detectsAndCleansUp(new OnDoAnswer(), UnfinishedVerificationException.class);
@@ -130,6 +141,9 @@ public class InvalidStateDetectionTest extends TestBase {
         detectsAndCleansUp(new OnVerifyNoMoreInteractions(), InvalidUseOfMatchersException.class);
 
         anyObject();
+        detectsAndCleansUp(new OnVerifyNoInteractions(), InvalidUseOfMatchersException.class);
+
+        anyObject();
         detectsAndCleansUp(new OnDoAnswer(), InvalidUseOfMatchersException.class);
     }
 
@@ -138,17 +152,20 @@ public class InvalidStateDetectionTest extends TestBase {
         doThrow(new RuntimeException()).when(mock);
 
         try {
-        	doThrow(new RuntimeException()).when(mock).oneArg(true);
+            doThrow(new RuntimeException()).when(mock).oneArg(true);
             fail();
-        } catch (UnfinishedStubbingException e) {}
+        } catch (UnfinishedStubbingException e) {
+        }
 
         doThrow(new RuntimeException()).when(mock).oneArg(true);
         try {
             mock.oneArg(true);
             fail();
-        } catch (RuntimeException e) {}
+        } catch (RuntimeException e) {
+        }
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldCorrectStateAfterDetectingUnfinishedVerification() {
         mock.simpleMethod();
@@ -157,7 +174,8 @@ public class InvalidStateDetectionTest extends TestBase {
         try {
             verify(mock).simpleMethod();
             fail();
-        } catch (UnfinishedVerificationException e) {}
+        } catch (UnfinishedVerificationException e) {
+        }
 
         verify(mock).simpleMethod();
     }
@@ -167,36 +185,49 @@ public class InvalidStateDetectionTest extends TestBase {
     }
 
     private static class OnVerify implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
         public void detect(IMethods mock) {
             verify(mock);
         }
     }
 
     private static class OnVerifyInOrder implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
         public void detect(IMethods mock) {
             inOrder(mock).verify(mock);
         }
     }
 
     private static class OnVerifyZeroInteractions implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
         public void detect(IMethods mock) {
             verifyZeroInteractions(mock);
         }
     }
 
     private static class OnVerifyNoMoreInteractions implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
         public void detect(IMethods mock) {
             verifyNoMoreInteractions(mock);
         }
     }
 
+    private static class OnVerifyNoInteractions implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+        public void detect(IMethods mock) {
+            verifyNoInteractions(mock);
+        }
+    }
+
     private static class OnDoAnswer implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
         public void detect(IMethods mock) {
             doAnswer(null);
         }
     }
 
     private static class OnStub implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
         public void detect(IMethods mock) {
             when(mock);
         }
@@ -209,12 +240,14 @@ public class InvalidStateDetectionTest extends TestBase {
     }
 
     private static class OnMockCreation implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
         public void detect(IMethods mock) {
             mock(IMethods.class);
         }
     }
 
     private static class OnSpyCreation implements DetectsInvalidState {
+        @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
         public void detect(IMethods mock) {
             spy(new Object());
         }
@@ -227,7 +260,7 @@ public class InvalidStateDetectionTest extends TestBase {
         } catch (Exception e) {
             assertEquals(expected, e.getClass());
         }
-        //Make sure state is cleaned up
+        // Make sure state is cleaned up
         new StateMaster().validate();
     }
 }

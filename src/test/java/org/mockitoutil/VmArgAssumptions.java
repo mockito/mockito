@@ -4,11 +4,11 @@
  */
 package org.mockitoutil;
 
-import java.lang.management.ManagementFactory;
-import java.util.List;
-
 import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
+
+import java.lang.management.ManagementFactory;
+import java.util.List;
 
 public class VmArgAssumptions {
     public static void assumeVmArgPresent(String vmArg) {
@@ -28,5 +28,4 @@ public class VmArgAssumptions {
         }
         return false;
     }
-
 }

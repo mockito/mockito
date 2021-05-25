@@ -4,14 +4,21 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockitoutil.ClassLoaders.coverageTool;
+
+import java.io.Serializable;
+import java.util.List;
+
 import net.bytebuddy.ByteBuddy;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.handler.MockHandlerImpl;
-import org.mockito.invocation.InvocationContainer;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
@@ -20,13 +27,6 @@ import org.mockito.stubbing.Answer;
 import org.mockitoutil.ClassLoaders;
 import org.mockitoutil.SimpleSerializationUtil;
 import org.objenesis.ObjenesisStd;
-
-import java.io.Serializable;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockitoutil.ClassLoaders.coverageTool;
 
 public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
 
@@ -40,16 +40,17 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
 
     @Test
     public void should_create_mock_from_interface() throws Exception {
-        SomeInterface proxy = mockMaker.createMock(settingsFor(SomeInterface.class), dummyHandler());
+        SomeInterface proxy =
+                mockMaker.createMock(settingsFor(SomeInterface.class), dummyHandler());
 
         Class<?> superClass = proxy.getClass().getSuperclass();
         assertThat(superClass).isEqualTo(Object.class);
     }
 
-
     @Test
     public void should_create_mock_from_class() throws Exception {
-        ClassWithoutConstructor proxy = mockMaker.createMock(settingsFor(ClassWithoutConstructor.class), dummyHandler());
+        ClassWithoutConstructor proxy =
+                mockMaker.createMock(settingsFor(ClassWithoutConstructor.class), dummyHandler());
 
         Class<?> superClass = mockTypeOf(proxy.getClass());
         assertThat(superClass).isEqualTo(ClassWithoutConstructor.class);
@@ -60,9 +61,11 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
         try {
             new ClassWithDodgyConstructor();
             fail();
-        } catch (Exception expected) {}
+        } catch (Exception expected) {
+        }
 
-        ClassWithDodgyConstructor mock = mockMaker.createMock(settingsFor(ClassWithDodgyConstructor.class), dummyHandler());
+        ClassWithDodgyConstructor mock =
+                mockMaker.createMock(settingsFor(ClassWithDodgyConstructor.class), dummyHandler());
         assertThat(mock).isNotNull();
     }
 
@@ -74,26 +77,31 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
         MockHandler handlerOne = mockMaker.getHandler(mockOne);
         MockHandler handlerTwo = mockMaker.getHandler(mockTwo);
 
-
         assertThat(handlerOne).isNotSameAs(handlerTwo);
     }
 
     @Test
     public void should_use_ancillary_Types() {
-        SomeClass mock = mockMaker.createMock(settingsFor(SomeClass.class, SomeInterface.class), dummyHandler());
+        SomeClass mock =
+                mockMaker.createMock(
+                        settingsFor(SomeClass.class, SomeInterface.class), dummyHandler());
 
         assertThat(mock).isInstanceOf(SomeInterface.class);
     }
 
     @Test
     public void should_create_class_by_constructor() {
-        OtherClass mock = mockMaker.createMock(settingsWithConstructorFor(OtherClass.class), dummyHandler());
+        OtherClass mock =
+                mockMaker.createMock(settingsWithConstructorFor(OtherClass.class), dummyHandler());
         assertThat(mock).isNotNull();
     }
 
     @Test
     public void should_allow_serialization() throws Exception {
-        SerializableClass proxy = mockMaker.createMock(serializableSettingsFor(SerializableClass.class, SerializableMode.BASIC), dummyHandler());
+        SerializableClass proxy =
+                mockMaker.createMock(
+                        serializableSettingsFor(SerializableClass.class, SerializableMode.BASIC),
+                        dummyHandler());
 
         SerializableClass serialized = SimpleSerializationUtil.serializeAndBack(proxy);
         assertThat(serialized).isNotNull();
@@ -106,15 +114,19 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
 
     @Test
     public void should_create_mock_from_class_with_super_call_to_final_method() throws Exception {
-        MockCreationSettings<CallingSuperMethodClass> settings = settingsWithSuperCall(CallingSuperMethodClass.class);
-        SampleClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<CallingSuperMethodClass>(settings));
+        MockCreationSettings<CallingSuperMethodClass> settings =
+                settingsWithSuperCall(CallingSuperMethodClass.class);
+        SampleClass proxy =
+                mockMaker.createMock(
+                        settings, new MockHandlerImpl<CallingSuperMethodClass>(settings));
         assertThat(proxy.foo()).isEqualTo("foo");
     }
 
     @Test
     public void should_reset_mock_and_set_new_handler() throws Throwable {
         MockCreationSettings<SampleClass> settings = settingsWithSuperCall(SampleClass.class);
-        SampleClass proxy = mockMaker.createMock(settings, new MockHandlerImpl<SampleClass>(settings));
+        SampleClass proxy =
+                mockMaker.createMock(settings, new MockHandlerImpl<SampleClass>(settings));
 
         MockHandler handler = new MockHandlerImpl<SampleClass>(settings);
         mockMaker.resetMock(proxy, handler, settings);
@@ -122,8 +134,11 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
     }
 
     class SomeClass {}
+
     interface SomeInterface {}
+
     static class OtherClass {}
+
     static class SerializableClass implements Serializable {}
 
     private class ClassWithoutConstructor {}
@@ -137,31 +152,34 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
     @Test
     public void instantiate_fine_when_objenesis_on_the_classpath() throws Exception {
         // given
-        ClassLoader classpath_with_objenesis = ClassLoaders.excludingClassLoader()
-                .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, ObjenesisStd.class)
-                .withCodeSourceUrlOf(coverageTool())
-                .build();
+        ClassLoader classpath_with_objenesis =
+                ClassLoaders.excludingClassLoader()
+                        .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, ObjenesisStd.class)
+                        .withCodeSourceUrlOf(coverageTool())
+                        .build();
 
-        Class<?> mock_maker_class_loaded_fine_until = Class.forName(
-                "org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker",
-                true,
-                classpath_with_objenesis
-        );
+        Class<?> mock_maker_class_loaded_fine_until =
+                Class.forName(
+                        "org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker",
+                        true,
+                        classpath_with_objenesis);
 
         // when
-        mock_maker_class_loaded_fine_until.newInstance();
+        mock_maker_class_loaded_fine_until.getConstructor().newInstance();
 
         // then everything went fine
     }
 
-    private static <T> MockCreationSettings<T> settingsFor(Class<T> type, Class<?>... extraInterfaces) {
+    private static <T> MockCreationSettings<T> settingsFor(
+            Class<T> type, Class<?>... extraInterfaces) {
         MockSettingsImpl<T> mockSettings = new MockSettingsImpl<T>();
         mockSettings.setTypeToMock(type);
-        if(extraInterfaces.length > 0) mockSettings.extraInterfaces(extraInterfaces);
+        if (extraInterfaces.length > 0) mockSettings.extraInterfaces(extraInterfaces);
         return mockSettings;
     }
 
-    private static <T> MockCreationSettings<T> serializableSettingsFor(Class<T> type, SerializableMode serializableMode) {
+    private static <T> MockCreationSettings<T> serializableSettingsFor(
+            Class<T> type, SerializableMode serializableMode) {
         MockSettingsImpl<T> mockSettings = new MockSettingsImpl<T>();
         mockSettings.serializable(serializableMode);
         mockSettings.setTypeToMock(type);
@@ -186,10 +204,19 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker> {
     }
 
     private static class DummyMockHandler implements MockHandler<Object> {
-        public Object handle(Invocation invocation) throws Throwable { return null; }
-        public MockCreationSettings<Object> getMockSettings() { return null; }
-        public InvocationContainer getInvocationContainer() { return null; }
-        public void setAnswersForStubbing(List<Answer<?>> list) { }
+        public Object handle(Invocation invocation) throws Throwable {
+            return null;
+        }
+
+        public MockCreationSettings<Object> getMockSettings() {
+            return null;
+        }
+
+        public InvocationContainer getInvocationContainer() {
+            return null;
+        }
+
+        public void setAnswersForStubbing(List<Answer<?>> list) {}
     }
 
     private static class SampleClass {

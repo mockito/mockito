@@ -2,8 +2,12 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.verification;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.AdditionalMatchers.aryEq;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -13,14 +17,9 @@ import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.AdditionalMatchers.aryEq;
-import static org.mockito.Mockito.*;
 
 public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
@@ -38,12 +37,12 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             String expectedMessage =
-                    "\n" +
-                    "Wanted but not invoked:" +
-                    "\n" +
-                    "iMethods.simpleMethod();" +
-                    "\n" +
-                    "-> at";
+                    "\n"
+                            + "Wanted but not invoked:"
+                            + "\n"
+                            + "iMethods.simpleMethod();"
+                            + "\n"
+                            + "-> at";
             assertThat(e).hasMessageContaining(expectedMessage);
         }
     }
@@ -73,18 +72,18 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             String wanted =
-                    "\n" +
-                    "Argument(s) are different! Wanted:" +
-                    "\n" +
-                    "iMethods.varargs(1, 1000);";
+                    "\n"
+                            + "Argument(s) are different! Wanted:"
+                            + "\n"
+                            + "iMethods.varargs(1, 1000);";
 
             assertThat(e).hasMessageContaining(wanted);
 
             String actual =
-                    "\n" +
-                    "Actual invocation has different arguments:" +
-                    "\n" +
-                    "iMethods.varargs(1, 2);";
+                    "\n"
+                            + "Actual invocations have different arguments:"
+                            + "\n"
+                            + "iMethods.varargs(1, 2);";
 
             assertThat(e).hasMessageContaining(actual);
         }
@@ -99,46 +98,49 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             String wanted =
-                    "\n" +
-                    "Argument(s) are different! Wanted:" +
-                    "\n" +
-                    "iMethods.varargs(" +
-                    "\n" +
-                    "    \"x\"," +
-                    "\n" +
-                    "    \"y\"," +
-                    "\n" +
-                    "    \"z\"" +
-                    "\n" +
-                    ");";
+                    "\n"
+                            + "Argument(s) are different! Wanted:"
+                            + "\n"
+                            + "iMethods.varargs("
+                            + "\n"
+                            + "    \"x\","
+                            + "\n"
+                            + "    \"y\","
+                            + "\n"
+                            + "    \"z\""
+                            + "\n"
+                            + ");";
 
             assertThat(e).hasMessageContaining(wanted);
 
             String actual =
-                    "\n" +
-                    "Actual invocation has different arguments:" +
-                    "\n" +
-                    "iMethods.varargs(" +
-                    "\n" +
-                    "    \"this is very long string\"," +
-                    "\n" +
-                    "    \"this is another very long string\"" +
-                    "\n" +
-                    ");";
+                    "\n"
+                            + "Actual invocations have different arguments:"
+                            + "\n"
+                            + "iMethods.varargs("
+                            + "\n"
+                            + "    \"this is very long string\","
+                            + "\n"
+                            + "    \"this is another very long string\""
+                            + "\n"
+                            + ");";
 
             assertThat(e).hasMessageContaining(actual);
         }
     }
 
     @Test
-    public void should_print_actual_and_wanted_when_actual_method_name_and_wanted_method_name_are_the_same() {
+    public void
+            should_print_actual_and_wanted_when_actual_method_name_and_wanted_method_name_are_the_same() {
         mock.simpleMethod();
 
         try {
             verify(mock).simpleMethod(10);
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e).hasMessageContaining("simpleMethod(10)").hasMessageContaining("simpleMethod()");
+            assertThat(e)
+                    .hasMessageContaining("simpleMethod(10)")
+                    .hasMessageContaining("simpleMethod()");
         }
     }
 
@@ -167,18 +169,11 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verifyNoMoreInteractions(mock);
             fail();
         } catch (NoInteractionsWanted e) {
-            String expectedMessage =
-                    "\n" +
-                    "No interactions wanted here:" +
-                    "\n" +
-                    "-> at";
+            String expectedMessage = "\n" + "No interactions wanted here:" + "\n" + "-> at";
             assertThat(e).hasMessageContaining(expectedMessage);
 
             String expectedCause =
-                    "\n" +
-                    "But found this interaction on mock '" + mock + "':" +
-                    "\n" +
-                    "-> at";
+                    "\n" + "But found this interaction on mock '" + mock + "':" + "\n" + "-> at";
             assertThat(e).hasMessageContaining(expectedCause);
         }
     }
@@ -192,19 +187,32 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verifyZeroInteractions(mock);
             fail();
         } catch (NoInteractionsWanted e) {
-            String expected =
-                    "\n" +
-                    "No interactions wanted here:" +
-                    "\n" +
-                    "-> at";
+            String expected = "\n" + "No interactions wanted here:" + "\n" + "-> at";
 
             assertThat(e).hasMessageContaining(expected);
 
             String expectedCause =
-                "\n" +
-                "But found this interaction on mock '" + mock + "':" +
-                "\n" +
-                "-> at";
+                    "\n" + "But found this interaction on mock '" + mock + "':" + "\n" + "-> at";
+
+            assertThat(e).hasMessageContaining(expectedCause);
+        }
+    }
+
+    @Test
+    public void should_print_first_unexpected_invocation_when_verifying_no_interactions() {
+        mock.twoArgumentMethod(1, 2);
+        mock.threeArgumentMethod(1, "2", "3");
+
+        try {
+            verifyNoInteractions(mock);
+            fail();
+        } catch (NoInteractionsWanted e) {
+            String expected = "\n" + "No interactions wanted here:" + "\n" + "-> at";
+
+            assertThat(e).hasMessageContaining(expected);
+
+            String expectedCause =
+                    "\n" + "But found these interactions on mock '" + mock + "':" + "\n" + "-> at";
 
             assertThat(e).hasMessageContaining(expectedCause);
         }
@@ -227,28 +235,28 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             String expectedMessage =
-                "\n" +
-                "Wanted but not invoked:" +
-                "\n" +
-                "iMethods.twoArgumentMethod(\n" +
-                "    <any integer>,\n" +
-                "    100\n" +
-                ");";
+                    "\n"
+                            + "Wanted but not invoked:"
+                            + "\n"
+                            + "iMethods.twoArgumentMethod(\n"
+                            + "    <any integer>,\n"
+                            + "    100\n"
+                            + ");";
             assertThat(e).hasMessageContaining(expectedMessage);
         }
     }
 
     @Test
     public void should_print_method_when_missing_invocation_with_array_matcher() {
-        mock.oneArray(new boolean[] { true, false, false });
+        mock.oneArray(new boolean[] {true, false, false});
 
         try {
-            verify(mock).oneArray(aryEq(new boolean[] { false, false, false }));
+            verify(mock).oneArray(aryEq(new boolean[] {false, false, false}));
             fail();
         } catch (ArgumentsAreDifferent e) {
             assertThat(e)
-                .hasMessageContaining("[false, false, false]")
-                .hasMessageContaining("[true, false, false]");
+                    .hasMessageContaining("[false, false, false]")
+                    .hasMessageContaining("[true, false, false]");
         }
     }
 
@@ -260,9 +268,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).varargsString(10, "111", "222", "333");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e)
-                .hasMessageContaining("111")
-                .hasMessageContaining("\"xxx\"");
+            assertThat(e).hasMessageContaining("111").hasMessageContaining("\"xxx\"");
         }
     }
 
@@ -275,8 +281,8 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             assertThat(e)
-                .hasMessageContaining("matches(\"burrito from Exmouth\")")
-                .hasMessageContaining("\"foo\"");
+                    .hasMessageContaining("matches(\"burrito from Exmouth\")")
+                    .hasMessageContaining("\"foo\"");
         }
     }
 
@@ -301,8 +307,8 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (NeverWantedButInvoked e) {
             assertThat(e)
-                .hasMessageContaining("Never wanted here:")
-                .hasMessageContaining("But invoked here:");
+                    .hasMessageContaining("Never wanted here:")
+                    .hasMessageContaining("But invoked here:");
         }
     }
 
@@ -315,9 +321,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).simpleMethod("bar");
             fail();
         } catch (ArgumentsAreDifferent e) {
-            assertThat(e)
-                .hasMessageContaining("bar")
-                .hasMessageContaining("foo");
+            assertThat(e).hasMessageContaining("bar").hasMessageContaining("foo");
         }
     }
 
@@ -332,13 +336,14 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (ArgumentsAreDifferent e) {
             assertThat(e)
-                .hasMessageContaining("iHavefunkyName.simpleMethod(20)")
-                .hasMessageContaining("iHavefunkyName.simpleMethod(10)");
+                    .hasMessageContaining("iHavefunkyName.simpleMethod(20)")
+                    .hasMessageContaining("iHavefunkyName.simpleMethod(10)");
         }
     }
 
     @Test
-    public void should_print_interactions_on_mock_when_ordinary_verification_fail() throws Exception {
+    public void should_print_interactions_on_mock_when_ordinary_verification_fail()
+            throws Exception {
         mock.otherMethod();
         mock.booleanReturningMethod();
 
@@ -346,7 +351,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             verify(mock).simpleMethod();
             fail();
         } catch (WantedButNotInvoked e) {
-//            assertContains("")
+            //            assertContains("")
         }
     }
 
@@ -357,13 +362,16 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
         try {
             verify(veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock).simpleMethod();
             fail();
-        } catch(WantedButNotInvoked e) {
-            assertThat(e).hasMessageContaining("veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock.simpleMethod()");
+        } catch (WantedButNotInvoked e) {
+            assertThat(e)
+                    .hasMessageContaining("veeeeeeeeeeeeeeeeeeeeeeeerylongNameMock.simpleMethod()");
         }
     }
 
     @Test
-    public void should_print_method_name_and_arguments_of_other_interactions_with_different_methods() throws Exception {
+    public void
+            should_print_method_name_and_arguments_of_other_interactions_with_different_methods()
+                    throws Exception {
         try {
             mock.arrayMethod(new String[] {"a", "b", "c"});
             mock.forByte((byte) 25);
@@ -372,15 +380,16 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             assertThat(e)
-                .hasMessageContaining("iMethods.threeArgumentMethod(12, foo, \"xx\")")
-                .hasMessageContaining("iMethods.arrayMethod([\"a\", \"b\", \"c\"])")
-                .hasMessageContaining("iMethods.forByte((byte) 0x19)");
+                    .hasMessageContaining("iMethods.threeArgumentMethod(12, foo, \"xx\")")
+                    .hasMessageContaining("iMethods.arrayMethod([\"a\", \"b\", \"c\"])")
+                    .hasMessageContaining("iMethods.forByte((byte) 0x19)");
         }
     }
 
     @Test
     @Ignore("issue 380 related")
-    public void should_print_method_name_and_arguments_of_other_interactions_of_same_method() throws Exception {
+    public void should_print_method_name_and_arguments_of_other_interactions_of_same_method()
+            throws Exception {
         try {
             mock.forByte((byte) 25);
             mock.forByte((byte) 12);
@@ -389,9 +398,9 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             assertThat(e)
-                .hasMessageContaining("iMethods.forByte(42)")
-                .hasMessageContaining("iMethods.forByte(25)")
-                .hasMessageContaining("iMethods.forByte(12)");
+                    .hasMessageContaining("iMethods.forByte(42)")
+                    .hasMessageContaining("iMethods.forByte(25)")
+                    .hasMessageContaining("iMethods.forByte(12)");
         }
     }
 

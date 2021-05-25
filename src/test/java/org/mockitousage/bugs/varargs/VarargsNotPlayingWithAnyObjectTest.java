@@ -2,18 +2,22 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.bugs.varargs;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.anyObject;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.anyVararg;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
-
-//see issue 62
+// see issue 62
 public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
 
     interface VarargMethod {
@@ -35,16 +39,10 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
         verify(mock, never()).run(anyString(), eq("f"));
     }
 
-    //we cannot use anyObject() for entire varargs because it makes the verification pick up extra invocations
-    //see other tests in this package
     @Test
-    public void shouldNotAllowUsingAnyObjectForVarArgs() {
+    public void shouldAllowUsingAnyObjectForVarArgs() {
         mock.run("a", "b");
-
-        try {
-            verify(mock).run((String[]) anyObject());
-            fail();
-        } catch (AssertionError e) {}
+        verify(mock).run((String[]) anyObject());
     }
 
     @Test

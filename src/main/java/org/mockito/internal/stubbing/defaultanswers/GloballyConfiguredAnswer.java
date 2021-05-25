@@ -20,6 +20,7 @@ public class GloballyConfiguredAnswer implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = 3585893470101750917L;
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         return new GlobalConfiguration().getDefaultAnswer().answer(invocation);
     }

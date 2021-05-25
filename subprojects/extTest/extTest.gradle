@@ -3,21 +3,23 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 apply plugin: 'java'
 description = "End-to-end tests for Mockito and its extensions."
 
-//so that we can depend on locally published mockito
-//and test end-to-end mockito jar resolution (for example, flesh out missing dependencies in pom file)
-[compileTestJava, ideaModule].each {
-    it.dependsOn ":publishToMavenLocal"
-}
-
 repositories {
     mavenLocal() //we depend on locally published mockito
 }
 
 dependencies {
-    testCompile "org.mockito:mockito-core:$version"
+    testCompile project.rootProject
+    testCompile project(":junit-jupiter")
     testCompile project(path: ':', configuration: 'testUtil')
     testCompile libraries.junit4
     testCompile libraries.assertj
+    testCompile libraries.junitJupiterApi
+    testRuntime libraries.junitJupiterEngine
+    testRuntime libraries.junitVintageEngine
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
 }
 
 configurations.all {

@@ -4,6 +4,10 @@
  */
 package org.mockito.internal.junit;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.runner.Description;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
@@ -12,27 +16,27 @@ import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.mock.MockCreationSettings;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Reports unnecessary stubbings
  */
 public class UnnecessaryStubbingsReporter implements MockCreationListener {
 
-    private List<Object> mocks = new LinkedList<Object>();
+    private final List<Object> mocks = new LinkedList<Object>();
 
     public void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
-        Collection<Invocation> unused = new UnusedStubbingsFinder().getUnusedStubbingsByLocation(mocks);
+        Collection<Invocation> unused =
+                new UnusedStubbingsFinder().getUnusedStubbingsByLocation(mocks);
         if (unused.isEmpty()) {
-            return; //whoa!!! All stubbings were used!
+            return; // whoa!!! All stubbings were used!
         }
 
-        //Oups, there are unused stubbings
-        Description unnecessaryStubbings = Description.createTestDescription(testClass, "unnecessary Mockito stubbings");
-        notifier.fireTestFailure(new Failure(unnecessaryStubbings,
-                Reporter.formatUnncessaryStubbingException(testClass, unused)));
+        // Oups, there are unused stubbings
+        Description unnecessaryStubbings =
+                Description.createTestDescription(testClass, "unnecessary Mockito stubbings");
+        notifier.fireTestFailure(
+                new Failure(
+                        unnecessaryStubbings,
+                        Reporter.formatUnncessaryStubbingException(testClass, unused)));
     }
 
     @Override

@@ -4,6 +4,8 @@
  */
 package org.mockito.junit;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -21,9 +23,6 @@ import org.mockito.internal.runners.StrictRunner;
 import org.mockito.quality.MockitoHint;
 import org.mockito.quality.Strictness;
 
-import java.lang.reflect.InvocationTargetException;
-
-
 /**
  * Mockito JUnit Runner keeps tests clean and improves debugging experience.
  * Make sure to try out {@link MockitoJUnitRunner.StrictStubs} which automatically
@@ -38,7 +37,7 @@ import java.lang.reflect.InvocationTargetException;
  *       To opt-out from this feature, use {@code}&#064;RunWith(MockitoJUnitRunner.Silent.class){@code}
  *   <li>
  *      Initializes mocks annotated with {@link Mock},
- *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary.
+ *      so that explicit usage of {@link MockitoAnnotations#openMocks(Object)} is not necessary.
  *      Mocks are initialized before each test method.
  *   <li>
  *      Validates framework usage after each test method. See javadoc for {@link Mockito#validateMockitoUsage()}.
@@ -47,7 +46,7 @@ import java.lang.reflect.InvocationTargetException;
  *      It drives cleaner tests and improves debugging experience.
  *      The only reason this feature is not turned on by default
  *      is because it would have been an incompatible change
- *      and Mockito strictly follows <a href="http://semver.org">semantic versioning</a>.
+ *      and Mockito strictly follows <a href="https://semver.org">semantic versioning</a>.
  * </ul>
  *
  * Runner is completely optional - there are other ways you can get &#064;Mock working, for example by writing a base class.
@@ -70,7 +69,7 @@ import java.lang.reflect.InvocationTargetException;
  * </code></pre>
  *
  * If you would like to take advantage of Mockito JUnit runner features
- * but you cannot use the runner because, for example, you use TestNG, there is a solution!
+ * but you cannot use the runner there is a solution!
  * {@link MockitoSession} API is intended to offer cleaner tests and improved debuggability
  * to users that cannot use Mockito's built-in JUnit support (runner or the rule).
  */
@@ -150,7 +149,8 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
     private final InternalRunner runner;
 
     public MockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
-        //by default, StrictRunner is used. We can change that potentially based on feedback from users
+        // by default, StrictRunner is used. We can change that potentially based on feedback from
+        // users
         this(new StrictRunner(new RunnerFactory().createStrict(klass), klass));
     }
 
@@ -168,8 +168,9 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
         return runner.getDescription();
     }
 
+    @Override
     public void filter(Filter filter) throws NoTestsRemainException {
-        //filter is required because without it UnrootedTests show up in Eclipse
+        // filter is required because without it UnrootedTests show up in Eclipse
         runner.filter(filter);
     }
 }

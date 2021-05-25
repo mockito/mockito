@@ -11,5 +11,4 @@ public interface InOrderContext {
     boolean isVerified(Invocation invocation);
 
     void markVerified(Invocation i);
-
 }

@@ -4,22 +4,23 @@
  */
 package org.mockito.internal.runners.util;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.mockito.internal.runners.DefaultInternalRunner;
 import org.mockito.internal.runners.InternalRunner;
 import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.assertNotNull;
-
 public class RunnerProviderTest extends TestBase {
 
     @Test
     public void shouldCreateRunnerInstance() throws Throwable {
-        //given
+        // given
         RunnerProvider provider = new RunnerProvider();
-        //when
-        InternalRunner runner = provider.newInstance(DefaultInternalRunner.class.getName(), this.getClass(), null);
-        //then
+        // when
+        InternalRunner runner =
+                provider.newInstance(DefaultInternalRunner.class.getName(), this.getClass(), null);
+        // then
         assertNotNull(runner);
     }
 }

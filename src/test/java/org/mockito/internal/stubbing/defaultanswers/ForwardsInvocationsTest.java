@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class ForwardsInvocationsTest extends TestBase {
 
@@ -25,12 +25,17 @@ public class ForwardsInvocationsTest extends TestBase {
     @Test
     public void should_call_method_with_varargs() throws Throwable {
         ForwardsInvocations forwardsInvocations = new ForwardsInvocations(new FooImpl());
-        assertEquals(4, forwardsInvocations.answer(invocationOf(Foo.class, "bar", "b", new Object[] {12, "3", 4.5})));
+        assertEquals(
+                4,
+                forwardsInvocations.answer(
+                        invocationOf(Foo.class, "bar", "b", new Object[] {12, "3", 4.5})));
     }
 
     @Test
     public void should_call_method_with_empty_varargs() throws Throwable {
         ForwardsInvocations forwardsInvocations = new ForwardsInvocations(new FooImpl());
-        assertEquals(1, forwardsInvocations.answer(invocationOf(Foo.class, "bar", "b", new Object[] {})));
+        assertEquals(
+                1,
+                forwardsInvocations.answer(invocationOf(Foo.class, "bar", "b", new Object[] {})));
     }
 }

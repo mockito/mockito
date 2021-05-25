@@ -4,16 +4,15 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
-
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
 
 public class BeanPropertySetterTest {
 
@@ -34,7 +33,8 @@ public class BeanPropertySetterTest {
     }
 
     @Test
-    public void use_the_setter_on_the_target_when_field_name_begins_by_at_least_2_caps() throws Exception {
+    public void use_the_setter_on_the_target_when_field_name_begins_by_at_least_2_caps()
+            throws Exception {
         // given
         BeanWithWeirdFields someBean = new BeanWithWeirdFields();
         Field theField = someBean.getClass().getDeclaredField("UUID");
@@ -50,7 +50,8 @@ public class BeanPropertySetterTest {
     }
 
     @Test
-    public void should_not_fail_if_bean_class_declares_only_the_setter_for_the_property() throws Exception {
+    public void should_not_fail_if_bean_class_declares_only_the_setter_for_the_property()
+            throws Exception {
         // given
         SomeBeanWithJustASetter someBean = new SomeBeanWithJustASetter();
         Field theField = someBean.getClass().getDeclaredField("theField");
@@ -65,7 +66,8 @@ public class BeanPropertySetterTest {
     }
 
     @Test
-    public void should_fail_if_matching_setter_cannot_be_found_and_if_report_failure_is_true() throws Exception {
+    public void should_fail_if_matching_setter_cannot_be_found_and_if_report_failure_is_true()
+            throws Exception {
         // given
         SomeBeanWithNoSetterMatchingFieldType bean = new SomeBeanWithNoSetterMatchingFieldType();
         Field theField = bean.getClass().getDeclaredField("theField");
@@ -96,7 +98,8 @@ public class BeanPropertySetterTest {
     }
 
     @Test
-    public void return_false_if_no_setter_was_found_and_if_reportNoSetterFound_is_false() throws Exception {
+    public void return_false_if_no_setter_was_found_and_if_reportNoSetterFound_is_false()
+            throws Exception {
         // given
         SomeBeanWithNoSetterMatchingFieldType bean = new SomeBeanWithNoSetterMatchingFieldType();
         Field theField = bean.getClass().getDeclaredField("theField");
@@ -132,6 +135,7 @@ public class BeanPropertySetterTest {
             this.theField = theField;
         }
     }
+
     static class SomeBeanWithJustAGetter {
         private File theField;
 
@@ -158,5 +162,4 @@ public class BeanPropertySetterTest {
             this.UUID = UUID;
         }
     }
-
 }

@@ -15,14 +15,15 @@ public class DeepStubbingWithJUnitRunnerTest {
 
     private final SomeClass someClass = new SomeClass();
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS) private Root root;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    private Root root;
 
     @Test
     public void deep_stubs_dont_trigger_unnecessary_stubbing_exception() {
-        //when
+        // when
         someClass.someMethod(root);
 
-        //then unnecessary stubbing exception is not thrown
+        // then unnecessary stubbing exception is not thrown
     }
 
     public static class SomeClass {
@@ -39,7 +40,5 @@ public class DeepStubbingWithJUnitRunnerTest {
         Bar getBar();
     }
 
-    interface Bar {
-
-    }
+    interface Bar {}
 }

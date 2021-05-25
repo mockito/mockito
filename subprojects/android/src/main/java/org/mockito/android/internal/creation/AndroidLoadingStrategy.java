@@ -4,18 +4,24 @@
  */
 package org.mockito.android.internal.creation;
 
-import static org.mockito.internal.util.StringUtil.join;
-
-import java.io.File;
 import net.bytebuddy.android.AndroidClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.SubclassLoader;
 
+import java.io.File;
+
+import static org.mockito.internal.util.StringUtil.join;
+
 class AndroidLoadingStrategy implements SubclassLoader {
 
     @Override
-    public ClassLoadingStrategy<ClassLoader> getStrategy(Class<?> mockFeatures) {
+    public boolean isDisrespectingOpenness() {
+        return false;
+    }
+
+    @Override
+    public ClassLoadingStrategy<ClassLoader> resolveStrategy(Class<?> mockedType, ClassLoader classLoader, boolean localMock) {
         File target = AndroidTempFileLocator.target;
         if (target == null) {
             throw new MockitoException(join(

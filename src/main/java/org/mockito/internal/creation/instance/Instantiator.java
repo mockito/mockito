@@ -14,9 +14,6 @@ package org.mockito.internal.creation.instance;
 @Deprecated
 public interface Instantiator {
 
-    /**
-     * Creates instance of given class
-     */
-    <T> T newInstance(Class<T> cls) throws InstantiationException;
-
+    /** Creates instance of given class */
+    <T> T newInstance(Class<T> cls);
 }

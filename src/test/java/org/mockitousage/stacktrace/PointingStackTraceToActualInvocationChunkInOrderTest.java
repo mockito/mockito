@@ -2,8 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.stacktrace;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,10 +17,6 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBase {
@@ -40,14 +39,17 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
         mock.simpleMethod(1);
         mock.simpleMethod(1);
     }
+
     private void secondChunk() {
         mockTwo.simpleMethod(2);
         mockTwo.simpleMethod(2);
     }
+
     private void thirdChunk() {
         mock.simpleMethod(3);
         mock.simpleMethod(3);
     }
+
     private void fourthChunk() {
         mockTwo.simpleMethod(4);
         mockTwo.simpleMethod(4);
@@ -79,7 +81,7 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
     }
 
     @Test
-    public void shouldPointToThirdChunkWhenTooLittleActualInvocations() {
+    public void shouldPointToThirdChunkWhenTooFewActualInvocations() {
         inOrder.verify(mock, times(2)).simpleMethod(anyInt());
         inOrder.verify(mockTwo, times(2)).simpleMethod(anyInt());
         inOrder.verify(mock, atLeastOnce()).simpleMethod(anyInt());

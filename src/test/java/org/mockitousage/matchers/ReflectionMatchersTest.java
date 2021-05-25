@@ -2,17 +2,16 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.matchers;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
-import org.mockitoutil.TestBase;
 
 import static org.mockito.Matchers.refEq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("all")
 public class ReflectionMatchersTest extends TestBase {
@@ -20,6 +19,7 @@ public class ReflectionMatchersTest extends TestBase {
     class Parent {
         private int parentField;
         protected String protectedParentField;
+
         public Parent(int parentField, String protectedParentField) {
             this.parentField = parentField;
             this.protectedParentField = protectedParentField;
@@ -29,7 +29,12 @@ public class ReflectionMatchersTest extends TestBase {
     class Child extends Parent {
         private int childFieldOne;
         private Object childFieldTwo;
-        public Child(int parentField, String protectedParentField, int childFieldOne, Object childFieldTwo) {
+
+        public Child(
+                int parentField,
+                String protectedParentField,
+                int childFieldOne,
+                Object childFieldTwo) {
             super(parentField, protectedParentField);
             this.childFieldOne = childFieldOne;
             this.childFieldTwo = childFieldTwo;
@@ -56,25 +61,25 @@ public class ReflectionMatchersTest extends TestBase {
         verify(mock).run(refEq(wanted));
     }
 
-    @Test(expected=ArgumentsAreDifferent.class)
+    @Test(expected = ArgumentsAreDifferent.class)
     public void shouldNotMatchWhenFieldValuesDiffer() throws Exception {
         Child wanted = new Child(1, "foo", 2, "bar XXX");
         verify(mock).run(refEq(wanted));
     }
 
-    @Test(expected=ArgumentsAreDifferent.class)
+    @Test(expected = ArgumentsAreDifferent.class)
     public void shouldNotMatchAgain() throws Exception {
         Child wanted = new Child(1, "foo", 999, "bar");
         verify(mock).run(refEq(wanted));
     }
 
-    @Test(expected=ArgumentsAreDifferent.class)
+    @Test(expected = ArgumentsAreDifferent.class)
     public void shouldNotMatchYetAgain() throws Exception {
         Child wanted = new Child(1, "XXXXX", 2, "bar");
         verify(mock).run(refEq(wanted));
     }
 
-    @Test(expected=ArgumentsAreDifferent.class)
+    @Test(expected = ArgumentsAreDifferent.class)
     public void shouldNotMatch() throws Exception {
         Child wanted = new Child(234234, "foo", 2, "bar");
         verify(mock).run(refEq(wanted));
@@ -93,7 +98,7 @@ public class ReflectionMatchersTest extends TestBase {
         verify(mock).run(refEq(wanted, "parentField", "childFieldTwo"));
     }
 
-    @Test(expected=ArgumentsAreDifferent.class)
+    @Test(expected = ArgumentsAreDifferent.class)
     public void shouldNotMatchWithFieldsExclusion() throws Exception {
         Child wanted = new Child(234234, "foo", 2, "excluded");
         verify(mock).run(refEq(wanted, "childFieldTwo"));

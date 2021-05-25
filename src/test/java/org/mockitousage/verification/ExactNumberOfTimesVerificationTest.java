@@ -2,20 +2,19 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.verification;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.exceptions.verification.*;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class ExactNumberOfTimesVerificationTest extends TestBase {
@@ -28,7 +27,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectTooLittleActualInvocations() throws Exception {
+    public void shouldDetectTooFewActualInvocations() throws Exception {
         mock.clear();
         mock.clear();
 
@@ -36,10 +35,8 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, times(100)).clear();
             fail();
-        } catch (TooLittleActualInvocations e) {
-            assertThat(e)
-                .hasMessageContaining("Wanted 100 times")
-                .hasMessageContaining("was 2");
+        } catch (TooFewActualInvocations e) {
+            assertThat(e).hasMessageContaining("Wanted 100 times").hasMessageContaining("was 2");
         }
     }
 
@@ -53,9 +50,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
             verify(mock, times(1)).clear();
             fail();
         } catch (TooManyActualInvocations e) {
-            assertThat(e)
-                .hasMessageContaining("Wanted 1 time")
-                .hasMessageContaining("was 2 times");
+            assertThat(e).hasMessageContaining("Wanted 1 time").hasMessageContaining("was 2 times");
         }
     }
 
@@ -65,7 +60,8 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, times(15)).clear();
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 
     @Test
@@ -107,7 +103,8 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             verify(mock, never()).add("one");
             fail();
-        } catch (NeverWantedButInvoked e) {}
+        } catch (NeverWantedButInvoked e) {
+        }
     }
 
     @Test
@@ -124,6 +121,7 @@ public class ExactNumberOfTimesVerificationTest extends TestBase {
         try {
             inOrder.verify(mock, never()).add("two");
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 }

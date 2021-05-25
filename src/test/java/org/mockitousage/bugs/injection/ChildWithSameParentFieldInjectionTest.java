@@ -4,22 +4,20 @@
  */
 package org.mockitousage.bugs.injection;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertNotNull;
-
 // issue 289
 @RunWith(MockitoJUnitRunner.class)
 public class ChildWithSameParentFieldInjectionTest {
-    @InjectMocks
-    private System system;
+    @InjectMocks private System system;
 
-    @Mock
-    private SomeService someService;
+    @Mock private SomeService someService;
 
     @Test
     public void parent_field_is_not_null() {
@@ -48,7 +46,6 @@ public class ChildWithSameParentFieldInjectionTest {
     }
 
     public static class SomeService {
-        public void doSomething() {
-        }
+        public void doSomething() {}
     }
 }

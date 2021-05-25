@@ -2,8 +2,9 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.annotation;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.examples.use.ArticleCalculator;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MockInjectionUsingConstructorIssue421Test {
@@ -31,16 +30,14 @@ public class MockInjectionUsingConstructorIssue421Test {
 
         private ArticleCalculator calculator;
 
-        public Issue421(int a) {
-        }
+        public Issue421(int a) {}
 
         public Issue421(ArticleCalculator calculator) {
             this.calculator = calculator;
         }
 
-        public void checkIfMockIsInjected(){
+        public void checkIfMockIsInjected() {
             assertThat(MockUtil.isMock(calculator)).isTrue();
         }
     }
-
 }

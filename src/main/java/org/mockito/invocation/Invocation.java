@@ -4,6 +4,9 @@
  */
 package org.mockito.invocation;
 
+import java.util.List;
+
+import org.mockito.ArgumentMatcher;
 import org.mockito.NotExtensible;
 
 /**
@@ -34,9 +37,8 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
      */
     int getSequenceNumber();
 
-    /**
-     * @return the location in code of this invocation.
-     */
+    /** @return the location in code of this invocation. */
+    @Override
     Location getLocation();
 
     /**
@@ -46,6 +48,16 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
      * @return unprocessed arguments, exactly as provided to this invocation.
      */
     Object[] getRawArguments();
+
+    /**
+     * Wraps each argument using {@link org.mockito.ArgumentMatchers#eq(Object)} or
+     * {@link org.mockito.AdditionalMatchers#aryEq(Object[])}
+     * Used internally for the purposes of human-readable invocation printing.
+     *
+     * @return a list of {@link ArgumentMatcher} wrapping each of this invocation arguments
+     * @since 2.25.6
+     */
+    List<ArgumentMatcher> getArgumentsAsMatchers();
 
     /**
      * Returns unprocessed arguments whereas {@link #getArguments()} returns

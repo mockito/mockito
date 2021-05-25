@@ -4,15 +4,15 @@
  */
 package org.mockitousage.misuse;
 
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
 public class CleaningUpPotentialStubbingTest extends TestBase {
 
@@ -45,10 +45,11 @@ public class CleaningUpPotentialStubbingTest extends TestBase {
 
     private void assertOngoingStubbingIsReset() {
         try {
-            //In real, there might be a call to real object or a final method call
-            //I'm modelling it with null
+            // In real, there might be a call to real object or a final method call
+            // I'm modelling it with null
             when(null).thenReturn("anything");
             fail();
-        } catch (MissingMethodInvocationException e) {}
+        } catch (MissingMethodInvocationException e) {
+        }
     }
 }

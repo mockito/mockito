@@ -2,15 +2,15 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.matchers;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.regex.Pattern;
+
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class MatchersToStringTest extends TestBase {
 
@@ -41,19 +41,19 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void sameToStringWithObject() {
-        Object o = new Object() {
-            @Override
-            public String toString() {
-                return "X";
-            }
-        };
+        Object o =
+                new Object() {
+                    @Override
+                    public String toString() {
+                        return "X";
+                    }
+                };
         assertEquals("same(X)", new Same(o).toString());
     }
 
     @Test
     public void equalsToStringWithString() {
         assertEquals("\"X\"", new Equals("X").toString());
-
     }
 
     @Test
@@ -63,20 +63,21 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void equalsToStringWithObject() {
-        Object o = new Object() {
-            @Override
-            public String toString() {
-                return "X";
-            }
-        };
+        Object o =
+                new Object() {
+                    @Override
+                    public String toString() {
+                        return "X";
+                    }
+                };
         assertEquals("X", new Equals(o).toString());
     }
 
     @Test
     public void orToString() {
-        ArgumentMatcher<?> m1=new Equals(1);
-        ArgumentMatcher<?> m2=new Equals(2);
-        assertEquals("or(1, 2)", new Or(m1,m2).toString());
+        ArgumentMatcher<?> m1 = new Equals(1);
+        ArgumentMatcher<?> m2 = new Equals(2);
+        assertEquals("or(1, 2)", new Or(m1, m2).toString());
     }
 
     @Test
@@ -86,9 +87,9 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void andToString() {
-        ArgumentMatcher<?> m1=new Equals(1);
-        ArgumentMatcher<?> m2=new Equals(2);
-        assertEquals("and(1, 2)", new And(m1,m2).toString());
+        ArgumentMatcher<?> m1 = new Equals(1);
+        ArgumentMatcher<?> m2 = new Equals(2);
+        assertEquals("and(1, 2)", new And(m1, m2).toString());
     }
 
     @Test
@@ -116,5 +117,4 @@ public class MatchersToStringTest extends TestBase {
         assertEquals("matches(\"\\\\s+\")", new Matches("\\s+").toString());
         assertEquals("matches(\"\\\\s+\")", new Matches(Pattern.compile("\\s+")).toString());
     }
-
 }

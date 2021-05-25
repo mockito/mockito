@@ -2,8 +2,16 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willAnswer;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,15 +19,6 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitoutil.TestBase;
-
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willAnswer;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
 
 public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase {
 
@@ -36,46 +35,52 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
 
     @Test
     public void shouldIncludeInitialLog() {
-        //given
+        // given
         int importType = 0;
         Date currentDate = new GregorianCalendar(2009, 10, 12).getTime();
 
         ImportLogBean initialLog = new ImportLogBean(currentDate, importType);
         initialLog.setStatus(1);
 
-        given(importLogDao.anyImportRunningOrRunnedToday(importType, currentDate)).willReturn(false);
-        willAnswer(byCheckingLogEquals(initialLog)).given(importLogDao).include(any(ImportLogBean.class));
+        given(importLogDao.anyImportRunningOrRunnedToday(importType, currentDate))
+                .willReturn(false);
+        willAnswer(byCheckingLogEquals(initialLog))
+                .given(importLogDao)
+                .include(any(ImportLogBean.class));
 
-        //when
+        // when
         importManager.startImportProcess(importType, currentDate);
 
-        //then
+        // then
         verify(importLogDao).include(any(ImportLogBean.class));
     }
 
     @Test
     public void shouldAlterFinalLog() {
-        //given
+        // given
         int importType = 0;
         Date currentDate = new GregorianCalendar(2009, 10, 12).getTime();
 
         ImportLogBean finalLog = new ImportLogBean(currentDate, importType);
         finalLog.setStatus(9);
 
-        given(importLogDao.anyImportRunningOrRunnedToday(importType, currentDate)).willReturn(false);
-        willAnswer(byCheckingLogEquals(finalLog)).given(importLogDao).alter(any(ImportLogBean.class));
+        given(importLogDao.anyImportRunningOrRunnedToday(importType, currentDate))
+                .willReturn(false);
+        willAnswer(byCheckingLogEquals(finalLog))
+                .given(importLogDao)
+                .alter(any(ImportLogBean.class));
 
-        //when
+        // when
         importManager.startImportProcess(importType, currentDate);
 
-        //then
+        // then
         verify(importLogDao).alter(any(ImportLogBean.class));
     }
 
     private Answer<Object> byCheckingLogEquals(final ImportLogBean status) {
         return new Answer<Object>() {
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                ImportLogBean bean =  invocation.getArgument(0);
+                ImportLogBean bean = invocation.getArgument(0);
                 assertEquals(status, bean);
                 return null;
             }
@@ -98,7 +103,8 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
                 importLogBean = createResume(importType, date);
                 if (isOkToImport(importType, date)) {
                     // get the right handler
-                    //importLogBean = ImportHandlerFactory.singleton().getImportHandler(importType).processImport(importLogBean);
+                    // importLogBean =
+                    // ImportHandlerFactory.singleton().getImportHandler(importType).processImport(importLogBean);
                     // 2 = ok
                     importLogBean.setStatus(2);
                 } else {
@@ -107,11 +113,9 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
                 }
             } catch (Exception e) {
                 // 9 = failed - exception
-                if (importLogBean != null)
-                    importLogBean.setStatus(9);
+                if (importLogBean != null) importLogBean.setStatus(9);
             } finally {
-                if (importLogBean != null)
-                    finalizeResume(importLogBean);
+                if (importLogBean != null) finalizeResume(importLogBean);
             }
         }
 
@@ -120,8 +124,7 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
         }
 
         private ImportLogBean createResume(int importType, Date date) {
-            ImportLogBean importLogBean = new ImportLogBean(date,
-                    importType);
+            ImportLogBean importLogBean = new ImportLogBean(date, importType);
             // 1 = running
             importLogBean.setStatus(1);
             importLogDao.include(importLogBean);
@@ -141,8 +144,7 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
         void alter(ImportLogBean importLogBean);
     }
 
-    private class IImportHandler {
-    }
+    private class IImportHandler {}
 
     private class ImportLogBean {
         private Date currentDate;
@@ -167,7 +169,9 @@ public class PlaygroundWithDemoOfUnclonedParametersProblemTest extends TestBase 
 
             if (importType != that.importType) return false;
             if (status != that.status) return false;
-            if (currentDate != null ? !currentDate.equals(that.currentDate) : that.currentDate != null) return false;
+            if (currentDate != null
+                    ? !currentDate.equals(that.currentDate)
+                    : that.currentDate != null) return false;
 
             return true;
         }

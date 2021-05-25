@@ -4,6 +4,9 @@
  */
 package org.mockito.verification;
 
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -12,17 +15,11 @@ import org.mockito.internal.util.Timer;
 import org.mockito.internal.verification.VerificationDataImpl;
 import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
-
 public class TimeoutTest extends TestBase {
 
-    @Mock
-    VerificationMode mode;
-    @Mock
-    VerificationDataImpl data;
-    @Mock
-    Timer timer;
+    @Mock VerificationMode mode;
+    @Mock VerificationDataImpl data;
+    @Mock Timer timer;
 
     private final MockitoAssertionError error = new MockitoAssertionError("");
 
@@ -45,15 +42,13 @@ public class TimeoutTest extends TestBase {
         Timeout t = new Timeout(1, mode, timer);
 
         when(timer.isCounting()).thenReturn(true, true, true, false);
-        doThrow(error).
-        doThrow(error).
-        doThrow(error).
-        when(mode).verify(data);
+        doThrow(error).doThrow(error).doThrow(error).when(mode).verify(data);
 
         try {
             t.verify(data);
             fail();
-        } catch (MockitoAssertionError e) {}
+        } catch (MockitoAssertionError e) {
+        }
 
         verify(timer, times(4)).isCounting();
     }
@@ -63,10 +58,7 @@ public class TimeoutTest extends TestBase {
         Timeout t = new Timeout(1, mode, timer);
 
         when(timer.isCounting()).thenReturn(true, true, true, false);
-        doThrow(error).
-        doThrow(error).
-        doNothing().
-        when(mode).verify(data);
+        doThrow(error).doThrow(error).doNothing().when(mode).verify(data);
 
         t.verify(data);
         verify(timer, times(3)).isCounting();
@@ -82,9 +74,9 @@ public class TimeoutTest extends TestBase {
         try {
             t.verify(data);
             fail();
-        } catch (MockitoAssertionError e) {}
+        } catch (MockitoAssertionError e) {
+        }
 
         verify(mode, times(5)).verify(data);
     }
-
 }

@@ -2,8 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.stacktrace;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 import org.junit.After;
 import org.junit.Test;
@@ -13,10 +16,6 @@ import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.exceptions.misusing.UnfinishedVerificationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
 
@@ -39,11 +38,12 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
             fail();
         } catch (InvalidUseOfMatchersException e) {
             assertThat(e)
-                .hasMessageContaining("-> at ")
-                .hasMessageContaining("misplacedArgumentMatcherHere(");
+                    .hasMessageContaining("-> at ")
+                    .hasMessageContaining("misplacedArgumentMatcherHere(");
         }
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     private void unfinishedStubbingHere() {
         when(mock.simpleMethod());
     }
@@ -57,8 +57,8 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
             fail();
         } catch (UnfinishedStubbingException e) {
             assertThat(e)
-                .hasMessageContaining("-> at ")
-                .hasMessageContaining("unfinishedStubbingHere(");
+                    .hasMessageContaining("-> at ")
+                    .hasMessageContaining("unfinishedStubbingHere(");
         }
     }
 
@@ -73,6 +73,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
         }
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     private void unfinishedVerificationHere() {
         verify(mock);
     }

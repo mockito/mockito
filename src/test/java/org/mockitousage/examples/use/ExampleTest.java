@@ -2,8 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.examples.use;
+
+import static org.mockito.Mockito.*;
+
+import java.util.Arrays;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,10 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
-import java.util.Arrays;
-
-import static org.mockito.Mockito.*;
 
 public class ExampleTest {
 
@@ -65,7 +64,8 @@ public class ExampleTest {
         when(mockCalculator.countNumberOfRelatedArticles(articleTwo)).thenReturn(12);
         when(mockCalculator.countNumberOfRelatedArticles(articleThree)).thenReturn(0);
 
-        when(mockDatabase.getArticlesFor("Guardian")).thenReturn(Arrays.asList(articleOne, articleTwo, articleThree));
+        when(mockDatabase.getArticlesFor("Guardian"))
+                .thenReturn(Arrays.asList(articleOne, articleTwo, articleThree));
 
         articleManager.updateRelatedArticlesCounters("Guardian");
 
@@ -82,7 +82,8 @@ public class ExampleTest {
         when(mockCalculator.countNumberOfRelatedArticles(articleOne)).thenReturn(1);
         when(mockCalculator.countNumberOfRelatedArticles(articleTwo)).thenReturn(12);
 
-        when(mockDatabase.getArticlesFor("Guardian")).thenReturn(Arrays.asList(articleOne, articleTwo));
+        when(mockDatabase.getArticlesFor("Guardian"))
+                .thenReturn(Arrays.asList(articleOne, articleTwo));
 
         articleManager.updateRelatedArticlesCounters("Guardian");
 

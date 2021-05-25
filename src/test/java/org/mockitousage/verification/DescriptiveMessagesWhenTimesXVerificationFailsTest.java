@@ -2,21 +2,20 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.verification;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.times;
+
+import java.util.LinkedList;
 
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.exceptions.verification.TooLittleActualInvocations;
+import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
 
 @SuppressWarnings("unchecked")
 public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase {
@@ -33,11 +32,11 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
         try {
             Mockito.verify(mock, times(100)).clear();
             fail();
-        } catch (TooLittleActualInvocations e) {
+        } catch (TooFewActualInvocations e) {
             assertThat(e)
-                .hasMessageContaining("mock.clear();")
-                .hasMessageContaining("Wanted 100 times")
-                .hasMessageContaining("was 3");
+                    .hasMessageContaining("mock.clear();")
+                    .hasMessageContaining("Wanted 100 times")
+                    .hasMessageContaining("was 3");
         }
     }
 
@@ -54,9 +53,9 @@ public class DescriptiveMessagesWhenTimesXVerificationFailsTest extends TestBase
             fail();
         } catch (TooManyActualInvocations e) {
             assertThat(e)
-                .hasMessageContaining("mock.clear();")
-                .hasMessageContaining("Wanted 1 time")
-                .hasMessageContaining("was 4");
+                    .hasMessageContaining("mock.clear();")
+                    .hasMessageContaining("Wanted 1 time")
+                    .hasMessageContaining("was 4");
         }
     }
 }

@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.matchers;
 
-import org.mockito.ArgumentMatcher;
-
 import static org.mockito.internal.exceptions.Reporter.noArgumentValueWasCaptured;
 
 import java.io.Serializable;
@@ -15,19 +13,24 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@SuppressWarnings("unchecked")
-public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
+import org.mockito.ArgumentMatcher;
 
-    private final List<Object> arguments = new ArrayList<Object>();
+@SuppressWarnings("unchecked")
+public class CapturingMatcher<T>
+        implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
+
+    private final List<Object> arguments = new ArrayList<>();
 
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock readLock = lock.readLock();
     private final Lock writeLock = lock.writeLock();
 
+    @Override
     public boolean matches(Object argument) {
         return true;
     }
 
+    @Override
     public String toString() {
         return "<Capturing argument>";
     }
@@ -54,6 +57,7 @@ public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArgument
         }
     }
 
+    @Override
     public void captureFrom(Object argument) {
         writeLock.lock();
         try {

@@ -2,14 +2,12 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.exceptions.verification.junit;
 
 import static org.mockito.internal.util.StringUtil.removeFirstLine;
 
 import junit.framework.ComparisonFailure;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
-
 
 public class ArgumentsAreDifferent extends ComparisonFailure {
 

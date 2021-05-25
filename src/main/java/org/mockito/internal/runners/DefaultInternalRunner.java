@@ -24,71 +24,95 @@ public class DefaultInternalRunner implements InternalRunner {
 
     private final BlockJUnit4ClassRunner runner;
 
-    public DefaultInternalRunner(Class<?> testClass, final Supplier<MockitoTestListener> listenerSupplier) throws InitializationError {
-        runner = new BlockJUnit4ClassRunner(testClass) {
+    public DefaultInternalRunner(
+            Class<?> testClass, final Supplier<MockitoTestListener> listenerSupplier)
+            throws InitializationError {
+        runner =
+                new BlockJUnit4ClassRunner(testClass) {
 
-            public Object target;
-            private MockitoTestListener mockitoTestListener;
-
-            protected Statement withBefores(FrameworkMethod method, Object target, Statement statement) {
-                this.target = target;
-                // get new test listener and add it to the framework
-                mockitoTestListener = listenerSupplier.get();
-                Mockito.framework().addListener(mockitoTestListener);
-                // init annotated mocks before tests
-                MockitoAnnotations.initMocks(target);
-                return super.withBefores(method, target, statement);
-            }
-
-            public void run(final RunNotifier notifier) {
-                RunListener listener = new RunListener() {
-                    private boolean started;
-                    Throwable failure;
+                    public Object target;
+                    private MockitoTestListener mockitoTestListener;
 
                     @Override
-                    public void testStarted(Description description) throws Exception {
-                        started = true;
-                    }
-
-                    @Override
-                    public void testFailure(Failure failure) throws Exception {
-                        this.failure = failure.getException();
-                        // If the test fails during the setup, `testFinished` is never invoked
-                        // Therefore, if we have not started, cleanup the testlistener
-                        if (!started && mockitoTestListener != null) {
-                            Mockito.framework().removeListener(mockitoTestListener);
-                        }
-                    }
-
-                    @Override
-                    public void testFinished(Description description) throws Exception {
-                        try {
-                            if (mockitoTestListener != null) {
-                                Mockito.framework().removeListener(mockitoTestListener);
-                                mockitoTestListener.testFinished(new DefaultTestFinishedEvent(target, description.getMethodName(), failure));
+                    protected Statement withBefores(
+                            FrameworkMethod method, final Object target, Statement statement) {
+                        this.target = target;
+                        final Statement base = super.withBefores(method, target, statement);
+                        return new Statement() {
+                            @Override
+                            public void evaluate() throws Throwable {
+                                AutoCloseable closeable;
+                                if (mockitoTestListener == null) {
+                                    // get new test listener and add it to the framework
+                                    mockitoTestListener = listenerSupplier.get();
+                                    Mockito.framework().addListener(mockitoTestListener);
+                                    // init annotated mocks before tests
+                                    closeable = MockitoAnnotations.openMocks(target);
+                                } else {
+                                    closeable = null;
+                                }
+                                try {
+                                    base.evaluate();
+                                } finally {
+                                    if (closeable != null) {
+                                        closeable.close();
+                                    }
+                                }
                             }
-                            Mockito.validateMockitoUsage();
-                        } catch (Throwable t) {
-                            //In order to produce clean exception to the user we need to fire test failure with the right description
-                            //Otherwise JUnit framework will report failure with some generic test name
-                            notifier.fireTestFailure(new Failure(description, t));
-                        }
+                        };
+                    }
+
+                    public void run(final RunNotifier notifier) {
+                        RunListener listener =
+                                new RunListener() {
+                                    Throwable failure;
+
+                                    @Override
+                                    public void testFailure(Failure failure) throws Exception {
+                                        this.failure = failure.getException();
+                                    }
+
+                                    @Override
+                                    public void testFinished(Description description)
+                                            throws Exception {
+                                        try {
+                                            if (mockitoTestListener != null) {
+                                                Mockito.framework()
+                                                        .removeListener(mockitoTestListener);
+                                                mockitoTestListener.testFinished(
+                                                        new DefaultTestFinishedEvent(
+                                                                target,
+                                                                description.getMethodName(),
+                                                                failure));
+                                                mockitoTestListener = null;
+                                            }
+                                            Mockito.validateMockitoUsage();
+                                        } catch (Throwable t) {
+                                            // In order to produce clean exception to the user we
+                                            // need to fire test failure with the right description
+                                            // Otherwise JUnit framework will report failure with
+                                            // some generic test name
+                                            notifier.fireTestFailure(new Failure(description, t));
+                                        }
+                                    }
+                                };
+                        notifier.addListener(listener);
+                        super.run(notifier);
                     }
                 };
-                notifier.addListener(listener);
-                super.run(notifier);
-            }
-        };
     }
 
+    @Override
     public void run(final RunNotifier notifier) {
         runner.run(notifier);
     }
 
+    @Override
     public Description getDescription() {
         return runner.getDescription();
     }
 
+    @Override
     public void filter(Filter filter) throws NoTestsRemainException {
         runner.filter(filter);
     }

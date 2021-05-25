@@ -27,7 +27,6 @@ import org.mockito.session.MockitoSessionBuilder;
  * otherwise {@link UnfinishedMockingSessionException} is triggered when the next session is created.
  * <p>
  * {@code MockitoSession} is useful when you cannot use {@link MockitoJUnitRunner} or {@link MockitoRule}.
- * For example, you work with TestNG instead of JUnit.
  * Another example is when different JUnit runner is in use (Jukito, Springockito)
  * and it cannot be combined with Mockito's own runner.
  * <p>
@@ -67,18 +66,18 @@ import org.mockito.session.MockitoSessionBuilder;
  * <p>
  * Why to use {@code MockitoSession}?
  * What's the difference between {@code MockitoSession}, {@link MockitoJUnitRunner}, {@link MockitoRule}
- * and traditional {@link MockitoAnnotations#initMocks(Object)}?
+ * and traditional {@link MockitoAnnotations#openMocks(Object)}?
  * <p>
  * Great questions!
  * There is no need to use {@code MockitoSession} if you already use {@link MockitoJUnitRunner} or {@link MockitoRule}.
  * If you are JUnit user who does not leverage Mockito rule or runner we strongly recommend to do so.
  * Both the runner and the rule support strict stubbing which can really help driving cleaner tests.
  * See {@link MockitoJUnitRunner.StrictStubs} and {@link MockitoRule#strictness(Strictness)}.
- * If you cannot use Mockito's JUnit support (for example, you are on TestNG) {@code MockitoSession} exactly is for you!
+ * If you cannot use Mockito's JUnit support {@code MockitoSession} exactly is for you!
  * You can automatically take advantage of strict stubbing ({@link Strictness}),
  * automatic initialization of annotated mocks ({@link MockitoAnnotations}),
  * and extra validation ({@link Mockito#validateMockitoUsage()}).
- * If you use Mockito annotations with {@link MockitoAnnotations#initMocks(Object)}
+ * If you use Mockito annotations with {@link MockitoAnnotations#openMocks(Object)}
  * but not Mockito runner/rule please try out Mockito's JUnit support (runner or rule) or
  * start using {@code MockitoSession}. You'll get cleaner tests and better productivity.
  * <p>
@@ -88,6 +87,7 @@ import org.mockito.session.MockitoSessionBuilder;
  * @since 2.7.0
  */
 @Incubating
+@NotExtensible
 public interface MockitoSession {
 
     /**

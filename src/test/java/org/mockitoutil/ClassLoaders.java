@@ -4,6 +4,9 @@
  */
 package org.mockitoutil;
 
+import static java.lang.String.format;
+import static java.util.Arrays.asList;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -32,18 +35,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
+
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.plugins.MemberAccessor;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 import org.objenesis.instantiator.ObjectInstantiator;
 
-import static java.lang.String.format;
-import static java.util.Arrays.asList;
-
 public abstract class ClassLoaders {
     protected ClassLoader parent = currentClassLoader();
 
-    protected ClassLoaders() {
-    }
+    protected ClassLoaders() {}
 
     public static IsolatedURLClassLoaderBuilder isolatedClassLoader() {
         return new IsolatedURLClassLoaderBuilder();
@@ -104,28 +106,33 @@ public abstract class ClassLoaders {
         }
 
         public void execute(final Runnable task) throws Exception {
-            ExecutorService executorService = Executors.newSingleThreadExecutor(new ThreadFactory() {
-                @Override
-                public Thread newThread(Runnable r) {
-                    Thread thread = Executors.defaultThreadFactory().newThread(r);
-                    thread.setContextClassLoader(classLoader);
-                    return thread;
-                }
-            });
+            ExecutorService executorService =
+                    Executors.newSingleThreadExecutor(
+                            new ThreadFactory() {
+                                @Override
+                                public Thread newThread(Runnable r) {
+                                    Thread thread = Executors.defaultThreadFactory().newThread(r);
+                                    thread.setContextClassLoader(classLoader);
+                                    return thread;
+                                }
+                            });
             try {
-                Future<?> taskFuture = executorService.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            reloadTaskInClassLoader(task).run();
-                        } catch (Throwable throwable) {
-                            throw new IllegalStateException(format("Given task could not be loaded properly in the given classloader '%s', error '%s",
-                                                                   task,
-                                                                   throwable.getMessage()),
-                                                            throwable);
-                        }
-                    }
-                });
+                Future<?> taskFuture =
+                        executorService.submit(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            reloadTaskInClassLoader(task).run();
+                                        } catch (Throwable throwable) {
+                                            throw new IllegalStateException(
+                                                    format(
+                                                            "Given task could not be loaded properly in the given classloader '%s', error '%s",
+                                                            task, throwable.getMessage()),
+                                                    throwable);
+                                        }
+                                    }
+                                });
                 taskFuture.get();
                 executorService.shutdownNow();
             } catch (InterruptedException e) {
@@ -143,26 +150,27 @@ public abstract class ClassLoaders {
         Runnable reloadTaskInClassLoader(Runnable task) {
             try {
                 @SuppressWarnings("unchecked")
-                Class<Runnable> taskClassReloaded = (Class<Runnable>) classLoader.loadClass(task.getClass().getName());
+                Class<Runnable> taskClassReloaded =
+                        (Class<Runnable>) classLoader.loadClass(task.getClass().getName());
 
                 Objenesis objenesis = new ObjenesisStd();
-                ObjectInstantiator<Runnable> thingyInstantiator = objenesis.getInstantiatorOf(taskClassReloaded);
+                ObjectInstantiator<Runnable> thingyInstantiator =
+                        objenesis.getInstantiatorOf(taskClassReloaded);
                 Runnable reloaded = thingyInstantiator.newInstance();
 
                 // lenient shallow copy of class compatible fields
                 for (Field field : task.getClass().getDeclaredFields()) {
                     Field declaredField = taskClassReloaded.getDeclaredField(field.getName());
                     int modifiers = declaredField.getModifiers();
-                    if(Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
+                    if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
                         // Skip static final fields (e.g. jacoco fields)
                         // otherwise IllegalAccessException (can be bypassed with Unsafe though)
                         // We may also miss coverage data.
                         continue;
                     }
                     if (declaredField.getType() == field.getType()) { // don't copy this
-                        field.setAccessible(true);
-                        declaredField.setAccessible(true);
-                        declaredField.set(reloaded, field.get(task));
+                        MemberAccessor accessor = Plugins.getMemberAccessor();
+                        accessor.set(declaredField, reloaded, accessor.get(field, task));
                     }
                 }
 
@@ -214,8 +222,7 @@ public abstract class ClassLoaders {
                     jdkClassLoader(),
                     codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
                     privateCopyPrefixes,
-                    excludedPrefixes
-            );
+                    excludedPrefixes);
         }
     }
 
@@ -223,10 +230,11 @@ public abstract class ClassLoaders {
         private final ArrayList<String> privateCopyPrefixes;
         private final ArrayList<String> excludedPrefixes;
 
-        LocalIsolatedURLClassLoader(ClassLoader classLoader,
-                                    URL[] urls,
-                                    ArrayList<String> privateCopyPrefixes,
-                                    ArrayList<String> excludedPrefixes) {
+        LocalIsolatedURLClassLoader(
+                ClassLoader classLoader,
+                URL[] urls,
+                ArrayList<String> privateCopyPrefixes,
+                ArrayList<String> excludedPrefixes) {
             super(urls, classLoader);
             this.privateCopyPrefixes = privateCopyPrefixes;
             this.excludedPrefixes = excludedPrefixes;
@@ -235,17 +243,20 @@ public abstract class ClassLoaders {
         @Override
         public Class<?> findClass(String name) throws ClassNotFoundException {
             if (!classShouldBePrivate(name) || classShouldBeExcluded(name)) {
-                throw new ClassNotFoundException(format("Can only load classes with prefixes : %s, but not : %s",
-                                                        privateCopyPrefixes,
-                                                        excludedPrefixes));
+                throw new ClassNotFoundException(
+                        format(
+                                "Can only load classes with prefixes : %s, but not : %s",
+                                privateCopyPrefixes, excludedPrefixes));
             }
             try {
                 return super.findClass(name);
             } catch (ClassNotFoundException cnfe) {
-                throw new ClassNotFoundException(format("%s%n%s%n",
-                                                        cnfe.getMessage(),
-                                                        "    Did you forgot to add the code source url 'withCodeSourceUrlOf' / 'withCurrentCodeSourceUrls' ?"),
-                                                 cnfe);
+                throw new ClassNotFoundException(
+                        format(
+                                "%s%n%s%n",
+                                cnfe.getMessage(),
+                                "    Did you forgot to add the code source url 'withCodeSourceUrlOf' / 'withCurrentCodeSourceUrls' ?"),
+                        cnfe);
             }
         }
 
@@ -294,17 +305,15 @@ public abstract class ClassLoaders {
             return new LocalExcludingURLClassLoader(
                     jdkClassLoader(),
                     codeSourceUrls.toArray(new URL[codeSourceUrls.size()]),
-                    excludedPrefixes
-            );
+                    excludedPrefixes);
         }
     }
 
     static class LocalExcludingURLClassLoader extends URLClassLoader {
         private final ArrayList<String> excludedPrefixes;
 
-        LocalExcludingURLClassLoader(ClassLoader classLoader,
-                                     URL[] urls,
-                                     ArrayList<String> excludedPrefixes) {
+        LocalExcludingURLClassLoader(
+                ClassLoader classLoader, URL[] urls, ArrayList<String> excludedPrefixes) {
             super(urls, classLoader);
             this.excludedPrefixes = excludedPrefixes;
         }
@@ -312,7 +321,8 @@ public abstract class ClassLoaders {
         @Override
         public Class<?> findClass(String name) throws ClassNotFoundException {
             if (classShouldBeExcluded(name))
-                throw new ClassNotFoundException("classes with prefix : " + excludedPrefixes + " are excluded");
+                throw new ClassNotFoundException(
+                        "classes with prefix : " + excludedPrefixes + " are excluded");
             return super.findClass(name);
         }
 
@@ -408,12 +418,12 @@ public abstract class ClassLoaders {
             }
 
             @Override
-            public void connect() throws IOException {
-            }
+            public void connect() throws IOException {}
 
             @Override
             public InputStream getInputStream() throws IOException {
-                return new ByteArrayInputStream(inMemoryClassLoader.inMemoryClassObjects.get(qualifiedName));
+                return new ByteArrayInputStream(
+                        inMemoryClassLoader.inMemoryClassObjects.get(qualifiedName));
             }
         }
     }
@@ -474,8 +484,16 @@ public abstract class ClassLoaders {
                     addFromFileBasedClassLoader(classes, uri);
                 } else if (uri.getScheme().equalsIgnoreCase(InMemoryClassLoader.SCHEME)) {
                     addFromInMemoryBasedClassLoader(classes, uri);
+                } else if (uri.getScheme().equalsIgnoreCase("jar")) {
+                    // Java 9+ returns "jar:file:" style urls for modules.
+                    // It's not a classes owned by mockito itself.
+                    // Just ignore it.
+                    continue;
                 } else {
-                    throw new IllegalArgumentException(format("Given ClassLoader '%s' don't have reachable by File or vi ClassLoaders.inMemory", classLoader));
+                    throw new IllegalArgumentException(
+                            format(
+                                    "Given ClassLoader '%s' don't have reachable by File or vi ClassLoaders.inMemory",
+                                    classLoader));
                 }
             }
             return classes;
@@ -493,8 +511,8 @@ public abstract class ClassLoaders {
             }
         }
 
-
-        private Set<String> findClassQualifiedNames(File root, File file, Set<String> packageFilters) {
+        private Set<String> findClassQualifiedNames(
+                File root, File file, Set<String> packageFilters) {
             if (file.isDirectory()) {
                 File[] files = file.listFiles();
                 Set<String> classes = new HashSet<String>();
@@ -521,10 +539,11 @@ public abstract class ClassLoaders {
         }
 
         private String classNameFor(File root, File file) {
-            String temp = file.getAbsolutePath().substring(root.getAbsolutePath().length() + 1).
-                    replace(File.separatorChar, '.');
+            String temp =
+                    file.getAbsolutePath()
+                            .substring(root.getAbsolutePath().length() + 1)
+                            .replace(File.separatorChar, '.');
             return temp.subSequence(0, temp.indexOf(".class")).toString();
         }
-
     }
 }

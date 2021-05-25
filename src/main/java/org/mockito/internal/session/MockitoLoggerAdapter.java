@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.session;
 
-import org.mockito.internal.util.MockitoLogger;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.session.MockitoSessionLogger;
 
 class MockitoLoggerAdapter implements MockitoLogger {

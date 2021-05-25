@@ -4,15 +4,15 @@
  */
 package org.mockito.internal.configuration.injection.scanner;
 
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.reflection.FieldReader;
+import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 import java.lang.reflect.Field;
 import java.util.Set;
 
-import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.reflection.FieldReader;
 
 /**
  * Scan mocks, and prepare them if needed.
@@ -80,7 +80,6 @@ public class MockScanner {
     }
 
     private boolean isMockOrSpy(Object instance) {
-        return MockUtil.isMock(instance)
-                || MockUtil.isSpy(instance);
+        return MockUtil.isMock(instance) || MockUtil.isSpy(instance);
     }
 }

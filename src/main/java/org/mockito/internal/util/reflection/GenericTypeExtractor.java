@@ -7,10 +7,8 @@ package org.mockito.internal.util.reflection;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-/**
- * Attempts to extract generic type of given target base class or target interface
- */
-public class GenericTypeExtractor {
+/** Attempts to extract generic type of given target base class or target interface */
+public final class GenericTypeExtractor {
 
     /**
      * Extract generic type of root class either from the target base class or from target base interface.
@@ -34,20 +32,21 @@ public class GenericTypeExtractor {
      *                            it will be used for generic type extraction
      * @return generic interface if found, Object.class if not found.
      */
-    public static Class<?> genericTypeOf(Class<?> rootClass, Class<?> targetBaseClass, Class<?> targetBaseInterface) {
-        //looking for candidates in the hierarchy of rootClass
+    public static Class<?> genericTypeOf(
+            Class<?> rootClass, Class<?> targetBaseClass, Class<?> targetBaseInterface) {
+        // looking for candidates in the hierarchy of rootClass
         Class<?> match = rootClass;
-        while(match != Object.class) {
-            //check the super class first
+        while (match != Object.class) {
+            // check the super class first
             if (match.getSuperclass() == targetBaseClass) {
                 return extractGeneric(match.getGenericSuperclass());
             }
-            //check the interfaces (recursively)
+            // check the interfaces (recursively)
             Type genericInterface = findGenericInterface(match, targetBaseInterface);
             if (genericInterface != null) {
                 return extractGeneric(genericInterface);
             }
-            //recurse the hierarchy
+            // recurse the hierarchy
             match = match.getSuperclass();
         }
         return Object.class;
@@ -61,7 +60,7 @@ public class GenericTypeExtractor {
         for (int i = 0; i < sourceClass.getInterfaces().length; i++) {
             Class<?> inter = sourceClass.getInterfaces()[i];
             if (inter == targetBaseInterface) {
-                return sourceClass.getGenericInterfaces()[0];
+                return sourceClass.getGenericInterfaces()[i];
             } else {
                 Type deeper = findGenericInterface(inter, targetBaseInterface);
                 if (deeper != null) {
@@ -85,4 +84,6 @@ public class GenericTypeExtractor {
         }
         return Object.class;
     }
+
+    private GenericTypeExtractor() {}
 }

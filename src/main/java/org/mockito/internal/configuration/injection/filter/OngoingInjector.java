@@ -23,9 +23,11 @@ public interface OngoingInjector {
     /**
      * Injector that will do nothing, and will return <code>null</code> as no mocks will be injected
      */
-    OngoingInjector nop = new OngoingInjector() {
-        public Object thenInject() {
-            return null;
-        }
-    };
+    OngoingInjector nop =
+            new OngoingInjector() {
+                @Override
+                public Object thenInject() {
+                    return null;
+                }
+            };
 }

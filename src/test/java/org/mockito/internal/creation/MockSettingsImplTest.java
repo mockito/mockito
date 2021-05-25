@@ -4,52 +4,58 @@
  */
 package org.mockito.internal.creation;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.debugging.VerboseMockInvocationLogger;
-import org.mockito.listeners.InvocationListener;
-import org.mockitoutil.TestBase;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.ThrowableAssert;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.debugging.VerboseMockInvocationLogger;
+import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.StubbingLookupListener;
+import org.mockitoutil.TestBase;
 
 public class MockSettingsImplTest extends TestBase {
 
     private MockSettingsImpl<?> mockSettingsImpl = new MockSettingsImpl<Object>();
 
     @Mock private InvocationListener invocationListener;
+    @Mock private StubbingLookupListener stubbingLookupListener;
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     @SuppressWarnings("unchecked")
     public void shouldNotAllowSettingNullInterface() {
         mockSettingsImpl.extraInterfaces(List.class, null);
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     @SuppressWarnings("unchecked")
     public void shouldNotAllowNonInterfaces() {
         mockSettingsImpl.extraInterfaces(List.class, LinkedList.class);
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     @SuppressWarnings("unchecked")
     public void shouldNotAllowUsingTheSameInterfaceAsExtra() {
         mockSettingsImpl.extraInterfaces(List.class, LinkedList.class);
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     @SuppressWarnings("unchecked")
     public void shouldNotAllowEmptyExtraInterfaces() {
         mockSettingsImpl.extraInterfaces();
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     @SuppressWarnings("unchecked")
     public void shouldNotAllowNullArrayOfExtraInterfaces() {
         mockSettingsImpl.extraInterfaces((Class<?>[]) null);
@@ -58,10 +64,10 @@ public class MockSettingsImplTest extends TestBase {
     @Test
     @SuppressWarnings("unchecked")
     public void shouldAllowMultipleInterfaces() {
-        //when
+        // when
         mockSettingsImpl.extraInterfaces(List.class, Set.class);
 
-        //then
+        // then
         assertEquals(2, mockSettingsImpl.getExtraInterfaces().size());
         assertTrue(mockSettingsImpl.getExtraInterfaces().contains(List.class));
         assertTrue(mockSettingsImpl.getExtraInterfaces().contains(Set.class));
@@ -69,98 +75,201 @@ public class MockSettingsImplTest extends TestBase {
 
     @Test
     public void shouldSetMockToBeSerializable() throws Exception {
-        //when
+        // when
         mockSettingsImpl.serializable();
 
-        //then
+        // then
         assertTrue(mockSettingsImpl.isSerializable());
     }
 
     @Test
     public void shouldKnowIfIsSerializable() throws Exception {
-        //given
+        // given
         assertFalse(mockSettingsImpl.isSerializable());
 
-        //when
+        // when
         mockSettingsImpl.serializable();
 
-        //then
+        // then
         assertTrue(mockSettingsImpl.isSerializable());
     }
 
     @Test
     public void shouldAddVerboseLoggingListener() {
-        //given
+        // given
         assertFalse(mockSettingsImpl.hasInvocationListeners());
 
-        //when
+        // when
         mockSettingsImpl.verboseLogging();
 
-        //then
-        assertThat(mockSettingsImpl.getInvocationListeners()).extracting("class").contains(VerboseMockInvocationLogger.class);
+        // then
+        assertThat(mockSettingsImpl.getInvocationListeners())
+                .extracting("class")
+                .contains(VerboseMockInvocationLogger.class);
     }
 
     @Test
     public void shouldAddVerboseLoggingListenerOnlyOnce() {
-        //given
+        // given
         assertFalse(mockSettingsImpl.hasInvocationListeners());
 
-        //when
+        // when
         mockSettingsImpl.verboseLogging().verboseLogging();
 
-        //then
+        // then
         Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).hasSize(1);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test(expected=MockitoException.class)
-    public void shouldNotAllowNullListener() {
-        mockSettingsImpl.invocationListeners((InvocationListener[])null);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void shouldAddInvocationListener() {
-        //given
+        // given
         assertFalse(mockSettingsImpl.hasInvocationListeners());
 
-        //when
+        // when
         mockSettingsImpl.invocationListeners(invocationListener);
 
-        //then
-        Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).contains(invocationListener);
+        // then
+        Assertions.assertThat(mockSettingsImpl.getInvocationListeners())
+                .contains(invocationListener);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void canAddDuplicateInvocationListeners_ItsNotOurBusinessThere() {
-        //given
+        // given
         assertFalse(mockSettingsImpl.hasInvocationListeners());
 
-        //when
-        mockSettingsImpl.invocationListeners(invocationListener, invocationListener).invocationListeners(invocationListener);
+        // when
+        mockSettingsImpl
+                .invocationListeners(invocationListener, invocationListener)
+                .invocationListeners(invocationListener);
 
-        //then
-        Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).containsSequence(invocationListener, invocationListener, invocationListener);
+        // then
+        Assertions.assertThat(mockSettingsImpl.getInvocationListeners())
+                .containsSequence(invocationListener, invocationListener, invocationListener);
     }
 
     @Test
-    public void shouldReportErrorWhenAddingNoInvocationListeners() throws Exception {
-        try {
-            mockSettingsImpl.invocationListeners();
-            fail();
-        } catch (Exception e) {
-            Assertions.assertThat(e.getMessage()).contains("at least one listener");
-        }
+    public void validates_listeners() {
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mockSettingsImpl.addListeners(
+                                        new Object[] {}, new LinkedList<Object>(), "myListeners");
+                            }
+                        })
+                .hasMessageContaining("myListeners() requires at least one listener");
+
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mockSettingsImpl.addListeners(
+                                        null, new LinkedList<Object>(), "myListeners");
+                            }
+                        })
+                .hasMessageContaining("myListeners() does not accept null vararg array");
+
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mockSettingsImpl.addListeners(
+                                        new Object[] {null},
+                                        new LinkedList<Object>(),
+                                        "myListeners");
+                            }
+                        })
+                .hasMessageContaining("myListeners() does not accept null listeners");
     }
 
     @Test
-    public void shouldReportErrorWhenAddingANullInvocationListener() throws Exception {
-        try {
-            mockSettingsImpl.invocationListeners(invocationListener, null);
-            fail();
-        } catch (Exception e) {
-            Assertions.assertThat(e.getMessage()).contains("does not accept null");
-        }
+    public void validates_stubbing_lookup_listeners() {
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mockSettingsImpl.stubbingLookupListeners(
+                                        new StubbingLookupListener[] {});
+                            }
+                        })
+                .hasMessageContaining("stubbingLookupListeners() requires at least one listener");
+
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mockSettingsImpl.stubbingLookupListeners(null);
+                            }
+                        })
+                .hasMessageContaining(
+                        "stubbingLookupListeners() does not accept null vararg array");
+
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mockSettingsImpl.stubbingLookupListeners(
+                                        new StubbingLookupListener[] {null});
+                            }
+                        })
+                .hasMessageContaining("stubbingLookupListeners() does not accept null listeners");
+    }
+
+    @Test
+    public void validates_invocation_listeners() {
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mockSettingsImpl.invocationListeners(new InvocationListener[] {});
+                            }
+                        })
+                .hasMessageContaining("invocationListeners() requires at least one listener");
+
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mockSettingsImpl.invocationListeners(null);
+                            }
+                        })
+                .hasMessageContaining("invocationListeners() does not accept null vararg array");
+
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                mockSettingsImpl.invocationListeners(
+                                        new InvocationListener[] {null});
+                            }
+                        })
+                .hasMessageContaining("invocationListeners() does not accept null listeners");
+    }
+
+    @Test
+    public void addListeners_has_empty_listeners_by_default() {
+        assertTrue(mockSettingsImpl.getInvocationListeners().isEmpty());
+        assertTrue(mockSettingsImpl.getStubbingLookupListeners().isEmpty());
+    }
+
+    @Test
+    public void addListeners_shouldAddMockObjectListeners() {
+        // when
+        mockSettingsImpl.invocationListeners(invocationListener);
+        mockSettingsImpl.stubbingLookupListeners(stubbingLookupListener);
+
+        // then
+        assertThat(mockSettingsImpl.getInvocationListeners()).contains(invocationListener);
+        assertThat(mockSettingsImpl.getStubbingLookupListeners()).contains(stubbingLookupListener);
+    }
+
+    @Test
+    public void addListeners_canAddDuplicateMockObjectListeners_ItsNotOurBusinessThere() {
+        // when
+        mockSettingsImpl
+                .stubbingLookupListeners(stubbingLookupListener)
+                .stubbingLookupListeners(stubbingLookupListener)
+                .invocationListeners(invocationListener)
+                .invocationListeners(invocationListener);
+
+        // then
+        assertThat(mockSettingsImpl.getInvocationListeners())
+                .containsSequence(invocationListener, invocationListener);
+        assertThat(mockSettingsImpl.getStubbingLookupListeners())
+                .containsSequence(stubbingLookupListener, stubbingLookupListener);
     }
 }

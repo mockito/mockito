@@ -2,8 +2,10 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.verification;
+
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -13,9 +15,6 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
-
 @SuppressWarnings("unchecked")
 public class VerificationExcludingStubsTest extends TestBase {
 
@@ -23,35 +22,39 @@ public class VerificationExcludingStubsTest extends TestBase {
 
     @Test
     public void shouldAllowToExcludeStubsForVerification() throws Exception {
-        //given
+        // given
         when(mock.simpleMethod()).thenReturn("foo");
 
-        //when
-        String stubbed = mock.simpleMethod(); //irrelevant call because it is stubbing
+        // when
+        String stubbed = mock.simpleMethod(); // irrelevant call because it is stubbing
         mock.objectArgMethod(stubbed);
 
-        //then
+        // then
         verify(mock).objectArgMethod("foo");
 
-        //verifyNoMoreInteractions fails:
-        try { verifyNoMoreInteractions(mock); fail(); } catch (NoInteractionsWanted e) {}
+        // verifyNoMoreInteractions fails:
+        try {
+            verifyNoMoreInteractions(mock);
+            fail();
+        } catch (NoInteractionsWanted e) {
+        }
 
-        //but it works when stubs are ignored:
+        // but it works when stubs are ignored:
         ignoreStubs(mock);
         verifyNoMoreInteractions(mock);
     }
 
     @Test
     public void shouldExcludeFromVerificationInOrder() throws Exception {
-        //given
+        // given
         when(mock.simpleMethod()).thenReturn("foo");
 
-        //when
+        // when
         mock.objectArgMethod("1");
         mock.objectArgMethod("2");
-        mock.simpleMethod(); //calling the stub
+        mock.simpleMethod(); // calling the stub
 
-        //then
+        // then
         InOrder inOrder = inOrder(ignoreStubs(mock));
         inOrder.verify(mock).objectArgMethod("1");
         inOrder.verify(mock).objectArgMethod("2");
@@ -68,5 +71,4 @@ public class VerificationExcludingStubsTest extends TestBase {
     public void shouldIgnoringStubsDetectNonMocks() throws Exception {
         ignoreStubs(mock, new Object());
     }
-
 }

@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unused")
 public class FieldReaderTest extends TestBase {
@@ -20,17 +20,17 @@ public class FieldReaderTest extends TestBase {
 
     @Test
     public void shouldKnowWhenNull() throws Exception {
-        //when
+        // when
         FieldReader reader = new FieldReader(new Foo(), Foo.class.getDeclaredField("isNull"));
-        //then
+        // then
         assertTrue(reader.isNull());
     }
 
     @Test
     public void shouldKnowWhenNotNull() throws Exception {
-        //when
+        // when
         FieldReader reader = new FieldReader(new Foo(), Foo.class.getDeclaredField("notNull"));
-        //then
+        // then
         assertFalse(reader.isNull());
     }
 }

@@ -2,19 +2,18 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.performance;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 public class LoadsOfMocksTest extends TestBase {
 

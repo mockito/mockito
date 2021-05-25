@@ -2,12 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.matchers;
 
-import org.mockito.ArgumentMatcher;
-
 import java.io.Serializable;
+
+import org.mockito.ArgumentMatcher;
 
 public class StartsWith implements ArgumentMatcher<String>, Serializable {
 
@@ -17,10 +16,12 @@ public class StartsWith implements ArgumentMatcher<String>, Serializable {
         this.prefix = prefix;
     }
 
+    @Override
     public boolean matches(String actual) {
         return actual != null && actual.startsWith(prefix);
     }
 
+    @Override
     public String toString() {
         return "startsWith(\"" + prefix + "\")";
     }

@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import static org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces.toAnswer;
+
 import java.util.Collection;
 
 import org.mockito.internal.stubbing.answers.AnswersWithDelay;
@@ -16,13 +18,13 @@ import org.mockito.stubbing.Answer2;
 import org.mockito.stubbing.Answer3;
 import org.mockito.stubbing.Answer4;
 import org.mockito.stubbing.Answer5;
+import org.mockito.stubbing.Answer6;
 import org.mockito.stubbing.VoidAnswer1;
 import org.mockito.stubbing.VoidAnswer2;
 import org.mockito.stubbing.VoidAnswer3;
 import org.mockito.stubbing.VoidAnswer4;
 import org.mockito.stubbing.VoidAnswer5;
-
-import static org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces.toAnswer;
+import org.mockito.stubbing.VoidAnswer6;
 
 /**
  * Additional answers provides factory methods for answers.
@@ -37,7 +39,7 @@ import static org.mockito.internal.stubbing.answers.AnswerFunctionalInterfaces.t
  * @since 1.9.5
  */
 @SuppressWarnings("unchecked")
-public class AdditionalAnswers {
+public final class AdditionalAnswers {
     /**
      * Returns the first parameter of an invocation.
      *
@@ -274,7 +276,7 @@ public class AdditionalAnswers {
      * This feature suffers from the same drawback as the spy.
      * The mock will call the delegate if you use regular when().then() stubbing style.
      * Since the real implementation is called this might have some side effects.
-     * Therefore you should to use the doReturn|Throw|Answer|CallRealMethod stubbing style. Example:
+     * Therefore you should use the doReturn|Throw|Answer|CallRealMethod stubbing style. Example:
      *
      * <pre class="code"><code class="java">
      *   List listWithDelegate = mock(List.class, AdditionalAnswers.delegatesTo(awesomeList));
@@ -306,7 +308,7 @@ public class AdditionalAnswers {
      *   when(mock.foo()).thenReturn(1, 2, 3);
      *
      *   //is equivalent to:
-     *   when(mock.foo()).thenAnswer(new ReturnsElementsOf(Arrays.asList(1, 2, 3)));
+     *   when(mock.foo()).thenAnswer(AdditionalAnswers.returnsElementsOf(Arrays.asList(1, 2, 3)));
      * </code></pre>
      *
      * @param elements The collection of elements to return.
@@ -488,4 +490,45 @@ public class AdditionalAnswers {
     public static <A, B, C, D, E> Answer<Void> answerVoid(VoidAnswer5<A, B, C, D, E> answer) {
         return toAnswer(answer);
     }
+
+    /**
+     * Creates an answer from a functional interface - allows for a strongly typed answer to be created
+     * idiomatically in Java 8
+     *
+     * @param answer interface to the answer - which is expected to return something
+     * @param <T> return type
+     * @param <A> input parameter type 1
+     * @param <B> input parameter type 2
+     * @param <C> input parameter type 3
+     * @param <D> input parameter type 4
+     * @param <E> input parameter type 5
+     * @param <F> input parameter type 6
+     * @return the answer object to use
+     * @since 2.26.0
+     */
+    @Incubating
+    public static <T, A, B, C, D, E, F> Answer<T> answer(Answer6<T, A, B, C, D, E, F> answer) {
+        return toAnswer(answer);
+    }
+
+    /**
+     * Creates an answer from a functional interface - allows for a strongly typed answer to be created
+     * idiomatically in Java 8
+     *
+     * @param answer interface to the answer - a void method
+     * @param <A> input parameter type 1
+     * @param <B> input parameter type 2
+     * @param <C> input parameter type 3
+     * @param <D> input parameter type 4
+     * @param <E> input parameter type 5
+     * @param <F> input parameter type 6
+     * @return the answer object to use
+     * @since 2.26.0
+     */
+    @Incubating
+    public static <A, B, C, D, E, F> Answer<Void> answerVoid(VoidAnswer6<A, B, C, D, E, F> answer) {
+        return toAnswer(answer);
+    }
+
+    private AdditionalAnswers() {}
 }

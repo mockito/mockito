@@ -22,12 +22,11 @@ public class GenericMaster {
             if (actual instanceof Class) {
                 return (Class<?>) actual;
             } else if (actual instanceof ParameterizedType) {
-                //in case of nested generics we don't go deep
+                // in case of nested generics we don't go deep
                 return (Class<?>) ((ParameterizedType) actual).getRawType();
             }
         }
 
         return Object.class;
     }
-
 }

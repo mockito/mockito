@@ -10,6 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
 import java.util.concurrent.CountDownLatch;
+
 import org.junit.Test;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
@@ -24,9 +25,9 @@ import org.mockito.mock.MockCreationSettings;
  */
 public class InvocationContainerImplTest {
 
-    InvocationContainerImpl container = new InvocationContainerImpl( new MockSettingsImpl());
+    InvocationContainerImpl container = new InvocationContainerImpl(new MockSettingsImpl());
     InvocationContainerImpl containerStubOnly =
-      new InvocationContainerImpl( (MockCreationSettings) new MockSettingsImpl().stubOnly());
+            new InvocationContainerImpl((MockCreationSettings) new MockSettingsImpl().stubOnly());
     Invocation invocation = new InvocationBuilder().toInvocation();
     LinkedList<Throwable> exceptions = new LinkedList<Throwable>();
 
@@ -40,40 +41,42 @@ public class InvocationContainerImplTest {
         doShouldBeThreadSafe(containerStubOnly);
     }
 
-    //works 50% of the time
+    // works 50% of the time
     private void doShouldBeThreadSafe(final InvocationContainerImpl c) throws Throwable {
-        //given
+        // given
         Thread[] t = new Thread[200];
         final CountDownLatch starter = new CountDownLatch(200);
-        for (int i = 0; i < t.length; i++ ) {
-            t[i] = new Thread() {
-                public void run() {
-                    try {
-                        starter.await(); //NOPMD
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    c.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
-                    c.addAnswer(new Returns("foo"));
-                    c.findAnswerFor(invocation);
-                }
-            };
-            t[i].setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-                public void uncaughtException(Thread t, Throwable e) {
-                    exceptions.add(e);
-                }
-            });
+        for (int i = 0; i < t.length; i++) {
+            t[i] =
+                    new Thread() {
+                        public void run() {
+                            try {
+                                starter.await(); // NOPMD
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            c.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
+                            c.addAnswer(new Returns("foo"), null);
+                            c.findAnswerFor(invocation);
+                        }
+                    };
+            t[i].setUncaughtExceptionHandler(
+                    new Thread.UncaughtExceptionHandler() {
+                        public void uncaughtException(Thread t, Throwable e) {
+                            exceptions.add(e);
+                        }
+                    });
             t[i].start();
 
             starter.countDown();
         }
 
-        //when
+        // when
         for (Thread aT : t) {
             aT.join();
         }
 
-        //then
+        // then
         if (exceptions.size() != 0) {
             throw exceptions.getFirst();
         }
@@ -98,16 +101,17 @@ public class InvocationContainerImplTest {
         container.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
         assertTrue(container.hasInvocationForPotentialStubbing());
 
-        container.addAnswer(new ReturnsEmptyValues());
+        container.addAnswer(new ReturnsEmptyValues(), null);
         assertFalse(container.hasInvocationForPotentialStubbing());
     }
 
     @Test
     public void should_tell_if_has_invocation_for_potential_stubbing_stub_only() throws Exception {
-        containerStubOnly.setInvocationForPotentialStubbing(new InvocationBuilder().toInvocationMatcher());
+        containerStubOnly.setInvocationForPotentialStubbing(
+                new InvocationBuilder().toInvocationMatcher());
         assertTrue(containerStubOnly.hasInvocationForPotentialStubbing());
 
-        containerStubOnly.addAnswer(new ReturnsEmptyValues());
+        containerStubOnly.addAnswer(new ReturnsEmptyValues(), null);
         assertFalse(containerStubOnly.hasInvocationForPotentialStubbing());
     }
 }

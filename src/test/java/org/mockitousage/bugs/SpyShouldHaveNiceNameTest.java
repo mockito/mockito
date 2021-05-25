@@ -2,34 +2,33 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.bugs;
+
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.verify;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Spy;
 import org.mockitoutil.TestBase;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.verify;
-
-//see issue 216
+// see issue 216
 public class SpyShouldHaveNiceNameTest extends TestBase {
 
     @Spy List<Integer> veryCoolSpy = new LinkedList<Integer>();
 
     @Test
     public void shouldPrintNiceName() {
-        //when
+        // when
         veryCoolSpy.add(1);
 
         try {
             verify(veryCoolSpy).add(2);
             fail();
-        } catch(AssertionError e) {
+        } catch (AssertionError e) {
             Assertions.assertThat(e.getMessage()).contains("veryCoolSpy");
         }
     }

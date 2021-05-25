@@ -4,16 +4,16 @@
  */
 package org.mockitousage.bugs.injection;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Issue 211 : @InjectMocks should carry out their work by the method (and not by field) if available
@@ -44,5 +44,4 @@ public class InjectMocksShouldTryPropertySettersFirstBeforeFieldAccessTest {
             propertySetterUsed = true;
         }
     }
-
 }

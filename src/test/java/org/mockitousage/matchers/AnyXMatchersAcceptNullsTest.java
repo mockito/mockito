@@ -4,15 +4,15 @@
  */
 package org.mockitousage.matchers;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.when;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unchecked")
 public class AnyXMatchersAcceptNullsTest extends TestBase {

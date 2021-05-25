@@ -5,8 +5,11 @@
 package org.mockito.internal.junit.util;
 
 import java.lang.reflect.Field;
+
 import org.junit.runner.notification.Failure;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.exceptions.ExceptionIncludingMockitoWarnings;
+import org.mockito.plugins.MemberAccessor;
 
 @Deprecated
 public class JUnitFailureHacker {
@@ -15,13 +18,17 @@ public class JUnitFailureHacker {
         if (isEmpty(warnings)) {
             return;
         }
-        //TODO: this has to protect the use in case jUnit changes and this internal state logic fails
+        // TODO: this has to protect the use in case jUnit changes and this internal state logic
+        // fails
         Throwable throwable = (Throwable) getInternalState(failure, "fThrownException");
 
-        String newMessage = "contains both: actual test failure *and* Mockito warnings.\n" +
-                warnings + "\n *** The actual failure is because of: ***\n";
+        String newMessage =
+                "contains both: actual test failure *and* Mockito warnings.\n"
+                        + warnings
+                        + "\n *** The actual failure is because of: ***\n";
 
-        ExceptionIncludingMockitoWarnings e = new ExceptionIncludingMockitoWarnings(newMessage, throwable);
+        ExceptionIncludingMockitoWarnings e =
+                new ExceptionIncludingMockitoWarnings(newMessage, throwable);
         e.setStackTrace(throwable.getStackTrace());
         setInternalState(failure, "fThrownException", e);
     }
@@ -31,24 +38,28 @@ public class JUnitFailureHacker {
     }
 
     private static Object getInternalState(Object target, String field) {
+        MemberAccessor accessor = Plugins.getMemberAccessor();
         Class<?> c = target.getClass();
         try {
             Field f = getFieldFromHierarchy(c, field);
-            f.setAccessible(true);
-            return f.get(target);
+            return accessor.get(f, target);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to get internal state on a private field. Please report to mockito mailing list.", e);
+            throw new RuntimeException(
+                    "Unable to get internal state on a private field. Please report to mockito mailing list.",
+                    e);
         }
     }
 
     private static void setInternalState(Object target, String field, Object value) {
+        MemberAccessor accessor = Plugins.getMemberAccessor();
         Class<?> c = target.getClass();
         try {
             Field f = getFieldFromHierarchy(c, field);
-            f.setAccessible(true);
-            f.set(target, value);
+            accessor.set(f, target, value);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to set internal state on a private field. Please report to mockito mailing list.", e);
+            throw new RuntimeException(
+                    "Unable to set internal state on a private field. Please report to mockito mailing list.",
+                    e);
         }
     }
 
@@ -60,9 +71,11 @@ public class JUnitFailureHacker {
         }
         if (f == null) {
             throw new RuntimeException(
-                    "You want me to get this field: '" + field +
-                            "' on this class: '" + clazz.getSimpleName() +
-                            "' but this field is not declared within the hierarchy of this class!");
+                    "You want me to get this field: '"
+                            + field
+                            + "' on this class: '"
+                            + clazz.getSimpleName()
+                            + "' but this field is not declared within the hierarchy of this class!");
         }
         return f;
     }

@@ -2,59 +2,59 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.bugs;
+
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import java.io.Serializable;
 
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
 
-import java.io.Serializable;
-
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
-//see issue 101
+// see issue 101
 public class BridgeMethodsHitAgainTest extends TestBase {
 
-  public interface Factory {}
-  public interface ExtendedFactory extends Factory {}
+    public interface Factory {}
 
-  public interface SomeInterface {
-    Factory factory();
-  }
+    public interface ExtendedFactory extends Factory {}
 
-  public interface SomeSubInterface extends SomeInterface {
-    ExtendedFactory factory();
-  }
+    public interface SomeInterface {
+        Factory factory();
+    }
 
-  public interface Base<T extends Serializable> {
-    int test(T value);
-  }
+    public interface SomeSubInterface extends SomeInterface {
+        ExtendedFactory factory();
+    }
 
-  public interface Extended extends Base<String> {
-    @Override
-    int test(String value);
-  }
+    public interface Base<T extends Serializable> {
+        int test(T value);
+    }
 
-  @Mock SomeSubInterface someSubInterface;
-  @Mock ExtendedFactory extendedFactory;
+    public interface Extended extends Base<String> {
+        @Override
+        int test(String value);
+    }
 
-  @Test
-  public void basicCheck() {
-    Mockito.when((someSubInterface).factory()).thenReturn(extendedFactory);
-    SomeInterface si = someSubInterface;
-    assertTrue(si.factory() != null);
-  }
+    @Mock SomeSubInterface someSubInterface;
+    @Mock ExtendedFactory extendedFactory;
 
-  @Test
-  public void checkWithExtraCast() {
-    Mockito.when(((SomeInterface) someSubInterface).factory()).thenReturn(extendedFactory);
-    SomeInterface si = someSubInterface;
-    assertTrue(si.factory() != null);
-  }
+    @Test
+    public void basicCheck() {
+        Mockito.when((someSubInterface).factory()).thenReturn(extendedFactory);
+        SomeInterface si = someSubInterface;
+        assertTrue(si.factory() != null);
+    }
+
+    @Test
+    public void checkWithExtraCast() {
+        Mockito.when(((SomeInterface) someSubInterface).factory()).thenReturn(extendedFactory);
+        SomeInterface si = someSubInterface;
+        assertTrue(si.factory() != null);
+    }
 
     @Test
     public void testBridgeInvocationIsRecordedForInterceptedMethod() {

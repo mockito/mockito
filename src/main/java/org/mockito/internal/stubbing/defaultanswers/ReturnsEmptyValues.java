@@ -4,18 +4,30 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod;
+import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import org.mockito.internal.util.JavaEightUtil;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockName;
 import org.mockito.stubbing.Answer;
-
-import static org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod;
-import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
-
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * Default answer of every Mockito mock.
@@ -42,6 +54,9 @@ import java.util.*;
  * Returns an {@code java.util.stream.Stream#empty() empty Stream} for Stream. Similarly for primitive stream variants.
  * </li>
  * <li>
+ * Returns an {@code java.time.Duration.ZERO zero Duration} for empty Duration and {@code java.time.Period.ZERO zero Period} for empty Period.
+ * </li>
+ * <li>
  * Returns null for everything else
  * </li>
  * </ul>
@@ -50,23 +65,27 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
 
     private static final long serialVersionUID = 1998191268711234347L;
 
-
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
+    @Override
     public Object answer(InvocationOnMock invocation) {
         if (isToStringMethod(invocation.getMethod())) {
             Object mock = invocation.getMock();
             MockName name = MockUtil.getMockName(mock);
             if (name.isDefault()) {
-                return "Mock for " + MockUtil.getMockSettings(mock).getTypeToMock().getSimpleName() + ", hashCode: " + mock.hashCode();
+                return "Mock for "
+                        + MockUtil.getMockSettings(mock).getTypeToMock().getSimpleName()
+                        + ", hashCode: "
+                        + mock.hashCode();
             } else {
                 return name.toString();
             }
         } else if (isCompareToMethod(invocation.getMethod())) {
-            //see issue 184.
-            //mocks by default should return 0 if references are the same, otherwise some other value because they are not the same. Hence we return 1 (anything but 0 is good).
-            //Only for compareTo() method by the Comparable interface
+            // see issue 184.
+            // mocks by default should return 0 if references are the same, otherwise some other
+            // value because they are not the same. Hence we return 1 (anything but 0 is good).
+            // Only for compareTo() method by the Comparable interface
             return invocation.getMock() == invocation.getArgument(0) ? 0 : 1;
         }
 
@@ -77,38 +96,39 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     Object returnValueFor(Class<?> type) {
         if (Primitives.isPrimitiveOrWrapper(type)) {
             return Primitives.defaultValue(type);
-            //new instances are used instead of Collections.emptyList(), etc.
-            //to avoid UnsupportedOperationException if code under test modifies returned collection
+            // new instances are used instead of Collections.emptyList(), etc.
+            // to avoid UnsupportedOperationException if code under test modifies returned
+            // collection
         } else if (type == Iterable.class) {
-            return new ArrayList<Object>(0);
+            return new ArrayList<>(0);
         } else if (type == Collection.class) {
-            return new LinkedList<Object>();
+            return new LinkedList<>();
         } else if (type == Set.class) {
-            return new HashSet<Object>();
+            return new HashSet<>();
         } else if (type == HashSet.class) {
-            return new HashSet<Object>();
+            return new HashSet<>();
         } else if (type == SortedSet.class) {
-            return new TreeSet<Object>();
+            return new TreeSet<>();
         } else if (type == TreeSet.class) {
-            return new TreeSet<Object>();
+            return new TreeSet<>();
         } else if (type == LinkedHashSet.class) {
-            return new LinkedHashSet<Object>();
+            return new LinkedHashSet<>();
         } else if (type == List.class) {
-            return new LinkedList<Object>();
+            return new LinkedList<>();
         } else if (type == LinkedList.class) {
-            return new LinkedList<Object>();
+            return new LinkedList<>();
         } else if (type == ArrayList.class) {
-            return new ArrayList<Object>();
+            return new ArrayList<>();
         } else if (type == Map.class) {
-            return new HashMap<Object, Object>();
+            return new HashMap<>();
         } else if (type == HashMap.class) {
-            return new HashMap<Object, Object>();
+            return new HashMap<>();
         } else if (type == SortedMap.class) {
-            return new TreeMap<Object, Object>();
+            return new TreeMap<>();
         } else if (type == TreeMap.class) {
-            return new TreeMap<Object, Object>();
+            return new TreeMap<>();
         } else if (type == LinkedHashMap.class) {
-            return new LinkedHashMap<Object, Object>();
+            return new LinkedHashMap<>();
         } else if ("java.util.Optional".equals(type.getName())) {
             return JavaEightUtil.emptyOptional();
         } else if ("java.util.OptionalDouble".equals(type.getName())) {
@@ -125,9 +145,13 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return JavaEightUtil.emptyIntStream();
         } else if ("java.util.stream.LongStream".equals(type.getName())) {
             return JavaEightUtil.emptyLongStream();
+        } else if ("java.time.Duration".equals(type.getName())) {
+            return JavaEightUtil.emptyDuration();
+        } else if ("java.time.Period".equals(type.getName())) {
+            return JavaEightUtil.emptyPeriod();
         }
 
-        //Let's not care about the rest of collections.
+        // Let's not care about the rest of collections.
         return null;
     }
 }

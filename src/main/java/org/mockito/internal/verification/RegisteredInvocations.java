@@ -2,13 +2,11 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.verification;
-
-import org.mockito.invocation.Invocation;
 
 import java.util.List;
 
+import org.mockito.invocation.Invocation;
 
 public interface RegisteredInvocations {
 
@@ -21,5 +19,4 @@ public interface RegisteredInvocations {
     void clear();
 
     boolean isEmpty();
-
 }

@@ -2,14 +2,14 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.invocation;
 
 import static java.util.Arrays.asList;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.internal.matchers.Any.ANY;
 
 import java.lang.reflect.Method;
@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,8 +55,10 @@ public class InvocationMatcherTest extends TestBase {
 
     @Test
     public void should_not_equal_if_number_of_arguments_differ() throws Exception {
-        InvocationMatcher withOneArg = new InvocationMatcher(new InvocationBuilder().args("test").toInvocation());
-        InvocationMatcher withTwoArgs = new InvocationMatcher(new InvocationBuilder().args("test", 100).toInvocation());
+        InvocationMatcher withOneArg =
+                new InvocationMatcher(new InvocationBuilder().args("test").toInvocation());
+        InvocationMatcher withTwoArgs =
+                new InvocationMatcher(new InvocationBuilder().args("test", 100).toInvocation());
 
         assertFalse(withOneArg.equals(null));
         assertFalse(withOneArg.equals(withTwoArgs));
@@ -64,9 +67,11 @@ public class InvocationMatcherTest extends TestBase {
     @Test
     public void should_to_string_with_matchers() throws Exception {
         ArgumentMatcher m = NotNull.NOT_NULL;
-        InvocationMatcher notNull = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(m));
+        InvocationMatcher notNull =
+                new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(m));
         ArgumentMatcher mTwo = new Equals('x');
-        InvocationMatcher equals = new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(mTwo));
+        InvocationMatcher equals =
+                new InvocationMatcher(new InvocationBuilder().toInvocation(), asList(mTwo));
 
         assertThat(notNull.toString()).contains("simpleMethod(notNull())");
         assertThat(equals.toString()).contains("simpleMethod('x')");
@@ -89,19 +94,23 @@ public class InvocationMatcherTest extends TestBase {
 
     @Test
     public void should_not_be_similar_if_mocks_are_different() throws Exception {
-        Invocation onDifferentMock = new InvocationBuilder().simpleMethod().mock("different mock").toInvocation();
+        Invocation onDifferentMock =
+                new InvocationBuilder().simpleMethod().mock("different mock").toInvocation();
         assertFalse(simpleMethod.hasSimilarMethod(onDifferentMock));
     }
 
     @Test
-    public void should_not_be_similar_if_is_overloaded_but_used_with_the_same_arg() throws Exception {
+    public void should_not_be_similar_if_is_overloaded_but_used_with_the_same_arg()
+            throws Exception {
         Method method = IMethods.class.getMethod("simpleMethod", String.class);
         Method overloadedMethod = IMethods.class.getMethod("simpleMethod", Object.class);
 
         String sameArg = "test";
 
-        InvocationMatcher invocation = new InvocationBuilder().method(method).arg(sameArg).toInvocationMatcher();
-        Invocation overloadedInvocation = new InvocationBuilder().method(overloadedMethod).arg(sameArg).toInvocation();
+        InvocationMatcher invocation =
+                new InvocationBuilder().method(method).arg(sameArg).toInvocationMatcher();
+        Invocation overloadedInvocation =
+                new InvocationBuilder().method(overloadedMethod).arg(sameArg).toInvocation();
 
         assertFalse(invocation.hasSimilarMethod(overloadedInvocation));
     }
@@ -111,76 +120,84 @@ public class InvocationMatcherTest extends TestBase {
         Method method = IMethods.class.getMethod("simpleMethod", String.class);
         Method overloadedMethod = IMethods.class.getMethod("simpleMethod", Object.class);
 
-        InvocationMatcher invocation = new InvocationBuilder().mock(mock).method(method).arg("foo").toInvocationMatcher();
-        Invocation overloadedInvocation = new InvocationBuilder().mock(mock).method(overloadedMethod).arg("bar").toInvocation();
+        InvocationMatcher invocation =
+                new InvocationBuilder().mock(mock).method(method).arg("foo").toInvocationMatcher();
+        Invocation overloadedInvocation =
+                new InvocationBuilder()
+                        .mock(mock)
+                        .method(overloadedMethod)
+                        .arg("bar")
+                        .toInvocation();
 
         assertTrue(invocation.hasSimilarMethod(overloadedInvocation));
     }
 
     @Test
     public void should_capture_arguments_from_invocation() throws Exception {
-        //given
+        // given
         Invocation invocation = new InvocationBuilder().args("1", 100).toInvocation();
         CapturingMatcher capturingMatcher = new CapturingMatcher();
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(new Equals("1"), capturingMatcher));
+        InvocationMatcher invocationMatcher =
+                new InvocationMatcher(invocation, (List) asList(new Equals("1"), capturingMatcher));
 
-        //when
+        // when
         invocationMatcher.captureArgumentsFrom(invocation);
 
-        //then
+        // then
         assertEquals(1, capturingMatcher.getAllValues().size());
         assertEquals(100, capturingMatcher.getLastValue());
     }
 
     @Test
     public void should_match_varargs_using_any_varargs() throws Exception {
-        //given
+        // given
         mock.varargs("1", "2");
         Invocation invocation = getLastInvocation();
         InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(ANY));
 
-        //when
+        // when
         boolean match = invocationMatcher.matches(invocation);
 
-        //then
+        // then
         assertTrue(match);
     }
 
     @Test
     public void should_capture_varargs_as_vararg() throws Exception {
-        //given
+        // given
         mock.mixedVarargs(1, "a", "b");
         Invocation invocation = getLastInvocation();
         CapturingMatcher m = new CapturingMatcher();
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, Arrays.<ArgumentMatcher>asList(new Equals(1), m));
+        InvocationMatcher invocationMatcher =
+                new InvocationMatcher(invocation, Arrays.<ArgumentMatcher>asList(new Equals(1), m));
 
-        //when
+        // when
         invocationMatcher.captureArgumentsFrom(invocation);
 
-        //then
+        // then
         Assertions.assertThat(m.getAllValues()).containsExactly("a", "b");
     }
 
-    @Test  // like using several time the captor in the vararg
+    @Test // like using several time the captor in the vararg
     public void should_capture_arguments_when_args_count_does_NOT_match() throws Exception {
-        //given
+        // given
         mock.varargs();
         Invocation invocation = getLastInvocation();
 
-        //when
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation,(List) asList(ANY));
+        // when
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(ANY));
 
-        //then
+        // then
         invocationMatcher.captureArgumentsFrom(invocation);
     }
 
     @Test
     public void should_create_from_invocations() throws Exception {
-        //given
+        // given
         Invocation i = new InvocationBuilder().toInvocation();
-        //when
+        // when
         List<InvocationMatcher> out = InvocationMatcher.createFrom(asList(i));
-        //then
+        // then
         assertEquals(1, out.size());
         assertEquals(i, out.get(0).getInvocation());
     }

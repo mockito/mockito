@@ -2,7 +2,6 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.exceptions.base;
 
 import java.util.Collections;
@@ -39,12 +38,12 @@ public class TraceBuilder {
         return toTraceList().toArray(new StackTraceElement[0]);
     }
 
-    public TraceBuilder classes(String ... classes) {
+    public TraceBuilder classes(String... classes) {
         this.classes = classes;
         return this;
     }
 
-    public TraceBuilder methods(String ... methods) {
+    public TraceBuilder methods(String... methods) {
         this.methods = methods;
         return this;
     }

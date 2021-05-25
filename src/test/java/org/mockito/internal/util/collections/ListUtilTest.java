@@ -2,30 +2,33 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.util.collections;
+
+import static java.util.Arrays.asList;
+
+import static org.junit.Assert.assertTrue;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockitoutil.TestBase;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertTrue;
-
 public class ListUtilTest extends TestBase {
 
     @Test
     public void shouldFilterList() throws Exception {
         List<String> list = asList("one", "x", "two", "x", "three");
-        List<String> filtered = ListUtil.filter(list, new Filter<String>() {
-            public boolean isOut(String object) {
-                return object == "x";
-            }
-        });
+        List<String> filtered =
+                ListUtil.filter(
+                        list,
+                        new Filter<String>() {
+                            public boolean isOut(String object) {
+                                return object == "x";
+                            }
+                        });
 
         Assertions.assertThat(filtered).containsSequence("one", "two", "three");
     }

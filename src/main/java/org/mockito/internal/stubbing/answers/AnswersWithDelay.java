@@ -4,12 +4,12 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
+import java.io.Serializable;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.ValidableAnswer;
-
-import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Returns as the provided answer would return, after delaying the specified amount.
@@ -33,7 +33,7 @@ public class AnswersWithDelay implements Answer<Object>, ValidableAnswer, Serial
 
     @Override
     public Object answer(final InvocationOnMock invocation) throws Throwable {
-        TimeUnit.MILLISECONDS.sleep(sleepyTime);
+        MILLISECONDS.sleep(sleepyTime);
         return answer.answer(invocation);
     }
 
@@ -44,4 +44,3 @@ public class AnswersWithDelay implements Answer<Object>, ValidableAnswer, Serial
         }
     }
 }
-

@@ -2,7 +2,6 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito;
 
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
@@ -39,7 +38,7 @@ import org.mockito.internal.matchers.LessThan;
  * Scroll down to see all methods - full list of matchers.
  */
 @SuppressWarnings("ALL")
-public class AdditionalMatchers {
+public final class AdditionalMatchers {
 
     /**
      * argument greater than or equal the given value.
@@ -1055,4 +1054,6 @@ public class AdditionalMatchers {
     private static void reportMatcher(ArgumentMatcher<?> matcher) {
         mockingProgress().getArgumentMatcherStorage().reportMatcher(matcher);
     }
+
+    private AdditionalMatchers() {}
 }

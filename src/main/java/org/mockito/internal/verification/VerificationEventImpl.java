@@ -14,26 +14,30 @@ public class VerificationEventImpl implements VerificationEvent {
     private final VerificationData data;
     private final Throwable cause;
 
-
-    public VerificationEventImpl(Object mock, VerificationMode mode, VerificationData data, Throwable cause) {
+    public VerificationEventImpl(
+            Object mock, VerificationMode mode, VerificationData data, Throwable cause) {
         this.mock = mock;
         this.mode = mode;
         this.data = data;
         this.cause = cause;
     }
 
+    @Override
     public Object getMock() {
         return mock;
     }
 
+    @Override
     public VerificationMode getMode() {
         return mode;
     }
 
+    @Override
     public VerificationData getData() {
         return data;
     }
 
+    @Override
     public Throwable getVerificationError() {
         return cause;
     }

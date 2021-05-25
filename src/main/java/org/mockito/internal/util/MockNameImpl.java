@@ -4,9 +4,9 @@
  */
 package org.mockito.internal.util;
 
-import org.mockito.mock.MockName;
-
 import java.io.Serializable;
+
+import org.mockito.mock.MockName;
 
 public class MockNameImpl implements MockName, Serializable {
 
@@ -15,9 +15,9 @@ public class MockNameImpl implements MockName, Serializable {
     private boolean defaultName;
 
     @SuppressWarnings("unchecked")
-    public MockNameImpl(String mockName, Class<?> classToMock) {
+    public MockNameImpl(String mockName, Class<?> type, boolean mockedStatic) {
         if (mockName == null) {
-            this.mockName = toInstanceName(classToMock);
+            this.mockName = mockedStatic ? toClassName(type) : toInstanceName(type);
             this.defaultName = true;
         } else {
             this.mockName = mockName;
@@ -31,13 +31,23 @@ public class MockNameImpl implements MockName, Serializable {
     private static String toInstanceName(Class<?> clazz) {
         String className = clazz.getSimpleName();
         if (className.length() == 0) {
-            //it's an anonymous class, let's get name from the parent
+            // it's an anonymous class, let's get name from the parent
             className = clazz.getSuperclass().getSimpleName();
         }
-        //lower case first letter
+        // lower case first letter
         return className.substring(0, 1).toLowerCase() + className.substring(1);
     }
 
+    private static String toClassName(Class<?> clazz) {
+        String className = clazz.getSimpleName();
+        if (className.length() == 0) {
+            // it's an anonymous class, let's get name from the parent
+            className = clazz.getSuperclass().getSimpleName() + "$";
+        }
+        return className + ".class";
+    }
+
+    @Override
     public boolean isDefault() {
         return defaultName;
     }

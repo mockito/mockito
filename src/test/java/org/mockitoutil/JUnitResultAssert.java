@@ -4,14 +4,14 @@
  */
 package org.mockitoutil;
 
-import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
-
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.internal.util.collections.Iterables.firstOf;
 import static org.mockitoutil.TestBase.filterLineNo;
+
+import java.util.List;
+
+import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
 
 /**
  * Assertion utility for cleaner & easier to debug tests that inspect on JUnit's Result object
@@ -39,8 +39,13 @@ public class JUnitResultAssert {
         fails(expectedFailureCount);
         for (Failure f : result.getFailures()) {
             if (!expectedException.isInstance(f.getException())) {
-                throw new AssertionError("Incorrect failure type, expected: " + expectedException + ", actual: " + f.getException().getClass().getSimpleName() + "\n" +
-                        formatFailures(result.getFailures()));
+                throw new AssertionError(
+                        "Incorrect failure type, expected: "
+                                + expectedException
+                                + ", actual: "
+                                + f.getException().getClass().getSimpleName()
+                                + "\n"
+                                + formatFailures(result.getFailures()));
             }
         }
         return this;
@@ -51,8 +56,13 @@ public class JUnitResultAssert {
      */
     public JUnitResultAssert fails(int expectedFailureCount) {
         if (result.getFailures().size() != expectedFailureCount) {
-            throw new AssertionError("Wrong number of failures, expected: " + expectedFailureCount + ", actual: " + result.getFailures().size() + "\n" +
-                    formatFailures(result.getFailures()));
+            throw new AssertionError(
+                    "Wrong number of failures, expected: "
+                            + expectedFailureCount
+                            + ", actual: "
+                            + result.getFailures().size()
+                            + "\n"
+                            + formatFailures(result.getFailures()));
         }
         return this;
     }
@@ -61,15 +71,20 @@ public class JUnitResultAssert {
      * @param expectedExceptions - failures must match the supplied sequence in order,
      *                           if supplied input is empty, this method is a no-op
      */
-    public JUnitResultAssert failsExactly(Class ... expectedExceptions) {
+    public JUnitResultAssert failsExactly(Class... expectedExceptions) {
         fails(expectedExceptions.length);
         int i = 0;
         for (Failure f : result.getFailures()) {
             if (!expectedExceptions[i].isInstance(f.getException())) {
-                throw new AssertionError("Actual failure #" + (i+1)
-                        + " should be of type: " + expectedExceptions[i].getSimpleName()
-                        + " but is of type: " + f.getException().getClass().getSimpleName()
-                        + "\n" + formatFailures(result.getFailures()));
+                throw new AssertionError(
+                        "Actual failure #"
+                                + (i + 1)
+                                + " should be of type: "
+                                + expectedExceptions[i].getSimpleName()
+                                + " but is of type: "
+                                + f.getException().getClass().getSimpleName()
+                                + "\n"
+                                + formatFailures(result.getFailures()));
             }
             i++;
         }
@@ -92,27 +107,41 @@ public class JUnitResultAssert {
      */
     public JUnitResultAssert fails(String methodName, Class expectedException) {
         for (Failure f : result.getFailures()) {
-            if (methodName.equals(f.getDescription().getMethodName()) && expectedException.isInstance(f.getException())) {
+            if (methodName.equals(f.getDescription().getMethodName())
+                    && expectedException.isInstance(f.getException())) {
                 return this;
             }
         }
-        throw new AssertionError("Method '" + methodName + "' did not fail with: " + expectedException.getSimpleName()
-                + "\n" + formatFailures(result.getFailures()));
+        throw new AssertionError(
+                "Method '"
+                        + methodName
+                        + "' did not fail with: "
+                        + expectedException.getSimpleName()
+                        + "\n"
+                        + formatFailures(result.getFailures()));
     }
 
     /**
      * Expects given amount of failures, with given exception triggered by given test method
      */
-    public JUnitResultAssert fails(int expectedFailureCount, String methodName, Class expectedException) {
-        return fails(expectedFailureCount, expectedException)
-                .fails(methodName, expectedException);
+    public JUnitResultAssert fails(
+            int expectedFailureCount, String methodName, Class expectedException) {
+        return fails(expectedFailureCount, expectedException).fails(methodName, expectedException);
     }
 
     public JUnitResultAssert succeeds(int successCount) {
         int i = result.getRunCount() - result.getFailureCount();
         if (i != successCount) {
-            throw new AssertionError("Expected " + successCount + " passes but " + i + "/" + result.getRunCount() + " passed." +
-                    "\n" + formatFailures(result.getFailures()));
+            throw new AssertionError(
+                    "Expected "
+                            + successCount
+                            + " passes but "
+                            + i
+                            + "/"
+                            + result.getRunCount()
+                            + " passed."
+                            + "\n"
+                            + formatFailures(result.getFailures()));
         }
         return this;
     }

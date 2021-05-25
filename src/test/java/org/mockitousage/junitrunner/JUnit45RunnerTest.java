@@ -4,17 +4,17 @@
  */
 package org.mockitousage.junitrunner;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.verify;
+import static org.mockitousage.junitrunner.Filters.methodNameContains;
+
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.verify;
-import static org.mockitousage.junitrunner.Filters.methodNameContains;
 
 @RunWith(MockitoJUnitRunner.class)
 public class JUnit45RunnerTest {
@@ -35,7 +35,7 @@ public class JUnit45RunnerTest {
     }
 
     @Test
-    public void shouldFilterTestMethodsCorrectly() throws Exception{
+    public void shouldFilterTestMethodsCorrectly() throws Exception {
         MockitoJUnitRunner runner = new MockitoJUnitRunner(this.getClass());
 
         runner.filter(methodNameContains("shouldInitMocksUsingRunner"));

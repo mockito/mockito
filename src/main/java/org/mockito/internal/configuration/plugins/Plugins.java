@@ -4,16 +4,18 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import java.util.List;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.InstantiatorProvider2;
+import org.mockito.plugins.MemberAccessor;
 import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.MockResolver;
+import org.mockito.plugins.MockitoLogger;
 import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.StackTraceCleanerProvider;
 
-/**
- * Access to Mockito behavior that can be reconfigured by plugins
- */
-public class Plugins {
+/** Access to Mockito behavior that can be reconfigured by plugins */
+public final class Plugins {
 
     private static final PluginRegistry registry = new PluginRegistry();
 
@@ -35,6 +37,16 @@ public class Plugins {
     }
 
     /**
+     * Returns the implementation of the member accessor available for the current runtime.
+     *
+     * <p>Returns default member accessor if no
+     * {@link org.mockito.plugins.MemberAccessor} extension exists or is visible in the current classpath.</p>
+     */
+    public static MemberAccessor getMemberAccessor() {
+        return registry.getMemberAccessor();
+    }
+
+    /**
      * Returns the instantiator provider available for the current runtime.
      *
      * <p>Returns {@link org.mockito.internal.creation.instance.DefaultInstantiatorProvider} if no
@@ -42,7 +54,7 @@ public class Plugins {
      * current classpath.</p>
      */
     public static InstantiatorProvider2 getInstantiatorProvider() {
-      return registry.getInstantiatorProvider();
+        return registry.getInstantiatorProvider();
     }
 
     /**
@@ -56,9 +68,30 @@ public class Plugins {
     }
 
     /**
+     * Returns the logger available for the current runtime.
+     *
+     * <p>Returns {@link org.mockito.internal.util.ConsoleMockitoLogger} if no
+     * {@link org.mockito.plugins.MockitoLogger} extension exists or is visible in the current classpath.</p>
+     */
+    public static MockitoLogger getMockitoLogger() {
+        return registry.getMockitoLogger();
+    }
+
+    /**
+     * Returns a list of available mock resolvers if any.
+     *
+     * @return A list of available mock resolvers or an empty list if none are registered.
+     */
+    public static List<MockResolver> getMockResolvers() {
+        return registry.getMockResolvers();
+    }
+
+    /**
      * @return instance of mockito plugins type
      */
     public static MockitoPlugins getPlugins() {
         return new DefaultMockitoPlugins();
     }
+
+    private Plugins() {}
 }

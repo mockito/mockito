@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing.answers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
 import static org.mockitoutil.TestBase.getLastInvocation;
@@ -15,7 +16,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 
-public class DoesNothingTest   {
+public class DoesNothingTest {
 
     private IMethods mock;
     private Invocation invocation_Void;
@@ -23,7 +24,7 @@ public class DoesNothingTest   {
     private Invocation invocation_String;
 
     @Before
-    public void init(){
+    public void init() {
         mock = mock(IMethods.class);
 
         mock.voidMethod();
@@ -44,12 +45,12 @@ public class DoesNothingTest   {
     }
 
     @Test(expected = MockitoException.class)
-    public void validateFor_nonVoidReturnType_shouldFail()   {
+    public void validateFor_nonVoidReturnType_shouldFail() {
         doesNothing().validateFor(invocation_String);
     }
 
     @Test
-    public void validateFor_voidReturnType_shouldPass()   {
+    public void validateFor_voidReturnType_shouldPass() {
         doesNothing().validateFor(invocation_void);
     }
 
@@ -58,5 +59,17 @@ public class DoesNothingTest   {
         doesNothing().validateFor(invocation_Void);
     }
 
+    @Test
+    public void answer_returns_null_for_generic_parameter() {
+        SubclassWithGenericParameter mock = mock(SubclassWithGenericParameter.class);
+        doNothing().when(mock).methodReturningT();
+    }
 
+    static class SuperClassWithGenericParameter<T> {
+        T methodReturningT() {
+            return null;
+        }
+    }
+
+    static class SubclassWithGenericParameter extends SuperClassWithGenericParameter<Void> {}
 }

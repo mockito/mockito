@@ -4,10 +4,10 @@
  */
 package org.mockito.internal.creation;
 
-import org.mockito.internal.invocation.MockitoMethod;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
+import org.mockito.internal.invocation.MockitoMethod;
 
 public class DelegatingMethod implements MockitoMethod {
 
@@ -20,30 +20,37 @@ public class DelegatingMethod implements MockitoMethod {
         this.parameterTypes = SuspendMethod.trimSuspendParameterTypes(method.getParameterTypes());
     }
 
+    @Override
     public Class<?>[] getExceptionTypes() {
         return method.getExceptionTypes();
     }
 
+    @Override
     public Method getJavaMethod() {
         return method;
     }
 
+    @Override
     public String getName() {
         return method.getName();
     }
 
+    @Override
     public Class<?>[] getParameterTypes() {
         return parameterTypes;
     }
 
+    @Override
     public Class<?> getReturnType() {
         return method.getReturnType();
     }
 
+    @Override
     public boolean isVarArgs() {
         return method.isVarArgs();
     }
 
+    @Override
     public boolean isAbstract() {
         return (method.getModifiers() & Modifier.ABSTRACT) != 0;
     }

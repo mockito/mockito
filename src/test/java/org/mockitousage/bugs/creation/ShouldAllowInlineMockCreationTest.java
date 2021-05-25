@@ -2,21 +2,20 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.bugs.creation;
-
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockitoutil.TestBase;
-
-import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-//see issue 191
+import java.util.List;
+import java.util.Set;
+
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockitoutil.TestBase;
+
+// see issue 191
 public class ShouldAllowInlineMockCreationTest extends TestBase {
 
     @Mock List list;

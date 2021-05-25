@@ -14,9 +14,10 @@ public class ScenarioPrinter {
         if (invocations.size() == 1) {
             return "Actually, above is the only interaction with this mock.";
         }
-        StringBuilder sb = new StringBuilder(
-                "***\n" +
-                "For your reference, here is the list of all invocations ([?] - means unverified).\n");
+        StringBuilder sb =
+                new StringBuilder(
+                        "***\n"
+                                + "For your reference, here is the list of all invocations ([?] - means unverified).\n");
 
         int counter = 0;
         for (VerificationAwareInvocation i : invocations) {
@@ -28,5 +29,4 @@ public class ScenarioPrinter {
         }
         return sb.toString();
     }
-
 }

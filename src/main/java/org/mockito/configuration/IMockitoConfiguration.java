@@ -57,7 +57,7 @@ public interface IMockitoConfiguration {
      * See javadoc for {@link IMockitoConfiguration}
      *
      * @deprecated Please use the extension mechanism {@link org.mockito.plugins.AnnotationEngine} instead,
-     *             this method will probably be removed in mockito 3.
+     *             this method will probably be removed in mockito 4.
      */
     @Deprecated
     AnnotationEngine getAnnotationEngine();

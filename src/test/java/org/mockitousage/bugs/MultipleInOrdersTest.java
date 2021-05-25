@@ -4,21 +4,21 @@
  */
 package org.mockitousage.bugs;
 
-import org.junit.Test;
-import org.mockito.InOrder;
-
-import java.util.List;
-
 import static org.junit.Assert.assertNotSame;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+
+import java.util.List;
+
+import org.junit.Test;
+import org.mockito.InOrder;
 
 @SuppressWarnings("unchecked")
 public class MultipleInOrdersTest {
 
     @Test
-    public void inOrderTest(){
-        List<String> list= mock(List.class);
+    public void inOrderTest() {
+        List<String> list = mock(List.class);
 
         list.add("a");
         list.add("x");

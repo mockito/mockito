@@ -5,8 +5,16 @@
 package org.mockito.plugins;
 
 import org.mockito.Incubating;
+import org.mockito.MockedConstruction;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+
+import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * The facility to create mocks.
@@ -31,7 +39,7 @@ import org.mockito.mock.MockCreationSettings;
  *         A file "<code>mockito-extensions/org.mockito.plugins.MockMaker</code>". The content of this file is
  *         exactly a <strong>one</strong> line with the qualified name:
  *         <code>org.awesome.mockito.AwesomeMockMaker</code>.
-*      </li>
+ *      </li>
  * </ol>
  * </p>
  *
@@ -64,10 +72,26 @@ public interface MockMaker {
      * @return The mock instance.
      * @since 1.9.5
      */
-    <T> T createMock(
-            MockCreationSettings<T> settings,
-            MockHandler handler
-    );
+    <T> T createMock(MockCreationSettings<T> settings, MockHandler handler);
+
+    /**
+     * By implementing this method, a mock maker can optionally support the creation of spies where all fields
+     * are set within a constructor. This avoids problems when creating spies of classes that declare
+     * effectively final instance fields where setting field values from outside the constructor is prohibited.
+     *
+     * @param settings Mock creation settings like type to mock, extra interfaces and so on.
+     * @param handler See {@link org.mockito.invocation.MockHandler}.
+     *                <b>Do not</b> provide your own implementation at this time. Make sure your implementation of
+     *                {@link #getHandler(Object)} will return this instance.
+     * @param instance  The object to spy upon.
+     * @param <T> Type of the mock to return, actually the <code>settings.getTypeToMock</code>.
+     * @return The spy instance, if this mock maker supports direct spy creation.
+     * @since 3.5.0
+     */
+    default <T> Optional<T> createSpy(
+            MockCreationSettings<T> settings, MockHandler handler, T instance) {
+        return Optional.empty();
+    }
 
     /**
      * Returns the handler for the {@code mock}. <b>Do not</b> provide your own implementations at this time
@@ -95,11 +119,7 @@ public interface MockMaker {
      * @param settings The mock settings - should you need to access some of the mock creation details.
      * @since 1.9.5
      */
-    void resetMock(
-            Object mock,
-            MockHandler newHandler,
-            MockCreationSettings settings
-    );
+    void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings);
 
     /**
      * Indicates if the given type can be mocked by this mockmaker.
@@ -114,6 +134,75 @@ public interface MockMaker {
      */
     @Incubating
     TypeMockability isTypeMockable(Class<?> type);
+
+    /**
+     * If you want to provide your own implementation of {@code MockMaker} this method should:
+     * <ul>
+     *     <li>Alter the supplied class to only change its behavior in the current thread.</li>
+     *     <li>Only alters the static method's behavior after being enabled.</li>
+     *     <li>Stops the altered behavior when disabled.</li>
+     * </ul>
+     *
+     * @param settings Mock creation settings like type to mock, extra interfaces and so on.
+     * @param handler See {@link org.mockito.invocation.MockHandler}.
+     *                <b>Do not</b> provide your own implementation at this time. Make sure your implementation of
+     *                {@link #getHandler(Object)} will return this instance.
+     * @param <T> Type of the mock to return, actually the <code>settings.getTypeToMock</code>.
+     * @return A control for the static mock.
+     * @since 3.4.0
+     */
+    @Incubating
+    default <T> StaticMockControl<T> createStaticMock(
+            Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
+        throw new MockitoException(
+                join(
+                        "The used MockMaker "
+                                + getClass().getSimpleName()
+                                + " does not support the creation of static mocks",
+                        "",
+                        "Mockito's inline mock maker supports static mocks based on the Instrumentation API.",
+                        "You can simply enable this mock mode, by placing the 'mockito-inline' artifact where you are currently using 'mockito-core'.",
+                        "Note that Mockito's inline mock maker is not supported on Android."));
+    }
+
+    /**
+     * If you want to provide your own implementation of {@code MockMaker} this method should:
+     * <ul>
+     *     <li>Intercept all constructions of the specified type in the current thread</li>
+     *     <li>Only intercept the construction after being enabled.</li>
+     *     <li>Stops the interception when disabled.</li>
+     * </ul>
+     *
+     * @param settingsFactory Factory for mock creation settings like type to mock, extra interfaces and so on.
+     * @param handlerFactory Factory for settings. See {@link org.mockito.invocation.MockHandler}.
+     *                <b>Do not</b> provide your own implementation at this time. Make sure your implementation of
+     *                {@link #getHandler(Object)} will return this instance.
+     * @param <T> Type of the mock to return, actually the <code>settings.getTypeToMock</code>.
+     * @return A control for the mocked construction.
+     * @since 3.5.0
+     */
+    @Incubating
+    default <T> ConstructionMockControl<T> createConstructionMock(
+            Class<T> type,
+            Function<MockedConstruction.Context, MockCreationSettings<T>> settingsFactory,
+            Function<MockedConstruction.Context, MockHandler<T>> handlerFactory,
+            MockedConstruction.MockInitializer<T> mockInitializer) {
+        throw new MockitoException(
+                join(
+                        "The used MockMaker "
+                                + getClass().getSimpleName()
+                                + " does not support the creation of construction mocks",
+                        "",
+                        "Mockito's inline mock maker supports construction mocks based on the Instrumentation API.",
+                        "You can simply enable this mock mode, by placing the 'mockito-inline' artifact where you are currently using 'mockito-core'.",
+                        "Note that Mockito's inline mock maker is not supported on Android."));
+    }
+
+    /**
+     * Clears all cashes for mocked types and removes all byte code alterations, if possible.
+     */
+    @Incubating
+    default void clearAllCaches() {}
 
     /**
      * Carries the mockability information
@@ -131,5 +220,27 @@ public interface MockMaker {
          * informs why type is not mockable
          */
         String nonMockableReason();
+    }
+
+    @Incubating
+    interface StaticMockControl<T> {
+
+        Class<T> getType();
+
+        void enable();
+
+        void disable();
+    }
+
+    @Incubating
+    interface ConstructionMockControl<T> {
+
+        Class<T> getType();
+
+        void enable();
+
+        void disable();
+
+        List<T> getMocks();
     }
 }

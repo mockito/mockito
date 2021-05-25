@@ -4,18 +4,18 @@
  */
 package org.mockito.internal.verification;
 
-import org.junit.Test;
-import org.mockito.exceptions.base.MockitoAssertionError;
-import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.internal.invocation.InvocationMatcher;
-import org.mockito.invocation.MatchableInvocation;
-import org.mockito.internal.verification.api.VerificationData;
-import org.mockito.invocation.Invocation;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.MatchableInvocation;
 
 public class OnlyTest {
 
@@ -46,30 +46,33 @@ public class OnlyTest {
 
     @Test
     public void shouldMarkAsVerified() {
-        //given
+        // given
         Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
 
-        //when
+        // when
         only.verify(new VerificationDataStub(new InvocationMatcher(invocation), invocation));
 
-        //then
+        // then
         assertTrue(invocation.isVerified());
     }
 
     @Test
     public void shouldNotMarkAsVerifiedWhenAssertionFailed() {
-        //given
+        // given
         Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
 
-        //when
+        // when
         try {
-            only.verify(new VerificationDataStub(new InvocationBuilder().toInvocationMatcher(), invocation));
+            only.verify(
+                    new VerificationDataStub(
+                            new InvocationBuilder().toInvocationMatcher(), invocation));
             fail();
-        } catch (MockitoAssertionError e) {}
+        } catch (MockitoAssertionError e) {
+        }
 
-        //then
+        // then
         assertFalse(invocation.isVerified());
     }
 }

@@ -2,8 +2,10 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.misuse;
+
+import static org.junit.Assume.assumeFalse;
+import static org.mockito.Mockito.*;
 
 import org.junit.After;
 import org.junit.Test;
@@ -13,9 +15,6 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assume.assumeFalse;
-import static org.mockito.Mockito.*;
 
 public class InvalidUsageTest extends TestBase {
 
@@ -27,69 +26,81 @@ public class InvalidUsageTest extends TestBase {
         super.resetState();
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void shouldRequireArgumentsWhenVerifyingNoMoreInteractions() {
         verifyNoMoreInteractions();
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void shouldRequireArgumentsWhenVerifyingZeroInteractions() {
         verifyZeroInteractions();
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
+    public void shouldRequireArgumentsWhenVerifyingNoInteractions() {
+        verifyNoInteractions();
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test(expected = MockitoException.class)
     public void shouldNotCreateInOrderObjectWithoutMocks() {
         inOrder();
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void shouldNotAllowVerifyingInOrderUnfamilarMocks() {
         InOrder inOrder = inOrder(mock);
         inOrder.verify(mockTwo).simpleMethod();
     }
 
-    @Test(expected=MissingMethodInvocationException.class)
+    @Test(expected = MissingMethodInvocationException.class)
     public void shouldReportMissingMethodInvocationWhenStubbing() {
-        when(mock.simpleMethod()).thenReturn("this stubbing is required to make sure Stubbable is pulled");
+        when(mock.simpleMethod())
+                .thenReturn("this stubbing is required to make sure Stubbable is pulled");
         when("".toString()).thenReturn("x");
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
         when(mock.simpleMethod()).thenThrow(new Exception());
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void shouldNotAllowSettingNullThrowable() throws Exception {
         when(mock.simpleMethod()).thenThrow(new Throwable[] {null});
     }
 
     @SuppressWarnings("all")
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void shouldNotAllowSettingNullThrowableVararg() throws Exception {
         when(mock.simpleMethod()).thenThrow((Throwable) null);
     }
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void shouldNotAllowSettingNullConsecutiveThrowable() throws Exception {
         when(mock.simpleMethod()).thenThrow(new RuntimeException(), null);
     }
 
     final class FinalClass {}
 
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void shouldNotAllowMockingFinalClassesIfDisabled() throws Exception {
-        assumeFalse("Inlining mock allows mocking final classes", mock(FinalClass.class).getClass() == FinalClass.class);
+        assumeFalse(
+                "Inlining mock allows mocking final classes",
+                mock(FinalClass.class).getClass() == FinalClass.class);
     }
 
-    @Test(expected=MockitoException.class)
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test(expected = MockitoException.class)
     public void shouldNotAllowMockingPrimitives() throws Exception {
         mock(Integer.TYPE);
     }
 
     interface ObjectLikeInterface {
         boolean equals(Object o);
+
         String toString();
+
         int hashCode();
     }
 
@@ -104,6 +115,18 @@ public class InvalidUsageTest extends TestBase {
         verifyZeroInteractions(inter);
     }
 
+    @Test
+    public void shouldNotMockObjectMethodsOnInterfaceVerifyNoInteractions() throws Exception {
+        ObjectLikeInterface inter = mock(ObjectLikeInterface.class);
+
+        inter.equals(null);
+        inter.toString();
+        inter.hashCode();
+
+        verifyNoInteractions(inter);
+    }
+
+    @Test
     public void shouldNotMockObjectMethodsOnClass() throws Exception {
         Object clazz = mock(ObjectLikeInterface.class);
 
@@ -112,5 +135,16 @@ public class InvalidUsageTest extends TestBase {
         clazz.hashCode();
 
         verifyZeroInteractions(clazz);
+    }
+
+    @Test
+    public void shouldNotMockObjectMethodsOnClassVerifyNoInteractions() throws Exception {
+        Object clazz = mock(ObjectLikeInterface.class);
+
+        clazz.equals(null);
+        clazz.toString();
+        clazz.hashCode();
+
+        verifyNoInteractions(clazz);
     }
 }

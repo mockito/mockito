@@ -2,11 +2,15 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.bugs;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+
 import org.junit.Test;
 import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
@@ -16,18 +20,13 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-
 // @Ignore("for demo only. this test cannot be enabled as it fails :)")
 public class MockitoRunnerBreaksWhenNoTestMethodsTest extends TestBase {
 
     @Test
     public void ensure_the_test_runner_breaks() throws Exception {
         JUnitCore runner = new JUnitCore();
-//        runner.addListener(new TextListener(System.out));
+        //        runner.addListener(new TextListener(System.out));
         runner.addListener(new TextListener(DevNull.out));
 
         Result result = runner.run(TestClassWithoutTestMethod.class);
@@ -39,17 +38,22 @@ public class MockitoRunnerBreaksWhenNoTestMethodsTest extends TestBase {
 
     @RunWith(MockitoJUnitRunner.class)
     static class TestClassWithoutTestMethod { // package visibility is important
-        public void notATestMethod() { }
+        public void notATestMethod() {}
     }
 
     public static final class DevNull {
-        public final static PrintStream out = new PrintStream(new OutputStream() {
-            public void close() {}
-            public void flush() {}
-            public void write(byte[] b) {}
-            public void write(byte[] b, int off, int len) {}
-            public void write(int b) {}
+        public static final PrintStream out =
+                new PrintStream(
+                        new OutputStream() {
+                            public void close() {}
 
-        } );
+                            public void flush() {}
+
+                            public void write(byte[] b) {}
+
+                            public void write(byte[] b, int off, int len) {}
+
+                            public void write(int b) {}
+                        });
     }
 }

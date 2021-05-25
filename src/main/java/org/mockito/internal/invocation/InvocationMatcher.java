@@ -2,10 +2,8 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.invocation;
 
-import static org.mockito.internal.invocation.ArgumentsProcessor.argumentsToMatchers;
 import static org.mockito.internal.invocation.MatcherApplicationStrategy.getMatcherApplicationStrategyFor;
 import static org.mockito.internal.invocation.TypeSafeMatching.matchesTypeSafe;
 
@@ -15,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.CapturesArguments;
 import org.mockito.internal.reporting.PrintSettings;
@@ -32,11 +31,11 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
     private final Invocation invocation;
     private final List<ArgumentMatcher<?>> matchers;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public InvocationMatcher(Invocation invocation, List<ArgumentMatcher> matchers) {
         this.invocation = invocation;
         if (matchers.isEmpty()) {
-            this.matchers = (List) argumentsToMatchers(invocation.getArguments());
+            this.matchers = (List) invocation.getArgumentsAsMatchers();
         } else {
             this.matchers = (List) matchers;
         }
@@ -44,11 +43,11 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
 
     @SuppressWarnings("rawtypes")
     public InvocationMatcher(Invocation invocation) {
-        this(invocation, Collections.<ArgumentMatcher> emptyList());
+        this(invocation, Collections.<ArgumentMatcher>emptyList());
     }
 
     public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {
-        LinkedList<InvocationMatcher> out = new LinkedList<InvocationMatcher>();
+        LinkedList<InvocationMatcher> out = new LinkedList<>();
         for (Invocation i : invocations) {
             out.add(new InvocationMatcher(i));
         }
@@ -65,20 +64,22 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public List<ArgumentMatcher> getMatchers() {
         return (List) matchers;
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public String toString() {
         return new PrintSettings().print((List) matchers, invocation);
     }
 
     @Override
     public boolean matches(Invocation candidate) {
-        return invocation.getMock().equals(candidate.getMock()) && hasSameMethod(candidate) && argumentsMatch(candidate);
+        return invocation.getMock().equals(candidate.getMock())
+                && hasSameMethod(candidate)
+                && argumentsMatch(candidate);
     }
 
     /**
@@ -108,7 +109,8 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
     @Override
     public boolean hasSameMethod(Invocation candidate) {
         // not using method.equals() for 1 good reason:
-        // sometimes java generates forwarding methods when generics are in play see JavaGenericsForwardingMethodsTest
+        // sometimes java generates forwarding methods when generics are in play see
+        // JavaGenericsForwardingMethodsTest
         Method m1 = invocation.getMethod();
         Method m2 = candidate.getMethod();
 
@@ -128,7 +130,8 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
 
     @Override
     public void captureArgumentsFrom(Invocation invocation) {
-        MatcherApplicationStrategy strategy = getMatcherApplicationStrategyFor(invocation, matchers);
+        MatcherApplicationStrategy strategy =
+                getMatcherApplicationStrategyFor(invocation, matchers);
         strategy.forEachMatcherAndArgument(captureArgument());
     }
 
@@ -146,9 +149,10 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
         };
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private boolean argumentsMatch(Invocation actual) {
         List matchers = getMatchers();
-        return getMatcherApplicationStrategyFor(actual, matchers).forEachMatcherAndArgument( matchesTypeSafe());
+        return getMatcherApplicationStrategyFor(actual, matchers)
+                .forEachMatcherAndArgument(matchesTypeSafe());
     }
 }

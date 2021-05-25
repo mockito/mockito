@@ -2,20 +2,21 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.bugs;
+
+import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-import static org.mockito.Mockito.*;
-
-//see bug 116
+// see bug 116
 public class AIOOBExceptionWithAtLeastTest extends TestBase {
 
     interface IProgressMonitor {
         void beginTask(String s, int i);
+
         void worked(int i);
+
         void done();
     }
 

@@ -2,8 +2,14 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.annotation;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.verify;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -11,13 +17,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.verify;
 
 @SuppressWarnings("unchecked")
 public class CaptorAnnotationBasicTest extends TestBase {
@@ -52,10 +51,10 @@ public class CaptorAnnotationBasicTest extends TestBase {
 
     @Test
     public void shouldUseCaptorInOrdinaryWay() {
-        //when
+        // when
         createPerson("Wes", "Williams");
 
-        //then
+        // then
         ArgumentCaptor<Person> captor = ArgumentCaptor.forClass(Person.class);
         verify(peopleRepository).save(captor.capture());
         assertEquals("Wes", captor.getValue().getName());
@@ -66,24 +65,25 @@ public class CaptorAnnotationBasicTest extends TestBase {
 
     @Test
     public void shouldUseAnnotatedCaptor() {
-        //when
+        // when
         createPerson("Wes", "Williams");
 
-        //then
+        // then
         verify(peopleRepository).save(captor.capture());
         assertEquals("Wes", captor.getValue().getName());
         assertEquals("Williams", captor.getValue().getSurname());
     }
 
     @SuppressWarnings("rawtypes")
-    @Captor ArgumentCaptor genericLessCaptor;
+    @Captor
+    ArgumentCaptor genericLessCaptor;
 
     @Test
     public void shouldUseGenericlessAnnotatedCaptor() {
-        //when
+        // when
         createPerson("Wes", "Williams");
 
-        //then
+        // then
         verify(peopleRepository).save((Person) genericLessCaptor.capture());
         assertEquals("Wes", ((Person) genericLessCaptor.getValue()).getName());
         assertEquals("Williams", ((Person) genericLessCaptor.getValue()).getSurname());
@@ -94,14 +94,14 @@ public class CaptorAnnotationBasicTest extends TestBase {
 
     @Test
     public void shouldCaptureGenericList() {
-        //given
+        // given
         List<String> list = new LinkedList<String>();
         mock.listArgMethod(list);
 
-        //when
+        // when
         verify(mock).listArgMethod(genericListCaptor.capture());
 
-        //then
+        // then
         assertSame(list, genericListCaptor.getValue());
     }
 }

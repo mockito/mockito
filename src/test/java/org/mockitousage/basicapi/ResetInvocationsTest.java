@@ -4,22 +4,20 @@
  */
 package org.mockitousage.basicapi;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
-
 public class ResetInvocationsTest extends TestBase {
 
-    @Mock
-    IMethods methods;
+    @Mock IMethods methods;
 
-    @Mock
-    IMethods moarMethods;
+    @Mock IMethods moarMethods;
 
     @Test
     public void reset_invocations_should_reset_only_invocations() {
@@ -51,6 +49,6 @@ public class ResetInvocationsTest extends TestBase {
 
     @Test(expected = NotAMockException.class)
     public void resettingNullIsSafe() {
-        clearInvocations(new Object[]{null});
+        clearInvocations(new Object[] {null});
     }
 }

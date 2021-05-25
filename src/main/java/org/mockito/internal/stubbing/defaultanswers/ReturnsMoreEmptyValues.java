@@ -2,17 +2,17 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.stubbing.defaultanswers;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 /**
- * It's likely this implementation will be used by default by every Mockito 3.0.0 mock.
+ * It's likely this implementation will be used by default by every Mockito 4.0.0 mock.
  * <p>
  * Currently <b>used only</b> by {@link Mockito#RETURNS_SMART_NULLS}
  * <p>
@@ -52,6 +52,7 @@ public class ReturnsMoreEmptyValues implements Answer<Object>, Serializable {
     /* (non-Javadoc)
      * @see org.mockito.stubbing.Answer#answer(org.mockito.invocation.InvocationOnMock)
      */
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Object ret = delegate.answer(invocation);
         if (ret != null) {
@@ -65,7 +66,7 @@ public class ReturnsMoreEmptyValues implements Answer<Object>, Serializable {
     Object returnValueFor(Class<?> type) {
         if (type == String.class) {
             return "";
-        }  else if (type.isArray()) {
+        } else if (type.isArray()) {
             Class<?> componentType = type.getComponentType();
             return Array.newInstance(componentType, 0);
         }

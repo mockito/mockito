@@ -4,6 +4,12 @@
  */
 package org.mockitousage.debugging;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
+
+import java.lang.reflect.Method;
+
 import org.assertj.core.api.Condition;
 import org.junit.After;
 import org.junit.Test;
@@ -18,12 +24,6 @@ import org.mockito.verification.VerificationEvent;
 import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
 
-import java.lang.reflect.Method;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
-
 public class VerificationListenerCallBackTest extends TestBase {
 
     @After
@@ -33,7 +33,7 @@ public class VerificationListenerCallBackTest extends TestBase {
 
     @Test
     public void should_call_single_listener_on_verify() throws NoSuchMethodException {
-        //given
+        // given
         RememberingListener listener = new RememberingListener();
         MockitoFramework mockitoFramework = Mockito.framework();
         mockitoFramework.addListener(listener);
@@ -41,17 +41,17 @@ public class VerificationListenerCallBackTest extends TestBase {
         Method invocationWanted = Foo.class.getDeclaredMethod("doSomething", String.class);
         Foo foo = mock(Foo.class);
 
-        //when
+        // when
         VerificationMode never = never();
         verify(foo, never).doSomething("");
 
-        //then
+        // then
         assertThat(listener).is(notifiedFor(foo, never, invocationWanted));
     }
 
     @Test
     public void should_call_all_listeners_on_verify() throws NoSuchMethodException {
-        //given
+        // given
         RememberingListener listener1 = new RememberingListener();
         RememberingListener2 listener2 = new RememberingListener2();
         Mockito.framework().addListener(listener1).addListener(listener2);
@@ -59,18 +59,18 @@ public class VerificationListenerCallBackTest extends TestBase {
         Method invocationWanted = Foo.class.getDeclaredMethod("doSomething", String.class);
         Foo foo = mock(Foo.class);
 
-        //when
+        // when
         VerificationMode never = never();
         verify(foo, never).doSomething("");
 
-        //then
+        // then
         assertThat(listener1).is(notifiedFor(foo, never, invocationWanted));
         assertThat(listener2).is(notifiedFor(foo, never, invocationWanted));
     }
 
     @Test
     public void should_not_call_listener_when_verify_was_called_incorrectly() {
-        //when
+        // when
         VerificationListener listener = mock(VerificationListener.class);
         framework().addListener(listener);
         Foo foo = null;
@@ -79,59 +79,59 @@ public class VerificationListenerCallBackTest extends TestBase {
             verify(foo).doSomething("");
             fail("Exception expected.");
         } catch (Exception e) {
-            //then
+            // then
             verify(listener, never()).onVerification(any(VerificationEvent.class));
         }
     }
 
     @Test
     public void should_notify_when_verification_throws_type_error() {
-        //given
+        // given
         RememberingListener listener = new RememberingListener();
         MockitoFramework mockitoFramework = Mockito.framework();
         mockitoFramework.addListener(listener);
         Foo foo = mock(Foo.class);
 
-        //when
+        // when
         try {
             verify(foo).doSomething("");
             fail("Exception expected.");
         } catch (Throwable e) {
-            //then
+            // then
             assertThat(listener.cause).isInstanceOf(MockitoAssertionError.class);
         }
     }
 
     @Test
     public void should_notify_when_verification_throws_runtime_exception() {
-        //given
+        // given
         RememberingListener listener = new RememberingListener();
         MockitoFramework mockitoFramework = Mockito.framework();
         mockitoFramework.addListener(listener);
         Foo foo = mock(Foo.class);
 
-        //when
+        // when
         try {
             verify(foo, new RuntimeExceptionVerificationMode()).doSomething("");
             fail("Exception expected.");
         } catch (Throwable e) {
-            //then
+            // then
             assertThat(listener.cause).isInstanceOf(RuntimeException.class);
         }
     }
 
     @Test
     public void should_call_verification_listeners() {
-        //given
+        // given
         RememberingListener listener = new RememberingListener();
         MockitoFramework mockitoFramework = Mockito.framework();
         mockitoFramework.addListener(listener);
         JUnitCore runner = new JUnitCore();
 
-        //when
+        // when
         runner.run(VerificationListenerSample.class);
 
-        //then
+        // then
         assertThat(listener.mock).isNotNull();
         assertThat(listener.mode).isEqualToComparingFieldByField(times(1));
     }
@@ -160,16 +160,16 @@ public class VerificationListenerCallBackTest extends TestBase {
         }
     }
 
-    private static class RememberingListener2 extends RememberingListener {
+    private static class RememberingListener2 extends RememberingListener {}
 
-    }
-
-    private static Condition<RememberingListener> notifiedFor(final Object mock, final VerificationMode mode, final Method wantedMethod) {
+    private static Condition<RememberingListener> notifiedFor(
+            final Object mock, final VerificationMode mode, final Method wantedMethod) {
         return new Condition<RememberingListener>() {
             public boolean matches(RememberingListener listener) {
                 assertThat(listener.mock).isEqualTo(mock);
                 assertThat(listener.mode).isEqualTo(mode);
-                assertThat(listener.data.getTarget().getInvocation().getMethod()).isEqualTo(wantedMethod);
+                assertThat(listener.data.getTarget().getInvocation().getMethod())
+                        .isEqualTo(wantedMethod);
 
                 return true;
             }

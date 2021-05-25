@@ -4,6 +4,11 @@
  */
 package org.mockito.internal.verification;
 
+import static java.util.Arrays.asList;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
@@ -17,85 +22,82 @@ import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-
 public class NoMoreInteractionsTest extends TestBase {
 
     InOrderContextImpl context = new InOrderContextImpl();
 
     @Test
     public void shouldVerifyInOrder() {
-        //given
+        // given
         NoMoreInteractions n = new NoMoreInteractions();
         Invocation i = new InvocationBuilder().toInvocation();
         assertFalse(context.isVerified(i));
 
         try {
-            //when
+            // when
             n.verifyInOrder(new VerificationDataInOrderImpl(context, asList(i), null));
-            //then
+            // then
             fail();
-        } catch(VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 
     @Test
     public void shouldVerifyInOrderAndPass() {
-        //given
+        // given
         NoMoreInteractions n = new NoMoreInteractions();
         Invocation i = new InvocationBuilder().toInvocation();
         context.markVerified(i);
         assertTrue(context.isVerified(i));
 
-        //when
+        // when
         n.verifyInOrder(new VerificationDataInOrderImpl(context, asList(i), null));
-        //then no exception is thrown
+        // then no exception is thrown
     }
 
     @Test
     public void shouldVerifyInOrderMultipleInvoctions() {
-        //given
+        // given
         NoMoreInteractions n = new NoMoreInteractions();
         Invocation i = new InvocationBuilder().seq(1).toInvocation();
         Invocation i2 = new InvocationBuilder().seq(2).toInvocation();
 
-        //when
+        // when
         context.markVerified(i2);
 
-        //then no exception is thrown
+        // then no exception is thrown
         n.verifyInOrder(new VerificationDataInOrderImpl(context, asList(i, i2), null));
     }
 
     @Test
     public void shouldVerifyInOrderMultipleInvoctionsAndThrow() {
-        //given
+        // given
         NoMoreInteractions n = new NoMoreInteractions();
         Invocation i = new InvocationBuilder().seq(1).toInvocation();
         Invocation i2 = new InvocationBuilder().seq(2).toInvocation();
 
         try {
-            //when
+            // when
             n.verifyInOrder(new VerificationDataInOrderImpl(context, asList(i, i2), null));
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 
     @Test
     public void noMoreInteractionsExceptionMessageShouldDescribeMock() {
-        //given
+        // given
         NoMoreInteractions n = new NoMoreInteractions();
         IMethods mock = mock(IMethods.class, "a mock");
         InvocationMatcher i = new InvocationBuilder().mock(mock).toInvocationMatcher();
 
-        InvocationContainerImpl invocations =
-            new InvocationContainerImpl( new MockSettingsImpl());
+        InvocationContainerImpl invocations = new InvocationContainerImpl(new MockSettingsImpl());
         invocations.setInvocationForPotentialStubbing(i);
 
         try {
-            //when
+            // when
             n.verify(new VerificationDataImpl(invocations, null));
-            //then
+            // then
             fail();
         } catch (NoInteractionsWanted e) {
             Assertions.assertThat(e.toString()).contains(mock.toString());
@@ -104,15 +106,15 @@ public class NoMoreInteractionsTest extends TestBase {
 
     @Test
     public void noMoreInteractionsInOrderExceptionMessageShouldDescribeMock() {
-        //given
+        // given
         NoMoreInteractions n = new NoMoreInteractions();
         IMethods mock = mock(IMethods.class, "a mock");
         Invocation i = new InvocationBuilder().mock(mock).toInvocation();
 
         try {
-            //when
+            // when
             n.verifyInOrder(new VerificationDataInOrderImpl(context, asList(i), null));
-            //then
+            // then
             fail();
         } catch (VerificationInOrderFailure e) {
             Assertions.assertThat(e.toString()).contains(mock.toString());

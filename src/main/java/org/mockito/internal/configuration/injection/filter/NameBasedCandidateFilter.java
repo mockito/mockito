@@ -18,27 +18,32 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
         this.next = next;
     }
 
-    public OngoingInjector filterCandidate(final Collection<Object> mocks,
-                                           final Field candidateFieldToBeInjected,
-                                           final List<Field> allRemainingCandidateFields,
-                                           final Object injectee) {
+    @Override
+    public OngoingInjector filterCandidate(
+            final Collection<Object> mocks,
+            final Field candidateFieldToBeInjected,
+            final List<Field> allRemainingCandidateFields,
+            final Object injectee) {
         if (mocks.size() == 1
-                && anotherCandidateMatchesMockName(mocks, candidateFieldToBeInjected, allRemainingCandidateFields)) {
+                && anotherCandidateMatchesMockName(
+                        mocks, candidateFieldToBeInjected, allRemainingCandidateFields)) {
             return OngoingInjector.nop;
         }
 
-        return next.filterCandidate(tooMany(mocks) ? selectMatchingName(mocks, candidateFieldToBeInjected) : mocks,
-                                    candidateFieldToBeInjected,
-                                    allRemainingCandidateFields,
-                                    injectee);
+        return next.filterCandidate(
+                tooMany(mocks) ? selectMatchingName(mocks, candidateFieldToBeInjected) : mocks,
+                candidateFieldToBeInjected,
+                allRemainingCandidateFields,
+                injectee);
     }
 
     private boolean tooMany(Collection<Object> mocks) {
         return mocks.size() > 1;
     }
 
-    private List<Object> selectMatchingName(Collection<Object> mocks, Field candidateFieldToBeInjected) {
-        List<Object> mockNameMatches = new ArrayList<Object>();
+    private List<Object> selectMatchingName(
+            Collection<Object> mocks, Field candidateFieldToBeInjected) {
+        List<Object> mockNameMatches = new ArrayList<>();
         for (Object mock : mocks) {
             if (candidateFieldToBeInjected.getName().equals(getMockName(mock).toString())) {
                 mockNameMatches.add(mock);
@@ -56,9 +61,10 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
      * whenever we find a field that does match its name with the mock
      * name, we should take that field instead.
      */
-    private boolean anotherCandidateMatchesMockName(final Collection<Object> mocks,
-                                                    final Field candidateFieldToBeInjected,
-                                                    final List<Field> allRemainingCandidateFields) {
+    private boolean anotherCandidateMatchesMockName(
+            final Collection<Object> mocks,
+            final Field candidateFieldToBeInjected,
+            final List<Field> allRemainingCandidateFields) {
         String mockName = getMockName(mocks.iterator().next()).toString();
 
         for (Field otherCandidateField : allRemainingCandidateFields) {

@@ -18,7 +18,10 @@ public class SafeJUnitRule implements MethodRule {
 
     private final MethodRule testedRule;
     private FailureAssert failureAssert = null;
-    private Runnable successAssert = new Runnable() { public void run() { } };
+    private Runnable successAssert =
+            new Runnable() {
+                public void run() {}
+            };
 
     /**
      * Wraps rule under test with exception handling so that it is easy to assert on exceptions fired from the tested rule.
@@ -27,7 +30,8 @@ public class SafeJUnitRule implements MethodRule {
         this.testedRule = testedRule;
     }
 
-    public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
+    public Statement apply(
+            final Statement base, final FrameworkMethod method, final Object target) {
         return new Statement() {
             public void evaluate() throws Throwable {
                 try {
@@ -41,8 +45,9 @@ public class SafeJUnitRule implements MethodRule {
                     return;
                 }
                 if (failureAssert != null) {
-                    //looks like the user expects a throwable but it was not thrown!
-                    throw new ExpectedThrowableNotReported("Expected the tested rule to throw an exception but it did not.");
+                    // looks like the user expects a throwable but it was not thrown!
+                    throw new ExpectedThrowableNotReported(
+                            "Expected the tested rule to throw an exception but it did not.");
                 }
             }
         };
@@ -51,26 +56,30 @@ public class SafeJUnitRule implements MethodRule {
     /**
      * Expects that _after_ the test, the rule will fire specific exception with specific exception message
      */
-    public void expectFailure(final Class<? extends Throwable> expected, final String expectedMessage) {
-        this.expectFailure(new FailureAssert() {
-            public void doAssert(Throwable t) {
-                assertThrowable(t, expected).hasMessage(expectedMessage);
-            }
-        });
+    public void expectFailure(
+            final Class<? extends Throwable> expected, final String expectedMessage) {
+        this.expectFailure(
+                new FailureAssert() {
+                    public void doAssert(Throwable t) {
+                        assertThrowable(t, expected).hasMessage(expectedMessage);
+                    }
+                });
     }
 
     /**
      * Expects that _after_ the test, the rule will fire specific exception with specific exception message
      */
     public void expectFailure(final Class<? extends Throwable> expected) {
-        this.expectFailure(new FailureAssert() {
-            public void doAssert(Throwable t) {
-                assertThrowable(t, expected);
-            }
-        });
+        this.expectFailure(
+                new FailureAssert() {
+                    public void doAssert(Throwable t) {
+                        assertThrowable(t, expected);
+                    }
+                });
     }
 
-    private static AbstractThrowableAssert assertThrowable(Throwable throwable, Class<? extends Throwable> expected) {
+    private static AbstractThrowableAssert assertThrowable(
+            Throwable throwable, Class<? extends Throwable> expected) {
         return Assertions.assertThat(throwable).isInstanceOf(expected);
     }
 

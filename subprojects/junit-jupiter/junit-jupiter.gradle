@@ -1,0 +1,60 @@
+import aQute.bnd.gradle.BundleTaskConvention
+import aQute.bnd.gradle.FileSetRepositoryConvention
+import aQute.bnd.gradle.Resolve
+
+description = "Mockito JUnit 5 support"
+
+apply from: "$rootDir/gradle/java-library.gradle"
+apply plugin: 'biz.aQute.bnd.builder'
+
+dependencies {
+    compile project.rootProject
+    implementation libraries.junitJupiterApi
+    testCompile libraries.assertj
+    testCompile libraries.junitPlatformLauncher
+    testRuntime libraries.junitJupiterEngine
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+}
+
+jar {
+    classpath = project.configurations.runtimeClasspath
+    bnd(
+        'Bundle-Name': 'Mockito Extension Library for JUnit 5.',
+        'Bundle-SymbolicName': 'org.mockito.junit-jupiter',
+        'Bundle-Version': "\${version_cleanup;${project.version}}",
+        '-versionpolicy': '[${version;==;${@}},${version;+;${@}})',
+        'Export-Package': "org.mockito.junit.jupiter.*;version=${version}",
+        '-removeheaders': 'Private-Package',
+        'Automatic-Module-Name': 'org.mockito.junit.jupiter',
+        '-noextraheaders': 'true',
+        '-export-apiguardian': 'org.mockito.internal.*'
+    )
+}
+
+def osgiPropertiesFile = file("$buildDir/verifyOSGiProperties.bndrun")
+
+// Bnd's Resolve task uses a properties file for its configuration. This
+// task writes out the properties necessary for it to verify the OSGi
+// metadata.
+tasks.register('osgiProperties', WriteProperties) {
+  outputFile = osgiPropertiesFile
+  property('-standalone', true)
+  property('-runee', "JavaSE-${targetCompatibility}")
+  property('-runrequires', 'osgi.identity;filter:="(osgi.identity=org.mockito.junit-jupiter)"')
+}
+
+// Bnd's Resolve task is what verifies that a jar can be used in OSGi and
+// that its metadata is valid. If the metadata is invalid this task will
+// fail.
+tasks.register('verifyOSGi', Resolve) {
+  dependsOn(osgiProperties)
+  setBndrun(osgiPropertiesFile)
+  reportOptional = false
+}
+
+tasks.check {
+  dependsOn(verifyOSGi)
+}

@@ -4,14 +4,14 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.internal.exceptions.Reporter;
-import org.mockito.internal.util.MockitoLogger;
-import org.mockito.internal.util.collections.ListUtil;
-import org.mockito.invocation.Invocation;
-import org.mockito.stubbing.Stubbing;
-
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.mockito.internal.exceptions.Reporter;
+import org.mockito.invocation.Invocation;
+import org.mockito.plugins.MockitoLogger;
+import org.mockito.stubbing.Stubbing;
 
 /**
  * Contains unused stubbings, knows how to format them
@@ -43,20 +43,24 @@ public class UnusedStubbings {
         return unused.size();
     }
 
+    @Override
     public String toString() {
         return unused.toString();
     }
 
-    public void reportUnused() {
-        if (!unused.isEmpty()) {
-            List<Invocation> invocations = ListUtil.convert(unused, (ListUtil.Converter) new ListUtil.Converter<Stubbing, Invocation>() {
-                public Invocation convert(Stubbing s) {
-                    return s.getInvocation();
-                }
-            });
-
-
-            Reporter.unncessaryStubbingException(invocations);
+    void reportUnused() {
+        if (unused.isEmpty()) {
+            return;
         }
+
+        List<Invocation> invocations = new LinkedList<>();
+        for (Stubbing stubbing : unused) {
+            invocations.add(stubbing.getInvocation());
+        }
+        if (invocations.isEmpty()) {
+            return;
+        }
+
+        Reporter.unncessaryStubbingException(invocations);
     }
 }

@@ -2,7 +2,6 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.stubbing;
 
 import org.mockito.Incubating;
@@ -89,5 +88,4 @@ public interface ValidableAnswer {
      * @since 2.3.8
      */
     void validateFor(InvocationOnMock invocation);
-
 }

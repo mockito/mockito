@@ -2,14 +2,13 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.exceptions.base;
-
-import org.junit.Test;
-import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class MockitoExceptionTest extends TestBase {
 

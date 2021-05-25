@@ -2,7 +2,6 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.configuration.injection;
 
 import static org.mockito.internal.exceptions.Reporter.cannotInitializeForInjectMocksAnnotation;
@@ -65,25 +64,33 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     private final MockCandidateFilter mockCandidateFilter =
             new TypeBasedCandidateFilter(
-                    new NameBasedCandidateFilter(
-                            new TerminalMockCandidateFilter()));
+                    new NameBasedCandidateFilter(new TerminalMockCandidateFilter()));
 
-    private final ListUtil.Filter<Field> notFinalOrStatic = new ListUtil.Filter<Field>() {
-        public boolean isOut(Field object) {
-            return Modifier.isFinal(object.getModifiers()) || Modifier.isStatic(object.getModifiers());
-        }
-    };
+    private final ListUtil.Filter<Field> notFinalOrStatic =
+            new ListUtil.Filter<Field>() {
+                @Override
+                public boolean isOut(Field object) {
+                    return Modifier.isFinal(object.getModifiers())
+                            || Modifier.isStatic(object.getModifiers());
+                }
+            };
 
-
-    public boolean processInjection(Field injectMocksField, Object injectMocksFieldOwner, Set<Object> mockCandidates) {
-        FieldInitializationReport report = initializeInjectMocksField(injectMocksField, injectMocksFieldOwner);
+    @Override
+    public boolean processInjection(
+            Field injectMocksField, Object injectMocksFieldOwner, Set<Object> mockCandidates) {
+        FieldInitializationReport report =
+                initializeInjectMocksField(injectMocksField, injectMocksFieldOwner);
 
         // for each field in the class hierarchy
         boolean injectionOccurred = false;
         Class<?> fieldClass = report.fieldClass();
         Object fieldInstanceNeedingInjection = report.fieldInstance();
         while (fieldClass != Object.class) {
-            injectionOccurred |= injectMockCandidates(fieldClass, fieldInstanceNeedingInjection, newMockSafeHashSet(mockCandidates));
+            injectionOccurred |=
+                    injectMockCandidates(
+                            fieldClass,
+                            fieldInstanceNeedingInjection,
+                            newMockSafeHashSet(mockCandidates));
             fieldClass = fieldClass.getSuperclass();
         }
         return injectionOccurred;
@@ -93,33 +100,42 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         try {
             return new FieldInitializer(fieldOwner, field).initialize();
         } catch (MockitoException e) {
-            if(e.getCause() instanceof InvocationTargetException) {
+            if (e.getCause() instanceof InvocationTargetException) {
                 Throwable realCause = e.getCause().getCause();
                 throw fieldInitialisationThrewException(field, realCause);
             }
-            throw cannotInitializeForInjectMocksAnnotation(field.getName(),e.getMessage());
+            throw cannotInitializeForInjectMocksAnnotation(field.getName(), e.getMessage());
         }
     }
 
-
-    private boolean injectMockCandidates(Class<?> awaitingInjectionClazz, Object injectee, Set<Object> mocks) {
+    private boolean injectMockCandidates(
+            Class<?> awaitingInjectionClazz, Object injectee, Set<Object> mocks) {
         boolean injectionOccurred;
-        List<Field> orderedCandidateInjecteeFields = orderedInstanceFieldsFrom(awaitingInjectionClazz);
+        List<Field> orderedCandidateInjecteeFields =
+                orderedInstanceFieldsFrom(awaitingInjectionClazz);
         // pass 1
-        injectionOccurred = injectMockCandidatesOnFields(mocks, injectee, false, orderedCandidateInjecteeFields);
+        injectionOccurred =
+                injectMockCandidatesOnFields(
+                        mocks, injectee, false, orderedCandidateInjecteeFields);
         // pass 2
-        injectionOccurred |= injectMockCandidatesOnFields(mocks, injectee, injectionOccurred, orderedCandidateInjecteeFields);
+        injectionOccurred |=
+                injectMockCandidatesOnFields(
+                        mocks, injectee, injectionOccurred, orderedCandidateInjecteeFields);
         return injectionOccurred;
     }
 
-    private boolean injectMockCandidatesOnFields(Set<Object> mocks,
-                                                 Object injectee,
-                                                 boolean injectionOccurred,
-                                                 List<Field> orderedCandidateInjecteeFields) {
+    private boolean injectMockCandidatesOnFields(
+            Set<Object> mocks,
+            Object injectee,
+            boolean injectionOccurred,
+            List<Field> orderedCandidateInjecteeFields) {
         for (Iterator<Field> it = orderedCandidateInjecteeFields.iterator(); it.hasNext(); ) {
             Field candidateField = it.next();
-            Object injected = mockCandidateFilter.filterCandidate(mocks, candidateField, orderedCandidateInjecteeFields, injectee)
-                                                 .thenInject();
+            Object injected =
+                    mockCandidateFilter
+                            .filterCandidate(
+                                    mocks, candidateField, orderedCandidateInjecteeFields, injectee)
+                            .thenInject();
             if (injected != null) {
                 injectionOccurred |= true;
                 mocks.remove(injected);

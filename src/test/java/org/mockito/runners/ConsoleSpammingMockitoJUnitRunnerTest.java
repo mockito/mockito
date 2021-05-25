@@ -4,6 +4,8 @@
  */
 package org.mockito.runners;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.Description;
@@ -14,8 +16,6 @@ import org.junit.runners.model.InitializationError;
 import org.mockito.internal.runners.InternalRunner;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
 
@@ -31,22 +31,25 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
         notifier = new RunNotifier();
     }
 
-    //TODO add sensible tests
+    // TODO add sensible tests
 
     @Test
     public void shouldDelegateToGetDescription() throws Exception {
-        //given
+        // given
         final Description expectedDescription = Description.createSuiteDescription(this.getClass());
-        runner = new ConsoleSpammingMockitoJUnitRunner(loggerStub, new InternalRunnerStub() {
-            public Description getDescription() {
-                return expectedDescription;
-            }
-        });
+        runner =
+                new ConsoleSpammingMockitoJUnitRunner(
+                        loggerStub,
+                        new InternalRunnerStub() {
+                            public Description getDescription() {
+                                return expectedDescription;
+                            }
+                        });
 
-        //when
+        // when
         Description description = runner.getDescription();
 
-        //then
+        // then
         assertEquals(expectedDescription, description);
     }
 
@@ -70,11 +73,8 @@ public class ConsoleSpammingMockitoJUnitRunnerTest extends TestBase {
             return null;
         }
 
-        public void run(RunNotifier notifier) {
-        }
+        public void run(RunNotifier notifier) {}
 
-        public void filter(Filter filter) throws NoTestsRemainException {
-        }
-
+        public void filter(Filter filter) throws NoTestsRemainException {}
     }
 }

@@ -4,13 +4,13 @@
  */
 package org.mockito;
 
+import java.util.Collection;
+
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.MockitoHint;
 import org.mockito.stubbing.Stubbing;
-
-import java.util.Collection;
 
 /**
  * Provides mocking information.

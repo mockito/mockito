@@ -21,31 +21,29 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
 
 public class VarargsTest {
 
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    @Captor
-    private ArgumentCaptor<String> captor;
-    @Mock
-    private IMethods mock;
+    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Rule public ExpectedException exception = ExpectedException.none();
+    @Captor private ArgumentCaptor<String> captor;
+    @Mock private IMethods mock;
 
-    private static final Condition<Object> NULL = new Condition<Object>() {
+    private static final Condition<Object> NULL =
+            new Condition<Object>() {
 
-        @Override
-        public boolean matches(Object value) {
-            return value == null;
-        }
-    };
+                @Override
+                public boolean matches(Object value) {
+                    return value == null;
+                }
+            };
 
     @Test
     public void shouldMatchVarArgs_noArgs() {
@@ -83,7 +81,7 @@ public class VarargsTest {
         Object arg = null;
         mock.varargs(arg);
 
-        verify(mock).varargs(eq(null));
+        verify(mock).varargs(ArgumentMatchers.<Object[]>eq(null));
     }
 
     @Test
@@ -91,7 +89,7 @@ public class VarargsTest {
         Object arg = null;
         mock.varargs(arg);
 
-        verify(mock).varargs(isNull());
+        verify(mock).varargs(ArgumentMatchers.<Object[]>isNull());
     }
 
     @Test
@@ -99,7 +97,7 @@ public class VarargsTest {
         Object[] argArray = null;
         mock.varargs(argArray);
 
-        verify(mock).varargs(isNull());
+        verify(mock).varargs(ArgumentMatchers.<Object[]>isNull());
     }
 
     @Test
@@ -115,28 +113,28 @@ public class VarargsTest {
     public void shouldMatchVarArgs_emptyVarArgsOneAnyMatcher() {
         mock.varargs();
 
-        verify(mock).varargs((String[])any()); // any() -> VarargMatcher
+        verify(mock).varargs((String[]) any()); // any() -> VarargMatcher
     }
 
     @Test
     public void shouldMatchVarArgs_oneArgsOneAnyMatcher() {
         mock.varargs(1);
 
-        verify(mock).varargs(any()); // any() -> VarargMatcher
+        verify(mock).varargs(ArgumentMatchers.<Object[]>any()); // any() -> VarargMatcher
     }
 
     @Test
     public void shouldMatchVarArgs_twoArgsOneAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(any()); // any() -> VarargMatcher
+        verify(mock).varargs(ArgumentMatchers.<Object[]>any()); // any() -> VarargMatcher
     }
 
     @Test
     public void shouldMatchVarArgs_twoArgsTwoAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(any(), any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(), ArgumentMatchers.<Object>any()); // any() -> VarargMatcher
     }
 
     @Test
@@ -145,7 +143,7 @@ public class VarargsTest {
 
         exception.expectMessage("Argument(s) are different");
 
-        verify(mock).varargs(any(), any(), any()); //any() -> VarargMatcher
+        verify(mock).varargs(any(), any(), any()); // any() -> VarargMatcher
     }
 
     @Test
@@ -266,7 +264,6 @@ public class VarargsTest {
         exception.expect(ArgumentsAreDifferent.class);
 
         verify(mock).varargs(captor.capture(), captor.capture());
-
     }
 
     @Test
@@ -276,7 +273,6 @@ public class VarargsTest {
         verify(mock).varargs(captor.capture(), eq("2"), captor.capture());
 
         assertThat(captor).containsExactly("1", "3");
-
     }
 
     @Test
@@ -290,7 +286,6 @@ public class VarargsTest {
         }
 
         assertThat(captor).isEmpty();
-
     }
 
     @Test
@@ -300,7 +295,6 @@ public class VarargsTest {
         exception.expect(ArgumentsAreDifferent.class);
 
         verify(mock).varargs(captor.capture(), captor.capture());
-
     }
 
     /**
@@ -320,25 +314,27 @@ public class VarargsTest {
 
         verify(mock).varargs(varargCaptor.capture());
 
-        assertThat(varargCaptor).containsExactly(new String[] { "1", "2" });
+        assertThat(varargCaptor).containsExactly(new String[] {"1", "2"});
     }
 
     @Test
-    public void shouldNotMatchRegualrAndVaraArgs()   {
-        mock.varargsString(1, "a","b");
+    public void shouldNotMatchRegualrAndVaraArgs() {
+        mock.varargsString(1, "a", "b");
 
         exception.expect(ArgumentsAreDifferent.class);
 
         verify(mock).varargsString(1);
     }
+
     @Test
-    public void shouldNotMatchVaraArgs()   {
-        when(mock.varargsObject(1, "a","b")).thenReturn("OK");
+    public void shouldNotMatchVaraArgs() {
+        when(mock.varargsObject(1, "a", "b")).thenReturn("OK");
 
         Assertions.assertThat(mock.varargsObject(1)).isNull();
     }
 
-    private static <T> AbstractListAssert<?, ?, T, ObjectAssert<T>> assertThat(ArgumentCaptor<T> captor) {
+    private static <T> AbstractListAssert<?, ?, T, ObjectAssert<T>> assertThat(
+            ArgumentCaptor<T> captor) {
         return Assertions.assertThat(captor.getAllValues());
     }
 }

@@ -2,14 +2,13 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.bugs;
-
-import org.junit.Test;
-import org.mockitoutil.TestBase;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
+
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class ActualInvocationHasNullArgumentNPEBugTest extends TestBase {
 
@@ -19,19 +18,20 @@ public class ActualInvocationHasNullArgumentNPEBugTest extends TestBase {
 
     @Test
     public void shouldAllowPassingNullArgument() {
-        //given
+        // given
         Fun mockFun = mock(Fun.class);
         when(mockFun.doFun((String) anyObject())).thenReturn("value");
 
-        //when
+        // when
         mockFun.doFun(null);
 
-        //then
+        // then
         try {
             verify(mockFun).doFun("hello");
-            fail();
-        } catch(AssertionError r) {
-            //it's ok, we just want to reproduce the bug
+        } catch (AssertionError r) {
+            // it's ok, we just want to reproduce the bug
+            return;
         }
+        fail();
     }
 }

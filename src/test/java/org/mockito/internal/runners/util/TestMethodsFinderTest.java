@@ -4,16 +4,17 @@
  */
 package org.mockito.internal.runners.util;
 
-import org.junit.Test;
-import org.mockitoutil.TestBase;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+import org.mockitoutil.TestBase;
 
 public class TestMethodsFinderTest extends TestBase {
 
     public static class HasTests {
-        @Test public void someTest() {}
+        @Test
+        public void someTest() {}
     }
 
     static class DoesNotHaveTests {

@@ -2,16 +2,15 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.bugs;
+
+import static org.mockito.Mockito.*;
 
 import org.junit.Test;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import static org.mockito.Mockito.*;
-
-//issue 151
+// issue 151
 public class StubbingMocksThatAreConfiguredToReturnMocksTest extends TestBase {
 
     @Test

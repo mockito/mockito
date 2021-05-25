@@ -4,9 +4,10 @@
  */
 package org.mockito.internal.util;
 
-import org.mockito.internal.creation.instance.InstantiationException;
-
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import org.mockito.creation.instance.InstantiationException;
 
 /**
  * Helper class to work with features that were introduced in Java versions after 1.5.
@@ -19,6 +20,8 @@ public final class JavaEightUtil {
     private static Object emptyOptionalDouble;
     private static Object emptyOptionalInt;
     private static Object emptyOptionalLong;
+    private static Object emptyDuration;
+    private static Object emptyPeriod;
 
     private JavaEightUtil() {
         // utility class
@@ -38,7 +41,6 @@ public final class JavaEightUtil {
         return emptyOptional = invokeNullaryFactoryMethod("java.util.Optional", "empty");
     }
 
-
     /**
      * Creates an empty OptionalDouble using reflection to stay backwards-compatible with older JDKs.
      *
@@ -50,7 +52,8 @@ public final class JavaEightUtil {
             return emptyOptionalDouble;
         }
 
-        return emptyOptionalDouble = invokeNullaryFactoryMethod("java.util.OptionalDouble", "empty");
+        return emptyOptionalDouble =
+                invokeNullaryFactoryMethod("java.util.OptionalDouble", "empty");
     }
 
     /**
@@ -122,6 +125,34 @@ public final class JavaEightUtil {
     }
 
     /**
+     * Creates an empty Duration using reflection to stay backwards-compatible with older JDKs.
+     *
+     * @return an empty (ZERO) Duration.
+     */
+    public static Object emptyDuration() {
+        // no need for double-checked locking
+        if (emptyDuration != null) {
+            return emptyDuration;
+        }
+
+        return emptyDuration = getStaticFieldValue("java.time.Duration", "ZERO");
+    }
+
+    /**
+     * Creates an empty Period using reflection to stay backwards-compatible with older JDKs.
+     *
+     * @return an empty (ZERO) Period.
+     */
+    public static Object emptyPeriod() {
+        // no need for double-checked locking
+        if (emptyPeriod != null) {
+            return emptyPeriod;
+        }
+
+        return emptyPeriod = getStaticFieldValue("java.time.Period", "ZERO");
+    }
+
+    /**
      * Invokes a nullary static factory method using reflection to stay backwards-compatible with older JDKs.
      *
      * @param fqcn The fully qualified class name of the type to be produced.
@@ -130,15 +161,68 @@ public final class JavaEightUtil {
      */
     private static Object invokeNullaryFactoryMethod(final String fqcn, final String methodName) {
         try {
-            final Class<?> type = Class.forName(fqcn);
-            final Method method = type.getMethod(methodName);
-
+            final Method method = getMethod(fqcn, methodName);
             return method.invoke(null);
             // any exception is really unexpected since the type name has
             // already been verified
         } catch (final Exception e) {
             throw new InstantiationException(
                     String.format("Could not create %s#%s(): %s", fqcn, methodName, e), e);
+        }
+    }
+
+    /**
+     * Gets a value of the classes' field using reflection to stay backwards-compatible with older JDKs.
+     *
+     * @param fqcn The fully qualified class name of the type to be produced.
+     * @param fieldName The name of th classes' field which value is going to be returned.
+     * @return the restored value.
+     */
+    private static Object getStaticFieldValue(final String fqcn, final String fieldName) {
+        try {
+            final Class<?> type = getClass(fqcn);
+            final Field field = type.getField(fieldName);
+            return field.get(null);
+            // any exception is really unexpected since the type name has
+            // already been verified
+        } catch (Exception e) {
+            throw new InstantiationException(
+                    String.format("Could not get %s#%s(): %s", fqcn, fieldName, e), e);
+        }
+    }
+
+    /**
+     * Returns the {@code Class} object associated with the class or interface with the given string name.
+     *
+     * @param fqcn The fully qualified class name of the type to be produced.
+     * @return the Class object for the class with the specified name.
+     */
+    private static Class<?> getClass(String fqcn) {
+        try {
+            return Class.forName(fqcn);
+            // any exception is really unexpected since the type name has
+            // already been verified
+        } catch (ClassNotFoundException e) {
+            throw new InstantiationException(String.format("Could not find %s: %s", fqcn, e), e);
+        }
+    }
+
+    /**
+     * Returns a Method object that reflects the specified public member method of the class or interface represented by the fully qualified class name.
+     *
+     * @param fqcn The fully qualified class name of the type to be produced.
+     * @param methodName The name of the method.
+     * @param parameterClasses The list of parameters.
+     * @return The Method object that matches the specified name and parameterTypes.
+     */
+    private static Method getMethod(
+            final String fqcn, final String methodName, final Class<?>... parameterClasses) {
+        try {
+            final Class<?> type = getClass(fqcn);
+            return type.getMethod(methodName, parameterClasses);
+        } catch (Exception e) {
+            throw new InstantiationException(
+                    String.format("Could not find %s#%s(): %s", fqcn, methodName, e), e);
         }
     }
 }

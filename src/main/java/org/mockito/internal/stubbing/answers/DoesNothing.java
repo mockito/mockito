@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.mockito.internal.exceptions.Reporter.onlyVoidMethodsCanBeSetToDoNothing;
+
 import java.io.Serializable;
 
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.ValidableAnswer;
-
-import static org.mockito.internal.exceptions.Reporter.onlyVoidMethodsCanBeSetToDoNothing;
 
 public class DoesNothing implements Answer<Object>, ValidableAnswer, Serializable {
 
@@ -20,12 +20,12 @@ public class DoesNothing implements Answer<Object>, ValidableAnswer, Serializabl
 
     private DoesNothing() {}
 
-    public static DoesNothing doesNothing(){
+    public static DoesNothing doesNothing() {
         return SINGLETON;
     }
 
     @Override
-    public Object answer(InvocationOnMock invocation){
+    public Object answer(InvocationOnMock invocation) {
         return null;
     }
 

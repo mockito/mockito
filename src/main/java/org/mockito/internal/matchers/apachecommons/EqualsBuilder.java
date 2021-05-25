@@ -2,18 +2,19 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
-//NON-STANDARD LICENCE HEADER HERE - THAT'S OK
-//Class comes from Apache Commons Lang, added some tiny changes
 package org.mockito.internal.matchers.apachecommons;
 
-import java.lang.reflect.AccessibleObject;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.plugins.MemberAccessor;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+// Class comes from Apache Commons Lang, added some tiny changes
 /**
  * <p>Assists in implementing {@link Object#equals(Object)} methods.</p>
  *
@@ -92,7 +93,7 @@ class EqualsBuilder {
         // do nothing for now.
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * <p>This method uses reflection to determine if the two <code>Object</code>s
@@ -188,7 +189,8 @@ class EqualsBuilder {
      * @return <code>true</code> if the two Objects have tested equals.
      * @since 2.1.0
      */
-    public static boolean reflectionEquals(Object lhs, Object rhs, boolean testTransients, Class<?> reflectUpToClass) {
+    public static boolean reflectionEquals(
+            Object lhs, Object rhs, boolean testTransients, Class<?> reflectUpToClass) {
         return reflectionEquals(lhs, rhs, testTransients, reflectUpToClass, null);
     }
 
@@ -218,7 +220,11 @@ class EqualsBuilder {
      * @return <code>true</code> if the two Objects have tested equals.
      * @since 2.1.0
      */
-    public static boolean reflectionEquals(Object lhs, Object rhs, boolean testTransients, Class<?> reflectUpToClass,
+    public static boolean reflectionEquals(
+            Object lhs,
+            Object rhs,
+            boolean testTransients,
+            Class<?> reflectUpToClass,
             String[] excludeFields) {
         if (lhs == rhs) {
             return true;
@@ -250,19 +256,15 @@ class EqualsBuilder {
             return false;
         }
         EqualsBuilder equalsBuilder = new EqualsBuilder();
-        try {
-            reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);
-            while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
-                testClass = testClass.getSuperclass();
-                reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);
-            }
-        } catch (IllegalArgumentException e) {
-            // In this case, we tried to test a subclass vs. a superclass and
-            // the subclass has ivars or the ivars are transient and
-            // we are testing transients.
-            // If a subclass has ivars that we are trying to test them, we get an
-            // exception and we know that the objects are not equal.
+        if (reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {
             return false;
+        }
+        while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
+            testClass = testClass.getSuperclass();
+            if (reflectionAppend(
+                    lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields)) {
+                return false;
+            }
         }
         return equalsBuilder.isEquals();
     }
@@ -278,34 +280,41 @@ class EqualsBuilder {
      * @param useTransients  whether to test transient fields
      * @param excludeFields  array of field names to exclude from testing
      */
-    private static void reflectionAppend(
-        Object lhs,
-        Object rhs,
-        Class<?> clazz,
-        EqualsBuilder builder,
-        boolean useTransients,
-        String[] excludeFields) {
+    private static boolean reflectionAppend(
+            Object lhs,
+            Object rhs,
+            Class<?> clazz,
+            EqualsBuilder builder,
+            boolean useTransients,
+            String[] excludeFields) {
         Field[] fields = clazz.getDeclaredFields();
-        List<String> excludedFieldList = excludeFields != null ? Arrays.asList(excludeFields) : Collections.<String>emptyList();
-        AccessibleObject.setAccessible(fields, true);
+        List<String> excludedFieldList =
+                excludeFields != null
+                        ? Arrays.asList(excludeFields)
+                        : Collections.<String>emptyList();
+        MemberAccessor accessor = Plugins.getMemberAccessor();
         for (int i = 0; i < fields.length && builder.isEquals; i++) {
             Field f = fields[i];
             if (!excludedFieldList.contains(f.getName())
-                && (f.getName().indexOf('$') == -1)
-                && (useTransients || !Modifier.isTransient(f.getModifiers()))
-                && (!Modifier.isStatic(f.getModifiers()))) {
+                    && (f.getName().indexOf('$') == -1)
+                    && (useTransients || !Modifier.isTransient(f.getModifiers()))
+                    && !Modifier.isStatic(f.getModifiers())) {
                 try {
-                    builder.append(f.get(lhs), f.get(rhs));
-                } catch (IllegalAccessException e) {
-                    //this can't happen. Would get a Security exception instead
-                    //throw a runtime exception in case the impossible happens.
-                    throw new InternalError("Unexpected IllegalAccessException");
+                    builder.append(accessor.get(f, lhs), accessor.get(f, rhs));
+                } catch (RuntimeException | IllegalAccessException ignored) {
+                    // In this case, we tried to test a subclass vs. a superclass and
+                    // the subclass has ivars or the ivars are transient and we are
+                    // testing transients. If a subclass has ivars that we are trying
+                    // to test them, we get an exception and we know that the objects
+                    // are not equal.
+                    return true;
                 }
             }
         }
+        return false;
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * <p>Adds the result of <code>super.equals()</code> to this builder.</p>
@@ -319,7 +328,7 @@ class EqualsBuilder {
         return this;
     }
 
-    //-------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
     /**
      * <p>Test if two <code>Object</code>s are equal using their
@@ -342,8 +351,8 @@ class EqualsBuilder {
         }
         Class<?> lhsClass = lhs.getClass();
         if (!lhsClass.isArray()) {
-            if (lhs instanceof java.math.BigDecimal && rhs instanceof java.math.BigDecimal) {
-                isEquals = (((java.math.BigDecimal) lhs).compareTo((java.math.BigDecimal) rhs) == 0);
+            if (lhs instanceof BigDecimal && rhs instanceof BigDecimal) {
+                isEquals = (((BigDecimal) lhs).compareTo((BigDecimal) rhs) == 0);
             } else {
                 // The simple case, not an array, just test the element
                 isEquals = lhs.equals(rhs);
@@ -352,8 +361,8 @@ class EqualsBuilder {
             // Here when we compare different dimensions, for example: a boolean[][] to a boolean[]
             this.setEquals(false);
 
-        // 'Switch' on type of array, to dispatch to the correct handler
-        // This handles multi dimensional arrays of the same depth
+            // 'Switch' on type of array, to dispatch to the correct handler
+            // This handles multi dimensional arrays of the same depth
         } else if (lhs instanceof long[]) {
             append((long[]) lhs, (long[]) rhs);
         } else if (lhs instanceof int[]) {
@@ -487,7 +496,7 @@ class EqualsBuilder {
      * @param lhs  the left hand <code>boolean</code>
      * @param rhs  the right hand <code>boolean</code>
      * @return EqualsBuilder - used to chain calls.
-      */
+     */
     public EqualsBuilder append(boolean lhs, boolean rhs) {
         isEquals &= (lhs == rhs);
         return this;

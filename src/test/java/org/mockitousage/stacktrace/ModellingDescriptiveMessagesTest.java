@@ -2,8 +2,12 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.stacktrace;
+
+import static org.mockito.Mockito.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -16,11 +20,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
-
 @Ignore
 @RunWith(MockitoJUnitRunner.class)
 public class ModellingDescriptiveMessagesTest extends TestBase {
@@ -32,9 +31,10 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         super.makeStackTracesClean();
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void makeSureStateIsValidatedInTheVeryFirstTestThanksToTheRunner() {
-        //mess up the state:
+        // mess up the state:
         verify(mock);
     }
 
@@ -58,7 +58,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     }
 
     @Test
-    public void shouldSayTooLittleInvocations() {
+    public void shouldSayTooFewInvocations() {
         mock.simpleMethod();
         verify(mock, times(2)).simpleMethod();
     }
@@ -80,7 +80,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     }
 
     @Test
-    public void shouldSayTooLittleInvocationsInOrder() {
+    public void shouldSayTooFewInvocationsInOrder() {
         mock.simpleMethod();
         mock.otherMethod();
         mock.otherMethod();
@@ -107,7 +107,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     }
 
     @Test
-    public void shouldSayTooLittleInvocationsInAtLeastModeInOrder() {
+    public void shouldSayTooFewInvocationsInAtLeastModeInOrder() {
         mock.simpleMethod();
 
         InOrder inOrder = inOrder(mock);
@@ -115,7 +115,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     }
 
     @Test
-    public void shouldSayTooLittleInvocationsInAtLeastMode() {
+    public void shouldSayTooFewInvocationsInAtLeastMode() {
         mock.simpleMethod();
 
         verify(mock, atLeast(2)).simpleMethod();
@@ -137,6 +137,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         m.simpleMethod();
     }
 
+    @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void shouldPointOutUnfinishedStubbing() {
         when(mock.simpleMethod());
@@ -167,26 +168,31 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
         argument.getValue();
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldScreamWhenNullPassedInsteadOfAnInterface() {
         mock(IMethods.class, withSettings().extraInterfaces(List.class, null));
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldScreamWhenNonInterfacePassed() {
         mock(IMethods.class, withSettings().extraInterfaces(LinkedList.class));
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldScreamWhenExtraIsTheSame() {
         mock(IMethods.class, withSettings().extraInterfaces(IMethods.class));
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldScreamWhenExtraInterfacesEmpty() {
         mock(IMethods.class, withSettings().extraInterfaces());
     }
 
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldScreamWhenExtraInterfacesIsANullArray() {
         mock(IMethods.class, withSettings().extraInterfaces((Class<?>[]) null));

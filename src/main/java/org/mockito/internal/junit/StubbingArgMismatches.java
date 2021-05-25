@@ -4,27 +4,25 @@
  */
 package org.mockito.internal.junit;
 
-import org.mockito.internal.util.MockitoLogger;
-import org.mockito.invocation.Invocation;
-
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.mockito.invocation.Invocation;
+import org.mockito.plugins.MockitoLogger;
 
 /**
  * Contains stubbing arg mismatches, knows how to format them
  */
 class StubbingArgMismatches {
 
-    final Map<Invocation, Set<Invocation>> mismatches = new LinkedHashMap<Invocation, Set<Invocation>>();
+    final Map<Invocation, Set<Invocation>> mismatches = new LinkedHashMap<>();
 
     public void add(Invocation invocation, Invocation stubbing) {
-        Set<Invocation> matchingInvocations = mismatches.get(stubbing);
-        if (matchingInvocations == null) {
-            matchingInvocations = new LinkedHashSet<Invocation>();
-            mismatches.put(stubbing, matchingInvocations);
-        }
+        Set<Invocation> matchingInvocations =
+                mismatches.computeIfAbsent(
+                        stubbing, (Invocation k) -> new LinkedHashSet<Invocation>());
         matchingInvocations.add(invocation);
     }
 
@@ -49,6 +47,7 @@ class StubbingArgMismatches {
         return mismatches.size();
     }
 
+    @Override
     public String toString() {
         return "" + mismatches;
     }

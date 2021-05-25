@@ -1,3 +1,11 @@
+def java11 = System.env.SIMULATE_JAVA11
+if (java11 != null) {
+    test {
+        logger.info("$it.path - use Java11 simluation: ${java11}")
+        systemProperty "org.mockito.internal.noUnsafeInjection", java11
+    }
+}
+
 task(createTestResources).doLast {
     def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
     if (System.env.MOCK_MAKER != null) {
@@ -12,7 +20,7 @@ task(createTestResources).doLast {
 
 task(removeTestResources).doLast {
     def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
-    if (mockMakerFile.exists()){
+    if (mockMakerFile.exists()) {
         mockMakerFile.delete()
     }
 }

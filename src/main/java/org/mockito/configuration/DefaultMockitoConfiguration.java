@@ -17,6 +17,7 @@ import org.mockito.stubbing.Answer;
  */
 public class DefaultMockitoConfiguration implements IMockitoConfiguration {
 
+    @Override
     public Answer<Object> getDefaultAnswer() {
         return new ReturnsEmptyValues();
     }
@@ -31,6 +32,7 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     /* (non-Javadoc)
      * @see org.mockito.configuration.IMockitoConfiguration#cleansStackTrace()
      */
+    @Override
     public boolean cleansStackTrace() {
         return true;
     }
@@ -38,9 +40,8 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     /* (non-Javadoc)
      * @see org.mockito.configuration.IMockitoConfiguration#enableClassCache()
      */
+    @Override
     public boolean enableClassCache() {
         return true;
     }
-
-
 }

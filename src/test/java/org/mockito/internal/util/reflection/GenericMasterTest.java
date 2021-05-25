@@ -4,13 +4,13 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class GenericMasterTest {
 
@@ -24,16 +24,27 @@ public class GenericMasterTest {
     List<Set<Collection<String>>> multiNested;
 
     public interface ListSet extends List<Set<?>> {}
+
     public interface MapNumberString extends Map<Number, String> {}
+
     public class HashMapNumberString<K extends Number> extends HashMap<K, String> {}
 
-    public List<Number> numberList() { return null; }
-    public Comparable<Number> numberComparable() { return null; }
+    public List<Number> numberList() {
+        return null;
+    }
+
+    public Comparable<Number> numberComparable() {
+        return null;
+    }
+
     @SuppressWarnings("rawtypes")
-    public List rawList() { return null; }
-    public List<? extends Type> typeList() { return null; }
+    public List rawList() {
+        return null;
+    }
 
-
+    public List<? extends Type> typeList() {
+        return null;
+    }
 
     @Test
     public void should_find_generic_class() throws Exception {
@@ -56,5 +67,4 @@ public class GenericMasterTest {
     private Field field(String fieldName) throws SecurityException, NoSuchFieldException {
         return this.getClass().getDeclaredField(fieldName);
     }
-
 }

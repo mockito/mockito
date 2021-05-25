@@ -4,20 +4,20 @@
  */
 package org.mockito.internal.util;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.assertEquals;
 
 public class SimpleMockitoLoggerTest extends TestBase {
 
     @Test
     public void shouldLog() throws Exception {
-        //given
+        // given
         SimpleMockitoLogger logger = new SimpleMockitoLogger();
-        //when
+        // when
         logger.log("foo");
-        //then
+        // then
         assertEquals("foo", logger.getLoggedInfo());
     }
 }

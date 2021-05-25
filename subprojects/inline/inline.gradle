@@ -9,5 +9,12 @@ dependencies {
 
 tasks.javadoc.enabled = false
 
-//required by the "StressTest.java"
+//required by the "StressTest.java" and "OneLinerStubStressTest.java"
 test.maxHeapSize = "256m"
+retryTest.maxHeapSize = "256m"
+
+if (JavaVersion.current().java9Compatible) {
+    test {
+        jvmArgs '--illegal-access=deny'
+    }
+}

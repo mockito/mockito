@@ -4,17 +4,18 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.mockito.internal.util.Checks;
-
-import static org.mockito.internal.util.reflection.FieldSetter.setField;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.util.Checks;
+import org.mockito.plugins.MemberAccessor;
 
 /**
  * Represents an accessible instance field.
  *
- * Contains the instance reference on which the field can be read adn write.
+ * Contains the instance reference on which the field can be read and write.
  */
 public class InstanceField {
     private final Field field;
@@ -47,10 +48,14 @@ public class InstanceField {
      * Set the given value to the field of this instance.
      *
      * @param value The value that should be written to the field.
-     * @see FieldSetter
      */
     public void set(Object value) {
-        setField(instance, field,value);
+        MemberAccessor accessor = Plugins.getMemberAccessor();
+        try {
+            accessor.set(field, instance, value);
+        } catch (IllegalAccessException e) {
+            throw new MockitoException("Access to " + field + " was denied", e);
+        }
     }
 
     /**
@@ -124,8 +129,12 @@ public class InstanceField {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         InstanceField that = (InstanceField) o;
         return field.equals(that.field) && instance.equals(that.instance);

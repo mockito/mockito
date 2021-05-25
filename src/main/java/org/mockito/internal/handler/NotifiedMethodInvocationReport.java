@@ -4,11 +4,11 @@
  */
 package org.mockito.internal.handler;
 
+import static org.mockito.internal.matchers.Equality.areEqual;
+
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MethodInvocationReport;
-
-import static org.mockito.internal.matchers.Equality.areEqual;
 
 /**
  * Report on a method call
@@ -17,7 +17,6 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
     private final Invocation invocation;
     private final Object returnedValue;
     private final Throwable throwable;
-
 
     /**
      * Build a new {@link org.mockito.listeners.MethodInvocationReport} with a return value.
@@ -45,38 +44,50 @@ public class NotifiedMethodInvocationReport implements MethodInvocationReport {
         this.throwable = throwable;
     }
 
+    @Override
     public DescribedInvocation getInvocation() {
         return invocation;
     }
 
+    @Override
     public Object getReturnedValue() {
         return returnedValue;
     }
 
+    @Override
     public Throwable getThrowable() {
         return throwable;
     }
 
+    @Override
     public boolean threwException() {
         return throwable != null;
     }
 
+    @Override
     public String getLocationOfStubbing() {
-        return (invocation.stubInfo() == null) ? null : invocation.stubInfo().stubbedAt().toString();
+        return (invocation.stubInfo() == null)
+                ? null
+                : invocation.stubInfo().stubbedAt().toString();
     }
 
-
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         NotifiedMethodInvocationReport that = (NotifiedMethodInvocationReport) o;
 
-        return areEqual(invocation, that.invocation) &&
-               areEqual(returnedValue, that.returnedValue) &&
-               areEqual(throwable, that.throwable);
+        return areEqual(invocation, that.invocation)
+                && areEqual(returnedValue, that.returnedValue)
+                && areEqual(throwable, that.throwable);
     }
 
+    @Override
     public int hashCode() {
         int result = invocation != null ? invocation.hashCode() : 0;
         result = 31 * result + (returnedValue != null ? returnedValue.hashCode() : 0);

@@ -2,11 +2,12 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.plugins.switcher;
 
 import org.junit.Test;
 import org.mockitousage.plugins.instantiator.MyInstantiatorProvider2;
+import org.mockitousage.plugins.logger.MyMockitoLogger;
+import org.mockitousage.plugins.resolver.MyMockResolver;
 import org.mockitousage.plugins.stacktrace.MyStackTraceCleanerProvider;
 
 import java.util.List;
@@ -18,10 +19,15 @@ import static org.mockito.Mockito.mock;
 
 public class PluginSwitchTest {
 
+    @SuppressWarnings("CheckReturnValue")
     @Test
     public void plugin_switcher_is_used() {
         mock(List.class);
-        assertEquals(MyPluginSwitch.invokedFor, asList(MyMockMaker.class.getName(), MyStackTraceCleanerProvider.class.getName(), MyInstantiatorProvider2.class.getName()));
+        assertEquals(MyPluginSwitch.invokedFor, asList(MyMockMaker.class.getName(),
+            MyStackTraceCleanerProvider.class.getName(),
+            MyMockitoLogger.class.getName(),
+            MyMockResolver.class.getName(),
+            MyInstantiatorProvider2.class.getName()));
     }
 
     @Test

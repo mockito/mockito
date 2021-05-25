@@ -2,8 +2,9 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.annotation;
+
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Test;
@@ -15,8 +16,6 @@ import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockito.internal.configuration.IndependentAnnotationEngine;
 import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.*;
 
 public class DeprecatedAnnotationEngineApiTest extends TestBase {
 
@@ -32,6 +31,7 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
 
     class Tested {
         Dependency dependency;
+
         public void setDependency(Dependency dependency) {
             this.dependency = dependency;
         }
@@ -41,15 +41,15 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
 
     @Test
     public void shouldInjectMocksIfThereIsNoUserDefinedEngine() throws Exception {
-        //given
+        // given
         AnnotationEngine defaultEngine = new DefaultMockitoConfiguration().getAnnotationEngine();
         ConfigurationAccess.getConfig().overrideAnnotationEngine(defaultEngine);
         SimpleTestCase test = new SimpleTestCase();
 
-        //when
-        MockitoAnnotations.initMocks(test);
+        // when
+        MockitoAnnotations.openMocks(test);
 
-        //then
+        // then
         assertNotNull(test.mock);
         assertNotNull(test.tested.dependency);
         assertSame(test.mock, test.tested.dependency);
@@ -57,15 +57,17 @@ public class DeprecatedAnnotationEngineApiTest extends TestBase {
 
     @Test
     public void shouldRespectUsersEngine() throws Exception {
-        //given
-        AnnotationEngine customizedEngine = new IndependentAnnotationEngine() { /**/ };
+        // given
+        AnnotationEngine customizedEngine = new IndependentAnnotationEngine() {
+                    /**/
+                };
         ConfigurationAccess.getConfig().overrideAnnotationEngine(customizedEngine);
         SimpleTestCase test = new SimpleTestCase();
 
-        //when
-        MockitoAnnotations.initMocks(test);
+        // when
+        MockitoAnnotations.openMocks(test);
 
-        //then
+        // then
         assertNotNull(test.mock);
         assertNull(test.tested.dependency);
     }

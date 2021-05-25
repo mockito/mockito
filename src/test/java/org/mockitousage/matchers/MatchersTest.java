@@ -2,26 +2,12 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.matchers;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.RandomAccess;
-import java.util.regex.Pattern;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.exceptions.verification.junit.ArgumentsAreDifferent;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalMatchers.and;
 import static org.mockito.AdditionalMatchers.aryEq;
 import static org.mockito.AdditionalMatchers.cmpEq;
@@ -60,6 +46,19 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.RandomAccess;
+import java.util.regex.Pattern;
+
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
 public class MatchersTest extends TestBase {
@@ -286,7 +285,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(anyLong())).thenReturn("6");
         when(mock.oneArg(anyShort())).thenReturn("7");
         when(mock.oneArg((String) anyObject())).thenReturn("8");
-        when(mock.oneArg(anyObject())).thenReturn("9");
+        when(mock.oneArg(Mockito.<Object>anyObject())).thenReturn("9");
         when(mock.oneArg(any(RandomAccess.class))).thenReturn("10");
 
         assertEquals("0", mock.oneArg(true));
@@ -326,59 +325,61 @@ public class MatchersTest extends TestBase {
 
     @Test
     public void should_use_smart_equals_for_arrays() throws Exception {
-        //issue 143
-        mock.arrayMethod(new String[]{"one"});
-        verify(mock).arrayMethod(eq(new String[]{"one"}));
-        verify(mock).arrayMethod(new String[]{"one"});
+        // issue 143
+        mock.arrayMethod(new String[] {"one"});
+        verify(mock).arrayMethod(eq(new String[] {"one"}));
+        verify(mock).arrayMethod(new String[] {"one"});
     }
 
     @Test
     public void should_use_smart_equals_for_primitive_arrays() throws Exception {
-        //issue 143
-        mock.objectArgMethod(new int[]{1, 2});
-        verify(mock).objectArgMethod(eq(new int[]{1, 2}));
-        verify(mock).objectArgMethod(new int[]{1, 2});
+        // issue 143
+        mock.objectArgMethod(new int[] {1, 2});
+        verify(mock).objectArgMethod(eq(new int[] {1, 2}));
+        verify(mock).objectArgMethod(new int[] {1, 2});
     }
 
+    @SuppressWarnings("ReturnValueIgnored")
     @Test(expected = ArgumentsAreDifferent.class)
-    public void array_equals_should_throw_ArgumentsAreDifferentException_for_non_matching_arguments() {
+    public void
+            array_equals_should_throw_ArgumentsAreDifferentException_for_non_matching_arguments() {
         List<Object> list = Mockito.mock(List.class);
 
         list.add("test"); // testing fix for issue 20
-        list.contains(new Object[]{"1"});
+        list.contains(new Object[] {"1"});
 
-        Mockito.verify(list).contains(new Object[]{"1", "2", "3"});
+        Mockito.verify(list).contains(new Object[] {"1", "2", "3"});
     }
 
     @Test
     public void array_equals_matcher() {
-        when(mock.oneArray(aryEq(new boolean[]{true, false, false}))).thenReturn("0");
-        when(mock.oneArray(aryEq(new byte[]{1}))).thenReturn("1");
-        when(mock.oneArray(aryEq(new char[]{1}))).thenReturn("2");
-        when(mock.oneArray(aryEq(new double[]{1}))).thenReturn("3");
-        when(mock.oneArray(aryEq(new float[]{1}))).thenReturn("4");
-        when(mock.oneArray(aryEq(new int[]{1}))).thenReturn("5");
-        when(mock.oneArray(aryEq(new long[]{1}))).thenReturn("6");
-        when(mock.oneArray(aryEq(new short[]{1}))).thenReturn("7");
-        when(mock.oneArray(aryEq(new String[]{"Test"}))).thenReturn("8");
-        when(mock.oneArray(aryEq(new Object[]{"Test", new Integer(4)}))).thenReturn("9");
+        when(mock.oneArray(aryEq(new boolean[] {true, false, false}))).thenReturn("0");
+        when(mock.oneArray(aryEq(new byte[] {1}))).thenReturn("1");
+        when(mock.oneArray(aryEq(new char[] {1}))).thenReturn("2");
+        when(mock.oneArray(aryEq(new double[] {1}))).thenReturn("3");
+        when(mock.oneArray(aryEq(new float[] {1}))).thenReturn("4");
+        when(mock.oneArray(aryEq(new int[] {1}))).thenReturn("5");
+        when(mock.oneArray(aryEq(new long[] {1}))).thenReturn("6");
+        when(mock.oneArray(aryEq(new short[] {1}))).thenReturn("7");
+        when(mock.oneArray(aryEq(new String[] {"Test"}))).thenReturn("8");
+        when(mock.oneArray(aryEq(new Object[] {"Test", new Integer(4)}))).thenReturn("9");
 
-        assertEquals("0", mock.oneArray(new boolean[]{true, false, false}));
-        assertEquals("1", mock.oneArray(new byte[]{1}));
-        assertEquals("2", mock.oneArray(new char[]{1}));
-        assertEquals("3", mock.oneArray(new double[]{1}));
-        assertEquals("4", mock.oneArray(new float[]{1}));
-        assertEquals("5", mock.oneArray(new int[]{1}));
-        assertEquals("6", mock.oneArray(new long[]{1}));
-        assertEquals("7", mock.oneArray(new short[]{1}));
-        assertEquals("8", mock.oneArray(new String[]{"Test"}));
-        assertEquals("9", mock.oneArray(new Object[]{"Test", new Integer(4)}));
+        assertEquals("0", mock.oneArray(new boolean[] {true, false, false}));
+        assertEquals("1", mock.oneArray(new byte[] {1}));
+        assertEquals("2", mock.oneArray(new char[] {1}));
+        assertEquals("3", mock.oneArray(new double[] {1}));
+        assertEquals("4", mock.oneArray(new float[] {1}));
+        assertEquals("5", mock.oneArray(new int[] {1}));
+        assertEquals("6", mock.oneArray(new long[] {1}));
+        assertEquals("7", mock.oneArray(new short[] {1}));
+        assertEquals("8", mock.oneArray(new String[] {"Test"}));
+        assertEquals("9", mock.oneArray(new Object[] {"Test", new Integer(4)}));
 
-        assertEquals(null, mock.oneArray(new Object[]{"Test", new Integer(999)}));
-        assertEquals(null, mock.oneArray(new Object[]{"Test", new Integer(4), "x"}));
+        assertEquals(null, mock.oneArray(new Object[] {"Test", new Integer(999)}));
+        assertEquals(null, mock.oneArray(new Object[] {"Test", new Integer(4), "x"}));
 
-        assertEquals(null, mock.oneArray(new boolean[]{true, false}));
-        assertEquals(null, mock.oneArray(new boolean[]{true, true, false}));
+        assertEquals(null, mock.oneArray(new boolean[] {true, false}));
+        assertEquals(null, mock.oneArray(new boolean[] {true, true, false}));
     }
 
     @Test
@@ -512,6 +513,14 @@ public class MatchersTest extends TestBase {
     }
 
     @Test
+    public void matches_Pattern_matcher_in_subregion() {
+        when(mock.oneArg(matches(Pattern.compile("[a-z]")))).thenReturn("1");
+
+        assertEquals("1", mock.oneArg("3a45"));
+        assertEquals(null, mock.oneArg("3445"));
+    }
+
+    @Test
     public void contains_matcher() {
         when(mock.oneArg(contains("ell"))).thenReturn("1");
         when(mock.oneArg(contains("ld"))).thenReturn("2");
@@ -594,21 +603,21 @@ public class MatchersTest extends TestBase {
     public void eq_matcher_and_nulls() {
         mock.simpleMethod((Object) null);
 
-        verify(mock).simpleMethod(eq(null));
+        verify(mock).simpleMethod(Mockito.<Object>eq(null));
     }
 
     @Test
     public void same_matcher_and_nulls() {
         mock.simpleMethod((Object) null);
 
-        verify(mock).simpleMethod(same(null));
+        verify(mock).simpleMethod(Mockito.<Object>same(null));
     }
 
     @Test
     public void nullable_matcher() throws Exception {
         // imagine a Stream.of(...).map(c -> mock.oneArg(c))...
         mock.oneArg((Character) null);
-        mock.oneArg(Character.valueOf('€'));
+        mock.oneArg(Character.valueOf('\u20AC'));
 
         verify(mock, times(2)).oneArg(nullable(Character.class));
     }

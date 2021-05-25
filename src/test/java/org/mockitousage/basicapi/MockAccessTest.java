@@ -4,14 +4,13 @@
  */
 package org.mockitousage.basicapi;
 
-
-import org.junit.Test;
-
-import java.util.Set;
-
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.Set;
+
+import org.junit.Test;
 
 public class MockAccessTest {
 

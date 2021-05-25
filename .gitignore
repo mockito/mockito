@@ -1,3 +1,6 @@
+# Mac
+.DS_Store
+
 # Intellij
 *.iml
 *.ipr
@@ -14,9 +17,13 @@ bin/
 
 # Gradle & builds
 build
+build-cache
 target
 out
 .gradle
 classes
 .gradletasknamecache
 *.log
+
+# Used to check reproducibility of Mockito jars
+checksums/

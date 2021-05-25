@@ -4,24 +4,24 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
 import org.junit.Test;
 import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
 import org.mockito.internal.invocation.InvocationBuilder;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 public class DefaultAnswerValidatorTest {
 
     @Test
-    public void should_fail_if_returned_value_of_answer_is_incompatible_with_return_type() throws Throwable {
+    public void should_fail_if_returned_value_of_answer_is_incompatible_with_return_type()
+            throws Throwable {
         // given
-        class AWrongType {
-        }
+        class AWrongType {}
         try {
             // when
-            DefaultAnswerValidator.validateReturnValueFor(new InvocationBuilder().method("toString").toInvocation(),
-                                                          new AWrongType());
+            DefaultAnswerValidator.validateReturnValueFor(
+                    new InvocationBuilder().method("toString").toInvocation(), new AWrongType());
             fail("expected validation to fail");
         } catch (WrongTypeOfReturnValue e) {
             // then
@@ -34,7 +34,7 @@ public class DefaultAnswerValidatorTest {
 
     @Test
     public void should_not_fail_if_returned_value_of_answer_is_null() throws Throwable {
-        DefaultAnswerValidator.validateReturnValueFor(new InvocationBuilder().method("toString").toInvocation(),
-                                                      null);
+        DefaultAnswerValidator.validateReturnValueFor(
+                new InvocationBuilder().method("toString").toInvocation(), null);
     }
 }

@@ -13,7 +13,7 @@ import org.mockito.verification.VerificationMode;
  * Behavior Driven Development style of writing tests uses <b>//given //when //then</b> comments as fundamental parts of your test methods.
  * This is exactly how we write our tests and we warmly encourage you to do so!
  * <p>
- * Start learning about BDD here: <a href="http://en.wikipedia.org/wiki/Behavior_Driven_Development">http://en.wikipedia.org/wiki/Behavior_Driven_Development</a>
+ * Start learning about BDD here: <a href="https://en.wikipedia.org/wiki/Behavior-driven_development">https://en.wikipedia.org/wiki/Behavior-driven_development</a>
  * <p>
  * The problem is that current stubbing api with canonical role of <b>when</b> word does not integrate nicely with <b>//given //when //then</b> comments.
  * It's because stubbing belongs to <b>given</b> component of the test and not to the <b>when</b> component of the test.
@@ -127,9 +127,12 @@ public class BDDMockito extends Mockito {
          * See original {@link OngoingStubbing#thenThrow(Class, Class[])}
          * @since 2.1.0
          */
-        // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation
-        @SuppressWarnings ({"unchecked", "varargs"})
-        BDDMyOngoingStubbing<T> willThrow(Class<? extends Throwable> throwableType, Class<? extends Throwable>... throwableTypes);
+        // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array
+        // creation
+        @SuppressWarnings({"unchecked", "varargs"})
+        BDDMyOngoingStubbing<T> willThrow(
+                Class<? extends Throwable> throwableType,
+                Class<? extends Throwable>... throwableTypes);
 
         /**
          * See original {@link OngoingStubbing#thenCallRealMethod()}
@@ -176,8 +179,11 @@ public class BDDMockito extends Mockito {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenThrow(throwableType));
         }
 
-        public BDDMyOngoingStubbing<T> willThrow(Class<? extends Throwable> throwableType, Class<? extends Throwable>... throwableTypes) {
-            return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenThrow(throwableType, throwableTypes));
+        public BDDMyOngoingStubbing<T> willThrow(
+                Class<? extends Throwable> throwableType,
+                Class<? extends Throwable>... throwableTypes) {
+            return new BDDOngoingStubbingImpl<T>(
+                    mockitoOngoingStubbing.thenThrow(throwableType, throwableTypes));
         }
 
         public BDDMyOngoingStubbing<T> willCallRealMethod() {
@@ -251,7 +257,9 @@ public class BDDMockito extends Mockito {
         /**
          * @see #verifyZeroInteractions(Object...)
          * @since 2.1.0
+         * @deprecated Since 3.0.1. Please migrate your code to {@link #shouldHaveNoInteractions()}
          */
+        @Deprecated
         void shouldHaveZeroInteractions();
 
         /**
@@ -259,6 +267,12 @@ public class BDDMockito extends Mockito {
          * @since 2.1.0
          */
         void shouldHaveNoMoreInteractions();
+
+        /**
+         * @see #verifyNoInteractions(Object...)
+         * @since 3.0.1
+         */
+        void shouldHaveNoInteractions();
     }
 
     private static class ThenImpl<T> implements Then<T> {
@@ -316,6 +330,14 @@ public class BDDMockito extends Mockito {
         public void shouldHaveNoMoreInteractions() {
             verifyNoMoreInteractions(mock);
         }
+
+        /**
+         * @see #verifyNoInteractions(Object...)
+         * @since 3.0.1
+         */
+        public void shouldHaveNoInteractions() {
+            verifyNoInteractions(mock);
+        }
     }
 
     /**
@@ -338,7 +360,7 @@ public class BDDMockito extends Mockito {
         /**
          * See original {@link Stubber#doNothing()}.
          *
-         * This method will be removed in version 3.0.0
+         * This method will be removed in version 4.0.0
          *
          * @since 1.8.0
          * @deprecated as of 2.1.0 please use {@link #willDoNothing()} instead
@@ -381,8 +403,10 @@ public class BDDMockito extends Mockito {
          * See original {@link Stubber#doThrow(Class, Class[])}
          * @since 2.1.0
          */
-        @SuppressWarnings ({"unchecked", "varargs"})
-        BDDStubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown);
+        @SuppressWarnings({"unchecked", "varargs"})
+        BDDStubber willThrow(
+                Class<? extends Throwable> toBeThrown,
+                Class<? extends Throwable>... nextToBeThrown);
 
         /**
          * See original {@link Stubber#doCallRealMethod()}
@@ -434,7 +458,8 @@ public class BDDMockito extends Mockito {
         }
 
         public BDDStubber willReturn(Object toBeReturned, Object... nextToBeReturned) {
-            return new BDDStubberImpl(mockitoStubber.doReturn(toBeReturned).doReturn(nextToBeReturned));
+            return new BDDStubberImpl(
+                    mockitoStubber.doReturn(toBeReturned).doReturn(nextToBeReturned));
         }
 
         public BDDStubber willThrow(Throwable... toBeThrown) {
@@ -445,7 +470,9 @@ public class BDDMockito extends Mockito {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown));
         }
 
-        public BDDStubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown) {
+        public BDDStubber willThrow(
+                Class<? extends Throwable> toBeThrown,
+                Class<? extends Throwable>... nextToBeThrown) {
             return new BDDStubberImpl(mockitoStubber.doThrow(toBeThrown, nextToBeThrown));
         }
 
@@ -474,7 +501,8 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#doThrow(Class)}
      * @since 1.9.0
      */
-    public static BDDStubber willThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... throwableTypes) {
+    public static BDDStubber willThrow(
+            Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... throwableTypes) {
         return new BDDStubberImpl(Mockito.doThrow(toBeThrown, throwableTypes));
     }
 

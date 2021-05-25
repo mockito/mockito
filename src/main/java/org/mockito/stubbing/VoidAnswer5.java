@@ -45,5 +45,6 @@ public interface VoidAnswer5<A0, A1, A2, A3, A4> {
      *
      * @throws Throwable the throwable to be thrown
      */
-    void answer(A0 argument0, A1 argument1, A2 argument2, A3 argument3, A4 argument4) throws Throwable;
+    void answer(A0 argument0, A1 argument1, A2 argument2, A3 argument3, A4 argument4)
+            throws Throwable;
 }

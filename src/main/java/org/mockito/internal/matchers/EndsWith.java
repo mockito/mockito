@@ -2,7 +2,6 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.matchers;
 
 import java.io.Serializable;
@@ -17,10 +16,12 @@ public class EndsWith implements ArgumentMatcher<String>, Serializable {
         this.suffix = suffix;
     }
 
+    @Override
     public boolean matches(String actual) {
         return actual != null && actual.endsWith(suffix);
     }
 
+    @Override
     public String toString() {
         return "endsWith(\"" + suffix + "\")";
     }

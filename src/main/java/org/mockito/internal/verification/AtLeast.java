@@ -2,7 +2,6 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.verification;
 
 import static org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker.checkAtLeastNumberOfInvocations;
@@ -28,7 +27,7 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
     @Override
     public void verify(VerificationData data) {
         if (wantedCount == 1) {
-             checkMissingInvocation(data.getAllInvocations(), data.getTarget());
+            checkMissingInvocation(data.getAllInvocations(), data.getTarget());
         }
         checkAtLeastNumberOfInvocations(data.getAllInvocations(), data.getTarget(), wantedCount);
     }
@@ -36,18 +35,15 @@ public class AtLeast implements VerificationInOrderMode, VerificationMode {
     @Override
     public void verifyInOrder(VerificationDataInOrder data) {
         if (wantedCount == 1) {
-             checkMissingInvocation(data.getAllInvocations(), data.getWanted(),  data.getOrderingContext());
+            checkMissingInvocation(
+                    data.getAllInvocations(), data.getWanted(), data.getOrderingContext());
         }
-        checkAtLeastNumberOfInvocations(data.getAllInvocations(), data.getWanted(), wantedCount, data.getOrderingContext());
+        checkAtLeastNumberOfInvocations(
+                data.getAllInvocations(), data.getWanted(), wantedCount, data.getOrderingContext());
     }
 
     @Override
     public String toString() {
         return "Wanted invocations count: at least " + wantedCount;
-    }
-
-    @Override
-    public VerificationMode description(String description) {
-        return VerificationModeFactory.description(this, description);
     }
 }

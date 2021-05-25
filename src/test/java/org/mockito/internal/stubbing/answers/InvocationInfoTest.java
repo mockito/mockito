@@ -4,77 +4,172 @@
  */
 package org.mockito.internal.stubbing.answers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockitoutil.TestBase.getLastInvocation;
+
 import java.lang.reflect.Method;
 import java.nio.charset.CharacterCodingException;
+
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockitoutil.TestBase.getLastInvocation;
-
 public class InvocationInfoTest {
 
     @Test
     public void should_know_valid_throwables() throws Exception {
-        //when
+        // when
         Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
         InvocationInfo info = new InvocationInfo(invocation);
 
-        //then
+        // then
         assertThat(info.isValidException(new Exception())).isFalse();
         assertThat(info.isValidException(new CharacterCodingException())).isTrue();
     }
 
     @Test
     public void should_know_valid_return_types() throws Exception {
-        assertThat(new InvocationInfo(new InvocationBuilder().method("integerReturningMethod").toInvocation()).isValidReturnType(Integer.class)).isTrue();
-        assertThat(new InvocationInfo(new InvocationBuilder().method("integerReturningMethod").toInvocation()).isValidReturnType(int.class)).isTrue();
-        assertThat(new InvocationInfo(new InvocationBuilder().method("intReturningMethod").toInvocation()).isValidReturnType(Integer.class)).isTrue();
-        assertThat(new InvocationInfo(new InvocationBuilder().method("intReturningMethod").toInvocation()).isValidReturnType(int.class)).isTrue();
-        assertThat(new InvocationInfo(new InvocationBuilder().method("integerReturningMethod").toInvocation()).isValidReturnType(String.class)).isFalse();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method("integerReturningMethod")
+                                                .toInvocation())
+                                .isValidReturnType(Integer.class))
+                .isTrue();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method("integerReturningMethod")
+                                                .toInvocation())
+                                .isValidReturnType(int.class))
+                .isTrue();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method("intReturningMethod")
+                                                .toInvocation())
+                                .isValidReturnType(Integer.class))
+                .isTrue();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method("intReturningMethod")
+                                                .toInvocation())
+                                .isValidReturnType(int.class))
+                .isTrue();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method("integerReturningMethod")
+                                                .toInvocation())
+                                .isValidReturnType(String.class))
+                .isFalse();
     }
 
     @Test
     public void should_know_when_invocation_returns_primitive() {
-        assertThat(new InvocationInfo(new InvocationBuilder().method("intReturningMethod").toInvocation()).returnsPrimitive()).isTrue();
-        assertThat(new InvocationInfo(new InvocationBuilder().method("integerReturningMethod").toInvocation()).returnsPrimitive()).isFalse();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method("intReturningMethod")
+                                                .toInvocation())
+                                .returnsPrimitive())
+                .isTrue();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method("integerReturningMethod")
+                                                .toInvocation())
+                                .returnsPrimitive())
+                .isFalse();
     }
 
     @Test
     public void should_know_when_invocation_returns_void() {
-        assertThat(new InvocationInfo(new InvocationBuilder().method("voidMethod").toInvocation()).isVoid()).isTrue();
-        assertThat(new InvocationInfo(new InvocationBuilder().method("integerReturningMethod").toInvocation()).isVoid()).isFalse();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder().method("voidMethod").toInvocation())
+                                .isVoid())
+                .isTrue();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method("integerReturningMethod")
+                                                .toInvocation())
+                                .isVoid())
+                .isFalse();
     }
 
     @Test
     public void should_read_the_method_name() {
-        assertThat(new InvocationInfo(new InvocationBuilder().method("voidMethod").toInvocation()).getMethodName()).isEqualTo("voidMethod");
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder().method("voidMethod").toInvocation())
+                                .getMethodName())
+                .isEqualTo("voidMethod");
     }
 
     @Test
     public void should_read_the_method_return_name() {
-        assertThat(new InvocationInfo(new InvocationBuilder().method("voidMethod").toInvocation()).printMethodReturnType()).isEqualTo("void");
-        assertThat(new InvocationInfo(new InvocationBuilder().method("integerReturningMethod").toInvocation()).printMethodReturnType()).isEqualTo("Integer");
-        assertThat(new InvocationInfo(new InvocationBuilder().method("intReturningMethod").toInvocation()).printMethodReturnType()).isEqualTo("int");
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder().method("voidMethod").toInvocation())
+                                .printMethodReturnType())
+                .isEqualTo("void");
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method("integerReturningMethod")
+                                                .toInvocation())
+                                .printMethodReturnType())
+                .isEqualTo("Integer");
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method("intReturningMethod")
+                                                .toInvocation())
+                                .printMethodReturnType())
+                .isEqualTo("int");
     }
 
     @Test
     public void should_know_abstract_method() throws Exception { // To be extended with Java 8
-        assertThat(new InvocationInfo(new InvocationBuilder().method(iAmAbstract()).toInvocation()).isAbstract()).isTrue();
-        assertThat(new InvocationInfo(new InvocationBuilder().method(iAmNotAbstract()).toInvocation()).isAbstract()).isFalse();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method(iAmAbstract())
+                                                .toInvocation())
+                                .isAbstract())
+                .isTrue();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method(iAmNotAbstract())
+                                                .toInvocation())
+                                .isAbstract())
+                .isFalse();
     }
 
     @Test
     public void should_know_method_is_declared_on_interface() throws Exception {
-        assertThat(new InvocationInfo(new InvocationBuilder().method(iAmAbstract()).toInvocation()).isDeclaredOnInterface()).isFalse();
-        assertThat(new InvocationInfo(new InvocationBuilder().method("voidMethod").toInvocation()).isDeclaredOnInterface()).isTrue();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder()
+                                                .method(iAmAbstract())
+                                                .toInvocation())
+                                .isDeclaredOnInterface())
+                .isFalse();
+        assertThat(
+                        new InvocationInfo(
+                                        new InvocationBuilder().method("voidMethod").toInvocation())
+                                .isDeclaredOnInterface())
+                .isTrue();
     }
 
     @Test
-    public void isVoid_invocationOnVoidMethod_returnTrue(){
+    public void isVoid_invocationOnVoidMethod_returnTrue() {
         mock(IMethods.class).voidMethod();
 
         InvocationInfo voidMethod = new InvocationInfo(getLastInvocation());
@@ -83,7 +178,7 @@ public class InvocationInfoTest {
     }
 
     @Test
-    public void isVoid_invocationOnVoidReturningMethod_returnTrue(){
+    public void isVoid_invocationOnVoidReturningMethod_returnTrue() {
         mock(IMethods.class).voidReturningMethod();
 
         InvocationInfo voidRetuningMethod = new InvocationInfo(getLastInvocation());
@@ -92,7 +187,7 @@ public class InvocationInfoTest {
     }
 
     @Test
-    public void isVoid_invocationNonVoidMethod_returnFalse(){
+    public void isVoid_invocationNonVoidMethod_returnFalse() {
         mock(IMethods.class).simpleMethod();
 
         InvocationInfo stringReturningMethod = new InvocationInfo(getLastInvocation());

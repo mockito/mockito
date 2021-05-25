@@ -2,15 +2,14 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.invocation;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Stubbing;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @Deprecated
 public class UnusedStubsFinder {
@@ -21,12 +20,13 @@ public class UnusedStubsFinder {
      * @param mocks full list of mocks
      */
     public List<Invocation> find(List<?> mocks) {
-        List<Invocation> unused = new LinkedList<Invocation>();
+        List<Invocation> unused = new LinkedList<>();
         for (Object mock : mocks) {
-            List<Stubbing> fromSingleMock = MockUtil.getInvocationContainer(mock).getStubbedInvocations();
-            for(Stubbing s : fromSingleMock) {
+            List<Stubbing> fromSingleMock =
+                    MockUtil.getInvocationContainer(mock).getStubbingsDescending();
+            for (Stubbing s : fromSingleMock) {
                 if (!s.wasUsed()) {
-                     unused.add(s.getInvocation());
+                    unused.add(s.getInvocation());
                 }
             }
         }

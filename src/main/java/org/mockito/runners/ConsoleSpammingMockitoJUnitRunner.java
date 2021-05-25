@@ -4,6 +4,8 @@
  */
 package org.mockito.runners;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runner.manipulation.Filter;
@@ -12,13 +14,11 @@ import org.junit.runner.manipulation.NoTestsRemainException;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.debugging.WarningsCollector;
-import org.mockito.internal.runners.RunnerFactory;
 import org.mockito.internal.runners.InternalRunner;
-import org.mockito.internal.util.ConsoleMockitoLogger;
-import org.mockito.internal.util.MockitoLogger;
-
-import java.lang.reflect.InvocationTargetException;
+import org.mockito.internal.runners.RunnerFactory;
+import org.mockito.plugins.MockitoLogger;
 
 /**
  * @deprecated as of 2.1.0. Use the {@link org.mockito.junit.MockitoJUnitRunner} runner instead
@@ -33,7 +33,7 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner implements Filtera
     private final InternalRunner runner;
 
     public ConsoleSpammingMockitoJUnitRunner(Class<?> klass) throws InvocationTargetException {
-        this(new ConsoleMockitoLogger(), new RunnerFactory().create(klass));
+        this(Plugins.getMockitoLogger(), new RunnerFactory().create(klass));
     }
 
     ConsoleSpammingMockitoJUnitRunner(MockitoLogger logger, InternalRunner runner) {
@@ -43,18 +43,20 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner implements Filtera
 
     @Override
     public void run(RunNotifier notifier) {
-        RunListener listener = new RunListener() {
-            WarningsCollector warningsCollector;
+        RunListener listener =
+                new RunListener() {
+                    WarningsCollector warningsCollector;
 
-            @Override
-            public void testStarted(Description description) throws Exception {
-                warningsCollector = new WarningsCollector();
-            }
+                    @Override
+                    public void testStarted(Description description) throws Exception {
+                        warningsCollector = new WarningsCollector();
+                    }
 
-            @Override public void testFailure(Failure failure) throws Exception {
-                logger.log(warningsCollector.getWarnings());
-            }
-        };
+                    @Override
+                    public void testFailure(Failure failure) throws Exception {
+                        logger.log(warningsCollector.getWarnings());
+                    }
+                };
 
         notifier.addListener(listener);
 
@@ -66,8 +68,9 @@ public class ConsoleSpammingMockitoJUnitRunner extends Runner implements Filtera
         return runner.getDescription();
     }
 
+    @Override
     public void filter(Filter filter) throws NoTestsRemainException {
-        //filter is required because without it UnrootedTests show up in Eclipse
+        // filter is required because without it UnrootedTests show up in Eclipse
         runner.filter(filter);
     }
 }

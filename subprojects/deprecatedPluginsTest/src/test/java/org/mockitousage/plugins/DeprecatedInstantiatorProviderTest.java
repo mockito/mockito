@@ -2,7 +2,6 @@
  * Copyright (c) 2018 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.plugins;
 
 import org.junit.Test;
@@ -24,6 +23,7 @@ public class DeprecatedInstantiatorProviderTest {
         assertNotNull(plugin);
     }
 
+    @SuppressWarnings("CheckReturnValue")
     @Test
     public void uses_custom_instantiator_provider() {
         MyDeprecatedInstantiatorProvider.invokedFor.remove();
@@ -31,6 +31,7 @@ public class DeprecatedInstantiatorProviderTest {
         assertEquals(MyDeprecatedInstantiatorProvider.invokedFor.get(), asList(DeprecatedInstantiatorProviderTest.class));
     }
 
+    @SuppressWarnings("CheckReturnValue")
     @Test(expected = InstantiationException.class)
     public void exception_while_instantiating() throws Throwable {
         MyDeprecatedInstantiatorProvider.shouldExcept.set(true);
