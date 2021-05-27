@@ -94,8 +94,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         if (!Modifier.isPublic(features.mockedType.getModifiers())
                 || !features.mockedType.isInterface()) {
             // The mocked type is package private or is not an interface and thus may contain
-            // package
-            // private methods.
+            // package private methods.
             return true;
         }
         for (Class<?> iface : features.interfaces) {
@@ -110,10 +109,11 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
         MultipleParentClassLoader.Builder loaderBuilder =
                 new MultipleParentClassLoader.Builder()
-                        .append(features.mockedType)
-                        .append(features.interfaces)
-                        .append(MockAccess.class, DispatcherDefaultingToRealMethod.class)
-                        .append(
+                        .appendMostSpecific(features.mockedType)
+                        .appendMostSpecific(features.interfaces)
+                        .appendMostSpecific(
+                                MockAccess.class, DispatcherDefaultingToRealMethod.class)
+                        .appendMostSpecific(
                                 MockMethodInterceptor.class,
                                 MockMethodInterceptor.ForHashCode.class,
                                 MockMethodInterceptor.ForEquals.class);
@@ -134,7 +134,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             }
         }
         if (shouldIncludeContextLoader) {
-            loaderBuilder = loaderBuilder.append(contextLoader);
+            loaderBuilder = loaderBuilder.appendMostSpecific(contextLoader);
         }
         ClassLoader classLoader = loaderBuilder.build(MockMethodInterceptor.class.getClassLoader());
 
