@@ -10,7 +10,7 @@ buildscript {
 
         classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
         classpath 'org.shipkit:shipkit-changelog:1.1.15'
-        classpath 'org.shipkit:shipkit-auto-version:1.1.14'
+        classpath 'org.shipkit:shipkit-auto-version:1.1.16'
 
         classpath 'com.google.googlejavaformat:google-java-format:1.10.0'
     }
