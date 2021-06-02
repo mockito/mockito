@@ -136,7 +136,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         if (shouldIncludeContextLoader) {
             loaderBuilder = loaderBuilder.appendMostSpecific(contextLoader);
         }
-        ClassLoader classLoader = loaderBuilder.build(MockMethodInterceptor.class.getClassLoader());
+        ClassLoader classLoader = loaderBuilder.build();
 
         // If Mockito does not need to create a new class loader and if a mock is not based on a JDK
         // type, we attempt
