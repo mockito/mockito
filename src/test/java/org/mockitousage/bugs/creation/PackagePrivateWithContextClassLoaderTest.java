@@ -102,27 +102,13 @@ public class PackagePrivateWithContextClassLoaderTest {
     /**
      * This classloader has a parent, but doesn't always delegate to it.
      */
-    public final class NotAlwaysDelegatingClassLoader extends ClassLoader {
+    public static final class NotAlwaysDelegatingClassLoader extends ClassLoader {
 
         /**
          * Initial size of buffer used to read class data.
          */
         /*  Note: should be enough for most classes, and is not a hard limit. */
         private static final int BUF_SIZE = 4096;
-
-        private final String[] excludedClassPrefixes =
-                new String[] {
-                    "java.",
-                    "javax.",
-                    "sun.",
-                    "net.sf.cglib",
-                    "junit.",
-                    "org.junit.",
-                    "org.objenesis.",
-                    "jdk.internal.reflect.",
-                    "org.xml.sax.",
-                    "org.mockito."
-                };
 
         public NotAlwaysDelegatingClassLoader() {
             super(NotAlwaysDelegatingClassLoader.class.getClassLoader());
@@ -134,14 +120,10 @@ public class PackagePrivateWithContextClassLoaderTest {
             // ourselves or delegate to the parent.
             Class<?> result = findLoadedClass(name);
             if (result == null) {
-                boolean shouldLoad = true;
-                for (String excluded : excludedClassPrefixes) {
-                    if (name.startsWith(excluded)) {
-                        shouldLoad = false;
-                        break;
-                    }
-                }
-                if (shouldLoad) {
+                // All classes defined in this testsuite should be loaded by this classloader,
+                // but any other class (e.g. those coming from java.* or org.mockito.* packages)
+                // will be loaded by the parent.
+                if (name.startsWith("org.mockitousage.")) {
                     result = findClass(name);
                 } else {
                     return super.loadClass(name, resolve);
