@@ -52,7 +52,7 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
 
     @Override
     public String toStringWithType() {
-        return "(" + wanted.getClass().getSimpleName() + ") " + describe(wanted);
+        return "(" + wanted.getClass().getName() + ") " + describe(wanted);
     }
 
     @Override
