@@ -98,7 +98,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             // package private methods.
             return true;
         }
-        if (hasPackagePrivateParam(features.mockedType)) {
+        if (hasNonPublicTypeReference(features.mockedType)) {
             return true;
         }
 
@@ -106,14 +106,14 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             if (!Modifier.isPublic(iface.getModifiers())) {
                 return true;
             }
-            if (hasPackagePrivateParam(iface)) {
+            if (hasNonPublicTypeReference(iface)) {
                 return true;
             }
         }
         return false;
     }
 
-    private static boolean hasPackagePrivateParam(Class<?> iface) {
+    private static boolean hasNonPublicTypeReference(Class<?> iface) {
         for (Method method : iface.getMethods()) {
             if (!Modifier.isPublic(method.getReturnType().getModifiers())) {
                 return true;
