@@ -30,21 +30,21 @@ public class EqualsTest extends TestBase {
     public void shouldDescribeWithExtraTypeInfo() throws Exception {
         String descStr = new Equals(100).toStringWithType();
 
-        assertEquals("(Integer) 100", descStr);
+        assertEquals("(java.lang.Integer) 100", descStr);
     }
 
     @Test
     public void shouldDescribeWithExtraTypeInfoOfLong() throws Exception {
         String descStr = new Equals(100L).toStringWithType();
 
-        assertEquals("(Long) 100L", descStr);
+        assertEquals("(java.lang.Long) 100L", descStr);
     }
 
     @Test
     public void shouldDescribeWithTypeOfString() throws Exception {
         String descStr = new Equals("x").toStringWithType();
 
-        assertEquals("(String) \"x\"", descStr);
+        assertEquals("(java.lang.String) \"x\"", descStr);
     }
 
     @Test
