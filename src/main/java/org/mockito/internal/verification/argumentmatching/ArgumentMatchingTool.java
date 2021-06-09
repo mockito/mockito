@@ -48,4 +48,28 @@ public class ArgumentMatchingTool {
     private static boolean toStringEquals(ArgumentMatcher m, Object arg) {
         return m.toString().equals(String.valueOf(arg));
     }
+
+    /**
+     * Suspiciously not matching arguments are those that don't match, and the classes have same simple name.
+     */
+    public static Integer[] getNotMatchingArgsWithSameNameIndexes(
+        List<ArgumentMatcher> matchers, Object[] arguments) {
+        if (matchers.size() != arguments.length) {
+            return new Integer[0];
+        }
+
+        List<Integer> suspicious = new LinkedList<>();
+        int i = 0;
+        for (ArgumentMatcher m : matchers) {
+            if (m instanceof ContainsExtraTypeInfo
+                && !safelyMatches(m, arguments[i])
+                && !((ContainsExtraTypeInfo) m).typeMatches(arguments[i])
+                && ((ContainsExtraTypeInfo) m).sameName(arguments[i])) {
+                suspicious.add(i);
+            }
+            i++;
+        }
+        return suspicious.toArray(new Integer[0]);
+    }
+
 }

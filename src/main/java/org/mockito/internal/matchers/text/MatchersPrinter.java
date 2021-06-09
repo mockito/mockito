@@ -32,6 +32,8 @@ public class MatchersPrinter {
         for (final ArgumentMatcher matcher : matchers) {
             if (matcher instanceof ContainsExtraTypeInfo && printSettings.extraTypeInfoFor(i)) {
                 out.add(new FormattedText(((ContainsExtraTypeInfo) matcher).toStringWithType()));
+            } else if(matcher instanceof ContainsExtraTypeInfo && printSettings.fullyQualifiedNameFor(i)){
+                out.add(new FormattedText(((ContainsExtraTypeInfo) matcher).toStringWithFullName()));
             } else {
                 out.add(new FormattedText(MatcherToString.toString(matcher)));
             }

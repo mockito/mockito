@@ -56,7 +56,17 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
     }
 
     @Override
+    public String toStringWithFullName() {
+        return "(" + wanted.getClass().getCanonicalName() + ") " + describe(wanted);
+    }
+
+    @Override
     public boolean typeMatches(Object target) {
         return wanted != null && target != null && target.getClass() == wanted.getClass();
+    }
+
+    @Override
+    public boolean sameName(Object target) {
+        return wanted != null && target != null && target.getClass().getSimpleName().equals(wanted.getClass().getSimpleName());
     }
 }

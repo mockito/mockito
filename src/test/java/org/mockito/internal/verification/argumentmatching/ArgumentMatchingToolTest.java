@@ -116,9 +116,20 @@ public class ArgumentMatchingToolTest extends TestBase {
             }
 
             @Override
+            public String toStringWithFullName() {
+                return "";
+            }
+
+            @Override
             public boolean typeMatches(Object target) {
                 return true;
             }
+
+            @Override
+            public boolean sameName(Object target) {
+                return true;
+            }
+
         }
 
         // given

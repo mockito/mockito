@@ -19,6 +19,7 @@ public class PrintSettings {
     public static final int MAX_LINE_LENGTH = 45;
     private boolean multiline;
     private List<Integer> withTypeInfo = new LinkedList<>();
+    private List<Integer> withFullyQualifiedName = new LinkedList<>();
 
     public void setMultiline(boolean multiline) {
         this.multiline = multiline;
@@ -38,8 +39,16 @@ public class PrintSettings {
         return withTypeInfo.contains(argumentIndex);
     }
 
+    public boolean fullyQualifiedNameFor(int argumentIndex) {
+        return withFullyQualifiedName.contains(argumentIndex);
+    }
+
     public void setMatchersToBeDescribedWithExtraTypeInfo(Integer[] indexesOfMatchers) {
         this.withTypeInfo = Arrays.asList(indexesOfMatchers);
+    }
+
+    public void setMatchersToBeDescribedWithFullName(Integer[] indexesOfMatchers) {
+        this.withFullyQualifiedName= Arrays.asList(indexesOfMatchers);
     }
 
     public String print(List<ArgumentMatcher> matchers, Invocation invocation) {

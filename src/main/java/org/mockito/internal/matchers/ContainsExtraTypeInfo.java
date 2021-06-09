@@ -19,8 +19,19 @@ public interface ContainsExtraTypeInfo {
     String toStringWithType();
 
     /**
+     * Returns more verbose description of the object which include type information and fully qualified class name
+     */
+    String toStringWithFullName();
+
+    /**
      * Checks if target target has matching type.
      * If the type matches, there is no point in rendering result from {@link #toStringWithType()}
      */
     boolean typeMatches(Object target);
+
+    /**
+     * Checks if target target's class has same simple name.
+     * If the simple names matches, we need to use {@link #toStringWithFullName()}
+     */
+    boolean sameName(Object target);
 }

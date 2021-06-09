@@ -28,17 +28,21 @@ public class SmartPrinter {
         this(
                 wanted,
                 Collections.singletonList(actual),
-                indexesOfMatchersToBeDescribedWithExtraTypeInfo);
+                indexesOfMatchersToBeDescribedWithExtraTypeInfo,
+                new Integer[0]);
     }
 
     public SmartPrinter(
             MatchableInvocation wanted,
             List<Invocation> allActualInvocations,
-            Integer... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
+            Integer[] indexesOfMatchersToBeDescribedWithExtraTypeInfo,
+            Integer[] indexesOfMatchersToBeDescribedWithFullName) {
         PrintSettings printSettings = new PrintSettings();
         printSettings.setMultiline(isMultiLine(wanted, allActualInvocations));
         printSettings.setMatchersToBeDescribedWithExtraTypeInfo(
                 indexesOfMatchersToBeDescribedWithExtraTypeInfo);
+        printSettings.setMatchersToBeDescribedWithFullName(
+                indexesOfMatchersToBeDescribedWithFullName);
 
         this.wanted = printSettings.print(wanted);
 
