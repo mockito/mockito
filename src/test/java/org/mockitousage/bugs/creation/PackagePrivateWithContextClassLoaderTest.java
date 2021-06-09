@@ -31,9 +31,23 @@ public class PackagePrivateWithContextClassLoaderTest {
         abstract void packagePrivateAbstractMethod();
     }
 
+    public interface PublicInterfaceWithPackagePrivateMethodParam {
+        void doSomething(PackagePrivateInterface i);
+    }
+
+    public interface PublicInterfaceWithPackagePrivateMethodReturn {
+        PackagePrivateInterface doSomething();
+    }
+
+    public interface PublicInterfaceOverridesPackagePrivateMethodReturn {
+        PublicChildOfPackagePrivate doSomething();
+    }
+
     public interface PublicInterface {}
 
     interface PackagePrivateInterface {}
+
+    public interface PublicChildOfPackagePrivate extends PackagePrivateInterface {}
 
     static class PackagePrivateClass {}
 
@@ -53,6 +67,28 @@ public class PackagePrivateWithContextClassLoaderTest {
         PublicClass publicClass = mock(PublicClass.class);
         when(publicClass.packagePrivateMethod()).thenReturn(3);
         assertThat(publicClass.packagePrivateMethod()).isEqualTo(3);
+    }
+
+    @Test
+    public void should_be_able_to_mock_interface_method_package_private_param() throws Exception {
+        PublicInterfaceWithPackagePrivateMethodParam publicClass =
+                mock(PublicInterfaceWithPackagePrivateMethodParam.class);
+        publicClass.doSomething(null);
+    }
+
+    @Test
+    public void should_be_able_to_mock_interface_method_package_private_return() throws Exception {
+        PublicInterfaceWithPackagePrivateMethodReturn publicClass =
+                mock(PublicInterfaceWithPackagePrivateMethodReturn.class);
+        PackagePrivateInterface packagePrivateInterface = publicClass.doSomething();
+    }
+
+    @Test
+    public void should_be_able_to_mock_interface_method_package_private_return_override()
+            throws Exception {
+        PublicInterfaceOverridesPackagePrivateMethodReturn publicClass =
+                mock(PublicInterfaceOverridesPackagePrivateMethodReturn.class);
+        PackagePrivateInterface packagePrivateInterface = publicClass.doSomething();
     }
 
     @Test

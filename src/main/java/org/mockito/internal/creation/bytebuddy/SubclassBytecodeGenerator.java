@@ -25,6 +25,7 @@ import static org.mockito.internal.util.StringUtil.join;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -97,9 +98,30 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             // package private methods.
             return true;
         }
+        if (hasNonPublicTypeReference(features.mockedType)) {
+            return true;
+        }
+
         for (Class<?> iface : features.interfaces) {
             if (!Modifier.isPublic(iface.getModifiers())) {
                 return true;
+            }
+            if (hasNonPublicTypeReference(iface)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasNonPublicTypeReference(Class<?> iface) {
+        for (Method method : iface.getMethods()) {
+            if (!Modifier.isPublic(method.getReturnType().getModifiers())) {
+                return true;
+            }
+            for (Class<?> param : method.getParameterTypes()) {
+                if (!Modifier.isPublic(param.getModifiers())) {
+                    return true;
+                }
             }
         }
         return false;
