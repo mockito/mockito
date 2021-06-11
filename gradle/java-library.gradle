@@ -1,7 +1,5 @@
 apply plugin: "java"
 
-group = 'org.mockito'
-
 if (!archivesBaseName.startsWith("mockito-")) {
     archivesBaseName = "mockito-" + project.name
 }

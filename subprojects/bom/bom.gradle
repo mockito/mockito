@@ -1,0 +1,23 @@
+plugins {
+    id('java-platform')
+}
+
+description = "Mockito Bill of Materials (BOM)"
+
+if (!archivesBaseName.startsWith("mockito-")) {
+    archivesBaseName = "mockito-" + project.name
+}
+
+apply from: "$rootDir/gradle/java-publication.gradle"
+
+dependencies {
+    constraints {
+        project.rootProject.subprojects.forEach { subproject ->
+            if (!subproject.name.endsWith("Test") &&
+                !subproject.name.endsWith("-test") &&
+                subproject.name != "bom") {
+                api(subproject)
+            }
+        }
+    }
+}
