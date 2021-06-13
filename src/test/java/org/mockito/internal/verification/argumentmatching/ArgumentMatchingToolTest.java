@@ -111,12 +111,7 @@ public class ArgumentMatchingToolTest extends TestBase {
             }
 
             @Override
-            public String toStringWithType() {
-                return "";
-            }
-
-            @Override
-            public String toStringWithFullName() {
+            public String toStringWithType(boolean useFullyQualifiedClassName) {
                 return "";
             }
 
@@ -126,8 +121,8 @@ public class ArgumentMatchingToolTest extends TestBase {
             }
 
             @Override
-            public boolean sameName(Object target) {
-                return true;
+            public Class getWantedClass() {
+                return String.class;
             }
 
         }

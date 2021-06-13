@@ -4,8 +4,13 @@
  */
 package org.mockito.internal.verification.argumentmatching;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.ContainsExtraTypeInfo;
@@ -52,24 +57,26 @@ public class ArgumentMatchingTool {
     /**
      * Suspiciously not matching arguments are those that don't match, and the classes have same simple name.
      */
-    public static Integer[] getNotMatchingArgsWithSameNameIndexes(
-        List<ArgumentMatcher> matchers, Object[] arguments) {
-        if (matchers.size() != arguments.length) {
-            return new Integer[0];
-        }
-
-        List<Integer> suspicious = new LinkedList<>();
-        int i = 0;
+    public static Set<String> getNotMatchingArgsWithSameName(
+            List<ArgumentMatcher> matchers, Object[] arguments) {
+        Set<String> repeatedClassNames = new HashSet<>();
+        Map<String, Set<String>> classesHavingSameName = new HashMap<>();
         for (ArgumentMatcher m : matchers) {
-            if (m instanceof ContainsExtraTypeInfo
-                && !safelyMatches(m, arguments[i])
-                && !((ContainsExtraTypeInfo) m).typeMatches(arguments[i])
-                && ((ContainsExtraTypeInfo) m).sameName(arguments[i])) {
-                suspicious.add(i);
+            if (m instanceof ContainsExtraTypeInfo) {
+                Class wantedClass = ((ContainsExtraTypeInfo) m).getWantedClass();
+                classesHavingSameName.computeIfAbsent(wantedClass.getSimpleName(), className -> new HashSet<>())
+                                     .add(wantedClass.getCanonicalName());
             }
-            i++;
         }
-        return suspicious.toArray(new Integer[0]);
+        for (Object argument : arguments) {
+            Class wantedClass = argument.getClass();
+            classesHavingSameName.computeIfAbsent(wantedClass.getSimpleName(), className -> new HashSet<>())
+                                 .add(wantedClass.getCanonicalName());
+        }
+        return classesHavingSameName.entrySet().stream()
+                                    .filter(classEntry -> classEntry.getValue().size() > 1)
+                                    .map(classEntry -> classEntry.getKey())
+                                    .collect(Collectors.toSet());
     }
 
 }

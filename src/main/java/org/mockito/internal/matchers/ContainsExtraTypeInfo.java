@@ -9,29 +9,25 @@ package org.mockito.internal.matchers;
  * When ArgumentMatcher fails, chance is that the actual object has the same output of toString() than
  * the wanted object. This looks weird when failures are reported.
  * Therefore when matcher fails but toString() yields the same outputs,
- * we will try to use the {@link #toStringWithType()} method.
+ * we will try to use the {@link #toStringWithType(boolean)} method.
  */
 public interface ContainsExtraTypeInfo {
 
     /**
+     * @param useFullyQualifiedClassName - uses fully qualified class name if true else simple class name
      * Returns more verbose description of the object which include type information
      */
-    String toStringWithType();
-
-    /**
-     * Returns more verbose description of the object which include type information and fully qualified class name
-     */
-    String toStringWithFullName();
+    String toStringWithType(boolean useFullyQualifiedClassName);
 
     /**
      * Checks if target target has matching type.
-     * If the type matches, there is no point in rendering result from {@link #toStringWithType()}
+     * If the type matches, there is no point in rendering result from {@link #toStringWithType(boolean)}
      */
     boolean typeMatches(Object target);
 
     /**
-     * Checks if target target's class has same simple name.
-     * If the simple names matches, we need to use {@link #toStringWithFullName()}
+     *
+     * @return Returns the Class of the argument
      */
-    boolean sameName(Object target);
+    Class getWantedClass();
 }

@@ -31,9 +31,10 @@ public class MatchersPrinter {
         int i = 0;
         for (final ArgumentMatcher matcher : matchers) {
             if (matcher instanceof ContainsExtraTypeInfo && printSettings.extraTypeInfoFor(i)) {
-                out.add(new FormattedText(((ContainsExtraTypeInfo) matcher).toStringWithType()));
-            } else if(matcher instanceof ContainsExtraTypeInfo && printSettings.fullyQualifiedNameFor(i)){
-                out.add(new FormattedText(((ContainsExtraTypeInfo) matcher).toStringWithFullName()));
+                out.add(new FormattedText(((ContainsExtraTypeInfo) matcher).toStringWithType(false)));
+            } else if(matcher instanceof ContainsExtraTypeInfo
+                      && printSettings.fullyQualifiedNameFor(((ContainsExtraTypeInfo) matcher).getWantedClass().getSimpleName())){
+                out.add(new FormattedText(((ContainsExtraTypeInfo) matcher).toStringWithType(true)));
             } else {
                 out.add(new FormattedText(MatcherToString.toString(matcher)));
             }

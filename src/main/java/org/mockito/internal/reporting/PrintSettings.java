@@ -5,8 +5,10 @@
 package org.mockito.internal.reporting;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.text.MatchersPrinter;
@@ -19,7 +21,7 @@ public class PrintSettings {
     public static final int MAX_LINE_LENGTH = 45;
     private boolean multiline;
     private List<Integer> withTypeInfo = new LinkedList<>();
-    private List<Integer> withFullyQualifiedName = new LinkedList<>();
+    private Set<String> withFullyQualifiedName = Collections.emptySet();
 
     public void setMultiline(boolean multiline) {
         this.multiline = multiline;
@@ -39,16 +41,16 @@ public class PrintSettings {
         return withTypeInfo.contains(argumentIndex);
     }
 
-    public boolean fullyQualifiedNameFor(int argumentIndex) {
-        return withFullyQualifiedName.contains(argumentIndex);
+    public boolean fullyQualifiedNameFor(String simpleClassName) {
+        return withFullyQualifiedName.contains(simpleClassName);
     }
 
     public void setMatchersToBeDescribedWithExtraTypeInfo(Integer[] indexesOfMatchers) {
         this.withTypeInfo = Arrays.asList(indexesOfMatchers);
     }
 
-    public void setMatchersToBeDescribedWithFullName(Integer[] indexesOfMatchers) {
-        this.withFullyQualifiedName= Arrays.asList(indexesOfMatchers);
+    public void setMatchersToBeDescribedWithFullName(Set<String> indexesOfMatchers) {
+        this.withFullyQualifiedName= indexesOfMatchers;
     }
 
     public String print(List<ArgumentMatcher> matchers, Invocation invocation) {
