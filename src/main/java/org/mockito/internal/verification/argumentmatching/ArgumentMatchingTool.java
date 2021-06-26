@@ -59,24 +59,31 @@ public class ArgumentMatchingTool {
      */
     public static Set<String> getNotMatchingArgsWithSameName(
             List<ArgumentMatcher> matchers, Object[] arguments) {
-        Set<String> repeatedClassNames = new HashSet<>();
         Map<String, Set<String>> classesHavingSameName = new HashMap<>();
         for (ArgumentMatcher m : matchers) {
             if (m instanceof ContainsExtraTypeInfo) {
-                Class wantedClass = ((ContainsExtraTypeInfo) m).getWanted().getClass();
-                classesHavingSameName.computeIfAbsent(wantedClass.getSimpleName(), className -> new HashSet<>())
-                                     .add(wantedClass.getCanonicalName());
+                Object wanted = ((ContainsExtraTypeInfo) m).getWanted();
+                if (wanted == null) {
+                    continue;
+                }
+                Class wantedClass = wanted.getClass();
+                classesHavingSameName
+                        .computeIfAbsent(wantedClass.getSimpleName(), className -> new HashSet<>())
+                        .add(wantedClass.getCanonicalName());
             }
         }
         for (Object argument : arguments) {
+            if (argument == null) {
+                continue;
+            }
             Class wantedClass = argument.getClass();
-            classesHavingSameName.computeIfAbsent(wantedClass.getSimpleName(), className -> new HashSet<>())
-                                 .add(wantedClass.getCanonicalName());
+            classesHavingSameName
+                    .computeIfAbsent(wantedClass.getSimpleName(), className -> new HashSet<>())
+                    .add(wantedClass.getCanonicalName());
         }
         return classesHavingSameName.entrySet().stream()
-                                    .filter(classEntry -> classEntry.getValue().size() > 1)
-                                    .map(classEntry -> classEntry.getKey())
-                                    .collect(Collectors.toSet());
+                .filter(classEntry -> classEntry.getValue().size() > 1)
+                .map(classEntry -> classEntry.getKey())
+                .collect(Collectors.toSet());
     }
-
 }

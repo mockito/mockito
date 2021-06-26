@@ -50,7 +50,7 @@ public class PrintSettings {
     }
 
     public void setMatchersToBeDescribedWithFullName(Set<String> indexesOfMatchers) {
-        this.withFullyQualifiedName= indexesOfMatchers;
+        this.withFullyQualifiedName = indexesOfMatchers;
     }
 
     public String print(List<ArgumentMatcher> matchers, Invocation invocation) {

@@ -124,7 +124,6 @@ public class ArgumentMatchingToolTest extends TestBase {
             public Object getWanted() {
                 return "";
             }
-
         }
 
         // given

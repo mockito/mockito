@@ -42,8 +42,7 @@ public class SmartPrinter {
         printSettings.setMultiline(isMultiLine(wanted, allActualInvocations));
         printSettings.setMatchersToBeDescribedWithExtraTypeInfo(
                 indexesOfMatchersToBeDescribedWithExtraTypeInfo);
-        printSettings.setMatchersToBeDescribedWithFullName(
-                classNamesToBeDescribedWithFullName);
+        printSettings.setMatchersToBeDescribedWithFullName(classNamesToBeDescribedWithFullName);
 
         this.wanted = printSettings.print(wanted);
 

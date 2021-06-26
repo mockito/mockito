@@ -9,7 +9,7 @@ package org.mockito.internal.matchers;
  * When ArgumentMatcher fails, chance is that the actual object has the same output of toString() than
  * the wanted object. This looks weird when failures are reported.
  * Therefore when matcher fails but toString() yields the same outputs,
- * we will try to use the {@link #toStringWithType(boolean)} method.
+ * we will try to use the {@link #toStringWithType(String)} method.
  */
 public interface ContainsExtraTypeInfo {
 

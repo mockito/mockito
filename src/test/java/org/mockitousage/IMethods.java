@@ -247,9 +247,11 @@ public interface IMethods {
 
     void overloadedMethodWithDifferentClassNameArguments(Integer i, String string);
 
-    void overloadedMethodWithSameClassNameArguments(java.sql.Date javaDate, String string, Date date);
+    void overloadedMethodWithSameClassNameArguments(
+            java.sql.Date javaDate, String string, Date date);
 
-    void overloadedMethodWithSameClassNameArguments(Date date, String string, java.sql.Date javaDate);
+    void overloadedMethodWithSameClassNameArguments(
+            Date date, String string, java.sql.Date javaDate);
 
     /**
      * Using this class to test cases where two classes have same simple name
@@ -269,10 +271,10 @@ public interface IMethods {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o){
+            if (this == o) {
                 return true;
             }
-            if (o == null || getClass() != o.getClass()){
+            if (o == null || getClass() != o.getClass()) {
                 return false;
             }
             Date date = (Date) o;
@@ -283,9 +285,5 @@ public interface IMethods {
         public int hashCode() {
             return Objects.hash(value);
         }
-
     }
-
-
 }
-

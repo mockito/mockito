@@ -60,5 +60,4 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
     public boolean typeMatches(Object target) {
         return wanted != null && target != null && target.getClass() == wanted.getClass();
     }
-
 }

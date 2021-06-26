@@ -44,8 +44,10 @@ public class MissingInvocationChecker {
         Integer[] indexesOfSuspiciousArgs =
                 getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());
         Set<String> classesWithSameSimpleName =
-            getNotMatchingArgsWithSameName(wanted.getMatchers(), similar.getArguments());
-        SmartPrinter smartPrinter = new SmartPrinter(wanted, invocations, indexesOfSuspiciousArgs,classesWithSameSimpleName);
+                getNotMatchingArgsWithSameName(wanted.getMatchers(), similar.getArguments());
+        SmartPrinter smartPrinter =
+                new SmartPrinter(
+                        wanted, invocations, indexesOfSuspiciousArgs, classesWithSameSimpleName);
         List<Location> actualLocations =
                 ListUtil.convert(
                         invocations,

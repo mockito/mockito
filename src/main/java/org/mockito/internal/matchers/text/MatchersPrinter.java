@@ -32,14 +32,21 @@ public class MatchersPrinter {
         for (final ArgumentMatcher matcher : matchers) {
             if (matcher instanceof ContainsExtraTypeInfo) {
                 ContainsExtraTypeInfo typeInfoMatcher = (ContainsExtraTypeInfo) matcher;
-                Class<?> wantedClass = typeInfoMatcher.getWanted().getClass();
-                String simpleNameOfArgument = wantedClass.getSimpleName();
+                Object wanted = typeInfoMatcher.getWanted();
+                String simpleNameOfArgument =
+                        wanted != null ? wanted.getClass().getSimpleName() : "";
+                String fullyQualifiedClassName =
+                        wanted != null ? wanted.getClass().getCanonicalName() : "";
 
                 if (printSettings.extraTypeInfoFor(i)) {
-                    out.add(new FormattedText(typeInfoMatcher.toStringWithType(wantedClass.getSimpleName())));
+                    out.add(
+                            new FormattedText(
+                                    typeInfoMatcher.toStringWithType(simpleNameOfArgument)));
                 } else if (printSettings.fullyQualifiedNameFor(simpleNameOfArgument)) {
-                    out.add(new FormattedText(typeInfoMatcher.toStringWithType(wantedClass.getCanonicalName())));
-                }  else {
+                    out.add(
+                            new FormattedText(
+                                    typeInfoMatcher.toStringWithType(fullyQualifiedClassName)));
+                } else {
                     out.add(new FormattedText(MatcherToString.toString(matcher)));
                 }
             } else {

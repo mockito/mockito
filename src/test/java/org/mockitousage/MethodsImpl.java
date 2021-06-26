@@ -450,27 +450,22 @@ public class MethodsImpl implements IMethods {
     }
 
     @Override
-    public void overloadedMethodWithSameClassNameArguments(java.sql.Date javaDate, Date date) {
-    }
+    public void overloadedMethodWithSameClassNameArguments(java.sql.Date javaDate, Date date) {}
 
     @Override
-    public void overloadedMethodWithSameClassNameArguments(Date date, java.sql.Date javaDate) {
-    }
+    public void overloadedMethodWithSameClassNameArguments(Date date, java.sql.Date javaDate) {}
 
     @Override
-    public void overloadedMethodWithDifferentClassNameArguments(String string, Integer i) {
-    }
+    public void overloadedMethodWithDifferentClassNameArguments(String string, Integer i) {}
 
     @Override
-    public void overloadedMethodWithDifferentClassNameArguments(Integer i, String string) {
-    }
+    public void overloadedMethodWithDifferentClassNameArguments(Integer i, String string) {}
 
     @Override
-    public void overloadedMethodWithSameClassNameArguments(java.sql.Date javaDate, String string, Date date) {
-    }
+    public void overloadedMethodWithSameClassNameArguments(
+            java.sql.Date javaDate, String string, Date date) {}
 
     @Override
-    public void overloadedMethodWithSameClassNameArguments(Date date, String string, java.sql.Date javaDate) {
-    }
-
+    public void overloadedMethodWithSameClassNameArguments(
+            Date date, String string, java.sql.Date javaDate) {}
 }
