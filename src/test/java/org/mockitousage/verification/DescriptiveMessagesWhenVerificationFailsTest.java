@@ -9,6 +9,8 @@ import static org.junit.Assert.fail;
 import static org.mockito.AdditionalMatchers.aryEq;
 import static org.mockito.Mockito.*;
 
+import java.sql.Date;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -383,6 +385,118 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
                     .hasMessageContaining("iMethods.threeArgumentMethod(12, foo, \"xx\")")
                     .hasMessageContaining("iMethods.arrayMethod([\"a\", \"b\", \"c\"])")
                     .hasMessageContaining("iMethods.forByte((byte) 0x19)");
+        }
+    }
+
+    @Test
+    public void should_print_fully_qualified_name_when_arguments_classes_have_same_simple_name() {
+        try {
+            mock.overloadedMethodWithSameClassNameArguments(new Date(0), new IMethods.Date(0));
+            verify(mock).overloadedMethodWithSameClassNameArguments(new IMethods.Date(0), new Date(0));
+            fail();
+        } catch (Throwable e) {
+            String wanted =
+                "\n"
+                    + "Argument(s) are different! Wanted:"
+                    + "\n"
+                    + "iMethods.overloadedMethodWithSameClassNameArguments("
+                    + "\n"
+                    + "    (org.mockitousage.IMethods.Date) 0,"
+                    + "\n"
+                    + "    (java.sql.Date) 1970-01-01"
+                    + "\n"
+                    + ");";
+
+            assertThat(e).hasMessageContaining(wanted);
+
+            String actual =
+                "\n"
+                    + "Actual invocations have different arguments:"
+                    + "\n"
+                    + "iMethods.overloadedMethodWithSameClassNameArguments("
+                    + "\n"
+                    + "    (java.sql.Date) 1970-01-01,"
+                    + "\n"
+                    + "    (org.mockitousage.IMethods.Date) 0"
+                    + "\n"
+                    + ");";
+            assertThat(e).hasMessageContaining(actual);
+        }
+    }
+
+    @Test
+    public void should_not_print_fully_qualified_name_when_arguments_classes_have_different_simple_name() {
+        try {
+            mock.overloadedMethodWithDifferentClassNameArguments("string", 0);
+            verify(mock).overloadedMethodWithDifferentClassNameArguments(0, "string");
+            fail();
+        } catch (Throwable e) {
+            String wanted =
+                "\n"
+                    + "Argument(s) are different! Wanted:"
+                    + "\n"
+                    + "iMethods.overloadedMethodWithDifferentClassNameArguments("
+                    + "\n"
+                    + "    0,"
+                    + "\n"
+                    + "    \"string\""
+                    + "\n"
+                    + ");";
+
+            assertThat(e).hasMessageContaining(wanted);
+
+            String actual =
+                "\n"
+                    + "Actual invocations have different arguments:"
+                    + "\n"
+                    + "iMethods.overloadedMethodWithDifferentClassNameArguments("
+                    + "\n"
+                    + "    \"string\","
+                    + "\n"
+                    + "    0"
+                    + "\n"
+                    + ");";
+            assertThat(e).hasMessageContaining(actual);
+        }
+    }
+
+    @Test
+    public void should_print_fully_qualified_name_when_some_arguments_classes_have_same_simple_name() {
+        try {
+            mock.overloadedMethodWithSameClassNameArguments(new Date(0), "string", new IMethods.Date(0));
+            verify(mock).overloadedMethodWithSameClassNameArguments(new IMethods.Date(0), "string", new Date(0));
+            fail();
+        } catch (Throwable e) {
+            String wanted =
+                "\n"
+                    + "Argument(s) are different! Wanted:"
+                    + "\n"
+                    + "iMethods.overloadedMethodWithSameClassNameArguments("
+                    + "\n"
+                    + "    (org.mockitousage.IMethods.Date) 0,"
+                    + "\n"
+                    + "    \"string\","
+                    + "\n"
+                    + "    (java.sql.Date) 1970-01-01"
+                    + "\n"
+                    + ");";
+
+            assertThat(e).hasMessageContaining(wanted);
+
+            String actual =
+                "\n"
+                    + "Actual invocations have different arguments:"
+                    + "\n"
+                    + "iMethods.overloadedMethodWithSameClassNameArguments("
+                    + "\n"
+                    + "    (java.sql.Date) 1970-01-01,"
+                    + "\n"
+                    + "    \"string\","
+                    + "\n"
+                    + "    (org.mockitousage.IMethods.Date) 0"
+                    + "\n"
+                    + ");";
+            assertThat(e).hasMessageContaining(actual);
         }
     }
 

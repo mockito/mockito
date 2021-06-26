@@ -14,20 +14,20 @@ package org.mockito.internal.matchers;
 public interface ContainsExtraTypeInfo {
 
     /**
-     * @param useFullyQualifiedClassName - uses fully qualified class name if true else simple class name
+     * @param className - name of the class to be printed in description
      * Returns more verbose description of the object which include type information
      */
-    String toStringWithType(boolean useFullyQualifiedClassName);
+    String toStringWithType(String className);
 
     /**
      * Checks if target target has matching type.
-     * If the type matches, there is no point in rendering result from {@link #toStringWithType(boolean)}
+     * If the type matches, there is no point in rendering result from {@link #toStringWithType(String)}
      */
     boolean typeMatches(Object target);
 
     /**
      *
-     * @return Returns the Class of the argument
+     * @return Returns the wanted argument
      */
-    Class getWantedClass();
+    Object getWanted();
 }

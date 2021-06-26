@@ -30,11 +30,18 @@ public class MatchersPrinter {
         List<FormattedText> out = new LinkedList<>();
         int i = 0;
         for (final ArgumentMatcher matcher : matchers) {
-            if (matcher instanceof ContainsExtraTypeInfo && printSettings.extraTypeInfoFor(i)) {
-                out.add(new FormattedText(((ContainsExtraTypeInfo) matcher).toStringWithType(false)));
-            } else if(matcher instanceof ContainsExtraTypeInfo
-                      && printSettings.fullyQualifiedNameFor(((ContainsExtraTypeInfo) matcher).getWantedClass().getSimpleName())){
-                out.add(new FormattedText(((ContainsExtraTypeInfo) matcher).toStringWithType(true)));
+            if (matcher instanceof ContainsExtraTypeInfo) {
+                ContainsExtraTypeInfo typeInfoMatcher = (ContainsExtraTypeInfo) matcher;
+                Class<?> wantedClass = typeInfoMatcher.getWanted().getClass();
+                String simpleNameOfArgument = wantedClass.getSimpleName();
+
+                if (printSettings.extraTypeInfoFor(i)) {
+                    out.add(new FormattedText(typeInfoMatcher.toStringWithType(wantedClass.getSimpleName())));
+                } else if (printSettings.fullyQualifiedNameFor(simpleNameOfArgument)) {
+                    out.add(new FormattedText(typeInfoMatcher.toStringWithType(wantedClass.getCanonicalName())));
+                }  else {
+                    out.add(new FormattedText(MatcherToString.toString(matcher)));
+                }
             } else {
                 out.add(new FormattedText(MatcherToString.toString(matcher)));
             }

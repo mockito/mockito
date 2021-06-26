@@ -31,7 +31,8 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
         return ValuePrinter.print(object);
     }
 
-    protected final Object getWanted() {
+    @Override
+    public final Object getWanted() {
         return wanted;
     }
 
@@ -51,18 +52,13 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
     }
 
     @Override
-    public String toStringWithType(boolean useFullyQualifiedClassName) {
-        return "(" + (useFullyQualifiedClassName ? wanted.getClass().getCanonicalName() : wanted.getClass().getSimpleName()) + ") " + describe(wanted);
+    public String toStringWithType(String className) {
+        return "(" + className + ") " + describe(wanted);
     }
 
     @Override
     public boolean typeMatches(Object target) {
         return wanted != null && target != null && target.getClass() == wanted.getClass();
-    }
-
-    @Override
-    public Class getWantedClass() {
-        return wanted.getClass();
     }
 
 }

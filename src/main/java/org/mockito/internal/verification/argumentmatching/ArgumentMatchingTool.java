@@ -63,7 +63,7 @@ public class ArgumentMatchingTool {
         Map<String, Set<String>> classesHavingSameName = new HashMap<>();
         for (ArgumentMatcher m : matchers) {
             if (m instanceof ContainsExtraTypeInfo) {
-                Class wantedClass = ((ContainsExtraTypeInfo) m).getWantedClass();
+                Class wantedClass = ((ContainsExtraTypeInfo) m).getWanted().getClass();
                 classesHavingSameName.computeIfAbsent(wantedClass.getSimpleName(), className -> new HashSet<>())
                                      .add(wantedClass.getCanonicalName());
             }
