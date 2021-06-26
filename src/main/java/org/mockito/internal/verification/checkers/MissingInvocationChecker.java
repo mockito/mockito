@@ -11,9 +11,11 @@ import static org.mockito.internal.invocation.InvocationsFinder.findAllMatchingU
 import static org.mockito.internal.invocation.InvocationsFinder.findInvocations;
 import static org.mockito.internal.invocation.InvocationsFinder.findPreviousVerifiedInOrder;
 import static org.mockito.internal.invocation.InvocationsFinder.findSimilarInvocation;
+import static org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool.getNotMatchingArgsWithSameName;
 import static org.mockito.internal.verification.argumentmatching.ArgumentMatchingTool.getSuspiciouslyNotMatchingArgsIndexes;
 
 import java.util.List;
+import java.util.Set;
 
 import org.mockito.internal.reporting.SmartPrinter;
 import org.mockito.internal.util.collections.ListUtil;
@@ -41,7 +43,11 @@ public class MissingInvocationChecker {
 
         Integer[] indexesOfSuspiciousArgs =
                 getSuspiciouslyNotMatchingArgsIndexes(wanted.getMatchers(), similar.getArguments());
-        SmartPrinter smartPrinter = new SmartPrinter(wanted, invocations, indexesOfSuspiciousArgs);
+        Set<String> classesWithSameSimpleName =
+                getNotMatchingArgsWithSameName(wanted.getMatchers(), similar.getArguments());
+        SmartPrinter smartPrinter =
+                new SmartPrinter(
+                        wanted, invocations, indexesOfSuspiciousArgs, classesWithSameSimpleName);
         List<Location> actualLocations =
                 ListUtil.convert(
                         invocations,

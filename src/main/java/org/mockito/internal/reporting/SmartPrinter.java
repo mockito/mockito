@@ -7,6 +7,7 @@ package org.mockito.internal.reporting;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
@@ -28,17 +29,20 @@ public class SmartPrinter {
         this(
                 wanted,
                 Collections.singletonList(actual),
-                indexesOfMatchersToBeDescribedWithExtraTypeInfo);
+                indexesOfMatchersToBeDescribedWithExtraTypeInfo,
+                Collections.emptySet());
     }
 
     public SmartPrinter(
             MatchableInvocation wanted,
             List<Invocation> allActualInvocations,
-            Integer... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
+            Integer[] indexesOfMatchersToBeDescribedWithExtraTypeInfo,
+            Set<String> classNamesToBeDescribedWithFullName) {
         PrintSettings printSettings = new PrintSettings();
         printSettings.setMultiline(isMultiLine(wanted, allActualInvocations));
         printSettings.setMatchersToBeDescribedWithExtraTypeInfo(
                 indexesOfMatchersToBeDescribedWithExtraTypeInfo);
+        printSettings.setMatchersToBeDescribedWithFullName(classNamesToBeDescribedWithFullName);
 
         this.wanted = printSettings.print(wanted);
 

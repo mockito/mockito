@@ -238,4 +238,52 @@ public interface IMethods {
     String forObject(Object object);
 
     <T> String genericToString(T arg);
+
+    void overloadedMethodWithSameClassNameArguments(java.sql.Date javaDate, Date date);
+
+    void overloadedMethodWithSameClassNameArguments(Date date, java.sql.Date javaDate);
+
+    void overloadedMethodWithDifferentClassNameArguments(String String, Integer i);
+
+    void overloadedMethodWithDifferentClassNameArguments(Integer i, String string);
+
+    void overloadedMethodWithSameClassNameArguments(
+            java.sql.Date javaDate, String string, Date date);
+
+    void overloadedMethodWithSameClassNameArguments(
+            Date date, String string, java.sql.Date javaDate);
+
+    /**
+     * Using this class to test cases where two classes have same simple name
+     */
+    public static class Date {
+
+        private int value;
+
+        public Date(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            Date date = (Date) o;
+            return value == date.value;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
+        }
+    }
 }

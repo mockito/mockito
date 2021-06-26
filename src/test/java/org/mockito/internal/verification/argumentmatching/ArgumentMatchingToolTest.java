@@ -111,13 +111,18 @@ public class ArgumentMatchingToolTest extends TestBase {
             }
 
             @Override
-            public String toStringWithType() {
+            public String toStringWithType(String className) {
                 return "";
             }
 
             @Override
             public boolean typeMatches(Object target) {
                 return true;
+            }
+
+            @Override
+            public Object getWanted() {
+                return "";
             }
         }
 
