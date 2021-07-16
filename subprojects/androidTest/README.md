@@ -17,13 +17,13 @@ Libraries and their versions are defined in `ext.library-versions.gradle`. It is
 
 ByteBuddy is an optional declaration. If you specify '0' for the ByteBuddy version, e.g.
 
-```bytebuddy_version = '0'```
+`bytebuddy_version = '0'`
 
 then ByteBuddy will be as declared by Mockito's own dependencies.
 
 However you are able to specify a _newer_ version if you would like to test an update, and you can do this by specifying a real version, e.g.:
 
-```bytebuddy_version = '1.11.7'```
+`bytebuddy_version = '1.11.7'`
 
 This will cause ByteBuddy to be directly included in this project using the specified version.
 
