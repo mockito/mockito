@@ -1,0 +1,58 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "org.mockitousage.androidtest"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation rootProject.kotlin_lib
+    implementation rootProject.core_ktx_lib
+    implementation rootProject.appcompat_lib
+    implementation rootProject.material_lib
+
+    testImplementation rootProject.junit_lib
+    testImplementation rootProject.junit_jupiter_api_lib
+    testImplementation rootProject.junit_jupiter_engine_lib
+    testImplementation rootProject.mockito_core_lib
+    testImplementation rootProject.mockito_kotlin_lib
+    if (rootProject.bytebuddy_version != '0') {
+        testImplementation rootProject.byte_buddy_lib
+    }
+
+    androidTestImplementation rootProject.android_test_junit_lib
+    androidTestImplementation rootProject.espresso_lib
+    androidTestImplementation rootProject.mockito_kotlin_lib
+    androidTestImplementation rootProject.mockito_android_lib
+    if (rootProject.bytebuddy_version != '0') {
+        androidTestImplementation rootProject.byte_buddy_lib
+    }
+}
