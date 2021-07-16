@@ -7,8 +7,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 
 @RunWith(AndroidJUnit4::class)
 class BasicInstrumentedTests {
@@ -35,11 +35,12 @@ class BasicInstrumentedTests {
     fun mockAndUseBasicClassUsingAnnotatedMock() {
         val basicClass = BasicOpenClassReceiver(mockedViaAnnotationBasicOpenClass)
         basicClass.callDependencyMethod()
+        throw Exception("java")
     }
 
     @Test
     fun mockAndUseBasicClassUsingLocalMock() {
-        val basicOpenClass = mock<BasicOpenClass>()
+        val basicOpenClass = mock(BasicOpenClass::class.java)
         val basicReceiver = BasicOpenClassReceiver(basicOpenClass)
         basicReceiver.callDependencyMethod()
     }
@@ -62,14 +63,14 @@ class BasicInstrumentedTests {
 
     @Test
     fun mockAndUseBasicInterfaceUsingLocalMock() {
-        val basicInterface = mock<BasicInterface>()
+        val basicInterface = mock(BasicInterface::class.java)
         val receiver = BasicInterfaceReceiver(basicInterface)
         receiver.callInterfaceMethod()
     }
 
     @Test
     fun mockAndUseBasicInterfaceAndVerify() {
-        val basicInterface = mock<BasicInterface>()
+        val basicInterface = mock(BasicInterface::class.java)
         val receiver = BasicInterfaceReceiver(basicInterface)
         receiver.callInterfaceMethod()
         verify(basicInterface).interfaceMethod()

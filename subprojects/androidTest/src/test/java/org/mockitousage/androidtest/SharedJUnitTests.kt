@@ -1,7 +1,7 @@
 package org.mockitousage.androidtest
 
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 
 class SharedJUnitTests(
     private val mockedViaAnnotationBasicOpenClass: BasicOpenClass,
@@ -15,7 +15,7 @@ class SharedJUnitTests(
     }
 
     fun mockAndUseBasicOpenClassUsingLocalMock() {
-        val basicOpenClass = mock<BasicOpenClass>()
+        val basicOpenClass = mock(BasicOpenClass::class.java)
         val basicReceiver = BasicOpenClassReceiver(basicOpenClass)
         basicReceiver.callDependencyMethod()
     }
@@ -34,7 +34,7 @@ class SharedJUnitTests(
     }
 
     fun mockAndUseBasicClosedClassUsingLocalMock() {
-        val basicClosedClass = mock<BasicClosedClass>()
+        val basicClosedClass = mock(BasicClosedClass::class.java)
         val basicReceiver = BasicClosedClassReceiver(basicClosedClass)
         basicReceiver.callDependencyMethod()
     }
@@ -54,13 +54,13 @@ class SharedJUnitTests(
     }
 
     fun mockAndUseBasicInterfaceUsingLocalMock() {
-        val basicInterface = mock<BasicInterface>()
+        val basicInterface = mock(BasicInterface::class.java)
         val receiver = BasicInterfaceReceiver(basicInterface)
         receiver.callInterfaceMethod()
     }
 
     fun mockAndUseBasicInterfaceAndVerify() {
-        val basicInterface = mock<BasicInterface>()
+        val basicInterface = mock(BasicInterface::class.java)
         val receiver = BasicInterfaceReceiver(basicInterface)
         receiver.callInterfaceMethod()
         verify(basicInterface).interfaceMethod()
