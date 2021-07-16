@@ -4,7 +4,7 @@ ext {
 
 def versions = [:]
 
-versions.bytebuddy = '1.11.6'
+versions.bytebuddy = '1.11.7'
 versions.junitJupiter = '5.7.2'
 versions.errorprone = '2.7.1'
 
@@ -34,12 +34,12 @@ libraries.bndGradle =  'biz.aQute.bnd:biz.aQute.bnd.gradle:5.3.0'
 
 libraries.groovy = 'org.codehaus.groovy:groovy:3.0.8'
 
-def kotlinVersion = '1.5.20'
+def kotlinVersion = '1.5.21'
 libraries.kotlin = [
     version: kotlinVersion,
 
     stdlib: "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
-    coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0-native-mt',
+    coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1-native-mt',
     gradlePlugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}",
 ]
 libraries.android = [
