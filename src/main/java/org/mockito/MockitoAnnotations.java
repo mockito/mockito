@@ -103,7 +103,7 @@ public final class MockitoAnnotations {
                     join(
                             "Failed to release mocks",
                             "",
-                            "This should not happen unless you are using a third-part mock maker"),
+                            "This should not happen unless you are using a third-party mock maker"),
                     e);
         }
     }
