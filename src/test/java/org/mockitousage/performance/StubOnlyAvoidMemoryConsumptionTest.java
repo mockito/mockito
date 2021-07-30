@@ -17,7 +17,7 @@ public class StubOnlyAvoidMemoryConsumptionTest {
         when(obj.toString()).thenReturn("asdf");
 
         for (int i = 0; i < 1000000; i++) {
-            obj.toString();
+            String ignored = obj.toString();
         }
     }
 
@@ -28,7 +28,7 @@ public class StubOnlyAvoidMemoryConsumptionTest {
         when(obj.toString()).thenReturn("asdf");
 
         for (int i = 0; i < 1000000; i++) {
-            obj.toString();
+            String ignored = obj.toString();
         }
     }
 }

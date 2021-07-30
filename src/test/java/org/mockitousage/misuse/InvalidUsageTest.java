@@ -108,9 +108,9 @@ public class InvalidUsageTest extends TestBase {
     public void shouldNotMockObjectMethodsOnInterface() throws Exception {
         ObjectLikeInterface inter = mock(ObjectLikeInterface.class);
 
-        inter.equals(null);
-        inter.toString();
-        inter.hashCode();
+        Object ignored = inter.equals(null);
+        ignored = inter.toString();
+        ignored = inter.hashCode();
 
         verifyZeroInteractions(inter);
     }
@@ -119,9 +119,9 @@ public class InvalidUsageTest extends TestBase {
     public void shouldNotMockObjectMethodsOnInterfaceVerifyNoInteractions() throws Exception {
         ObjectLikeInterface inter = mock(ObjectLikeInterface.class);
 
-        inter.equals(null);
-        inter.toString();
-        inter.hashCode();
+        Object ignored = inter.equals(null);
+        ignored = inter.toString();
+        ignored = inter.hashCode();
 
         verifyNoInteractions(inter);
     }
@@ -130,9 +130,9 @@ public class InvalidUsageTest extends TestBase {
     public void shouldNotMockObjectMethodsOnClass() throws Exception {
         Object clazz = mock(ObjectLikeInterface.class);
 
-        clazz.equals(null);
-        clazz.toString();
-        clazz.hashCode();
+        Object ignored = clazz.equals(null);
+        ignored = clazz.toString();
+        ignored = clazz.hashCode();
 
         verifyZeroInteractions(clazz);
     }
@@ -141,9 +141,9 @@ public class InvalidUsageTest extends TestBase {
     public void shouldNotMockObjectMethodsOnClassVerifyNoInteractions() throws Exception {
         Object clazz = mock(ObjectLikeInterface.class);
 
-        clazz.equals(null);
-        clazz.toString();
-        clazz.hashCode();
+        Object ignored = clazz.equals(null);
+        ignored = clazz.toString();
+        ignored = clazz.hashCode();
 
         verifyNoInteractions(clazz);
     }

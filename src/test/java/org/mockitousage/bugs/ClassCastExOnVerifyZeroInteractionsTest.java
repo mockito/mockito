@@ -43,6 +43,6 @@ public class ClassCastExOnVerifyZeroInteractionsTest {
                             }
                         });
 
-        test.toString();
+        String ignored = test.toString();
     }
 }
