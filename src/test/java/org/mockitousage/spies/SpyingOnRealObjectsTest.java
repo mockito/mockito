@@ -193,4 +193,13 @@ public class SpyingOnRealObjectsTest extends TestBase {
                             "Most likely it is due to mocking a private class that is not visible to Mockito");
         }
     }
+
+    @Test
+    public void spysHashCodeEqualsDelegatedToActualMethods() {
+        List<String> real = new ArrayList<>();
+        real.add("one");
+        List<String> spy = spy(real);
+        assertEquals(real.hashCode(), spy.hashCode());
+        assertTrue(spy.equals(real));
+    }
 }
