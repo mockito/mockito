@@ -77,7 +77,7 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
 
     @Override
     public boolean matches(Invocation candidate) {
-        return invocation.getMock().equals(candidate.getMock())
+        return invocation.getMock() == candidate.getMock()
                 && hasSameMethod(candidate)
                 && argumentsMatch(candidate);
     }

@@ -44,6 +44,7 @@ import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
 import net.bytebuddy.matcher.ElementMatcher;
+import org.mockito.Answers;
 import org.mockito.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
@@ -237,14 +238,24 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                                 features.stripAnnotations
                                         ? MethodAttributeAppender.NoOp.INSTANCE
                                         : INCLUDING_RECEIVER)
-                        .method(isHashCode())
-                        .intercept(hashCode)
-                        .method(isEquals())
-                        .intercept(equals)
                         .serialVersionUid(42L)
                         .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
                         .implement(MockAccess.class)
                         .intercept(FieldAccessor.ofBeanProperty());
+
+        if (features.defaultAnswer != Answers.CALLS_REAL_METHODS) {
+            builder =
+                    builder.method(isHashCode())
+                            .intercept(hashCode)
+                            .method(isEquals())
+                            .intercept(equals);
+        } else {
+            builder =
+                    builder.method(isHashCode())
+                            .intercept(dispatcher)
+                            .method(isEquals())
+                            .intercept(dispatcher);
+        }
         if (features.serializableMode == SerializableMode.ACROSS_CLASSLOADERS) {
             builder =
                     builder.implement(CrossClassLoaderSerializableMock.class)
