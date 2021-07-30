@@ -114,7 +114,7 @@ public class HashCodeAndEqualsSafeSetTest {
 
     @Test(expected = CloneNotSupportedException.class)
     public void cloneIsNotSupported() throws CloneNotSupportedException {
-        HashCodeAndEqualsSafeSet.of().clone();
+        Object ignored = HashCodeAndEqualsSafeSet.of().clone();
     }
 
     @Test

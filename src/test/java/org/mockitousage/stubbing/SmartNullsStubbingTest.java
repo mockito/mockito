@@ -119,7 +119,7 @@ public class SmartNullsStubbingTest extends TestBase {
     @Test
     public void shouldNotThrowSmartNullPointerOnObjectMethods() {
         Object smartNull = mock.objectReturningMethod();
-        smartNull.toString();
+        String ignored = smartNull.toString();
     }
 
     @Test
