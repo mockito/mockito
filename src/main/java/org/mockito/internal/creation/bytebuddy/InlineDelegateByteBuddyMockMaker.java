@@ -393,7 +393,8 @@ class InlineDelegateByteBuddyMockMaker
                             settings.getTypeToMock(),
                             settings.getExtraInterfaces(),
                             settings.getSerializableMode(),
-                            settings.isStripAnnotations()));
+                            settings.isStripAnnotations(),
+                            settings.getDefaultAnswer()));
         } catch (Exception bytecodeGenerationFailed) {
             throw prettifyFailure(settings, bytecodeGenerationFailed);
         }
