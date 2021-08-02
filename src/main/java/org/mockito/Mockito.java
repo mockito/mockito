@@ -1590,6 +1590,7 @@ import java.util.function.Function;
  * released. To define mock behavior and to verify method invocations, use the <code>MockedConstruction</code> that is returned.
  * <p>
  */
+@CheckReturnValue
 @SuppressWarnings("unchecked")
 public class Mockito extends ArgumentMatchers {
 
@@ -1860,7 +1861,6 @@ public class Mockito extends ArgumentMatchers {
      * @param classToMock class or interface to mock
      * @return mock object
      */
-    @CheckReturnValue
     public static <T> T mock(Class<T> classToMock) {
         return mock(classToMock, withSettings());
     }
@@ -1880,7 +1880,6 @@ public class Mockito extends ArgumentMatchers {
      * @param name of the mock
      * @return mock object
      */
-    @CheckReturnValue
     public static <T> T mock(Class<T> classToMock, String name) {
         return mock(classToMock, withSettings().name(name).defaultAnswer(RETURNS_DEFAULTS));
     }
@@ -1897,7 +1896,6 @@ public class Mockito extends ArgumentMatchers {
      * @return A {@link org.mockito.MockingDetails} instance.
      * @since 1.9.5
      */
-    @CheckReturnValue
     public static MockingDetails mockingDetails(Object toInspect) {
         return MOCKITO_CORE.mockingDetails(toInspect);
     }
@@ -1921,7 +1919,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return mock object
      */
-    @CheckReturnValue
     public static <T> T mock(Class<T> classToMock, Answer defaultAnswer) {
         return mock(classToMock, withSettings().defaultAnswer(defaultAnswer));
     }
@@ -1949,7 +1946,6 @@ public class Mockito extends ArgumentMatchers {
      * @param mockSettings additional mock settings
      * @return mock object
      */
-    @CheckReturnValue
     public static <T> T mock(Class<T> classToMock, MockSettings mockSettings) {
         return MOCKITO_CORE.mock(classToMock, mockSettings);
     }
@@ -2033,7 +2029,6 @@ public class Mockito extends ArgumentMatchers {
      *            to spy on
      * @return a spy of the real object
      */
-    @CheckReturnValue
     public static <T> T spy(T object) {
         return MOCKITO_CORE.mock(
                 (Class<T>) object.getClass(),
@@ -2068,7 +2063,6 @@ public class Mockito extends ArgumentMatchers {
      * @since 1.10.12
      */
     @Incubating
-    @CheckReturnValue
     public static <T> T spy(Class<T> classToSpy) {
         return MOCKITO_CORE.mock(
                 classToSpy, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
@@ -2091,7 +2085,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedStatic<T> mockStatic(Class<T> classToMock) {
         return mockStatic(classToMock, withSettings());
     }
@@ -2114,7 +2107,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedStatic<T> mockStatic(Class<T> classToMock, Answer defaultAnswer) {
         return mockStatic(classToMock, withSettings().defaultAnswer(defaultAnswer));
     }
@@ -2137,7 +2129,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedStatic<T> mockStatic(Class<T> classToMock, String name) {
         return mockStatic(classToMock, withSettings().name(name));
     }
@@ -2160,7 +2151,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedStatic<T> mockStatic(Class<T> classToMock, MockSettings mockSettings) {
         return MOCKITO_CORE.mockStatic(classToMock, mockSettings);
     }
@@ -2179,7 +2169,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedConstruction<T> mockConstructionWithAnswer(
             Class<T> classToMock, Answer defaultAnswer, Answer... additionalAnswers) {
         return mockConstruction(
@@ -2209,7 +2198,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedConstruction<T> mockConstruction(Class<T> classToMock) {
         return mockConstruction(classToMock, index -> withSettings(), (mock, context) -> {});
     }
@@ -2226,7 +2214,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock, MockedConstruction.MockInitializer<T> mockInitializer) {
         return mockConstruction(classToMock, withSettings(), mockInitializer);
@@ -2244,7 +2231,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock, MockSettings mockSettings) {
         return mockConstruction(classToMock, context -> mockSettings);
@@ -2262,7 +2248,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock,
             Function<MockedConstruction.Context, MockSettings> mockSettingsFactory) {
@@ -2282,7 +2267,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock,
             MockSettings mockSettings,
@@ -2303,7 +2287,6 @@ public class Mockito extends ArgumentMatchers {
      * @return mock controller
      */
     @Incubating
-    @CheckReturnValue
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock,
             Function<MockedConstruction.Context, MockSettings> mockSettingsFactory,
@@ -2371,7 +2354,6 @@ public class Mockito extends ArgumentMatchers {
      * @return OngoingStubbing object used to stub fluently.
      *         <strong>Do not</strong> create a reference to this returned object.
      */
-    @CheckReturnValue
     public static <T> OngoingStubbing<T> when(T methodCall) {
         return MOCKITO_CORE.when(methodCall);
     }
@@ -2402,7 +2384,6 @@ public class Mockito extends ArgumentMatchers {
      * @param mock to be verified
      * @return mock object itself
      */
-    @CheckReturnValue
     public static <T> T verify(T mock) {
         return MOCKITO_CORE.verify(mock, times(1));
     }
@@ -2429,7 +2410,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return mock object itself
      */
-    @CheckReturnValue
     public static <T> T verify(T mock, VerificationMode mode) {
         return MOCKITO_CORE.verify(mock, mode);
     }
@@ -2584,7 +2564,6 @@ public class Mockito extends ArgumentMatchers {
      * @param toBeThrown to be thrown when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    @CheckReturnValue
     public static Stubber doThrow(Throwable... toBeThrown) {
         return MOCKITO_CORE.stubber().doThrow(toBeThrown);
     }
@@ -2607,7 +2586,6 @@ public class Mockito extends ArgumentMatchers {
      * @return stubber - to select a method for stubbing
      * @since 2.1.0
      */
-    @CheckReturnValue
     public static Stubber doThrow(Class<? extends Throwable> toBeThrown) {
         return MOCKITO_CORE.stubber().doThrow(toBeThrown);
     }
@@ -2635,7 +2613,6 @@ public class Mockito extends ArgumentMatchers {
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array
     // creation
     @SuppressWarnings({"unchecked", "varargs"})
-    @CheckReturnValue
     public static Stubber doThrow(
             Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... toBeThrownNext) {
         return MOCKITO_CORE.stubber().doThrow(toBeThrown, toBeThrownNext);
@@ -2672,7 +2649,6 @@ public class Mockito extends ArgumentMatchers {
      * @return stubber - to select a method for stubbing
      * @since 1.9.5
      */
-    @CheckReturnValue
     public static Stubber doCallRealMethod() {
         return MOCKITO_CORE.stubber().doCallRealMethod();
     }
@@ -2699,7 +2675,6 @@ public class Mockito extends ArgumentMatchers {
      * @param answer to answer when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    @CheckReturnValue
     public static Stubber doAnswer(Answer answer) {
         return MOCKITO_CORE.stubber().doAnswer(answer);
     }
@@ -2742,7 +2717,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return stubber - to select a method for stubbing
      */
-    @CheckReturnValue
     public static Stubber doNothing() {
         return MOCKITO_CORE.stubber().doNothing();
     }
@@ -2793,7 +2767,6 @@ public class Mockito extends ArgumentMatchers {
      * @param toBeReturned to be returned when the stubbed method is called
      * @return stubber - to select a method for stubbing
      */
-    @CheckReturnValue
     public static Stubber doReturn(Object toBeReturned) {
         return MOCKITO_CORE.stubber().doReturn(toBeReturned);
     }
@@ -2848,7 +2821,6 @@ public class Mockito extends ArgumentMatchers {
      * @since 2.1.0
      */
     @SuppressWarnings({"unchecked", "varargs"})
-    @CheckReturnValue
     public static Stubber doReturn(Object toBeReturned, Object... toBeReturnedNext) {
         return MOCKITO_CORE.stubber().doReturn(toBeReturned, toBeReturnedNext);
     }
@@ -2880,7 +2852,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return InOrder object to be used to verify in order
      */
-    @CheckReturnValue
     public static InOrder inOrder(Object... mocks) {
         return MOCKITO_CORE.inOrder(mocks);
     }
@@ -2981,7 +2952,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
-    @CheckReturnValue
     public static VerificationMode times(int wantedNumberOfInvocations) {
         return VerificationModeFactory.times(wantedNumberOfInvocations);
     }
@@ -3003,7 +2973,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
-    @CheckReturnValue
     public static VerificationMode never() {
         return times(0);
     }
@@ -3019,7 +2988,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
-    @CheckReturnValue
     public static VerificationMode atLeastOnce() {
         return VerificationModeFactory.atLeastOnce();
     }
@@ -3036,7 +3004,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
-    @CheckReturnValue
     public static VerificationMode atLeast(int minNumberOfInvocations) {
         return VerificationModeFactory.atLeast(minNumberOfInvocations);
     }
@@ -3052,7 +3019,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
-    @CheckReturnValue
     public static VerificationMode atMostOnce() {
         return VerificationModeFactory.atMostOnce();
     }
@@ -3069,7 +3035,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
-    @CheckReturnValue
     public static VerificationMode atMost(int maxNumberOfInvocations) {
         return VerificationModeFactory.atMost(maxNumberOfInvocations);
     }
@@ -3087,7 +3052,6 @@ public class Mockito extends ArgumentMatchers {
      * @param wantedNumberOfInvocations number of invocations to verify
      * @return  verification mode
      */
-    @CheckReturnValue
     public static VerificationMode calls(int wantedNumberOfInvocations) {
         return VerificationModeFactory.calls(wantedNumberOfInvocations);
     }
@@ -3108,7 +3072,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return verification mode
      */
-    @CheckReturnValue
     public static VerificationMode only() {
         return VerificationModeFactory.only();
     }
@@ -3141,7 +3104,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return object that allows fluent specification of the verification (times(x), atLeast(y), etc.)
      */
-    @CheckReturnValue
     public static VerificationWithTimeout timeout(long millis) {
         return new Timeout(millis, VerificationModeFactory.times(1));
     }
@@ -3197,7 +3159,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return object that allows fluent specification of the verification
      */
-    @CheckReturnValue
     public static VerificationAfterDelay after(long millis) {
         return new After(millis, VerificationModeFactory.times(1));
     }
@@ -3281,7 +3242,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @return mock settings instance with defaults.
      */
-    @CheckReturnValue
     public static MockSettings withSettings() {
         return new MockSettingsImpl().defaultAnswer(RETURNS_DEFAULTS);
     }
@@ -3295,7 +3255,6 @@ public class Mockito extends ArgumentMatchers {
      * @return verification mode
      * @since 2.1.0
      */
-    @CheckReturnValue
     public static VerificationMode description(String description) {
         return times(1).description(description);
     }
@@ -3305,7 +3264,6 @@ public class Mockito extends ArgumentMatchers {
      * An instance of {@code MockingDetails} can be retrieved via {@link #mockingDetails(Object)}.
      */
     @Deprecated
-    @CheckReturnValue
     static MockitoDebugger debug() {
         return new MockitoDebuggerImpl();
     }
@@ -3316,7 +3274,6 @@ public class Mockito extends ArgumentMatchers {
      * @since 2.1.0
      */
     @Incubating
-    @CheckReturnValue
     public static MockitoFramework framework() {
         return new DefaultMockitoFramework();
     }
@@ -3330,7 +3287,6 @@ public class Mockito extends ArgumentMatchers {
      * @since 2.7.0
      */
     @Incubating
-    @CheckReturnValue
     public static MockitoSessionBuilder mockitoSession() {
         return new DefaultMockitoSessionBuilder();
     }

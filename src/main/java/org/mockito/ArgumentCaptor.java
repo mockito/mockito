@@ -59,6 +59,7 @@ import org.mockito.internal.matchers.CapturingMatcher;
  * @see Captor
  * @since 1.8.0
  */
+@CheckReturnValue
 public class ArgumentCaptor<T> {
 
     private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
@@ -79,7 +80,7 @@ public class ArgumentCaptor<T> {
      * @return null or default values
      */
     public T capture() {
-        Mockito.argThat(capturingMatcher);
+        T ignored = Mockito.argThat(capturingMatcher);
         return defaultValue(clazz);
     }
 

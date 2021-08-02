@@ -27,7 +27,7 @@ public class ClickableStackTracesWhenFrameworkMisusedTest extends TestBase {
     }
 
     private void misplacedArgumentMatcherHere() {
-        anyString();
+        String ignored = anyString();
     }
 
     @Test

@@ -128,28 +128,28 @@ public class InvalidStateDetectionTest extends TestBase {
 
     @Test
     public void shouldDetectMisplacedArgumentMatcher() {
-        anyObject();
+        Object ignored = anyObject();
         detectsAndCleansUp(new OnVerify(), InvalidUseOfMatchersException.class);
 
-        anyObject();
+        ignored = anyObject();
         detectsAndCleansUp(new OnVerifyInOrder(), InvalidUseOfMatchersException.class);
 
-        anyObject();
+        ignored = anyObject();
         detectsAndCleansUp(new OnVerifyZeroInteractions(), InvalidUseOfMatchersException.class);
 
-        anyObject();
+        ignored = anyObject();
         detectsAndCleansUp(new OnVerifyNoMoreInteractions(), InvalidUseOfMatchersException.class);
 
-        anyObject();
+        ignored = anyObject();
         detectsAndCleansUp(new OnVerifyNoInteractions(), InvalidUseOfMatchersException.class);
 
-        anyObject();
+        ignored = anyObject();
         detectsAndCleansUp(new OnDoAnswer(), InvalidUseOfMatchersException.class);
     }
 
     @Test
     public void shouldCorrectStateAfterDetectingUnfinishedStubbing() {
-        doThrow(new RuntimeException()).when(mock);
+        Object ignored = doThrow(new RuntimeException()).when(mock);
 
         try {
             doThrow(new RuntimeException()).when(mock).oneArg(true);

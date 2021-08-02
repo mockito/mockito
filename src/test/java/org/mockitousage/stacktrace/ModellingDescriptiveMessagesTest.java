@@ -164,8 +164,8 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     @Test
     public void shouldShowExampleOfCorrectArgumentCapturing() {
         ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
-        argument.capture();
-        argument.getValue();
+        Object ignored = argument.capture();
+        String ignoredValue = argument.getValue();
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})

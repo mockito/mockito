@@ -180,7 +180,7 @@ public class StaticMockingExperimentTest extends TestBase {
     @Test
     public void do_answer_stubbing_static_method() throws Throwable {
         // register stubbed return value
-        doReturn("hey").when(mock);
+        Object ignored = doReturn("hey").when(mock);
 
         // complete stubbing by triggering an invocation that needs to be stubbed
         Invocation invocation =
@@ -242,7 +242,7 @@ public class StaticMockingExperimentTest extends TestBase {
         Method adapter = ConstructorMethodAdapter.class.getDeclaredMethods()[0];
 
         // stub constructor
-        doReturn(new Foo("hey!")).when(mock);
+        Object ignored = doReturn(new Foo("hey!")).when(mock);
         Invocation constructor =
                 Mockito.framework()
                         .getInvocationFactory()
