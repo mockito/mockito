@@ -40,7 +40,7 @@ public class VerificationExcludingStubsTest extends TestBase {
         }
 
         // but it works when stubs are ignored:
-        ignoreStubs(mock);
+        Object[] ignored = ignoreStubs(mock);
         verifyNoMoreInteractions(mock);
     }
 
@@ -64,11 +64,11 @@ public class VerificationExcludingStubsTest extends TestBase {
 
     @Test(expected = NotAMockException.class)
     public void shouldIgnoringStubsDetectNulls() throws Exception {
-        ignoreStubs(mock, null);
+        Object ignored = ignoreStubs(mock, null);
     }
 
     @Test(expected = NotAMockException.class)
     public void shouldIgnoringStubsDetectNonMocks() throws Exception {
-        ignoreStubs(mock, new Object());
+        Object ignored = ignoreStubs(mock, new Object());
     }
 }

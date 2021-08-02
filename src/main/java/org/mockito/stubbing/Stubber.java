@@ -4,6 +4,7 @@
  */
 package org.mockito.stubbing;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.Mockito;
 import org.mockito.NotExtensible;
 
@@ -39,6 +40,7 @@ import org.mockito.NotExtensible;
  *
  * See examples in javadoc for {@link Mockito}
  */
+@CheckReturnValue
 @SuppressWarnings("unchecked")
 @NotExtensible
 public interface Stubber extends BaseStubber {

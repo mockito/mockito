@@ -112,6 +112,7 @@ import org.mockito.internal.util.Primitives;
  *
  * @see AdditionalMatchers
  */
+@CheckReturnValue
 @SuppressWarnings("unchecked")
 public class ArgumentMatchers {
 
@@ -258,7 +259,7 @@ public class ArgumentMatchers {
      */
     @Deprecated
     public static <T> T anyVararg() {
-        any();
+        Object ignored = any();
         return null;
     }
 

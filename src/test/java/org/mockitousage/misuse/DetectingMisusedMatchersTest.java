@@ -40,15 +40,15 @@ public class DetectingMisusedMatchersTest extends TestBase {
     }
 
     private void misplaced_anyObject_argument_matcher() {
-        anyObject();
+        Object ignored = anyObject();
     }
 
     private void misplaced_anyInt_argument_matcher() {
-        anyInt();
+        int ignored = anyInt();
     }
 
     private void misplaced_anyBoolean_argument_matcher() {
-        anyBoolean();
+        boolean ignored = anyBoolean();
     }
 
     @Test
