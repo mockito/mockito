@@ -22,7 +22,7 @@ import org.mockito.junit.MockitoJUnitRunner;
  * </ul>
  * <p>
  * Mockito will try to inject mocks only either by constructor injection,
- * setter injection, or property injection in order and as described below.
+ * property injection or setter injection in order and as described below.
  * If any of the following strategy fail, then Mockito <strong>won't report failure</strong>;
  * i.e. you will have to provide dependencies yourself.
  * <ol>
