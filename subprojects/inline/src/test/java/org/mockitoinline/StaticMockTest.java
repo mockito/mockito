@@ -130,7 +130,7 @@ public final class StaticMockTest {
             assertEquals("foo", reference.get());
             dummy.when(Dummy::foo).thenReturn("bar");
             assertEquals("bar", Dummy.foo());
-            dummy.verify(times(2), Dummy::foo);
+            dummy.verify(Dummy::foo, times(2));
         }
     }
 
@@ -152,7 +152,7 @@ public final class StaticMockTest {
             assertEquals("qux", reference.get());
             dummy.when(Dummy::foo).thenReturn("bar");
             assertEquals("bar", Dummy.foo());
-            dummy.verify(times(2), Dummy::foo);
+            dummy.verify(Dummy::foo, times(2));
         }
     }
 
