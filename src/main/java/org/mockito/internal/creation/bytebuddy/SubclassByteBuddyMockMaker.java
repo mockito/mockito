@@ -162,7 +162,9 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
         return new TypeMockability() {
             @Override
             public boolean mockable() {
-                return !type.isPrimitive() && !Modifier.isFinal(type.getModifiers());
+                return !type.isPrimitive()
+                        && !Modifier.isFinal(type.getModifiers())
+                        && !TypeSupport.INSTANCE.isSealed(type);
             }
 
             @Override
@@ -175,6 +177,9 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
                 }
                 if (Modifier.isFinal(type.getModifiers())) {
                     return "final class";
+                }
+                if (TypeSupport.INSTANCE.isSealed(type)) {
+                    return "sealed class";
                 }
                 return join("not handled type");
             }
