@@ -11,6 +11,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.Observable;
 import java.util.Observer;
 
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.ClassFileVersion;
+import net.bytebuddy.description.modifier.TypeManifestation;
+import net.bytebuddy.dynamic.DynamicType;
 import org.junit.Test;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.plugins.MockMaker;
@@ -27,6 +31,31 @@ public class SubclassByteBuddyMockMakerTest
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(Integer.class);
         assertThat(mockable.mockable()).isFalse();
         assertThat(mockable.nonMockableReason()).contains("final");
+    }
+
+    @Test
+    public void is_type_mockable_excludes_sealed_classes() {
+        // is only supported on Java 17 and later
+        if (ClassFileVersion.ofThisVm().isAtMost(ClassFileVersion.JAVA_V16)) {
+            return;
+        }
+        DynamicType.Builder<Object> base = new ByteBuddy().subclass(Object.class);
+        DynamicType.Unloaded<Object> dynamic =
+                new ByteBuddy()
+                        .subclass(Object.class)
+                        .permittedSubclass(base.toTypeDescription())
+                        .make();
+        Class<?> type =
+                new ByteBuddy()
+                        .subclass(base.toTypeDescription())
+                        .merge(TypeManifestation.FINAL)
+                        .make()
+                        .include(dynamic)
+                        .load(null)
+                        .getLoaded();
+        MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(type);
+        assertThat(mockable.mockable()).isFalse();
+        assertThat(mockable.nonMockableReason()).contains("sealed");
     }
 
     @Test

@@ -344,7 +344,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         if (subclassingRequired
                 && !features.mockedType.isArray()
                 && !features.mockedType.isPrimitive()
-                && Modifier.isFinal(features.mockedType.getModifiers())) {
+                && (Modifier.isFinal(features.mockedType.getModifiers())
+                        || TypeSupport.INSTANCE.isSealed(features.mockedType)
+                        || features.interfaces.stream().anyMatch(TypeSupport.INSTANCE::isSealed))) {
             throw new MockitoException(
                     "Unsupported settings with this type '" + features.mockedType.getName() + "'");
         }
