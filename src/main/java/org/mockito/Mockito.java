@@ -102,6 +102,7 @@ import java.util.function.Function;
  *      <a href="#47">47. New API for clearing mock state in inline mocking (Since 2.25.0)</a><br/>
  *      <a href="#48">48. New API for mocking static methods (Since 3.4.0)</a><br/>
  *      <a href="#49">49. New API for mocking object construction (Since 3.5.0)</a><br/>
+ *      <a href="#50">50. Avoiding code generation when restricting mocks to interfaces (Since 3.12.2)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1588,6 +1589,19 @@ import java.util.function.Function;
  *
  * Due to the defined scope of the mocked construction, object construction returns to its original behavior once the scope is
  * released. To define mock behavior and to verify method invocations, use the <code>MockedConstruction</code> that is returned.
+ * <p>
+ *
+ * <h3 id="50">50. <a class="meaningful_link" href="#proxy_mock_maker" name="mocked_construction">Avoiding code generation when only interfaces are mocked</a> (since 3.12.2)</h3>
+ *
+ * The JVM offers the {@link java.lang.reflect.Proxy} facility for creating dynamic proxies of interface types. For most applications, Mockito
+ * must be capable of mocking classes as supported by the default mock maker, or even final classes, as supported by the inline mock maker. To
+ * create such mocks, Mockito requires to setup diverse JVM facilities and must apply code generation. If only interfaces are supposed to be
+ * mocked, one can however choose to use a {@link org.mockito.internal.creation.proxy.ProxyMockMaker} that is based on the {@link java.lang.reflect.Proxy}
+ * API which avoids diverse overhead of the other mock makers but also limits mocking to interfaces.
+ *
+ * This mock maker can be activated explicitly by the mockito extension mechanism, just create in the classpath a file
+ * <code>/mockito-extensions/org.mockito.plugins.MockMaker</code> containing the value <code>mock-maker-proxy</code>.
+ *
  * <p>
  */
 @CheckReturnValue
