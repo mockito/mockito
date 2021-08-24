@@ -21,6 +21,7 @@ class DefaultMockitoPlugins implements MockitoPlugins {
 
     private static final Map<String, String> DEFAULT_PLUGINS = new HashMap<>();
     static final String INLINE_ALIAS = "mock-maker-inline";
+    static final String PROXY_ALIAS = "mock-maker-proxy";
     static final String MODULE_ALIAS = "member-accessor-module";
 
     static {
@@ -40,6 +41,7 @@ class DefaultMockitoPlugins implements MockitoPlugins {
                 "org.mockito.internal.configuration.InjectingAnnotationEngine");
         DEFAULT_PLUGINS.put(
                 INLINE_ALIAS, "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
+        DEFAULT_PLUGINS.put(PROXY_ALIAS, "org.mockito.internal.creation.proxy.ProxyMockMaker");
         DEFAULT_PLUGINS.put(
                 MockitoLogger.class.getName(), "org.mockito.internal.util.ConsoleMockitoLogger");
         DEFAULT_PLUGINS.put(

@@ -455,7 +455,7 @@ public class InlineDelegateByteBuddyMockMakerTest
         assertThat(mockMaker.getHandler(proxy2)).isNull();
     }
 
-    private static <T> MockCreationSettings<T> settingsFor(
+    protected static <T> MockCreationSettings<T> settingsFor(
             Class<T> type, Class<?>... extraInterfaces) {
         MockSettingsImpl<T> mockSettings = new MockSettingsImpl<T>();
         mockSettings.setTypeToMock(type);
