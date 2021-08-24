@@ -5,12 +5,14 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import java.lang.ref.ReferenceQueue;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import net.bytebuddy.TypeCache;
 import org.mockito.mock.SerializableMode;
+import org.mockito.stubbing.Answer;
 
 class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
         implements BytecodeGenerator {
@@ -43,7 +45,8 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
                                     params.mockedType,
                                     params.interfaces,
                                     params.serializableMode,
-                                    params.stripAnnotations),
+                                    params.stripAnnotations,
+                                    params.defaultAnswer),
                             () -> bytecodeGenerator.mockClass(params),
                             BOOTSTRAP_LOCK);
         } catch (IllegalArgumentException exception) {
@@ -83,15 +86,18 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
 
         private final SerializableMode serializableMode;
         private final boolean stripAnnotations;
+        private final Answer defaultAnswer;
 
         private MockitoMockKey(
-                Class<?> type,
-                Set<Class<?>> additionalType,
-                SerializableMode serializableMode,
-                boolean stripAnnotations) {
+            Class<?> type,
+            Set<Class<?>> additionalType,
+            SerializableMode serializableMode,
+            boolean stripAnnotations,
+            Answer defaultAnswer) {
             super(type, additionalType);
             this.serializableMode = serializableMode;
             this.stripAnnotations = stripAnnotations;
+            this.defaultAnswer = defaultAnswer;
         }
 
         @Override
@@ -107,7 +113,8 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
             }
             MockitoMockKey that = (MockitoMockKey) object;
             return stripAnnotations == that.stripAnnotations
-                    && serializableMode.equals(that.serializableMode);
+                    && serializableMode.equals(that.serializableMode)
+                    && Objects.equals(defaultAnswer, that.defaultAnswer);
         }
 
         @Override
@@ -115,6 +122,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
             int result = super.hashCode();
             result = 31 * result + (stripAnnotations ? 1 : 0);
             result = 31 * result + serializableMode.hashCode();
+            result = 31 * result + Objects.hashCode(defaultAnswer);
             return result;
         }
     }
