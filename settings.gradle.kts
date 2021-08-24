@@ -9,7 +9,6 @@ include("deprecatedPluginsTest",
     "kotlinTest",
     "kotlinReleaseCoroutinesTest",
     "android",
-    "androidTest",
     "junit-jupiter",
     "junitJupiterExtensionTest",
     "junitJupiterInlineMockMakerExtensionTest",
@@ -18,6 +17,12 @@ include("deprecatedPluginsTest",
     "errorprone",
     "junitJupiterParallelTest",
     "osgi-test")
+
+if (System.getenv("ANDROID_SDK_ROOT") != null || File(".local.properties").exists()) {
+    include("androidTest")
+} else {
+    logger.info("Not including android test project due to missing SDK configuration")
+}
 
 rootProject.name = "mockito"
 
