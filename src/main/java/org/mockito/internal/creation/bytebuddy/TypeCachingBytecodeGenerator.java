@@ -45,8 +45,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
                                     params.mockedType,
                                     params.interfaces,
                                     params.serializableMode,
-                                    params.stripAnnotations,
-                                    params.defaultAnswer),
+                                    params.stripAnnotations),
                             () -> bytecodeGenerator.mockClass(params),
                             BOOTSTRAP_LOCK);
         } catch (IllegalArgumentException exception) {
@@ -86,18 +85,15 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
 
         private final SerializableMode serializableMode;
         private final boolean stripAnnotations;
-        private final Answer defaultAnswer;
 
         private MockitoMockKey(
                 Class<?> type,
                 Set<Class<?>> additionalType,
                 SerializableMode serializableMode,
-                boolean stripAnnotations,
-                Answer defaultAnswer) {
+                boolean stripAnnotations) {
             super(type, additionalType);
             this.serializableMode = serializableMode;
             this.stripAnnotations = stripAnnotations;
-            this.defaultAnswer = defaultAnswer;
         }
 
         @Override
@@ -113,8 +109,7 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
             }
             MockitoMockKey that = (MockitoMockKey) object;
             return stripAnnotations == that.stripAnnotations
-                    && serializableMode.equals(that.serializableMode)
-                    && Objects.equals(defaultAnswer, that.defaultAnswer);
+                    && serializableMode.equals(that.serializableMode);
         }
 
         @Override
@@ -122,7 +117,6 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
             int result = super.hashCode();
             result = 31 * result + (stripAnnotations ? 1 : 0);
             result = 31 * result + serializableMode.hashCode();
-            result = 31 * result + Objects.hashCode(defaultAnswer);
             return result;
         }
     }
