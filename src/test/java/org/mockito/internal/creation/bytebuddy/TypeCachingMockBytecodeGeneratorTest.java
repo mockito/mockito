@@ -145,7 +145,7 @@ public class TypeCachingMockBytecodeGeneratorTest {
     }
 
     @Test
-    public void ensure_cache_returns_different_instance_defaultAnswer() throws Exception {
+    public void ensure_cache_returns_same_instance_defaultAnswer() throws Exception {
         // given
         ClassLoader classloader_with_life_shorter_than_cache =
                 inMemoryClassLoader()
@@ -174,10 +174,10 @@ public class TypeCachingMockBytecodeGeneratorTest {
                                     SerializableMode.NONE,
                                     false,
                                     answer));
-            assertThat(classes.add(klass)).isTrue();
+            assertThat(classes.add(klass)).isFalse();
         }
 
-        assertThat(classes).hasSize(answers.length + 1);
+        assertThat(classes).hasSize(1);
     }
 
     @Test

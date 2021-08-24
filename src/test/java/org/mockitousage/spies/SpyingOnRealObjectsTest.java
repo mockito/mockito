@@ -9,7 +9,6 @@ import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -192,14 +191,5 @@ public class SpyingOnRealObjectsTest extends TestBase {
                     .hasMessageContaining(
                             "Most likely it is due to mocking a private class that is not visible to Mockito");
         }
-    }
-
-    @Test
-    public void spysHashCodeEqualsDelegatedToActualMethods() {
-        List<String> real = new ArrayList<>();
-        real.add("one");
-        List<String> spy = spy(real);
-        assertEquals(real.hashCode(), spy.hashCode());
-        assertTrue(spy.equals(real));
     }
 }
