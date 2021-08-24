@@ -14,6 +14,8 @@ import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.junit.Before;
@@ -140,6 +142,42 @@ public class TypeCachingMockBytecodeGeneratorTest {
                                 Answers.RETURNS_DEFAULTS));
 
         assertThat(other_mock_type).isNotSameAs(the_mock_type);
+    }
+
+    @Test
+    public void ensure_cache_returns_different_instance_defaultAnswer() throws Exception {
+        // given
+        ClassLoader classloader_with_life_shorter_than_cache =
+                inMemoryClassLoader()
+                        .withClassDefinition("foo.Bar", makeMarkerInterface("foo.Bar"))
+                        .build();
+
+        TypeCachingBytecodeGenerator cachingMockBytecodeGenerator =
+                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+
+        Answers[] answers = Answers.values();
+        Set<Class<?>> classes = Collections.newSetFromMap(new IdentityHashMap<>());
+        classes.add(
+                cachingMockBytecodeGenerator.mockClass(
+                        withMockFeatures(
+                                classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
+                                Collections.<Class<?>>emptySet(),
+                                SerializableMode.NONE,
+                                false,
+                                null)));
+        for (Answers answer : answers) {
+            Class<?> klass =
+                    cachingMockBytecodeGenerator.mockClass(
+                            withMockFeatures(
+                                    classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
+                                    Collections.<Class<?>>emptySet(),
+                                    SerializableMode.NONE,
+                                    false,
+                                    answer));
+            assertThat(classes.add(klass)).isTrue();
+        }
+
+        assertThat(classes).hasSize(answers.length + 1);
     }
 
     @Test
