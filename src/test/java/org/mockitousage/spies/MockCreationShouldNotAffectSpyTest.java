@@ -30,21 +30,18 @@ public class MockCreationShouldNotAffectSpyTest extends TestBase {
     static class TestClass {
         private final long value;
 
-        TestClass(final long value)
-        {
+        TestClass(final long value) {
             this.value = value;
         }
 
-        public boolean equals(final Object o)
-        {
+        public boolean equals(final Object o) {
             if (!(o instanceof TestClass)) {
                 return false;
             }
-            return value == ((TestClass)o).value;
+            return value == ((TestClass) o).value;
         }
 
-        public int hashCode()
-        {
+        public int hashCode() {
             return Long.hashCode(value);
         }
     }

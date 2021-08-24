@@ -35,11 +35,10 @@ public class SpyCreationShouldNotAffectMockTest extends TestBase {
         }
 
         public boolean equals(final Object o) {
-            if (!(o instanceof TestClass))
-            {
+            if (!(o instanceof TestClass)) {
                 return false;
             }
-            return value == ((TestClass)o).value;
+            return value == ((TestClass) o).value;
         }
 
         public int hashCode() {

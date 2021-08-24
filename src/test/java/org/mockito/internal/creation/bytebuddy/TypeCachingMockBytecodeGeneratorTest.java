@@ -157,21 +157,23 @@ public class TypeCachingMockBytecodeGeneratorTest {
 
         Answers[] answers = Answers.values();
         Set<Class<?>> classes = Collections.newSetFromMap(new IdentityHashMap<>());
-        classes.add(cachingMockBytecodeGenerator.mockClass(
-            withMockFeatures(
-                classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
-                Collections.<Class<?>>emptySet(),
-                SerializableMode.NONE,
-                false,
-                null)));
+        classes.add(
+                cachingMockBytecodeGenerator.mockClass(
+                        withMockFeatures(
+                                classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
+                                Collections.<Class<?>>emptySet(),
+                                SerializableMode.NONE,
+                                false,
+                                null)));
         for (Answers answer : answers) {
-            Class<?> klass = cachingMockBytecodeGenerator.mockClass(
-                withMockFeatures(
-                    classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
-                    Collections.<Class<?>>emptySet(),
-                    SerializableMode.NONE,
-                    false,
-                    answer));
+            Class<?> klass =
+                    cachingMockBytecodeGenerator.mockClass(
+                            withMockFeatures(
+                                    classloader_with_life_shorter_than_cache.loadClass("foo.Bar"),
+                                    Collections.<Class<?>>emptySet(),
+                                    SerializableMode.NONE,
+                                    false,
+                                    answer));
             assertThat(classes.add(klass)).isTrue();
         }
 

@@ -89,11 +89,11 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
         private final Answer defaultAnswer;
 
         private MockitoMockKey(
-            Class<?> type,
-            Set<Class<?>> additionalType,
-            SerializableMode serializableMode,
-            boolean stripAnnotations,
-            Answer defaultAnswer) {
+                Class<?> type,
+                Set<Class<?>> additionalType,
+                SerializableMode serializableMode,
+                boolean stripAnnotations,
+                Answer defaultAnswer) {
             super(type, additionalType);
             this.serializableMode = serializableMode;
             this.stripAnnotations = stripAnnotations;
