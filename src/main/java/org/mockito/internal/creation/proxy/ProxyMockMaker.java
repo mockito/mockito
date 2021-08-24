@@ -107,7 +107,7 @@ public class ProxyMockMaker implements MockMaker {
                     case "equals":
                         return proxy == args[0];
                     case "toString":
-                        return "";
+                        break;
                     default:
                         throw new MockitoException(
                                 join(

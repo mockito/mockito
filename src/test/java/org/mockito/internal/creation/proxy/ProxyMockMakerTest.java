@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mockito.internal.creation.AbstractMockMakerTest;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,6 +46,55 @@ public class ProxyMockMakerTest
         assertThat(mockMaker.isTypeMockable(Object.class).nonMockableReason())
                 .isEqualTo("non-interface");
         assertThat(mockMaker.isTypeMockable(SomeInterface.class).mockable()).isTrue();
+    }
+
+    @Test
+    public void can_compute_hash_code() throws Throwable {
+        SomeInterface proxy =
+                mockMaker.createMock(settingsFor(SomeInterface.class), dummyHandler());
+
+        InvocationHandler handler = Proxy.getInvocationHandler(proxy);
+
+        assertThat(handler.invoke(proxy, Object.class.getMethod("hashCode"), new Object[0]))
+                .isEqualTo(System.identityHashCode(proxy));
+    }
+
+    @Test
+    public void can_compute_equality() throws Throwable {
+        SomeInterface proxy =
+                mockMaker.createMock(settingsFor(SomeInterface.class), dummyHandler());
+
+        InvocationHandler handler = Proxy.getInvocationHandler(proxy);
+
+        assertThat(
+                        handler.invoke(
+                                proxy,
+                                Object.class.getMethod("equals", Object.class),
+                                new Object[] {proxy}))
+                .isEqualTo(true);
+        assertThat(
+                        handler.invoke(
+                                proxy,
+                                Object.class.getMethod("equals", Object.class),
+                                new Object[] {null}))
+                .isEqualTo(false);
+        assertThat(
+                        handler.invoke(
+                                proxy,
+                                Object.class.getMethod("equals", Object.class),
+                                new Object[] {new Object()}))
+                .isEqualTo(false);
+    }
+
+    @Test
+    public void can_invoke_toString() throws Throwable {
+        SomeInterface proxy =
+                mockMaker.createMock(settingsFor(SomeInterface.class), dummyHandler());
+
+        InvocationHandler handler = Proxy.getInvocationHandler(proxy);
+
+        assertThat(handler.invoke(proxy, Object.class.getMethod("toString"), new Object[0]))
+                .isNull();
     }
 
     interface SomeInterface {}
