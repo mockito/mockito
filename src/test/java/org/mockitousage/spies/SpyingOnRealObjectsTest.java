@@ -59,7 +59,7 @@ public class SpyingOnRealObjectsTest extends TestBase {
 
     @Test
     public void shouldAllowOverridingStubs() {
-        when(spy.contains(anyObject())).thenReturn(true);
+        when(spy.contains(any())).thenReturn(true);
         when(spy.contains("foo")).thenReturn(false);
 
         assertTrue(spy.contains("bar"));
