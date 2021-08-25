@@ -25,6 +25,8 @@ import static org.mockito.internal.util.StringUtil.join;
  */
 public class ProxyMockMaker implements MockMaker {
 
+    private static final Object[] EMPTY = new Object[0];
+
     private final Method invokeDefault;
 
     public ProxyMockMaker() {
@@ -100,6 +102,9 @@ public class ProxyMockMaker implements MockMaker {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if (args == null) {
+                args = EMPTY;
+            }
             if (method.getDeclaringClass() == Object.class) {
                 switch (method.getName()) {
                     case "hashCode":

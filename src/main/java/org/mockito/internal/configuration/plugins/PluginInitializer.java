@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Set;
 
 import org.mockito.internal.util.collections.Iterables;
 import org.mockito.plugins.PluginSwitch;
@@ -16,10 +17,10 @@ import org.mockito.plugins.PluginSwitch;
 class PluginInitializer {
 
     private final PluginSwitch pluginSwitch;
-    private final String alias;
+    private final Set<String> alias;
     private final DefaultMockitoPlugins plugins;
 
-    PluginInitializer(PluginSwitch pluginSwitch, String alias, DefaultMockitoPlugins plugins) {
+    PluginInitializer(PluginSwitch pluginSwitch, Set<String> alias, DefaultMockitoPlugins plugins) {
         this.pluginSwitch = pluginSwitch;
         this.alias = alias;
         this.plugins = plugins;
@@ -45,8 +46,8 @@ class PluginInitializer {
             String classOrAlias =
                     new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
             if (classOrAlias != null) {
-                if (classOrAlias.equals(alias)) {
-                    classOrAlias = plugins.getDefaultPluginClass(alias);
+                if (alias.contains(classOrAlias)) {
+                    classOrAlias = plugins.getDefaultPluginClass(classOrAlias);
                 }
                 Class<?> pluginClass = loader.loadClass(classOrAlias);
                 Object plugin = pluginClass.getDeclaredConstructor().newInstance();
@@ -77,8 +78,8 @@ class PluginInitializer {
                             .findPluginClasses(Iterables.toIterable(resources));
             List<T> impls = new ArrayList<>();
             for (String classOrAlias : classesOrAliases) {
-                if (classOrAlias.equals(alias)) {
-                    classOrAlias = plugins.getDefaultPluginClass(alias);
+                if (alias.contains(classOrAlias)) {
+                    classOrAlias = plugins.getDefaultPluginClass(classOrAlias);
                 }
                 Class<?> pluginClass = loader.loadClass(classOrAlias);
                 Object plugin = pluginClass.getDeclaredConstructor().newInstance();
