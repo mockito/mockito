@@ -7,7 +7,9 @@ package org.mockito.internal.configuration.plugins;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import org.mockito.plugins.PluginSwitch;
@@ -25,21 +27,23 @@ class PluginLoader {
     PluginLoader(PluginSwitch pluginSwitch) {
         this(
                 new DefaultMockitoPlugins(),
-                new PluginInitializer(pluginSwitch, null, new DefaultMockitoPlugins()));
+                new PluginInitializer(
+                        pluginSwitch, Collections.emptySet(), new DefaultMockitoPlugins()));
     }
 
     /**
-     * @deprecated Let's avoid adding more aliases. It complicates the API.
-     * Instead of an alias, we can use fully qualified class name of the alternative implementation.
-     * <p>
      * Adds an alias for a class name to this plugin loader. Instead of the fully qualified type name,
-     * the alias can be used as a convenience name for a known plugin.
+     * the alias can be used as a convenience name for a known plugin. This avoids exposing API that is
+     * explicitly marked as <i>internal</i> through the package name. Without such aliases, we would need
+     * to make internal packages part of the API, not by code but by configuration file.
      */
-    @Deprecated
-    PluginLoader(PluginSwitch pluginSwitch, String alias) {
+    PluginLoader(PluginSwitch pluginSwitch, String... alias) {
         this(
                 new DefaultMockitoPlugins(),
-                new PluginInitializer(pluginSwitch, alias, new DefaultMockitoPlugins()));
+                new PluginInitializer(
+                        pluginSwitch,
+                        new HashSet<>(Arrays.asList(alias)),
+                        new DefaultMockitoPlugins()));
     }
 
     /**

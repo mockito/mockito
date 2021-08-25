@@ -55,7 +55,7 @@ public class ProxyMockMakerTest
 
         InvocationHandler handler = Proxy.getInvocationHandler(proxy);
 
-        assertThat(handler.invoke(proxy, Object.class.getMethod("hashCode"), new Object[0]))
+        assertThat(handler.invoke(proxy, Object.class.getMethod("hashCode"), null))
                 .isEqualTo(System.identityHashCode(proxy));
     }
 
@@ -93,8 +93,7 @@ public class ProxyMockMakerTest
 
         InvocationHandler handler = Proxy.getInvocationHandler(proxy);
 
-        assertThat(handler.invoke(proxy, Object.class.getMethod("toString"), new Object[0]))
-                .isNull();
+        assertThat(handler.invoke(proxy, Object.class.getMethod("toString"), null)).isNull();
     }
 
     interface SomeInterface {}

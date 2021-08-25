@@ -22,7 +22,10 @@ class PluginRegistry {
             new PluginLoader(new DefaultPluginSwitch()).loadPlugin(PluginSwitch.class);
 
     private final MockMaker mockMaker =
-            new PluginLoader(pluginSwitch, DefaultMockitoPlugins.INLINE_ALIAS)
+            new PluginLoader(
+                            pluginSwitch,
+                            DefaultMockitoPlugins.INLINE_ALIAS,
+                            DefaultMockitoPlugins.PROXY_ALIAS)
                     .loadPlugin(MockMaker.class);
 
     private final MemberAccessor memberAccessor =
