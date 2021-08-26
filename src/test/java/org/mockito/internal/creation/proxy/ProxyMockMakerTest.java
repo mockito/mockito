@@ -42,10 +42,11 @@ public class ProxyMockMakerTest
 
     @Test
     public void should_discover_mockable_input() {
-        assertThat(mockMaker.isTypeMockable(Object.class).mockable()).isFalse();
-        assertThat(mockMaker.isTypeMockable(Object.class).nonMockableReason())
+        assertThat(mockMaker.isTypeMockable(Number.class).mockable()).isFalse();
+        assertThat(mockMaker.isTypeMockable(Number.class).nonMockableReason())
                 .isEqualTo("non-interface");
         assertThat(mockMaker.isTypeMockable(SomeInterface.class).mockable()).isTrue();
+        assertThat(mockMaker.isTypeMockable(Object.class).mockable()).isTrue();
     }
 
     @Test
