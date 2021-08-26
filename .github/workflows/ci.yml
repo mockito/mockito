@@ -26,7 +26,7 @@ jobs:
     # Definition of the build matrix
     strategy:
       matrix:
-        java: [8, 11, 15]
+        java: [8, 11, 16]
         mock-maker: ['mock-maker-default', 'mock-maker-inline']
 
     # All build steps
