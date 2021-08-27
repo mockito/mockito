@@ -28,6 +28,17 @@ task mockitoCoverage(type: JacocoReport) {
             }
 
             mockitoCoverage.executionData(files(test.jacoco.destinationFile).builtBy(test))
+
+            afterEvaluate {
+                classDirectories.setFrom(
+                    classDirectories.files.collect {
+                        fileTree(
+                            dir: it,
+                            exclude: ["**/internal/util/concurrent/**"]
+                        )
+                    }
+                )
+            }
         }
     }
 
@@ -35,16 +46,6 @@ task mockitoCoverage(type: JacocoReport) {
         xml.enabled true
         html.enabled true
         html.destination file("${buildDir}/jacocoHtml")
-    }
-
-    doFirst {
-        classDirectories.from = classDirectories.files.collect {
-            fileTree(
-                dir: it,
-                exclude: ['**/org/mockito/internal/util/concurrent/**']
-            )
-        }
-        executionData.from = executionData.files.findAll { it.exists() }
     }
 
     doLast {
