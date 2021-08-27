@@ -6,9 +6,9 @@ description = "Test suite memory usage of Mockito"
 apply from: "$rootDir/gradle/dependencies.gradle"
 
 dependencies {
-    compile project.rootProject
-    testCompile libraries.junit4
-    testCompile libraries.assertj
+    implementation project.rootProject
+    testImplementation libraries.junit4
+    testImplementation libraries.assertj
 }
 
 tasks.javadoc.enabled = false

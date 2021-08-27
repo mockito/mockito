@@ -17,9 +17,9 @@ sourceSets {
 }
 
 dependencies {
-    testBundleCompile project.rootProject
-    testBundleCompile libraries.junit4
-    testBundleCompile sourceSets.otherBundle.output
+    testBundleImplementation project.rootProject
+    testBundleImplementation libraries.junit4
+    testBundleImplementation sourceSets.otherBundle.output
 }
 
 import aQute.bnd.gradle.Bundle

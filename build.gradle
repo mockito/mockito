@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
+        classpath 'gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.16.1'
         classpath 'net.ltgt.gradle:gradle-errorprone-plugin:2.0.2'
 
         classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
@@ -83,16 +83,16 @@ configurations {
 }
 
 dependencies {
-    compile libraries.bytebuddy, libraries.bytebuddyagent
+    api libraries.bytebuddy, libraries.bytebuddyagent
 
     compileOnly libraries.junit4, libraries.hamcrest, libraries.opentest4j
-    compile libraries.objenesis
+    implementation libraries.objenesis
 
-    testCompile libraries.assertj
+    testImplementation libraries.assertj
 
     //putting 'provided' dependencies on test compile and runtime classpath
     testCompileOnly configurations.compileOnly
-    testRuntime configurations.compileOnly
+    testRuntimeOnly configurations.compileOnly
 
     testUtil sourceSets.test.output
 

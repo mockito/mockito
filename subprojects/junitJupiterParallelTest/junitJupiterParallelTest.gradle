@@ -7,7 +7,7 @@ apply plugin: "java"
 dependencies {
     testImplementation libraries.junitJupiterApi
     testImplementation project(":junit-jupiter")
-    testRuntime libraries.junitJupiterEngine
+    testRuntimeOnly libraries.junitJupiterEngine
 }
 
 test {

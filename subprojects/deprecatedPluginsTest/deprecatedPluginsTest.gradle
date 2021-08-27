@@ -4,6 +4,6 @@ apply plugin: 'java'
 description = "End-to-end tests for deprecated Mockito plugins."
 
 dependencies {
-    testCompile project(":")
-    testCompile libraries.junit4
+    testImplementation project(":")
+    testImplementation libraries.junit4
 }

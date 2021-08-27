@@ -8,11 +8,11 @@ apply from: "$rootDir/gradle/java-library.gradle"
 apply plugin: 'biz.aQute.bnd.builder'
 
 dependencies {
-    compile project.rootProject
+    api project.rootProject
     implementation libraries.junitJupiterApi
-    testCompile libraries.assertj
-    testCompile libraries.junitPlatformLauncher
-    testRuntime libraries.junitJupiterEngine
+    testImplementation libraries.assertj
+    testImplementation libraries.junitPlatformLauncher
+    testRuntimeOnly libraries.junitJupiterEngine
 }
 
 tasks.withType(Test) {

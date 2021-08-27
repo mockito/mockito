@@ -8,9 +8,9 @@ description = "Kotlin tests for Mockito."
 apply from: "$rootDir/gradle/dependencies.gradle"
 
 dependencies {
-    testCompile project(":")
-    testCompile libraries.junit4
+    testImplementation project(":")
+    testImplementation libraries.junit4
 
-    testCompile libraries.kotlin.stdlib
-    testCompile libraries.kotlin.coroutines
+    testImplementation libraries.kotlin.stdlib
+    testImplementation libraries.kotlin.coroutines
 }

@@ -8,10 +8,10 @@ apply from: "osgi-test-bundles.gradle"
 description = "Test suite for OSGi framework with Mockito"
 
 dependencies {
-    testCompile libraries.junit4
-    testCompile libraries.osgi
+    testImplementation libraries.junit4
+    testImplementation libraries.osgi
 
-    testRuntime libraries.equinox
+    testRuntimeOnly libraries.equinox
 }
 
 tasks.javadoc.enabled = false
