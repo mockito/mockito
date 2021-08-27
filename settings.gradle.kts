@@ -4,6 +4,7 @@ plugins {
 
 include("deprecatedPluginsTest",
     "inline",
+    "proxy",
     "extTest",
     "groovyTest",
     "kotlinTest",
