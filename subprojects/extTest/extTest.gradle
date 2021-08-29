@@ -8,14 +8,14 @@ repositories {
 }
 
 dependencies {
-    testCompile project.rootProject
-    testCompile project(":junit-jupiter")
-    testCompile project(path: ':', configuration: 'testUtil')
-    testCompile libraries.junit4
-    testCompile libraries.assertj
-    testCompile libraries.junitJupiterApi
-    testRuntime libraries.junitJupiterEngine
-    testRuntime libraries.junitVintageEngine
+    testImplementation project.rootProject
+    testImplementation project(":junit-jupiter")
+    testImplementation project(path: ':', configuration: 'testUtil')
+    testImplementation libraries.junit4
+    testImplementation libraries.assertj
+    testImplementation libraries.junitJupiterApi
+    testRuntimeOnly libraries.junitJupiterEngine
+    testRuntimeOnly libraries.junitVintageEngine
 }
 
 tasks.withType(Test) {

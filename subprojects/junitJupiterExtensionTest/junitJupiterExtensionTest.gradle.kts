@@ -7,11 +7,11 @@ plugins {
 description = "End-to-end tests for automatic registration of MockitoExtension."
 
 dependencies {
-    testCompile(project(":junit-jupiter"))
-    testCompile(library("assertj"))
-    testCompile(library("junitPlatformLauncher"))
-    testCompile(library("junitJupiterApi"))
-    testRuntime(library("junitJupiterEngine"))
+    testImplementation(project(":junit-jupiter"))
+    testImplementation(library("assertj"))
+    testImplementation(library("junitPlatformLauncher"))
+    testImplementation(library("junitJupiterApi"))
+    testRuntimeOnly(library("junitJupiterEngine"))
 }
 
 tasks.named<Test>("test") {
