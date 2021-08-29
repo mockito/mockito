@@ -4,7 +4,7 @@
  */
 package org.mockitoproxy;
 
-import net.bytebuddy.ClassFileVersion;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
@@ -17,6 +17,7 @@ import java.lang.reflect.Proxy;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -45,19 +46,28 @@ public class MocksTest {
     }
 
     @Test
-    public void can_call_default_method_java_16() {
-        if (ClassFileVersion.ofThisVm().isLessThan(ClassFileVersion.JAVA_V16)) {
-            return; // Not supported prior to Java 16.
-        }
-
+    public void can_call_default_method_if_available() {
         SomeInterface mock = Mockito.mock(SomeInterface.class);
         assertThat(mock, instanceOf(Proxy.class));
 
-        when(mock.m()).thenCallRealMethod();
+        when(mock.d()).thenCallRealMethod();
 
         assertThat(mock.d(), is("default"));
 
         verify(mock).d();
+    }
+
+    @Test
+    public void cannot_call_default_method_if_not_available() {
+        SomeInterface mock = Mockito.mock(SomeInterface.class);
+        assertThat(mock, instanceOf(Proxy.class));
+
+        try {
+            when(mock.m()).thenCallRealMethod();
+            fail("Expected failure when requesting real method for non-default method");
+        } catch (MockitoException e) {
+            assertThat(e.getMessage(), CoreMatchers.containsString("real method"));
+        }
     }
 
     @Test

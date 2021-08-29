@@ -7,14 +7,15 @@ package org.mockito.internal.creation.proxy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.debugging.LocationImpl;
 import org.mockito.internal.invocation.RealMethod;
-import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.util.Platform;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockMaker;
 
-import java.io.Serializable;
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.mockito.internal.invocation.DefaultInvocationFactory.createInvocation;
@@ -28,19 +29,7 @@ public class ProxyMockMaker implements MockMaker {
 
     private static final Object[] EMPTY = new Object[0];
 
-    private final Method invokeDefault;
-
-    public ProxyMockMaker() {
-        Method m;
-        try {
-            m =
-                    InvocationHandler.class.getMethod(
-                            "invokeDefault", Object.class, Method.class, Object[].class);
-        } catch (NoSuchMethodException ignored) {
-            m = null;
-        }
-        invokeDefault = m;
-    }
+    private final ProxyRealMethod proxyRealMethod = ProxyRealMethod.make();
 
     @Override
     @SuppressWarnings("unchecked")
@@ -156,54 +145,15 @@ public class ProxyMockMaker implements MockMaker {
                 }
             }
             RealMethod realMethod;
-            if (invokeDefault == null || Modifier.isAbstract(method.getModifiers())) {
+            if (Modifier.isAbstract(method.getModifiers())) {
                 realMethod = RealMethod.IsIllegal.INSTANCE;
             } else {
-                realMethod = new RealDefaultMethod(proxy, method, args);
+                realMethod = proxyRealMethod.resolve(proxy, method, args);
             }
             return handler.get()
                     .handle(
                             createInvocation(
                                     proxy, method, args, realMethod, settings, new LocationImpl()));
-        }
-    }
-
-    private class RealDefaultMethod implements RealMethod, Serializable {
-
-        private static final long serialVersionUID = -1;
-
-        private final Object proxy;
-        private final SerializableMethod serializableMethod;
-        private final Object[] args;
-
-        private RealDefaultMethod(Object proxy, Method method, Object[] args) {
-            this.proxy = proxy;
-            this.serializableMethod = new SerializableMethod(method);
-            this.args = args;
-        }
-
-        @Override
-        public boolean isInvokable() {
-            return true;
-        }
-
-        @Override
-        public Object invoke() throws Throwable {
-            try {
-                return invokeDefault.invoke(null, proxy, serializableMethod.getJavaMethod(), args);
-            } catch (InvocationTargetException e) {
-                throw e.getTargetException();
-            } catch (IllegalAccessException | IllegalArgumentException e) {
-                throw new MockitoException(
-                        join(
-                                "Failed to access default method or invoked method with illegal arguments",
-                                "",
-                                "Method "
-                                        + serializableMethod.getJavaMethod()
-                                        + " could not be delegated, this is not supposed to happen",
-                                Platform.describe()),
-                        e);
-            }
         }
     }
 
