@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.MoreThanAllowedActualInvocations;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
 
 public class AtMostXVerificationTest extends TestBase {
@@ -113,6 +114,13 @@ public class AtMostXVerificationTest extends TestBase {
         } catch (NoInteractionsWanted e) {
             assertThat(e).hasMessageContaining("undesiredInteraction(");
         }
+    }
+
+    @Test
+    public void should_return_formatted_output_from_toString_method() {
+        VerificationMode atMost = atMost(3);
+
+        assertThat(atMost).hasToString("Wanted invocations count: at most 3");
     }
 
     private void undesiredInteraction() {

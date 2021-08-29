@@ -6,6 +6,7 @@ package org.mockitousage.verification;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.verify;
@@ -22,7 +23,9 @@ import org.mockito.Mock;
 import org.mockito.exceptions.verification.MoreThanAllowedActualInvocations;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.internal.verification.DummyVerificationMode;
 import org.mockito.junit.MockitoRule;
+import org.mockito.verification.VerificationMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.Stopwatch;
 import org.mockitoutil.async.AsyncTesting;
@@ -300,5 +303,30 @@ public class VerificationWithAfterTest {
 
         // using generous number to avoid timing issues
         watch.assertElapsedTimeIsLessThan(2000, MILLISECONDS);
+    }
+
+    @Test
+    public void should_return_formatted_output_from_toString_when_created_with_factory_method() {
+        VerificationMode after = after(3);
+
+        assertThat(after).hasToString("Wanted after 3 ms: [Wanted invocations count: 1]");
+    }
+
+    @Test
+    public void should_return_formatted_output_from_toString_using_wrapped_verification_mode() {
+        org.mockito.verification.After after =
+                new org.mockito.verification.After(10, new DummyVerificationMode());
+
+        assertThat(after).hasToString("Wanted after 10 ms: [Dummy verification mode]");
+    }
+
+    @Test
+    public void
+            should_return_formatted_output_from_toString_when_chaining_other_verification_mode() {
+        VerificationMode afterAndOnly = after(5).only();
+
+        assertThat(afterAndOnly)
+                .hasToString(
+                        "Wanted after 5 ms: [Wanted invocations count: 1 and no other method invoked]");
     }
 }

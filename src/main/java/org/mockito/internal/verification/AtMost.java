@@ -51,4 +51,9 @@ public class AtMost implements VerificationMode {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "Wanted invocations count: at most " + maxNumberOfInvocations;
+    }
 }

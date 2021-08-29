@@ -4,6 +4,7 @@
  */
 package org.mockitousage.verification;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
@@ -21,7 +22,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.TooFewActualInvocations;
+import org.mockito.internal.verification.DummyVerificationMode;
 import org.mockito.junit.MockitoRule;
+import org.mockito.verification.Timeout;
+import org.mockito.verification.VerificationMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.Stopwatch;
 import org.mockitoutil.async.AsyncTesting;
@@ -170,6 +174,31 @@ public class VerificationWithTimeoutTest {
 
         // then
         verify(mock, timeout(100).only()).oneArg('c');
+    }
+
+    @Test
+    public void should_return_formatted_output_from_toString_when_created_with_factory_method() {
+        VerificationMode timeout = timeout(7);
+
+        assertThat(timeout).hasToString("Wanted after at most 7 ms: [Wanted invocations count: 1]");
+    }
+
+    @Test
+    public void should_return_formatted_output_from_toString_using_wrapped_verification_mode() {
+        VerificationMode timeoutAndAtLeastOnce = new Timeout(9, new DummyVerificationMode());
+
+        assertThat(timeoutAndAtLeastOnce)
+                .hasToString("Wanted after at most 9 ms: [Dummy verification mode]");
+    }
+
+    @Test
+    public void
+            should_return_formatted_output_from_toString_when_chaining_other_verification_mode() {
+        VerificationMode timeoutAndOnly = timeout(7).only();
+
+        assertThat(timeoutAndOnly)
+                .hasToString(
+                        "Wanted after at most 7 ms: [Wanted invocations count: 1 and no other method invoked]");
     }
 
     @Test
