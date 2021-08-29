@@ -62,4 +62,13 @@ public class Timeout extends VerificationWrapper<VerificationOverTimeImpl>
     public VerificationMode never() {
         throw atMostAndNeverShouldNotBeUsedWithTimeout();
     }
+
+    @Override
+    public String toString() {
+        return "Wanted after at most "
+                + wrappedVerification.getTimer().duration()
+                + " ms: ["
+                + wrappedVerification.getDelegate()
+                + "]";
+    }
 }

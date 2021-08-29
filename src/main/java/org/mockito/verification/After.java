@@ -38,4 +38,13 @@ public class After extends VerificationWrapper<VerificationOverTimeImpl>
     protected VerificationMode copySelfWithNewVerificationMode(VerificationMode verificationMode) {
         return new After(wrappedVerification.copyWithVerificationMode(verificationMode));
     }
+
+    @Override
+    public String toString() {
+        return "Wanted after "
+                + wrappedVerification.getTimer().duration()
+                + " ms: ["
+                + wrappedVerification.getDelegate()
+                + "]";
+    }
 }

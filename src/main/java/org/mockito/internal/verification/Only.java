@@ -34,4 +34,9 @@ public class Only implements VerificationMode {
         }
         markVerified(chunk.get(0), target);
     }
+
+    @Override
+    public String toString() {
+        return "Wanted invocations count: 1 and no other method invoked";
+    }
 }

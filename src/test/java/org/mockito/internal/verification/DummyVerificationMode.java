@@ -13,4 +13,9 @@ public class DummyVerificationMode implements VerificationMode {
     public VerificationMode description(String description) {
         return new DummyVerificationMode();
     }
+
+    @Override
+    public String toString() {
+        return "Dummy verification mode";
+    }
 }
