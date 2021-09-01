@@ -26,7 +26,7 @@ jobs:
     # Definition of the build matrix
     strategy:
       matrix:
-        java: [8, 11, 17]
+        java: [8, 11, 17-ea]
         mock-maker: ['mock-maker-default', 'mock-maker-inline']
 
     # All build steps
@@ -41,7 +41,7 @@ jobs:
     - name: 2. Set up Java ${{ matrix.java }}
       uses: actions/setup-java@v2
       with:
-        distribution: 'adopt'
+        distribution: 'zulu'
         java-version: ${{ matrix.java }}
 
     - name: 3. Validate Gradle wrapper
