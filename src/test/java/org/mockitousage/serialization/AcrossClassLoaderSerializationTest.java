@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import net.bytebuddy.ClassFileVersion;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -31,6 +32,10 @@ public class AcrossClassLoaderSerializationTest {
     @Test
     public void check_that_mock_can_be_serialized_in_a_classloader_and_deserialized_in_another()
             throws Exception {
+        // No longer supported starting with JDK 16+
+        if (!ClassFileVersion.ofThisVm().isAtMost(ClassFileVersion.JAVA_V16)) {
+            return;
+        }
         byte[] bytes = create_mock_and_serialize_it_in_class_loader_A();
 
         Object the_deserialized_mock = read_stream_and_deserialize_it_in_class_loader_B(bytes);

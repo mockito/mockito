@@ -116,16 +116,16 @@ public class GenericMetadataSupportTest {
     public void can_get_type_variables_from_Class() {
         assertThat(inferFrom(GenericsNest.class).actualTypeArguments().keySet())
                 .hasSize(1)
-                .extracting("name")
+                .extracting(TypeVariable::getName)
                 .contains("K");
         assertThat(inferFrom(ListOfNumbers.class).actualTypeArguments().keySet()).isEmpty();
         assertThat(inferFrom(ListOfAnyNumbers.class).actualTypeArguments().keySet())
                 .hasSize(1)
-                .extracting("name")
+                .extracting(TypeVariable::getName)
                 .contains("N");
         assertThat(inferFrom(Map.class).actualTypeArguments().keySet())
                 .hasSize(2)
-                .extracting("name")
+                .extracting(TypeVariable::getName)
                 .contains("K", "V");
         assertThat(inferFrom(Serializable.class).actualTypeArguments().keySet()).isEmpty();
         assertThat(inferFrom(StringList.class).actualTypeArguments().keySet()).isEmpty();
@@ -153,21 +153,21 @@ public class GenericMetadataSupportTest {
                                 .actualTypeArguments()
                                 .keySet())
                 .hasSize(2)
-                .extracting("name")
+                .extracting(TypeVariable::getName)
                 .contains("K", "V");
         assertThat(
                         inferFrom(ListOfAnyNumbers.class.getGenericInterfaces()[0])
                                 .actualTypeArguments()
                                 .keySet())
                 .hasSize(1)
-                .extracting("name")
+                .extracting(TypeVariable::getName)
                 .contains("E");
         assertThat(
                         inferFrom(Integer.class.getGenericInterfaces()[0])
                                 .actualTypeArguments()
                                 .keySet())
                 .hasSize(1)
-                .extracting("name")
+                .extracting(TypeVariable::getName)
                 .contains("T");
         assertThat(
                         inferFrom(StringBuilder.class.getGenericInterfaces()[0])
