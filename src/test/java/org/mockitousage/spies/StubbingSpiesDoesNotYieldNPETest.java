@@ -4,7 +4,7 @@
  */
 package org.mockitousage.spies;
 
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.spy;
 
 import java.util.Collection;

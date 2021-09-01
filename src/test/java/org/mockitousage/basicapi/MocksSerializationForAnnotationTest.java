@@ -300,7 +300,7 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
     @Test
     public void should_serialize_real_partial_mock() throws Exception {
         // given
-        when(anyMock.matches(anyObject())).thenCallRealMethod();
+        when(anyMock.matches(any())).thenCallRealMethod();
 
         // when
         ByteArrayOutputStream serialized = serializeMock(anyMock);

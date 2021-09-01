@@ -20,7 +20,7 @@ public class ActualInvocationHasNullArgumentNPEBugTest extends TestBase {
     public void shouldAllowPassingNullArgument() {
         // given
         Fun mockFun = mock(Fun.class);
-        when(mockFun.doFun((String) anyObject())).thenReturn("value");
+        when(mockFun.doFun((String) any())).thenReturn("value");
 
         // when
         mockFun.doFun(null);

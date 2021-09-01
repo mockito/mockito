@@ -5,7 +5,7 @@
 package org.mockitousage.misuse;
 
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -46,7 +46,7 @@ public class ExplicitFrameworkValidationTest extends TestBase {
 
     @Test
     public void shouldDetectMisplacedArgumentMatcher() {
-        anyObject();
+        Object ignored = any();
         try {
             Mockito.validateMockitoUsage();
             fail();

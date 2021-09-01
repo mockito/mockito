@@ -45,11 +45,6 @@ public class MockitoTest {
     }
 
     @Test(expected = NotAMockException.class)
-    public void shouldValidateMockWhenVerifyingZeroInteractions() {
-        Mockito.verifyZeroInteractions("notMock");
-    }
-
-    @Test(expected = NotAMockException.class)
     public void shouldValidateMockWhenVerifyingNoInteractions() {
         Mockito.verifyNoInteractions("notMock");
     }

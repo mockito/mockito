@@ -121,18 +121,18 @@ public class UsingVarargsTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyWithAnyObject() {
+    public void shouldVerifyWithAny() {
         Foo foo = Mockito.mock(Foo.class);
         foo.varArgs("");
-        Mockito.verify(foo).varArgs((String[]) Mockito.anyObject());
-        Mockito.verify(foo).varArgs((String) Mockito.anyObject());
+        Mockito.verify(foo).varArgs((String[]) Mockito.any());
+        Mockito.verify(foo).varArgs((String) Mockito.any());
     }
 
     @Test
     public void shouldVerifyWithNullVarArgArray() {
         Foo foo = Mockito.mock(Foo.class);
         foo.varArgs((String[]) null);
-        Mockito.verify(foo).varArgs((String[]) Mockito.anyObject());
+        Mockito.verify(foo).varArgs((String[]) Mockito.any());
         Mockito.verify(foo).varArgs((String[]) null);
     }
 
@@ -175,7 +175,7 @@ public class UsingVarargsTest extends TestBase {
     // See bug #157
     public void shouldMatchEasilyEmptyVararg() throws Exception {
         // when
-        when(mock.foo(anyVararg())).thenReturn(-1);
+        when(mock.foo(any())).thenReturn(-1);
 
         // then
         assertEquals(-1, mock.foo());

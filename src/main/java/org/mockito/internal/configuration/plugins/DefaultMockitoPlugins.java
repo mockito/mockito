@@ -6,9 +6,7 @@ package org.mockito.internal.configuration.plugins;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.mockito.internal.creation.instance.InstantiatorProvider2Adapter;
 import org.mockito.plugins.AnnotationEngine;
-import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MemberAccessor;
 import org.mockito.plugins.MockMaker;
@@ -53,18 +51,8 @@ class DefaultMockitoPlugins implements MockitoPlugins {
 
     @Override
     public <T> T getDefaultPlugin(Class<T> pluginType) {
-        if (pluginType == InstantiatorProvider.class) {
-            // the implementation class is not configured via map so that we can reduce duplication
-            // (ensure that we are adapting the currently configured default implementation for
-            // InstantiatorProvider2)
-            String className = DEFAULT_PLUGINS.get(InstantiatorProvider2.class.getName());
-            return pluginType.cast(
-                    new InstantiatorProvider2Adapter(
-                            create(InstantiatorProvider2.class, className)));
-        } else {
-            String className = DEFAULT_PLUGINS.get(pluginType.getName());
-            return create(pluginType, className);
-        }
+        String className = DEFAULT_PLUGINS.get(pluginType.getName());
+        return create(pluginType, className);
     }
 
     String getDefaultPluginClass(String classOrAlias) {

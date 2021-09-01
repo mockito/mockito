@@ -94,7 +94,7 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
         doReturn("java").when(mock).giveMeSomeString("coffee");
 
         // then
-        verifyZeroInteractions(listener);
+        verifyNoInteractions(listener);
     }
 
     @Test
@@ -170,7 +170,7 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
         mock.doSomething("foo");
 
         // then
-        verifyZeroInteractions(listener, listener2);
+        verifyNoInteractions(listener, listener2);
     }
 
     @Test

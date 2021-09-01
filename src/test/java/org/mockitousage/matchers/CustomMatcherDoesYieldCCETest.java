@@ -5,7 +5,7 @@
 package org.mockitousage.matchers;
 
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.argThat;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;

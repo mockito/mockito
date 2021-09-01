@@ -6,10 +6,8 @@ package org.mockito;
 
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
-import org.mockito.internal.InternalMockHandler;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.internal.debugging.MockitoDebuggerImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.session.DefaultMockitoSessionBuilder;
 import org.mockito.internal.verification.VerificationModeFactory;
@@ -29,9 +27,11 @@ import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
 import org.mockito.session.MockitoSessionLogger;
 import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.Answer1;
 import org.mockito.stubbing.LenientStubber;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
+import org.mockito.stubbing.VoidAnswer1;
 import org.mockito.verification.*;
 
 import java.util.function.Function;
@@ -284,10 +284,10 @@ import java.util.function.Function;
  * </code></pre>
  *
  * <p>
- * Matcher methods like <code>anyObject()</code>, <code>eq()</code> <b>do not</b> return matchers.
+ * Matcher methods like <code>any()</code>, <code>eq()</code> <b>do not</b> return matchers.
  * Internally, they record a matcher on a stack and return a dummy value (usually null).
  * This implementation is due to static type safety imposed by the java compiler.
- * The consequence is that you cannot use <code>anyObject()</code>, <code>eq()</code> methods outside of verified/stubbed method.
+ * The consequence is that you cannot use <code>any()</code>, <code>eq()</code> methods outside of verified/stubbed method.
  *
  *
  *
@@ -400,9 +400,6 @@ import java.util.function.Function;
  *
  * //verify that method was never called on a mock
  * verify(mockOne, never()).add("two");
- *
- * //verify that other mocks were not interacted
- * verifyZeroInteractions(mockTwo, mockThree);
  *
  * </code></pre>
  *
@@ -1242,7 +1239,7 @@ import java.util.function.Function;
  * as Java 8 lambdas. Even in Java 7 and lower these custom answers based on a typed interface can reduce boilerplate.
  * In particular, this approach will make it easier to test functions which use callbacks.
  *
- * The methods {@link AdditionalAnswers#answer(Answer1) answer} and {@link AdditionalAnswers#answerVoid(VoidAnswer1) answerVoid}
+ * The methods {@link AdditionalAnswers#answer(Answer1)}} and {@link AdditionalAnswers#answerVoid(VoidAnswer1)}
  * can be used to create the answer. They rely on the related answer interfaces in {@link org.mockito.stubbing} that
  * support answers up to 5 parameters.
  *
@@ -1436,15 +1433,10 @@ import java.util.function.Function;
  *      Provides access to invocation container object which has no methods (marker interface).
  *      Container is needed to hide the internal implementation and avoid leaking it to the public API.
  *     </li>
- *     <li>Changed {@link Stubbing} -
+ *     <li>Changed {@link org.mockito.stubbing.Stubbing} -
  *      it now extends {@link Answer} interface.
  *      It is backwards compatible because Stubbing interface is not extensible (see {@link NotExtensible}).
  *      The change should be seamless to our users.
- *     </li>
- *     <li>Deprecated {@link InternalMockHandler} -
- *       In order to accommodate API changes we needed to deprecate this interface.
- *       The interface was always documented as internal, we don't have evidence it was used by the community.
- *       The deprecation should be completely seamless for our users.
  *     </li>
  *     <li>{@link NotExtensible} -
  *       Public annotation that indicates to the user that she should not provide custom implementations of given type.
@@ -1505,9 +1497,9 @@ import java.util.function.Function;
  *       Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was
  *       replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a></h3>
  *
- * <p>{@link org.mockito.plugins.InstantiatorProvider} returned an internal API. Hence it was deprecated and replaced
- * by {@link org.mockito.plugins.InstantiatorProvider2}. Old {@link org.mockito.plugins.InstantiatorProvider
- * instantiator providers} will continue to work, but it is recommended to switch to the new API.</p>
+ * <p>org.mockito.plugins.InstantiatorProvider returned an internal API. Hence it was deprecated and replaced
+ * by {@link org.mockito.plugins.InstantiatorProvider2}. org.mockito.plugins.InstantiatorProvider
+ * has now been removed.</p>
  *
  * <h3 id="45">45. <a class="meaningful_link" href="#junit5_mockito" name="junit5_mockito">New JUnit Jupiter (JUnit5+) extension</a></h3>
  *
@@ -2532,18 +2524,6 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
-     * Verifies that no interactions happened on given mocks beyond the previously verified interactions.<br/>
-     * This method has the same behavior as {@link #verifyNoMoreInteractions(Object...)}.
-     *
-     * @param mocks to be verified
-     * @deprecated Since 3.0.1. Please migrate your code to {@link #verifyNoInteractions(Object...)}
-     */
-    @Deprecated
-    public static void verifyZeroInteractions(Object... mocks) {
-        MOCKITO_CORE.verifyNoMoreInteractions(mocks);
-    }
-
-    /**
      * Verifies that no interactions happened on given mocks.
      * <pre class="code"><code class="java">
      *   verifyNoInteractions(mockOne, mockTwo);
@@ -2980,8 +2960,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * <p>
      * If you want to verify there were NO interactions with the mock
-     * check out {@link Mockito#verifyZeroInteractions(Object...)}
-     * or {@link Mockito#verifyNoMoreInteractions(Object...)}
+     * check out {@link Mockito#verifyNoMoreInteractions(Object...)}
      * <p>
      * See examples in javadoc for {@link Mockito} class
      *
@@ -3271,15 +3250,6 @@ public class Mockito extends ArgumentMatchers {
      */
     public static VerificationMode description(String description) {
         return times(1).description(description);
-    }
-
-    /**
-     * @deprecated - please use {@link MockingDetails#printInvocations()} instead.
-     * An instance of {@code MockingDetails} can be retrieved via {@link #mockingDetails(Object)}.
-     */
-    @Deprecated
-    static MockitoDebugger debug() {
-        return new MockitoDebuggerImpl();
     }
 
     /**

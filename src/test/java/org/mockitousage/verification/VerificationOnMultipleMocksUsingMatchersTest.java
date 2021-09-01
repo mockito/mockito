@@ -29,10 +29,10 @@ public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {
         map.put("test", 100);
         map.put("test two", 200);
 
-        verify(list).add(anyObject());
+        verify(list).add(any());
         verify(list).add(anyInt(), eq("test two"));
 
-        verify(map, times(2)).put(anyObject(), anyObject());
+        verify(map, times(2)).put(any(), any());
         verify(map).put(eq("test two"), eq(200));
 
         verifyNoMoreInteractions(list, map);
@@ -55,10 +55,9 @@ public class VerificationOnMultipleMocksUsingMatchersTest extends TestBase {
         verify(list, times(1)).add("two");
         verify(list, times(0)).add("three");
 
-        verify(map, times(2)).put(anyObject(), anyInt());
+        verify(map, times(2)).put(any(), anyInt());
 
         verifyNoMoreInteractions(list, map);
-        verifyZeroInteractions(set);
         verifyNoInteractions(set);
     }
 }

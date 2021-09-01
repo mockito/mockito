@@ -5,7 +5,7 @@
 package org.mockitousage.matchers;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -29,29 +29,6 @@ public class AnyXMatchersAcceptNullsTest extends TestBase {
         when(mock.oneArg((Object) any())).thenReturn("matched");
 
         assertEquals(null, mock.forObject(null));
-    }
-
-    @Test
-    public void shouldAcceptNullsInAnyObjectMatcher() {
-        when(mock.oneArg((Object) anyObject())).thenReturn("matched");
-
-        assertEquals(null, mock.forObject(null));
-    }
-
-    @Test
-    public void shouldNotAcceptNullInAnyXMatchers() {
-        when(mock.oneArg(anyString())).thenReturn("0");
-        when(mock.forList(anyListOf(String.class))).thenReturn("1");
-        when(mock.forMap(anyMapOf(String.class, String.class))).thenReturn("2");
-        when(mock.forCollection(anyCollectionOf(String.class))).thenReturn("3");
-        when(mock.forSet(anySetOf(String.class))).thenReturn("4");
-
-        assertEquals(null, mock.oneArg((Object) null));
-        assertEquals(null, mock.oneArg((String) null));
-        assertEquals(null, mock.forList(null));
-        assertEquals(null, mock.forMap(null));
-        assertEquals(null, mock.forCollection(null));
-        assertEquals(null, mock.forSet(null));
     }
 
     @Test

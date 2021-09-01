@@ -312,7 +312,7 @@ public class MocksSerializationTest extends TestBase implements Serializable {
     public void should_serialize_real_partial_mock() throws Exception {
         // given
         Any mock = mock(Any.class, withSettings().serializable());
-        when(mock.matches(anyObject())).thenCallRealMethod();
+        when(mock.matches(any())).thenCallRealMethod();
 
         // when
         ByteArrayOutputStream serialized = serializeMock(mock);

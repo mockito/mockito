@@ -120,7 +120,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowAnyVarargMatchEntireVararg() {
+    public void shouldAllowAnyMatchEntireVararg() {
         // given
         invocation = varargs("1", "2");
         matchers = asList(ANY);
@@ -135,7 +135,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     }
 
     @Test
-    public void shouldNotAllowAnyObjectWithMixedVarargs() {
+    public void shouldNotAllowAnyWithMixedVarargs() {
         // given
         invocation = mixedVarargs(1, "1", "2");
         matchers = asList(new Equals(1));
@@ -150,7 +150,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowAnyObjectWithMixedVarargs() {
+    public void shouldAllowanyWithMixedVarargs() {
         // given
         invocation = mixedVarargs(1, "1", "2");
         matchers = asList(new Equals(1), ANY);
@@ -165,7 +165,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     }
 
     @Test
-    public void shouldAnyObjectVarargDealWithDifferentSizeOfArgs() {
+    public void shouldAnyDealWithDifferentSizeOfArgs() {
         // given
         invocation = mixedVarargs(1, "1", "2");
         matchers = asList(new Equals(1));
@@ -182,7 +182,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     }
 
     @Test
-    public void shouldMatchAnyVarargEvenIfOneOfTheArgsIsNull() {
+    public void shouldMatchAnyEvenIfOneOfTheArgsIsNull() {
         // given
         invocation = mixedVarargs(null, null, "2");
         matchers = asList(new Equals(null), ANY);
@@ -196,7 +196,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     }
 
     @Test
-    public void shouldMatchAnyVarargEvenIfMatcherIsDecorated() {
+    public void shouldMatchAnyEvenIfMatcherIsDecorated() {
         // given
         invocation = varargs("1", "2");
         matchers = asList(ANY);
@@ -210,7 +210,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     }
 
     @Test
-    public void shouldMatchAnyVarargEvenIfMatcherIsWrappedInHamcrestMatcher() {
+    public void shouldMatchAnyEvenIfMatcherIsWrappedInHamcrestMatcher() {
         // given
         invocation = varargs("1", "2");
         HamcrestArgumentMatcher argumentMatcher = new HamcrestArgumentMatcher(new IntMatcher());

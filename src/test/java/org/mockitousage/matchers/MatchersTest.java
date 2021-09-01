@@ -20,7 +20,7 @@ import static org.mockito.AdditionalMatchers.lt;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.AdditionalMatchers.or;
 import static org.mockito.ArgumentMatchers.nullable;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyByte;
@@ -29,7 +29,6 @@ import static org.mockito.Mockito.anyDouble;
 import static org.mockito.Mockito.anyFloat;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.anyObject;
 import static org.mockito.Mockito.anyShort;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.contains;
@@ -48,12 +47,12 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.RandomAccess;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
@@ -284,9 +283,7 @@ public class MatchersTest extends TestBase {
         when(mock.oneArg(anyInt())).thenReturn("5");
         when(mock.oneArg(anyLong())).thenReturn("6");
         when(mock.oneArg(anyShort())).thenReturn("7");
-        when(mock.oneArg((String) anyObject())).thenReturn("8");
-        when(mock.oneArg(Mockito.<Object>anyObject())).thenReturn("9");
-        when(mock.oneArg(any(RandomAccess.class))).thenReturn("10");
+        when(mock.oneArg(any(RandomAccess.class))).thenReturn("8");
 
         assertEquals("0", mock.oneArg(true));
         assertEquals("0", mock.oneArg(false));
@@ -298,12 +295,8 @@ public class MatchersTest extends TestBase {
         assertEquals("5", mock.oneArg(1));
         assertEquals("6", mock.oneArg(1L));
         assertEquals("7", mock.oneArg((short) 1));
-        assertEquals("8", mock.oneArg("Test"));
 
-        assertEquals("9", mock.oneArg(new Object()));
-        assertEquals("9", mock.oneArg(new HashMap()));
-
-        assertEquals("10", mock.oneArg(new ArrayList()));
+        assertEquals("8", mock.oneArg(new ArrayList()));
     }
 
     @Test
@@ -455,14 +448,14 @@ public class MatchersTest extends TestBase {
 
     @Test
     public void null_matcher_for_primitive_wrappers() {
-        when(mock.forBoolean(isNull(Boolean.class))).thenReturn("ok");
-        when(mock.forInteger(isNull(Integer.class))).thenReturn("ok");
-        when(mock.forLong(isNull(Long.class))).thenReturn("ok");
-        when(mock.forByte(isNull(Byte.class))).thenReturn("ok");
-        when(mock.forShort(isNull(Short.class))).thenReturn("ok");
-        when(mock.forCharacter(isNull(Character.class))).thenReturn("ok");
-        when(mock.forDouble(isNull(Double.class))).thenReturn("ok");
-        when(mock.forFloat(isNull(Float.class))).thenReturn("ok");
+        when(mock.forBoolean(ArgumentMatchers.<Boolean>isNull())).thenReturn("ok");
+        when(mock.forInteger(ArgumentMatchers.<Integer>isNull())).thenReturn("ok");
+        when(mock.forLong(ArgumentMatchers.<Long>isNull())).thenReturn("ok");
+        when(mock.forByte(ArgumentMatchers.<Byte>isNull())).thenReturn("ok");
+        when(mock.forShort(ArgumentMatchers.<Short>isNull())).thenReturn("ok");
+        when(mock.forCharacter(ArgumentMatchers.<Character>isNull())).thenReturn("ok");
+        when(mock.forDouble(ArgumentMatchers.<Double>isNull())).thenReturn("ok");
+        when(mock.forFloat(ArgumentMatchers.<Float>isNull())).thenReturn("ok");
 
         assertEquals("ok", mock.forBoolean(null));
         assertEquals("ok", mock.forInteger(null));

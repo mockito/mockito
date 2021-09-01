@@ -64,7 +64,7 @@ public class BasicStubbingTest extends TestBase {
         when(mock.simpleMethod("one")).thenThrow(new RuntimeException());
         doThrow(new RuntimeException()).when(mock).simpleMethod("two");
 
-        verifyZeroInteractions(mock);
+        verifyNoInteractions(mock);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class BasicStubbingTest extends TestBase {
         }
 
         // anything that can cause state validation
-        verifyZeroInteractions(mock);
+        verifyNoInteractions(mock);
     }
 
     @Test

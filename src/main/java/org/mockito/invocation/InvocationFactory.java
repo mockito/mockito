@@ -6,7 +6,6 @@ package org.mockito.invocation;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.concurrent.Callable;
 
 import org.mockito.Incubating;
 import org.mockito.MockitoFramework;
@@ -26,33 +25,6 @@ import org.mockito.mock.MockCreationSettings;
  */
 @Incubating
 public interface InvocationFactory {
-
-    /**
-     * @deprecated Use {@link #createInvocation(Object, MockCreationSettings, Method, RealMethodBehavior, Object...)} instead.
-     *
-     * Why deprecated? We found use cases where we need to handle Throwable and ensure correct stack trace filtering
-     * (removing Mockito internals from the stack trace). Hence the introduction of {@link RealMethodBehavior}.
-     *
-     * Creates instance of an {@link Invocation} object.
-     * This method is useful for framework integrators to programmatically simulate method calls on mocks using {@link MockHandler}.
-     * It enables advanced framework integrations.
-     *
-     * @param target the mock object the method is invoked on.
-     * @param settings creation settings of the mock object.
-     * @param method java method invoked on mock.
-     * @param realMethod real method behavior. Needed for spying / invoking real behavior on mock objects.
-     * @param args the java method arguments
-     *
-     * @return invocation instance
-     * @since 2.10.0
-     */
-    @Deprecated
-    Invocation createInvocation(
-            Object target,
-            MockCreationSettings settings,
-            Method method,
-            Callable realMethod,
-            Object... args);
 
     /**
      * Behavior of the real method.
