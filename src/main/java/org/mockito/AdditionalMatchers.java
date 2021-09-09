@@ -16,11 +16,11 @@ import org.mockito.internal.matchers.LessOrEqual;
 import org.mockito.internal.matchers.LessThan;
 
 /**
- * See {@link Matchers} for general info about matchers.
+ * See {@link ArgumentMatchers} for general info about matchers.
  * <p>
  * AdditionalMatchers provides rarely used matchers, kept only for somewhat compatibility with EasyMock.
  * Use additional matchers very judiciously because they may impact readability of a test.
- * It is recommended to use matchers from {@link Matchers} and keep stubbing and verification simple.
+ * It is recommended to use matchers from {@link ArgumentMatchers} and keep stubbing and verification simple.
  * <p>
  * Example of using logical and(), not(), or() matchers:
  *

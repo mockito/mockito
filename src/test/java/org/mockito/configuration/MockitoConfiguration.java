@@ -5,7 +5,6 @@
 package org.mockito.configuration;
 
 import org.mockito.stubbing.Answer;
-import org.mockitousage.configuration.CustomizedAnnotationForSmartMockTest;
 
 public class MockitoConfiguration extends DefaultMockitoConfiguration
         implements IMockitoConfiguration {
@@ -14,7 +13,7 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration
 
     private boolean cleansStackTrace;
 
-    private AnnotationEngine overriddenEngine;
+    private org.mockito.plugins.AnnotationEngine overriddenEngine;
 
     private boolean enableClassCache = true;
 
@@ -29,7 +28,7 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration
     }
 
     // for testing purposes, allow to override the annotation engine
-    public void overrideAnnotationEngine(AnnotationEngine engine) {
+    public void overrideAnnotationEngine(org.mockito.plugins.AnnotationEngine engine) {
         this.overriddenEngine = engine;
     }
 
@@ -45,14 +44,6 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration
         } else {
             return overriddenDefaultAnswer;
         }
-    }
-
-    @Override
-    public AnnotationEngine getAnnotationEngine() {
-        if (this.overriddenEngine != null) {
-            return this.overriddenEngine;
-        }
-        return new CustomizedAnnotationForSmartMockTest.CustomInjectingAnnotationEngine();
     }
 
     @Override

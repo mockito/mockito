@@ -36,11 +36,6 @@ public class VerificationDataImpl implements VerificationData {
         return wanted;
     }
 
-    @Override
-    public InvocationMatcher getWanted() {
-        return wanted;
-    }
-
     private void assertWantedIsVerifiable() {
         if (wanted == null) {
             return;

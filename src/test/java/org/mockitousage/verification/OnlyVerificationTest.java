@@ -6,7 +6,7 @@ package org.mockitousage.verification;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 

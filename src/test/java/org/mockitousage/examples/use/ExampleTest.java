@@ -89,7 +89,7 @@ public class ExampleTest {
 
         InOrder inOrder = inOrder(mockDatabase, mockCalculator);
 
-        inOrder.verify(mockCalculator).countNumberOfRelatedArticles((Article) anyObject());
-        inOrder.verify(mockDatabase, atLeastOnce()).save((Article) anyObject());
+        inOrder.verify(mockCalculator).countNumberOfRelatedArticles(any());
+        inOrder.verify(mockDatabase, atLeastOnce()).save(any());
     }
 }

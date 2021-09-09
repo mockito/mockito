@@ -21,8 +21,7 @@ import org.mockito.plugins.AnnotationEngine;
 /**
  * See {@link MockitoAnnotations}
  */
-public class InjectingAnnotationEngine
-        implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
+public class InjectingAnnotationEngine implements AnnotationEngine {
     private final AnnotationEngine delegate = new IndependentAnnotationEngine();
     private final AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
 

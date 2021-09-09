@@ -39,7 +39,7 @@ import org.mockito.invocation.InvocationOnMock;
  *
  * <pre class="code"><code class="java">
  * when(mock.someMethod(anyString(), anyInt())).then(doSomethingTricky()); // fail at answer execution time
- * when(mock.incompatibleMethod(anyVararg())).then(doSomethingTricky()); // fail at answer execution time
+ * when(mock.incompatibleMethod(any())).then(doSomethingTricky()); // fail at answer execution time
  * </code></pre>
  * </p>
  *
@@ -48,7 +48,7 @@ import org.mockito.invocation.InvocationOnMock;
  * validable at <em>stub time</em> by implementing this contract.
  *
  * <pre class="code"><code class="java">
- * when(mock.incompatibleMethod(anyVararg())).then(doSomethingTricky()); // fail at answer stub time
+ * when(mock.incompatibleMethod(any())).then(doSomethingTricky()); // fail at answer stub time
  *
  * static Answer doSomethingTricky() {
  *     return new TrickyAnswer();

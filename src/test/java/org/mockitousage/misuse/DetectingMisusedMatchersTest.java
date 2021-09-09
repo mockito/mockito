@@ -9,7 +9,7 @@ import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.anyObject;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.verify;
@@ -39,8 +39,8 @@ public class DetectingMisusedMatchersTest extends TestBase {
         super.resetState();
     }
 
-    private void misplaced_anyObject_argument_matcher() {
-        Object ignored = anyObject();
+    private void misplaced_any_argument_matcher() {
+        Object ignored = any();
     }
 
     private void misplaced_anyInt_argument_matcher() {
@@ -53,7 +53,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
 
     @Test
     public void should_fail_fast_when_argument_matchers_are_abused() {
-        misplaced_anyObject_argument_matcher();
+        misplaced_any_argument_matcher();
         try {
             mock(IMethods.class);
             fail();
@@ -68,7 +68,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
             Observer observer = mock(Observer.class);
 
             misplaced_anyInt_argument_matcher();
-            misplaced_anyObject_argument_matcher();
+            misplaced_any_argument_matcher();
             misplaced_anyBoolean_argument_matcher();
 
             observer.update(null, null);
@@ -80,7 +80,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
                     .hasMessageContaining(
                             "DetectingMisusedMatchersTest.misplaced_anyInt_argument_matcher")
                     .hasMessageContaining(
-                            "DetectingMisusedMatchersTest.misplaced_anyObject_argument_matcher")
+                            "DetectingMisusedMatchersTest.misplaced_any_argument_matcher")
                     .hasMessageContaining(
                             "DetectingMisusedMatchersTest.misplaced_anyBoolean_argument_matcher");
         }
@@ -90,7 +90,7 @@ public class DetectingMisusedMatchersTest extends TestBase {
     @Test
     public void shouldSayUnfinishedVerificationButNotInvalidUseOfMatchers() {
         assumeTrue("Does not apply for inline mocks", withFinal.getClass() != WithFinal.class);
-        verify(withFinal).finalMethod(anyObject());
+        verify(withFinal).finalMethod(any());
         try {
             verify(withFinal);
             fail();

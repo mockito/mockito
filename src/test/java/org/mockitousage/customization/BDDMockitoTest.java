@@ -263,24 +263,8 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_validate_that_mock_did_not_have_any_interactions() {
-        then(mock).shouldHaveZeroInteractions();
-    }
-
-    @Test
     public void should_validate_that_mock_had_no_interactions() {
         then(mock).shouldHaveNoInteractions();
-    }
-
-    @Test
-    public void should_fail_when_mock_had_unwanted_interactions() {
-        mock.booleanObjectReturningMethod();
-
-        try {
-            then(mock).shouldHaveZeroInteractions();
-            fail("should have reported this interaction wasn't wanted");
-        } catch (NoInteractionsWanted expected) {
-        }
     }
 
     @Test
@@ -336,7 +320,7 @@ public class BDDMockitoTest extends TestBase {
         person.ride(bike);
 
         then(person).should(times(2)).ride(bike);
-        then(police).shouldHaveZeroInteractions();
+        then(police).shouldHaveNoInteractions();
     }
 
     @Test

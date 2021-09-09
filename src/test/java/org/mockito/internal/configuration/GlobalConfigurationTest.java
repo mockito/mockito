@@ -11,21 +11,11 @@ import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.configuration.AnnotationEngine;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.ClassLoaders;
 import org.objenesis.Objenesis;
 
 public class GlobalConfigurationTest {
-    @Test
-    public void returns_mockito_configuration_annotation_engine_if_non_default() throws Exception {
-        ConfigurationAccess.getConfig().overrideAnnotationEngine(new CustomAnnotationEngine());
-        assertThat(new GlobalConfiguration().getAnnotationEngine())
-                .isInstanceOf(CustomAnnotationEngine.class);
-        assertThat(new GlobalConfiguration().tryGetPluginAnnotationEngine())
-                .isInstanceOf(CustomAnnotationEngine.class);
-    }
-
     @Test
     public void returns_mockito_annotation_engine_of_Plugins_if_no_MockitoConfiguration()
             throws Throwable {
@@ -44,8 +34,6 @@ public class GlobalConfigurationTest {
                         new Runnable() {
                             @Override
                             public void run() {
-                                assertThat(new GlobalConfiguration().getAnnotationEngine())
-                                        .isInstanceOf(Plugins.getAnnotationEngine().getClass());
                                 assertThat(new GlobalConfiguration().tryGetPluginAnnotationEngine())
                                         .isInstanceOf(Plugins.getAnnotationEngine().getClass());
                             }
@@ -57,7 +45,7 @@ public class GlobalConfigurationTest {
         ConfigurationAccess.getConfig().overrideAnnotationEngine(null);
     }
 
-    private static class CustomAnnotationEngine implements AnnotationEngine {
+    private static class CustomAnnotationEngine implements org.mockito.plugins.AnnotationEngine {
         @Override
         public AutoCloseable process(Class<?> clazz, Object testInstance) {
             return new NoAction();

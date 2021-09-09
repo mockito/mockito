@@ -39,9 +39,6 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
         //        verifyNoMoreInteractions();
         //        verifyNoMoreInteractions(null);
         //        verifyNoMoreInteractions("");
-        //        verifyZeroInteractions();
-        //        verifyZeroInteractions(null);
-        //        verifyZeroInteractions("");
         //
         //        inOrder();
         //        inOrder(null);

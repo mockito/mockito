@@ -5,9 +5,8 @@
 package org.mockitousage.bugs.varargs;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.anyObject;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.anyVararg;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -18,7 +17,7 @@ import org.mockito.Mock;
 import org.mockitoutil.TestBase;
 
 // see issue 62
-public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
+public class VarargsNotPlayingWithAnyTest extends TestBase {
 
     interface VarargMethod {
         Object run(String... args);
@@ -27,27 +26,27 @@ public class VarargsNotPlayingWithAnyObjectTest extends TestBase {
     @Mock VarargMethod mock;
 
     @Test
-    public void shouldMatchAnyVararg() {
+    public void shouldMatchAny() {
         mock.run("a", "b");
 
         verify(mock).run(anyString(), anyString());
-        verify(mock).run((String) anyObject(), (String) anyObject());
+        verify(mock).run((String) any(), (String) any());
 
-        verify(mock).run((String[]) anyVararg());
+        verify(mock).run((String[]) any());
 
         verify(mock, never()).run();
         verify(mock, never()).run(anyString(), eq("f"));
     }
 
     @Test
-    public void shouldAllowUsingAnyObjectForVarArgs() {
+    public void shouldAllowUsinganyForVarArgs() {
         mock.run("a", "b");
-        verify(mock).run((String[]) anyObject());
+        verify(mock).run((String[]) any());
     }
 
     @Test
-    public void shouldStubUsingAnyVarargs() {
-        when(mock.run((String[]) anyVararg())).thenReturn("foo");
+    public void shouldStubUsingAny() {
+        when(mock.run((String[]) any())).thenReturn("foo");
 
         assertEquals("foo", mock.run("a", "b"));
     }

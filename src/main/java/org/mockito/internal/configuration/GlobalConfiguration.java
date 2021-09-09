@@ -6,7 +6,6 @@ package org.mockito.internal.configuration;
 
 import java.io.Serializable;
 
-import org.mockito.configuration.AnnotationEngine;
 import org.mockito.configuration.DefaultMockitoConfiguration;
 import org.mockito.configuration.IMockitoConfiguration;
 import org.mockito.internal.configuration.plugins.Plugins;
@@ -47,16 +46,8 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
         new GlobalConfiguration();
     }
 
-    public AnnotationEngine getAnnotationEngine() {
-        return GLOBAL_CONFIGURATION.get().getAnnotationEngine();
-    }
-
     public org.mockito.plugins.AnnotationEngine tryGetPluginAnnotationEngine() {
-        IMockitoConfiguration configuration = GLOBAL_CONFIGURATION.get();
-        if (configuration.getClass() == DefaultMockitoConfiguration.class) {
-            return Plugins.getAnnotationEngine();
-        }
-        return configuration.getAnnotationEngine();
+        return Plugins.getAnnotationEngine();
     }
 
     @Override

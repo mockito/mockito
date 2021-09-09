@@ -7,7 +7,7 @@ package org.mockitousage.matchers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -41,8 +41,8 @@ public class InvalidUseOfMatchersTest {
     @Test
     public void should_detect_stupid_use_of_matchers_when_verifying() {
         mock.oneArg(true);
-        eq("that's the stupid way");
-        eq("of using matchers");
+        Object ignored = eq("that's the stupid way");
+        ignored = eq("of using matchers");
         try {
             Mockito.verify(mock).oneArg(true);
             fail();

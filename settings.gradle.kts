@@ -2,8 +2,7 @@ plugins {
   id("com.gradle.enterprise").version("3.3.4")
 }
 
-include("deprecatedPluginsTest",
-    "inline",
+include("inline",
     "proxy",
     "extTest",
     "groovyTest",

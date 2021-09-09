@@ -5,9 +5,7 @@
 package org.mockito.internal.configuration.plugins;
 
 import java.util.List;
-import org.mockito.internal.creation.instance.InstantiatorProviderAdapter;
 import org.mockito.plugins.AnnotationEngine;
-import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MemberAccessor;
 import org.mockito.plugins.MockMaker;
@@ -47,14 +45,8 @@ class PluginRegistry {
             new PluginLoader(pluginSwitch).loadPlugins(MockResolver.class);
 
     PluginRegistry() {
-        Object impl =
-                new PluginLoader(pluginSwitch)
-                        .loadPlugin(InstantiatorProvider2.class, InstantiatorProvider.class);
-        if (impl instanceof InstantiatorProvider) {
-            instantiatorProvider = new InstantiatorProviderAdapter((InstantiatorProvider) impl);
-        } else {
-            instantiatorProvider = (InstantiatorProvider2) impl;
-        }
+        instantiatorProvider =
+                new PluginLoader(pluginSwitch).loadPlugin(InstantiatorProvider2.class);
     }
 
     /**

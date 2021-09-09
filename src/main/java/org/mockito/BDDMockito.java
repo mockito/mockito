@@ -255,14 +255,6 @@ public class BDDMockito extends Mockito {
         T should(InOrder inOrder, VerificationMode mode);
 
         /**
-         * @see #verifyZeroInteractions(Object...)
-         * @since 2.1.0
-         * @deprecated Since 3.0.1. Please migrate your code to {@link #shouldHaveNoInteractions()}
-         */
-        @Deprecated
-        void shouldHaveZeroInteractions();
-
-        /**
          * @see #verifyNoMoreInteractions(Object...)
          * @since 2.1.0
          */
@@ -316,14 +308,6 @@ public class BDDMockito extends Mockito {
         }
 
         /**
-         * @see #verifyZeroInteractions(Object...)
-         * @since 2.1.0
-         */
-        public void shouldHaveZeroInteractions() {
-            verifyZeroInteractions(mock);
-        }
-
-        /**
          * @see #verifyNoMoreInteractions(Object...)
          * @since 2.1.0
          */
@@ -356,17 +340,6 @@ public class BDDMockito extends Mockito {
          * @since 1.8.0
          */
         BDDStubber will(Answer<?> answer);
-
-        /**
-         * See original {@link Stubber#doNothing()}.
-         *
-         * This method will be removed in version 4.0.0
-         *
-         * @since 1.8.0
-         * @deprecated as of 2.1.0 please use {@link #willDoNothing()} instead
-         */
-        @Deprecated
-        BDDStubber willNothing();
 
         /**
          * See original {@link Stubber#doNothing()}
@@ -439,14 +412,6 @@ public class BDDMockito extends Mockito {
 
         public BDDStubber will(Answer<?> answer) {
             return new BDDStubberImpl(mockitoStubber.doAnswer(answer));
-        }
-
-        /**
-         * @deprecated please use {@link #willDoNothing()} instead
-         */
-        @Deprecated
-        public BDDStubber willNothing() {
-            return willDoNothing();
         }
 
         public BDDStubber willDoNothing() {

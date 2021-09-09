@@ -4,7 +4,7 @@
  */
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.refEq;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 

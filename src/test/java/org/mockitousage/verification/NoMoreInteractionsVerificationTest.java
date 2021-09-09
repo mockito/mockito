@@ -51,29 +51,6 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyNoInteractionsAsManyTimesAsYouWant() throws Exception {
-        verifyNoMoreInteractions(mock);
-        verifyNoMoreInteractions(mock);
-
-        verifyZeroInteractions(mock);
-        verifyZeroInteractions(mock);
-
-        verifyNoInteractions(mock);
-        verifyNoInteractions(mock);
-    }
-
-    @Test
-    public void shouldFailZeroInteractionsVerification() throws Exception {
-        mock.clear();
-
-        try {
-            verifyZeroInteractions(mock);
-            fail();
-        } catch (NoInteractionsWanted e) {
-        }
-    }
-
-    @Test
     public void shouldFailNoMoreInteractionsVerification() throws Exception {
         mock.clear();
 
@@ -136,7 +113,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
 
         verifyNoMoreInteractions(list);
         try {
-            verifyZeroInteractions(map);
+            verifyNoInteractions(map);
             fail();
         } catch (NoInteractionsWanted e) {
         }

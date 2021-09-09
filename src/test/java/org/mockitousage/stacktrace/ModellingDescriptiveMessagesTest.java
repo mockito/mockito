@@ -158,7 +158,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
 
     @Test
     public void shouldMentionFinalAndObjectMethodsWhenMisplacedArgumentMatcher() {
-        when(mock.equals(anyObject())).thenReturn(false);
+        when(mock.equals(any())).thenReturn(false);
     }
 
     @Test

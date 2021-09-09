@@ -31,8 +31,7 @@ import org.mockito.plugins.MemberAccessor;
  * @see MockitoAnnotations
  */
 @SuppressWarnings("unchecked")
-public class IndependentAnnotationEngine
-        implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
+public class IndependentAnnotationEngine implements AnnotationEngine {
     private final Map<Class<? extends Annotation>, FieldAnnotationProcessor<?>>
             annotationProcessorMap = new HashMap<>();
 

@@ -46,8 +46,7 @@ import org.mockito.plugins.MemberAccessor;
  * <p>This engine will fail, if the field is also annotated with incompatible Mockito annotations.
  */
 @SuppressWarnings({"unchecked"})
-public class SpyAnnotationEngine
-        implements AnnotationEngine, org.mockito.configuration.AnnotationEngine {
+public class SpyAnnotationEngine implements AnnotationEngine {
 
     @Override
     public AutoCloseable process(Class<?> context, Object testInstance) {

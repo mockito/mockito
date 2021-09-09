@@ -5,7 +5,7 @@
 package org.mockitousage.bugs;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import org.junit.Test;
 import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
@@ -29,7 +29,7 @@ public class ClassCastExOnVerifyZeroInteractionsTest {
                             }
                         });
         test.m1();
-        verifyZeroInteractions(test);
+        verifyNoInteractions(test);
     }
 
     @Test(expected = WrongTypeOfReturnValue.class)

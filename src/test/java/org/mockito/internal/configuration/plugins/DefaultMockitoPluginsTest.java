@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker;
 import org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker;
 import org.mockito.internal.util.ConsoleMockitoLogger;
-import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockitoLogger;
@@ -23,7 +22,6 @@ public class DefaultMockitoPluginsTest extends TestBase {
     private DefaultMockitoPlugins plugins = new DefaultMockitoPlugins();
 
     @Test
-    @SuppressWarnings("deprecation")
     public void provides_plugins() throws Exception {
         assertEquals(
                 "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker",
@@ -34,7 +32,6 @@ public class DefaultMockitoPluginsTest extends TestBase {
                 plugins.getDefaultPluginClass(PROXY_ALIAS));
         assertEquals(
                 ByteBuddyMockMaker.class, plugins.getDefaultPlugin(MockMaker.class).getClass());
-        assertNotNull(plugins.getDefaultPlugin(InstantiatorProvider.class));
         assertNotNull(plugins.getDefaultPlugin(InstantiatorProvider2.class));
         assertEquals(
                 ConsoleMockitoLogger.class,

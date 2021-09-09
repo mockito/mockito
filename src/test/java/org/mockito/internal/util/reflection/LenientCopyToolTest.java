@@ -136,7 +136,7 @@ public class LenientCopyToolTest extends TestBase {
                 .doThrow(new IllegalStateException())
                 .doNothing()
                 .when(tool.accessor)
-                .set(any(Field.class), anyObject(), anyObject());
+                .set(any(Field.class), any(), any());
 
         // when
         tool.copyToMock(from, to);

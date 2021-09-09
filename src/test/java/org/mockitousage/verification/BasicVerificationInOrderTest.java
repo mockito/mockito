@@ -262,11 +262,6 @@ public class BasicVerificationInOrderTest extends TestBase {
     }
 
     @Test(expected = NoInteractionsWanted.class)
-    public void shouldFailOnVerifyZeroInteractions() {
-        verifyZeroInteractions(mockOne);
-    }
-
-    @Test(expected = NoInteractionsWanted.class)
     public void shouldFailOnVerifyNoInteractions() {
         verifyNoInteractions(mockOne);
     }

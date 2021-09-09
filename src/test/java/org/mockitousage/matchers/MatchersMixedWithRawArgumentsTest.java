@@ -4,8 +4,8 @@
  */
 package org.mockitousage.matchers;
 
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Ignore;
@@ -31,7 +31,7 @@ public class MatchersMixedWithRawArgumentsTest extends TestBase {
     // float: max-1
 
     // 1. how objenesis deal with primitive arrays (like byte[])?
-    // 2. Analisys of all matchers used by R2 project finished before anyObject() and so far proves
+    // 2. Analisys of all matchers used by R2 project finished before any() and so far proves
     // it's a good idea.
 
     @Ignore("prototyping new feature that allows to avoid eq() matchers when raw args passed")
