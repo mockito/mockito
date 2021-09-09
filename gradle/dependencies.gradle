@@ -39,7 +39,7 @@ libraries.kotlin = [
     version: kotlinVersion,
 
     stdlib: "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
-    coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1-native-mt',
+    coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt',
     gradlePlugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}",
 ]
 libraries.android = [
