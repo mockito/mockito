@@ -8,8 +8,8 @@ Overall document style
 * { margin:0; padding:0; }
 body { background-color: #FFFFFF; color:#333; font-size: 100%; }
 body { font-size: 0.875em; line-height: 1.286em; font-family: "Helvetica", "Arial", sans-serif; }
-code { color: #777; line-height: 1.286em; font-family: "Consolas", "Lucida Console", "Droid Sans Mono", "Andale Mono", "Monaco", "Lucida Sans Typewriter"; }
-pre { color: #555; line-height: 1.0em; font-family: "Consolas", "Lucida Console", "Droid Sans Mono", "Andale Mono", "Monaco", "Lucida Sans Typewriter"; }
+code { color: #777; line-height: 1.286em; font-family: "Consolas", "Lucida Console", "Droid Sans Mono", "Andale Mono", "Monaco", "Lucida Sans Typewriter", monospace; }
+pre { color: #555; line-height: 1.0em; font-family: "Consolas", "Lucida Console", "Droid Sans Mono", "Andale Mono", "Monaco", "Lucida Sans Typewriter", monospace; }
 
 a { text-decoration: none; color: #16569A; /* also try #2E85ED, #0033FF, #6C93C6, #1D7BBE, #1D8DD2 */ }
 a:hover, a:hover code { color: #EEEEEE; background-color: #16569A; }
