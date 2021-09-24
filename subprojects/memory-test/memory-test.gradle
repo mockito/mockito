@@ -15,5 +15,4 @@ tasks.javadoc.enabled = false
 
 test {
     maxHeapSize = "128m"
-    jvmArgs = ["-XX:MaxPermSize=128m"]
 }

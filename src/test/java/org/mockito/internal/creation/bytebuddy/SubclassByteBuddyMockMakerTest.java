@@ -4,13 +4,6 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.Observable;
-import java.util.Observer;
-
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.description.modifier.TypeManifestation;
@@ -18,6 +11,13 @@ import net.bytebuddy.dynamic.DynamicType;
 import org.junit.Test;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.plugins.MockMaker;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.util.Observable;
+import java.util.Observer;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubclassByteBuddyMockMakerTest
         extends AbstractByteBuddyMockMakerTest<SubclassByteBuddyMockMaker> {
@@ -35,22 +35,16 @@ public class SubclassByteBuddyMockMakerTest
 
     @Test
     public void is_type_mockable_excludes_sealed_classes() {
-        // is only supported on Java 17 and later
         if (ClassFileVersion.ofThisVm().isAtMost(ClassFileVersion.JAVA_V16)) {
             return;
         }
-        DynamicType.Builder<Object> base = new ByteBuddy().subclass(Object.class);
-        DynamicType.Unloaded<Object> dynamic =
-                new ByteBuddy()
-                        .subclass(Object.class)
-                        .permittedSubclass(base.toTypeDescription())
-                        .make();
+        DynamicType.Builder<?> base = new ByteBuddy().subclass(Object.class);
+        DynamicType.Builder<?> subclass =
+                new ByteBuddy().subclass(base.toTypeDescription()).merge(TypeManifestation.FINAL);
         Class<?> type =
-                new ByteBuddy()
-                        .subclass(base.toTypeDescription())
-                        .merge(TypeManifestation.FINAL)
+                base.permittedSubclass(subclass.toTypeDescription())
                         .make()
-                        .include(dynamic)
+                        .include(subclass.make())
                         .load(null)
                         .getLoaded();
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(type);

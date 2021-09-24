@@ -18,7 +18,7 @@ include("inline",
     "junitJupiterParallelTest",
     "osgi-test")
 
-if (System.getenv("ANDROID_SDK_ROOT") != null || File(".local.properties").exists()) {
+if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17) && (System.getenv("ANDROID_SDK_ROOT") != null || File(".local.properties").exists())) {
     include("androidTest")
 } else {
     logger.info("Not including android test project due to missing SDK configuration")
