@@ -4,8 +4,6 @@
  */
 package org.mockito.listeners;
 
-import org.mockito.Incubating;
-
 /**
  * This listener gets notified when the user starts verification.
  * It allows to replace the mock object for verification.
@@ -54,7 +52,6 @@ import org.mockito.Incubating;
  *
  * @since 2.11.0
  */
-@Incubating
 public interface VerificationStartedListener {
 
     /**
@@ -64,6 +61,5 @@ public interface VerificationStartedListener {
      * @param event object that allows to identify and replace mock for verification.
      * @since 2.11.0
      */
-    @Incubating
     void onVerificationStarted(VerificationStartedEvent event);
 }

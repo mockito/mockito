@@ -5,7 +5,6 @@
 package org.mockito.junit;
 
 import org.junit.rules.TestRule;
-import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoAssertionError;
 
 /**
@@ -37,7 +36,6 @@ import org.mockito.exceptions.base.MockitoAssertionError;
  * @see org.mockito.Mockito#verify(Object, org.mockito.verification.VerificationMode)
  * @since 2.1.0
  */
-@Incubating
 public interface VerificationCollector extends TestRule {
 
     /**
@@ -70,7 +68,6 @@ public interface VerificationCollector extends TestRule {
      * @throws MockitoAssertionError If there were failed verifications
      * @since 2.1.0
      */
-    @Incubating
     void collectAndReport() throws MockitoAssertionError;
 
     /**
@@ -96,6 +93,5 @@ public interface VerificationCollector extends TestRule {
      * @return this
      * @since 2.1.0
      */
-    @Incubating
     VerificationCollector assertLazily();
 }

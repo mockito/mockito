@@ -19,7 +19,6 @@ import java.util.List;
  *
  * @param <T> The type for which the construction is being mocked.
  */
-@Incubating
 public interface MockedConstruction<T> extends ScopedMock {
 
     List<T> constructed();

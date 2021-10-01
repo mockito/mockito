@@ -19,7 +19,6 @@ import org.mockito.plugins.MockitoPlugins;
  *
  * @since 2.1.0
  */
-@Incubating
 @NotExtensible
 public interface MockitoFramework {
 
@@ -53,7 +52,6 @@ public interface MockitoFramework {
      * @return this instance of mockito framework (fluent builder pattern)
      * @since 2.1.0
      */
-    @Incubating
     MockitoFramework addListener(MockitoListener listener) throws RedundantListenerException;
 
     /**
@@ -70,7 +68,6 @@ public interface MockitoFramework {
      * @return this instance of mockito framework (fluent builder pattern)
      * @since 2.1.0
      */
-    @Incubating
     MockitoFramework removeListener(MockitoListener listener);
 
     /**
@@ -81,7 +78,6 @@ public interface MockitoFramework {
      * @return object that gives access to mockito plugins
      * @since 2.10.0
      */
-    @Incubating
     MockitoPlugins getPlugins();
 
     /**
@@ -91,7 +87,6 @@ public interface MockitoFramework {
      * @return object that can construct invocations
      * @since 2.10.0
      */
-    @Incubating
     InvocationFactory getInvocationFactory();
 
     /**
@@ -130,7 +125,6 @@ public interface MockitoFramework {
      * @since 2.25.0
      * @see #clearInlineMock(Object)
      */
-    @Incubating
     void clearInlineMocks();
 
     /**
@@ -142,6 +136,5 @@ public interface MockitoFramework {
      * @since 2.25.0
      * @see #clearInlineMocks()
      */
-    @Incubating
     void clearInlineMock(Object mock);
 }

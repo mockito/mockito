@@ -4,7 +4,6 @@
  */
 package org.mockito.stubbing;
 
-import org.mockito.Incubating;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 import org.mockito.NotExtensible;
@@ -60,6 +59,5 @@ public interface Stubbing extends Answer {
      *
      * @since 2.20.0
      */
-    @Incubating
     Strictness getStrictness();
 }

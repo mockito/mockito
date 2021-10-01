@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.Incubating;
 import org.mockito.MockedConstruction;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.internal.exceptions.Reporter;
@@ -15,7 +14,6 @@ import org.mockito.plugins.InlineMockMaker;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Incubating
 public class InlineByteBuddyMockMaker
         implements ClassCreatingMockMaker, InlineMockMaker, Instantiator {
     private final InlineDelegateByteBuddyMockMaker inlineDelegateByteBuddyMockMaker;

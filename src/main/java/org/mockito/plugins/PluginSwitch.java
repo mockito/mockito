@@ -4,8 +4,6 @@
  */
 package org.mockito.plugins;
 
-import org.mockito.Incubating;
-
 /**
  * Allows switching off the plugins that are discovered on classpath.
  *
@@ -42,7 +40,6 @@ import org.mockito.Incubating;
  *
  * @since 1.10.15
  */
-@Incubating
 public interface PluginSwitch {
 
     /**

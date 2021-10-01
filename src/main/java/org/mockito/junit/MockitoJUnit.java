@@ -5,7 +5,6 @@
 package org.mockito.junit;
 
 import org.junit.rules.TestRule;
-import org.mockito.Incubating;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.junit.JUnitRule;
 import org.mockito.internal.junit.JUnitTestRule;
@@ -56,7 +55,6 @@ public final class MockitoJUnit {
      * @return the rule instance
      * @since 2.1.0
      */
-    @Incubating
     public static VerificationCollector collector() {
         return new VerificationCollectorImpl();
     }

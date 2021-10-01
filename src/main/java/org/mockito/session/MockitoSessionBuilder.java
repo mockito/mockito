@@ -4,7 +4,6 @@
  */
 package org.mockito.session;
 
-import org.mockito.Incubating;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
 import org.mockito.NotExtensible;
@@ -17,7 +16,6 @@ import org.mockito.quality.Strictness;
  *
  * @since 2.7.0
  */
-@Incubating
 @NotExtensible
 public interface MockitoSessionBuilder {
 
@@ -41,7 +39,6 @@ public interface MockitoSessionBuilder {
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @since 2.7.0
      */
-    @Incubating
     MockitoSessionBuilder initMocks(Object testClassInstance);
 
     /**
@@ -59,7 +56,6 @@ public interface MockitoSessionBuilder {
      * @see #initMocks(Object)
      * @since 2.15.0
      */
-    @Incubating
     MockitoSessionBuilder initMocks(Object... testClassInstances);
 
     /**
@@ -81,7 +77,6 @@ public interface MockitoSessionBuilder {
      * @see org.mockito.quality.MockitoHint
      * @since 2.15.0
      */
-    @Incubating
     MockitoSessionBuilder name(String name);
 
     /**
@@ -95,7 +90,6 @@ public interface MockitoSessionBuilder {
      * @return the same builder instance for fluent configuration of {@code MockitoSession}.
      * @since 2.7.0
      */
-    @Incubating
     MockitoSessionBuilder strictness(Strictness strictness);
 
     /**
@@ -114,7 +108,6 @@ public interface MockitoSessionBuilder {
      * @see org.mockito.quality.MockitoHint
      * @since 2.15.0
      */
-    @Incubating
     MockitoSessionBuilder logger(MockitoSessionLogger logger);
 
     /**
@@ -136,6 +129,5 @@ public interface MockitoSessionBuilder {
      * @throws UnfinishedMockingSessionException
      *  when previous session was not concluded with {@link MockitoSession#finishMocking()}
      */
-    @Incubating
     MockitoSession startMocking() throws UnfinishedMockingSessionException;
 }

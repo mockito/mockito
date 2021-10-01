@@ -8,7 +8,6 @@ package org.mockito;
  * Represents a mock with a thread-local explicit scope. Scoped mocks must be closed by the entity
  * that activates the scoped mock.
  */
-@Incubating
 public interface ScopedMock extends AutoCloseable {
 
     /**

@@ -21,7 +21,6 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.mockito.Incubating;
 import org.mockito.exceptions.base.MockitoSerializationIssue;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.settings.CreationSettings;
@@ -58,7 +57,6 @@ import org.mockito.plugins.MemberAccessor;
  * @author Brice Dutheil
  * @since 1.10.0
  */
-@Incubating
 class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
     private static final String MOCKITO_PROXY_MARKER = "ByteBuddyMockitoProxyMarker";

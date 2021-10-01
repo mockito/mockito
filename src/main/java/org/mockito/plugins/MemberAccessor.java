@@ -4,8 +4,6 @@
  */
 package org.mockito.plugins;
 
-import org.mockito.Incubating;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +13,6 @@ import java.lang.reflect.Method;
  * A member accessor is responsible for invoking methods, constructors and for setting
  * and reading field values.
  */
-@Incubating
 public interface MemberAccessor {
 
     Object newInstance(Constructor<?> constructor, Object... arguments)

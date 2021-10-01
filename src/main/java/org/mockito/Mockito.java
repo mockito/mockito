@@ -2068,7 +2068,6 @@ public class Mockito extends ArgumentMatchers {
      * @return a spy of the provided class
      * @since 1.10.12
      */
-    @Incubating
     public static <T> T spy(Class<T> classToSpy) {
         return MOCKITO_CORE.mock(
                 classToSpy, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
@@ -2090,7 +2089,6 @@ public class Mockito extends ArgumentMatchers {
      * @param classToMock class or interface of which static mocks should be mocked.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedStatic<T> mockStatic(Class<T> classToMock) {
         return mockStatic(classToMock, withSettings());
     }
@@ -2112,7 +2110,6 @@ public class Mockito extends ArgumentMatchers {
      * @param defaultAnswer the default answer when invoking static methods.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedStatic<T> mockStatic(Class<T> classToMock, Answer defaultAnswer) {
         return mockStatic(classToMock, withSettings().defaultAnswer(defaultAnswer));
     }
@@ -2134,7 +2131,6 @@ public class Mockito extends ArgumentMatchers {
      * @param name the name of the mock to use in error messages.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedStatic<T> mockStatic(Class<T> classToMock, String name) {
         return mockStatic(classToMock, withSettings().name(name));
     }
@@ -2156,7 +2152,6 @@ public class Mockito extends ArgumentMatchers {
      * @param mockSettings the settings to use where only name and default answer are considered.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedStatic<T> mockStatic(Class<T> classToMock, MockSettings mockSettings) {
         return MOCKITO_CORE.mockStatic(classToMock, mockSettings);
     }
@@ -2174,7 +2169,6 @@ public class Mockito extends ArgumentMatchers {
      *                         last answer is used. If this array is empty, the {@code defaultAnswer} is used.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedConstruction<T> mockConstructionWithAnswer(
             Class<T> classToMock, Answer defaultAnswer, Answer... additionalAnswers) {
         return mockConstruction(
@@ -2203,7 +2197,6 @@ public class Mockito extends ArgumentMatchers {
      * @param classToMock non-abstract class of which constructions should be mocked.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedConstruction<T> mockConstruction(Class<T> classToMock) {
         return mockConstruction(classToMock, index -> withSettings(), (mock, context) -> {});
     }
@@ -2219,7 +2212,6 @@ public class Mockito extends ArgumentMatchers {
      * @param mockInitializer a callback to prepare a mock's methods after its instantiation.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock, MockedConstruction.MockInitializer<T> mockInitializer) {
         return mockConstruction(classToMock, withSettings(), mockInitializer);
@@ -2236,7 +2228,6 @@ public class Mockito extends ArgumentMatchers {
      * @param mockSettings the mock settings to use.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock, MockSettings mockSettings) {
         return mockConstruction(classToMock, context -> mockSettings);
@@ -2253,7 +2244,6 @@ public class Mockito extends ArgumentMatchers {
      * @param mockSettingsFactory the mock settings to use.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock,
             Function<MockedConstruction.Context, MockSettings> mockSettingsFactory) {
@@ -2272,7 +2262,6 @@ public class Mockito extends ArgumentMatchers {
      * @param mockInitializer a callback to prepare a mock's methods after its instantiation.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock,
             MockSettings mockSettings,
@@ -2292,7 +2281,6 @@ public class Mockito extends ArgumentMatchers {
      * @param mockInitializer a callback to prepare a mock's methods after its instantiation.
      * @return mock controller
      */
-    @Incubating
     public static <T> MockedConstruction<T> mockConstruction(
             Class<T> classToMock,
             Function<MockedConstruction.Context, MockSettings> mockSettingsFactory,
@@ -3257,7 +3245,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @since 2.1.0
      */
-    @Incubating
     public static MockitoFramework framework() {
         return new DefaultMockitoFramework();
     }
@@ -3270,7 +3257,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @since 2.7.0
      */
-    @Incubating
     public static MockitoSessionBuilder mockitoSession() {
         return new DefaultMockitoSessionBuilder();
     }
@@ -3338,7 +3324,6 @@ public class Mockito extends ArgumentMatchers {
      *
      * @since 2.20.0
      */
-    @Incubating
     public static LenientStubber lenient() {
         return MOCKITO_CORE.lenient();
     }

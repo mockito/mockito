@@ -4,7 +4,6 @@
  */
 package org.mockito.invocation;
 
-import org.mockito.Incubating;
 import org.mockito.NotExtensible;
 
 /**
@@ -17,5 +16,4 @@ import org.mockito.NotExtensible;
  * @since 2.10.0
  */
 @NotExtensible
-@Incubating
 public interface InvocationContainer {}

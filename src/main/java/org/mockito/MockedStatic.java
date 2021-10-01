@@ -23,7 +23,6 @@ import org.mockito.verification.VerificationMode;
  *
  * @param <T> The type being mocked.
  */
-@Incubating
 public interface MockedStatic<T> extends ScopedMock {
 
     /**
