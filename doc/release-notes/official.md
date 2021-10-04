@@ -1936,7 +1936,7 @@ Last version published to Maven Central after the team adopted [Continuous Deliv
 * Commits: 5
   * 2: Brice Dutheil
   * 2: Christian Schwarz
-  * 1: Felix Dekker
+  * 1: F.W. Dekker
 * Improvements: 4
   * Replaced ObjectBox with AtomicReference [(#777)](https://github.com/mockito/mockito/pull/777)
   * InvocationMatcher internal improvements [(#776)](https://github.com/mockito/mockito/pull/776)
