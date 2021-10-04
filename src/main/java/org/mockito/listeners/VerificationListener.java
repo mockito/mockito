@@ -4,7 +4,6 @@
  */
 package org.mockito.listeners;
 
-import org.mockito.Incubating;
 import org.mockito.verification.VerificationEvent;
 
 /**
@@ -12,7 +11,6 @@ import org.mockito.verification.VerificationEvent;
  * <p>
  * For this to happen, it must be registered using {@link org.mockito.internal.progress.MockingProgress#addListener(MockitoListener)}.
  */
-@Incubating
 public interface VerificationListener extends MockitoListener {
     /**
      * Called after a verification happened.

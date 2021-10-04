@@ -4,7 +4,6 @@
  */
 package org.mockito.plugins;
 
-import org.mockito.Incubating;
 import org.mockito.MockedConstruction;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.MockHandler;
@@ -132,7 +131,6 @@ public interface MockMaker {
      * @return object that carries the information about mockability of given type.
      * @since 2.1.0
      */
-    @Incubating
     TypeMockability isTypeMockable(Class<?> type);
 
     /**
@@ -151,7 +149,6 @@ public interface MockMaker {
      * @return A control for the static mock.
      * @since 3.4.0
      */
-    @Incubating
     default <T> StaticMockControl<T> createStaticMock(
             Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
         throw new MockitoException(
@@ -181,7 +178,6 @@ public interface MockMaker {
      * @return A control for the mocked construction.
      * @since 3.5.0
      */
-    @Incubating
     default <T> ConstructionMockControl<T> createConstructionMock(
             Class<T> type,
             Function<MockedConstruction.Context, MockCreationSettings<T>> settingsFactory,
@@ -201,7 +197,6 @@ public interface MockMaker {
     /**
      * Clears all cashes for mocked types and removes all byte code alterations, if possible.
      */
-    @Incubating
     default void clearAllCaches() {}
 
     /**
@@ -209,7 +204,6 @@ public interface MockMaker {
      *
      * @since 2.1.0
      */
-    @Incubating
     interface TypeMockability {
         /**
          * informs if type is mockable
@@ -222,7 +216,6 @@ public interface MockMaker {
         String nonMockableReason();
     }
 
-    @Incubating
     interface StaticMockControl<T> {
 
         Class<T> getType();
@@ -232,7 +225,6 @@ public interface MockMaker {
         void disable();
     }
 
-    @Incubating
     interface ConstructionMockControl<T> {
 
         Class<T> getType();

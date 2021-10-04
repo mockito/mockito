@@ -6,7 +6,6 @@ package org.mockito.invocation;
 
 import java.io.Serializable;
 
-import org.mockito.Incubating;
 import org.mockito.MockSettings;
 import org.mockito.mock.MockCreationSettings;
 
@@ -44,7 +43,6 @@ public interface MockHandler<T> extends Serializable {
      * @return read-only settings of the mock
      * @since 2.10.0
      */
-    @Incubating
     MockCreationSettings<T> getMockSettings();
 
     /**
@@ -60,6 +58,5 @@ public interface MockHandler<T> extends Serializable {
      *          The container is not part of the public API, please do not cast it or provide custom implementations.
      * @since 2.10.0
      */
-    @Incubating
     InvocationContainer getInvocationContainer();
 }

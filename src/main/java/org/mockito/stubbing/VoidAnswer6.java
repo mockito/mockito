@@ -4,8 +4,6 @@
  */
 package org.mockito.stubbing;
 
-import org.mockito.Incubating;
-
 /**
  * Generic interface to be used for configuring mock's answer for a six argument invocation that returns nothing.
  *
@@ -35,7 +33,6 @@ import org.mockito.Incubating;
  * @param <A5> type of the sixth argument
  * @see Answer
  */
-@Incubating
 public interface VoidAnswer6<A0, A1, A2, A3, A4, A5> {
     /**
      * @param argument0 the first argument.

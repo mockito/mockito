@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import org.mockito.Incubating;
 import org.mockito.MockedConstruction;
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.MockHandler;
@@ -65,7 +64,6 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
     }
 
     @Override
-    @Incubating
     public TypeMockability isTypeMockable(Class<?> type) {
         return subclassByteBuddyMockMaker.isTypeMockable(type);
     }

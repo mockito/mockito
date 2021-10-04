@@ -4,8 +4,6 @@
  */
 package org.mockito.plugins;
 
-import org.mockito.Incubating;
-
 /**
  * Mockito logger.
  *
@@ -35,13 +33,11 @@ import org.mockito.Incubating;
  *
  * @since 2.23.19
  */
-@Incubating
 public interface MockitoLogger {
     /**
      * Log specified object.
      *
      * @param what to be logged
      */
-    @Incubating
     void log(Object what);
 }

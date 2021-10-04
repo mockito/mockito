@@ -7,7 +7,6 @@ package org.mockito.mock;
 import java.util.List;
 import java.util.Set;
 
-import org.mockito.Incubating;
 import org.mockito.MockSettings;
 import org.mockito.NotExtensible;
 import org.mockito.listeners.InvocationListener;
@@ -90,7 +89,6 @@ public interface MockCreationSettings<T> {
      *
      * @since 2.11.0
      */
-    @Incubating
     List<VerificationStartedListener> getVerificationStartedListeners();
 
     /**
@@ -98,7 +96,6 @@ public interface MockCreationSettings<T> {
      *
      * @since 1.10.12
      */
-    @Incubating
     boolean isUsingConstructor();
 
     /**
@@ -110,7 +107,6 @@ public interface MockCreationSettings<T> {
      *
      * @since 2.7.14
      */
-    @Incubating
     Object[] getConstructorArgs();
 
     /**
@@ -119,7 +115,6 @@ public interface MockCreationSettings<T> {
      * @return the outer class instance used for creation of the mock object via the constructor.
      * @since 1.10.12
      */
-    @Incubating
     Object getOuterClassInstance();
 
     /**
@@ -128,6 +123,5 @@ public interface MockCreationSettings<T> {
      *
      * @since 2.20.0
      */
-    @Incubating
     boolean isLenient();
 }

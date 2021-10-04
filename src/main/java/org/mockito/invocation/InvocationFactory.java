@@ -7,7 +7,6 @@ package org.mockito.invocation;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-import org.mockito.Incubating;
 import org.mockito.MockitoFramework;
 import org.mockito.mock.MockCreationSettings;
 
@@ -23,7 +22,6 @@ import org.mockito.mock.MockCreationSettings;
  *
  * @since 2.10.0
  */
-@Incubating
 public interface InvocationFactory {
 
     /**
@@ -49,7 +47,6 @@ public interface InvocationFactory {
      * @return invocation instance
      * @since 2.14.0
      */
-    @Incubating
     Invocation createInvocation(
             Object target,
             MockCreationSettings settings,

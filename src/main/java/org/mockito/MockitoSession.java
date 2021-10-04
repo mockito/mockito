@@ -86,7 +86,6 @@ import org.mockito.session.MockitoSessionBuilder;
  *
  * @since 2.7.0
  */
-@Incubating
 @NotExtensible
 public interface MockitoSession {
 
@@ -101,7 +100,6 @@ public interface MockitoSession {
      * @param strictness new strictness for this session.
      * @since 2.15.0
      */
-    @Incubating
     void setStrictness(Strictness strictness);
 
     /**
@@ -123,7 +121,6 @@ public interface MockitoSession {
      * @see #finishMocking(Throwable)
      * @since 2.7.0
      */
-    @Incubating
     void finishMocking();
 
     /**
@@ -140,6 +137,5 @@ public interface MockitoSession {
      * @see #finishMocking()
      * @since 2.15.0
      */
-    @Incubating
     void finishMocking(Throwable failure);
 }

@@ -4,8 +4,6 @@
  */
 package org.mockito.stubbing;
 
-import org.mockito.Incubating;
-
 /**
  * Generic interface to be used for configuring mock's answer for a five argument invocation.
  *
@@ -34,7 +32,6 @@ import org.mockito.Incubating;
  * @param <A3> type of the fourth argument
  * @see Answer
  */
-@Incubating
 public interface Answer5<T, A0, A1, A2, A3, A4> {
     /**
      * @param argument0 the first argument.

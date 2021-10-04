@@ -5,7 +5,6 @@
 package org.mockito.junit;
 
 import org.junit.rules.TestRule;
-import org.mockito.Incubating;
 import org.mockito.quality.Strictness;
 
 /**
@@ -28,6 +27,5 @@ public interface MockitoTestRule extends TestRule {
      *
      * @since 3.3.0
      */
-    @Incubating
     MockitoTestRule strictness(Strictness strictness);
 }

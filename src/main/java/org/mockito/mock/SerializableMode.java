@@ -4,12 +4,9 @@
  */
 package org.mockito.mock;
 
-import org.mockito.Incubating;
-
 /**
  * Mock serializable style.
  */
-@Incubating
 public enum SerializableMode {
 
     /**
@@ -25,6 +22,5 @@ public enum SerializableMode {
     /**
      * Useful if the mock is deserialized in a different classloader / vm.
      */
-    @Incubating
     ACROSS_CLASSLOADERS
 }

@@ -4,15 +4,12 @@
  */
 package org.mockito.listeners;
 
-import org.mockito.Incubating;
-
 /**
  * The instance of this class is passed to {@link VerificationStartedListener}.
  * For all the details, including how and why to use this API, see {@link VerificationStartedListener}.
  *
  * @since 2.11.0
  */
-@Incubating
 public interface VerificationStartedEvent {
 
     /**
@@ -27,7 +24,6 @@ public interface VerificationStartedEvent {
      * @param mock to be used for verification.
      * @since 2.11.0
      */
-    @Incubating
     void setMock(Object mock);
 
     /**
@@ -37,6 +33,5 @@ public interface VerificationStartedEvent {
      *
      * @since 2.11.0
      */
-    @Incubating
     Object getMock();
 }

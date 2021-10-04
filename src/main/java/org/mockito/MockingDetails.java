@@ -117,7 +117,6 @@ public interface MockingDetails {
      * @return mock handler instance of this mock
      * @since 2.10.0
      */
-    @Incubating
     MockHandler getMockHandler();
 
     /**

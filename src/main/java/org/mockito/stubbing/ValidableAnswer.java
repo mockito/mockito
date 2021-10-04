@@ -4,7 +4,6 @@
  */
 package org.mockito.stubbing;
 
-import org.mockito.Incubating;
 import org.mockito.invocation.InvocationOnMock;
 
 /**
@@ -68,7 +67,6 @@ import org.mockito.invocation.InvocationOnMock;
  *
  * @since 2.3.8
  */
-@Incubating
 public interface ValidableAnswer {
 
     /**
