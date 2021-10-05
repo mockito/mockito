@@ -2,23 +2,25 @@ apply plugin: 'biz.aQute.bnd.builder'
 
 jar {
     classpath = project.configurations.compileClasspath
-    bnd(
-        'Bundle-Name': 'Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.',
-        'Bundle-SymbolicName': 'org.mockito.mockito-core',
-        'Bundle-Version': "\${version_cleanup;${project.version}}",
-        '-versionpolicy': '[${version;==;${@}},${version;+;${@}})',
-        'Export-Package': "org.mockito.internal.*;status=INTERNAL;mandatory:=status;version=${version},org.mockito.*;version=${version}",
-        'Import-Package': [
-                'net.bytebuddy.*;version="[1.6.0,2.0)"',
-                'junit.*;resolution:=optional',
-                'org.junit.*;resolution:=optional',
-                'org.hamcrest;resolution:=optional',
-                'org.objenesis;version="[3.1,4.0)"',
-                'org.opentest4j.*;resolution:=optional',
-                'org.mockito.*'
-        ].join(','),
-        '-removeheaders': 'Private-Package',
-        'Automatic-Module-Name': 'org.mockito',
-        '-noextraheaders': 'true'
-    )
+    bundle {
+        bnd(
+            'Bundle-Name': 'Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.',
+            'Bundle-SymbolicName': 'org.mockito.mockito-core',
+            'Bundle-Version': "\${version_cleanup;${project.version}}",
+            '-versionpolicy': '[${version;==;${@}},${version;+;${@}})',
+            'Export-Package': "org.mockito.internal.*;status=INTERNAL;mandatory:=status;version=${version},org.mockito.*;version=${version}",
+            'Import-Package': [
+                    'net.bytebuddy.*;version="[1.6.0,2.0)"',
+                    'junit.*;resolution:=optional',
+                    'org.junit.*;resolution:=optional',
+                    'org.hamcrest;resolution:=optional',
+                    'org.objenesis;version="[3.1,4.0)"',
+                    'org.opentest4j.*;resolution:=optional',
+                    'org.mockito.*'
+            ].join(','),
+            '-removeheaders': 'Private-Package',
+            'Automatic-Module-Name': 'org.mockito',
+            '-noextraheaders': 'true'
+        )
+    }
 }
