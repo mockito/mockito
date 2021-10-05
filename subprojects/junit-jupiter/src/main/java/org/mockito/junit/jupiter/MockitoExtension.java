@@ -21,9 +21,9 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
+import org.mockito.ScopedMock;
 import org.mockito.internal.configuration.MockAnnotationProcessor;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.session.MockitoSessionLoggerAdapter;
@@ -181,7 +181,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
     @Override
     @SuppressWarnings("unchecked")
     public void afterEach(ExtensionContext context) {
-        context.getStore(MOCKITO).remove(MOCKS, Set.class).forEach(mock -> ((MockedStatic<?>) mock).closeOnDemand());
+        context.getStore(MOCKITO).remove(MOCKS, Set.class).forEach(mock -> ((ScopedMock) mock).closeOnDemand());
         context.getStore(MOCKITO).remove(SESSION, MockitoSession.class)
                 .finishMocking(context.getExecutionException().orElse(null));
     }
@@ -200,7 +200,7 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
             parameter.getType(),
             parameter::getParameterizedType,
             parameter.getName());
-        if (mock instanceof MockedStatic<?>) {
+        if (mock instanceof ScopedMock) {
             context.getStore(MOCKITO).get(MOCKS, Set.class).add(mock);
         }
         return mock;
