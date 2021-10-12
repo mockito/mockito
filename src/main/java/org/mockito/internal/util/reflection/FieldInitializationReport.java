@@ -10,15 +10,18 @@ package org.mockito.internal.util.reflection;
 public class FieldInitializationReport {
     private final Object fieldInstance;
     private final boolean wasInitialized;
-    private final boolean wasInitializedUsingConstructorArgs;
 
-    public FieldInitializationReport(
-            Object fieldInstance,
-            boolean wasInitialized,
-            boolean wasInitializedUsingConstructorArgs) {
+    /**
+     * Report field is not initialized.
+     */
+    public FieldInitializationReport() {
+        this.fieldInstance = null;
+        this.wasInitialized = false;
+    }
+
+    public FieldInitializationReport(Object fieldInstance, boolean wasInitialized) {
         this.fieldInstance = fieldInstance;
         this.wasInitialized = wasInitialized;
-        this.wasInitializedUsingConstructorArgs = wasInitializedUsingConstructorArgs;
     }
 
     /**
@@ -31,21 +34,21 @@ public class FieldInitializationReport {
     }
 
     /**
+     * Indicate whether the field is initialized or not.
+     *
+     * @return <code>true</code> if field is initialized, <code>false</code> otherwise.
+     */
+    public boolean fieldIsInitialized() {
+        return fieldInstance != null;
+    }
+
+    /**
      * Indicate whether the field was created during the process or not.
      *
      * @return <code>true</code> if created, <code>false</code> if the field did already hold an instance.
      */
     public boolean fieldWasInitialized() {
         return wasInitialized;
-    }
-
-    /**
-     * Indicate whether the field was created using constructor args.
-     *
-     * @return <code>true</code> if field was created using constructor parameters.
-     */
-    public boolean fieldWasInitializedUsingContructorArgs() {
-        return wasInitializedUsingConstructorArgs;
     }
 
     /**

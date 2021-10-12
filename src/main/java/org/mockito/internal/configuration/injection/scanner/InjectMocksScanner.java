@@ -31,31 +31,31 @@ public class InjectMocksScanner {
     }
 
     /**
-     * Add the fields annotated by @{@link InjectMocks}
+     * Scan the class hierarchy to find fields annotated by @{@link InjectMocks}.
      *
-     * @param mockDependentFields Set of fields annotated by  @{@link InjectMocks}
+     * @return A set of fields annotated by @{@link InjectMocks}
      */
-    public void addTo(Set<Field> mockDependentFields) {
-        mockDependentFields.addAll(scan());
+    public Set<Field> scanHierarchy() {
+        final Set<Field> mockDependentFields = new HashSet<>();
+        Class<?> currentClass = clazz;
+        while (currentClass != Object.class) {
+            scan(currentClass, mockDependentFields);
+            currentClass = currentClass.getSuperclass();
+        }
+        return mockDependentFields;
     }
 
     /**
      * Scan fields annotated by &#064;InjectMocks
-     *
-     * @return Fields that depends on Mock
      */
     @SuppressWarnings("unchecked")
-    private Set<Field> scan() {
-        Set<Field> mockDependentFields = new HashSet<>();
-        Field[] fields = clazz.getDeclaredFields();
-        for (Field field : fields) {
+    private void scan(Class<?> clazz, Set<Field> mockDependentFields) {
+        for (Field field : clazz.getDeclaredFields()) {
             if (null != field.getAnnotation(InjectMocks.class)) {
                 assertNoAnnotations(field, Mock.class, Captor.class);
                 mockDependentFields.add(field);
             }
         }
-
-        return mockDependentFields;
     }
 
     private static void assertNoAnnotations(
