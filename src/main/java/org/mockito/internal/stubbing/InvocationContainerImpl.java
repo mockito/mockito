@@ -163,13 +163,20 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return invocationForStubbing.getInvocation().getMock();
     }
 
-    public MatchableInvocation getInvocationForStubbing() {
-        return invocationForStubbing;
-    }
-
     private RegisteredInvocations createRegisteredInvocations(MockCreationSettings mockSettings) {
         return mockSettings.isStubOnly()
                 ? new SingleRegisteredInvocation()
                 : new DefaultRegisteredInvocations();
+    }
+
+    public Answer findStubbedAnswer() {
+        synchronized (stubbed) {
+            for (StubbedInvocationMatcher s : stubbed) {
+                if (invocationForStubbing.matches(s.getInvocation())) {
+                    return s;
+                }
+            }
+        }
+        return null;
     }
 }
