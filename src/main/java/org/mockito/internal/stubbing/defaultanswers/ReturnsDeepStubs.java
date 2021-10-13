@@ -20,7 +20,6 @@ import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.Stubbing;
 
 /**
  * Returning deep stub implementation.
@@ -80,12 +79,9 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
             throws Throwable {
         InvocationContainerImpl container = MockUtil.getInvocationContainer(invocation.getMock());
 
-        // matches invocation for verification
-        // TODO why don't we do container.findAnswer here?
-        for (Stubbing stubbing : container.getStubbingsDescending()) {
-            if (container.getInvocationForStubbing().matches(stubbing.getInvocation())) {
-                return stubbing.answer(invocation);
-            }
+        Answer existingAnswer = container.findStubbedAnswer();
+        if (existingAnswer != null) {
+            return existingAnswer.answer(invocation);
         }
 
         // record deep stub answer
