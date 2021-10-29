@@ -15,8 +15,10 @@ Most popular mocking framework for Java
 [![Javadoc](https://www.javadoc.io/badge/org.mockito/mockito-core.svg)](https://www.javadoc.io/doc/org.mockito/mockito-core)
 
 
-## Current version is 3.x
+## Current version is 4.x
 Still on Mockito 1.x? See [what's new](https://github.com/mockito/mockito/wiki/What%27s-new-in-Mockito-2) in Mockito 2! [Mockito 3](https://github.com/mockito/mockito/releases/tag/v3.0.0) does not introduce any breaking API changes, but now requires Java 8 over Java 6 for Mockito 2.
+[Mockito 4](https://github.com/mockito/mockito/releases/tag/v4.0.0) removes deprecated API.
+
 
 ## Mockito for enterprise
 
