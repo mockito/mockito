@@ -40,7 +40,7 @@ public class KotlinInlineClassUtil {
             // If we don't make this check, then we would potentially pass a mock of inline type A
             // into a method
             // that accepts inline type B.
-            inlineClass.getDeclaredMethod("box-impl", underlyingType);
+            Object ignored = inlineClass.getDeclaredMethod("box-impl", underlyingType);
             return true;
         } catch (NoSuchMethodException e) {
             return false;
