@@ -30,7 +30,9 @@ plugins {
 
 sonarqube {
   properties {
-    property "sonar.projectKey", "SQM_Project-1"
+    property "sonar.projectKey", "anubhav0407_mockito"
+    property "sonar.organization", "project1111"
+    property "sonar.host.url", "https://sonarcloud.io"
   }
 }
 
