@@ -28,7 +28,7 @@ public class DoNotMockTest {
     public void can_not_mock_class_via_mock_annotation() {
         assertThatThrownBy(
                         () -> {
-                            MockitoAnnotations.initMocks(new TestClass());
+                            MockitoAnnotations.openMocks(new TestClass());
                         })
                 .isInstanceOf(DoNotMockException.class);
     }
@@ -68,8 +68,8 @@ public class DoNotMockTest {
             can_not_mock_subclass_with_unmockable_interface_that_extends_non_mockable_interface() {
         assertThatThrownBy(
                         () -> {
-                            SubclasOfSubInterfaceOfNotMockableInterface notMockable =
-                                    mock(SubclasOfSubInterfaceOfNotMockableInterface.class);
+                            SubclassOfSubInterfaceOfNotMockableInterface notMockable =
+                                    mock(SubclassOfSubInterfaceOfNotMockableInterface.class);
                         })
                 .isInstanceOf(DoNotMockException.class);
     }
@@ -113,7 +113,7 @@ public class DoNotMockTest {
     @org.mockitousage.annotation.org.mockito.DoNotMock
     private static class NotMockableWithDifferentAnnotation {}
 
-    @DoNotMock("Special reason")
+    @DoNotMock(reason = "Special reason")
     private interface NotMockableWithReason {}
 
     static class SubclassOfNotMockableInterface implements NotMockableInterface {}
@@ -124,7 +124,7 @@ public class DoNotMockTest {
 
     private interface SubInterfaceOfNotMockableInterface extends NotMockableInterface {}
 
-    private static class SubclasOfSubInterfaceOfNotMockableInterface
+    private static class SubclassOfSubInterfaceOfNotMockableInterface
             implements SubInterfaceOfNotMockableInterface {}
 
     private static class TestClass {

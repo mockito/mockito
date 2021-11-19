@@ -107,6 +107,7 @@ public class MockitoCore {
     }
 
     private static void checkDoNotMockAnnotationForType(Class<?> type) {
+        // Object and interfaces do not have a super class
         if (type == null) {
             return;
         }

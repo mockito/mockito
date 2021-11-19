@@ -22,6 +22,11 @@ import java.lang.annotation.Target;
  * will match on annotations with a type ending in "org.mockito.DoNotMock". You can thus place
  * your custom annotation in {@code com.my.package.org.mockito.DoNotMock} and Mockito will enforce
  * that types annotated by {@code @com.my.package.org.mockito.DoNotMock} can not be mocked.
+ *
+ * <pre class="code"><code class="java">
+ * &#064;DoNotMock(reason = "Use a real instance instead")
+ * class DoNotMockMe {}
+ * </code></pre>
  */
 @Target({TYPE})
 @Retention(RUNTIME)
@@ -32,5 +37,5 @@ public @interface DoNotMock {
      *
      * <p>This should suggest alternative APIs to use for testing objects of this type.
      */
-    String value() default "Create a real instance instead.";
+    String reason() default "Create a real instance instead.";
 }
