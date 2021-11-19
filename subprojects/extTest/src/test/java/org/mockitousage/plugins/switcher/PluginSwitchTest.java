@@ -4,7 +4,6 @@
  */
 package org.mockitousage.plugins.switcher;
 
-import java.util.ArrayList;
 import org.junit.Test;
 import org.mockitousage.plugins.donotmockenforcer.MyDoNotMockEnforcer;
 import org.mockitousage.plugins.instantiator.MyInstantiatorProvider2;
