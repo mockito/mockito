@@ -4,8 +4,10 @@
  */
 package org.mockito;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore("https://github.com/mockito/mockito/issues/2478")
 public class PrematureGarbageCollectionTest {
 
     @Test
