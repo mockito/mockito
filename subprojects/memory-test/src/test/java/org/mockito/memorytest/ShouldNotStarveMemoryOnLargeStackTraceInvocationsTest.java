@@ -10,8 +10,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Assume;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore("https://github.com/mockito/mockito/issues/2478")
 public class ShouldNotStarveMemoryOnLargeStackTraceInvocationsTest {
 
     private static final int STACK_TRACE_DEPTH = 1000;
