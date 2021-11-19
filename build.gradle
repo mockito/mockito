@@ -20,7 +20,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.diffplug.gradle.spotless' version '6.0.0'
+    id 'com.diffplug.spotless' version '6.0.0'
     id 'eclipse'
     id 'com.github.ben-manes.versions' version '0.39.0'
     id 'biz.aQute.bnd.builder' version '6.0.0'
@@ -112,13 +112,13 @@ spotless {
     java {
         licenseHeaderFile rootProject.file('config/spotless/spotless.header')
 
-        customLazyGroovy('google-java-format') {
+        custom 'google-java-format', { source ->
             com.google.googlejavaformat.java.JavaFormatterOptions options = new com.google.googlejavaformat.java.JavaFormatterOptions.Builder()
                     .style(com.google.googlejavaformat.java.JavaFormatterOptions.Style.AOSP)
                     .formatJavadoc(false)
                     .build()
             com.google.googlejavaformat.java.Formatter formatter = new com.google.googlejavaformat.java.Formatter(options)
-            return { source -> formatter.formatSource(source) }
+            return formatter.formatSource(source)
         }
 
         // This test contains emulation of same-line stubbings. The formatter would put them on a separate line.
