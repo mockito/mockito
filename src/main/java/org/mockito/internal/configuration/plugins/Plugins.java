@@ -4,8 +4,10 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import org.mockito.DoNotMock;
 import java.util.List;
 import org.mockito.plugins.AnnotationEngine;
+import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MemberAccessor;
 import org.mockito.plugins.MockMaker;
@@ -91,6 +93,16 @@ public final class Plugins {
      */
     public static MockitoPlugins getPlugins() {
         return new DefaultMockitoPlugins();
+    }
+
+    /**
+     * Returns the {@link DoNotMock} enforcer available for the current runtime.
+     *
+     * <p> Returns {@link org.mockito.internal.configuration.DefaultDoNotMockEnforcer} if no
+     * {@link DoNotMockEnforcer} extension exists or is visible in the current classpath.</p>
+     */
+    public static DoNotMockEnforcer getDoNotMockEnforcer() {
+        return registry.getDoNotMockEnforcer();
     }
 
     private Plugins() {}

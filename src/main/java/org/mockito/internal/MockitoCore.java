@@ -27,13 +27,19 @@ import static org.mockito.internal.verification.VerificationModeFactory.noIntera
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import org.mockito.MockingDetails;
+import org.mockito.exceptions.misusing.DoNotMockException;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
 import org.mockito.internal.listeners.VerificationStartedNotifier;
@@ -53,6 +59,7 @@ import org.mockito.internal.verification.api.VerificationDataInOrderImpl;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.MockMaker;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.LenientStubber;
@@ -66,6 +73,10 @@ import java.util.function.Function;
 
 @SuppressWarnings("unchecked")
 public class MockitoCore {
+
+    private static final DoNotMockEnforcer DO_NOT_MOCK_ENFORCER = Plugins.getDoNotMockEnforcer();
+    private static final Set<Class<?>> MOCKABLE_CLASSES =
+            Collections.synchronizedSet(new HashSet<>());
 
     public boolean isTypeMockable(Class<?> typeToMock) {
         return typeMockabilityOf(typeToMock).mockable();
@@ -81,9 +92,41 @@ public class MockitoCore {
         }
         MockSettingsImpl impl = (MockSettingsImpl) settings;
         MockCreationSettings<T> creationSettings = impl.build(typeToMock);
+        checkDoNotMockAnnotation(creationSettings.getTypeToMock(), creationSettings);
         T mock = createMock(creationSettings);
         mockingProgress().mockingStarted(mock, creationSettings);
         return mock;
+    }
+
+    private void checkDoNotMockAnnotation(
+            Class<?> typeToMock, MockCreationSettings<?> creationSettings) {
+        checkDoNotMockAnnotationForType(typeToMock);
+        for (Class<?> aClass : creationSettings.getExtraInterfaces()) {
+            checkDoNotMockAnnotationForType(aClass);
+        }
+    }
+
+    private static void checkDoNotMockAnnotationForType(Class<?> type) {
+        // Object and interfaces do not have a super class
+        if (type == null) {
+            return;
+        }
+
+        if (MOCKABLE_CLASSES.contains(type)) {
+            return;
+        }
+
+        String warning = DO_NOT_MOCK_ENFORCER.checkTypeForDoNotMockViolation(type);
+        if (warning != null) {
+            throw new DoNotMockException(warning);
+        }
+
+        checkDoNotMockAnnotationForType(type.getSuperclass());
+        for (Class<?> aClass : type.getInterfaces()) {
+            checkDoNotMockAnnotationForType(aClass);
+        }
+
+        MOCKABLE_CLASSES.add(type);
     }
 
     public <T> MockedStatic<T> mockStatic(Class<T> classToMock, MockSettings settings) {
