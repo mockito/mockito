@@ -5,6 +5,7 @@
 package org.mockitousage.plugins.switcher;
 
 import org.junit.Test;
+import org.mockitousage.plugins.donotmockenforcer.MyDoNotMockEnforcer;
 import org.mockitousage.plugins.instantiator.MyInstantiatorProvider2;
 import org.mockitousage.plugins.logger.MyMockitoLogger;
 import org.mockitousage.plugins.resolver.MyMockResolver;
@@ -12,6 +13,7 @@ import org.mockitousage.plugins.stacktrace.MyStackTraceCleanerProvider;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -23,9 +25,10 @@ public class PluginSwitchTest {
     @Test
     public void plugin_switcher_is_used() {
         mock(List.class);
-        assertEquals(MyPluginSwitch.invokedFor, asList(MyMockMaker.class.getName(),
+        assertThat(MyPluginSwitch.invokedFor).hasSameElementsAs(asList(MyMockMaker.class.getName(),
             MyStackTraceCleanerProvider.class.getName(),
             MyMockitoLogger.class.getName(),
+            MyDoNotMockEnforcer.class.getName(),
             MyMockResolver.class.getName(),
             MyInstantiatorProvider2.class.getName()));
     }

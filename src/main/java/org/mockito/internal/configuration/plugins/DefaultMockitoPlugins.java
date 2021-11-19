@@ -7,6 +7,7 @@ package org.mockito.internal.configuration.plugins;
 import java.util.HashMap;
 import java.util.Map;
 import org.mockito.plugins.AnnotationEngine;
+import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MemberAccessor;
 import org.mockito.plugins.MockMaker;
@@ -47,6 +48,9 @@ class DefaultMockitoPlugins implements MockitoPlugins {
                 "org.mockito.internal.util.reflection.ReflectionMemberAccessor");
         DEFAULT_PLUGINS.put(
                 MODULE_ALIAS, "org.mockito.internal.util.reflection.ModuleMemberAccessor");
+        DEFAULT_PLUGINS.put(
+                DoNotMockEnforcer.class.getName(),
+                "org.mockito.internal.configuration.DefaultDoNotMockEnforcer");
     }
 
     @Override
