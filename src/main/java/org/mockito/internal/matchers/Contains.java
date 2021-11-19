@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
 
-
 public class Contains implements ArgumentMatcher<String>, Serializable {
 
     private final String substring;
@@ -17,10 +16,12 @@ public class Contains implements ArgumentMatcher<String>, Serializable {
         this.substring = substring;
     }
 
+    @Override
     public boolean matches(String actual) {
         return actual != null && actual.contains(substring);
     }
 
+    @Override
     public String toString() {
         return "contains(\"" + substring + "\")";
     }

@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.mockito.invocation.Invocation;
 
-
 public interface RegisteredInvocations {
 
     void add(Invocation invocation);
@@ -20,5 +19,4 @@ public interface RegisteredInvocations {
     void clear();
 
     boolean isEmpty();
-
 }

@@ -31,12 +31,12 @@ public class DiamondInheritanceIsConfusingMockitoTest {
             this.value = value;
         }
 
-        public T getFoo() { return value; }
+        public T getFoo() {
+            return value;
+        }
     }
 
-    public class Sub
-            extends Super<String>
-            implements iInterface {
+    public class Sub extends Super<String> implements iInterface {
 
         public Sub(String s) {
             super(s);

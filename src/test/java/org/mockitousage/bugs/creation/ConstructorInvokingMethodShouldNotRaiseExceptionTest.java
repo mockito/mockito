@@ -16,56 +16,61 @@ import org.mockito.Spy;
 public class ConstructorInvokingMethodShouldNotRaiseExceptionTest {
 
     public static class WithDumbMethod {
-        @Spy
-        HasConstructorInvokingMethod hasConstructorInvokingMethod;
+        @Spy HasConstructorInvokingMethod hasConstructorInvokingMethod;
 
         @Test
         public void should_be_able_to_create_spy() throws Exception {
-            MockitoAnnotations.initMocks(this);
+            MockitoAnnotations.openMocks(this);
         }
 
         private static class HasConstructorInvokingMethod {
-            public HasConstructorInvokingMethod() { someMethod(); }
+            public HasConstructorInvokingMethod() {
+                someMethod();
+            }
 
-            void someMethod() { }
+            void someMethod() {}
         }
     }
 
     public static class UsingMethodObjectReferenceResult {
-        @Spy
-        HasConstructorInvokingMethod hasConstructorInvokingMethod;
+        @Spy HasConstructorInvokingMethod hasConstructorInvokingMethod;
 
         @Test
         public void should_be_able_to_create_spy() throws Exception {
-            MockitoAnnotations.initMocks(this);
+            MockitoAnnotations.openMocks(this);
         }
 
         private static class HasConstructorInvokingMethod {
             private final boolean doesIt;
+
             public HasConstructorInvokingMethod() {
                 doesIt = someMethod().contains("yup");
             }
 
-            String someMethod() { return "tada!"; }
+            String someMethod() {
+                return "tada!";
+            }
         }
     }
 
     public static class UsingMethodPrimitiveResult {
-        @Spy
-        HasConstructorInvokingMethod hasConstructorInvokingMethod;
+        @Spy HasConstructorInvokingMethod hasConstructorInvokingMethod;
 
         @Test
         public void should_be_able_to_create_spy() throws Exception {
-            MockitoAnnotations.initMocks(this);
+            MockitoAnnotations.openMocks(this);
         }
 
         private static class HasConstructorInvokingMethod {
             private final boolean doesIt;
+
             public HasConstructorInvokingMethod() {
                 doesIt = someMethod();
             }
 
-            boolean someMethod() { return new Random().nextBoolean(); }
+            boolean someMethod() {
+                return new Random().nextBoolean();
+            }
         }
     }
 }

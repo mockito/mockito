@@ -39,16 +39,24 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
         mock.giveMeSomeString("soda");
 
         // then
-        verify(listener).onStubbingLookup(argThat(new ArgumentMatcher<StubbingLookupEvent>() {
-            @Override
-            public boolean matches(StubbingLookupEvent argument) {
-                assertEquals("soda", argument.getInvocation().getArgument(0));
-                assertEquals("mock", argument.getMockSettings().getMockName().toString());
-                assertEquals(2, argument.getAllStubbings().size());
-                assertNotNull(argument.getStubbingFound());
-                return true;
-            }
-        }));
+        verify(listener)
+                .onStubbingLookup(
+                        argThat(
+                                new ArgumentMatcher<StubbingLookupEvent>() {
+                                    @Override
+                                    public boolean matches(StubbingLookupEvent argument) {
+                                        assertEquals(
+                                                "soda", argument.getInvocation().getArgument(0));
+                                        assertEquals(
+                                                "mock",
+                                                argument.getMockSettings()
+                                                        .getMockName()
+                                                        .toString());
+                                        assertEquals(2, argument.getAllStubbings().size());
+                                        assertNotNull(argument.getStubbingFound());
+                                        return true;
+                                    }
+                                }));
     }
 
     @Test
@@ -60,16 +68,24 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
         mock.giveMeSomeString("soda");
 
         // then
-        verify(listener).onStubbingLookup(argThat(new ArgumentMatcher<StubbingLookupEvent>() {
-            @Override
-            public boolean matches(StubbingLookupEvent argument) {
-                assertEquals("soda", argument.getInvocation().getArgument(0));
-                assertEquals("mock", argument.getMockSettings().getMockName().toString());
-                assertEquals(1, argument.getAllStubbings().size());
-                assertNull(argument.getStubbingFound());
-                return true;
-            }
-        }));
+        verify(listener)
+                .onStubbingLookup(
+                        argThat(
+                                new ArgumentMatcher<StubbingLookupEvent>() {
+                                    @Override
+                                    public boolean matches(StubbingLookupEvent argument) {
+                                        assertEquals(
+                                                "soda", argument.getInvocation().getArgument(0));
+                                        assertEquals(
+                                                "mock",
+                                                argument.getMockSettings()
+                                                        .getMockName()
+                                                        .toString());
+                                        assertEquals(1, argument.getAllStubbings().size());
+                                        assertNull(argument.getStubbingFound());
+                                        return true;
+                                    }
+                                }));
     }
 
     @Test
@@ -78,7 +94,7 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
         doReturn("java").when(mock).giveMeSomeString("coffee");
 
         // then
-        verifyZeroInteractions(listener);
+        verifyNoInteractions(listener);
     }
 
     @Test
@@ -133,7 +149,10 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
 
         // when
         mock.doSomething("1");
-        mockingDetails(mock).getMockCreationSettings().getStubbingLookupListeners().remove(listener2);
+        mockingDetails(mock)
+                .getMockCreationSettings()
+                .getStubbingLookupListeners()
+                .remove(listener2);
         mock.doSomething("2");
 
         // then
@@ -151,33 +170,35 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
         mock.doSomething("foo");
 
         // then
-        verifyZeroInteractions(listener, listener2);
+        verifyNoInteractions(listener, listener2);
     }
 
     @Test
     public void add_listeners_concurrently_sanity_check() throws Exception {
-        //given
+        // given
         final IMethods mock = mock(IMethods.class);
         final MockCreationSettings<?> settings = mockingDetails(mock).getMockCreationSettings();
 
         List<Runnable> runnables = new LinkedList<Runnable>();
         for (int i = 0; i < 50; i++) {
-            runnables.add(new Runnable() {
-                public void run() {
-                    StubbingLookupListener listener1 = mock(StubbingLookupListener.class);
-                    StubbingLookupListener listener2 = mock(StubbingLookupListener.class);
-                    settings.getStubbingLookupListeners().add(listener1);
-                    settings.getStubbingLookupListeners().add(listener2);
-                    settings.getStubbingLookupListeners().remove(listener1);
-                }
-            });
+            runnables.add(
+                    new Runnable() {
+                        public void run() {
+                            StubbingLookupListener listener1 = mock(StubbingLookupListener.class);
+                            StubbingLookupListener listener2 = mock(StubbingLookupListener.class);
+                            settings.getStubbingLookupListeners().add(listener1);
+                            settings.getStubbingLookupListeners().add(listener2);
+                            settings.getStubbingLookupListeners().remove(listener1);
+                        }
+                    });
         }
 
-        //when
+        // when
         ConcurrentTesting.concurrently(runnables.toArray(new Runnable[runnables.size()]));
 
-        //then
-        //This assertion may be flaky. If it is let's fix it or remove the test. For now, I'm keeping the test.
+        // then
+        // This assertion may be flaky. If it is let's fix it or remove the test. For now, I'm
+        // keeping the test.
         assertEquals(50, settings.getStubbingLookupListeners().size());
     }
 

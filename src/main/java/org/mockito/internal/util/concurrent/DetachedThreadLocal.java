@@ -19,20 +19,22 @@ public class DetachedThreadLocal<T> implements Runnable {
         switch (cleaner) {
             case THREAD:
             case MANUAL:
-                map = new WeakConcurrentMap<Thread, T>(cleaner == Cleaner.THREAD) {
-                    @Override
-                    protected T defaultValue(Thread key) {
-                        return DetachedThreadLocal.this.initialValue(key);
-                    }
-                };
+                map =
+                        new WeakConcurrentMap<Thread, T>(cleaner == Cleaner.THREAD) {
+                            @Override
+                            protected T defaultValue(Thread key) {
+                                return DetachedThreadLocal.this.initialValue(key);
+                            }
+                        };
                 break;
             case INLINE:
-                map = new WeakConcurrentMap.WithInlinedExpunction<Thread, T>() {
-                    @Override
-                    protected T defaultValue(Thread key) {
-                        return DetachedThreadLocal.this.initialValue(key);
-                    }
-                };
+                map =
+                        new WeakConcurrentMap.WithInlinedExpunction<Thread, T>() {
+                            @Override
+                            protected T defaultValue(Thread key) {
+                                return DetachedThreadLocal.this.initialValue(key);
+                            }
+                        };
                 break;
             default:
                 throw new AssertionError();
@@ -41,6 +43,14 @@ public class DetachedThreadLocal<T> implements Runnable {
 
     public T get() {
         return map.get(Thread.currentThread());
+    }
+
+    /**
+     * @param thread The thread for which to set a thread-local value.
+     * @return The value associated with this thread.
+     */
+    public T get(Thread thread) {
+        return map.get(thread);
     }
 
     public void set(T value) {
@@ -84,15 +94,7 @@ public class DetachedThreadLocal<T> implements Runnable {
 
     /**
      * @param thread The thread for which to set a thread-local value.
-     * @return The value associated with this thread.
-     */
-    public T get(Thread thread) {
-        return map.get(thread);
-    }
-
-    /**
-     * @param thread The thread for which to set a thread-local value.
-     * @param value  The value to set.
+     * @param value The value to set.
      */
     public void define(Thread thread, T value) {
         map.put(thread, value);
@@ -133,6 +135,8 @@ public class DetachedThreadLocal<T> implements Runnable {
      * ({@link Cleaner#MANUAL}).
      */
     public enum Cleaner {
-        THREAD, INLINE, MANUAL
+        THREAD,
+        INLINE,
+        MANUAL
     }
 }

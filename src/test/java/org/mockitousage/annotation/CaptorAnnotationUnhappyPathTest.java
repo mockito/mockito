@@ -23,20 +23,20 @@ public class CaptorAnnotationUnhappyPathTest extends TestBase {
     @Before
     @Override
     public void init() {
-        //we need to get rid of parent implementation this time
+        // we need to get rid of parent implementation this time
     }
 
     @Test
     public void shouldFailIfCaptorHasWrongType() throws Exception {
         try {
-            //when
-            MockitoAnnotations.initMocks(this);
+            // when
+            MockitoAnnotations.openMocks(this);
             fail();
         } catch (MockitoException e) {
-            //then
+            // then
             assertThat(e)
-                .hasMessageContaining("notACaptorField")
-                .hasMessageContaining("wrong type");
+                    .hasMessageContaining("notACaptorField")
+                    .hasMessageContaining("wrong type");
         }
     }
 }

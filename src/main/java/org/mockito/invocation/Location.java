@@ -17,6 +17,7 @@ public interface Location {
      *
      * @return location
      */
+    @Override
     String toString();
 
     /**

@@ -39,7 +39,7 @@ import org.mockito.stubbing.VoidAnswer6;
  * @since 1.9.5
  */
 @SuppressWarnings("unchecked")
-public class AdditionalAnswers {
+public final class AdditionalAnswers {
     /**
      * Returns the first parameter of an invocation.
      *
@@ -276,7 +276,7 @@ public class AdditionalAnswers {
      * This feature suffers from the same drawback as the spy.
      * The mock will call the delegate if you use regular when().then() stubbing style.
      * Since the real implementation is called this might have some side effects.
-     * Therefore you should to use the doReturn|Throw|Answer|CallRealMethod stubbing style. Example:
+     * Therefore you should use the doReturn|Throw|Answer|CallRealMethod stubbing style. Example:
      *
      * <pre class="code"><code class="java">
      *   List listWithDelegate = mock(List.class, AdditionalAnswers.delegatesTo(awesomeList));
@@ -308,7 +308,7 @@ public class AdditionalAnswers {
      *   when(mock.foo()).thenReturn(1, 2, 3);
      *
      *   //is equivalent to:
-     *   when(mock.foo()).thenAnswer(new ReturnsElementsOf(Arrays.asList(1, 2, 3)));
+     *   when(mock.foo()).thenAnswer(AdditionalAnswers.returnsElementsOf(Arrays.asList(1, 2, 3)));
      * </code></pre>
      *
      * @param elements The collection of elements to return.
@@ -330,7 +330,6 @@ public class AdditionalAnswers {
      *
      * @since 2.8.44
      */
-    @Incubating
     public static <T> Answer<T> answersWithDelay(long sleepyTime, Answer<T> answer) {
         return (Answer<T>) new AnswersWithDelay(sleepyTime, (Answer<Object>) answer);
     }
@@ -344,7 +343,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.1.0
      */
-    @Incubating
     public static <T, A> Answer<T> answer(Answer1<T, A> answer) {
         return toAnswer(answer);
     }
@@ -357,7 +355,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.1.0
      */
-    @Incubating
     public static <A> Answer<Void> answerVoid(VoidAnswer1<A> answer) {
         return toAnswer(answer);
     }
@@ -372,7 +369,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.1.0
      */
-    @Incubating
     public static <T, A, B> Answer<T> answer(Answer2<T, A, B> answer) {
         return toAnswer(answer);
     }
@@ -386,7 +382,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.1.0
      */
-    @Incubating
     public static <A, B> Answer<Void> answerVoid(VoidAnswer2<A, B> answer) {
         return toAnswer(answer);
     }
@@ -402,7 +397,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.1.0
      */
-    @Incubating
     public static <T, A, B, C> Answer<T> answer(Answer3<T, A, B, C> answer) {
         return toAnswer(answer);
     }
@@ -417,7 +411,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.1.0
      */
-    @Incubating
     public static <A, B, C> Answer<Void> answerVoid(VoidAnswer3<A, B, C> answer) {
         return toAnswer(answer);
     }
@@ -434,7 +427,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.1.0
      */
-    @Incubating
     public static <T, A, B, C, D> Answer<T> answer(Answer4<T, A, B, C, D> answer) {
         return toAnswer(answer);
     }
@@ -450,7 +442,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.1.0
      */
-    @Incubating
     public static <A, B, C, D> Answer<Void> answerVoid(VoidAnswer4<A, B, C, D> answer) {
         return toAnswer(answer);
     }
@@ -468,7 +459,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.1.0
      */
-    @Incubating
     public static <T, A, B, C, D, E> Answer<T> answer(Answer5<T, A, B, C, D, E> answer) {
         return toAnswer(answer);
     }
@@ -486,7 +476,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.1.0
      */
-    @Incubating
     public static <A, B, C, D, E> Answer<Void> answerVoid(VoidAnswer5<A, B, C, D, E> answer) {
         return toAnswer(answer);
     }
@@ -506,7 +495,6 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.26.0
      */
-    @Incubating
     public static <T, A, B, C, D, E, F> Answer<T> answer(Answer6<T, A, B, C, D, E, F> answer) {
         return toAnswer(answer);
     }
@@ -525,8 +513,9 @@ public class AdditionalAnswers {
      * @return the answer object to use
      * @since 2.26.0
      */
-    @Incubating
     public static <A, B, C, D, E, F> Answer<Void> answerVoid(VoidAnswer6<A, B, C, D, E, F> answer) {
         return toAnswer(answer);
     }
+
+    private AdditionalAnswers() {}
 }

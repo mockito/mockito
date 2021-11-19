@@ -14,21 +14,21 @@ import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-//bug 197
+// bug 197
 public class ShouldOnlyModeAllowCapturingArgumentsTest extends TestBase {
 
     @Mock IMethods mock;
 
     @Test
     public void shouldAllowCapturingArguments() {
-        //given
+        // given
         mock.simpleMethod("o");
         ArgumentCaptor<String> arg = ArgumentCaptor.forClass(String.class);
 
-        //when
+        // when
         verify(mock, only()).simpleMethod(arg.capture());
 
-        //then
+        // then
         assertEquals("o", arg.getValue());
     }
 }

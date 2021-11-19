@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class Primitives {
+public final class Primitives {
 
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPES = new HashMap<Class<?>, Class<?>>();
-    private static final Map<Class<?>, Object> PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES = new HashMap<Class<?>, Object>();
-
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPES = new HashMap<>();
+    private static final Map<Class<?>, Object> PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES =
+            new HashMap<>();
 
     /**
      * Returns the primitive type of the given class.
@@ -43,8 +43,9 @@ public class Primitives {
     }
 
     public static boolean isAssignableFromWrapper(Class<?> valueClass, Class<?> referenceType) {
-        if(isPrimitiveOrWrapper(valueClass) && isPrimitiveOrWrapper(referenceType)) {
-            return Primitives.primitiveTypeOf(valueClass).isAssignableFrom(Primitives.primitiveTypeOf(referenceType));
+        if (isPrimitiveOrWrapper(valueClass) && isPrimitiveOrWrapper(referenceType)) {
+            return Primitives.primitiveTypeOf(valueClass)
+                    .isAssignableFrom(Primitives.primitiveTypeOf(referenceType));
         }
         return false;
     }
@@ -59,7 +60,6 @@ public class Primitives {
     public static <T> T defaultValue(Class<T> primitiveOrWrapperType) {
         return (T) PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.get(primitiveOrWrapperType);
     }
-
 
     static {
         PRIMITIVE_TYPES.put(Boolean.class, Boolean.TYPE);
@@ -91,4 +91,6 @@ public class Primitives {
         PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(float.class, 0F);
         PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.put(double.class, 0D);
     }
+
+    private Primitives() {}
 }

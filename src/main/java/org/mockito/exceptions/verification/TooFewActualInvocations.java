@@ -4,10 +4,12 @@
  */
 package org.mockito.exceptions.verification;
 
+import org.mockito.exceptions.base.MockitoAssertionError;
+
 /**
  * @since 2.27.5
  */
-public class TooFewActualInvocations extends TooLittleActualInvocations {
+public class TooFewActualInvocations extends MockitoAssertionError {
 
     private static final long serialVersionUID = 1L;
 

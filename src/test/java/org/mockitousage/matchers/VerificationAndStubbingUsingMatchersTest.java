@@ -44,7 +44,8 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         try {
             three.simpleMethod("test three again");
             fail();
-        } catch (RuntimeException e) {}
+        } catch (RuntimeException e) {
+        }
     }
 
     @Test
@@ -55,7 +56,8 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         try {
             one.oneArg(true);
             fail();
-        } catch (RuntimeException e) {}
+        } catch (RuntimeException e) {
+        }
 
         one.simpleMethod(100);
         two.simpleMethod("test Mockito");
@@ -74,6 +76,7 @@ public class VerificationAndStubbingUsingMatchersTest extends TestBase {
         try {
             verify(three).varargsObject(eq(10), eq("first arg"), startsWith("third"));
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 }

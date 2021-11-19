@@ -15,11 +15,10 @@ public class InstanceOfTest {
 
     @Test
     public void should_describe_the_matcher() {
-        assertThat(new InstanceOf(Object.class).toString()).contains("isA")
-                                                           .contains("Object");
-        assertThat(new InstanceOf(Object[].class).toString()).contains("isA")
-                                                           .contains("Object[]");
-        assertThat(new InstanceOf(Object.class, "matches something").toString()).isEqualTo("matches something");
+        assertThat(new InstanceOf(Object.class).toString()).contains("isA").contains("Object");
+        assertThat(new InstanceOf(Object[].class).toString()).contains("isA").contains("Object[]");
+        assertThat(new InstanceOf(Object.class, "matches something").toString())
+                .isEqualTo("matches something");
     }
 
     @Test

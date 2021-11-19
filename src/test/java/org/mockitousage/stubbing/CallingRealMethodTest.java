@@ -13,8 +13,7 @@ import org.mockitoutil.TestBase;
 
 public class CallingRealMethodTest extends TestBase {
 
-    @Mock
-    TestedObject mock;
+    @Mock TestedObject mock;
 
     static class TestedObject {
 

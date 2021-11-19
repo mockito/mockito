@@ -10,11 +10,13 @@ import org.mockito.plugins.InstantiatorProvider2;
 
 public class DefaultInstantiatorProvider implements InstantiatorProvider2 {
 
-    private final static Instantiator INSTANCE = new ObjenesisInstantiator();
+    private static final Instantiator INSTANCE = new ObjenesisInstantiator();
 
+    @Override
     public Instantiator getInstantiator(MockCreationSettings<?> settings) {
         if (settings != null && settings.getConstructorArgs() != null) {
-            return new ConstructorInstantiator(settings.getOuterClassInstance() != null, settings.getConstructorArgs());
+            return new ConstructorInstantiator(
+                    settings.getOuterClassInstance() != null, settings.getConstructorArgs());
         } else {
             return INSTANCE;
         }

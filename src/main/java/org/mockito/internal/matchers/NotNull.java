@@ -12,13 +12,14 @@ public class NotNull implements ArgumentMatcher<Object>, Serializable {
 
     public static final NotNull NOT_NULL = new NotNull();
 
-    private NotNull() {
-    }
+    private NotNull() {}
 
+    @Override
     public boolean matches(Object actual) {
         return actual != null;
     }
 
+    @Override
     public String toString() {
         return "notNull()";
     }

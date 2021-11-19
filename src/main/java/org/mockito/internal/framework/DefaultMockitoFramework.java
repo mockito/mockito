@@ -18,12 +18,14 @@ import org.mockito.plugins.MockitoPlugins;
 
 public class DefaultMockitoFramework implements MockitoFramework {
 
+    @Override
     public MockitoFramework addListener(MockitoListener listener) {
         Checks.checkNotNull(listener, "listener");
         mockingProgress().addListener(listener);
         return this;
     }
 
+    @Override
     public MockitoFramework removeListener(MockitoListener listener) {
         Checks.checkNotNull(listener, "listener");
         mockingProgress().removeListener(listener);

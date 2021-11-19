@@ -51,10 +51,10 @@ public class CaptorAnnotationBasicTest extends TestBase {
 
     @Test
     public void shouldUseCaptorInOrdinaryWay() {
-        //when
+        // when
         createPerson("Wes", "Williams");
 
-        //then
+        // then
         ArgumentCaptor<Person> captor = ArgumentCaptor.forClass(Person.class);
         verify(peopleRepository).save(captor.capture());
         assertEquals("Wes", captor.getValue().getName());
@@ -65,24 +65,25 @@ public class CaptorAnnotationBasicTest extends TestBase {
 
     @Test
     public void shouldUseAnnotatedCaptor() {
-        //when
+        // when
         createPerson("Wes", "Williams");
 
-        //then
+        // then
         verify(peopleRepository).save(captor.capture());
         assertEquals("Wes", captor.getValue().getName());
         assertEquals("Williams", captor.getValue().getSurname());
     }
 
     @SuppressWarnings("rawtypes")
-    @Captor ArgumentCaptor genericLessCaptor;
+    @Captor
+    ArgumentCaptor genericLessCaptor;
 
     @Test
     public void shouldUseGenericlessAnnotatedCaptor() {
-        //when
+        // when
         createPerson("Wes", "Williams");
 
-        //then
+        // then
         verify(peopleRepository).save((Person) genericLessCaptor.capture());
         assertEquals("Wes", ((Person) genericLessCaptor.getValue()).getName());
         assertEquals("Williams", ((Person) genericLessCaptor.getValue()).getSurname());
@@ -93,14 +94,14 @@ public class CaptorAnnotationBasicTest extends TestBase {
 
     @Test
     public void shouldCaptureGenericList() {
-        //given
+        // given
         List<String> list = new LinkedList<String>();
         mock.listArgMethod(list);
 
-        //when
+        // when
         verify(mock).listArgMethod(genericListCaptor.capture());
 
-        //then
+        // then
         assertSame(list, genericListCaptor.getValue());
     }
 }

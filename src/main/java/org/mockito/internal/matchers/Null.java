@@ -12,13 +12,14 @@ public class Null implements ArgumentMatcher<Object>, Serializable {
 
     public static final Null NULL = new Null();
 
-    private Null() {
-    }
+    private Null() {}
 
+    @Override
     public boolean matches(Object actual) {
         return actual == null;
     }
 
+    @Override
     public String toString() {
         return "isNull()";
     }

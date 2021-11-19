@@ -39,14 +39,17 @@ public class PointingStackTraceToActualInvocationChunkInOrderTest extends TestBa
         mock.simpleMethod(1);
         mock.simpleMethod(1);
     }
+
     private void secondChunk() {
         mockTwo.simpleMethod(2);
         mockTwo.simpleMethod(2);
     }
+
     private void thirdChunk() {
         mock.simpleMethod(3);
         mock.simpleMethod(3);
     }
+
     private void fourthChunk() {
         mockTwo.simpleMethod(4);
         mockTwo.simpleMethod(4);

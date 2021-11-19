@@ -16,9 +16,9 @@ public class ConsecutiveStubbing<T> extends BaseStubbing<T> {
         this.invocationContainer = invocationContainer;
     }
 
+    @Override
     public OngoingStubbing<T> thenAnswer(Answer<?> answer) {
         invocationContainer.addConsecutiveAnswer(answer);
         return this;
     }
-
 }

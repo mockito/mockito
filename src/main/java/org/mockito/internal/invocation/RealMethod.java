@@ -18,7 +18,6 @@ import org.mockito.invocation.InvocationOnMock;
 public interface RealMethod extends Serializable {
 
     enum IsIllegal implements RealMethod {
-
         INSTANCE;
 
         @Override
@@ -34,12 +33,13 @@ public interface RealMethod extends Serializable {
 
     class FromCallable extends FromBehavior implements RealMethod {
         public FromCallable(final Callable<?> callable) {
-            super(new InvocationFactory.RealMethodBehavior() {
-                @Override
-                public Object call() throws Throwable {
-                    return callable.call();
-                }
-            });
+            super(
+                    new InvocationFactory.RealMethodBehavior() {
+                        @Override
+                        public Object call() throws Throwable {
+                            return callable.call();
+                        }
+                    });
         }
     }
 

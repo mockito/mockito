@@ -4,7 +4,6 @@
  */
 package org.mockito.configuration;
 
-import org.mockito.internal.configuration.InjectingAnnotationEngine;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValues;
 import org.mockito.stubbing.Answer;
 
@@ -17,20 +16,15 @@ import org.mockito.stubbing.Answer;
  */
 public class DefaultMockitoConfiguration implements IMockitoConfiguration {
 
+    @Override
     public Answer<Object> getDefaultAnswer() {
         return new ReturnsEmptyValues();
     }
 
     /* (non-Javadoc)
-     * @see org.mockito.IMockitoConfiguration#getAnnotationEngine()
-     */
-    public AnnotationEngine getAnnotationEngine() {
-        return new InjectingAnnotationEngine();
-    }
-
-    /* (non-Javadoc)
      * @see org.mockito.configuration.IMockitoConfiguration#cleansStackTrace()
      */
+    @Override
     public boolean cleansStackTrace() {
         return true;
     }
@@ -38,9 +32,8 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     /* (non-Javadoc)
      * @see org.mockito.configuration.IMockitoConfiguration#enableClassCache()
      */
+    @Override
     public boolean enableClassCache() {
         return true;
     }
-
-
 }

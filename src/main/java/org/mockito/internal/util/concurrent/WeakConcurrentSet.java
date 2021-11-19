@@ -21,11 +21,11 @@ public class WeakConcurrentSet<V> implements Runnable, Iterable<V> {
     public WeakConcurrentSet(Cleaner cleaner) {
         switch (cleaner) {
             case INLINE:
-                target = new WeakConcurrentMap.WithInlinedExpunction<V, Boolean>();
+                target = new WeakConcurrentMap.WithInlinedExpunction<>();
                 break;
             case THREAD:
             case MANUAL:
-                target = new WeakConcurrentMap<V, Boolean>(cleaner == Cleaner.THREAD);
+                target = new WeakConcurrentMap<>(cleaner == Cleaner.THREAD);
                 break;
             default:
                 throw new AssertionError();
@@ -53,7 +53,7 @@ public class WeakConcurrentSet<V> implements Runnable, Iterable<V> {
      * @return {@code true} if the value is contained in the set.
      */
     public boolean remove(V value) {
-        return target.remove(value);
+        return target.remove(value) != null;
     }
 
     /**
@@ -84,7 +84,9 @@ public class WeakConcurrentSet<V> implements Runnable, Iterable<V> {
      * ({@link Cleaner#MANUAL}).
      */
     public enum Cleaner {
-        THREAD, INLINE, MANUAL
+        THREAD,
+        INLINE,
+        MANUAL
     }
 
     /**

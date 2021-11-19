@@ -34,7 +34,7 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
     @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void makeSureStateIsValidatedInTheVeryFirstTestThanksToTheRunner() {
-        //mess up the state:
+        // mess up the state:
         verify(mock);
     }
 
@@ -158,14 +158,14 @@ public class ModellingDescriptiveMessagesTest extends TestBase {
 
     @Test
     public void shouldMentionFinalAndObjectMethodsWhenMisplacedArgumentMatcher() {
-        when(mock.equals(anyObject())).thenReturn(false);
+        when(mock.equals(any())).thenReturn(false);
     }
 
     @Test
     public void shouldShowExampleOfCorrectArgumentCapturing() {
         ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
-        argument.capture();
-        argument.getValue();
+        Object ignored = argument.capture();
+        String ignoredValue = argument.getValue();
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})

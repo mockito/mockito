@@ -4,7 +4,6 @@
  */
 package org.mockito.internal.progress;
 
-
 import org.mockito.internal.verification.Times;
 import org.mockito.internal.verification.VerificationModeFactory;
 

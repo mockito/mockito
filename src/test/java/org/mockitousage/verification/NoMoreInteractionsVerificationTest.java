@@ -51,35 +51,14 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyNoInteractionsAsManyTimesAsYouWant() throws Exception {
-        verifyNoMoreInteractions(mock);
-        verifyNoMoreInteractions(mock);
-
-        verifyZeroInteractions(mock);
-        verifyZeroInteractions(mock);
-
-        verifyNoInteractions(mock);
-        verifyNoInteractions(mock);
-    }
-
-    @Test
-    public void shouldFailZeroInteractionsVerification() throws Exception {
-        mock.clear();
-
-        try {
-            verifyZeroInteractions(mock);
-            fail();
-        } catch (NoInteractionsWanted e) {}
-    }
-
-    @Test
     public void shouldFailNoMoreInteractionsVerification() throws Exception {
         mock.clear();
 
         try {
             verifyNoMoreInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -89,7 +68,8 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         try {
             verifyNoInteractions(mock);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -133,9 +113,10 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
 
         verifyNoMoreInteractions(list);
         try {
-            verifyZeroInteractions(map);
+            verifyNoInteractions(map);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -154,12 +135,13 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         try {
             verifyNoInteractions(map);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @SuppressWarnings("all")
-    @Test(expected=MockitoException.class)
+    @Test(expected = MockitoException.class)
     public void verifyNoMoreInteractionsShouldScreamWhenNullPassed() throws Exception {
-        verifyNoMoreInteractions((Object[])null);
+        verifyNoMoreInteractions((Object[]) null);
     }
 }

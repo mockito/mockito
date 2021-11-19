@@ -4,8 +4,9 @@
  */
 package org.mockitousage.verification;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 
@@ -15,6 +16,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.verification.VerificationMode;
 import org.mockitoutil.TestBase;
 
 public class OnlyVerificationTest extends TestBase {
@@ -41,7 +43,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).get(0);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 
     @Test
@@ -51,7 +54,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).clear();
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -61,7 +65,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).get(999);
             fail();
-        } catch (WantedButNotInvoked e) {}
+        } catch (WantedButNotInvoked e) {
+        }
     }
 
     @Test
@@ -71,7 +76,8 @@ public class OnlyVerificationTest extends TestBase {
         try {
             verify(mock, only()).get(2);
             fail();
-        } catch (NoInteractionsWanted e) {}
+        } catch (NoInteractionsWanted e) {
+        }
     }
 
     @Test
@@ -82,4 +88,10 @@ public class OnlyVerificationTest extends TestBase {
         verify(mock2, only()).get(0);
     }
 
+    @Test
+    public void should_return_formatted_output_from_toString_method() {
+        VerificationMode only = only();
+
+        assertThat(only).hasToString("Wanted invocations count: 1 and no other method invoked");
+    }
 }

@@ -4,7 +4,6 @@
  */
 package org.mockito.plugins;
 
-import org.mockito.Incubating;
 import org.mockito.MockitoFramework;
 
 /**
@@ -26,7 +25,6 @@ import org.mockito.MockitoFramework;
  *
  * @since 2.25.0
  */
-@Incubating
 public interface InlineMockMaker extends MockMaker {
 
     /**
@@ -36,7 +34,6 @@ public interface InlineMockMaker extends MockMaker {
      * @param mock the mock instance whose internal state is to be cleaned.
      * @since 2.25.0
      */
-    @Incubating
     void clearMock(Object mock);
 
     /**
@@ -45,7 +42,5 @@ public interface InlineMockMaker extends MockMaker {
      *
      * @since 2.25.0
      */
-    @Incubating
     void clearAllMocks();
-
 }

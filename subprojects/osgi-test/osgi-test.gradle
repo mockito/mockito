@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "osgi-test-bundles.gradle"
+
+description = "Test suite for OSGi framework with Mockito"
+
+dependencies {
+    testImplementation libraries.junit4
+    testImplementation libraries.osgi
+
+    testRuntimeOnly libraries.equinox
+}
+
+tasks.javadoc.enabled = false
+
+configurations {
+    testRuntimeBundles
+}
+
+dependencies {
+    testRuntimeBundles project.rootProject
+    testRuntimeBundles libraries.bytebuddy
+    testRuntimeBundles libraries.objenesis
+    testRuntimeBundles tasks.testBundle.outputs.files
+    testRuntimeBundles tasks.otherBundle.outputs.files
+}
+
+test {
+    dependsOn configurations.testRuntimeBundles
+    inputs.files(sourceSets.testBundle.allSource)
+    inputs.files(sourceSets.otherBundle.allSource)
+    systemProperty 'testRuntimeBundles', configurations.testRuntimeBundles.asPath
+    useJUnit()
+}
+

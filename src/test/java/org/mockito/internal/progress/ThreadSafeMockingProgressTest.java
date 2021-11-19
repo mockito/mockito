@@ -25,11 +25,11 @@ public class ThreadSafeMockingProgressTest extends TestBase {
 
     @Test
     public void shouldShareState() throws Exception {
-        //given
+        // given
         MockingProgress p = mockingProgress();
         p.verificationStarted(new DummyVerificationMode());
 
-        //then
+        // then
         p = mockingProgress();
         assertNotNull(p.pullVerificationMode());
     }
@@ -37,11 +37,11 @@ public class ThreadSafeMockingProgressTest extends TestBase {
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldKnowWhenVerificationHasStarted() throws Exception {
-        //given
+        // given
         verify(mock(List.class));
         MockingProgress p = mockingProgress();
 
-        //then
+        // then
         assertNotNull(p.pullVerificationMode());
     }
 }

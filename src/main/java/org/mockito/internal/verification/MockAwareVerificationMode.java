@@ -17,25 +17,23 @@ public class MockAwareVerificationMode implements VerificationMode {
     private final VerificationMode mode;
     private final Set<VerificationListener> listeners;
 
-    public MockAwareVerificationMode(Object mock, VerificationMode mode, Set<VerificationListener> listeners) {
+    public MockAwareVerificationMode(
+            Object mock, VerificationMode mode, Set<VerificationListener> listeners) {
         this.mock = mock;
         this.mode = mode;
         this.listeners = listeners;
     }
 
+    @Override
     public void verify(VerificationData data) {
         try {
             mode.verify(data);
             notifyListeners(new VerificationEventImpl(mock, mode, data, null));
-        } catch (RuntimeException e) {
-            notifyListeners(new VerificationEventImpl(mock, mode, data, e));
-            throw e;
-        } catch (Error e) {
+        } catch (RuntimeException | Error e) {
             notifyListeners(new VerificationEventImpl(mock, mode, data, e));
             throw e;
         }
     }
-
 
     private void notifyListeners(VerificationEvent event) {
         for (VerificationListener listener : listeners) {
@@ -46,5 +44,4 @@ public class MockAwareVerificationMode implements VerificationMode {
     public Object getMock() {
         return mock;
     }
-
 }

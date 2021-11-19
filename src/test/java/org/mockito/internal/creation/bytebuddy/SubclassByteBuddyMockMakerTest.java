@@ -4,18 +4,23 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.ClassFileVersion;
+import net.bytebuddy.description.modifier.TypeManifestation;
+import net.bytebuddy.dynamic.DynamicType;
+import org.junit.Test;
+import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.plugins.MockMaker;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.junit.Test;
-import org.mockito.internal.creation.MockSettingsImpl;
-import org.mockito.plugins.MockMaker;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class SubclassByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTest<SubclassByteBuddyMockMaker> {
+public class SubclassByteBuddyMockMakerTest
+        extends AbstractByteBuddyMockMakerTest<SubclassByteBuddyMockMaker> {
 
     public SubclassByteBuddyMockMakerTest() {
         super(new SubclassByteBuddyMockMaker());
@@ -29,6 +34,25 @@ public class SubclassByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTe
     }
 
     @Test
+    public void is_type_mockable_excludes_sealed_classes() {
+        if (ClassFileVersion.ofThisVm().isAtMost(ClassFileVersion.JAVA_V16)) {
+            return;
+        }
+        DynamicType.Builder<?> base = new ByteBuddy().subclass(Object.class);
+        DynamicType.Builder<?> subclass =
+                new ByteBuddy().subclass(base.toTypeDescription()).merge(TypeManifestation.FINAL);
+        Class<?> type =
+                base.permittedSubclass(subclass.toTypeDescription())
+                        .make()
+                        .include(subclass.make())
+                        .load(null)
+                        .getLoaded();
+        MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(type);
+        assertThat(mockable.mockable()).isFalse();
+        assertThat(mockable.nonMockableReason()).contains("sealed");
+    }
+
+    @Test
     public void is_type_mockable_excludes_primitive_classes() {
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(int.class);
         assertThat(mockable.mockable()).isFalse();
@@ -37,9 +61,11 @@ public class SubclassByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTe
 
     @Test
     public void is_type_mockable_allow_anonymous() {
-        Observer anonymous = new Observer() {
-            @Override public void update(Observable o, Object arg) { }
-        };
+        Observer anonymous =
+                new Observer() {
+                    @Override
+                    public void update(Observable o, Object arg) {}
+                };
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(anonymous.getClass());
         assertThat(mockable.mockable()).isTrue();
         assertThat(mockable.nonMockableReason()).contains("");
@@ -54,7 +80,8 @@ public class SubclassByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTe
 
     @Test
     public void mock_type_with_annotations() throws Exception {
-        MockSettingsImpl<ClassWithAnnotation> mockSettings = new MockSettingsImpl<ClassWithAnnotation>();
+        MockSettingsImpl<ClassWithAnnotation> mockSettings =
+                new MockSettingsImpl<ClassWithAnnotation>();
         mockSettings.setTypeToMock(ClassWithAnnotation.class);
 
         ClassWithAnnotation proxy = mockMaker.createMock(mockSettings, dummyHandler());
@@ -62,20 +89,34 @@ public class SubclassByteBuddyMockMakerTest extends AbstractByteBuddyMockMakerTe
         assertThat(proxy.getClass().isAnnotationPresent(SampleAnnotation.class)).isTrue();
         assertThat(proxy.getClass().getAnnotation(SampleAnnotation.class).value()).isEqualTo("foo");
 
-        assertThat(proxy.getClass().getMethod("sampleMethod").isAnnotationPresent(SampleAnnotation.class)).isTrue();
-        assertThat(proxy.getClass().getMethod("sampleMethod").getAnnotation(SampleAnnotation.class).value()).isEqualTo("bar");
+        assertThat(
+                        proxy.getClass()
+                                .getMethod("sampleMethod")
+                                .isAnnotationPresent(SampleAnnotation.class))
+                .isTrue();
+        assertThat(
+                        proxy.getClass()
+                                .getMethod("sampleMethod")
+                                .getAnnotation(SampleAnnotation.class)
+                                .value())
+                .isEqualTo("bar");
     }
 
     @Test
     public void mock_type_without_annotations() throws Exception {
-        MockSettingsImpl<ClassWithAnnotation> mockSettings = new MockSettingsImpl<ClassWithAnnotation>();
+        MockSettingsImpl<ClassWithAnnotation> mockSettings =
+                new MockSettingsImpl<ClassWithAnnotation>();
         mockSettings.setTypeToMock(ClassWithAnnotation.class);
         mockSettings.withoutAnnotations();
 
         ClassWithAnnotation proxy = mockMaker.createMock(mockSettings, dummyHandler());
 
         assertThat(proxy.getClass().isAnnotationPresent(SampleAnnotation.class)).isFalse();
-        assertThat(proxy.getClass().getMethod("sampleMethod").isAnnotationPresent(SampleAnnotation.class)).isFalse();
+        assertThat(
+                        proxy.getClass()
+                                .getMethod("sampleMethod")
+                                .isAnnotationPresent(SampleAnnotation.class))
+                .isFalse();
     }
 
     @Override

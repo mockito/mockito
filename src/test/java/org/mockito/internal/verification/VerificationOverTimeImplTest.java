@@ -7,9 +7,7 @@ package org.mockito.internal.verification;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import static org.mockito.MockitoAnnotations.initMocks;
-
-import java.time.Duration;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,18 +19,15 @@ import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockito.verification.VerificationMode;
 
 public class VerificationOverTimeImplTest {
-    @Mock
-    private VerificationMode delegate;
+    @Mock private VerificationMode delegate;
     private VerificationOverTimeImpl impl;
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
+    @Rule public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setUp() {
-        initMocks(this);
-        impl = new VerificationOverTimeImpl(
-            Duration.ofMillis(10), Duration.ofSeconds(1), delegate, true);
+        openMocks(this);
+        impl = new VerificationOverTimeImpl(10, 1000, delegate, true);
     }
 
     @Test

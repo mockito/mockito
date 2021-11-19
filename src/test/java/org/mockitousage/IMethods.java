@@ -42,7 +42,7 @@ public interface IMethods {
 
     Double doubleObjectReturningMethod();
 
-    Object objectReturningMethod(Object ... objects);
+    Object objectReturningMethod(Object... objects);
 
     Object objectReturningMethodNoArgs();
 
@@ -124,7 +124,8 @@ public interface IMethods {
 
     String simpleMethod(String one, Integer two, Integer three, Integer four, Integer five);
 
-    String simpleMethod(String one, Integer two, Integer three, Integer four, Integer five, Integer six);
+    String simpleMethod(
+            String one, Integer two, Integer three, Integer four, Integer five, Integer six);
 
     String simpleMethod(String one, String[] two);
 
@@ -166,21 +167,21 @@ public interface IMethods {
 
     void varargsbyte(byte... bytes);
 
-    int varargs(Object ... object);
+    int varargs(Object... object);
 
-    String varargsReturningString(Object ... object);
+    String varargsReturningString(Object... object);
 
-    int varargs(String ... string);
+    int varargs(String... string);
 
-    void mixedVarargs(Object i, String ... string);
+    void mixedVarargs(Object i, String... string);
 
-    String mixedVarargsReturningString(Object i, String ... string);
+    String mixedVarargsReturningString(Object i, String... string);
 
-    String[] mixedVarargsReturningStringArray(Object i, String ... string);
+    String[] mixedVarargsReturningStringArray(Object i, String... string);
 
-    Object[] mixedVarargsReturningObjectArray(Object i, String ... string);
+    Object[] mixedVarargsReturningObjectArray(Object i, String... string);
 
-    List<String> listReturningMethod(Object ... objects);
+    List<String> listReturningMethod(Object... objects);
 
     LinkedList<String> linkedListReturningMethod();
 
@@ -237,4 +238,52 @@ public interface IMethods {
     String forObject(Object object);
 
     <T> String genericToString(T arg);
+
+    void overloadedMethodWithSameClassNameArguments(java.sql.Date javaDate, Date date);
+
+    void overloadedMethodWithSameClassNameArguments(Date date, java.sql.Date javaDate);
+
+    void overloadedMethodWithDifferentClassNameArguments(String String, Integer i);
+
+    void overloadedMethodWithDifferentClassNameArguments(Integer i, String string);
+
+    void overloadedMethodWithSameClassNameArguments(
+            java.sql.Date javaDate, String string, Date date);
+
+    void overloadedMethodWithSameClassNameArguments(
+            Date date, String string, java.sql.Date javaDate);
+
+    /**
+     * Using this class to test cases where two classes have same simple name
+     */
+    public static class Date {
+
+        private int value;
+
+        public Date(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            Date date = (Date) o;
+            return value == date.value;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
+        }
+    }
 }

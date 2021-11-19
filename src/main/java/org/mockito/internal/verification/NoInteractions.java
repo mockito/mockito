@@ -14,6 +14,7 @@ import org.mockito.verification.VerificationMode;
 
 public class NoInteractions implements VerificationMode {
 
+    @Override
     @SuppressWarnings("unchecked")
     public void verify(VerificationData data) {
         List<Invocation> invocations = data.getAllInvocations();
@@ -21,5 +22,4 @@ public class NoInteractions implements VerificationMode {
             throw noInteractionsWanted(invocations.get(0).getMock(), (List) invocations);
         }
     }
-
 }

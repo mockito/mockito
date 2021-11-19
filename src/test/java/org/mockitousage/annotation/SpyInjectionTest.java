@@ -20,6 +20,7 @@ public class SpyInjectionTest extends TestBase {
 
     static class HasSpy {
         private List<?> spy;
+
         public void setSpy(List<?> spy) {
             this.spy = spy;
         }

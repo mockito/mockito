@@ -4,7 +4,6 @@
  */
 package org.mockito.invocation;
 
-
 /**
  * Provides information about the invocation, specifically a human readable description and the location.
  */
@@ -15,6 +14,7 @@ public interface DescribedInvocation {
      *
      * @return the description of this invocation.
      */
+    @Override
     String toString();
 
     /**

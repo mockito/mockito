@@ -48,31 +48,42 @@ public class MockInjectionTest {
         MockInjection.onField(field("withConstructor"), this).withMocks(null);
     }
 
-
     @Test
     public void can_try_constructor_injection() throws Exception {
-        MockInjection.onField(field("withConstructor"), this).withMocks(oneSetMock()).tryConstructorInjection().apply();
+        MockInjection.onField(field("withConstructor"), this)
+                .withMocks(oneSetMock())
+                .tryConstructorInjection()
+                .apply();
 
         assertThat(withConstructor.initializedWithConstructor).isEqualTo(true);
     }
 
     @Test
     public void should_not_fail_if_constructor_injection_is_not_possible() throws Exception {
-        MockInjection.onField(field("withoutConstructor"), this).withMocks(otherKindOfMocks()).tryConstructorInjection().apply();
+        MockInjection.onField(field("withoutConstructor"), this)
+                .withMocks(otherKindOfMocks())
+                .tryConstructorInjection()
+                .apply();
 
         assertThat(withoutConstructor).isNull();
     }
 
     @Test
     public void can_try_property_or_setter_injection() throws Exception {
-        MockInjection.onField(field("withoutConstructor"), this).withMocks(oneSetMock()).tryPropertyOrFieldInjection().apply();
+        MockInjection.onField(field("withoutConstructor"), this)
+                .withMocks(oneSetMock())
+                .tryPropertyOrFieldInjection()
+                .apply();
 
         assertThat(withoutConstructor.theSet).isNotNull();
     }
 
     @Test
     public void should_not_fail_if_property_or_field_injection_is_not_possible() throws Exception {
-        MockInjection.onField(field("withoutConstructor"), this).withMocks(otherKindOfMocks()).tryPropertyOrFieldInjection().apply();
+        MockInjection.onField(field("withoutConstructor"), this)
+                .withMocks(otherKindOfMocks())
+                .tryPropertyOrFieldInjection()
+                .apply();
 
         assertThat(withoutConstructor.theSet).isNull();
     }
@@ -89,9 +100,9 @@ public class MockInjectionTest {
         return getClass().getDeclaredField(field);
     }
 
-
     public static class AnObjectWithConstructor {
         public boolean initializedWithConstructor = false;
+
         public AnObjectWithConstructor(Set<String> strings) {
             initializedWithConstructor = true;
         }

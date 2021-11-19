@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
 
-@SuppressWarnings({ "unchecked", "serial","rawtypes" })
+@SuppressWarnings({"unchecked", "serial", "rawtypes"})
 public class Or implements ArgumentMatcher<Object>, Serializable {
     private final ArgumentMatcher m1;
     private final ArgumentMatcher m2;
@@ -18,11 +18,13 @@ public class Or implements ArgumentMatcher<Object>, Serializable {
         this.m2 = m2;
     }
 
+    @Override
     public boolean matches(Object actual) {
         return m1.matches(actual) || m2.matches(actual);
     }
 
+    @Override
     public String toString() {
-        return "or("+m1+", "+m2+")";
+        return "or(" + m1 + ", " + m2 + ")";
     }
 }

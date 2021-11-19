@@ -4,7 +4,6 @@
  */
 package org.mockito.session;
 
-import org.mockito.Incubating;
 import org.mockito.MockitoSession;
 import org.mockito.NotExtensible;
 
@@ -17,7 +16,6 @@ import org.mockito.NotExtensible;
  *
  * @since 2.15.0
  */
-@Incubating
 @NotExtensible
 public interface MockitoSessionLogger {
 
@@ -26,7 +24,5 @@ public interface MockitoSessionLogger {
      *
      * @param hint to log; never {@code null}
      */
-    @Incubating
     void log(String hint);
-
 }

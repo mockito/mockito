@@ -6,7 +6,7 @@ package org.mockito.internal.verification;
 
 import org.mockito.verification.VerificationMode;
 
-public class VerificationModeFactory {
+public final class VerificationModeFactory {
 
     public static VerificationMode atLeastOnce() {
         return atLeast(1);
@@ -17,7 +17,7 @@ public class VerificationModeFactory {
     }
 
     public static VerificationMode only() {
-        return new Only(); //TODO make exception message nicer
+        return new Only(); // TODO make exception message nicer
     }
 
     public static Times times(int wantedNumberOfInvocations) {
@@ -25,7 +25,7 @@ public class VerificationModeFactory {
     }
 
     public static Calls calls(int wantedNumberOfInvocations) {
-        return new Calls( wantedNumberOfInvocations );
+        return new Calls(wantedNumberOfInvocations);
     }
 
     public static NoMoreInteractions noMoreInteractions() {
@@ -54,4 +54,6 @@ public class VerificationModeFactory {
     public static VerificationMode description(VerificationMode mode, String description) {
         return new Description(mode, description);
     }
+
+    private VerificationModeFactory() {}
 }

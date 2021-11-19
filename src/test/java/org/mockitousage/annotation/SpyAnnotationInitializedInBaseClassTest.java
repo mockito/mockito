@@ -22,42 +22,37 @@ public class SpyAnnotationInitializedInBaseClassTest extends TestBase {
 
     class BaseClass {
 
-        @Spy
-        List list = new LinkedList();
+        @Spy List list = new LinkedList();
     }
 
-    class SubClass extends BaseClass {
-
-    }
+    class SubClass extends BaseClass {}
 
     @Test
     public void shouldInitSpiesInBaseClass() throws Exception {
-        //given
+        // given
         SubClass subClass = new SubClass();
-        //when
-        MockitoAnnotations.initMocks(subClass);
-        //then
+        // when
+        MockitoAnnotations.openMocks(subClass);
+        // then
         assertTrue(MockUtil.isMock(subClass.list));
     }
 
     @Before
     @Override
     public void init() {
-        //we need to get rid of parent implementation this time
+        // we need to get rid of parent implementation this time
     }
 
     @Before
     public void before() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
-    @Spy
-    List spyInBaseclass = new LinkedList();
+    @Spy List spyInBaseclass = new LinkedList();
 
     public static class SubTest extends SpyAnnotationInitializedInBaseClassTest {
 
-        @Spy
-        List spyInSubclass = new LinkedList();
+        @Spy List spyInSubclass = new LinkedList();
 
         @Test
         public void shouldInitSpiesInHierarchy() throws Exception {

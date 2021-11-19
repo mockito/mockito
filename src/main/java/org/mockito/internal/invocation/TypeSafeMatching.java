@@ -8,22 +8,21 @@ import java.lang.reflect.Method;
 
 import org.mockito.ArgumentMatcher;
 
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class TypeSafeMatching implements ArgumentMatcherAction {
 
-    private final static ArgumentMatcherAction TYPE_SAFE_MATCHING_ACTION = new TypeSafeMatching();
+    private static final ArgumentMatcherAction TYPE_SAFE_MATCHING_ACTION = new TypeSafeMatching();
 
     private TypeSafeMatching() {}
 
-
-    public static ArgumentMatcherAction matchesTypeSafe(){
+    public static ArgumentMatcherAction matchesTypeSafe() {
         return TYPE_SAFE_MATCHING_ACTION;
     }
+
     @Override
     public boolean apply(ArgumentMatcher matcher, Object argument) {
         return isCompatible(matcher, argument) && matcher.matches(argument);
     }
-
 
     /**
      * Returns <code>true</code> if the given <b>argument</b> can be passed to
@@ -31,8 +30,9 @@ public class TypeSafeMatching implements ArgumentMatcherAction {
      * {@link ClassCastException}.
      */
     private static boolean isCompatible(ArgumentMatcher<?> argumentMatcher, Object argument) {
-        if (argument == null)
+        if (argument == null) {
             return true;
+        }
 
         Class<?> expectedArgumentType = getArgumentType(argumentMatcher);
 
@@ -51,7 +51,10 @@ public class TypeSafeMatching implements ArgumentMatcherAction {
                 return method.getParameterTypes()[0];
             }
         }
-        throw new NoSuchMethodError("Method 'matches(T)' not found in ArgumentMatcher: " + argumentMatcher + " !\r\n Please file a bug with this stack trace at: https://github.com/mockito/mockito/issues/new ");
+        throw new NoSuchMethodError(
+                "Method 'matches(T)' not found in ArgumentMatcher: "
+                        + argumentMatcher
+                        + " !\r\n Please file a bug with this stack trace at: https://github.com/mockito/mockito/issues/new ");
     }
 
     /**

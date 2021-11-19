@@ -61,9 +61,11 @@ public interface BaseStubber {
      *
      * @since 2.1.0
      */
-    // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array creation
-    @SuppressWarnings ({"unchecked", "varargs"})
-    Stubber doThrow(Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown);
+    // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array
+    // creation
+    @SuppressWarnings({"unchecked", "varargs"})
+    Stubber doThrow(
+            Class<? extends Throwable> toBeThrown, Class<? extends Throwable>... nextToBeThrown);
 
     /**
      * Use it for stubbing consecutive calls in {@link Mockito#doAnswer(Answer)} style:

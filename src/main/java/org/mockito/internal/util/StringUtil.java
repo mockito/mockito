@@ -28,7 +28,7 @@ public class StringUtil {
      * Joins Strings with line break character. It adds line break in front, too.
      * This makes it something like 'format' no really 'join'.
      */
-    public static String join(Object ... linesToBreak) {
+    public static String join(Object... linesToBreak) {
         return join("\n", asList(linesToBreak));
     }
 
@@ -57,10 +57,10 @@ public class StringUtil {
         for (Object line : lines) {
             out.append(linePrefix).append(line).append("\n");
         }
-        return out.substring(0, out.length() - 1); //lose last EOL
+        return out.substring(0, out.length() - 1); // lose last EOL
     }
 
-    public static String decamelizeMatcher(String className) {
+    public static String decamelizeMatcherName(String className) {
         if (className.length() == 0) {
             return "<custom argument matcher>";
         }

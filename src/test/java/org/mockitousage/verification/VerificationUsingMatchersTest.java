@@ -7,14 +7,18 @@ package org.mockitousage.verification;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
-import static org.mockito.AdditionalMatchers.*;
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.AdditionalMatchers.geq;
+import static org.mockito.AdditionalMatchers.leq;
+import static org.mockito.AdditionalMatchers.and;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
@@ -67,7 +71,8 @@ public class VerificationUsingMatchersTest extends TestBase {
         mock.threeArgumentMethod(11, "", "01234");
 
         try {
-            verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
+            verify(mock)
+                    .threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
         } catch (ArgumentsAreDifferent e) {
         }
@@ -75,7 +80,8 @@ public class VerificationUsingMatchersTest extends TestBase {
         mock.threeArgumentMethod(8, new Object(), "01234");
 
         try {
-            verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
+            verify(mock)
+                    .threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
         } catch (ArgumentsAreDifferent e) {
         }
@@ -83,13 +89,14 @@ public class VerificationUsingMatchersTest extends TestBase {
         mock.threeArgumentMethod(8, "", "no match");
 
         try {
-            verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
+            verify(mock)
+                    .threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
             fail();
         } catch (ArgumentsAreDifferent e) {
         }
 
         mock.threeArgumentMethod(8, "", "123");
 
-        verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), Matchers.contains("123"));
+        verify(mock).threeArgumentMethod(and(geq(7), leq(10)), isA(String.class), contains("123"));
     }
 }

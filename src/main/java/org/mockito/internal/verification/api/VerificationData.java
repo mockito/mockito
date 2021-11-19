@@ -6,7 +6,6 @@ package org.mockito.internal.verification.api;
 
 import java.util.List;
 
-import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
 
@@ -39,13 +38,4 @@ public interface VerificationData {
      * @since 2.2.12
      */
     MatchableInvocation getTarget();
-
-    /**
-     * @deprecated - This internal method leaks internal class <code>InvocationMatcher</code>.
-     * Please use {@link org.mockito.internal.verification.api.VerificationData#getTarget()} instead.
-     *
-     * Deprecated since 2.2.12
-     */
-    @Deprecated
-    InvocationMatcher getWanted();
 }

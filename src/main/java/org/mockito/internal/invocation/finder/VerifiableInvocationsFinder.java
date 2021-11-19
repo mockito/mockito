@@ -22,7 +22,8 @@ public class VerifiableInvocationsFinder {
         return ListUtil.filter(invocations, new RemoveIgnoredForVerification());
     }
 
-    private static class RemoveIgnoredForVerification implements Filter<Invocation>{
+    private static class RemoveIgnoredForVerification implements Filter<Invocation> {
+        @Override
         public boolean isOut(Invocation invocation) {
             return invocation.isIgnoredForVerification();
         }

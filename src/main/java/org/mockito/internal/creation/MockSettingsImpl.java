@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.mockito.MockSettings;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
 import org.mockito.internal.util.Checks;
@@ -35,7 +36,8 @@ import org.mockito.mock.SerializableMode;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
-public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSettings, MockCreationSettings<T> {
+public class MockSettingsImpl<T> extends CreationSettings<T>
+        implements MockSettings, MockCreationSettings<T> {
 
     private static final long serialVersionUID = 4475297236197939569L;
     private boolean useConstructor;
@@ -119,9 +121,10 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
 
     @Override
     public MockSettings useConstructor(Object... constructorArgs) {
-        Checks.checkNotNull(constructorArgs,
-            "constructorArgs",
-            "If you need to pass null, please cast it to the right type, e.g.: useConstructor((String) null)");
+        Checks.checkNotNull(
+                constructorArgs,
+                "constructorArgs",
+                "If you need to pass null, please cast it to the right type, e.g.: useConstructor((String) null)");
         this.useConstructor = true;
         this.constructorArgs = constructorArgs;
         return this;
@@ -154,7 +157,7 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         if (outerClassInstance == null) {
             return constructorArgs;
         }
-        List<Object> resultArgs = new ArrayList<Object>(constructorArgs.length + 1);
+        List<Object> resultArgs = new ArrayList<>(constructorArgs.length + 1);
         resultArgs.add(outerClassInstance);
         resultArgs.addAll(asList(constructorArgs));
         return resultArgs.toArray(new Object[constructorArgs.length + 1]);
@@ -225,8 +228,13 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
     }
 
     @Override
-    public <T> MockCreationSettings<T> build(Class<T> typeToMock) {
-        return validatedSettings(typeToMock, (CreationSettings<T>) this);
+    public <T2> MockCreationSettings<T2> build(Class<T2> typeToMock) {
+        return validatedSettings(typeToMock, (CreationSettings<T2>) this);
+    }
+
+    @Override
+    public <T2> MockCreationSettings<T2> buildStatic(Class<T2> classToMock) {
+        return validatedStaticSettings(classToMock, (CreationSettings<T2>) this);
     }
 
     @Override
@@ -235,33 +243,56 @@ public class MockSettingsImpl<T> extends CreationSettings<T> implements MockSett
         return this;
     }
 
-    private static <T> CreationSettings<T> validatedSettings(Class<T> typeToMock, CreationSettings<T> source) {
+    private static <T> CreationSettings<T> validatedSettings(
+            Class<T> typeToMock, CreationSettings<T> source) {
         MockCreationValidator validator = new MockCreationValidator();
 
         validator.validateType(typeToMock);
         validator.validateExtraInterfaces(typeToMock, source.getExtraInterfaces());
         validator.validateMockedType(typeToMock, source.getSpiedInstance());
 
-        //TODO SF - add this validation and also add missing coverage
-//        validator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance());
+        // TODO SF - add this validation and also add missing coverage
+        //        validator.validateDelegatedInstance(classToMock, settings.getDelegatedInstance());
 
         validator.validateConstructorUse(source.isUsingConstructor(), source.getSerializableMode());
 
-        //TODO SF - I don't think we really need CreationSettings type
-        //TODO do we really need to copy the entire settings every time we create mock object? it does not seem necessary.
+        // TODO SF - I don't think we really need CreationSettings type
+        // TODO do we really need to copy the entire settings every time we create mock object? it
+        // does not seem necessary.
         CreationSettings<T> settings = new CreationSettings<T>(source);
-        settings.setMockName(new MockNameImpl(source.getName(), typeToMock));
+        settings.setMockName(new MockNameImpl(source.getName(), typeToMock, false));
         settings.setTypeToMock(typeToMock);
         settings.setExtraInterfaces(prepareExtraInterfaces(source));
         return settings;
     }
 
+    private static <T> CreationSettings<T> validatedStaticSettings(
+            Class<T> classToMock, CreationSettings<T> source) {
+
+        if (classToMock.isPrimitive()) {
+            throw new MockitoException(
+                    "Cannot create static mock of primitive type " + classToMock);
+        }
+        if (!source.getExtraInterfaces().isEmpty()) {
+            throw new MockitoException(
+                    "Cannot specify additional interfaces for static mock of " + classToMock);
+        }
+        if (source.getSpiedInstance() != null) {
+            throw new MockitoException(
+                    "Cannot specify spied instance for static mock of " + classToMock);
+        }
+
+        CreationSettings<T> settings = new CreationSettings<T>(source);
+        settings.setMockName(new MockNameImpl(source.getName(), classToMock, true));
+        settings.setTypeToMock(classToMock);
+        return settings;
+    }
+
     private static Set<Class<?>> prepareExtraInterfaces(CreationSettings settings) {
-        Set<Class<?>> interfaces = new HashSet<Class<?>>(settings.getExtraInterfaces());
-        if(settings.isSerializable()) {
+        Set<Class<?>> interfaces = new HashSet<>(settings.getExtraInterfaces());
+        if (settings.isSerializable()) {
             interfaces.add(Serializable.class);
         }
         return interfaces;
     }
-
 }

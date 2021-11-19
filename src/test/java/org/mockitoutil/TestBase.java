@@ -48,16 +48,17 @@ public class TestBase {
         ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
         ConfigurationAccess.getConfig().overrideDefaultAnswer(null);
         StateMaster state = new StateMaster();
-        //catch any invalid state left over after test case run
-        //this way we can catch early if some Mockito operations leave weird state afterwards
+        // catch any invalid state left over after test case run
+        // this way we can catch early if some Mockito operations leave weird state afterwards
         state.validate();
-        //reset the state, especially, reset any ongoing stubbing for correct error messages of tests that assert unhappy paths
+        // reset the state, especially, reset any ongoing stubbing for correct error messages of
+        // tests that assert unhappy paths
         state.reset();
     }
 
     @Before
     public void init() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     public static void makeStackTracesClean() {
@@ -72,14 +73,19 @@ public class TestBase {
         return new MockitoCore().getLastInvocation();
     }
 
-    protected static Invocation invocationOf(Class<?> type, String methodName, Object ... args) throws NoSuchMethodException {
+    protected static Invocation invocationOf(Class<?> type, String methodName, Object... args)
+            throws NoSuchMethodException {
         Class<?>[] types = new Class<?>[args.length];
         for (int i = 0; i < args.length; i++) {
             types[i] = args[i].getClass();
         }
-        return new InterceptedInvocation(new MockStrongReference<Object>(mock(type), false),
-            new SerializableMethod(type.getMethod(methodName, types)), args, InterceptedInvocation.NO_OP,
-            new LocationImpl(), 1);
+        return new InterceptedInvocation(
+                new MockStrongReference<Object>(mock(type), false),
+                new SerializableMethod(type.getMethod(methodName, types)),
+                args,
+                InterceptedInvocation.NO_OP,
+                new LocationImpl(),
+                1);
     }
 
     protected static Invocation invocationAt(String location) {
@@ -95,7 +101,8 @@ public class TestBase {
         e.printStackTrace(new PrintStream(out));
         try {
             out.close();
-        } catch (IOException ex) {}
+        } catch (IOException ex) {
+        }
         return out.toString();
     }
 

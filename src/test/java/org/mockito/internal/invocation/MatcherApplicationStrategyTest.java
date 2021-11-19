@@ -33,8 +33,7 @@ import org.mockitoutil.TestBase;
 @SuppressWarnings("unchecked")
 public class MatcherApplicationStrategyTest extends TestBase {
 
-    @Mock
-    IMethods mock;
+    @Mock IMethods mock;
     private Invocation invocation;
     private List matchers;
 
@@ -52,7 +51,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals("1"));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(RETURN_ALWAYS_FALSE);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(RETURN_ALWAYS_FALSE);
 
         // then
         assertFalse(match);
@@ -65,7 +66,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals("1"));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
 
         // then
         assertTrue(match);
@@ -78,7 +81,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals("1"));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
 
         // then
         assertFalse(match);
@@ -91,7 +96,9 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals("1"), new Equals("2"));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(RETURN_ALWAYS_TRUE);
 
         // then
         assertFalse(match);
@@ -104,59 +111,69 @@ public class MatcherApplicationStrategyTest extends TestBase {
         matchers = asList(new Equals("1"), Any.ANY, new InstanceOf(String.class));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
 
         // then
         assertTrue(match);
     }
 
     @Test
-    public void shouldAllowAnyVarargMatchEntireVararg() {
+    public void shouldAllowAnyMatchEntireVararg() {
         // given
         invocation = varargs("1", "2");
         matchers = asList(ANY);
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
 
         // then
         assertTrue(match);
     }
 
     @Test
-    public void shouldNotAllowAnyObjectWithMixedVarargs() {
+    public void shouldNotAllowAnyWithMixedVarargs() {
         // given
         invocation = mixedVarargs(1, "1", "2");
         matchers = asList(new Equals(1));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
 
         // then
         assertFalse(match);
     }
 
     @Test
-    public void shouldAllowAnyObjectWithMixedVarargs() {
+    public void shouldAllowanyWithMixedVarargs() {
         // given
         invocation = mixedVarargs(1, "1", "2");
         matchers = asList(new Equals(1), ANY);
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
 
         // then
         assertTrue(match);
     }
 
     @Test
-    public void shouldAnyObjectVarargDealWithDifferentSizeOfArgs() {
+    public void shouldAnyDealWithDifferentSizeOfArgs() {
         // given
         invocation = mixedVarargs(1, "1", "2");
         matchers = asList(new Equals(1));
 
         // when
-        boolean match = getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
 
         // then
         assertFalse(match);
@@ -165,41 +182,43 @@ public class MatcherApplicationStrategyTest extends TestBase {
     }
 
     @Test
-    public void shouldMatchAnyVarargEvenIfOneOfTheArgsIsNull() {
+    public void shouldMatchAnyEvenIfOneOfTheArgsIsNull() {
         // given
         invocation = mixedVarargs(null, null, "2");
         matchers = asList(new Equals(null), ANY);
 
         // when
-        getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        getMatcherApplicationStrategyFor(invocation, matchers)
+                .forEachMatcherAndArgument(recordAction);
 
         // then
         recordAction.assertContainsExactly(new Equals(null), ANY, ANY);
-
     }
 
     @Test
-    public void shouldMatchAnyVarargEvenIfMatcherIsDecorated() {
+    public void shouldMatchAnyEvenIfMatcherIsDecorated() {
         // given
         invocation = varargs("1", "2");
         matchers = asList(ANY);
 
         // when
-        getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        getMatcherApplicationStrategyFor(invocation, matchers)
+                .forEachMatcherAndArgument(recordAction);
 
         // then
         recordAction.assertContainsExactly(ANY, ANY);
     }
 
     @Test
-    public void shouldMatchAnyVarargEvenIfMatcherIsWrappedInHamcrestMatcher() {
+    public void shouldMatchAnyEvenIfMatcherIsWrappedInHamcrestMatcher() {
         // given
         invocation = varargs("1", "2");
         HamcrestArgumentMatcher argumentMatcher = new HamcrestArgumentMatcher(new IntMatcher());
         matchers = asList(argumentMatcher);
 
         // when
-        getMatcherApplicationStrategyFor(invocation, matchers).forEachMatcherAndArgument(recordAction);
+        getMatcherApplicationStrategyFor(invocation, matchers)
+                .forEachMatcherAndArgument(recordAction);
 
         // then
         recordAction.assertContainsExactly(argumentMatcher, argumentMatcher);
@@ -209,6 +228,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
         public boolean matches(Object o) {
             return true;
         }
+
         public void describeTo(Description description) {}
     }
 
@@ -240,18 +260,19 @@ public class MatcherApplicationStrategyTest extends TestBase {
         }
     }
 
-    private static final ArgumentMatcherAction RETURN_ALWAYS_TRUE = new ArgumentMatcherAction() {
-        @Override
-        public boolean apply(ArgumentMatcher<?> matcher, Object argument) {
-            return true;
-        }
-    };
+    private static final ArgumentMatcherAction RETURN_ALWAYS_TRUE =
+            new ArgumentMatcherAction() {
+                @Override
+                public boolean apply(ArgumentMatcher<?> matcher, Object argument) {
+                    return true;
+                }
+            };
 
-    private static final ArgumentMatcherAction RETURN_ALWAYS_FALSE = new ArgumentMatcherAction() {
-        @Override
-        public boolean apply(ArgumentMatcher<?> matcher, Object argument) {
-            return false;
-        }
-    };
-
+    private static final ArgumentMatcherAction RETURN_ALWAYS_FALSE =
+            new ArgumentMatcherAction() {
+                @Override
+                public boolean apply(ArgumentMatcher<?> matcher, Object argument) {
+                    return false;
+                }
+            };
 }

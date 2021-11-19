@@ -43,6 +43,7 @@ public class UnusedStubbings {
         return unused.size();
     }
 
+    @Override
     public String toString() {
         return unused.toString();
     }
@@ -52,7 +53,7 @@ public class UnusedStubbings {
             return;
         }
 
-        List<Invocation> invocations = new LinkedList<Invocation>();
+        List<Invocation> invocations = new LinkedList<>();
         for (Stubbing stubbing : unused) {
             invocations.add(stubbing.getInvocation());
         }

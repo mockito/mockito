@@ -34,135 +34,155 @@ public class StrictnessPerStubbingTest {
 
     @Before
     public void before() {
-        mockito = Mockito.mockitoSession().initMocks(this).strictness(Strictness.STRICT_STUBS).startMocking();
+        mockito =
+                Mockito.mockitoSession()
+                        .initMocks(this)
+                        .strictness(Strictness.STRICT_STUBS)
+                        .startMocking();
     }
 
     @Test
     public void potential_stubbing_problem() {
-        //when
+        // when
         when(mock.simpleMethod("1")).thenReturn("1");
         lenient().when(mock.differentMethod("2")).thenReturn("2");
 
-        //then on lenient stubbing, we can call it with different argument:
+        // then on lenient stubbing, we can call it with different argument:
         mock.differentMethod("200");
 
-        //but on strict stubbing, we cannot:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                ProductionCode.simpleMethod(mock, "100");
-            }
-        }).isInstanceOf(PotentialStubbingProblem.class);
+        // but on strict stubbing, we cannot:
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                ProductionCode.simpleMethod(mock, "100");
+                            }
+                        })
+                .isInstanceOf(PotentialStubbingProblem.class);
     }
 
     @Test
     public void doReturn_syntax() {
-        //when
-        lenient().doReturn("2").doReturn("3")
-            .when(mock).simpleMethod(1);
+        // when
+        lenient().doReturn("2").doReturn("3").when(mock).simpleMethod(1);
 
-        //then on lenient stubbing, we can call it with different argument:
+        // then on lenient stubbing, we can call it with different argument:
         mock.simpleMethod(200);
 
-        //and stubbing works, too:
+        // and stubbing works, too:
         assertEquals("2", mock.simpleMethod(1));
         assertEquals("3", mock.simpleMethod(1));
     }
 
     @Test
     public void doReturn_varargs_syntax() {
-        //when
-        lenient().doReturn("2", "3")
-            .when(mock).simpleMethod(1);
+        // when
+        lenient().doReturn("2", "3").when(mock).simpleMethod(1);
 
-        //then on lenient stubbing, we can call it with different argument with no exception:
+        // then on lenient stubbing, we can call it with different argument with no exception:
         mock.simpleMethod(200);
 
-        //and stubbing works, too:
+        // and stubbing works, too:
         assertEquals("2", mock.simpleMethod(1));
         assertEquals("3", mock.simpleMethod(1));
     }
 
     @Test
     public void doThrow_syntax() {
-        //when
+        // when
         lenient()
-            .doThrow(IllegalArgumentException.class)
-            .doThrow(IllegalStateException.class)
-            .when(mock).simpleMethod(1);
+                .doThrow(IllegalArgumentException.class)
+                .doThrow(IllegalStateException.class)
+                .when(mock)
+                .simpleMethod(1);
 
-        //then on lenient stubbing, we can call it with different argument with no exception:
+        // then on lenient stubbing, we can call it with different argument with no exception:
         mock.simpleMethod(200);
 
-        //and stubbing works, too:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalArgumentException.class);
+        // and stubbing works, too:
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalArgumentException.class);
 
-        //testing consecutive call:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalStateException.class);
+        // testing consecutive call:
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void doThrow_vararg_syntax() {
-        //when
+        // when
         lenient()
-            .doThrow(IllegalArgumentException.class, IllegalStateException.class)
-            .when(mock).simpleMethod(1);
+                .doThrow(IllegalArgumentException.class, IllegalStateException.class)
+                .when(mock)
+                .simpleMethod(1);
 
-        //then on lenient stubbing, we can call it with different argument with no exception:
+        // then on lenient stubbing, we can call it with different argument with no exception:
         mock.simpleMethod(200);
 
-        //and stubbing works, too:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalArgumentException.class);
+        // and stubbing works, too:
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalArgumentException.class);
 
-        //testing consecutive call:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalStateException.class);
+        // testing consecutive call:
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void doThrow_instance_vararg_syntax() {
-        //when
+        // when
         lenient()
-            .doThrow(new IllegalArgumentException(), new IllegalStateException())
-            .when(mock).simpleMethod(1);
+                .doThrow(new IllegalArgumentException(), new IllegalStateException())
+                .when(mock)
+                .simpleMethod(1);
 
-        //then on lenient stubbing, we can call it with different argument with no exception:
+        // then on lenient stubbing, we can call it with different argument with no exception:
         mock.simpleMethod(200);
 
-        //and stubbing works, too:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalArgumentException.class);
+        // and stubbing works, too:
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalArgumentException.class);
 
-        //testing consecutive call:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() throws Throwable {
-                mock.simpleMethod(1);
-            }
-        }).isInstanceOf(IllegalStateException.class);
+        // testing consecutive call:
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() throws Throwable {
+                                mock.simpleMethod(1);
+                            }
+                        })
+                .isInstanceOf(IllegalStateException.class);
     }
 
     static class Counter {
         int increment(int x) {
             return x + 1;
         }
+
         void scream(String message) {
             throw new RuntimeException(message);
         }
@@ -170,97 +190,104 @@ public class StrictnessPerStubbingTest {
 
     @Test
     public void doCallRealMethod_syntax() {
-        //when
+        // when
         Counter mock = mock(Counter.class);
         lenient().doCallRealMethod().when(mock).increment(1);
 
-        //then no exception and default return value if we call it with different arg:
+        // then no exception and default return value if we call it with different arg:
         assertEquals(0, mock.increment(0));
 
-        //and real method is called when using correct arg:
+        // and real method is called when using correct arg:
         assertEquals(2, mock.increment(1));
     }
 
     @Test
     public void doNothing_syntax() {
-        //when
+        // when
         final Counter spy = spy(Counter.class);
         lenient().doNothing().when(spy).scream("1");
 
-        //then no stubbing exception and real method is called if we call stubbed method with different arg:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                spy.scream("2");
-            }
-        }).hasMessage("2");
+        // then no stubbing exception and real method is called if we call stubbed method with
+        // different arg:
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                spy.scream("2");
+                            }
+                        })
+                .hasMessage("2");
 
-        //and we do nothing when stubbing called with correct arg:
+        // and we do nothing when stubbing called with correct arg:
         spy.scream("1");
     }
 
     @Test
     public void doAnswer_syntax() {
-        //when
+        // when
         lenient().doAnswer(AdditionalAnswers.returnsFirstArg()).when(mock).simpleMethod("1");
 
-        //then on lenient stubbing, we can call it with different argument:
+        // then on lenient stubbing, we can call it with different argument:
         mock.simpleMethod("200");
 
-        //and stubbing works, too:
+        // and stubbing works, too:
         assertEquals("1", mock.simpleMethod("1"));
     }
 
     @Test
     public void unnecessary_stubbing() {
-        //when
+        // when
         when(mock.simpleMethod("1")).thenReturn("1");
         lenient().when(mock.differentMethod("2")).thenReturn("2");
 
-        //then unnecessary stubbing flags method only on the strict stubbing:
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                mockito.finishMocking();
-            }
-        }).isInstanceOf(UnnecessaryStubbingException.class)
-            .hasMessageContaining("1. -> ")
-            //good enough to prove that we're flagging just one unnecessary stubbing:
-            //TODO 792: this assertion is duplicated with StrictnessPerMockTest
-            .isNot(TestBase.hasMessageContaining("2. ->"));
+        // then unnecessary stubbing flags method only on the strict stubbing:
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                mockito.finishMocking();
+                            }
+                        })
+                .isInstanceOf(UnnecessaryStubbingException.class)
+                .hasMessageContaining("1. -> ")
+                // good enough to prove that we're flagging just one unnecessary stubbing:
+                // TODO 792: this assertion is duplicated with StrictnessPerMockTest
+                .isNot(TestBase.hasMessageContaining("2. ->"));
     }
 
     @Test
     public void unnecessary_stubbing_with_doReturn() {
-        //when
+        // when
         lenient().doReturn("2").when(mock).differentMethod("2");
 
-        //then no exception is thrown:
+        // then no exception is thrown:
         mockito.finishMocking();
     }
 
     @Test
     public void verify_no_more_invocations() {
-        //when
+        // when
         when(mock.simpleMethod("1")).thenReturn("1");
         lenient().when(mock.differentMethod("2")).thenReturn("2");
 
-        //and:
+        // and:
         mock.simpleMethod("1");
         mock.differentMethod("200"); // <- different arg
 
-        //then 'verifyNoMoreInteractions' flags the lenient stubbing (called with different arg)
-        //and reports it with [?] in the exception message
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                verifyNoMoreInteractions(mock);
-            }
-        }).isInstanceOf(NoInteractionsWanted.class)
-            .hasMessageContaining("1. ->")
-            .hasMessageContaining("2. [?]->");
-            //TODO 792: assertion duplicated with StrictnessPerMockTest
-            // and we should use assertions based on content of the exception rather than the string
+        // then 'verifyNoMoreInteractions' flags the lenient stubbing (called with different arg)
+        // and reports it with [?] in the exception message
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() throws Throwable {
+                                verifyNoMoreInteractions(mock);
+                            }
+                        })
+                .isInstanceOf(NoInteractionsWanted.class)
+                .hasMessageContaining("1. ->")
+                .hasMessageContaining("2. [?]->");
+        // TODO 792: assertion duplicated with StrictnessPerMockTest
+        // and we should use assertions based on content of the exception rather than the string
     }
 
     @After

@@ -1,37 +1,38 @@
 buildscript {
     repositories {
         mavenLocal() //for local testing of mockito-release-tools
-        jcenter()
-        maven { url "https://plugins.gradle.org/m2/" }
+        google()
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
 
     dependencies {
-        classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0'
-        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.6'
+        classpath 'gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.16.1'
+        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:2.0.2'
 
-        //Using buildscript.classpath so that we can resolve shipkit from maven local, during local testing
-        classpath 'org.shipkit:shipkit:2.1.6'
+        classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
+        classpath 'org.shipkit:shipkit-changelog:1.1.15'
+        classpath 'org.shipkit:shipkit-auto-version:1.1.19'
+
+        classpath 'com.google.googlejavaformat:google-java-format:1.12.0'
+        classpath 'com.android.tools.build:gradle:4.2.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
     }
 }
 
 plugins {
-    id 'com.gradle.build-scan' version '2.2.1'
-    id "com.diffplug.gradle.spotless" version "3.24.3"
+    id 'com.diffplug.gradle.spotless' version '4.5.1'
     id 'eclipse'
+    id 'com.github.ben-manes.versions' version '0.39.0'
+    id 'biz.aQute.bnd.builder' version '6.0.0'
+    id 'ru.vyarus.animalsniffer' version '1.5.2'
 }
 
 description = 'Mockito mock objects library core API and implementation'
 
 apply plugin: 'base'
-archivesBaseName = "mockito-core"
+archivesBaseName = 'mockito-core'
 
-apply plugin: "org.shipkit.java"
-allprojects {
-    plugins.withId("java") {
-        //Only upload specific modules we select
-        bintrayUpload.enabled = false
-    }
-}
+apply from: 'gradle/shipkit.gradle'
 
 apply from: 'gradle/root/ide.gradle'
 apply from: 'gradle/root/gradle-fix.gradle'
@@ -48,7 +49,8 @@ apply from: 'gradle/dependencies.gradle'
 
 allprojects { proj ->
     repositories {
-        jcenter()
+        mavenCentral()
+        google()
     }
     plugins.withId('java') {
         proj.apply from: "$rootDir/gradle/errorprone.gradle"
@@ -64,6 +66,12 @@ allprojects { proj ->
         options.addStringOption('charSet', 'UTF-8')
         options.setSource('8')
     }
+
+    tasks.withType(AbstractArchiveTask) {
+        preserveFileTimestamps = false
+        reproducibleFileOrder = true
+    }
+
     apply plugin: 'checkstyle'
     checkstyle {
        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
@@ -75,43 +83,46 @@ configurations {
 }
 
 dependencies {
-    compile libraries.bytebuddy, libraries.bytebuddyagent
+    api libraries.bytebuddy, libraries.bytebuddyagent
 
     compileOnly libraries.junit4, libraries.hamcrest, libraries.opentest4j
-    compile libraries.objenesis
+    implementation libraries.objenesis
 
-    testCompile libraries.asm
-
-    testCompile libraries.assertj
+    testImplementation libraries.assertj
 
     //putting 'provided' dependencies on test compile and runtime classpath
     testCompileOnly configurations.compileOnly
-    testRuntime configurations.compileOnly
+    testRuntimeOnly configurations.compileOnly
 
     testUtil sourceSets.test.output
+
+    signature 'org.codehaus.mojo.signature:java18:1.0@signature'
+    signature 'net.sf.androidscents.signature:android-api-level-24:7.0_r2@signature'
 }
 
-wrapper {
-    gradleVersion = '5.3.1'
-    distributionSha256Sum = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
-}
-
-//Posting Build scans to https://scans.gradle.com
-buildScan {
-    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-    termsOfServiceAgree = 'yes'
+animalsniffer {
+    sourceSets = [sourceSets.main]
+    annotation = 'org.mockito.internal.SuppressSignatureCheck'
 }
 
 spotless {
+    // We run the check separately on CI, so don't run this by default
+    enforceCheck = false
+
     java {
         licenseHeaderFile rootProject.file('config/spotless/spotless.header')
 
-        removeUnusedImports()
-        trimTrailingWhitespace()
-        endWithNewline()
-        indentWithSpaces(4)
+        customLazyGroovy('google-java-format') {
+            com.google.googlejavaformat.java.JavaFormatterOptions options = new com.google.googlejavaformat.java.JavaFormatterOptions.Builder()
+                    .style(com.google.googlejavaformat.java.JavaFormatterOptions.Style.AOSP)
+                    .formatJavadoc(false)
+                    .build()
+            com.google.googlejavaformat.java.Formatter formatter = new com.google.googlejavaformat.java.Formatter(options)
+            return { source -> formatter.formatSource(source) }
+        }
 
-        importOrder 'static java', 'static javax', 'static ', 'java', 'javax', ''
+        // This test contains emulation of same-line stubbings. The formatter would put them on a separate line.
+        targetExclude 'src/test/java/org/mockitousage/internal/junit/UnusedStubbingsFinderTest.java'
     }
 }
 

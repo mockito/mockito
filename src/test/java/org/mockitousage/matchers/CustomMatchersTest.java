@@ -7,7 +7,7 @@ package org.mockitousage.matchers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -145,15 +145,20 @@ public class CustomMatchersTest extends TestBase {
         mock.simpleMethod("foo");
 
         try {
-            verify(mock).simpleMethod((String) argThat(new ArgumentMatcher<Object>() {
-                public boolean matches(Object argument) {
-                    return false;
-                }}));
+            verify(mock)
+                    .simpleMethod(
+                            (String)
+                                    argThat(
+                                            new ArgumentMatcher<Object>() {
+                                                public boolean matches(Object argument) {
+                                                    return false;
+                                                }
+                                            }));
             fail();
         } catch (AssertionError e) {
             assertThat(e)
-                .hasMessageContaining("<custom argument matcher>")
-                .hasMessageContaining("foo");
+                    .hasMessageContaining("<custom argument matcher>")
+                    .hasMessageContaining("foo");
         }
     }
 }

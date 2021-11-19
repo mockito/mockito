@@ -150,6 +150,5 @@ public class StubbingReturnsSelfTest {
         public String request() {
             return uri + headers.toString();
         }
-
     }
 }

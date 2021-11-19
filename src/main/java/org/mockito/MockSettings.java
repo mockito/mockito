@@ -255,7 +255,6 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      * @since 2.11.0
      */
-    @Incubating
     MockSettings verificationStartedListeners(VerificationStartedListener... listeners);
 
     /**
@@ -296,7 +295,6 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      * @since 2.7.14 (useConstructor with no arguments was supported since 1.10.12)
      */
-    @Incubating
     MockSettings useConstructor(Object... args);
 
     /**
@@ -311,7 +309,6 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      * @since 1.10.12
      */
-    @Incubating
     MockSettings outerInstance(Object outerClassInstance);
 
     /**
@@ -322,7 +319,6 @@ public interface MockSettings extends Serializable {
      * @return settings instance so that you can fluently specify other settings
      * @since 1.10.13
      */
-    @Incubating
     MockSettings withoutAnnotations();
 
     /**
@@ -337,8 +333,21 @@ public interface MockSettings extends Serializable {
      * @return immutable view of mock settings
      * @since 2.10.0
      */
-    @Incubating
     <T> MockCreationSettings<T> build(Class<T> typeToMock);
+
+    /**
+     * Creates immutable view of mock settings used later by Mockito, for use within a static mocking.
+     * Framework integrators can use this method to create instances of creation settings
+     * and use them in advanced use cases, for example to create invocations with {@link InvocationFactory},
+     * or to implement custom {@link MockHandler}.
+     * Since {@link MockCreationSettings} is {@link NotExtensible}, Mockito public API needs a creation method for this type.
+     *
+     * @param classToMock class to mock
+     * @param <T> type to mock
+     * @return immutable view of mock settings
+     * @since 2.10.0
+     */
+    <T> MockCreationSettings<T> buildStatic(Class<T> classToMock);
 
     /**
      * Lenient mocks bypass "strict stubbing" validation (see {@link Strictness#STRICT_STUBS}).
@@ -351,6 +360,5 @@ public interface MockSettings extends Serializable {
      *
      * For more information and an elaborate example, see {@link Mockito#lenient()}.
      */
-    @Incubating
     MockSettings lenient();
 }

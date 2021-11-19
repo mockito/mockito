@@ -80,7 +80,7 @@ class JunitJupiterTest {
     @Nested
     @ExtendWith(MockitoExtension.class)
         // ^^ duplicate registration should be ignored by JUnit
-        // see http://junit.org/junit5/docs/current/user-guide/#extensions-registration-inherita
+        // see https://junit.org/junit5/docs/current/user-guide/#extensions-registration-inheritance
     class DuplicateExtensionOnNestedTest {
 
         @Mock

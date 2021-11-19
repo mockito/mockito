@@ -4,6 +4,7 @@
  */
 package org.mockitousage.verification;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
@@ -11,6 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -259,11 +262,6 @@ public class BasicVerificationInOrderTest extends TestBase {
     }
 
     @Test(expected = NoInteractionsWanted.class)
-    public void shouldFailOnVerifyZeroInteractions() {
-        verifyZeroInteractions(mockOne);
-    }
-
-    @Test(expected = NoInteractionsWanted.class)
     public void shouldFailOnVerifyNoInteractions() {
         verifyNoInteractions(mockOne);
     }
@@ -271,6 +269,31 @@ public class BasicVerificationInOrderTest extends TestBase {
     @SuppressWarnings({"all", "CheckReturnValue", "MockitoUsage"})
     @Test(expected = MockitoException.class)
     public void shouldScreamWhenNullPassed() {
-        inOrder((Object[])null);
+        inOrder((Object[]) null);
+    }
+
+    @Test
+    public void shouldThrowNullPassedToVerifyException() {
+        try {
+            inOrder.verify(null);
+            fail();
+        } catch (NullInsteadOfMockException e) {
+            assertThat(e)
+                    .hasMessageContaining(
+                            "Argument passed to verify() should be a mock but is null!");
+        }
+    }
+
+    @Test
+    public void shouldThrowNotAMockPassedToVerifyException() {
+        Object object = new Object();
+        try {
+            inOrder.verify(object);
+            fail();
+        } catch (NotAMockException e) {
+            assertThat(e)
+                    .hasMessageContaining(
+                            "Argument passed to verify() is of type Object and is not a mock!");
+        }
     }
 }

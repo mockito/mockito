@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
 
-@SuppressWarnings({ "unchecked", "serial","rawtypes" })
+@SuppressWarnings({"unchecked", "serial", "rawtypes"})
 public class Not implements ArgumentMatcher<Object>, Serializable {
 
     private final ArgumentMatcher matcher;
@@ -17,10 +17,12 @@ public class Not implements ArgumentMatcher<Object>, Serializable {
         this.matcher = matcher;
     }
 
+    @Override
     public boolean matches(Object actual) {
         return !matcher.matches(actual);
     }
 
+    @Override
     public String toString() {
         return "not(" + matcher + ")";
     }

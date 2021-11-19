@@ -5,34 +5,34 @@
 package org.mockito.configuration;
 
 import org.mockito.stubbing.Answer;
-import org.mockitousage.configuration.CustomizedAnnotationForSmartMockTest;
 
-public class MockitoConfiguration extends DefaultMockitoConfiguration implements IMockitoConfiguration {
+public class MockitoConfiguration extends DefaultMockitoConfiguration
+        implements IMockitoConfiguration {
 
     private Answer<Object> overriddenDefaultAnswer = null;
 
     private boolean cleansStackTrace;
 
-    private AnnotationEngine overriddenEngine;
+    private org.mockito.plugins.AnnotationEngine overriddenEngine;
 
     private boolean enableClassCache = true;
 
-    //for testing purposes, allow to override the configuration
+    // for testing purposes, allow to override the configuration
     public void overrideDefaultAnswer(Answer<Object> defaultAnswer) {
         this.overriddenDefaultAnswer = defaultAnswer;
     }
 
-    //for testing purposes, allow to override the configuration
+    // for testing purposes, allow to override the configuration
     public void overrideCleansStackTrace(boolean cleansStackTrace) {
         this.cleansStackTrace = cleansStackTrace;
     }
 
-    //for testing purposes, allow to override the annotation engine
-    public void overrideAnnotationEngine(AnnotationEngine engine) {
+    // for testing purposes, allow to override the annotation engine
+    public void overrideAnnotationEngine(org.mockito.plugins.AnnotationEngine engine) {
         this.overriddenEngine = engine;
     }
 
-    //for testing purposes, allow to override the annotation engine
+    // for testing purposes, allow to override the annotation engine
     public void overrideEnableClassCache(boolean enableClassCache) {
         this.enableClassCache = enableClassCache;
     }
@@ -47,14 +47,6 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
     }
 
     @Override
-    public AnnotationEngine getAnnotationEngine() {
-        if (this.overriddenEngine != null) {
-            return this.overriddenEngine;
-        }
-        return new CustomizedAnnotationForSmartMockTest.CustomInjectingAnnotationEngine();
-    }
-
-    @Override
     public boolean cleansStackTrace() {
         return cleansStackTrace;
     }
@@ -63,5 +55,4 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration implements
     public boolean enableClassCache() {
         return enableClassCache;
     }
-
 }

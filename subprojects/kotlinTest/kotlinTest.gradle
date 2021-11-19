@@ -1,23 +1,16 @@
 plugins {
-    // Can not use libraries.kotlin.version here per https://stackoverflow.com/questions/37555196/in-gradle-how-to-use-a-variable-for-a-plugin-version
-    id 'org.jetbrains.kotlin.jvm' version '1.2.31'
+    id 'org.jetbrains.kotlin.jvm'
     id 'java'
 }
 
 description = "Kotlin tests for Mockito."
 
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
-}
-
 apply from: "$rootDir/gradle/dependencies.gradle"
 
 dependencies {
-    testCompile project(":")
-    testCompile libraries.junit4
+    testImplementation project(":")
+    testImplementation libraries.junit4
 
-    testCompile libraries.kotlin.stdlib
-    testCompile libraries.kotlin.coroutines
+    testImplementation libraries.kotlin.stdlib
+    testImplementation libraries.kotlin.coroutines
 }

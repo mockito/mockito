@@ -1,0 +1,10 @@
+description = "Mockito preconfigured proxy mock mock maker (to support interfaces without code generation)"
+
+apply from: "$rootDir/gradle/java-library.gradle"
+
+dependencies {
+    implementation project.rootProject
+    testImplementation libraries.junit4
+}
+
+tasks.javadoc.enabled = false

@@ -47,7 +47,8 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne).simpleMethod(1);
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 
     @Test
@@ -77,7 +78,8 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, atLeastOnce()).simpleMethod();
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 
     @Test
@@ -96,6 +98,7 @@ public class VerificationInOrderTest extends TestBase {
         try {
             inOrder.verify(mockOne, times(3)).simpleMethod(anyInt());
             fail();
-        } catch (VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 }

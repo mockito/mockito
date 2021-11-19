@@ -6,6 +6,7 @@ package org.mockitousage.verification;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.verify;
@@ -22,7 +23,9 @@ import org.mockito.Mock;
 import org.mockito.exceptions.verification.MoreThanAllowedActualInvocations;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
+import org.mockito.internal.verification.DummyVerificationMode;
 import org.mockito.junit.MockitoRule;
+import org.mockito.verification.VerificationMode;
 import org.mockitousage.IMethods;
 import org.mockitoutil.Stopwatch;
 import org.mockitoutil.async.AsyncTesting;
@@ -33,16 +36,18 @@ public class VerificationWithAfterTest {
 
     @Mock private IMethods mock;
 
-    private Runnable callMock = new Runnable() {
-        public void run() {
-            mock.oneArg('1');
-        }
-    };
+    private Runnable callMock =
+            new Runnable() {
+                public void run() {
+                    mock.oneArg('1');
+                }
+            };
 
     private AsyncTesting async = new AsyncTesting();
     private Stopwatch watch = createNotStarted();
 
-    @After public void tearDown() {
+    @After
+    public void tearDown() {
         async.cleanUp();
     }
 
@@ -63,12 +68,14 @@ public class VerificationWithAfterTest {
         async.runAfter(40, callMock);
 
         // then
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                verify(mock, after(600)).oneArg('1');
-            }
-        }).isInstanceOf(TooManyActualInvocations.class);
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() {
+                                verify(mock, after(600)).oneArg('1');
+                            }
+                        })
+                .isInstanceOf(TooManyActualInvocations.class);
     }
 
     @Test
@@ -90,12 +97,14 @@ public class VerificationWithAfterTest {
         async.runAfter(80, callMock);
 
         // then
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                verify(mock, after(300).times(2)).oneArg('1');
-            }
-        }).isInstanceOf(TooManyActualInvocations.class);
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() {
+                                verify(mock, after(300).times(2)).oneArg('1');
+                            }
+                        })
+                .isInstanceOf(TooManyActualInvocations.class);
     }
 
     @Test
@@ -116,12 +125,15 @@ public class VerificationWithAfterTest {
         async.runAfter(600, callMock);
 
         // then
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                verify(mock, after(300).atLeast(3)).oneArg('1');
-            }
-        }).isInstanceOf(AssertionError.class).hasMessageContaining("Wanted *at least* 3 times"); //TODO specific exception
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() {
+                                verify(mock, after(300).atLeast(3)).oneArg('1');
+                            }
+                        })
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Wanted *at least* 3 times"); // TODO specific exception
     }
 
     @Test
@@ -143,12 +155,15 @@ public class VerificationWithAfterTest {
         async.runAfter(600, callMock);
 
         // then
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                verify(mock, after(300).atMost(1)).oneArg('1');
-            }
-        }).isInstanceOf(AssertionError.class).hasMessageContaining("Wanted at most 1 time but was 2"); //TODO specific exception
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() {
+                                verify(mock, after(300).atMost(1)).oneArg('1');
+                            }
+                        })
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Wanted at most 1 time but was 2"); // TODO specific exception
     }
 
     @Test
@@ -166,12 +181,15 @@ public class VerificationWithAfterTest {
         async.runAfter(10, callMock);
 
         // then
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                verify(mock, after(300).never()).oneArg('1');
-            }
-        }).isInstanceOf(MoreThanAllowedActualInvocations.class).hasMessageContaining("Wanted at most 0 times but was 1");
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() {
+                                verify(mock, after(300).never()).oneArg('1');
+                            }
+                        })
+                .isInstanceOf(MoreThanAllowedActualInvocations.class)
+                .hasMessageContaining("Wanted at most 0 times but was 1");
     }
 
     @Test
@@ -191,12 +209,15 @@ public class VerificationWithAfterTest {
         async.runAfter(50, callMock);
 
         // then
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() {
-                verify(mock, after(300).only()).oneArg('1');
-            }
-        }).isInstanceOf(AssertionError.class).hasMessageContaining("No interactions wanted here"); //TODO specific exception
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            @Override
+                            public void call() {
+                                verify(mock, after(300).only()).oneArg('1');
+                            }
+                        })
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("No interactions wanted here"); // TODO specific exception
     }
 
     @Test
@@ -208,11 +229,13 @@ public class VerificationWithAfterTest {
         async.runAfter(100, callMock);
 
         // then
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() {
-                verify(mock, after(10000).atMost(1)).oneArg('1');
-            }
-        }).isInstanceOf(MoreThanAllowedActualInvocations.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                verify(mock, after(10000).atMost(1)).oneArg('1');
+                            }
+                        })
+                .isInstanceOf(MoreThanAllowedActualInvocations.class);
 
         // using generous number to avoid timing issues
         watch.assertElapsedTimeIsLessThan(2000, MILLISECONDS);
@@ -226,18 +249,20 @@ public class VerificationWithAfterTest {
         async.runAfter(50, callMock);
 
         // then
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() {
-                verify(mock, after(10000).never()).oneArg('1');
-            }
-        }).isInstanceOf(MoreThanAllowedActualInvocations.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                verify(mock, after(10000).never()).oneArg('1');
+                            }
+                        })
+                .isInstanceOf(MoreThanAllowedActualInvocations.class);
 
         // using generous number to avoid timing issues
         watch.assertElapsedTimeIsLessThan(2000, MILLISECONDS);
     }
 
     @Test
-    @Ignore //TODO nice to have
+    @Ignore // TODO nice to have
     public void should_fail_early_when_only_is_used() {
         watch.start();
 
@@ -246,18 +271,20 @@ public class VerificationWithAfterTest {
         async.runAfter(100, callMock);
 
         // then
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() {
-                verify(mock, after(10000).only()).oneArg('1');
-            }
-        }).isInstanceOf(NoInteractionsWanted.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                verify(mock, after(10000).only()).oneArg('1');
+                            }
+                        })
+                .isInstanceOf(NoInteractionsWanted.class);
 
         // using generous number to avoid timing issues
         watch.assertElapsedTimeIsLessThan(2000, MILLISECONDS);
     }
 
     @Test
-    @Ignore //TODO nice to have
+    @Ignore // TODO nice to have
     public void should_fail_early_when_time_x_is_used() {
         watch.start();
 
@@ -266,13 +293,40 @@ public class VerificationWithAfterTest {
         async.runAfter(100, callMock);
 
         // then
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() {
-                verify(mock, after(10000).times(1)).oneArg('1');
-            }
-        }).isInstanceOf(NoInteractionsWanted.class);
+        assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                verify(mock, after(10000).times(1)).oneArg('1');
+                            }
+                        })
+                .isInstanceOf(NoInteractionsWanted.class);
 
         // using generous number to avoid timing issues
         watch.assertElapsedTimeIsLessThan(2000, MILLISECONDS);
+    }
+
+    @Test
+    public void should_return_formatted_output_from_toString_when_created_with_factory_method() {
+        VerificationMode after = after(3);
+
+        assertThat(after).hasToString("Wanted after 3 ms: [Wanted invocations count: 1]");
+    }
+
+    @Test
+    public void should_return_formatted_output_from_toString_using_wrapped_verification_mode() {
+        org.mockito.verification.After after =
+                new org.mockito.verification.After(10, new DummyVerificationMode());
+
+        assertThat(after).hasToString("Wanted after 10 ms: [Dummy verification mode]");
+    }
+
+    @Test
+    public void
+            should_return_formatted_output_from_toString_when_chaining_other_verification_mode() {
+        VerificationMode afterAndOnly = after(5).only();
+
+        assertThat(afterAndOnly)
+                .hasToString(
+                        "Wanted after 5 ms: [Wanted invocations count: 1 and no other method invoked]");
     }
 }

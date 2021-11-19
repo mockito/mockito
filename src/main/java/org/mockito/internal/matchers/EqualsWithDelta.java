@@ -18,6 +18,7 @@ public class EqualsWithDelta implements ArgumentMatcher<Number>, Serializable {
         this.delta = delta;
     }
 
+    @Override
     public boolean matches(Number actual) {
         if (wanted == null ^ actual == null) {
             return false;
@@ -28,10 +29,10 @@ public class EqualsWithDelta implements ArgumentMatcher<Number>, Serializable {
         }
 
         return wanted.doubleValue() - delta.doubleValue() <= actual.doubleValue()
-                && actual.doubleValue() <= wanted.doubleValue()
-                        + delta.doubleValue();
+                && actual.doubleValue() <= wanted.doubleValue() + delta.doubleValue();
     }
 
+    @Override
     public String toString() {
         return "eq(" + wanted + ", " + delta + ")";
     }

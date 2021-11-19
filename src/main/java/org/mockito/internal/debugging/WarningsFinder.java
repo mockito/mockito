@@ -21,16 +21,16 @@ public class WarningsFinder {
     }
 
     public void find(FindingsListener findingsListener) {
-        List<Invocation> unusedStubs = new LinkedList<Invocation>(this.baseUnusedStubs);
-        List<InvocationMatcher> allInvocations = new LinkedList<InvocationMatcher>(this.baseAllInvocations);
+        List<Invocation> unusedStubs = new LinkedList<>(this.baseUnusedStubs);
+        List<InvocationMatcher> allInvocations = new LinkedList<>(this.baseAllInvocations);
 
         Iterator<Invocation> unusedIterator = unusedStubs.iterator();
-        while(unusedIterator.hasNext()) {
+        while (unusedIterator.hasNext()) {
             Invocation unused = unusedIterator.next();
             Iterator<InvocationMatcher> unstubbedIterator = allInvocations.iterator();
-            while(unstubbedIterator.hasNext()) {
+            while (unstubbedIterator.hasNext()) {
                 InvocationMatcher unstubbed = unstubbedIterator.next();
-                if(unstubbed.hasSimilarMethod(unused)) {
+                if (unstubbed.hasSimilarMethod(unused)) {
                     findingsListener.foundStubCalledWithDifferentArgs(unused, unstubbed);
                     unusedIterator.remove();
                     unstubbedIterator.remove();

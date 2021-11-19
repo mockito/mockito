@@ -25,7 +25,7 @@ public class ConcurrentTesting {
      * Starts all supplied runnables and then waits for all of them to complete.
      * Runnables are executed concurrently.
      */
-    public static void concurrently(Runnable ... runnables) throws InterruptedException {
+    public static void concurrently(Runnable... runnables) throws InterruptedException {
         List<Thread> threads = new LinkedList<Thread>();
         for (Runnable r : runnables) {
             Thread t = new Thread(r);

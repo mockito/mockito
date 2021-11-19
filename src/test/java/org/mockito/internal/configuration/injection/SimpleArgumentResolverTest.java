@@ -17,9 +17,14 @@ public class SimpleArgumentResolverTest {
     @Test
     public void should_return_object_matching_given_types() throws Exception {
         ConstructorInjection.SimpleArgumentResolver resolver =
-                new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet<Long>(), new ByteArrayOutputStream(), new HashMap<String, String>()));
+                new ConstructorInjection.SimpleArgumentResolver(
+                        newSetOf(
+                                new HashSet<Long>(),
+                                new ByteArrayOutputStream(),
+                                new HashMap<String, String>()));
 
-        Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, OutputStream.class);
+        Object[] resolvedInstance =
+                resolver.resolveTypeInstances(Set.class, Map.class, OutputStream.class);
 
         assertEquals(3, resolvedInstance.length);
         assertTrue(resolvedInstance[0] instanceof Set);
@@ -30,9 +35,11 @@ public class SimpleArgumentResolverTest {
     @Test
     public void should_return_null_when_match_is_not_possible_on_given_types() throws Exception {
         ConstructorInjection.SimpleArgumentResolver resolver =
-                new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashSet<Float>(), new ByteArrayOutputStream()));
+                new ConstructorInjection.SimpleArgumentResolver(
+                        newSetOf(new HashSet<Float>(), new ByteArrayOutputStream()));
 
-        Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, OutputStream.class);
+        Object[] resolvedInstance =
+                resolver.resolveTypeInstances(Set.class, Map.class, OutputStream.class);
 
         assertEquals(3, resolvedInstance.length);
         assertTrue(resolvedInstance[0] instanceof Set);
@@ -43,9 +50,11 @@ public class SimpleArgumentResolverTest {
     @Test
     public void should_return_null_when_types_are_primitives() throws Exception {
         ConstructorInjection.SimpleArgumentResolver resolver =
-                new ConstructorInjection.SimpleArgumentResolver(newSetOf(new HashMap<Integer, String>(), new TreeSet<Integer>()));
+                new ConstructorInjection.SimpleArgumentResolver(
+                        newSetOf(new HashMap<Integer, String>(), new TreeSet<Integer>()));
 
-        Object[] resolvedInstance = resolver.resolveTypeInstances(Set.class, Map.class, Boolean.class);
+        Object[] resolvedInstance =
+                resolver.resolveTypeInstances(Set.class, Map.class, Boolean.class);
 
         assertEquals(3, resolvedInstance.length);
         assertTrue(resolvedInstance[0] instanceof Set);
@@ -56,6 +65,4 @@ public class SimpleArgumentResolverTest {
     private Set<Object> newSetOf(Object... objects) {
         return new HashSet<Object>(Arrays.asList(objects));
     }
-
-
 }

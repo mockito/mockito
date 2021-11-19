@@ -13,14 +13,13 @@ import org.mockitoutil.TestBase;
 public class AtLeastMarksAllInvocationsVerified extends TestBase {
 
     public static class SomeMethods {
-        public void allowedMethod() {
-        }
-        public void disallowedMethod() {
-        }
+        public void allowedMethod() {}
+
+        public void disallowedMethod() {}
     }
 
     @Test(expected = org.mockito.exceptions.verification.NoInteractionsWanted.class)
-    public void shouldFailBecauseDisallowedMethodWasCalled(){
+    public void shouldFailBecauseDisallowedMethodWasCalled() {
         SomeMethods someMethods = mock(SomeMethods.class);
 
         someMethods.allowedMethod();

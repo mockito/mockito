@@ -4,17 +4,15 @@
  */
 package org.mockito.internal.util;
 
-/**
- * Pre-made preconditions
- */
-public class Checks {
+/** Pre-made preconditions */
+public final class Checks {
 
     public static <T> T checkNotNull(T value, String checkedValue) {
         return checkNotNull(value, checkedValue, null);
     }
 
     public static <T> T checkNotNull(T value, String checkedValue, String additionalMessage) {
-        if(value == null) {
+        if (value == null) {
             String message = checkedValue + " should not be null";
             if (additionalMessage != null) {
                 message += ". " + additionalMessage;
@@ -31,4 +29,6 @@ public class Checks {
         }
         return iterable;
     }
+
+    private Checks() {}
 }

@@ -12,10 +12,12 @@ public class InOrderContextImpl implements InOrderContext {
 
     final IdentitySet verified = new IdentitySet();
 
+    @Override
     public boolean isVerified(Invocation invocation) {
         return verified.contains(invocation);
     }
 
+    @Override
     public void markVerified(Invocation i) {
         verified.add(i);
     }

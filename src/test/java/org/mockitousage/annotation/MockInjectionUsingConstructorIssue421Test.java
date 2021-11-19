@@ -30,16 +30,14 @@ public class MockInjectionUsingConstructorIssue421Test {
 
         private ArticleCalculator calculator;
 
-        public Issue421(int a) {
-        }
+        public Issue421(int a) {}
 
         public Issue421(ArticleCalculator calculator) {
             this.calculator = calculator;
         }
 
-        public void checkIfMockIsInjected(){
+        public void checkIfMockIsInjected() {
             assertThat(MockUtil.isMock(calculator)).isTrue();
         }
     }
-
 }

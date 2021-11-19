@@ -24,36 +24,36 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
 
     @Test
     public void shouldWorkFineIfNoInvocations() throws Exception {
-        //when
+        // when
         InOrder inOrder = inOrder(mock);
 
-        //then
+        // then
         inOrder.verifyNoMoreInteractions();
     }
 
     @Test
     public void shouldSayNoInteractionsWanted() throws Exception {
-        //when
+        // when
         mock.simpleMethod();
 
-        //then
+        // then
         InOrder inOrder = inOrder(mock);
         try {
             inOrder.verifyNoMoreInteractions();
             fail();
-        } catch(VerificationInOrderFailure e) {
+        } catch (VerificationInOrderFailure e) {
             assertThat(e).hasMessageContaining("No interactions wanted");
         }
     }
 
     @Test
     public void shouldVerifyNoMoreInteractionsInOrder() throws Exception {
-        //when
+        // when
         mock.simpleMethod();
         mock.simpleMethod(10);
         mock.otherMethod();
 
-        //then
+        // then
         InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).simpleMethod(10);
         inOrder.verify(mock).otherMethod();
@@ -62,12 +62,12 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
 
     @Test
     public void shouldVerifyNoMoreInteractionsInOrderWithMultipleMocks() throws Exception {
-        //when
+        // when
         mock.simpleMethod();
         mock2.simpleMethod();
         mock.otherMethod();
 
-        //then
+        // then
         InOrder inOrder = inOrder(mock, mock2);
         inOrder.verify(mock2).simpleMethod();
         inOrder.verify(mock).otherMethod();
@@ -76,47 +76,50 @@ public class FindingRedundantInvocationsInOrderTest extends TestBase {
 
     @Test
     public void shouldFailToVerifyNoMoreInteractionsInOrder() throws Exception {
-        //when
+        // when
         mock.simpleMethod();
         mock.simpleMethod(10);
         mock.otherMethod();
 
-        //then
+        // then
         InOrder inOrder = inOrder(mock);
         inOrder.verify(mock).simpleMethod(10);
         try {
             inOrder.verifyNoMoreInteractions();
             fail();
-        } catch(VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 
     @Test
     public void shouldFailToVerifyNoMoreInteractionsInOrderWithMultipleMocks() throws Exception {
-        //when
+        // when
         mock.simpleMethod();
         mock2.simpleMethod();
         mock.otherMethod();
 
-        //then
+        // then
         InOrder inOrder = inOrder(mock, mock2);
         inOrder.verify(mock2).simpleMethod();
         try {
             inOrder.verifyNoMoreInteractions();
             fail();
-        } catch(VerificationInOrderFailure e) {}
+        } catch (VerificationInOrderFailure e) {
+        }
     }
 
     @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void shouldValidateState() throws Exception {
-        //when
+        // when
         InOrder inOrder = inOrder(mock);
         verify(mock); // mess up state
 
-        //then
+        // then
         try {
             inOrder.verifyNoMoreInteractions();
             fail();
-        } catch(UnfinishedVerificationException e) {}
+        } catch (UnfinishedVerificationException e) {
+        }
     }
 }

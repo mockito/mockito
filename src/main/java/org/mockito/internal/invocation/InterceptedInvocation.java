@@ -25,7 +25,8 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     private final MockReference<Object> mockRef;
     private final MockitoMethod mockitoMethod;
-    private final Object[] arguments, rawArguments;
+    private final Object[] arguments;
+    private final Object[] rawArguments;
     private final RealMethod realMethod;
 
     private final int sequenceNumber;
@@ -36,12 +37,13 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
     private boolean isIgnoredForVerification;
     private StubInfo stubInfo;
 
-    public InterceptedInvocation(MockReference<Object> mockRef,
-                                 MockitoMethod mockitoMethod,
-                                 Object[] arguments,
-                                 RealMethod realMethod,
-                                 Location location,
-                                 int sequenceNumber) {
+    public InterceptedInvocation(
+            MockReference<Object> mockRef,
+            MockitoMethod mockitoMethod,
+            Object[] arguments,
+            RealMethod realMethod,
+            Location location,
+            int sequenceNumber) {
         this.mockRef = mockRef;
         this.mockitoMethod = mockitoMethod;
         this.arguments = ArgumentsProcessor.expandArgs(mockitoMethod, arguments);
@@ -122,26 +124,14 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         return (T) arguments[index];
     }
 
-    public MockReference<Object> getMockRef() {
-        return mockRef;
-    }
-
-    public MockitoMethod getMockitoMethod() {
-        return mockitoMethod;
-    }
-
-    public RealMethod getRealMethod() {
-        return realMethod;
+    @Override
+    public <T> T getArgument(int index, Class<T> clazz) {
+        return clazz.cast(arguments[index]);
     }
 
     @Override
     public List<ArgumentMatcher> getArgumentsAsMatchers() {
         return argumentsToMatchers(getArguments());
-    }
-
-    @Override
-    public <T> T getArgument(int index, Class<T> clazz) {
-        return clazz.cast(arguments[index]);
     }
 
     @Override
@@ -152,15 +142,40 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         return realMethod.invoke();
     }
 
+    /**
+     * @deprecated Not used by Mockito but by mockito-scala
+     */
+    @Deprecated
+    public MockReference<Object> getMockRef() {
+        return mockRef;
+    }
+
+    /**
+     * @deprecated Not used by Mockito but by mockito-scala
+     */
+    @Deprecated
+    public MockitoMethod getMockitoMethod() {
+        return mockitoMethod;
+    }
+
+    /**
+     * @deprecated Not used by Mockito but by mockito-scala
+     */
+    @Deprecated
+    public RealMethod getRealMethod() {
+        return realMethod;
+    }
+
     @Override
     public int hashCode() {
-        //TODO SF we need to provide hash code implementation so that there are no unexpected, slight perf issues
+        // TODO SF we need to provide hash code implementation so that there are no unexpected,
+        // slight perf issues
         return 1;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || !o.getClass().equals(this.getClass())) {
+        if (!(o instanceof InterceptedInvocation)) {
             return false;
         }
         InterceptedInvocation other = (InterceptedInvocation) o;
@@ -173,17 +188,20 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
         return Arrays.equals(arguments, this.arguments);
     }
 
+    @Override
     public String toString() {
         return new PrintSettings().print(getArgumentsAsMatchers(), this);
     }
 
-    public final static RealMethod NO_OP = new RealMethod() {
-        public boolean isInvokable() {
-            return false;
-        }
-        public Object invoke() throws Throwable {
-            return null;
-        }
-    };
+    public static final RealMethod NO_OP =
+            new RealMethod() {
+                @Override
+                public boolean isInvokable() {
+                    return false;
+                }
 
+                public Object invoke() throws Throwable {
+                    return null;
+                }
+            };
 }

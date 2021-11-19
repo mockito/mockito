@@ -16,7 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-//see bug 190
+// see bug 190
 public class ShouldNotDeadlockAnswerExecutionTest {
 
     @Test
@@ -91,7 +91,6 @@ public class ShouldNotDeadlockAnswerExecutionTest {
 
             return null;
         }
-
     }
 
     static class ServiceRunner implements Runnable {
@@ -105,13 +104,10 @@ public class ShouldNotDeadlockAnswerExecutionTest {
         public void run() {
             service.verySlowMethod();
         }
-
     }
 
     interface Service {
 
         String verySlowMethod();
-
     }
-
 }

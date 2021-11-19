@@ -8,14 +8,13 @@ import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 
 public class ExceptionFactory {
 
-    private ExceptionFactory() {
-    }
+    private ExceptionFactory() {}
 
     private static interface ExceptionFactoryImpl {
         AssertionError create(String message, String wanted, String actual);
     }
 
-    private final static ExceptionFactoryImpl factory;
+    private static final ExceptionFactoryImpl factory;
 
     static {
         ExceptionFactoryImpl theFactory = null;
@@ -42,7 +41,8 @@ public class ExceptionFactory {
      * it returns an instance of
      * {@link org.mockito.exceptions.verification.ArgumentsAreDifferent}.
      */
-    public static AssertionError createArgumentsAreDifferentException(String message, String wanted, String actual) {
+    public static AssertionError createArgumentsAreDifferentException(
+            String message, String wanted, String actual) {
         return factory.create(message, wanted, actual);
     }
 }

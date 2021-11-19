@@ -4,51 +4,60 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import org.mockito.internal.creation.instance.InstantiatorProviderAdapter;
+import java.util.List;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.DoNotMockEnforcer;
-import org.mockito.plugins.InstantiatorProvider;
 import org.mockito.plugins.InstantiatorProvider2;
+import org.mockito.plugins.MemberAccessor;
 import org.mockito.plugins.MockMaker;
+import org.mockito.plugins.MockResolver;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.plugins.PluginSwitch;
 import org.mockito.plugins.StackTraceCleanerProvider;
 
 class PluginRegistry {
 
-    private final PluginSwitch pluginSwitch = new PluginLoader(new DefaultPluginSwitch())
-            .loadPlugin(PluginSwitch.class);
+    private final PluginSwitch pluginSwitch =
+            new PluginLoader(new DefaultPluginSwitch()).loadPlugin(PluginSwitch.class);
 
-    private final MockMaker mockMaker = new PluginLoader(pluginSwitch, DefaultMockitoPlugins.INLINE_ALIAS)
-            .loadPlugin(MockMaker.class);
+    private final MockMaker mockMaker =
+            new PluginLoader(
+                            pluginSwitch,
+                            DefaultMockitoPlugins.INLINE_ALIAS,
+                            DefaultMockitoPlugins.PROXY_ALIAS)
+                    .loadPlugin(MockMaker.class);
 
-    private final StackTraceCleanerProvider stackTraceCleanerProvider = new PluginLoader(pluginSwitch)
-            .loadPlugin(StackTraceCleanerProvider.class);
+    private final MemberAccessor memberAccessor =
+            new PluginLoader(pluginSwitch, DefaultMockitoPlugins.MODULE_ALIAS)
+                    .loadPlugin(MemberAccessor.class);
+
+    private final StackTraceCleanerProvider stackTraceCleanerProvider =
+            new PluginLoader(pluginSwitch).loadPlugin(StackTraceCleanerProvider.class);
 
     private final InstantiatorProvider2 instantiatorProvider;
 
-    private final AnnotationEngine annotationEngine = new PluginLoader(pluginSwitch)
-            .loadPlugin(AnnotationEngine.class);
+    private final AnnotationEngine annotationEngine =
+            new PluginLoader(pluginSwitch).loadPlugin(AnnotationEngine.class);
 
-    private final MockitoLogger mockitoLogger = new PluginLoader(pluginSwitch)
-            .loadPlugin(MockitoLogger.class);
-    private final DoNotMockEnforcer doNotMockEnforcer = new PluginLoader(pluginSwitch).loadPlugin(
-        DoNotMockEnforcer.class);
+    private final MockitoLogger mockitoLogger =
+            new PluginLoader(pluginSwitch).loadPlugin(MockitoLogger.class);
+
+    private final List<MockResolver> mockResolvers =
+            new PluginLoader(pluginSwitch).loadPlugins(MockResolver.class);
+
+    private final DoNotMockEnforcer doNotMockEnforcer =
+            new PluginLoader(pluginSwitch).loadPlugin(DoNotMockEnforcer.class);
 
     PluginRegistry() {
-        Object impl = new PluginLoader(pluginSwitch).loadPlugin(InstantiatorProvider2.class, InstantiatorProvider.class);
-        if (impl instanceof InstantiatorProvider) {
-            instantiatorProvider = new InstantiatorProviderAdapter((InstantiatorProvider) impl);
-        } else {
-            instantiatorProvider = (InstantiatorProvider2) impl;
-        }
+        instantiatorProvider =
+                new PluginLoader(pluginSwitch).loadPlugin(InstantiatorProvider2.class);
     }
 
     /**
      * The implementation of the stack trace cleaner
      */
     StackTraceCleanerProvider getStackTraceCleanerProvider() {
-        //TODO we should throw some sensible exception if this is null.
+        // TODO we should throw some sensible exception if this is null.
         return stackTraceCleanerProvider;
     }
 
@@ -60,6 +69,16 @@ class PluginRegistry {
      */
     MockMaker getMockMaker() {
         return mockMaker;
+    }
+
+    /**
+     * Returns the implementation of the member accessor available for the current runtime.
+     *
+     * <p>Returns {@link org.mockito.internal.util.reflection.ReflectionMemberAccessor} if no
+     * {@link org.mockito.plugins.MockMaker} extension exists or is visible in the current classpath.</p>
+     */
+    MemberAccessor getMemberAccessor() {
+        return memberAccessor;
     }
 
     /**
@@ -101,5 +120,14 @@ class PluginRegistry {
      */
     DoNotMockEnforcer getDoNotMockEnforcer() {
         return doNotMockEnforcer;
+    }
+
+    /**
+     * Returns a list of available mock resolvers if any.
+     *
+     * @return A list of available mock resolvers or an empty list if none are registered.
+     */
+    List<MockResolver> getMockResolvers() {
+        return mockResolvers;
     }
 }

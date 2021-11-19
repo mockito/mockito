@@ -59,8 +59,8 @@ import org.mockito.internal.matchers.CapturingMatcher;
  * @see Captor
  * @since 1.8.0
  */
+@CheckReturnValue
 public class ArgumentCaptor<T> {
-
 
     private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
     private final Class<? extends T> clazz;
@@ -80,7 +80,7 @@ public class ArgumentCaptor<T> {
      * @return null or default values
      */
     public T capture() {
-        Mockito.argThat(capturingMatcher);
+        T ignored = Mockito.argThat(capturingMatcher);
         return defaultValue(clazz);
     }
 
@@ -145,7 +145,7 @@ public class ArgumentCaptor<T> {
      * @param <U> Type of object captured by the newly built ArgumentCaptor
      * @return A new ArgumentCaptor
      */
-    public static <U,S extends U> ArgumentCaptor<U> forClass(Class<S> clazz) {
+    public static <U, S extends U> ArgumentCaptor<U> forClass(Class<S> clazz) {
         return new ArgumentCaptor<U>(clazz);
     }
 }

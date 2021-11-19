@@ -35,14 +35,12 @@ public class NumberOfInvocationsInOrderCheckerTest {
 
     private IMethods mock;
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
+    @Rule public ExpectedException exception = ExpectedException.none();
 
     @Before
     public void setup() {
         context = new InOrderContextImpl();
         mock = mock(IMethods.class, "mock");
-
     }
 
     @Test
@@ -91,7 +89,8 @@ public class NumberOfInvocationsInOrderCheckerTest {
     @Test
     public void shouldReportTooFewActual() throws Exception {
         wanted = buildSimpleMethod().toInvocationMatcher();
-        invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
+        invocations =
+                asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
         exception.expect(VerificationInOrderFailure.class);
         exception.expectMessage("mock.simpleMethod()");
@@ -104,7 +103,8 @@ public class NumberOfInvocationsInOrderCheckerTest {
     @Test
     public void shouldReportWithAllInvocationsStackTrace() throws Exception {
         wanted = buildSimpleMethod().toInvocationMatcher();
-        invocations = asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
+        invocations =
+                asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
         exception.expect(VerificationInOrderFailure.class);
         exception.expectMessage("mock.simpleMethod()");
@@ -113,7 +113,6 @@ public class NumberOfInvocationsInOrderCheckerTest {
         exception.expectMessage(containsTimes("-> at", 3));
 
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
-
     }
 
     @Test
@@ -218,7 +217,6 @@ public class NumberOfInvocationsInOrderCheckerTest {
         public void describeTo(Description description) {
             description.appendText("containing '" + expected + "' exactly " + amount + " times");
         }
-
     }
 
     private InvocationBuilder buildSimpleMethod() {

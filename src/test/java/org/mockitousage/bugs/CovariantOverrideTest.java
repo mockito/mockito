@@ -10,7 +10,7 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-//see issue 101
+// see issue 101
 public class CovariantOverrideTest extends TestBase {
 
     public interface ReturnsObject {

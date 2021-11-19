@@ -4,8 +4,6 @@
  */
 package org.mockito.stubbing;
 
-import org.mockito.Incubating;
-
 /**
  * Generic interface to be used for configuring mock's answer for a two argument invocation.
  *
@@ -32,7 +30,6 @@ import org.mockito.Incubating;
  * @param <A1> type of the second argument
  * @see Answer
  */
-@Incubating
 public interface Answer2<T, A0, A1> {
     /**
      * @param argument0 the first argument.

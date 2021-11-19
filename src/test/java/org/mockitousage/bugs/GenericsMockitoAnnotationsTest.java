@@ -5,7 +5,7 @@
 package org.mockitousage.bugs;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,13 +20,13 @@ import org.mockito.Mock;
  */
 public class GenericsMockitoAnnotationsTest {
 
-    @Mock
-    private TestCollectionSourceProvider testCollectionSourceProvider;
+    @Mock private TestCollectionSourceProvider testCollectionSourceProvider;
 
     @Ignore
     @Test
     public void should_not_throw_class_cast_exception() {
-        given(testCollectionSourceProvider.getCollection(new ArrayList<Integer>())).willReturn(new ArrayList<Integer>());
+        given(testCollectionSourceProvider.getCollection(new ArrayList<Integer>()))
+                .willReturn(new ArrayList<Integer>());
     }
 
     static class TestCollectionSourceProvider {
@@ -37,6 +37,6 @@ public class GenericsMockitoAnnotationsTest {
 
     @Before
     public void setUp() throws Exception {
-        initMocks(this);
+        openMocks(this);
     }
 }

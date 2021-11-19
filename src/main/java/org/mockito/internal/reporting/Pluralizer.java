@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.reporting;
 
-public class Pluralizer {
+public final class Pluralizer {
 
     public static String pluralize(int number) {
         return number == 1 ? "1 time" : number + " times";
@@ -17,4 +17,6 @@ public class Pluralizer {
             return "were exactly " + x + " interactions";
         }
     }
+
+    private Pluralizer() {}
 }

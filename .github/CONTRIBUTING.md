@@ -6,15 +6,11 @@
 
 **If looking for support**
 
-* Search / Ask question on [stackoverflow](http://stackoverflow.com/questions/tagged/mockito)
-* Go to the [mockito mailing-list](http://groups.google.com/group/mockito) (moderated)
+* Search / Ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/mockito)
+* Go to the [mockito mailing-list](https://groups.google.com/group/mockito) (moderated)
 * Issues should always have a [Short, Self Contained, Correct (Compilable), Example](http://sscce.org) (same as any question on stackoverflow.com)
 
 # Contributing to Mockito
-
-Which branch : 
-* On mockito 3.x (or 2.x), make your pull request target `release/3.x` (or `release/2.x`)
-* On next mockito version make your pull request target `release/3.x`
 
 ## Pull request criteria
 
@@ -46,9 +42,9 @@ Things we pay attention in a PR :
 * On pull requests, please document the change, what it brings, what is the benefit.
 * **Clean commit history** in the topic branch in your fork of the repository, even during review. That means that commits are _rebased_ and _squashed_ if necessary, so that each commit clearly changes one things and there are no extraneous fix-ups.
 
-  For that matter it's possible to commit [_semantic_ changes](http://lemike-de.tumblr.com/post/79041908218/semantic-commits). _Tests are an asset, so is history_.
+  For that matter it's possible to commit [_semantic_ changes](https://lemike-de.tumblr.com/post/79041908218/semantic-commits). _Tests are an asset, so is history_.
 
-  _Exemple gratia_:
+  _Example gratia_:
 
   ```
   Fixes #73 : The new feature
@@ -73,14 +69,14 @@ This section is not about some kind of fruitless tabs vs spaces debate. It's abo
 
 _This includes IntelliJ IDEA instructions, however we are sure there's similar settings in all major IDEs._
 
-But first of all, make sure that : 
+But first of all, make sure that :
 
 * Don't use tabs, only spaces
 * Character encoding is **UTF-8**
 * Line ending character is unix-style **`LF`**
 * New line is added at end of file: `IntelliJ setting > Editor > General > Ensure line feed at file end on save`
 
-For most editors, this should be automatically enforced by [EditorConfig](http://editorconfig.org/).
+For most editors, this should be automatically enforced by [EditorConfig](https://editorconfig.org/).
 Check if your editor has a built-in plugin or if you need to download one.
 IntelliJ has a built-in plugin, for Eclipse you need to download [this plugin](https://github.com/ncjones/editorconfig-eclipse#readme).
 
@@ -100,6 +96,7 @@ Imports must be sorted in the following order
 1. blank line
 1. `import java.*`
 1. `import javax.*`
+1. blank line
 1. `import all other imports`
 
 This order can be set in `IntelliJ setting > Editor > Code Style > Java > Imports > Import Layout`
@@ -108,8 +105,8 @@ Also make sure that
 * One blank lines before imports.
 * One blank lines after imports.
 * Never import with wildcard `*`
-   * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Class count to use import with '*'` to `100`     
-   * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Names count to use import static with '*'` to `100`     
+   * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Class count to use import with '*'` to `100`
+   * Set `IntelliJ setting > Editor > Code Style > Java > Imports > Names count to use import static with '*'` to `100`
 
 ### Alignment
 
@@ -164,7 +161,7 @@ We found vertical alignment helping when reading the code, for that reason we wa
 
     ```java
     @Mock(answer = Answers.RETURNS_DEFAULTS,
-          serializable = true, 
+          serializable = true,
           extraInterfaces = { List.class, YetAnotherInterface.class })
     ```
 
@@ -188,3 +185,7 @@ We found vertical alignment helping when reading the code, for that reason we wa
     1. For parameter `Throws list` choose : `Do not wrap`
     2. For sub-parameter `Align when multiline` tick the checkbox
 
+## Gradle Tips
+
+1. It is possible to run `./gradlew dependencyUpdates` to find out of date dependencies, including tools. Note that this
+    may show beta or alpha dependencies.

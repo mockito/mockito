@@ -28,12 +28,12 @@ class NullResultGuardian<T> implements MockHandler<T> {
     public Object handle(Invocation invocation) throws Throwable {
         Object result = delegate.handle(invocation);
         Class<?> returnType = invocation.getMethod().getReturnType();
-        if(result == null && returnType.isPrimitive()) {
-            //primitive values cannot be null
+        if (result == null && returnType.isPrimitive()) {
+            // primitive values cannot be null
             return defaultValue(returnType);
         }
         return result;
-     }
+    }
 
     @Override
     public MockCreationSettings<T> getMockSettings() {

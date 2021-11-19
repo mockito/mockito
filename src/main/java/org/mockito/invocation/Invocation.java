@@ -37,9 +37,8 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
      */
     int getSequenceNumber();
 
-    /**
-     * @return the location in code of this invocation.
-     */
+    /** @return the location in code of this invocation. */
+    @Override
     Location getLocation();
 
     /**

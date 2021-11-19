@@ -7,7 +7,6 @@ package org.mockito.internal.creation.bytebuddy;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.handler.MockHandlerImpl;
@@ -15,14 +14,12 @@ import org.mockitoutil.TestBase;
 
 public class ByteBuddyMockMakerTest extends TestBase {
 
-    @InjectMocks
-    private ByteBuddyMockMaker mockMaker = new ByteBuddyMockMaker();
-
-    @Mock
-    private ClassCreatingMockMaker delegate;
+    @Mock private SubclassByteBuddyMockMaker delegate;
 
     @Test
     public void should_delegate_call() {
+        ByteBuddyMockMaker mockMaker = new ByteBuddyMockMaker(delegate);
+
         CreationSettings<Object> creationSettings = new CreationSettings<Object>();
         MockHandlerImpl<Object> handler = new MockHandlerImpl<Object>(creationSettings);
 

@@ -47,17 +47,19 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
             return defaultReturnValue;
         }
 
-        return RetrieveGenericsForDefaultAnswers.returnTypeForMockWithCorrectGenerics(invocation,
-            new RetrieveGenericsForDefaultAnswers.AnswerCallback() {
-                @Override
-                public Object apply(Class<?> type) {
-                    if (type == null) {
-                        return null;
-                    }
+        return RetrieveGenericsForDefaultAnswers.returnTypeForMockWithCorrectGenerics(
+                invocation,
+                new RetrieveGenericsForDefaultAnswers.AnswerCallback() {
+                    @Override
+                    public Object apply(Class<?> type) {
+                        if (type == null) {
+                            return null;
+                        }
 
-                    return Mockito.mock(type, new ThrowsSmartNullPointer(invocation, new LocationImpl()));
-                }
-            });
+                        return Mockito.mock(
+                                type, new ThrowsSmartNullPointer(invocation, new LocationImpl()));
+                    }
+                });
     }
 
     private static class ThrowsSmartNullPointer implements Answer {
@@ -71,10 +73,11 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
             this.location = location;
         }
 
+        @Override
         public Object answer(InvocationOnMock currentInvocation) throws Throwable {
             if (isToStringMethod(currentInvocation.getMethod())) {
-                return "SmartNull returned by this unstubbed method call on a mock:\n" +
-                    unstubbedInvocation.toString();
+                return "SmartNull returned by this unstubbed method call on a mock:\n"
+                        + unstubbedInvocation;
             }
 
             throw smartNullPointerException(unstubbedInvocation.toString(), location);

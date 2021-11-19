@@ -4,8 +4,6 @@
  */
 package org.mockito.stubbing;
 
-import org.mockito.Incubating;
-
 /**
  * Generic interface to be used for configuring mock's answer for a single argument invocation.
  *
@@ -31,7 +29,6 @@ import org.mockito.Incubating;
  * @param <A0> type of the single argument
  * @see Answer
  */
-@Incubating
 public interface Answer1<T, A0> {
     /**
      * @param argument0 the single argument.

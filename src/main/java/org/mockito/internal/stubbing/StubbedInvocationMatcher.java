@@ -20,20 +20,23 @@ import org.mockito.stubbing.Stubbing;
 public class StubbedInvocationMatcher extends InvocationMatcher implements Serializable, Stubbing {
 
     private static final long serialVersionUID = 4919105134123672727L;
-    private final Queue<Answer> answers = new ConcurrentLinkedQueue<Answer>();
+    private final Queue<Answer> answers = new ConcurrentLinkedQueue<>();
     private final Strictness strictness;
+    private final Object usedAtLock = new Object[0];
     private DescribedInvocation usedAt;
 
-    public StubbedInvocationMatcher(Answer answer, MatchableInvocation invocation, Strictness strictness) {
+    public StubbedInvocationMatcher(
+            Answer answer, MatchableInvocation invocation, Strictness strictness) {
         super(invocation.getInvocation(), invocation.getMatchers());
         this.strictness = strictness;
         this.answers.add(answer);
     }
 
+    @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
-        //see ThreadsShareGenerouslyStubbedMockTest
+        // see ThreadsShareGenerouslyStubbedMockTest
         Answer a;
-        synchronized(answers) {
+        synchronized (answers) {
             a = answers.size() == 1 ? answers.peek() : answers.poll();
         }
         return a.answer(invocation);
@@ -44,11 +47,16 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Seria
     }
 
     public void markStubUsed(DescribedInvocation usedAt) {
-        this.usedAt = usedAt;
+        synchronized (usedAtLock) {
+            this.usedAt = usedAt;
+        }
     }
 
+    @Override
     public boolean wasUsed() {
-        return usedAt != null;
+        synchronized (usedAtLock) {
+            return usedAt != null;
+        }
     }
 
     @Override

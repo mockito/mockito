@@ -22,35 +22,39 @@ public class VerificationExcludingStubsTest extends TestBase {
 
     @Test
     public void shouldAllowToExcludeStubsForVerification() throws Exception {
-        //given
+        // given
         when(mock.simpleMethod()).thenReturn("foo");
 
-        //when
-        String stubbed = mock.simpleMethod(); //irrelevant call because it is stubbing
+        // when
+        String stubbed = mock.simpleMethod(); // irrelevant call because it is stubbing
         mock.objectArgMethod(stubbed);
 
-        //then
+        // then
         verify(mock).objectArgMethod("foo");
 
-        //verifyNoMoreInteractions fails:
-        try { verifyNoMoreInteractions(mock); fail(); } catch (NoInteractionsWanted e) {}
+        // verifyNoMoreInteractions fails:
+        try {
+            verifyNoMoreInteractions(mock);
+            fail();
+        } catch (NoInteractionsWanted e) {
+        }
 
-        //but it works when stubs are ignored:
-        ignoreStubs(mock);
+        // but it works when stubs are ignored:
+        Object[] ignored = ignoreStubs(mock);
         verifyNoMoreInteractions(mock);
     }
 
     @Test
     public void shouldExcludeFromVerificationInOrder() throws Exception {
-        //given
+        // given
         when(mock.simpleMethod()).thenReturn("foo");
 
-        //when
+        // when
         mock.objectArgMethod("1");
         mock.objectArgMethod("2");
-        mock.simpleMethod(); //calling the stub
+        mock.simpleMethod(); // calling the stub
 
-        //then
+        // then
         InOrder inOrder = inOrder(ignoreStubs(mock));
         inOrder.verify(mock).objectArgMethod("1");
         inOrder.verify(mock).objectArgMethod("2");
@@ -60,12 +64,11 @@ public class VerificationExcludingStubsTest extends TestBase {
 
     @Test(expected = NotAMockException.class)
     public void shouldIgnoringStubsDetectNulls() throws Exception {
-        ignoreStubs(mock, null);
+        Object ignored = ignoreStubs(mock, null);
     }
 
     @Test(expected = NotAMockException.class)
     public void shouldIgnoringStubsDetectNonMocks() throws Exception {
-        ignoreStubs(mock, new Object());
+        Object ignored = ignoreStubs(mock, new Object());
     }
-
 }

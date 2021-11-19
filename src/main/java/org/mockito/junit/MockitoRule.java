@@ -5,7 +5,6 @@
 package org.mockito.junit;
 
 import org.junit.rules.MethodRule;
-import org.mockito.Incubating;
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -37,7 +36,7 @@ import org.mockito.quality.Strictness;
  *      See also {@link MockitoHint}.
  *   <li>
  *      Initializes mocks annotated with {@link org.mockito.Mock},
- *      so that explicit usage of {@link MockitoAnnotations#initMocks(Object)} is not necessary.
+ *      so that explicit usage of {@link MockitoAnnotations#openMocks(Object)} is not necessary.
  *      Mocks are initialized before each test method.
  *   <li>
  *      Validates framework usage after each test method. See javadoc for {@link org.mockito.Mockito#validateMockitoUsage()}.
@@ -46,7 +45,7 @@ import org.mockito.quality.Strictness;
  *      It drives cleaner tests and improves debugging experience.
  *      The only reason this feature is not turned on by default
  *      is because it would have been an incompatible change
- *      and Mockito strictly follows <a href="http://semver.org">semantic versioning</a>.
+ *      and Mockito strictly follows <a href="https://semver.org">semantic versioning</a>.
  *
  * </ul>
  * Example use:
@@ -67,7 +66,7 @@ import org.mockito.quality.Strictness;
  * </code></pre>
  *
  * If you would like to take advantage of Mockito JUnit rule features
- * but you cannot use the rule because, for example, you use TestNG, there is a solution!
+ * but you cannot use the rule there is a solution!
  * {@link MockitoSession} API is intended to offer cleaner tests and improved debuggability
  * to users that cannot use Mockito's built-in JUnit support (runner or the rule).
  *
@@ -146,6 +145,5 @@ public interface MockitoRule extends MethodRule {
      *
      * @since 2.3.0
      */
-    @Incubating
     MockitoRule strictness(Strictness strictness);
 }

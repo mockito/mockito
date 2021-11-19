@@ -17,7 +17,8 @@ public class StackTraceFilter implements Serializable {
     static final long serialVersionUID = -5499819791513105700L;
 
     private static final StackTraceCleaner CLEANER =
-            Plugins.getStackTraceCleanerProvider().getStackTraceCleaner(new DefaultStackTraceCleaner());
+            Plugins.getStackTraceCleanerProvider()
+                    .getStackTraceCleaner(new DefaultStackTraceCleaner());
 
     private static Object JAVA_LANG_ACCESS;
     private static Method GET_STACK_TRACE_ELEMENT;
@@ -25,12 +26,12 @@ public class StackTraceFilter implements Serializable {
     static {
         try {
             JAVA_LANG_ACCESS =
-                Class.forName("sun.misc.SharedSecrets")
-                    .getMethod("getJavaLangAccess")
-                    .invoke(null);
+                    Class.forName("sun.misc.SharedSecrets")
+                            .getMethod("getJavaLangAccess")
+                            .invoke(null);
             GET_STACK_TRACE_ELEMENT =
-                Class.forName("sun.misc.JavaLangAccess")
-                    .getMethod("getStackTraceElement", Throwable.class, int.class);
+                    Class.forName("sun.misc.JavaLangAccess")
+                            .getMethod("getStackTraceElement", Throwable.class, int.class);
         } catch (Exception ignored) {
             // Use the slow computational path for filtering stacktraces if fast path does not exist
             // in JVM
@@ -44,9 +45,9 @@ public class StackTraceFilter implements Serializable {
      * <strike>If any good are in the middle of bad those are also removed.</strike>
      */
     public StackTraceElement[] filter(StackTraceElement[] target, boolean keepTop) {
-        //TODO: profile
-        //TODO: investigate "keepTop" commit history - no effect!
-        final List<StackTraceElement> filtered = new ArrayList<StackTraceElement>();
+        // TODO: profile
+        // TODO: investigate "keepTop" commit history - no effect!
+        final List<StackTraceElement> filtered = new ArrayList<>();
         for (StackTraceElement element : target) {
             if (CLEANER.isIn(element)) {
                 filtered.add(element);
@@ -80,13 +81,13 @@ public class StackTraceFilter implements Serializable {
             // The assumption here is that the CLEANER filter will not filter out every single
             // element. However, since we don't want to compute the full length of the stacktrace,
             // we don't know the upper boundary. Therefore, simply increment the counter and go as
-            // far as we have to go, assuming that we get there. If, in the rare occassion, we
+            // far as we have to go, assuming that we get there. If, in the rare occasion, we
             // don't, we fall back to the old slow path.
             while (true) {
                 try {
                     StackTraceElement stackTraceElement =
-                        (StackTraceElement)
-                            GET_STACK_TRACE_ELEMENT.invoke(JAVA_LANG_ACCESS, target, i);
+                            (StackTraceElement)
+                                    GET_STACK_TRACE_ELEMENT.invoke(JAVA_LANG_ACCESS, target, i);
 
                     if (CLEANER.isIn(stackTraceElement)) {
                         if (shouldSkip) {

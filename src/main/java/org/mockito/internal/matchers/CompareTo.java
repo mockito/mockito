@@ -8,7 +8,8 @@ import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
 
-public abstract class CompareTo<T extends Comparable<T>> implements ArgumentMatcher<T>, Serializable {
+public abstract class CompareTo<T extends Comparable<T>>
+        implements ArgumentMatcher<T>, Serializable {
     private final T wanted;
 
     public CompareTo(T value) {
@@ -20,7 +21,7 @@ public abstract class CompareTo<T extends Comparable<T>> implements ArgumentMatc
         if (actual == null) {
             return false;
         }
-        if (!actual.getClass().isInstance(wanted)){
+        if (!actual.getClass().isInstance(wanted)) {
             return false;
         }
 

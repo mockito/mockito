@@ -20,7 +20,10 @@ import org.mockitousage.IMethods;
 public class LenientMockAnnotationTest {
 
     public @Rule MockitoRule rule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS);
-    @Mock(lenient = true) IMethods lenientMock;
+
+    @Mock(lenient = true)
+    IMethods lenientMock;
+
     @Mock IMethods regularMock;
 
     @Test
@@ -28,14 +31,16 @@ public class LenientMockAnnotationTest {
         when(lenientMock.simpleMethod("1")).thenReturn("1");
         when(regularMock.simpleMethod("2")).thenReturn("2");
 
-        //then lenient mock does not throw:
+        // then lenient mock does not throw:
         ProductionCode.simpleMethod(lenientMock, "3");
 
-        //but regular mock throws:
-        Assertions.assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            public void call() {
-                ProductionCode.simpleMethod(regularMock,"4");
-            }
-        }).isInstanceOf(PotentialStubbingProblem.class);
+        // but regular mock throws:
+        Assertions.assertThatThrownBy(
+                        new ThrowableAssert.ThrowingCallable() {
+                            public void call() {
+                                ProductionCode.simpleMethod(regularMock, "4");
+                            }
+                        })
+                .isInstanceOf(PotentialStubbingProblem.class);
     }
 }

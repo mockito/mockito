@@ -9,7 +9,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
-
 public class EqualsTest extends TestBase {
 
     @Test
@@ -29,21 +28,21 @@ public class EqualsTest extends TestBase {
 
     @Test
     public void shouldDescribeWithExtraTypeInfo() throws Exception {
-        String descStr = new Equals(100).toStringWithType();
+        String descStr = new Equals(100).toStringWithType(Integer.class.getSimpleName());
 
         assertEquals("(Integer) 100", descStr);
     }
 
     @Test
     public void shouldDescribeWithExtraTypeInfoOfLong() throws Exception {
-        String descStr = new Equals(100L).toStringWithType();
+        String descStr = new Equals(100L).toStringWithType(Long.class.getSimpleName());
 
         assertEquals("(Long) 100L", descStr);
     }
 
     @Test
     public void shouldDescribeWithTypeOfString() throws Exception {
-        String descStr = new Equals("x").toStringWithType();
+        String descStr = new Equals("x").toStringWithType(String.class.getSimpleName());
 
         assertEquals("(String) \"x\"", descStr);
     }
@@ -78,29 +77,29 @@ public class EqualsTest extends TestBase {
 
     @Test
     public void shouldMatchTypes() throws Exception {
-        //when
+        // when
         ContainsExtraTypeInfo equals = new Equals(10);
 
-        //then
+        // then
         assertTrue(equals.typeMatches(10));
         assertFalse(equals.typeMatches(10L));
     }
 
     @Test
     public void shouldMatchTypesSafelyWhenActualIsNull() throws Exception {
-        //when
+        // when
         ContainsExtraTypeInfo equals = new Equals(null);
 
-        //then
+        // then
         assertFalse(equals.typeMatches(10));
     }
 
     @Test
     public void shouldMatchTypesSafelyWhenGivenIsNull() throws Exception {
-        //when
+        // when
         ContainsExtraTypeInfo equals = new Equals(10);
 
-        //then
+        // then
         assertFalse(equals.typeMatches(null));
     }
 }

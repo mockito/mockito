@@ -20,36 +20,46 @@ public class NoByteCodeDependenciesTest {
     @Test
     public void pure_mockito_should_not_depend_bytecode_libraries() throws Exception {
 
-        ClassLoader classLoader_without_bytecode_libraries = ClassLoaders.excludingClassLoader()
-            .withCodeSourceUrlOf(
-                Mockito.class,
-                Matcher.class
-            )
-            .withCodeSourceUrlOf(coverageTool())
-            .without("net.bytebuddy", "org.objenesis")
-            .build();
+        ClassLoader classLoader_without_bytecode_libraries =
+                ClassLoaders.excludingClassLoader()
+                        .withCodeSourceUrlOf(Mockito.class, Matcher.class)
+                        .withCodeSourceUrlOf(coverageTool())
+                        .without("net.bytebuddy", "org.objenesis")
+                        .build();
 
-        Set<String> pureMockitoAPIClasses = ClassLoaders.in(classLoader_without_bytecode_libraries).omit(
-            "bytebuddy", "runners", "junit", "JUnit", "opentest4j").listOwnedClasses();
-        pureMockitoAPIClasses.remove("org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
-        pureMockitoAPIClasses.remove("org.mockito.internal.creation.instance.ObjenesisInstantiator");
+        Set<String> pureMockitoAPIClasses =
+                ClassLoaders.in(classLoader_without_bytecode_libraries)
+                        .omit("bytebuddy", "runners", "junit", "JUnit", "opentest4j")
+                        .listOwnedClasses();
+        pureMockitoAPIClasses.remove(
+                "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
+        pureMockitoAPIClasses.remove(
+                "org.mockito.internal.creation.instance.ObjenesisInstantiator");
 
         // Remove classes that trigger plugin-loading, since bytebuddy plugins are the default.
         pureMockitoAPIClasses.remove("org.mockito.internal.debugging.LocationImpl");
         pureMockitoAPIClasses.remove("org.mockito.internal.exceptions.stacktrace.StackTraceFilter");
         pureMockitoAPIClasses.remove("org.mockito.internal.util.MockUtil");
 
+        // Remove instrumentation-based member accessor which is optional.
+        pureMockitoAPIClasses.remove(
+                "org.mockito.internal.util.reflection.InstrumentationMemberAccessor");
+
         for (String pureMockitoAPIClass : pureMockitoAPIClasses) {
             checkDependency(classLoader_without_bytecode_libraries, pureMockitoAPIClass);
         }
     }
 
-    private void checkDependency(ClassLoader classLoader, String pureMockitoAPIClass) throws ClassNotFoundException {
+    private void checkDependency(ClassLoader classLoader, String pureMockitoAPIClass)
+            throws ClassNotFoundException {
         try {
             Class.forName(pureMockitoAPIClass, true, classLoader);
         } catch (Throwable e) {
             e.printStackTrace();
-            throw new AssertionError(String.format("'%s' has some dependency to Byte Buddy or Objenesis", pureMockitoAPIClass));
+            throw new AssertionError(
+                    String.format(
+                            "'%s' has some dependency to Byte Buddy or Objenesis",
+                            pureMockitoAPIClass));
         }
     }
 }

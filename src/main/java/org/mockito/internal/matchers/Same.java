@@ -17,10 +17,12 @@ public class Same implements ArgumentMatcher<Object>, Serializable {
         this.wanted = wanted;
     }
 
+    @Override
     public boolean matches(Object actual) {
         return wanted == actual;
     }
 
+    @Override
     public String toString() {
         return "same(" + ValuePrinter.print(wanted) + ")";
     }

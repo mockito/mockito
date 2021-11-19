@@ -22,28 +22,26 @@ public class ScenarioPrinterTest extends TestBase {
 
     @Test
     public void shouldPrintInvocations() {
-        //given
+        // given
         Invocation verified = new InvocationBuilder().simpleMethod().verified().toInvocation();
         Invocation unverified = new InvocationBuilder().differentMethod().toInvocation();
 
-        //when
+        // when
         String out = sp.print((List) asList(verified, unverified));
 
-        //then
-        assertThat(out)
-            .contains("1. -> at")
-            .contains("2. [?]-> at");
+        // then
+        assertThat(out).contains("1. -> at").contains("2. [?]-> at");
     }
 
     @Test
     public void shouldNotPrintInvocationsWhenSingleUnwanted() {
-        //given
+        // given
         Invocation unverified = new InvocationBuilder().differentMethod().toInvocation();
 
-        //when
+        // when
         String out = sp.print((List) asList(unverified));
 
-        //then
+        // then
         assertThat(out).contains("Actually, above is the only interaction with this mock.");
     }
 }

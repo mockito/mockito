@@ -5,7 +5,7 @@
 package org.mockitousage.bugs;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import org.junit.Test;
 import org.mockito.exceptions.misusing.WrongTypeOfReturnValue;
@@ -20,23 +20,29 @@ public class ClassCastExOnVerifyZeroInteractionsTest {
 
     @Test(expected = NoInteractionsWanted.class)
     public void should_not_throw_ClassCastException_when_mock_verification_fails() {
-        TestMock test = mock(TestMock.class, new Answer<Object>() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                return false;
-            }
-        });
+        TestMock test =
+                mock(
+                        TestMock.class,
+                        new Answer<Object>() {
+                            public Object answer(InvocationOnMock invocation) throws Throwable {
+                                return false;
+                            }
+                        });
         test.m1();
-        verifyZeroInteractions(test);
+        verifyNoInteractions(test);
     }
 
     @Test(expected = WrongTypeOfReturnValue.class)
     public void should_report_bogus_default_answer() throws Exception {
-        TestMock test = mock(TestMock.class, new Answer<Object>() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                return false;
-            }
-        });
+        TestMock test =
+                mock(
+                        TestMock.class,
+                        new Answer<Object>() {
+                            public Object answer(InvocationOnMock invocation) throws Throwable {
+                                return false;
+                            }
+                        });
 
-        test.toString();
+        String ignored = test.toString();
     }
 }

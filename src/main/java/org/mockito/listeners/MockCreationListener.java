@@ -19,4 +19,12 @@ public interface MockCreationListener extends MockitoListener {
      * @param settings the settings used for creation
      */
     void onMockCreated(Object mock, MockCreationSettings settings);
+
+    /**
+     * Static mock object was just created.
+     *
+     * @param mock the type being mocked
+     * @param settings the settings used for creation
+     */
+    default void onStaticMockCreated(Class<?> mock, MockCreationSettings settings) {}
 }

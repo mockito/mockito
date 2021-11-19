@@ -18,11 +18,9 @@ import org.mockitoutil.TestBase;
 
 public class ResetTest extends TestBase {
 
-    @Mock
-    private IMethods mock;
+    @Mock private IMethods mock;
 
-    @Mock
-    private IMethods mockTwo;
+    @Mock private IMethods mockTwo;
 
     @Test
     public void shouldResetOngoingStubbingSoThatMoreMeaningfulExceptionsAreRaised() {
@@ -42,7 +40,7 @@ public class ResetTest extends TestBase {
 
     @Test(expected = NotAMockException.class)
     public void resettingNullIsSafe() {
-        reset(new Object[]{null});
+        reset(new Object[] {null});
     }
 
     @Test
@@ -51,14 +49,15 @@ public class ResetTest extends TestBase {
         when(mock.objectReturningMethod(200)).thenReturn(200);
         reset(mock);
         assertNull(mock.objectReturningMethod(200));
-        assertEquals("default behavior should return null", null, mock.objectReturningMethod("blah"));
+        assertEquals(
+                "default behavior should return null", null, mock.objectReturningMethod("blah"));
     }
 
     @Test
     public void shouldRemoveAllInteractions() throws Exception {
         mock.simpleMethod(1);
         reset(mock);
-        verifyZeroInteractions(mock);
+        verifyNoInteractions(mock);
     }
 
     @Test
@@ -74,14 +73,6 @@ public class ResetTest extends TestBase {
         when(mockTwo.toString()).thenReturn("test");
         reset(mockTwo);
         assertThat(mockTwo.toString()).contains("Mock for IMethods");
-    }
-
-    @Test
-    public void shouldStubbingNotBeTreatedAsInteraction() {
-        when(mock.simpleMethod("one")).thenThrow(new RuntimeException());
-        doThrow(new RuntimeException()).when(mock).simpleMethod("two");
-        reset(mock);
-        verifyZeroInteractions(mock);
     }
 
     @Test
@@ -112,7 +103,7 @@ public class ResetTest extends TestBase {
     @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
     public void shouldValidateStateWhenResetting() {
-        //invalid verify:
+        // invalid verify:
         verify(mock);
 
         try {
@@ -124,11 +115,11 @@ public class ResetTest extends TestBase {
 
     @Test
     public void shouldMaintainPreviousDefaultAnswer() {
-        //given
+        // given
         mock = mock(IMethods.class, RETURNS_MOCKS);
-        //when
+        // when
         reset(mock);
-        //then
+        // then
         assertNotNull(mock.iMethodsReturningMethod());
     }
 }

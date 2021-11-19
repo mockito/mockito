@@ -4,8 +4,6 @@
  */
 package org.mockito.stubbing;
 
-import org.mockito.Incubating;
-
 /**
  * Generic interface to be used for configuring mock's answer for a five argument invocation that returns nothing.
  *
@@ -34,7 +32,6 @@ import org.mockito.Incubating;
  * @param <A4> type of the fifth argument
  * @see Answer
  */
-@Incubating
 public interface VoidAnswer5<A0, A1, A2, A3, A4> {
     /**
      * @param argument0 the first argument.
@@ -45,5 +42,6 @@ public interface VoidAnswer5<A0, A1, A2, A3, A4> {
      *
      * @throws Throwable the throwable to be thrown
      */
-    void answer(A0 argument0, A1 argument1, A2 argument2, A3 argument3, A4 argument4) throws Throwable;
+    void answer(A0 argument0, A1 argument1, A2 argument2, A3 argument3, A4 argument4)
+            throws Throwable;
 }

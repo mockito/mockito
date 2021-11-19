@@ -13,7 +13,7 @@ import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-//see bug 138
+// see bug 138
 public class VerifyingWithAnExtraCallToADifferentMockTest extends TestBase {
 
     @Mock IMethods mock;
@@ -21,17 +21,18 @@ public class VerifyingWithAnExtraCallToADifferentMockTest extends TestBase {
 
     @Test
     public void shouldAllowVerifyingWhenOtherMockCallIsInTheSameLine() {
-        //given
+        // given
         when(mock.otherMethod()).thenReturn("foo");
 
-        //when
+        // when
         mockTwo.simpleMethod("foo");
 
-        //then
+        // then
         verify(mockTwo).simpleMethod(mock.otherMethod());
         try {
             verify(mockTwo, never()).simpleMethod(mock.otherMethod());
             fail();
-        } catch (NeverWantedButInvoked e) {}
+        } catch (NeverWantedButInvoked e) {
+        }
     }
 }

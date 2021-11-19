@@ -46,6 +46,18 @@ public class MockitoAssertionError extends AssertionError {
         unfilteredStackTrace = error.getUnfilteredStackTrace();
     }
 
+    /**
+     * Creates a copy of the given assertion error with the custom failure message prepended.
+     * @param error The assertion error to copy
+     * @param message The custom message to prepend
+     * @since 3.3.13
+     */
+    public MockitoAssertionError(AssertionError error, String message) {
+        super(message + "\n" + error.getMessage());
+        unfilteredStackTrace = error.getStackTrace();
+        super.setStackTrace(unfilteredStackTrace);
+    }
+
     public StackTraceElement[] getUnfilteredStackTrace() {
         return unfilteredStackTrace;
     }

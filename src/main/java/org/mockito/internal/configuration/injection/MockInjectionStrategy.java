@@ -17,12 +17,13 @@ public abstract class MockInjectionStrategy {
      */
     public static MockInjectionStrategy nop() {
         return new MockInjectionStrategy() {
-            protected boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
+            @Override
+            protected boolean processInjection(
+                    Field field, Object fieldOwner, Set<Object> mockCandidates) {
                 return false;
             }
         };
     }
-
 
     private MockInjectionStrategy nextStrategy;
 
@@ -37,7 +38,7 @@ public abstract class MockInjectionStrategy {
      * @return The passed strategy instance to allow chaining.
      */
     public MockInjectionStrategy thenTry(MockInjectionStrategy strategy) {
-        if(nextStrategy != null) {
+        if (nextStrategy != null) {
             nextStrategy.thenTry(strategy);
         } else {
             nextStrategy = strategy;
@@ -64,7 +65,7 @@ public abstract class MockInjectionStrategy {
      * @return <code>true</code> if successful, <code>false</code> otherwise.
      */
     public boolean process(Field onField, Object fieldOwnedBy, Set<Object> mockCandidates) {
-        if(processInjection(onField, fieldOwnedBy, mockCandidates)) {
+        if (processInjection(onField, fieldOwnedBy, mockCandidates)) {
             return true;
         }
         return relayProcessToNextStrategy(onField, fieldOwnedBy, mockCandidates);
@@ -82,9 +83,11 @@ public abstract class MockInjectionStrategy {
      * @param mockCandidates Pool of mocks to inject.
      * @return <code>true</code> if injection occurred, <code>false</code> otherwise
      */
-    protected abstract boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates);
+    protected abstract boolean processInjection(
+            Field field, Object fieldOwner, Set<Object> mockCandidates);
 
-    private boolean relayProcessToNextStrategy(Field field, Object fieldOwner, Set<Object> mockCandidates) {
+    private boolean relayProcessToNextStrategy(
+            Field field, Object fieldOwner, Set<Object> mockCandidates) {
         return nextStrategy != null && nextStrategy.process(field, fieldOwner, mockCandidates);
     }
 }

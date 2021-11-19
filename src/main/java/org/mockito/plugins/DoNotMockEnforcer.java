@@ -4,7 +4,6 @@
  */
 package org.mockito.plugins;
 
-
 /**
  * Enforcer that is applied to every type in the type hierarchy of the class-to-be-mocked.
  */

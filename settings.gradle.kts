@@ -1,19 +1,32 @@
-include("deprecatedPluginsTest",
-    "inline",
+plugins {
+  id("com.gradle.enterprise").version("3.3.4")
+}
+
+include("inline",
+    "proxy",
     "extTest",
+    "groovyTest",
     "kotlinTest",
     "kotlinReleaseCoroutinesTest",
     "android",
     "junit-jupiter",
     "junitJupiterExtensionTest",
+    "junitJupiterInlineMockMakerExtensionTest",
     "module-test",
     "memory-test",
     "errorprone",
-    "junitJupiterParallelTest")
+    "junitJupiterParallelTest",
+    "osgi-test")
+
+if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17) && (System.getenv("ANDROID_SDK_ROOT") != null || File(".local.properties").exists())) {
+    include("androidTest")
+} else {
+    logger.info("Not including android test project due to missing SDK configuration")
+}
 
 rootProject.name = "mockito"
 
-val koltinBuildScriptProject = hashSetOf("junitJupiterExtensionTest")
+val koltinBuildScriptProject = hashSetOf("junitJupiterExtensionTest", "junitJupiterInlineMockMakerExtensionTest")
 
 fun buildFileExtensionFor(projectName: String) =
     if (projectName in koltinBuildScriptProject) ".gradle.kts" else ".gradle"
@@ -30,6 +43,14 @@ rootProject.children.forEach { project ->
     }
     require(project.buildFile.isFile) {
         "Build file ${project.buildFile} for project ${project.name} does not exist."
+    }
+}
+
+//Posting Build scans to https://scans.gradle.com
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
     }
 }
 

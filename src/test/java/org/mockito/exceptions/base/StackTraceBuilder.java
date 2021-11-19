@@ -11,7 +11,7 @@ public class StackTraceBuilder {
 
     private String[] methods;
 
-    public StackTraceBuilder methods(String ... methods) {
+    public StackTraceBuilder methods(String... methods) {
         this.methods = methods;
         return this;
     }

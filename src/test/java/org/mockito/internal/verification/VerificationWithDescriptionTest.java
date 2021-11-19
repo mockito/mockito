@@ -19,12 +19,11 @@ import org.mockito.exceptions.base.MockitoAssertionError;
 
 public class VerificationWithDescriptionTest {
 
-    @Mock
-    private List<?> mock;
+    @Mock private List<?> mock;
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

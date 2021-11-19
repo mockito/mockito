@@ -19,7 +19,7 @@ import org.mockito.session.MockitoSessionLogger;
 
 public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
 
-    private List<Object> testClassInstances = new ArrayList<Object>();
+    private final List<Object> testClassInstances = new ArrayList<Object>();
     private String name;
     private Strictness strictness;
     private MockitoSessionLogger logger;
@@ -62,19 +62,25 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
 
     @Override
     public MockitoSession startMocking() {
-        //Configure default values
+        // Configure default values
         List<Object> effectiveTestClassInstances;
         String effectiveName;
         if (testClassInstances.isEmpty()) {
             effectiveTestClassInstances = emptyList();
             effectiveName = this.name == null ? "<Unnamed Session>" : this.name;
         } else {
-            effectiveTestClassInstances = new ArrayList<Object>(testClassInstances);
+            effectiveTestClassInstances = new ArrayList<>(testClassInstances);
             Object lastTestClassInstance = testClassInstances.get(testClassInstances.size() - 1);
-            effectiveName = this.name == null ? lastTestClassInstance.getClass().getName() : this.name;
+            effectiveName =
+                    this.name == null ? lastTestClassInstance.getClass().getName() : this.name;
         }
-        Strictness effectiveStrictness = this.strictness == null ? Strictness.STRICT_STUBS : this.strictness;
-        MockitoLogger logger = this.logger == null ? Plugins.getMockitoLogger() : new MockitoLoggerAdapter(this.logger);
-        return new DefaultMockitoSession(effectiveTestClassInstances, effectiveName, effectiveStrictness, logger);
+        Strictness effectiveStrictness =
+                this.strictness == null ? Strictness.STRICT_STUBS : this.strictness;
+        MockitoLogger logger =
+                this.logger == null
+                        ? Plugins.getMockitoLogger()
+                        : new MockitoLoggerAdapter(this.logger);
+        return new DefaultMockitoSession(
+                effectiveTestClassInstances, effectiveName, effectiveStrictness, logger);
     }
 }

@@ -20,7 +20,7 @@ import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
-//see issue 200
+// see issue 200
 public class InheritedGenericsPolimorphicCallTest extends TestBase {
 
     protected interface MyIterable<T> extends Iterable<T> {
@@ -43,7 +43,7 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
 
     @Test
     public void shouldVerificationWorks() {
-        iterable.iterator();
+        MyIterator<String> unused = iterable.iterator();
 
         verify(iterable).iterator();
         verify((Iterable<String>) iterable).iterator();
@@ -51,24 +51,29 @@ public class InheritedGenericsPolimorphicCallTest extends TestBase {
 
     @Test
     public void shouldWorkExactlyAsJavaProxyWould() {
-        //given
+        // given
         final List<Method> methods = new LinkedList<Method>();
-        InvocationHandler handler = new InvocationHandler() {
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            methods.add(method);
-            return null;
-        }};
+        InvocationHandler handler =
+                new InvocationHandler() {
+                    public Object invoke(Object proxy, Method method, Object[] args)
+                            throws Throwable {
+                        methods.add(method);
+                        return null;
+                    }
+                };
 
-        iterable = (MyIterable<String>) Proxy.newProxyInstance(
-                this.getClass().getClassLoader(),
-                new Class<?>[] { MyIterable.class },
-                handler);
+        iterable =
+                (MyIterable<String>)
+                        Proxy.newProxyInstance(
+                                this.getClass().getClassLoader(),
+                                new Class<?>[] {MyIterable.class},
+                                handler);
 
-        //when
-        iterable.iterator();
-        ((Iterable<String>) iterable).iterator();
+        // when
+        MyIterator<String> unused = iterable.iterator();
+        Iterator<String> unused2 = ((Iterable<String>) iterable).iterator();
 
-        //then
+        // then
         assertEquals(2, methods.size());
         assertEquals(methods.get(0), methods.get(1));
     }
