@@ -32,9 +32,6 @@ import org.mockito.internal.util.Primitives;
 /**
  * Allow flexible verification or stubbing. See also {@link AdditionalMatchers}.
  *
- * <p>
- * {@link Mockito} extends ArgumentMatchers so to get access to all matchers just import Mockito class statically.
- *
  * <pre class="code"><code class="java">
  * //stubbing using anyInt() argument matcher
  * when(mockedList.get(anyInt())).thenReturn("element");
