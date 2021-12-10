@@ -252,8 +252,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                 } else {
                     do {
                         if (mocked.add(type)) {
-                            assureInitialization(type);
                             if (!flatMocked.remove(type)) {
+                                assureInitialization(type);
                                 targets.add(type);
                             }
                             addInterfaces(targets, type.getInterfaces());
@@ -356,6 +356,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         for (Class<?> type : interfaces) {
             if (mocked.add(type)) {
                 if (!flatMocked.remove(type)) {
+                    assureInitialization(type);
                     types.add(type);
                 }
                 addInterfaces(types, type.getInterfaces());
