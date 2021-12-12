@@ -46,7 +46,7 @@ public final class StaticMockTest {
     }
 
     @Test
-    public void testStaticMockWithMoInteractions() {
+    public void testStaticMockWithNoInteractions() {
         try (MockedStatic<Dummy> dummy = Mockito.mockStatic(Dummy.class)) {
             dummy.when(Dummy::foo).thenReturn("bar");
             dummy.verifyNoInteractions();
@@ -54,7 +54,7 @@ public final class StaticMockTest {
     }
 
     @Test(expected = NoInteractionsWanted.class)
-    public void testStaticMockWithMoInteractionsFailed() {
+    public void testStaticMockWithNoInteractionsFailed() {
         try (MockedStatic<Dummy> dummy = Mockito.mockStatic(Dummy.class)) {
             dummy.when(Dummy::foo).thenReturn("bar");
             assertEquals("bar", Dummy.foo());
@@ -63,7 +63,7 @@ public final class StaticMockTest {
     }
 
     @Test
-    public void testStaticMockWithMoMoreInteractions() {
+    public void testStaticMockWithNoMoreInteractions() {
         try (MockedStatic<Dummy> dummy = Mockito.mockStatic(Dummy.class)) {
             dummy.when(Dummy::foo).thenReturn("bar");
             assertEquals("bar", Dummy.foo());
@@ -73,7 +73,7 @@ public final class StaticMockTest {
     }
 
     @Test(expected = NoInteractionsWanted.class)
-    public void testStaticMockWithMoMoreInteractionsFailed() {
+    public void testStaticMockWithNoMoreInteractionsFailed() {
         try (MockedStatic<Dummy> dummy = Mockito.mockStatic(Dummy.class)) {
             dummy.when(Dummy::foo).thenReturn("bar");
             assertEquals("bar", Dummy.foo());
