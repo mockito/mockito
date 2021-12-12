@@ -7,11 +7,14 @@ package org.mockitoinline;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
@@ -19,6 +22,9 @@ import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 
 public final class StaticMockTest {
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void testStaticMockSimple() {
@@ -177,6 +183,20 @@ public final class StaticMockTest {
         assertEquals("bar", Dummy.var1);
     }
 
+    @Test
+    public void testStaticMockMustUseValidMatchers() {
+        exception.expect(MockitoException.class);
+        exception.expectMessage("Invalid use of argument matchers!\n" +
+            "2 matchers expected, 1 recorded:\n" +
+            "-> at org.mockitoinline.StaticMockTest");
+
+        try (MockedStatic<Dummy> mockedClass = Mockito.mockStatic(Dummy.class)) {
+            mockedClass.when(() -> Dummy.fooVoid("foo", any())).thenReturn(null);
+
+            Dummy.fooVoid("foo", "bar");
+        }
+    }
+
     static class Dummy {
 
         static String var1 = null;
@@ -186,6 +206,10 @@ public final class StaticMockTest {
         }
 
         static void fooVoid(String var2) {
+            var1 = var2;
+        }
+
+        static void fooVoid(String var2, String var3) {
             var1 = var2;
         }
     }
