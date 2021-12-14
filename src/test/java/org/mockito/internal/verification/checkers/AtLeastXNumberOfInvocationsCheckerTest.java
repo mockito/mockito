@@ -5,13 +5,11 @@
 package org.mockito.internal.verification.checkers;
 
 import static java.util.Arrays.asList;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.internal.verification.checkers.AtLeastXNumberOfInvocationsChecker.checkAtLeastNumberOfInvocations;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.internal.invocation.InvocationBuilder;
@@ -22,8 +20,6 @@ import org.mockito.invocation.Invocation;
 
 public class AtLeastXNumberOfInvocationsCheckerTest {
 
-    @Rule public ExpectedException exception = ExpectedException.none();
-
     @Test
     public void shouldMarkActualInvocationsAsVerifiedInOrder() {
         InOrderContext context = new InOrderContextImpl();
@@ -33,7 +29,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest {
 
         // when
         checkAtLeastNumberOfInvocations(
-                asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1, context);
+            asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1, context);
 
         // then
         assertThat(invocation.isVerified()).isTrue();
@@ -46,14 +42,12 @@ public class AtLeastXNumberOfInvocationsCheckerTest {
         Invocation invocation = new InvocationBuilder().simpleMethod().toInvocation();
         Invocation invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
 
-        exception.expect(VerificationInOrderFailure.class);
-        exception.expectMessage("iMethods.simpleMethod()");
-        exception.expectMessage("Wanted *at least* 2 times");
-        exception.expectMessage("But was 1 time");
-
         // when
-        checkAtLeastNumberOfInvocations(
-                asList(invocation, invocationTwo), new InvocationMatcher(invocation), 2, context);
+        assertThatThrownBy(() ->
+                               checkAtLeastNumberOfInvocations(
+                                   asList(invocation, invocationTwo), new InvocationMatcher(invocation), 2, context)
+        ).isInstanceOf(VerificationInOrderFailure.class)
+         .hasMessageContainingAll("iMethods.simpleMethod();", "Wanted *at least* 2 times", "But was 1 time");
     }
 
     @Test
@@ -64,7 +58,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest {
 
         // when
         checkAtLeastNumberOfInvocations(
-                asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1);
+            asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1);
 
         // then
         assertThat(invocation.isVerified()).isTrue();
@@ -76,13 +70,16 @@ public class AtLeastXNumberOfInvocationsCheckerTest {
         Invocation invocation = new InvocationBuilder().simpleMethod().toInvocation();
         Invocation invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
 
-        exception.expect(TooFewActualInvocations.class);
-        exception.expectMessage("iMethods.simpleMethod()");
-        exception.expectMessage("Wanted *at least* 2 times");
-        exception.expectMessage("But was 1 time");
-
         // when
-        checkAtLeastNumberOfInvocations(
-                asList(invocation, invocationTwo), new InvocationMatcher(invocation), 2);
+        assertThatThrownBy(
+            () -> {
+                checkAtLeastNumberOfInvocations(
+                    asList(invocation, invocationTwo), new InvocationMatcher(invocation), 2);
+            })
+            .isInstanceOf(TooFewActualInvocations.class)
+            .hasMessageContainingAll(
+                "iMethods.simpleMethod();",
+                "Wanted *at least* 2 times",
+                "But was 1 time");
     }
 }
