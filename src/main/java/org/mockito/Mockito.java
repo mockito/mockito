@@ -103,6 +103,7 @@ import java.util.function.Function;
  *      <a href="#48">48. New API for mocking static methods (Since 3.4.0)</a><br/>
  *      <a href="#49">49. New API for mocking object construction (Since 3.5.0)</a><br/>
  *      <a href="#50">50. Avoiding code generation when restricting mocks to interfaces (Since 3.12.2)</a><br/>
+ *      <a href="#51">51. New API for marking classes as unmockable (Since 4.1.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1594,6 +1595,15 @@ import java.util.function.Function;
  * This mock maker can be activated explicitly by the mockito extension mechanism, just create in the classpath a file
  * <code>/mockito-extensions/org.mockito.plugins.MockMaker</code> containing the value <code>mock-maker-proxy</code>.
  *
+ * <h3 id="51">51. <a class="meaningful_link" href="#do_not_mock" name="do_not_mock">Mark classes as unmockable</a> (since 4.1.0)</h3>
+ *
+ * In some cases, mocking a class/interface can lead to unexpected runtime behavior. For example, mocking a <code>java.util.List</code>
+ * is difficult, given the requirements imposed by the interface. This means that on runtime, depending on what methods the application
+ * calls on the list, your mock might behave in such a way that it violates the interface.
+ *
+ * <p>
+ * For any class/interface you own that is problematic to mock, you can now mark the class with {@link org.mockito.DoNotMock @DoNotMock}. For usage
+ * of the annotation and how to ship your own (to avoid a compile time dependency on a test artifact), please see its JavaDoc.
  * <p>
  */
 @CheckReturnValue
