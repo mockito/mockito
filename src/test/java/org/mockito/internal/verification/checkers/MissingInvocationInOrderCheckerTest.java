@@ -7,13 +7,13 @@ package org.mockito.internal.verification.checkers;
 import static java.util.Arrays.asList;
 
 import static org.mockito.internal.verification.checkers.MissingInvocationChecker.checkMissingInvocation;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -33,8 +33,6 @@ public class MissingInvocationInOrderCheckerTest {
     private List<Invocation> invocations;
 
     @Mock private IMethods mock;
-
-    @Rule public ExpectedException exception = ExpectedException.none();
 
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
@@ -57,11 +55,12 @@ public class MissingInvocationInOrderCheckerTest {
         invocations = asList(buildDifferentMethod().toInvocation());
         wanted = buildSimpleMethod().toInvocationMatcher();
 
-        exception.expect(WantedButNotInvoked.class);
-        exception.expectMessage("Wanted but not invoked:");
-        exception.expectMessage("mock.simpleMethod()");
-
-        checkMissingInvocation(invocations, wanted, context);
+        assertThatThrownBy(
+                        () -> {
+                            checkMissingInvocation(invocations, wanted, context);
+                        })
+                .isInstanceOf(WantedButNotInvoked.class)
+                .hasMessageContainingAll("Wanted but not invoked:", "mock.simpleMethod()");
     }
 
     @Test
@@ -69,14 +68,16 @@ public class MissingInvocationInOrderCheckerTest {
         invocations = asList(buildIntArgMethod().arg(1111).toInvocation());
         wanted = buildIntArgMethod().arg(2222).toInvocationMatcher();
 
-        exception.expect(ArgumentsAreDifferent.class);
-
-        exception.expectMessage("Argument(s) are different! Wanted:");
-        exception.expectMessage("mock.intArgumentMethod(2222);");
-        exception.expectMessage("Actual invocations have different arguments:");
-        exception.expectMessage("mock.intArgumentMethod(1111);");
-
-        checkMissingInvocation(invocations, wanted, context);
+        assertThatThrownBy(
+                        () -> {
+                            checkMissingInvocation(invocations, wanted, context);
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mock.intArgumentMethod(2222);",
+                        "Actual invocations have different arguments:",
+                        "mock.intArgumentMethod(1111);");
     }
 
     @Test
@@ -89,15 +90,17 @@ public class MissingInvocationInOrderCheckerTest {
         invocations = asList(invocation1, invocation2);
         wanted = buildIntArgMethod().arg(2222).toInvocationMatcher();
 
-        exception.expect(VerificationInOrderFailure.class);
-
-        exception.expectMessage("Verification in order failure");
-        exception.expectMessage("Wanted but not invoked:");
-        exception.expectMessage("mock.intArgumentMethod(2222);");
-        exception.expectMessage("Wanted anywhere AFTER following interaction:");
-        exception.expectMessage("mock.intArgumentMethod(2222);");
-
-        checkMissingInvocation(invocations, wanted, context);
+        assertThatThrownBy(
+                        () -> {
+                            checkMissingInvocation(invocations, wanted, context);
+                        })
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContainingAll(
+                        "Verification in order failure",
+                        "Wanted but not invoked:",
+                        "mock.intArgumentMethod(2222);",
+                        "Wanted anywhere AFTER following interaction:",
+                        "mock.intArgumentMethod(2222);");
     }
 
     private InvocationBuilder buildIntArgMethod() {
