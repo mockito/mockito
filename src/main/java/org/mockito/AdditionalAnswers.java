@@ -31,7 +31,7 @@ import org.mockito.stubbing.VoidAnswer6;
  *
  * <p>Currently offer answers that can return the parameter of an invocation at a certain position,
  * along with answers that draw on a strongly typed interface to provide a neater way to write custom answers
- * that either return a value or are void (see answer interfaces in {@link org.mockito.stubbing}).
+ * that either return a value or are void (see answer interfaces in org.mockito.stubbing).
  *
  * <p>See factory methods for more information : {@link #returnsFirstArg}, {@link #returnsSecondArg},
  * {@link #returnsLastArg}, {@link #returnsArgAt}, {@link #answer} and {@link #answerVoid}

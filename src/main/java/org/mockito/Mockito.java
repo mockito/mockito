@@ -7,6 +7,7 @@ package org.mockito;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.MockitoCore;
+import org.mockito.internal.creation.proxy.ProxyMockMaker;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.session.DefaultMockitoSessionBuilder;
@@ -16,6 +17,7 @@ import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner.Strict;
 import org.mockito.junit.MockitoRule;
 import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
@@ -1241,7 +1243,7 @@ import java.util.function.Function;
  * In particular, this approach will make it easier to test functions which use callbacks.
  *
  * The methods {@link AdditionalAnswers#answer(Answer1)}} and {@link AdditionalAnswers#answerVoid(VoidAnswer1)}
- * can be used to create the answer. They rely on the related answer interfaces in {@link org.mockito.stubbing} that
+ * can be used to create the answer. They rely on the related answer interfaces in org.mockito.stubbing that
  * support answers up to 5 parameters.
  *
  * <p>
@@ -1374,7 +1376,7 @@ import java.util.function.Function;
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
  *     <li>Strict stubbing with JUnit4 Rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
- *     <li>Strict stubbing with JUnit4 Runner - {@link MockitoJUnitRunner.Strict}</li>
+ *     <li>Strict stubbing with JUnit4 Runner - {@link Strict MockitoJUnitRunner.Strict}</li>
  *     <li>Strict stubbing with JUnit5 Extension - <code>org.mockito.junit.jupiter.MockitoExtension</code></li>
  *     <li>Strict stubbing with TestNG Listener <a href="https://github.com/mockito/mockito-testng">MockitoTestNGListener</a></li>
  *     <li>Strict stubbing if you cannot use runner/rule - {@link MockitoSession}</li>
@@ -1589,7 +1591,7 @@ import java.util.function.Function;
  * The JVM offers the {@link java.lang.reflect.Proxy} facility for creating dynamic proxies of interface types. For most applications, Mockito
  * must be capable of mocking classes as supported by the default mock maker, or even final classes, as supported by the inline mock maker. To
  * create such mocks, Mockito requires to setup diverse JVM facilities and must apply code generation. If only interfaces are supposed to be
- * mocked, one can however choose to use a {@link org.mockito.internal.creation.proxy.ProxyMockMaker} that is based on the {@link java.lang.reflect.Proxy}
+ * mocked, one can however choose to use a {@link ProxyMockMaker} that is based on the {@link java.lang.reflect.Proxy}
  * API which avoids diverse overhead of the other mock makers but also limits mocking to interfaces.
  *
  * This mock maker can be activated explicitly by the mockito extension mechanism, just create in the classpath a file
