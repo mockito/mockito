@@ -47,6 +47,8 @@ public final class MockedStaticImpl<T> implements MockedStatic<T> {
 
         try {
             verification.apply();
+        } catch (MockitoException exception) {
+            throw exception;
         } catch (Throwable ignored) {
         }
 
