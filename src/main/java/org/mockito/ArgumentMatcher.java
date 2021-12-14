@@ -80,7 +80,7 @@ package org.mockito;
  * and use a lambda, e.g.:
  *
  * <pre class="code"><code class="java">
- *   verify(mock).addAll(<b>argThat(list -> list.size() == 2)</b>);
+ *   verify(mock).addAll(<b>argThat(list -&gt; list.size() == 2)</b>);
  * </code></pre>
  *
  * <p>

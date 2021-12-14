@@ -14,8 +14,8 @@ import org.mockito.ArgumentMatcher;
  * It is used during verification process:
  *
  * <pre class="code"><code class="java">
- *   mock.foo();   // <- invocation
- *   verify(mock).bar();  // <- matchable invocation
+ *   mock.foo();   // &lt;- invocation
+ *   verify(mock).bar();  // &lt;- matchable invocation
  * </code></pre>
  *
  * @since 2.2.12

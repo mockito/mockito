@@ -51,7 +51,7 @@ final class RetrieveGenericsForDefaultAnswers {
     /**
      * Try to resolve the result value using {@link ReturnsEmptyValues} and {@link ReturnsMoreEmptyValues}.
      *
-     * This will try to use all parent class (superclass & interfaces) to retrieve the value..
+     * This will try to use all parent class (superclass and interfaces) to retrieve the value..
      *
      * @param type the return type of the method
      * @return a non-null instance if the type has been resolve. Null otherwise.

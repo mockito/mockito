@@ -26,10 +26,10 @@ public interface VerificationData {
      * The target or wanted invocation.
      * Below example illustrates what is the 'target' invocation:
      * <pre class="code"><code class="java">
-     *   mock.foo();   // <- invocation 1
-     *   mock.bar();   // <- invocation 2
+     *   mock.foo();   // &lt;- invocation 1
+     *   mock.bar();   // &lt;- invocation 2
      *
-     *   verify(mock).bar();  // <- target invocation
+     *   verify(mock).bar();  // &lt;- target invocation
      * </code></pre>
      *
      * Target invocation can contain argument matchers therefore the returned type is {@link MatchableInvocation}

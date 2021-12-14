@@ -14,7 +14,7 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 /**
- * Assertion utility for cleaner & easier to debug tests that inspect on JUnit's Result object
+ * Assertion utility for cleaner and easier to debug tests that inspect on JUnit's Result object
  */
 public class JUnitResultAssert {
     private Result result;

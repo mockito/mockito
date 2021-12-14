@@ -23,12 +23,12 @@ import org.mockito.stubbing.Answer;
  * <p/>
  * Don't use it too often.
  * Consider writing simple tests that use simple mocks.
- * Repeat after me: simple tests push simple, KISSy, readable & maintainable code.
+ * Repeat after me: simple tests push simple, KISSy, readable and maintainable code.
  * If you cannot write a test in a simple way - refactor the code under test.
  * <p/>
  * Examples of mock settings:
  * <pre class="code"><code class="java">
- *   //Creates mock with different default answer & name
+ *   //Creates mock with different default answer and name
  *   Foo mock = mock(Foo.class, withSettings()
  *                                .defaultAnswer(RETURNS_SMART_NULLS)
  *                                .name("cool mockie")
@@ -51,8 +51,8 @@ public interface MockSettings extends Serializable {
      * Specifies extra interfaces the mock should implement. Might be useful for legacy code or some corner cases.
      * <p>
      * This mysterious feature should be used very occasionally.
-     * The object under test should know exactly its collaborators & dependencies.
-     * If you happen to use it often than please make sure you are really producing simple, clean & readable code.
+     * The object under test should know exactly its collaborators and dependencies.
+     * If you happen to use it often than please make sure you are really producing simple, clean and readable code.
      * <p>
      * Examples:
      * <pre class="code"><code class="java">
@@ -101,7 +101,7 @@ public interface MockSettings extends Serializable {
      * <p>
      * However, there are rare cases when partial mocks come handy:
      * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
-     * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
+     * However, I wouldn't use partial mocks for new, test-driven and well-designed code.
      * <p>
      * Enough warnings about partial mocks, see an example how spiedInstance() works:
      * <pre class="code"><code class="java">

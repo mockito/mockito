@@ -32,7 +32,7 @@ public interface MockitoFramework {
      * Make sure you remove the listener when the job is complete, see {@link #removeListener(MockitoListener)}.
      * Currently the listeners list is thread local so you need to remove listener from the same thread otherwise
      * remove is ineffectual.
-     * In typical scenarios, it is not a problem, because adding & removing listeners typically happens in the same thread.
+     * In typical scenarios, it is not a problem, because adding and removing listeners typically happens in the same thread.
      * <p>
      * If you are trying to add the listener but a listener of the same type was already added (and not removed)
      * this method will throw {@link RedundantListenerException}.
@@ -58,7 +58,7 @@ public interface MockitoFramework {
      * When you add listener using {@link #addListener(MockitoListener)} make sure to remove it.
      * Currently the listeners list is thread local so you need to remove listener from the same thread otherwise
      * remove is ineffectual.
-     * In typical scenarios, it is not a problem, because adding & removing listeners typically happens in the same thread.
+     * In typical scenarios, it is not a problem, because adding and removing listeners typically happens in the same thread.
      * <p>
      * For usage examples, see Mockito codebase.
      * If you have ideas and feature requests about Mockito listeners API

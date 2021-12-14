@@ -30,8 +30,8 @@ import org.mockito.exceptions.base.MockitoException;
  *
  * //test:
  * ...
- * when(translator.translate("one")).thenReturn("jeden"); // <- stubbing realized during code execution
- * when(translator.translate("two")).thenReturn("dwa"); // <- stubbing never realized
+ * when(translator.translate("one")).thenReturn("jeden"); // &lt;- stubbing realized during code execution
+ * when(translator.translate("two")).thenReturn("dwa"); // &lt;- stubbing never realized
  * ...
  * </code>
  * </pre>
@@ -39,7 +39,7 @@ import org.mockito.exceptions.base.MockitoException;
  * The stray stubbing might be an oversight of the developer, the artifact of copy-paste
  * or the effect of not understanding the test/code.
  * Either way, the developer ends up with unnecessary test code.
- * In order to keep the codebase clean & maintainable it is necessary to remove unnecessary code.
+ * In order to keep the codebase clean and maintainable it is necessary to remove unnecessary code.
  * Otherwise tests are harder to read and reason about.
  * <p>
  * Mockito JUnit Runner triggers <code>UnnecessaryStubbingException</code> only when none of the test methods use the stubbings.
