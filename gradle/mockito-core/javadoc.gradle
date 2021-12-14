@@ -40,12 +40,6 @@ javadoc {
     options.noTree = false
     options.links = ['https://docs.oracle.com/javase/6/docs/api/',
                      'https://junit.org/junit4/javadoc/4.12/']
-    options.header("""<em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
-    // The footer option has no function past JDK 16:
-    // https://github.com/leohacker/jdk16/commit/d47336bf1cef06762cc0c769d93769edf9f05a47
-    if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_16)) {
-        options.footer("""<em id="mockito-version-header-javadoc7-footer"><strong>Mockito ${project.version} API</strong></em>""")
-    }
     options.bottom("""
         <script type="text/javascript" src="{@docRoot}/js/jdk6-project-version-insert.min.js"></script>
         <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
