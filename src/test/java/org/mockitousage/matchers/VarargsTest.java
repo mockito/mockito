@@ -4,6 +4,7 @@
  */
 package org.mockitousage.matchers;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -19,7 +20,6 @@ import org.assertj.core.api.ObjectAssert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
@@ -32,7 +32,6 @@ import org.mockitousage.IMethods;
 public class VarargsTest {
 
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
-    @Rule public ExpectedException exception = ExpectedException.none();
     @Captor private ArgumentCaptor<String> captor;
     @Mock private IMethods mock;
 
@@ -104,9 +103,11 @@ public class VarargsTest {
     public void shouldnotMatchVarArgs_twoArgsOneMatcher() {
         mock.varargs("1", "1");
 
-        exception.expectMessage("Argument(s) are different");
-
-        verify(mock).varargs(eq("1"));
+        assertThatThrownBy(
+                () -> {
+                    verify(mock).varargs(eq("1"));
+                })
+                .hasMessageContaining("Argument(s) are different");
     }
 
     @Test
@@ -141,9 +142,11 @@ public class VarargsTest {
     public void shouldMatchVarArgs_twoArgsThreeAnyMatcher() {
         mock.varargs(1, 2);
 
-        exception.expectMessage("Argument(s) are different");
-
-        verify(mock).varargs(any(), any(), any()); // any() -> VarargMatcher
+        assertThatThrownBy(
+                () -> {
+                    verify(mock).varargs(any(), any(), any()); // any() -> VarargMatcher
+                })
+                .hasMessageContaining("Argument(s) are different");
     }
 
     @Test
@@ -261,9 +264,11 @@ public class VarargsTest {
     public void shouldNotCaptureVarArgs_3args2captures() {
         mock.varargs("1", "2", "3");
 
-        exception.expect(ArgumentsAreDifferent.class);
-
-        verify(mock).varargs(captor.capture(), captor.capture());
+        assertThatThrownBy(
+                () -> {
+                    verify(mock).varargs(captor.capture(), captor.capture());
+                })
+                .isInstanceOf(ArgumentsAreDifferent.class);
     }
 
     @Test
@@ -292,9 +297,11 @@ public class VarargsTest {
     public void shouldNotCaptureVarArgs_1args2captures() {
         mock.varargs("1");
 
-        exception.expect(ArgumentsAreDifferent.class);
-
-        verify(mock).varargs(captor.capture(), captor.capture());
+        assertThatThrownBy(
+                () -> {
+                    verify(mock).varargs(captor.capture(), captor.capture());
+                })
+                .isInstanceOf(ArgumentsAreDifferent.class);
     }
 
     /**
@@ -321,9 +328,11 @@ public class VarargsTest {
     public void shouldNotMatchRegualrAndVaraArgs() {
         mock.varargsString(1, "a", "b");
 
-        exception.expect(ArgumentsAreDifferent.class);
-
-        verify(mock).varargsString(1);
+        assertThatThrownBy(
+                () -> {
+                    verify(mock).varargsString(1);
+                })
+                .isInstanceOf(ArgumentsAreDifferent.class);
     }
 
     @Test
