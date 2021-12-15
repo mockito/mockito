@@ -5,7 +5,11 @@
 package org.mockitousage.annotation;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
@@ -16,10 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.internal.TextListener;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -36,13 +38,16 @@ import org.mockitousage.examples.use.ArticleManager;
 
 public class MockInjectionUsingConstructorTest {
 
-    @Mock private ArticleCalculator calculator;
-    @Mock private ArticleDatabase database;
+    @Mock
+    private ArticleCalculator calculator;
+    @Mock
+    private ArticleDatabase database;
 
-    @InjectMocks private ArticleManager articleManager;
-    @Spy @InjectMocks private ArticleManager spiedArticleManager;
-
-    @Rule public ExpectedException exception = ExpectedException.none();
+    @InjectMocks
+    private ArticleManager articleManager;
+    @Spy
+    @InjectMocks
+    private ArticleManager spiedArticleManager;
 
     @Before
     public void before() {
@@ -106,17 +111,22 @@ public class MockInjectionUsingConstructorTest {
     public static class junit_test_with_3_tests_methods {
         private static int constructor_instantiation = 0;
 
-        @Mock List<?> some_collaborator;
-        @InjectMocks some_class_with_parametered_constructor should_be_initialized_3_times;
+        @Mock
+        List<?> some_collaborator;
+        @InjectMocks
+        some_class_with_parametered_constructor should_be_initialized_3_times;
 
         @Test
-        public void test_1() {}
+        public void test_1() {
+        }
 
         @Test
-        public void test_2() {}
+        public void test_2() {
+        }
 
         @Test
-        public void test_3() {}
+        public void test_3() {
+        }
 
         private static class some_class_with_parametered_constructor {
             public some_class_with_parametered_constructor(List<?> collaborator) {
@@ -133,70 +143,85 @@ public class MockInjectionUsingConstructorTest {
 
     @Ignore("don't run this code in the test runner")
     private static class ATest {
-        @Mock Set<?> set;
-        @InjectMocks FailingConstructor failingConstructor;
+        @Mock
+        Set<?> set;
+        @InjectMocks
+        FailingConstructor failingConstructor;
     }
 
     @Test
-    public void injectMocksMustFailWithInterface() throws Exception {
+    public void injectMocksMustFailWithInterface() {
         class TestCase {
-            @InjectMocks IMethods f;
+            @InjectMocks
+            IMethods f;
         }
 
-        exception.expect(MockitoException.class);
-        exception.expectMessage(
-                "Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'IMethods' is an interface");
-
-        openMocks(new TestCase());
+        assertThatThrownBy(
+                () -> {
+                    openMocks(new TestCase());
+                })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'IMethods' is an interface");
     }
 
     @Test
     public void injectMocksMustFailWithEnum() throws Exception {
         class TestCase {
-            @InjectMocks TimeUnit f;
+            @InjectMocks
+            TimeUnit f;
         }
 
-        exception.expect(MockitoException.class);
-        exception.expectMessage(
-                "Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'TimeUnit' is an enum");
+        assertThatThrownBy(
+                () -> {
+                    openMocks(new TestCase());
+                })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'TimeUnit' is an enum");
 
-        openMocks(new TestCase());
     }
 
     @Test
-    public void injectMocksMustFailWithAbstractClass() throws Exception {
+    public void injectMocksMustFailWithAbstractClass() {
         class TestCase {
-            @InjectMocks AbstractCollection<?> f;
+            @InjectMocks
+            AbstractCollection<?> f;
         }
 
-        exception.expect(MockitoException.class);
-        exception.expectMessage(
-                "Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'AbstractCollection' is an abstract class");
-
-        openMocks(new TestCase());
+        assertThatThrownBy(
+                () -> {
+                    openMocks(new TestCase());
+                })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'AbstractCollection' is an abstract class");
     }
 
     @Test
-    public void injectMocksMustFailWithNonStaticInnerClass() throws Exception {
+    public void injectMocksMustFailWithNonStaticInnerClass() {
         class TestCase {
-            class InnerClass {}
+            class InnerClass {
+            }
 
-            @InjectMocks InnerClass f;
+            @InjectMocks
+            InnerClass f;
         }
 
-        exception.expect(MockitoException.class);
-        exception.expectMessage(
-                "Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'InnerClass' is an inner non static class");
+        assertThatThrownBy(
+                () -> {
+                    openMocks(new TestCase());
+                })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Cannot instantiate @InjectMocks field named 'f'! Cause: the type 'InnerClass' is an inner non static class");
 
-        openMocks(new TestCase());
     }
 
-    static class StaticInnerClass {}
+    static class StaticInnerClass {
+    }
 
     @Test
-    public void injectMocksMustSucceedWithStaticInnerClass() throws Exception {
+    public void injectMocksMustSucceedWithStaticInnerClass() {
         class TestCase {
-            @InjectMocks StaticInnerClass f;
+            @InjectMocks
+            StaticInnerClass f;
         }
 
         TestCase testClass = new TestCase();
@@ -206,9 +231,10 @@ public class MockInjectionUsingConstructorTest {
     }
 
     @Test
-    public void injectMocksMustSucceedWithInstance() throws Exception {
+    public void injectMocksMustSucceedWithInstance() {
         class TestCase {
-            @InjectMocks StaticInnerClass f = new StaticInnerClass();
+            @InjectMocks
+            StaticInnerClass f = new StaticInnerClass();
         }
 
         TestCase testClass = new TestCase();
