@@ -21,7 +21,7 @@ package org.mockito.stubbing;
  *         }
  * })).when(mock).someMethod(anyString(), anyInt(), anyString(), anyChar(), any(), anyString());
  *
- * // The following will raise an exception with the message "ka-boom <3 mockito"
+ * // The following will raise an exception with the message "ka-boom &lt;3 mockito"
  * mock.someMethod("%s-boom %c%d %s", 3, "ka", '&lt;', new Object(), "mockito");
  * </code></pre>
  *

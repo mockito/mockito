@@ -22,8 +22,6 @@ javadoc {
     // While there's errors the javadoc is still generated without those symbols or links ;
     // for this reason the javadoc output is suppressed and can be reactivated with --info option.
     exclude 'org/mockito/internal'
-    logging.captureStandardError LogLevel.INFO
-    logging.captureStandardOutput LogLevel.INFO // suppress "## warnings" message
 
     options.docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
     options.windowTitle = "Mockito ${project.version} API"
@@ -41,9 +39,7 @@ javadoc {
     options.noNavBar = false
     options.noTree = false
     options.links = ['https://docs.oracle.com/javase/6/docs/api/',
-                     'http://junit.org/junit4/javadoc/4.12/']
-    options.header("""<em id="mockito-version-header-javadoc7-header"><strong>Mockito ${project.version} API</strong></em>""")
-    options.footer("""<em id="mockito-version-header-javadoc7-footer"><strong>Mockito ${project.version} API</strong></em>""")
+                     'https://junit.org/junit4/javadoc/4.12/']
     options.bottom("""
         <script type="text/javascript" src="{@docRoot}/js/jdk6-project-version-insert.min.js"></script>
         <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
@@ -53,16 +49,8 @@ javadoc {
         <script type="text/javascript" src="{@docRoot}/js/index.js" async defer></script>
     """.replaceAll(/\r|\n|[ ]{8}/, ""))
     options.stylesheetFile rootProject.file("src/javadoc/stylesheet.css")
-    options.addStringOption('Xdoclint:none', '-quiet')
-
-    def minorVersion = System.getProperty("java.version") =~ /1.8.0_(\d*)/
-
-    // Since JDK 8 version 121 scripts are not allowed in comments. However,
-    // earlier version throw an error if an unknown option is passed.
-    // Therefore only add this option if the JDK is actually correct.
-    if (minorVersion.size() > 0 && Integer.valueOf(minorVersion[0][1]) >= 121 || JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('-allow-script-in-comments', true)
-    }
+    options.addStringOption('Xwerror', '-quiet')
+    options.addBooleanOption('-allow-script-in-comments', true)
 
     doLast {
         copy {

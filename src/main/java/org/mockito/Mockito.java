@@ -7,6 +7,7 @@ package org.mockito;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.MockitoCore;
+import org.mockito.internal.creation.proxy.ProxyMockMaker;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.session.DefaultMockitoSessionBuilder;
@@ -16,6 +17,7 @@ import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner.Strict;
 import org.mockito.junit.MockitoRule;
 import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
@@ -51,8 +53,8 @@ import java.util.function.Function;
  *
  * <b>
  *      <a href="#0">0. Migrating to Mockito 2</a><br/>
- *      <a href="#0.1">0.1 Mockito Android support</a></br/>
- *      <a href="#0.2">0.2 Configuration-free inline mock making</a></br/>
+ *      <a href="#0.1">0.1 Mockito Android support</a><br/>
+ *      <a href="#0.2">0.2 Configuration-free inline mock making</a><br/>
  *      <a href="#1">1. Let's verify some behaviour! </a><br/>
  *      <a href="#2">2. How about some stubbing? </a><br/>
  *      <a href="#3">3. Argument matchers </a><br/>
@@ -70,7 +72,7 @@ import java.util.function.Function;
  *      <a href="#15">15. Capturing arguments for further assertions (Since 1.8.0) </a><br/>
  *      <a href="#16">16. Real partial mocks (Since 1.8.0) </a><br/>
  *      <a href="#17">17. Resetting mocks (Since 1.8.0) </a><br/>
- *      <a href="#18">18. Troubleshooting & validating framework usage (Since 1.8.0) </a><br/>
+ *      <a href="#18">18. Troubleshooting and validating framework usage (Since 1.8.0) </a><br/>
  *      <a href="#19">19. Aliases for behavior driven development (Since 1.8.0) </a><br/>
  *      <a href="#20">20. Serializable mocks (Since 1.8.1) </a><br/>
  *      <a href="#21">21. New annotations: <code>&#064;Captor</code>, <code>&#064;Spy</code>, <code>&#064;InjectMocks</code> (Since 1.8.3) </a><br/>
@@ -251,7 +253,7 @@ import java.util.function.Function;
  * verify(mockedList).get(anyInt());
  *
  * //<b>argument matchers can also be written as Java 8 Lambdas</b>
- * verify(mockedList).add(argThat(someString -> someString.length() > 5));
+ * verify(mockedList).add(argThat(someString -&gt; someString.length() &gt; 5));
  *
  * </code></pre>
  *
@@ -263,7 +265,7 @@ import java.util.function.Function;
  * For information solely on <b>custom argument matchers</b> check out javadoc for {@link ArgumentMatcher} class.
  * <p>
  * Be reasonable with using complicated argument matching.
- * The natural matching style using <code>equals()</code> with occasional <code>anyX()</code> matchers tend to give clean & simple tests.
+ * The natural matching style using <code>equals()</code> with occasional <code>anyX()</code> matchers tend to give clean and simple tests.
  * Sometimes it's just better to refactor the code to allow <code>equals()</code> matching or even implement <code>equals()</code> method to help out with testing.
  * <p>
  * Also, read <a href="#15">section 15</a> or javadoc for {@link ArgumentCaptor} class.
@@ -524,7 +526,7 @@ import java.util.function.Function;
  * Yet another controversial feature which was not included in Mockito
  * originally. We recommend simply stubbing with <code>thenReturn()</code> or
  * <code>thenThrow()</code>, which should be enough to test/test-drive
- * any clean & simple code. However, if you do have a need to stub with the generic Answer interface, here is an example:
+ * any clean and simple code. However, if you do have a need to stub with the generic Answer interface, here is an example:
  *
  * <pre class="code"><code class="java">
  * when(mock.someMethod(anyString())).thenAnswer(
@@ -679,7 +681,7 @@ import java.util.function.Function;
  * <h3 id="15">15. <a class="meaningful_link" href="#captors" name="captors">Capturing arguments</a> for further assertions (Since 1.8.0)</h3>
  *
  * Mockito verifies argument values in natural java style: by using an <code>equals()</code> method.
- * This is also the recommended way of matching arguments because it makes tests clean & simple.
+ * This is also the recommended way of matching arguments because it makes tests clean and simple.
  * In some situations though, it is helpful to assert on certain arguments after the actual verification.
  * For example:
  * <pre class="code"><code class="java">
@@ -706,7 +708,7 @@ import java.util.function.Function;
  *
  * <h3 id="16">16. <a class="meaningful_link" href="#partial_mocks" name="partial_mocks">Real partial mocks</a> (Since 1.8.0)</h3>
  *
- *  Finally, after many internal debates & discussions on the mailing list, partial mock support was added to Mockito.
+ *  Finally, after many internal debates and discussions on the mailing list, partial mock support was added to Mockito.
  *  Previously we considered partial mocks as code smells. However, we found a legitimate use case for partial mocks.
  *  <p>
  *  <b>Before release 1.8</b> <code>spy()</code> was not producing real partial mocks and it was confusing for some users.
@@ -731,7 +733,7 @@ import java.util.function.Function;
  * <p>
  * However, there are rare cases when partial mocks come handy:
  * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
- * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
+ * However, I wouldn't use partial mocks for new, test-driven and well-designed code.
  *
  *
  *
@@ -743,7 +745,7 @@ import java.util.function.Function;
  * <p>
  * Instead of <code>reset()</code> please consider writing simple, small and focused test methods over lengthy, over-specified tests.
  * <b>First potential code smell is <code>reset()</code> in the middle of the test method.</b> This probably means you're testing too much.
- * Follow the whisper of your test methods: "Please keep us small & focused on single behavior".
+ * Follow the whisper of your test methods: "Please keep us small and focused on single behavior".
  * There are several threads about it on mockito mailing list.
  * <p>
  * The only reason we added <code>reset()</code> method is to
@@ -757,13 +759,13 @@ import java.util.function.Function;
  *   mock.add(1);
  *
  *   reset(mock);
- *   //at this point the mock forgot any interactions & stubbing
+ *   //at this point the mock forgot any interactions and stubbing
  * </code></pre>
  *
  *
  *
  *
- * <h3 id="18">18. <a class="meaningful_link" href="#framework_validation" name="framework_validation">Troubleshooting & validating framework usage</a> (Since 1.8.0)</h3>
+ * <h3 id="18">18. <a class="meaningful_link" href="#framework_validation" name="framework_validation">Troubleshooting and validating framework usage</a> (Since 1.8.0)</h3>
  *
  * First of all, in case of any trouble, I encourage you to read the Mockito FAQ:
  * <a href="https://github.com/mockito/mockito/wiki/FAQ">https://github.com/mockito/mockito/wiki/FAQ</a>
@@ -928,7 +930,7 @@ import java.util.function.Function;
  * Mockito will now allow you to create mocks when stubbing.
  * Basically, it allows to create a stub in one line of code.
  * This can be helpful to keep test code clean.
- * For example, some boring stub can be created & stubbed at field initialization in a test:
+ * For example, some boring stub can be created and stubbed at field initialization in a test:
  * <pre class="code"><code class="java">
  * public class CarTest {
  *   Car boringStubbedCar = when(mock(Car.class).shiftGear()).thenThrow(EngineNotStarted.class).getMock();
@@ -1075,7 +1077,7 @@ import java.util.function.Function;
  * SomeAbstract spy = spy(SomeAbstract.class);
  *
  * //Mocking abstract methods, spying default methods of an interface (only available since 2.7.13)
- * Function<Foo, Bar> function = spy(Function.class);
+ * Function&lt;Foo, Bar&gt; function = spy(Function.class);
  *
  * //Robust API, via settings builder:
  * OtherAbstract spy = mock(OtherAbstract.class, withSettings()
@@ -1199,21 +1201,21 @@ import java.util.function.Function;
  *
  * // verify a list only had strings of a certain length added to it
  * // note - this will only compile under Java 8
- * verify(list, times(2)).add(argThat(string -> string.length() < 5));
+ * verify(list, times(2)).add(argThat(string -&gt; string.length() &lt; 5));
  *
  * // Java 7 equivalent - not as neat
- * verify(list, times(2)).add(argThat(new ArgumentMatcher<String>(){
+ * verify(list, times(2)).add(argThat(new ArgumentMatcher&lt;String&gt;(){
  *     public boolean matches(String arg) {
- *         return arg.length() < 5;
+ *         return arg.length() &lt; 5;
  *     }
  * }));
  *
  * // more complex Java 8 example - where you can specify complex verification behaviour functionally
- * verify(target, times(1)).receiveComplexObject(argThat(obj -> obj.getSubObject().get(0).equals("expected")));
+ * verify(target, times(1)).receiveComplexObject(argThat(obj -&gt; obj.getSubObject().get(0).equals("expected")));
  *
  * // this can also be used when defining the behaviour of a mock under different inputs
  * // in this case if the input list was fewer than 3 items the mock returns null
- * when(mock.someMethod(argThat(list -> list.size()<3))).thenReturn(null);
+ * when(mock.someMethod(argThat(list -&gt; list.size()&lt;3))).thenReturn(null);
  * </code></pre>
  *
  * <h3 id="37">37. <a class="meaningful_link" href="#Java_8_Custom_Answers" name="Java_8_Custom_Answers">Java 8 Custom Answer Support</a> (Since 2.1.0)</h3>
@@ -1227,12 +1229,12 @@ import java.util.function.Function;
  * <p>
  * <pre class="code"><code class="java">
  * // answer by returning 12 every time
- * doAnswer(invocation -> 12).when(mock).doSomething();
+ * doAnswer(invocation -&gt; 12).when(mock).doSomething();
  *
  * // answer by using one of the parameters - converting into the right
  * // type as your go - in this case, returning the length of the second string parameter
  * // as the answer. This gets long-winded quickly, with casting of parameters.
- * doAnswer(invocation -> ((String)invocation.getArgument(1)).length())
+ * doAnswer(invocation -&gt; ((String)invocation.getArgument(1)).length())
  *     .when(mock).doSomething(anyString(), anyString(), anyString());
  * </code></pre>
  *
@@ -1241,7 +1243,7 @@ import java.util.function.Function;
  * In particular, this approach will make it easier to test functions which use callbacks.
  *
  * The methods {@link AdditionalAnswers#answer(Answer1)}} and {@link AdditionalAnswers#answerVoid(VoidAnswer1)}
- * can be used to create the answer. They rely on the related answer interfaces in {@link org.mockito.stubbing} that
+ * can be used to create the answer. They rely on the related answer interfaces in org.mockito.stubbing that
  * support answers up to 5 parameters.
  *
  * <p>
@@ -1257,11 +1259,11 @@ import java.util.function.Function;
  * void receive(String item);
  *
  * // Java 8 - style 1
- * doAnswer(AdditionalAnswers.<String,Callback>answerVoid((operand, callback) -> callback.receive("dummy"))
+ * doAnswer(AdditionalAnswers.&lt;String,Callback&gt;answerVoid((operand, callback) -&gt; callback.receive("dummy"))
  *     .when(mock).execute(anyString(), any(Callback.class));
  *
  * // Java 8 - style 2 - assuming static import of AdditionalAnswers
- * doAnswer(answerVoid((String operand, Callback callback) -> callback.receive("dummy"))
+ * doAnswer(answerVoid((String operand, Callback callback) -&gt; callback.receive("dummy"))
  *     .when(mock).execute(anyString(), any(Callback.class));
  *
  * // Java 8 - style 3 - where mocking function to is a static member of test class
@@ -1273,7 +1275,7 @@ import java.util.function.Function;
  *     .when(mock).execute(anyString(), any(Callback.class));
  *
  * // Java 7
- * doAnswer(answerVoid(new VoidAnswer2<String, Callback>() {
+ * doAnswer(answerVoid(new VoidAnswer2&lt;String, Callback&gt;() {
  *     public void answer(String operation, Callback callback) {
  *         callback.receive("dummy");
  *     }})).when(mock).execute(anyString(), any(Callback.class));
@@ -1285,11 +1287,11 @@ import java.util.function.Function;
  *
  * // this could be mocked
  * // Java 8
- * doAnswer(AdditionalAnswers.<Boolean,String,String>answer((input1, input2) -> input1.equals(input2))))
+ * doAnswer(AdditionalAnswers.&lt;Boolean,String,String&gt;answer((input1, input2) -&gt; input1.equals(input2))))
  *     .when(mock).execute(anyString(), anyString());
  *
  * // Java 7
- * doAnswer(answer(new Answer2<String, String, String>() {
+ * doAnswer(answer(new Answer2&lt;String, String, String&gt;() {
  *     public String answer(String input1, String input2) {
  *         return input1 + input2;
  *     }})).when(mock).execute(anyString(), anyString());
@@ -1374,7 +1376,7 @@ import java.util.function.Function;
  * To quickly find out how "stricter" Mockito can make you more productive and get your tests cleaner, see:
  * <ul>
  *     <li>Strict stubbing with JUnit4 Rules - {@link MockitoRule#strictness(Strictness)} with {@link Strictness#STRICT_STUBS}</li>
- *     <li>Strict stubbing with JUnit4 Runner - {@link MockitoJUnitRunner.Strict}</li>
+ *     <li>Strict stubbing with JUnit4 Runner - {@link Strict MockitoJUnitRunner.Strict}</li>
  *     <li>Strict stubbing with JUnit5 Extension - <code>org.mockito.junit.jupiter.MockitoExtension</code></li>
  *     <li>Strict stubbing with TestNG Listener <a href="https://github.com/mockito/mockito-testng">MockitoTestNGListener</a></li>
  *     <li>Strict stubbing if you cannot use runner/rule - {@link MockitoSession}</li>
@@ -1589,7 +1591,7 @@ import java.util.function.Function;
  * The JVM offers the {@link java.lang.reflect.Proxy} facility for creating dynamic proxies of interface types. For most applications, Mockito
  * must be capable of mocking classes as supported by the default mock maker, or even final classes, as supported by the inline mock maker. To
  * create such mocks, Mockito requires to setup diverse JVM facilities and must apply code generation. If only interfaces are supposed to be
- * mocked, one can however choose to use a {@link org.mockito.internal.creation.proxy.ProxyMockMaker} that is based on the {@link java.lang.reflect.Proxy}
+ * mocked, one can however choose to use a {@link ProxyMockMaker} that is based on the {@link java.lang.reflect.Proxy}
  * API which avoids diverse overhead of the other mock makers but also limits mocking to interfaces.
  *
  * This mock maker can be activated explicitly by the mockito extension mechanism, just create in the classpath a file
@@ -1772,7 +1774,7 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * However, there are rare cases when partial mocks come handy:
      * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
-     * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
+     * However, I wouldn't use partial mocks for new, test-driven and well-designed code.
      * <p>
      * Example:
      * <pre class="code"><code class="java">
@@ -1977,7 +1979,7 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * However, there are rare cases when partial mocks come handy:
      * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
-     * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
+     * However, I wouldn't use partial mocks for new, test-driven and well-designed code.
      * <p>
      * Example:
      *
@@ -2422,7 +2424,7 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * Instead of <code>#reset()</code> please consider writing simple, small and focused test methods over lengthy, over-specified tests.
      * <b>First potential code smell is <code>reset()</code> in the middle of the test method.</b> This probably means you're testing too much.
-     * Follow the whisper of your test methods: "Please keep us small & focused on single behavior".
+     * Follow the whisper of your test methods: "Please keep us small and focused on single behavior".
      * There are several threads about it on mockito mailing list.
      * <p>
      * The only reason we added <code>reset()</code> method is to
@@ -2436,7 +2438,7 @@ public class Mockito extends ArgumentMatchers {
      *   mock.add(1);
      *
      *   reset(mock);
-     *   //at this point the mock forgot any interactions & stubbing
+     *   //at this point the mock forgot any interactions and stubbing
      * </code></pre>
      *
      * @param <T> The Type of the mocks
@@ -2619,7 +2621,7 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * However, there are rare cases when partial mocks come handy:
      * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
-     * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
+     * However, I wouldn't use partial mocks for new, test-driven and well-designed code.
      * <p>
      * See also javadoc {@link Mockito#spy(Object)} to find out more about partial mocks.
      * <b>Mockito.spy() is a recommended way of creating partial mocks.</b>
@@ -3206,12 +3208,12 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * Don't use it too often.
      * Consider writing simple tests that use simple mocks.
-     * Repeat after me: simple tests push simple, KISSy, readable & maintainable code.
+     * Repeat after me: simple tests push simple, KISSy, readable and maintainable code.
      * If you cannot write a test in a simple way - refactor the code under test.
      * <p>
      * Examples of mock settings:
      * <pre class="code"><code class="java">
-     *   //Creates mock with different default answer & name
+     *   //Creates mock with different default answer and name
      *   Foo mock = mock(Foo.class, withSettings()
      *       .defaultAnswer(RETURNS_SMART_NULLS)
      *       .name("cool mockie"));

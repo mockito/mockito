@@ -15,7 +15,7 @@ import org.mockito.internal.matchers.CapturingMatcher;
  *
  * <p>
  * Mockito verifies argument values in natural java style: by using an equals() method.
- * This is also the recommended way of matching arguments because it makes tests clean & simple.
+ * This is also the recommended way of matching arguments because it makes tests clean and simple.
  * In some situations though, it is helpful to assert on certain arguments after the actual verification.
  * For example:
  * <pre class="code"><code class="java">

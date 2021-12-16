@@ -26,7 +26,7 @@ import org.mockito.quality.Strictness;
  * given(mock.getSomething(100)).willReturn(something);
  *
  * //code under test:
- * Something something = mock.getSomething(50); // <-- stubbing argument mismatch
+ * Something something = mock.getSomething(50); // &lt;-- stubbing argument mismatch
  * </code></pre>
  * The stubbing argument mismatch typically indicates:
  * <ol>

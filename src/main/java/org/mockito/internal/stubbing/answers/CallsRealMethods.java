@@ -31,7 +31,7 @@ import org.mockito.stubbing.ValidableAnswer;
  * <p>
  * However, there are rare cases when partial mocks come handy:
  * dealing with code you cannot change easily (3rd party interfaces, interim refactoring of legacy code etc.)
- * However, I wouldn't use partial mocks for new, test-driven & well-designed code.
+ * However, I wouldn't use partial mocks for new, test-driven and well-designed code.
  * <p>
  */
 public class CallsRealMethods implements Answer<Object>, ValidableAnswer, Serializable {
