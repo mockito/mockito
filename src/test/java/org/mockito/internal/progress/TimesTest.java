@@ -15,9 +15,9 @@ public class TimesTest {
     @Test
     public void shouldNotAllowNegativeNumberOfInvocations() {
         assertThatThrownBy(
-                () -> {
-                    VerificationModeFactory.times(-50);
-                })
+                        () -> {
+                            VerificationModeFactory.times(-50);
+                        })
                 .isInstanceOf(MockitoException.class)
                 .hasMessage("Negative value is not allowed here");
     }

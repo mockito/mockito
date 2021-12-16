@@ -32,8 +32,7 @@ public class MissingInvocationCheckerTest extends TestBase {
     private InvocationMatcher wanted;
     private List<Invocation> invocations;
 
-    @Mock
-    private IMethods mock;
+    @Mock private IMethods mock;
 
     @Test
     public void shouldPassBecauseActualInvocationFound() {
@@ -49,16 +48,15 @@ public class MissingInvocationCheckerTest extends TestBase {
         invocations = asList(buildDifferentMethod().toInvocation());
 
         assertThatThrownBy(
-                () -> {
-                    MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
-                })
+                        () -> {
+                            MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+                        })
                 .isInstanceOf(WantedButNotInvoked.class)
                 .hasMessageContainingAll(
                         "Wanted but not invoked:",
                         "mock.simpleMethod()",
                         "However, there was exactly 1 interaction with this mock:",
-                        "mock.differentMethod();"
-                );
+                        "mock.differentMethod();");
     }
 
     @Test
@@ -67,16 +65,15 @@ public class MissingInvocationCheckerTest extends TestBase {
         invocations = asList(buildIntArgMethod(new InvocationBuilder()).arg(1111).toInvocation());
 
         assertThatThrownBy(
-                () -> {
-                    MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
-                })
+                        () -> {
+                            MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+                        })
                 .isInstanceOf(ArgumentsAreDifferent.class)
                 .hasMessageContainingAll(
                         "Argument(s) are different! Wanted:",
                         "mock.intArgumentMethod(2222);",
                         "Actual invocations have different arguments:",
-                        "mock.intArgumentMethod(1111);"
-                );
+                        "mock.intArgumentMethod(1111);");
     }
 
     @Test
@@ -87,16 +84,15 @@ public class MissingInvocationCheckerTest extends TestBase {
                         buildIntArgMethod(new CustomInvocationBuilder()).arg(1111).toInvocation());
 
         assertThatThrownBy(
-                () -> {
-                    MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
-                })
+                        () -> {
+                            MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+                        })
                 .isInstanceOf(ArgumentsAreDifferent.class)
                 .hasMessageContainingAll(
                         "Argument(s) are different! Wanted:",
                         "mock.intArgumentMethod(MyCoolPrint(2222));",
                         "Actual invocations have different arguments:",
-                        "mock.intArgumentMethod(MyCoolPrint(1111));"
-                );
+                        "mock.intArgumentMethod(MyCoolPrint(1111));");
     }
 
     private InvocationBuilder buildIntArgMethod(InvocationBuilder invocationBuilder) {

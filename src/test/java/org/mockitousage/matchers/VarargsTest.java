@@ -104,9 +104,9 @@ public class VarargsTest {
         mock.varargs("1", "1");
 
         assertThatThrownBy(
-                () -> {
-                    verify(mock).varargs(eq("1"));
-                })
+                        () -> {
+                            verify(mock).varargs(eq("1"));
+                        })
                 .hasMessageContaining("Argument(s) are different");
     }
 
@@ -143,9 +143,9 @@ public class VarargsTest {
         mock.varargs(1, 2);
 
         assertThatThrownBy(
-                () -> {
-                    verify(mock).varargs(any(), any(), any()); // any() -> VarargMatcher
-                })
+                        () -> {
+                            verify(mock).varargs(any(), any(), any()); // any() -> VarargMatcher
+                        })
                 .hasMessageContaining("Argument(s) are different");
     }
 
@@ -265,9 +265,9 @@ public class VarargsTest {
         mock.varargs("1", "2", "3");
 
         assertThatThrownBy(
-                () -> {
-                    verify(mock).varargs(captor.capture(), captor.capture());
-                })
+                        () -> {
+                            verify(mock).varargs(captor.capture(), captor.capture());
+                        })
                 .isInstanceOf(ArgumentsAreDifferent.class);
     }
 
@@ -298,9 +298,9 @@ public class VarargsTest {
         mock.varargs("1");
 
         assertThatThrownBy(
-                () -> {
-                    verify(mock).varargs(captor.capture(), captor.capture());
-                })
+                        () -> {
+                            verify(mock).varargs(captor.capture(), captor.capture());
+                        })
                 .isInstanceOf(ArgumentsAreDifferent.class);
     }
 
@@ -329,9 +329,9 @@ public class VarargsTest {
         mock.varargsString(1, "a", "b");
 
         assertThatThrownBy(
-                () -> {
-                    verify(mock).varargsString(1);
-                })
+                        () -> {
+                            verify(mock).varargsString(1);
+                        })
                 .isInstanceOf(ArgumentsAreDifferent.class);
     }
 

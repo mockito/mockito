@@ -29,7 +29,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest {
 
         // when
         checkAtLeastNumberOfInvocations(
-            asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1, context);
+                asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1, context);
 
         // then
         assertThat(invocation.isVerified()).isTrue();
@@ -43,11 +43,16 @@ public class AtLeastXNumberOfInvocationsCheckerTest {
         Invocation invocationTwo = new InvocationBuilder().differentMethod().toInvocation();
 
         // when
-        assertThatThrownBy(() ->
-                               checkAtLeastNumberOfInvocations(
-                                   asList(invocation, invocationTwo), new InvocationMatcher(invocation), 2, context)
-        ).isInstanceOf(VerificationInOrderFailure.class)
-         .hasMessageContainingAll("iMethods.simpleMethod();", "Wanted *at least* 2 times", "But was 1 time");
+        assertThatThrownBy(
+                        () ->
+                                checkAtLeastNumberOfInvocations(
+                                        asList(invocation, invocationTwo),
+                                        new InvocationMatcher(invocation),
+                                        2,
+                                        context))
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContainingAll(
+                        "iMethods.simpleMethod();", "Wanted *at least* 2 times", "But was 1 time");
     }
 
     @Test
@@ -58,7 +63,7 @@ public class AtLeastXNumberOfInvocationsCheckerTest {
 
         // when
         checkAtLeastNumberOfInvocations(
-            asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1);
+                asList(invocation, invocationTwo), new InvocationMatcher(invocation), 1);
 
         // then
         assertThat(invocation.isVerified()).isTrue();
@@ -72,14 +77,14 @@ public class AtLeastXNumberOfInvocationsCheckerTest {
 
         // when
         assertThatThrownBy(
-            () -> {
-                checkAtLeastNumberOfInvocations(
-                    asList(invocation, invocationTwo), new InvocationMatcher(invocation), 2);
-            })
-            .isInstanceOf(TooFewActualInvocations.class)
-            .hasMessageContainingAll(
-                "iMethods.simpleMethod();",
-                "Wanted *at least* 2 times",
-                "But was 1 time");
+                        () -> {
+                            checkAtLeastNumberOfInvocations(
+                                    asList(invocation, invocationTwo),
+                                    new InvocationMatcher(invocation),
+                                    2);
+                        })
+                .isInstanceOf(TooFewActualInvocations.class)
+                .hasMessageContainingAll(
+                        "iMethods.simpleMethod();", "Wanted *at least* 2 times", "But was 1 time");
     }
 }

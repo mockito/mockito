@@ -17,8 +17,7 @@ import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockito.verification.VerificationMode;
 
 public class VerificationOverTimeImplTest {
-    @Mock
-    private VerificationMode delegate;
+    @Mock private VerificationMode delegate;
     private VerificationOverTimeImpl impl;
 
     @Before
@@ -39,9 +38,9 @@ public class VerificationOverTimeImplTest {
 
         doThrow(toBeThrown).when(delegate).verify(null);
         assertThatThrownBy(
-                () -> {
-                    impl.verify(null);
-                })
+                        () -> {
+                            impl.verify(null);
+                        })
                 .isEqualTo(toBeThrown);
     }
 
@@ -51,9 +50,9 @@ public class VerificationOverTimeImplTest {
 
         doThrow(toBeThrown).when(delegate).verify(null);
         assertThatThrownBy(
-                () -> {
-                    impl.verify(null);
-                })
+                        () -> {
+                            impl.verify(null);
+                        })
                 .isEqualTo(toBeThrown);
     }
 
@@ -63,9 +62,9 @@ public class VerificationOverTimeImplTest {
 
         doThrow(toBeThrown).when(delegate).verify(null);
         assertThatThrownBy(
-                () -> {
-                    impl.verify(null);
-                })
+                        () -> {
+                            impl.verify(null);
+                        })
                 .isEqualTo(toBeThrown);
     }
 }
