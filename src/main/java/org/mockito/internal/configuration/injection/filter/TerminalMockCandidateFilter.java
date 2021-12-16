@@ -40,7 +40,8 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
                         accessor.set(candidateFieldToBeInjected, injectee, matchingMock);
                     }
                 } catch (RuntimeException | IllegalAccessException e) {
-                    throw cannotInjectDependency(candidateFieldToBeInjected, matchingMock, e);
+                    final Throwable details = e.getCause() == null ? e : e.getCause();
+                    throw cannotInjectDependency(candidateFieldToBeInjected, matchingMock, details);
                 }
                 return matchingMock;
             };

@@ -8,46 +8,33 @@ import static org.mockito.internal.exceptions.Reporter.fieldInitialisationThrewE
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.reflection.ConstructorResolver;
+import org.mockito.internal.util.reflection.ConstructorResolver.BiggestConstructorResolver;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
-import org.mockito.internal.util.reflection.FieldInitializer.ConstructorArgumentResolver;
 
 /**
  * Injection strategy based on constructor.
  *
  * <p>
  * The strategy will search for the constructor with most parameters
- * and try to resolve mocks by type.
- * </p>
- *
- * <blockquote>
- * TODO on missing mock type, shall it abandon or create "noname" mocks.
- * TODO and what if the arg type is not mockable.
- * </blockquote>
- *
- * <p>
- * For now the algorithm tries to create anonymous mocks if an argument type is missing.
- * If not possible the algorithm abandon resolution.
+ * and try to resolve mocks by type, or null if there is no mocks matching a parameter.
  * </p>
  */
 public class ConstructorInjection extends MockInjectionStrategy {
 
-    public ConstructorInjection() {}
-
     @Override
     public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
         try {
-            SimpleArgumentResolver simpleArgumentResolver =
-                    new SimpleArgumentResolver(mockCandidates);
+            ConstructorResolver constructorResolver =
+                    createConstructorResolver(field.getType(), mockCandidates);
             FieldInitializationReport report =
-                    new FieldInitializer(fieldOwner, field, simpleArgumentResolver).initialize();
+                    new FieldInitializer(fieldOwner, field, constructorResolver).initialize();
 
-            return report.fieldWasInitializedUsingContructorArgs();
+            return report.fieldWasInitialized();
         } catch (MockitoException e) {
             if (e.getCause() instanceof InvocationTargetException) {
                 Throwable realCause = e.getCause().getCause();
@@ -58,32 +45,8 @@ public class ConstructorInjection extends MockInjectionStrategy {
         }
     }
 
-    /**
-     * Returns mocks that match the argument type, if not possible assigns null.
-     */
-    static class SimpleArgumentResolver implements ConstructorArgumentResolver {
-        final Set<Object> objects;
-
-        public SimpleArgumentResolver(Set<Object> objects) {
-            this.objects = objects;
-        }
-
-        @Override
-        public Object[] resolveTypeInstances(Class<?>... argTypes) {
-            List<Object> argumentInstances = new ArrayList<>(argTypes.length);
-            for (Class<?> argType : argTypes) {
-                argumentInstances.add(objectThatIsAssignableFrom(argType));
-            }
-            return argumentInstances.toArray();
-        }
-
-        private Object objectThatIsAssignableFrom(Class<?> argType) {
-            for (Object object : objects) {
-                if (argType.isAssignableFrom(object.getClass())) {
-                    return object;
-                }
-            }
-            return null;
-        }
+    protected ConstructorResolver createConstructorResolver(
+            Class<?> fieldType, Set<Object> mockCandidates) {
+        return new BiggestConstructorResolver(fieldType, mockCandidates);
     }
 }

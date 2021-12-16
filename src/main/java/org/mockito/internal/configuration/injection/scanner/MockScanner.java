@@ -33,25 +33,26 @@ public class MockScanner {
     }
 
     /**
-     * Add the scanned and prepared mock instance to the given collection.
-     *
+     * Scan and prepare mocks for the class hierarchy of given <code>testClassInstance</code>.
      * <p>
      * The preparation of mocks consists only in defining a MockName if not already set.
      * </p>
-     *
-     * @param mocks Set of mocks
+     * @return A prepared set of mock
      */
-    public void addPreparedMocks(Set<Object> mocks) {
-        mocks.addAll(scan());
+    public Set<Object> scanHierarchy() {
+        final Set<Object> mocks = newMockSafeHashSet();
+        Class<?> currentClass = clazz;
+        while (currentClass != Object.class) {
+            scan(currentClass, mocks);
+            currentClass = currentClass.getSuperclass();
+        }
+        return mocks;
     }
 
     /**
      * Scan and prepare mocks for the given <code>testClassInstance</code> and <code>clazz</code> in the type hierarchy.
-     *
-     * @return A prepared set of mock
      */
-    private Set<Object> scan() {
-        Set<Object> mocks = newMockSafeHashSet();
+    private void scan(Class<?> clazz, Set<Object> mocks) {
         for (Field field : clazz.getDeclaredFields()) {
             // mock or spies only
             FieldReader fieldReader = new FieldReader(instance, field);
@@ -61,7 +62,6 @@ public class MockScanner {
                 mocks.add(mockInstance);
             }
         }
-        return mocks;
     }
 
     private Object preparedMock(Object instance, Field field) {

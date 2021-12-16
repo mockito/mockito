@@ -8,7 +8,6 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +23,7 @@ import org.mockito.plugins.AnnotationEngine;
 public class InjectingAnnotationEngine implements AnnotationEngine {
     private final AnnotationEngine delegate = new IndependentAnnotationEngine();
     private final AnnotationEngine spyAnnotationEngine = new SpyAnnotationEngine();
+    private final DefaultInjectionEngine injectionEngine = new DefaultInjectionEngine();
 
     /**
      * Process the fields of the test instance and create Mocks, Spies, Captors and inject them on fields
@@ -45,23 +45,12 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
     public AutoCloseable process(Class<?> clazz, Object testInstance) {
         List<AutoCloseable> closeables = new ArrayList<>();
         closeables.addAll(processIndependentAnnotations(testInstance.getClass(), testInstance));
-        closeables.addAll(processInjectMocks(testInstance.getClass(), testInstance));
+        closeables.add(injectCloseableMocks(testInstance));
         return () -> {
             for (AutoCloseable closeable : closeables) {
                 closeable.close();
             }
         };
-    }
-
-    private List<AutoCloseable> processInjectMocks(
-            final Class<?> clazz, final Object testInstance) {
-        List<AutoCloseable> closeables = new ArrayList<>();
-        Class<?> classContext = clazz;
-        while (classContext != Object.class) {
-            closeables.add(injectCloseableMocks(testInstance));
-            classContext = classContext.getSuperclass();
-        }
-        return closeables;
     }
 
     private List<AutoCloseable> processIndependentAnnotations(
@@ -104,18 +93,16 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
      */
     private AutoCloseable injectCloseableMocks(final Object testClassInstance) {
         Class<?> clazz = testClassInstance.getClass();
-        Set<Field> mockDependentFields = new HashSet<>();
+        Set<Field> fieldsToMock = new InjectMocksScanner(clazz).scanHierarchy();
         Set<Object> mocks = newMockSafeHashSet();
-
-        while (clazz != Object.class) {
-            new InjectMocksScanner(clazz).addTo(mockDependentFields);
-            new MockScanner(testClassInstance, clazz).addPreparedMocks(mocks);
-            onInjection(testClassInstance, clazz, mockDependentFields, mocks);
-            clazz = clazz.getSuperclass();
-        }
-
-        new DefaultInjectionEngine()
-                .injectMocksOnFields(mockDependentFields, mocks, testClassInstance);
+        Set<Object> previousMocks = newMockSafeHashSet();
+        do {
+            previousMocks.addAll(mocks);
+            mocks.addAll(new MockScanner(testClassInstance, clazz).scanHierarchy());
+            onInjection(testClassInstance, clazz, fieldsToMock, mocks);
+            injectionEngine.injectOngoingMocksOnFields(fieldsToMock, mocks, testClassInstance);
+        } while (!mocks.equals(previousMocks));
+        injectionEngine.injectMocksOnFields(fieldsToMock, mocks, testClassInstance);
 
         return () -> {
             for (Object mock : mocks) {

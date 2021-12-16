@@ -39,8 +39,9 @@ import org.mockito.plugins.MemberAccessor;
  * </p>
  * <p/>
  * <p>
- * If the field is also annotated with the <strong>compatible</strong> &#64;InjectMocks then the field will be ignored,
- * The injection engine will handle this specific case.
+ * If the field is also annotated with the <strong>compatible</strong> &#64;InjectMocks and has
+ * parameterized constructor then the field will be ignored, the injection engine will handle this
+ * specific case.
  * </p>
  * <p/>
  * <p>This engine will fail, if the field is also annotated with incompatible Mockito annotations.
@@ -53,8 +54,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
         Field[] fields = context.getDeclaredFields();
         MemberAccessor accessor = Plugins.getMemberAccessor();
         for (Field field : fields) {
-            if (field.isAnnotationPresent(Spy.class)
-                    && !field.isAnnotationPresent(InjectMocks.class)) {
+            if (shouldProcess(field)) {
                 assertNoIncompatibleAnnotations(Spy.class, field, Mock.class, Captor.class);
                 Object instance;
                 try {
@@ -80,6 +80,19 @@ public class SpyAnnotationEngine implements AnnotationEngine {
             }
         }
         return new NoAction();
+    }
+
+    private boolean shouldProcess(Field field) {
+        if (!field.isAnnotationPresent(Spy.class)) {
+            return false;
+        }
+        if (!field.isAnnotationPresent(InjectMocks.class)) {
+            return true;
+        }
+        if (field.getType().isInterface()) {
+            return false;
+        }
+        return !hasParameterizedConstructor(field.getType());
     }
 
     private static Object spyInstance(Field field, Object instance) {
@@ -129,6 +142,15 @@ public class SpyAnnotationEngine implements AnnotationEngine {
         } else {
             return Mockito.mock(type, settings.useConstructor());
         }
+    }
+
+    private static boolean hasParameterizedConstructor(Class<?> type) {
+        for (Constructor<?> constructor : type.getDeclaredConstructors()) {
+            if (constructor.getParameterTypes().length > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static Constructor<?> noArgConstructorOf(Class<?> type) {

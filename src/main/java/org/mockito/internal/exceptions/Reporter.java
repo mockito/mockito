@@ -826,7 +826,7 @@ public class Reporter {
     }
 
     public static MockitoException cannotInjectDependency(
-            Field field, Object matchingMock, Exception details) {
+            Field field, Object matchingMock, Throwable details) {
         return new MockitoException(
                 join(
                         "Mockito couldn't inject mock dependency '"
@@ -841,7 +841,7 @@ public class Reporter {
                 details);
     }
 
-    private static String exceptionCauseMessageIfAvailable(Exception details) {
+    private static String exceptionCauseMessageIfAvailable(Throwable details) {
         if (details.getCause() == null) {
             return details.getMessage();
         }
