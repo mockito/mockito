@@ -34,6 +34,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     private final RegisteredInvocations registeredInvocations;
     private final Strictness mockStrictness;
 
+    private final Object invocationLock = new Object();
     private MatchableInvocation invocationForStubbing;
 
     public InvocationContainerImpl(MockCreationSettings mockSettings) {
@@ -44,11 +45,15 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     public void setInvocationForPotentialStubbing(MatchableInvocation invocation) {
         registeredInvocations.add(invocation.getInvocation());
-        this.invocationForStubbing = invocation;
+        synchronized (this.invocationLock) {
+            this.invocationForStubbing = invocation;
+        }
     }
 
     public void resetInvocationForPotentialStubbing(MatchableInvocation invocationMatcher) {
-        this.invocationForStubbing = invocationMatcher;
+        synchronized (this.invocationLock) {
+            this.invocationForStubbing = invocationMatcher;
+        }
     }
 
     public void addAnswer(Answer answer, Strictness stubbingStrictness) {
@@ -59,10 +64,12 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     /** Adds new stubbed answer and returns the invocation matcher the answer was added to. */
     public StubbedInvocationMatcher addAnswer(
             Answer answer, boolean isConsecutive, Strictness stubbingStrictness) {
-        Invocation invocation = invocationForStubbing.getInvocation();
-        mockingProgress().stubbingCompleted();
-        if (answer instanceof ValidableAnswer) {
-            ((ValidableAnswer) answer).validateFor(invocation);
+        synchronized (this.invocationLock) {
+            Invocation invocation = invocationForStubbing.getInvocation();
+            mockingProgress().stubbingCompleted();
+            if (answer instanceof ValidableAnswer) {
+                ((ValidableAnswer) answer).validateFor(invocation);
+            }
         }
 
         synchronized (stubbed) {
@@ -119,15 +126,17 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     public void setMethodForStubbing(MatchableInvocation invocation) {
-        invocationForStubbing = invocation;
-        assert hasAnswersForStubbing();
-        for (int i = 0; i < doAnswerStyleStubbing.getAnswers().size(); i++) {
-            addAnswer(
-                    doAnswerStyleStubbing.getAnswers().get(i),
-                    i != 0,
-                    doAnswerStyleStubbing.getStubbingStrictness());
+        synchronized (this.invocationLock) {
+            invocationForStubbing = invocation;
+            assert hasAnswersForStubbing();
+            for (int i = 0; i < doAnswerStyleStubbing.getAnswers().size(); i++) {
+                addAnswer(
+                        doAnswerStyleStubbing.getAnswers().get(i),
+                        i != 0,
+                        doAnswerStyleStubbing.getStubbingStrictness());
+            }
+            doAnswerStyleStubbing.clear();
         }
-        doAnswerStyleStubbing.clear();
     }
 
     @Override
