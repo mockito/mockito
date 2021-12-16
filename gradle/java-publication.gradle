@@ -1,29 +1,34 @@
-//Sources/javadoc artifacts required by Maven module publications
-def licenseSpec = copySpec {
-    from project.rootDir
-    include "LICENSE"
+group = 'org.mockito'
+
+plugins.withId("java") {
+    //Sources/javadoc artifacts required by Maven module publications
+    def licenseSpec = copySpec {
+        from project.rootDir
+        include "LICENSE"
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+        with licenseSpec
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from tasks.javadoc
+        with licenseSpec
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }
+
+    jar {
+        with licenseSpec
+    }
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-    with licenseSpec
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from tasks.javadoc
-    with licenseSpec
-}
-
-jar {
-    with licenseSpec
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
 
 tasks.withType(GenerateModuleMetadata) {
     enabled = false
@@ -34,9 +39,14 @@ apply plugin: "maven-publish"
 publishing {
     publications {
         javaLibrary(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
+            plugins.withId("java") {
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+            }
+            plugins.withId("java-platform") {
+                from components.javaPlatform
+            }
 
             artifactId = project.archivesBaseName
 
@@ -44,10 +54,12 @@ publishing {
                 name = artifactId
                 description = project.description
 
-                //Gradle does not write 'jar' packaging to the pom (unlike other packaging types).
-                //This is OK because 'jar' is implicit/default:
-                // https://maven.apache.org/guides/introduction/introduction-to-the-pom.html#minimal-pom
-                packaging = project.tasks.jar.extension
+                plugins.withId("java") {
+                    //Gradle does not write 'jar' packaging to the pom (unlike other packaging types).
+                    //This is OK because 'jar' is implicit/default:
+                    // https://maven.apache.org/guides/introduction/introduction-to-the-pom.html#minimal-pom
+                    packaging = project.tasks.jar.extension
+                }
 
                 url = "https://github.com/mockito/mockito"
                 licenses {
@@ -88,8 +100,10 @@ publishing {
     repositories { maven { url = "$buildDir/repo" } }
 }
 
+plugins.withId("java") {
 //fleshes out problems with Maven pom generation when building
-tasks.build.dependsOn("publishJavaLibraryPublicationToMavenLocal")
+    tasks.build.dependsOn("publishJavaLibraryPublicationToMavenLocal")
+}
 
 apply plugin: 'signing' //https://docs.gradle.org/current/userguide/signing_plugin.html
 signing {

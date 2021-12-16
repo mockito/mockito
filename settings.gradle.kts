@@ -16,7 +16,8 @@ include("inline",
     "memory-test",
     "errorprone",
     "junitJupiterParallelTest",
-    "osgi-test")
+    "osgi-test",
+    "bom")
 
 if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17) && (System.getenv("ANDROID_SDK_ROOT") != null || File(".local.properties").exists())) {
     include("androidTest")
