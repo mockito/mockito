@@ -6,19 +6,15 @@ package org.mockito.internal.verification.checkers;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
+import org.assertj.core.api.Condition;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -35,8 +31,6 @@ public class NumberOfInvocationsInOrderCheckerTest {
 
     private IMethods mock;
 
-    @Rule public ExpectedException exception = ExpectedException.none();
-
     @Before
     public void setup() {
         context = new InOrderContextImpl();
@@ -52,30 +46,32 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldPassIfChunkMatches() throws Exception {
+    public void shouldPassIfChunkMatches() {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildSimpleMethod().toInvocation());
         NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1, context);
     }
 
     @Test
-    public void shouldReportTooFewInvocations() throws Exception {
+    public void shouldReportTooFewInvocations() {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
 
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(first, second);
 
-        exception.expect(VerificationInOrderFailure.class);
-        exception.expectMessage("mock.simpleMethod()");
-        exception.expectMessage("Wanted 4 times");
-        exception.expectMessage("But was 2 times");
-
-        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 4, context);
+        assertThatThrownBy(
+                        () -> {
+                            NumberOfInvocationsChecker.checkNumberOfInvocations(
+                                    invocations, wanted, 4, context);
+                        })
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContainingAll(
+                        "mock.simpleMethod()", "Wanted 4 times", "But was 2 times");
     }
 
     @Test
-    public void shouldMarkAsVerifiedInOrder() throws Exception {
+    public void shouldMarkAsVerifiedInOrder() {
         Invocation invocation = buildSimpleMethod().toInvocation();
 
         invocations = asList(invocation);
@@ -87,50 +83,56 @@ public class NumberOfInvocationsInOrderCheckerTest {
     }
 
     @Test
-    public void shouldReportTooFewActual() throws Exception {
+    public void shouldReportTooFewActual() {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations =
                 asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
-        exception.expect(VerificationInOrderFailure.class);
-        exception.expectMessage("mock.simpleMethod()");
-        exception.expectMessage("Wanted 100 times");
-        exception.expectMessage("But was 2 times");
-
-        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
+        assertThatThrownBy(
+                        () -> {
+                            NumberOfInvocationsChecker.checkNumberOfInvocations(
+                                    invocations, wanted, 100, context);
+                        })
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContainingAll(
+                        "mock.simpleMethod()", "Wanted 100 times", "But was 2 times");
     }
 
     @Test
-    public void shouldReportWithAllInvocationsStackTrace() throws Exception {
+    public void shouldReportWithAllInvocationsStackTrace() {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations =
                 asList(buildSimpleMethod().toInvocation(), buildSimpleMethod().toInvocation());
 
-        exception.expect(VerificationInOrderFailure.class);
-        exception.expectMessage("mock.simpleMethod()");
-        exception.expectMessage("Wanted 100 times");
-        exception.expectMessage("But was 2 times");
-        exception.expectMessage(containsTimes("-> at", 3));
-
-        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
+        assertThatThrownBy(
+                        () -> {
+                            NumberOfInvocationsChecker.checkNumberOfInvocations(
+                                    invocations, wanted, 100, context);
+                        })
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContainingAll(
+                        "mock.simpleMethod()", "Wanted 100 times", "But was 2 times")
+                .has(messageContaining("-> at", 3));
     }
 
     @Test
-    public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() throws Exception {
+    public void shouldNotReportWithLastInvocationStackTraceIfNoInvocationsFound() {
         invocations = emptyList();
         wanted = buildSimpleMethod().toInvocationMatcher();
 
-        exception.expect(VerificationInOrderFailure.class);
-        exception.expectMessage("mock.simpleMethod()");
-        exception.expectMessage("Wanted 100 times");
-        exception.expectMessage("But was 0 times");
-        exception.expectMessage(containsTimes("-> at", 1));
-
-        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 100, context);
+        assertThatThrownBy(
+                        () -> {
+                            NumberOfInvocationsChecker.checkNumberOfInvocations(
+                                    invocations, wanted, 100, context);
+                        })
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContainingAll(
+                        "mock.simpleMethod()", "Wanted 100 times", "But was 0 times")
+                .has(messageContaining("-> at", 1));
     }
 
     @Test
-    public void shouldReportWithFirstUndesiredInvocationStackTrace() throws Exception {
+    public void shouldReportWithFirstUndesiredInvocationStackTrace() {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
         Invocation third = buildSimpleMethod().toInvocation();
@@ -138,43 +140,54 @@ public class NumberOfInvocationsInOrderCheckerTest {
         invocations = asList(first, second, third);
         wanted = buildSimpleMethod().toInvocationMatcher();
 
-        exception.expect(VerificationInOrderFailure.class);
-        exception.expectMessage("" + third.getLocation());
-        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 2, context);
+        assertThatThrownBy(
+                        () -> {
+                            NumberOfInvocationsChecker.checkNumberOfInvocations(
+                                    invocations, wanted, 2, context);
+                        })
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContaining("" + third.getLocation());
     }
 
     @Test
-    public void shouldReportTooManyActual() throws Exception {
+    public void shouldReportTooManyActual() {
         Invocation first = buildSimpleMethod().toInvocation();
         Invocation second = buildSimpleMethod().toInvocation();
 
         invocations = asList(first, second);
         wanted = buildSimpleMethod().toInvocationMatcher();
 
-        exception.expectMessage("Wanted 1 time");
-        exception.expectMessage("But was 2 times");
-
-        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 1, context);
+        assertThatThrownBy(
+                        () -> {
+                            NumberOfInvocationsChecker.checkNumberOfInvocations(
+                                    invocations, wanted, 1, context);
+                        })
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContainingAll("Wanted 1 time", "But was 2 times");
     }
 
     @Test
-    public void shouldReportNeverWantedButInvoked() throws Exception {
+    public void shouldReportNeverWantedButInvoked() {
         Invocation first = buildSimpleMethod().toInvocation();
 
         invocations = asList(first);
         wanted = buildSimpleMethod().toInvocationMatcher();
 
-        exception.expect(VerificationInOrderFailure.class);
-        exception.expectMessage("mock.simpleMethod()");
-        exception.expectMessage("Wanted 0 times");
-        exception.expectMessage("But was 1 time:");
-        exception.expectMessage("" + first.getLocation());
-
-        NumberOfInvocationsChecker.checkNumberOfInvocations(invocations, wanted, 0, context);
+        assertThatThrownBy(
+                        () -> {
+                            NumberOfInvocationsChecker.checkNumberOfInvocations(
+                                    invocations, wanted, 0, context);
+                        })
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContainingAll(
+                        "mock.simpleMethod()",
+                        "Wanted 0 times",
+                        "But was 1 time:",
+                        "" + first.getLocation());
     }
 
     @Test
-    public void shouldMarkInvocationsAsVerified() throws Exception {
+    public void shouldMarkInvocationsAsVerified() {
         Invocation invocation = buildSimpleMethod().toInvocation();
         assertThat(invocation.isVerified()).isFalse();
 
@@ -184,38 +197,35 @@ public class NumberOfInvocationsInOrderCheckerTest {
         assertThat(invocation.isVerified()).isTrue();
     }
 
-    private static BaseMatcher<String> containsTimes(String value, int amount) {
-        return new StringContainsNumberMatcher(value, amount);
+    private static Condition<? super Throwable> messageContaining(
+            String value, int amountOfOccurrences) {
+        return new ThrowableMessageContainsOccurrencesCondition(value, amountOfOccurrences);
     }
 
-    private static class StringContainsNumberMatcher extends TypeSafeMatcher<String> {
+    private static class ThrowableMessageContainsOccurrencesCondition extends Condition<Throwable> {
 
-        private final String expected;
+        private final String value;
+        private final int expectedOccurrences;
 
-        private final int amount;
+        public ThrowableMessageContainsOccurrencesCondition(String value, int expectedOccurrences) {
+            this.value = value;
+            this.expectedOccurrences = expectedOccurrences;
 
-        StringContainsNumberMatcher(String expected, int amount) {
-            this.expected = expected;
-            this.amount = amount;
+            as("exactly %s occurrences of \"%s\"", expectedOccurrences, value);
         }
 
         @Override
-        public boolean matchesSafely(String text) {
+        public boolean matches(Throwable ex) {
             int lastIndex = 0;
             int count = 0;
             while (lastIndex != -1) {
-                lastIndex = text.indexOf(expected, lastIndex);
+                lastIndex = ex.getMessage().indexOf(value, lastIndex);
                 if (lastIndex != -1) {
                     count++;
-                    lastIndex += expected.length();
+                    lastIndex += value.length();
                 }
             }
-            return count == amount;
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("containing '" + expected + "' exactly " + amount + " times");
+            return count == expectedOccurrences;
         }
     }
 
