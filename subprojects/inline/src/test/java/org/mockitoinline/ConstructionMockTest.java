@@ -4,6 +4,14 @@
  */
 package org.mockitoinline;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -11,9 +19,6 @@ import org.junit.Test;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
-
-import static junit.framework.TestCase.*;
-import static org.mockito.Mockito.*;
 
 public final class ConstructionMockTest {
 
@@ -113,19 +118,27 @@ public final class ConstructionMockTest {
         }
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void testConstructionMockMustBeExclusiveInScopeWithinThread() {
-        try (
-            MockedConstruction<Dummy> dummy = Mockito.mockConstruction(Dummy.class);
-            MockedConstruction<Dummy> duplicate = Mockito.mockConstruction(Dummy.class)
-        ) {
-            fail("Not supposed to allow duplicates");
-        }
+        assertThatThrownBy(
+                () -> {
+                    try (
+                            MockedConstruction<Dummy> dummy = Mockito.mockConstruction(Dummy.class);
+                            MockedConstruction<Dummy> duplicate = Mockito.mockConstruction(Dummy.class)) {
+                    }
+                })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("static mocking is already registered in the current thread");
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void testConstructionMockMustNotTargetAbstractClass() {
-        Mockito.mockConstruction(Runnable.class).close();
+        assertThatThrownBy(
+                () -> {
+                    Mockito.mockConstruction(Runnable.class).close();
+                })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("It is not possible to construct primitive types or abstract types");
     }
 
     static class Dummy {
