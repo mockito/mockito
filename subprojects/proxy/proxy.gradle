@@ -5,6 +5,7 @@ apply from: "$rootDir/gradle/java-library.gradle"
 dependencies {
     implementation project.rootProject
     testImplementation libraries.junit4
+    testImplementation libraries.assertj
 }
 
 tasks.javadoc.enabled = false
