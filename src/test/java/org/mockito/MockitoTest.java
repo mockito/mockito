@@ -127,10 +127,10 @@ public class MockitoTest {
 
     @Test
     public void shouldStartingMockSettingsContainDefaultBehavior() {
-        // when
+        // given
         MockSettingsImpl<?> settings = (MockSettingsImpl<?>) Mockito.withSettings();
 
-        // then
-        assertThat(Mockito.RETURNS_DEFAULTS).isEqualTo(settings.getDefaultAnswer());
+        // when / then
+        assertThat(settings.getDefaultAnswer()).isEqualTo(Mockito.RETURNS_DEFAULTS);
     }
 }
