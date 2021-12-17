@@ -5,6 +5,7 @@
 package org.mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
@@ -28,48 +29,100 @@ public class MockitoTest {
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
-    @Test(expected = NotAMockException.class)
+    @Test
     public void shouldValidateMockWhenVerifying() {
-        Mockito.verify("notMock");
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.verify("notMock");
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContaining(
+                        "Argument passed to verify() is of type String and is not a mock!")
+                .hasMessageContaining("Make sure you place the parenthesis correctly!");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
-    @Test(expected = NotAMockException.class)
+    @Test
     public void shouldValidateMockWhenVerifyingWithExpectedNumberOfInvocations() {
-        Mockito.verify("notMock", times(19));
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.verify("notMock", times(19));
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContaining(
+                        "Argument passed to verify() is of type String and is not a mock!")
+                .hasMessageContaining("Make sure you place the parenthesis correctly!");
     }
 
-    @Test(expected = NotAMockException.class)
+    @Test
     public void shouldValidateMockWhenVerifyingNoMoreInteractions() {
-        Mockito.verifyNoMoreInteractions("notMock");
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.verifyNoMoreInteractions("notMock");
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContaining("Argument(s) passed is not a mock!");
     }
 
-    @Test(expected = NotAMockException.class)
+    @Test
     public void shouldValidateMockWhenVerifyingNoInteractions() {
-        Mockito.verifyNoInteractions("notMock");
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.verifyNoInteractions("notMock");
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContaining("Argument(s) passed is not a mock!");
     }
 
-    @Test(expected = NullInsteadOfMockException.class)
+    @Test
     public void shouldValidateNullMockWhenVerifyingNoInteractions() {
-        Mockito.verifyNoInteractions(new Object[] {null});
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.verifyNoInteractions(new Object[] {null});
+                        })
+                .isInstanceOf(NullInsteadOfMockException.class)
+                .hasMessageContaining("Argument(s) passed is null!");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
-    @Test(expected = NotAMockException.class)
+    @Test
     public void shouldValidateMockWhenCreatingInOrderObject() {
-        Mockito.inOrder("notMock");
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.inOrder("notMock");
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContaining("Argument(s) passed is not a mock!");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
-    @Test(expected = MockitoException.class)
-    public void shouldGiveExplantionOnStaticMockingWithoutInlineMockMaker() {
-        Mockito.mockStatic(Object.class);
+    @Test
+    public void shouldGiveExplanationOnStaticMockingWithoutInlineMockMaker() {
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.mockStatic(Object.class);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "The used MockMaker SubclassByteBuddyMockMaker does not support the creation of static mocks",
+                        "Mockito's inline mock maker supports static mocks based on the Instrumentation API.",
+                        "You can simply enable this mock mode, by placing the 'mockito-inline' artifact where you are currently using 'mockito-core'.",
+                        "Note that Mockito's inline mock maker is not supported on Android.");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
-    @Test(expected = MockitoException.class)
-    public void shouldGiveExplantionOnConstructionMockingWithoutInlineMockMaker() {
-        Mockito.mockConstruction(Object.class);
+    @Test
+    public void shouldGiveExplanationOnConstructionMockingWithoutInlineMockMaker() {
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.mockConstruction(Object.class);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "The used MockMaker SubclassByteBuddyMockMaker does not support the creation of construction mocks",
+                        "Mockito's inline mock maker supports construction mocks based on the Instrumentation API.",
+                        "You can simply enable this mock mode, by placing the 'mockito-inline' artifact where you are currently using 'mockito-core'.",
+                        "Note that Mockito's inline mock maker is not supported on Android.");
     }
 
     @Test
