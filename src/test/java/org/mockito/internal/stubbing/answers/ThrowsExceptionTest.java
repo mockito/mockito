@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing.answers;
 
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
@@ -20,7 +21,7 @@ import org.mockito.invocation.Invocation;
 
 public class ThrowsExceptionTest {
     @Test
-    public void should_raise_wanted_throwable() throws Throwable {
+    public void should_raise_wanted_throwable() {
         try {
             new ThrowsException(new IllegalStateException("my dear throwable"))
                     .answer(createMethodInvocation());
@@ -33,7 +34,7 @@ public class ThrowsExceptionTest {
     }
 
     @Test
-    public void should_throw_mock_exception_without_stacktrace() throws Exception {
+    public void should_throw_mock_exception_without_stacktrace() {
         try {
             new ThrowsException(mock(Exception.class)).answer(createMethodInvocation());
             Assertions.fail("should have raised wanted exception");
@@ -43,7 +44,7 @@ public class ThrowsExceptionTest {
     }
 
     @Test
-    public void should_fill_in_exception_stacktrace() throws Exception {
+    public void should_fill_in_exception_stacktrace() {
         // given
         Exception throwableToRaise = new Exception();
         throwableToRaise.fillInStackTrace();
@@ -66,7 +67,7 @@ public class ThrowsExceptionTest {
     }
 
     @Test
-    public void should_invalidate_null_throwable() throws Throwable {
+    public void should_invalidate_null_throwable() {
         try {
             Invocation invocation = createMethodInvocation();
             new ThrowsException(null).validateFor(invocation);
@@ -86,17 +87,25 @@ public class ThrowsExceptionTest {
     }
 
     @Test
-    public void should_pass_proper_checked_exception() throws Throwable {
+    public void should_pass_proper_checked_exception() {
         new ThrowsException(new CharacterCodingException()).validateFor(createMethodInvocation());
     }
 
-    @Test(expected = MockitoException.class)
-    public void should_fail_invalid_checked_exception() throws Throwable {
-        new ThrowsException(new IOException()).validateFor(createMethodInvocation());
+    @Test
+    public void should_fail_invalid_checked_exception() {
+        assertThatThrownBy(
+                        () -> {
+                            new ThrowsException(new IOException())
+                                    .validateFor(createMethodInvocation());
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Checked exception is invalid for this method!",
+                        "Invalid: java.io.IOException");
     }
 
     @Test
-    public void should_pass_RuntimeExceptions() throws Throwable {
+    public void should_pass_RuntimeExceptions() {
         new ThrowsException(new Error()).validateFor(createMethodInvocation());
         new ThrowsException(new RuntimeException()).validateFor(createMethodInvocation());
     }
