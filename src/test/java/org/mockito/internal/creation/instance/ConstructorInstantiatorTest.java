@@ -5,6 +5,7 @@
 package org.mockito.internal.creation.instance;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -77,13 +78,16 @@ public class ConstructorInstantiatorTest extends TestBase {
                 SomeClass3.class);
     }
 
-    @Test(expected = org.mockito.creation.instance.InstantiationException.class)
+    @Test
     public void fails_when_null_is_passed_for_a_primitive() {
-        assertEquals(
-                new ConstructorInstantiator(false, new Object[] {null})
-                        .newInstance(SomeClass3.class)
-                        .getClass(),
-                SomeClass3.class);
+        assertThatThrownBy(
+                        () -> {
+                            new ConstructorInstantiator(false, new Object[] {null})
+                                    .newInstance(SomeClass3.class)
+                                    .getClass();
+                        })
+                .isInstanceOf(org.mockito.creation.instance.InstantiationException.class)
+                .hasMessageContaining("Unable to create instance of 'SomeClass3'.");
     }
 
     @Test
