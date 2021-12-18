@@ -76,7 +76,7 @@ public class MockInjectionTest {
                 .tryConstructorInjection()
                 .apply();
 
-        assertThat(withConstructor.initializedWithConstructor).isEqualTo(true);
+        assertThat(withConstructor.initializedWithConstructor).isTrue();
     }
 
     @Test
