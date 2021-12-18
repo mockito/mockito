@@ -6,7 +6,6 @@ package org.mockito.internal.creation.instance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
@@ -32,50 +31,49 @@ public class ConstructorInstantiatorTest extends TestBase {
 
     @Test
     public void creates_instances() {
-        assertEquals(
-                new ConstructorInstantiator(false, new Object[0])
-                        .newInstance(SomeClass.class)
-                        .getClass(),
-                SomeClass.class);
+        assertThat(
+                        new ConstructorInstantiator(false, new Object[0])
+                                .newInstance(SomeClass.class)
+                                .getClass())
+                .isEqualTo(SomeClass.class);
     }
 
     @Test
     public void creates_instances_of_inner_classes() {
-        assertEquals(
-                new ConstructorInstantiator(true, this)
-                        .newInstance(SomeInnerClass.class)
-                        .getClass(),
-                SomeInnerClass.class);
-        assertEquals(
-                new ConstructorInstantiator(true, new ChildOfThis())
-                        .newInstance(SomeInnerClass.class)
-                        .getClass(),
-                SomeInnerClass.class);
+        assertThat(
+                        new ConstructorInstantiator(true, this)
+                                .newInstance(SomeInnerClass.class)
+                                .getClass())
+                .isEqualTo(SomeInnerClass.class);
+        assertThat(
+                        new ConstructorInstantiator(true, new ChildOfThis())
+                                .newInstance(SomeInnerClass.class)
+                                .getClass())
+                .isEqualTo(SomeInnerClass.class);
     }
 
     @Test
     public void creates_instances_with_arguments() {
-        assertEquals(
-                new ConstructorInstantiator(false, "someString")
-                        .newInstance(SomeClass2.class)
-                        .getClass(),
-                SomeClass2.class);
+        assertThat(
+                        new ConstructorInstantiator(false, "someString")
+                                .newInstance(SomeClass2.class)
+                                .getClass())
+                .isEqualTo(SomeClass2.class);
     }
 
     @Test
     public void creates_instances_with_null_arguments() {
-        assertEquals(
-                new ConstructorInstantiator(false, new Object[] {null})
-                        .newInstance(SomeClass2.class)
-                        .getClass(),
-                SomeClass2.class);
+        assertThat(
+                        new ConstructorInstantiator(false, new Object[] {null})
+                                .newInstance(SomeClass2.class)
+                                .getClass())
+                .isEqualTo(SomeClass2.class);
     }
 
     @Test
     public void creates_instances_with_primitive_arguments() {
-        assertEquals(
-                new ConstructorInstantiator(false, 123).newInstance(SomeClass3.class).getClass(),
-                SomeClass3.class);
+        assertThat(new ConstructorInstantiator(false, 123).newInstance(SomeClass3.class).getClass())
+                .isEqualTo(SomeClass3.class);
     }
 
     @Test
