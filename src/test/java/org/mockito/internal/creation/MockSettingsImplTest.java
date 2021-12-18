@@ -6,15 +6,11 @@ package org.mockito.internal.creation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
@@ -96,9 +92,9 @@ public class MockSettingsImplTest extends TestBase {
         mockSettingsImpl.extraInterfaces(List.class, Set.class);
 
         // then
-        assertEquals(2, mockSettingsImpl.getExtraInterfaces().size());
-        assertTrue(mockSettingsImpl.getExtraInterfaces().contains(List.class));
-        assertTrue(mockSettingsImpl.getExtraInterfaces().contains(Set.class));
+        assertThat(mockSettingsImpl.getExtraInterfaces().size()).isEqualTo(2);
+        assertThat(mockSettingsImpl.getExtraInterfaces()).contains(List.class);
+        assertThat(mockSettingsImpl.getExtraInterfaces()).contains(Set.class);
     }
 
     @Test
@@ -107,25 +103,25 @@ public class MockSettingsImplTest extends TestBase {
         mockSettingsImpl.serializable();
 
         // then
-        assertTrue(mockSettingsImpl.isSerializable());
+        assertThat(mockSettingsImpl.isSerializable()).isTrue();
     }
 
     @Test
     public void shouldKnowIfIsSerializable() {
         // given
-        assertFalse(mockSettingsImpl.isSerializable());
+        assertThat(mockSettingsImpl.isSerializable()).isFalse();
 
         // when
         mockSettingsImpl.serializable();
 
         // then
-        assertTrue(mockSettingsImpl.isSerializable());
+        assertThat(mockSettingsImpl.isSerializable()).isTrue();
     }
 
     @Test
     public void shouldAddVerboseLoggingListener() {
         // given
-        assertFalse(mockSettingsImpl.hasInvocationListeners());
+        assertThat(mockSettingsImpl.hasInvocationListeners()).isFalse();
 
         // when
         mockSettingsImpl.verboseLogging();
@@ -139,34 +135,33 @@ public class MockSettingsImplTest extends TestBase {
     @Test
     public void shouldAddVerboseLoggingListenerOnlyOnce() {
         // given
-        assertFalse(mockSettingsImpl.hasInvocationListeners());
+        assertThat(mockSettingsImpl.hasInvocationListeners()).isFalse();
 
         // when
         mockSettingsImpl.verboseLogging().verboseLogging();
 
         // then
-        Assertions.assertThat(mockSettingsImpl.getInvocationListeners()).hasSize(1);
+        assertThat(mockSettingsImpl.getInvocationListeners()).hasSize(1);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void shouldAddInvocationListener() {
         // given
-        assertFalse(mockSettingsImpl.hasInvocationListeners());
+        assertThat(mockSettingsImpl.hasInvocationListeners()).isFalse();
 
         // when
         mockSettingsImpl.invocationListeners(invocationListener);
 
         // then
-        Assertions.assertThat(mockSettingsImpl.getInvocationListeners())
-                .contains(invocationListener);
+        assertThat(mockSettingsImpl.getInvocationListeners()).contains(invocationListener);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void canAddDuplicateInvocationListeners_ItsNotOurBusinessThere() {
         // given
-        assertFalse(mockSettingsImpl.hasInvocationListeners());
+        assertThat(mockSettingsImpl.hasInvocationListeners()).isFalse();
 
         // when
         mockSettingsImpl
@@ -174,7 +169,7 @@ public class MockSettingsImplTest extends TestBase {
                 .invocationListeners(invocationListener);
 
         // then
-        Assertions.assertThat(mockSettingsImpl.getInvocationListeners())
+        assertThat(mockSettingsImpl.getInvocationListeners())
                 .containsSequence(invocationListener, invocationListener, invocationListener);
     }
 
@@ -235,8 +230,8 @@ public class MockSettingsImplTest extends TestBase {
 
     @Test
     public void addListeners_has_empty_listeners_by_default() {
-        assertTrue(mockSettingsImpl.getInvocationListeners().isEmpty());
-        assertTrue(mockSettingsImpl.getStubbingLookupListeners().isEmpty());
+        assertThat(mockSettingsImpl.getInvocationListeners()).isEmpty();
+        assertThat(mockSettingsImpl.getStubbingLookupListeners()).isEmpty();
     }
 
     @Test
