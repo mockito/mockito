@@ -30,7 +30,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.collections.HashCodeAndEqualsSafeSet;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockitousage.IMethods;
 import org.mockitousage.examples.use.ArticleCalculator;
