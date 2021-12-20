@@ -4,12 +4,23 @@
  */
 package org.mockitousage.customization;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.inOrder;
+import static org.mockito.BDDMockito.mock;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.times;
+import static org.mockito.BDDMockito.willAnswer;
+import static org.mockito.BDDMockito.willCallRealMethod;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.BDDMockito.willThrow;
 
 import java.util.Set;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
@@ -17,7 +28,6 @@ import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockitousage.IMethods;
 import org.mockitousage.MethodsImpl;
@@ -28,30 +38,30 @@ public class BDDMockitoTest extends TestBase {
     @Mock IMethods mock;
 
     @Test
-    public void should_stub() throws Exception {
+    public void should_stub() {
         given(mock.simpleMethod("foo")).willReturn("bar");
 
-        Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("bar");
-        Assertions.assertThat(mock.simpleMethod("whatever")).isEqualTo(null);
+        assertThat(mock.simpleMethod("foo")).isEqualTo("bar");
+        assertThat(mock.simpleMethod("whatever")).isNull();
     }
 
     @Test
-    public void should_stub_with_throwable() throws Exception {
+    public void should_stub_with_throwable() {
         given(mock.simpleMethod("foo")).willThrow(new SomethingWasWrong());
 
         try {
-            Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
+            assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
             fail();
         } catch (SomethingWasWrong expected) {
         }
     }
 
     @Test
-    public void should_stub_with_throwable_class() throws Exception {
+    public void should_stub_with_throwable_class() {
         given(mock.simpleMethod("foo")).willThrow(SomethingWasWrong.class);
 
         try {
-            Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
+            assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
             fail();
         } catch (SomethingWasWrong expected) {
         }
@@ -59,73 +69,71 @@ public class BDDMockitoTest extends TestBase {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_stub_with_throwable_classes() throws Exception {
+    public void should_stub_with_throwable_classes() {
         // unavoidable 'unchecked generic array creation' warning (from JDK7 onward)
         given(mock.simpleMethod("foo"))
                 .willThrow(SomethingWasWrong.class, AnotherThingWasWrong.class);
 
         try {
-            Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
+            assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
             fail();
         } catch (SomethingWasWrong expected) {
         }
     }
 
     @Test
-    public void should_stub_with_answer() throws Exception {
+    public void should_stub_with_answer() {
         given(mock.simpleMethod(anyString()))
                 .willAnswer(
-                        new Answer<String>() {
-                            public String answer(InvocationOnMock invocation) throws Throwable {
-                                return invocation.getArgument(0);
-                            }
-                        });
+                        (Answer<String>)
+                                invocation -> {
+                                    return invocation.getArgument(0);
+                                });
 
-        Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
+        assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
     }
 
     @Test
-    public void should_stub_with_will_answer_alias() throws Exception {
+    public void should_stub_with_will_answer_alias() {
         given(mock.simpleMethod(anyString()))
                 .will(
-                        new Answer<String>() {
-                            public String answer(InvocationOnMock invocation) throws Throwable {
-                                return invocation.getArgument(0);
-                            }
-                        });
+                        (Answer<String>)
+                                invocation -> {
+                                    return invocation.getArgument(0);
+                                });
 
-        Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
+        assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
     }
 
     @Test
-    public void should_stub_consecutively() throws Exception {
+    public void should_stub_consecutively() {
         given(mock.simpleMethod(anyString())).willReturn("foo").willReturn("bar");
 
-        Assertions.assertThat(mock.simpleMethod("whatever")).isEqualTo("foo");
-        Assertions.assertThat(mock.simpleMethod("whatever")).isEqualTo("bar");
+        assertThat(mock.simpleMethod("whatever")).isEqualTo("foo");
+        assertThat(mock.simpleMethod("whatever")).isEqualTo("bar");
     }
 
     @Test
-    public void should_return_consecutively() throws Exception {
+    public void should_return_consecutively() {
         given(mock.objectReturningMethodNoArgs()).willReturn("foo", "bar", 12L, new byte[0]);
 
-        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo("foo");
-        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo("bar");
-        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo(12L);
-        Assertions.assertThat(mock.objectReturningMethodNoArgs()).isEqualTo(new byte[0]);
+        assertThat(mock.objectReturningMethodNoArgs()).isEqualTo("foo");
+        assertThat(mock.objectReturningMethodNoArgs()).isEqualTo("bar");
+        assertThat(mock.objectReturningMethodNoArgs()).isEqualTo(12L);
+        assertThat(mock.objectReturningMethodNoArgs()).isEqualTo(new byte[0]);
     }
 
     @Test
-    public void should_stub_consecutively_with_call_real_method() throws Exception {
+    public void should_stub_consecutively_with_call_real_method() {
         MethodsImpl mock = mock(MethodsImpl.class);
         willReturn("foo").willCallRealMethod().given(mock).simpleMethod();
 
-        Assertions.assertThat(mock.simpleMethod()).isEqualTo("foo");
-        Assertions.assertThat(mock.simpleMethod()).isEqualTo(null);
+        assertThat(mock.simpleMethod()).isEqualTo("foo");
+        assertThat(mock.simpleMethod()).isNull();
     }
 
     @Test
-    public void should_stub_void() throws Exception {
+    public void should_stub_void() {
         willThrow(new SomethingWasWrong()).given(mock).voidMethod();
 
         try {
@@ -136,7 +144,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_void_with_exception_class() throws Exception {
+    public void should_stub_void_with_exception_class() {
         willThrow(SomethingWasWrong.class).given(mock).voidMethod();
 
         try {
@@ -148,7 +156,7 @@ public class BDDMockitoTest extends TestBase {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void should_stub_void_with_exception_classes() throws Exception {
+    public void should_stub_void_with_exception_classes() {
         willThrow(SomethingWasWrong.class, AnotherThingWasWrong.class).given(mock).voidMethod();
 
         try {
@@ -159,7 +167,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_void_consecutively() throws Exception {
+    public void should_stub_void_consecutively() {
         willDoNothing().willThrow(new SomethingWasWrong()).given(mock).voidMethod();
 
         mock.voidMethod();
@@ -171,7 +179,7 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_void_consecutively_with_exception_class() throws Exception {
+    public void should_stub_void_consecutively_with_exception_class() {
         willDoNothing().willThrow(SomethingWasWrong.class).given(mock).voidMethod();
 
         mock.voidMethod();
@@ -183,75 +191,110 @@ public class BDDMockitoTest extends TestBase {
     }
 
     @Test
-    public void should_stub_using_do_return_style() throws Exception {
+    public void should_stub_using_do_return_style() {
         willReturn("foo").given(mock).simpleMethod("bar");
 
-        Assertions.assertThat(mock.simpleMethod("boooo")).isEqualTo(null);
-        Assertions.assertThat(mock.simpleMethod("bar")).isEqualTo("foo");
+        assertThat(mock.simpleMethod("boooo")).isEqualTo(null);
+        assertThat(mock.simpleMethod("bar")).isEqualTo("foo");
     }
 
     @Test
-    public void should_stub_using_do_answer_style() throws Exception {
+    public void should_stub_using_do_answer_style() {
         willAnswer(
-                        new Answer<String>() {
-                            public String answer(InvocationOnMock invocation) throws Throwable {
-                                return invocation.getArgument(0);
-                            }
-                        })
+                        (Answer<String>)
+                                invocation -> {
+                                    return invocation.getArgument(0);
+                                })
                 .given(mock)
                 .simpleMethod(anyString());
 
-        Assertions.assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
+        assertThat(mock.simpleMethod("foo")).isEqualTo("foo");
     }
 
     @Test
-    public void should_stub_by_delegating_to_real_method() throws Exception {
+    public void should_stub_by_delegating_to_real_method() {
         // given
         Dog dog = mock(Dog.class);
         // when
         willCallRealMethod().given(dog).bark();
         // then
-        Assertions.assertThat(dog.bark()).isEqualTo("woof");
+        assertThat(dog.bark()).isEqualTo("woof");
     }
 
     @Test
-    public void should_stub_by_delegating_to_real_method_using_typical_stubbing_syntax()
-            throws Exception {
+    public void should_stub_by_delegating_to_real_method_using_typical_stubbing_syntax() {
         // given
         Dog dog = mock(Dog.class);
         // when
         given(dog.bark()).willCallRealMethod();
         // then
-        Assertions.assertThat(dog.bark()).isEqualTo("woof");
+        assertThat(dog.bark()).isEqualTo("woof");
     }
 
     @Test
-    public void should_all_stubbed_mock_reference_access() throws Exception {
+    public void should_all_stubbed_mock_reference_access() {
         Set<?> expectedMock = mock(Set.class);
 
         Set<?> returnedMock = given(expectedMock.isEmpty()).willReturn(false).getMock();
 
-        Assertions.assertThat(returnedMock).isEqualTo(expectedMock);
+        assertThat(returnedMock).isEqualTo(expectedMock);
     }
 
-    @Test(expected = NotAMockException.class)
+    @Test
     public void should_validate_mock_when_verifying() {
-        then("notMock").should();
+        assertThatThrownBy(
+                        () -> {
+                            then("notMock").should();
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContainingAll(
+                        "Argument passed to verify() is of type String and is not a mock!",
+                        "Make sure you place the parenthesis correctly!",
+                        "See the examples of correct verifications:",
+                        "    verify(mock).someMethod();",
+                        "    verify(mock, times(10)).someMethod();",
+                        "    verify(mock, atLeastOnce()).someMethod();");
     }
 
-    @Test(expected = NotAMockException.class)
+    @Test
     public void should_validate_mock_when_verifying_with_expected_number_of_invocations() {
-        then("notMock").should(times(19));
+        assertThatThrownBy(
+                        () -> {
+                            then("notMock").should(times(19));
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContainingAll(
+                        "Argument passed to verify() is of type String and is not a mock!",
+                        "Make sure you place the parenthesis correctly!",
+                        "See the examples of correct verifications:",
+                        "    verify(mock).someMethod();",
+                        "    verify(mock, times(10)).someMethod();",
+                        "    verify(mock, atLeastOnce()).someMethod();");
     }
 
-    @Test(expected = NotAMockException.class)
+    @Test
     public void should_validate_mock_when_verifying_no_more_interactions() {
-        then("notMock").should();
+        assertThatThrownBy(
+                        () -> {
+                            then("notMock").shouldHaveNoMoreInteractions();
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContainingAll(
+                        "Argument(s) passed is not a mock!",
+                        "Examples of correct verifications:",
+                        "    verifyNoMoreInteractions(mockOne, mockTwo);",
+                        "    verifyNoInteractions(mockOne, mockTwo);");
     }
 
-    @Test(expected = WantedButNotInvoked.class)
+    @Test
     public void should_fail_for_expected_behavior_that_did_not_happen() {
-        then(mock).should().booleanObjectReturningMethod();
+        assertThatThrownBy(
+                        () -> {
+                            then(mock).should().booleanObjectReturningMethod();
+                        })
+                .isInstanceOf(WantedButNotInvoked.class)
+                .hasMessageContainingAll(
+                        "Wanted but not invoked:", "mock.booleanObjectReturningMethod();");
     }
 
     @Test
@@ -305,9 +348,17 @@ public class BDDMockitoTest extends TestBase {
         }
     }
 
-    @Test(expected = WantedButNotInvoked.class)
+    @Test
     public void should_fail_when_checking_order_of_interactions_that_did_not_happen() {
-        then(mock).should(inOrder(mock)).booleanObjectReturningMethod();
+        assertThatThrownBy(
+                        () -> {
+                            then(mock).should(inOrder(mock)).booleanObjectReturningMethod();
+                        })
+                .isInstanceOf(WantedButNotInvoked.class)
+                .hasMessageContainingAll(
+                        "Wanted but not invoked:",
+                        "mock.booleanObjectReturningMethod();",
+                        "Actually, there were zero interactions with this mock.");
     }
 
     @Test
