@@ -169,8 +169,7 @@ public class SpyAnnotationTest extends TestBase {
                         () -> {
                             spiedList.get(10); // see shouldInitSpy
                         })
-                .isInstanceOf(IndexOutOfBoundsException.class)
-                .hasMessage("Index: 10, Size: 0");
+                .isInstanceOf(IndexOutOfBoundsException.class);
     }
 
     @Test
