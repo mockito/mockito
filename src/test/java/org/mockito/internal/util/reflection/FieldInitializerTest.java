@@ -4,9 +4,15 @@
  */
 package org.mockito.internal.util.reflection;
 
-import static org.junit.Assert.*;
-import static org.mockito.BDDMockito.given;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Field;
@@ -75,11 +81,18 @@ public class FieldInitializerTest {
         assertFalse(report.fieldWasInitializedUsingContructorArgs());
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void should_fail_to_instantiate_field_if_no_default_constructor() throws Exception {
         FieldInitializer fieldInitializer =
                 new FieldInitializer(this, field("noDefaultConstructor"));
-        fieldInitializer.initialize();
+
+        assertThatThrownBy(
+                        () -> {
+                            fieldInitializer.initialize();
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessage(
+                        "the type 'StaticClassWithoutDefaultConstructor' has no default constructor");
     }
 
     @Test
@@ -97,9 +110,14 @@ public class FieldInitializerTest {
         }
     }
 
-    @Test(expected = MockitoException.class)
-    public void should_fail_for_abstract_field() throws Exception {
-        new FieldInitializer(this, field("abstractType"));
+    @Test
+    public void should_fail_for_abstract_field() {
+        assertThatThrownBy(
+                        () -> {
+                            new FieldInitializer(this, field("abstractType"));
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessage("the type 'AbstractStaticClass' is an abstract class.");
     }
 
     @Test
@@ -107,9 +125,14 @@ public class FieldInitializerTest {
         new FieldInitializer(this, field("instantiatedAbstractType"));
     }
 
-    @Test(expected = MockitoException.class)
-    public void should_fail_for_interface_field() throws Exception {
-        new FieldInitializer(this, field("interfaceType"));
+    @Test
+    public void should_fail_for_interface_field() {
+        assertThatThrownBy(
+                        () -> {
+                            new FieldInitializer(this, field("interfaceType"));
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessage("the type 'Interface' is an interface.");
     }
 
     @Test
@@ -117,9 +140,9 @@ public class FieldInitializerTest {
         new FieldInitializer(this, field("instantiatedInterfaceType"));
     }
 
-    @Test(expected = MockitoException.class)
-    public void should_fail_for_local_type_field() throws Exception {
-        // when
+    @Test
+    public void should_fail_for_local_type_field() {
+        // given
         class LocalType {}
 
         class TheTestWithLocalType {
@@ -128,9 +151,15 @@ public class FieldInitializerTest {
 
         TheTestWithLocalType testWithLocalType = new TheTestWithLocalType();
 
-        // when
-        new FieldInitializer(
-                testWithLocalType, testWithLocalType.getClass().getDeclaredField("field"));
+        // when / then
+        assertThatThrownBy(
+                        () -> {
+                            new FieldInitializer(
+                                    testWithLocalType,
+                                    testWithLocalType.getClass().getDeclaredField("field"));
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessage("the type 'LocalType' is a local class.");
     }
 
     @Test
@@ -149,9 +178,14 @@ public class FieldInitializerTest {
                 testWithLocalType, testWithLocalType.getClass().getDeclaredField("field"));
     }
 
-    @Test(expected = MockitoException.class)
-    public void should_fail_for_inner_class_field() throws Exception {
-        new FieldInitializer(this, field("innerClassType"));
+    @Test
+    public void should_fail_for_inner_class_field() {
+        assertThatThrownBy(
+                        () -> {
+                            new FieldInitializer(this, field("innerClassType"));
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessage("the type 'InnerClassType' is an inner non static class.");
     }
 
     @Test
@@ -192,7 +226,7 @@ public class FieldInitializerTest {
     }
 
     static class StaticClassThrowingExceptionDefaultConstructor {
-        StaticClassThrowingExceptionDefaultConstructor() throws Exception {
+        StaticClassThrowingExceptionDefaultConstructor() {
             throw new NullPointerException("business logic failed");
         }
     }
