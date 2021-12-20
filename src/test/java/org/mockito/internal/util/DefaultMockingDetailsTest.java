@@ -5,6 +5,7 @@
 package org.mockito.internal.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -115,9 +116,15 @@ public class DefaultMockingDetailsTest {
         assertEquals(0, mockingDetails(mock).getMockCreationSettings().getExtraInterfaces().size());
     }
 
-    @Test(expected = NotAMockException.class)
+    @Test
     public void fails_when_getting_creation_settings_for_incorrect_input() {
-        mockingDetails(null).getMockCreationSettings();
+        assertThatThrownBy(
+                        () -> {
+                            mockingDetails(null).getMockCreationSettings();
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessage(
+                        "Argument passed to Mockito.mockingDetails() should be a mock, but is null!");
     }
 
     @Test
