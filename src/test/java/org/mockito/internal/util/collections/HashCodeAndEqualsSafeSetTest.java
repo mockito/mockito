@@ -5,6 +5,7 @@
 package org.mockito.internal.util.collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import java.util.HashSet;
@@ -112,13 +113,17 @@ public class HashCodeAndEqualsSafeSetTest {
         assertThat(mocks.toArray(new UnmockableHashCodeAndEquals[0])[0]).isSameAs(mock1);
     }
 
-    @Test(expected = CloneNotSupportedException.class)
-    public void cloneIsNotSupported() throws CloneNotSupportedException {
-        Object ignored = HashCodeAndEqualsSafeSet.of().clone();
+    @Test
+    public void cloneIsNotSupported() {
+        assertThatThrownBy(
+                        () -> {
+                            HashCodeAndEqualsSafeSet.of().clone();
+                        })
+                .isInstanceOf(CloneNotSupportedException.class);
     }
 
     @Test
-    public void isEmptyAfterClear() throws Exception {
+    public void isEmptyAfterClear() {
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         set.clear();
 
