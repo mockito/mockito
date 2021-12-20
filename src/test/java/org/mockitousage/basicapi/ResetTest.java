@@ -5,6 +5,7 @@
 package org.mockitousage.basicapi;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -33,18 +34,28 @@ public class ResetTest extends TestBase {
         }
     }
 
-    @Test(expected = NotAMockException.class)
+    @Test
     public void resettingNonMockIsSafe() {
-        reset("");
-    }
-
-    @Test(expected = NotAMockException.class)
-    public void resettingNullIsSafe() {
-        reset(new Object[] {null});
+        assertThatThrownBy(
+                        () -> {
+                            reset("");
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessage("Argument should be a mock, but is: class java.lang.String");
     }
 
     @Test
-    public void shouldRemoveAllStubbing() throws Exception {
+    public void resettingNullIsSafe() {
+        assertThatThrownBy(
+                        () -> {
+                            reset(new Object[] {null});
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessage("Argument should be a mock, but is null!");
+    }
+
+    @Test
+    public void shouldRemoveAllStubbing() {
         when(mock.objectReturningMethod(isA(Integer.class))).thenReturn(100);
         when(mock.objectReturningMethod(200)).thenReturn(200);
         reset(mock);
@@ -54,21 +65,21 @@ public class ResetTest extends TestBase {
     }
 
     @Test
-    public void shouldRemoveAllInteractions() throws Exception {
+    public void shouldRemoveAllInteractions() {
         mock.simpleMethod(1);
         reset(mock);
         verifyNoInteractions(mock);
     }
 
     @Test
-    public void shouldRemoveAllInteractionsVerifyNoInteractions() throws Exception {
+    public void shouldRemoveAllInteractionsVerifyNoInteractions() {
         mock.simpleMethod(1);
         reset(mock);
         verifyNoInteractions(mock);
     }
 
     @Test
-    public void shouldRemoveStubbingToString() throws Exception {
+    public void shouldRemoveStubbingToString() {
         IMethods mockTwo = mock(IMethods.class);
         when(mockTwo.toString()).thenReturn("test");
         reset(mockTwo);
