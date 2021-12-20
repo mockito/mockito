@@ -134,8 +134,7 @@ public class ReturnsGenericDeepStubsTest {
                         () -> {
                             mock.twoTypeParams(new StringBuilder()).append(2).append(3);
                         })
-                .isInstanceOf(ClassCastException.class)
-                .hasMessageContaining("cannot be cast to java.lang.StringBuilder");
+                .isInstanceOf(ClassCastException.class);
     }
 
     class WithGenerics<T> {
