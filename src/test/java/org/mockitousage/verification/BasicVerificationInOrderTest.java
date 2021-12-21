@@ -5,8 +5,14 @@
 package org.mockitousage.verification;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -101,14 +107,36 @@ public class BasicVerificationInOrderTest extends TestBase {
         }
     }
 
-    @Test(expected = VerificationInOrderFailure.class)
+    @Test
     public void shouldFailOnFirstMethodBecauseOneInvocationWanted() {
-        inOrder.verify(mockOne, times(0)).simpleMethod(1);
+        assertThatThrownBy(
+                        () -> {
+                            inOrder.verify(mockOne, times(0)).simpleMethod(1);
+                        })
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContainingAll(
+                        "Verification in order failure:",
+                        "iMethods.simpleMethod(1);",
+                        "Wanted 0 times:",
+                        "-> at ",
+                        "But was 1 time:",
+                        "-> at ");
     }
 
-    @Test(expected = VerificationInOrderFailure.class)
+    @Test
     public void shouldFailOnFirstMethodBecauseOneInvocationWantedAgain() {
-        inOrder.verify(mockOne, times(2)).simpleMethod(1);
+        assertThatThrownBy(
+                        () -> {
+                            inOrder.verify(mockOne, times(2)).simpleMethod(1);
+                        })
+                .isInstanceOf(VerificationInOrderFailure.class)
+                .hasMessageContainingAll(
+                        "Verification in order failure:",
+                        "iMethods.simpleMethod(1);",
+                        "Wanted 2 times:",
+                        "-> at ",
+                        "But was 1 time:",
+                        "-> at ");
     }
 
     @Test
@@ -159,14 +187,56 @@ public class BasicVerificationInOrderTest extends TestBase {
 
     /* ------------- */
 
-    @Test(expected = ArgumentsAreDifferent.class)
+    @Test
     public void shouldFailOnFirstMethodBecauseDifferentArgsWanted() {
-        inOrder.verify(mockOne).simpleMethod(100);
+        assertThatThrownBy(
+                        () -> {
+                            inOrder.verify(mockOne).simpleMethod(100);
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "iMethods.simpleMethod(100);",
+                        "-> at ",
+                        "Actual invocations have different arguments:",
+                        "iMethods.simpleMethod(1);",
+                        "-> at ",
+                        "iMethods.simpleMethod(2);",
+                        "-> at ",
+                        "iMethods.simpleMethod(2);",
+                        "-> at ",
+                        "iMethods.simpleMethod(3);",
+                        "-> at ",
+                        "iMethods.simpleMethod(2);",
+                        "-> at ",
+                        "iMethods.simpleMethod(4);",
+                        "-> at ");
     }
 
-    @Test(expected = WantedButNotInvoked.class)
+    @Test
     public void shouldFailOnFirstMethodBecauseDifferentMethodWanted() {
-        inOrder.verify(mockOne).oneArg(true);
+        assertThatThrownBy(
+                        () -> {
+                            inOrder.verify(mockOne).oneArg(true);
+                        })
+                .isInstanceOf(WantedButNotInvoked.class)
+                .hasMessageContainingAll(
+                        "Wanted but not invoked:",
+                        "iMethods.oneArg(true);",
+                        "-> at ",
+                        "However, there were exactly 6 interactions with this mock:",
+                        "iMethods.simpleMethod(1);",
+                        "-> at ",
+                        "iMethods.simpleMethod(2);",
+                        "-> at ",
+                        "iMethods.simpleMethod(2);",
+                        "-> at ",
+                        "iMethods.simpleMethod(3);",
+                        "-> at ",
+                        "iMethods.simpleMethod(2);",
+                        "-> at ",
+                        "iMethods.simpleMethod(4);",
+                        "-> at ");
     }
 
     @Test
@@ -261,15 +331,38 @@ public class BasicVerificationInOrderTest extends TestBase {
         }
     }
 
-    @Test(expected = NoInteractionsWanted.class)
+    @Test
     public void shouldFailOnVerifyNoInteractions() {
-        verifyNoInteractions(mockOne);
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoInteractions(mockOne);
+                        })
+                .isInstanceOf(NoInteractionsWanted.class)
+                .hasMessageContainingAll(
+                        "No interactions wanted here:",
+                        "-> at ",
+                        "But found these interactions on mock 'iMethods':",
+                        "-> at ",
+                        "-> at ",
+                        "***",
+                        "For your reference, here is the list of all invocations ([?] - means unverified).",
+                        "1. [?]-> at ",
+                        "2. [?]-> at ");
     }
 
     @SuppressWarnings({"all", "CheckReturnValue", "MockitoUsage"})
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldScreamWhenNullPassed() {
-        inOrder((Object[]) null);
+        assertThatThrownBy(
+                        () -> {
+                            inOrder((Object[]) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Method requires argument(s)!",
+                        "Pass mocks that require verification in order.",
+                        "For example:",
+                        "    InOrder inOrder = inOrder(mockOne, mockTwo);");
     }
 
     @Test
