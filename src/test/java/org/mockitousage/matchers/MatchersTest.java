@@ -5,6 +5,7 @@
 package org.mockitousage.matchers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
@@ -19,8 +20,8 @@ import static org.mockito.AdditionalMatchers.leq;
 import static org.mockito.AdditionalMatchers.lt;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.AdditionalMatchers.or;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anyByte;
@@ -333,7 +334,7 @@ public class MatchersTest extends TestBase {
     }
 
     @SuppressWarnings("ReturnValueIgnored")
-    @Test(expected = ArgumentsAreDifferent.class)
+    @Test
     public void
             array_equals_should_throw_ArgumentsAreDifferentException_for_non_matching_arguments() {
         List<Object> list = Mockito.mock(List.class);
@@ -341,7 +342,16 @@ public class MatchersTest extends TestBase {
         list.add("test"); // testing fix for issue 20
         list.contains(new Object[] {"1"});
 
-        Mockito.verify(list).contains(new Object[] {"1", "2", "3"});
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.verify(list).contains(new Object[] {"1", "2", "3"});
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "list.contains([\"1\", \"2\", \"3\"]);",
+                        "Actual invocations have different arguments:",
+                        "list.add(\"test\");");
     }
 
     @Test
