@@ -24,7 +24,7 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBase {
+public class VerificationInOrderMixedWithOrdinaryVerificationTest extends TestBase {
 
     private IMethods mockOne;
     private IMethods mockTwo;
