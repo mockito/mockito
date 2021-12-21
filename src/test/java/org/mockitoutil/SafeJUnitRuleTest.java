@@ -4,7 +4,10 @@
  */
 package org.mockitoutil;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 import org.assertj.core.api.Assertions;
@@ -23,7 +26,7 @@ public class SafeJUnitRuleTest {
         // when
         rule.apply(
                         new Statement() {
-                            public void evaluate() throws Throwable {
+                            public void evaluate() {
                                 // all good
                             }
                         },
@@ -35,18 +38,23 @@ public class SafeJUnitRuleTest {
         assertTrue(delegate.statementEvaluated);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void regular_failing_test() throws Throwable {
-        // when
-        rule.apply(
-                        new Statement() {
-                            public void evaluate() throws Throwable {
-                                throw new IllegalArgumentException();
-                            }
-                        },
-                        mock(FrameworkMethod.class),
-                        this)
-                .evaluate();
+    @Test
+    public void regular_failing_test() {
+        // given
+        Statement baseStatement =
+                new Statement() {
+                    public void evaluate() {
+                        throw new IllegalArgumentException();
+                    }
+                };
+        Statement statement = rule.apply(baseStatement, mock(FrameworkMethod.class), this);
+
+        // when / then
+        assertThatThrownBy(
+                        () -> {
+                            statement.evaluate();
+                        })
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -57,7 +65,7 @@ public class SafeJUnitRuleTest {
         // when
         rule.apply(
                         new Statement() {
-                            public void evaluate() throws Throwable {
+                            public void evaluate() {
                                 throw new AssertionError("x");
                             }
                         },
@@ -75,7 +83,7 @@ public class SafeJUnitRuleTest {
         try {
             rule.apply(
                             new Statement() {
-                                public void evaluate() throws Throwable {
+                                public void evaluate() {
                                     // all good
                                 }
                             },
@@ -99,7 +107,7 @@ public class SafeJUnitRuleTest {
         try {
             rule.apply(
                             new Statement() {
-                                public void evaluate() throws Throwable {
+                                public void evaluate() {
                                     throw new AssertionError("BAR");
                                 }
                             },
@@ -121,7 +129,7 @@ public class SafeJUnitRuleTest {
         try {
             rule.apply(
                             new Statement() {
-                                public void evaluate() throws Throwable {
+                                public void evaluate() {
                                     throw new RuntimeException("x");
                                 }
                             },
@@ -148,7 +156,7 @@ public class SafeJUnitRuleTest {
         try {
             rule.apply(
                             new Statement() {
-                                public void evaluate() throws Throwable {
+                                public void evaluate() {
                                     throw new RuntimeException();
                                 }
                             },
