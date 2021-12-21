@@ -6,11 +6,14 @@ package org.mockitousage.verification;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
@@ -26,7 +29,7 @@ public class BasicVerificationTest extends TestBase {
     @Mock private List<String> mockTwo;
 
     @Test
-    public void shouldVerify() throws Exception {
+    public void shouldVerify() {
         mock.clear();
         verify(mock).clear();
 
@@ -36,30 +39,36 @@ public class BasicVerificationTest extends TestBase {
         verifyNoMoreInteractions(mock);
     }
 
-    @Test(expected = WantedButNotInvoked.class)
-    public void shouldFailVerification() throws Exception {
-        verify(mock).clear();
+    @Test
+    public void shouldFailVerification() {
+        assertThatThrownBy(
+                        () -> {
+                            verify(mock).clear();
+                        })
+                .isInstanceOf(WantedButNotInvoked.class)
+                .hasMessageContainingAll(
+                        "Wanted but not invoked:",
+                        "mock.clear();",
+                        "-> at ",
+                        "Actually, there were zero interactions with this mock.");
     }
 
     @Test
-    public void shouldFailVerificationOnMethodArgument() throws Exception {
+    public void shouldFailVerificationOnMethodArgument() {
         mock.clear();
         mock.add("foo");
 
         verify(mock).clear();
 
         assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            @Override
-                            public void call() {
-                                verify(mock).add("bar");
-                            }
+                        () -> {
+                            verify(mock).add("bar");
                         })
                 .isInstanceOf(ArgumentsAreDifferent.class);
     }
 
     @Test
-    public void shouldFailOnWrongMethod() throws Exception {
+    public void shouldFailOnWrongMethod() {
         mock.clear();
         mock.clear();
 
@@ -75,7 +84,7 @@ public class BasicVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectRedundantInvocation() throws Exception {
+    public void shouldDetectRedundantInvocation() {
         mock.clear();
         mock.add("foo");
         mock.add("bar");
@@ -91,7 +100,7 @@ public class BasicVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectWhenInvokedMoreThanOnce() throws Exception {
+    public void shouldDetectWhenInvokedMoreThanOnce() {
         mock.add("foo");
         mock.clear();
         mock.clear();
@@ -106,7 +115,7 @@ public class BasicVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyStubbedMethods() throws Exception {
+    public void shouldVerifyStubbedMethods() {
         when(mock.add("test")).thenReturn(Boolean.FALSE);
 
         mock.add("test");
@@ -115,7 +124,7 @@ public class BasicVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldDetectWhenOverloadedMethodCalled() throws Exception {
+    public void shouldDetectWhenOverloadedMethodCalled() {
         IMethods mockThree = mock(IMethods.class);
 
         mockThree.varargs((Object[]) new Object[] {});
