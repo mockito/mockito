@@ -4,9 +4,14 @@
  */
 package org.mockitousage.bugs;
 
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.junit.Test;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockitoutil.TestBase;
 
 // see issue 112
@@ -18,7 +23,7 @@ public class AtLeastMarksAllInvocationsVerified extends TestBase {
         public void disallowedMethod() {}
     }
 
-    @Test(expected = org.mockito.exceptions.verification.NoInteractionsWanted.class)
+    @Test
     public void shouldFailBecauseDisallowedMethodWasCalled() {
         SomeMethods someMethods = mock(SomeMethods.class);
 
@@ -26,6 +31,18 @@ public class AtLeastMarksAllInvocationsVerified extends TestBase {
         someMethods.disallowedMethod();
 
         verify(someMethods, atLeast(1)).allowedMethod();
-        verifyNoMoreInteractions(someMethods);
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoMoreInteractions(someMethods);
+                        })
+                .isInstanceOf(NoInteractionsWanted.class)
+                .hasMessageContainingAll(
+                        "No interactions wanted here:",
+                        "-> at ",
+                        "But found this interaction on mock 'someMethods':",
+                        "-> at ",
+                        "For your reference, here is the list of all invocations ([?] - means unverified).",
+                        "1. -> at ",
+                        "2. [?]-> at ");
     }
 }
