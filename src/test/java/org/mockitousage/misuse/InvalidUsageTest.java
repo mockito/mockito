@@ -4,8 +4,12 @@
  */
 package org.mockitousage.misuse;
 
-import static org.junit.Assume.assumeFalse;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Test;
@@ -26,69 +30,154 @@ public class InvalidUsageTest extends TestBase {
         super.resetState();
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldRequireArgumentsWhenVerifyingNoMoreInteractions() {
-        verifyNoMoreInteractions();
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoMoreInteractions();
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Method requires argument(s)!",
+                        "Pass mocks that should be verified, e.g:",
+                        "    verifyNoMoreInteractions(mockOne, mockTwo);",
+                        "    verifyNoInteractions(mockOne, mockTwo);");
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldRequireArgumentsWhenVerifyingNoInteractions() {
-        verifyNoInteractions();
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoInteractions();
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Method requires argument(s)!",
+                        "Pass mocks that should be verified, e.g:",
+                        "    verifyNoMoreInteractions(mockOne, mockTwo);",
+                        "    verifyNoInteractions(mockOne, mockTwo);");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldNotCreateInOrderObjectWithoutMocks() {
-        inOrder();
+        assertThatThrownBy(
+                        () -> {
+                            inOrder();
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Method requires argument(s)!",
+                        "Pass mocks that require verification in order.",
+                        "For example:",
+                        "    InOrder inOrder = inOrder(mockOne, mockTwo);");
     }
 
-    @Test(expected = MockitoException.class)
-    public void shouldNotAllowVerifyingInOrderUnfamilarMocks() {
+    @Test
+    public void shouldNotAllowVerifyingInOrderUnfamiliarMocks() {
         InOrder inOrder = inOrder(mock);
-        inOrder.verify(mockTwo).simpleMethod();
+        assertThatThrownBy(
+                        () -> {
+                            inOrder.verify(mockTwo).simpleMethod();
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "InOrder can only verify mocks that were passed in during creation of InOrder.",
+                        "For example:",
+                        "    InOrder inOrder = inOrder(mockOne);",
+                        "    inOrder.verify(mockOne).doStuff();");
     }
 
-    @Test(expected = MissingMethodInvocationException.class)
+    @Test
     public void shouldReportMissingMethodInvocationWhenStubbing() {
         when(mock.simpleMethod())
                 .thenReturn("this stubbing is required to make sure Stubbable is pulled");
-        when("".toString()).thenReturn("x");
+        assertThatThrownBy(
+                        () -> {
+                            when("".toString()).thenReturn("x");
+                        })
+                .isInstanceOf(MissingMethodInvocationException.class)
+                .hasMessageContainingAll(
+                        "when() requires an argument which has to be 'a method call on a mock'.",
+                        "For example:",
+                        "    when(mock.getArticles()).thenReturn(articles);",
+                        "Also, this error might show up because:",
+                        "1. you stub either of: final/private/equals()/hashCode() methods.",
+                        "   Those methods *cannot* be stubbed/verified.",
+                        "   Mocking methods declared on non-public parent classes is not supported.",
+                        "2. inside when() you don't call method on mock but on some other object.");
     }
 
-    @Test(expected = MockitoException.class)
-    public void shouldNotAllowSettingInvalidCheckedException() throws Exception {
-        when(mock.simpleMethod()).thenThrow(new Exception());
+    @Test
+    public void shouldNotAllowSettingInvalidCheckedException() {
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.simpleMethod()).thenThrow(new Exception());
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Checked exception is invalid for this method!",
+                        "Invalid: java.lang.Exception");
     }
 
-    @Test(expected = MockitoException.class)
-    public void shouldNotAllowSettingNullThrowable() throws Exception {
-        when(mock.simpleMethod()).thenThrow(new Throwable[] {null});
+    @Test
+    public void shouldNotAllowSettingNullThrowable() {
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.simpleMethod()).thenThrow(new Throwable[] {null});
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Cannot stub with null throwable!");
     }
 
     @SuppressWarnings("all")
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldNotAllowSettingNullThrowableVararg() throws Exception {
-        when(mock.simpleMethod()).thenThrow((Throwable) null);
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.simpleMethod()).thenThrow((Throwable) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Cannot stub with null throwable!");
     }
 
-    @Test(expected = MockitoException.class)
-    public void shouldNotAllowSettingNullConsecutiveThrowable() throws Exception {
-        when(mock.simpleMethod()).thenThrow(new RuntimeException(), null);
+    @Test
+    public void shouldNotAllowSettingNullConsecutiveThrowable() {
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.simpleMethod()).thenThrow(new RuntimeException(), null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Cannot stub with null throwable!");
     }
 
     final class FinalClass {}
 
-    @Test(expected = MockitoException.class)
-    public void shouldNotAllowMockingFinalClassesIfDisabled() throws Exception {
-        assumeFalse(
-                "Inlining mock allows mocking final classes",
-                mock(FinalClass.class).getClass() == FinalClass.class);
+    @Test
+    public void shouldNotAllowMockingFinalClassesIfDisabled() {
+        assertThatThrownBy(
+                        () -> {
+                            mock(FinalClass.class);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Cannot mock/spy class org.mockitousage.misuse.InvalidUsageTest$FinalClass",
+                        "Mockito cannot mock/spy because :",
+                        " - final class");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
-    @Test(expected = MockitoException.class)
-    public void shouldNotAllowMockingPrimitives() throws Exception {
-        mock(Integer.TYPE);
+    @Test
+    public void shouldNotAllowMockingPrimitives() {
+        assertThatThrownBy(
+                        () -> {
+                            mock(Integer.TYPE);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Cannot mock/spy int",
+                        "Mockito cannot mock/spy because :",
+                        " - primitive type");
     }
 
     interface ObjectLikeInterface {
@@ -100,7 +189,7 @@ public class InvalidUsageTest extends TestBase {
     }
 
     @Test
-    public void shouldNotMockObjectMethodsOnInterfaceVerifyNoInteractions() throws Exception {
+    public void shouldNotMockObjectMethodsOnInterfaceVerifyNoInteractions() {
         ObjectLikeInterface inter = mock(ObjectLikeInterface.class);
 
         Object ignored = inter.equals(null);
@@ -111,7 +200,7 @@ public class InvalidUsageTest extends TestBase {
     }
 
     @Test
-    public void shouldNotMockObjectMethodsOnClassVerifyNoInteractions() throws Exception {
+    public void shouldNotMockObjectMethodsOnClassVerifyNoInteractions() {
         Object clazz = mock(ObjectLikeInterface.class);
 
         Object ignored = clazz.equals(null);

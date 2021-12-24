@@ -4,6 +4,7 @@
  */
 package org.mockitousage.matchers;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -61,28 +62,72 @@ public class ReflectionMatchersTest extends TestBase {
         verify(mock).run(refEq(wanted));
     }
 
-    @Test(expected = ArgumentsAreDifferent.class)
+    @Test
     public void shouldNotMatchWhenFieldValuesDiffer() throws Exception {
         Child wanted = new Child(1, "foo", 2, "bar XXX");
-        verify(mock).run(refEq(wanted));
+        assertThatThrownBy(
+                        () -> {
+                            verify(mock).run(refEq(wanted));
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mockMe.run(",
+                        "    refEq(org.mockitousage.matchers.ReflectionMatchersTest",
+                        "Actual invocations have different arguments:",
+                        "mockMe.run(",
+                        "    org.mockitousage.matchers.ReflectionMatchersTest");
     }
 
-    @Test(expected = ArgumentsAreDifferent.class)
+    @Test
     public void shouldNotMatchAgain() throws Exception {
         Child wanted = new Child(1, "foo", 999, "bar");
-        verify(mock).run(refEq(wanted));
+        assertThatThrownBy(
+                        () -> {
+                            verify(mock).run(refEq(wanted));
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mockMe.run(",
+                        "    refEq(org.mockitousage.matchers.ReflectionMatchersTest",
+                        "Actual invocations have different arguments:",
+                        "mockMe.run(",
+                        "    org.mockitousage.matchers.ReflectionMatchersTest");
     }
 
-    @Test(expected = ArgumentsAreDifferent.class)
+    @Test
     public void shouldNotMatchYetAgain() throws Exception {
         Child wanted = new Child(1, "XXXXX", 2, "bar");
-        verify(mock).run(refEq(wanted));
+        assertThatThrownBy(
+                        () -> {
+                            verify(mock).run(refEq(wanted));
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mockMe.run(",
+                        "    refEq(org.mockitousage.matchers.ReflectionMatchersTest",
+                        "Actual invocations have different arguments:",
+                        "mockMe.run(",
+                        "    org.mockitousage.matchers.ReflectionMatchersTest");
     }
 
-    @Test(expected = ArgumentsAreDifferent.class)
+    @Test
     public void shouldNotMatch() throws Exception {
         Child wanted = new Child(234234, "foo", 2, "bar");
-        verify(mock).run(refEq(wanted));
+        assertThatThrownBy(
+                        () -> {
+                            verify(mock).run(refEq(wanted));
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mockMe.run(",
+                        "    refEq(org.mockitousage.matchers.ReflectionMatchersTest",
+                        "Actual invocations have different arguments:",
+                        "mockMe.run(",
+                        "    org.mockitousage.matchers.ReflectionMatchersTest");
     }
 
     @Test
@@ -98,9 +143,20 @@ public class ReflectionMatchersTest extends TestBase {
         verify(mock).run(refEq(wanted, "parentField", "childFieldTwo"));
     }
 
-    @Test(expected = ArgumentsAreDifferent.class)
+    @Test
     public void shouldNotMatchWithFieldsExclusion() throws Exception {
         Child wanted = new Child(234234, "foo", 2, "excluded");
-        verify(mock).run(refEq(wanted, "childFieldTwo"));
+        assertThatThrownBy(
+                        () -> {
+                            verify(mock).run(refEq(wanted, "childFieldTwo"));
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mockMe.run(",
+                        "    refEq(org.mockitousage.matchers.ReflectionMatchersTest",
+                        "Actual invocations have different arguments:",
+                        "mockMe.run(",
+                        "    org.mockitousage.matchers.ReflectionMatchersTest");
     }
 }

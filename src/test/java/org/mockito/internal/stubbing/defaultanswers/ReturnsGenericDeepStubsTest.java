@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -124,14 +125,16 @@ public class ReturnsGenericDeepStubsTest {
         assertThat(anotherListOfInteger.get(25)).isEqualTo(0);
     }
 
-    @Test(expected = ClassCastException.class)
+    @Test
     public void
             as_expected_fail_with_a_CCE_on_call_site_when_erasure_takes_place_for_example___StringBuilder_is_subject_to_erasure() {
         GenericsNest<?> mock = mock(GenericsNest.class, RETURNS_DEEP_STUBS);
 
-        // following assignment needed to create a ClassCastException on the call site (i.e. : here)
-        StringBuilder stringBuilder_assignment_that_should_throw_a_CCE =
-                mock.twoTypeParams(new StringBuilder()).append(2).append(3);
+        assertThatThrownBy(
+                        () -> {
+                            mock.twoTypeParams(new StringBuilder()).append(2).append(3);
+                        })
+                .isInstanceOf(ClassCastException.class);
     }
 
     class WithGenerics<T> {

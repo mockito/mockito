@@ -4,7 +4,10 @@
  */
 package org.mockito.internal.util;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.withSettings;
 
 import java.util.ArrayList;
@@ -13,7 +16,6 @@ import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.TestBase;
@@ -27,14 +29,24 @@ public class MockUtilTest extends TestBase {
         assertNotNull(MockUtil.getMockHandler(mock));
     }
 
-    @Test(expected = NotAMockException.class)
+    @Test
     public void should_scream_when_not_a_mock_passed() {
-        MockUtil.getMockHandler("");
+        assertThatThrownBy(
+                        () -> {
+                            MockUtil.getMockHandler("");
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessage("Argument should be a mock, but is: class java.lang.String");
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void should_scream_when_null_passed() {
-        MockUtil.getMockHandler(null);
+        assertThatThrownBy(
+                        () -> {
+                            MockUtil.getMockHandler(null);
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessage("Argument should be a mock, but is null!");
     }
 
     @Test

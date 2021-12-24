@@ -5,7 +5,7 @@
 package org.mockitousage.stubbing;
 
 import static java.util.Collections.singletonList;
-
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -41,7 +41,7 @@ public class StubbingWarningsTest {
     }
 
     @Test
-    public void few_interactions() throws Throwable {
+    public void few_interactions() {
         // when
         mock.simpleMethod(100);
         mock.otherMethod();
@@ -52,7 +52,7 @@ public class StubbingWarningsTest {
     }
 
     @Test
-    public void stubbing_used() throws Throwable {
+    public void stubbing_used() {
         // when
         given(mock.simpleMethod(100)).willReturn("100");
         mock.simpleMethod(100);
@@ -63,7 +63,7 @@ public class StubbingWarningsTest {
     }
 
     @Test
-    public void unused_stubbed_is_not_implicitly_verified() throws Throwable {
+    public void unused_stubbed_is_not_implicitly_verified() {
         // when
         given(mock.simpleMethod(100)).willReturn("100");
         mock.simpleMethod(100); // <- stubbing is used
@@ -75,7 +75,7 @@ public class StubbingWarningsTest {
     }
 
     @Test
-    public void stubbing_argument_mismatch() throws Throwable {
+    public void stubbing_argument_mismatch() {
         // when
         given(mock.simpleMethod(100)).willReturn("100");
         mock.simpleMethod(200);
@@ -96,7 +96,7 @@ public class StubbingWarningsTest {
     }
 
     @Test
-    public void unused_stubbing() throws Throwable {
+    public void unused_stubbing() {
         // when
         given(mock.simpleMethod(100)).willReturn("100");
 
@@ -113,17 +113,29 @@ public class StubbingWarningsTest {
     }
 
     @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
-    @Test(expected = MockitoException.class)
-    public void unfinished_verification_without_throwable() throws Throwable {
+    @Test
+    public void unfinished_verification_without_throwable() {
         // when
         verify(mock);
 
-        mockito.finishMocking();
+        assertThatThrownBy(
+                        () -> {
+                            mockito.finishMocking();
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Missing method call for verify(mock) here:",
+                        "-> at",
+                        "Example of correct verification:",
+                        "    verify(mock).doSomething()",
+                        "Also, this error might show up because you verify either of: final/private/equals()/hashCode() methods.",
+                        "Those methods *cannot* be stubbed/verified.",
+                        "Mocking methods declared on non-public parent classes is not supported.");
     }
 
     @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
     @Test
-    public void unfinished_verification_with_throwable() throws Throwable {
+    public void unfinished_verification_with_throwable() {
         // when
         verify(mock);
 

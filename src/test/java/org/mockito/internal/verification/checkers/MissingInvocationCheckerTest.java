@@ -6,18 +6,21 @@ package org.mockito.internal.verification.checkers;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
-import org.mockito.internal.invocation.*;
+import org.mockito.internal.invocation.InterceptedInvocation;
+import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.internal.invocation.InvocationMatcher;
+import org.mockito.internal.invocation.MockitoMethod;
+import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
@@ -30,8 +33,6 @@ public class MissingInvocationCheckerTest extends TestBase {
     private List<Invocation> invocations;
 
     @Mock private IMethods mock;
-
-    @Rule public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void shouldPassBecauseActualInvocationFound() {
@@ -46,13 +47,16 @@ public class MissingInvocationCheckerTest extends TestBase {
         wanted = buildSimpleMethod().toInvocationMatcher();
         invocations = asList(buildDifferentMethod().toInvocation());
 
-        exception.expect(WantedButNotInvoked.class);
-        exception.expectMessage("Wanted but not invoked:");
-        exception.expectMessage("mock.simpleMethod()");
-        exception.expectMessage("However, there was exactly 1 interaction with this mock:");
-        exception.expectMessage("mock.differentMethod();");
-
-        MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+        assertThatThrownBy(
+                        () -> {
+                            MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+                        })
+                .isInstanceOf(WantedButNotInvoked.class)
+                .hasMessageContainingAll(
+                        "Wanted but not invoked:",
+                        "mock.simpleMethod()",
+                        "However, there was exactly 1 interaction with this mock:",
+                        "mock.differentMethod();");
     }
 
     @Test
@@ -60,14 +64,16 @@ public class MissingInvocationCheckerTest extends TestBase {
         wanted = buildIntArgMethod(new InvocationBuilder()).arg(2222).toInvocationMatcher();
         invocations = asList(buildIntArgMethod(new InvocationBuilder()).arg(1111).toInvocation());
 
-        exception.expect(ArgumentsAreDifferent.class);
-
-        exception.expectMessage("Argument(s) are different! Wanted:");
-        exception.expectMessage("mock.intArgumentMethod(2222);");
-        exception.expectMessage("Actual invocations have different arguments:");
-        exception.expectMessage("mock.intArgumentMethod(1111);");
-
-        MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+        assertThatThrownBy(
+                        () -> {
+                            MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mock.intArgumentMethod(2222);",
+                        "Actual invocations have different arguments:",
+                        "mock.intArgumentMethod(1111);");
     }
 
     @Test
@@ -77,14 +83,16 @@ public class MissingInvocationCheckerTest extends TestBase {
                 singletonList(
                         buildIntArgMethod(new CustomInvocationBuilder()).arg(1111).toInvocation());
 
-        exception.expect(ArgumentsAreDifferent.class);
-
-        exception.expectMessage("Argument(s) are different! Wanted:");
-        exception.expectMessage("mock.intArgumentMethod(MyCoolPrint(2222));");
-        exception.expectMessage("Actual invocations have different arguments:");
-        exception.expectMessage("mock.intArgumentMethod(MyCoolPrint(1111));");
-
-        MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+        assertThatThrownBy(
+                        () -> {
+                            MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mock.intArgumentMethod(MyCoolPrint(2222));",
+                        "Actual invocations have different arguments:",
+                        "mock.intArgumentMethod(MyCoolPrint(1111));");
     }
 
     private InvocationBuilder buildIntArgMethod(InvocationBuilder invocationBuilder) {
@@ -112,7 +120,7 @@ public class MissingInvocationCheckerTest extends TestBase {
                     mockRef, mockitoMethod, arguments, realMethod, location, sequenceNumber) {
                 @Override
                 public List<ArgumentMatcher> getArgumentsAsMatchers() {
-                    List<ArgumentMatcher> matchers = new ArrayList<ArgumentMatcher>();
+                    List<ArgumentMatcher> matchers = new ArrayList<>();
                     for (final Object argument : getRawArguments()) {
                         matchers.add(
                                 new ArgumentMatcher() {

@@ -4,7 +4,7 @@
  */
 package org.mockitousage.stubbing;
 
-import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
@@ -24,11 +24,8 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
@@ -42,8 +39,6 @@ public class StubbingWithThrowablesTest extends TestBase {
 
     private Map mockTwo;
 
-    @Rule public ExpectedException exception = ExpectedException.none();
-
     @Before
     public void setup() {
         mock = mock(LinkedList.class);
@@ -55,22 +50,18 @@ public class StubbingWithThrowablesTest extends TestBase {
         when(mock.add("")).thenThrow(new ExceptionOne());
 
         // 1st invocation
-        Assertions.assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            public void call() {
-                                mock.add("");
-                            }
+        assertThatThrownBy(
+                        () -> {
+                            mock.add("");
                         })
                 .isInstanceOf(ExceptionOne.class);
 
         mock.add("1");
 
         // 2nd invocation
-        Assertions.assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            public void call() {
-                                mock.add("");
-                            }
+        assertThatThrownBy(
+                        () -> {
+                            mock.add("");
                         })
                 .isInstanceOf(ExceptionOne.class);
     }
@@ -80,22 +71,18 @@ public class StubbingWithThrowablesTest extends TestBase {
         doThrow(new ExceptionOne()).when(mock).clear();
 
         // 1st invocation
-        Assertions.assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            public void call() {
-                                mock.clear();
-                            }
+        assertThatThrownBy(
+                        () -> {
+                            mock.clear();
                         })
                 .isInstanceOf(ExceptionOne.class);
 
         mock.add("1");
 
         // 2nd invocation
-        Assertions.assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            public void call() {
-                                mock.clear();
-                            }
+        assertThatThrownBy(
+                        () -> {
+                            mock.clear();
                         })
                 .isInstanceOf(ExceptionOne.class);
     }
@@ -125,43 +112,51 @@ public class StubbingWithThrowablesTest extends TestBase {
     }
 
     @Test
-    public void shouldStubWithThrowable() throws Exception {
+    public void shouldStubWithThrowable() {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
         when(mock.add("throw")).thenThrow(expected);
 
-        exception.expect(sameInstance(expected));
-        mock.add("throw");
+        assertThatThrownBy(
+                        () -> {
+                            mock.add("throw");
+                        })
+                .isEqualTo(expected);
     }
 
     @Test
-    public void shouldSetThrowableToVoidMethod() throws Exception {
+    public void shouldSetThrowableToVoidMethod() {
         IllegalArgumentException expected = new IllegalArgumentException("thrown by mock");
 
         doThrow(expected).when(mock).clear();
 
-        exception.expect(sameInstance(expected));
-
-        mock.clear();
+        assertThatThrownBy(
+                        () -> {
+                            mock.clear();
+                        })
+                .isEqualTo(expected);
     }
 
     @Test
-    public void shouldLastStubbingVoidBeImportant() throws Exception {
+    public void shouldLastStubbingVoidBeImportant() {
         doThrow(new ExceptionOne()).when(mock).clear();
         doThrow(new ExceptionTwo()).when(mock).clear();
 
-        exception.expect(ExceptionTwo.class);
-
-        mock.clear();
+        assertThatThrownBy(
+                        () -> {
+                            mock.clear();
+                        })
+                .isInstanceOf(ExceptionTwo.class);
     }
 
     @Test
-    public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation()
-            throws Exception {
+    public void shouldFailStubbingThrowableOnTheSameInvocationDueToAcceptableLimitation() {
         when(mock.size()).thenThrow(new ExceptionOne());
 
-        exception.expect(ExceptionOne.class);
-
-        when(mock.size()).thenThrow(new ExceptionTwo());
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.size()).thenThrow(new ExceptionTwo());
+                        })
+                .isInstanceOf(ExceptionOne.class);
     }
 
     @Test
@@ -171,160 +166,199 @@ public class StubbingWithThrowablesTest extends TestBase {
 
         when(reader.read()).thenThrow(ioException);
 
-        exception.expect(sameInstance(ioException));
-
-        reader.read();
+        assertThatThrownBy(
+                        () -> {
+                            reader.read();
+                        })
+                .isEqualTo(ioException);
     }
 
     @Test
-    public void shouldAllowSettingError() throws Exception {
+    public void shouldAllowSettingError() {
         Error error = new Error();
 
         when(mock.add("quake")).thenThrow(error);
 
-        exception.expect(Error.class);
-
-        mock.add("quake");
+        assertThatThrownBy(
+                        () -> {
+                            mock.add("quake");
+                        })
+                .isEqualTo(error);
     }
 
     @Test
     public void shouldNotAllowNullExceptionType() {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Cannot stub with null throwable");
-
-        when(mock.add(null)).thenThrow((Exception) null);
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.add(null)).thenThrow((Exception) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Cannot stub with null throwable");
     }
 
     @Test
     public void shouldInstantiateExceptionClassOnInteraction() {
         when(mock.add(null)).thenThrow(NaughtyException.class);
 
-        exception.expect(NaughtyException.class);
-
-        mock.add(null);
+        assertThatThrownBy(
+                        () -> {
+                            mock.add(null);
+                        })
+                .isInstanceOf(NaughtyException.class);
     }
 
     @Test
     public void shouldInstantiateExceptionClassWithOngoingStubbingOnInteraction() {
         doThrow(NaughtyException.class).when(mock).add(null);
 
-        exception.expect(NaughtyException.class);
-
-        mock.add(null);
+        assertThatThrownBy(
+                        () -> {
+                            mock.add(null);
+                        })
+                .isInstanceOf(NaughtyException.class);
     }
 
     @Test
     public void shouldNotAllowSettingInvalidCheckedException() {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Checked exception is invalid for this method");
-
-        when(mock.add("monkey island")).thenThrow(new Exception());
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.add("monkey island")).thenThrow(new Exception());
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Checked exception is invalid for this method");
     }
 
     @Test
     public void shouldNotAllowSettingNullThrowable() {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Cannot stub with null throwable");
-
-        when(mock.add("monkey island")).thenThrow((Throwable) null);
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.add("monkey island")).thenThrow((Throwable) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Cannot stub with null throwable");
     }
 
     @Test
     public void shouldNotAllowSettingNullThrowableArray() {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Cannot stub with null throwable");
-
-        when(mock.add("monkey island")).thenThrow((Throwable[]) null);
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.add("monkey island")).thenThrow((Throwable[]) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Cannot stub with null throwable");
     }
 
     @Test
     public void shouldNotAllowSettingNullThrowableClass() {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Exception type cannot be null");
-
-        when(mock.isEmpty()).thenThrow((Class) null);
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.isEmpty()).thenThrow((Class) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Exception type cannot be null");
     }
 
     @Test
     public void shouldNotAllowSettingNullThrowableClasses() {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Exception type cannot be null");
-
-        when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class[]) null);
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class[]) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Exception type cannot be null");
     }
 
     @Test
     public void shouldNotAllowSettingNullVarArgThrowableClass() {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Exception type cannot be null");
-
-        when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class) null);
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Exception type cannot be null");
     }
 
     @Test
     public void doThrowShouldNotAllowSettingNullThrowableClass() {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Exception type cannot be null");
-
-        doThrow((Class) null).when(mock).isEmpty();
+        assertThatThrownBy(
+                        () -> {
+                            doThrow((Class) null).when(mock).isEmpty();
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Exception type cannot be null");
     }
 
     @Test
-    public void doThrowShouldNotAllowSettingNullThrowableClasses() throws Exception {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Exception type cannot be null");
-
-        doThrow(RuntimeException.class, (Class) null).when(mock).isEmpty();
+    public void doThrowShouldNotAllowSettingNullThrowableClasses() {
+        assertThatThrownBy(
+                        () -> {
+                            doThrow(RuntimeException.class, (Class) null).when(mock).isEmpty();
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Exception type cannot be null");
     }
 
     @Test
-    public void doThrowShouldNotAllowSettingNullVarArgThrowableClasses() throws Exception {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Exception type cannot be null");
-
-        doThrow(RuntimeException.class, (Class[]) null).when(mock).isEmpty();
+    public void doThrowShouldNotAllowSettingNullVarArgThrowableClasses() {
+        assertThatThrownBy(
+                        () -> {
+                            doThrow(RuntimeException.class, (Class[]) null).when(mock).isEmpty();
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Exception type cannot be null");
     }
 
     @Test
-    public void shouldNotAllowSettingNullVarArgsThrowableClasses() throws Exception {
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Exception type cannot be null");
-
-        when(mock.isEmpty()).thenThrow(RuntimeException.class, (Class<RuntimeException>[]) null);
+    public void shouldNotAllowSettingNullVarArgsThrowableClasses() {
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.isEmpty())
+                                    .thenThrow(
+                                            RuntimeException.class,
+                                            (Class<RuntimeException>[]) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Exception type cannot be null");
     }
 
     @Test
-    public void shouldNotAllowDifferentCheckedException() throws Exception {
+    public void shouldNotAllowDifferentCheckedException() {
         IMethods mock = mock(IMethods.class);
 
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Checked exception is invalid for this method");
-
-        when(mock.throwsIOException(0)).thenThrow(CheckedException.class);
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.throwsIOException(0)).thenThrow(CheckedException.class);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Checked exception is invalid for this method");
     }
 
     @Test
-    public void shouldNotAllowCheckedExceptionWhenErrorIsDeclared() throws Exception {
+    public void shouldNotAllowCheckedExceptionWhenErrorIsDeclared() {
         IMethods mock = mock(IMethods.class);
 
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Checked exception is invalid for this method");
-
-        when(mock.throwsError(0)).thenThrow(CheckedException.class);
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.throwsError(0)).thenThrow(CheckedException.class);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Checked exception is invalid for this method");
     }
 
     @Test
-    public void shouldNotAllowCheckedExceptionWhenNothingIsDeclared() throws Exception {
+    public void shouldNotAllowCheckedExceptionWhenNothingIsDeclared() {
         IMethods mock = mock(IMethods.class);
 
-        exception.expect(MockitoException.class);
-        exception.expectMessage("Checked exception is invalid for this method");
-
-        when(mock.throwsNothing(true)).thenThrow(CheckedException.class);
+        assertThatThrownBy(
+                        () -> {
+                            when(mock.throwsNothing(true)).thenThrow(CheckedException.class);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Checked exception is invalid for this method");
     }
 
     @Test
-    public void shouldMixThrowablesAndReturnsOnDifferentMocks() throws Exception {
+    public void shouldMixThrowablesAndReturnsOnDifferentMocks() {
         when(mock.add("ExceptionOne")).thenThrow(new ExceptionOne());
         when(mock.getLast()).thenReturn("last");
         doThrow(new ExceptionTwo()).when(mock).clear();

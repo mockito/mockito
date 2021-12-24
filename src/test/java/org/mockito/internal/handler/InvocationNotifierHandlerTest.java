@@ -5,6 +5,7 @@
 package org.mockito.internal.handler;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
@@ -49,7 +50,7 @@ public class InvocationNotifierHandlerTest {
     @Before
     public void setUp() throws Exception {
         notifier =
-                new InvocationNotifierHandler<ArrayList<Answer<?>>>(
+                new InvocationNotifierHandler<>(
                         mockHandler,
                         (MockCreationSettings<ArrayList<Answer<?>>>)
                                 new MockSettingsImpl<ArrayList<Answer<?>>>()
@@ -90,7 +91,7 @@ public class InvocationNotifierHandlerTest {
                         new NotifiedMethodInvocationReport(invocation, (Object) computedException));
     }
 
-    @Test(expected = ParseException.class)
+    @Test
     public void
             should_notify_all_listeners_when_called_delegate_handler_throws_exception_and_rethrow_it()
                     throws Throwable {
@@ -99,18 +100,18 @@ public class InvocationNotifierHandlerTest {
         given(mockHandler.handle(invocation)).willThrow(parseException);
 
         // when
-        try {
-            notifier.handle(invocation);
-            fail();
-        } finally {
-            // then
-            verify(listener1)
-                    .reportInvocation(
-                            new NotifiedMethodInvocationReport(invocation, parseException));
-            verify(listener2)
-                    .reportInvocation(
-                            new NotifiedMethodInvocationReport(invocation, parseException));
-        }
+        assertThatThrownBy(
+                        () -> {
+                            notifier.handle(invocation);
+                        })
+                .isInstanceOf(ParseException.class)
+                .hasMessage("");
+
+        // then
+        verify(listener1)
+                .reportInvocation(new NotifiedMethodInvocationReport(invocation, parseException));
+        verify(listener2)
+                .reportInvocation(new NotifiedMethodInvocationReport(invocation, parseException));
     }
 
     @Test
@@ -132,8 +133,7 @@ public class InvocationNotifierHandlerTest {
     }
 
     @Test
-    public void should_delegate_all_MockHandlerInterface_to_the_parameterized_MockHandler()
-            throws Exception {
+    public void should_delegate_all_MockHandlerInterface_to_the_parameterized_MockHandler() {
         notifier.getInvocationContainer();
         notifier.getMockSettings();
 

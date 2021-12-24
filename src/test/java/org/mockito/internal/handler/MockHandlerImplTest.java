@@ -4,15 +4,14 @@
  */
 package org.mockito.internal.handler;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
-
-import java.util.Arrays;
 
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
@@ -23,8 +22,6 @@ import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.progress.ArgumentMatcherStorage;
-import org.mockito.internal.stubbing.InvocationContainerImpl;
-import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.Invocation;
@@ -32,12 +29,8 @@ import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"unchecked", "serial"})
+@SuppressWarnings({"unchecked"})
 public class MockHandlerImplTest extends TestBase {
-
-    private StubbedInvocationMatcher stubbedInvocationMatcher =
-            mock(StubbedInvocationMatcher.class);
-    private Invocation invocation = mock(Invocation.class);
 
     @Test
     public void should_remove_verification_mode_even_when_invalid_matchers() throws Throwable {
@@ -66,59 +59,46 @@ public class MockHandlerImplTest extends TestBase {
         assertNull(mockingProgress().pullVerificationMode());
     }
 
-    @Test(expected = MockitoException.class)
-    public void should_throw_mockito_exception_when_invocation_handler_throws_anything()
-            throws Throwable {
+    @Test
+    public void should_throw_mockito_exception_when_invocation_handler_throws_anything() {
         // given
         InvocationListener throwingListener = mock(InvocationListener.class);
-        doThrow(new Throwable())
-                .when(throwingListener)
-                .reportInvocation(any(MethodInvocationReport.class));
-        MockHandlerImpl<?> handler = create_correctly_stubbed_handler(throwingListener);
-
-        // when
-        handler.handle(invocation);
+        // when / then
+        assertThatThrownBy(
+                        () -> {
+                            doThrow(new Throwable())
+                                    .when(throwingListener)
+                                    .reportInvocation(any(MethodInvocationReport.class));
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Checked exception is invalid for this method!",
+                        "Invalid: java.lang.Throwable");
     }
 
-    @Test(expected = WrongTypeOfReturnValue.class)
+    @Test
     public void should_report_bogus_default_answer() throws Throwable {
+        // given
         MockSettingsImpl mockSettings = mock(MockSettingsImpl.class);
         MockHandlerImpl<?> handler = new MockHandlerImpl(mockSettings);
         given(mockSettings.getDefaultAnswer()).willReturn(new Returns(AWrongType.WRONG_TYPE));
-
-        @SuppressWarnings("unused") // otherwise cast is not done
-        String there_should_not_be_a_CCE_here =
-                (String)
-                        handler.handle(
-                                new InvocationBuilder()
-                                        .method(Object.class.getDeclaredMethod("toString"))
-                                        .toInvocation());
-    }
-
-    private MockHandlerImpl<?> create_correctly_stubbed_handler(
-            InvocationListener throwingListener) {
-        MockHandlerImpl<?> handler = create_handler_with_listeners(throwingListener);
-        stub_ordinary_invocation_with_given_return_value(handler);
-        return handler;
-    }
-
-    private void stub_ordinary_invocation_with_given_return_value(MockHandlerImpl<?> handler) {
-        stub_ordinary_invocation_with_invocation_matcher(handler, stubbedInvocationMatcher);
-    }
-
-    private void stub_ordinary_invocation_with_invocation_matcher(
-            MockHandlerImpl<?> handler, StubbedInvocationMatcher value) {
-        handler.invocationContainer = mock(InvocationContainerImpl.class);
-        given(handler.invocationContainer.findAnswerFor(any(Invocation.class))).willReturn(value);
-    }
-
-    private MockHandlerImpl<?> create_handler_with_listeners(InvocationListener... listener) {
-        @SuppressWarnings("rawtypes")
-        MockHandlerImpl<?> handler = new MockHandlerImpl(mock(MockSettingsImpl.class));
-        handler.matchersBinder = mock(MatchersBinder.class);
-        given(handler.getMockSettings().getInvocationListeners())
-                .willReturn(Arrays.asList(listener));
-        return handler;
+        Invocation invocation =
+                new InvocationBuilder()
+                        .method(Object.class.getDeclaredMethod("toString"))
+                        .toInvocation();
+        // when / then
+        assertThatThrownBy(
+                        () -> {
+                            @SuppressWarnings("unused") // otherwise cast is not done
+                            String there_should_not_be_a_CCE_here =
+                                    (String) handler.handle(invocation);
+                        })
+                .isInstanceOf(WrongTypeOfReturnValue.class)
+                .hasMessageContainingAll(
+                        "Default answer returned a result with the wrong type:",
+                        "AWrongType cannot be returned by toString()",
+                        "toString() should return String",
+                        "The default answer of iMethods that was configured on the mock is probably incorrectly implemented.");
     }
 
     private static class AWrongType {

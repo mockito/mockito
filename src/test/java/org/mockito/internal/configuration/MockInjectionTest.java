@@ -5,6 +5,7 @@
 package org.mockito.internal.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Field;
@@ -28,24 +29,44 @@ public class MockInjectionTest {
         withoutConstructor = null;
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void should_not_allow_null_on_field() {
-        MockInjection.onField((Field) null, this);
+        assertThatThrownBy(
+                        () -> {
+                            MockInjection.onField((Field) null, this);
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("item in fields should not be null");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void should_not_allow_null_on_fields() {
-        MockInjection.onFields((Set<Field>) null, this);
+        assertThatThrownBy(
+                        () -> {
+                            MockInjection.onFields((Set<Field>) null, this);
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("fields should not be null");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void should_not_allow_null_on_instance_owning_the_field() throws Exception {
-        MockInjection.onField(field("withConstructor"), null);
+    @Test
+    public void should_not_allow_null_on_instance_owning_the_field() {
+        assertThatThrownBy(
+                        () -> {
+                            MockInjection.onField(field("withConstructor"), null);
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("fieldOwner should not be null");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void should_not_allow_null_on_mocks() throws Exception {
-        MockInjection.onField(field("withConstructor"), this).withMocks(null);
+    @Test
+    public void should_not_allow_null_on_mocks() {
+        assertThatThrownBy(
+                        () -> {
+                            MockInjection.onField(field("withConstructor"), this).withMocks(null);
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("mocks should not be null");
     }
 
     @Test
@@ -55,7 +76,7 @@ public class MockInjectionTest {
                 .tryConstructorInjection()
                 .apply();
 
-        assertThat(withConstructor.initializedWithConstructor).isEqualTo(true);
+        assertThat(withConstructor.initializedWithConstructor).isTrue();
     }
 
     @Test

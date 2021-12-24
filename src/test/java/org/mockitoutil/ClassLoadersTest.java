@@ -5,6 +5,7 @@
 package org.mockitoutil;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
 import static org.mockitoutil.ClassLoaders.currentClassLoader;
 import static org.mockitoutil.ClassLoaders.excludingClassLoader;
@@ -23,20 +24,22 @@ public class ClassLoadersTest {
             "org.mockitoutil.ClassLoadersTest$ClassUsingInterface1";
     public static final String INTERFACE_NAME = "org.mockitoutil.ClassLoadersTest$Interface1";
 
-    @Test(expected = ClassNotFoundException.class)
-    public void isolated_class_loader_cannot_load_classes_when_no_given_prefix() throws Exception {
+    @Test
+    public void isolated_class_loader_cannot_load_classes_when_no_given_prefix() {
         // given
         ClassLoader cl = isolatedClassLoader().build();
 
-        // when
-        cl.loadClass("org.mockito.Mockito");
-
-        // then raises CNFE
+        // when / then
+        assertThatThrownBy(
+                        () -> {
+                            cl.loadClass("org.mockito.Mockito");
+                        })
+                .isInstanceOf(ClassNotFoundException.class)
+                .hasMessage("Can only load classes with prefixes : [], but not : []");
     }
 
     @Test
-    public void isolated_class_loader_cannot_load_classes_if_no_code_source_path()
-            throws Exception {
+    public void isolated_class_loader_cannot_load_classes_if_no_code_source_path() {
         // given
         ClassLoader cl =
                 isolatedClassLoader().withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE).build();
@@ -113,7 +116,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void isolated_class_loader_cannot_load_classes_if_prefix_excluded() throws Exception {
+    public void isolated_class_loader_cannot_load_classes_if_prefix_excluded() {
         // given
         ClassLoader cl =
                 isolatedClassLoader()
@@ -135,7 +138,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void isolated_class_loader_has_no_parent() throws Exception {
+    public void isolated_class_loader_has_no_parent() {
         ClassLoader cl =
                 isolatedClassLoader()
                         .withCurrentCodeSourceUrls()
@@ -146,16 +149,18 @@ public class ClassLoadersTest {
         assertThat(cl.getParent()).isNull();
     }
 
-    @Test(expected = ClassNotFoundException.class)
-    public void excluding_class_loader_cannot_load_classes_when_no_correct_source_url_set()
-            throws Exception {
+    @Test
+    public void excluding_class_loader_cannot_load_classes_when_no_correct_source_url_set() {
         // given
         ClassLoader cl = excludingClassLoader().withCodeSourceUrlOf(this.getClass()).build();
 
-        // when
-        cl.loadClass("org.mockito.Mockito");
-
-        // then class CNFE
+        // when / then
+        assertThatThrownBy(
+                        () -> {
+                            cl.loadClass("org.mockito.Mockito");
+                        })
+                .isInstanceOf(ClassNotFoundException.class)
+                .hasMessage("org.mockito.Mockito");
     }
 
     @Test
@@ -194,7 +199,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void can_not_load_a_class_not_previously_registered_in_builder() throws Exception {
+    public void can_not_load_a_class_not_previously_registered_in_builder() {
         // given
         ClassLoader cl =
                 ClassLoaders.inMemoryClassLoader()
@@ -266,7 +271,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void return_bootstrap_classloader() throws Exception {
+    public void return_bootstrap_classloader() {
         assertThat(jdkClassLoader()).isNotEqualTo(Mockito.class.getClassLoader());
         assertThat(jdkClassLoader()).isNotEqualTo(ClassLoaders.class.getClassLoader());
         assertThat(jdkClassLoader()).isEqualTo(Number.class.getClassLoader());
@@ -274,7 +279,7 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void return_current_classloader() throws Exception {
+    public void return_current_classloader() {
         assertThat(currentClassLoader()).isEqualTo(this.getClass().getClassLoader());
     }
 

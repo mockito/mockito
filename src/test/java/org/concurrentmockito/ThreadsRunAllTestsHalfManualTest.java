@@ -115,7 +115,7 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
                             DescriptiveMessagesWhenVerificationFailsTest.class,
                             DescriptiveMessagesWhenTimesXVerificationFailsTest.class,
                             BasicVerificationInOrderTest.class,
-                            VerificationInOrderMixedWithOrdiraryVerificationTest.class,
+                            VerificationInOrderMixedWithOrdinaryVerificationTest.class,
                             DescriptiveMessagesOnVerificationInOrderErrorsTest.class,
                             InvalidStateDetectionTest.class,
                             ReplacingObjectMethodsTest.class,

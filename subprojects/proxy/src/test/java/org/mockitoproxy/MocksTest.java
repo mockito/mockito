@@ -4,22 +4,23 @@
  */
 package org.mockitoproxy;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.exceptions.base.MockitoException;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Proxy;
-
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Proxy;
+
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.exceptions.base.MockitoException;
 
 public class MocksTest {
 
@@ -103,9 +104,17 @@ public class MocksTest {
         assertThat(mock.toString(), is("value"));
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void cannot_create_mock_of_non_object_class() {
-        Number number = Mockito.mock(Number.class);
+        assertThatThrownBy(
+                () -> {
+                    Number number = Mockito.mock(Number.class);
+                })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Cannot mock/spy class",
+                        "Mockito cannot mock/spy because :",
+                        " - non-interface");
     }
 
     public interface SomeInterface {

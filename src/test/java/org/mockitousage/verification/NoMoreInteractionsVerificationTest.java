@@ -5,8 +5,14 @@
 package org.mockitousage.verification;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +35,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldStubbingNotRegisterRedundantInteractions() throws Exception {
+    public void shouldStubbingNotRegisterRedundantInteractions() {
         when(mock.add("one")).thenReturn(true);
         when(mock.add("two")).thenReturn(true);
 
@@ -40,7 +46,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyWhenWantedNumberOfInvocationsUsed() throws Exception {
+    public void shouldVerifyWhenWantedNumberOfInvocationsUsed() {
         mock.add("one");
         mock.add("one");
         mock.add("one");
@@ -51,7 +57,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldFailNoMoreInteractionsVerification() throws Exception {
+    public void shouldFailNoMoreInteractionsVerification() {
         mock.clear();
 
         try {
@@ -62,7 +68,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldFailNoInteractionsVerification() throws Exception {
+    public void shouldFailNoInteractionsVerification() {
         mock.clear();
 
         try {
@@ -73,7 +79,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldPrintAllInvocationsWhenVerifyingNoMoreInvocations() throws Exception {
+    public void shouldPrintAllInvocationsWhenVerifyingNoMoreInvocations() {
         mock.add(1);
         mock.add(2);
         mock.clear();
@@ -88,7 +94,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldNotContainAllInvocationsWhenSingleUnwantedFound() throws Exception {
+    public void shouldNotContainAllInvocationsWhenSingleUnwantedFound() {
         mock.add(1);
 
         try {
@@ -100,7 +106,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyOneMockButFailOnOther() throws Exception {
+    public void shouldVerifyOneMockButFailOnOther() {
         List<String> list = mock(List.class);
         Map<String, Integer> map = mock(Map.class);
 
@@ -120,7 +126,7 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
     }
 
     @Test
-    public void shouldVerifyOneMockButFailOnOtherVerifyNoInteractions() throws Exception {
+    public void shouldVerifyOneMockButFailOnOtherVerifyNoInteractions() {
         List<String> list = mock(List.class);
         Map<String, Integer> map = mock(Map.class);
 
@@ -139,9 +145,18 @@ public class NoMoreInteractionsVerificationTest extends TestBase {
         }
     }
 
-    @SuppressWarnings("all")
-    @Test(expected = MockitoException.class)
-    public void verifyNoMoreInteractionsShouldScreamWhenNullPassed() throws Exception {
-        verifyNoMoreInteractions((Object[]) null);
+    // @SuppressWarnings("all")
+    @Test
+    public void verifyNoMoreInteractionsShouldScreamWhenNullPassed() {
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoMoreInteractions((Object[]) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Method requires argument(s)!",
+                        "Pass mocks that should be verified, e.g:",
+                        "    verifyNoMoreInteractions(mockOne, mockTwo);",
+                        "    verifyNoInteractions(mockOne, mockTwo);");
     }
 }

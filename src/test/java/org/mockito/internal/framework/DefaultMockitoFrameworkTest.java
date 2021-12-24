@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.framework;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
@@ -41,14 +42,24 @@ public class DefaultMockitoFrameworkTest extends TestBase {
         new StateMaster().clearMockitoListeners();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void prevents_adding_null_listener() {
-        framework.addListener(null);
+        assertThatThrownBy(
+                        () -> {
+                            framework.addListener(null);
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("listener should not be null");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void prevents_removing_null_listener() {
-        framework.removeListener(null);
+        assertThatThrownBy(
+                        () -> {
+                            framework.removeListener(null);
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("listener should not be null");
     }
 
     @Test

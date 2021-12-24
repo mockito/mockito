@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing.answers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.internal.stubbing.answers.DoesNothing.doesNothing;
@@ -38,15 +39,20 @@ public class DoesNothingTest {
     }
 
     @Test
-    public void answer_returnsNull() throws Throwable {
+    public void answer_returnsNull() {
         assertThat(doesNothing().answer(invocation_Void)).isNull();
         assertThat(doesNothing().answer(invocation_void)).isNull();
         assertThat(doesNothing().answer(invocation_String)).isNull();
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void validateFor_nonVoidReturnType_shouldFail() {
-        doesNothing().validateFor(invocation_String);
+        assertThatThrownBy(
+                        () -> {
+                            doesNothing().validateFor(invocation_String);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Only void methods can doNothing()!");
     }
 
     @Test
@@ -55,7 +61,7 @@ public class DoesNothingTest {
     }
 
     @Test
-    public void validateFor_voidObjectReturnType() throws Throwable {
+    public void validateFor_voidObjectReturnType() {
         doesNothing().validateFor(invocation_Void);
     }
 

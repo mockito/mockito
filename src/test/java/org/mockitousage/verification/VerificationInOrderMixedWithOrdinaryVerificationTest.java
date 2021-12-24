@@ -4,8 +4,16 @@
  */
 package org.mockitousage.verification;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +24,7 @@ import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
-public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBase {
+public class VerificationInOrderMixedWithOrdinaryVerificationTest extends TestBase {
 
     private IMethods mockOne;
     private IMethods mockTwo;
@@ -121,9 +129,18 @@ public class VerificationInOrderMixedWithOrdiraryVerificationTest extends TestBa
         }
     }
 
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldScreamWhenUnfamiliarMockPassedToInOrderObject() {
-        inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(1);
+        assertThatThrownBy(
+                        () -> {
+                            inOrder.verify(mockTwo, atLeastOnce()).simpleMethod(1);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "InOrder can only verify mocks that were passed in during creation of InOrder.",
+                        "For example:",
+                        "    InOrder inOrder = inOrder(mockOne);",
+                        "    inOrder.verify(mockOne).doStuff();");
     }
 
     @Test

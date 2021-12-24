@@ -4,13 +4,14 @@
  */
 package org.mockito.internal.configuration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import java.util.List;
 
 import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.exceptions.base.MockitoException;
-
-import static org.assertj.core.api.Assertions.*;
 
 public class MockAnnotationProcessorTest {
 
@@ -35,19 +36,34 @@ public class MockAnnotationProcessorTest {
         assertThat(type).isEqualTo(Void.class);
     }
 
-    @Test(expected = MockitoException.class)
-    public void testGeneric() throws Exception {
-        MockAnnotationProcessor.inferParameterizedType(
-                MockAnnotationProcessorTest.class.getDeclaredField("generic").getGenericType(),
-                "generic",
-                "Sample");
+    @Test
+    public void testGeneric() {
+        assertThatThrownBy(
+                        () -> {
+                            MockAnnotationProcessor.inferParameterizedType(
+                                    MockAnnotationProcessorTest.class
+                                            .getDeclaredField("generic")
+                                            .getGenericType(),
+                                    "generic",
+                                    "Sample");
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining(
+                        "Mockito cannot infer a static mock from a raw type for generic");
     }
 
-    @Test(expected = MockitoException.class)
-    public void testRaw() throws Exception {
-        MockAnnotationProcessor.inferParameterizedType(
-                MockAnnotationProcessorTest.class.getDeclaredField("raw").getGenericType(),
-                "raw",
-                "Sample");
+    @Test
+    public void testRaw() {
+        assertThatThrownBy(
+                        () -> {
+                            MockAnnotationProcessor.inferParameterizedType(
+                                    MockAnnotationProcessorTest.class
+                                            .getDeclaredField("raw")
+                                            .getGenericType(),
+                                    "raw",
+                                    "Sample");
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("Mockito cannot infer a static mock from a raw type for raw");
     }
 }

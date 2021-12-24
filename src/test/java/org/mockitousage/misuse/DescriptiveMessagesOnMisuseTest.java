@@ -4,7 +4,11 @@
  */
 package org.mockitousage.misuse;
 
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -58,42 +62,110 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
     }
 
     @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
-    @Test(expected = NotAMockException.class)
+    @Test
     public void shouldScreamWhenWholeMethodPassedToVerify() {
-        verify(mock.booleanReturningMethod());
+        assertThatThrownBy(
+                        () -> {
+                            verify(mock.booleanReturningMethod());
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContainingAll(
+                        "Argument passed to verify() is of type Boolean and is not a mock!",
+                        "Make sure you place the parenthesis correctly!",
+                        "See the examples of correct verifications:",
+                        "    verify(mock).someMethod();",
+                        "    verify(mock, times(10)).someMethod();",
+                        "    verify(mock, atLeastOnce()).someMethod();");
     }
 
-    @Test(expected = NotAMockException.class)
+    @Test
     public void shouldScreamWhenWholeMethodPassedToVerifyNoMoreInteractions() {
-        verifyNoMoreInteractions(mock.byteReturningMethod());
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoMoreInteractions(mock.byteReturningMethod());
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContainingAll(
+                        "Argument(s) passed is not a mock!",
+                        "Examples of correct verifications:",
+                        "    verifyNoMoreInteractions(mockOne, mockTwo);",
+                        "    verifyNoInteractions(mockOne, mockTwo);");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
-    @Test(expected = NotAMockException.class)
+    @Test
     public void shouldScreamWhenInOrderCreatedWithDodgyMock() {
-        inOrder("not a mock");
+        assertThatThrownBy(
+                        () -> {
+                            inOrder("not a mock");
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContainingAll(
+                        "Argument(s) passed is not a mock!",
+                        "Pass mocks that require verification in order.",
+                        "For example:",
+                        "    InOrder inOrder = inOrder(mockOne, mockTwo);");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
-    @Test(expected = NullInsteadOfMockException.class)
+    @Test
     public void shouldScreamWhenInOrderCreatedWithNulls() {
-        inOrder(mock, null);
+        assertThatThrownBy(
+                        () -> {
+                            inOrder(mock, null);
+                        })
+                .isInstanceOf(NullInsteadOfMockException.class)
+                .hasMessageContainingAll(
+                        "Argument(s) passed is null!",
+                        "Pass mocks that require verification in order.",
+                        "For example:",
+                        "    InOrder inOrder = inOrder(mockOne, mockTwo);");
     }
 
     @SuppressWarnings({"MockitoUsage", "CheckReturnValue"})
-    @Test(expected = NullInsteadOfMockException.class)
+    @Test
     public void shouldScreamNullPassedToVerify() {
-        verify(null);
+        assertThatThrownBy(
+                        () -> {
+                            verify(null);
+                        })
+                .isInstanceOf(NullInsteadOfMockException.class)
+                .hasMessageContainingAll(
+                        "Argument passed to verify() should be a mock but is null!",
+                        "Examples of correct verifications:",
+                        "    verify(mock).someMethod();",
+                        "    verify(mock, times(10)).someMethod();",
+                        "    verify(mock, atLeastOnce()).someMethod();",
+                        "    not: verify(mock.someMethod());",
+                        "Also, if you use @Mock annotation don't miss openMocks()");
     }
 
-    @Test(expected = NullInsteadOfMockException.class)
+    @Test
     public void shouldScreamWhenNotMockPassedToVerifyNoMoreInteractions() {
-        verifyNoMoreInteractions(null, "blah");
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoMoreInteractions(null, "blah");
+                        })
+                .isInstanceOf(NullInsteadOfMockException.class)
+                .hasMessageContainingAll(
+                        "Argument(s) passed is null!",
+                        "Examples of correct verifications:",
+                        "    verifyNoMoreInteractions(mockOne, mockTwo);",
+                        "    verifyNoInteractions(mockOne, mockTwo);");
     }
 
     @SuppressWarnings("all")
-    @Test(expected = MockitoException.class)
+    @Test
     public void shouldScreamWhenNullPassedToVerifyNoMoreInteractions() {
-        verifyNoMoreInteractions((Object[]) null);
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoMoreInteractions((Object[]) null);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "Method requires argument(s)!",
+                        "Pass mocks that should be verified, e.g:",
+                        "    verifyNoMoreInteractions(mockOne, mockTwo);",
+                        "    verifyNoInteractions(mockOne, mockTwo);");
     }
 }

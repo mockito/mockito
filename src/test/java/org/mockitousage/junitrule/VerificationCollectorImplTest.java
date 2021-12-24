@@ -5,14 +5,18 @@
 package org.mockitousage.junitrule;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.longThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.shortThat;
+import static org.mockito.Mockito.verify;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
-import org.mockito.ArgumentMatcher;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.VerificationCollector;
@@ -31,14 +35,23 @@ public class VerificationCollectorImplTest {
         collector.collectAndReport();
     }
 
-    @Test(expected = MockitoAssertionError.class)
+    @Test
     public void should_collect_verification_failures() {
         VerificationCollector collector = MockitoJUnit.collector().assertLazily();
 
         IMethods methods = mock(IMethods.class);
 
         verify(methods).simpleMethod();
-        collector.collectAndReport();
+        assertThatThrownBy(
+                        () -> {
+                            collector.collectAndReport();
+                        })
+                .isInstanceOf(MockitoAssertionError.class)
+                .hasMessageContainingAll(
+                        "There were multiple verification failures:",
+                        "1. Wanted but not invoked:",
+                        "iMethods.simpleMethod();",
+                        "Actually, there were zero interactions with this mock.");
     }
 
     @Test
@@ -78,21 +91,10 @@ public class VerificationCollectorImplTest {
         verify(methods)
                 .longArg(
                         longThat(
-                                new ArgumentMatcher<Long>() {
-                                    @Override
-                                    public boolean matches(Long argument) {
-                                        throw new AssertionError("custom error message");
-                                    }
+                                argument -> {
+                                    throw new AssertionError("custom error message");
                                 }));
-        verify(methods)
-                .forShort(
-                        shortThat(
-                                new ArgumentMatcher<Short>() {
-                                    @Override
-                                    public boolean matches(Short argument) {
-                                        return false;
-                                    }
-                                }));
+        verify(methods).forShort(shortThat(argument -> false));
 
         try {
             collector.collectAndReport();

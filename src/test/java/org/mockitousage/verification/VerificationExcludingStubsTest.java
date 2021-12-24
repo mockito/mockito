@@ -4,8 +4,13 @@
  */
 package org.mockitousage.verification;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.ignoreStubs;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -21,7 +26,7 @@ public class VerificationExcludingStubsTest extends TestBase {
     @Mock IMethods mock;
 
     @Test
-    public void shouldAllowToExcludeStubsForVerification() throws Exception {
+    public void shouldAllowToExcludeStubsForVerification() {
         // given
         when(mock.simpleMethod()).thenReturn("foo");
 
@@ -45,7 +50,7 @@ public class VerificationExcludingStubsTest extends TestBase {
     }
 
     @Test
-    public void shouldExcludeFromVerificationInOrder() throws Exception {
+    public void shouldExcludeFromVerificationInOrder() {
         // given
         when(mock.simpleMethod()).thenReturn("foo");
 
@@ -62,13 +67,23 @@ public class VerificationExcludingStubsTest extends TestBase {
         verifyNoMoreInteractions(mock);
     }
 
-    @Test(expected = NotAMockException.class)
-    public void shouldIgnoringStubsDetectNulls() throws Exception {
-        Object ignored = ignoreStubs(mock, null);
+    @Test
+    public void shouldIgnoringStubsDetectNulls() {
+        assertThatThrownBy(
+                        () -> {
+                            Object ignored = ignoreStubs(mock, null);
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessage("Argument should be a mock, but is null!");
     }
 
-    @Test(expected = NotAMockException.class)
-    public void shouldIgnoringStubsDetectNonMocks() throws Exception {
-        Object ignored = ignoreStubs(mock, new Object());
+    @Test
+    public void shouldIgnoringStubsDetectNonMocks() {
+        assertThatThrownBy(
+                        () -> {
+                            Object ignored = ignoreStubs(mock, new Object());
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessage("Argument should be a mock, but is: class java.lang.Object");
     }
 }

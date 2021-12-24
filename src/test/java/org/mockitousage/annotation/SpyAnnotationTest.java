@@ -5,6 +5,7 @@
 package org.mockitousage.annotation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -162,9 +163,13 @@ public class SpyAnnotationTest extends TestBase {
         assertEquals("inner strength", outer.strength.fullStrength());
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test
     public void should_reset_spy() throws Exception {
-        spiedList.get(10); // see shouldInitSpy
+        assertThatThrownBy(
+                        () -> {
+                            spiedList.get(10); // see shouldInitSpy
+                        })
+                .isInstanceOf(IndexOutOfBoundsException.class);
     }
 
     @Test
