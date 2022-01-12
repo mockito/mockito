@@ -12,12 +12,9 @@ import static net.bytebuddy.implementation.attribute.MethodAttributeAppender.For
 import static net.bytebuddy.matcher.ElementMatchers.any;
 import static net.bytebuddy.matcher.ElementMatchers.hasParameters;
 import static net.bytebuddy.matcher.ElementMatchers.hasType;
-import static net.bytebuddy.matcher.ElementMatchers.isAnnotatedWith;
-import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 import static net.bytebuddy.matcher.ElementMatchers.isEquals;
 import static net.bytebuddy.matcher.ElementMatchers.isHashCode;
 import static net.bytebuddy.matcher.ElementMatchers.isPackagePrivate;
-import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.returns;
 import static net.bytebuddy.matcher.ElementMatchers.whereAny;
 import static org.mockito.internal.util.StringUtil.join;
@@ -29,9 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Random;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.method.MethodDescription;
@@ -224,7 +219,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 byteBuddy
                         .subclass(features.mockedType)
                         .name(name)
-                        .ignoreAlso(isGroovyMethod())
+                        .ignoreAlso(BytecodeGenerator.isGroovyMethod(false))
                         .annotateType(
                                 features.stripAnnotations
                                         ? new Annotation[0]
@@ -280,22 +275,6 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     public void mockClassConstruction(Class<?> type) {
         throw new MockitoException(
                 "The subclass byte code generator cannot create construction mocks");
-    }
-
-    private <T> Collection<Class<? super T>> getAllTypes(Class<T> type) {
-        Collection<Class<? super T>> supertypes = new LinkedList<>();
-        supertypes.add(type);
-        Class<? super T> superType = type;
-        while (superType != null) {
-            supertypes.add(superType);
-            superType = superType.getSuperclass();
-        }
-        return supertypes;
-    }
-
-    private static ElementMatcher<MethodDescription> isGroovyMethod() {
-        return isDeclaredBy(named("groovy.lang.GroovyObjectSupport"))
-                .or(isAnnotatedWith(named("groovy.transform.Internal")));
     }
 
     private boolean isComingFromJDK(Class<?> type) {
