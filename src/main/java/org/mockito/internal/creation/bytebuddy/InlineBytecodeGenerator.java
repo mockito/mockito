@@ -387,6 +387,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                                 //            ,ClassFileLocator.ForClassLoader.ofSystemLoader()
                                 //        )
                                 )
+                        .ignoreAlso(BytecodeGenerator.isGroovyMethod())
                         // Note: The VM erases parameter meta data from the provided class file
                         // (bug). We just add this information manually.
                         .visit(new ParameterWritingVisitorWrapper(classBeingRedefined))

@@ -4,6 +4,12 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.matcher.ElementMatcher;
+
+import static net.bytebuddy.matcher.ElementMatchers.*;
+import static net.bytebuddy.matcher.ElementMatchers.named;
+
 public interface BytecodeGenerator {
 
     <T> Class<? extends T> mockClass(MockFeatures<T> features);
@@ -13,4 +19,9 @@ public interface BytecodeGenerator {
     void mockClassStatic(Class<?> type);
 
     default void clearAllCaches() {}
+
+    static ElementMatcher<MethodDescription> isGroovyMethod() {
+        return isDeclaredBy(named("groovy.lang.GroovyObjectSupport"))
+            .or(isAnnotatedWith(named("groovy.transform.Internal")));
+    }
 }

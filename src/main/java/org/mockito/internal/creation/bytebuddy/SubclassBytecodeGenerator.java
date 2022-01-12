@@ -224,7 +224,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 byteBuddy
                         .subclass(features.mockedType)
                         .name(name)
-                        .ignoreAlso(isGroovyMethod())
+                        .ignoreAlso(BytecodeGenerator.isGroovyMethod())
                         .annotateType(
                                 features.stripAnnotations
                                         ? new Annotation[0]
@@ -291,11 +291,6 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             superType = superType.getSuperclass();
         }
         return supertypes;
-    }
-
-    private static ElementMatcher<MethodDescription> isGroovyMethod() {
-        return isDeclaredBy(named("groovy.lang.GroovyObjectSupport"))
-                .or(isAnnotatedWith(named("groovy.transform.Internal")));
     }
 
     private boolean isComingFromJDK(Class<?> type) {
