@@ -20,8 +20,15 @@ public interface BytecodeGenerator {
 
     default void clearAllCaches() {}
 
-    static ElementMatcher<MethodDescription> isGroovyMethod() {
-        return isDeclaredBy(named("groovy.lang.GroovyObjectSupport"))
-            .or(isAnnotatedWith(named("groovy.transform.Internal")));
+    static ElementMatcher<MethodDescription> isGroovyMethod(boolean inline) {
+        ElementMatcher.Junction<MethodDescription> matcher =
+                isDeclaredBy(named("groovy.lang.GroovyObjectSupport"))
+                        .or(isAnnotatedWith(named("groovy.transform.Internal")));
+        if (inline) {
+            return matcher.or(
+                    named("$getStaticMetaClass").and(returns(named("groovy.lang.MetaClass"))));
+        } else {
+            return matcher;
+        }
     }
 }

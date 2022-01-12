@@ -12,9 +12,12 @@ import static net.bytebuddy.implementation.attribute.MethodAttributeAppender.For
 import static net.bytebuddy.matcher.ElementMatchers.any;
 import static net.bytebuddy.matcher.ElementMatchers.hasParameters;
 import static net.bytebuddy.matcher.ElementMatchers.hasType;
+import static net.bytebuddy.matcher.ElementMatchers.isAnnotatedWith;
+import static net.bytebuddy.matcher.ElementMatchers.isDeclaredBy;
 import static net.bytebuddy.matcher.ElementMatchers.isEquals;
 import static net.bytebuddy.matcher.ElementMatchers.isHashCode;
 import static net.bytebuddy.matcher.ElementMatchers.isPackagePrivate;
+import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.returns;
 import static net.bytebuddy.matcher.ElementMatchers.whereAny;
 import static org.mockito.internal.util.StringUtil.join;
@@ -221,7 +224,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 byteBuddy
                         .subclass(features.mockedType)
                         .name(name)
-                        .ignoreAlso(BytecodeGenerator.isGroovyMethod())
+                        .ignoreAlso(BytecodeGenerator.isGroovyMethod(false))
                         .annotateType(
                                 features.stripAnnotations
                                         ? new Annotation[0]

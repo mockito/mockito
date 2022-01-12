@@ -117,15 +117,19 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                                                                 .or(isEquals())
                                                                 .or(isDefaultFinalizer())))
                                         .and(
-                                                not(
-                                                        isDeclaredBy(nameStartsWith("java."))
+                                                not(isDeclaredBy(nameStartsWith("java."))
                                                                 .<MethodDescription>and(
-                                                                        isPackagePrivate()))),
+                                                                        isPackagePrivate()))
+                                                        .and(
+                                                                not(
+                                                                        BytecodeGenerator
+                                                                                .isGroovyMethod(
+                                                                                        true)))),
                                 Advice.withCustomMapping()
                                         .bind(MockMethodAdvice.Identifier.class, identifier)
                                         .to(MockMethodAdvice.class))
                         .method(
-                                isStatic(),
+                                isStatic().and(not(BytecodeGenerator.isGroovyMethod(true))),
                                 Advice.withCustomMapping()
                                         .bind(MockMethodAdvice.Identifier.class, identifier)
                                         .to(MockMethodAdvice.ForStatic.class))
