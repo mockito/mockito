@@ -2185,7 +2185,7 @@ public class Mockito extends ArgumentMatchers {
                 context -> {
                     if (context.getCount() == 1 || additionalAnswers.length == 0) {
                         return withSettings().defaultAnswer(defaultAnswer);
-                    } else if (context.getCount() >= additionalAnswers.length) {
+                    } else if (context.getCount() > additionalAnswers.length) {
                         return withSettings()
                                 .defaultAnswer(additionalAnswers[additionalAnswers.length - 1]);
                     } else {
