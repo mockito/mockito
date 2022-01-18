@@ -57,6 +57,19 @@ public final class ConstructionMockTest {
         }
     }
 
+    /**
+     * Tests issue #2544
+     */
+    @Test
+    public void testConstructionMockDefaultAnswerMultipleMoreThanTwo() {
+        try (MockedConstruction<Dummy> ignored = Mockito.mockConstructionWithAnswer(Dummy.class, invocation -> "bar", invocation -> "qux", invocation -> "baz")) {
+            assertEquals("bar", new Dummy().foo());
+            assertEquals("qux", new Dummy().foo());
+            assertEquals("baz", new Dummy().foo());
+            assertEquals("baz", new Dummy().foo());
+        }
+    }
+
     @Test
     public void testConstructionMockPrepared() {
         try (MockedConstruction<Dummy> ignored = Mockito.mockConstruction(Dummy.class, (mock, context) -> when(mock.foo()).thenReturn("bar"))) {
