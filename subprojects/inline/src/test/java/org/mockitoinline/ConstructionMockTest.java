@@ -50,10 +50,11 @@ public final class ConstructionMockTest {
 
     @Test
     public void testConstructionMockDefaultAnswerMultiple() {
-        try (MockedConstruction<Dummy> ignored = Mockito.mockConstructionWithAnswer(Dummy.class, invocation -> "bar", invocation -> "qux")) {
+        try (MockedConstruction<Dummy> ignored = Mockito.mockConstructionWithAnswer(Dummy.class, invocation -> "bar", invocation -> "qux", invocation -> "baz")) {
             assertEquals("bar", new Dummy().foo());
             assertEquals("qux", new Dummy().foo());
-            assertEquals("qux", new Dummy().foo());
+            assertEquals("baz", new Dummy().foo());
+            assertEquals("baz", new Dummy().foo());
         }
     }
 
