@@ -19,6 +19,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
@@ -111,27 +114,6 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             throws Throwable {
         if (mocked != null) {
             returned = mocked.call();
-        }
-    }
-
-    static Throwable hideRecursiveCall(Throwable throwable, int current, Class<?> targetType) {
-        try {
-            StackTraceElement[] stack = throwable.getStackTrace();
-            int skip = 0;
-            StackTraceElement next;
-            do {
-                next = stack[stack.length - current - ++skip];
-            } while (!next.getClassName().equals(targetType.getName()));
-            int top = stack.length - current - skip;
-            StackTraceElement[] cleared = new StackTraceElement[stack.length - skip];
-            System.arraycopy(stack, 0, cleared, 0, top);
-            System.arraycopy(stack, top + skip, cleared, top, current);
-            throwable.setStackTrace(cleared);
-            return throwable;
-        } catch (RuntimeException ignored) {
-            // This should not happen unless someone instrumented or manipulated exception stack
-            // traces.
-            return throwable;
         }
     }
 
@@ -333,23 +315,30 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             return accessor.invoke(origin, instance, arguments);
         } catch (InvocationTargetException exception) {
             Throwable cause = exception.getCause();
-            StackTraceElement[] tmpStack = new Throwable().getStackTrace();
-
-            int skip = tmpStack.length;
-            // if there is a suitable instance, do not skip the root-cause for the exception
-            if (instance != null) {
-                skip = 0;
-                String causingClassName = instance.getClass().getName();
-                StackTraceElement stackFrame;
-                do {
-                    stackFrame = tmpStack[skip++];
-                } while (stackFrame.getClassName().startsWith(causingClassName));
-            }
-
-            new ConditionalStackTraceFilter()
-                    .filter(hideRecursiveCall(cause, skip, origin.getDeclaringClass()));
+            new ConditionalStackTraceFilter().filter(removeRecursiveCalls(cause, origin.getDeclaringClass()));
             throw cause;
         }
+    }
+
+    static Throwable removeRecursiveCalls(final Throwable cause, final Class<?> declaringClass) {
+        final List<String> uniqueStackTraceItems = new ArrayList<>();
+        final List<Integer> indexesToBeRemoved = new ArrayList<>();
+        for (StackTraceElement element : cause.getStackTrace()) {
+            final String key = element.getClassName() + element.getLineNumber();
+            final int elementIndex = uniqueStackTraceItems.lastIndexOf(key);
+            uniqueStackTraceItems.add(key);
+
+            if (elementIndex > -1 && declaringClass.getName().equals(element.getClassName())) {
+                indexesToBeRemoved.add(elementIndex);
+            }
+        }
+        final List<StackTraceElement> adjustedList = new ArrayList<>(Arrays.asList(cause.getStackTrace()));
+        indexesToBeRemoved.stream()
+            .sorted(Comparator.reverseOrder())
+            .mapToInt(Integer::intValue)
+            .forEach(adjustedList::remove);
+        cause.setStackTrace(adjustedList.toArray(new StackTraceElement[]{}));
+        return cause;
     }
 
     private static class ReturnValueWrapper implements Callable<Object> {
