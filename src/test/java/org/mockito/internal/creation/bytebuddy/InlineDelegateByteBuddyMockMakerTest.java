@@ -9,19 +9,14 @@ import static net.bytebuddy.ClassFileVersion.JAVA_V8;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
@@ -253,17 +248,56 @@ public class InlineDelegateByteBuddyMockMakerTest
                 mockMaker.createSpy(
                         settings, new MockHandlerImpl<>(settings), new ExceptionThrowingClass());
 
-        StackTraceElement[] returnedStack = null;
-        try {
-            proxy.get().throwException();
-        } catch (IOException ex) {
-            returnedStack = ex.getStackTrace();
-        }
+        StackTraceElement[] returnedStack =
+                assertThrows(IOException.class, () -> proxy.get().throwException()).getStackTrace();
 
         assertNotNull("Stack trace from mockito expected", returnedStack);
 
-        assertEquals(ExceptionThrowingClass.class.getName(), returnedStack[0].getClassName());
-        assertEquals("internalThrowException", returnedStack[0].getMethodName());
+        List<StackTraceElement> exceptionClassElements =
+                Arrays.stream(returnedStack)
+                        .filter(
+                                element ->
+                                        element.getClassName()
+                                                .equals(ExceptionThrowingClass.class.getName()))
+                        .collect(Collectors.toList());
+        assertEquals(3, exceptionClassElements.size());
+        assertEquals("internalThrowException", exceptionClassElements.get(0).getMethodName());
+        assertEquals("internalThrowException", exceptionClassElements.get(1).getMethodName());
+        assertEquals("throwException", exceptionClassElements.get(2).getMethodName());
+    }
+
+    @Test
+    public void should_leave_causing_stack_with_two_spies() throws Exception {
+        // given
+        MockSettingsImpl<ExceptionThrowingClass> settingsEx = new MockSettingsImpl<>();
+        settingsEx.setTypeToMock(ExceptionThrowingClass.class);
+        settingsEx.defaultAnswer(Answers.CALLS_REAL_METHODS);
+        Optional<ExceptionThrowingClass> proxyEx =
+                mockMaker.createSpy(
+                        settingsEx,
+                        new MockHandlerImpl<>(settingsEx),
+                        new ExceptionThrowingClass());
+
+        MockSettingsImpl<WrapperClass> settingsWr = new MockSettingsImpl<>();
+        settingsWr.setTypeToMock(WrapperClass.class);
+        settingsWr.defaultAnswer(Answers.CALLS_REAL_METHODS);
+        Optional<WrapperClass> proxyWr =
+                mockMaker.createSpy(
+                        settingsWr, new MockHandlerImpl<>(settingsWr), new WrapperClass());
+
+        // when
+        IOException ex =
+                assertThrows(IOException.class, () -> proxyWr.get().callWrapped(proxyEx.get()));
+        List<StackTraceElement> wrapperClassElements =
+                Arrays.stream(ex.getStackTrace())
+                        .filter(
+                                element ->
+                                        element.getClassName().equals(WrapperClass.class.getName()))
+                        .collect(Collectors.toList());
+
+        // then
+        assertEquals(1, wrapperClassElements.size());
+        assertEquals("callWrapped", wrapperClassElements.get(0).getMethodName());
     }
 
     @Test
@@ -271,30 +305,33 @@ public class InlineDelegateByteBuddyMockMakerTest
         StackTraceElement[] stack =
                 new StackTraceElement[] {
                     new StackTraceElement("foo", "", "", -1),
-                    new StackTraceElement(SampleInterface.class.getName(), "", "", -1),
+                    new StackTraceElement(SampleInterface.class.getName(), "", "", 15),
                     new StackTraceElement("qux", "", "", -1),
                     new StackTraceElement("bar", "", "", -1),
+                    new StackTraceElement(SampleInterface.class.getName(), "", "", 15),
                     new StackTraceElement("baz", "", "", -1)
                 };
 
         Throwable throwable = new Throwable();
         throwable.setStackTrace(stack);
-        throwable = MockMethodAdvice.hideRecursiveCall(throwable, 2, SampleInterface.class);
+        throwable = MockMethodAdvice.removeRecursiveCalls(throwable, SampleInterface.class);
 
         assertThat(throwable.getStackTrace())
                 .isEqualTo(
                         new StackTraceElement[] {
                             new StackTraceElement("foo", "", "", -1),
+                            new StackTraceElement("qux", "", "", -1),
                             new StackTraceElement("bar", "", "", -1),
+                            new StackTraceElement(SampleInterface.class.getName(), "", "", 15),
                             new StackTraceElement("baz", "", "", -1)
                         });
     }
 
     @Test
-    public void should_handle_missing_or_inconsistent_stack_trace() throws Exception {
+    public void should_handle_missing_or_inconsistent_stack_trace() {
         Throwable throwable = new Throwable();
         throwable.setStackTrace(new StackTraceElement[0]);
-        assertThat(MockMethodAdvice.hideRecursiveCall(throwable, 0, SampleInterface.class))
+        assertThat(MockMethodAdvice.removeRecursiveCalls(throwable, SampleInterface.class))
                 .isSameAs(throwable);
     }
 
@@ -576,6 +613,12 @@ public class InlineDelegateByteBuddyMockMakerTest
 
         public T value() {
             return null;
+        }
+    }
+
+    public static class WrapperClass {
+        public void callWrapped(ExceptionThrowingClass exceptionThrowingClass) throws IOException {
+            exceptionThrowingClass.throwException();
         }
     }
 
