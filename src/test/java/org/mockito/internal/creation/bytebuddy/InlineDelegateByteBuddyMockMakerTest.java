@@ -249,13 +249,17 @@ public class InlineDelegateByteBuddyMockMakerTest
                         settings, new MockHandlerImpl<>(settings), new ExceptionThrowingClass());
 
         StackTraceElement[] returnedStack =
-            assertThrows(IOException.class, () -> proxy.get().throwException()).getStackTrace();
+                assertThrows(IOException.class, () -> proxy.get().throwException()).getStackTrace();
 
         assertNotNull("Stack trace from mockito expected", returnedStack);
 
-        List<StackTraceElement> exceptionClassElements = Arrays.stream(returnedStack)
-            .filter(element -> element.getClassName().equals(ExceptionThrowingClass.class.getName()))
-            .collect(Collectors.toList());
+        List<StackTraceElement> exceptionClassElements =
+                Arrays.stream(returnedStack)
+                        .filter(
+                                element ->
+                                        element.getClassName()
+                                                .equals(ExceptionThrowingClass.class.getName()))
+                        .collect(Collectors.toList());
         assertEquals(3, exceptionClassElements.size());
         assertEquals("internalThrowException", exceptionClassElements.get(0).getMethodName());
         assertEquals("internalThrowException", exceptionClassElements.get(1).getMethodName());
@@ -264,26 +268,34 @@ public class InlineDelegateByteBuddyMockMakerTest
 
     @Test
     public void should_leave_causing_stack_with_two_spies() throws Exception {
-        //given
+        // given
         MockSettingsImpl<ExceptionThrowingClass> settingsEx = new MockSettingsImpl<>();
         settingsEx.setTypeToMock(ExceptionThrowingClass.class);
         settingsEx.defaultAnswer(Answers.CALLS_REAL_METHODS);
         Optional<ExceptionThrowingClass> proxyEx =
-            mockMaker.createSpy(settingsEx, new MockHandlerImpl<>(settingsEx), new ExceptionThrowingClass());
+                mockMaker.createSpy(
+                        settingsEx,
+                        new MockHandlerImpl<>(settingsEx),
+                        new ExceptionThrowingClass());
 
         MockSettingsImpl<WrapperClass> settingsWr = new MockSettingsImpl<>();
         settingsWr.setTypeToMock(WrapperClass.class);
         settingsWr.defaultAnswer(Answers.CALLS_REAL_METHODS);
         Optional<WrapperClass> proxyWr =
-            mockMaker.createSpy(settingsWr, new MockHandlerImpl<>(settingsWr), new WrapperClass());
+                mockMaker.createSpy(
+                        settingsWr, new MockHandlerImpl<>(settingsWr), new WrapperClass());
 
-        //when
-        IOException ex = assertThrows(IOException.class, () -> proxyWr.get().callWrapped(proxyEx.get()));
-        List<StackTraceElement> wrapperClassElements = Arrays.stream(ex.getStackTrace())
-            .filter(element -> element.getClassName().equals(WrapperClass.class.getName()))
-            .collect(Collectors.toList());
+        // when
+        IOException ex =
+                assertThrows(IOException.class, () -> proxyWr.get().callWrapped(proxyEx.get()));
+        List<StackTraceElement> wrapperClassElements =
+                Arrays.stream(ex.getStackTrace())
+                        .filter(
+                                element ->
+                                        element.getClassName().equals(WrapperClass.class.getName()))
+                        .collect(Collectors.toList());
 
-        //then
+        // then
         assertEquals(1, wrapperClassElements.size());
         assertEquals("callWrapped", wrapperClassElements.get(0).getMethodName());
     }

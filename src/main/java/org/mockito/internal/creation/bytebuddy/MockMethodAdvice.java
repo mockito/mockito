@@ -315,7 +315,8 @@ public class MockMethodAdvice extends MockMethodDispatcher {
             return accessor.invoke(origin, instance, arguments);
         } catch (InvocationTargetException exception) {
             Throwable cause = exception.getCause();
-            new ConditionalStackTraceFilter().filter(removeRecursiveCalls(cause, origin.getDeclaringClass()));
+            new ConditionalStackTraceFilter()
+                    .filter(removeRecursiveCalls(cause, origin.getDeclaringClass()));
             throw cause;
         }
     }
@@ -332,12 +333,13 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                 indexesToBeRemoved.add(elementIndex);
             }
         }
-        final List<StackTraceElement> adjustedList = new ArrayList<>(Arrays.asList(cause.getStackTrace()));
+        final List<StackTraceElement> adjustedList =
+                new ArrayList<>(Arrays.asList(cause.getStackTrace()));
         indexesToBeRemoved.stream()
-            .sorted(Comparator.reverseOrder())
-            .mapToInt(Integer::intValue)
-            .forEach(adjustedList::remove);
-        cause.setStackTrace(adjustedList.toArray(new StackTraceElement[]{}));
+                .sorted(Comparator.reverseOrder())
+                .mapToInt(Integer::intValue)
+                .forEach(adjustedList::remove);
+        cause.setStackTrace(adjustedList.toArray(new StackTraceElement[] {}));
         return cause;
     }
 
