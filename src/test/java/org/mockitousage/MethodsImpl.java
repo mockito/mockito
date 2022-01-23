@@ -303,6 +303,11 @@ public class MethodsImpl implements IMethods {
         return null;
     }
 
+    @Override
+    public String throwsRemovedInSubclass() {
+        return null;
+    }
+
     public String oneArray(String[] array) {
         return null;
     }

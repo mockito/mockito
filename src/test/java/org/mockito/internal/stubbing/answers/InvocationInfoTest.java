@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
+import org.mockitousage.MethodsImpl;
 
 public class InvocationInfoTest {
 
@@ -26,6 +27,20 @@ public class InvocationInfoTest {
 
         // then
         assertThat(info.isValidException(new Exception())).isFalse();
+        assertThat(info.isValidException(new CharacterCodingException())).isTrue();
+    }
+
+    @Test
+    public void should_mark_interface_overridden_exceptions_as_valid() {
+        // when
+        Invocation invocation =
+                new InvocationBuilder()
+                        .method("throwsRemovedInSubclass")
+                        .mockClass(MethodsImpl.class)
+                        .toInvocation();
+        InvocationInfo info = new InvocationInfo(invocation);
+
+        // then
         assertThat(info.isValidException(new CharacterCodingException())).isTrue();
     }
 

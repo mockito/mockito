@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing.answers;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 import org.mockito.internal.invocation.AbstractAwareMethod;
 import org.mockito.internal.util.MockUtil;
@@ -25,6 +26,26 @@ public class InvocationInfo implements AbstractAwareMethod {
     }
 
     public boolean isValidException(Throwable throwable) {
+        if (isValidException(method, throwable)) {
+            return true;
+        }
+
+        return Arrays.stream(method.getDeclaringClass().getInterfaces())
+                .anyMatch(parent -> isValidExceptionForParent(parent, throwable));
+    }
+
+    private boolean isValidExceptionForParent(Class<?> parent, Throwable throwable) {
+        try {
+            Method parentMethod =
+                    parent.getMethod(this.method.getName(), this.method.getParameterTypes());
+            return isValidException(parentMethod, throwable);
+        } catch (NoSuchMethodException e) {
+            // ignore interfaces that doesn't have such a method
+            return false;
+        }
+    }
+
+    private boolean isValidException(Method method, Throwable throwable) {
         Class<?>[] exceptions = method.getExceptionTypes();
         Class<?> throwableClass = throwable.getClass();
         for (Class<?> exception : exceptions) {
@@ -32,7 +53,6 @@ public class InvocationInfo implements AbstractAwareMethod {
                 return true;
             }
         }
-
         return false;
     }
 

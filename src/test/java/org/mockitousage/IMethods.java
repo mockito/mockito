@@ -159,6 +159,8 @@ public interface IMethods {
 
     String canThrowException() throws CharacterCodingException;
 
+    String throwsRemovedInSubclass() throws CharacterCodingException;
+
     String oneArray(String[] array);
 
     void varargsString(int i, String... string);
