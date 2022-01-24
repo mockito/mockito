@@ -4,6 +4,8 @@
  */
 package org.mockito;
 
+import static org.mockito.Mockito.times;
+
 import org.mockito.verification.VerificationMode;
 
 /**
@@ -61,6 +63,39 @@ public interface InOrder {
      * @return mock object itself
      */
     <T> T verify(T mock, VerificationMode mode);
+
+    /**
+     * Verifies static interaction in order, with exactly one number of invocations.
+     *
+     * @see #verify(MockedStatic, MockedStatic.Verification, VerificationMode)
+     */
+    default void verify(MockedStatic<?> mockedStatic, MockedStatic.Verification verification) {
+        verify(mockedStatic, verification, times(1));
+    }
+
+    /**
+     * Verifies static interaction in order. E.g:
+     *
+     * <pre class="code"><code class="java">
+     * try (MockedStatic<Foo> mocked = mockStatic(Foo.class)) {
+     *   InOrder inOrder = inOrder(Foo.class);
+     *
+     *   mocked.when(Foo::firstMethod).thenReturn("first");
+     *   mocked.when(Foo::secondMethod).thenReturn("second");
+     *
+     *   assertEquals("first", Foo.firstMethod());
+     *   assertEquals("second", Foo.secondMethod());
+     *
+     *   inOrder.verify(mocked, Foo::firstMethod, times(1));
+     *   inOrder.verify(mocked, Foo::secondMethod, atLeastOnce());
+     * }
+     * </code></pre>
+     *
+     * @param mockedStatic static mock to be verified
+     * @param verification verification to be verified
+     * @param mode         for example times(x) or atLeastOnce()
+     */
+    void verify(MockedStatic<?> mockedStatic, MockedStatic.Verification verification, VerificationMode mode);
 
     /**
      * Verifies that no more interactions happened <b>in order</b>.
