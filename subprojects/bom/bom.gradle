@@ -12,6 +12,7 @@ apply from: "$rootDir/gradle/java-publication.gradle"
 
 dependencies {
     constraints {
+        api(project.rootProject)
         project.rootProject.subprojects.forEach { subproject ->
             if (!subproject.name.endsWith("Test") &&
                 !subproject.name.endsWith("-test") &&
