@@ -6,7 +6,9 @@ package org.mockito.internal.stubbing.answers;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.mockito.internal.invocation.AbstractAwareMethod;
 import org.mockito.internal.util.MockUtil;
@@ -25,18 +27,36 @@ public class InvocationInfo implements AbstractAwareMethod {
         this.invocation = theInvocation;
     }
 
-    public boolean isValidException(Throwable throwable) {
+    public boolean isValidException(final Throwable throwable) {
         if (isValidException(method, throwable)) {
             return true;
         }
 
-        return Arrays.stream(method.getDeclaringClass().getInterfaces())
-                .anyMatch(parent -> isValidExceptionForParent(parent, throwable));
+        return isValidExceptionForParents(method.getDeclaringClass(), throwable);
     }
 
-    private boolean isValidExceptionForParent(Class<?> parent, Throwable throwable) {
+    private boolean isValidExceptionForParents(final Class<?> parent, final Throwable throwable) {
+        final List<Class<?>> ancestors = new ArrayList<>(Arrays.asList(parent.getInterfaces()));
+
+        if (parent.getSuperclass() != null) {
+            ancestors.add(parent.getSuperclass());
+        }
+
+        final boolean validException =
+                ancestors.stream()
+                        .anyMatch(ancestor -> isValidExceptionForClass(ancestor, throwable));
+
+        if (validException) {
+            return true;
+        }
+
+        return ancestors.stream()
+                .anyMatch(ancestor -> isValidExceptionForParents(ancestor, throwable));
+    }
+
+    private boolean isValidExceptionForClass(final Class<?> parent, final Throwable throwable) {
         try {
-            Method parentMethod =
+            final Method parentMethod =
                     parent.getMethod(this.method.getName(), this.method.getParameterTypes());
             return isValidException(parentMethod, throwable);
         } catch (NoSuchMethodException e) {
@@ -45,10 +65,10 @@ public class InvocationInfo implements AbstractAwareMethod {
         }
     }
 
-    private boolean isValidException(Method method, Throwable throwable) {
-        Class<?>[] exceptions = method.getExceptionTypes();
-        Class<?> throwableClass = throwable.getClass();
-        for (Class<?> exception : exceptions) {
+    private boolean isValidException(final Method method, final Throwable throwable) {
+        final Class<?>[] exceptions = method.getExceptionTypes();
+        final Class<?> throwableClass = throwable.getClass();
+        for (final Class<?> exception : exceptions) {
             if (exception.isAssignableFrom(throwableClass)) {
                 return true;
             }
