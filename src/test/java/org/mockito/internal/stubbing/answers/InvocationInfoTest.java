@@ -9,25 +9,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockitoutil.TestBase.getLastInvocation;
 
 import java.lang.reflect.Method;
-import java.nio.charset.CharacterCodingException;
 
 import org.junit.Test;
 import org.mockito.internal.invocation.InvocationBuilder;
-import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 
 public class InvocationInfoTest {
-
-    @Test
-    public void should_know_valid_throwables() throws Exception {
-        // when
-        Invocation invocation = new InvocationBuilder().method("canThrowException").toInvocation();
-        InvocationInfo info = new InvocationInfo(invocation);
-
-        // then
-        assertThat(info.isValidException(new Exception())).isFalse();
-        assertThat(info.isValidException(new CharacterCodingException())).isTrue();
-    }
 
     @Test
     public void should_know_valid_return_types() throws Exception {
