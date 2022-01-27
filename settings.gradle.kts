@@ -14,10 +14,15 @@ include("inline",
     "junitJupiterInlineMockMakerExtensionTest",
     "module-test",
     "memory-test",
-    "errorprone",
     "junitJupiterParallelTest",
     "osgi-test",
     "bom")
+
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_11)) {
+    include("errorprone")
+} else {
+    logger.info("Not including errorprone, which requires minimum JDK 11+")
+}
 
 if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17) && (System.getenv("ANDROID_SDK_ROOT") != null || File(".local.properties").exists())) {
     include("androidTest")
