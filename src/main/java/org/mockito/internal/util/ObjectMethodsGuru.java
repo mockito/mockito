@@ -26,4 +26,11 @@ public class ObjectMethodsGuru {
                 && method.getParameterTypes().length == 1
                 && method.getParameterTypes()[0] == method.getDeclaringClass();
     }
+
+    public static boolean isEqualsMethod(Method method) {
+        return "equals".equals(method.getName())
+            && method.getReturnType() == boolean.class
+            && method.getParameterTypes().length == 1
+            && method.getParameterTypes()[0] == Object.class;
+    }
 }

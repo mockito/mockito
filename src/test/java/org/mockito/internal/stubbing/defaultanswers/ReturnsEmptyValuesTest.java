@@ -5,6 +5,8 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 import java.util.*;
@@ -86,6 +88,81 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
         // then
         assertEquals(0, result);
+    }
+
+    private static class Equals {
+        public boolean equals( int other ) {
+            return true;
+        }
+
+        public boolean equals( Equals other ) {
+            return true;
+        }
+    }
+
+    @Test
+    public void should_return_true_equals_self() throws Exception {
+        //given
+        Equals d = mock(Equals.class);
+        Invocation equals = mock(Invocation.class);
+        doReturn( d.getClass().getMethod( "equals", Object.class ) ).when( equals ).getMethod();
+        doReturn( d ).when( equals ).getArgument( eq( 0 ) );
+        doReturn( d ).when( equals ).getMock();
+
+        //when
+        Object result = values.answer( equals );
+
+        //then
+        assertEquals( Boolean.TRUE, result );
+    }
+
+    @Test
+    public void should_return_false_equals_other() throws Exception {
+        //given
+        Equals d = mock(Equals.class);
+        Equals other = mock(Equals.class);
+        Invocation equals = mock(Invocation.class);
+        doReturn( d.getClass().getMethod( "equals", Object.class ) ).when( equals ).getMethod();
+        doReturn( other ).when( equals ).getArgument( eq( 0 ) );
+        doReturn( d ).when( equals ).getMock();
+
+        //when
+        Object result = values.answer( equals );
+
+        //then
+        assertEquals( Boolean.FALSE, result );
+    }
+
+    @Test
+    public void verify_equals_primitive_param_default_answer() throws Exception {
+        //given
+        Equals d = mock(Equals.class);
+        Invocation equals = mock(Invocation.class);
+        doReturn( d.getClass().getMethod( "equals", int.class ) ).when( equals ).getMethod();
+        doReturn( d ).when( equals ).getArgument( eq( 0 ) );
+        doReturn( d ).when( equals ).getMock();
+
+        //when
+        Object result = values.answer( equals );
+
+        //then
+        assertEquals( Boolean.FALSE, result );
+    }
+
+    @Test
+    public void verify_equals_overloaded_param_default_answer() throws Exception {
+        //given
+        Equals d = mock(Equals.class);
+        Invocation equals = mock(Invocation.class);
+        doReturn( d.getClass().getMethod( "equals", Equals.class ) ).when( equals ).getMethod();
+        doReturn( d ).when( equals ).getArgument( eq( 0 ) );
+        doReturn( d ).when( equals ).getMock();
+
+        //when
+        Object result = values.answer( equals );
+
+        //then
+        assertEquals( Boolean.FALSE, result );
     }
 
     @Test

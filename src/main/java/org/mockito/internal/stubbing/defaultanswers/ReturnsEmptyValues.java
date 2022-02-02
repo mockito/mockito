@@ -4,9 +4,6 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
-import static org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod;
-import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +25,8 @@ import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockName;
 import org.mockito.stubbing.Answer;
+
+import static org.mockito.internal.util.ObjectMethodsGuru.*;
 
 /**
  * Default answer of every Mockito mock.
@@ -87,6 +86,8 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             // value because they are not the same. Hence we return 1 (anything but 0 is good).
             // Only for compareTo() method by the Comparable interface
             return invocation.getMock() == invocation.getArgument(0) ? 0 : 1;
+        } else if (isEqualsMethod( invocation.getMethod() )) {
+            return invocation.getMock() == invocation.getArgument( 0 );
         }
 
         Class<?> returnType = invocation.getMethod().getReturnType();
