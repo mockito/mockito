@@ -62,8 +62,7 @@ public class InOrderImpl implements InOrder, InOrderContext {
         }
         if (mode instanceof VerificationWrapper) {
             return mockitoCore.verify(
-                    mock,
-                    new VerificationWrapperInOrderWrapper((VerificationWrapper<?>) mode, this));
+                    mock, new VerificationWrapperInOrderWrapper((VerificationWrapper<?>) mode, this));
         } else if (!(mode instanceof VerificationInOrderMode)) {
             throw new MockitoException(
                     mode.getClass().getSimpleName() + " is not implemented to work with InOrder");
