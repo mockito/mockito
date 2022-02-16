@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.InOrder;
+import org.mockito.MockedStatic;
 import org.mockito.MockingDetails;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.verification.InOrderContextImpl;
@@ -61,12 +62,31 @@ public class InOrderImpl implements InOrder, InOrderContext {
         }
         if (mode instanceof VerificationWrapper) {
             return mockitoCore.verify(
-                    mock, new VerificationWrapperInOrderWrapper((VerificationWrapper) mode, this));
+                    mock,
+                    new VerificationWrapperInOrderWrapper((VerificationWrapper<?>) mode, this));
         } else if (!(mode instanceof VerificationInOrderMode)) {
             throw new MockitoException(
                     mode.getClass().getSimpleName() + " is not implemented to work with InOrder");
         }
         return mockitoCore.verify(mock, new InOrderWrapper((VerificationInOrderMode) mode, this));
+    }
+
+    @Override
+    public void verify(
+            MockedStatic<?> mockedStatic,
+            MockedStatic.Verification verification,
+            VerificationMode mode) {
+        if (mode instanceof VerificationWrapper) {
+            mockedStatic.verify(
+                    verification,
+                    new VerificationWrapperInOrderWrapper((VerificationWrapper<?>) mode, this));
+        } else if (mode instanceof VerificationInOrderMode) {
+            mockedStatic.verify(
+                    verification, new InOrderWrapper((VerificationInOrderMode) mode, this));
+        } else {
+            throw new MockitoException(
+                    mode.getClass().getSimpleName() + " is not implemented to work with InOrder");
+        }
     }
 
     // We can't use `this.mocksToBeVerifiedInOrder.contains`, since that in turn calls `.equals` on
