@@ -62,7 +62,8 @@ public class InOrderImpl implements InOrder, InOrderContext {
         }
         if (mode instanceof VerificationWrapper) {
             return mockitoCore.verify(
-                    mock, new VerificationWrapperInOrderWrapper((VerificationWrapper<?>) mode, this));
+                    mock,
+                    new VerificationWrapperInOrderWrapper((VerificationWrapper<?>) mode, this));
         } else if (!(mode instanceof VerificationInOrderMode)) {
             throw new MockitoException(
                     mode.getClass().getSimpleName() + " is not implemented to work with InOrder");
@@ -71,15 +72,20 @@ public class InOrderImpl implements InOrder, InOrderContext {
     }
 
     @Override
-    public void verify(MockedStatic<?> mockedStatic, MockedStatic.Verification verification, VerificationMode mode) {
+    public void verify(
+            MockedStatic<?> mockedStatic,
+            MockedStatic.Verification verification,
+            VerificationMode mode) {
         if (mode instanceof VerificationWrapper) {
-            mockedStatic.verify(verification,
-                new VerificationWrapperInOrderWrapper((VerificationWrapper<?>) mode, this));
+            mockedStatic.verify(
+                    verification,
+                    new VerificationWrapperInOrderWrapper((VerificationWrapper<?>) mode, this));
         } else if (mode instanceof VerificationInOrderMode) {
-            mockedStatic.verify(verification, new InOrderWrapper((VerificationInOrderMode) mode, this));
+            mockedStatic.verify(
+                    verification, new InOrderWrapper((VerificationInOrderMode) mode, this));
         } else {
             throw new MockitoException(
-                mode.getClass().getSimpleName() + " is not implemented to work with InOrder");
+                    mode.getClass().getSimpleName() + " is not implemented to work with InOrder");
         }
     }
 

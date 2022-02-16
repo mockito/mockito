@@ -95,7 +95,10 @@ public interface InOrder {
      * @param verification verification to be verified
      * @param mode         for example times(x) or atLeastOnce()
      */
-    void verify(MockedStatic<?> mockedStatic, MockedStatic.Verification verification, VerificationMode mode);
+    void verify(
+            MockedStatic<?> mockedStatic,
+            MockedStatic.Verification verification,
+            VerificationMode mode);
 
     /**
      * Verifies that no more interactions happened <b>in order</b>.
