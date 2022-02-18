@@ -10,19 +10,12 @@ import java.util.List;
 
 import org.mockito.invocation.Invocation;
 
-public class SingleRegisteredInvocation implements RegisteredInvocations, Serializable {
-
-    private Invocation invocation;
+public class ZeroRegisteredInvocation implements RegisteredInvocations, Serializable {
+    @Override
+    public void add(Invocation invocation) {}
 
     @Override
-    public void add(Invocation invocation) {
-        this.invocation = invocation;
-    }
-
-    @Override
-    public void removeLast() {
-        invocation = null;
-    }
+    public void removeLast() {}
 
     @Override
     public List<Invocation> getAll() {
@@ -30,12 +23,10 @@ public class SingleRegisteredInvocation implements RegisteredInvocations, Serial
     }
 
     @Override
-    public void clear() {
-        invocation = null;
-    }
+    public void clear() {}
 
     @Override
     public boolean isEmpty() {
-        return invocation == null;
+        return true;
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.verification.DefaultRegisteredInvocations;
 import org.mockito.internal.verification.RegisteredInvocations;
-import org.mockito.internal.verification.SingleRegisteredInvocation;
+import org.mockito.internal.verification.ZeroRegisteredInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MatchableInvocation;
@@ -165,7 +165,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     private RegisteredInvocations createRegisteredInvocations(MockCreationSettings mockSettings) {
         return mockSettings.isStubOnly()
-                ? new SingleRegisteredInvocation()
+                ? new ZeroRegisteredInvocation()
                 : new DefaultRegisteredInvocations();
     }
 
