@@ -56,7 +56,6 @@ import org.mockito.plugins.AnnotationEngine;
  * <b><code>MockitoAnnotations.openMocks(this)</code></b> method has to be called to initialize annotated fields.
  * <p>
  * In above example, <code>openMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
- * For JUnit3 <code>openMocks()</code> can go to <code>setup()</code> method of a base class.
  * You can also put openMocks() in your JUnit runner (&#064;RunWith) or use built-in runner: {@link MockitoJUnitRunner}.
  * If static method mocks are used, it is required to close the initialization. Additionally, if using third-party
  * mock-makers, other life-cycles might be handled by the open-release routine.

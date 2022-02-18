@@ -36,7 +36,7 @@ public class ExceptionFactory {
      * Returns an AssertionError that describes the fact that the arguments of an invocation are different.
      * If {@link org.opentest4j.AssertionFailedError} is on the class path (used by JUnit 5 and others),
      * it returns a class that extends it. Otherwise, if {@link junit.framework.ComparisonFailure} is on the
-     * class path (shipped with JUnit 3 and 4), it will return a class that extends that. This provides
+     * class path (shipped with JUnit 4), it will return a class that extends that. This provides
      * better IDE support as the comparison result can be opened in a visual diff. If neither are available,
      * it returns an instance of
      * {@link org.mockito.exceptions.verification.ArgumentsAreDifferent}.
