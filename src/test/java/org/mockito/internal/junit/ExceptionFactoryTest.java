@@ -15,27 +15,18 @@ import org.mockito.exceptions.verification.ArgumentsAreDifferent;
 
 public class ExceptionFactoryTest {
 
-    private static ClassLoader classLoaderWithoutJUnitOrOpenTest =
+    private static final ClassLoader classLoaderWithoutJUnitOrOpenTest =
             excludingClassLoader()
                     .withCodeSourceUrlOf(ExceptionFactory.class)
                     .without("org.junit", "junit", "org.opentest4j")
                     .build();
-    private static ClassLoader classLoaderWithoutOpenTest =
-            excludingClassLoader()
-                    .withCodeSourceUrlOf(ExceptionFactory.class, org.junit.ComparisonFailure.class)
-                    .without("org.opentest4j")
-                    .build();
-    private static ClassLoader currentClassLoader = ExceptionFactoryTest.class.getClassLoader();
+    private static final ClassLoader currentClassLoader =
+            ExceptionFactoryTest.class.getClassLoader();
 
     /** loaded by the current classloader */
     private static Class<?> opentestComparisonFailure;
 
     private static Class<?> opentestArgumentsAreDifferent;
-
-    /** loaded by the classloader {@value #classLoaderWithoutOpenTest}, which excludes OpenTest4J classes */
-    private static Class<?> junit3ComparisonFailure;
-
-    private static Class<?> junit3ArgumentsAreDifferent;
 
     /** loaded by the custom classloader {@value #classLoaderWithoutJUnitOrOpenTest}, which excludes JUnit and OpenTest4J classes */
     private static Class<?> nonJunitArgumentsAreDifferent;
@@ -44,13 +35,6 @@ public class ExceptionFactoryTest {
     public static void init() throws ClassNotFoundException {
         nonJunitArgumentsAreDifferent =
                 classLoaderWithoutJUnitOrOpenTest.loadClass(ArgumentsAreDifferent.class.getName());
-        junit3ComparisonFailure =
-                classLoaderWithoutOpenTest.loadClass(
-                        junit.framework.ComparisonFailure.class.getName());
-        junit3ArgumentsAreDifferent =
-                classLoaderWithoutOpenTest.loadClass(
-                        org.mockito.exceptions.verification.junit.ArgumentsAreDifferent.class
-                                .getName());
         opentestComparisonFailure = org.opentest4j.AssertionFailedError.class;
         opentestArgumentsAreDifferent =
                 org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent.class;
@@ -61,15 +45,6 @@ public class ExceptionFactoryTest {
         AssertionError e = invokeFactoryThroughLoader(classLoaderWithoutJUnitOrOpenTest);
 
         assertThat(e).isExactlyInstanceOf(nonJunitArgumentsAreDifferent);
-    }
-
-    @Test
-    public void createArgumentsAreDifferentException_withJUnit3_butNotOpenTest() throws Exception {
-        AssertionError e = invokeFactoryThroughLoader(classLoaderWithoutOpenTest);
-
-        assertThat(e)
-                .isExactlyInstanceOf(junit3ArgumentsAreDifferent)
-                .isInstanceOf(junit3ComparisonFailure);
     }
 
     @Test
@@ -90,17 +65,6 @@ public class ExceptionFactoryTest {
 
         e = invokeFactoryThroughLoader(classLoaderWithoutJUnitOrOpenTest);
         assertThat(e).isExactlyInstanceOf(nonJunitArgumentsAreDifferent);
-    }
-
-    @Test
-    public void createArgumentsAreDifferentException_withJUnit3_2x() throws Exception {
-        AssertionError e;
-
-        e = invokeFactoryThroughLoader(classLoaderWithoutOpenTest);
-        assertThat(e).isExactlyInstanceOf(junit3ArgumentsAreDifferent);
-
-        e = invokeFactoryThroughLoader(classLoaderWithoutOpenTest);
-        assertThat(e).isExactlyInstanceOf(junit3ArgumentsAreDifferent);
     }
 
     @Test

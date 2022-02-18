@@ -59,7 +59,6 @@ import org.mockito.stubbing.Answer;
  * <p>
  * <strong><code>MockitoAnnotations.openMocks(this)</code></strong> method has to be called to initialize annotated objects.
  * In above example, <code>openMocks()</code> is called in &#064;Before (JUnit4) method of test's base class.
- * For JUnit3 <code>openMocks()</code> can go to <code>setup()</code> method of a base class.
  * <strong>Instead</strong> you can also put openMocks() in your JUnit runner (&#064;RunWith) or use the built-in
  * {@link MockitoJUnitRunner}. Also, make sure to release any mocks after disposing your test class with a corresponding hook.
  * </p>
