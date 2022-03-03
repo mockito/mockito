@@ -15,8 +15,6 @@ import org.mockitoutil.ClassLoaders;
 
 public class NoByteCodeDependenciesTest {
 
-    private ClassLoader contextClassLoader;
-
     @Test
     public void pure_mockito_should_not_depend_bytecode_libraries() throws Exception {
 
