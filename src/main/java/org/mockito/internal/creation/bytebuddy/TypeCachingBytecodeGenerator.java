@@ -5,12 +5,14 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import java.lang.ref.ReferenceQueue;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import net.bytebuddy.TypeCache;
 import org.mockito.mock.SerializableMode;
+import org.mockito.stubbing.Answer;
 
 class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
         implements BytecodeGenerator {
