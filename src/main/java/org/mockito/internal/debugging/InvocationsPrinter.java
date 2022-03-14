@@ -5,10 +5,10 @@
 package org.mockito.internal.debugging;
 
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mockito.Mockito;
-import org.mockito.internal.util.collections.ListUtil;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Stubbing;
 
@@ -37,15 +37,10 @@ public class InvocationsPrinter {
             }
         }
 
-        LinkedList<Stubbing> unused =
-                ListUtil.filter(
-                        stubbings,
-                        new ListUtil.Filter<Stubbing>() {
-                            @Override
-                            public boolean isOut(Stubbing s) {
-                                return s.wasUsed();
-                            }
-                        });
+        List<Stubbing> unused =
+                stubbings.stream()
+                        .filter(stubbing -> !stubbing.wasUsed())
+                        .collect(Collectors.toList());
 
         if (unused.isEmpty()) {
             return sb.toString();

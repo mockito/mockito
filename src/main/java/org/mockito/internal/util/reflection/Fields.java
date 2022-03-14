@@ -18,6 +18,7 @@ import org.mockito.internal.util.collections.ListUtil.Filter;
  *
  * Code is very new and might need rework.
  */
+@Deprecated
 public abstract class Fields {
 
     /**
@@ -26,6 +27,7 @@ public abstract class Fields {
      * @param instance Instance from which declared fields will be retrieved.
      * @return InstanceFields of this object instance.
      */
+    @Deprecated
     public static InstanceFields allDeclaredFieldsOf(Object instance) {
         List<InstanceField> instanceFields = new ArrayList<>();
         for (Class<?> clazz = instance.getClass();
@@ -42,12 +44,14 @@ public abstract class Fields {
      * @param instance Instance from which declared fields will be retrieved.
      * @return InstanceFields of this object instance.
      */
+    @Deprecated
     public static InstanceFields declaredFieldsOf(Object instance) {
         List<InstanceField> instanceFields = new ArrayList<>();
         instanceFields.addAll(instanceFieldsIn(instance, instance.getClass().getDeclaredFields()));
         return new InstanceFields(instance, instanceFields);
     }
 
+    @Deprecated
     private static List<InstanceField> instanceFieldsIn(Object instance, Field[] fields) {
         List<InstanceField> instanceDeclaredFields = new ArrayList<>();
         for (Field field : fields) {
@@ -64,6 +68,7 @@ public abstract class Fields {
      * @return The filter.
      */
     @SuppressWarnings({"unchecked", "vararg"})
+    @Deprecated
     public static Filter<InstanceField> annotatedBy(
             final Class<? extends Annotation>... annotations) {
         return new Filter<InstanceField>() {
@@ -86,6 +91,7 @@ public abstract class Fields {
      *
      * @return The filter.
      */
+    @Deprecated
     private static Filter<InstanceField> nullField() {
         return new Filter<InstanceField>() {
             @Override
@@ -100,6 +106,7 @@ public abstract class Fields {
      *
      * @return The filter.
      */
+    @Deprecated
     public static Filter<InstanceField> syntheticField() {
         return new Filter<InstanceField>() {
             @Override
@@ -109,6 +116,7 @@ public abstract class Fields {
         };
     }
 
+    @Deprecated
     public static class InstanceFields {
         private final Object instance;
 

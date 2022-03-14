@@ -12,8 +12,10 @@ import java.util.LinkedList;
  * use cases neatly. However, we want to keep Mockito dependencies minimal. In Java8 we should be
  * able to get rid of this class.
  */
+@Deprecated
 public final class ListUtil {
 
+    @Deprecated
     public static <T> LinkedList<T> filter(Collection<T> collection, Filter<T> filter) {
         LinkedList<T> filtered = new LinkedList<T>();
         for (T t : collection) {
@@ -24,6 +26,7 @@ public final class ListUtil {
         return filtered;
     }
 
+    @Deprecated
     public static <FromT, To> LinkedList<To> convert(
             Collection<FromT> collection, Converter<FromT, To> converter) {
         LinkedList<To> converted = new LinkedList<To>();
@@ -33,10 +36,12 @@ public final class ListUtil {
         return converted;
     }
 
+    @Deprecated
     public interface Filter<T> {
         boolean isOut(T object);
     }
 
+    @Deprecated
     public interface Converter<FromT, To> {
         To convert(FromT from);
     }
