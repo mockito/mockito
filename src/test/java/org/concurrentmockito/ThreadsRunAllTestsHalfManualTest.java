@@ -34,7 +34,6 @@ import org.mockito.internal.progress.TimesTest;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsEmptyValuesTest;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsGenericDeepStubsTest;
 import org.mockito.internal.util.MockUtilTest;
-import org.mockito.internal.util.collections.ListUtilTest;
 import org.mockito.internal.verification.DefaultRegisteredInvocationsTest;
 import org.mockito.internal.verification.checkers.MissingInvocationCheckerTest;
 import org.mockito.internal.verification.checkers.MissingInvocationInOrderCheckerTest;
@@ -57,7 +56,20 @@ import org.mockitousage.stacktrace.StackTraceFilteringTest;
 import org.mockitousage.stubbing.BasicStubbingTest;
 import org.mockitousage.stubbing.ReturningDefaultValuesTest;
 import org.mockitousage.stubbing.StubbingWithThrowablesTest;
-import org.mockitousage.verification.*;
+import org.mockitousage.verification.AtMostXVerificationTest;
+import org.mockitousage.verification.BasicVerificationInOrderTest;
+import org.mockitousage.verification.BasicVerificationTest;
+import org.mockitousage.verification.DescriptiveMessagesOnVerificationInOrderErrorsTest;
+import org.mockitousage.verification.DescriptiveMessagesWhenTimesXVerificationFailsTest;
+import org.mockitousage.verification.DescriptiveMessagesWhenVerificationFailsTest;
+import org.mockitousage.verification.ExactNumberOfTimesVerificationTest;
+import org.mockitousage.verification.NoMoreInteractionsVerificationTest;
+import org.mockitousage.verification.RelaxedVerificationInOrderTest;
+import org.mockitousage.verification.SelectedMocksInOrderVerificationTest;
+import org.mockitousage.verification.VerificationInOrderMixedWithOrdinaryVerificationTest;
+import org.mockitousage.verification.VerificationInOrderTest;
+import org.mockitousage.verification.VerificationOnMultipleMocksUsingMatchersTest;
+import org.mockitousage.verification.VerificationUsingMatchersTest;
 import org.mockitoutil.TestBase;
 
 public class ThreadsRunAllTestsHalfManualTest extends TestBase {
@@ -70,7 +82,6 @@ public class ThreadsRunAllTestsHalfManualTest extends TestBase {
             Result result =
                     JUnitCore.runClasses(
                             EqualsTest.class,
-                            ListUtilTest.class,
                             MockingProgressImplTest.class,
                             TimesTest.class,
                             MockHandlerImplTest.class,

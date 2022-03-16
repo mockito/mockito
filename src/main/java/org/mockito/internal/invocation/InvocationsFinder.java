@@ -6,9 +6,8 @@ package org.mockito.internal.invocation;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.mockito.internal.util.collections.ListUtil;
-import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.internal.verification.api.InOrderContext;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.Location;
@@ -20,7 +19,7 @@ public class InvocationsFinder {
 
     public static List<Invocation> findInvocations(
             List<Invocation> invocations, MatchableInvocation wanted) {
-        return ListUtil.filter(invocations, new RemoveNotMatching(wanted));
+        return invocations.stream().filter(wanted::matches).collect(Collectors.toList());
     }
 
     public static List<Invocation> findAllMatchingUnverifiedChunks(
@@ -28,7 +27,7 @@ public class InvocationsFinder {
             MatchableInvocation wanted,
             InOrderContext orderingContext) {
         List<Invocation> unverified = removeVerifiedInOrder(invocations, orderingContext);
-        return ListUtil.filter(unverified, new RemoveNotMatching(wanted));
+        return unverified.stream().filter(wanted::matches).collect(Collectors.toList());
     }
 
     /**
@@ -127,13 +126,13 @@ public class InvocationsFinder {
 
     public static Invocation findPreviousVerifiedInOrder(
             List<Invocation> invocations, InOrderContext context) {
-        LinkedList<Invocation> verifiedOnly =
-                ListUtil.filter(invocations, new RemoveUnverifiedInOrder(context));
+        List<Invocation> verifiedOnly =
+                invocations.stream().filter(context::isVerified).collect(Collectors.toList());
 
         if (verifiedOnly.isEmpty()) {
             return null;
         } else {
-            return verifiedOnly.getLast();
+            return verifiedOnly.get(verifiedOnly.size() - 1);
         }
     }
 
@@ -156,32 +155,6 @@ public class InvocationsFinder {
             locations.add(invocation.getLocation());
         }
         return locations;
-    }
-
-    private static class RemoveNotMatching implements Filter<Invocation> {
-        private final MatchableInvocation wanted;
-
-        private RemoveNotMatching(MatchableInvocation wanted) {
-            this.wanted = wanted;
-        }
-
-        @Override
-        public boolean isOut(Invocation invocation) {
-            return !wanted.matches(invocation);
-        }
-    }
-
-    private static class RemoveUnverifiedInOrder implements Filter<Invocation> {
-        private final InOrderContext orderingContext;
-
-        public RemoveUnverifiedInOrder(InOrderContext orderingContext) {
-            this.orderingContext = orderingContext;
-        }
-
-        @Override
-        public boolean isOut(Invocation invocation) {
-            return !orderingContext.isVerified(invocation);
-        }
     }
 
     /**

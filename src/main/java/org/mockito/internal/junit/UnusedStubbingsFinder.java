@@ -4,18 +4,15 @@
  */
 package org.mockito.internal.junit;
 
-import static org.mockito.internal.util.collections.ListUtil.filter;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.mockito.internal.invocation.finder.AllInvocationsFinder;
 import org.mockito.internal.stubbing.UnusedStubbingReporting;
-import org.mockito.internal.util.collections.ListUtil.Filter;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Stubbing;
 
@@ -29,19 +26,10 @@ public class UnusedStubbingsFinder {
      * Stubbings explicitily marked as LENIENT are not included.
      */
     public UnusedStubbings getUnusedStubbings(Iterable<Object> mocks) {
-        Set<Stubbing> stubbings = AllInvocationsFinder.findStubbings(mocks);
-
-        List<Stubbing> unused =
-                filter(
-                        stubbings,
-                        new Filter<Stubbing>() {
-                            @Override
-                            public boolean isOut(Stubbing s) {
-                                return !UnusedStubbingReporting.shouldBeReported(s);
-                            }
-                        });
-
-        return new UnusedStubbings(unused);
+        return new UnusedStubbings(
+                AllInvocationsFinder.findStubbings(mocks).stream()
+                        .filter(UnusedStubbingReporting::shouldBeReported)
+                        .collect(Collectors.toList()));
     }
 
     /**
