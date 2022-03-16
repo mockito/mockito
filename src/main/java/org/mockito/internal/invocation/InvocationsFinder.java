@@ -126,15 +126,13 @@ public class InvocationsFinder {
 
     public static Invocation findPreviousVerifiedInOrder(
             List<Invocation> invocations, InOrderContext context) {
-        LinkedList<Invocation> verifiedOnly =
-                invocations.stream()
-                        .filter(context::isVerified)
-                        .collect(Collectors.toCollection(LinkedList::new));
+        List<Invocation> verifiedOnly =
+                invocations.stream().filter(context::isVerified).collect(Collectors.toList());
 
         if (verifiedOnly.isEmpty()) {
             return null;
         } else {
-            return verifiedOnly.getLast();
+            return verifiedOnly.get(verifiedOnly.size() - 1);
         }
     }
 
