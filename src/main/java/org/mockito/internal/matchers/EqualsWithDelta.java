@@ -6,6 +6,7 @@ package org.mockito.internal.matchers;
 
 import java.io.Serializable;
 
+import java.util.Objects;
 import org.mockito.ArgumentMatcher;
 
 public class EqualsWithDelta implements ArgumentMatcher<Number>, Serializable {
@@ -24,7 +25,7 @@ public class EqualsWithDelta implements ArgumentMatcher<Number>, Serializable {
             return false;
         }
 
-        if (wanted == actual) {
+        if (Objects.equals(wanted, actual)) {
             return true;
         }
 
