@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.junit.Test;
 
 // Possible description on a IBM J9 VM (see #801)
@@ -75,23 +74,19 @@ public class PlatformTest {
         // https://stackoverflow.com/questions/35844985/how-do-we-get-sr-and-fp-of-ibm-jre-using-java
         //  -
         // https://www.ibm.com/support/knowledgecenter/SSYKE2_8.0.0/com.ibm.java.80.doc/user/build_number.html
-        Map<String, Boolean> versions =
-                new HashMap<String, Boolean>() {
-                    {
-                        put("1.8.0_92-b14", false);
-                        put("1.8.0-b24", true);
-                        put("1.8.0_5", true);
-                        put("1.8.0b5_u44", true);
-                        put("1.8.0b5_u92", false);
-                        put("1.7.0_4", false);
-                        put("1.4.0_03-b04", false);
-                        put("1.4.0_03-ea-b01", false);
-                        put("pxi3270_27sr4-20160303_03 (SR4)", false);
-                        put("pwi3260sr11-20120412_01 (SR11)", false);
-                        put("pwa6480sr1fp10-20150711_01 (SR1 FP10)", false);
-                        put("null", false);
-                    }
-                };
+        Map<String, Boolean> versions = new HashMap<>();
+        versions.put("1.8.0_92-b14", false);
+        versions.put("1.8.0-b24", true);
+        versions.put("1.8.0_5", true);
+        versions.put("1.8.0b5_u44", true);
+        versions.put("1.8.0b5_u92", false);
+        versions.put("1.7.0_4", false);
+        versions.put("1.4.0_03-b04", false);
+        versions.put("1.4.0_03-ea-b01", false);
+        versions.put("pxi3270_27sr4-20160303_03 (SR4)", false);
+        versions.put("pwi3260sr11-20120412_01 (SR11)", false);
+        versions.put("pwa6480sr1fp10-20150711_01 (SR1 FP10)", false);
+        versions.put("null", false);
 
         assertPlatformParsesCorrectlyVariousVersionScheme(versions);
     }
@@ -134,15 +129,11 @@ public class PlatformTest {
         // java.specification.version      1.9           9
         // java.vm.specification.version   1.9           9
         //
-        Map<String, Boolean> versions =
-                new HashMap<String, Boolean>() {
-                    {
-                        put("9-ea+73", false);
-                        put("9+100", false);
-                        put("9.1.2+62", false);
-                        put("9.0.1+20", false);
-                    }
-                };
+        Map<String, Boolean> versions = new HashMap<>();
+        versions.put("9-ea+73", false);
+        versions.put("9+100", false);
+        versions.put("9.1.2+62", false);
+        versions.put("9.0.1+20", false);
 
         assertPlatformParsesCorrectlyVariousVersionScheme(versions);
     }

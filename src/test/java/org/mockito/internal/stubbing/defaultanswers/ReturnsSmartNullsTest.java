@@ -16,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
@@ -307,20 +306,14 @@ public class ReturnsSmartNullsTest extends TestBase {
             should_return_a_empty_map_that_has_been_defined_with_method_generic_and_provided_in_var_args()
                     throws Throwable {
 
-        final Map<String, String> map1 =
-                new HashMap<String, String>() {
-                    {
-                        put("key-1", "value-1");
-                        put("key-2", "value-2");
-                    }
-                };
-        final Map<String, String> map2 =
-                new HashMap<String, String>() {
-                    {
-                        put("key-3", "value-1");
-                        put("key-4", "value-2");
-                    }
-                };
+        final Map<String, String> map1 = new HashMap<>();
+        map1.put("key-1", "value-1");
+        map1.put("key-2", "value-2");
+
+        final Map<String, String> map2 = new HashMap<>();
+        map2.put("key-3", "value-1");
+        map2.put("key-4", "value-2");
+
         Answer<Object> answer = new ReturnsSmartNulls();
 
         Object smartNull = answer.answer(invocationMethodWithVarArgs(new Map[] {map1, map2}));

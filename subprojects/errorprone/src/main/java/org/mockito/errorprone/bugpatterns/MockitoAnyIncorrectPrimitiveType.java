@@ -49,7 +49,7 @@ public class MockitoAnyIncorrectPrimitiveType extends AbstractMockitoAnyForPrimi
   };
 
   private static final Matcher<ExpressionTree> METHOD_MATCHER =
-      staticMethod().onClassAny(CLASS_NAMES).withNameMatching(METHOD_NAME_PATTERN).withParameters();
+      staticMethod().onClassAny(CLASS_NAMES).withNameMatching(METHOD_NAME_PATTERN).withNoParameters();
 
   @Override
   protected Matcher<? super MethodInvocationTree> matcher() {

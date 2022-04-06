@@ -52,8 +52,10 @@ allprojects { proj ->
         mavenCentral()
         google()
     }
-    plugins.withId('java') {
-        proj.apply from: "$rootDir/gradle/errorprone.gradle"
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_11)) {
+        plugins.withId('java') {
+            proj.apply from: "$rootDir/gradle/errorprone.gradle"
+        }
     }
     tasks.withType(JavaCompile) {
         //I don't believe those warnings add value given modern IDEs
