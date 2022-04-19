@@ -69,7 +69,11 @@ public abstract class Platform {
     }
 
     public static boolean isJava8BelowUpdate45() {
-        return isJava8BelowUpdate45(JVM_VERSION);
+        if (JVM_VERSION == null) {
+            return false;
+        } else {
+            return isJava8BelowUpdate45(JVM_VERSION);
+        }
     }
 
     static boolean isJava8BelowUpdate45(String jvmVersion) {
