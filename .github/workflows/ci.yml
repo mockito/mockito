@@ -96,11 +96,11 @@ jobs:
         with:
           fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
-      - name: Set up Java 8
+      - name: Set up Java 11
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: 8
+          distribution: 'zulu'
+          java-version: 11
 
       - name: Build and release
         run: ./gradlew githubRelease publishToSonatype closeAndReleaseStagingRepository releaseSummary
