@@ -72,6 +72,8 @@ allprojects { proj ->
     tasks.withType(AbstractArchiveTask) {
         preserveFileTimestamps = false
         reproducibleFileOrder = true
+        dirMode = Integer.parseInt("0755", 8)
+        fileMode = Integer.parseInt("0644", 8)
     }
 
     apply plugin: 'checkstyle'
