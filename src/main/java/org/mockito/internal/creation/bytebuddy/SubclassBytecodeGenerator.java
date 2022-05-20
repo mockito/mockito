@@ -222,24 +222,32 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             }
         }
         // Graal requires that the byte code of classes is identical what requires that interfaces
-        // are always
-        // defined in the exact same order. Therefore, we add an interface to the interface set if
-        // not mocking
-        // a class when Graal is active.
+        // are always defined in the exact same order. Therefore, we add an interface to the
+        // interface set if not mocking a class when Graal is active.
         @SuppressWarnings("unchecked")
         Class<T> target =
                 GraalImageCode.getCurrent().isDefined() && features.mockedType.isInterface()
                         ? (Class<T>) Object.class
                         : features.mockedType;
+        // If we create a mock for an interface with additional interfaces implemented, we do not
+        // want to preserve the annotations of either interface. The caching mechanism does not
+        // consider the order of these interfaces and the same mock class might be reused for
+        // either order. Also, it does not have clean semantics as annotations are not normally
+        // preserved for interfaces in Java.
+        Annotation[] annotationsOnType;
+        if (features.stripAnnotations) {
+            annotationsOnType = new Annotation[0];
+        } else if (!features.mockedType.isInterface() || features.interfaces.isEmpty()) {
+            annotationsOnType = features.mockedType.getAnnotations();
+        } else {
+            annotationsOnType = new Annotation[0];
+        }
         DynamicType.Builder<T> builder =
                 byteBuddy
                         .subclass(target)
                         .name(name)
                         .ignoreAlso(BytecodeGenerator.isGroovyMethod(false))
-                        .annotateType(
-                                features.stripAnnotations || features.mockedType.isInterface()
-                                        ? new Annotation[0]
-                                        : features.mockedType.getAnnotations())
+                        .annotateType(annotationsOnType)
                         .implement(
                                 new ArrayList<>(
                                         GraalImageCode.getCurrent().isDefined()

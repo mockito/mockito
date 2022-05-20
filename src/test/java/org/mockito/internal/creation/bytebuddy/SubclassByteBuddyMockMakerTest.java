@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.plugins.MockMaker;
 
+import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Observable;
@@ -79,9 +80,8 @@ public class SubclassByteBuddyMockMakerTest
     }
 
     @Test
-    public void mock_type_with_annotations() throws Exception {
-        MockSettingsImpl<ClassWithAnnotation> mockSettings =
-                new MockSettingsImpl<ClassWithAnnotation>();
+    public void mock_class_with_annotations() throws Exception {
+        MockSettingsImpl<ClassWithAnnotation> mockSettings = new MockSettingsImpl<>();
         mockSettings.setTypeToMock(ClassWithAnnotation.class);
 
         ClassWithAnnotation proxy = mockMaker.createMock(mockSettings, dummyHandler());
@@ -103,9 +103,78 @@ public class SubclassByteBuddyMockMakerTest
     }
 
     @Test
+    public void mock_class_with_annotations_with_additional_interface() throws Exception {
+        MockSettingsImpl<ClassWithAnnotation> mockSettings = new MockSettingsImpl<>();
+        mockSettings.setTypeToMock(ClassWithAnnotation.class);
+        mockSettings.extraInterfaces(Serializable.class);
+
+        ClassWithAnnotation proxy = mockMaker.createMock(mockSettings, dummyHandler());
+
+        assertThat(proxy.getClass().isAnnotationPresent(SampleAnnotation.class)).isTrue();
+        assertThat(proxy.getClass().getAnnotation(SampleAnnotation.class).value()).isEqualTo("foo");
+
+        assertThat(
+                        proxy.getClass()
+                                .getMethod("sampleMethod")
+                                .isAnnotationPresent(SampleAnnotation.class))
+                .isTrue();
+        assertThat(
+                        proxy.getClass()
+                                .getMethod("sampleMethod")
+                                .getAnnotation(SampleAnnotation.class)
+                                .value())
+                .isEqualTo("bar");
+    }
+
+    @Test
+    public void mock_interface_with_annotations() throws Exception {
+        MockSettingsImpl<InterfaceWithAnnotation> mockSettings = new MockSettingsImpl<>();
+        mockSettings.setTypeToMock(InterfaceWithAnnotation.class);
+
+        InterfaceWithAnnotation proxy = mockMaker.createMock(mockSettings, dummyHandler());
+
+        assertThat(proxy.getClass().isAnnotationPresent(SampleAnnotation.class)).isTrue();
+        assertThat(proxy.getClass().getAnnotation(SampleAnnotation.class).value()).isEqualTo("foo");
+
+        assertThat(
+                        proxy.getClass()
+                                .getMethod("sampleMethod")
+                                .isAnnotationPresent(SampleAnnotation.class))
+                .isTrue();
+        assertThat(
+                        proxy.getClass()
+                                .getMethod("sampleMethod")
+                                .getAnnotation(SampleAnnotation.class)
+                                .value())
+                .isEqualTo("bar");
+    }
+
+    @Test
+    public void mock_interface_with_annotations_with_additional_interface() throws Exception {
+        MockSettingsImpl<InterfaceWithAnnotation> mockSettings = new MockSettingsImpl<>();
+        mockSettings.setTypeToMock(InterfaceWithAnnotation.class);
+        mockSettings.extraInterfaces(Serializable.class);
+
+        InterfaceWithAnnotation proxy = mockMaker.createMock(mockSettings, dummyHandler());
+
+        assertThat(proxy.getClass().isAnnotationPresent(SampleAnnotation.class)).isFalse();
+
+        assertThat(
+                        proxy.getClass()
+                                .getMethod("sampleMethod")
+                                .isAnnotationPresent(SampleAnnotation.class))
+                .isTrue();
+        assertThat(
+                        proxy.getClass()
+                                .getMethod("sampleMethod")
+                                .getAnnotation(SampleAnnotation.class)
+                                .value())
+                .isEqualTo("bar");
+    }
+
+    @Test
     public void mock_type_without_annotations() throws Exception {
-        MockSettingsImpl<ClassWithAnnotation> mockSettings =
-                new MockSettingsImpl<ClassWithAnnotation>();
+        MockSettingsImpl<ClassWithAnnotation> mockSettings = new MockSettingsImpl<>();
         mockSettings.setTypeToMock(ClassWithAnnotation.class);
         mockSettings.withoutAnnotations();
 
@@ -137,5 +206,12 @@ public class SubclassByteBuddyMockMakerTest
         public void sampleMethod() {
             throw new UnsupportedOperationException();
         }
+    }
+
+    @SampleAnnotation("foo")
+    public interface InterfaceWithAnnotation {
+
+        @SampleAnnotation("bar")
+        void sampleMethod();
     }
 }
