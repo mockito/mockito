@@ -13,6 +13,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -111,4 +112,12 @@ public @interface Mock {
      * @since 2.23.3
      */
     boolean lenient() default false;
+
+    /**
+     * Mock will have custom strictness, see {@link MockSettings#strictness(Strictness)}.
+     * For examples how to use 'Mock' annotation and parameters see {@link Mock}.
+     *
+     * @since 4.5.2
+     */
+    Strictness strictness() default Strictness.STRICT_STUBS;
 }

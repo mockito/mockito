@@ -45,6 +45,7 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         if (annotation.stubOnly()) {
             mockSettings.stubOnly();
         }
+        mockSettings.strictness(annotation.strictness());
         if (annotation.lenient()) {
             mockSettings.lenient();
         }

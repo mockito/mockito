@@ -124,4 +124,12 @@ public interface MockCreationSettings<T> {
      * @since 2.20.0
      */
     boolean isLenient();
+
+    /**
+     * Sets strictness level for the mock, e.g. having {@link Strictness#STRICT_STUBS} characteristic.
+     * For more information about using mocks with custom strictness, see {@link MockSettings#strictness(Strictness)}.
+     *
+     * @since 4.5.2
+     */
+    Strictness getStrictness();
 }

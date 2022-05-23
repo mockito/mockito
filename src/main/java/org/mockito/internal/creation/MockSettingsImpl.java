@@ -12,6 +12,7 @@ import static org.mockito.internal.exceptions.Reporter.extraInterfacesDoesNotAcc
 import static org.mockito.internal.exceptions.Reporter.extraInterfacesRequiresAtLeastOneInterface;
 import static org.mockito.internal.exceptions.Reporter.methodDoesNotAcceptParameter;
 import static org.mockito.internal.exceptions.Reporter.requiresAtLeastOneListener;
+import static org.mockito.internal.exceptions.Reporter.strictnessDoesNotAcceptNullParameter;
 import static org.mockito.internal.util.collections.Sets.newSet;
 
 import java.io.Serializable;
@@ -33,6 +34,7 @@ import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
+import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 @SuppressWarnings("unchecked")
@@ -239,7 +241,16 @@ public class MockSettingsImpl<T> extends CreationSettings<T>
 
     @Override
     public MockSettings lenient() {
-        this.lenient = true;
+        this.strictness = Strictness.LENIENT;
+        return this;
+    }
+
+    @Override
+    public MockSettings strictness(Strictness strictness) {
+        this.strictness = strictness;
+        if (strictness == null) {
+            throw strictnessDoesNotAcceptNullParameter();
+        }
         return this;
     }
 

@@ -361,4 +361,20 @@ public interface MockSettings extends Serializable {
      * For more information and an elaborate example, see {@link Mockito#lenient()}.
      */
     MockSettings lenient();
+
+    /**
+     * Specifies strictness level for the mock.
+     * The default strictness level is STRICT_STUBS
+     *
+     * <pre class="code"><code class="java">
+     *   Foo defaultStrictMock = mock(Foo.class);
+     *   Foo explicitStrictMock = mock(Foo.class, withSettings().strictness(Strictness.STRICT_STUBS));
+     *   Foo lenientMock = mock(Foo.class, withSettings().strictness(Strictness.LENIENT));
+     * </code></pre>
+     *
+     * @param strictness the strictness level to set on mock
+     * @return settings instance so that you can fluently specify other settings
+     * @since 4.5.2
+     */
+    MockSettings strictness(Strictness strictness);
 }
