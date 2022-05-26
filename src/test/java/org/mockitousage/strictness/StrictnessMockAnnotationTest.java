@@ -37,8 +37,7 @@ public class StrictnessMockAnnotationTest {
     public void mock_is_strict() {
         when(regularMock.simpleMethod("2")).thenReturn("2");
 
-        Assertions.assertThatThrownBy(
-                () -> ProductionCode.simpleMethod(regularMock, "4"))
-            .isInstanceOf(PotentialStubbingProblem.class);
+        Assertions.assertThatThrownBy(() -> ProductionCode.simpleMethod(regularMock, "4"))
+                .isInstanceOf(PotentialStubbingProblem.class);
     }
 }

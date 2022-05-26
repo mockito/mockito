@@ -263,9 +263,7 @@ public class MockSettingsImplTest extends TestBase {
 
     @Test
     public void validates_strictness() {
-        assertThatThrownBy(
-            () ->
-                mockSettingsImpl.strictness(null))
-            .hasMessageContaining("strictness() does not accept null parameter");
+        assertThatThrownBy(() -> mockSettingsImpl.strictness(null))
+                .hasMessageContaining("strictness() does not accept null parameter");
     }
 }

@@ -43,17 +43,15 @@ public class StrictnessWithSettingsTest {
     public void mock_is_strict_with_default_settings() {
         when(regularMock.simpleMethod("3")).thenReturn("3");
 
-        Assertions.assertThatThrownBy(
-                () -> ProductionCode.simpleMethod(regularMock, "4"))
-            .isInstanceOf(PotentialStubbingProblem.class);
+        Assertions.assertThatThrownBy(() -> ProductionCode.simpleMethod(regularMock, "4"))
+                .isInstanceOf(PotentialStubbingProblem.class);
     }
 
     @Test
     public void mock_is_strict_with_explicit_settings() {
         when(strictMock.simpleMethod("2")).thenReturn("2");
 
-        Assertions.assertThatThrownBy(
-                () -> ProductionCode.simpleMethod(strictMock, "5"))
-            .isInstanceOf(PotentialStubbingProblem.class);
+        Assertions.assertThatThrownBy(() -> ProductionCode.simpleMethod(strictMock, "5"))
+                .isInstanceOf(PotentialStubbingProblem.class);
     }
 }
