@@ -118,10 +118,21 @@ public interface MockCreationSettings<T> {
     Object getOuterClassInstance();
 
     /**
+     *  @deprecated Use {@link MockCreationSettings#getStrictness()} instead.
+     *
      * Informs if the mock was created with "lenient" strictness, e.g. having {@link Strictness#LENIENT} characteristic.
      * For more information about using mocks with lenient strictness, see {@link MockSettings#lenient()}.
      *
      * @since 2.20.0
      */
+    @Deprecated
     boolean isLenient();
+
+    /**
+     * Sets strictness level for the mock, e.g. having {@link Strictness#STRICT_STUBS} characteristic.
+     * For more information about using mocks with custom strictness, see {@link MockSettings#strictness(Strictness)}.
+     *
+     * @since 4.6.0
+     */
+    Strictness getStrictness();
 }

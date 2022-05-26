@@ -964,6 +964,10 @@ public class Reporter {
         return new MockitoException("defaultAnswer() does not accept null parameter");
     }
 
+    public static MockitoException strictnessDoesNotAcceptNullParameter() {
+        return new MockitoException("strictness() does not accept null parameter");
+    }
+
     public static MockitoException serializableWontWorkForObjectsThatDontImplementSerializable(
             Class<?> classToMock) {
         return new MockitoException(

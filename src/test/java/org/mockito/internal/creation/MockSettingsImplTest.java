@@ -260,4 +260,10 @@ public class MockSettingsImplTest extends TestBase {
         assertThat(mockSettingsImpl.getStubbingLookupListeners())
                 .containsSequence(stubbingLookupListener, stubbingLookupListener);
     }
+
+    @Test
+    public void validates_strictness() {
+        assertThatThrownBy(() -> mockSettingsImpl.strictness(null))
+                .hasMessageContaining("strictness() does not accept null parameter");
+    }
 }

@@ -31,8 +31,8 @@ public final class StrictnessSelector {
             return stubbing.getStrictness();
         }
 
-        if (mockSettings.isLenient()) {
-            return Strictness.LENIENT;
+        if (mockSettings.getStrictness() != null) {
+            return mockSettings.getStrictness();
         }
 
         return testLevelStrictness;
