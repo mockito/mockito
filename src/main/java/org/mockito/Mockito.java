@@ -1615,7 +1615,7 @@ import java.util.function.Function;
  * either using @Mock annotation strictness attribute or using MockSettings.strictness().
  *
  * <pre class="code"><code class="java">
- *   @Mock(strictness = Strictness.LENIENT)
+ *   {@literal @}Mock(strictness = Strictness.LENIENT)
  *   Foo mock;
  *   // using MockSettings.withSettings()
  *   Foo mock = Mockito.mock(Foo.class, withSettings().strictness(Strictness.WARN));
