@@ -5,7 +5,6 @@
 package org.mockitousage.strictness;
 
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,28 +34,26 @@ public class StrictnessWithSettingsTest {
     @Test
     public void mock_is_lenient() {
         when(lenientMock.simpleMethod("1")).thenReturn("1");
+
+        // lenient mock does not throw
+        ProductionCode.simpleMethod(lenientMock, "3");
+    }
+
+    @Test
+    public void mock_is_strict_with_default_settings() {
         when(regularMock.simpleMethod("3")).thenReturn("3");
+
+        Assertions.assertThatThrownBy(
+                () -> ProductionCode.simpleMethod(regularMock, "4"))
+            .isInstanceOf(PotentialStubbingProblem.class);
+    }
+
+    @Test
+    public void mock_is_strict_with_explicit_settings() {
         when(strictMock.simpleMethod("2")).thenReturn("2");
 
-        // then lenient mock does not throw:
-        ProductionCode.simpleMethod(lenientMock, "3");
-
-        // but regular mock throws:
         Assertions.assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            public void call() {
-                                ProductionCode.simpleMethod(regularMock, "4");
-                            }
-                        })
-                .isInstanceOf(PotentialStubbingProblem.class);
-
-        // also strict mock throws:
-        Assertions.assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            public void call() {
-                                ProductionCode.simpleMethod(strictMock, "5");
-                            }
-                        })
-                .isInstanceOf(PotentialStubbingProblem.class);
+                () -> ProductionCode.simpleMethod(strictMock, "5"))
+            .isInstanceOf(PotentialStubbingProblem.class);
     }
 }

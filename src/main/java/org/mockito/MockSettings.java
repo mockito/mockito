@@ -350,6 +350,8 @@ public interface MockSettings extends Serializable {
     <T> MockCreationSettings<T> buildStatic(Class<T> classToMock);
 
     /**
+     * @deprecated Use {@link MockSettings#strictness(Strictness)} instead.
+     *
      * Lenient mocks bypass "strict stubbing" validation (see {@link Strictness#STRICT_STUBS}).
      * When mock is declared as lenient none of its stubbings will be checked for potential stubbing problems such as
      * 'unnecessary stubbing' ({@link UnnecessaryStubbingException}) or for 'stubbing argument mismatch' {@link PotentialStubbingProblem}.
@@ -360,11 +362,13 @@ public interface MockSettings extends Serializable {
      *
      * For more information and an elaborate example, see {@link Mockito#lenient()}.
      */
+    @Deprecated
     MockSettings lenient();
 
     /**
      * Specifies strictness level for the mock.
-     * The default strictness level is STRICT_STUBS
+     * The default strictness level is determined by the rule/runner used.
+     * If you are using no rule/runner, the default strictness level is LENIENT
      *
      * <pre class="code"><code class="java">
      *   Foo defaultStrictMock = mock(Foo.class);
@@ -374,7 +378,7 @@ public interface MockSettings extends Serializable {
      *
      * @param strictness the strictness level to set on mock
      * @return settings instance so that you can fluently specify other settings
-     * @since 4.5.2
+     * @since 4.6.0
      */
     MockSettings strictness(Strictness strictness);
 }

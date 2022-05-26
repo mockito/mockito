@@ -5,7 +5,6 @@
 package org.mockitousage.strictness;
 
 import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -29,18 +28,17 @@ public class StrictnessMockAnnotationTest {
     @Test
     public void mock_is_lenient() {
         when(lenientMock.simpleMethod("1")).thenReturn("1");
-        when(regularMock.simpleMethod("2")).thenReturn("2");
 
         // then lenient mock does not throw:
         ProductionCode.simpleMethod(lenientMock, "3");
+    }
 
-        // but regular mock throws:
+    @Test
+    public void mock_is_strict() {
+        when(regularMock.simpleMethod("2")).thenReturn("2");
+
         Assertions.assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            public void call() {
-                                ProductionCode.simpleMethod(regularMock, "4");
-                            }
-                        })
-                .isInstanceOf(PotentialStubbingProblem.class);
+                () -> ProductionCode.simpleMethod(regularMock, "4"))
+            .isInstanceOf(PotentialStubbingProblem.class);
     }
 }
