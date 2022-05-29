@@ -22,7 +22,7 @@ import org.mockito.mock.MockCreationSettings;
  * the type to mock, extra interfaces, and serialization support.
  *
  * <p>
- * The type to mock has to be not final and not part of the JDK. THe created mock will implement extra interfaces
+ * The type to mock has to be not final and not part of the JDK. The created mock will implement extra interfaces
  * if any. And will implement <code>Serializable</code> if this settings is explicitly set.
  */
 public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
