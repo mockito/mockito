@@ -13,7 +13,7 @@ libraries.junitJupiterApi = "org.junit.jupiter:junit-jupiter-api:${versions.juni
 libraries.junitPlatformLauncher = 'org.junit.platform:junit-platform-launcher:1.8.2'
 libraries.junitJupiterEngine = "org.junit.jupiter:junit-jupiter-engine:${versions.junitJupiter}"
 libraries.junitVintageEngine = "org.junit.vintage:junit-vintage-engine:${versions.junitJupiter}"
-libraries.assertj = 'org.assertj:assertj-core:3.22.0'
+libraries.assertj = 'org.assertj:assertj-core:3.23.1'
 libraries.hamcrest = 'org.hamcrest:hamcrest-core:2.2'
 libraries.opentest4j = 'org.opentest4j:opentest4j:1.2.0'
 
