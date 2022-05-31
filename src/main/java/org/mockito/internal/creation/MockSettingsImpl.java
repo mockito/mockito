@@ -247,10 +247,10 @@ public class MockSettingsImpl<T> extends CreationSettings<T>
 
     @Override
     public MockSettings strictness(Strictness strictness) {
-        this.strictness = strictness;
         if (strictness == null) {
             throw strictnessDoesNotAcceptNullParameter();
         }
+        this.strictness = strictness;
         return this;
     }
 

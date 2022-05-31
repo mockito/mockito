@@ -28,6 +28,7 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
                 annotation, field.getType(), field::getGenericType, field.getName());
     }
 
+    @SuppressWarnings("deprecation")
     public static Object processAnnotationForMock(
             Mock annotation, Class<?> type, Supplier<Type> genericType, String name) {
         MockSettings mockSettings = Mockito.withSettings();
@@ -45,9 +46,11 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         if (annotation.stubOnly()) {
             mockSettings.stubOnly();
         }
-        mockSettings.strictness(annotation.strictness());
         if (annotation.lenient()) {
             mockSettings.lenient();
+        }
+        if (annotation.strictness() != Mock.Strictness.NOT_SET) {
+            mockSettings.strictness(annotation.strictness().outer());
         }
 
         // see @Mock answer default value
