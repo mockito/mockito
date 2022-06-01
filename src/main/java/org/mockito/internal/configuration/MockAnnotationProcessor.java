@@ -17,6 +17,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.Supplier;
+import org.mockito.quality.Strictness;
 
 /**
  * Instantiates a mock on a field annotated by {@link Mock}
@@ -50,7 +51,7 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
             mockSettings.lenient();
         }
         if (annotation.strictness() != Mock.Strictness.NOT_SET) {
-            mockSettings.strictness(annotation.strictness().outer());
+            mockSettings.strictness(Strictness.valueOf(annotation.strictness().toString()));
         }
 
         // see @Mock answer default value

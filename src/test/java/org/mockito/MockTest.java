@@ -4,29 +4,57 @@
  */
 package org.mockito;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assume.assumeThat;
 
-@RunWith(value = Parameterized.class)
+@RunWith(Enclosed.class)
 public class MockTest {
 
-    public org.mockito.quality.Strictness strictness;
+    @RunWith(value = Parameterized.class)
+    public static class StrictnessToMockStrictnessTest {
 
-    public MockTest(org.mockito.quality.Strictness strictness) {
-        this.strictness = strictness;
+        public org.mockito.quality.Strictness strictness;
+
+        public StrictnessToMockStrictnessTest(org.mockito.quality.Strictness strictness) {
+            this.strictness = strictness;
+        }
+
+        @Test
+        public void should_have_matching_enum_in_mock_strictness_enum() {
+            Mock.Strictness.valueOf(strictness.name());
+        }
+
+        @Parameterized.Parameters(name = "{0}")
+        public static org.mockito.quality.Strictness[] data() {
+            return org.mockito.quality.Strictness.values();
+        }
     }
 
-    @Test
-    public void should_have_matching_enum_in_mock_strictness_enum() {
-        final Mock.Strictness mockStrictness = Mock.Strictness.valueOf(this.strictness.name());
-        assertThat(mockStrictness.outer()).isEqualTo(strictness);
-    }
+    @RunWith(value = Parameterized.class)
+    public static class MockStrictnessToStrictnessTest {
 
-    @Parameterized.Parameters
-    public static org.mockito.quality.Strictness[] data() {
-        return org.mockito.quality.Strictness.values();
+        public Mock.Strictness strictness;
+
+        public MockStrictnessToStrictnessTest(Mock.Strictness strictness) {
+            this.strictness = strictness;
+        }
+
+        @Test
+        public void should_have_matching_enum_in_strictness_enum() {
+            assumeThat("Ignore NOT_SET", strictness, not(Mock.Strictness.NOT_SET));
+            org.mockito.quality.Strictness.valueOf(strictness.name());
+        }
+
+        @Parameterized.Parameters(name = "{0}")
+        public static Mock.Strictness[] data() {
+            return Mock.Strictness.values();
+        }
     }
 }

@@ -131,31 +131,21 @@ public @interface Mock {
          *
          * @since 4.6.1
          */
-        NOT_SET(null),
+        NOT_SET,
 
         /**
          * See {@link org.mockito.quality.Strictness#LENIENT}
          */
-        LENIENT(org.mockito.quality.Strictness.LENIENT),
+        LENIENT,
 
         /**
          * See {@link org.mockito.quality.Strictness#WARN}
          */
-        WARN(org.mockito.quality.Strictness.WARN),
+        WARN,
 
         /**
          * See {@link org.mockito.quality.Strictness#STRICT_STUBS}
          */
-        STRICT_STUBS(org.mockito.quality.Strictness.STRICT_STUBS);
-
-        private final org.mockito.quality.Strictness outer;
-
-        Strictness(org.mockito.quality.Strictness outer) {
-            this.outer = outer;
-        }
-
-        public org.mockito.quality.Strictness outer() {
-            return outer;
-        }
+        STRICT_STUBS
     }
 }
