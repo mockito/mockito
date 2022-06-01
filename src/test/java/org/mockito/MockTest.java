@@ -4,14 +4,12 @@
  */
 package org.mockito;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assume.assumeThat;
 
 @RunWith(Enclosed.class)
@@ -48,7 +46,7 @@ public class MockTest {
 
         @Test
         public void should_have_matching_enum_in_strictness_enum() {
-            assumeThat("Ignore NOT_SET", strictness, not(Mock.Strictness.NOT_SET));
+            assumeThat("Ignore NOT_SET", strictness, not(Mock.Strictness.TEST_LEVEL_DEFAULT));
             org.mockito.quality.Strictness.valueOf(strictness.name());
         }
 

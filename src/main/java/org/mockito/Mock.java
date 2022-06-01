@@ -122,7 +122,7 @@ public @interface Mock {
      *
      * @since 4.6.1
      */
-    Strictness strictness() default Strictness.NOT_SET;
+    Strictness strictness() default Strictness.TEST_LEVEL_DEFAULT;
 
     enum Strictness {
 
@@ -131,7 +131,7 @@ public @interface Mock {
          *
          * @since 4.6.1
          */
-        NOT_SET,
+        TEST_LEVEL_DEFAULT,
 
         /**
          * See {@link org.mockito.quality.Strictness#LENIENT}

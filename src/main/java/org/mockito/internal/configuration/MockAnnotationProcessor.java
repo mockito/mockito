@@ -50,7 +50,7 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         if (annotation.lenient()) {
             mockSettings.lenient();
         }
-        if (annotation.strictness() != Mock.Strictness.NOT_SET) {
+        if (annotation.strictness() != Mock.Strictness.TEST_LEVEL_DEFAULT) {
             mockSettings.strictness(Strictness.valueOf(annotation.strictness().toString()));
         }
 
