@@ -21,7 +21,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
@@ -159,6 +161,29 @@ class StrictnessTest {
     void inherits_strictness_from_base_class() {
         TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(InheritedWarnStubs.class);
 
+        assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
+    }
+
+    @ExtendWith(MockitoExtension.class)
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    static class LenientMockitoSettings {
+
+        @Mock
+        private Predicate<String> rootMock;
+
+        @Test
+        void should_not_throw_on_potential_stubbing_issue() {
+            Mockito.doReturn(true).when(rootMock).test("Foo");
+
+            ProductionCode.simpleMethod(rootMock, "Bar");
+        }
+    }
+
+    @Test
+    void use_strictness_from_settings_annotation() {
+        TestExecutionResult result = invokeTestClassAndRetrieveMethodResult(LenientMockitoSettings.class);
+
+        assertThat(result.getThrowable()).isEqualTo(Optional.empty());
         assertThat(result.getStatus()).isEqualTo(TestExecutionResult.Status.SUCCESSFUL);
     }
 

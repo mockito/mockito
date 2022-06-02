@@ -13,7 +13,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -34,12 +33,13 @@ import org.mockito.stubbing.Answer;
  *       &#064;Mock(name = "database") private ArticleDatabase dbMock;
  *       &#064;Mock(answer = RETURNS_MOCKS) private UserProvider userProvider;
  *       &#064;Mock(extraInterfaces = {Queue.class, Observer.class}) private ArticleMonitor articleMonitor;
+ *       &#064;Mock(strictness = Mock.Strictness.LENIENT) private ArticleConsumer articleConsumer;
  *       &#064;Mock(stubOnly = true) private Logger logger;
  *
  *       private ArticleManager manager;
  *
  *       &#064;Before public void setup() {
- *           manager = new ArticleManager(userProvider, database, calculator, articleMonitor, logger);
+ *           manager = new ArticleManager(userProvider, database, calculator, articleMonitor, articleConsumer, logger);
  *       }
  *   }
  *
@@ -117,10 +117,35 @@ public @interface Mock {
     boolean lenient() default false;
 
     /**
-     * Mock will have custom strictness, see {@link MockSettings#strictness(Strictness)}.
+     * Mock will have custom strictness, see {@link MockSettings#strictness(org.mockito.quality.Strictness)}.
      * For examples how to use 'Mock' annotation and parameters see {@link Mock}.
      *
-     * @since 4.6.0
+     * @since 4.6.1
      */
-    Strictness strictness() default Strictness.STRICT_STUBS;
+    Strictness strictness() default Strictness.TEST_LEVEL_DEFAULT;
+
+    enum Strictness {
+
+        /**
+         * Default value used to indicate the mock does not override the test level strictness.
+         *
+         * @since 4.6.1
+         */
+        TEST_LEVEL_DEFAULT,
+
+        /**
+         * See {@link org.mockito.quality.Strictness#LENIENT}
+         */
+        LENIENT,
+
+        /**
+         * See {@link org.mockito.quality.Strictness#WARN}
+         */
+        WARN,
+
+        /**
+         * See {@link org.mockito.quality.Strictness#STRICT_STUBS}
+         */
+        STRICT_STUBS
+    }
 }

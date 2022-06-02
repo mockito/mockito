@@ -45,7 +45,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     private boolean useConstructor;
     private Object outerClassInstance;
     private Object[] constructorArgs;
-    protected Strictness strictness = Strictness.STRICT_STUBS;
+    protected Strictness strictness = null;
 
     public CreationSettings() {}
 
