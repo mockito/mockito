@@ -44,9 +44,9 @@ import static org.mockito.internal.util.StringUtil.join;
 /**
  * Agent and subclass based mock maker.
  * <p>
- * This mock maker which uses a combination of the Java instrumentation API and sub-classing rather than creating
+ * This mock maker uses a combination of the Java instrumentation API and sub-classing rather than creating
  * a new sub-class to create a mock. This way, it becomes possible to mock final types and methods. This mock
- * maker <strong>must to be activated explicitly</strong> for supporting mocking final types and methods:
+ * maker <strong>must be activated explicitly</strong> for supporting mocking final types and methods:
  * <p>
  * <p>
  * This mock maker can be activated by creating the file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
@@ -62,7 +62,7 @@ import static org.mockito.internal.util.StringUtil.join;
  * assert mock(Foo.class).getClass() == Foo.class;
  * </pre></code>
  * <p>
- * unless any of the following conditions is met, in such case the mock maker <em>fall backs</em> to the
+ * unless any of the following conditions is met, in such case the mock maker <em>falls back</em> to
  * the creation of a subclass.
  * <p>
  * <ul>
@@ -87,7 +87,7 @@ import static org.mockito.internal.util.StringUtil.join;
  * include private types in a protected package.</li>
  * <li>Mockito can no longer mock <code>native</code> methods. Inline mocks require byte code manipulation of a
  * method where native methods do not offer any byte code to manipulate.</li>
- * <li>Mockito cannot longer strip <code>synchronized</code> modifiers from mocked instances.</li>
+ * <li>Mockito can no longer strip <code>synchronized</code> modifiers from mocked instances.</li>
  * </ul>
  * <p>
  * <p>
