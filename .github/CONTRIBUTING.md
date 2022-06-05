@@ -6,9 +6,9 @@
 
 **If looking for support**
 
-* Search / Ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/mockito)
+* Search / Ask a question on [Stack Overflow / Questions tagged [mockito]](https://stackoverflow.com/questions/tagged/mockito)
 * Go to the [mockito mailing-list](https://groups.google.com/group/mockito) (moderated)
-* Issues should always have a [Short, Self Contained, Correct (Compilable), Example](http://sscce.org) (same as any question on stackoverflow.com)
+* Issues should always have a [Short, Self Contained, Correct (Compilable), Example](http://sscce.org) (same as any question on [Stack Overflow](https://stackoverflow.com))
 
 # Contributing to Mockito
 
