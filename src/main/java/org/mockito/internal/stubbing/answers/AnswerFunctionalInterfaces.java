@@ -4,8 +4,6 @@
  */
 package org.mockito.internal.stubbing.answers;
 
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Answer1;
@@ -22,8 +20,6 @@ import org.mockito.stubbing.VoidAnswer5;
 import org.mockito.stubbing.VoidAnswer6;
 
 import java.lang.reflect.Method;
-
-import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * Functional interfaces to make it easy to implement answers in Java 8
@@ -339,8 +335,8 @@ public class AnswerFunctionalInterfaces {
 
     @SuppressWarnings("unchecked")
     private static <A> A lastParameter(
-            InvocationOnMock invocationOnMock, Method answerMethod, int argumentIndex) {
-        final Method invocationMethod = invocationOnMock.getMethod();
+            InvocationOnMock invocation, Method answerMethod, int argumentIndex) {
+        final Method invocationMethod = invocation.getMethod();
 
         if (invocationMethod.isVarArgs()
                 && invocationMethod.getParameterTypes().length == (argumentIndex + 1)) {
@@ -348,11 +344,10 @@ public class AnswerFunctionalInterfaces {
                     invocationMethod.getParameterTypes()[argumentIndex];
             final Class<?> answerRawArgType = answerMethod.getParameterTypes()[argumentIndex];
             if (answerRawArgType.isAssignableFrom(invocationRawArgType)) {
-                Invocation invocation = (Invocation) invocationOnMock;
                 return (A) invocation.getRawArguments()[argumentIndex];
             }
         }
 
-        return invocationOnMock.getArgument(argumentIndex);
+        return invocation.getArgument(argumentIndex);
     }
 }

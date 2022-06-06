@@ -51,9 +51,7 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
     }
 
     @Override
-    public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-        Invocation invocation = (Invocation) invocationOnMock;
-
+    public Object answer(InvocationOnMock invocation) throws Throwable {
         if (wantedArgIndexIsVarargAndSameTypeAsReturnType(invocation)) {
             // answer raw vararg array argument
             return invocation.getRawArguments()[invocation.getRawArguments().length - 1];
@@ -82,7 +80,7 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
         return wantedArgumentPosition;
     }
 
-    private int inferWantedRawArgumentPosition(Invocation invocation) {
+    private int inferWantedRawArgumentPosition(InvocationOnMock invocation) {
         if (wantedArgumentPosition == LAST_ARGUMENT) {
             return invocation.getRawArguments().length - 1;
         }
@@ -121,7 +119,7 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
         }
     }
 
-    private boolean wantedArgIndexIsVarargAndSameTypeAsReturnType(Invocation invocation) {
+    private boolean wantedArgIndexIsVarargAndSameTypeAsReturnType(InvocationOnMock invocation) {
         int rawArgumentPosition = inferWantedRawArgumentPosition(invocation);
         Method method = invocation.getMethod();
         Class<?>[] parameterTypes = method.getParameterTypes();
