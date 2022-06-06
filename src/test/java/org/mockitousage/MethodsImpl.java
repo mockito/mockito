@@ -254,9 +254,46 @@ public class MethodsImpl implements IMethods {
         return null;
     }
 
+    public String threeArgumentVarArgsMethod(
+            final int valueOne, final String valueTwo, final String... valueThree) {
+        return null;
+    }
+
     public String fourArgumentMethod(
             int valueOne, String valueTwo, String valueThree, boolean[] array) {
         return null;
+    }
+
+    public String fourArgumentVarArgsMethod(
+            final int valueOne,
+            final String valueTwo,
+            final int valueThree,
+            final String... valueFour) {
+        return null;
+    }
+
+    public String fiveArgumentVarArgsMethod(
+            final int valueOne,
+            final String valueTwo,
+            final int valueThree,
+            final String valueFour,
+            final String... valueFive) {
+        return null;
+    }
+
+    public String sixArgumentVarArgsMethod(
+            final int valueOne,
+            final String valueTwo,
+            final int valueThree,
+            final String valueFour,
+            final String valueFive,
+            final String... valueSix) {
+        return null;
+    }
+
+    @Override
+    public int arrayVarargsMethod(final String[]... arrayVarArgs) {
+        return 0;
     }
 
     public void twoArgumentMethod(int one, int two) {}
@@ -432,6 +469,11 @@ public class MethodsImpl implements IMethods {
     }
 
     public Integer toIntWrapper(int i) {
+        return null;
+    }
+
+    @Override
+    public Integer toIntWrapperVarArgs(final int i, final Object... varargs) {
         return null;
     }
 

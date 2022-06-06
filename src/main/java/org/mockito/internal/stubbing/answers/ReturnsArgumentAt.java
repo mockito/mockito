@@ -51,25 +51,27 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
     }
 
     @Override
-    public Object answer(InvocationOnMock invocation) throws Throwable {
+    public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+        Invocation invocation = (Invocation) invocationOnMock;
+
+        if (wantedArgIndexIsVarargAndSameTypeAsReturnType(invocation)) {
+            // answer raw vararg array argument
+            return invocation.getRawArguments()[invocation.getRawArguments().length - 1];
+        }
+
         int argumentPosition = inferWantedArgumentPosition(invocation);
         validateIndexWithinInvocationRange(invocation, argumentPosition);
-
-        if (wantedArgIndexIsVarargAndSameTypeAsReturnType(
-                invocation.getMethod(), argumentPosition)) {
-            // answer raw vararg array argument
-            return ((Invocation) invocation).getRawArguments()[argumentPosition];
-        }
 
         // answer expanded argument at wanted position
         return invocation.getArgument(argumentPosition);
     }
 
     @Override
-    public void validateFor(InvocationOnMock invocation) {
+    public void validateFor(InvocationOnMock invocationOnMock) {
+        Invocation invocation = (Invocation) invocationOnMock;
         int argumentPosition = inferWantedArgumentPosition(invocation);
-        validateIndexWithinInvocationRange(invocation, argumentPosition);
-        validateArgumentTypeCompatibility((Invocation) invocation, argumentPosition);
+        validateIndexWithinTheoreticalInvocationRange(invocation, argumentPosition);
+        validateArgumentTypeCompatibility(invocation, argumentPosition);
     }
 
     private int inferWantedArgumentPosition(InvocationOnMock invocation) {
@@ -80,9 +82,26 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
         return wantedArgumentPosition;
     }
 
+    private int inferWantedRawArgumentPosition(Invocation invocation) {
+        if (wantedArgumentPosition == LAST_ARGUMENT) {
+            return invocation.getRawArguments().length - 1;
+        }
+
+        return wantedArgumentPosition;
+    }
+
     private void validateIndexWithinInvocationRange(
             InvocationOnMock invocation, int argumentPosition) {
-        if (!wantedArgumentPositionIsValidForInvocation(invocation, argumentPosition)) {
+
+        if (invocation.getArguments().length <= argumentPosition) {
+            throw invalidArgumentPositionRangeAtInvocationTime(
+                    invocation, wantedArgumentPosition == LAST_ARGUMENT, wantedArgumentPosition);
+        }
+    }
+
+    private void validateIndexWithinTheoreticalInvocationRange(
+            InvocationOnMock invocation, int argumentPosition) {
+        if (!wantedArgumentPositionIsValidForTheoreticalInvocation(invocation, argumentPosition)) {
             throw invalidArgumentPositionRangeAtInvocationTime(
                     invocation, wantedArgumentPosition == LAST_ARGUMENT, wantedArgumentPosition);
         }
@@ -102,15 +121,16 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
         }
     }
 
-    private boolean wantedArgIndexIsVarargAndSameTypeAsReturnType(
-            Method method, int argumentPosition) {
+    private boolean wantedArgIndexIsVarargAndSameTypeAsReturnType(Invocation invocation) {
+        int rawArgumentPosition = inferWantedRawArgumentPosition(invocation);
+        Method method = invocation.getMethod();
         Class<?>[] parameterTypes = method.getParameterTypes();
         return method.isVarArgs()
-                && argumentPosition == /* vararg index */ parameterTypes.length - 1
-                && method.getReturnType().isAssignableFrom(parameterTypes[argumentPosition]);
+                && rawArgumentPosition == /* vararg index */ parameterTypes.length - 1
+                && method.getReturnType().isAssignableFrom(parameterTypes[rawArgumentPosition]);
     }
 
-    private boolean wantedArgumentPositionIsValidForInvocation(
+    private boolean wantedArgumentPositionIsValidForTheoreticalInvocation(
             InvocationOnMock invocation, int argumentPosition) {
         if (argumentPosition < 0) {
             return false;
@@ -145,7 +165,7 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
             return parameterTypes[argumentIndex];
         }
         // if wanted argument is vararg
-        if (wantedArgIndexIsVarargAndSameTypeAsReturnType(invocation.getMethod(), argumentIndex)) {
+        if (wantedArgIndexIsVarargAndSameTypeAsReturnType(invocation)) {
             // return the vararg array if return type is compatible
             // because the user probably want to return the array itself if the return type is
             // compatible
