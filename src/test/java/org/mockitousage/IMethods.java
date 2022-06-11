@@ -133,7 +133,25 @@ public interface IMethods {
 
     String threeArgumentMethodWithStrings(int valueOne, String valueTwo, String valueThree);
 
+    String threeArgumentVarArgsMethod(int valueOne, String valueTwo, String... valueThree);
+
     String fourArgumentMethod(int valueOne, String valueTwo, String valueThree, boolean[] array);
+
+    String fourArgumentVarArgsMethod(
+            int valueOne, String valueTwo, int valueThree, String... valueFour);
+
+    String fiveArgumentVarArgsMethod(
+            int valueOne, String valueTwo, int valueThree, String valueFour, String... valueFive);
+
+    String sixArgumentVarArgsMethod(
+            int valueOne,
+            String valueTwo,
+            int valueThree,
+            String valueFour,
+            String valueFive,
+            String... valueSix);
+
+    int arrayVarargsMethod(String[]... arrayVarArgs);
 
     void twoArgumentMethod(int one, int two);
 
@@ -234,6 +252,8 @@ public interface IMethods {
     int toIntPrimitive(Integer i);
 
     Integer toIntWrapper(int i);
+
+    Integer toIntWrapperVarArgs(int i, Object... varargs);
 
     String forObject(Object object);
 

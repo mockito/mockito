@@ -33,6 +33,15 @@ public interface InvocationOnMock extends Serializable {
     Method getMethod();
 
     /**
+     * Returns unprocessed arguments whereas {@link #getArguments()} returns
+     * arguments already processed (e.g. varargs expended, etc.).
+     *
+     * @return unprocessed arguments, exactly as provided to this invocation.
+     * @since 4.7.0
+     */
+    Object[] getRawArguments();
+
+    /**
      * Returns arguments passed to the method.
      *
      * Vararg are expanded in this array.
