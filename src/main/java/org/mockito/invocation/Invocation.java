@@ -56,6 +56,7 @@ public interface Invocation extends InvocationOnMock, DescribedInvocation {
      * arguments already processed (e.g. varargs expended, etc.).
      *
      * @return unprocessed arguments, exactly as provided to this invocation.
+     * @since 4.7.0
      */
     Class<?> getRawReturnType();
 

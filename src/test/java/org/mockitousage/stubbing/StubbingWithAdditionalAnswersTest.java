@@ -82,7 +82,10 @@ public class StubbingWithAdditionalAnswersTest {
         assertThatThrownBy(() -> iMethods.mixedVarargsReturningString(1, "a", "b"))
                 .isInstanceOf(MockitoException.class)
                 .hasMessageContaining("Invalid argument index");
+    }
 
+    @Test
+    public void returns_arg_at_throws_on_out_of_range_array_var_args() throws Exception {
         assertThatThrownBy(
                         () ->
                                 given(iMethods.mixedVarargsReturningStringArray(eq(1), any()))
