@@ -113,7 +113,7 @@ public class MockitoJUnitRunner extends Runner implements Filterable {
      * Detects unused stubs and reports them as failures. Default behavior in Mockito 2.x.
      * To improve productivity and quality of tests please consider newer API, the {@link StrictStubs}.
      * <p>
-     * For more information on detecting unusued stubs, see {@link UnnecessaryStubbingException}.
+     * For more information on detecting unused stubs, see {@link UnnecessaryStubbingException}.
      * For more information on stubbing argument mismatch warnings see {@link MockitoHint}.
      *
      * @since 2.1.0
