@@ -74,6 +74,13 @@ public class StubbingReturnsSelfTest {
     }
 
     @Test
+    public void should_not_fail_when_calling_method_with_generic_return_type() {
+        Builder builder = mock(Builder.class, RETURNS_SELF);
+
+        assertThat(builder.returnGeneric("Generic Result")).isEqualTo(null);
+    }
+
+    @Test
     public void use_full_builder_with_terminating_method() {
         HttpBuilder builder = mock(HttpBuilder.class, RETURNS_SELF);
         HttpRequesterWithHeaders requester = new HttpRequesterWithHeaders(builder);
@@ -98,6 +105,10 @@ public class StubbingReturnsSelfTest {
 
         public int returnInt() {
             return 1;
+        }
+
+        public <T> T returnGeneric(T result) {
+            return result;
         }
     }
 
