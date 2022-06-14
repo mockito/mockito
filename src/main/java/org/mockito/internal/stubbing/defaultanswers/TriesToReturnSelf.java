@@ -20,7 +20,7 @@ public class TriesToReturnSelf implements Answer<Object>, Serializable {
         Object mock = invocation.getMock();
         Class<?> mockType = MockUtil.getMockHandler(mock).getMockSettings().getTypeToMock();
 
-        if (methodReturnType.isAssignableFrom(mockType)) {
+        if (methodReturnType.isAssignableFrom(mockType) && methodReturnType != Object.class) {
             return invocation.getMock();
         }
 
