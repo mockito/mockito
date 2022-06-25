@@ -434,7 +434,7 @@ class InlineDelegateByteBuddyMockMaker
                 join(
                         "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
                         "",
-                        "If you're not sure why you're getting this error, please report to the mailing list.",
+                        "If you're not sure why you're getting this error, please open an issue on GitHub.",
                         "",
                         Platform.warnForVM(
                                 "IBM J9 VM",
