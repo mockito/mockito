@@ -219,14 +219,14 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
                                         + typeToMock.getCanonicalName()
                                         + "'. The error was :",
                                 "  " + ioe.getMessage(),
-                                "If you are unsure what is the reason of this exception, feel free to contact us on the mailing list."),
+                                "If you are unsure what is the reason of this exception, feel free to open an issue on GitHub."),
                         ioe);
             } catch (ClassNotFoundException cce) {
                 throw new MockitoSerializationIssue(
                         join(
                                 "A class couldn't be found while deserializing a Mockito mock, you should check your classpath. The error was :",
                                 "  " + cce.getMessage(),
-                                "If you are still unsure what is the reason of this exception, feel free to contact us on the mailing list."),
+                                "If you are still unsure what is the reason of this exception, feel free to open an issue on GitHub."),
                         cce);
             }
         }
