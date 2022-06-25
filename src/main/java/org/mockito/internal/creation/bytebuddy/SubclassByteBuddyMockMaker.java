@@ -114,7 +114,8 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
                 join(
                         "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
                         "",
-                        "Mockito can only mock non-private & non-final classes.",
+                        "Mockito can only mock non-private & non-final classes, but the root cause of this error might be different.",
+                        "Please check the full stacktrace to understand what the issue is.",
                         "If you're not sure why you're getting this error, please report to the mailing list.",
                         "",
                         Platform.warnForVM(
