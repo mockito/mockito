@@ -251,6 +251,7 @@ class InlineDelegateByteBuddyMockMaker
 
         ThreadLocal<Class<?>> currentConstruction = new ThreadLocal<>();
         ThreadLocal<Boolean> isSuspended = ThreadLocal.withInitial(() -> false);
+        Predicate<Class<?>> isCallFromSubclassConstructor = StackWalkerChecker.orFallback();
         Predicate<Class<?>> isMockConstruction =
                 type -> {
                     if (isSuspended.get()) {
@@ -260,6 +261,11 @@ class InlineDelegateByteBuddyMockMaker
                     }
                     Map<Class<?>, ?> interceptors = mockedConstruction.get();
                     if (interceptors != null && interceptors.containsKey(type)) {
+                        // We only initiate a construction mock, if the call originates from an
+                        // un-mocked (as suppression is not enabled) subclass constructor.
+                        if (isCallFromSubclassConstructor.test(type)) {
+                            return false;
+                        }
                         currentConstruction.set(type);
                         return true;
                     } else {
