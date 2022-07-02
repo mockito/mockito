@@ -105,7 +105,8 @@ import java.util.function.Function;
  *      <a href="#49">49. New API for mocking object construction (Since 3.5.0)</a><br/>
  *      <a href="#50">50. Avoiding code generation when restricting mocks to interfaces (Since 3.12.2)</a><br/>
  *      <a href="#51">51. New API for marking classes as unmockable (Since 4.1.0)</a><br/>
- *      <a href="#51">52. New strictness attribute for @Mock annotation and <code>MockSettings.strictness()</code> methods (Since 4.6.0)</a><br/>
+ *      <a href="#52">52. New strictness attribute for @Mock annotation and <code>MockSettings.strictness()</code> methods (Since 4.6.0)</a><br/>
+ *      <a href="#53">53. New <code>InjectUnsafe</code> annotation (FIXME: Since ?.??.?)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1622,6 +1623,17 @@ import java.util.function.Function;
  *   Foo mock = Mockito.mock(Foo.class, withSettings().strictness(Strictness.WARN));
  * </code></pre>
  *
+ * <h3 id="48">48. New annotation:
+ * <a class="meaningful_link" href="#unjectunsafe_annotation" name="unjectunsafe_annotation">
+ *     {@link InjectUnsafe @InjectUnsafe}</a></h3>
+ *
+ * <p>
+ *     The annotation {@link InjectUnsafe} modifies the behavior of {@link InjectMocks}.
+ *     It finally (hehe) enables injecting Mocks into final, static and static-final fields.
+ * </p>
+ * <p>
+ *     <strong>Please note: there are some risks involved! See {@link InjectUnsafe} for more details!</strong>
+ * </p>
  */
 @CheckReturnValue
 @SuppressWarnings("unchecked")

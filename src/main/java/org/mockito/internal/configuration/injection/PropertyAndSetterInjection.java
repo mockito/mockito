@@ -16,8 +16,10 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.mockito.InjectUnsafe;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
 import org.mockito.internal.configuration.injection.filter.NameBasedCandidateFilter;
@@ -59,12 +61,28 @@ import org.mockito.internal.util.reflection.FieldInitializer;
  * <u>Note:</u> If the field needing injection is not initialized, the strategy tries
  * to create one using a no-arg constructor of the field type.
  * </p>
+ * <p>
+ * <u>Note:</u> Injection behavior can be altered using {@link InjectUnsafe}.
+ * </p>
  */
 public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     private final MockCandidateFilter mockCandidateFilter =
             new TypeBasedCandidateFilter(
                     new NameBasedCandidateFilter(new TerminalMockCandidateFilter()));
+
+    private static final Predicate<Field> ACCEPT_ANY_STATIC =
+            object -> Modifier.isStatic(object.getModifiers());
+    private static final Predicate<Field> ACCEPT_ANY_FINAL =
+            object -> Modifier.isFinal(object.getModifiers());
+    private static final Predicate<Field> ACCEPT_INSTANCE_FIELD =
+            ACCEPT_ANY_FINAL.negate().and(ACCEPT_ANY_STATIC.negate());
+    private static final Predicate<Field> ACCEPT_INSTANCE_FINAL =
+            ACCEPT_ANY_FINAL.and(ACCEPT_ANY_STATIC.negate());
+    private static final Predicate<Field> ACCEPT_STATIC_FINAL =
+            ACCEPT_ANY_STATIC.and(ACCEPT_ANY_FINAL);
+    private static final Predicate<Field> ACCEPT_STATIC_NON_FINAL =
+            ACCEPT_ANY_STATIC.and(ACCEPT_ANY_FINAL.negate());
 
     @Override
     public boolean processInjection(
@@ -76,12 +94,14 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         boolean injectionOccurred = false;
         Class<?> fieldClass = report.fieldClass();
         Object fieldInstanceNeedingInjection = report.fieldInstance();
+        InjectUnsafe injectUnsafe = new InjectUnsafeParser().parse(injectMocksField);
         while (fieldClass != Object.class) {
             injectionOccurred |=
                     injectMockCandidates(
                             fieldClass,
                             fieldInstanceNeedingInjection,
-                            newMockSafeHashSet(mockCandidates));
+                            newMockSafeHashSet(mockCandidates),
+                            injectUnsafe);
             fieldClass = fieldClass.getSuperclass();
         }
         return injectionOccurred;
@@ -100,26 +120,26 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
     }
 
     private boolean injectMockCandidates(
-            Class<?> awaitingInjectionClazz, Object injectee, Set<Object> mocks) {
+            Class<?> awaitingInjectionClazz,
+            Object injectee,
+            Set<Object> mocks,
+            InjectUnsafe injectUnsafe) {
         boolean injectionOccurred;
         List<Field> orderedCandidateInjecteeFields =
-                orderedInstanceFieldsFrom(awaitingInjectionClazz);
+                orderedInstanceFieldsFrom(awaitingInjectionClazz, injectUnsafe);
         // pass 1
         injectionOccurred =
-                injectMockCandidatesOnFields(
-                        mocks, injectee, false, orderedCandidateInjecteeFields);
+                injectMockCandidatesOnFields(mocks, injectee, orderedCandidateInjecteeFields);
         // pass 2
         injectionOccurred |=
-                injectMockCandidatesOnFields(
-                        mocks, injectee, injectionOccurred, orderedCandidateInjecteeFields);
+                injectMockCandidatesOnFields(mocks, injectee, orderedCandidateInjecteeFields);
         return injectionOccurred;
     }
 
     private boolean injectMockCandidatesOnFields(
-            Set<Object> mocks,
-            Object injectee,
-            boolean injectionOccurred,
-            List<Field> orderedCandidateInjecteeFields) {
+            Set<Object> mocks, Object injectee, List<Field> orderedCandidateInjecteeFields) {
+
+        boolean injectionOccurred = false;
         for (Iterator<Field> it = orderedCandidateInjecteeFields.iterator(); it.hasNext(); ) {
             Field candidateField = it.next();
             Object injected =
@@ -128,7 +148,7 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
                                     mocks, candidateField, orderedCandidateInjecteeFields, injectee)
                             .thenInject();
             if (injected != null) {
-                injectionOccurred |= true;
+                injectionOccurred = true;
                 mocks.remove(injected);
                 it.remove();
             }
@@ -136,13 +156,32 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
         return injectionOccurred;
     }
 
-    private List<Field> orderedInstanceFieldsFrom(Class<?> awaitingInjectionClazz) {
-        return sortSuperTypesLast(
-                Arrays.stream(awaitingInjectionClazz.getDeclaredFields())
-                        .filter(
-                                field ->
-                                        !Modifier.isFinal(field.getModifiers())
-                                                && !Modifier.isStatic(field.getModifiers()))
-                        .collect(Collectors.toList()));
+    List<Field> orderedInstanceFieldsFrom(
+            Class<?> awaitingInjectionClazz, InjectUnsafe injectUnsafe) {
+        Predicate<Field> allowedFieldsModifiers = predicateFromOverrides(injectUnsafe);
+
+        List<Field> result =
+                sortSuperTypesLast(
+                        Arrays.stream(awaitingInjectionClazz.getDeclaredFields())
+                                .filter(allowedFieldsModifiers)
+                                .collect(Collectors.toList()));
+        return result;
+    }
+
+    private Predicate<Field> predicateFromOverrides(InjectUnsafe injectUnsafe) {
+        Predicate<Field> filter = ACCEPT_INSTANCE_FIELD;
+
+        switch (injectUnsafe.value()) {
+            case STATIC_FINAL:
+                return filter.or(ACCEPT_STATIC_FINAL);
+            case FINAL:
+                return filter.or(ACCEPT_INSTANCE_FINAL);
+            case STATIC:
+                return filter.or(ACCEPT_STATIC_NON_FINAL);
+            case NONE:
+                return filter;
+            default:
+                throw new IllegalArgumentException("Not implemented: " + injectUnsafe.value());
+        }
     }
 }

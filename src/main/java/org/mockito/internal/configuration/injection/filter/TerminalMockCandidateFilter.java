@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.reflection.BeanPropertySetter;
+import org.mockito.internal.util.reflection.StaticFinalOverrider;
 import org.mockito.plugins.MemberAccessor;
 
 /**
@@ -25,22 +26,27 @@ import org.mockito.plugins.MemberAccessor;
 public class TerminalMockCandidateFilter implements MockCandidateFilter {
     @Override
     public OngoingInjector filterCandidate(
-            final Collection<Object> mocks,
-            final Field candidateFieldToBeInjected,
-            final List<Field> allRemainingCandidateFields,
-            final Object injectee) {
+            Collection<Object> mocks,
+            Field candidateFieldToBeInjected,
+            List<Field> allRemainingCandidateFields,
+            Object injectee) {
         if (mocks.size() == 1) {
-            final Object matchingMock = mocks.iterator().next();
+            Object matchingMock = mocks.iterator().next();
 
             MemberAccessor accessor = Plugins.getMemberAccessor();
             return () -> {
+                StaticFinalOverrider overrider =
+                        StaticFinalOverrider.forField(candidateFieldToBeInjected);
                 try {
                     if (!new BeanPropertySetter(injectee, candidateFieldToBeInjected)
                             .set(matchingMock)) {
+                        overrider.enableWrite();
                         accessor.set(candidateFieldToBeInjected, injectee, matchingMock);
                     }
                 } catch (RuntimeException | IllegalAccessException e) {
                     throw cannotInjectDependency(candidateFieldToBeInjected, matchingMock, e);
+                } finally {
+                    overrider.restore();
                 }
                 return matchingMock;
             };
