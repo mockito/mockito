@@ -1259,11 +1259,11 @@ import java.util.function.Function;
  * void receive(String item);
  *
  * // Java 8 - style 1
- * doAnswer(AdditionalAnswers.&lt;String,Callback&gt;answerVoid((operand, callback) -&gt; callback.receive("dummy"))
+ * doAnswer(AdditionalAnswers.&lt;String,Callback&gt;answerVoid((operand, callback) -&gt; callback.receive("dummy")))
  *     .when(mock).execute(anyString(), any(Callback.class));
  *
  * // Java 8 - style 2 - assuming static import of AdditionalAnswers
- * doAnswer(answerVoid((String operand, Callback callback) -&gt; callback.receive("dummy"))
+ * doAnswer(answerVoid((String operand, Callback callback) -&gt; callback.receive("dummy")))
  *     .when(mock).execute(anyString(), any(Callback.class));
  *
  * // Java 8 - style 3 - where mocking function to is a static member of test class
@@ -1271,7 +1271,7 @@ import java.util.function.Function;
  *     callback.receive("dummy");
  * }
  *
- * doAnswer(answerVoid(TestClass::dummyCallbackImpl)
+ * doAnswer(answerVoid(TestClass::dummyCallbackImpl))
  *     .when(mock).execute(anyString(), any(Callback.class));
  *
  * // Java 7
@@ -1287,7 +1287,7 @@ import java.util.function.Function;
  *
  * // this could be mocked
  * // Java 8
- * doAnswer(AdditionalAnswers.&lt;Boolean,String,String&gt;answer((input1, input2) -&gt; input1.equals(input2))))
+ * doAnswer(AdditionalAnswers.&lt;Boolean,String,String&gt;answer((input1, input2) -&gt; input1.equals(input2)))
  *     .when(mock).execute(anyString(), anyString());
  *
  * // Java 7
