@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 import org.mockito.internal.creation.DelegatingMethod;
-import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.invocation.mockref.MockWeakReference;
 import org.mockito.internal.progress.SequenceNumber;
 import org.mockito.invocation.Invocation;
@@ -71,7 +71,7 @@ public class DefaultInvocationFactory implements InvocationFactory {
             RealMethod realMethod,
             MockCreationSettings settings) {
         return createInvocation(
-                mock, invokedMethod, arguments, realMethod, settings, new LocationImpl());
+                mock, invokedMethod, arguments, realMethod, settings, LocationFactory.create());
     }
 
     private static MockitoMethod createMockitoMethod(Method method, MockCreationSettings settings) {

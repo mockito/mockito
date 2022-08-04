@@ -22,7 +22,7 @@ import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.StubValue;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
 import net.bytebuddy.implementation.bind.annotation.This;
-import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.invocation.RealMethod;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.MockHandler;
@@ -53,7 +53,7 @@ public class MockMethodInterceptor implements Serializable {
 
     Object doIntercept(Object mock, Method invokedMethod, Object[] arguments, RealMethod realMethod)
             throws Throwable {
-        return doIntercept(mock, invokedMethod, arguments, realMethod, new LocationImpl());
+        return doIntercept(mock, invokedMethod, arguments, realMethod, LocationFactory.create());
     }
 
     Object doIntercept(

@@ -23,7 +23,7 @@ import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.exceptions.verification.TooManyActualInvocations;
 import org.mockito.exceptions.verification.VerificationInOrderFailure;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.exceptions.util.ScenarioPrinter;
 import org.mockito.internal.junit.ExceptionFactory;
 import org.mockito.internal.matchers.LocalizedMatcher;
@@ -84,7 +84,7 @@ public class Reporter {
         return new MockitoException(
                 join(
                         "Incorrect use of API detected here:",
-                        new LocationImpl(),
+                        LocationFactory.create(),
                         "",
                         "You probably stored a reference to OngoingStubbing returned by when() and called stubbing methods like thenReturn() on this reference more than once.",
                         "Examples of correct usage:",
@@ -262,7 +262,7 @@ public class Reporter {
                         "Invalid use of argument matchers inside additional matcher "
                                 + additionalMatcherName
                                 + " !",
-                        new LocationImpl(),
+                        LocationFactory.create(),
                         "",
                         expectedSubMatchersCount
                                 + " sub matchers expected, "
@@ -295,7 +295,7 @@ public class Reporter {
         return new InvalidUseOfMatchersException(
                 join(
                         "No matchers found for additional matcher " + additionalMatcherName,
-                        new LocationImpl(),
+                        LocationFactory.create(),
                         ""));
     }
 
@@ -322,7 +322,7 @@ public class Reporter {
                 .append("Argument(s) are different! Wanted:\n")
                 .append(wanted)
                 .append("\n")
-                .append(new LocationImpl())
+                .append(LocationFactory.create())
                 .append("\n")
                 .append("Actual invocations have different arguments:\n");
 
@@ -365,7 +365,7 @@ public class Reporter {
     }
 
     private static String createWantedButNotInvokedMessage(DescribedInvocation wanted) {
-        return join("Wanted but not invoked:", wanted.toString(), new LocationImpl(), "");
+        return join("Wanted but not invoked:", wanted.toString(), LocationFactory.create(), "");
     }
 
     public static MockitoAssertionError wantedButNotInvokedInOrder(
@@ -375,7 +375,7 @@ public class Reporter {
                         "Verification in order failure",
                         "Wanted but not invoked:",
                         wanted.toString(),
-                        new LocationImpl(),
+                        LocationFactory.create(),
                         "Wanted anywhere AFTER following interaction:",
                         previous.toString(),
                         previous.getLocation(),
@@ -400,7 +400,7 @@ public class Reporter {
         return join(
                 wanted.toString(),
                 "Wanted " + pluralize(wantedCount) + ":",
-                new LocationImpl(),
+                LocationFactory.create(),
                 "But was " + pluralize(actualCount) + ":",
                 createAllLocationsMessage(invocations),
                 "");
@@ -413,7 +413,7 @@ public class Reporter {
                 join(
                         wanted.toString(),
                         "Never wanted here:",
-                        new LocationImpl(),
+                        LocationFactory.create(),
                         "But invoked here:",
                         createAllLocationsArgsMessage(invocations)));
     }
@@ -463,7 +463,7 @@ public class Reporter {
                 "Wanted "
                         + discrepancy.getPluralizedWantedCount()
                         + (discrepancy.getWantedCount() == 0 ? "." : ":"),
-                new LocationImpl(),
+                LocationFactory.create(),
                 "But was "
                         + discrepancy.getPluralizedActualCount()
                         + (discrepancy.getActualCount() == 0 ? "." : ":"),
@@ -496,7 +496,7 @@ public class Reporter {
         return new NoInteractionsWanted(
                 join(
                         "No interactions wanted here:",
-                        new LocationImpl(),
+                        LocationFactory.create(),
                         "But found this interaction on mock '"
                                 + MockUtil.getMockName(undesired.getMock())
                                 + "':",
@@ -508,7 +508,7 @@ public class Reporter {
         return new VerificationInOrderFailure(
                 join(
                         "No interactions wanted here:",
-                        new LocationImpl(),
+                        LocationFactory.create(),
                         "But found this interaction on mock '"
                                 + MockUtil.getMockName(undesired.getMock())
                                 + "':",
@@ -527,7 +527,7 @@ public class Reporter {
         return new NoInteractionsWanted(
                 join(
                         "No interactions wanted here:",
-                        new LocationImpl(),
+                        LocationFactory.create(),
                         "But found these interactions on mock '"
                                 + MockUtil.getMockName(mock)
                                 + "':",
@@ -645,7 +645,7 @@ public class Reporter {
         return new SmartNullPointerException(
                 join(
                         "You have a NullPointerException here:",
-                        new LocationImpl(),
+                        LocationFactory.create(),
                         "because this method call was *not* stubbed correctly:",
                         location,
                         invocation,
