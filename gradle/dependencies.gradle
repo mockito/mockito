@@ -6,7 +6,7 @@ def versions = [:]
 
 versions.bytebuddy = '1.12.13'
 versions.junitJupiter = '5.9.0'
-versions.errorprone = '2.14.0'
+versions.errorprone = '2.15.0'
 
 libraries.junit4 = 'junit:junit:4.13.2'
 libraries.junitJupiterApi = "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}"
