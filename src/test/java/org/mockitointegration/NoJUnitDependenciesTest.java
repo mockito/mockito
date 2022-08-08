@@ -42,27 +42,17 @@ public class NoJUnitDependenciesTest {
                         .omit("runners", "junit", "JUnit", "opentest4j")
                         .listOwnedClasses();
 
+        ClassLoadabilityChecker checker = new ClassLoadabilityChecker(classLoader_without_JUnit, "JUnit");
+
         // The later class is required to be initialized before any inline mock maker classes can be
         // loaded.
-        checkDependency(
-                classLoader_without_JUnit,
+        checker.checkLoadability(
                 "org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker");
         pureMockitoAPIClasses.remove(
                 "org.mockito.internal.creation.bytebuddy.InlineDelegateByteBuddyMockMaker");
 
         for (String pureMockitoAPIClass : pureMockitoAPIClasses) {
-            checkDependency(classLoader_without_JUnit, pureMockitoAPIClass);
-        }
-    }
-
-    private void checkDependency(ClassLoader classLoader_without_JUnit, String pureMockitoAPIClass)
-            throws ClassNotFoundException {
-        try {
-            Class.forName(pureMockitoAPIClass, true, classLoader_without_JUnit);
-        } catch (Throwable e) {
-            e.printStackTrace();
-            throw new AssertionError(
-                    String.format("'%s' has some dependency to JUnit", pureMockitoAPIClass));
+            checker.checkLoadability(pureMockitoAPIClass);
         }
     }
 }

@@ -43,21 +43,10 @@ public class NoByteCodeDependenciesTest {
         pureMockitoAPIClasses.remove(
                 "org.mockito.internal.util.reflection.InstrumentationMemberAccessor");
 
+        ClassLoadabilityChecker checker = new ClassLoadabilityChecker(
+            classLoader_without_bytecode_libraries, "ByteBuddy or Objenesis");
         for (String pureMockitoAPIClass : pureMockitoAPIClasses) {
-            checkDependency(classLoader_without_bytecode_libraries, pureMockitoAPIClass);
-        }
-    }
-
-    private void checkDependency(ClassLoader classLoader, String pureMockitoAPIClass)
-            throws ClassNotFoundException {
-        try {
-            Class.forName(pureMockitoAPIClass, true, classLoader);
-        } catch (Throwable e) {
-            e.printStackTrace();
-            throw new AssertionError(
-                    String.format(
-                            "'%s' has some dependency to Byte Buddy or Objenesis",
-                            pureMockitoAPIClass));
+            checker.checkLoadability(pureMockitoAPIClass);
         }
     }
 }
