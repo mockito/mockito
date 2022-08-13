@@ -18,16 +18,8 @@ class Java8LocationImpl implements Location, Serializable {
     private String stackTraceLine;
     private String sourceFile;
 
-    public Java8LocationImpl() {
-        this(new Throwable(), false);
-    }
-
     public Java8LocationImpl(Throwable stackTraceHolder, boolean isInline) {
         this(stackTraceFilter, stackTraceHolder, isInline);
-    }
-
-    public Java8LocationImpl(StackTraceFilter stackTraceFilter) {
-        this(stackTraceFilter, new Throwable(), false);
     }
 
     private Java8LocationImpl(
