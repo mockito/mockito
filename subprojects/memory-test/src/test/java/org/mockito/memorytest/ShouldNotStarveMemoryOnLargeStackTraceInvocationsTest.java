@@ -5,6 +5,7 @@
 package org.mockito.memorytest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,7 +14,6 @@ import org.junit.Assume;
 import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore("https://github.com/mockito/mockito/issues/2478")
 public class ShouldNotStarveMemoryOnLargeStackTraceInvocationsTest {
 
     private static final int STACK_TRACE_DEPTH = 1000;
@@ -23,12 +23,7 @@ public class ShouldNotStarveMemoryOnLargeStackTraceInvocationsTest {
 
     static {
         try {
-            Class.forName("sun.misc.SharedSecrets")
-                .getMethod("getJavaLangAccess")
-                .invoke(null);
-            Class.forName("sun.misc.JavaLangAccess")
-                .getMethod("getStackTraceElement", Throwable.class, int.class);
-
+            Class.forName("java.lang.StackWalker");
             supported = true;
         } catch (Exception ignored) {
         }
