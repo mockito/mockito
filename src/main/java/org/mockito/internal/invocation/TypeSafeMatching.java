@@ -4,14 +4,25 @@
  */
 package org.mockito.internal.invocation;
 
-import java.lang.reflect.Method;
-
 import org.mockito.ArgumentMatcher;
+
+import java.lang.reflect.Method;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class TypeSafeMatching implements ArgumentMatcherAction {
 
     private static final ArgumentMatcherAction TYPE_SAFE_MATCHING_ACTION = new TypeSafeMatching();
+
+    /**
+     * This cache is in theory unbounded. However, its max size is bounded by the number of types of argument matchers
+     * that are both in the system and being used, which is expected to bound the cache's size to a low number
+     * (<200) in all but the most contrived cases, and form a small percentage of the overall memory usage of those
+     * classes.
+     */
+    private static final ConcurrentMap<Class<?>, Class<?>> argumentTypeCache =
+            new ConcurrentHashMap<>();
 
     private TypeSafeMatching() {}
 
@@ -39,11 +50,23 @@ public class TypeSafeMatching implements ArgumentMatcherAction {
         return expectedArgumentType.isInstance(argument);
     }
 
+    private static Class<?> getArgumentType(ArgumentMatcher<?> matcher) {
+        Class<?> argumentMatcherType = matcher.getClass();
+        Class<?> cached = argumentTypeCache.get(argumentMatcherType);
+        // Avoids a lambda allocation on invocations >=2 for worse perf on invocation 1.
+        if (cached != null) {
+            return cached;
+        } else {
+            return argumentTypeCache.computeIfAbsent(
+                    argumentMatcherType, unusedKey -> getArgumentTypeUncached(matcher));
+        }
+    }
+
     /**
      * Returns the type of {@link ArgumentMatcher#matches(Object)} of the given
      * {@link ArgumentMatcher} implementation.
      */
-    private static Class<?> getArgumentType(ArgumentMatcher<?> argumentMatcher) {
+    private static Class<?> getArgumentTypeUncached(ArgumentMatcher<?> argumentMatcher) {
         Method[] methods = argumentMatcher.getClass().getMethods();
 
         for (Method method : methods) {
