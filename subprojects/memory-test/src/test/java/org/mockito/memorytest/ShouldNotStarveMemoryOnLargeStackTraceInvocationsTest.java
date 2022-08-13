@@ -5,13 +5,11 @@
 package org.mockito.memorytest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assumptions.assumeThat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ShouldNotStarveMemoryOnLargeStackTraceInvocationsTest {

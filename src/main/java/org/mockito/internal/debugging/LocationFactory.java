@@ -6,8 +6,6 @@ package org.mockito.internal.debugging;
 
 import org.mockito.invocation.Location;
 
-import java.io.Serializable;
-
 public final class LocationFactory {
     private static final Factory factory = createLocationFactory();
 

@@ -4,18 +4,15 @@
  */
 package org.mockitousage.internal.debugging;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-
-import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
-
-import com.sun.management.ThreadMXBean;
 import org.junit.Test;
 import org.mockito.internal.debugging.LocationFactory;
 import org.mockitoutil.TestBase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class LocationFactoryTest extends TestBase {
 
