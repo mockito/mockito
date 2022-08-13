@@ -32,7 +32,7 @@ public final class ClassLoadabilityChecker {
     public void checkLoadability(String className) {
         try {
             Class.forName(className, INITIALIZE_CLASSES, classLoader);
-        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+        } catch (ClassNotFoundException | LinkageError e) {
             if (isFailureExcluded(className, e)) {
                 return;
             }
