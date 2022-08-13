@@ -42,7 +42,8 @@ public class NoJUnitDependenciesTest {
                         .omit("runners", "junit", "JUnit", "opentest4j")
                         .listOwnedClasses();
 
-        ClassLoadabilityChecker checker = new ClassLoadabilityChecker(classLoader_without_JUnit, "JUnit");
+        ClassLoadabilityChecker checker =
+                new ClassLoadabilityChecker(classLoader_without_JUnit, "JUnit");
 
         // The later class is required to be initialized before any inline mock maker classes can be
         // loaded.

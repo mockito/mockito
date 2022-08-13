@@ -43,8 +43,9 @@ public class NoByteCodeDependenciesTest {
         pureMockitoAPIClasses.remove(
                 "org.mockito.internal.util.reflection.InstrumentationMemberAccessor");
 
-        ClassLoadabilityChecker checker = new ClassLoadabilityChecker(
-            classLoader_without_bytecode_libraries, "ByteBuddy or Objenesis");
+        ClassLoadabilityChecker checker =
+                new ClassLoadabilityChecker(
+                        classLoader_without_bytecode_libraries, "ByteBuddy or Objenesis");
         for (String pureMockitoAPIClass : pureMockitoAPIClasses) {
             checker.checkLoadability(pureMockitoAPIClass);
         }

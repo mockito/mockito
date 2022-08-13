@@ -31,15 +31,14 @@ public final class ClassLoadabilityChecker {
 
     public void checkLoadability(String className) {
         try {
-            Class.forName(className,  INITIALIZE_CLASSES, classLoader);
+            Class.forName(className, INITIALIZE_CLASSES, classLoader);
         } catch (ClassNotFoundException | NoClassDefFoundError e) {
             if (isFailureExcluded(className, e)) {
                 return;
             }
             e.printStackTrace();
             throw new AssertionError(
-                String.format("'%s' has some dependency to %s",
-                    className, purpose));
+                    String.format("'%s' has some dependency to %s", className, purpose));
         }
     }
 

@@ -9,23 +9,7 @@ import org.mockito.invocation.Location;
 import java.io.Serializable;
 
 public final class LocationFactory {
-    private static final String PROPERTY = "mockito.locationFactory.disable";
-    private static final Factory factory;
-
-    static {
-        Factory lFactory;
-        if (Boolean.getBoolean(PROPERTY)) {
-            factory = unused -> NoLocation.INSTANCE;
-        } else {
-            try {
-                Class.forName("java.lang.StackWalker");
-                lFactory = new Java9PlusLocationFactory();
-            } catch (ClassNotFoundException e) {
-                lFactory = new Java8LocationFactory();
-            }
-            factory = lFactory;
-        }
-    }
+    private static final Factory factory = createLocationFactory();
 
     private LocationFactory() {}
 
@@ -41,6 +25,15 @@ public final class LocationFactory {
         Location create(boolean inline);
     }
 
+    private static Factory createLocationFactory() {
+        try {
+            Class.forName("java.lang.StackWalker");
+            return new Java9PlusLocationFactory();
+        } catch (ClassNotFoundException e) {
+            return new Java8LocationFactory();
+        }
+    }
+
     private static final class Java8LocationFactory implements Factory {
         @Override
         public Location create(boolean inline) {
@@ -53,23 +46,6 @@ public final class LocationFactory {
         @Override
         public Location create(boolean inline) {
             return new Java9PlusLocationImpl(inline);
-        }
-    }
-
-    private static final class NoLocation implements Location, Serializable {
-        private static final long serialVersionUID = -3807068467458099012L;
-        private static final NoLocation INSTANCE = new NoLocation();
-
-        private NoLocation() {}
-
-        @Override
-        public String getSourceFile() {
-            return "<unknown source file>";
-        }
-
-        @Override
-        public String toString() {
-            return "-> at <<unknown line>>";
         }
     }
 }

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.debugging;
 
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.stacktrace.StackTraceCleaner;
 import org.mockito.exceptions.stacktrace.StackTraceCleaner.StackFrameMetadata;
 import org.mockito.internal.configuration.plugins.Plugins;
@@ -23,6 +24,11 @@ import java.util.stream.Stream;
 
 class Java9PlusLocationImpl implements Location, Serializable {
     private static final long serialVersionUID = 2954388321980069195L;
+
+    private static final String UNEXPECTED_ERROR_SUFFIX =
+            "\nThis is unexpected and is likely due to a change in either Java's StackWalker or Reflection APIs."
+                    + "\nIt's worth trying to upgrade to a newer version of Mockito, or otherwise to file a bug report.";
+
     private static final String STACK_WALKER = "java.lang.StackWalker";
     private static final String STACK_FRAME = STACK_WALKER + "$StackFrame";
     private static final String OPTION = STACK_WALKER + "$Option";
@@ -50,8 +56,15 @@ class Java9PlusLocationImpl implements Location, Serializable {
             Plugins.getStackTraceCleanerProvider()
                     .getStackTraceCleaner(new DefaultStackTraceCleaner());
 
+    /**
+     * In Java, allocating lambdas is cheap, but not free. stream.map(this::doSomething)
+     * will allocate a Function object each time the function is called (although not
+     * per element). By assigning these Functions and Predicates to variables, we can
+     * avoid the memory allocation.
+     */
     private static final Function<Object, StackFrameMetadata> toStackFrameMetadata =
             MetadataShim::new;
+
     private static final Predicate<StackFrameMetadata> cleanerIsIn = CLEANER::isIn;
 
     private static final int FRAMES_TO_SKIP = framesToSkip();
@@ -70,22 +83,18 @@ class Java9PlusLocationImpl implements Location, Serializable {
 
     @Override
     public String toString() {
-        maybeInitializeStackTraceLine();
-        return stackTraceLine;
+        return stackTraceLine();
     }
 
-    private void maybeInitializeStackTraceLine() {
+    private String stackTraceLine() {
         if (stackTraceLine == null) {
             synchronized (this) {
                 if (stackTraceLine == null) {
-                    stackTraceLine = stackTraceLine(sfm);
+                    stackTraceLine = PREFIX + sfm.toString();
                 }
             }
         }
-    }
-
-    private static String stackTraceLine(StackFrameMetadata element) {
-        return PREFIX + element.toString();
+        return stackTraceLine;
     }
 
     private static StackFrameMetadata getStackFrame(boolean isInline) {
@@ -97,9 +106,24 @@ class Java9PlusLocationImpl implements Location, Serializable {
                                 .skip(isInline ? 1 : 0)
                                 .findFirst()
                                 .orElseThrow(
-                                        () ->
-                                                new IllegalArgumentException(
-                                                        "Mockito could not find the first non-Mockito stack frame")));
+                                        () -> new MockitoException(noStackTraceFailureMessage())));
+    }
+
+    private static boolean usingDefaultStackTraceCleaner() {
+        return CLEANER instanceof DefaultStackTraceCleaner;
+    }
+
+    private static String noStackTraceFailureMessage() {
+        if (usingDefaultStackTraceCleaner()) {
+            return "Mockito could not find the first non-Mockito stack frame."
+                    + UNEXPECTED_ERROR_SUFFIX;
+        } else {
+            String cleanerType = CLEANER.getClass().getName();
+            String fmt =
+                    "Mockito could not find the first non-Mockito stack frame. A custom stack frame cleaner \n"
+                            + "(type %s) is in use and this has mostly likely filtered out all the relevant stack frames.";
+            return String.format(fmt, cleanerType);
+        }
     }
 
     /**
@@ -121,8 +145,24 @@ class Java9PlusLocationImpl implements Location, Serializable {
     private static <T> T stackWalk(Function<Stream<Object>, T> function) {
         try {
             return (T) walk.invoke(stackWalker, function);
-        } catch (InvocationTargetException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new MockitoException(
+                    "Unexpected access exception while stack walking." + UNEXPECTED_ERROR_SUFFIX,
+                    e);
+        } catch (InvocationTargetException e) {
+            throw new MockitoException(stackWalkFailureMessage());
+        }
+    }
+
+    private static String stackWalkFailureMessage() {
+        if (usingDefaultStackTraceCleaner()) {
+            return "Caught an unexpected exception while stack walking." + UNEXPECTED_ERROR_SUFFIX;
+        } else {
+            String className = CLEANER.getClass().getName();
+            String fmt =
+                    "Caught an unexpected exception while stack walking."
+                            + "\nThis is likely caused by the custom stack trace cleaner in use (class %s).";
+            return String.format(fmt, className);
         }
     }
 
@@ -150,8 +190,10 @@ class Java9PlusLocationImpl implements Location, Serializable {
             Method getInstance =
                     stackWalkerClazz.getDeclaredMethod("getInstance", Set.class, int.class);
             return getInstance.invoke(null, options, BUFFER_SIZE);
-        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new MockitoException(
+                    "Mockito received an exception while trying to acquire a StackWalker."
+                            + UNEXPECTED_ERROR_SUFFIX);
         }
     }
 
