@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.mockito.Mockito;
-import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.invocation.mockref.MockReference;
 import org.mockito.internal.invocation.mockref.MockStrongReference;
 import org.mockito.invocation.Invocation;
@@ -72,7 +72,7 @@ public class InvocationBuilder {
                         new SerializableMethod(method),
                         args,
                         NO_OP,
-                        location == null ? new LocationImpl() : location,
+                        location == null ? LocationFactory.create() : location,
                         1);
         if (verified) {
             i.markVerified();

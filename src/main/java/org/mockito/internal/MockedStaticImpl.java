@@ -17,7 +17,7 @@ import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.listeners.VerificationStartedNotifier;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
@@ -35,7 +35,7 @@ public final class MockedStaticImpl<T> implements MockedStatic<T> {
 
     private boolean closed;
 
-    private final Location location = new LocationImpl();
+    private final Location location = LocationFactory.create();
 
     protected MockedStaticImpl(MockMaker.StaticMockControl<T> control) {
         this.control = control;

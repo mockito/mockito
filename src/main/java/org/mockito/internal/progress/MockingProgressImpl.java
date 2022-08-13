@@ -14,7 +14,7 @@ import java.util.Set;
 
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.mockito.internal.debugging.Localized;
-import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.listeners.AutoCleanableListener;
 import org.mockito.invocation.Location;
@@ -105,7 +105,7 @@ public class MockingProgressImpl implements MockingProgress {
     @Override
     public void stubbingStarted() {
         validateState();
-        stubbingInProgress = new LocationImpl();
+        stubbingInProgress = LocationFactory.create();
     }
 
     @Override

@@ -10,7 +10,7 @@ import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 import java.io.Serializable;
 
 import org.mockito.Mockito;
-import org.mockito.internal.debugging.LocationImpl;
+import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
 import org.mockito.stubbing.Answer;
@@ -57,7 +57,8 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
                         }
 
                         return Mockito.mock(
-                                type, new ThrowsSmartNullPointer(invocation, new LocationImpl()));
+                                type,
+                                new ThrowsSmartNullPointer(invocation, LocationFactory.create()));
                     }
                 });
     }

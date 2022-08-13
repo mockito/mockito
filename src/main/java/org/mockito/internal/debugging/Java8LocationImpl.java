@@ -9,7 +9,7 @@ import java.io.Serializable;
 import org.mockito.internal.exceptions.stacktrace.StackTraceFilter;
 import org.mockito.invocation.Location;
 
-public class LocationImpl implements Location, Serializable {
+class Java8LocationImpl implements Location, Serializable {
 
     private static final long serialVersionUID = -9054861157390980624L;
     // Limit the amount of objects being created, as this class is heavily instantiated:
@@ -18,19 +18,11 @@ public class LocationImpl implements Location, Serializable {
     private String stackTraceLine;
     private String sourceFile;
 
-    public LocationImpl() {
-        this(new Throwable(), false);
-    }
-
-    public LocationImpl(Throwable stackTraceHolder, boolean isInline) {
+    public Java8LocationImpl(Throwable stackTraceHolder, boolean isInline) {
         this(stackTraceFilter, stackTraceHolder, isInline);
     }
 
-    public LocationImpl(StackTraceFilter stackTraceFilter) {
-        this(stackTraceFilter, new Throwable(), false);
-    }
-
-    private LocationImpl(
+    private Java8LocationImpl(
             StackTraceFilter stackTraceFilter, Throwable stackTraceHolder, boolean isInline) {
         computeStackTraceInformation(stackTraceFilter, stackTraceHolder, isInline);
     }

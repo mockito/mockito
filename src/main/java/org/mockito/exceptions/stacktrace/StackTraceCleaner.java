@@ -25,4 +25,29 @@ public interface StackTraceCleaner {
      * @return whether the element should be excluded from cleaned stack trace.
      */
     boolean isIn(StackTraceElement candidate);
+
+    /**
+     * It's recommended to override this method in subclasses to avoid potentially costly re-boxing operations.
+     */
+    default boolean isIn(StackFrameMetadata candidate) {
+        return isIn(
+                new StackTraceElement(
+                        candidate.getClassName(),
+                        candidate.getMethodName(),
+                        candidate.getFileName(),
+                        candidate.getLineNumber()));
+    }
+
+    /**
+     * Very similar to the StackFrame class declared on the StackWalker api.
+     */
+    interface StackFrameMetadata {
+        String getClassName();
+
+        String getMethodName();
+
+        String getFileName();
+
+        int getLineNumber();
+    }
 }

@@ -13,7 +13,7 @@ public class Localized<T> {
 
     public Localized(T object) {
         this.object = object;
-        location = new LocationImpl();
+        location = LocationFactory.create();
     }
 
     public T getObject() {
