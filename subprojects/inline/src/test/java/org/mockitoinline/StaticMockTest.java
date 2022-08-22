@@ -212,6 +212,15 @@ public final class StaticMockTest {
         }
     }
 
+    @Test
+    public void testStaticMockVarargs() {
+        assertEquals("foobar", Dummy.fooVarargs("foo", "bar"));
+        try (MockedStatic<Dummy> ignored = Mockito.mockStatic(Dummy.class)) {
+            assertNull(Dummy.fooVarargs("foo", "bar"));
+        }
+        assertEquals("foobar", Dummy.fooVarargs("foo", "bar"));
+    }
+
     static class Dummy {
 
         static String var1 = null;
@@ -226,6 +235,14 @@ public final class StaticMockTest {
 
         static void fooVoid(String var2, String var3) {
             var1 = var2;
+        }
+
+        static String fooVarargs(String... args) {
+            StringBuilder sb = new StringBuilder();
+            for (String arg : args) {
+                sb.append(arg);
+            }
+            return sb.toString();
         }
     }
 }
