@@ -235,6 +235,9 @@ class InstrumentationMemberAccessor implements MemberAccessor {
             if (!Modifier.isStatic(method.getModifiers())) {
                 handle = handle.bindTo(target);
             }
+            if (handle.isVarargsCollector()) {
+                handle = handle.asFixedArity();
+            }
             try {
                 return DISPATCHER.invokeWithArguments(handle, arguments);
             } catch (Throwable t) {
