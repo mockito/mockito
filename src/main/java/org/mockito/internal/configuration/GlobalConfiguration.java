@@ -43,7 +43,7 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     }
 
     public static void validate() {
-        new GlobalConfiguration();
+        GlobalConfiguration unused = new GlobalConfiguration();
     }
 
     public org.mockito.plugins.AnnotationEngine tryGetPluginAnnotationEngine() {
