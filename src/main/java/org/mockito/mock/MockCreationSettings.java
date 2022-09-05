@@ -12,6 +12,7 @@ import org.mockito.NotExtensible;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.VerificationStartedListener;
+import org.mockito.plugins.MockMaker;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
@@ -135,4 +136,13 @@ public interface MockCreationSettings<T> {
      * @since 4.6.0
      */
     Strictness getStrictness();
+
+    /**
+     * Returns the {@link MockMaker} which shall be used to create the mock.
+     * When the return value is {@code null}, the default shall be used.
+     *
+     * @see MockSettings#mockMaker(String)
+     * @since 4.8.0
+     */
+    String getMockMaker();
 }

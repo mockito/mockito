@@ -5,7 +5,11 @@
 package org.mockito.internal.configuration.plugins;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import org.mockito.MockMakers;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.InstantiatorProvider2;
@@ -16,11 +20,13 @@ import org.mockito.plugins.MockitoPlugins;
 import org.mockito.plugins.PluginSwitch;
 import org.mockito.plugins.StackTraceCleanerProvider;
 
-class DefaultMockitoPlugins implements MockitoPlugins {
+public class DefaultMockitoPlugins implements MockitoPlugins {
 
     private static final Map<String, String> DEFAULT_PLUGINS = new HashMap<>();
-    static final String INLINE_ALIAS = "mock-maker-inline";
-    static final String PROXY_ALIAS = "mock-maker-proxy";
+    static final String INLINE_ALIAS = MockMakers.INLINE;
+    static final String PROXY_ALIAS = MockMakers.PROXY;
+    static final String SUBCLASS_ALIAS = MockMakers.SUBCLASS;
+    public static final Set<String> MOCK_MAKER_ALIASES = new HashSet<>();
     static final String MODULE_ALIAS = "member-accessor-module";
 
     static {
@@ -42,6 +48,8 @@ class DefaultMockitoPlugins implements MockitoPlugins {
                 INLINE_ALIAS, "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
         DEFAULT_PLUGINS.put(PROXY_ALIAS, "org.mockito.internal.creation.proxy.ProxyMockMaker");
         DEFAULT_PLUGINS.put(
+                SUBCLASS_ALIAS, "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
+        DEFAULT_PLUGINS.put(
                 MockitoLogger.class.getName(), "org.mockito.internal.util.ConsoleMockitoLogger");
         DEFAULT_PLUGINS.put(
                 MemberAccessor.class.getName(),
@@ -51,6 +59,10 @@ class DefaultMockitoPlugins implements MockitoPlugins {
         DEFAULT_PLUGINS.put(
                 DoNotMockEnforcer.class.getName(),
                 "org.mockito.internal.configuration.DefaultDoNotMockEnforcer");
+
+        MOCK_MAKER_ALIASES.add(INLINE_ALIAS);
+        MOCK_MAKER_ALIASES.add(PROXY_ALIAS);
+        MOCK_MAKER_ALIASES.add(SUBCLASS_ALIAS);
     }
 
     @Override
@@ -59,7 +71,7 @@ class DefaultMockitoPlugins implements MockitoPlugins {
         return create(pluginType, className);
     }
 
-    String getDefaultPluginClass(String classOrAlias) {
+    public static String getDefaultPluginClass(String classOrAlias) {
         return DEFAULT_PLUGINS.get(classOrAlias);
     }
 

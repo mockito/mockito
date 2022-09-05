@@ -254,11 +254,17 @@ public class MockSettingsImpl<T> extends CreationSettings<T>
         return this;
     }
 
+    @Override
+    public MockSettings mockMaker(String mockMaker) {
+        this.mockMaker = mockMaker;
+        return this;
+    }
+
     private static <T> CreationSettings<T> validatedSettings(
             Class<T> typeToMock, CreationSettings<T> source) {
         MockCreationValidator validator = new MockCreationValidator();
 
-        validator.validateType(typeToMock);
+        validator.validateType(typeToMock, source.getMockMaker());
         validator.validateExtraInterfaces(typeToMock, source.getExtraInterfaces());
         validator.validateMockedType(typeToMock, source.getSpiedInstance());
 

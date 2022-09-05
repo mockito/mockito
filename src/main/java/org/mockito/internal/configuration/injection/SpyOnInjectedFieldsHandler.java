@@ -42,6 +42,7 @@ public class SpyOnInjectedFieldsHandler extends MockInjectionStrategy {
                     // B. protect against multiple use of MockitoAnnotations.openMocks()
                     Mockito.reset(instance);
                 } else {
+                    // TODO: Add mockMaker option for @Spy annotation (#2740)
                     Object mock =
                             Mockito.mock(
                                     instance.getClass(),

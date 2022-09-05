@@ -83,6 +83,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
     }
 
     private static Object spyInstance(Field field, Object instance) {
+        // TODO: Add mockMaker option for @Spy annotation (#2740)
         return Mockito.mock(
                 instance.getClass(),
                 withSettings()
@@ -93,6 +94,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
 
     private static Object spyNewInstance(Object testInstance, Field field)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
+        // TODO: Add mockMaker option for @Spy annotation (#2740)
         MockSettings settings =
                 withSettings().defaultAnswer(CALLS_REAL_METHODS).name(field.getName());
         Class<?> type = field.getType();

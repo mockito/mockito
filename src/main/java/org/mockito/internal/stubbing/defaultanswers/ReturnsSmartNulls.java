@@ -10,9 +10,12 @@ import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 import java.io.Serializable;
 
 import org.mockito.Mockito;
+import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.debugging.LocationFactory;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -56,9 +59,16 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
                             return null;
                         }
 
+                        MockCreationSettings<?> mockSettings =
+                                MockUtil.getMockSettings(invocation.getMock());
+                        Answer<?> defaultAnswer =
+                                new ThrowsSmartNullPointer(invocation, LocationFactory.create());
+
                         return Mockito.mock(
                                 type,
-                                new ThrowsSmartNullPointer(invocation, LocationFactory.create()));
+                                new MockSettingsImpl<>()
+                                        .defaultAnswer(defaultAnswer)
+                                        .mockMaker(mockSettings.getMockMaker()));
                     }
                 });
     }

@@ -8,7 +8,9 @@ import java.io.Serializable;
 
 import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Answer;
 
 public class ReturnsMocks implements Answer<Object>, Serializable {
@@ -33,9 +35,14 @@ public class ReturnsMocks implements Answer<Object>, Serializable {
                             return null;
                         }
 
+                        MockCreationSettings<?> mockSettings =
+                                MockUtil.getMockSettings(invocation.getMock());
+
                         return Mockito.mock(
                                 type,
-                                new MockSettingsImpl<Object>().defaultAnswer(ReturnsMocks.this));
+                                new MockSettingsImpl<>()
+                                        .defaultAnswer(ReturnsMocks.this)
+                                        .mockMaker(mockSettings.getMockMaker()));
                     }
                 });
     }

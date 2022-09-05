@@ -15,6 +15,7 @@ import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
+import org.mockito.plugins.MockMaker;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
@@ -381,4 +382,25 @@ public interface MockSettings extends Serializable {
      * @since 4.6.0
      */
     MockSettings strictness(Strictness strictness);
+
+    /**
+     * Specifies the {@code MockMaker} for the mock.
+     * The default depends on your project as described in the class documentation of {@link MockMaker}.
+     * You should usually use the default, this option primarily exists to ease migrations.
+     * You may specify either one of the constants from {@link MockMakers},
+     * <pre>
+     *     Object mock = Mockito.mock(Object.class, Mockito.withSettings()
+     *             .mockMaker(MockMakers.INLINE));
+     * </pre>
+     * or the {@link Class#getName() binary name} of a class which implements the {@code MockMaker} interface.
+     * <pre>
+     *     Object mock = Mockito.mock(Object.class, Mockito.withSettings()
+     *             .mockMaker("org.awesome.mockito.AwesomeMockMaker"));
+     * </pre>
+     *
+     * @param mockMaker the {@code MockMaker} to use for the mock
+     * @return settings instance so that you can fluently specify other settings
+     * @since 4.8.0
+     */
+    MockSettings mockMaker(String mockMaker);
 }

@@ -18,12 +18,10 @@ class PluginInitializer {
 
     private final PluginSwitch pluginSwitch;
     private final Set<String> alias;
-    private final DefaultMockitoPlugins plugins;
 
-    PluginInitializer(PluginSwitch pluginSwitch, Set<String> alias, DefaultMockitoPlugins plugins) {
+    PluginInitializer(PluginSwitch pluginSwitch, Set<String> alias) {
         this.pluginSwitch = pluginSwitch;
         this.alias = alias;
-        this.plugins = plugins;
     }
 
     /**
@@ -47,7 +45,7 @@ class PluginInitializer {
                     new PluginFinder(pluginSwitch).findPluginClass(Iterables.toIterable(resources));
             if (classOrAlias != null) {
                 if (alias.contains(classOrAlias)) {
-                    classOrAlias = plugins.getDefaultPluginClass(classOrAlias);
+                    classOrAlias = DefaultMockitoPlugins.getDefaultPluginClass(classOrAlias);
                 }
                 Class<?> pluginClass = loader.loadClass(classOrAlias);
                 Object plugin = pluginClass.getDeclaredConstructor().newInstance();
@@ -79,7 +77,7 @@ class PluginInitializer {
             List<T> impls = new ArrayList<>();
             for (String classOrAlias : classesOrAliases) {
                 if (alias.contains(classOrAlias)) {
-                    classOrAlias = plugins.getDefaultPluginClass(classOrAlias);
+                    classOrAlias = DefaultMockitoPlugins.getDefaultPluginClass(classOrAlias);
                 }
                 Class<?> pluginClass = loader.loadClass(classOrAlias);
                 Object plugin = pluginClass.getDeclaredConstructor().newInstance();

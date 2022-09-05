@@ -8,15 +8,12 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
-import org.mockito.internal.MockitoCore;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockCreationSettings;
 
 final class RetrieveGenericsForDefaultAnswers {
-
-    private static final MockitoCore MOCKITO_CORE = new MockitoCore();
 
     static Object returnTypeForMockWithCorrectGenerics(
             InvocationOnMock invocation, AnswerCallback answerCallback) {
@@ -38,7 +35,9 @@ final class RetrieveGenericsForDefaultAnswers {
         }
 
         if (type != null) {
-            if (!MOCKITO_CORE.isTypeMockable(type)) {
+            final MockCreationSettings<?> mockSettings =
+                    MockUtil.getMockSettings(invocation.getMock());
+            if (!MockUtil.typeMockabilityOf(type, mockSettings.getMockMaker()).mockable()) {
                 return null;
             }
 
