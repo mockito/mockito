@@ -11,11 +11,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Test;
+import org.mockito.MockMakers;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
@@ -152,6 +154,21 @@ public final class ConstructionMockTest {
                 })
                 .isInstanceOf(MockitoException.class)
                 .hasMessageContaining("It is not possible to construct primitive types or abstract types");
+    }
+
+    @Test
+    public void testConstructionMocksMustNotUseCustomMockMaker() {
+        assertThatThrownBy(
+            () -> {
+                try (MockedConstruction<Dummy> ignored = Mockito.mockConstruction(
+                    Dummy.class,
+                    withSettings().mockMaker(MockMakers.INLINE))
+                ) {
+                    new Dummy();
+                }
+            })
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("you cannot override the MockMaker for construction mocks");
     }
 
     static class Dummy {

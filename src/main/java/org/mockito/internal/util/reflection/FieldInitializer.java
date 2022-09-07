@@ -259,7 +259,11 @@ public class FieldInitializer {
                     private int countMockableParams(Constructor<?> constructor) {
                         int constructorMockableParamsSize = 0;
                         for (Class<?> aClass : constructor.getParameterTypes()) {
-                            if (MockUtil.typeMockabilityOf(aClass).mockable()) {
+                            // The argResolver already knows the concrete types it can provide.
+                            // Instead of checking for mockability, I think it would be better to
+                            // ask the argResolver whether it can resolve this type.
+                            // Anyway, I keep it for now to avoid breaking any existing code.
+                            if (MockUtil.typeMockabilityOf(aClass, null).mockable()) {
                                 constructorMockableParamsSize++;
                             }
                         }

@@ -53,6 +53,9 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         if (annotation.strictness() != Mock.Strictness.TEST_LEVEL_DEFAULT) {
             mockSettings.strictness(Strictness.valueOf(annotation.strictness().toString()));
         }
+        if (!annotation.mockMaker().isEmpty()) {
+            mockSettings.mockMaker(annotation.mockMaker());
+        }
 
         // see @Mock answer default value
         mockSettings.defaultAnswer(annotation.answer());

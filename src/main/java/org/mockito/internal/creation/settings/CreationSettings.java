@@ -46,6 +46,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     private Object outerClassInstance;
     private Object[] constructorArgs;
     protected Strictness strictness = null;
+    protected String mockMaker;
 
     public CreationSettings() {}
 
@@ -68,6 +69,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.constructorArgs = copy.getConstructorArgs();
         this.strictness = copy.strictness;
         this.stripAnnotations = copy.stripAnnotations;
+        this.mockMaker = copy.mockMaker;
     }
 
     @Override
@@ -177,5 +179,10 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     @Override
     public Strictness getStrictness() {
         return strictness;
+    }
+
+    @Override
+    public String getMockMaker() {
+        return mockMaker;
     }
 }

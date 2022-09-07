@@ -13,6 +13,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.plugins.MockMaker;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -123,6 +124,13 @@ public @interface Mock {
      * @since 4.6.1
      */
     Strictness strictness() default Strictness.TEST_LEVEL_DEFAULT;
+
+    /**
+     * Mock will be created by the given {@link MockMaker}, see {@link MockSettings#mockMaker(String)}.
+     *
+     * @since 4.8.0
+     */
+    String mockMaker() default "";
 
     enum Strictness {
 

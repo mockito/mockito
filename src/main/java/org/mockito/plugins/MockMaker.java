@@ -4,6 +4,7 @@
  */
 package org.mockito.plugins;
 
+import org.mockito.MockSettings;
 import org.mockito.MockedConstruction;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.MockHandler;
@@ -44,6 +45,19 @@ import static org.mockito.internal.util.StringUtil.join;
  *
  * <p>Note that if several <code>mockito-extensions/org.mockito.plugins.MockMaker</code> files exists in the classpath
  * Mockito will only use the first returned by the standard {@link ClassLoader#getResource} mechanism.
+ *
+ * <h3>Using the MockSettings of individual mocks</h3>
+ *
+ * <p>If you want to use a {@code MockMaker} only for a specific mock,
+ * you can specify it using {@link MockSettings#mockMaker(String)}.</p>
+ * <pre>
+ *     // Use a built-in mock maker
+ *     Object mock = Mockito.mock(Object.class, Mockito.withSettings()
+ *             .mockMaker(MockMakers.INLINE));
+ *     // Or load a mock maker using a fully qualified class name
+ *     Object mock = Mockito.mock(Object.class, Mockito.withSettings()
+ *             .mockMaker("org.awesome.mockito.AwesomeMockMaker"));
+ * </pre>
  *
  * @see org.mockito.mock.MockCreationSettings
  * @see org.mockito.invocation.MockHandler

@@ -66,7 +66,7 @@ public class MockCreationValidatorTest {
     @Test
     public void should_fail_when_type_not_mockable() {
         try {
-            validator.validateType(long.class);
+            validator.validateType(long.class, null);
         } catch (MockitoException ex) {
             assertThat(ex.getMessage()).contains("primitive");
         }

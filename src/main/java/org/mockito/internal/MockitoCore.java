@@ -22,7 +22,6 @@ import static org.mockito.internal.util.MockUtil.getInvocationContainer;
 import static org.mockito.internal.util.MockUtil.getMockHandler;
 import static org.mockito.internal.util.MockUtil.isMock;
 import static org.mockito.internal.util.MockUtil.resetMock;
-import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
 import static org.mockito.internal.verification.VerificationModeFactory.noInteractions;
 import static org.mockito.internal.verification.VerificationModeFactory.noMoreInteractions;
 
@@ -31,6 +30,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
@@ -67,20 +67,12 @@ import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.verification.VerificationMode;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
-
 @SuppressWarnings("unchecked")
 public class MockitoCore {
 
     private static final DoNotMockEnforcer DO_NOT_MOCK_ENFORCER = Plugins.getDoNotMockEnforcer();
     private static final Set<Class<?>> MOCKABLE_CLASSES =
             Collections.synchronizedSet(new HashSet<>());
-
-    public boolean isTypeMockable(Class<?> typeToMock) {
-        return typeMockabilityOf(typeToMock).mockable();
-    }
 
     public <T> T mock(Class<T> typeToMock, MockSettings settings) {
         if (!(settings instanceof MockSettingsImpl)) {
@@ -160,6 +152,14 @@ public class MockitoCore {
                                         + "At the moment, you cannot provide your own implementations of that class.");
                     }
                     MockSettingsImpl impl = MockSettingsImpl.class.cast(value);
+                    String mockMaker = impl.getMockMaker();
+                    if (mockMaker != null) {
+                        throw new IllegalArgumentException(
+                                "Unexpected MockMaker '"
+                                        + mockMaker
+                                        + "'\n"
+                                        + "At the moment, you cannot override the MockMaker for construction mocks.");
+                    }
                     return impl.build(typeToMock);
                 };
         MockMaker.ConstructionMockControl<T> control =

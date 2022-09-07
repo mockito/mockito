@@ -27,8 +27,7 @@ class PluginLoader {
     PluginLoader(PluginSwitch pluginSwitch) {
         this(
                 new DefaultMockitoPlugins(),
-                new PluginInitializer(
-                        pluginSwitch, Collections.emptySet(), new DefaultMockitoPlugins()));
+                new PluginInitializer(pluginSwitch, Collections.emptySet()));
     }
 
     /**
@@ -40,10 +39,7 @@ class PluginLoader {
     PluginLoader(PluginSwitch pluginSwitch, String... alias) {
         this(
                 new DefaultMockitoPlugins(),
-                new PluginInitializer(
-                        pluginSwitch,
-                        new HashSet<>(Arrays.asList(alias)),
-                        new DefaultMockitoPlugins()));
+                new PluginInitializer(pluginSwitch, new HashSet<>(Arrays.asList(alias))));
     }
 
     /**

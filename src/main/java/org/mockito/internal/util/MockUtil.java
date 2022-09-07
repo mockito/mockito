@@ -7,6 +7,7 @@ package org.mockito.internal.util;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.internal.configuration.plugins.DefaultMockitoPlugins;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
@@ -18,6 +19,9 @@ import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockMaker.TypeMockability;
 import org.mockito.plugins.MockResolver;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
@@ -25,15 +29,57 @@ import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
 @SuppressWarnings("unchecked")
 public class MockUtil {
 
-    private static final MockMaker mockMaker = Plugins.getMockMaker();
+    private static final MockMaker defaultMockMaker = Plugins.getMockMaker();
+    private static final Map<Class<? extends MockMaker>, MockMaker> mockMakers =
+            new ConcurrentHashMap<>(
+                    Collections.singletonMap(defaultMockMaker.getClass(), defaultMockMaker));
 
     private MockUtil() {}
 
-    public static TypeMockability typeMockabilityOf(Class<?> type) {
-        return mockMaker.isTypeMockable(type);
+    private static MockMaker getMockMaker(String mockMaker) {
+        if (mockMaker == null) {
+            return defaultMockMaker;
+        }
+
+        String typeName;
+        if (DefaultMockitoPlugins.MOCK_MAKER_ALIASES.contains(mockMaker)) {
+            typeName = DefaultMockitoPlugins.getDefaultPluginClass(mockMaker);
+        } else {
+            typeName = mockMaker;
+        }
+
+        Class<? extends MockMaker> type;
+        // Using the context class loader because PluginInitializer.loadImpl is using it as well.
+        // Personally, I am suspicious whether the context class loader is a good choice in either
+        // of these cases.
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            loader = ClassLoader.getSystemClassLoader();
+        }
+        try {
+            type = loader.loadClass(typeName).asSubclass(MockMaker.class);
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to load MockMaker: " + mockMaker, e);
+        }
+
+        return mockMakers.computeIfAbsent(
+                type,
+                t -> {
+                    try {
+                        return t.getDeclaredConstructor().newInstance();
+                    } catch (Exception e) {
+                        throw new IllegalStateException(
+                                "Failed to construct MockMaker: " + t.getName(), e);
+                    }
+                });
+    }
+
+    public static TypeMockability typeMockabilityOf(Class<?> type, String mockMaker) {
+        return getMockMaker(mockMaker).isTypeMockable(type);
     }
 
     public static <T> T createMock(MockCreationSettings<T> settings) {
+        MockMaker mockMaker = getMockMaker(settings.getMockMaker());
         MockHandler mockHandler = createMockHandler(settings);
 
         Object spiedInstance = settings.getSpiedInstance();
@@ -62,17 +108,11 @@ public class MockUtil {
         MockHandler newHandler = createMockHandler(settings);
 
         mock = resolve(mock);
-        mockMaker.resetMock(mock, newHandler, settings);
+        getMockMaker(settings.getMockMaker()).resetMock(mock, newHandler, settings);
     }
 
     public static MockHandler<?> getMockHandler(Object mock) {
-        if (mock == null) {
-            throw new NotAMockException("Argument should be a mock, but is null!");
-        }
-
-        mock = resolve(mock);
-
-        MockHandler handler = mockMaker.getHandler(mock);
+        MockHandler handler = getMockHandlerOrNull(mock);
         if (handler != null) {
             return handler;
         } else {
@@ -104,10 +144,24 @@ public class MockUtil {
         if (mock == null) {
             return false;
         }
+        return getMockHandlerOrNull(mock) != null;
+    }
+
+    private static MockHandler<?> getMockHandlerOrNull(Object mock) {
+        if (mock == null) {
+            throw new NotAMockException("Argument should be a mock, but is null!");
+        }
 
         mock = resolve(mock);
 
-        return mockMaker.getHandler(mock) != null;
+        for (MockMaker mockMaker : mockMakers.values()) {
+            MockHandler<?> handler = mockMaker.getHandler(mock);
+            if (handler != null) {
+                assert getMockMaker(handler.getMockSettings().getMockMaker()) == mockMaker;
+                return handler;
+            }
+        }
+        return null;
     }
 
     private static Object resolve(Object mock) {
@@ -143,6 +197,7 @@ public class MockUtil {
 
     public static <T> MockMaker.StaticMockControl<T> createStaticMock(
             Class<T> type, MockCreationSettings<T> settings) {
+        MockMaker mockMaker = getMockMaker(settings.getMockMaker());
         MockHandler<T> handler = createMockHandler(settings);
         return mockMaker.createStaticMock(type, settings, handler);
     }
@@ -153,11 +208,13 @@ public class MockUtil {
             MockedConstruction.MockInitializer<T> mockInitializer) {
         Function<MockedConstruction.Context, MockHandler<T>> handlerFactory =
                 context -> createMockHandler(settingsFactory.apply(context));
-        return mockMaker.createConstructionMock(
+        return defaultMockMaker.createConstructionMock(
                 type, settingsFactory, handlerFactory, mockInitializer);
     }
 
     public static void clearAllCaches() {
-        mockMaker.clearAllCaches();
+        for (MockMaker mockMaker : mockMakers.values()) {
+            mockMaker.clearAllCaches();
+        }
     }
 }
