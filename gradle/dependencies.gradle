@@ -32,7 +32,7 @@ libraries.osgi = 'org.osgi:osgi.core:8.0.0'
 libraries.equinox = 'org.eclipse.platform:org.eclipse.osgi:3.18.100'
 libraries.bndGradle =  'biz.aQute.bnd:biz.aQute.bnd.gradle:6.3.1'
 
-libraries.groovy = 'org.codehaus.groovy:groovy:3.0.12'
+libraries.groovy = 'org.codehaus.groovy:groovy:3.0.13'
 
 def kotlinVersion = '1.7.10'
 libraries.kotlin = [
