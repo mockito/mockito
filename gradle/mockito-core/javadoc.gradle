@@ -38,7 +38,7 @@ javadoc {
     options.noIndex = false
     options.noNavBar = false
     options.noTree = false
-    options.links = ['https://docs.oracle.com/javase/6/docs/api/',
+    options.links = ['https://docs.oracle.com/javase/11/docs/api/',
                      'https://junit.org/junit4/javadoc/4.12/']
     options.bottom("""
         <script type="text/javascript" src="{@docRoot}/js/jdk6-project-version-insert.min.js"></script>
