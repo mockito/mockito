@@ -38,8 +38,8 @@ javadoc {
     options.noIndex = false
     options.noNavBar = false
     options.noTree = false
-    options.links = ['https://docs.oracle.com/javase/6/docs/api/',
-                     'https://junit.org/junit4/javadoc/4.12/']
+    options.links('https://junit.org/junit4/javadoc/4.12/')
+    options.linksOffline('https://docs.oracle.com/javase/6/docs/api/', "$buildDir/javase-6-docs/")
     options.bottom("""
         <script type="text/javascript" src="{@docRoot}/js/jdk6-project-version-insert.min.js"></script>
         <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
@@ -51,6 +51,17 @@ javadoc {
     options.stylesheetFile rootProject.file("src/javadoc/stylesheet.css")
     options.addStringOption('Xwerror', '-quiet')
     options.addBooleanOption('-allow-script-in-comments', true)
+
+    // attempt to fix https://github.com/mockito/mockito/issues/2765
+    doFirst {
+        download.run {
+            src 'https://docs.oracle.com/javase/6/docs/api/package-list'
+            // somehow downloading src/javadoc or buildDir/javadoc didn't work, probably something related to the folder
+            // lifecycle
+            dest "$buildDir/javase-6-docs/element-list"
+            overwrite true
+        }
+    }
 
     doLast {
         copy {
