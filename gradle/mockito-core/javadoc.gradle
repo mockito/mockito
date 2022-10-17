@@ -1,31 +1,19 @@
 //It seems the gradle javadoc task works file by file and as such disable some features of javadoc tool
 //such as link to packages, https://groups.google.com/d/msg/gradle-dev/R83dy_6PHMc/bgw0cUTMFAAJ
 
-def java8DocsUrl = 'https://docs.oracle.com/javase/8/docs/api/'
-def packageListUrl = "$java8DocsUrl/package-list"
-def java8DocsDir = "$buildDir/javase-8-docs"
+// In this directory we keep two copies of the `package-list` file for java 8 api docs:
+// - as `package-list` for Java 9+
+// - as `element-list` for java 8
+def java8DocsDir = "$buildDir/java-8-docs"
 
-// Temporary workaround for https://github.com/mockito/mockito/issues/2765
-// For Java 8, download the `package-list` as `element-list`
-task downloadJava8ElementList(type: Download) {
-    src packageListUrl
-    // Since the JavaDoc output is generated in `$buildDir/javadoc`, specify a different location for this task
-    dest "$java8DocsDir/element-list"
-    overwrite true
-}
-
-// Temporary workaround for https://github.com/mockito/mockito/issues/2765
-// For Java 9+, download the `package-list` as-is
-task downloadJava9PlusPackageList(type: Download, dependsOn: downloadJava8ElementList) {
-    src packageListUrl
-    // Since the JavaDoc output is generated in `$buildDir/javadoc`, specify a different location for this task
-    dest java8DocsDir
-    overwrite true
+task copyJava8Docs(type: Copy) {
+    from "gradle/mockito-core/java-8-docs"
+    into java8DocsDir
 }
 
 javadoc {
     description "Creates javadoc html for Mockito API."
-    dependsOn downloadJava9PlusPackageList
+    dependsOn copyJava8Docs
 
     // For more details on the format
     // see https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
@@ -63,7 +51,7 @@ javadoc {
     options.noNavBar = false
     options.noTree = false
     options.links('https://junit.org/junit4/javadoc/4.12/')
-    options.linksOffline(java8DocsUrl, java8DocsDir)
+    options.linksOffline('https://docs.oracle.com/javase/8/docs/api/', java8DocsDir)
     options.bottom("""
         <script type="text/javascript" src="{@docRoot}/js/jdk6-project-version-insert.min.js"></script>
         <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
