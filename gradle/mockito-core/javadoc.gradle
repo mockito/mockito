@@ -4,16 +4,10 @@
 // In this directory we keep two copies of the `package-list` file for java 8 api docs:
 // - as `package-list` for Java 9+
 // - as `element-list` for java 8
-def java8DocsDir = "$buildDir/java-8-docs"
-
-task copyJava8Docs(type: Copy) {
-    from "gradle/mockito-core/java-8-docs"
-    into java8DocsDir
-}
+def java8DocsDir = 'gradle/mockito-core/java-8-docs'
 
 javadoc {
     description "Creates javadoc html for Mockito API."
-    dependsOn copyJava8Docs
 
     // For more details on the format
     // see https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html

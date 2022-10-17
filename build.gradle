@@ -25,7 +25,6 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.42.0'
     id 'biz.aQute.bnd.builder' version '6.3.1'
     id 'ru.vyarus.animalsniffer' version '1.5.2'
-    id 'de.undercouch.download' version '5.3.0'
 }
 
 description = 'Mockito mock objects library core API and implementation'
