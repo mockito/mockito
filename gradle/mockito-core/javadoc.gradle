@@ -61,6 +61,12 @@ javadoc {
             dest "$buildDir/javase-6-docs/element-list"
             overwrite true
         }
+        // dumbly downloading again just to see if we can make all jdks happy
+        download.run {
+            src 'https://docs.oracle.com/javase/6/docs/api/package-list'
+            dest "$buildDir/javase-6-docs/element-list"
+            overwrite true
+        }
     }
 
     doLast {
