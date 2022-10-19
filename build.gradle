@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         classpath 'gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.16.1'
-        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:2.0.2'
+        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:3.0.1'
 
         classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
         classpath 'org.shipkit:shipkit-changelog:1.2.0'
