@@ -49,7 +49,7 @@ jobs:
 
     - name: 3. Validate Gradle wrapper
       if: matrix.java == 8 && matrix.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
-      uses: gradle/wrapper-validation-action@v1.0.4 # https://github.com/gradle/wrapper-validation-action
+      uses: gradle/wrapper-validation-action@v1.0.5 # https://github.com/gradle/wrapper-validation-action
 
     - name: 4. Build and check reproducibility of artifacts (single job only)
       if: matrix.java == 8 && matrix.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
