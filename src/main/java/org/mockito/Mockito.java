@@ -1902,6 +1902,23 @@ public class Mockito extends ArgumentMatchers {
     public static final Answer<Object> RETURNS_SELF = Answers.RETURNS_SELF;
 
     /**
+     * Creates mock object of requested class or interface.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you want to mock.
+     * @return mock object
+     */
+    public static <T> T mock(T... reified) {
+        if (reified.length > 0) {
+            throw new IllegalArgumentException(
+                    "Please don't pass any values here. Java will detect class automagically.");
+        }
+        Class<T> classToMock = (Class<T>) reified.getClass().getComponentType();
+        return mock(classToMock, withSettings());
+    }
+
+    /**
      * Creates mock object of given class or interface.
      * <p>
      * See examples in javadoc for {@link Mockito} class

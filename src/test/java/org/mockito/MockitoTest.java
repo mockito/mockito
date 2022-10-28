@@ -133,4 +133,12 @@ public class MockitoTest {
         // when / then
         assertThat(settings.getDefaultAnswer()).isEqualTo(Mockito.RETURNS_DEFAULTS);
     }
+
+    @Test
+    @SuppressWarnings({"DoNotMock", "DoNotMockAutoValue"})
+    public void automaticallyDetectsClassToMock() {
+        List<String> mock = Mockito.mock();
+        Mockito.when(mock.size()).thenReturn(42);
+        assertThat(mock.size()).isEqualTo(42);
+    }
 }
