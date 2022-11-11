@@ -192,13 +192,13 @@ class InlineDelegateByteBuddyMockMaker
     private final BytecodeGenerator bytecodeGenerator;
 
     private final WeakConcurrentMap<Object, MockMethodInterceptor> mocks =
-            new WeakConcurrentMap.WithInlinedExpunction<Object, MockMethodInterceptor>();
+            new WeakConcurrentMap<>(false);
 
     private final DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics =
-            new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.INLINE);
+            new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.MANUAL);
 
     private final DetachedThreadLocal<Map<Class<?>, BiConsumer<Object, MockedConstruction.Context>>>
-            mockedConstruction = new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.INLINE);
+            mockedConstruction = new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.MANUAL);
 
     private final ThreadLocal<Boolean> mockitoConstruction = ThreadLocal.withInitial(() -> false);
 
@@ -382,6 +382,7 @@ class InlineDelegateByteBuddyMockMaker
             if (instance instanceof MockAccess) {
                 ((MockAccess) instance).setMockitoInterceptor(mockMethodInterceptor);
             }
+            mocks.expungeStaleEntries();
             return instance;
         } catch (InstantiationException e) {
             throw new MockitoException(
@@ -496,6 +497,7 @@ class InlineDelegateByteBuddyMockMaker
             if (mock instanceof MockAccess) {
                 ((MockAccess) mock).setMockitoInterceptor(mockMethodInterceptor);
             }
+            mocks.expungeStaleEntries();
         }
     }
 
@@ -570,6 +572,7 @@ class InlineDelegateByteBuddyMockMaker
             interceptors = new WeakHashMap<>();
             mockedStatics.set(interceptors);
         }
+        mockedStatics.getBackingMap().expungeStaleEntries();
 
         return new InlineStaticMockControl<>(type, interceptors, settings, handler);
     }
@@ -598,6 +601,7 @@ class InlineDelegateByteBuddyMockMaker
             interceptors = new WeakHashMap<>();
             mockedConstruction.set(interceptors);
         }
+        mockedConstruction.getBackingMap().expungeStaleEntries();
 
         return new InlineConstructionMockControl<>(
                 type, settingsFactory, handlerFactory, mockInitializer, interceptors);

@@ -94,8 +94,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                         .with(Implementation.Context.Disabled.Factory.INSTANCE)
                         .with(MethodGraph.Compiler.ForDeclaredMethods.INSTANCE)
                         .ignore(isSynthetic().and(not(isConstructor())).or(isDefaultFinalizer()));
-        mocked = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.INLINE);
-        flatMocked = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.INLINE);
+        mocked = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.MANUAL);
+        flatMocked = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.MANUAL);
         String identifier = RandomString.make();
         subclassEngine =
                 new TypeCachingBytecodeGenerator(
@@ -299,6 +299,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                 lastException = null;
             }
         }
+
+        mocked.expungeStaleEntries();
+        flatMocked.expungeStaleEntries();
     }
 
     private void assureCanReadMockito(Set<Class<?>> types) {
