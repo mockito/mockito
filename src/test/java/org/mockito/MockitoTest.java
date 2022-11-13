@@ -147,10 +147,30 @@ public class MockitoTest {
     @SuppressWarnings({"DoNotMock", "DoNotMockAutoValue"})
     public void newMockMethod_shouldNotBeCalledWithParameters() {
         assertThatThrownBy(
-            () -> {
-                Mockito.mock(asList("1", "2"), asList("3", "4"));
-            })
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageStartingWith("Please don't pass any values here");
+                        () -> {
+                            Mockito.mock(asList("1", "2"), asList("3", "4"));
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageStartingWith("Please don't pass any values here");
+    }
+
+    @Test
+    @SuppressWarnings({"DoNotMock", "DoNotMockAutoValue"})
+    public void automaticallyDetectsClassToSpy() {
+        List<String> mock = Mockito.spy();
+        Mockito.when(mock.size()).thenReturn(42);
+        assertThat(mock.size()).isEqualTo(42);
+        assertThat(mock.get(0)).isNull();
+    }
+
+    @Test
+    @SuppressWarnings({"DoNotMock", "DoNotMockAutoValue"})
+    public void newSpyMethod_shouldNotBeCalledWithParameters() {
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.spy(asList("1", "2"), asList("3", "4"));
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageStartingWith("Please don't pass any values here");
     }
 }
