@@ -107,6 +107,7 @@ import java.util.function.Function;
  *      <a href="#51">51. New API for marking classes as unmockable (Since 4.1.0)</a><br/>
  *      <a href="#52">52. New strictness attribute for @Mock annotation and <code>MockSettings.strictness()</code> methods (Since 4.6.0)</a><br/>
  *      <a href="#53">53. Specifying mock maker for individual mocks (Since 4.8.0)</a><br/>
+ *      <a href="#54">54. Mocking without specifying class (Since 4.9.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1639,6 +1640,25 @@ import java.util.function.Function;
  *   Foo mock = Mockito.mock(Foo.class, withSettings().mockMaker(MockMakers.SUBCLASS));
  * </code></pre>
  *
+ * <h3 id="54">54. <a class="meaningful_link" href="#mock_without_class" name="mock_without_class">
+ *  Mocking without specifying class</a> (Since 4.9.0)</h3>
+ *
+ * <p>
+ * Starting from 4.9.0, there is a shorter form of creating a mock.
+ * </p>
+ *
+ * Instead of calling method {@link Mockito#mock(Class)} with Class parameter, you can now
+ * now call method {@code mock()} <strong>without parameters</strong>:
+ *
+ * <pre class="code"><code class="java">
+ *   Foo foo = Mockito.mock();
+ *   Bar bar = Mockito.mock();
+ * </code></pre>
+ *
+ * Mockito will automatically detect the needed class.
+ * <p>
+ * P.S. Works only if you assign result of {@code mock()} to a variable or field. Only then Java compiler can know the type of that variable.
+ * </p>
  */
 @CheckReturnValue
 @SuppressWarnings("unchecked")
@@ -1908,6 +1928,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @param reified don't pass any values to it. It's a trick to detect the class/interface you want to mock.
      * @return mock object
+     * @since 4.9.0
      */
     public static <T> T mock(T... reified) {
         if (reified.length > 0) {
