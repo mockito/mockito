@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
@@ -140,5 +141,16 @@ public class MockitoTest {
         List<String> mock = Mockito.mock();
         Mockito.when(mock.size()).thenReturn(42);
         assertThat(mock.size()).isEqualTo(42);
+    }
+
+    @Test
+    @SuppressWarnings({"DoNotMock", "DoNotMockAutoValue"})
+    public void newMockMethod_shouldNotBeCalledWithParameters() {
+        assertThatThrownBy(
+            () -> {
+                Mockito.mock(asList("1", "2"), asList("3", "4"));
+            })
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageStartingWith("Please don't pass any values here");
     }
 }
