@@ -1321,30 +1321,30 @@ import java.util.function.Function;
  * alternative {@link org.mockito.plugins.MockMaker} is used</a>.
  *
  * <h3 id="39">39. <a class="meaningful_link" href="#Mocking_Final" name="Mocking_Final">Mocking final types, enums and final methods</a> (Since 2.1.0)</h3>
- *
+ * <p>
  * Mockito now offers an {@link Incubating}, optional support for mocking final classes and methods.
+ * </p>
+ * <p>
  * This is a fantastic improvement that demonstrates Mockito's everlasting quest for improving testing experience.
  * Our ambition is that Mockito "just works" with final classes and methods.
  * Previously they were considered <em>unmockable</em>, preventing the user from mocking.
  * We already started discussing how to make this feature enabled by default.
  * Currently, the feature is still optional as we wait for more feedback from the community.
- *
+ * </p>
  * <p>
  * This alternative mock maker which uses
  * a combination of both Java instrumentation API and sub-classing rather than creating a new class to represent
  * a mock. This way, it becomes possible to mock final types and methods.
- *
+ * </p>
  * <p>
  * This mock maker is <strong>turned off by default</strong> because it is based on completely different mocking mechanism
- * that requires more feedback from the community. It can be activated explicitly by the mockito extension mechanism,
- * just create in the classpath a file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
- * containing the value <code>mock-maker-inline</code>.
- *
+ * that requires more feedback from the community. It can be activated explicitly: instead of using the
+ * <i>mockito-core</i> artifact, include the <i>mockito-inline</i> artifact in your project.
+ * </p>
  * <p>
- * As a convenience, the Mockito team provides an artifact where this mock maker is preconfigured. Instead of using the
- * <i>mockito-core</i> artifact, include the <i>mockito-inline</i> artifact in your project. Note that this artifact is
+ * P.S. Note that this artifact is
  * likely to be discontinued once mocking of final classes and methods gets integrated into the default mock maker.
- *
+ * </p>
  * <p>
  * Some noteworthy notes about this mock maker:
  * <ul>
