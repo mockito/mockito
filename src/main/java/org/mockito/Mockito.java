@@ -1657,8 +1657,9 @@ import java.util.function.Function;
  *
  * Mockito will automatically detect the needed class.
  * <p>
- * P.S. Works only if you assign result of {@code mock()} or {@code spy()} to a variable or field.
- * Only then Java compiler can know the type of that variable.
+ * It works only if you assign result of {@code mock()} or {@code spy()} to a variable or field with an explicit type.
+ * With an implicit type, the Java compiler is unable to automatically determine the type of a mock and you need
+ * to pass in the {@code Class} explicitly.
  * </p>
  */
 @CheckReturnValue
