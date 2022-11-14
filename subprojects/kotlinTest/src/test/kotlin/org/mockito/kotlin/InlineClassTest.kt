@@ -339,4 +339,14 @@ class InlineClassTest {
 
         verify(mock).returnsResult()
     }
+
+    @Test
+    @SuppressWarnings("DoNotMock", "DoNotMockAutoValue")
+    fun automaticallyDetectsClassToMock() {
+        val mock: WithResult = mock()
+
+        `when`(mock.returnsResult()).thenReturn(Result.success("OK"))
+
+        assertEquals("OK", mock.returnsResult().getOrNull())
+    }
 }

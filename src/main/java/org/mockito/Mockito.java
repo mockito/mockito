@@ -33,7 +33,11 @@ import org.mockito.stubbing.LenientStubber;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
 import org.mockito.stubbing.VoidAnswer1;
-import org.mockito.verification.*;
+import org.mockito.verification.After;
+import org.mockito.verification.Timeout;
+import org.mockito.verification.VerificationAfterDelay;
+import org.mockito.verification.VerificationMode;
+import org.mockito.verification.VerificationWithTimeout;
 
 import java.util.function.Function;
 
@@ -107,6 +111,7 @@ import java.util.function.Function;
  *      <a href="#51">51. New API for marking classes as unmockable (Since 4.1.0)</a><br/>
  *      <a href="#52">52. New strictness attribute for @Mock annotation and <code>MockSettings.strictness()</code> methods (Since 4.6.0)</a><br/>
  *      <a href="#53">53. Specifying mock maker for individual mocks (Since 4.8.0)</a><br/>
+ *      <a href="#54">54. Mocking/spying without specifying class (Since 4.9.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1639,6 +1644,23 @@ import java.util.function.Function;
  *   Foo mock = Mockito.mock(Foo.class, withSettings().mockMaker(MockMakers.SUBCLASS));
  * </code></pre>
  *
+ * <h3 id="54">54. <a class="meaningful_link" href="#mock_without_class" name="mock_without_class">
+ *  Mocking/spying without specifying class</a> (Since 4.9.0)</h3>
+ *
+ * Instead of calling method {@link Mockito#mock(Class)} or {@link Mockito#spy(Class)} with Class parameter, you can now
+ * now call method {@code mock()} or {@code spy()} <strong>without parameters</strong>:
+ *
+ * <pre class="code"><code class="java">
+ *   Foo foo = Mockito.mock();
+ *   Bar bar = Mockito.spy();
+ * </code></pre>
+ *
+ * Mockito will automatically detect the needed class.
+ * <p>
+ * It works only if you assign result of {@code mock()} or {@code spy()} to a variable or field with an explicit type.
+ * With an implicit type, the Java compiler is unable to automatically determine the type of a mock and you need
+ * to pass in the {@code Class} explicitly.
+ * </p>
  */
 @CheckReturnValue
 @SuppressWarnings("unchecked")
@@ -1902,6 +1924,23 @@ public class Mockito extends ArgumentMatchers {
     public static final Answer<Object> RETURNS_SELF = Answers.RETURNS_SELF;
 
     /**
+     * Creates mock object of requested class or interface.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you want to mock.
+     * @return mock object
+     * @since 4.9.0
+     */
+    public static <T> T mock(T... reified) {
+        if (reified.length > 0) {
+            throw new IllegalArgumentException(
+                    "Please don't pass any values here. Java will detect class automagically.");
+        }
+        return mock(getClassOf(reified), withSettings());
+    }
+
+    /**
      * Creates mock object of given class or interface.
      * <p>
      * See examples in javadoc for {@link Mockito} class
@@ -2113,6 +2152,25 @@ public class Mockito extends ArgumentMatchers {
     public static <T> T spy(Class<T> classToSpy) {
         return MOCKITO_CORE.mock(
                 classToSpy, withSettings().useConstructor().defaultAnswer(CALLS_REAL_METHODS));
+    }
+
+    /**
+     * Please refer to the documentation of {@link #spy(Class)}.
+     *
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you want to mock.
+     * @return spy object
+     * @since 4.9.0
+     */
+    public static <T> T spy(T... reified) {
+        if (reified.length > 0) {
+            throw new IllegalArgumentException(
+                    "Please don't pass any values here. Java will detect class automagically.");
+        }
+        return spy(getClassOf(reified));
+    }
+
+    private static <T> Class<T> getClassOf(T[] array) {
+        return (Class<T>) array.getClass().getComponentType();
     }
 
     /**
