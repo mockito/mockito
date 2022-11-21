@@ -7,7 +7,6 @@ package org.mockitousage.stubbing;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.lang.reflect.Method;
 import java.util.Set;
 
 import org.junit.Test;
@@ -110,7 +109,8 @@ public class StubbingWithCustomAnswerTest extends TestBase {
                         new Answer<String>() {
                             public String answer(InvocationOnMock invocation) throws Throwable {
                                 assertTrue(invocation.getArguments().getClass().isArray());
-                                assertEquals(Method.class, invocation.getMethod().getClass());
+                                assertEquals(
+                                        IMethods.class, invocation.getMethod().getDeclaringClass());
 
                                 return "assertions passed";
                             }
