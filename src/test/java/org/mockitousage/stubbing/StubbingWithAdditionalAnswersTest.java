@@ -58,10 +58,12 @@ public class StubbingWithAdditionalAnswersTest {
         given(iMethods.objectArgMethod(any())).will(returnsFirstArg());
         given(iMethods.threeArgumentMethod(eq(0), any(), anyString())).will(returnsSecondArg());
         given(iMethods.threeArgumentMethod(eq(1), any(), anyString())).will(returnsLastArg());
+        given(iMethods.mixedVarargsReturningString(eq(1), any())).will(returnsArgAt(2));
 
         assertThat(iMethods.objectArgMethod("first")).isEqualTo("first");
         assertThat(iMethods.threeArgumentMethod(0, "second", "whatever")).isEqualTo("second");
         assertThat(iMethods.threeArgumentMethod(1, "whatever", "last")).isEqualTo("last");
+        assertThat(iMethods.mixedVarargsReturningString(1, "a", "b")).isEqualTo("b");
     }
 
     public interface Foo {
