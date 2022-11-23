@@ -5,6 +5,7 @@
 package org.mockito.internal.matchers;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 import org.mockito.ArgumentMatcher;
 
@@ -20,5 +21,10 @@ public class Any implements ArgumentMatcher<Object>, VarargMatcher, Serializable
     @Override
     public String toString() {
         return "<any>";
+    }
+
+    @Override
+    public Type type() {
+        return Object.class;
     }
 }

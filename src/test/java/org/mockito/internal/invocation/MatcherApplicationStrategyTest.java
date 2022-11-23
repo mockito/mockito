@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.internal.invocation.MatcherApplicationStrategy.getMatcherApplicationStrategyFor;
 import static org.mockito.internal.matchers.Any.ANY;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -230,6 +231,11 @@ public class MatcherApplicationStrategyTest extends TestBase {
         }
 
         public void describeTo(Description description) {}
+
+        @Override
+        public Type type() {
+            return Integer.class;
+        }
     }
 
     private Invocation mixedVarargs(Object a, String... s) {

@@ -5,9 +5,14 @@
 package org.mockito.internal.matchers;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 /**
  * Internal interface that informs Mockito that the matcher is intended to capture varargs.
  * This information is needed when mockito collects the arguments.
  */
-public interface VarargMatcher extends Serializable {}
+public interface VarargMatcher extends Serializable {
+
+    // Todo: default impl to avoid compatability issues?
+    Type type();
+}

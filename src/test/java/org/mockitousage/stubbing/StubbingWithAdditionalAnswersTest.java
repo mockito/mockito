@@ -28,6 +28,8 @@ import java.util.Date;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -56,12 +58,116 @@ public class StubbingWithAdditionalAnswersTest {
         given(iMethods.objectArgMethod(any())).will(returnsFirstArg());
         given(iMethods.threeArgumentMethod(eq(0), any(), anyString())).will(returnsSecondArg());
         given(iMethods.threeArgumentMethod(eq(1), any(), anyString())).will(returnsLastArg());
-        given(iMethods.mixedVarargsReturningString(eq(1), any())).will(returnsArgAt(2));
 
         assertThat(iMethods.objectArgMethod("first")).isEqualTo("first");
         assertThat(iMethods.threeArgumentMethod(0, "second", "whatever")).isEqualTo("second");
         assertThat(iMethods.threeArgumentMethod(1, "whatever", "last")).isEqualTo("last");
-        assertThat(iMethods.mixedVarargsReturningString(1, "a", "b")).isEqualTo("b");
+    }
+
+    public interface Foo {
+        String m1(String arg);
+        String m1(String... args);
+    }
+
+    @Mock private Foo foo;
+
+    @Test
+    public void shouldWorkWithCasts() throws Exception  {
+        given(foo.m1((String)any())).willReturn("single arg method");
+        given(foo.m1((String[])any())).willReturn("var arg method");
+
+        assertThat(foo.m1( "a")).isEqualTo("single arg method");
+        assertThat(foo.m1()).isEqualTo("var arg method");
+        assertThat(foo.m1( new String[] {"a" })).isEqualTo("var arg method");
+        assertThat(foo.m1("a", "b")).isEqualTo("var arg method");
+    }
+
+    @Test
+    public void shouldWork() throws Exception  {
+        given(foo.m1(any(String.class))).willReturn("single arg method");
+
+        assertThat(foo.m1( "a")).isEqualTo("single arg method");
+        assertThat(foo.m1( new String[] {"a"})).isNull();
+        assertThat(foo.m1( "a", "b")).isNull();
+        assertThat(foo.m1( "a", "b", "c")).isNull();
+    }
+
+    @Test
+    public void shouldWork2() throws Exception  {
+        given(foo.m1(any(String[].class))).willReturn("var arg method");
+
+        assertThat(foo.m1( "a")).isNull();
+        assertThat(foo.m1( new String[] {"a"})).isEqualTo("var arg method");
+        assertThat(foo.m1( "a", "b")).isEqualTo("var arg method");
+        assertThat(foo.m1( "a", "b", "c")).isEqualTo("var arg method");
+    }
+
+    @Test
+    public void shouldWork3() throws Exception  {
+        given(foo.m1(any(String.class), any(String.class))).willReturn("var arg method");
+
+        assertThat(foo.m1( "a")).isNull();
+        assertThat(foo.m1( new String[] {"a"})).isNull();
+        assertThat(foo.m1( "a", "b")).isEqualTo("var arg method");
+        assertThat(foo.m1( "a", "b", "c")).isNull();
+    }
+
+    @Test
+    public void shouldCaptureVarArgs_nullArrayArg1() {
+        iMethods.varargs((String[]) null);
+
+        ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
+        verify(iMethods).varargs(captor.capture());
+    }
+
+    @Test
+    public void shouldCaptureVarArgs_nullArrayArg2() {
+        iMethods.varargs((String[]) null);
+
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        verify(iMethods).varargs(captor.capture());
+    }
+
+
+    @Test
+    public void shouldVerifyVarArgs_any_nullArrayArg() {
+        iMethods.varargs((String[]) null);
+
+        verify(iMethods).varargs(ArgumentMatchers.any());
+    }
+
+    @Test
+    public void shouldVerifyVarArgs_eq_NullArrayArg() {
+        iMethods.varargs((String[]) null);
+
+        verify(iMethods).varargs(ArgumentMatchers.eq(null));
+    }
+
+
+
+    @Test
+    public void shouldVerifyVarArgs_eq_nullArrayArg() {
+
+        iMethods.varargs((String)null);
+
+        verify(iMethods).varargs(ArgumentMatchers.eq(null));
+    }
+
+    @Test
+    public void shouldVerifyVarArgs_isNull_nullArrayArg() {
+
+        iMethods.varargs((String)null);
+
+        verify(iMethods).varargs(ArgumentMatchers.isNull());
+    }
+
+    @Test
+    public void shouldVerifyVarArgs_isNotNull_nullArrayArg() {
+
+        iMethods.varargs();
+
+        // Todo: still fails. Would require `NotNull` to be `VarargMatcher` I think
+        //verify(iMethods).varargs(ArgumentMatchers.isNotNull());
     }
 
     @Test
