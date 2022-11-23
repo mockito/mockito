@@ -20,9 +20,7 @@ public class MatcherApplicationStrategy {
     private final Invocation invocation;
     private final List<ArgumentMatcher<?>> matchers;
 
-    private MatcherApplicationStrategy(
-            Invocation invocation,
-            List<ArgumentMatcher<?>> matchers) {
+    private MatcherApplicationStrategy(Invocation invocation, List<ArgumentMatcher<?>> matchers) {
         this.invocation = invocation;
         this.matchers = matchers;
     }
@@ -62,13 +60,17 @@ public class MatcherApplicationStrategy {
      *         </ul>
      */
     public boolean forEachMatcherAndArgument(ArgumentMatcherAction action) {
-        final boolean isVararg = invocation.getMethod().isVarArgs()
-            && invocation.getRawArguments().length == matchers.size()
-            && getLastVarargMatcher(matchers).isPresent();
+        final boolean isVararg =
+                invocation.getMethod().isVarArgs()
+                        && invocation.getRawArguments().length == matchers.size()
+                        && getLastVarargMatcher(matchers).isPresent();
 
         if (isVararg) {
             final Type type = getLastVarargMatcher(matchers).get().type();
-            final Class<?> varArgType = invocation.getMethod().getParameterTypes()[invocation.getMethod().getParameterTypes().length - 1];
+            final Class<?> varArgType =
+                    invocation.getMethod()
+                            .getParameterTypes()[
+                            invocation.getMethod().getParameterTypes().length - 1];
             if (type.equals(varArgType)) {
                 return argsMatch(invocation.getRawArguments(), matchers, action);
             }
@@ -87,9 +89,10 @@ public class MatcherApplicationStrategy {
         return false;
     }
 
-    private boolean argsMatch(final Object[] arguments,
-                              final List<ArgumentMatcher<?>> matchers,
-                              final ArgumentMatcherAction action) {
+    private boolean argsMatch(
+            final Object[] arguments,
+            final List<ArgumentMatcher<?>> matchers,
+            final ArgumentMatcherAction action) {
 
         for (int i = 0; i < arguments.length; i++) {
             ArgumentMatcher<?> matcher = matchers.get(i);
@@ -102,12 +105,15 @@ public class MatcherApplicationStrategy {
         return true;
     }
 
-    private static Optional<VarargMatcher> getLastVarargMatcher(final List<ArgumentMatcher<?>> matchers) {
+    private static Optional<VarargMatcher> getLastVarargMatcher(
+            final List<ArgumentMatcher<?>> matchers) {
         ArgumentMatcher<?> argumentMatcher = lastMatcher(matchers);
         if (argumentMatcher instanceof HamcrestArgumentMatcher<?>) {
             return ((HamcrestArgumentMatcher<?>) argumentMatcher).varargMatcher();
         }
-        return argumentMatcher instanceof VarargMatcher ? Optional.of((VarargMatcher) argumentMatcher) : Optional.empty();
+        return argumentMatcher instanceof VarargMatcher
+                ? Optional.of((VarargMatcher) argumentMatcher)
+                : Optional.empty();
     }
 
     private static List<ArgumentMatcher<?>> appendLastMatcherNTimes(
