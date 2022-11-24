@@ -47,5 +47,5 @@ libraries.android = [
     compat: 'androidx.appcompat:appcompat:1.4.2',
     material: 'com.google.android.material:material:1.6.1',
     junit: 'androidx.test.ext:junit:1.1.3',
-    espresso: 'androidx.test.espresso:espresso-core:3.4.0',
+    espresso: 'androidx.test.espresso:espresso-core:3.5.0',
 ]
