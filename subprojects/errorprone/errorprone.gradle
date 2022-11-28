@@ -10,14 +10,30 @@ dependencies {
     implementation project.rootProject
     implementation libraries.errorprone
 
-    testImplementation 'junit:junit:4.13-beta-1'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation libraries.errorproneTestApi
 }
 
 test {
     inputs.files(configurations.errorproneJavac).withNormalizer(ClasspathNormalizer)
-    jvmArgs += "-Xbootclasspath/p:${configurations.errorproneJavac.asPath}"
+    jvmArgs += "-Xbootclasspath/a:${configurations.errorproneJavac.asPath}"
+    jvmArgs += "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED"
+    jvmArgs += "--add-exports=jdk.compiler/com.sun.tools.javac.type=ALL-UNNAMED"
+    jvmArgs += "--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED"
+    jvmArgs += "--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
+    jvmArgs += "--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"
+    jvmArgs += "--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED"
+    jvmArgs += "--add-exports=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED"
+    jvmArgs += "--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED"
+    jvmArgs += "--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED"
+}
 
-    // ErrorProne can only run on JDK 8
-    it.enabled = !JavaVersion.current().isJava9Compatible()
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED"
+    options.compilerArgs << "--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"
+    options.compilerArgs << "--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
+}
+
+tasks.withType(Javadoc) {
+    options.addBooleanOption("-add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED", true)
 }
