@@ -9,9 +9,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -19,6 +21,7 @@ import org.assertj.core.api.AbstractListAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
 import org.assertj.core.api.ObjectAssert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -445,6 +448,49 @@ public class VarargsTest {
         mock.varargs((String) null);
 
         verify(mock).varargs(isNull());
+    }
+
+    @Test
+    public void shouldVerifyExactlyOneVarArg_isA() {
+        mock.varargs("one param");
+
+        verify(mock).varargs(isA(String.class));
+    }
+
+    @Test
+    public void shouldNotVerifyExactlyOneVarArg_isA() {
+        mock.varargs("two", "params");
+
+        verify(mock, never()).varargs(isA(String.class));
+    }
+
+    @Test
+    public void shouldVerifyVarArgArray_isA() {
+        mock.varargs("one param");
+
+        verify(mock).varargs(isA(String[].class));
+    }
+
+    @Test
+    public void shouldVerifyVarArgArray_isA2() {
+        mock.varargs("two", "params");
+
+        verify(mock).varargs(isA(String[].class));
+    }
+
+    @Test
+    public void shouldVerifyExactlyOneVarArg_any() {
+        mock.varargs("one param");
+
+        verify(mock).varargs(any(String.class));
+    }
+
+    @Test
+    @Ignore("Fails due to https://github.com/mockito/mockito/issues/1593")
+    public void shouldNotVerifyExactlyOneVarArg_any() {
+        mock.varargs("two", "params");
+
+        verify(mock, never()).varargs(any(String.class));
     }
 
     private static <T> AbstractListAssert<?, ?, T, ObjectAssert<T>> assertThatCaptor(

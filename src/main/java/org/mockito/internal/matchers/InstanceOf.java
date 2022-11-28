@@ -31,6 +31,11 @@ public class InstanceOf implements ArgumentMatcher<Object>, Serializable {
     }
 
     @Override
+    public Class<?> type() {
+        return clazz;
+    }
+
+    @Override
     public String toString() {
         return description;
     }
