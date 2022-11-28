@@ -4,10 +4,6 @@
  */
 package org.mockito.internal.invocation;
 
-import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
-import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.MATCH_EACH_VARARGS_WITH_LAST_MATCHER;
-import static org.mockito.internal.invocation.MatcherApplicationStrategy.MatcherApplicationType.ONE_MATCHER_PER_ARGUMENT;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,22 +16,12 @@ import org.mockito.invocation.Invocation;
 public class MatcherApplicationStrategy {
 
     private final Invocation invocation;
-    private final List<ArgumentMatcher<?>> matchers;
-    private final MatcherApplicationType matchingType;
+    private final List<? extends ArgumentMatcher<?>> matchers;
 
     private MatcherApplicationStrategy(
-            Invocation invocation,
-            List<ArgumentMatcher<?>> matchers,
-            MatcherApplicationType matchingType) {
+            Invocation invocation, List<? extends ArgumentMatcher<?>> matchers) {
         this.invocation = invocation;
-        if (matchingType == MATCH_EACH_VARARGS_WITH_LAST_MATCHER) {
-            int times = varargLength(invocation);
-            this.matchers = appendLastMatcherNTimes(matchers, times);
-        } else {
-            this.matchers = matchers;
-        }
-
-        this.matchingType = matchingType;
+        this.matchers = matchers;
     }
 
     /**
@@ -51,10 +37,8 @@ public class MatcherApplicationStrategy {
      * @return never <code>null</code>
      */
     public static MatcherApplicationStrategy getMatcherApplicationStrategyFor(
-            Invocation invocation, List<ArgumentMatcher<?>> matchers) {
-
-        MatcherApplicationType type = getMatcherApplicationType(invocation, matchers);
-        return new MatcherApplicationStrategy(invocation, matchers, type);
+            Invocation invocation, List<? extends ArgumentMatcher<?>> matchers) {
+        return new MatcherApplicationStrategy(invocation, matchers);
     }
 
     /**
@@ -74,11 +58,28 @@ public class MatcherApplicationStrategy {
      *         </ul>
      */
     public boolean forEachMatcherAndArgument(ArgumentMatcherAction action) {
-        if (matchingType == ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS) {
-            return false;
+        if (invocation.getArguments().length == matchers.size()) {
+            return argsMatch(invocation.getArguments(), matchers, action);
         }
 
-        Object[] arguments = invocation.getArguments();
+        final boolean isVararg =
+                invocation.getMethod().isVarArgs()
+                        && invocation.getRawArguments().length == matchers.size()
+                        && isLastMatcherVarargMatcher(matchers);
+
+        if (isVararg) {
+            int times = varargLength(invocation);
+            final List<? extends ArgumentMatcher<?>> matchers = appendLastMatcherNTimes(times);
+            return argsMatch(invocation.getArguments(), matchers, action);
+        }
+
+        return false;
+    }
+
+    private boolean argsMatch(
+            Object[] arguments,
+            List<? extends ArgumentMatcher<?>> matchers,
+            ArgumentMatcherAction action) {
         for (int i = 0; i < arguments.length; i++) {
             ArgumentMatcher<?> matcher = matchers.get(i);
             Object argument = arguments[i];
@@ -90,24 +91,7 @@ public class MatcherApplicationStrategy {
         return true;
     }
 
-    private static MatcherApplicationType getMatcherApplicationType(
-            Invocation invocation, List<ArgumentMatcher<?>> matchers) {
-        final int rawArguments = invocation.getRawArguments().length;
-        final int expandedArguments = invocation.getArguments().length;
-        final int matcherCount = matchers.size();
-
-        if (expandedArguments == matcherCount) {
-            return ONE_MATCHER_PER_ARGUMENT;
-        }
-
-        if (rawArguments == matcherCount && isLastMatcherVarargMatcher(matchers)) {
-            return MATCH_EACH_VARARGS_WITH_LAST_MATCHER;
-        }
-
-        return ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
-    }
-
-    private static boolean isLastMatcherVarargMatcher(final List<ArgumentMatcher<?>> matchers) {
+    private static boolean isLastMatcherVarargMatcher(List<? extends ArgumentMatcher<?>> matchers) {
         ArgumentMatcher<?> argumentMatcher = lastMatcher(matchers);
         if (argumentMatcher instanceof HamcrestArgumentMatcher<?>) {
             return ((HamcrestArgumentMatcher<?>) argumentMatcher).isVarargMatcher();
@@ -115,8 +99,8 @@ public class MatcherApplicationStrategy {
         return argumentMatcher instanceof VarargMatcher;
     }
 
-    private static List<ArgumentMatcher<?>> appendLastMatcherNTimes(
-            List<ArgumentMatcher<?>> matchers, int timesToAppendLastMatcher) {
+    private List<? extends ArgumentMatcher<?>> appendLastMatcherNTimes(
+            int timesToAppendLastMatcher) {
         ArgumentMatcher<?> lastMatcher = lastMatcher(matchers);
 
         List<ArgumentMatcher<?>> expandedMatchers = new ArrayList<ArgumentMatcher<?>>(matchers);
@@ -132,13 +116,7 @@ public class MatcherApplicationStrategy {
         return expandedArgumentCount - rawArgumentCount;
     }
 
-    private static ArgumentMatcher<?> lastMatcher(List<ArgumentMatcher<?>> matchers) {
+    private static ArgumentMatcher<?> lastMatcher(List<? extends ArgumentMatcher<?>> matchers) {
         return matchers.get(matchers.size() - 1);
-    }
-
-    enum MatcherApplicationType {
-        ONE_MATCHER_PER_ARGUMENT,
-        MATCH_EACH_VARARGS_WITH_LAST_MATCHER,
-        ERROR_UNSUPPORTED_NUMBER_OF_MATCHERS;
     }
 }

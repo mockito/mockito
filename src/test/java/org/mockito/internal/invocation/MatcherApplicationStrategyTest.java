@@ -35,7 +35,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
 
     @Mock IMethods mock;
     private Invocation invocation;
-    private List matchers;
+    private List<? extends ArgumentMatcher<?>> matchers;
 
     private RecordingAction recordAction;
 
@@ -213,7 +213,8 @@ public class MatcherApplicationStrategyTest extends TestBase {
     public void shouldMatchAnyEvenIfMatcherIsWrappedInHamcrestMatcher() {
         // given
         invocation = varargs("1", "2");
-        HamcrestArgumentMatcher argumentMatcher = new HamcrestArgumentMatcher(new IntMatcher());
+        HamcrestArgumentMatcher<Integer> argumentMatcher =
+                new HamcrestArgumentMatcher<>(new IntMatcher());
         matchers = asList(argumentMatcher);
 
         // when
@@ -224,7 +225,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
         recordAction.assertContainsExactly(argumentMatcher, argumentMatcher);
     }
 
-    class IntMatcher extends BaseMatcher<Integer> implements VarargMatcher {
+    private static class IntMatcher extends BaseMatcher<Integer> implements VarargMatcher {
         public boolean matches(Object o) {
             return true;
         }
@@ -242,8 +243,8 @@ public class MatcherApplicationStrategyTest extends TestBase {
         return getLastInvocation();
     }
 
-    private class RecordingAction implements ArgumentMatcherAction {
-        private List<ArgumentMatcher<?>> matchers = new ArrayList<ArgumentMatcher<?>>();
+    private static class RecordingAction implements ArgumentMatcherAction {
+        private final List<ArgumentMatcher<?>> matchers = new ArrayList<ArgumentMatcher<?>>();
 
         @Override
         public boolean apply(ArgumentMatcher<?> matcher, Object argument) {
