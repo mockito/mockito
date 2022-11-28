@@ -9,9 +9,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -53,29 +55,24 @@ public class VarargsTest {
         verify(mock).varargs();
     }
 
+    /* todo
+    To support this, `NotNull` would need to implement `VarargsMatcher`.
     @Test
-    @Ignore("This test must succeed but is fails currently, see github issue #616")
     public void shouldMatchEmptyVarArgs_noArgsIsNotNull() {
         mock.varargs();
 
-        verify(mock).varargs(isNotNull());
+        verify(mock).varargs(isNotNull(String[].class));
     }
 
+    To support this, `Null` would need to implement `VarargsMatcher`.
     @Test
-    @Ignore("This test must succeed but is fails currently, see github issue #616")
     public void shouldMatchEmptyVarArgs_noArgsIsNull() {
-        mock.varargs();
+        mock.varargs((String[]) null);
 
-        verify(mock).varargs(isNull());
+        verify(mock).varargs(isNull(String[].class));
     }
 
-    @Test
-    @Ignore("This test must succeed but is fails currently, see github issue #616")
-    public void shouldMatchEmptyVarArgs_noArgsIsNotNullArray() {
-        mock.varargs();
-
-        verify(mock).varargs((String[]) isNotNull());
-    }
+     */
 
     @Test
     public void shouldMatchVarArgs_oneNullArg_eqNull() {
@@ -179,13 +176,15 @@ public class VarargsTest {
         verify(mock).varargsbyte();
     }
 
+    /* todo
+    To support this, `NotNull` would need to implement `VarargsMatcher`.
     @Test
-    @Ignore
     public void shouldMatchEmptyVarArgs_emptyArrayIsNotNull() {
         mock.varargsbyte();
 
-        verify(mock).varargsbyte((byte[]) isNotNull());
+        verify(mock).varargsbyte(isNotNull(byte[].class));
     }
+    */
 
     @Test
     public void shouldMatchVarArgs_oneArgIsNotNull() {
@@ -306,16 +305,7 @@ public class VarargsTest {
                 .isInstanceOf(ArgumentsAreDifferent.class);
     }
 
-    /**
-     * As of v2.0.0-beta.118 this test fails. Once the github issues:
-     * <ul>
-     * <li>'#584 ArgumentCaptor can't capture varargs-arrays
-     * <li>#565 ArgumentCaptor should be type aware' are fixed this test must
-     * succeed
-     * </ul>
-     */
     @Test
-    @Ignore("Blocked by github issue: #584 & #565")
     public void shouldCaptureVarArgsAsArray() {
         mock.varargs("1", "2");
 
@@ -430,42 +420,90 @@ public class VarargsTest {
     public void shouldVerifyVarArgs_any_NullArrayArg1() {
         mock.varargs((String[]) null);
 
-        verify(mock).varargs(ArgumentMatchers.any());
+        verify(mock).varargs(any());
     }
 
     @Test
     public void shouldVerifyVarArgs_any_NullArrayArg2() {
         mock.varargs((String) null);
 
-        verify(mock).varargs(ArgumentMatchers.any());
+        verify(mock).varargs(any());
     }
 
     @Test
     public void shouldVerifyVarArgs_eq_NullArrayArg1() {
         mock.varargs((String[]) null);
 
-        verify(mock).varargs(ArgumentMatchers.eq(null));
+        verify(mock).varargs(eq(null));
     }
 
     @Test
     public void shouldVerifyVarArgs_eq_NullArrayArg2() {
         mock.varargs((String) null);
 
-        verify(mock).varargs(ArgumentMatchers.eq(null));
+        verify(mock).varargs(eq(null));
     }
 
+    /*
+    To support this, `Null` would need to implement `VarargsMatcher`.
     @Test
-    public void shouldVerifyVarArgs_isNull_NullArrayArg1() {
-        mock.varargs((String[]) null);
+    public void shouldVerifyVarArgs_isNull_NullArrayArg() {
+        mock.varargs((String) null);
 
-        verify(mock).varargs(ArgumentMatchers.isNull());
+        verify(mock).varargs(isNull(String.class));
     }
+    */
 
     @Test
     public void shouldVerifyVarArgs_isNull_NullArrayArg2() {
         mock.varargs((String) null);
 
-        verify(mock).varargs(ArgumentMatchers.isNull());
+        verify(mock).varargs(isNull());
+    }
+
+    @Test
+    public void shouldVerifyExactlyOneVarArg_isA() {
+        mock.varargs("one param");
+
+        verify(mock).varargs(isA(String.class));
+    }
+
+    @Test
+    public void shouldNotVerifyExactlyOneVarArg_isA() {
+        mock.varargs("two", "params");
+
+        verify(mock, never()).varargs(isA(String.class));
+    }
+
+    @Test
+    @Ignore("Fails. Fixing this would require isA to use `InstanceOf.VarArgAware")
+    public void shouldVerifyVarArgArray_isA() {
+        mock.varargs("one param");
+
+        verify(mock).varargs(isA(String[].class));
+    }
+
+    @Test
+    @Ignore("Fails. Fixing this would require isA to use `InstanceOf.VarArgAware")
+    public void shouldVerifyVarArgArray_isA2() {
+        mock.varargs("two", "params");
+
+        verify(mock).varargs(isA(String[].class));
+    }
+
+    @Test
+    public void shouldVerifyExactlyOneVarArg_any() {
+        mock.varargs("one param");
+
+        verify(mock).varargs(any(String.class));
+    }
+
+    @Test
+    @Ignore("Fails due to https://github.com/mockito/mockito/issues/1593")
+    public void shouldNotVerifyExactlyOneVarArg_any() {
+        mock.varargs("two", "params");
+
+        verify(mock, never()).varargs(any(String.class));
     }
 
     private static <T> AbstractListAssert<?, ?, T, ObjectAssert<T>> assertThatCaptor(
