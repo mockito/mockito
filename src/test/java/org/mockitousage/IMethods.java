@@ -199,6 +199,10 @@ public interface IMethods {
 
     Object[] mixedVarargsReturningObjectArray(Object i, String... string);
 
+    String methodWithVarargAndNonVarargVariants(String string);
+
+    String methodWithVarargAndNonVarargVariants(String... string);
+
     List<String> listReturningMethod(Object... objects);
 
     LinkedList<String> linkedListReturningMethod();

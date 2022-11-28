@@ -376,6 +376,16 @@ public class MethodsImpl implements IMethods {
         return null;
     }
 
+    @Override
+    public String methodWithVarargAndNonVarargVariants(String string) {
+        return "plain";
+    }
+
+    @Override
+    public String methodWithVarargAndNonVarargVariants(String... string) {
+        return "varargs";
+    }
+
     public void varargsbyte(byte... bytes) {}
 
     public List<String> listReturningMethod(Object... objects) {

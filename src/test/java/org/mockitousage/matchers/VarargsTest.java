@@ -4,12 +4,14 @@
  */
 package org.mockitousage.matchers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -198,7 +200,7 @@ public class VarargsTest {
 
         verify(mock).varargs(captor.capture());
 
-        assertThat(captor).isEmpty();
+        assertThatCaptor(captor).isEmpty();
     }
 
     @Test
@@ -208,7 +210,7 @@ public class VarargsTest {
 
         verify(mock).varargs(captor.capture());
 
-        assertThat(captor).areExactly(1, NULL);
+        assertThatCaptor(captor).areExactly(1, NULL);
     }
 
     /**
@@ -221,7 +223,7 @@ public class VarargsTest {
         mock.varargs(argArray);
 
         verify(mock).varargs(captor.capture());
-        assertThat(captor).areExactly(1, NULL);
+        assertThatCaptor(captor).areExactly(1, NULL);
     }
 
     @Test
@@ -230,7 +232,7 @@ public class VarargsTest {
 
         verify(mock).varargs(captor.capture());
 
-        assertThat(captor).contains("1", "2");
+        assertThatCaptor(captor).contains("1", "2");
     }
 
     @Test
@@ -239,7 +241,7 @@ public class VarargsTest {
 
         verify(mock).varargs(captor.capture(), captor.capture());
 
-        assertThat(captor).contains("1", "2");
+        assertThatCaptor(captor).contains("1", "2");
     }
 
     @Test
@@ -248,7 +250,7 @@ public class VarargsTest {
 
         verify(mock).varargs(captor.capture());
 
-        assertThat(captor).contains("1", (String) null);
+        assertThatCaptor(captor).contains("1", (String) null);
     }
 
     @Test
@@ -257,7 +259,7 @@ public class VarargsTest {
 
         verify(mock).varargs(captor.capture(), captor.capture());
 
-        assertThat(captor).contains("1", (String) null);
+        assertThatCaptor(captor).contains("1", (String) null);
     }
 
     @Test
@@ -277,7 +279,7 @@ public class VarargsTest {
 
         verify(mock).varargs(captor.capture(), eq("2"), captor.capture());
 
-        assertThat(captor).containsExactly("1", "3");
+        assertThatCaptor(captor).containsExactly("1", "3");
     }
 
     @Test
@@ -290,7 +292,7 @@ public class VarargsTest {
         } catch (ArgumentsAreDifferent expected) {
         }
 
-        assertThat(captor).isEmpty();
+        assertThatCaptor(captor).isEmpty();
     }
 
     @Test
@@ -321,7 +323,7 @@ public class VarargsTest {
 
         verify(mock).varargs(varargCaptor.capture());
 
-        assertThat(varargCaptor).containsExactly(new String[] {"1", "2"});
+        assertThatCaptor(varargCaptor).containsExactly(new String[] {"1", "2"});
     }
 
     @Test
@@ -342,7 +344,131 @@ public class VarargsTest {
         Assertions.assertThat(mock.varargsObject(1)).isNull();
     }
 
-    private static <T> AbstractListAssert<?, ?, T, ObjectAssert<T>> assertThat(
+    @Test
+    public void shouldDifferentiateNonVarargVariant() {
+        given(mock.methodWithVarargAndNonVarargVariants(any(String.class)))
+                .willReturn("single arg method");
+
+        assertThat(mock.methodWithVarargAndNonVarargVariants("a")).isEqualTo("single arg method");
+        assertThat(mock.methodWithVarargAndNonVarargVariants(new String[] {"a"})).isNull();
+        assertThat(mock.methodWithVarargAndNonVarargVariants("a", "b")).isNull();
+    }
+
+    @Test
+    public void shouldMockVarargsInvocation_single_vararg_matcher() {
+        given(mock.methodWithVarargAndNonVarargVariants(any(String[].class)))
+                .willReturn("var arg method");
+
+        assertThat(mock.methodWithVarargAndNonVarargVariants("a")).isNull();
+        assertThat(mock.methodWithVarargAndNonVarargVariants(new String[] {"a"}))
+                .isEqualTo("var arg method");
+        assertThat(mock.methodWithVarargAndNonVarargVariants("a", "b")).isEqualTo("var arg method");
+    }
+
+    @Test
+    public void shouldMockVarargsInvocation_multiple_vararg_matcher() {
+        given(mock.methodWithVarargAndNonVarargVariants(any(String.class), any(String.class)))
+                .willReturn("var arg method");
+
+        assertThat(mock.methodWithVarargAndNonVarargVariants("a")).isNull();
+        assertThat(mock.methodWithVarargAndNonVarargVariants(new String[] {"a"})).isNull();
+        assertThat(mock.methodWithVarargAndNonVarargVariants("a", "b")).isEqualTo("var arg method");
+        assertThat(mock.methodWithVarargAndNonVarargVariants(new String[] {"a", "b"}))
+                .isEqualTo("var arg method");
+        assertThat(mock.methodWithVarargAndNonVarargVariants("a", "b", "c")).isNull();
+    }
+
+    @Test
+    public void shouldMockVarargsInvocationUsingCasts() {
+        given(mock.methodWithVarargAndNonVarargVariants((String) any()))
+                .willReturn("single arg method");
+        given(mock.methodWithVarargAndNonVarargVariants((String[]) any()))
+                .willReturn("var arg method");
+
+        assertThat(mock.methodWithVarargAndNonVarargVariants("a")).isEqualTo("single arg method");
+        assertThat(mock.methodWithVarargAndNonVarargVariants()).isEqualTo("var arg method");
+        assertThat(mock.methodWithVarargAndNonVarargVariants(new String[] {"a"}))
+                .isEqualTo("var arg method");
+        assertThat(mock.methodWithVarargAndNonVarargVariants("a", "b")).isEqualTo("var arg method");
+    }
+
+    @Test
+    public void shouldMockVarargsInvocationForSuperType() {
+        given(mock.varargsReturningString(any(Object[].class))).willReturn("a");
+
+        assertThat(mock.varargsReturningString("a", "b")).isEqualTo("a");
+    }
+
+    @Test
+    public void shouldHandleArrayVarargsMethods() {
+        given(mock.arrayVarargsMethod(any(String[][].class))).willReturn(1);
+
+        assertThat(mock.arrayVarargsMethod(new String[]{})).isEqualTo(1);
+    }
+
+    @Test
+    public void shouldCaptureVarArgs_NullArrayArg1() {
+        mock.varargs((String[]) null);
+        ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
+
+        verify(mock).varargs(captor.capture());
+
+        assertThat(captor.getValue()).isNull();
+    }
+
+    @Test
+    public void shouldCaptureVarArgs_NullArrayArg2() {
+        mock.varargs((String[]) null);
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+
+        verify(mock).varargs(captor.capture());
+
+        assertThat(captor.getValue()).isNull();
+    }
+
+    @Test
+    public void shouldVerifyVarArgs_any_NullArrayArg1() {
+        mock.varargs((String[]) null);
+
+        verify(mock).varargs(ArgumentMatchers.any());
+    }
+
+    @Test
+    public void shouldVerifyVarArgs_any_NullArrayArg2() {
+        mock.varargs((String) null);
+
+        verify(mock).varargs(ArgumentMatchers.any());
+    }
+
+    @Test
+    public void shouldVerifyVarArgs_eq_NullArrayArg1() {
+        mock.varargs((String[]) null);
+
+        verify(mock).varargs(ArgumentMatchers.eq(null));
+    }
+
+    @Test
+    public void shouldVerifyVarArgs_eq_NullArrayArg2() {
+        mock.varargs((String) null);
+
+        verify(mock).varargs(ArgumentMatchers.eq(null));
+    }
+
+    @Test
+    public void shouldVerifyVarArgs_isNull_NullArrayArg1() {
+        mock.varargs((String[]) null);
+
+        verify(mock).varargs(ArgumentMatchers.isNull());
+    }
+
+    @Test
+    public void shouldVerifyVarArgs_isNull_NullArrayArg2() {
+        mock.varargs((String) null);
+
+        verify(mock).varargs(ArgumentMatchers.isNull());
+    }
+
+    private static <T> AbstractListAssert<?, ?, T, ObjectAssert<T>> assertThatCaptor(
             ArgumentCaptor<T> captor) {
         return Assertions.assertThat(captor.getAllValues());
     }

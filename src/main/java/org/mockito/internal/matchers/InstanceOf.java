@@ -11,7 +11,7 @@ import org.mockito.internal.util.Primitives;
 
 public class InstanceOf implements ArgumentMatcher<Object>, Serializable {
 
-    private final Class<?> clazz;
+    final Class<?> clazz;
     private final String description;
 
     public InstanceOf(Class<?> clazz) {
@@ -43,6 +43,11 @@ public class InstanceOf implements ArgumentMatcher<Object>, Serializable {
 
         public VarArgAware(Class<?> clazz, String describedAs) {
             super(clazz, describedAs);
+        }
+
+        @Override
+        public Class<?> type() {
+            return clazz;
         }
     }
 }

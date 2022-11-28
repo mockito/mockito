@@ -62,11 +62,12 @@ import org.mockito.internal.matchers.CapturingMatcher;
 @CheckReturnValue
 public class ArgumentCaptor<T> {
 
-    private final CapturingMatcher<T> capturingMatcher = new CapturingMatcher<T>();
+    private final CapturingMatcher<T> capturingMatcher;
     private final Class<? extends T> clazz;
 
     private ArgumentCaptor(Class<? extends T> clazz) {
         this.clazz = clazz;
+        this.capturingMatcher = new CapturingMatcher<T>(clazz);
     }
 
     /**

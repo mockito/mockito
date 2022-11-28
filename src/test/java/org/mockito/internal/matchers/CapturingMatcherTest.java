@@ -19,7 +19,7 @@ public class CapturingMatcherTest extends TestBase {
     @Test
     public void should_capture_arguments() throws Exception {
         // given
-        CapturingMatcher<String> m = new CapturingMatcher<String>();
+        CapturingMatcher<String> m = new CapturingMatcher<String>(String.class);
 
         // when
         m.captureFrom("foo");
@@ -32,7 +32,7 @@ public class CapturingMatcherTest extends TestBase {
     @Test
     public void should_know_last_captured_value() throws Exception {
         // given
-        CapturingMatcher<String> m = new CapturingMatcher<String>();
+        CapturingMatcher<String> m = new CapturingMatcher<String>(String.class);
 
         // when
         m.captureFrom("foo");
@@ -45,7 +45,7 @@ public class CapturingMatcherTest extends TestBase {
     @Test
     public void should_scream_when_nothing_yet_captured() throws Exception {
         // given
-        CapturingMatcher<String> m = new CapturingMatcher<String>();
+        CapturingMatcher<String> m = new CapturingMatcher<String>(String.class);
 
         try {
             // when
@@ -59,7 +59,7 @@ public class CapturingMatcherTest extends TestBase {
     @Test
     public void should_not_fail_when_used_in_concurrent_tests() throws Exception {
         // given
-        final CapturingMatcher<String> m = new CapturingMatcher<String>();
+        final CapturingMatcher<String> m = new CapturingMatcher<String>(String.class);
 
         // when
         m.captureFrom("concurrent access");
