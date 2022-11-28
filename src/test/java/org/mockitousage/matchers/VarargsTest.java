@@ -403,7 +403,7 @@ public class VarargsTest {
     public void shouldHandleArrayVarargsMethods() {
         given(mock.arrayVarargsMethod(any(String[][].class))).willReturn(1);
 
-        assertThat(mock.arrayVarargsMethod(new String[]{})).isEqualTo(1);
+        assertThat(mock.arrayVarargsMethod(new String[] {})).isEqualTo(1);
     }
 
     @Test
