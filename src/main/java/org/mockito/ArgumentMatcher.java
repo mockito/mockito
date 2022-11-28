@@ -125,4 +125,48 @@ public interface ArgumentMatcher<T> {
      * @return true if this matcher accepts the given argument.
      */
     boolean matches(T argument);
+
+    /**
+     * The type of the argument the matcher matches.
+     *
+     * <p>Only defaulted to maintain backwards compatability.
+     * Implementations should provide their own implementation for this method.
+     *
+     * <p>Initially, this method is only being used to determine if a matcher should be used to match
+     * a raw vararg parameter or not. This may change in future releases.
+     *
+     * <p>Where a matcher:
+     * <ul>
+     *     <li>is at the parameter index of a vararg parameter</li>
+     *     <li>is the last matcher passed</li>
+     *     <li>matchers the raw type of the vararg parameter</li>
+     * </ul>
+     *
+     * Then the matcher is matched against the vararg raw parameter.
+     *
+     * <p>For example:
+     *
+     * <pre class="code"><code class="java">
+     *  // Given vararg method with signature:
+     *  int someVarargMethod(int x, String... args);
+     *
+     *  // The following will match the last matcher against the contents of the `args` array:
+     *  (as the above criteria are met)
+     *  mock.someVarargMethod(eq(1), any(String[].class));
+     *
+     *  // The following will match the last matcher against each element of the `args` array:
+     *  // (as the type of the last matcher does not match the raw type of the vararg parameter)
+     *  mock.someVarargMethod(eq(1), any(String.class));
+     *
+     *  // The following will match only invocations with two strings in the 'args' array:
+     *  // (as there are more matchers than raw arguments)
+     *  mock.someVarargMethod(eq(1), any(), any());
+     * </code></pre>
+     *
+     * @return the type this matcher handles.
+     * @since 4.10.0
+     */
+    default Class<?> type() {
+        return Void.class;
+    }
 }

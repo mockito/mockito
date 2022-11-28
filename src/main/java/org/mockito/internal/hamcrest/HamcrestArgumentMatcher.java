@@ -9,8 +9,6 @@ import org.hamcrest.StringDescription;
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.VarargMatcher;
 
-import java.util.Optional;
-
 public class HamcrestArgumentMatcher<T> implements ArgumentMatcher<T> {
 
     private final Matcher matcher;
@@ -24,12 +22,9 @@ public class HamcrestArgumentMatcher<T> implements ArgumentMatcher<T> {
         return this.matcher.matches(argument);
     }
 
+    @Deprecated
     public boolean isVarargMatcher() {
         return matcher instanceof VarargMatcher;
-    }
-
-    public Optional<VarargMatcher> varargMatcher() {
-        return isVarargMatcher() ? Optional.of((VarargMatcher) matcher) : Optional.empty();
     }
 
     @Override

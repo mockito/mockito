@@ -6,7 +6,6 @@ package org.mockito.internal.invocation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
@@ -61,15 +60,11 @@ public class MatcherApplicationStrategy {
     public boolean forEachMatcherAndArgument(ArgumentMatcherAction action) {
         final boolean isVararg =
                 invocation.getMethod().isVarArgs()
-                        && invocation.getRawArguments().length == matchers.size()
-                        && getLastMatcherVarargMatcherType(matchers).isPresent();
+                        && invocation.getRawArguments().length == matchers.size();
 
         if (isVararg) {
-            final Class<?> matcherType = getLastMatcherVarargMatcherType(matchers).get();
-            final Class<?> paramType =
-                    invocation.getMethod()
-                            .getParameterTypes()[
-                            invocation.getMethod().getParameterTypes().length - 1];
+            final Class<?> matcherType = lastMatcher().type();
+            final Class<?> paramType = lastParameterType();
             if (paramType.isAssignableFrom(matcherType)) {
                 return argsMatch(invocation.getRawArguments(), matchers, action);
             }
@@ -79,8 +74,8 @@ public class MatcherApplicationStrategy {
             return argsMatch(invocation.getArguments(), matchers, action);
         }
 
-        if (isVararg) {
-            int times = varargLength(invocation);
+        if (isVararg && isLastMatcherVarargMatcher()) {
+            int times = varargLength();
             final List<? extends ArgumentMatcher<?>> matchers = appendLastMatcherNTimes(times);
             return argsMatch(invocation.getArguments(), matchers, action);
         }
@@ -103,22 +98,17 @@ public class MatcherApplicationStrategy {
         return true;
     }
 
-    private static Optional<Class<?>> getLastMatcherVarargMatcherType(
-            final List<? extends ArgumentMatcher<?>> matchers) {
-        ArgumentMatcher<?> argumentMatcher = lastMatcher(matchers);
+    private boolean isLastMatcherVarargMatcher() {
+        ArgumentMatcher<?> argumentMatcher = lastMatcher();
         if (argumentMatcher instanceof HamcrestArgumentMatcher<?>) {
-            return ((HamcrestArgumentMatcher<?>) argumentMatcher)
-                    .varargMatcher()
-                    .map(VarargMatcher::type);
+            return ((HamcrestArgumentMatcher<?>) argumentMatcher).isVarargMatcher();
         }
-        return argumentMatcher instanceof VarargMatcher
-                ? Optional.of((VarargMatcher) argumentMatcher).map(VarargMatcher::type)
-                : Optional.empty();
+        return argumentMatcher instanceof VarargMatcher;
     }
 
     private List<? extends ArgumentMatcher<?>> appendLastMatcherNTimes(
             int timesToAppendLastMatcher) {
-        ArgumentMatcher<?> lastMatcher = lastMatcher(matchers);
+        ArgumentMatcher<?> lastMatcher = lastMatcher();
 
         List<ArgumentMatcher<?>> expandedMatchers = new ArrayList<ArgumentMatcher<?>>(matchers);
         for (int i = 0; i < timesToAppendLastMatcher; i++) {
@@ -127,13 +117,18 @@ public class MatcherApplicationStrategy {
         return expandedMatchers;
     }
 
-    private static int varargLength(Invocation invocation) {
+    private int varargLength() {
         int rawArgumentCount = invocation.getRawArguments().length;
         int expandedArgumentCount = invocation.getArguments().length;
         return expandedArgumentCount - rawArgumentCount;
     }
 
-    private static ArgumentMatcher<?> lastMatcher(List<? extends ArgumentMatcher<?>> matchers) {
+    private ArgumentMatcher<?> lastMatcher() {
         return matchers.get(matchers.size() - 1);
+    }
+
+    private Class<?> lastParameterType() {
+        final Class<?>[] parameterTypes = invocation.getMethod().getParameterTypes();
+        return parameterTypes[parameterTypes.length - 1];
     }
 }

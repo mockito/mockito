@@ -247,11 +247,6 @@ public class MatcherApplicationStrategyTest extends TestBase {
         }
 
         public void describeTo(Description description) {}
-
-        @Override
-        public Class<?> type() {
-            return Integer.class;
-        }
     }
 
     private Invocation mixedVarargs(Object a, String... s) {
