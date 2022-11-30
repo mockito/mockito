@@ -7,6 +7,7 @@ package org.mockitousage.matchers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
+import static org.mockito.AdditionalMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
@@ -24,6 +25,7 @@ import org.assertj.core.api.ObjectAssert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.AdditionalMatchers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
@@ -495,7 +497,7 @@ public class VarargsTest {
     }
 
     @Test
-    public void shouldMockVarargInvocation() {
+    public void shouldMockVarargInvocation_eq() {
         given(mock.varargs(eq("one param"))).willReturn(1);
 
         assertThat(mock.varargs("one param")).isEqualTo(1);
@@ -505,7 +507,7 @@ public class VarargsTest {
     }
 
     @Test
-    public void shouldVerifyInvocation() {
+    public void shouldVerifyInvocation_eq() {
         mock.varargs("one param");
 
         verify(mock).varargs(eq("one param"));
@@ -515,7 +517,7 @@ public class VarargsTest {
     }
 
     @Test
-    public void shouldMockVarargInvocation_raw() {
+    public void shouldMockVarargInvocation_eq_raw() {
         given(mock.varargs(eq(new String[] {"one param"}))).willReturn(1);
 
         assertThat(mock.varargs("one param")).isEqualTo(1);
@@ -525,13 +527,21 @@ public class VarargsTest {
     }
 
     @Test
-    public void shouldVerifyInvocation_raw() {
+    public void shouldVerifyInvocation_eq_raw() {
         mock.varargs("one param");
 
         verify(mock).varargs(eq(new String[] {"one param"}));
         verify(mock, never()).varargs(eq(new String[] {}));
         verify(mock, never()).varargs(eq(new String[] {"different"}));
         verify(mock, never()).varargs(eq(new String[] {"one param", "another"}));
+    }
+
+    @Test
+    public void shouldVerifyInvocation_not() {
+        mock.varargs("one param");
+
+        verify(mock).varargs(not(eq(new String[] {"diff"})));
+        verify(mock, never()).varargs(not(eq(new String[] {"one param"})));
     }
 
     @Test

@@ -112,6 +112,7 @@ public class EqualsTest extends TestBase {
 
     @Test
     public void shouldDefaultTypeOnNull() {
-        assertThat(new Equals(null).type()).isEqualTo(((ArgumentMatcher<Object>) argument -> false).type());
+        assertThat(new Equals(null).type())
+                .isEqualTo(((ArgumentMatcher<Object>) argument -> false).type());
     }
 }
