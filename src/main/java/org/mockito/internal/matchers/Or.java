@@ -24,6 +24,13 @@ public class Or implements ArgumentMatcher<Object>, Serializable {
     }
 
     @Override
+    public Class<?> type() {
+        return m1.type().isAssignableFrom(m2.type())
+                ? m1.type()
+                : m2.type().isAssignableFrom(m1.type()) ? m2.type() : ArgumentMatcher.super.type();
+    }
+
+    @Override
     public String toString() {
         return "or(" + m1 + ", " + m2 + ")";
     }

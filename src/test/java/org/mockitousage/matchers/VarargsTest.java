@@ -563,6 +563,22 @@ public class VarargsTest {
         verify(mock).polyVararg(eq(new BaseType[] {new SubType(), new SubType()}));
     }
 
+    @Test
+    public void shouldVerifyInvocation_or() {
+        mock.polyVararg(new SubType(), new SubType());
+
+        verify(mock)
+                .polyVararg(
+                        or(
+                                eq(new BaseType[] {new SubType()}),
+                                eq(new SubType[] {new SubType(), new SubType()})));
+        verify(mock)
+                .polyVararg(
+                        or(
+                                eq(new BaseType[] {new SubType(), new SubType()}),
+                                eq(new SubType[] {new SubType()})));
+    }
+
     private static <T> AbstractListAssert<?, ?, T, ObjectAssert<T>> assertThatCaptor(
             ArgumentCaptor<T> captor) {
         return Assertions.assertThat(captor.getAllValues());

@@ -58,11 +58,11 @@ public class MatcherApplicationStrategy {
      *         </ul>
      */
     public boolean forEachMatcherAndArgument(ArgumentMatcherAction action) {
-        final boolean isVararg =
+        final boolean maybeVararg =
                 invocation.getMethod().isVarArgs()
                         && invocation.getRawArguments().length == matchers.size();
 
-        if (isVararg) {
+        if (maybeVararg) {
             final Class<?> matcherType = lastMatcher().type();
             final Class<?> paramType = lastParameterType();
             if (paramType.isAssignableFrom(matcherType)) {
@@ -74,7 +74,7 @@ public class MatcherApplicationStrategy {
             return argsMatch(invocation.getArguments(), matchers, action);
         }
 
-        if (isVararg && isLastMatcherVarargMatcher()) {
+        if (maybeVararg && isLastMatcherVarargMatcher()) {
             int times = varargLength();
             final List<? extends ArgumentMatcher<?>> matchers = appendLastMatcherNTimes(times);
             return argsMatch(invocation.getArguments(), matchers, action);
