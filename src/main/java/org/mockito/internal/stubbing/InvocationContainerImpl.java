@@ -144,17 +144,13 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     /**
-     * Stubbings in descending order, most recent first
-     */
-    public List<Stubbing> getStubbingsDescending() {
-        return (List) stubbed;
-    }
-
-    /**
      * Stubbings in ascending order, most recent last
      */
     public Collection<Stubbing> getStubbingsAscending() {
-        List<Stubbing> result = new LinkedList<>(stubbed);
+        List<Stubbing> result;
+        synchronized (stubbed) {
+            result = new LinkedList<>(stubbed);
+        }
         Collections.reverse(result);
         return result;
     }
