@@ -709,9 +709,10 @@ public class ArgumentMatchers {
      * @param type the type of the argument being matched.
      * @return <code>null</code>.
      * @see #isNotNull(Class)
+     * @since 4.10.0
      */
     public static <T> T isNull(Class<T> type) {
-        reportMatcher(new Null(type));
+        reportMatcher(new Null<>(type));
         return null;
     }
 
@@ -746,9 +747,10 @@ public class ArgumentMatchers {
      *
      * @param type the type of the argument being matched.
      * @return <code>null</code>.
+     * @since 4.10.0
      */
     public static <T> T notNull(Class<T> type) {
-        reportMatcher(new NotNull(type));
+        reportMatcher(new NotNull<>(type));
         return null;
     }
 
@@ -784,6 +786,7 @@ public class ArgumentMatchers {
      * @param type the type of the argument being matched.
      * @return <code>null</code>.
      * @see #isNull()
+     * @since 4.10.0
      */
     public static <T> T isNotNull(Class<T> type) {
         return notNull(type);
