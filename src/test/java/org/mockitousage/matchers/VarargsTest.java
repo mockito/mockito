@@ -13,6 +13,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -25,7 +26,6 @@ import org.assertj.core.api.ObjectAssert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.AdditionalMatchers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Captor;
@@ -542,6 +542,16 @@ public class VarargsTest {
 
         verify(mock).varargs(not(eq(new String[] {"diff"})));
         verify(mock, never()).varargs(not(eq(new String[] {"one param"})));
+    }
+
+    @Test
+    public void shouldVerifyInvocation_same() {
+        String[] args = {"two", "params"};
+
+        mock.varargs(args);
+
+        verify(mock).varargs(same(args));
+        verify(mock, never()).varargs(same(new String[] {"two", "params"}));
     }
 
     @Test
