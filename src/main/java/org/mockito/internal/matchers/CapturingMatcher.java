@@ -9,6 +9,7 @@ import static org.mockito.internal.exceptions.Reporter.noArgumentValueWasCapture
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -27,7 +28,7 @@ public class CapturingMatcher<T>
     private final Lock writeLock = lock.writeLock();
 
     public CapturingMatcher(final Class<? extends T> clazz) {
-        this.clazz = clazz;
+        this.clazz = Objects.requireNonNull(clazz);
     }
 
     @Override

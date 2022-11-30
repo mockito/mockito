@@ -354,12 +354,17 @@ public class MethodsImpl implements IMethods {
         return -1;
     }
 
-    public String varargsReturningString(Object... object) {
-        return null;
-    }
-
     public int varargs(String... string) {
         return -1;
+    }
+
+    @Override
+    public int polyVararg(final BaseType... args) {
+        return 0;
+    }
+
+    public String varargsReturningString(Object... object) {
+        return null;
     }
 
     public void mixedVarargs(Object i, String... string) {}

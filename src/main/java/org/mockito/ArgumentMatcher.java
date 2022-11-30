@@ -129,38 +129,32 @@ public interface ArgumentMatcher<T> {
     /**
      * The type of the argument the matcher matches.
      *
-     * <p>Only defaulted to maintain backwards compatability.
-     * Implementations should provide their own implementation for this method.
-     *
-     * <p>Initially, this method is only being used to determine if a matcher should be used to match
-     * a raw vararg parameter or not. This may change in future releases.
+     * <p>This method is used to differentiate matchers used to match all the parameters passed to a vararg parameter
+     * from a matcher used to match a single value passed to a vararg parameter.
      *
      * <p>Where a matcher:
      * <ul>
      *     <li>is at the parameter index of a vararg parameter</li>
      *     <li>is the last matcher passed</li>
-     *     <li>matchers the raw type of the vararg parameter</li>
+     *     <li>matchers the raw type of the vararg parameter, i.e. the array type</li>
      * </ul>
      *
-     * Then the matcher is matched against the vararg raw parameter.
+     * Then the matcher is matched against the raw vararg parameter, rather than the elements of the raw parameter.
      *
      * <p>For example:
      *
      * <pre class="code"><code class="java">
      *  // Given vararg method with signature:
-     *  int someVarargMethod(int x, String... args);
+     *  int someVarargMethod(String... args);
      *
-     *  // The following will match the last matcher against the contents of the `args` array:
-     *  (as the above criteria are met)
-     *  mock.someVarargMethod(eq(1), any(String[].class));
+     *  // The following will match against the contents of the args array
+     *  mock.someVarargMethod(isA(String[].class));
      *
-     *  // The following will match the last matcher against each element of the `args` array:
-     *  // (as the type of the last matcher does not match the raw type of the vararg parameter)
-     *  mock.someVarargMethod(eq(1), any(String.class));
+     *  // The following will match a call with a single element in the args array
+     *  mock.someVarargMethod(isA(String.class));
      *
-     *  // The following will match only invocations with two strings in the 'args' array:
-     *  // (as there are more matchers than raw arguments)
-     *  mock.someVarargMethod(eq(1), any(), any());
+     *  // The following will match only invocations with two strings in the args array
+     *  mock.someVarargMethod(isA(String.class), isA(String.class));
      * </code></pre>
      *
      * @return the type this matcher handles.

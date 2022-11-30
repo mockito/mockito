@@ -5,6 +5,7 @@
 package org.mockito.internal.matchers;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.mockito.ArgumentMatcher;
 
@@ -15,7 +16,7 @@ public class NotNull<T> implements ArgumentMatcher<T>, Serializable {
     private final Class<T> type;
 
     public NotNull(Class<T> type) {
-        this.type = type;
+        this.type = Objects.requireNonNull(type);
     }
 
     @Override

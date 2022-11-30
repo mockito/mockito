@@ -6,19 +6,12 @@ package org.mockito.internal.matchers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockitousage.IMethods;
+import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
 
 public class EqualsTest extends TestBase {
-
-    @Mock private IMethods mock;
 
     @Test
     public void shouldBeEqual() {
@@ -113,42 +106,12 @@ public class EqualsTest extends TestBase {
     }
 
     @Test
-    public void shouldMockVarargInvocation() {
-        given(mock.varargs(eq("one param"))).willReturn(1);
-
-        assertThat(mock.varargs("one param")).isEqualTo(1);
-        assertThat(mock.varargs()).isEqualTo(0);
-        assertThat(mock.varargs("different")).isEqualTo(0);
-        assertThat(mock.varargs("one param", "another")).isEqualTo(0);
+    public void shouldInferType() {
+        assertThat(new Equals("String").type()).isEqualTo(String.class);
     }
 
     @Test
-    public void shouldVerifyInvocation() {
-        mock.varargs("one param");
-
-        verify(mock).varargs(eq("one param"));
-        verify(mock, never()).varargs();
-        verify(mock, never()).varargs(eq("different"));
-        verify(mock, never()).varargs(eq("one param"), eq("another"));
-    }
-
-    @Test
-    public void shouldMockVarargInvocation_raw() {
-        given(mock.varargs(eq(new String[] {"one param"}))).willReturn(1);
-
-        assertThat(mock.varargs("one param")).isEqualTo(1);
-        assertThat(mock.varargs()).isEqualTo(0);
-        assertThat(mock.varargs("different")).isEqualTo(0);
-        assertThat(mock.varargs("one param", "another")).isEqualTo(0);
-    }
-
-    @Test
-    public void shouldVerifyInvocation_raw() {
-        mock.varargs("one param");
-
-        verify(mock).varargs(eq(new String[] {"one param"}));
-        verify(mock, never()).varargs(eq(new String[] {}));
-        verify(mock, never()).varargs(eq(new String[] {"different"}));
-        verify(mock, never()).varargs(eq(new String[] {"one param", "another"}));
+    public void shouldDefaultTypeOnNull() {
+        assertThat(new Equals(null).type()).isEqualTo(((ArgumentMatcher<Object>) argument -> false).type());
     }
 }

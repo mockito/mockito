@@ -32,6 +32,7 @@ import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockitousage.IMethods;
+import org.mockitousage.IMethods.BaseType;
 
 public class VarargsTest {
 
@@ -493,8 +494,69 @@ public class VarargsTest {
         verify(mock, never()).varargs(any(String.class));
     }
 
+    @Test
+    public void shouldMockVarargInvocation() {
+        given(mock.varargs(eq("one param"))).willReturn(1);
+
+        assertThat(mock.varargs("one param")).isEqualTo(1);
+        assertThat(mock.varargs()).isEqualTo(0);
+        assertThat(mock.varargs("different")).isEqualTo(0);
+        assertThat(mock.varargs("one param", "another")).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldVerifyInvocation() {
+        mock.varargs("one param");
+
+        verify(mock).varargs(eq("one param"));
+        verify(mock, never()).varargs();
+        verify(mock, never()).varargs(eq("different"));
+        verify(mock, never()).varargs(eq("one param"), eq("another"));
+    }
+
+    @Test
+    public void shouldMockVarargInvocation_raw() {
+        given(mock.varargs(eq(new String[] {"one param"}))).willReturn(1);
+
+        assertThat(mock.varargs("one param")).isEqualTo(1);
+        assertThat(mock.varargs()).isEqualTo(0);
+        assertThat(mock.varargs("different")).isEqualTo(0);
+        assertThat(mock.varargs("one param", "another")).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldVerifyInvocation_raw() {
+        mock.varargs("one param");
+
+        verify(mock).varargs(eq(new String[] {"one param"}));
+        verify(mock, never()).varargs(eq(new String[] {}));
+        verify(mock, never()).varargs(eq(new String[] {"different"}));
+        verify(mock, never()).varargs(eq(new String[] {"one param", "another"}));
+    }
+
+    @Test
+    public void shouldVerifySubTypes() {
+        mock.polyVararg(new SubType(), new SubType());
+
+        verify(mock).polyVararg(eq(new SubType()), eq(new SubType()));
+        verify(mock).polyVararg(eq(new SubType[] {new SubType(), new SubType()}));
+        verify(mock).polyVararg(eq(new BaseType[] {new SubType(), new SubType()}));
+    }
+
     private static <T> AbstractListAssert<?, ?, T, ObjectAssert<T>> assertThatCaptor(
             ArgumentCaptor<T> captor) {
         return Assertions.assertThat(captor.getAllValues());
+    }
+
+    private static class SubType implements BaseType {
+        @Override
+        public boolean equals(final Object obj) {
+            return obj != null && obj.getClass().equals(getClass());
+        }
+
+        @Override
+        public int hashCode() {
+            return super.hashCode();
+        }
     }
 }
