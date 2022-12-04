@@ -34,7 +34,7 @@ import org.mockito.quality.Strictness;
  *       See {@link UnnecessaryStubbingException}.
  *       Similar to JUnit rules, the runner also reports stubbing argument mismatches as console warnings
  *       (see {@link MockitoHint}).
- *       To opt-out from this feature, use {@code}&#064;RunWith(MockitoJUnitRunner.Silent.class){@code}
+ *       To opt-out from this feature, use {@code @RunWith(MockitoJUnitRunner.Silent.class)}
  *   <li>
  *      Initializes mocks annotated with {@link Mock},
  *      so that explicit usage of {@link MockitoAnnotations#openMocks(Object)} is not necessary.
