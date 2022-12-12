@@ -24,13 +24,26 @@ public final class LocationFactory {
     }
 
     private static Factory createLocationFactory() {
-        return new LocationFactoryImpl();
+        try {
+            Class.forName("java.lang.StackWalker");
+            return new Java9PlusLocationFactory();
+        } catch (ClassNotFoundException e) {
+            return new Java8LocationFactory();
+        }
     }
 
-    private static final class LocationFactoryImpl implements Factory {
+    private static final class Java8LocationFactory implements Factory {
         @Override
         public Location create(boolean inline) {
-            return new LocationImpl(inline);
+            return new Java8LocationImpl(new Throwable(), inline);
+        }
+    }
+
+    private static final class Java9PlusLocationFactory implements Factory {
+
+        @Override
+        public Location create(boolean inline) {
+            return new Java9PlusLocationImpl(inline);
         }
     }
 }
