@@ -30,7 +30,7 @@ jobs:
     strategy:
       matrix:
         java: [8, 11, 17]
-        mock-maker: ['mock-maker-default', 'mock-maker-inline']
+        mock-maker: ['mock-maker-default', 'mock-maker-inline', 'mock-maker-subclass']
 
     # All build steps
     # SINGLE-MATRIX-JOB means that the step does not need to be executed on every job in the matrix
