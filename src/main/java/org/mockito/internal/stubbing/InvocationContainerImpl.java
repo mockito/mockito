@@ -158,7 +158,8 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return invocationForStubbing.getInvocation().getMock();
     }
 
-    private RegisteredInvocations createRegisteredInvocations(MockCreationSettings<?> mockSettings) {
+    private RegisteredInvocations createRegisteredInvocations(
+            MockCreationSettings<?> mockSettings) {
         return mockSettings.isStubOnly()
                 ? new SingleRegisteredInvocation()
                 : new DefaultRegisteredInvocations();
