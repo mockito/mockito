@@ -127,19 +127,19 @@ public interface ArgumentMatcher<T> {
     boolean matches(T argument);
 
     /**
-     * The type of the argument the matcher matches.
+     * The type of the argument this matcher matches.
      *
-     * <p>This method is used to differentiate matchers used to match all the parameters passed to a vararg parameter
-     * from a matcher used to match a single value passed to a vararg parameter.
+     * <p>This method is used to differentiate between a matcher used to match a raw vararg array parameter
+     * from a matcher used to match a single value passed as a vararg parameter.
      *
-     * <p>Where a matcher:
+     * <p>Where the matcher:
      * <ul>
      *     <li>is at the parameter index of a vararg parameter</li>
      *     <li>is the last matcher passed</li>
-     *     <li>matchers the raw type of the vararg parameter, i.e. the array type</li>
+     *     <li>this method returns a type assignable to the vararg parameter's raw type, i.e. its array type.</li>
      * </ul>
      *
-     * Then the matcher is matched against the raw vararg parameter, rather than the elements of the raw parameter.
+     * ...then the matcher is matched against the raw vararg parameter, rather than the first element of the raw parameter.
      *
      * <p>For example:
      *
@@ -147,17 +147,19 @@ public interface ArgumentMatcher<T> {
      *  // Given vararg method with signature:
      *  int someVarargMethod(String... args);
      *
-     *  // The following will match against the contents of the args array
+     *  // The following will match invocations with any number of parameters, i.e. any number of elements in the raw array.
      *  mock.someVarargMethod(isA(String[].class));
      *
-     *  // The following will match a call with a single element in the args array
+     *  // The following will match invocations with a single parameter, i.e. one string in the raw array.
      *  mock.someVarargMethod(isA(String.class));
      *
-     *  // The following will match only invocations with two strings in the args array
+     *  // The following will match invocations with two parameters, i.e. two strings in the raw array
      *  mock.someVarargMethod(isA(String.class), isA(String.class));
      * </code></pre>
      *
-     * @return the type this matcher handles.
+     * <p>Only matcher implementations that can conceptually match a raw vararg parameter should override this method.
+     *
+     * @return the type this matcher handles. The default value of {@link Void} means the type is not known.
      * @since 4.10.0
      */
     default Class<?> type() {
