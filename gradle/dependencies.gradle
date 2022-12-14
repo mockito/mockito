@@ -4,9 +4,9 @@ ext {
 
 def versions = [:]
 
-versions.bytebuddy = '1.12.16'
+versions.bytebuddy = '1.12.19'
 versions.junitJupiter = '5.9.1'
-versions.errorprone = '2.14.0'
+versions.errorprone = '2.16'
 
 libraries.junit4 = 'junit:junit:4.13.2'
 libraries.junitJupiterApi = "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}"
@@ -34,7 +34,7 @@ libraries.bndGradle =  'biz.aQute.bnd:biz.aQute.bnd.gradle:6.3.1'
 
 libraries.groovy = 'org.codehaus.groovy:groovy:3.0.13'
 
-def kotlinVersion = '1.7.10'
+def kotlinVersion = '1.7.22'
 libraries.kotlin = [
     version: kotlinVersion,
 
@@ -46,6 +46,6 @@ libraries.android = [
     ktx: 'androidx.core:core-ktx:1.8.0',
     compat: 'androidx.appcompat:appcompat:1.4.2',
     material: 'com.google.android.material:material:1.6.1',
-    junit: 'androidx.test.ext:junit:1.1.3',
-    espresso: 'androidx.test.espresso:espresso-core:3.4.0',
+    junit: 'androidx.test.ext:junit:1.1.4',
+    espresso: 'androidx.test.espresso:espresso-core:3.5.0',
 ]
