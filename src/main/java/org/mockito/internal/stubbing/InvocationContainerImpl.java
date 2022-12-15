@@ -25,7 +25,6 @@ import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.Stubbing;
 import org.mockito.stubbing.ValidableAnswer;
 
-@SuppressWarnings("unchecked")
 public class InvocationContainerImpl implements InvocationContainer, Serializable {
 
     private static final long serialVersionUID = -5334301962749537177L;
@@ -36,7 +35,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     private MatchableInvocation invocationForStubbing;
 
-    public InvocationContainerImpl(MockCreationSettings mockSettings) {
+    public InvocationContainerImpl(MockCreationSettings<?> mockSettings) {
         this.registeredInvocations = createRegisteredInvocations(mockSettings);
         this.mockStrictness = mockSettings.getStrictness();
         this.doAnswerStyleStubbing = new DoAnswerStyleStubbing();
@@ -51,14 +50,14 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         this.invocationForStubbing = invocationMatcher;
     }
 
-    public void addAnswer(Answer answer, Strictness stubbingStrictness) {
+    public void addAnswer(Answer<?> answer, Strictness stubbingStrictness) {
         registeredInvocations.removeLast();
         addAnswer(answer, false, stubbingStrictness);
     }
 
     /** Adds new stubbed answer and returns the invocation matcher the answer was added to. */
     public StubbedInvocationMatcher addAnswer(
-            Answer answer, boolean isConsecutive, Strictness stubbingStrictness) {
+            Answer<?> answer, boolean isConsecutive, Strictness stubbingStrictness) {
         Invocation invocation = invocationForStubbing.getInvocation();
         mockingProgress().stubbingCompleted();
         if (answer instanceof ValidableAnswer) {
@@ -79,7 +78,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         }
     }
 
-    public void addConsecutiveAnswer(Answer answer) {
+    public void addConsecutiveAnswer(Answer<?> answer) {
         addAnswer(answer, true, null);
     }
 
@@ -144,17 +143,13 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     /**
-     * Stubbings in descending order, most recent first
-     */
-    public List<Stubbing> getStubbingsDescending() {
-        return (List) stubbed;
-    }
-
-    /**
      * Stubbings in ascending order, most recent last
      */
     public Collection<Stubbing> getStubbingsAscending() {
-        List<Stubbing> result = new LinkedList<>(stubbed);
+        List<Stubbing> result;
+        synchronized (stubbed) {
+            result = new LinkedList<>(stubbed);
+        }
         Collections.reverse(result);
         return result;
     }
@@ -163,13 +158,14 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
         return invocationForStubbing.getInvocation().getMock();
     }
 
-    private RegisteredInvocations createRegisteredInvocations(MockCreationSettings mockSettings) {
+    private RegisteredInvocations createRegisteredInvocations(
+            MockCreationSettings<?> mockSettings) {
         return mockSettings.isStubOnly()
                 ? new SingleRegisteredInvocation()
                 : new DefaultRegisteredInvocations();
     }
 
-    public Answer findStubbedAnswer() {
+    public Answer<?> findStubbedAnswer() {
         synchronized (stubbed) {
             for (StubbedInvocationMatcher s : stubbed) {
                 if (invocationForStubbing.matches(s.getInvocation())) {
