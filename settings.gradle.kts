@@ -2,7 +2,8 @@ plugins {
   id("com.gradle.enterprise").version("3.3.4")
 }
 
-include("inline",
+include("subclass",
+    "inline",
     "proxy",
     "extTest",
     "groovyTest",
