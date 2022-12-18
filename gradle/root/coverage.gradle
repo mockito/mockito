@@ -5,21 +5,13 @@ task mockitoCoverage(type: JacocoReport) {
         if (currentProject.name in ['android']) {
             return
         }
-        // We only run these tests on Java 9+
-        if (currentProject.name in ['module-test'] && !JavaVersion.current().isJava9Compatible()) {
-            return
-        }
-        // We only run these tests on Java 8
-        if (currentProject.name in ['errorprone'] && JavaVersion.current().isJava9Compatible()) {
-            return
-        }
         plugins.withId("java") {
             mockitoCoverage.sourceSets currentProject.sourceSets.main
 
             apply plugin: "jacoco"
 
             jacoco {
-                toolVersion = '0.8.7'
+                toolVersion = '0.8.8'
 
                 if (currentProject != rootProject) {   //already automatically enhanced in mockito main project as "java" plugin was applied before
                     applyTo test

@@ -24,7 +24,7 @@ plugins {
     id 'eclipse'
     id 'com.github.ben-manes.versions' version '0.44.0'
     id 'biz.aQute.bnd.builder' version '6.4.0'
-    id 'ru.vyarus.animalsniffer' version '1.5.2'
+    id 'ru.vyarus.animalsniffer' version '1.6.0'
 }
 
 description = 'Mockito mock objects library core API and implementation'
@@ -52,10 +52,8 @@ allprojects { proj ->
         mavenCentral()
         google()
     }
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_11)) {
-        plugins.withId('java') {
-            proj.apply from: "$rootDir/gradle/errorprone.gradle"
-        }
+    plugins.withId('java') {
+        proj.apply from: "$rootDir/gradle/errorprone.gradle"
     }
     tasks.withType(JavaCompile) {
         //I don't believe those warnings add value given modern IDEs
@@ -66,7 +64,7 @@ allprojects { proj ->
         options.addStringOption('Xdoclint:none', '-quiet')
         options.addStringOption('encoding', 'UTF-8')
         options.addStringOption('charSet', 'UTF-8')
-        options.setSource('8')
+        options.setSource('11')
     }
 
     tasks.withType(AbstractArchiveTask) {
@@ -107,6 +105,15 @@ dependencies {
 animalsniffer {
     sourceSets = [sourceSets.main]
     annotation = 'org.mockito.internal.SuppressSignatureCheck'
+    // See please https://github.com/mojohaus/animal-sniffer/issues/172
+    ignore += [
+        'java.lang.instrument.Instrumentation',
+        'java.lang.invoke.MethodHandle',
+        'java.lang.invoke.MethodHandles$Lookup',
+        'java.lang.StackWalker',
+        'java.lang.StackWalker$StackFrame',
+        'java.lang.StackWalker$Option'
+    ]
 }
 
 spotless {
