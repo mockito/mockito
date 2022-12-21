@@ -16,7 +16,7 @@
 bin/
 
 # VSCode
-.vscode
+.vscode/
 
 # Gradle & builds
 build
