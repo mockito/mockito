@@ -19,7 +19,8 @@ include("subclass",
     "junitJupiterParallelTest",
     "osgi-test",
     "bom",
-    "errorprone")
+    "errorprone",
+    "programmatic-test")
 
 if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17) && (System.getenv("ANDROID_SDK_ROOT") != null || File(".local.properties").exists())) {
     include("androidTest")
