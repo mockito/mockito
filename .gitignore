@@ -15,6 +15,9 @@
 .settings/
 bin/
 
+# VSCode
+.vscode
+
 # Gradle & builds
 build
 build-cache
