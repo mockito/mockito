@@ -23,6 +23,11 @@ public class Same implements ArgumentMatcher<Object>, Serializable {
     }
 
     @Override
+    public Class<?> type() {
+        return wanted != null ? wanted.getClass() : ArgumentMatcher.super.type();
+    }
+
+    @Override
     public String toString() {
         return "same(" + ValuePrinter.print(wanted) + ")";
     }

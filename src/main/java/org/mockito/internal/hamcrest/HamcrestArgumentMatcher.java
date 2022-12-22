@@ -22,6 +22,7 @@ public class HamcrestArgumentMatcher<T> implements ArgumentMatcher<T> {
         return this.matcher.matches(argument);
     }
 
+    @SuppressWarnings("deprecation")
     public boolean isVarargMatcher() {
         return matcher instanceof VarargMatcher;
     }

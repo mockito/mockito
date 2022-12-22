@@ -700,6 +700,23 @@ public class ArgumentMatchers {
     }
 
     /**
+     * <code>null</code> argument.
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
+     *
+     * @param type the type of the argument being matched.
+     * @return <code>null</code>.
+     * @see #isNotNull(Class)
+     * @since 5.0.0
+     */
+    public static <T> T isNull(Class<T> type) {
+        reportMatcher(new Null<>(type));
+        return null;
+    }
+
+    /**
      * Not <code>null</code> argument.
      *
      * <p>
@@ -721,6 +738,26 @@ public class ArgumentMatchers {
      * Not <code>null</code> argument.
      *
      * <p>
+     * Alias to {@link ArgumentMatchers#isNotNull()}
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
+     *
+     * @param type the type of the argument being matched.
+     * @return <code>null</code>.
+     * @since 5.0.0
+     */
+    public static <T> T notNull(Class<T> type) {
+        reportMatcher(new NotNull<>(type));
+        return null;
+    }
+
+    /**
+     * Not <code>null</code> argument.
+     *
+     * <p>
      * Alias to {@link ArgumentMatchers#notNull()}
      * </p>
      *
@@ -733,6 +770,26 @@ public class ArgumentMatchers {
      */
     public static <T> T isNotNull() {
         return notNull();
+    }
+
+    /**
+     * Not <code>null</code> argument.
+     *
+     * <p>
+     * Alias to {@link ArgumentMatchers#notNull(Class)}
+     * </p>
+     *
+     * <p>
+     * See examples in javadoc for {@link ArgumentMatchers} class
+     * </p>
+     *
+     * @param type the type of the argument being matched.
+     * @return <code>null</code>.
+     * @see #isNull()
+     * @since 5.0.0
+     */
+    public static <T> T isNotNull(Class<T> type) {
+        return notNull(type);
     }
 
     /**

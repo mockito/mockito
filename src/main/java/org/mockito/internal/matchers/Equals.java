@@ -23,6 +23,11 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
     }
 
     @Override
+    public Class<?> type() {
+        return wanted != null ? wanted.getClass() : ArgumentMatcher.super.type();
+    }
+
+    @Override
     public String toString() {
         return describe(wanted);
     }
