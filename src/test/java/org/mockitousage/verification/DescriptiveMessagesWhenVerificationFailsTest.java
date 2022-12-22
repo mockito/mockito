@@ -83,7 +83,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String actual =
                     "\n"
-                            + "Actual invocations have different arguments:"
+                            + "Actual invocations have different arguments at position [1]:"
                             + "\n"
                             + "iMethods.varargs(1, 2);";
 
@@ -392,7 +392,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String actual =
                     "\n"
-                            + "Actual invocations have different arguments:"
+                            + "Actual invocations have different arguments at positions [0, 1]:"
                             + "\n"
                             + "iMethods.overloadedMethodWithSameClassNameArguments("
                             + "\n"
@@ -429,7 +429,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String actual =
                     "\n"
-                            + "Actual invocations have different arguments:"
+                            + "Actual invocations have different arguments at positions [0, 1]:"
                             + "\n"
                             + "iMethods.overloadedMethodWithDifferentClassNameArguments("
                             + "\n"
@@ -471,7 +471,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
             String actual =
                     "\n"
-                            + "Actual invocations have different arguments:"
+                            + "Actual invocations have different arguments at positions [0, 2]:"
                             + "\n"
                             + "iMethods.overloadedMethodWithSameClassNameArguments("
                             + "\n"
