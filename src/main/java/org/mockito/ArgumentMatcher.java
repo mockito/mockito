@@ -110,6 +110,7 @@ package org.mockito;
  * @param <T> type of argument
  * @since 2.1.0
  */
+@FunctionalInterface
 public interface ArgumentMatcher<T> {
 
     /**
@@ -125,4 +126,44 @@ public interface ArgumentMatcher<T> {
      * @return true if this matcher accepts the given argument.
      */
     boolean matches(T argument);
+
+    /**
+     * The type of the argument this matcher matches.
+     *
+     * <p>This method is used to differentiate between a matcher used to match a raw vararg array parameter
+     * from a matcher used to match a single value passed as a vararg parameter.
+     *
+     * <p>Where the matcher:
+     * <ul>
+     *     <li>is at the parameter index of a vararg parameter</li>
+     *     <li>is the last matcher passed</li>
+     *     <li>this method returns a type assignable to the vararg parameter's raw type, i.e. its array type.</li>
+     * </ul>
+     *
+     * ...then the matcher is matched against the raw vararg parameter, rather than the first element of the raw parameter.
+     *
+     * <p>For example:
+     *
+     * <pre class="code"><code class="java">
+     *  // Given vararg method with signature:
+     *  int someVarargMethod(String... args);
+     *
+     *  // The following will match invocations with any number of parameters, i.e. any number of elements in the raw array.
+     *  mock.someVarargMethod(isA(String[].class));
+     *
+     *  // The following will match invocations with a single parameter, i.e. one string in the raw array.
+     *  mock.someVarargMethod(isA(String.class));
+     *
+     *  // The following will match invocations with two parameters, i.e. two strings in the raw array
+     *  mock.someVarargMethod(isA(String.class), isA(String.class));
+     * </code></pre>
+     *
+     * <p>Only matcher implementations that can conceptually match a raw vararg parameter should override this method.
+     *
+     * @return the type this matcher handles. The default value of {@link Void} means the type is not known.
+     * @since 5.0.0
+     */
+    default Class<?> type() {
+        return Void.class;
+    }
 }

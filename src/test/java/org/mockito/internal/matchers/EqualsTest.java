@@ -4,9 +4,11 @@
  */
 package org.mockito.internal.matchers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 import org.mockitoutil.TestBase;
 
 public class EqualsTest extends TestBase {
@@ -101,5 +103,16 @@ public class EqualsTest extends TestBase {
 
         // then
         assertFalse(equals.typeMatches(null));
+    }
+
+    @Test
+    public void shouldInferType() {
+        assertThat(new Equals("String").type()).isEqualTo(String.class);
+    }
+
+    @Test
+    public void shouldDefaultTypeOnNull() {
+        assertThat(new Equals(null).type())
+                .isEqualTo(((ArgumentMatcher<Object>) argument -> false).type());
     }
 }

@@ -5,18 +5,27 @@
 package org.mockito.internal.matchers;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.mockito.ArgumentMatcher;
 
-public class Null implements ArgumentMatcher<Object>, Serializable {
+public class Null<T> implements ArgumentMatcher<T>, Serializable {
 
-    public static final Null NULL = new Null();
+    public static final Null<Object> NULL = new Null<>(Object.class);
+    private final Class<T> type;
 
-    private Null() {}
+    public Null(Class<T> type) {
+        this.type = Objects.requireNonNull(type);
+    }
 
     @Override
     public boolean matches(Object actual) {
         return actual == null;
+    }
+
+    @Override
+    public Class<T> type() {
+        return type;
     }
 
     @Override

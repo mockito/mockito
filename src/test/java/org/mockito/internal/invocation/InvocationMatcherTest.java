@@ -136,7 +136,7 @@ public class InvocationMatcherTest extends TestBase {
     public void should_capture_arguments_from_invocation() throws Exception {
         // given
         Invocation invocation = new InvocationBuilder().args("1", 100).toInvocation();
-        CapturingMatcher capturingMatcher = new CapturingMatcher();
+        CapturingMatcher capturingMatcher = new CapturingMatcher(List.class);
         InvocationMatcher invocationMatcher =
                 new InvocationMatcher(invocation, (List) asList(new Equals("1"), capturingMatcher));
 
@@ -167,7 +167,7 @@ public class InvocationMatcherTest extends TestBase {
         // given
         mock.mixedVarargs(1, "a", "b");
         Invocation invocation = getLastInvocation();
-        CapturingMatcher m = new CapturingMatcher();
+        CapturingMatcher m = new CapturingMatcher(List.class);
         InvocationMatcher invocationMatcher =
                 new InvocationMatcher(invocation, Arrays.<ArgumentMatcher>asList(new Equals(1), m));
 

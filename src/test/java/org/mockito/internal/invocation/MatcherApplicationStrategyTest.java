@@ -9,6 +9,7 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.internal.invocation.MatcherApplicationStrategy.getMatcherApplicationStrategyFor;
 import static org.mockito.internal.matchers.Any.ANY;
 
@@ -223,6 +224,21 @@ public class MatcherApplicationStrategyTest extends TestBase {
 
         // then
         recordAction.assertContainsExactly(argumentMatcher, argumentMatcher);
+    }
+
+    @Test
+    public void shouldMatchAnyThatMatchesRawVarArgType() {
+        // given
+        invocation = varargs("1", "2");
+        InstanceOf.VarArgAware any = new InstanceOf.VarArgAware(String[].class, "<any String[]>");
+        matchers = asList(any);
+
+        // when
+        getMatcherApplicationStrategyFor(invocation, matchers)
+                .forEachMatcherAndArgument(recordAction);
+
+        // then
+        recordAction.assertContainsExactly(any);
     }
 
     private static class IntMatcher extends BaseMatcher<Integer> implements VarargMatcher {

@@ -21,4 +21,9 @@ public class Any implements ArgumentMatcher<Object>, VarargMatcher, Serializable
     public String toString() {
         return "<any>";
     }
+
+    @Override
+    public Class<?> type() {
+        return Object.class;
+    }
 }
