@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.verification.argumentmatching;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,7 +17,7 @@ import java.util.stream.Collectors;
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.ContainsExtraTypeInfo;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class ArgumentMatchingTool {
 
     private ArgumentMatchingTool() {}
@@ -40,6 +42,28 @@ public class ArgumentMatchingTool {
             i++;
         }
         return suspicious.toArray(new Integer[0]);
+    }
+
+    /**
+     * Returns indexes of arguments not matching the provided matchers.
+     */
+    public static List<Integer> getNotMatchingArgsIndexes(
+            List<ArgumentMatcher> matchers, Object[] arguments) {
+        if (matchers.size() != arguments.length) {
+            return Collections.emptyList();
+        }
+
+        List<Integer> nonMatching = new ArrayList<>();
+        int i = 0;
+        for (ArgumentMatcher m : matchers) {
+            if (!safelyMatches(m, arguments[i])) {
+                nonMatching.add(i);
+            }
+
+            i++;
+        }
+
+        return nonMatching;
     }
 
     private static boolean safelyMatches(ArgumentMatcher m, Object arg) {

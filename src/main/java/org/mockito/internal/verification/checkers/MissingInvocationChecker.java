@@ -52,7 +52,11 @@ public class MissingInvocationChecker {
                 invocations.stream().map(Invocation::getLocation).collect(Collectors.toList());
 
         throw argumentsAreDifferent(
-                smartPrinter.getWanted(), smartPrinter.getActuals(), actualLocations);
+                similar,
+                wanted,
+                smartPrinter.getWanted(),
+                smartPrinter.getActuals(),
+                actualLocations);
     }
 
     public static void checkMissingInvocation(
