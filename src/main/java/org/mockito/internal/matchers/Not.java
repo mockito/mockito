@@ -23,6 +23,11 @@ public class Not implements ArgumentMatcher<Object>, Serializable {
     }
 
     @Override
+    public Class<?> type() {
+        return matcher.type();
+    }
+
+    @Override
     public String toString() {
         return "not(" + matcher + ")";
     }

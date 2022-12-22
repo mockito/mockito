@@ -187,9 +187,11 @@ public interface IMethods {
 
     int varargs(Object... object);
 
-    String varargsReturningString(Object... object);
-
     int varargs(String... string);
+
+    int polyVararg(BaseType... args);
+
+    String varargsReturningString(Object... object);
 
     void mixedVarargs(Object i, String... string);
 
@@ -198,6 +200,10 @@ public interface IMethods {
     String[] mixedVarargsReturningStringArray(Object i, String... string);
 
     Object[] mixedVarargsReturningObjectArray(Object i, String... string);
+
+    String methodWithVarargAndNonVarargVariants(String string);
+
+    String methodWithVarargAndNonVarargVariants(String... string);
 
     List<String> listReturningMethod(Object... objects);
 
@@ -306,4 +312,6 @@ public interface IMethods {
             return Objects.hash(value);
         }
     }
+
+    interface BaseType {}
 }
