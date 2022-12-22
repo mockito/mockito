@@ -456,7 +456,7 @@ public class DescriptiveMessagesWhenVerificationFailsTest extends TestBase {
 
         try {
             mock.overloadedMethodWithSameClassNameArguments(
-                dateArg, "string", new IMethods.Date(0));
+                    dateArg, "string", new IMethods.Date(0));
             verify(mock)
                     .overloadedMethodWithSameClassNameArguments(
                             new IMethods.Date(0), "string", dateArg);
