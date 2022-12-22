@@ -95,6 +95,76 @@ public class MissingInvocationCheckerTest extends TestBase {
                         "mock.intArgumentMethod(MyCoolPrint(1111));");
     }
 
+    @Test
+    public void shouldSpecifyPosition0WhenWantedInvocationDiffersFromActual() {
+        wanted = buildMultiArgsMethod().args("arg1", 2222).toInvocationMatcher();
+        invocations = singletonList(buildMultiArgsMethod().args("differs", 2222).toInvocation());
+
+        assertThatThrownBy(
+                        () -> {
+                            MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mock.simpleMethod(\"arg1\", 2222);",
+                        "Actual invocations have different arguments at position [0]:",
+                        "mock.simpleMethod(\"differs\", 2222);");
+    }
+
+    @Test
+    public void shouldSpecifyPosition1WhenWantedInvocationDiffersFromActual() {
+        wanted = buildMultiArgsMethod().args("arg1", 2222).toInvocationMatcher();
+        invocations = singletonList(buildMultiArgsMethod().args("arg1", 1111).toInvocation());
+
+        assertThatThrownBy(
+                        () -> {
+                            MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mock.simpleMethod(\"arg1\", 2222);",
+                        "Actual invocations have different arguments at position [1]:",
+                        "mock.simpleMethod(\"arg1\", 1111);");
+    }
+
+    @Test
+    public void shouldSpecifyPosition0And1WhenWantedInvocationDiffersFromActual() {
+        wanted = buildMultiArgsMethod().args("arg1", 2222).toInvocationMatcher();
+        invocations = singletonList(buildMultiArgsMethod().args("differs", 1111).toInvocation());
+
+        assertThatThrownBy(
+                        () -> {
+                            MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mock.simpleMethod(\"arg1\", 2222);",
+                        "Actual invocations have different arguments at positions [0, 1]:",
+                        "mock.simpleMethod(\"differs\", 1111);");
+    }
+
+    @Test
+    public void shouldNotSpecifyPositionWhenWantedSingleArgInvocationSiffersFromActual() {
+        wanted = buildIntArgMethod(new CustomInvocationBuilder()).arg(2222).toInvocationMatcher();
+        invocations =
+                singletonList(
+                        buildIntArgMethod(new CustomInvocationBuilder()).arg(1111).toInvocation());
+
+        assertThatThrownBy(
+                        () -> {
+                            MissingInvocationChecker.checkMissingInvocation(invocations, wanted);
+                        })
+                .isInstanceOf(ArgumentsAreDifferent.class)
+                .hasMessageContainingAll(
+                        "Argument(s) are different! Wanted:",
+                        "mock.intArgumentMethod(MyCoolPrint(2222));",
+                        "Actual invocations have different arguments:",
+                        "mock.intArgumentMethod(MyCoolPrint(1111));");
+    }
+
     private InvocationBuilder buildIntArgMethod(InvocationBuilder invocationBuilder) {
         return invocationBuilder.mock(mock).method("intArgumentMethod").argTypes(int.class);
     }
@@ -105,6 +175,13 @@ public class MissingInvocationCheckerTest extends TestBase {
 
     private InvocationBuilder buildDifferentMethod() {
         return new InvocationBuilder().mock(mock).differentMethod();
+    }
+
+    private InvocationBuilder buildMultiArgsMethod() {
+        return new InvocationBuilder()
+                .mock(mock)
+                .method("simpleMethod")
+                .argTypes(String.class, Integer.class);
     }
 
     static class CustomInvocationBuilder extends InvocationBuilder {

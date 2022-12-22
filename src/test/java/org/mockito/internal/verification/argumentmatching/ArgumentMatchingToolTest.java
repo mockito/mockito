@@ -17,7 +17,7 @@ import org.mockito.internal.matchers.ContainsExtraTypeInfo;
 import org.mockito.internal.matchers.Equals;
 import org.mockitoutil.TestBase;
 
-@SuppressWarnings({"unchecked", "serial"})
+@SuppressWarnings({"rawtypes", "unchecked", "serial"})
 public class ArgumentMatchingToolTest extends TestBase {
 
     @Test
@@ -97,7 +97,6 @@ public class ArgumentMatchingToolTest extends TestBase {
     }
 
     @Test
-    @SuppressWarnings("rawtypes")
     public void shouldUseMatchersSafely() {
         // This matcher is evil cause typeMatches(Object) returns true for every passed type but
         // matches(T)
@@ -136,5 +135,50 @@ public class ArgumentMatchingToolTest extends TestBase {
 
         // then
         assertEquals(0, suspicious.length);
+    }
+
+    @Test
+    public void shouldNotFindNonMatchingIndexesWhenEveryArgsMatch() {
+        String arg1Value = "arg1";
+        Integer arg2Value = 2222;
+
+        Equals arg1 = new Equals(arg1Value);
+        Equals arg2 = new Equals(arg2Value);
+
+        List<Integer> indexes =
+                ArgumentMatchingTool.getNotMatchingArgsIndexes(
+                        Arrays.asList(arg1, arg2), new Object[] {arg1Value, arg2Value});
+
+        assertEquals(Arrays.asList(), indexes);
+    }
+
+    @Test
+    public void shouldFindNonMatchingIndexesWhenSingleArgDoesNotMatch() {
+        String arg1Value = "arg1";
+        Integer arg2Value = 2222;
+
+        Equals arg1 = new Equals(arg1Value);
+        Equals arg2 = new Equals(1111);
+
+        List<Integer> indexes =
+                ArgumentMatchingTool.getNotMatchingArgsIndexes(
+                        Arrays.asList(arg1, arg2), new Object[] {arg1Value, arg2Value});
+
+        assertEquals(Arrays.asList(1), indexes);
+    }
+
+    @Test
+    public void shouldFindNonMatchingIndexesWhenMultiArgsDoNotMatch() {
+        String arg1Value = "arg1";
+        Integer arg2Value = 2222;
+
+        Equals arg1 = new Equals("differs");
+        Equals arg2 = new Equals(1111);
+
+        List<Integer> indexes =
+                ArgumentMatchingTool.getNotMatchingArgsIndexes(
+                        Arrays.asList(arg1, arg2), new Object[] {arg1Value, arg2Value});
+
+        assertEquals(Arrays.asList(0, 1), indexes);
     }
 }
