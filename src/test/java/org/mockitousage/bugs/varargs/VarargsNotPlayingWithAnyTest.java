@@ -30,23 +30,23 @@ public class VarargsNotPlayingWithAnyTest extends TestBase {
         mock.run("a", "b");
 
         verify(mock).run(anyString(), anyString());
-        verify(mock).run((String) any(), (String) any());
+        verify(mock).run(any(), any());
 
-        verify(mock).run((String[]) any());
+        verify(mock).run(any(String[].class));
 
         verify(mock, never()).run();
         verify(mock, never()).run(anyString(), eq("f"));
     }
 
     @Test
-    public void shouldAllowUsinganyForVarArgs() {
+    public void shouldAllowUsingAnyForVarArgs() {
         mock.run("a", "b");
-        verify(mock).run((String[]) any());
+        verify(mock).run(any(String[].class));
     }
 
     @Test
     public void shouldStubUsingAny() {
-        when(mock.run((String[]) any())).thenReturn("foo");
+        when(mock.run(any(String[].class))).thenReturn("foo");
 
         assertEquals("foo", mock.run("a", "b"));
     }

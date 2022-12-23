@@ -56,7 +56,8 @@ public class StubbingWithAdditionalAnswersTest {
         given(iMethods.objectArgMethod(any())).will(returnsFirstArg());
         given(iMethods.threeArgumentMethod(eq(0), any(), anyString())).will(returnsSecondArg());
         given(iMethods.threeArgumentMethod(eq(1), any(), anyString())).will(returnsLastArg());
-        given(iMethods.mixedVarargsReturningString(eq(1), any())).will(returnsArgAt(2));
+        given(iMethods.mixedVarargsReturningString(eq(1), any(String[].class)))
+                .will(returnsArgAt(2));
 
         assertThat(iMethods.objectArgMethod("first")).isEqualTo("first");
         assertThat(iMethods.threeArgumentMethod(0, "second", "whatever")).isEqualTo("second");
@@ -66,8 +67,10 @@ public class StubbingWithAdditionalAnswersTest {
 
     @Test
     public void can_return_var_arguments_of_invocation() throws Exception {
-        given(iMethods.mixedVarargsReturningStringArray(eq(1), any())).will(returnsLastArg());
-        given(iMethods.mixedVarargsReturningObjectArray(eq(1), any())).will(returnsArgAt(1));
+        given(iMethods.mixedVarargsReturningStringArray(eq(1), any(String[].class)))
+                .will(returnsLastArg());
+        given(iMethods.mixedVarargsReturningObjectArray(eq(1), any(String[].class)))
+                .will(returnsArgAt(1));
 
         assertThat(iMethods.mixedVarargsReturningStringArray(1, "the", "var", "args"))
                 .containsExactlyInAnyOrder("the", "var", "args");
@@ -77,7 +80,8 @@ public class StubbingWithAdditionalAnswersTest {
 
     @Test
     public void returns_arg_at_throws_on_out_of_range_var_args() throws Exception {
-        given(iMethods.mixedVarargsReturningString(eq(1), any())).will(returnsArgAt(3));
+        given(iMethods.mixedVarargsReturningString(eq(1), any(String[].class)))
+                .will(returnsArgAt(3));
 
         assertThatThrownBy(() -> iMethods.mixedVarargsReturningString(1, "a", "b"))
                 .isInstanceOf(MockitoException.class)
@@ -111,7 +115,7 @@ public class StubbingWithAdditionalAnswersTest {
 
     @Test
     public void can_return_expanded_arguments_of_invocation() throws Exception {
-        given(iMethods.varargsObject(eq(1), any())).will(returnsArgAt(3));
+        given(iMethods.varargsObject(eq(1), any(Object[].class))).will(returnsArgAt(3));
 
         assertThat(iMethods.varargsObject(1, "bob", "alexander", "alice", "carl"))
                 .isEqualTo("alice");
@@ -389,7 +393,7 @@ public class StubbingWithAdditionalAnswersTest {
     @Test
     public void can_return_based_on_strongly_types_one_parameter_var_args_function()
             throws Exception {
-        given(iMethods.varargs(any()))
+        given(iMethods.varargs(any(String[].class)))
                 .will(
                         answer(
                                 new Answer1<Integer, String[]>() {
@@ -406,7 +410,7 @@ public class StubbingWithAdditionalAnswersTest {
             throws Exception {
         final IMethods target = mock(IMethods.class);
 
-        given(iMethods.varargs(any()))
+        given(iMethods.varargs(any(String[].class)))
                 .will(
                         answerVoid(
                                 new VoidAnswer1<String[]>() {
@@ -425,7 +429,7 @@ public class StubbingWithAdditionalAnswersTest {
     @Test
     public void can_return_based_on_strongly_typed_two_parameter_var_args_function()
             throws Exception {
-        given(iMethods.mixedVarargsReturningString(any(), any()))
+        given(iMethods.mixedVarargsReturningString(any(), any(String[].class)))
                 .will(
                         answer(
                                 new Answer2<String, Object, String[]>() {
@@ -442,7 +446,7 @@ public class StubbingWithAdditionalAnswersTest {
             throws Exception {
         final IMethods target = mock(IMethods.class);
 
-        given(iMethods.mixedVarargsReturningString(any(), any()))
+        given(iMethods.mixedVarargsReturningString(any(), any(String[].class)))
                 .will(
                         answerVoid(
                                 new VoidAnswer2<Object, String[]>() {
@@ -463,7 +467,7 @@ public class StubbingWithAdditionalAnswersTest {
             throws Exception {
         final IMethods target = mock(IMethods.class);
 
-        given(iMethods.threeArgumentVarArgsMethod(anyInt(), any(), any()))
+        given(iMethods.threeArgumentVarArgsMethod(anyInt(), any(), any(String[].class)))
                 .will(
                         answer(
                                 new Answer3<String, Integer, String, String[]>() {
@@ -486,7 +490,7 @@ public class StubbingWithAdditionalAnswersTest {
             throws Exception {
         final IMethods target = mock(IMethods.class);
 
-        given(iMethods.threeArgumentVarArgsMethod(anyInt(), any(), any()))
+        given(iMethods.threeArgumentVarArgsMethod(anyInt(), any(), any(String[].class)))
                 .will(
                         answerVoid(
                                 new VoidAnswer3<Integer, String, String[]>() {
@@ -506,7 +510,7 @@ public class StubbingWithAdditionalAnswersTest {
     public void can_return_based_on_strongly_typed_four_parameter_var_args_function()
             throws Exception {
         final IMethods target = mock(IMethods.class);
-        given(iMethods.fourArgumentVarArgsMethod(anyInt(), any(), anyInt(), any()))
+        given(iMethods.fourArgumentVarArgsMethod(anyInt(), any(), anyInt(), any(String[].class)))
                 .will(
                         answer(
                                 new Answer4<String, Integer, String, Integer, String[]>() {
@@ -531,7 +535,7 @@ public class StubbingWithAdditionalAnswersTest {
             throws Exception {
         final IMethods target = mock(IMethods.class);
 
-        given(iMethods.fourArgumentVarArgsMethod(anyInt(), any(), anyInt(), any()))
+        given(iMethods.fourArgumentVarArgsMethod(anyInt(), any(), anyInt(), any(String[].class)))
                 .will(
                         answerVoid(
                                 new VoidAnswer4<Integer, String, Integer, String[]>() {
@@ -552,7 +556,9 @@ public class StubbingWithAdditionalAnswersTest {
     public void can_return_based_on_strongly_typed_five_parameter_var_args_function()
             throws Exception {
         final IMethods target = mock(IMethods.class);
-        given(iMethods.fiveArgumentVarArgsMethod(anyInt(), any(), anyInt(), any(), any()))
+        given(
+                        iMethods.fiveArgumentVarArgsMethod(
+                                anyInt(), any(), anyInt(), any(), any(String[].class)))
                 .will(
                         answer(
                                 new Answer5<String, Integer, String, Integer, String, String[]>() {
@@ -580,7 +586,9 @@ public class StubbingWithAdditionalAnswersTest {
             throws Exception {
         final IMethods target = mock(IMethods.class);
 
-        given(iMethods.fiveArgumentVarArgsMethod(anyInt(), any(), anyInt(), any(), any()))
+        given(
+                        iMethods.fiveArgumentVarArgsMethod(
+                                anyInt(), any(), anyInt(), any(), any(String[].class)))
                 .will(
                         answerVoid(
                                 new VoidAnswer5<Integer, String, Integer, String, String[]>() {
@@ -605,7 +613,9 @@ public class StubbingWithAdditionalAnswersTest {
     public void can_return_based_on_strongly_typed_six_parameter_var_args_function()
             throws Exception {
         final IMethods target = mock(IMethods.class);
-        given(iMethods.sixArgumentVarArgsMethod(anyInt(), any(), anyInt(), any(), any(), any()))
+        given(
+                        iMethods.sixArgumentVarArgsMethod(
+                                anyInt(), any(), anyInt(), any(), any(), any(String[].class)))
                 .will(
                         answer(
                                 new Answer6<
@@ -641,7 +651,9 @@ public class StubbingWithAdditionalAnswersTest {
     public void will_execute_a_void_returning_strongly_typed_six_parameter_var_args_function()
             throws Exception {
         final IMethods target = mock(IMethods.class);
-        given(iMethods.sixArgumentVarArgsMethod(anyInt(), any(), anyInt(), any(), any(), any()))
+        given(
+                        iMethods.sixArgumentVarArgsMethod(
+                                anyInt(), any(), anyInt(), any(), any(), any(String[].class)))
                 .will(
                         answerVoid(
                                 new VoidAnswer6<
@@ -667,7 +679,7 @@ public class StubbingWithAdditionalAnswersTest {
 
     @Test
     public void can_accept_array_supertype_for_strongly_typed_var_args_function() throws Exception {
-        given(iMethods.varargs(any()))
+        given(iMethods.varargs(any(String[].class)))
                 .will(
                         answer(
                                 new Answer1<Integer, Object[]>() {
@@ -681,7 +693,7 @@ public class StubbingWithAdditionalAnswersTest {
 
     @Test
     public void can_accept_non_vararg_answer_on_var_args_function() throws Exception {
-        given(iMethods.varargs(any()))
+        given(iMethods.varargs(any(String[].class)))
                 .will(
                         answer(
                                 new Answer2<Integer, String, String>() {
@@ -695,7 +707,7 @@ public class StubbingWithAdditionalAnswersTest {
 
     @Test
     public void should_work_with_var_args_with_no_elements() throws Exception {
-        given(iMethods.varargs(any()))
+        given(iMethods.varargs(any(String[].class)))
                 .will(
                         answer(
                                 new Answer1<Integer, String[]>() {
@@ -709,7 +721,7 @@ public class StubbingWithAdditionalAnswersTest {
 
     @Test
     public void should_work_with_array_var_args() throws Exception {
-        given(iMethods.arrayVarargsMethod(any()))
+        given(iMethods.arrayVarargsMethod(any(String[].class)))
                 .will(
                         answer(
                                 new Answer1<Integer, String[][]>() {

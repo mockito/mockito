@@ -153,7 +153,7 @@ public class InvocationMatcherTest extends TestBase {
         // given
         mock.varargs("1", "2");
         Invocation invocation = getLastInvocation();
-        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, (List) asList(ANY));
+        InvocationMatcher invocationMatcher = new InvocationMatcher(invocation, asList(ANY, ANY));
 
         // when
         boolean match = invocationMatcher.matches(invocation);

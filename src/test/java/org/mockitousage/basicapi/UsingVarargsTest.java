@@ -173,9 +173,9 @@ public class UsingVarargsTest extends TestBase {
 
     @Test
     // See bug #157
-    public void shouldMatchEasilyEmptyVararg() throws Exception {
+    public void shouldMatchEasilyEmptyVararg() {
         // when
-        when(mock.foo(any())).thenReturn(-1);
+        when(mock.foo(any(Object[].class))).thenReturn(-1);
 
         // then
         assertEquals(-1, mock.foo());

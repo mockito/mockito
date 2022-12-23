@@ -73,7 +73,7 @@ public class ParameterizedConstructorInstantiatorTest {
     public void should_instantiate_type_if_resolver_provide_matching_types() throws Exception {
         Observer observer = mock(Observer.class);
         Map map = mock(Map.class);
-        given(resolver.resolveTypeInstances(ArgumentMatchers.<Class<?>[]>any()))
+        given(resolver.resolveTypeInstances(ArgumentMatchers.any(Class[].class)))
                 .willReturn(new Object[] {observer, map});
 
         new ParameterizedConstructorInstantiator(this, field("withMultipleConstructor"), resolver)
@@ -120,7 +120,7 @@ public class ParameterizedConstructorInstantiatorTest {
     @Test
     public void should_instantiate_type_with_vararg_constructor() throws Exception {
         Observer[] vararg = new Observer[] {};
-        given(resolver.resolveTypeInstances(ArgumentMatchers.<Class<?>[]>any()))
+        given(resolver.resolveTypeInstances(ArgumentMatchers.any(Class[].class)))
                 .willReturn(new Object[] {"", vararg});
 
         new ParameterizedConstructorInstantiator(this, field("withVarargConstructor"), resolver)

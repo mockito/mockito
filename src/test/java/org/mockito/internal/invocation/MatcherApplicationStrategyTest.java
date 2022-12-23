@@ -124,7 +124,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     public void shouldAllowAnyMatchEntireVararg() {
         // given
         invocation = varargs("1", "2");
-        matchers = asList(ANY);
+        matchers = asList(ANY, ANY);
 
         // when
         boolean match =
@@ -151,10 +151,10 @@ public class MatcherApplicationStrategyTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowanyWithMixedVarargs() {
+    public void shouldAllowAnyWithMixedVarargs() {
         // given
         invocation = mixedVarargs(1, "1", "2");
-        matchers = asList(new Equals(1), ANY);
+        matchers = asList(new Equals(1), ANY, ANY);
 
         // when
         boolean match =
@@ -186,7 +186,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     public void shouldMatchAnyEvenIfOneOfTheArgsIsNull() {
         // given
         invocation = mixedVarargs(null, null, "2");
-        matchers = asList(new Equals(null), ANY);
+        matchers = asList(new Equals(null), ANY, ANY);
 
         // when
         getMatcherApplicationStrategyFor(invocation, matchers)
@@ -200,7 +200,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     public void shouldMatchAnyEvenIfMatcherIsDecorated() {
         // given
         invocation = varargs("1", "2");
-        matchers = asList(ANY);
+        matchers = asList(ANY, ANY);
 
         // when
         getMatcherApplicationStrategyFor(invocation, matchers)

@@ -82,18 +82,18 @@ public class VarargsTest {
 
     @Test
     public void shouldMatchVarArgs_oneNullArg_isNull() {
-        Object arg = null;
-        mock.varargs(arg);
+        mock.varargs((Object) null);
 
-        verify(mock).varargs(ArgumentMatchers.<Object[]>isNull());
+        verify(mock).varargs(ArgumentMatchers.<Object>isNull());
+        verify(mock, never()).varargs(isNull(Object[].class));
     }
 
     @Test
     public void shouldMatchVarArgs_nullArrayArg() {
-        Object[] argArray = null;
-        mock.varargs(argArray);
+        mock.varargs((Object[]) null);
 
-        verify(mock).varargs(ArgumentMatchers.<Object[]>isNull());
+        verify(mock).varargs(isNull(Object[].class));
+        verify(mock).varargs(ArgumentMatchers.<Object>isNull());
     }
 
     @Test
@@ -111,21 +111,21 @@ public class VarargsTest {
     public void shouldMatchVarArgs_emptyVarArgsOneAnyMatcher() {
         mock.varargs();
 
-        verify(mock).varargs((String[]) any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(String[].class));
     }
 
     @Test
     public void shouldMatchVarArgs_oneArgsOneAnyMatcher() {
         mock.varargs(1);
 
-        verify(mock).varargs(ArgumentMatchers.<Object[]>any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(Object[].class));
     }
 
     @Test
     public void shouldMatchVarArgs_twoArgsOneAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(ArgumentMatchers.<Object[]>any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(Object[].class));
     }
 
     @Test
@@ -141,7 +141,7 @@ public class VarargsTest {
 
         assertThatThrownBy(
                         () -> {
-                            verify(mock).varargs(any(), any(), any()); // any() -> VarargMatcher
+                            verify(mock).varargs(any(), any(), any());
                         })
                 .hasMessageContaining("Argument(s) are different");
     }
@@ -361,20 +361,6 @@ public class VarargsTest {
         assertThat(mock.methodWithVarargAndNonVarargVariants(new String[] {"a", "b"}))
                 .isEqualTo("var arg method");
         assertThat(mock.methodWithVarargAndNonVarargVariants("a", "b", "c")).isNull();
-    }
-
-    @Test
-    public void shouldMockVarargsInvocationUsingCasts() {
-        given(mock.methodWithVarargAndNonVarargVariants((String) any()))
-                .willReturn("single arg method");
-        given(mock.methodWithVarargAndNonVarargVariants((String[]) any()))
-                .willReturn("var arg method");
-
-        assertThat(mock.methodWithVarargAndNonVarargVariants("a")).isEqualTo("single arg method");
-        assertThat(mock.methodWithVarargAndNonVarargVariants()).isEqualTo("var arg method");
-        assertThat(mock.methodWithVarargAndNonVarargVariants(new String[] {"a"}))
-                .isEqualTo("var arg method");
-        assertThat(mock.methodWithVarargAndNonVarargVariants("a", "b")).isEqualTo("var arg method");
     }
 
     @Test
