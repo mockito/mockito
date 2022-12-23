@@ -4,6 +4,7 @@
  */
 package org.mockitousage.matchers;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -58,7 +59,6 @@ public class CapturingArgumentsTest extends TestBase {
     BulkEmailService bulkEmailService = new BulkEmailService(emailService);
     IMethods mock = mock(IMethods.class);
 
-    @SuppressWarnings("deprecation")
     @Test
     public void should_allow_assertions_on_captured_argument() {
         // given
@@ -180,7 +180,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_when_full_arg_list_matches() throws Exception {
+    public void should_capture_when_full_arg_list_matches() {
         // given
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
 
@@ -208,7 +208,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_int_by_creating_captor_with_primitive() throws Exception {
+    public void should_capture_int_by_creating_captor_with_primitive() {
         // given
         ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(int.class);
 
@@ -221,66 +221,188 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_byte_vararg_by_creating_captor_with_primitive() throws Exception {
+    public void should_capture_byte_vararg_by_creating_captor_with_primitive() {
         // given
         ArgumentCaptor<Byte> argumentCaptor = ArgumentCaptor.forClass(byte.class);
 
         // when
-        mock.varargsbyte((byte) 1, (byte) 2);
+        mock.varargsbyte((byte) 1);
 
         // then
         verify(mock).varargsbyte(argumentCaptor.capture());
-        assertEquals((byte) 2, (byte) argumentCaptor.getValue());
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1, (byte) 2);
+        assertEquals((byte) 1, (byte) argumentCaptor.getValue());
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1);
     }
 
     @Test
-    public void should_capture_byte_vararg_by_creating_captor_with_primitive_wrapper()
-            throws Exception {
+    public void should_capture_byte_vararg_by_creating_captor_with_primitive_wrapper() {
         // given
         ArgumentCaptor<Byte> argumentCaptor = ArgumentCaptor.forClass(Byte.class);
 
         // when
-        mock.varargsbyte((byte) 1, (byte) 2);
+        mock.varargsbyte((byte) 1);
 
         // then
         verify(mock).varargsbyte(argumentCaptor.capture());
-        assertEquals((byte) 2, (byte) argumentCaptor.getValue());
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1, (byte) 2);
+        assertEquals((byte) 1, (byte) argumentCaptor.getValue());
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1);
     }
 
     @Test
-    public void should_capture_vararg() throws Exception {
+    public void should_not_capture_empty_vararg_with_single_captor() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        // when
+        mock.mixedVarargs(42);
+
+        // then
+        verify(mock, never()).mixedVarargs(any(), argumentCaptor.capture());
+    }
+
+    @Test
+    public void should_capture_single_vararg_with_single_captor() {
+        // given
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        // when
+        mock.mixedVarargs(42, "a");
+
+        // then
+        verify(mock).mixedVarargs(any(), argumentCaptor.capture());
+        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo("a");
+    }
+
+    @Test
+    public void should_not_capture_multiple_vararg_with_single_captor() {
+        // given
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        // when
+        mock.mixedVarargs(42, "a", "b");
+
+        // then
+        verify(mock, never()).mixedVarargs(any(), argumentCaptor.capture());
+    }
+
+    @Test
+    public void should_capture_multiple_vararg_with_multiple_captor() {
+        // given
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        // when
+        mock.mixedVarargs(42, "a", "b");
+
+        // then
+        verify(mock).mixedVarargs(any(), argumentCaptor.capture(), argumentCaptor.capture());
+        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo("b");
+        Assertions.assertThat(argumentCaptor.getAllValues()).isEqualTo(asList("a", "b"));
+    }
+
+    @Test
+    public void should_not_capture_multiple_vararg_some_null_with_single_captor() {
+        // given
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+
+        // when
+        mock.mixedVarargs(42, "a", null);
+
+        // then
+        verify(mock, never()).mixedVarargs(any(), argumentCaptor.capture());
+    }
+
+    @Test
+    public void should_capture_empty_vararg_with_array_captor() {
+        // given
+        ArgumentCaptor<String[]> argumentCaptor = ArgumentCaptor.forClass(String[].class);
+
+        // when
+        mock.mixedVarargs(42);
+
+        // then
+        verify(mock).mixedVarargs(any(), argumentCaptor.capture());
+        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo(new String[] {});
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly(new String[] {});
+    }
+
+    @Test
+    public void should_capture_single_vararg_with_array_captor() {
+        // given
+        ArgumentCaptor<String[]> argumentCaptor = ArgumentCaptor.forClass(String[].class);
+
+        // when
+        mock.mixedVarargs(42, "a");
+
+        // then
+        verify(mock).mixedVarargs(any(), argumentCaptor.capture());
+        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo(new String[] {"a"});
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly(new String[] {"a"});
+    }
+
+    @Test
+    public void should_capture_multiple_vararg_with_array_captor() {
+        // given
+        ArgumentCaptor<String[]> argumentCaptor = ArgumentCaptor.forClass(String[].class);
 
         // when
         mock.mixedVarargs(42, "a", "b", "c");
 
         // then
         verify(mock).mixedVarargs(any(), argumentCaptor.capture());
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c");
+        Assertions.assertThat(argumentCaptor.getAllValues())
+                .containsExactly(new String[] {"a", "b", "c"});
     }
 
     @Test
-    public void should_capture_all_vararg() throws Exception {
+    public void should_capture_multiple_vararg_some_null_with_array_captor() {
+        // given
+        ArgumentCaptor<String[]> argumentCaptor = ArgumentCaptor.forClass(String[].class);
+
+        // when
+        mock.mixedVarargs(42, "a", null, "c");
+
+        // then
+        verify(mock).mixedVarargs(any(), argumentCaptor.capture());
+        Assertions.assertThat(argumentCaptor.getAllValues())
+                .containsExactly(new String[] {"a", null, "c"});
+    }
+
+    @Test
+    public void should_capture_multiple_invocations_with_captor() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
         // when
-        mock.mixedVarargs(42, "a", "b", "c");
-        mock.mixedVarargs(42, "again ?!");
+        mock.mixedVarargs(42, "a", "b");
+        mock.mixedVarargs(42, "c", "d");
+
+        // then
+        verify(mock, times(2))
+                .mixedVarargs(any(), argumentCaptor.capture(), argumentCaptor.capture());
+
+        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo("d");
+        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c", "d");
+    }
+
+    @Test
+    public void should_capture_multiple_invocations_with_array_captor() {
+        // given
+        ArgumentCaptor<String[]> argumentCaptor = ArgumentCaptor.forClass(String[].class);
+
+        // when
+        mock.mixedVarargs(42, "a", "b");
+        mock.mixedVarargs(42, "c", "d");
 
         // then
         verify(mock, times(2)).mixedVarargs(any(), argumentCaptor.capture());
 
+        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo(new String[] {"c", "d"});
         Assertions.assertThat(argumentCaptor.getAllValues())
-                .containsExactly("a", "b", "c", "again ?!");
+                .containsExactly(new String[] {"a", "b"}, new String[] {"c", "d"});
     }
 
     @Test
-    public void should_capture_one_arg_even_when_using_vararg_captor_on_nonvararg_method()
-            throws Exception {
+    public void should_capture_one_arg_even_when_using_vararg_captor_on_nonvararg_method() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -293,7 +415,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void captures_correctly_when_captor_used_multiple_times() throws Exception {
+    public void captures_correctly_when_captor_used_multiple_times() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -312,7 +434,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void captures_correctly_when_captor_used_on_pure_vararg_method() throws Exception {
+    public void captures_correctly_when_captor_used_on_pure_vararg_method() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 

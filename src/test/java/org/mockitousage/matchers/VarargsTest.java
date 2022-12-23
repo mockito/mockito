@@ -199,13 +199,6 @@ public class VarargsTest {
     }
 
     @Test
-    public void shouldNotCaptureVarArgs_noArgs() {
-        mock.varargs();
-
-        verify(mock, never()).varargs(captor.capture());
-    }
-
-    @Test
     public void shouldCaptureVarArgs_oneNullArg_eqNull() {
         String arg = null;
         mock.varargs(arg);
@@ -238,35 +231,12 @@ public class VarargsTest {
     }
 
     @Test
-    public void shouldNotCaptureVarArgs_twoArgsOneCapture() {
-        mock.varargs("1", "2");
-
-        verify(mock, never()).varargs(captor.capture());
-    }
-
-    @Test
     public void shouldCaptureVarArgs_twoArgsTwoCaptures() {
         mock.varargs("1", "2");
 
         verify(mock).varargs(captor.capture(), captor.capture());
 
         assertThatCaptor(captor).contains("1", "2");
-    }
-
-    @Test
-    public void shouldCaptureVarArgs_oneNullArgument() {
-        mock.varargs("1", null);
-
-        verify(mock).varargs(arrayCaptor.capture());
-
-        assertThatCaptor(arrayCaptor).contains(new String[] {"1", null});
-    }
-
-    @Test
-    public void shouldNotCaptureVarArgs_oneNullArgument() {
-        mock.varargs("1", null);
-
-        verify(mock, never()).varargs(captor.capture());
     }
 
     @Test
