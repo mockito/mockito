@@ -149,7 +149,7 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_match_varargs_using_any_varargs() throws Exception {
+    public void should_match_varargs_using_any_varargs() {
         // given
         mock.varargs("1", "2");
         Invocation invocation = getLastInvocation();
@@ -163,11 +163,11 @@ public class InvocationMatcherTest extends TestBase {
     }
 
     @Test
-    public void should_capture_varargs_as_vararg() throws Exception {
+    public void should_capture_varargs_as_vararg() {
         // given
         mock.mixedVarargs(1, "a", "b");
         Invocation invocation = getLastInvocation();
-        CapturingMatcher m = new CapturingMatcher(List.class);
+        CapturingMatcher<String[]> m = new CapturingMatcher(String[].class);
         InvocationMatcher invocationMatcher =
                 new InvocationMatcher(invocation, Arrays.<ArgumentMatcher>asList(new Equals(1), m));
 
@@ -175,11 +175,11 @@ public class InvocationMatcherTest extends TestBase {
         invocationMatcher.captureArgumentsFrom(invocation);
 
         // then
-        Assertions.assertThat(m.getAllValues()).containsExactly("a", "b");
+        Assertions.assertThat(m.getAllValues()).containsExactly(new String[] {"a", "b"});
     }
 
     @Test // like using several time the captor in the vararg
-    public void should_capture_arguments_when_args_count_does_NOT_match() throws Exception {
+    public void should_capture_arguments_when_args_count_does_NOT_match() {
         // given
         mock.varargs();
         Invocation invocation = getLastInvocation();
