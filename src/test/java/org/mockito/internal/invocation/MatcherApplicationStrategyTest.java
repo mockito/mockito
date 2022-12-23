@@ -230,7 +230,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     public void shouldMatchAnyThatMatchesRawVarArgType() {
         // given
         invocation = varargs("1", "2");
-        InstanceOf.VarArgAware any = new InstanceOf.VarArgAware(String[].class, "<any String[]>");
+        InstanceOf any = new InstanceOf(String[].class, "<any String[]>");
         matchers = asList(any);
 
         // when

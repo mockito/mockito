@@ -721,7 +721,7 @@ public class StubbingWithAdditionalAnswersTest {
 
     @Test
     public void should_work_with_array_var_args() throws Exception {
-        given(iMethods.arrayVarargsMethod(any(String[].class)))
+        given(iMethods.arrayVarargsMethod(any(String[][].class)))
                 .will(
                         answer(
                                 new Answer1<Integer, String[][]>() {

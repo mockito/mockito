@@ -59,9 +59,8 @@ public class InstanceOfTest {
 
     @Test
     public void can_be_vararg_aware() {
-        assertThat(new InstanceOf.VarArgAware(Number[].class)).isInstanceOf(VarargMatcher.class);
-        assertThat(new InstanceOf.VarArgAware(Number[].class).matches(new Integer[0])).isTrue();
-        assertThat(new InstanceOf.VarArgAware(Number[].class).matches(new Number[0])).isTrue();
-        assertThat(new InstanceOf.VarArgAware(Number[].class).matches(new Object[0])).isFalse();
+        assertThat(new InstanceOf(Number[].class).matches(new Integer[0])).isTrue();
+        assertThat(new InstanceOf(Number[].class).matches(new Number[0])).isTrue();
+        assertThat(new InstanceOf(Number[].class).matches(new Object[0])).isFalse();
     }
 }
