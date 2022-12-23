@@ -17,8 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.mockito.ArgumentMatcher;
 
 @SuppressWarnings("unchecked")
-public class CapturingMatcher<T>
-        implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
+public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArguments, Serializable {
 
     private final Class<? extends T> clazz;
     private final List<Object> arguments = new ArrayList<>();

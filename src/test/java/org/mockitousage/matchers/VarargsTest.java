@@ -40,6 +40,7 @@ public class VarargsTest {
 
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Captor private ArgumentCaptor<String> captor;
+    @Captor private ArgumentCaptor<String[]> arrayCaptor;
     @Mock private IMethods mock;
 
     private static final Condition<Object> NULL =
@@ -192,9 +193,16 @@ public class VarargsTest {
     public void shouldCaptureVarArgs_noArgs() {
         mock.varargs();
 
-        verify(mock).varargs(captor.capture());
+        verify(mock).varargs(arrayCaptor.capture());
 
-        assertThatCaptor(captor).isEmpty();
+        assertThatCaptor(arrayCaptor).contains(new String[] {});
+    }
+
+    @Test
+    public void shouldNotCaptureVarArgs_noArgs() {
+        mock.varargs();
+
+        verify(mock, never()).varargs(captor.capture());
     }
 
     @Test
@@ -224,9 +232,16 @@ public class VarargsTest {
     public void shouldCaptureVarArgs_twoArgsOneCapture() {
         mock.varargs("1", "2");
 
-        verify(mock).varargs(captor.capture());
+        verify(mock).varargs(arrayCaptor.capture());
 
-        assertThatCaptor(captor).contains("1", "2");
+        assertThatCaptor(arrayCaptor).contains(new String[] {"1", "2"});
+    }
+
+    @Test
+    public void shouldNotCaptureVarArgs_twoArgsOneCapture() {
+        mock.varargs("1", "2");
+
+        verify(mock, never()).varargs(captor.capture());
     }
 
     @Test
@@ -242,9 +257,16 @@ public class VarargsTest {
     public void shouldCaptureVarArgs_oneNullArgument() {
         mock.varargs("1", null);
 
-        verify(mock).varargs(captor.capture());
+        verify(mock).varargs(arrayCaptor.capture());
 
-        assertThatCaptor(captor).contains("1", (String) null);
+        assertThatCaptor(arrayCaptor).contains(new String[] {"1", null});
+    }
+
+    @Test
+    public void shouldNotCaptureVarArgs_oneNullArgument() {
+        mock.varargs("1", null);
+
+        verify(mock, never()).varargs(captor.capture());
     }
 
     @Test
