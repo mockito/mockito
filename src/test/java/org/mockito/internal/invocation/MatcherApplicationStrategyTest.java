@@ -216,7 +216,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
         invocation = varargs("1", "2");
         HamcrestArgumentMatcher<Integer> argumentMatcher =
                 new HamcrestArgumentMatcher<>(new IntMatcher());
-        matchers = asList(argumentMatcher);
+        matchers = asList(argumentMatcher, argumentMatcher);
 
         // when
         getMatcherApplicationStrategyFor(invocation, matchers)
@@ -241,7 +241,15 @@ public class MatcherApplicationStrategyTest extends TestBase {
         recordAction.assertContainsExactly(any);
     }
 
-    private static class IntMatcher extends BaseMatcher<Integer> implements VarargMatcher {
+    private static class IntMatcher extends BaseMatcher<Integer> {
+        public boolean matches(Object o) {
+            return true;
+        }
+
+        public void describeTo(Description description) {}
+    }
+
+    private static class IntArrayMatcher extends BaseMatcher<Integer[]> {
         public boolean matches(Object o) {
             return true;
         }

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mockito.ArgumentMatcher;
-import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 import org.mockito.internal.matchers.CapturingMatcher;
 import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.invocation.Invocation;
@@ -100,9 +99,6 @@ public class MatcherApplicationStrategy {
 
     private boolean isLastMatcherVarargMatcher() {
         ArgumentMatcher<?> argumentMatcher = lastMatcher();
-        if (argumentMatcher instanceof HamcrestArgumentMatcher<?>) {
-            return ((HamcrestArgumentMatcher<?>) argumentMatcher).isVarargMatcher();
-        }
         return argumentMatcher instanceof VarargMatcher;
     }
 
