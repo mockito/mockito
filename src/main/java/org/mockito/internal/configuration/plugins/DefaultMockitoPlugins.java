@@ -28,13 +28,14 @@ public class DefaultMockitoPlugins implements MockitoPlugins {
     static final String SUBCLASS_ALIAS = MockMakers.SUBCLASS;
     public static final Set<String> MOCK_MAKER_ALIASES = new HashSet<>();
     static final String MODULE_ALIAS = "member-accessor-module";
+    static final String REFLECTION_ALIAS = "member-accessor-reflection";
 
     static {
         // Keep the mapping: plugin interface name -> plugin implementation class name
         DEFAULT_PLUGINS.put(PluginSwitch.class.getName(), DefaultPluginSwitch.class.getName());
         DEFAULT_PLUGINS.put(
                 MockMaker.class.getName(),
-                "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker");
+                "org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker");
         DEFAULT_PLUGINS.put(
                 StackTraceCleanerProvider.class.getName(),
                 "org.mockito.internal.exceptions.stacktrace.DefaultStackTraceCleanerProvider");
@@ -53,9 +54,11 @@ public class DefaultMockitoPlugins implements MockitoPlugins {
                 MockitoLogger.class.getName(), "org.mockito.internal.util.ConsoleMockitoLogger");
         DEFAULT_PLUGINS.put(
                 MemberAccessor.class.getName(),
-                "org.mockito.internal.util.reflection.ReflectionMemberAccessor");
+                "org.mockito.internal.util.reflection.ModuleMemberAccessor");
         DEFAULT_PLUGINS.put(
                 MODULE_ALIAS, "org.mockito.internal.util.reflection.ModuleMemberAccessor");
+        DEFAULT_PLUGINS.put(
+                REFLECTION_ALIAS, "org.mockito.internal.util.reflection.ReflectionMemberAccessor");
         DEFAULT_PLUGINS.put(
                 DoNotMockEnforcer.class.getName(),
                 "org.mockito.internal.configuration.DefaultDoNotMockEnforcer");

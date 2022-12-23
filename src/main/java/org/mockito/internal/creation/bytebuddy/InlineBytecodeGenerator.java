@@ -205,6 +205,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         boolean subclassingRequired =
                 !features.interfaces.isEmpty()
                         || features.serializableMode != SerializableMode.NONE
+                        || features.stripAnnotations
                         || Modifier.isAbstract(features.mockedType.getModifiers());
 
         checkSupportedCombination(subclassingRequired, features);
@@ -416,6 +417,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         }
         mocked.clear();
         flatMocked.clear();
+        subclassEngine.clearAllCaches();
         try {
             instrumentation.retransformClasses(types.toArray(new Class<?>[0]));
         } catch (UnmodifiableClassException e) {

@@ -8,9 +8,12 @@ import static org.mockito.internal.exceptions.Reporter.smartNullPointerException
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.creation.bytebuddy.MockAccess;
 import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
@@ -89,9 +92,28 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
             if (isToStringMethod(currentInvocation.getMethod())) {
                 return "SmartNull returned by this unstubbed method call on a mock:\n"
                         + unstubbedInvocation;
+            } else if (isMethodOf(
+                    MockAccess.class, currentInvocation.getMock(), currentInvocation.getMethod())) {
+                /* The MockAccess methods should be called directly */
+                return currentInvocation.callRealMethod();
             }
 
             throw smartNullPointerException(unstubbedInvocation.toString(), location);
+        }
+
+        private static boolean isMethodOf(Class<?> clazz, Object instance, Method method) {
+            if (!clazz.isInstance(instance)) {
+                return false;
+            }
+
+            for (Method m : clazz.getDeclaredMethods()) {
+                if (m.getName().equalsIgnoreCase(method.getName())
+                        && Arrays.equals(m.getParameterTypes(), method.getParameterTypes())) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

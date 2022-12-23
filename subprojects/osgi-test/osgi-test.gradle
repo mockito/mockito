@@ -8,6 +8,7 @@ apply from: "osgi-test-bundles.gradle"
 description = "Test suite for OSGi framework with Mockito"
 
 dependencies {
+    testImplementation project.rootProject
     testImplementation libraries.junit4
     testImplementation libraries.osgi
 

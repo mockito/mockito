@@ -4,9 +4,11 @@
  */
 package org.mockito.moduletest;
 
+import org.junit.Assume;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.reflection.ModuleMemberAccessor;
 import org.mockito.internal.util.reflection.ReflectionMemberAccessor;
 
@@ -17,6 +19,8 @@ import java.util.concurrent.Callable;
 
 import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.moduletest.ModuleUtil.layer;
 import static org.mockito.moduletest.ModuleUtil.modularJar;
 
@@ -73,6 +77,8 @@ public class ModuleAccessTest {
 
     @Test
     public void cannot_read_unopened_private_field_but_exception_includes_cause() throws Exception {
+        Assume.assumeThat(Plugins.getMemberAccessor(), not(instanceOf(ModuleMemberAccessor.class)));
+
         Path jar = modularJar(true, true, false, true);
         ModuleLayer layer = layer(jar, true, true);
 
@@ -91,4 +97,21 @@ public class ModuleAccessTest {
         }
     }
 
+    @Test
+    public void can_read_unopened_private_field_but_exception_includes_cause() throws Exception {
+        Assume.assumeThat(Plugins.getMemberAccessor(), instanceOf(ModuleMemberAccessor.class));
+
+        Path jar = modularJar(true, true, false, true);
+        ModuleLayer layer = layer(jar, true, true);
+
+        ClassLoader loader = layer.findLoader("mockito.test");
+        Class<?> type = loader.loadClass("sample.MyCallable");
+
+        @SuppressWarnings("unchecked")
+        Callable<String> testInstance = (Callable<String>) type.getDeclaredConstructor().newInstance();
+
+        Mockito.mockitoSession()
+            .initMocks(testInstance)
+            .startMocking();
+    }
 }

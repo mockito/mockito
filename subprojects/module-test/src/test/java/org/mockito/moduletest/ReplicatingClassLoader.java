@@ -53,4 +53,9 @@ public class ReplicatingClassLoader extends URLClassLoader {
     protected URL findResource(String moduleName, String name) {
         return Mockito.class.getResource("/" + name);
     }
+
+    @Override
+    public InputStream getResourceAsStream(String name) {
+        return Mockito.class.getResourceAsStream("/" + name);
+    }
 }

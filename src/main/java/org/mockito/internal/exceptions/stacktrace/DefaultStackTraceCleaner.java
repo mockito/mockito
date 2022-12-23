@@ -24,11 +24,18 @@ public class DefaultStackTraceCleaner implements StackTraceCleaner {
     private boolean isIn(String className) {
         if (isFromMockitoRunner(className) || isFromMockitoRule(className)) {
             return true;
-        } else if (isMockDispatcher(className) || isFromMockito(className)) {
+        } else if (isMockDispatcher(className)
+                || isFromMockito(className)
+                || isMethodHandle(className)) {
             return false;
         } else {
             return true;
         }
+    }
+
+    /* Some mock makers (like inline) use java.lang.invoke.MethodHandle to dispatch calls */
+    private static boolean isMethodHandle(String className) {
+        return className.startsWith("java.lang.invoke.MethodHandle");
     }
 
     private static boolean isMockDispatcher(String className) {

@@ -10,7 +10,6 @@ import static org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.P
 import static org.mockito.internal.configuration.plugins.DefaultMockitoPlugins.SUBCLASS_ALIAS;
 
 import org.junit.Test;
-import org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker;
 import org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker;
 import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.plugins.InstantiatorProvider2;
@@ -35,7 +34,8 @@ public class DefaultMockitoPluginsTest extends TestBase {
                 "org.mockito.internal.creation.bytebuddy.ByteBuddyMockMaker",
                 DefaultMockitoPlugins.getDefaultPluginClass(SUBCLASS_ALIAS));
         assertEquals(
-                ByteBuddyMockMaker.class, plugins.getDefaultPlugin(MockMaker.class).getClass());
+                InlineByteBuddyMockMaker.class,
+                plugins.getDefaultPlugin(MockMaker.class).getClass());
         assertNotNull(plugins.getDefaultPlugin(InstantiatorProvider2.class));
         assertEquals(
                 ConsoleMockitoLogger.class,
