@@ -133,7 +133,7 @@ public class VarargsTest {
     public void shouldMatchVarArgs_twoArgsTwoAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(any(), ArgumentMatchers.<Object>any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(), ArgumentMatchers.<Object>any());
     }
 
     @Test
