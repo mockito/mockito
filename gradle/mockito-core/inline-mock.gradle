@@ -1,25 +1,16 @@
-task copyMockMethodDispatcher {
+tasks.register('copyMockMethodDispatcher', Copy) {
     dependsOn compileJava
-    outputs.files files("${sourceSets.main.java.outputDir}/org/mockito/internal/creation/bytebuddy/inject")
-        .asFileTree
-        .matching { include "*.raw" }
-        .files
-        .collect { "${buildDir}/${it.name}" }
 
-    doLast {
-        copy {
-            from "${sourceSets.main.java.outputDir}/org/mockito/internal/creation/bytebuddy/inject"
-            into "${sourceSets.main.java.outputDir}/org/mockito/internal/creation/bytebuddy/inject"
-            include 'MockMethodDispatcher.class'
-            rename { String fileName ->
-                fileName.replace('.class', '.raw')
-            }
-        }
-    }
+    from "${sourceSets.main.java.classesDirectory.get()}/org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class"
+    into layout.buildDirectory.dir("generated/raw/org/mockito/internal/creation/bytebuddy/inject")
+
+    rename '(.+)\\.class', '$1.raw'
 }
 classes.dependsOn(copyMockMethodDispatcher)
 
 jar {
     exclude("org/mockito/internal/creation/bytebuddy/inject/package-info.class")
     exclude("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class")
+
+    from(layout.buildDirectory.dir("generated/raw"))
 }
