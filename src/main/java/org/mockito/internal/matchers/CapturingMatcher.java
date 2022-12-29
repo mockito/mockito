@@ -15,13 +15,13 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.mockito.ArgumentMatcher;
+import org.mockito.internal.util.Primitives;
 
-@SuppressWarnings("unchecked")
 public class CapturingMatcher<T>
         implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
 
     private final Class<? extends T> clazz;
-    private final List<Object> arguments = new ArrayList<>();
+    private final List<T> arguments = new ArrayList<>();
 
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final Lock readLock = lock.readLock();
@@ -33,12 +33,20 @@ public class CapturingMatcher<T>
 
     @Override
     public boolean matches(Object argument) {
-        return true;
+        if (argument == null) {
+            return true;
+        }
+
+        if (Primitives.isPrimitiveOrWrapper(clazz)) {
+            return Primitives.isAssignableFromWrapper(clazz, argument.getClass());
+        }
+
+        return clazz.isAssignableFrom(argument.getClass());
     }
 
     @Override
     public String toString() {
-        return "<Capturing argument>";
+        return "<Capturing argument: " + clazz.getSimpleName() + ">";
     }
 
     public T getLastValue() {
@@ -48,7 +56,7 @@ public class CapturingMatcher<T>
                 throw noArgumentValueWasCaptured();
             }
 
-            return (T) arguments.get(arguments.size() - 1);
+            return arguments.get(arguments.size() - 1);
         } finally {
             readLock.unlock();
         }
@@ -57,17 +65,18 @@ public class CapturingMatcher<T>
     public List<T> getAllValues() {
         readLock.lock();
         try {
-            return new ArrayList<T>((List) arguments);
+            return new ArrayList<>(arguments);
         } finally {
             readLock.unlock();
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void captureFrom(Object argument) {
         writeLock.lock();
         try {
-            this.arguments.add(argument);
+            this.arguments.add((T) argument);
         } finally {
             writeLock.unlock();
         }
