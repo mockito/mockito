@@ -12,7 +12,6 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.base.MockitoException;
@@ -22,7 +21,7 @@ import org.mockitoutil.TestBase;
 
 public class CapturingArgumentsTest extends TestBase {
 
-    class Person {
+    private static class Person {
 
         private final Integer age;
 
@@ -35,9 +34,9 @@ public class CapturingArgumentsTest extends TestBase {
         }
     }
 
-    class BulkEmailService {
+    private static class BulkEmailService {
 
-        private EmailService service;
+        private final EmailService service;
 
         public BulkEmailService(EmailService service) {
             this.service = service;
@@ -124,7 +123,7 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         verify(emailService).sendEmailTo(argument.capture());
-        assertEquals(null, argument.getValue());
+        assertNull(argument.getValue());
     }
 
     @Test
@@ -135,6 +134,7 @@ public class CapturingArgumentsTest extends TestBase {
         assertNotNull(argument);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void should_allow_construction_of_captor_for_a_more_specific_type() {
         // the test passes if this expression compiles
@@ -166,7 +166,7 @@ public class CapturingArgumentsTest extends TestBase {
         mock.simpleMethod("bar", 2);
 
         // then
-        Assertions.assertThat(argument.getAllValues()).containsOnly("bar");
+        assertThat(argument.getAllValues()).containsOnly("bar");
     }
 
     @Test
@@ -231,7 +231,36 @@ public class CapturingArgumentsTest extends TestBase {
         // then
         verify(mock).varargsbyte(argumentCaptor.capture());
         assertEquals((byte) 1, (byte) argumentCaptor.getValue());
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1);
+        assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1);
+    }
+
+    @Test
+    public void should_capture_byte_vararg_by_creating_captor_with_primitive_2_args() {
+        // given
+        ArgumentCaptor<Byte> argumentCaptor = ArgumentCaptor.forClass(byte.class);
+
+        // when
+        mock.varargsbyte((byte) 1, (byte) 2);
+
+        // then
+        verify(mock).varargsbyte(argumentCaptor.capture(), argumentCaptor.capture());
+        assertEquals((byte) 2, (byte) argumentCaptor.getValue());
+        assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1, (byte) 2);
+    }
+
+    @Test
+    public void should_capture_byte_vararg_by_creating_captor_with_primitive_array() {
+        // given
+        ArgumentCaptor<byte[]> argumentCaptor = ArgumentCaptor.forClass(byte[].class);
+
+        // when
+        mock.varargsbyte();
+        mock.varargsbyte((byte) 1, (byte) 2);
+
+        // then
+        verify(mock, times(2)).varargsbyte(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue()).containsExactly(new byte[] {1, 2});
+        assertThat(argumentCaptor.getAllValues()).containsExactly(new byte[] {}, new byte[] {1, 2});
     }
 
     @Test
@@ -245,7 +274,7 @@ public class CapturingArgumentsTest extends TestBase {
         // then
         verify(mock).varargsbyte(argumentCaptor.capture());
         assertEquals((byte) 1, (byte) argumentCaptor.getValue());
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1);
+        assertThat(argumentCaptor.getAllValues()).containsExactly((byte) 1);
     }
 
     @Test
@@ -270,7 +299,7 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         verify(mock).mixedVarargs(any(), argumentCaptor.capture());
-        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo("a");
+        assertThat(argumentCaptor.getValue()).isEqualTo("a");
     }
 
     @Test
@@ -295,8 +324,8 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         verify(mock).mixedVarargs(any(), argumentCaptor.capture(), argumentCaptor.capture());
-        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo("b");
-        Assertions.assertThat(argumentCaptor.getAllValues()).isEqualTo(asList("a", "b"));
+        assertThat(argumentCaptor.getValue()).isEqualTo("b");
+        assertThat(argumentCaptor.getAllValues()).isEqualTo(asList("a", "b"));
     }
 
     @Test
@@ -321,8 +350,8 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         verify(mock).mixedVarargs(any(), argumentCaptor.capture());
-        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo(new String[] {});
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly(new String[] {});
+        assertThat(argumentCaptor.getValue()).isEqualTo(new String[] {});
+        assertThat(argumentCaptor.getAllValues()).containsExactly(new String[] {});
     }
 
     @Test
@@ -335,8 +364,8 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         verify(mock).mixedVarargs(any(), argumentCaptor.capture());
-        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo(new String[] {"a"});
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly(new String[] {"a"});
+        assertThat(argumentCaptor.getValue()).isEqualTo(new String[] {"a"});
+        assertThat(argumentCaptor.getAllValues()).containsExactly(new String[] {"a"});
     }
 
     @Test
@@ -349,8 +378,7 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         verify(mock).mixedVarargs(any(), argumentCaptor.capture());
-        Assertions.assertThat(argumentCaptor.getAllValues())
-                .containsExactly(new String[] {"a", "b", "c"});
+        assertThat(argumentCaptor.getAllValues()).containsExactly(new String[] {"a", "b", "c"});
     }
 
     @Test
@@ -363,8 +391,7 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         verify(mock).mixedVarargs(any(), argumentCaptor.capture());
-        Assertions.assertThat(argumentCaptor.getAllValues())
-                .containsExactly(new String[] {"a", null, "c"});
+        assertThat(argumentCaptor.getAllValues()).containsExactly(new String[] {"a", null, "c"});
     }
 
     @Test
@@ -380,8 +407,8 @@ public class CapturingArgumentsTest extends TestBase {
         verify(mock, times(2))
                 .mixedVarargs(any(), argumentCaptor.capture(), argumentCaptor.capture());
 
-        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo("d");
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c", "d");
+        assertThat(argumentCaptor.getValue()).isEqualTo("d");
+        assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c", "d");
     }
 
     @Test
@@ -396,8 +423,8 @@ public class CapturingArgumentsTest extends TestBase {
         // then
         verify(mock, times(2)).mixedVarargs(any(), argumentCaptor.capture());
 
-        Assertions.assertThat(argumentCaptor.getValue()).isEqualTo(new String[] {"c", "d"});
-        Assertions.assertThat(argumentCaptor.getAllValues())
+        assertThat(argumentCaptor.getValue()).isEqualTo(new String[] {"c", "d"});
+        assertThat(argumentCaptor.getAllValues())
                 .containsExactly(new String[] {"a", "b"}, new String[] {"c", "d"});
     }
 
@@ -411,7 +438,7 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         verify(mock).simpleMethod(argumentCaptor.capture(), eq(2));
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a");
+        assertThat(argumentCaptor.getAllValues()).containsExactly("a");
     }
 
     @Test
@@ -430,7 +457,7 @@ public class CapturingArgumentsTest extends TestBase {
                         argumentCaptor.capture(),
                         argumentCaptor.capture(),
                         argumentCaptor.capture());
-        Assertions.assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c");
+        assertThat(argumentCaptor.getAllValues()).containsExactly("a", "b", "c");
     }
 
     @Test
@@ -443,6 +470,6 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         verify(mock).varargs(eq(42), argumentCaptor.capture());
-        Assertions.assertThat(argumentCaptor.getValue()).contains("capturedValue");
+        assertThat(argumentCaptor.getValue()).contains("capturedValue");
     }
 }
