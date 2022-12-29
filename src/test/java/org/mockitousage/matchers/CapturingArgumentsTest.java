@@ -57,9 +57,9 @@ public class CapturingArgumentsTest extends TestBase {
         boolean sendEmailTo(Person person);
     }
 
-    private EmailService emailService = mock(EmailService.class);
-    private BulkEmailService bulkEmailService = new BulkEmailService(emailService);
-    private IMethods mock = mock(IMethods.class);
+    private final EmailService emailService = mock(EmailService.class);
+    private final BulkEmailService bulkEmailService = new BulkEmailService(emailService);
+    private final IMethods mock = mock(IMethods.class);
     @Captor private ArgumentCaptor<List<?>> listCaptor;
 
     @SuppressWarnings("deprecation")
@@ -128,7 +128,7 @@ public class CapturingArgumentsTest extends TestBase {
 
         // then
         verify(emailService).sendEmailTo(argument.capture());
-        assertEquals(null, argument.getValue());
+        assertNull(argument.getValue());
     }
 
     @Test
@@ -139,6 +139,7 @@ public class CapturingArgumentsTest extends TestBase {
         assertNotNull(argument);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void should_allow_construction_of_captor_for_a_more_specific_type() {
         // the test passes if this expression compiles
@@ -184,7 +185,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_when_full_arg_list_matches() throws Exception {
+    public void should_capture_when_full_arg_list_matches() {
         // given
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
 
@@ -212,7 +213,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_int_by_creating_captor_with_primitive() throws Exception {
+    public void should_capture_int_by_creating_captor_with_primitive() {
         // given
         ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(int.class);
 
@@ -225,7 +226,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_not_capture_int_by_creating_captor_with_primitive() throws Exception {
+    public void should_not_capture_int_by_creating_captor_with_primitive() {
         // given
         ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(int.class);
 
@@ -237,7 +238,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_byte_vararg_by_creating_captor_with_primitive() throws Exception {
+    public void should_capture_byte_vararg_by_creating_captor_with_primitive() {
         // given
         ArgumentCaptor<Byte> argumentCaptor = ArgumentCaptor.forClass(byte.class);
 
@@ -251,8 +252,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_byte_vararg_by_creating_captor_with_primitive_wrapper()
-            throws Exception {
+    public void should_capture_byte_vararg_by_creating_captor_with_primitive_wrapper() {
         // given
         ArgumentCaptor<Byte> argumentCaptor = ArgumentCaptor.forClass(Byte.class);
 
@@ -266,7 +266,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_vararg() throws Exception {
+    public void should_capture_vararg() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -279,7 +279,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_all_vararg() throws Exception {
+    public void should_capture_all_vararg() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -295,8 +295,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void should_capture_one_arg_even_when_using_vararg_captor_on_nonvararg_method()
-            throws Exception {
+    public void should_capture_one_arg_even_when_using_vararg_captor_on_nonvararg_method() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -309,7 +308,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void captures_correctly_when_captor_used_multiple_times() throws Exception {
+    public void captures_correctly_when_captor_used_multiple_times() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
@@ -328,7 +327,7 @@ public class CapturingArgumentsTest extends TestBase {
     }
 
     @Test
-    public void captures_correctly_when_captor_used_on_pure_vararg_method() throws Exception {
+    public void captures_correctly_when_captor_used_on_pure_vararg_method() {
         // given
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
