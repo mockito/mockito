@@ -10,10 +10,13 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
@@ -54,9 +57,10 @@ public class CapturingArgumentsTest extends TestBase {
         boolean sendEmailTo(Person person);
     }
 
-    EmailService emailService = mock(EmailService.class);
-    BulkEmailService bulkEmailService = new BulkEmailService(emailService);
-    IMethods mock = mock(IMethods.class);
+    private final EmailService emailService = mock(EmailService.class);
+    private final BulkEmailService bulkEmailService = new BulkEmailService(emailService);
+    private final IMethods mock = mock(IMethods.class);
+    @Captor private ArgumentCaptor<List<?>> listCaptor;
 
     @Test
     public void should_allow_assertions_on_captured_argument() {
@@ -109,7 +113,7 @@ public class CapturingArgumentsTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             // then
-            assertThat(e).hasMessageContaining("<Capturing argument>");
+            assertThat(e).hasMessageContaining("<Capturing argument: Person>");
         }
     }
 
@@ -218,6 +222,18 @@ public class CapturingArgumentsTest extends TestBase {
         // then
         verify(mock).intArgumentMethod(argument.capture());
         assertEquals(10, (int) argument.getValue());
+    }
+
+    @Test
+    public void should_not_capture_int_by_creating_captor_with_primitive() {
+        // given
+        ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(int.class);
+
+        // when
+        mock.forObject(10L);
+
+        // then
+        verify(mock, never()).forObject(argument.capture());
     }
 
     @Test
@@ -471,5 +487,42 @@ public class CapturingArgumentsTest extends TestBase {
         // then
         verify(mock).varargs(eq(42), argumentCaptor.capture());
         assertThat(argumentCaptor.getValue()).contains("capturedValue");
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void should_capture_by_type() {
+        // When:
+        mock.simpleMethod(Set.of());
+        mock.simpleMethod(new ArrayList<>(0));
+
+        // Then:
+        ArgumentCaptor<Collection<?>> captor = ArgumentCaptor.forClass(ArrayList.class);
+        verify(mock).simpleMethod(captor.capture());
+        assertThat(captor.getAllValues()).containsExactly(List.of());
+    }
+
+    @Test
+    public void should_capture_by_type_using_annotation() {
+        // When:
+        mock.simpleMethod(Set.of());
+        mock.simpleMethod(new ArrayList<>(0));
+
+        // Then:
+        verify(mock).simpleMethod(listCaptor.capture());
+        assertThat(listCaptor.getAllValues()).containsExactly(List.of());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void should_always_capture_nulls() {
+        // When:
+        mock.simpleMethod((Set<?>) null);
+        mock.simpleMethod((List<?>) null);
+
+        // Then:
+        ArgumentCaptor<Collection<?>> captor = ArgumentCaptor.forClass(ArrayList.class);
+        verify(mock, times(2)).simpleMethod(captor.capture());
+        assertThat(captor.getAllValues()).containsExactly(null, null);
     }
 }
