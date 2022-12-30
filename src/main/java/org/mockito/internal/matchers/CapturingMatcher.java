@@ -17,8 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.util.Primitives;
 
-public class CapturingMatcher<T>
-        implements ArgumentMatcher<T>, CapturesArguments, VarargMatcher, Serializable {
+public class CapturingMatcher<T> implements ArgumentMatcher<T>, CapturesArguments, Serializable {
 
     private final Class<? extends T> clazz;
     private final List<T> arguments = new ArrayList<>();

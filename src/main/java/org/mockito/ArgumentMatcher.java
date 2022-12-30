@@ -161,7 +161,7 @@ public interface ArgumentMatcher<T> {
      * <p>Only matcher implementations that can conceptually match a raw vararg parameter should override this method.
      *
      * @return the type this matcher handles. The default value of {@link Void} means the type is not known.
-     * @since 5.0.0
+     * @since 4.11.0
      */
     default Class<?> type() {
         return Void.class;

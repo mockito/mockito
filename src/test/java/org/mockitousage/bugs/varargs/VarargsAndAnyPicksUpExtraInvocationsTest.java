@@ -26,7 +26,7 @@ public class VarargsAndAnyPicksUpExtraInvocationsTest extends TestBase {
         table.newRow("abc", "def");
 
         // then
-        verify(table, times(2)).newRow(anyString(), (String[]) any());
+        verify(table, times(2)).newRow(anyString(), any(String[].class));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class VarargsAndAnyPicksUpExtraInvocationsTest extends TestBase {
         table.newRow("x", "def");
 
         // then
-        verify(table, times(2)).newRow(eq("x"), (String[]) any());
+        verify(table, times(2)).newRow(eq("x"), any(String[].class));
     }
 
     @Test

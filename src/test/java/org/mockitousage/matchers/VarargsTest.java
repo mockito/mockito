@@ -40,6 +40,7 @@ public class VarargsTest {
 
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Captor private ArgumentCaptor<String> captor;
+    @Captor private ArgumentCaptor<String[]> arrayCaptor;
     @Mock private IMethods mock;
 
     private static final Condition<Object> NULL =
@@ -82,18 +83,18 @@ public class VarargsTest {
 
     @Test
     public void shouldMatchVarArgs_oneNullArg_isNull() {
-        Object arg = null;
-        mock.varargs(arg);
+        mock.varargs((Object) null);
 
-        verify(mock).varargs(ArgumentMatchers.<Object[]>isNull());
+        verify(mock).varargs(ArgumentMatchers.<Object>isNull());
+        verify(mock, never()).varargs(isNull(Object[].class));
     }
 
     @Test
     public void shouldMatchVarArgs_nullArrayArg() {
-        Object[] argArray = null;
-        mock.varargs(argArray);
+        mock.varargs((Object[]) null);
 
-        verify(mock).varargs(ArgumentMatchers.<Object[]>isNull());
+        verify(mock).varargs(isNull(Object[].class));
+        verify(mock).varargs(ArgumentMatchers.<Object>isNull());
     }
 
     @Test
@@ -111,28 +112,28 @@ public class VarargsTest {
     public void shouldMatchVarArgs_emptyVarArgsOneAnyMatcher() {
         mock.varargs();
 
-        verify(mock).varargs((String[]) any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(String[].class));
     }
 
     @Test
     public void shouldMatchVarArgs_oneArgsOneAnyMatcher() {
         mock.varargs(1);
 
-        verify(mock).varargs(ArgumentMatchers.<Object[]>any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(Object[].class));
     }
 
     @Test
     public void shouldMatchVarArgs_twoArgsOneAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(ArgumentMatchers.<Object[]>any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(Object[].class));
     }
 
     @Test
     public void shouldMatchVarArgs_twoArgsTwoAnyMatcher() {
         mock.varargs(1, 2);
 
-        verify(mock).varargs(any(), ArgumentMatchers.<Object>any()); // any() -> VarargMatcher
+        verify(mock).varargs(any(), ArgumentMatchers.<Object>any());
     }
 
     @Test
@@ -141,7 +142,7 @@ public class VarargsTest {
 
         assertThatThrownBy(
                         () -> {
-                            verify(mock).varargs(any(), any(), any()); // any() -> VarargMatcher
+                            verify(mock).varargs(any(), any(), any());
                         })
                 .hasMessageContaining("Argument(s) are different");
     }
@@ -192,9 +193,9 @@ public class VarargsTest {
     public void shouldCaptureVarArgs_noArgs() {
         mock.varargs();
 
-        verify(mock).varargs(captor.capture());
+        verify(mock).varargs(arrayCaptor.capture());
 
-        assertThatCaptor(captor).isEmpty();
+        assertThatCaptor(arrayCaptor).contains(new String[] {});
     }
 
     @Test
@@ -224,9 +225,9 @@ public class VarargsTest {
     public void shouldCaptureVarArgs_twoArgsOneCapture() {
         mock.varargs("1", "2");
 
-        verify(mock).varargs(captor.capture());
+        verify(mock).varargs(arrayCaptor.capture());
 
-        assertThatCaptor(captor).contains("1", "2");
+        assertThatCaptor(arrayCaptor).contains(new String[] {"1", "2"});
     }
 
     @Test
@@ -236,15 +237,6 @@ public class VarargsTest {
         verify(mock).varargs(captor.capture(), captor.capture());
 
         assertThatCaptor(captor).contains("1", "2");
-    }
-
-    @Test
-    public void shouldCaptureVarArgs_oneNullArgument() {
-        mock.varargs("1", null);
-
-        verify(mock).varargs(captor.capture());
-
-        assertThatCaptor(captor).contains("1", (String) null);
     }
 
     @Test
@@ -361,20 +353,6 @@ public class VarargsTest {
         assertThat(mock.methodWithVarargAndNonVarargVariants(new String[] {"a", "b"}))
                 .isEqualTo("var arg method");
         assertThat(mock.methodWithVarargAndNonVarargVariants("a", "b", "c")).isNull();
-    }
-
-    @Test
-    public void shouldMockVarargsInvocationUsingCasts() {
-        given(mock.methodWithVarargAndNonVarargVariants((String) any()))
-                .willReturn("single arg method");
-        given(mock.methodWithVarargAndNonVarargVariants((String[]) any()))
-                .willReturn("var arg method");
-
-        assertThat(mock.methodWithVarargAndNonVarargVariants("a")).isEqualTo("single arg method");
-        assertThat(mock.methodWithVarargAndNonVarargVariants()).isEqualTo("var arg method");
-        assertThat(mock.methodWithVarargAndNonVarargVariants(new String[] {"a"}))
-                .isEqualTo("var arg method");
-        assertThat(mock.methodWithVarargAndNonVarargVariants("a", "b")).isEqualTo("var arg method");
     }
 
     @Test

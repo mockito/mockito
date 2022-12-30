@@ -174,7 +174,7 @@ public class ArgumentMatchers {
      * @see #isNull()
      */
     public static <T> T any(Class<T> type) {
-        reportMatcher(new InstanceOf.VarArgAware(type, "<any " + type.getCanonicalName() + ">"));
+        reportMatcher(new InstanceOf(type, "<any " + type.getCanonicalName() + ">"));
         return defaultValue(type);
     }
 
@@ -709,7 +709,7 @@ public class ArgumentMatchers {
      * @param type the type of the argument being matched.
      * @return <code>null</code>.
      * @see #isNotNull(Class)
-     * @since 5.0.0
+     * @since 4.11.0
      */
     public static <T> T isNull(Class<T> type) {
         reportMatcher(new Null<>(type));
@@ -747,7 +747,7 @@ public class ArgumentMatchers {
      *
      * @param type the type of the argument being matched.
      * @return <code>null</code>.
-     * @since 5.0.0
+     * @since 4.11.0
      */
     public static <T> T notNull(Class<T> type) {
         reportMatcher(new NotNull<>(type));
@@ -786,7 +786,7 @@ public class ArgumentMatchers {
      * @param type the type of the argument being matched.
      * @return <code>null</code>.
      * @see #isNull()
-     * @since 5.0.0
+     * @since 4.11.0
      */
     public static <T> T isNotNull(Class<T> type) {
         return notNull(type);

@@ -6,7 +6,10 @@ package org.mockitousage.matchers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.hamcrest.MockitoHamcrest.*;
@@ -54,7 +57,44 @@ public class HamcrestMatchersTest extends TestBase {
         }
     }
 
-    private class IntMatcher extends BaseMatcher<Integer> {
+    @Test
+    public void does_not_verify_vararg_with_no_items() {
+        mock.varargs();
+
+        verify(mock, never()).varargs(argThat(isA(String.class)));
+    }
+
+    @Test
+    public void verifies_vararg_with_single_item() {
+        mock.varargs("a");
+
+        verify(mock).varargs(argThat(isA(String.class)));
+    }
+
+    @Test
+    public void does_not_verify_vararg_with_multiple_items() {
+        mock.varargs("a", "b");
+
+        verify(mock, never()).varargs(argThat(isA(String.class)));
+    }
+
+    @Test
+    public void verify_vararg_with_multiple_item() {
+        mock.varargs("a", "b");
+
+        verify(mock).varargs(argThat(isA(String.class)), argThat(isA(String.class)));
+    }
+
+    @Test
+    public void verifies_vararg_with_any_num_items() {
+        mock.varargs();
+        mock.varargs("a");
+        mock.varargs("a", "b");
+
+        verify(mock, times(3)).varargs(argThat(isA(String[].class), String[].class));
+    }
+
+    private final class IntMatcher extends BaseMatcher<Integer> {
         public boolean matches(Object o) {
             return true;
         }

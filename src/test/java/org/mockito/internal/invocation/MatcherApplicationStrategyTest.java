@@ -9,7 +9,6 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.internal.invocation.MatcherApplicationStrategy.getMatcherApplicationStrategyFor;
 import static org.mockito.internal.matchers.Any.ANY;
 
@@ -26,7 +25,6 @@ import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 import org.mockito.internal.matchers.Any;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.InstanceOf;
-import org.mockito.internal.matchers.VarargMatcher;
 import org.mockito.invocation.Invocation;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
@@ -124,7 +122,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     public void shouldAllowAnyMatchEntireVararg() {
         // given
         invocation = varargs("1", "2");
-        matchers = asList(ANY);
+        matchers = asList(ANY, ANY);
 
         // when
         boolean match =
@@ -151,10 +149,10 @@ public class MatcherApplicationStrategyTest extends TestBase {
     }
 
     @Test
-    public void shouldAllowanyWithMixedVarargs() {
+    public void shouldAllowAnyWithMixedVarargs() {
         // given
         invocation = mixedVarargs(1, "1", "2");
-        matchers = asList(new Equals(1), ANY);
+        matchers = asList(new Equals(1), ANY, ANY);
 
         // when
         boolean match =
@@ -186,7 +184,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     public void shouldMatchAnyEvenIfOneOfTheArgsIsNull() {
         // given
         invocation = mixedVarargs(null, null, "2");
-        matchers = asList(new Equals(null), ANY);
+        matchers = asList(new Equals(null), ANY, ANY);
 
         // when
         getMatcherApplicationStrategyFor(invocation, matchers)
@@ -200,7 +198,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     public void shouldMatchAnyEvenIfMatcherIsDecorated() {
         // given
         invocation = varargs("1", "2");
-        matchers = asList(ANY);
+        matchers = asList(ANY, ANY);
 
         // when
         getMatcherApplicationStrategyFor(invocation, matchers)
@@ -216,7 +214,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
         invocation = varargs("1", "2");
         HamcrestArgumentMatcher<Integer> argumentMatcher =
                 new HamcrestArgumentMatcher<>(new IntMatcher());
-        matchers = asList(argumentMatcher);
+        matchers = asList(argumentMatcher, argumentMatcher);
 
         // when
         getMatcherApplicationStrategyFor(invocation, matchers)
@@ -230,7 +228,7 @@ public class MatcherApplicationStrategyTest extends TestBase {
     public void shouldMatchAnyThatMatchesRawVarArgType() {
         // given
         invocation = varargs("1", "2");
-        InstanceOf.VarArgAware any = new InstanceOf.VarArgAware(String[].class, "<any String[]>");
+        InstanceOf any = new InstanceOf(String[].class, "<any String[]>");
         matchers = asList(any);
 
         // when
@@ -241,7 +239,15 @@ public class MatcherApplicationStrategyTest extends TestBase {
         recordAction.assertContainsExactly(any);
     }
 
-    private static class IntMatcher extends BaseMatcher<Integer> implements VarargMatcher {
+    private static class IntMatcher extends BaseMatcher<Integer> {
+        public boolean matches(Object o) {
+            return true;
+        }
+
+        public void describeTo(Description description) {}
+    }
+
+    private static class IntArrayMatcher extends BaseMatcher<Integer[]> {
         public boolean matches(Object o) {
             return true;
         }

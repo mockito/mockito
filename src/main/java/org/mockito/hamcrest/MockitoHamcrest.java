@@ -42,6 +42,24 @@ import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
  * Due to how java works we don't really have a clean way of detecting this scenario and protecting the user from this problem.
  * Hopefully, the javadoc describes the problem and solution well.
  * If you have an idea how to fix the problem, let us know via the mailing list or the issue tracker.
+ * <p/>
+ * By default, a matcher passed to a varargs parameter will match against the first element in the varargs array.
+ * To match against the raw varargs array pass the type of the varargs parameter to {@link MockitoHamcrest#argThat(Matcher, Class)}
+ * <p/>
+ * For example, to match any number of {@code String} values:
+ * <pre>
+ *     import static org.hamcrest.CoreMatchers.isA;
+ *     import static org.mockito.hamcrest.MockitoHamcrest.argThat;
+ *
+ *     // Given:
+ *     void varargMethod(String... args);
+ *
+ *     //stubbing
+ *     when(mock.varargMethod(argThat(isA(String[].class), String[].class));
+ *
+ *     //verification
+ *     verify(mock).giveMe(argThat(isA(String[].class), String[].class));
+ * </pre>
  *
  * @since 2.1.0
  */
@@ -59,6 +77,26 @@ public final class MockitoHamcrest {
     @SuppressWarnings("unchecked")
     public static <T> T argThat(Matcher<T> matcher) {
         reportMatcher(matcher);
+        return (T) defaultValue(genericTypeOfMatcher(matcher.getClass()));
+    }
+
+    /**
+     * Allows matching arguments with hamcrest matchers.
+     * <p/>
+     * This variant can be used to pass an explicit {@code type},
+     * which can be useful to provide a matcher that matches against all
+     * elements in a varargs parameter.
+     * <p/>
+     * See examples in javadoc for {@link MockitoHamcrest} class
+     *
+     * @param matcher decides whether argument matches
+     * @param type the type the matcher matches.
+     * @return <code>null</code> or default value for primitive (0, false, etc.)
+     * @since 5.0.0
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T argThat(Matcher<T> matcher, Class<T> type) {
+        reportMatcher(matcher, type);
         return (T) defaultValue(genericTypeOfMatcher(matcher.getClass()));
     }
 
@@ -175,9 +213,15 @@ public final class MockitoHamcrest {
     }
 
     private static <T> void reportMatcher(Matcher<T> matcher) {
-        mockingProgress()
-                .getArgumentMatcherStorage()
-                .reportMatcher(new HamcrestArgumentMatcher<T>(matcher));
+        reportMatcher(new HamcrestArgumentMatcher<T>(matcher));
+    }
+
+    private static <T> void reportMatcher(Matcher<T> matcher, Class<T> type) {
+        reportMatcher(new HamcrestArgumentMatcher<T>(matcher, type));
+    }
+
+    private static <T> void reportMatcher(final HamcrestArgumentMatcher<T> matcher) {
+        mockingProgress().getArgumentMatcherStorage().reportMatcher(matcher);
     }
 
     private MockitoHamcrest() {}

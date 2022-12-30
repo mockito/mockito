@@ -39,20 +39,4 @@ public class InstanceOf implements ArgumentMatcher<Object>, Serializable {
     public String toString() {
         return description;
     }
-
-    public static class VarArgAware extends InstanceOf implements VarargMatcher {
-
-        public VarArgAware(Class<?> clazz) {
-            super(clazz);
-        }
-
-        public VarArgAware(Class<?> clazz, String describedAs) {
-            super(clazz, describedAs);
-        }
-
-        @Override
-        public Class<?> type() {
-            return clazz;
-        }
-    }
 }
