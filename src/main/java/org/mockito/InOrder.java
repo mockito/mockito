@@ -12,13 +12,41 @@ import org.mockito.verification.VerificationMode;
  * Allows verification in order. E.g:
  *
  * <pre class="code"><code class="java">
+ * // Given
+ * First firstMock = mock(First.class);
+ * Second secondMock = mock(Second.class);
  * InOrder inOrder = inOrder(firstMock, secondMock);
  *
+ * // When
+ * firstMock.add("was called first");
+ * secondMock.add("was called second");
+ *
+ * // Then
  * inOrder.verify(firstMock).add("was called first");
  * inOrder.verify(secondMock).add("was called second");
+ * inOrder.verifyNoMoreInteractions();
  * </code></pre>
  *
- * As of Mockito 1.8.4 you can verifyNoMoreInteractions() in order-sensitive way. Read more: {@link InOrder#verifyNoMoreInteractions()}
+ * Static mocks can be verified alongside non-static mocks. E.g:
+ *
+ * <pre class="code"><code class="java">
+ * // Given
+ * First firstMock = mock(First.class);
+ * MockedStatic<StaticSecond> staticSecondMock = mockStatic(StaticSecond.class);
+ * InOrder inOrder = inOrder(firstMock, StaticSecond.class);
+ *
+ * // When
+ * firstMock.add("was called first");
+ * StaticSecond.doSomething("foobar");
+ *
+ * // Then
+ * inOrder.verify(firstMock).add("was called first");
+ * inOrder.verify(staticSecondMock, () -&gt; StaticSecond.doSomething("foobar"));
+ * inOrder.verifyNoMoreInteractions();
+ * </code></pre>
+ *
+ * As of Mockito 1.8.4 you can verifyNoMoreInteractions() in order-sensitive way. Read more:
+ * {@link InOrder#verifyNoMoreInteractions()}.
  * <p>
  *
  * See examples in javadoc for {@link Mockito} class
@@ -96,9 +124,9 @@ public interface InOrder {
      * @param mode         for example times(x) or atLeastOnce()
      */
     void verify(
-            MockedStatic<?> mockedStatic,
-            MockedStatic.Verification verification,
-            VerificationMode mode);
+        MockedStatic<?> mockedStatic,
+        MockedStatic.Verification verification,
+        VerificationMode mode);
 
     /**
      * Verifies that no more interactions happened <b>in order</b>.
