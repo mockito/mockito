@@ -4,7 +4,7 @@
      alt="Mockito" />
 </a>
 
-Most popular mocking framework for Java.
+Most popular mocking framework for Java
 
 [![CI](https://github.com/mockito/mockito/workflows/CI/badge.svg)](https://github.com/mockito/mockito/actions?query=workflow%3ACI)
 [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito)
