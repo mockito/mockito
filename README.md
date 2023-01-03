@@ -4,7 +4,7 @@
      alt="Mockito" />
 </a>
 
-Most popular mocking framework for Java
+Most popular mocking framework for Java.
 
 [![CI](https://github.com/mockito/mockito/workflows/CI/badge.svg)](https://github.com/mockito/mockito/actions?query=workflow%3ACI)
 [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito)
@@ -22,7 +22,7 @@ Still on Mockito 1.x? See [what's new](https://github.com/mockito/mockito/wiki/W
 
 ## Mockito for enterprise
 
-Available as part of the Tidelift Subscription
+Available as part of the [Tidelift](https://tidelift.com/subscription/pkg/maven-org-mockito-mockito-core) Subscription.
 
 The maintainers of org.mockito:mockito-core and thousands of other packages are working with Tidelift to deliver
 commercial support and maintenance for the open source dependencies you use to build your applications. Save time,
@@ -73,7 +73,7 @@ Then, _open_ the generated *.ipr file in IDEA.
 
 ## How to release new version?
 
-1. Every change on the main development branch is released as -SNAPSHOT version to Sonatype snapshot repo
+1. Every change on the main development branch is released as `-SNAPSHOT` version to Sonatype snapshot repo
    at https://s01.oss.sonatype.org/content/repositories/snapshots/org/mockito/mockito-core.
 2. In order to release a non-snapshot version to Maven Central push an annotated tag, for example:
 
