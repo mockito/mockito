@@ -13,6 +13,8 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.plugins.InlineMockMaker;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,6 +53,10 @@ public class OsgiTest extends Suite {
         Map<String, String> configuration = new HashMap<>();
         configuration.put(Constants.FRAMEWORK_STORAGE, frameworkStorage.toString());
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, String.join(",", EXTRA_SYSTEMPACKAGES));
+        // When inline mock macker is used, the new 'mockitoboot.jar' is created on the fly
+        // and added to boot classloader (by instrumentation). As such, the following
+        // packages have to be explicitly delegated to boot classloader.
+        configuration.put(Constants.FRAMEWORK_BOOTDELEGATION, "org.mockito.internal.creation.bytebuddy.inject");
         framework = frameworkFactory.newFramework(configuration);
         framework.init();
         BundleContext bundleContext = framework.getBundleContext();
@@ -79,11 +85,21 @@ public class OsgiTest extends Suite {
     }
 
     private static Class<?>[] getTestClasses() throws Exception {
-        return new Class<?>[] {
-            loadTestClass("SimpleMockTest"),
-            loadTestClass("MockNonPublicClassFailsTest"),
-            loadTestClass("MockClassInOtherBundleTest")
-        };
+        // The tests could not use 'Plugins' since 'org.mockito.internal' package is not exported.
+        // Making the decision which tests to run depending on mock maker instance.
+        if (Plugins.getMockMaker() instanceof InlineMockMaker) {
+            return new Class<?>[] {
+                loadTestClass("SimpleMockTest"),
+                loadTestClass("MockNonPublicClassTest"),
+                loadTestClass("MockClassInOtherBundleTest")
+            };
+        } else {
+            return new Class<?>[] {
+                loadTestClass("SimpleMockTest"),
+                loadTestClass("MockNonPublicClassFailsTest"),
+                loadTestClass("MockClassInOtherBundleTest")
+            };
+        }
     }
 
     @AfterClass

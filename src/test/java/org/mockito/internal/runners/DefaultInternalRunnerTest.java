@@ -4,11 +4,14 @@
  */
 package org.mockito.internal.runners;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -18,9 +21,11 @@ import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.Statement;
 import org.mockito.Mock;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.junit.MockitoTestListener;
 import org.mockito.internal.junit.TestFinishedEvent;
 import org.mockito.internal.util.Supplier;
+import org.mockito.plugins.InlineMockMaker;
 
 public class DefaultInternalRunnerTest {
 
@@ -42,6 +47,9 @@ public class DefaultInternalRunnerTest {
 
     @Test
     public void does_not_fail_second_test_when_first_test_fail() throws Exception {
+        // The TestFailOnInitialization is initialized properly by inline mock maker
+        Assume.assumeThat(Plugins.getMockMaker(), not(instanceOf(InlineMockMaker.class)));
+
         new DefaultInternalRunner(TestFailOnInitialization.class, supplier)
                 .run(newNotifier(runListener));
 

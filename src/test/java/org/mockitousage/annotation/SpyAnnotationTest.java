@@ -6,6 +6,8 @@ package org.mockitousage.annotation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -22,6 +24,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -30,6 +33,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.plugins.InlineMockMaker;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unused")
@@ -189,7 +194,20 @@ public class SpyAnnotationTest extends TestBase {
     }
 
     @Test
+    public void should_spy_private_inner() throws Exception {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+
+        WithInnerPrivate inner = new WithInnerPrivate();
+        MockitoAnnotations.openMocks(inner);
+
+        when(inner.spy_field.lenght()).thenReturn(10);
+        assertEquals(10, inner.spy_field.lenght());
+    }
+
+    @Test
     public void should_report_private_inner_not_supported() throws Exception {
+        Assume.assumeThat(Plugins.getMockMaker(), not(instanceOf(InlineMockMaker.class)));
+
         try {
             MockitoAnnotations.openMocks(new WithInnerPrivate());
             fail();
@@ -287,7 +305,11 @@ public class SpyAnnotationTest extends TestBase {
     static class WithInnerPrivate {
         @Spy private InnerPrivate spy_field;
 
-        private class InnerPrivate {}
+        private class InnerPrivate {
+            int lenght() {
+                return 0;
+            }
+        }
 
         private class InnerPrivateSub extends InnerPrivate {}
     }

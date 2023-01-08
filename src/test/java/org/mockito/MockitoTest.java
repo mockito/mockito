@@ -7,16 +7,21 @@ package org.mockito;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.Mockito.times;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import java.util.List;
 
+import org.junit.Assume;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.NullInsteadOfMockException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.plugins.InlineMockMaker;
 
 @SuppressWarnings("unchecked")
 public class MockitoTest {
@@ -99,6 +104,8 @@ public class MockitoTest {
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldGiveExplanationOnStaticMockingWithoutInlineMockMaker() {
+        Assume.assumeThat(Plugins.getMockMaker(), not(instanceOf(InlineMockMaker.class)));
+
         assertThatThrownBy(
                         () -> {
                             Mockito.mockStatic(Object.class);
@@ -114,6 +121,8 @@ public class MockitoTest {
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
     public void shouldGiveExplanationOnConstructionMockingWithoutInlineMockMaker() {
+        Assume.assumeThat(Plugins.getMockMaker(), not(instanceOf(InlineMockMaker.class)));
+
         assertThatThrownBy(
                         () -> {
                             Mockito.mockConstruction(Object.class);
@@ -124,6 +133,20 @@ public class MockitoTest {
                         "Mockito's inline mock maker supports construction mocks based on the Instrumentation API.",
                         "You can simply enable this mock mode, by placing the 'mockito-inline' artifact where you are currently using 'mockito-core'.",
                         "Note that Mockito's inline mock maker is not supported on Android.");
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void shouldGiveExplanationOnConstructionMockingWithInlineMockMaker() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.mockConstruction(Object.class);
+                        })
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContainingAll(
+                        "It is not possible to mock construction of the Object class to avoid inference with default object constructor chains");
     }
 
     @Test

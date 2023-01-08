@@ -4,7 +4,10 @@
  */
 package org.mockitousage.misuse;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.not;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -12,11 +15,14 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.plugins.InlineMockMaker;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
@@ -155,6 +161,8 @@ public class InvalidUsageTest extends TestBase {
 
     @Test
     public void shouldNotAllowMockingFinalClassesIfDisabled() {
+        Assume.assumeThat(Plugins.getMockMaker(), not(instanceOf(InlineMockMaker.class)));
+
         assertThatThrownBy(
                         () -> {
                             mock(FinalClass.class);
@@ -164,6 +172,12 @@ public class InvalidUsageTest extends TestBase {
                         "Cannot mock/spy class org.mockitousage.misuse.InvalidUsageTest$FinalClass",
                         "Mockito cannot mock/spy because :",
                         " - final class");
+    }
+
+    @Test
+    public void shouldAllowMockingFinalClassesIfEnabled() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+        assertThat(mock(FinalClass.class)).isInstanceOf(FinalClass.class);
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})

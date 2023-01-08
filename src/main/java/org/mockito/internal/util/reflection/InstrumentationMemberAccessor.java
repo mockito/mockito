@@ -188,7 +188,16 @@ class InstrumentationMemberAccessor implements MemberAccessor {
                     onConstruction.invoke(
                             () -> {
                                 try {
-                                    return DISPATCHER.invokeWithArguments(handle, arguments);
+                                    // Use handle.asFixedArity() to handle varargs bindings properly
+                                    // (as by default Java will create method handle with
+                                    // asVarargsCollector), fe:
+                                    //
+                                    //   private static class Varargs {
+                                    //     Varargs(String whatever, Observer... observers) {
+                                    //     }
+                                    //   }
+                                    return DISPATCHER.invokeWithArguments(
+                                            handle.asFixedArity(), arguments);
                                 } catch (Throwable throwable) {
                                     thrown.set(true);
                                     return throwable;
@@ -372,17 +381,23 @@ class InstrumentationMemberAccessor implements MemberAccessor {
                 throw new IllegalArgumentException("Cannot access " + target + " on " + owner);
             }
         }
-        if (types.length != values.length) {
+
+        Object[] args = values;
+        if (args == null) {
+            args = new Object[0];
+        }
+
+        if (types.length != args.length) {
             throw new IllegalArgumentException(
                     "Incorrect number of arguments for "
                             + target
                             + ": expected "
                             + types.length
                             + " but recevied "
-                            + values.length);
+                            + args.length);
         }
-        for (int index = 0; index < values.length; index++) {
-            if (values[index] == null) {
+        for (int index = 0; index < args.length; index++) {
+            if (args[index] == null) {
                 if (types[index].isPrimitive()) {
                     throw new IllegalArgumentException(
                             "Cannot assign null to primitive type "
@@ -394,10 +409,10 @@ class InstrumentationMemberAccessor implements MemberAccessor {
                 }
             } else {
                 Class<?> resolved = WRAPPERS.getOrDefault(types[index], types[index]);
-                if (!resolved.isAssignableFrom(values[index].getClass())) {
+                if (!resolved.isAssignableFrom(args[index].getClass())) {
                     throw new IllegalArgumentException(
                             "Cannot assign value of type "
-                                    + values[index].getClass()
+                                    + args[index].getClass()
                                     + " to "
                                     + resolved
                                     + " for "
