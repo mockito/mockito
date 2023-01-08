@@ -53,6 +53,9 @@ public class OsgiTest extends Suite {
         Map<String, String> configuration = new HashMap<>();
         configuration.put(Constants.FRAMEWORK_STORAGE, frameworkStorage.toString());
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, String.join(",", EXTRA_SYSTEMPACKAGES));
+        // When inline mock macker is used, the new 'mockitoboot.jar' is created on the fly
+        // and added to boot classloader (by instrumentation). As such, the following
+        // packages have to be explicitly delegated to boot classloader.
         configuration.put(Constants.FRAMEWORK_BOOTDELEGATION, "org.mockito.internal.creation.bytebuddy.inject");
         framework = frameworkFactory.newFramework(configuration);
         framework.init();
@@ -82,6 +85,8 @@ public class OsgiTest extends Suite {
     }
 
     private static Class<?>[] getTestClasses() throws Exception {
+        // The tests could not use 'Plugins' since 'org.mockito.internal' package is not exported.
+        // Making the decision which tests to run depending on mock maker instance.
         if (Plugins.getMockMaker() instanceof InlineMockMaker) {
             return new Class<?>[] {
                 loadTestClass("SimpleMockTest"),
