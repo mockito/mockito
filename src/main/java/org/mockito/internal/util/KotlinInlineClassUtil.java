@@ -18,8 +18,8 @@ public class KotlinInlineClassUtil {
     static {
         try {
             jvmInlineAnnotation = (Class<Annotation>) Class.forName("kotlin.jvm.JvmInline");
-        } catch (ClassNotFoundException e) {
-            // Do nothing: kotlin is pre 1.5.0
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            // Do nothing: kotlin is pre 1.5.0 or JvmInline is otherwise unavailable
         }
     }
 
