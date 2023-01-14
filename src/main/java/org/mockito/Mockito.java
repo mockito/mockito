@@ -1932,6 +1932,7 @@ public class Mockito extends ArgumentMatchers {
      * @return mock object
      * @since 4.9.0
      */
+    @SafeVarargs
     public static <T> T mock(T... reified) {
         if (reified.length > 0) {
             throw new IllegalArgumentException(
@@ -2161,6 +2162,7 @@ public class Mockito extends ArgumentMatchers {
      * @return spy object
      * @since 4.9.0
      */
+    @SafeVarargs
     public static <T> T spy(T... reified) {
         if (reified.length > 0) {
             throw new IllegalArgumentException(
