@@ -10,7 +10,7 @@ Most popular mocking framework for Java
 [![Coverage Status](https://img.shields.io/codecov/c/github/mockito/mockito.svg)](https://codecov.io/github/mockito/mockito)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/mockito/mockito/blob/main/LICENSE)
 
-[![Release Notes](https://img.shields.io/badge/release%20notes-3.x-yellow.svg)](https://github.com/mockito/mockito/releases/)
+[![Release Notes](https://img.shields.io/badge/release%20notes-5.x-yellow.svg)](https://github.com/mockito/mockito/releases/)
 [![Maven Central](https://img.shields.io/maven-central/v/org.mockito/mockito-core.svg)](https://search.maven.org/artifact/org.mockito/mockito-core/)
 [![Javadoc](https://www.javadoc.io/badge/org.mockito/mockito-core.svg)](https://www.javadoc.io/doc/org.mockito/mockito-core)
 
