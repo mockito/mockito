@@ -20,7 +20,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.diffplug.spotless' version '6.12.1'
+    id 'com.diffplug.spotless' version '6.13.0'
     id 'eclipse'
     id 'com.github.ben-manes.versions' version '0.44.0'
     id 'biz.aQute.bnd.builder' version '6.4.0'
