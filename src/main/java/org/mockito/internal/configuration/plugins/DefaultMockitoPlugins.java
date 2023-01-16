@@ -29,6 +29,7 @@ public class DefaultMockitoPlugins implements MockitoPlugins {
     public static final Set<String> MOCK_MAKER_ALIASES = new HashSet<>();
     static final String MODULE_ALIAS = "member-accessor-module";
     static final String REFLECTION_ALIAS = "member-accessor-reflection";
+    public static final Set<String> MEMBER_ACCESSOR_ALIASES = new HashSet<>();
 
     static {
         // Keep the mapping: plugin interface name -> plugin implementation class name
@@ -66,6 +67,9 @@ public class DefaultMockitoPlugins implements MockitoPlugins {
         MOCK_MAKER_ALIASES.add(INLINE_ALIAS);
         MOCK_MAKER_ALIASES.add(PROXY_ALIAS);
         MOCK_MAKER_ALIASES.add(SUBCLASS_ALIAS);
+
+        MEMBER_ACCESSOR_ALIASES.add(MODULE_ALIAS);
+        MEMBER_ACCESSOR_ALIASES.add(REFLECTION_ALIAS);
     }
 
     @Override

@@ -30,7 +30,12 @@ jobs:
     strategy:
       matrix:
         java: [11, 17]
-        mock-maker: ['mock-maker-default', 'mock-maker-inline', 'mock-maker-subclass']
+        entry:
+          - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
+          - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
+          - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-module' }
+          - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-reflection' }
+          - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-reflection' }
 
     # All build steps
     # SINGLE-MATRIX-JOB means that the step does not need to be executed on every job in the matrix
@@ -48,21 +53,22 @@ jobs:
         java-version: ${{ matrix.java }}
 
     - name: 3. Validate Gradle wrapper
-      if: matrix.java == 11 && matrix.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
+      if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
       uses: gradle/wrapper-validation-action@v1.0.5 # https://github.com/gradle/wrapper-validation-action
 
     - name: 4. Build and check reproducibility of artifacts (single job only)
-      if: matrix.java == 11 && matrix.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
+      if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
       run: ./check_reproducibility.sh
 
     - name: 5. Spotless check (single job only). Run './gradlew spotlessApply' locally if this job fails.
-      if: matrix.java == 11 && matrix.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
+      if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
       run: ./gradlew spotlessCheck
 
-    - name: 6. Build on Java ${{ matrix.java }} with ${{ matrix.mock-maker }}
+    - name: 6. Build on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }} 
       run: ./gradlew build idea --scan
       env:
-        MOCK_MAKER: ${{ matrix.mock-maker }}
+        MOCK_MAKER: ${{ matrix.entry.mock-maker }}
+        MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
     - name: 7. Upload coverage report
       run: |

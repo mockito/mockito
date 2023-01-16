@@ -6,24 +6,43 @@ if (java11 != null) {
     }
 }
 
-task(createTestResources).doLast {
-    def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
-    if (System.env.MOCK_MAKER != null) {
-        logger.info("Using MockMaker ${System.env.MOCK_MAKER}")
-        mockMakerFile.parentFile.mkdirs()
-        mockMakerFile.createNewFile()
-        mockMakerFile.write(System.env.MOCK_MAKER)
-    } else {
-        logger.info("Using default MockMaker")
+task(createTestResources) {
+    doLast {
+        // Configure MockMaker from environment (if specified), otherwise use default
+        def mockMakerFile = new File("$sourceSets.test.output.resourcesDir/mockito-extensions/org.mockito.plugins.MockMaker")
+        if (System.env.MOCK_MAKER != null && !System.env.MOCK_MAKER.endsWith("default")) {
+            logger.info("Using MockMaker ${System.env.MOCK_MAKER}")
+            mockMakerFile.parentFile.mkdirs()
+            mockMakerFile.createNewFile()
+            mockMakerFile.write(System.env.MOCK_MAKER)
+        } else {
+            logger.info("Using default MockMaker")
+        }
+
+        // Configure MemberAccessor from environment (if specified), otherwise use default
+        def memberAccessorFile = new File("$sourceSets.test.output.resourcesDir/mockito-extensions/org.mockito.plugins.MemberAccessor")
+        if (System.env.MEMBER_ACCESSOR != null  && !System.env.MEMBER_ACCESSOR.endsWith("default")) {
+            logger.info("Using MemberAccessor ${System.env.MEMBER_ACCESSOR}")
+            memberAccessorFile.parentFile.mkdirs()
+            memberAccessorFile.createNewFile()
+            memberAccessorFile.write(System.env.MEMBER_ACCESSOR)
+        } else {
+            logger.info("Using default MemberAccessor")
+        }
     }
 }
 
 task(removeTestResources).doLast {
-    def mockMakerFile = new File("$projectDir/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker")
+    def mockMakerFile = new File("$sourceSets.test.output.resourcesDir/mockito-extensions/org.mockito.plugins.MockMaker")
     if (mockMakerFile.exists()) {
         mockMakerFile.delete()
     }
+
+    def memberAccessorFile = new File("$sourceSets.test.output.resourcesDir/mockito-extensions/org.mockito.plugins.MemberAccessor")
+    if (memberAccessorFile.exists()) {
+        memberAccessorFile.delete()
+    }
 }
 
-compileTestJava.dependsOn createTestResources
-compileTestJava.finalizedBy removeTestResources
+processTestResources.finalizedBy(createTestResources)
+test.finalizedBy(removeTestResources)

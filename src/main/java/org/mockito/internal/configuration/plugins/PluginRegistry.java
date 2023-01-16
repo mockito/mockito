@@ -27,7 +27,9 @@ class PluginRegistry {
                     .loadPlugin(MockMaker.class);
 
     private final MemberAccessor memberAccessor =
-            new PluginLoader(pluginSwitch, DefaultMockitoPlugins.MODULE_ALIAS)
+            new PluginLoader(
+                            pluginSwitch,
+                            DefaultMockitoPlugins.MEMBER_ACCESSOR_ALIASES.toArray(new String[0]))
                     .loadPlugin(MemberAccessor.class);
 
     private final StackTraceCleanerProvider stackTraceCleanerProvider =
