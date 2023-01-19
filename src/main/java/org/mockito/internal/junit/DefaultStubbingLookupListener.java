@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.internal.stubbing.UnusedStubbingReporting;
@@ -68,17 +69,15 @@ class DefaultStubbingLookupListener implements StubbingLookupListener, Serializa
         List<Invocation> matchingStubbings = new LinkedList<>();
         for (Stubbing s : stubbings) {
             if (UnusedStubbingReporting.shouldBeReported(s)
-                    && s.getInvocation()
-                            .getMethod()
-                            .getName()
-                            .equals(invocation.getMethod().getName())
+                    && Objects.equals(
+                            s.getInvocation().getMethod().getName(),
+                            invocation.getMethod().getName())
                     // If stubbing and invocation are in the same source file we assume they are in
                     // the test code,
                     // and we don't flag it as mismatch:
-                    && !s.getInvocation()
-                            .getLocation()
-                            .getSourceFile()
-                            .equals(invocation.getLocation().getSourceFile())) {
+                    && !Objects.equals(
+                            s.getInvocation().getLocation().getSourceFile(),
+                            invocation.getLocation().getSourceFile())) {
                 matchingStubbings.add(s.getInvocation());
             }
         }

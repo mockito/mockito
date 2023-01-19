@@ -14,6 +14,10 @@ public class MyPluginSwitch implements PluginSwitch {
     static List<String> invokedFor = new LinkedList<String>();
 
     public boolean isEnabled(String pluginClassName) {
+        if (!pluginClassName.startsWith("org.mockitousage")) {
+            return false;
+        }
+
         invokedFor.add(pluginClassName);
         return true;
     }

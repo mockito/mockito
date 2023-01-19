@@ -4,6 +4,8 @@
  */
 package org.mockitousage.spies;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doThrow;
@@ -13,8 +15,12 @@ import static org.mockito.Mockito.when;
 import static org.mockitoutil.Conditions.methodsInStackTrace;
 
 import org.assertj.core.api.Assertions;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker;
+import org.mockito.internal.util.reflection.ReflectionMemberAccessor;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -104,6 +110,9 @@ public class PartialMockingWithSpiesTest extends TestBase {
 
     @Test
     public void shouldStackTraceGetFilteredOnUserExceptions() {
+        Assume.assumeThat(
+                Plugins.getMemberAccessor(), not(instanceOf(ReflectionMemberAccessor.class)));
+
         try {
             // when
             spy.getNameButDelegateToMethodThatThrows();
@@ -116,6 +125,30 @@ public class PartialMockingWithSpiesTest extends TestBase {
                                     "throwSomeException",
                                     "getNameButDelegateToMethodThatThrows",
                                     "shouldStackTraceGetFilteredOnUserExceptions"));
+        }
+    }
+
+    @Test
+    public void shouldStackTraceGetFilteredOnUserExceptionsReflection() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineByteBuddyMockMaker.class));
+        Assume.assumeThat(Plugins.getMemberAccessor(), instanceOf(ReflectionMemberAccessor.class));
+
+        try {
+            // when
+            spy.getNameButDelegateToMethodThatThrows();
+            fail();
+        } catch (Throwable t) {
+            // then
+            Assertions.assertThat(t)
+                    .has(
+                            methodsInStackTrace(
+                                    "throwSomeException",
+                                    "invoke0",
+                                    "invoke",
+                                    "invoke",
+                                    "invoke",
+                                    "getNameButDelegateToMethodThatThrows",
+                                    "shouldStackTraceGetFilteredOnUserExceptionsReflection"));
         }
     }
 
