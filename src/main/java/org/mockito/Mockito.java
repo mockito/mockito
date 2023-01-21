@@ -1924,21 +1924,68 @@ public class Mockito extends ArgumentMatchers {
     public static final Answer<Object> RETURNS_SELF = Answers.RETURNS_SELF;
 
     /**
-     * Creates mock object of requested class or interface.
+     * Creates a mock object of the requested class or interface.
      * <p>
-     * See examples in javadoc for {@link Mockito} class
+     * See examples in javadoc for the {@link Mockito} class.
      *
-     * @param reified don't pass any values to it. It's a trick to detect the class/interface you want to mock.
-     * @return mock object
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return the mock object.
      * @since 4.9.0
      */
     @SafeVarargs
     public static <T> T mock(T... reified) {
-        if (reified.length > 0) {
+        return mock(withSettings(), reified);
+    }
+
+    /**
+     * Creates a mock object of the requested class or interface with the given default answer.
+     * <p>
+     * See examples in javadoc for the {@link Mockito} class.
+     *
+     * @param defaultAnswer the default answer to use.
+     * @param reified       don't pass any values to it. It's a trick to detect the class/interface you
+     *                      want to mock.
+     * @return the mock object.
+     */
+    @SafeVarargs
+    public static <T> T mock(@SuppressWarnings("rawtypes") Answer defaultAnswer, T... reified) {
+        return mock(withSettings().defaultAnswer(defaultAnswer), reified);
+    }
+
+    /**
+     * Creates a mock object of the requested class or interface with the given name.
+     * <p>
+     * See examples in javadoc for the {@link Mockito} class.
+     *
+     * @param name     the mock name to use.
+     * @param reified  don't pass any values to it. It's a trick to detect the class/interface you
+     *                 want to mock.
+     * @return the mock object.
+     */
+    @SafeVarargs
+    public static <T> T mock(String name, T... reified) {
+        return mock(withSettings().name(name).defaultAnswer(RETURNS_DEFAULTS), reified);
+    }
+
+    /**
+     * Creates a mock object of the requested class or interface with the given settings.
+     * <p>
+     * See examples in javadoc for the {@link Mockito} class.
+     *
+     * @param settings the mock settings to use.
+     * @param reified  don't pass any values to it. It's a trick to detect the class/interface you
+     *                 want to mock.
+     * @return the mock object.
+     */
+    @SafeVarargs
+    public static <T> T mock(MockSettings settings, T... reified) {
+        if (reified == null || reified.length > 0) {
             throw new IllegalArgumentException(
                     "Please don't pass any values here. Java will detect class automagically.");
         }
-        return mock(getClassOf(reified), withSettings());
+
+        return mock(getClassOf(reified), settings);
     }
 
     /**

@@ -21,6 +21,7 @@ import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.listeners.InvocationListener;
 import org.mockito.plugins.InlineMockMaker;
 
 @SuppressWarnings("unchecked")
@@ -164,6 +165,49 @@ public class MockitoTest {
         List<String> mock = Mockito.mock();
         Mockito.when(mock.size()).thenReturn(42);
         assertThat(mock.size()).isEqualTo(42);
+    }
+
+    @Test
+    @SuppressWarnings({"DoNotMock", "DoNotMockAutoValue"})
+    public void newMockMethod_shouldNotBeCalledWithNullParameters() {
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.mock((Object[]) null);
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageStartingWith("Please don't pass any values here");
+    }
+
+    @Test
+    public void reifiedMockMethodWithNameSetsTheExpectedName() {
+        List<String> mock = Mockito.mock("My super cool new mock");
+        assertThat(mock).hasToString("My super cool new mock");
+    }
+
+    @Test
+    public void reifiedMockMethodWithDefaultAnswerSetsTheDefaultAnswer() {
+        abstract class Something {
+            abstract Something somethingElse();
+        }
+
+        Something something = Mockito.mock(Answers.RETURNS_SELF);
+
+        assertThat(something.somethingElse()).isSameAs(something);
+    }
+
+    @Test
+    public void reifiedMockMethodWithSettingsAppliesTheSettings() {
+
+        InvocationListener invocationListener = Mockito.mock(InvocationListener.class);
+
+        List<Object> mock =
+                Mockito.mock(
+                        Mockito.withSettings()
+                                .name("my name here")
+                                .invocationListeners(invocationListener));
+
+        assertThat(mock).hasToString("my name here");
+        Mockito.verify(invocationListener).reportInvocation(ArgumentMatchers.any());
     }
 
     @Test
