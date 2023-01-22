@@ -7,8 +7,6 @@ package org.mockito.internal.debugging;
 import org.mockito.invocation.Location;
 
 public final class LocationFactory {
-    private static final Factory factory = createLocationFactory();
-
     private LocationFactory() {}
 
     public static Location create() {
@@ -16,14 +14,6 @@ public final class LocationFactory {
     }
 
     public static Location create(boolean inline) {
-        return factory.create(inline);
-    }
-
-    private interface Factory {
-        Location create(boolean inline);
-    }
-
-    private static Factory createLocationFactory() {
-        return (inline) -> new LocationImpl(inline);
+        return new LocationImpl(inline);
     }
 }
