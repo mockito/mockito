@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id 'org.jetbrains.kotlin.jvm'
     id 'java'
@@ -6,6 +9,15 @@ plugins {
 description = "Kotlin tests for Mockito."
 
 apply from: "$rootDir/gradle/dependencies.gradle"
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+tasks.withType(KotlinCompile).configureEach {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_11
+    }
+}
 
 dependencies {
     testImplementation project(":")

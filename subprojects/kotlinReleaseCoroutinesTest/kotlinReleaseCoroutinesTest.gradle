@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
     repositories {
         mavenCentral()
@@ -15,6 +18,15 @@ description = "Kotlin tests for Mockito."
 repositories {
     mavenCentral()
     maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+tasks.withType(KotlinCompile).configureEach {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_11
+    }
 }
 
 dependencies {
