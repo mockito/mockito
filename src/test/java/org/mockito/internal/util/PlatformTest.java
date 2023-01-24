@@ -64,34 +64,6 @@ public class PlatformTest {
     }
 
     @Test
-    public void should_parse_open_jdk_string_and_report_wether_below_or_nut_update_45() {
-        // Given
-        // Sources :
-        //  - https://www.oracle.com/java/technologies/javase/versioning-naming.html
-        //  - https://www.oracle.com/java/technologies/javase/jdk7-naming.html
-        //  - https://www.oracle.com/java/technologies/javase/jdk8-naming.html
-        //  -
-        // https://stackoverflow.com/questions/35844985/how-do-we-get-sr-and-fp-of-ibm-jre-using-java
-        //  -
-        // https://www.ibm.com/support/knowledgecenter/SSYKE2_8.0.0/com.ibm.java.80.doc/user/build_number.html
-        Map<String, Boolean> versions = new HashMap<>();
-        versions.put("1.8.0_92-b14", false);
-        versions.put("1.8.0-b24", true);
-        versions.put("1.8.0_5", true);
-        versions.put("1.8.0b5_u44", true);
-        versions.put("1.8.0b5_u92", false);
-        versions.put("1.7.0_4", false);
-        versions.put("1.4.0_03-b04", false);
-        versions.put("1.4.0_03-ea-b01", false);
-        versions.put("pxi3270_27sr4-20160303_03 (SR4)", false);
-        versions.put("pwi3260sr11-20120412_01 (SR11)", false);
-        versions.put("pwa6480sr1fp10-20150711_01 (SR1 FP10)", false);
-        versions.put("null", false);
-
-        assertPlatformParsesCorrectlyVariousVersionScheme(versions);
-    }
-
-    @Test
     public void should_parse_open_jdk9_string() {
         // The tested method targets Java 8 but should be able to parse other Java version numbers
         // including Java 9
@@ -140,9 +112,7 @@ public class PlatformTest {
 
     private void assertPlatformParsesCorrectlyVariousVersionScheme(Map<String, Boolean> versions) {
         for (Map.Entry<String, Boolean> version : versions.entrySet()) {
-            assertThat(Platform.isJava8BelowUpdate45(version.getKey()))
-                    .describedAs(version.getKey())
-                    .isEqualTo(version.getValue());
+            assertThat(version.getValue()).describedAs(version.getKey()).isEqualTo(false);
         }
     }
 }

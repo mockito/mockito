@@ -99,7 +99,7 @@ dependencies {
     testUtil sourceSets.test.output
 
     signature 'org.codehaus.mojo.signature:java18:1.0@signature'
-    signature 'net.sf.androidscents.signature:android-api-level-24:7.0_r2@signature'
+    signature 'net.sf.androidscents.signature:android-api-level-26:8.0.0_r2@signature'
 }
 
 animalsniffer {

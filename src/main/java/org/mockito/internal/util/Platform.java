@@ -7,15 +7,9 @@ package org.mockito.internal.util;
 import static org.mockito.internal.util.StringUtil.join;
 
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class Platform {
 
-    private static final Pattern JAVA_8_RELEASE_VERSION_SCHEME =
-            Pattern.compile("1\\.8\\.0_(\\d+)(?:-ea)?(?:-b\\d+)?");
-    private static final Pattern JAVA_8_DEV_VERSION_SCHEME =
-            Pattern.compile("1\\.8\\.0b\\d+_u(\\d+)");
     public static final String JAVA_VERSION = System.getProperty("java.specification.version");
     public static final String JVM_VERSION = System.getProperty("java.runtime.version");
     public static final String JVM_VENDOR = System.getProperty("java.vm.vendor");
@@ -66,31 +60,6 @@ public abstract class Platform {
                             description);
         }
         return description;
-    }
-
-    public static boolean isJava8BelowUpdate45() {
-        if (JVM_VERSION == null) {
-            return false;
-        } else {
-            return isJava8BelowUpdate45(JVM_VERSION);
-        }
-    }
-
-    static boolean isJava8BelowUpdate45(String jvmVersion) {
-        Matcher matcher = JAVA_8_RELEASE_VERSION_SCHEME.matcher(jvmVersion);
-        if (matcher.matches()) {
-            int update = Integer.parseInt(matcher.group(1));
-            return update < 45;
-        }
-
-        matcher = JAVA_8_DEV_VERSION_SCHEME.matcher(jvmVersion);
-        if (matcher.matches()) {
-            int update = Integer.parseInt(matcher.group(1));
-            return update < 45;
-        }
-
-        matcher = Pattern.compile("1\\.8\\.0-b\\d+").matcher(jvmVersion);
-        return matcher.matches();
     }
 
     public static String warnForVM(

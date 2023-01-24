@@ -8,6 +8,8 @@ import static org.mockito.internal.util.ObjectMethodsGuru.isCompareToMethod;
 import static org.mockito.internal.util.ObjectMethodsGuru.isToStringMethod;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,12 +19,20 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import org.mockito.internal.util.JavaEightUtil;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
+
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
@@ -129,26 +139,26 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return new TreeMap<>();
         } else if (type == LinkedHashMap.class) {
             return new LinkedHashMap<>();
-        } else if ("java.util.Optional".equals(type.getName())) {
-            return JavaEightUtil.emptyOptional();
-        } else if ("java.util.OptionalDouble".equals(type.getName())) {
-            return JavaEightUtil.emptyOptionalDouble();
-        } else if ("java.util.OptionalInt".equals(type.getName())) {
-            return JavaEightUtil.emptyOptionalInt();
-        } else if ("java.util.OptionalLong".equals(type.getName())) {
-            return JavaEightUtil.emptyOptionalLong();
-        } else if ("java.util.stream.Stream".equals(type.getName())) {
-            return JavaEightUtil.emptyStream();
-        } else if ("java.util.stream.DoubleStream".equals(type.getName())) {
-            return JavaEightUtil.emptyDoubleStream();
-        } else if ("java.util.stream.IntStream".equals(type.getName())) {
-            return JavaEightUtil.emptyIntStream();
-        } else if ("java.util.stream.LongStream".equals(type.getName())) {
-            return JavaEightUtil.emptyLongStream();
-        } else if ("java.time.Duration".equals(type.getName())) {
-            return JavaEightUtil.emptyDuration();
-        } else if ("java.time.Period".equals(type.getName())) {
-            return JavaEightUtil.emptyPeriod();
+        } else if (type == Optional.class) {
+            return Optional.empty();
+        } else if (type == OptionalDouble.class) {
+            return OptionalDouble.empty();
+        } else if (type == OptionalInt.class) {
+            return OptionalInt.empty();
+        } else if (type == OptionalLong.class) {
+            return OptionalLong.empty();
+        } else if (type == Stream.class) {
+            return Stream.empty();
+        } else if (type == DoubleStream.class) {
+            return DoubleStream.empty();
+        } else if (type == IntStream.class) {
+            return IntStream.empty();
+        } else if (type == LongStream.class) {
+            return LongStream.empty();
+        } else if (type == Duration.class) {
+            return Duration.ZERO;
+        } else if (type == Period.class) {
+            return Period.ZERO;
         }
 
         // Let's not care about the rest of collections.
