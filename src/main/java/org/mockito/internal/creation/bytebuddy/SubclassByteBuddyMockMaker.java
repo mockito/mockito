@@ -122,9 +122,7 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
                                 "IBM J9 VM",
                                 "Early IBM virtual machine are known to have issues with Mockito, please upgrade to an up-to-date version.\n",
                                 "Hotspot",
-                                Platform.isJava8BelowUpdate45()
-                                        ? "Java 8 early builds have bugs that were addressed in Java 1.8.0_45, please update your JDK!\n"
-                                        : ""),
+                                ""),
                         Platform.describe(),
                         "",
                         "Underlying exception : " + generationFailed),
