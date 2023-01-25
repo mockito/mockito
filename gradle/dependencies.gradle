@@ -45,7 +45,7 @@ libraries.kotlin = [
 libraries.android = [
     ktx: 'androidx.core:core-ktx:1.8.0',
     compat: 'androidx.appcompat:appcompat:1.4.2',
-    material: 'com.google.android.material:material:1.6.1',
+    material: 'com.google.android.material:material:1.8.0',
     junit: 'androidx.test.ext:junit:1.1.5',
     espresso: 'androidx.test.espresso:espresso-core:3.5.1',
 ]
