@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 import org.mockito.junit.MockitoJUnitRunner;
 
 /**
- * Allows shorthand wrapping of field instances in an spy object.
+ * Allows shorthand wrapping of field instances in a spy object.
  *
  * <p>
  * Example:
@@ -79,7 +79,7 @@ import org.mockito.junit.MockitoJUnitRunner;
  * <li>Mockito <b>*does not*</b> delegate calls to the passed real instance, instead it actually creates a copy of it.
  * So if you keep the real instance and interact with it, don't expect the spied to be aware of those interaction
  * and their effect on real instance state.
- * The corollary is that when an <b>*unstubbed*</b> method is called <b>*on the spy*</b> but <b>*not on the real instance*</b>,
+ * The corollary is that when an <b>*un-stubbed*</b> method is called <b>*on the spy*</b> but <b>*not on the real instance*</b>,
  * you won't see any effects on the real instance.</li>
  *
  * <li>Watch out for final methods.

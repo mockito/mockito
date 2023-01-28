@@ -914,7 +914,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>char</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>char</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -929,7 +929,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>boolean</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>boolean</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -944,7 +944,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>byte</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>byte</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -959,7 +959,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>short</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>short</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -974,7 +974,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>int</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>int</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -989,7 +989,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>long</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>long</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -1004,7 +1004,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>float</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>float</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -1019,7 +1019,7 @@ public class ArgumentMatchers {
 
     /**
      * Allows creating custom <code>double</code> argument matchers.
-     *
+     * <p>
      * Note that {@link #argThat} will not work with primitive <code>double</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class

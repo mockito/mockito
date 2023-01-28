@@ -26,11 +26,11 @@ public interface MockitoFramework {
      * Adds listener to Mockito.
      * For a list of supported listeners, see the interfaces that extend {@link MockitoListener}.
      * <p>
-     * Listeners can be useful for engs that extend Mockito framework.
+     * Listeners can be useful for components that extend Mockito framework.
      * They are used in the implementation of unused stubbings warnings ({@link org.mockito.quality.MockitoHint}).
      * <p>
      * Make sure you remove the listener when the job is complete, see {@link #removeListener(MockitoListener)}.
-     * Currently the listeners list is thread local so you need to remove listener from the same thread otherwise
+     * Currently, the listeners list is thread local, so you need to remove listener from the same thread otherwise
      * remove is ineffectual.
      * In typical scenarios, it is not a problem, because adding and removing listeners typically happens in the same thread.
      * <p>
@@ -56,7 +56,7 @@ public interface MockitoFramework {
 
     /**
      * When you add listener using {@link #addListener(MockitoListener)} make sure to remove it.
-     * Currently the listeners list is thread local so you need to remove listener from the same thread otherwise
+     * Currently, the listeners list is thread local, so you need to remove listener from the same thread otherwise
      * remove is ineffectual.
      * In typical scenarios, it is not a problem, because adding and removing listeners typically happens in the same thread.
      * <p>
@@ -92,7 +92,7 @@ public interface MockitoFramework {
     /**
      * Clears up internal state of all inline mocks.
      * This method is only meaningful if inline mock maker is in use.
-     * Otherwise this method is a no-op and need not be used.
+     * For all other intents and purposes, this method is a no-op and need not be used.
      * <p>
      * This method is useful to tackle subtle memory leaks that are possible due to the nature of inline mocking
      * (issue <a href="https://github.com/mockito/mockito/pull/1619">#1619</a>).

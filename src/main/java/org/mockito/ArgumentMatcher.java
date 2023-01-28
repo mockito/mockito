@@ -10,7 +10,7 @@ package org.mockito;
  * and reduce the risk of version incompatibility.
  * Migration guide is included close to the bottom of this javadoc.
  * <p>
- * For non-trivial method arguments used in stubbing or verification, you have following options
+ * For non-trivial method arguments used in stubbing or verification, you have the following options
  * (in no particular order):
  * <ul>
  *     <li>refactor the code so that the interactions with collaborators are easier to test with mocks.
@@ -102,10 +102,10 @@ package org.mockito;
  *
  * </li>
  * </ul>
- * What option is right for you? If you don't mind compile dependency to hamcrest
- * then option b) is probably right for you.
- * Your choice should not have big impact and is fully reversible -
- * you can choose different option in future (and refactor the code)
+ * What option is right for you? If you don't mind having a compile-time dependency for Hamcrest,
+ * then the second option is probably right for you.
+ * Your choice should not have a big impact and is fully reversible -
+ * you can choose different option in future (and refactor the code)!
  *
  * @param <T> type of argument
  * @since 2.1.0

@@ -276,7 +276,7 @@ public final class AdditionalAnswers {
      * This feature suffers from the same drawback as the spy.
      * The mock will call the delegate if you use regular when().then() stubbing style.
      * Since the real implementation is called this might have some side effects.
-     * Therefore you should use the doReturn|Throw|Answer|CallRealMethod stubbing style. Example:
+     * Therefore, you should use the doReturn|Throw|Answer|CallRealMethod stubbing style. Example:
      *
      * <pre class="code"><code class="java">
      *   List listWithDelegate = mock(List.class, AdditionalAnswers.delegatesTo(awesomeList));

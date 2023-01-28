@@ -35,12 +35,13 @@ import org.mockito.internal.matchers.CapturingMatcher;
  *
  * <p>
  * <strong>Warning:</strong> it is recommended to use ArgumentCaptor with verification <strong>but not</strong> with stubbing.
- * Using ArgumentCaptor with stubbing may decrease test readability because captor is created outside of assert (aka verify or 'then') block.
- * Also it may reduce defect localization because if stubbed method was not called then no argument is captured.
+ * Using ArgumentCaptor with stubbing may decrease test readability because captor is created
+ * outside of assertion (aka verify or 'then') blocks.
+ * It may also reduce defect localization because if the stubbed method was not called, then no argument is captured.
  *
  * <p>
  * In a way ArgumentCaptor is related to custom argument matchers (see javadoc for {@link ArgumentMatcher} class).
- * Both techniques can be used for making sure certain arguments were passed to mocks.
+ * Both techniques can be used for making sure certain arguments were passed to mock objects.
  * However, ArgumentCaptor may be a better fit if:
  * <ul>
  * <li>custom argument matcher is not likely to be reused</li>

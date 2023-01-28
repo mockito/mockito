@@ -73,7 +73,7 @@ public interface MockingDetails {
      * What is 'stubbing'?
      * Stubbing is your when(x).then(y) declaration, e.g. configuring the mock to behave in a specific way,
      * when specific method with specific arguments is invoked on a mock.
-     * Typically stubbing is configuring mock to return X when method Y is invoked.
+     * Typically, stubbing is configuring mock to return X when method Y is invoked.
      * <p>
      * Why do you need to access stubbings of a mock?
      * In a normal workflow of creation clean tests, there is no need for this API.

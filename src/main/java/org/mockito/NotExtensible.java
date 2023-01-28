@@ -19,7 +19,7 @@ import java.lang.annotation.RetentionPolicy;
  * Public types are all types that are *not* under "org.mockito.internal.*" package.
  * <p>
  * Absence of {@code NotExtensible} annotation on a type *does not* mean it is intended to be extended.
- * The annotation has been introduced late and therefore it is not used frequently in the codebase.
+ * The annotation has been introduced late, and therefore it is not used frequently in the codebase.
  * Many public types from Mockito API are not intended for extension, even though they do not have this annotation applied.
  *
  * @since 2.10.0

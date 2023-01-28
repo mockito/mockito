@@ -17,10 +17,10 @@ import org.mockito.stubbing.ValidableAnswer;
 /**
  * Optional Answer that adds partial mocking support
  * <p>
- * {@link Answer} can be used to define the return values of unstubbed invocations.
+ * {@link Answer} can be used to define the return values of un-stubbed invocations.
  * <p>
  * This implementation can be helpful when working with legacy code.
- * When this implementation is used, unstubbed methods will delegate to the real implementation.
+ * When this implementation is used, un-stubbed methods will delegate to the real implementation.
  * This is a way to create a partial mock object that calls real methods by default.
  * <p>
  * As usual you are going to read <b>the partial mock warning</b>:

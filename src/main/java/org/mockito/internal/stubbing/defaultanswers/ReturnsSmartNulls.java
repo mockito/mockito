@@ -25,12 +25,12 @@ import org.mockito.stubbing.Answer;
  * Optional Answer that can be used with
  * {@link Mockito#mock(Class, Answer)}
  * <p>
- * This implementation can be helpful when working with legacy code. Unstubbed
+ * This implementation can be helpful when working with legacy code. Un-stubbed
  * methods often return null. If your code uses the object returned by an
- * unstubbed call you get a NullPointerException. This implementation of
+ * un-stubbed call, you get a NullPointerException. This implementation of
  * Answer returns SmartNulls instead of nulls.
  * SmartNull gives nicer exception message than NPE because it points out the
- * line where unstubbed method was called. You just click on the stack trace.
+ * line where un-stubbed method was called. You just click on the stack trace.
  * <p>
  * ReturnsSmartNulls first tries to return ordinary return values (see
  * {@link ReturnsMoreEmptyValues}) then it tries to return SmartNull. If the
@@ -90,7 +90,7 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
         @Override
         public Object answer(InvocationOnMock currentInvocation) throws Throwable {
             if (isToStringMethod(currentInvocation.getMethod())) {
-                return "SmartNull returned by this unstubbed method call on a mock:\n"
+                return "SmartNull returned by this un-stubbed method call on a mock:\n"
                         + unstubbedInvocation;
             } else if (isMethodOf(
                     MockAccess.class, currentInvocation.getMock(), currentInvocation.getMethod())) {
