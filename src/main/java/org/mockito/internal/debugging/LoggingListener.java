@@ -82,7 +82,7 @@ public class LoggingListener implements FindingsListener {
         if (!unstubbedCalls.isEmpty()) {
             lines.add("[Mockito]");
             lines.add(
-                    "[Mockito] Unstubbed method invocations (perhaps missing stubbing in the test?):");
+                    "[Mockito] Un-stubbed method invocations (perhaps missing stubbing in the test?):");
             lines.add("[Mockito]");
             addOrderedList(lines, unstubbedCalls);
         }

@@ -71,7 +71,7 @@ import java.util.function.Function;
  *      <a href="#11">11. Stubbing with callbacks </a><br/>
  *      <a href="#12">12. <code>doReturn()</code>|<code>doThrow()</code>|<code>doAnswer()</code>|<code>doNothing()</code>|<code>doCallRealMethod()</code> family of methods</a><br/>
  *      <a href="#13">13. Spying on real objects </a><br/>
- *      <a href="#14">14. Changing default return values of unstubbed invocations (Since 1.7) </a><br/>
+ *      <a href="#14">14. Changing default return values of un-stubbed invocations (Since 1.7) </a><br/>
  *      <a href="#15">15. Capturing arguments for further assertions (Since 1.8.0) </a><br/>
  *      <a href="#16">16. Real partial mocks (Since 1.8.0) </a><br/>
  *      <a href="#17">17. Resetting mocks (Since 1.8.0) </a><br/>
@@ -226,7 +226,7 @@ import java.util.function.Function;
  *
  * <li> Stubbing can be overridden: for example common stubbing can go to
  * fixture setup but the test methods can override it.
- * Please note that overridding stubbing is a potential code smell that points out too much stubbing</li>
+ * Please note that overriding stubbing is a potential code smell that points out too much stubbing</li>
  *
  * <li> Once stubbed, the method will always return a stubbed value, regardless
  * of how many times it is called. </li>
@@ -652,7 +652,7 @@ import java.util.function.Function;
  * <li>Mockito <b>*does not*</b> delegate calls to the passed real instance, instead it actually creates a copy of it.
  * So if you keep the real instance and interact with it, don't expect the spied to be aware of those interaction
  * and their effect on real instance state.
- * The corollary is that when an <b>*unstubbed*</b> method is called <b>*on the spy*</b> but <b>*not on the real instance*</b>,
+ * The corollary is that when an <b>*un-stubbed*</b> method is called <b>*on the spy*</b> but <b>*not on the real instance*</b>,
  * you won't see any effects on the real instance.
  * </li>
  *
@@ -665,7 +665,7 @@ import java.util.function.Function;
  *
  *
  *
- * <h3 id="14">14. Changing <a class="meaningful_link" href="#defaultreturn" name="defaultreturn">default return values of unstubbed invocations</a> (Since 1.7)</h3>
+ * <h3 id="14">14. Changing <a class="meaningful_link" href="#defaultreturn" name="defaultreturn">default return values of un-stubbed invocations</a> (Since 1.7)</h3>
  *
  * You can create a mock with specified strategy for its return values.
  * It's quite an advanced feature and typically you don't need it to write decent tests.
@@ -1671,9 +1671,9 @@ public class Mockito extends ArgumentMatchers {
     /**
      * The default <code>Answer</code> of every mock <b>if</b> the mock was not stubbed.
      *
-     * Typically it just returns some empty value.
+     * Typically, it just returns some empty value.
      * <p>
-     * {@link Answer} can be used to define the return values of unstubbed invocations.
+     * {@link Answer} can be used to define the return values of un-stubbed invocations.
      * <p>
      * This implementation first tries the global configuration and if there is no global configuration then
      * it will use a default answer that returns zeros, empty collections, nulls, etc.
@@ -1683,12 +1683,14 @@ public class Mockito extends ArgumentMatchers {
     /**
      * Optional <code>Answer</code> to be used with {@link Mockito#mock(Class, Answer)}.
      * <p>
-     * {@link Answer} can be used to define the return values of unstubbed invocations.
+     * {@link Answer} can be used to define the return values of un-stubbed invocations.
      * <p>
      * This implementation can be helpful when working with legacy code.
-     * Unstubbed methods often return null. If your code uses the object returned by an unstubbed call you get a NullPointerException.
+     * Un-stubbed methods often return null. If your code uses the object returned by an un-stubbed call,
+     * you get a NullPointerException.
      * This implementation of Answer <b>returns SmartNull instead of null</b>.
-     * <code>SmartNull</code> gives nicer exception message than NPE because it points out the line where unstubbed method was called. You just click on the stack trace.
+     * <code>SmartNull</code> gives nicer exception messages than NPEs, because it points out the
+     * line where the un-stubbed method was called. You just click on the stack trace.
      * <p>
      * <code>ReturnsSmartNulls</code> first tries to return ordinary values (zeros, empty collections, empty string, etc.)
      * then it tries to return SmartNull. If the return type is final then plain <code>null</code> is returned.
@@ -1697,15 +1699,15 @@ public class Mockito extends ArgumentMatchers {
      * <pre class="code"><code class="java">
      *   Foo mock = mock(Foo.class, RETURNS_SMART_NULLS);
      *
-     *   //calling unstubbed method here:
+     *   //calling un-stubbed method here:
      *   Stuff stuff = mock.getStuff();
      *
-     *   //using object returned by unstubbed call:
+     *   //using object returned by un-stubbed call:
      *   stuff.doSomething();
      *
      *   //Above doesn't yield NullPointerException this time!
      *   //Instead, SmartNullPointerException is thrown.
-     *   //Exception's cause links to unstubbed <i>mock.getStuff()</i> - just click on the stack trace.
+     *   //Exception's cause links to un-stubbed <i>mock.getStuff()</i> - just click on the stack trace.
      * </code></pre>
      */
     public static final Answer<Object> RETURNS_SMART_NULLS = Answers.RETURNS_SMART_NULLS;
@@ -1713,7 +1715,7 @@ public class Mockito extends ArgumentMatchers {
     /**
      * Optional <code>Answer</code> to be used with {@link Mockito#mock(Class, Answer)}
      * <p>
-     * {@link Answer} can be used to define the return values of unstubbed invocations.
+     * {@link Answer} can be used to define the return values of un-stubbed invocations.
      * <p>
      * This implementation can be helpful when working with legacy code.
      * <p>
@@ -1814,14 +1816,14 @@ public class Mockito extends ArgumentMatchers {
      * Optional <code>Answer</code> to be used with {@link Mockito#mock(Class, Answer)}
      *
      * <p>
-     * {@link Answer} can be used to define the return values of unstubbed invocations.
+     * {@link Answer} can be used to define the return values of un-stubbed invocations.
      * <p>
      * This implementation can be helpful when working with legacy code.
-     * When this implementation is used, unstubbed methods will delegate to the real implementation.
+     * When this implementation is used, un-stubbed methods will delegate to the real implementation.
      * This is a way to create a partial mock object that calls real methods by default.
      * <p>
-     * As usual you are going to read <b>the partial mock warning</b>:
-     * Object oriented programming is more less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
+     * As usual, you are going to read <b>the partial mock warning</b>:
+     * Object oriented programming is more-or-less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
      * How does partial mock fit into this paradigm? Well, it just doesn't...
      * Partial mock usually means that the complexity has been moved to a different method on the same object.
      * In most cases, this is not the way you want to design your application.
@@ -2050,7 +2052,7 @@ public class Mockito extends ArgumentMatchers {
      * <p>See examples in javadoc for {@link Mockito} class</p>
      *
      * @param classToMock class or interface to mock
-     * @param defaultAnswer default answer for unstubbed methods
+     * @param defaultAnswer default answer for un-stubbed methods
      *
      * @return mock object
      */
@@ -2061,7 +2063,7 @@ public class Mockito extends ArgumentMatchers {
     /**
      * Creates a mock with some non-standard settings.
      * <p>
-     * The number of configuration points for a mock grows
+     * The number of configuration points for a mock will grow,
      * so we need a fluent way to introduce new configuration without adding more and more overloaded Mockito.mock() methods.
      * Hence {@link MockSettings}.
      * <pre class="code"><code class="java">
@@ -2071,7 +2073,7 @@ public class Mockito extends ArgumentMatchers {
      * </code></pre>
      * <b>Use it carefully and occasionally</b>. What might be reason your test needs non-standard mocks?
      * Is the code under test so complicated that it requires non-standard mocks?
-     * Wouldn't you prefer to refactor the code under test so it is testable in a simple way?
+     * Wouldn't you prefer to refactor the code under test, so that it is testable in a simple way?
      * <p>
      * See also {@link Mockito#withSettings()}
      * <p>
@@ -2090,7 +2092,7 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * Real spies should be used <b>carefully and occasionally</b>, for example when dealing with legacy code.
      * <p>
-     * As usual you are going to read <b>the partial mock warning</b>:
+     * As usual, you are going to read <b>the partial mock warning</b>:
      * Object oriented programming tackles complexity by dividing the complexity into separate, specific, SRPy objects.
      * How does partial mock fit into this paradigm? Well, it just doesn't...
      * Partial mock usually means that the complexity has been moved to a different method on the same object.
@@ -2145,7 +2147,7 @@ public class Mockito extends ArgumentMatchers {
      * <li>Mockito <b>*does not*</b> delegate calls to the passed real instance, instead it actually creates a copy of it.
      * So if you keep the real instance and interact with it, don't expect the spied to be aware of those interaction
      * and their effect on real instance state.
-     * The corollary is that when an <b>*unstubbed*</b> method is called <b>*on the spy*</b> but <b>*not on the real instance*</b>,
+     * The corollary is that when an <b>*un-stubbed*</b> method is called <b>*on the spy*</b> but <b>*not on the real instance*</b>,
      * you won't see any effects on the real instance.</li>
      *
      * <li>Watch out for final methods.
@@ -2228,7 +2230,7 @@ public class Mockito extends ArgumentMatchers {
      * test or the mock will remain active on the current thread.
      * <p>
      * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
-     * classes used by custom class loaders used to executed the block with the mocked class. A mock
+     * classes used by custom class loaders used to execute the block with the mocked class. A mock
      * maker might forbid mocking static methods of know classes that are known to cause problems.
      * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
      * explicitly forbidden.
@@ -2248,7 +2250,7 @@ public class Mockito extends ArgumentMatchers {
      * test or the mock will remain active on the current thread.
      * <p>
      * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
-     * classes used by custom class loaders used to executed the block with the mocked class. A mock
+     * classes used by custom class loaders used to execute the block with the mocked class. A mock
      * maker might forbid mocking static methods of know classes that are known to cause problems.
      * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
      * explicitly forbidden.
@@ -2269,7 +2271,7 @@ public class Mockito extends ArgumentMatchers {
      * test or the mock will remain active on the current thread.
      * <p>
      * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
-     * classes used by custom class loaders used to executed the block with the mocked class. A mock
+     * classes used by custom class loaders used to execute the block with the mocked class. A mock
      * maker might forbid mocking static methods of know classes that are known to cause problems.
      * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
      * explicitly forbidden.
@@ -2290,7 +2292,7 @@ public class Mockito extends ArgumentMatchers {
      * test or the mock will remain active on the current thread.
      * <p>
      * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
-     * classes used by custom class loaders used to executed the block with the mocked class. A mock
+     * classes used by custom class loaders used to execute the block with the mocked class. A mock
      * maker might forbid mocking static methods of know classes that are known to cause problems.
      * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
      * explicitly forbidden.
@@ -2358,7 +2360,7 @@ public class Mockito extends ArgumentMatchers {
      * See examples in javadoc for {@link Mockito} class
      *
      * @param classToMock non-abstract class of which constructions should be mocked.
-     * @param mockInitializer a callback to prepare a mock's methods after its instantiation.
+     * @param mockInitializer a callback to prepare the methods on a mock after its instantiation.
      * @return mock controller
      */
     public static <T> MockedConstruction<T> mockConstruction(
@@ -2408,7 +2410,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @param classToMock non-abstract class of which constructions should be mocked.
      * @param mockSettings the settings to use.
-     * @param mockInitializer a callback to prepare a mock's methods after its instantiation.
+     * @param mockInitializer a callback to prepare the methods on a mock after its instantiation.
      * @return mock controller
      */
     public static <T> MockedConstruction<T> mockConstruction(
@@ -2427,7 +2429,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @param classToMock non-abstract class of which constructions should be mocked.
      * @param mockSettingsFactory a function to create settings to use.
-     * @param mockInitializer a callback to prepare a mock's methods after its instantiation.
+     * @param mockInitializer a callback to prepare the methods on a mock after its instantiation.
      * @return mock controller
      */
     public static <T> MockedConstruction<T> mockConstruction(
@@ -2478,7 +2480,7 @@ public class Mockito extends ArgumentMatchers {
      * <p>
      * Stubbing can be overridden: for example common stubbing can go to fixture
      * setup but the test methods can override it.
-     * Please note that overridding stubbing is a potential code smell that points out too much stubbing.
+     * Please note that overriding stubbing is a potential code smell that points out too much stubbing.
      * <p>
      * Once stubbed, the method will always return stubbed value regardless
      * of how many times it is called.
@@ -2630,7 +2632,7 @@ public class Mockito extends ArgumentMatchers {
      * Some users who did a lot of classic, expect-run-verify mocking tend to use <code>verifyNoMoreInteractions()</code> very often, even in every test method.
      * <code>verifyNoMoreInteractions()</code> is not recommended to use in every test method.
      * <code>verifyNoMoreInteractions()</code> is a handy assertion from the interaction testing toolkit. Use it only when it's relevant.
-     * Abusing it leads to overspecified, less maintainable tests.
+     * Abusing it leads to over-specified, less maintainable tests.
      * <p>
      * This method will also detect unverified invocations that occurred before the test method,
      * for example: in <code>setUp()</code>, <code>&#064;Before</code> method or in constructor.
@@ -2723,7 +2725,8 @@ public class Mockito extends ArgumentMatchers {
 
     /**
      * Same as {@link #doThrow(Class)} but sets consecutive exception classes to be thrown. Remember to use
-     * <code>doThrow()</code> when you want to stub the void method to throw several exception of specified class.
+     * <code>doThrow()</code> when you want to stub the void method to throw several exceptions
+     * that are instances of the specified class.
      * <p>
      * A new exception instance will be created for each method invocation.
      * <p>
@@ -2752,8 +2755,8 @@ public class Mockito extends ArgumentMatchers {
     /**
      * Use <code>doCallRealMethod()</code> when you want to call the real implementation of a method.
      * <p>
-     * As usual you are going to read <b>the partial mock warning</b>:
-     * Object oriented programming is more less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
+     * As usual, you are going to read <b>the partial mock warning</b>:
+     * Object oriented programming is more-or-less tackling complexity by dividing the complexity into separate, specific, SRPy objects.
      * How does partial mock fit into this paradigm? Well, it just doesn't...
      * Partial mock usually means that the complexity has been moved to a different method on the same object.
      * In most cases, this is not the way you want to design your application.
@@ -2891,7 +2894,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * Above scenarios shows a tradeoff of Mockito's elegant syntax. Note that the scenarios are very rare, though.
      * Spying should be sporadic and overriding exception-stubbing is very rare. Not to mention that in general
-     * overridding stubbing is a potential code smell that points out too much stubbing.
+     * overriding stubbing is a potential code smell that points out too much stubbing.
      * <p>
      * See examples in javadoc for {@link Mockito} class
      *
@@ -2942,7 +2945,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * Above scenarios shows a trade-off of Mockito's elegant syntax. Note that the scenarios are very rare, though.
      * Spying should be sporadic and overriding exception-stubbing is very rare. Not to mention that in general
-     * overridding stubbing is a potential code smell that points out too much stubbing.
+     * overriding stubbing is a potential code smell that points out too much stubbing.
      * <p>
      * See examples in javadoc for {@link Mockito} class
      *
@@ -2993,7 +2996,7 @@ public class Mockito extends ArgumentMatchers {
      * and provides other benefits.
      * <p>
      * <code>ignoreStubs()</code> is sometimes useful when coupled with <code>verifyNoMoreInteractions()</code> or verification <code>inOrder()</code>.
-     * Helps avoiding redundant verification of stubbed calls - typically we're not interested in verifying stubs.
+     * Helps to avoid redundant verification of stubbed calls - typically we're not interested in verifying stubs.
      * <p>
      * <b>Warning</b>, <code>ignoreStubs()</code> might lead to overuse of <code>verifyNoMoreInteractions(ignoreStubs(...));</code>
      * Bear in mind that Mockito does not recommend bombarding every test with <code>verifyNoMoreInteractions()</code>
@@ -3240,7 +3243,7 @@ public class Mockito extends ArgumentMatchers {
 
     /**
      * Verification will be triggered after given amount of millis, allowing testing of async code.
-     * Useful when interactions with the mock object did not happened yet.
+     * Useful when interactions with the mock object have yet to occur.
      * Extensive use of {@code after()} method can be a code smell - there are better ways of testing concurrent code.
      * <p>
      * Not yet implemented to work with InOrder verification.
@@ -3400,7 +3403,7 @@ public class Mockito extends ArgumentMatchers {
 
     /**
      * {@code MockitoSession} is an optional, highly recommended feature
-     * that helps driving cleaner tests by eliminating boilerplate code and adding extra validation.
+     * that drives writing cleaner tests by eliminating boilerplate code and adding extra validation.
      * <p>
      * For more information, including use cases and sample code, see the javadoc for {@link MockitoSession}.
      *
@@ -3422,7 +3425,7 @@ public class Mockito extends ArgumentMatchers {
      * Most mocks in most tests don't need leniency and should happily prosper with {@link Strictness#STRICT_STUBS}.
      * <ul>
      *     <li>If a specific stubbing needs to be lenient - use this method</li>
-     *     <li>If a specific mock need to have stubbings lenient - use {@link MockSettings#lenient()}</li>
+     *     <li>If a specific mock need to have lenient stubbings - use {@link MockSettings#strictness(Strictness)}</li>
      *     <li>If a specific test method / test class needs to have all stubbings lenient
      *          - configure strictness using our JUnit support ({@link MockitoJUnit} or Mockito Session ({@link MockitoSession})</li>
      *

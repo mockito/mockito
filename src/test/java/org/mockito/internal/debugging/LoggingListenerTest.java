@@ -97,7 +97,7 @@ public class LoggingListenerTest extends TestBase {
                         + "[Mockito]\n"
                         + "[Mockito] 1. at com.FooTest:30\n"
                         + "[Mockito]\n"
-                        + "[Mockito] Unstubbed method invocations (perhaps missing stubbing in the test?):\n"
+                        + "[Mockito] Un-stubbed method invocations (perhaps missing stubbing in the test?):\n"
                         + "[Mockito]\n"
                         + "[Mockito] 1. at com.Foo:96",
                 listener.getStubbingInfo());
@@ -127,7 +127,7 @@ public class LoggingListenerTest extends TestBase {
         assertEquals(
                 "[Mockito] Additional stubbing information (see javadoc for StubbingInfo class):\n"
                         + "[Mockito]\n"
-                        + "[Mockito] Unstubbed method invocations (perhaps missing stubbing in the test?):\n"
+                        + "[Mockito] Un-stubbed method invocations (perhaps missing stubbing in the test?):\n"
                         + "[Mockito]\n"
                         + "[Mockito] 1. com.Foo:20",
                 listener.getStubbingInfo());

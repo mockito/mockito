@@ -5,6 +5,7 @@
 package org.mockito;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -22,7 +23,13 @@ import java.lang.annotation.RetentionPolicy;
  * and can change before release.
  * </li>
  * </ul>
+ *
+ * <p>
+ * Any components extending a class or interface annotated with this annotation should also
+ * be considered to be incubating, as the underlying implementation may be subject to future change
+ * before it is finalized.
  */
 @Retention(RetentionPolicy.RUNTIME)
+@Inherited
 @Documented
 public @interface Incubating {}

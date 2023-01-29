@@ -158,6 +158,11 @@ import org.mockito.junit.MockitoJUnitRunner;
  * be it mocks/spies or real objects.
  * </p>
  *
+ * <p>
+ * Elements annotated with this annotation can also be spied upon by also adding the {@link Spy}
+ * annotation to the element.
+ * </p>
+ *
  * @see Mock
  * @see Spy
  * @see MockitoAnnotations#openMocks(Object)

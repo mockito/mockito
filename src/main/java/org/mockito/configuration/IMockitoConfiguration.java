@@ -13,7 +13,7 @@ import org.mockito.stubbing.Answer;
  * In most cases you don't really need to configure Mockito. For example in case of working with legacy code,
  * when you might want to have different 'mocking style' this interface might be helpful.
  * A reason of configuring Mockito might be if you disagree with the {@link org.mockito.Answers#RETURNS_DEFAULTS}
- * unstubbed mocks return.
+ * un-stubbed mocks return.
  *
  * <p>
  * To configure Mockito create exactly <b>org.mockito.configuration.MockitoConfiguration</b> class
@@ -38,7 +38,7 @@ import org.mockito.stubbing.Answer;
 public interface IMockitoConfiguration {
 
     /**
-     * Allows configuring the default answers of unstubbed invocations
+     * Allows configuring the default answers of un-stubbed invocations
      * <p>
      * See javadoc for {@link IMockitoConfiguration}
      */

@@ -43,7 +43,7 @@ import org.mockito.stubbing.Answer;
  * </code></pre>
  * {@link MockSettings} has been introduced for two reasons.
  * Firstly, to make it easy to add another mock setting when the demand comes.
- * Secondly, to enable combining together different mock settings without introducing zillions of overloaded mock() methods.
+ * Secondly, to enable combining different mock settings without introducing zillions of overloaded mock() methods.
  */
 @NotExtensible
 public interface MockSettings extends Serializable {
@@ -64,7 +64,7 @@ public interface MockSettings extends Serializable {
      *   Baz baz = (Baz) foo;
      * </code></pre>
      *
-     * @param interfaces extra interfaces the should implement.
+     * @param interfaces extra interfaces the mock should implement.
      * @return settings instance so that you can fluently specify other settings
      */
     MockSettings extraInterfaces(Class<?>... interfaces);
@@ -94,7 +94,7 @@ public interface MockSettings extends Serializable {
      *
      * Sets the instance that will be spied. Actually copies the internal fields of the passed instance to the mock.
      * <p>
-     * As usual you are going to read <b>the partial mock warning</b>:
+     * As usual, you are going to read <b>the partial mock warning</b>:
      * Object oriented programming is more or less about tackling complexity by dividing the complexity into separate, specific, SRPy objects.
      * How does partial mock fit into this paradigm? Well, it just doesn't...
      * Partial mock usually means that the complexity has been moved to a different method on the same object.
@@ -133,10 +133,10 @@ public interface MockSettings extends Serializable {
 
     /**
      * Specifies default answers to interactions.
-     * It's quite advanced feature and typically you don't need it to write decent tests.
-     * However it can be helpful when working with legacy systems.
+     * It's quite advanced feature, and typically you don't need it to write decent tests.
+     * However, it can be helpful when working with legacy systems.
      * <p>
-     * It is the default answer so it will be used <b>only when you don't</b> stub the method call.
+     * It is the default answer, so it will be used <b>only when you don't</b> stub the method call.
      *
      * <pre class="code"><code class="java">
      *   Foo mock = mock(Foo.class, withSettings().defaultAnswer(RETURNS_SMART_NULLS));
@@ -209,7 +209,7 @@ public interface MockSettings extends Serializable {
     /**
      * Add stubbing lookup listener to the mock object.
      *
-     * Multiple listeners may be added and they will be notified orderly.
+     * Multiple listeners may be added, and they will be notified in an orderly fashion.
      *
      * For use cases and more info see {@link StubbingLookupListener}.
      *
@@ -228,7 +228,7 @@ public interface MockSettings extends Serializable {
      * Registers a listener for method invocations on this mock. The listener is
      * notified every time a method on this mock is called.
      * <p>
-     * Multiple listeners may be added and they will be notified in the order they were supplied.
+     * Multiple listeners may be added, and they will be notified in the order they were supplied.
      *
      * Example:
      * <pre class="code"><code class="java">
@@ -247,7 +247,7 @@ public interface MockSettings extends Serializable {
      * See {@link VerificationStartedListener} on how such listener can be useful.
      * <p>
      * When multiple listeners are added, they are notified in order they were supplied.
-     * There is no reason to supply multiple listeners but we wanted to keep the API
+     * There is no reason to supply multiple listeners, but we wanted to keep the API
      * simple and consistent with {@link #invocationListeners(InvocationListener...)}.
      * <p>
      * Throws exception when any of the passed listeners is null or when the entire vararg array is null.
@@ -313,7 +313,7 @@ public interface MockSettings extends Serializable {
     MockSettings outerInstance(Object outerClassInstance);
 
     /**
-     * By default, Mockito makes an attempt to preserve all annotation meta data on the mocked
+     * By default, Mockito makes an attempt to preserve all annotation metadata on the mocked
      * type and its methods to mirror the mocked type as closely as possible. If this is not
      * desired, this option can be used to disable this behavior.
      *

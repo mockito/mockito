@@ -17,12 +17,12 @@ import org.mockito.session.MockitoSessionBuilder;
 
 /**
  * {@code MockitoSession} is an optional, highly recommended feature
- * that helps driving cleaner tests by eliminating boilerplate code and adding extra validation.
+ * that drives writing cleaner tests by eliminating boilerplate code and adding extra validation.
  * If you already use {@link MockitoJUnitRunner} or {@link MockitoRule}
  * *you don't need* {@code MockitoSession} because it is used by the runner/rule.
  * <p>
  * {@code MockitoSession} is a session of mocking, during which the user creates and uses Mockito mocks.
- * Typically the session is an execution of a single test method.
+ * Typically, the session is an execution of a single test method.
  * {@code MockitoSession} initializes mocks, validates usage and detects incorrect stubbing.
  * When the session is started it must be concluded with {@link #finishMocking()}
  * otherwise {@link UnfinishedMockingSessionException} is triggered when the next session is created.

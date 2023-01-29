@@ -62,8 +62,17 @@ public interface MockedStatic<T> extends ScopedMock {
      */
     void verifyNoInteractions();
 
+    /**
+     * Functional interface for a verification operation on a static mock.
+     */
+    @FunctionalInterface
     interface Verification {
 
+        /**
+         * Apply the verification operation.
+         *
+         * @throws Throwable any exception that may be thrown.
+         */
         void apply() throws Throwable;
     }
 }

@@ -21,19 +21,52 @@ import java.util.List;
  */
 public interface MockedConstruction<T> extends ScopedMock {
 
+    /**
+     * Get the constructed mocks.
+     *
+     * @return the constructed mocks.
+     */
     List<T> constructed();
 
+    /**
+     * The context for a construction mock.
+     */
     interface Context {
 
         int getCount();
 
+        /**
+         * Get the constructor that is invoked during the mock creation.
+         *
+         * @return the constructor.
+         */
         Constructor<?> constructor();
 
+        /**
+         * Get the arguments that were passed to the constructor.
+         *
+         * @return the arguments passed to the constructor, as a list.
+         */
         List<?> arguments();
     }
 
+    /**
+     * Functional interface that consumes a newly created mock and the mock context.
+     * <p>
+     * Used to attach behaviours to new mocks.
+     *
+     * @param <T> the mock type.
+     */
+    @FunctionalInterface
     interface MockInitializer<T> {
 
+        /**
+         * Configure the mock.
+         *
+         * @param mock the newly created mock.
+         * @param context the mock context.
+         * @throws Throwable any exception that may be thrown.
+         */
         void prepare(T mock, Context context) throws Throwable;
     }
 }
