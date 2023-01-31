@@ -6,10 +6,10 @@ plugins {
 }
 
 android {
+    namespace = "org.mockitousage.androidtest"
     compileSdkVersion 33
 
     defaultConfig {
-        applicationId "org.mockitousage.androidtest"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
