@@ -96,13 +96,11 @@ jobs:
     strategy:
       matrix:
         java: [ 11 ]
-        entry:
-          - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
 
     # All build steps
     steps:
     - name: 1. Check out code
-      uses: actions/checkout@v3 # https://github.com/actions/checkout
+      uses: actions/checkout@v3
       with:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
@@ -112,14 +110,11 @@ jobs:
         distribution: 'zulu'
         java-version: ${{ matrix.java }}
 
-    - name: 3. Run Android tests on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
+    - name: 3. Run Android tests on Java ${{ matrix.java }}
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 29
         script: ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache
-      env:
-        MOCK_MAKER: ${{ matrix.entry.mock-maker }}
-        MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
   #
   # Release job, only for pushes to the main development branch
