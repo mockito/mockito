@@ -22,7 +22,9 @@ include("subclass",
     "errorprone",
     "programmatic-test")
 
-if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17) && (System.getenv("ANDROID_SDK_ROOT") != null || File(".local.properties").exists())) {
+// https://developer.android.com/studio/command-line/variables#envar
+// https://developer.android.com/studio/build#properties-files
+if (System.getenv("ANDROID_HOME") != null || File("local.properties").exists()) {
     include("androidTest")
 } else {
     logger.info("Not including android test project due to missing SDK configuration")
