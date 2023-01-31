@@ -37,9 +37,6 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 
 dependencies {
     implementation libraries.kotlin.stdlib
-    implementation libraries.android.ktx
-    implementation libraries.android.compat
-    implementation libraries.android.material
 
     testImplementation project(":inline")
     testImplementation libraries.junit4
@@ -47,6 +44,5 @@ dependencies {
     testImplementation libraries.junitJupiterEngine
 
     androidTestImplementation libraries.android.junit
-    androidTestImplementation libraries.android.espresso
     androidTestImplementation project(":android")
 }
