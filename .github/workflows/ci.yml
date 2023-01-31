@@ -85,6 +85,41 @@ jobs:
         chmod +x codecov
         ./codecov
 
+  #
+  # Android build job
+  #
+  android:
+    runs-on: macos-latest
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
+
+    # Definition of the build matrix
+    strategy:
+      matrix:
+        java: [ 11 ]
+        entry:
+          - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
+
+    # All build steps
+    steps:
+    - name: 1. Check out code
+      uses: actions/checkout@v3 # https://github.com/actions/checkout
+      with:
+        fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
+
+    - name: 2. Set up Java ${{ matrix.java }}
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: ${{ matrix.java }}
+
+    - name: 3. Run Android tests on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 29
+        script: ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache
+      env:
+        MOCK_MAKER: ${{ matrix.entry.mock-maker }}
+        MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
   #
   # Release job, only for pushes to the main development branch
