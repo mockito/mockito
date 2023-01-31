@@ -6,6 +6,6 @@
         android:icon="@android:mipmap/sym_def_app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MockitoAndroidTest" />
+        android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar" />
 
 </manifest>
