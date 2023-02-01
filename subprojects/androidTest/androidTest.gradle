@@ -10,19 +10,12 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 26
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
 
     compileOptions {
@@ -31,6 +24,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = '11'
+    }
+}
+
+androidComponents {
+    beforeVariants(selector().withBuildType("release")) {
+        enable = false
     }
 }
 
