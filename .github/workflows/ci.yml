@@ -96,6 +96,7 @@ jobs:
     strategy:
       matrix:
         java: [ 11 ]
+        android-api: [26, 27, 28, 29, 30, 31]
 
     # All build steps
     steps:
@@ -110,10 +111,11 @@ jobs:
         distribution: 'zulu'
         java-version: ${{ matrix.java }}
 
-    - name: 3. Run Android tests on Java ${{ matrix.java }}
+    - name: 3. Run Android tests on Java ${{ matrix.java }} with Android API level ${{ matrix.android-api }}
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        api-level: 29
+        arch: x86_64
+        api-level: ${{ matrix.android-api }}
         script: ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache
 
   #
