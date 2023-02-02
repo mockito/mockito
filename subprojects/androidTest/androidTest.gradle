@@ -43,6 +43,7 @@ dependencies {
     testImplementation libraries.junitJupiterApi
     testImplementation libraries.junitJupiterEngine
 
+    androidTestImplementation libraries.android.runner
     androidTestImplementation libraries.android.junit
     androidTestImplementation project(":android")
 }

@@ -43,5 +43,6 @@ libraries.kotlin = [
     gradlePlugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}",
 ]
 libraries.android = [
+    runner: 'androidx.test:runner:1.5.2',
     junit: 'androidx.test.ext:junit:1.1.5',
 ]
