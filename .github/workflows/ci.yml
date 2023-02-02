@@ -96,7 +96,7 @@ jobs:
     strategy:
       matrix:
         java: [ 11 ]
-        android-api: [26, 27, 28, 29, 30, 31]
+        android-api: [ 26 ]
 
     # All build steps
     steps:
