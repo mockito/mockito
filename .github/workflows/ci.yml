@@ -95,7 +95,13 @@ jobs:
     # Definition of the build matrix
     strategy:
       matrix:
-        android-api: [ 26 ]
+        include:
+          # Minimum supported
+          - android-api: 26
+            android-image-type: default
+          # Maximum available
+          - android-api: 33
+            android-image-type: google_apis
 
     # All build steps
     steps:
@@ -115,6 +121,7 @@ jobs:
       with:
         arch: x86_64
         api-level: ${{ matrix.android-api }}
+        target: ${{ matrix.android-image-type }}
         script: ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache
 
   #
