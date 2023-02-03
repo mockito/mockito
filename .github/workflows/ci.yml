@@ -64,7 +64,7 @@ jobs:
       if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
       run: ./gradlew spotlessCheck
 
-    - name: 6. Build on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }} 
+    - name: 6. Build on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
       run: ./gradlew build idea --scan
       env:
         MOCK_MAKER: ${{ matrix.entry.mock-maker }}
