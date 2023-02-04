@@ -6,25 +6,18 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
-    buildToolsVersion "30.0.3"
+    namespace = "org.mockitousage.androidtest"
+    compileSdk = 33
 
     defaultConfig {
-        applicationId "org.mockitousage.androidtest"
-        minSdkVersion 21
-        targetSdkVersion 31
-        versionCode 1
-        versionName "1.0"
+        minSdk = 26
+        targetSdk = 33
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
@@ -34,20 +27,23 @@ android {
     }
 }
 
+androidComponents {
+    beforeVariants(selector().withBuildType("release")) {
+        enable = false
+    }
+}
+
 apply from: "$rootDir/gradle/dependencies.gradle"
 
 dependencies {
     implementation libraries.kotlin.stdlib
-    implementation libraries.android.ktx
-    implementation libraries.android.compat
-    implementation libraries.android.material
 
     testImplementation project(":inline")
     testImplementation libraries.junit4
     testImplementation libraries.junitJupiterApi
     testImplementation libraries.junitJupiterEngine
 
+    androidTestImplementation libraries.android.runner
     androidTestImplementation libraries.android.junit
-    androidTestImplementation libraries.android.espresso
     androidTestImplementation project(":android")
 }
