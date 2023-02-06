@@ -122,6 +122,7 @@ jobs:
         arch: x86_64
         api-level: ${{ matrix.android-api }}
         target: ${{ matrix.android-image-type }}
+        emulator-build: 7425822
         # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
         emulator-options: >
           -no-window
