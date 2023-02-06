@@ -91,6 +91,7 @@ jobs:
   android:
     runs-on: macos-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
+    timeout-minutes: 30
 
     # Definition of the build matrix
     strategy:
