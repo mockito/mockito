@@ -122,6 +122,13 @@ jobs:
         arch: x86_64
         api-level: ${{ matrix.android-api }}
         target: ${{ matrix.android-image-type }}
+        # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
+        emulator-options: >
+          -no-window
+          -gpu swiftshader_indirect
+          -no-snapshot
+          -noaudio
+          -no-boot-anim
         script: ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache
 
     - name: 4. Upload artifact "androidTest-results-${{ matrix.android-api }}"
