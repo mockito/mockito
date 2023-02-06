@@ -95,13 +95,8 @@ jobs:
     # Definition of the build matrix
     strategy:
       matrix:
-        include:
-          # Minimum supported
-          - android-api: 26
-            android-image-type: default
-          # Maximum available
-          - android-api: 33
-            android-image-type: google_apis
+        # Minimum supported and maximum available.
+        android-api: [ 26, 33 ]
 
     # All build steps
     steps:
@@ -121,7 +116,8 @@ jobs:
       with:
         arch: x86_64
         api-level: ${{ matrix.android-api }}
-        target: ${{ matrix.android-image-type }}
+        # Workaround for https://issuetracker.google.com/issues/267458959
+        target: ${{ matrix.android-api >= 32 && 'google_apis' || 'default' }}
         # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/160.
         emulator-build: 7425822
         # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
