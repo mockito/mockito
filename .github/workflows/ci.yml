@@ -129,6 +129,8 @@ jobs:
           -no-snapshot
           -noaudio
           -no-boot-anim
+          -camera-back none
+          -camera-front none
         script: ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache
 
     - name: 4. Upload artifact "androidTest-results-${{ matrix.android-api }}"
