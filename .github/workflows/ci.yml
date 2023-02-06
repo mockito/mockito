@@ -122,8 +122,10 @@ jobs:
         arch: x86_64
         api-level: ${{ matrix.android-api }}
         target: ${{ matrix.android-image-type }}
+        # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/160.
         emulator-build: 7425822
         # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
+        # See emulator manual for reference: https://developer.android.com/studio/run/emulator-commandline
         emulator-options: >
           -no-window
           -gpu swiftshader_indirect
@@ -132,6 +134,7 @@ jobs:
           -no-boot-anim
           -camera-back none
           -camera-front none
+        # See logcat manual for reference: https://developer.android.com/studio/command-line/logcat
         script: |
           # Capture full logcat output to a file.
           adb logcat > emulator.log &
