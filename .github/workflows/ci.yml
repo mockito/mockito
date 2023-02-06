@@ -132,14 +132,22 @@ jobs:
           -no-boot-anim
           -camera-back none
           -camera-front none
-        script: ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache
+        script: |
+          # Capture full logcat output to a file.
+          adb logcat > emulator.log &
+          # Output warnings and errors to the GitHub Actions output.
+          adb logcat *:W -v color &
+          # Run the actual tests.
+          ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache
 
     - name: 4. Upload artifact "androidTest-results-${{ matrix.android-api }}"
       if: success() || failure()
       uses: actions/upload-artifact@v3
       with:
         name: androidTest-results-${{ matrix.android-api }}
-        path: subprojects/androidTest/build/reports/androidTests/connected/**
+        path: |
+          ${{ github.workspace }}/subprojects/androidTest/build/reports/androidTests/connected/**
+          ${{ github.workspace }}/emulator.log
 
   #
   # Release job, only for pushes to the main development branch
