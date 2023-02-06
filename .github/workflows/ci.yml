@@ -124,6 +124,13 @@ jobs:
         target: ${{ matrix.android-image-type }}
         script: ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache
 
+    - name: 4. Upload artifact "androidTest-results-${{ matrix.android-api }}"
+      if: success() || failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: androidTest-results-${{ matrix.android-api }}
+        path: subprojects/androidTest/build/reports/androidTests/connected/**
+
   #
   # Release job, only for pushes to the main development branch
   #
