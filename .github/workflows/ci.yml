@@ -142,14 +142,14 @@ jobs:
           adb logcat --clear || true
           adb logcat --clear || true
           # Capture full logcat output to a file.
-          adb logcat > emulator.log & export PID_LOGCAT_FILE=$!
+          adb logcat > emulator.log & echo $! > logcat_file.pid
           # Output instrumentation test logs to the GitHub Actions output.
-          adb logcat "*:S MonitoringInstr:V AndroidJUnitRunner:V TestRequestBuilder:V TestExecutor:V TestRunner:V" --format=color & export PID_LOGCAT_CONSOLE=$!
+          adb logcat "*:S MonitoringInstr:V AndroidJUnitRunner:V TestRequestBuilder:V TestExecutor:V TestRunner:V" --format=color & echo $! > logcat_console.pid
           # Run the actual tests (ignore build failures, so that kill can execute after).
           ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache || true
           # Stop capturing logcat output.
-          kill $PID_LOGCAT_FILE    || echo "::warning file=.github/workflows/ci.yml::Logcat process $PID_LOGCAT_FILE didn't exist."
-          kill $PID_LOGCAT_CONSOLE || echo "::warning file=.github/workflows/ci.yml::Logcat process $PID_LOGCAT_CONSOLE didn't exist."
+          kill $(cat logcat_file.pid)    || echo "::warning file=.github/workflows/ci.yml::Logcat process $(cat logcat_file.pid) didn't exist."
+          kill $(cat logcat_console.pid) || echo "::warning file=.github/workflows/ci.yml::Logcat process $(cat logcat_console.pid) didn't exist."
 
     - name: 4. Upload artifact "androidTest-results-${{ matrix.android-api }}"
       if: success() || failure()
