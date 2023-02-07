@@ -133,12 +133,19 @@ jobs:
           -camera-front none
         # See logcat manual for reference: https://developer.android.com/studio/command-line/logcat
         script: |
+          # Capture logcat output from "Launch Emulator" to a file.
+          adb logcat -d > emulator-startup.log
+          # Shorten the logcat output, by truncating at this point, the relevant part is yet to come.
+          adb logcat --clear
           # Capture full logcat output to a file.
-          adb logcat > emulator.log &
+          adb logcat > emulator.log & PID_LOGCAT_FILE=$!
           # Output warnings and errors to the GitHub Actions output.
-          adb logcat *:W -v color &
-          # Run the actual tests.
-          ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache
+          adb logcat *:W --format=color & PID_LOGCAT_CONSOLE=$!
+          # Run the actual tests (ignore build failures, so that kill can execute after).
+          ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache || true
+          # Stop capturing logcat output.
+          kill $PID_LOGCAT_FILE    || echo "::warning file=.github/workflows/ci.yml::Logcat process $PID_LOGCAT_FILE didn't exist."
+          kill $PID_LOGCAT_CONSOLE || echo "::warning file=.github/workflows/ci.yml::Logcat process $PID_LOGCAT_CONSOLE didn't exist."
 
     - name: 4. Upload artifact "androidTest-results-${{ matrix.android-api }}"
       if: success() || failure()
@@ -148,6 +155,7 @@ jobs:
         path: |
           ${{ github.workspace }}/subprojects/androidTest/build/reports/androidTests/connected/**
           ${{ github.workspace }}/emulator.log
+          ${{ github.workspace }}/emulator-startup.log
 
   #
   # Release job, only for pushes to the main development branch
