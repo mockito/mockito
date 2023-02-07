@@ -35,7 +35,6 @@ class BasicInstrumentedTests {
     fun mockAndUseBasicClassUsingAnnotatedMock() {
         val basicClass = BasicOpenClassReceiver(mockedViaAnnotationBasicOpenClass)
         basicClass.callDependencyMethod()
-        error("Simulate failing test")
     }
 
     @Test
