@@ -143,8 +143,8 @@ jobs:
           adb logcat --clear || true
           # Capture full logcat output to a file.
           adb logcat > emulator.log & PID_LOGCAT_FILE=$!
-          # Output instrumentation test logs and all other errors to the GitHub Actions output.
-          adb logcat "*:E MonitoringInstr:V AndroidJUnitRunner:V TestRequestBuilder:V TestExecutor:V TestRunner:V" --format=color & PID_LOGCAT_CONSOLE=$!
+          # Output instrumentation test logs to the GitHub Actions output.
+          adb logcat "MonitoringInstr:V AndroidJUnitRunner:V TestRequestBuilder:V TestExecutor:V TestRunner:V" --format=color & PID_LOGCAT_CONSOLE=$!
           # Run the actual tests (ignore build failures, so that kill can execute after).
           ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache || true
           # Stop capturing logcat output.
