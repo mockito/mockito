@@ -136,7 +136,11 @@ jobs:
           # Capture logcat output from "Launch Emulator" to a file.
           adb logcat -d > emulator-startup.log
           # Shorten the logcat output, by truncating at this point, the relevant part is yet to come.
-          adb logcat --clear
+          # Best effort, could fail with "failed to clear the 'main' log",
+          # because something is locking logcat, so try a few times, and ignore errors each time.
+          adb logcat --clear || true
+          adb logcat --clear || true
+          adb logcat --clear || true
           # Capture full logcat output to a file.
           adb logcat > emulator.log & PID_LOGCAT_FILE=$!
           # Output instrumentation test logs and all other errors to the GitHub Actions output.
