@@ -82,6 +82,9 @@ allprojects { proj ->
 
 configurations {
     testUtil //TODO move to separate project
+    // Putting 'provided' dependencies on test compile and runtime classpath.
+    testCompileOnly.extendsFrom(compileOnly)
+    testRuntimeOnly.extendsFrom(compileOnly)
 }
 
 dependencies {
@@ -91,10 +94,6 @@ dependencies {
     implementation libraries.objenesis
 
     testImplementation libraries.assertj
-
-    //putting 'provided' dependencies on test compile and runtime classpath
-    testCompileOnly configurations.compileOnly
-    testRuntimeOnly configurations.compileOnly
 
     testUtil sourceSets.test.output
 
