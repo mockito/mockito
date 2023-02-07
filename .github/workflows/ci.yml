@@ -146,6 +146,7 @@ jobs:
           # Output instrumentation test logs to the GitHub Actions output.
           adb logcat "*:S MonitoringInstr:V AndroidJUnitRunner:V TestRequestBuilder:V TestExecutor:V TestRunner:V" --format=color & echo $! > logcat_console.pid
 
+          echo 0 > gradle.exit # Set a default exit code.
           # Run the actual tests (suppress build failures by saving the exit code).
           ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache || echo $? > gradle.exit
 
