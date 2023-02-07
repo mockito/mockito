@@ -119,8 +119,8 @@ jobs:
         api-level: ${{ matrix.android-api }}
         # Workaround for https://issuetracker.google.com/issues/267458959
         target: ${{ matrix.android-api >= 32 && 'google_apis' || 'default' }}
-        # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/160.
-        emulator-build: 7425822
+        # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/160, but newer version.
+        emulator-build: 9322596 # 31.3.14.0 got it via `emulator -version`
         # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
         # See emulator manual for reference: https://developer.android.com/studio/run/emulator-commandline
         emulator-options: >
