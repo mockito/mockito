@@ -145,8 +145,10 @@ jobs:
           adb logcat > emulator.log & echo $! > logcat_file.pid
           # Output instrumentation test logs to the GitHub Actions output.
           adb logcat "*:S MonitoringInstr:V AndroidJUnitRunner:V TestRequestBuilder:V TestExecutor:V TestRunner:V" --format=color & echo $! > logcat_console.pid
+
           # Run the actual tests (suppress build failures by saving the exit code).
           ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache || echo $? > gradle.exit
+
           # Stop capturing logcat output.
           kill $(cat logcat_file.pid)    || echo "::warning file=.github/workflows/ci.yml::Logcat process $(cat logcat_file.pid) didn't exist."
           kill $(cat logcat_console.pid) || echo "::warning file=.github/workflows/ci.yml::Logcat process $(cat logcat_console.pid) didn't exist."
