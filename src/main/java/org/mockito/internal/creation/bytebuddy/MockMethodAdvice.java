@@ -168,7 +168,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     @Override
     public boolean isMocked(Object instance) {
-        return selfCallInfo.checkSelfCall(instance) && isMock(instance);
+        return isMock(instance) && selfCallInfo.checkSelfCall(instance);
     }
 
     @Override
