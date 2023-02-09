@@ -20,39 +20,47 @@ public class ThreadLocalTest extends TestBase {
 
     @Test
     public void mock_ThreadLocal_does_not_raise_StackOverflowError() {
-        StackOverflowError stackOverflowError = Assertions.catchThrowableOfType(() -> {
-            mock(ThreadLocal.class, RETURNS_MOCKS);
-        }, StackOverflowError.class);
+        StackOverflowError stackOverflowError =
+                Assertions.catchThrowableOfType(
+                        () -> {
+                            mock(ThreadLocal.class, RETURNS_MOCKS);
+                        },
+                        StackOverflowError.class);
         Assertions.assertThat(stackOverflowError).isNull();
     }
 
     @Test
     public void mock_class_extending_ThreadLocal_does_not_raise_StackOverflowError() {
-        StackOverflowError stackOverflowError = Assertions.catchThrowableOfType(() -> {
-            mock(SomeThreadLocal.class, RETURNS_MOCKS);
-        }, StackOverflowError.class);
+        StackOverflowError stackOverflowError =
+                Assertions.catchThrowableOfType(
+                        () -> {
+                            mock(SomeThreadLocal.class, RETURNS_MOCKS);
+                        },
+                        StackOverflowError.class);
         Assertions.assertThat(stackOverflowError).isNull();
     }
 
     @Test
     public void spy_ThreadLocal_does_not_raise_StackOverflowError() {
-        StackOverflowError stackOverflowError = Assertions.catchThrowableOfType(() -> {
-            spy(ThreadLocal.class);
-        }, StackOverflowError.class);
+        StackOverflowError stackOverflowError =
+                Assertions.catchThrowableOfType(
+                        () -> {
+                            spy(ThreadLocal.class);
+                        },
+                        StackOverflowError.class);
         Assertions.assertThat(stackOverflowError).isNull();
     }
 
     @Test
     public void spy_class_extending_ThreadLocal_does_not_raise_StackOverflowError() {
-        StackOverflowError stackOverflowError = Assertions.catchThrowableOfType(() -> {
-            spy(SomeThreadLocal.class);
-        }, StackOverflowError.class);
+        StackOverflowError stackOverflowError =
+                Assertions.catchThrowableOfType(
+                        () -> {
+                            spy(SomeThreadLocal.class);
+                        },
+                        StackOverflowError.class);
         Assertions.assertThat(stackOverflowError).isNull();
     }
 
-    static class SomeThreadLocal<T> extends ThreadLocal<T> {
-
-    }
-
+    static class SomeThreadLocal<T> extends ThreadLocal<T> {}
 }
-
