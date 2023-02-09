@@ -10,8 +10,6 @@ import static org.mockito.Mockito.spy;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockitoutil.TestBase;
 
 /**
