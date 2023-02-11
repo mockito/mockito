@@ -8,7 +8,7 @@ jar {
             'Bundle-SymbolicName': 'org.mockito.mockito-core',
             'Bundle-Version': "\${version_cleanup;${project.version}}",
             '-versionpolicy': '[${version;==;${@}},${version;+;${@}})',
-            'Export-Package': "org.mockito.internal.*;status=INTERNAL;mandatory:=status;version=${version},org.mockito.*;version=${version}",
+            'Export-Package': "org.mockito.internal.*;status=INTERNAL;mandatory:=status;version=${archiveVersion.get()},org.mockito.*;version=${archiveVersion.get()}",
             'Import-Package': [
                     'net.bytebuddy.*;version="[1.6.0,2.0)"',
                     'junit.*;resolution:=optional',

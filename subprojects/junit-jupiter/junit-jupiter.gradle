@@ -25,7 +25,7 @@ jar {
             'Bundle-SymbolicName': 'org.mockito.junit-jupiter',
             'Bundle-Version': "\${version_cleanup;${project.version}}",
             '-versionpolicy': '[${version;==;${@}},${version;+;${@}})',
-            'Export-Package': "org.mockito.junit.jupiter.*;version=${version}",
+            'Export-Package': "org.mockito.junit.jupiter.*;version=${archiveVersion.get()}",
             '-removeheaders': 'Private-Package',
             'Automatic-Module-Name': 'org.mockito.junit.jupiter',
             '-noextraheaders': 'true',

@@ -35,8 +35,8 @@ task mockitoCoverage(type: JacocoReport) {
     }
 
     reports {
-        xml.enabled true
-        html.enabled true
+        xml.required = true
+        html.required = true
         html.destination file("${buildDir}/jacocoHtml")
     }
 

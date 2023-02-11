@@ -58,7 +58,7 @@ publishing {
                     //Gradle does not write 'jar' packaging to the pom (unlike other packaging types).
                     //This is OK because 'jar' is implicit/default:
                     // https://maven.apache.org/guides/introduction/introduction-to-the-pom.html#minimal-pom
-                    packaging = project.tasks.jar.extension
+                    packaging = project.tasks.jar.archiveExtension.get()
                 }
 
                 url = "https://github.com/mockito/mockito"
