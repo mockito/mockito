@@ -34,7 +34,9 @@ test {
         new RuntimeBundlesProvider(files: configurations.testRuntimeBundles.asFileTree)
     )
     dependsOn configurations.testRuntimeBundles
-    inputs.files(sourceSets.testBundle.allSource).withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files(sourceSets.testBundle.allSource)
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+        .withPropertyName('testBundleSources')
     inputs.files(sourceSets.otherBundle.allSource).withPathSensitivity(PathSensitivity.RELATIVE)
     useJUnit()
 }
