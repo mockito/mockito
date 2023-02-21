@@ -37,7 +37,9 @@ test {
     inputs.files(sourceSets.testBundle.allSource)
         .withPathSensitivity(PathSensitivity.RELATIVE)
         .withPropertyName('testBundleSources')
-    inputs.files(sourceSets.otherBundle.allSource).withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files(sourceSets.otherBundle.allSource)
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+        .withPropertyName('otherBundleSources')
     useJUnit()
 }
 
