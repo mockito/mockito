@@ -30,10 +30,31 @@ dependencies {
 }
 
 test {
+    jvmArgumentProviders.add(
+        new RuntimeBundlesProvider(files: configurations.testRuntimeBundles.asFileTree)
+    )
     dependsOn configurations.testRuntimeBundles
     inputs.files(sourceSets.testBundle.allSource)
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+        .withPropertyName('testBundleSources')
     inputs.files(sourceSets.otherBundle.allSource)
-    systemProperty 'testRuntimeBundles', configurations.testRuntimeBundles.asPath
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+        .withPropertyName('otherBundleSources')
     useJUnit()
 }
 
+/**
+ * A helper class to pass classpath elements as relative paths. This allows the build
+ * to be checked out in different locations on the file system and still hit the cache.
+ */
+class RuntimeBundlesProvider implements CommandLineArgumentProvider {
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
+    FileTree files
+
+    @Override
+    Iterable<String> asArguments() {
+        String[] absolutePaths = files.stream().map {it.absolutePath}.toArray()
+        ["-DtestRuntimeBundles=${CollectionUtils.join(File.pathSeparator, absolutePaths)}".toString()]
+    }
+}
