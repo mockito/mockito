@@ -5,9 +5,12 @@
 package org.mockito.internal.configuration.injection.filter;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.mockito.internal.util.MockUtil;
 
 public class TypeBasedCandidateFilter implements MockCandidateFilter {
 
@@ -26,7 +29,16 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
         List<Object> mockTypeMatches = new ArrayList<>();
         for (Object mock : mocks) {
             if (candidateFieldToBeInjected.getType().isAssignableFrom(mock.getClass())) {
-                mockTypeMatches.add(mock);
+                Type genericTypeToMock = MockUtil.getMockSettings(mock).getGenericTypeToMock();
+                Type genericType = candidateFieldToBeInjected.getGenericType();
+                // be more specific if generic type information is available
+                if (genericTypeToMock!=null || genericType!=null) {
+                    if (genericTypeToMock!=null && genericType!=null && genericTypeToMock.getTypeName().equals(genericType.getTypeName())) {
+                        mockTypeMatches.add(mock);
+                    } // else: filter out mock, as generic types don't match
+                } else {
+                    mockTypeMatches.add(mock);
+                }
             }
         }
 

@@ -16,6 +16,7 @@ import static org.mockito.internal.exceptions.Reporter.strictnessDoesNotAcceptNu
 import static org.mockito.internal.util.collections.Sets.newSet;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -257,6 +258,12 @@ public class MockSettingsImpl<T> extends CreationSettings<T>
     @Override
     public MockSettings mockMaker(String mockMaker) {
         this.mockMaker = mockMaker;
+        return this;
+    }
+
+    @Override
+    public MockSettings genericTypeToMock(Type genericType) {
+        this.genericTypeToMock = genericType;
         return this;
     }
 

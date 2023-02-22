@@ -57,6 +57,8 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
             mockSettings.mockMaker(annotation.mockMaker());
         }
 
+        mockSettings.genericTypeToMock(genericType.get());
+
         // see @Mock answer default value
         mockSettings.defaultAnswer(annotation.answer());
 

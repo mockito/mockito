@@ -5,6 +5,7 @@
 package org.mockito.internal.creation.settings;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -25,6 +26,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     private static final long serialVersionUID = -6789800638070123629L;
 
     protected Class<T> typeToMock;
+    protected Type genericTypeToMock;
     protected Set<Class<?>> extraInterfaces = new LinkedHashSet<>();
     protected String name;
     protected Object spiedInstance;
@@ -54,6 +56,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     public CreationSettings(CreationSettings copy) {
         // TODO can we have a reflection test here? We had a couple of bugs here in the past.
         this.typeToMock = copy.typeToMock;
+        this.genericTypeToMock = copy.genericTypeToMock;
         this.extraInterfaces = copy.extraInterfaces;
         this.name = copy.name;
         this.spiedInstance = copy.spiedInstance;
@@ -79,6 +82,11 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
 
     public CreationSettings<T> setTypeToMock(Class<T> typeToMock) {
         this.typeToMock = typeToMock;
+        return this;
+    }
+
+    public CreationSettings<T> setGenericTypeToMock(Type genericTypeToMock) {
+        this.genericTypeToMock = genericTypeToMock;
         return this;
     }
 
@@ -184,5 +192,10 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     @Override
     public String getMockMaker() {
         return mockMaker;
+    }
+
+    @Override
+    public Type getGenericTypeToMock() {
+        return genericTypeToMock;
     }
 }
