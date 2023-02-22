@@ -28,10 +28,14 @@ public class GenericTypeMockTest {
     private UnderTest underTest;
 
     /**
-     * Verify that InjectMocks will correctly match fields with same generic type but different type parameters, without using the same field name.
+     * Verify that InjectMocks will correctly match fields with same generic type but different type parameters, 
+     * without using the same field name.
      */
     @Test
     public void testInjectMock() {
+        // this used to fail without any error message hinting at the problem, as soon as a class under test has 
+        // a second field of the same generic type, but with different type parameter. The programmer then
+        // had to know that mock field names have to match field names in the class under test.
         assertNotNull(underTest.stringListProvider);
         assertNotNull(underTest.intListProvider);
     }
