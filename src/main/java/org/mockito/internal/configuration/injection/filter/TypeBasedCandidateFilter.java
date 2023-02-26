@@ -32,11 +32,14 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 Type genericTypeToMock = MockUtil.getMockSettings(mock).getGenericTypeToMock();
                 Type genericType = candidateFieldToBeInjected.getGenericType();
                 // be more specific if generic type information is available
-                if (genericTypeToMock!=null || genericType!=null) {
-                    // would rather like to use Type.getTypeName(), but that doesn't exist in Android SDK 26
-                    // which Mockito aims to maintain compatibility with.
-                    // Type.getTypeName() is documented to simply call Type.toString(), so use that instead
-                    if (genericTypeToMock!=null && genericType!=null && genericTypeToMock.toString().equals(genericType.toString())) {
+                if (genericTypeToMock != null || genericType != null) {
+                    // would rather like to use Type.getTypeName(), but that doesn't exist in
+                    // Android SDK 26 which Mockito aims to maintain compatibility with.
+                    // Type.getTypeName() is documented to simply call Type.toString(), so use that
+                    // instead
+                    if (genericTypeToMock != null
+                            && genericType != null
+                            && genericTypeToMock.toString().equals(genericType.toString())) {
                         mockTypeMatches.add(mock);
                     } // else: filter out mock, as generic types don't match
                 } else {
