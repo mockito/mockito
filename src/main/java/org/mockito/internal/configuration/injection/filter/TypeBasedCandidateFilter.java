@@ -39,14 +39,15 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 ParameterizedType genericMockType = (ParameterizedType) mockType;
                 Type[] actualTypeArguments = genericTypeToMock.getActualTypeArguments();
                 Type[] actualTypeArguments2 = genericMockType.getActualTypeArguments();
-                // getRawType() says "the Type object representing the class or interface that declares this type",
+                // getRawType() says "the Type object representing the class or interface that
+                // declares this type",
                 // no clue why that's a Type rather than a Class as return type anyway
                 Class rawType = (Class) genericTypeToMock.getRawType();
                 Class rawType2 = (Class) genericMockType.getRawType();
-                if (Objects.equals(genericTypeToMock.getOwnerType(), genericMockType.getOwnerType()) &&
-                    // e.g. Tree and TreeSet
-                    rawType.isAssignableFrom(rawType2) &&
-                    actualTypeArguments.length == actualTypeArguments2.length ) {
+                if (Objects.equals(genericTypeToMock.getOwnerType(), genericMockType.getOwnerType())
+                        // e.g. Tree and TreeSet
+                        && rawType.isAssignableFrom(rawType2)
+                        && actualTypeArguments.length == actualTypeArguments2.length) {
                     // descend into recursion on type arguments
                     for (int i = 0; i < actualTypeArguments.length; i++) {
                         return isCompatibleTypes(actualTypeArguments[i], actualTypeArguments2[i]);
@@ -61,9 +62,11 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
             Type[] upperBounds = wildcardTypeToMock.getUpperBounds();
             return Arrays.stream(upperBounds).anyMatch(t -> isCompatibleTypes(t, mockType));
         } else if (typeToMock instanceof GenericArrayType && mockType instanceof GenericArrayType) {
-            return isCompatibleTypes(((GenericArrayType)typeToMock).getGenericComponentType(), ((GenericArrayType)mockType).getGenericComponentType());
+            return isCompatibleTypes(
+                    ((GenericArrayType) typeToMock).getGenericComponentType(),
+                    ((GenericArrayType) mockType).getGenericComponentType());
         } else if (typeToMock instanceof Class && mockType instanceof Class) {
-            return ((Class)typeToMock).isAssignableFrom((Class) mockType);
+            return ((Class) typeToMock).isAssignableFrom((Class) mockType);
         }
         return false;
     }
@@ -79,12 +82,13 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
             if (candidateFieldToBeInjected.getType().isAssignableFrom(mock.getClass())) {
                 Type genericMockType = MockUtil.getMockSettings(mock).getGenericTypeToMock();
                 Type genericType = candidateFieldToBeInjected.getGenericType();
-                boolean bothHaveGenericTypeInfo = genericType!=null && genericMockType!=null;
+                boolean bothHaveGenericTypeInfo = genericType != null && genericMockType != null;
                 // be more specific if generic type information is available
                 if (!bothHaveGenericTypeInfo || isCompatibleTypes(genericType, genericMockType)) {
                     mockTypeMatches.add(mock);
                 } else { // filter out mock, as generic types don't match
-                    //System.out.println("types don't match " + candidateFieldToBeInjected + " " + genericType + " " + genericMockType);
+                    // System.out.println("types don't match " + candidateFieldToBeInjected + " " +
+                    // genericType + " " + genericMockType);
                 }
             }
         }
