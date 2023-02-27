@@ -27,7 +27,7 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
 
     protected boolean isCompatibleTypes(Type typeToMock, Type mockType) {
         if (typeToMock instanceof ParameterizedType && mockType instanceof ParameterizedType) {
-            // ParameterizedType.equals() is documented as: 
+            // ParameterizedType.equals() is documented as:
             // "Instances of classes that implement this interface must implement
             // an equals() method that equates any two instances that share the
             // same generic type declaration and have equal type parameters."
@@ -39,7 +39,7 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 ParameterizedType genericMockType = (ParameterizedType) mockType;
                 Type[] actualTypeArguments = genericTypeToMock.getActualTypeArguments();
                 Type[] actualTypeArguments2 = genericMockType.getActualTypeArguments();
-                // getRawType() says "the Type object representing the class or interface that declares this type", 
+                // getRawType() says "the Type object representing the class or interface that declares this type",
                 // no clue why that's a Type rather than a Class as return type anyway
                 Class rawType = (Class) genericTypeToMock.getRawType();
                 Class rawType2 = (Class) genericMockType.getRawType();
@@ -83,10 +83,9 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 // be more specific if generic type information is available
                 if (!bothHaveGenericTypeInfo || isCompatibleTypes(genericType, genericMockType)) {
                     mockTypeMatches.add(mock);
-                } else {
-                    // else: filter out mock, as generic types don't match
-                    System.out.println("types don't macht " + candidateFieldToBeInjected + " " + genericType + " " + genericMockType);
-                } 
+                } else { // filter out mock, as generic types don't match
+                    //System.out.println("types don't match " + candidateFieldToBeInjected + " " + genericType + " " + genericMockType);
+                }
             }
         }
 
