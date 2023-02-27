@@ -5,22 +5,27 @@
 
 package org.mockitousage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class GenericTypeMockTest {
 
     public static class UnderTest {
-        List<String> stringListProvider;
-        List<Integer> intListProvider;
+        List<String> stringList;
+        List<Integer> intList;
+        Set<?> anySet;
     }
 
     @Mock
@@ -28,6 +33,9 @@ public class GenericTypeMockTest {
 
     @Mock
     private List<Integer> intProviderMock;
+
+    @Mock
+    private TreeSet<String> treeSet = Mockito.mock(TreeSet.class);;
 
     @InjectMocks
     private UnderTest underTest;
@@ -41,8 +49,14 @@ public class GenericTypeMockTest {
         // this used to fail without any error message hinting at the problem, as soon as a class under test has
         // a second field of the same generic type, but with different type parameter. The programmer then
         // had to know that mock field names have to match field names in the class under test.
-        assertNotNull(underTest.stringListProvider);
-        assertNotNull(underTest.intListProvider);
+        assertNotNull(underTest.stringList);
+        assertNotNull(underTest.intList);
+        assertNotNull(underTest.anySet);
+
+        assertEquals(stringProviderMock, underTest.stringList);
+        assertEquals(intProviderMock, underTest.intList);
+        assertEquals(treeSet, underTest.anySet);
+
     }
 
 }
