@@ -8,7 +8,9 @@ package org.mockitousage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -26,6 +28,7 @@ public class GenericTypeMockTest {
         List<String> stringList;
         List<Integer> intList;
         Set<?> anySet;
+        Map<Integer, ? extends Collection<String>> intStringCollectionMap;
     }
 
     @Mock
@@ -35,7 +38,10 @@ public class GenericTypeMockTest {
     private List<Integer> intProviderMock;
 
     @Mock
-    private TreeSet<String> treeSet = Mockito.mock(TreeSet.class);;
+    private TreeSet<String> treeSetMock = Mockito.mock(TreeSet.class);;
+
+    @Mock
+    private Map<Integer, List<String>> intStringListMapMock;
 
     @InjectMocks
     private UnderTest underTest;
@@ -52,11 +58,12 @@ public class GenericTypeMockTest {
         assertNotNull(underTest.stringList);
         assertNotNull(underTest.intList);
         assertNotNull(underTest.anySet);
+        assertNotNull(underTest.intStringCollectionMap);
 
         assertEquals(stringProviderMock, underTest.stringList);
         assertEquals(intProviderMock, underTest.intList);
-        assertEquals(treeSet, underTest.anySet);
-
+        assertEquals(treeSetMock, underTest.anySet);
+        assertEquals(intStringListMapMock, underTest.intStringCollectionMap);
     }
 
 }
