@@ -8,62 +8,142 @@ package org.mockitousage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.sql.Time;
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * Tests that verify Mockito can discern mocks by generic types, so if there are multiple mock candidates
+ * with the same generic type but different type parameters available for injection into a given field,
+ * Mockito won't fail to inject (even if mock field name doesn't match under test's field name).
+ */
 @ExtendWith(MockitoExtension.class)
 public class GenericTypeMockTest {
 
-    public static class UnderTest {
-        List<String> stringList;
-        List<Integer> intList;
-        Set<?> anySet;
-        Map<Integer, ? extends Collection<String>> intStringCollectionMap;
+
+    @Nested
+    public class SingleTypeParamTest {
+        public class UnderTestWithSingleTypeParam {
+            List<String> stringList;
+            List<Integer> intList;
+        }
+
+        @Mock
+        private List<String> stringListMock;
+
+        @Mock
+        private List<Integer> intListMock;
+
+        // must construct non-static inner class ourselves here
+        // (making it public static classes doesn't work either)
+        @InjectMocks
+        private UnderTestWithSingleTypeParam underTestWithSingleTypeParam = new UnderTestWithSingleTypeParam();
+
+        @Test
+        void testSingleTypeParam() {
+            // testing for not null first before testing for equals,
+            // because assertEquals(null, null) == true,
+            // so test would succeed if both @Mock and @InjectMocks
+            // don't work at all
+            assertNotNull(stringListMock);
+            assertNotNull(intListMock);
+
+            assertEquals(stringListMock, underTestWithSingleTypeParam.stringList);
+            assertEquals(intListMock, underTestWithSingleTypeParam.intList);
+        }
     }
 
-    @Mock
-    private List<String> stringProviderMock;
+    @Nested
+    public class WildcardTest {
+        class UnderTestWithWildcard {
+            Set<? extends Date> dateSet;
+            Set<? extends Number> numberSet;
+        }
 
-    @Mock
-    private List<Integer> intProviderMock;
+        @Mock
+        Set<Time> timeSetMock; // java.sql.Time extends Date
 
-    @Mock
-    private TreeSet<String> treeSetMock = Mockito.mock(TreeSet.class);;
+        @Mock
+        Set<Integer> integerSetMock;
 
-    @Mock
-    private Map<Integer, List<String>> intStringListMapMock;
+        @InjectMocks
+        UnderTestWithWildcard underTestWithWildcard = new UnderTestWithWildcard();
 
-    @InjectMocks
-    private UnderTest underTest;
+        @Test
+        void testWildcard() {
+            assertNotNull(timeSetMock);
+            assertNotNull(integerSetMock);
 
-    /**
-     * Verify that InjectMocks will correctly match fields with same generic type but different type parameters,
-     * without using the same field name.
-     */
-    @Test
-    public void testInjectMock() {
-        // this used to fail without any error message hinting at the problem, as soon as a class under test has
-        // a second field of the same generic type, but with different type parameter. The programmer then
-        // had to know that mock field names have to match field names in the class under test.
-        assertNotNull(underTest.stringList);
-        assertNotNull(underTest.intList);
-        assertNotNull(underTest.anySet);
-        assertNotNull(underTest.intStringCollectionMap);
+            // this also tests whether WildcardType.upperBounds() is evaluated,
+            // i.e. that we match <? extends Date> to <Time> type parameter
+            assertEquals(timeSetMock, underTestWithWildcard.dateSet);
+            assertEquals(integerSetMock, underTestWithWildcard.numberSet);
+        }
+    }
 
-        assertEquals(stringProviderMock, underTest.stringList);
-        assertEquals(intProviderMock, underTest.intList);
-        assertEquals(treeSetMock, underTest.anySet);
-        assertEquals(intStringListMapMock, underTest.intStringCollectionMap);
+
+    @Nested
+    public class NestedTypeParametersTest {
+        public class UnderTestWithNestedTypeParameters {
+            Map<Integer, Collection<String>> intToStringCollectionMap;
+            Map<Integer, Collection<Integer>> intoToIntCollectionMap;
+        }
+
+        @Mock
+        Map<Integer, Collection<String>> intToStringCollectionMapMock;
+
+        @Mock
+        Map<Integer, Collection<Integer>> intToIntCollectionMapMock;
+
+        @InjectMocks
+        UnderTestWithNestedTypeParameters underTestWithNestedTypeParameters = new UnderTestWithNestedTypeParameters();
+
+        @Test
+        void testNestedTypeParameters() {
+            assertNotNull(intToStringCollectionMapMock);
+            assertNotNull(intToIntCollectionMapMock);
+
+            assertEquals(intToStringCollectionMapMock, underTestWithNestedTypeParameters.intToStringCollectionMap);
+            assertEquals(intToIntCollectionMapMock, underTestWithNestedTypeParameters.intoToIntCollectionMap);
+        }
+    }
+
+    @Nested
+    public class GenericSubclassTest {
+        public class UnderTestWithGenericSubclass {
+            Set<String> stringSet;
+            Set<Integer> intSet;
+        }
+
+        @Mock
+        TreeSet<String> stringTreeSetMock;
+
+        @Mock
+        HashSet<Integer> intHashSetMock;
+
+        @InjectMocks
+        UnderTestWithGenericSubclass underTestWithGenericSubclass = new UnderTestWithGenericSubclass();
+
+        @Test
+        void testGenericSubclass() {
+            assertNotNull(stringTreeSetMock);
+            assertNotNull(intHashSetMock);
+
+            assertEquals(stringTreeSetMock, underTestWithGenericSubclass.stringSet);
+            assertEquals(intHashSetMock, underTestWithGenericSubclass.intSet);
+        }
     }
 
 }
