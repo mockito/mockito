@@ -49,9 +49,11 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                         && rawType.isAssignableFrom(rawType2)
                         && actualTypeArguments.length == actualTypeArguments2.length) {
                     // descend into recursion on type arguments
+                    boolean isCompatible = true;
                     for (int i = 0; i < actualTypeArguments.length; i++) {
-                        return isCompatibleTypes(actualTypeArguments[i], actualTypeArguments2[i]);
+                        isCompatible = isCompatible && isCompatibleTypes(actualTypeArguments[i], actualTypeArguments2[i]);
                     }
+                    return isCompatible;
                 } else {
                     // owner type, raw type or type arguments length don't match
                     return false;
@@ -86,10 +88,7 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 // be more specific if generic type information is available
                 if (!bothHaveGenericTypeInfo || isCompatibleTypes(genericType, genericMockType)) {
                     mockTypeMatches.add(mock);
-                } else { // filter out mock, as generic types don't match
-                    // System.out.println("types don't match " + candidateFieldToBeInjected + " " +
-                    // genericType + " " + genericMockType);
-                }
+                } // else filter out mock, as generic types don't match
             }
         }
 
