@@ -5,7 +5,6 @@
 package org.mockito.internal.configuration.injection.filter;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
@@ -63,13 +62,9 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
             WildcardType wildcardTypeToMock = (WildcardType) typeToMock;
             Type[] upperBounds = wildcardTypeToMock.getUpperBounds();
             return Arrays.stream(upperBounds).anyMatch(t -> isCompatibleTypes(t, mockType));
-        } else if (typeToMock instanceof GenericArrayType && mockType instanceof GenericArrayType) {
-            return isCompatibleTypes(
-                    ((GenericArrayType) typeToMock).getGenericComponentType(),
-                    ((GenericArrayType) mockType).getGenericComponentType());
         } else if (typeToMock instanceof Class && mockType instanceof Class) {
             return ((Class) typeToMock).isAssignableFrom((Class) mockType);
-        }
+        } // no need to check for GenericArrayType, as Mockito cannot mock this anyway
         return false;
     }
 
