@@ -50,7 +50,10 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                     // descend into recursion on type arguments
                     boolean isCompatible = true;
                     for (int i = 0; i < actualTypeArguments.length; i++) {
-                        isCompatible = isCompatible && isCompatibleTypes(actualTypeArguments[i], actualTypeArguments2[i]);
+                        isCompatible =
+                                isCompatible
+                                        && isCompatibleTypes(
+                                                actualTypeArguments[i], actualTypeArguments2[i]);
                     }
                     return isCompatible;
                 } else {
