@@ -123,9 +123,10 @@ spotless {
         licenseHeaderFile rootProject.file('config/spotless/spotless.header')
 
         custom 'google-java-format', { source ->
-            com.google.googlejavaformat.java.JavaFormatterOptions options = new com.google.googlejavaformat.java.JavaFormatterOptions.Builder()
+            com.google.googlejavaformat.java.JavaFormatterOptions options = new com.google.googlejavaformat.java.AutoValue_JavaFormatterOptions.Builder()
                     .style(com.google.googlejavaformat.java.JavaFormatterOptions.Style.AOSP)
                     .formatJavadoc(false)
+                    .reorderModifiers(true)
                     .build()
             com.google.googlejavaformat.java.Formatter formatter = new com.google.googlejavaformat.java.Formatter(options)
             return formatter.formatSource(source)
