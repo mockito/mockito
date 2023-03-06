@@ -28,7 +28,8 @@ public class TerminalMockCandidateFilter implements MockCandidateFilter {
             final Collection<Object> mocks,
             final Field candidateFieldToBeInjected,
             final List<Field> allRemainingCandidateFields,
-            final Object injectee) {
+            final Object injectee,
+            final Field injectMocksField) {
         if (mocks.size() == 1) {
             final Object matchingMock = mocks.iterator().next();
 

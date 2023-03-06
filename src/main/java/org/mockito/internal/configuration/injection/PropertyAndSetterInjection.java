@@ -81,6 +81,7 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
                     injectMockCandidates(
                             fieldClass,
                             fieldInstanceNeedingInjection,
+                            injectMocksField,
                             newMockSafeHashSet(mockCandidates));
             fieldClass = fieldClass.getSuperclass();
         }
@@ -100,24 +101,32 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
     }
 
     private boolean injectMockCandidates(
-            Class<?> awaitingInjectionClazz, Object injectee, Set<Object> mocks) {
+            Class<?> awaitingInjectionClazz,
+            Object injectee,
+            Field injectMocksField,
+            Set<Object> mocks) {
         boolean injectionOccurred;
         List<Field> orderedCandidateInjecteeFields =
                 orderedInstanceFieldsFrom(awaitingInjectionClazz);
         // pass 1
         injectionOccurred =
                 injectMockCandidatesOnFields(
-                        mocks, injectee, false, orderedCandidateInjecteeFields);
+                        mocks, injectee, injectMocksField, false, orderedCandidateInjecteeFields);
         // pass 2
         injectionOccurred |=
                 injectMockCandidatesOnFields(
-                        mocks, injectee, injectionOccurred, orderedCandidateInjecteeFields);
+                        mocks,
+                        injectee,
+                        injectMocksField,
+                        injectionOccurred,
+                        orderedCandidateInjecteeFields);
         return injectionOccurred;
     }
 
     private boolean injectMockCandidatesOnFields(
             Set<Object> mocks,
             Object injectee,
+            Field injectMocksField,
             boolean injectionOccurred,
             List<Field> orderedCandidateInjecteeFields) {
         for (Iterator<Field> it = orderedCandidateInjecteeFields.iterator(); it.hasNext(); ) {
@@ -125,7 +134,11 @@ public class PropertyAndSetterInjection extends MockInjectionStrategy {
             Object injected =
                     mockCandidateFilter
                             .filterCandidate(
-                                    mocks, candidateField, orderedCandidateInjecteeFields, injectee)
+                                    mocks,
+                                    candidateField,
+                                    orderedCandidateInjecteeFields,
+                                    injectee,
+                                    injectMocksField)
                             .thenInject();
             if (injected != null) {
                 injectionOccurred |= true;

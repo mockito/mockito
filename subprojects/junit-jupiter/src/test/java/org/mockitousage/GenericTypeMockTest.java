@@ -195,4 +195,95 @@ public class GenericTypeMockTest {
         }
     }
 
+    @Nested
+    public class NoneMatchByTypeParameterTest {
+        public class UnderTestWithNoMatches {
+            List<Integer> intList;
+        }
+
+        @Mock
+        List<String> stringList;
+
+        @InjectMocks
+        UnderTestWithNoMatches underTestWithNoMatches = new UnderTestWithNoMatches();
+
+        @Test
+        void testNoneMatchByTypeParameter() {
+            assertNotNull(stringList);
+
+            // verify that when no candidate matches by type parameter, none is injected
+            assertNull(underTestWithNoMatches.intList);
+        }
+    }
+
+    @Nested
+    public class NoneMatchByRawTypeTest {
+        public class UnderTestWithNoMatches {
+            List<Integer> intList;
+        }
+
+        @Mock
+        Set<Integer> intSet;
+
+        @InjectMocks
+        UnderTestWithNoMatches underTestWithNoMatchesByRawType = new UnderTestWithNoMatches();
+
+        @Test
+        void testNoneMatchByRawType() {
+            assertNotNull(intSet);
+
+            // verify that when no candidate matches by raw type, none is injected
+            assertNull(underTestWithNoMatchesByRawType.intList);
+        }
+    }
+
+
+    @Nested
+    public class ClassWithTypeParameterNoMatchTest {
+        public class UnderTestWithTypeParameter<T> {
+            List<T> tList;
+        }
+
+        @Mock
+        List<Integer> intList;
+
+        @InjectMocks
+        UnderTestWithTypeParameter<String> underTestWithTypeParameterNoMatch = new UnderTestWithTypeParameter<String>();
+
+        @Test
+        void testWithTypeParameterNoMatch() {
+            assertNotNull(intList);
+
+            // verify that when no candidate matches by type parameter of class under test, none is injected
+            assertNull(underTestWithTypeParameterNoMatch.tList);
+        }
+    }
+
+    @Nested
+    public class ClassWithTypeParametersTest {
+        public class UnderTestWithTypeParameter<T1, T2> {
+            List<T1> t1List;
+            Set<T2> t2Set;
+        }
+
+        @Mock
+        List<String> stringList;
+
+        @Mock
+        Set<Integer> intSet;
+
+        @InjectMocks
+        UnderTestWithTypeParameter<String, Integer> underTestWithTypeParameter = new UnderTestWithTypeParameter<String, Integer>();
+
+        @Test
+        void testWithTypeParameters() {
+            assertNotNull(stringList);
+            assertNotNull(intSet);
+
+            // verify that can match the type parameters of the class under test
+            assertEquals(stringList, underTestWithTypeParameter.t1List);
+            assertEquals(intSet, underTestWithTypeParameter.t2Set);
+        }
+    }
+
 }
