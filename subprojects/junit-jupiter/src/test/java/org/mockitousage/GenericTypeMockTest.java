@@ -7,6 +7,7 @@ package org.mockitousage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.sql.Time;
 import java.util.Collection;
@@ -143,6 +144,51 @@ public class GenericTypeMockTest {
 
             assertEquals(stringTreeSetMock, underTestWithGenericSubclass.stringSet);
             assertEquals(intHashSetMock, underTestWithGenericSubclass.intSet);
+        }
+    }
+
+    @Nested
+    public class MultipleCandidatesByTypeTest {
+        public class UnderTestWithMultipleCandidatesByType {
+            List<String> stringList;
+        }
+
+        @Mock
+        List<String> stringList1;
+
+        @Mock
+        List<String> stringList2;
+
+        @InjectMocks
+        UnderTestWithMultipleCandidatesByType underTestWithMultipleCandidates = new UnderTestWithMultipleCandidatesByType();
+
+        @Test
+        void testMultipleCandidatesByTypes() {
+            // verify that when mutiple mock candidates exist with same type (but not matching by field names), none will be injected
+            assertNull(underTestWithMultipleCandidates.stringList);
+        }
+    }
+
+    @Nested
+    public class MultipleCandidatesOneByNameTest {
+        public class UnderTestWithMultipleCandidatesOneByName {
+            List<String> stringList;
+        }
+
+        @Mock
+        List<String> stringList;
+
+        @Mock
+        List<String> stringListMock;
+
+        @InjectMocks
+        UnderTestWithMultipleCandidatesOneByName underTestWithMultipleCandidatesOneByName = new UnderTestWithMultipleCandidatesOneByName();
+
+        @Test
+        void testMultipleCandidatesOneByName() {
+            // verify that when multiple mock candidates exist by type, and one of them matches by field name, that one is injected
+            assertNotNull(underTestWithMultipleCandidatesOneByName.stringList);
+            assertEquals(stringList, underTestWithMultipleCandidatesOneByName.stringList);
         }
     }
 
