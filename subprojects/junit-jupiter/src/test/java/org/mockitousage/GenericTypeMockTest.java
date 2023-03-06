@@ -164,6 +164,9 @@ public class GenericTypeMockTest {
 
         @Test
         void testMultipleCandidatesByTypes() {
+            assertNotNull(stringList1);
+            assertNotNull(stringList2);
+
             // verify that when mutiple mock candidates exist with same type (but not matching by field names), none will be injected
             assertNull(underTestWithMultipleCandidates.stringList);
         }
