@@ -99,6 +99,10 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                     }
                 }
                 if (variableIndex != -1) {
+                    // now test whether actual type with same index is compatible, e.g. for
+                    //   class ClassUnderTest<T1, T2> {..}
+                    // T1 would be the String in
+                    //   ClassUnderTest<String, Integer> underTest = ..
                     isCompatible &= isCompatibleTypes(injectMocksFieldTypeParameters[variableIndex], actualTypeArgument2, injectMocksField);
                 } else {
                     isCompatible = false;
