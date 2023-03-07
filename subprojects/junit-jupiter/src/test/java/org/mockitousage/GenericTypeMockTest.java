@@ -261,28 +261,28 @@ public class GenericTypeMockTest {
 
     @Nested
     public class ClassWithTypeParametersTest {
-        public class UnderTestWithTypeParameter<T1, T2> {
+        public class UnderTestWithTypeParameters<T1, T2> {
             List<T1> t1List;
-            Set<T2> t2Set;
+            List<T2> t2List;
         }
 
         @Mock
         List<String> stringList;
 
         @Mock
-        Set<Integer> intSet;
+        List<Integer> intList;
 
         @InjectMocks
-        UnderTestWithTypeParameter<String, Integer> underTestWithTypeParameter = new UnderTestWithTypeParameter<String, Integer>();
+        UnderTestWithTypeParameters<String, Integer> underTestWithTypeParameters = new UnderTestWithTypeParameters<String, Integer>();
 
         @Test
         void testWithTypeParameters() {
             assertNotNull(stringList);
-            assertNotNull(intSet);
+            assertNotNull(intList);
 
-            // verify that can match the type parameters of the class under test
-            assertEquals(stringList, underTestWithTypeParameter.t1List);
-            assertEquals(intSet, underTestWithTypeParameter.t2Set);
+            // verify that we can match the type parameters of the class under test
+            assertEquals(stringList, underTestWithTypeParameters.t1List);
+            assertEquals(intList, underTestWithTypeParameters.t2List);
         }
     }
 
