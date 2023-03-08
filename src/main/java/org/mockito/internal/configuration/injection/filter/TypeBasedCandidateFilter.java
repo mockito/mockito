@@ -40,11 +40,6 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 ParameterizedType genericMockType = (ParameterizedType) mockType;
                 Type[] actualTypeArguments = genericTypeToMock.getActualTypeArguments();
                 Type[] actualTypeArguments2 = genericMockType.getActualTypeArguments();
-                // getRawType() says "the Type object representing the class or interface that
-                // declares this type",
-                // no clue why that returns a Type rather than a Class anyway
-                Class<?> rawType = (Class<?>) genericTypeToMock.getRawType();
-                Class<?> rawType2 = (Class<?>) genericMockType.getRawType();
                 // Recurse on type parameters, so we properly test whether e.g. Wildcard bounds
                 // have a match
                 return recurseOnTypeArguments(
