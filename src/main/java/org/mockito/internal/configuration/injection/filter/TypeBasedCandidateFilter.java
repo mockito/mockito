@@ -25,6 +25,7 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
     }
 
     protected boolean isCompatibleTypes(Type typeToMock, Type mockType, Field injectMocksField) {
+        boolean result = false;
         if (typeToMock instanceof ParameterizedType && mockType instanceof ParameterizedType) {
             // ParameterizedType.equals() is documented as:
             // "Instances of classes that implement this interface must implement
@@ -34,7 +35,7 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
             // and e.g. Set doesn't equal TreeSet, so roll our own comparison if
             // ParameterizedTypeImpl.equals() returns false
             if (typeToMock.equals(mockType)) {
-                return true;
+                result = true;
             } else {
                 ParameterizedType genericTypeToMock = (ParameterizedType) typeToMock;
                 ParameterizedType genericMockType = (ParameterizedType) mockType;
@@ -42,21 +43,19 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 Type[] actualTypeArguments2 = genericMockType.getActualTypeArguments();
                 // Recurse on type parameters, so we properly test whether e.g. Wildcard bounds
                 // have a match
-                return recurseOnTypeArguments(
+                result = recurseOnTypeArguments(
                         injectMocksField, actualTypeArguments, actualTypeArguments2);
             }
         } else if (typeToMock instanceof WildcardType) {
             WildcardType wildcardTypeToMock = (WildcardType) typeToMock;
             Type[] upperBounds = wildcardTypeToMock.getUpperBounds();
-            return Arrays.stream(upperBounds)
+            result = Arrays.stream(upperBounds)
                     .anyMatch(t -> isCompatibleTypes(t, mockType, injectMocksField));
         } else if (typeToMock instanceof Class && mockType instanceof Class) {
-            return ((Class) typeToMock).isAssignableFrom((Class) mockType);
+            result = ((Class) typeToMock).isAssignableFrom((Class) mockType);
         } // no need to check for GenericArrayType, as Mockito cannot mock this anyway
 
-        // can only happen if there is a new subclass of Type that we don't know about yet,
-        // must have return statement here to be able to compile
-        return false;
+        return result;
     }
 
     private boolean recurseOnTypeArguments(
