@@ -79,7 +79,7 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
             Type actualTypeArgument = actualTypeArguments[i];
             Type actualTypeArgument2 = actualTypeArguments2[i];
             if (actualTypeArgument instanceof TypeVariable) {
-                TypeVariable<?> typeVariable = (TypeVariable<?>)actualTypeArgument;
+                TypeVariable<?> typeVariable = (TypeVariable<?>) actualTypeArgument;
                 // this is a TypeVariable declared by the class under test that turned
                 // up in one of its fields,
                 // e.g. class ClassUnderTest<T1, T2> { List<T1> tList; Set<T2> tSet}
@@ -89,8 +89,10 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 Type[] injectMocksFieldTypeParameters =
                         ((ParameterizedType) injectMocksField.getGenericType())
                                 .getActualTypeArguments();
-                // Find index of given TypeVariable where it was defined, e.g. 0 for T1 in ClassUnderTest<T1, T2>
-                TypeVariable<?>[] genericTypeParameters = injectMocksField.getType().getTypeParameters();
+                // Find index of given TypeVariable where it was defined, e.g. 0 for T1 in
+                // ClassUnderTest<T1, T2>
+                TypeVariable<?>[] genericTypeParameters =
+                        injectMocksField.getType().getTypeParameters();
                 int variableIndex = -1;
                 for (int i2 = 0; i2 < genericTypeParameters.length; i2++) {
                     if (genericTypeParameters[i2].equals(typeVariable)) {
@@ -103,7 +105,11 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                     //   class ClassUnderTest<T1, T2> {..}
                     // T1 would be the String in
                     //   ClassUnderTest<String, Integer> underTest = ..
-                    isCompatible &= isCompatibleTypes(injectMocksFieldTypeParameters[variableIndex], actualTypeArgument2, injectMocksField);
+                    isCompatible &=
+                            isCompatibleTypes(
+                                    injectMocksFieldTypeParameters[variableIndex],
+                                    actualTypeArgument2,
+                                    injectMocksField);
                 } else {
                     isCompatible = false;
                     break;
