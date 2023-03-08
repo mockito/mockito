@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 import org.mockito.internal.util.MockUtil;
 
@@ -43,20 +42,13 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 Type[] actualTypeArguments2 = genericMockType.getActualTypeArguments();
                 // getRawType() says "the Type object representing the class or interface that
                 // declares this type",
-                // no clue why that's a Type rather than a Class as return type anyway
-                Class rawType = (Class) genericTypeToMock.getRawType();
-                Class rawType2 = (Class) genericMockType.getRawType();
-                // Test similar to how ParameterizedTypeImpl.equals() does, but recurse on type
-                // parameters,
-                // so we properly test whether e.g. Wildcard bounds have a match
-                if (Objects.equals(genericTypeToMock.getOwnerType(), genericMockType.getOwnerType())
-                        // e.g. Set and TreeSet
-                        && rawType.isAssignableFrom(rawType2)
-                        && actualTypeArguments.length == actualTypeArguments2.length) {
-                    // descend into recursion on type arguments
-                    return recurseOnTypeArguments(
-                            injectMocksField, actualTypeArguments, actualTypeArguments2);
-                }
+                // no clue why that returns a Type rather than a Class anyway
+                Class<?> rawType = (Class<?>) genericTypeToMock.getRawType();
+                Class<?> rawType2 = (Class<?>) genericMockType.getRawType();
+                // Recurse on type parameters, so we properly test whether e.g. Wildcard bounds
+                // have a match
+                return recurseOnTypeArguments(
+                        injectMocksField, actualTypeArguments, actualTypeArguments2);
             }
         } else if (typeToMock instanceof WildcardType) {
             WildcardType wildcardTypeToMock = (WildcardType) typeToMock;
@@ -91,6 +83,7 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                                 .getActualTypeArguments();
                 // Find index of given TypeVariable where it was defined, e.g. 0 for T1 in
                 // ClassUnderTest<T1, T2>
+                // (we're always able to find it, otherwise test class wouldn't have compiled))
                 TypeVariable<?>[] genericTypeParameters =
                         injectMocksField.getType().getTypeParameters();
                 int variableIndex = -1;
@@ -100,20 +93,15 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                         break;
                     }
                 }
-                if (variableIndex != -1) {
-                    // now test whether actual type with same index is compatible, e.g. for
-                    //   class ClassUnderTest<T1, T2> {..}
-                    // T1 would be the String in
-                    //   ClassUnderTest<String, Integer> underTest = ..
-                    isCompatible &=
-                            isCompatibleTypes(
-                                    injectMocksFieldTypeParameters[variableIndex],
-                                    actualTypeArgument2,
-                                    injectMocksField);
-                } else {
-                    isCompatible = false;
-                    break;
-                }
+                // now test whether actual type for the type variable is compatible, e.g. for
+                //   class ClassUnderTest<T1, T2> {..}
+                // T1 would be the String in
+                //   ClassUnderTest<String, Integer> underTest = ..
+                isCompatible &=
+                        isCompatibleTypes(
+                                injectMocksFieldTypeParameters[variableIndex],
+                                actualTypeArgument2,
+                                injectMocksField);
             } else {
                 isCompatible &=
                         isCompatibleTypes(
@@ -136,12 +124,20 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 Type genericMockType = MockUtil.getMockSettings(mock).getGenericTypeToMock();
                 Type genericType = candidateFieldToBeInjected.getGenericType();
                 boolean bothHaveGenericTypeInfo = genericType != null && genericMockType != null;
-                // be more specific if generic type information is available
-                if (!bothHaveGenericTypeInfo
-                        || isCompatibleTypes(genericType, genericMockType, injectMocksField)) {
+                if (bothHaveGenericTypeInfo) {
+                    // be more specific if generic type information is available
+                    if (isCompatibleTypes(genericType, genericMockType, injectMocksField)) {
+                        mockTypeMatches.add(mock);
+                    } // else filter out mock, as generic types don't match
+                } else {
+                    // field is assignable from mock class, but no generic type information
+                    // is available (can happen with programmatically created Mocks where no
+                    // genericTypeToMock was supplied)
                     mockTypeMatches.add(mock);
-                } // else filter out mock, as generic types don't match
-            }
+                }
+            } // else filter out mock
+            // BTW mocks may contain Spy objects with their original class (seemingly before
+            // being wrapped), and MockUtil.getMockSettings() throws exception for those
         }
 
         return next.filterCandidate(
