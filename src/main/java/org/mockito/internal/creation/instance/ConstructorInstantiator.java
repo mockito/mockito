@@ -64,7 +64,8 @@ public class ConstructorInstantiator implements Instantiator {
 
     @SuppressWarnings("unchecked")
     private static <T> T invokeConstructor(Constructor<?> constructor, Object... params)
-            throws java.lang.InstantiationException, IllegalAccessException,
+            throws java.lang.InstantiationException,
+                    IllegalAccessException,
                     InvocationTargetException {
         MemberAccessor accessor = Plugins.getMemberAccessor();
         return (T) accessor.newInstance(constructor, params);

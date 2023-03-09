@@ -9,18 +9,18 @@ buildscript {
         classpath 'gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.16.1'
         classpath 'net.ltgt.gradle:gradle-errorprone-plugin:3.0.1'
 
-        classpath "io.github.gradle-nexus:publish-plugin:1.2.0"
+        classpath "io.github.gradle-nexus:publish-plugin:1.3.0"
         classpath 'org.shipkit:shipkit-changelog:1.2.0'
         classpath 'org.shipkit:shipkit-auto-version:1.2.2'
 
-        classpath 'com.google.googlejavaformat:google-java-format:1.15.0'
+        classpath 'com.google.googlejavaformat:google-java-format:1.16.0'
         classpath 'com.android.tools.build:gradle:7.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10"
     }
 }
 
 plugins {
-    id 'com.diffplug.spotless' version '6.15.0'
+    id 'com.diffplug.spotless' version '6.16.0'
     id 'eclipse'
     id 'com.github.ben-manes.versions' version '0.46.0'
     id 'biz.aQute.bnd.builder' version '6.4.0'
@@ -123,9 +123,10 @@ spotless {
         licenseHeaderFile rootProject.file('config/spotless/spotless.header')
 
         custom 'google-java-format', { source ->
-            com.google.googlejavaformat.java.JavaFormatterOptions options = new com.google.googlejavaformat.java.JavaFormatterOptions.Builder()
+            com.google.googlejavaformat.java.JavaFormatterOptions options = new com.google.googlejavaformat.java.AutoValue_JavaFormatterOptions.Builder()
                     .style(com.google.googlejavaformat.java.JavaFormatterOptions.Style.AOSP)
                     .formatJavadoc(false)
+                    .reorderModifiers(true)
                     .build()
             com.google.googlejavaformat.java.Formatter formatter = new com.google.googlejavaformat.java.Formatter(options)
             return formatter.formatSource(source)
