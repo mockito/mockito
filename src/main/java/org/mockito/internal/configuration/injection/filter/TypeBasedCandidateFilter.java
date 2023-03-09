@@ -43,14 +43,16 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 Type[] actualTypeArguments2 = genericMockType.getActualTypeArguments();
                 // Recurse on type parameters, so we properly test whether e.g. Wildcard bounds
                 // have a match
-                result = recurseOnTypeArguments(
-                        injectMocksField, actualTypeArguments, actualTypeArguments2);
+                result =
+                        recurseOnTypeArguments(
+                                injectMocksField, actualTypeArguments, actualTypeArguments2);
             }
         } else if (typeToMock instanceof WildcardType) {
             WildcardType wildcardTypeToMock = (WildcardType) typeToMock;
             Type[] upperBounds = wildcardTypeToMock.getUpperBounds();
-            result = Arrays.stream(upperBounds)
-                    .anyMatch(t -> isCompatibleTypes(t, mockType, injectMocksField));
+            result =
+                    Arrays.stream(upperBounds)
+                            .anyMatch(t -> isCompatibleTypes(t, mockType, injectMocksField));
         } else if (typeToMock instanceof Class && mockType instanceof Class) {
             result = ((Class) typeToMock).isAssignableFrom((Class) mockType);
         } // no need to check for GenericArrayType, as Mockito cannot mock this anyway
