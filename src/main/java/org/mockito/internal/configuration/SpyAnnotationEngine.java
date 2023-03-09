@@ -87,6 +87,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
         return Mockito.mock(
                 instance.getClass(),
                 withSettings()
+                        .genericTypeToMock(field.getGenericType())
                         .spiedInstance(instance)
                         .defaultAnswer(CALLS_REAL_METHODS)
                         .name(field.getName()));
@@ -96,7 +97,10 @@ public class SpyAnnotationEngine implements AnnotationEngine {
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
         // TODO: Add mockMaker option for @Spy annotation (#2740)
         MockSettings settings =
-                withSettings().defaultAnswer(CALLS_REAL_METHODS).name(field.getName());
+                withSettings()
+                        .genericTypeToMock(field.getGenericType())
+                        .defaultAnswer(CALLS_REAL_METHODS)
+                        .name(field.getName());
         Class<?> type = field.getType();
         if (type.isInterface()) {
             return Mockito.mock(type, settings.useConstructor());

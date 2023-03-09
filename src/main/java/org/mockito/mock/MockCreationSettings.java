@@ -4,6 +4,7 @@
  */
 package org.mockito.mock;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +27,11 @@ public interface MockCreationSettings<T> {
      * Mocked type. An interface or class the mock should implement / extend.
      */
     Class<T> getTypeToMock();
+
+    /**
+     * The generic type of the mock, if any.
+     */
+    Type getGenericTypeToMock();
 
     /**
      * the extra interfaces the mock object should implement.

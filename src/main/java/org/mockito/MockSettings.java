@@ -5,6 +5,7 @@
 package org.mockito;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
@@ -403,4 +404,11 @@ public interface MockSettings extends Serializable {
      * @since 4.8.0
      */
     MockSettings mockMaker(String mockMaker);
+
+    /**
+     * Specifies the generic type of the mock, preserving the information lost to Java type erasure.
+     * @param genericTypeToMock
+     * @return
+     */
+    MockSettings genericTypeToMock(Type genericTypeToMock);
 }
