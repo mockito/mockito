@@ -7,11 +7,12 @@ package org.mockito.internal.util.io;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,12 +25,12 @@ import org.mockito.exceptions.base.MockitoException;
 public final class IOUtil {
 
     /**
-     * Writes text to file
+     * Writes text to file in UTF-8.
      */
     public static void writeText(String text, File output) {
-        PrintWriter pw = null;
+        OutputStreamWriter pw = null;
         try {
-            pw = new PrintWriter(new FileWriter(output));
+            pw = new OutputStreamWriter(new FileOutputStream(output), StandardCharsets.UTF_8);
             pw.write(text);
         } catch (Exception e) {
             throw new MockitoException("Problems writing text to file: " + output, e);
@@ -38,9 +39,12 @@ public final class IOUtil {
         }
     }
 
+    /**
+     * Reads all lines from the given stream. Uses UTF-8.
+     */
     public static Collection<String> readLines(InputStream is) {
         List<String> out = new LinkedList<>();
-        BufferedReader r = new BufferedReader(new InputStreamReader(is));
+        BufferedReader r = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         String line;
         try {
             while ((line = r.readLine()) != null) {
