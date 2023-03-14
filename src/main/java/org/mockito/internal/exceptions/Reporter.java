@@ -910,7 +910,8 @@ public class Reporter {
                                 + "' that is annotated with @InjectMocks in your test, ",
                         "because there were multiple matching mocks (i.e. "
                                 + "fields annotated with @Mock and having matching type): "
-                                + String.join(", ", mockNames) + ".",
+                                + String.join(", ", mockNames)
+                                + ".",
                         "If you have multiple fields of same type in your class under test "
                                 + "then consider naming the @Mock fields "
                                 + "identically to the respective class under test's fields, "
