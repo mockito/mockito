@@ -4,7 +4,7 @@ ext {
 
 def versions = [:]
 
-versions.bytebuddy = '1.14.1'
+versions.bytebuddy = '1.14.2'
 versions.junitJupiter = '5.9.2'
 versions.errorprone = '2.18.0'
 
@@ -29,10 +29,10 @@ libraries.autoservice = "com.google.auto.service:auto-service:1.0.1"
 libraries.objenesis = 'org.objenesis:objenesis:3.3'
 
 libraries.osgi = 'org.osgi:osgi.core:8.0.0'
-libraries.equinox = 'org.eclipse.platform:org.eclipse.osgi:3.18.200'
+libraries.equinox = 'org.eclipse.platform:org.eclipse.osgi:3.18.300'
 libraries.bndGradle =  'biz.aQute.bnd:biz.aQute.bnd.gradle:6.4.0'
 
-libraries.groovy = 'org.codehaus.groovy:groovy:3.0.15'
+libraries.groovy = 'org.codehaus.groovy:groovy:3.0.16'
 
 def kotlinVersion = '1.8.10'
 libraries.kotlin = [
