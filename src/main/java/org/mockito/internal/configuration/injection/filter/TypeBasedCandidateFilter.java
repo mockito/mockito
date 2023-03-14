@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
+import static org.mockito.internal.exceptions.Reporter.moreThanOneMockCandidate;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -136,11 +138,24 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
             // being wrapped), and MockUtil.getMockSettings() throws exception for those
         }
 
-        return next.filterCandidate(
-                mockTypeMatches,
-                candidateFieldToBeInjected,
-                allRemainingCandidateFields,
-                injectee,
-                injectMocksField);
+        boolean wasMultipleMatches = mockTypeMatches.size() > 1;
+
+        OngoingInjector result =
+                next.filterCandidate(
+                        mockTypeMatches,
+                        candidateFieldToBeInjected,
+                        allRemainingCandidateFields,
+                        injectee,
+                        injectMocksField);
+
+        if (wasMultipleMatches) {
+            // we had found multiple mocks matching by type, see whether following filters
+            // were able to reduce this to single match (e.g. by filtering for matching field names)
+            if (result == OngoingInjector.nop) {
+                // nope, following filters cannot reduce this to a single match
+                throw moreThanOneMockCandidate(candidateFieldToBeInjected, mocks);
+            }
+        }
+        return result;
     }
 }
