@@ -38,7 +38,7 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 dependencies {
     implementation libraries.kotlin.stdlib
 
-    testImplementation project(":inline")
+    testImplementation project(":")
     testImplementation libraries.junit4
     testImplementation libraries.junitJupiterApi
     testImplementation libraries.junitJupiterEngine
