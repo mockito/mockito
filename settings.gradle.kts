@@ -3,7 +3,7 @@ plugins {
 }
 
 include("subclass",
-    "inline",
+    "inlineTest",
     "proxy",
     "extTest",
     "groovyTest",
