@@ -33,7 +33,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class GenericTypeMockTest {
 
-
     @Nested
     public class SingleTypeParamTest {
         public class UnderTestWithSingleTypeParam {
@@ -144,31 +143,6 @@ public class GenericTypeMockTest {
 
             assertEquals(stringTreeSetMock, underTestWithGenericSubclass.stringSet);
             assertEquals(intHashSetMock, underTestWithGenericSubclass.intSet);
-        }
-    }
-
-    @Nested
-    public class MultipleCandidatesByTypeTest {
-        public class UnderTestWithMultipleCandidatesByType {
-            List<String> stringList;
-        }
-
-        @Mock
-        List<String> stringList1;
-
-        @Mock
-        List<String> stringList2;
-
-        @InjectMocks
-        UnderTestWithMultipleCandidatesByType underTestWithMultipleCandidates = new UnderTestWithMultipleCandidatesByType();
-
-        @Test
-        void testMultipleCandidatesByTypes() {
-            assertNotNull(stringList1);
-            assertNotNull(stringList2);
-
-            // verify that when mutiple mock candidates exist with same type (but not matching by field names), none will be injected
-            assertNull(underTestWithMultipleCandidates.stringList);
         }
     }
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
@@ -53,6 +54,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.MatchableInvocation;
 import org.mockito.listeners.InvocationListener;
+import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
 
 /**
@@ -891,6 +893,29 @@ public class Reporter {
                         "Also I failed because: " + exceptionCauseMessageIfAvailable(details),
                         ""),
                 details);
+    }
+
+    public static MockitoException moreThanOneMockCandidate(
+            Field field, Collection<?> mockCandidates) {
+        List<String> mockNames =
+                mockCandidates.stream()
+                        .map(MockUtil::getMockName)
+                        .map(MockName::toString)
+                        .collect(Collectors.toList());
+        return new MockitoException(
+                join(
+                        "Mockito couldn't inject mock dependency on field "
+                                + "'"
+                                + field
+                                + "' that is annotated with @InjectMocks in your test, ",
+                        "because there were multiple matching mocks (i.e. "
+                                + "fields annotated with @Mock and having matching type): "
+                                + String.join(", ", mockNames)
+                                + ".",
+                        "If you have multiple fields of same type in your class under test "
+                                + "then consider naming the @Mock fields "
+                                + "identically to the respective class under test's fields, "
+                                + "so Mockito can match them by name."));
     }
 
     private static String exceptionCauseMessageIfAvailable(Exception details) {
