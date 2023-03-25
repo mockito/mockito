@@ -4,8 +4,8 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static net.bytebuddy.matcher.ElementMatchers.isAccessibleTo;
 import static net.bytebuddy.matcher.ElementMatchers.isConstructor;
-import static net.bytebuddy.matcher.ElementMatchers.isPrivate;
 import static net.bytebuddy.matcher.ElementMatchers.isStatic;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 
@@ -398,7 +398,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                                 .getSuperClass()
                                 .asErasure()
                                 .getDeclaredMethods()
-                                .filter(isConstructor().and(not(isPrivate())));
+                                .filter(isConstructor().and(isAccessibleTo(instrumentedType)));
                 int arguments = Integer.MAX_VALUE;
                 boolean packagePrivate = true;
                 MethodDescription.InDefinedShape current = null;

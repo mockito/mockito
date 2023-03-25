@@ -81,6 +81,22 @@ public class InlineDelegateByteBuddyMockMakerTest
     }
 
     @Test
+    public void should_create_mock_from_accessible_inner_spy() throws Exception {
+        MockCreationSettings<Outer.Inner> settings = settingsFor(Outer.Inner.class);
+        Optional<Outer.Inner> proxy =
+                mockMaker.createSpy(
+                        settings,
+                        new MockHandlerImpl<>(settings),
+                        new Outer.Inner(new Object(), new Object()));
+        assertThat(proxy)
+                .hasValueSatisfying(
+                        spy -> {
+                            assertThat(spy.p1).isNotNull();
+                            assertThat(spy.p2).isNotNull();
+                        });
+    }
+
+    @Test
     public void should_create_mock_from_non_constructable_class() throws Exception {
         MockCreationSettings<NonConstructableClass> settings =
                 settingsFor(NonConstructableClass.class);
@@ -643,6 +659,25 @@ public class InlineDelegateByteBuddyMockMakerTest
             int i = 0;
             if (test != i) {
                 throw new IOException("fatal");
+            }
+        }
+    }
+
+    static class Outer {
+
+        final Object p1;
+
+        private Outer(final Object p1) {
+            this.p1 = p1;
+        }
+
+        private static class Inner extends Outer {
+
+            final Object p2;
+
+            Inner(final Object p1, final Object p2) {
+                super(p1);
+                this.p2 = p2;
             }
         }
     }
