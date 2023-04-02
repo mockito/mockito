@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import org.mockito.internal.matchers.Any;
@@ -908,6 +909,41 @@ public class ArgumentMatchers {
      * @return <code>null</code>.
      */
     public static <T> T argThat(ArgumentMatcher<T> matcher) {
+        reportMatcher(matcher);
+        return null;
+    }
+    
+    /**
+     * Allows creating AssertJ matchers. Example:
+     * <pre class="code"><code class="java">
+     * //you can also verify using argument matcher
+     * verify(gryffindor).join(argThatMatch(name -> assertThat(name).isEqualTo("Harry Potter")));
+     * </code></pre>
+     * <p>
+     * AssertJ assertions have expressive output for failed assertion. Compare:
+     * <pre class="code"><code class="java">
+     * argThatMatch(name -> assertThat(name).isEqualTo("Harry Potter"))
+     * </pre>
+     * Output: <pre></pre><i>expected: "Harry Potter"
+     *  but was: "Draco Malfoy"</i></pre><br>
+     *  vs:
+     * <pre class="code"><code class="java">
+     * argThat(name -> name.equals("Harry Potter"))
+     * </pre>
+     * Output: <pre><i>Argument(s) are different! Wanted:
+     * gryffindor.join(<custom argument matcher>);
+     * -> at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+     * Actual invocations have different arguments:
+     * gryffindor.join("Draco Malfoy");
+     * -> at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+     * </i></pre>
+     * @since 5.2.1
+     */
+    public static <T> T argThatMatch(Consumer<T> assertion) {
+        ArgumentMatcher<T> matcher = arg -> {
+            assertion.accept(arg);
+            return true;
+        };
         reportMatcher(matcher);
         return null;
     }
