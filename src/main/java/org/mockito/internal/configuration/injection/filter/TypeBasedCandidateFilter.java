@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.mockito.internal.util.MockUtil;
 
@@ -28,26 +29,38 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
 
     protected boolean isCompatibleTypes(Type typeToMock, Type mockType, Field injectMocksField) {
         boolean result = false;
-        if (typeToMock instanceof ParameterizedType && mockType instanceof ParameterizedType) {
-            // ParameterizedType.equals() is documented as:
-            // "Instances of classes that implement this interface must implement
-            // an equals() method that equates any two instances that share the
-            // same generic type declaration and have equal type parameters."
-            // Unfortunately, e.g. Wildcard parameter "?" doesn't equal java.lang.String,
-            // and e.g. Set doesn't equal TreeSet, so roll our own comparison if
-            // ParameterizedTypeImpl.equals() returns false
-            if (typeToMock.equals(mockType)) {
-                result = true;
+        if (typeToMock instanceof ParameterizedType) {
+            if (mockType instanceof ParameterizedType) {
+                // ParameterizedType.equals() is documented as:
+                // "Instances of classes that implement this interface must implement
+                // an equals() method that equates any two instances that share the
+                // same generic type declaration and have equal type parameters."
+                // Unfortunately, e.g. Wildcard parameter "?" doesn't equal java.lang.String,
+                // and e.g. Set doesn't equal TreeSet, so roll our own comparison if
+                // ParameterizedTypeImpl.equals() returns false
+                if (typeToMock.equals(mockType)) {
+                    result = true;
+                } else {
+                    ParameterizedType genericTypeToMock = (ParameterizedType) typeToMock;
+                    ParameterizedType genericMockType = (ParameterizedType) mockType;
+                    Type[] actualTypeArguments = genericTypeToMock.getActualTypeArguments();
+                    Type[] actualTypeArguments2 = genericMockType.getActualTypeArguments();
+                    // Recurse on type parameters, so we properly test whether e.g. Wildcard bounds
+                    // have a match
+                    result =
+                            recurseOnTypeArguments(
+                                    injectMocksField, actualTypeArguments, actualTypeArguments2);
+                }
             } else {
-                ParameterizedType genericTypeToMock = (ParameterizedType) typeToMock;
-                ParameterizedType genericMockType = (ParameterizedType) mockType;
-                Type[] actualTypeArguments = genericTypeToMock.getActualTypeArguments();
-                Type[] actualTypeArguments2 = genericMockType.getActualTypeArguments();
-                // Recurse on type parameters, so we properly test whether e.g. Wildcard bounds
-                // have a match
-                result =
-                        recurseOnTypeArguments(
-                                injectMocksField, actualTypeArguments, actualTypeArguments2);
+                // mockType is a non-parameterized Class, i.e. a concrete class.
+                // We came here even though isAssignableFrom(), but that doesn't
+                // take type parameters into account due to Java type erasure,
+                // so walk concrete class' type hierarchy
+                // TODO was wäre es anders herum, typeToMock ist concrete, und mockType ist ParameterizedType?
+                Class<?> concreteMockClass = (Class<?>)mockType;
+                Stream<Type> mockInterfaces = Arrays.stream(concreteMockClass.getGenericInterfaces());
+                Stream<Type> mockSuperTypes = Stream.concat(mockInterfaces, Stream.of(concreteMockClass.getGenericSuperclass()));
+                result = mockSuperTypes.anyMatch(mockSuperType -> isCompatibleTypes(typeToMock, mockSuperType, injectMocksField));
             }
         } else if (typeToMock instanceof WildcardType) {
             WildcardType wildcardTypeToMock = (WildcardType) typeToMock;
@@ -56,7 +69,7 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                     Arrays.stream(upperBounds)
                             .anyMatch(t -> isCompatibleTypes(t, mockType, injectMocksField));
         } else if (typeToMock instanceof Class && mockType instanceof Class) {
-            result = ((Class) typeToMock).isAssignableFrom((Class) mockType);
+            result = ((Class<?>) typeToMock).isAssignableFrom((Class<?>) mockType);
         } // no need to check for GenericArrayType, as Mockito cannot mock this anyway
 
         return result;
@@ -119,12 +132,12 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
         List<Object> mockTypeMatches = new ArrayList<>();
         for (Object mock : mocks) {
             if (candidateFieldToBeInjected.getType().isAssignableFrom(mock.getClass())) {
-                Type genericMockType = MockUtil.getMockSettings(mock).getGenericTypeToMock();
-                Type genericType = candidateFieldToBeInjected.getGenericType();
-                boolean bothHaveGenericTypeInfo = genericType != null && genericMockType != null;
-                if (bothHaveGenericTypeInfo) {
+                Type mockType = MockUtil.getMockSettings(mock).getGenericTypeToMock();
+                Type typeToMock = candidateFieldToBeInjected.getGenericType();
+                boolean bothHaveTypeInfo = typeToMock != null && mockType != null;
+                if (bothHaveTypeInfo) {
                     // be more specific if generic type information is available
-                    if (isCompatibleTypes(genericType, genericMockType, injectMocksField)) {
+                    if (isCompatibleTypes(typeToMock, mockType, injectMocksField)) {
                         mockTypeMatches.add(mock);
                     } // else filter out mock, as generic types don't match
                 } else {

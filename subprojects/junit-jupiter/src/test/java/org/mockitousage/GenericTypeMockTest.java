@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -257,6 +258,52 @@ public class GenericTypeMockTest {
             // verify that we can match the type parameters of the class under test
             assertEquals(stringList, underTestWithTypeParameters.t1List);
             assertEquals(intList, underTestWithTypeParameters.t2List);
+        }
+    }
+
+    @Nested
+    public class InjectConcreteClassInFieldWithTypeParameter {
+        public class UnderTestWithTypeParameter<T> {
+            List<T> tList;
+        }
+
+        public class ConcreteStringList extends ArrayList<String> {}
+
+        @Mock
+        ConcreteStringList concreteStringList;
+
+        @InjectMocks
+        UnderTestWithTypeParameter<String> underTestWithTypeParameters = new UnderTestWithTypeParameter<String>();
+
+        @Test
+        void testWithTypeParameters() {
+            assertNotNull(concreteStringList);
+
+            // verify that we can match the type parameters of the class under test
+            assertEquals(concreteStringList, underTestWithTypeParameters.tList);
+        }
+    }
+
+    @Nested
+    public class NoneMatchInjectConcreteClassInFieldWithTypeParameterTest {
+        public class UnderTestWithTypeParameter<T> {
+            List<T> tList;
+        }
+
+        public class ConcreteStringList extends ArrayList<String> {}
+
+        @Mock
+        ConcreteStringList concreteStringList;
+
+        @InjectMocks
+        UnderTestWithTypeParameter<Integer> underTestWithTypeParameters = new UnderTestWithTypeParameter<Integer>();
+
+        @Test
+        void testWithTypeParameters() {
+            assertNotNull(concreteStringList);
+
+            // verify that when no concrete type candidate matches, none is injected
+            assertNull(underTestWithTypeParameters.tList);
         }
     }
 
