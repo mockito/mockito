@@ -10,6 +10,7 @@ import org.mockito.internal.MockitoCore;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.framework.DefaultMockitoFramework;
 import org.mockito.internal.session.DefaultMockitoSessionBuilder;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationFactory;
@@ -2167,6 +2168,10 @@ public class Mockito extends ArgumentMatchers {
      * @return a spy of the real object
      */
     public static <T> T spy(T object) {
+        if (MockUtil.isMock(object)) {
+            throw new IllegalArgumentException(
+                    "Please don't pass mock here. Spy is not allowed on mock.");
+        }
         return MOCKITO_CORE.mock(
                 (Class<T>) object.getClass(),
                 withSettings().spiedInstance(object).defaultAnswer(CALLS_REAL_METHODS));

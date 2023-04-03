@@ -409,6 +409,18 @@ public class CreatingMocksWithConstructorTest extends TestBase {
         assertEquals("value", testBug.getValue(0));
     }
 
+    @Test
+    public void forbid_spy_on_mock() {
+        try {
+            spy(mock(List.class));
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertThat(e)
+                    .hasMessageContaining(
+                            "Please don't pass mock here. Spy is not allowed on mock.");
+        }
+    }
+
     public abstract class SomeAbstractClass<T> {
 
         protected abstract String getRealValue(T value);
