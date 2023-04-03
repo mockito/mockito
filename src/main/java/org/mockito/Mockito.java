@@ -39,6 +39,7 @@ import org.mockito.verification.VerificationAfterDelay;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationWithTimeout;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -1661,6 +1662,19 @@ import java.util.function.Function;
  * With an implicit type, the Java compiler is unable to automatically determine the type of a mock and you need
  * to pass in the {@code Class} explicitly.
  * </p>
+ *
+ * <h3 id="55">55. <a class="meaningful_link" href="#verification_with_assertions" name="verification_with_assertions">
+ *  Verification with assertions</a> (Since 5.3.0)</h3>
+ *
+ * To validate arguments during verification, instead of capturing them with {@link ArgumentCaptor}, you can now
+ * use {@link ArgumentMatchers#assertArg(Consumer)}}:
+ *
+ * <pre class="code"><code class="java">
+ *   verify(serviceMock).doStuff(assertArg(param -> {
+ *     assertThat(param.getField1()).isEqualTo("foo");
+ *     assertThat(param.getField2()).isEqualTo("bar");
+ *   }));
+ * </code></pre>
  */
 @CheckReturnValue
 @SuppressWarnings("unchecked")
