@@ -53,14 +53,14 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 }
             } else {
                 // mockType is a non-parameterized Class, i.e. a concrete class.
-                // We came here even though isAssignableFrom(), but that doesn't
-                // take type parameters into account due to Java type erasure,
                 // so walk concrete class' type hierarchy
-                // TODO was wäre es anders herum, typeToMock ist concrete, und mockType ist ParameterizedType?
-                Class<?> concreteMockClass = (Class<?>)mockType;
-                Stream<Type> mockInterfaces = Arrays.stream(concreteMockClass.getGenericInterfaces());
-                Stream<Type> mockSuperTypes = Stream.concat(mockInterfaces, Stream.of(concreteMockClass.getGenericSuperclass()));
-                result = mockSuperTypes.anyMatch(mockSuperType -> isCompatibleTypes(typeToMock, mockSuperType, injectMocksField));
+                Class<?> concreteMockClass = (Class<?>) mockType;
+                Stream<Type> mockSuperTypes = getSuperTypes(concreteMockClass);
+                result =
+                        mockSuperTypes.anyMatch(
+                                mockSuperType ->
+                                        isCompatibleTypes(
+                                                typeToMock, mockSuperType, injectMocksField));
             }
         } else if (typeToMock instanceof WildcardType) {
             WildcardType wildcardTypeToMock = (WildcardType) typeToMock;
@@ -73,6 +73,13 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
         } // no need to check for GenericArrayType, as Mockito cannot mock this anyway
 
         return result;
+    }
+
+    private Stream<Type> getSuperTypes(Class<?> concreteMockClass) {
+        Stream<Type> mockInterfaces = Arrays.stream(concreteMockClass.getGenericInterfaces());
+        Stream<Type> mockSuperTypes =
+                Stream.concat(mockInterfaces, Stream.of(concreteMockClass.getGenericSuperclass()));
+        return mockSuperTypes;
     }
 
     private boolean recurseOnTypeArguments(
@@ -89,30 +96,44 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 // The TypeVariable`s actual type is declared by the field containing
                 // the object under test, i.e. the field annotated with @InjectMocks
                 // e.g. @InjectMocks ClassUnderTest<String, Integer> underTest = ..
-                Type[] injectMocksFieldTypeParameters =
-                        ((ParameterizedType) injectMocksField.getGenericType())
-                                .getActualTypeArguments();
-                // Find index of given TypeVariable where it was defined, e.g. 0 for T1 in
-                // ClassUnderTest<T1, T2>
-                // (we're always able to find it, otherwise test class wouldn't have compiled))
-                TypeVariable<?>[] genericTypeParameters =
-                        injectMocksField.getType().getTypeParameters();
-                int variableIndex = -1;
-                for (int i2 = 0; i2 < genericTypeParameters.length; i2++) {
-                    if (genericTypeParameters[i2].equals(typeVariable)) {
-                        variableIndex = i2;
-                        break;
+
+                Type genericType = injectMocksField.getGenericType();
+                if (genericType instanceof ParameterizedType) {
+                    Type[] injectMocksFieldTypeParameters =
+                            ((ParameterizedType) genericType).getActualTypeArguments();
+                    // Find index of given TypeVariable where it was defined, e.g. 0 for T1 in
+                    // ClassUnderTest<T1, T2>
+                    // (we're always able to find it, otherwise test class wouldn't have compiled))
+                    TypeVariable<?>[] genericTypeParameters =
+                            injectMocksField.getType().getTypeParameters();
+                    int variableIndex = -1;
+                    for (int i2 = 0; i2 < genericTypeParameters.length; i2++) {
+                        if (genericTypeParameters[i2].equals(typeVariable)) {
+                            variableIndex = i2;
+                            break;
+                        }
                     }
+                    // now test whether actual type for the type variable is compatible, e.g. for
+                    //   class ClassUnderTest<T1, T2> {..}
+                    // T1 would be the String in
+                    //   ClassUnderTest<String, Integer> underTest = ..
+                    isCompatible &=
+                            isCompatibleTypes(
+                                    injectMocksFieldTypeParameters[variableIndex],
+                                    actualTypeArgument2,
+                                    injectMocksField);
+                } else {
+                    // must be a concrete class, recurse on super types that may have type
+                    // parameters
+                    isCompatible &=
+                            getSuperTypes((Class<?>) genericType)
+                                    .anyMatch(
+                                            superType ->
+                                                    isCompatibleTypes(
+                                                            superType,
+                                                            actualTypeArgument2,
+                                                            injectMocksField));
                 }
-                // now test whether actual type for the type variable is compatible, e.g. for
-                //   class ClassUnderTest<T1, T2> {..}
-                // T1 would be the String in
-                //   ClassUnderTest<String, Integer> underTest = ..
-                isCompatible &=
-                        isCompatibleTypes(
-                                injectMocksFieldTypeParameters[variableIndex],
-                                actualTypeArgument2,
-                                injectMocksField);
             } else {
                 isCompatible &=
                         isCompatibleTypes(
