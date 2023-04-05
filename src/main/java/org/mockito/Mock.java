@@ -132,6 +132,13 @@ public @interface Mock {
      */
     String mockMaker() default "";
 
+    /**
+     * Mock will not attempt to preserve all annotation metadata, see {@link MockSettings#withoutAnnotations()}.
+     *
+     * @since 5.3.0
+     */
+    boolean withoutAnnotations() default false;
+
     enum Strictness {
 
         /**
