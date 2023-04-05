@@ -1670,7 +1670,7 @@ import java.util.function.Function;
  * use {@link ArgumentMatchers#assertArg(Consumer)}}:
  *
  * <pre class="code"><code class="java">
- *   verify(serviceMock).doStuff(assertArg(param -> {
+ *   verify(serviceMock).doStuff(assertArg(param -&gt; {
  *     assertThat(param.getField1()).isEqualTo("foo");
  *     assertThat(param.getField2()).isEqualTo("bar");
  *   }));
