@@ -70,12 +70,17 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
         String mockName = getMockName(mocks.iterator().next()).toString();
 
         for (Field otherCandidateField : allRemainingCandidateFields) {
-            if (!otherCandidateField.equals(candidateFieldToBeInjected)
-                    && otherCandidateField.getType().equals(candidateFieldToBeInjected.getType())
-                    && otherCandidateField.getName().equals(mockName)) {
+            if (isOtherCandidateEqualNewCandidate(otherCandidateField, candidateFieldToBeInjected, mockName)) {
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean isOtherCandidateEqualNewCandidate(Field otherCandidateField, Field candidateFieldToBeInjected, String mockName)
+    {
+        return !otherCandidateField.equals(candidateFieldToBeInjected)
+            && otherCandidateField.getType().equals(candidateFieldToBeInjected.getType())
+            && otherCandidateField.getName().equals(mockName);
     }
 }

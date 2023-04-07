@@ -4,10 +4,7 @@
  */
 package org.mockito.plugins;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 
 /**
  * A member accessor is responsible for invoking methods, constructors and for setting
@@ -41,5 +38,22 @@ public interface MemberAccessor {
 
         Object newInstance()
                 throws InstantiationException, InvocationTargetException, IllegalAccessException;
+    }
+
+    public default <T> void copyValues(T from, T mock, Class<?> classFrom) {
+        Field[] fields = classFrom.getDeclaredFields();
+
+        for (Field field : fields) {
+            // ignore static fields6
+            if (Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
+            try {
+                Object value = this.get(field, from);
+                this.set(field, mock, value);
+            } catch (Throwable t) {
+                // Ignore - be lenient - if some field cannot be copied then let's be it
+            }
+        }
     }
 }

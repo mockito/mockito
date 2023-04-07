@@ -16,6 +16,7 @@ import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
 import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
+import org.mockito.internal.util.concurrent.ManualCleaner;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
@@ -195,10 +196,10 @@ class InlineDelegateByteBuddyMockMaker
             new WeakConcurrentMap<>(false);
 
     private final DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics =
-            new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.MANUAL);
+        new DetachedThreadLocal<>(new ManualCleaner());
 
     private final DetachedThreadLocal<Map<Class<?>, BiConsumer<Object, MockedConstruction.Context>>>
-            mockedConstruction = new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.MANUAL);
+            mockedConstruction = new DetachedThreadLocal<>(new ManualCleaner());
 
     private final ThreadLocal<Boolean> mockitoConstruction = ThreadLocal.withInitial(() -> false);
 

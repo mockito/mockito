@@ -15,30 +15,8 @@ public class DetachedThreadLocal<T> implements Runnable {
 
     final WeakConcurrentMap<Thread, T> map;
 
-    public DetachedThreadLocal(Cleaner cleaner) {
-        switch (cleaner) {
-            case THREAD:
-            case MANUAL:
-                map =
-                        new WeakConcurrentMap<Thread, T>(cleaner == Cleaner.THREAD) {
-                            @Override
-                            protected T defaultValue(Thread key) {
-                                return DetachedThreadLocal.this.initialValue(key);
-                            }
-                        };
-                break;
-            case INLINE:
-                map =
-                        new WeakConcurrentMap.WithInlinedExpunction<Thread, T>() {
-                            @Override
-                            protected T defaultValue(Thread key) {
-                                return DetachedThreadLocal.this.initialValue(key);
-                            }
-                        };
-                break;
-            default:
-                throw new AssertionError();
-        }
+    public DetachedThreadLocal(Cleaners cleaner) {
+        map = cleaner.createMap(this);
     }
 
     public T get() {

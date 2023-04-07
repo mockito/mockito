@@ -15,6 +15,7 @@ import org.mockito.internal.matchers.text.MatchersPrinter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
+import org.mockito.mock.MockName;
 
 public class PrintSettings {
 
@@ -55,8 +56,11 @@ public class PrintSettings {
 
     public String print(List<ArgumentMatcher> matchers, Invocation invocation) {
         MatchersPrinter matchersPrinter = new MatchersPrinter();
-        String qualifiedName =
-                MockUtil.getMockName(invocation.getMock()) + "." + invocation.getMethod().getName();
+
+        MockName mockName = MockUtil.getMockName(invocation.getMock());
+        String methodName = invocation.getMethod().getName();
+        String qualifiedName = mockName + "." + methodName;
+
         String invocationString = qualifiedName + matchersPrinter.getArgumentsLine(matchers, this);
         if (isMultiline() || (!matchers.isEmpty() && invocationString.length() > MAX_LINE_LENGTH)) {
             return qualifiedName + matchersPrinter.getArgumentsBlock(matchers, this);
