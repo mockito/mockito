@@ -8,8 +8,10 @@ package org.mockitousage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.MockitoAnnotations.*;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -18,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -260,4 +263,87 @@ public class GenericTypeMockTest {
         }
     }
 
+    @Nested
+    public class InjectConcreteClassInFieldWithTypeParameter {
+        public class UnderTestWithTypeParameter<T> {
+            List<T> tList;
+        }
+
+        public class ConcreteStringList extends ArrayList<String> {}
+
+        @Mock
+        ConcreteStringList concreteStringList;
+
+        @InjectMocks
+        UnderTestWithTypeParameter<String> underTestWithTypeParameters = new UnderTestWithTypeParameter<String>();
+
+        @Test
+        void testWithTypeParameters() {
+            assertNotNull(concreteStringList);
+
+            // verify that we can match the type parameters of the class under test
+            assertEquals(concreteStringList, underTestWithTypeParameters.tList);
+        }
+    }
+
+    @Nested
+    public class NoneMatchInjectConcreteClassInFieldWithTypeParameterTest {
+        public class UnderTestWithTypeParameter<T> {
+            List<T> tList;
+        }
+
+        public class ConcreteStringList extends ArrayList<String> {}
+
+        @Mock
+        ConcreteStringList concreteStringList;
+
+        @InjectMocks
+        UnderTestWithTypeParameter<Integer> underTestWithTypeParameters = new UnderTestWithTypeParameter<Integer>();
+
+        @Test
+        void testWithTypeParameters() {
+            assertNotNull(concreteStringList);
+
+            // verify that when no concrete type candidate matches, none is injected
+            assertNull(underTestWithTypeParameters.tList);
+        }
+    }
+
+    /**
+     * Verify regression https://github.com/mockito/mockito/issues/2958 is fixed.
+     */
+    @Nested
+    public class RegressionClassCastException {
+        public class AbstractUnderTest<A extends AbstractUnderTest<A>> {
+            UnderTestInstance<A> instance;
+        }
+
+        public class UnderTestInstance<I extends AbstractUnderTest<I>> {
+        }
+
+        public class ConcreteUnderTest extends AbstractUnderTest<ConcreteUnderTest> {
+        }
+
+        @Mock
+        UnderTestInstance<ConcreteUnderTest> instanceMock;
+
+        @InjectMocks
+        protected ConcreteUnderTest concreteUnderTest = new ConcreteUnderTest();
+
+        @BeforeEach
+        public void initMocks()
+        {
+            openMocks(this);
+        }
+
+        @Test
+        public void testMockExists() {
+            assertNotNull(instanceMock);
+            assertEquals(instanceMock, concreteUnderTest.instance);
+        }
+
+
+    }
+
 }
+
