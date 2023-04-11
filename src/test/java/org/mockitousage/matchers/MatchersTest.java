@@ -645,4 +645,32 @@ public class MatchersTest extends TestBase {
             // do nothing
         }
     }
+
+    @Test
+    public void can_invoke_method_on_mock_after_assert_arg() throws Exception {
+        mock.oneArg("hello");
+
+        try {
+            verify(mock).oneArg(assertArg((String it) -> assertEquals("not-hello", it)));
+            fail("Should throw an exception");
+        } catch (ComparisonFailure e) {
+            // do nothing
+        }
+
+        mock.oneArg("hello");
+    }
+
+    @Test
+    public void can_verify_on_mock_after_assert_arg() throws Exception {
+        mock.oneArg("hello");
+
+        try {
+            verify(mock).oneArg(assertArg((String it) -> assertEquals("not-hello", it)));
+            fail("Should throw an exception");
+        } catch (ComparisonFailure e) {
+            // do nothing
+        }
+
+        verify(mock).oneArg("hello");
+    }
 }
