@@ -88,6 +88,9 @@ public class AnnotationsTest extends TestBase {
     @Mock(stubOnly = true)
     IMethods stubOnly;
 
+    @Mock(withoutAnnotations = true)
+    IMethods withoutAnnotations;
+
     @Test
     public void shouldInitMocksWithGivenSettings() throws Exception {
         assertEquals("i have a name", namedAndReturningMocks.toString());
@@ -98,6 +101,11 @@ public class AnnotationsTest extends TestBase {
 
         assertTrue(hasExtraInterfaces instanceof List);
         assertTrue(Mockito.mockingDetails(stubOnly).getMockCreationSettings().isStubOnly());
+
+        assertTrue(
+                Mockito.mockingDetails(withoutAnnotations)
+                        .getMockCreationSettings()
+                        .isStripAnnotations());
 
         assertEquals(0, noExtraConfig.intReturningMethod());
     }

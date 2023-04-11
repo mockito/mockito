@@ -56,6 +56,9 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         if (!annotation.mockMaker().isEmpty()) {
             mockSettings.mockMaker(annotation.mockMaker());
         }
+        if (annotation.withoutAnnotations()) {
+            mockSettings.withoutAnnotations();
+        }
 
         mockSettings.genericTypeToMock(genericType.get());
 
