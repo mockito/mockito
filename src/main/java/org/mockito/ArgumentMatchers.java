@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import org.mockito.internal.matchers.Any;
@@ -910,6 +911,22 @@ public class ArgumentMatchers {
     public static <T> T argThat(ArgumentMatcher<T> matcher) {
         reportMatcher(matcher);
         return null;
+    }
+
+    /**
+     * Allows creating custom argument matchers where matching is considered successful when the consumer given by parameter does not throw an exception.
+     * <p>
+     * Typically used with {@link Mockito#verify(Object)} to execute assertions on parameters passed to the verified method invocation.
+     *
+     * @param consumer executes assertions on the verified argument
+     * @return <code>null</code>.
+     */
+    public static <T> T assertArg(Consumer<T> consumer) {
+        return argThat(
+                argument -> {
+                    consumer.accept(argument);
+                    return true;
+                });
     }
 
     /**

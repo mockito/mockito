@@ -20,6 +20,7 @@ import static org.mockito.AdditionalMatchers.leq;
 import static org.mockito.AdditionalMatchers.lt;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.AdditionalMatchers.or;
+import static org.mockito.ArgumentMatchers.assertArg;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.any;
@@ -52,6 +53,7 @@ import java.util.List;
 import java.util.RandomAccess;
 import java.util.regex.Pattern;
 
+import org.junit.ComparisonFailure;
 import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
@@ -623,5 +625,52 @@ public class MatchersTest extends TestBase {
         mock.oneArg(Character.valueOf('\u20AC'));
 
         verify(mock, times(2)).oneArg(nullable(Character.class));
+    }
+
+    @Test
+    public void assertArg_matcher() throws Exception {
+        mock.oneArg("hello");
+
+        verify(mock).oneArg(assertArg((String it) -> assertEquals("hello", it)));
+    }
+
+    @Test
+    public void assertArg_matcher_fails_when_assertion_fails() throws Exception {
+        mock.oneArg("hello");
+
+        try {
+            verify(mock).oneArg(assertArg((String it) -> assertEquals("not-hello", it)));
+            fail("Should throw an exception");
+        } catch (ComparisonFailure e) {
+            // do nothing
+        }
+    }
+
+    @Test
+    public void can_invoke_method_on_mock_after_assert_arg() throws Exception {
+        mock.oneArg("hello");
+
+        try {
+            verify(mock).oneArg(assertArg((String it) -> assertEquals("not-hello", it)));
+            fail("Should throw an exception");
+        } catch (ComparisonFailure e) {
+            // do nothing
+        }
+
+        mock.oneArg("hello");
+    }
+
+    @Test
+    public void can_verify_on_mock_after_assert_arg() throws Exception {
+        mock.oneArg("hello");
+
+        try {
+            verify(mock).oneArg(assertArg((String it) -> assertEquals("not-hello", it)));
+            fail("Should throw an exception");
+        } catch (ComparisonFailure e) {
+            // do nothing
+        }
+
+        verify(mock).oneArg("hello");
     }
 }
