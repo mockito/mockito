@@ -102,7 +102,10 @@ public class AnnotationsTest extends TestBase {
         assertTrue(hasExtraInterfaces instanceof List);
         assertTrue(Mockito.mockingDetails(stubOnly).getMockCreationSettings().isStubOnly());
 
-        assertTrue(Mockito.mockingDetails(withoutAnnotations).getMockCreationSettings().isStripAnnotations());
+        assertTrue(
+                Mockito.mockingDetails(withoutAnnotations)
+                        .getMockCreationSettings()
+                        .isStripAnnotations());
 
         assertEquals(0, noExtraConfig.intReturningMethod());
     }
