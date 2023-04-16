@@ -8,6 +8,7 @@ package org.mockitousage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.MockitoAnnotations.*;
 
 import java.sql.Time;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -345,5 +347,30 @@ public class GenericTypeMockTest {
 
     }
 
+    /**
+     * Verify regression https://github.com/mockito/mockito/issues/2974 is fixed.
+     */
+    @Nested
+    public class RegressionNpe {
+        public abstract class Change {}
+        public class ChangeCollection<TChange extends Change> implements Iterable<TChange> {
+            private List<TChange> changes = new ArrayList<TChange>();
+            @Override
+            public Iterator<TChange> iterator() {
+                return null;
+            }
+        }
+
+        @Mock Change change0;
+
+        @InjectMocks ChangeCollection spiedImpl = new ChangeCollection();
+        @Mock(name = "changes") List<Change> innerList;
+
+        @Test
+        public void testNoNpe() {
+            assertSame(innerList, spiedImpl.changes);
+        }
+
+    }
 }
 
