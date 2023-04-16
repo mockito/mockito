@@ -77,9 +77,14 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
 
     private Stream<Type> getSuperTypes(Class<?> concreteMockClass) {
         Stream<Type> mockInterfaces = Arrays.stream(concreteMockClass.getGenericInterfaces());
-        Stream<Type> mockSuperTypes =
-                Stream.concat(mockInterfaces, Stream.of(concreteMockClass.getGenericSuperclass()));
-        return mockSuperTypes;
+        Type genericSuperclass = concreteMockClass.getGenericSuperclass();
+        // for java.lang.Object, genericSuperclass is null
+        if (genericSuperclass!=null) {
+            Stream<Type> mockSuperTypes = Stream.concat(mockInterfaces, Stream.of(genericSuperclass));
+            return mockSuperTypes;
+        } else {
+            return mockInterfaces;
+        }
     }
 
     private boolean recurseOnTypeArguments(
