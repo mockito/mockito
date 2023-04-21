@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.mockito.Answers;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
+import org.mockito.internal.creation.bytebuddy.sample.DifferentPackage;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.handler.MockHandlerImpl;
 import org.mockito.internal.stubbing.answers.Returns;
@@ -88,6 +89,22 @@ public class InlineDelegateByteBuddyMockMakerTest
                         settings,
                         new MockHandlerImpl<>(settings),
                         new Outer.Inner(new Object(), new Object()));
+        assertThat(proxy)
+                .hasValueSatisfying(
+                        spy -> {
+                            assertThat(spy.p1).isNotNull();
+                            assertThat(spy.p2).isNotNull();
+                        });
+    }
+
+    @Test
+    public void should_create_mock_from_visible_inner_spy() throws Exception {
+        MockCreationSettings<DifferentPackage> settings = settingsFor(DifferentPackage.class);
+        Optional<DifferentPackage> proxy =
+                mockMaker.createSpy(
+                        settings,
+                        new MockHandlerImpl<>(settings),
+                        new DifferentPackage(new Object(), new Object()));
         assertThat(proxy)
                 .hasValueSatisfying(
                         spy -> {
@@ -667,7 +684,7 @@ public class InlineDelegateByteBuddyMockMakerTest
 
         final Object p1;
 
-        private Outer(final Object p1) {
+        private Outer(Object p1) {
             this.p1 = p1;
         }
 
@@ -675,10 +692,19 @@ public class InlineDelegateByteBuddyMockMakerTest
 
             final Object p2;
 
-            Inner(final Object p1, final Object p2) {
+            Inner(Object p1, Object p2) {
                 super(p1);
                 this.p2 = p2;
             }
+        }
+    }
+
+    public static class SamePackage {
+
+        public final Object p1;
+
+        protected SamePackage(Object p1) {
+            this.p1 = p1;
         }
     }
 }
