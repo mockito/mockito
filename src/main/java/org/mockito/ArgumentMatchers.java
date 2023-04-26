@@ -940,10 +940,10 @@ public class ArgumentMatchers {
      */
     public static <T> T assertArg(ThrowingConsumer<T> consumer) {
         return argThat(
-            argument -> {
-                consumer.accept(argument);
-                return true;
-            });
+                argument -> {
+                    consumer.accept(argument);
+                    return true;
+                });
     }
 
     /**
