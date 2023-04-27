@@ -6,6 +6,7 @@ package org.mockito;
 
 import java.util.function.Consumer;
 
+@SuppressWarnings("FunctionalInterfaceMethodChanged")
 @FunctionalInterface
 public interface ThrowingConsumer<T> extends Consumer<T> {
     @Override

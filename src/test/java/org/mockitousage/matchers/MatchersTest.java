@@ -34,6 +34,7 @@ import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.anyShort;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.contains;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.endsWith;
 import static org.mockito.Mockito.isA;
 import static org.mockito.Mockito.isNotNull;
@@ -47,6 +48,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +62,7 @@ import org.mockito.Mockito;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
+import org.mockitousage.stubbing.StubbingUsingDoReturnTest;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
@@ -647,9 +650,17 @@ public class MatchersTest extends TestBase {
     }
 
     @Test
-    public void assertArg_matcher_fails_when_assertion_fails_with_ioException() throws Exception {
+    public void assertArg_matcher_can_accept_throwing_consumer() throws Exception {
+        mock.oneArg("hello");
+
         try {
-            verify(mock).simpleMethod(assertArg((Object o) -> mock.throwsIOException(0)));
+            verify(mock)
+                    .oneArg(
+                            assertArg(
+                                    (String it) -> {
+                                        assertEquals("not-hello", it);
+                                        doThrow(new IOException()).when(mock).throwsIOException(0);
+                                    }));
             fail("Should throw an exception");
         } catch (ComparisonFailure e) {
             // do nothing
@@ -676,30 +687,6 @@ public class MatchersTest extends TestBase {
 
         try {
             verify(mock).oneArg(assertArg((String it) -> assertEquals("not-hello", it)));
-            fail("Should throw an exception");
-        } catch (ComparisonFailure e) {
-            // do nothing
-        }
-
-        verify(mock).oneArg("hello");
-    }
-
-    @Test
-    public void can_invoke_method_on_mock_after_assert_arg_with_ioException() throws Exception {
-        try {
-            verify(mock).simpleMethod(assertArg((Object o) -> mock.throwsIOException(0)));
-            fail("Should throw an exception");
-        } catch (ComparisonFailure e) {
-            // do nothing
-        }
-
-        mock.oneArg("hello");
-    }
-
-    @Test
-    public void can_verify_on_mock_after_assert_arg_with_ioException() throws Exception {
-        try {
-            verify(mock).simpleMethod(assertArg((Object o) -> mock.throwsIOException(0)));
             fail("Should throw an exception");
         } catch (ComparisonFailure e) {
             // do nothing
