@@ -62,7 +62,6 @@ import org.mockito.Mockito;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
 import org.mockitousage.IMethods;
-import org.mockitousage.stubbing.StubbingUsingDoReturnTest;
 import org.mockitoutil.TestBase;
 
 @SuppressWarnings("unchecked")
