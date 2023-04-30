@@ -1648,7 +1648,7 @@ import java.util.function.Function;
  * <h3 id="54">54. <a class="meaningful_link" href="#mock_without_class" name="mock_without_class">
  *  Mocking/spying without specifying class</a> (Since 4.9.0)</h3>
  *
- * Instead of calling method {@link Mockito#mock(Class)} or {@link Mockito#spy(Class)} with Class parameter, you can now
+ * Instead of calling method {@link Mockito#mock(Class)} or {@link Mockito#spy(Class)} with Class parameter, you can
  * now call method {@code mock()} or {@code spy()} <strong>without parameters</strong>:
  *
  * <pre class="code"><code class="java">
