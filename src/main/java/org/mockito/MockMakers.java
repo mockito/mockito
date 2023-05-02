@@ -23,12 +23,14 @@ public final class MockMakers {
      * @see <a href="Mockito.html#39">Mocking final types, enums and final methods</a>
      */
     public static final String INLINE = "mock-maker-inline";
+
     /**
      * Proxy mock maker which avoids code generation, but can only mock interfaces.
      *
      * @see <a href="Mockito.html#50">Avoiding code generation when restricting mocks to interfaces</a>
      */
     public static final String PROXY = "mock-maker-proxy";
+
     /**
      * Subclass mock maker which mocks types by creating subclasses.
      * This is the first built-in mock maker which has been provided by Mockito.
