@@ -21,6 +21,7 @@ import org.mockito.internal.matchers.ContainsExtraTypeInfo;
 public class ArgumentMatchingTool {
 
     private ArgumentMatchingTool() {}
+
     /**
      * Suspiciously not matching arguments are those that don't match, the toString() representation is the same but types are different.
      */

@@ -15,6 +15,7 @@ public class StringUtil {
     private static final Pattern CAPS = Pattern.compile("([A-Z\\d][^A-Z\\d]*)");
 
     private StringUtil() {}
+
     /**
      * @param text
      *            to have the first line removed
