@@ -34,6 +34,7 @@ import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.anyShort;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.contains;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.endsWith;
 import static org.mockito.Mockito.isA;
 import static org.mockito.Mockito.isNotNull;
@@ -47,6 +48,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -640,6 +642,24 @@ public class MatchersTest extends TestBase {
 
         try {
             verify(mock).oneArg(assertArg((String it) -> assertEquals("not-hello", it)));
+            fail("Should throw an exception");
+        } catch (ComparisonFailure e) {
+            // do nothing
+        }
+    }
+
+    @Test
+    public void assertArg_matcher_can_accept_throwing_consumer() throws Exception {
+        mock.oneArg("hello");
+
+        try {
+            verify(mock)
+                    .oneArg(
+                            assertArg(
+                                    (String it) -> {
+                                        assertEquals("not-hello", it);
+                                        doThrow(new IOException()).when(mock).throwsIOException(0);
+                                    }));
             fail("Should throw an exception");
         } catch (ComparisonFailure e) {
             // do nothing

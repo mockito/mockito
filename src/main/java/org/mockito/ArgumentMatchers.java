@@ -930,6 +930,23 @@ public class ArgumentMatchers {
     }
 
     /**
+     * Allows creating custom argument matchers where matching is considered successful when the consumer given by parameter does not throw an exception.
+     * Consumer is allowed to throw exception other than RuntimeException
+     * <p>
+     * Typically used with {@link Mockito#verify(Object)} to execute assertions on parameters passed to the verified method invocation.
+     *
+     * @param consumer executes assertions on the verified argument
+     * @return <code>null</code>.
+     */
+    public static <T> T assertArg(ThrowingConsumer<T> consumer) {
+        return argThat(
+                argument -> {
+                    consumer.accept(argument);
+                    return true;
+                });
+    }
+
+    /**
      * Allows creating custom <code>char</code> argument matchers.
      * <p>
      * Note that {@link #argThat} will not work with primitive <code>char</code> matchers due to <code>NullPointerException</code> auto-unboxing caveat.
