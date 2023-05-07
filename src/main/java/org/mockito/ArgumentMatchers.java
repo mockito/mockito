@@ -115,7 +115,7 @@ import org.mockito.internal.util.Primitives;
 public class ArgumentMatchers {
 
     /**
-     * Matches <strong>anything</strong>, including nulls and varargs.
+     * Matches <strong>anything</strong>, including nulls.
      *
      * <p>
      * See examples in javadoc for {@link ArgumentMatchers} class
@@ -125,7 +125,8 @@ public class ArgumentMatchers {
      * <strong>Notes : </strong><br/>
      * <ul>
      *     <li>For primitive types use {@link #anyChar()} family or {@link #isA(Class)} or {@link #any(Class)}.</li>
-     *     <li>Since mockito 2.1.0 {@link #any(Class)} is not anymore an alias of this method.</li>
+     *     <li>Since Mockito 2.1.0 {@link #any(Class)} is not anymore an alias of this method.</li>
+     *     <li>Since Mockito 5.0.0 this no longer matches varargs. Use {@link #any(Class)} instead.</li>
      * </ul>
      * </p>
      *
@@ -162,7 +163,8 @@ public class ArgumentMatchers {
      * <ul>
      *     <li>For primitive types use {@link #anyChar()} family.</li>
      *     <li>Since Mockito 2.1.0 this method will perform a type check thus <code>null</code> values are not authorized.</li>
-     *     <li>Since mockito 2.1.0 {@link #any()} is no longer an alias of this method.</li>
+     *     <li>Since Mockito 2.1.0 {@link #any()} is no longer an alias of this method.</li>
+     *     <li>Since Mockito 5.0.0 this method can match varargs if the array type is specified, for example <code>any(String[].class)</code>.</li>
      * </ul>
      * </p>
      *
