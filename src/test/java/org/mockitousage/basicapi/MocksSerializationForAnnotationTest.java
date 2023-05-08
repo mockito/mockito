@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
+import java.util.function.Supplier;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -53,6 +54,9 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
             serializable = true)
     IMethods imethodsWithExtraInterfacesMock;
 
+    @Mock(serializable = true)
+    Supplier<Object> parameterizedSupplier;
+
     @Test
     public void should_allow_throws_exception_to_be_serializable() throws Exception {
         // given
@@ -66,6 +70,11 @@ public class MocksSerializationForAnnotationTest extends TestBase implements Ser
     public void should_allow_mock_to_be_serializable() throws Exception {
         // when-serialize then-deserialize
         serializeAndBack(imethodsMock);
+    }
+
+    @Test
+    public void should_allow_mock_of_parameterized_type_to_be_serializable() throws Exception {
+        serializeAndBack(parameterizedSupplier);
     }
 
     @Test
