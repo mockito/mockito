@@ -22,6 +22,7 @@ import org.mockito.internal.matchers.Contains;
 import org.mockito.internal.matchers.EndsWith;
 import org.mockito.internal.matchers.Equals;
 import org.mockito.internal.matchers.InstanceOf;
+import org.mockito.internal.matchers.JsonEquals;
 import org.mockito.internal.matchers.Matches;
 import org.mockito.internal.matchers.NotNull;
 import org.mockito.internal.matchers.Null;
@@ -663,6 +664,11 @@ public class ArgumentMatchers {
      */
     public static <T> T refEq(T value, String... excludeFields) {
         reportMatcher(new ReflectionEquals(value, excludeFields));
+        return null;
+    }
+
+    public static String jsonEq(String value) {
+        reportMatcher(new JsonEquals(value));
         return null;
     }
 
