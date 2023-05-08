@@ -26,7 +26,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     private static final long serialVersionUID = -6789800638070123629L;
 
     protected Class<T> typeToMock;
-    protected Type genericTypeToMock;
+    protected transient Type genericTypeToMock;
     protected Set<Class<?>> extraInterfaces = new LinkedHashSet<>();
     protected String name;
     protected Object spiedInstance;
