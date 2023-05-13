@@ -4,6 +4,8 @@
  */
 package org.mockito.exceptions.base;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +22,7 @@ public class TraceBuilder {
     }
 
     private List<StackTraceElement> toTraceList() {
-        assert methods.length == 0 || classes.length == 0;
+        assertThat(methods.length == 0 || classes.length == 0).isTrue();
 
         List<StackTraceElement> trace = new LinkedList<StackTraceElement>();
         for (String method : methods) {
