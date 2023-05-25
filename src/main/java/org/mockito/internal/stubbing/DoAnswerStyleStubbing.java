@@ -25,7 +25,7 @@ class DoAnswerStyleStubbing implements Serializable {
     }
 
     boolean isSet() {
-        return answers.isEmpty();
+        return answers.size() > 0;
     }
 
     void clear() {

@@ -110,7 +110,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     public boolean hasAnswersForStubbing() {
-        return !doAnswerStyleStubbing.isSet();
+        return doAnswerStyleStubbing.isSet();
     }
 
     public boolean hasInvocationForPotentialStubbing() {
