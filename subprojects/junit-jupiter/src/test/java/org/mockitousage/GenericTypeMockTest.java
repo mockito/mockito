@@ -5,10 +5,7 @@
 
 package org.mockitousage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.MockitoAnnotations.*;
 
 import java.sql.Time;
@@ -28,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
@@ -371,6 +369,39 @@ public class GenericTypeMockTest {
             assertSame(innerList, spiedImpl.changes);
         }
 
+    }
+
+    static class Regression3005Classes {
+
+        static class AbstractJob<A extends AbstractJob<A>> {
+            JobInstance<A> instance;
+        }
+
+        static class JobInstance<J extends AbstractJob<J>> {}
+
+        static class ConcreteJob extends AbstractJob<ConcreteJob> {}
+    }
+
+    /**
+     * Verify regression https://github.com/mockito/mockito/issues/3005 is fixed.
+     */
+    @Nested
+    public class RegressionClassCastExceptionWithWildcards {
+
+        @InjectMocks
+        protected Regression3005Classes.ConcreteJob job;
+        @Mock
+        Regression3005Classes.JobInstance<?> instance;
+
+        @Test
+        public void testNoClassCastException() {
+            assertNotNull(job);
+            assertNotNull(instance);
+            assertTrue(MockUtil.isMock(instance));
+            // instance cannot (or should not) be assigned to job.instance according to compiler:
+            // Incompatible types. Found: 'JobInstance<capture<?>>', required: 'JobInstance<ConcreteJob>'
+            assertNull(job.instance);
+        }
     }
 }
 
