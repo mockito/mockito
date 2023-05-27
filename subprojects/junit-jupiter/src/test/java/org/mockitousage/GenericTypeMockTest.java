@@ -403,5 +403,44 @@ public class GenericTypeMockTest {
             assertNull(job.instance);
         }
     }
+
+    static class Regression3006Classes {
+
+        interface JobData {}
+
+        static class AbstractJob<D extends JobData, A extends AbstractJob<D, A>> {
+            JobInstance<D,A> instance;
+        }
+
+        static class JobInstance<D extends JobData, J extends AbstractJob<D, J>> {}
+
+        static class ConcreteJob<D extends JobData> extends AbstractJob<D,ConcreteJob<D>> {}
+    }
+
+    /**
+     * Verify regression https://github.com/mockito/mockito/issues/3006 is fixed.
+     */
+    @Nested
+    public class Regression3006ArrayIndexOutOfBounds {
+
+        @InjectMocks
+        protected Regression3006Classes.ConcreteJob<Regression3006Classes.JobData> job;
+
+        @Mock
+        Regression3006Classes.JobInstance<
+            Regression3006Classes.JobData,
+            Regression3006Classes.ConcreteJob<Regression3006Classes.JobData>
+            > instance;
+
+        @Test
+        public void testMockExistsAndUsed() {
+            assertNotNull(job);
+            assertNotNull(instance);
+            assertTrue(MockUtil.isMock(instance));
+            // compiler allows job.instance = instance, and so does @InjectMocks
+            assertEquals(instance, job.instance);
+        }
+    }
+
 }
 
