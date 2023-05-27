@@ -16,6 +16,7 @@ dependencies {
     implementation libraries.junitJupiterApi
     testImplementation libraries.assertj
     testImplementation libraries.junitPlatformLauncher
+    testImplementation libraries.junitJupiterParams
     testRuntimeOnly libraries.junitJupiterEngine
 }
 
