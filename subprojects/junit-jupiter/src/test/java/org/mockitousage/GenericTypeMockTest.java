@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -493,6 +494,57 @@ public class GenericTypeMockTest {
             assertTrue(MockUtil.isMock(instance));
             // compiler allows job.instance = instance, and so does @InjectMocks
             assertEquals(instance, job.instance);
+        }
+    }
+
+    static class Regression3019Classes {
+
+        static class Something {}
+
+        static class ParameterizedInjectedObject<T extends Something> {
+            public void init() {}
+        }
+
+        static class AbstractGenericClass<T extends Something> {
+
+            ParameterizedInjectedObject<T> object;
+
+            public void init() {
+                object.init();
+            }
+        }
+
+        static class EntryPoint extends AbstractGenericClass<Something> {
+
+            @Override
+            public void init() {
+                super.init();
+                // do other things ...
+            }
+        }
+    }
+
+    /**
+     * Verify regression https://github.com/mockito/mockito/issues/3019 is fixed.
+     */
+    @Nested
+    public class Regression3019MissingInjection {
+
+        @Mock
+        private Regression3019Classes.ParameterizedInjectedObject<Regression3019Classes.Something> injected;
+
+        @InjectMocks
+        private Regression3019Classes.EntryPoint subject;
+
+        @Test
+        public void testSuccessfullyInjected() {
+            assertNotNull(injected);
+            assertTrue(MockUtil.isMock(injected));
+            assertNotNull(subject);
+            assertNotNull(subject.object);
+            // test it does not throw NPE
+            subject.init();
+            Mockito.verify(injected).init();
         }
     }
 
