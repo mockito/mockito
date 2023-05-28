@@ -44,14 +44,14 @@ jobs:
       - name: 3. Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1.0.6 # https://github.com/gradle/wrapper-validation-action
 
-      - name: 4. Build and check reproducibility of artifacts (single job only)
+      - name: 4. Build and check reproducibility of artifacts
         run: ./check_reproducibility.sh
 
-      - name: 5. Spotless check (single job only). Run './gradlew spotlessApply' locally if this job fails.
+      - name: 5. Spotless check. Run './gradlew spotlessApply' locally if this job fails.
         run: ./gradlew spotlessCheck
 
       - name: 6. Build on Java 11
-        run: ./gradlew build idea --scan -x test
+        run: ./gradlew build -x test idea --scan
 
       - name: 7. Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -59,20 +59,13 @@ jobs:
           name: libs
           path: build/libs
 
-      - name: 8. Upload coverage report
-        run: |
-          ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml
-          curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
+      - name: 8. Upload test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: 11-jacoco.xml
+          path: jacoco.xml
 
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
-          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
 
-          gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
-          shasum -a 256 -c codecov.SHA256SUM
-
-          chmod +x codecov
-          ./codecov
   #
   # Main test job
   #
@@ -109,18 +102,13 @@ jobs:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}
 
-      #To delete
-      - name: 4. Validate Gradle wrapper
-        if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
-        uses: gradle/wrapper-validation-action@v1.0.6 # https://github.com/gradle/wrapper-validation-action
-
-      - name: 5. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
+      - name: 4. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
         run: ./gradlew test
         env:
           MOCK_MAKER: ${{ matrix.entry.mock-maker }}
           MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
-      - name: 6. Upload coverage report
+      - name: 5. Upload coverage report
         run: |
           ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml
           curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
@@ -134,6 +122,14 @@ jobs:
 
           chmod +x codecov
           ./codecov
+
+      - name: 7. Upload test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${ matrix.java }}-jacoco.xml
+          path: jacoco.xml
+
+
 
   #
   # Android build job
