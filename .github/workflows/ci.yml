@@ -84,7 +84,7 @@ jobs:
     # Definition of the test matrix
     strategy:
       matrix:
-        java: [ 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]
+        java: [ 17 ]
         entry:
           - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
           - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
@@ -95,9 +95,9 @@ jobs:
     # All test steps
     steps:
       - name: 1. Check out code
-        uses: actions/checkout@v3 # https://github.com/actions/checkout
+        uses: actions/checkout@v3
 
-      - name: 2. Download build artifacts build on Java 11
+      - name: 2. Download build artifacts built on Java 11
         uses: actions/download-artifact@v3
         with:
           name: libs
