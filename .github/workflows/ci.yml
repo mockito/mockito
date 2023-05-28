@@ -92,7 +92,6 @@ jobs:
           - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-reflection' }
           - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-reflection' }
 
-
     # All test steps
     steps:
       - name: 1. Check out code
@@ -118,7 +117,7 @@ jobs:
         uses: gradle/wrapper-validation-action@v1.0.6 # https://github.com/gradle/wrapper-validation-action
 
       - name: 5. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
-        run: ./gradlewg test
+        run: ./gradlew test
         env:
           MOCK_MAKER: ${{ matrix.entry.mock-maker }}
           MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
