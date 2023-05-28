@@ -84,7 +84,7 @@ jobs:
     # Definition of the test matrix
     strategy:
       matrix:
-        java: [ 8, 9, 10, 12, 13, 14, 15, 16, 17 ]
+        java: [ 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 ]
         entry:
           - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
           - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
@@ -95,6 +95,11 @@ jobs:
 
     # All test steps
     steps:
+      - name: 1. Check out code
+        uses: actions/checkout@v3 # https://github.com/actions/checkout
+        with:
+          fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
+
       - name: 1. Download build artifacts build on Java 11
         uses: actions/download-artifact@v3
         with:
@@ -106,6 +111,11 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}
+
+      #To delete
+      - name: 3. Validate Gradle wrapper
+        if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
+        uses: gradle/wrapper-validation-action@v1.0.6 # https://github.com/gradle/wrapper-validation-action
 
       - name: 6. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
         run: ./gradle test
