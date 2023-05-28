@@ -51,7 +51,7 @@ jobs:
         run: ./gradlew spotlessCheck
 
       - name: 6. Build on Java 11
-        run: ./gradlew build idea --scan
+        run: ./gradlew build idea --scan -x test
 
       - name: 7. Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -84,7 +84,7 @@ jobs:
     # Definition of the test matrix
     strategy:
       matrix:
-        java: [ 17 ]
+        java: [ 11, 17 ]
         entry:
           - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
           - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
