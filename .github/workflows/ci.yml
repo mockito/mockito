@@ -56,7 +56,7 @@ jobs:
       - name: 7. Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: build/libs
+          name: libs
           path: build/libs
 
       - name: 8. Upload coverage report
@@ -96,13 +96,11 @@ jobs:
     steps:
       - name: 1. Check out code
         uses: actions/checkout@v3 # https://github.com/actions/checkout
-        with:
-          fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
       - name: 2. Download build artifacts build on Java 11
         uses: actions/download-artifact@v3
         with:
-          name: build/libs
+          name: libs
           path: build/libs
 
       - name: 3. Set up Java ${{ matrix.java }}
