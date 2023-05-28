@@ -56,8 +56,8 @@ jobs:
       - name: 7. Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: build
-          path: build
+          name: build/libs
+          path: build/libs
 
       - name: 8. Upload coverage report
         run: |
@@ -100,30 +100,30 @@ jobs:
         with:
           fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
-      - name: 1. Download build artifacts build on Java 11
+      - name: 2. Download build artifacts build on Java 11
         uses: actions/download-artifact@v3
         with:
-          name: build
-          path: build
+          name: build/libs
+          path: build/libs
 
-      - name: 2. Set up Java ${{ matrix.java }}
+      - name: 3. Set up Java ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}
 
       #To delete
-      - name: 3. Validate Gradle wrapper
+      - name: 4. Validate Gradle wrapper
         if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
         uses: gradle/wrapper-validation-action@v1.0.6 # https://github.com/gradle/wrapper-validation-action
 
-      - name: 6. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
-        run: ./gradle test
+      - name: 5. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
+        run: ./gradlewg test
         env:
           MOCK_MAKER: ${{ matrix.entry.mock-maker }}
           MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
-      - name: 8. Upload coverage report
+      - name: 6. Upload coverage report
         run: |
           ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml
           curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
