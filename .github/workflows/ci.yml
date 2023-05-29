@@ -126,7 +126,7 @@ jobs:
       - name: 7. Upload test coverage
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.java }}-jacoco.xml
+          name: ${{ matrix.java }}-${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-jacoco.xml
           path: jacoco.xml
 
 
