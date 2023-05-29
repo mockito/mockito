@@ -97,8 +97,6 @@ jobs:
 
       - name: 4. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
         run:  |
-          unzip build/libs/libs.zip -d build/libs
-
           cd build/libs
 
           java -jar mockito-core-0.0.1-SNAPSHOT.jar
