@@ -96,7 +96,14 @@ jobs:
           java-version: ${{ matrix.java }}
 
       - name: 4. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
-        run: ./gradlew test
+        run:  |
+          unzip build/libs/libs.zip -d build/libs
+
+          cd build/libs
+
+          java -jar mockito-core-0.0.1-SNAPSHOT.jar
+
+          ./gradlew test
         env:
           MOCK_MAKER: ${{ matrix.entry.mock-maker }}
           MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
