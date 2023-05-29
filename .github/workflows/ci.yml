@@ -92,6 +92,9 @@ jobs:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}
 
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
       - name: 4. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
         run:  ./gradlew test
         env:
