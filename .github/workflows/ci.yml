@@ -50,8 +50,8 @@ jobs:
       - name: 5. Spotless check. Run './gradlew spotlessApply' locally if this job fails.
         run: ./gradlew spotlessCheck
 
-      - name: 6. Build on Java 11 NEW
-        run: ./gradlew build -x test #idea --scan
+      - name: 6. Build on Java 11
+        run: ./gradlew build -x test idea --scan
 
       - name: 7. Upload build artifacts
         uses: actions/upload-artifact@v3
