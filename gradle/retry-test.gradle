@@ -35,6 +35,8 @@ task retryTest(type: Test) {
 }
 
 test {
+    classpath = project.sourceSets.test.output + configurations.testRuntimeClasspath + files(jar.archiveFile)
+
     finalizedBy retryTest
     ext.failedTests = []
     afterTest { descriptor, result ->

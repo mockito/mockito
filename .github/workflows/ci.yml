@@ -83,11 +83,11 @@ jobs:
       - name: 1. Check out code
         uses: actions/checkout@v3
 
-#      - name: 2. Download build artifacts built on Java 11
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: libs
-#          path: build/libs
+      - name: 2. Download build artifacts built on Java 11
+        uses: actions/download-artifact@v3
+        with:
+          name: libs
+          path: build/libs
 
       - name: 3. Set up Java ${{ matrix.java }}
         uses: actions/setup-java@v3
