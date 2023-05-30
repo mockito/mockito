@@ -29,7 +29,6 @@ jobs:
 
     # All build steps
     steps:
-
       - name: 1. Check out code
         uses: actions/checkout@v3 # https://github.com/actions/checkout
         with:
@@ -80,6 +79,9 @@ jobs:
 
     # All test steps
     steps:
+      - name: 1. Checkout out test code
+        uses: actions/checkout@v3
+
       - name: 2. Download build artifacts built on Java 11
         uses: actions/download-artifact@v3
         with:
