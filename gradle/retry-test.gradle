@@ -35,8 +35,11 @@ task retryTest(type: Test) {
 }
 
 test {
-    classpath += rootProject.files("libs/mockito-core-0.0.1-SNAPSHOT.jar")
-
+    doFirst {
+        print "test runtime classpath " + project.sourceSets.test.runtimeClasspath + "\n"
+        print "test classess dirs " + project.sourceSets.test.output.classesDirs + "\n"
+        print "classpath for test task " + classpath
+    }
     finalizedBy retryTest
     ext.failedTests = []
     afterTest { descriptor, result ->
@@ -68,3 +71,4 @@ test {
 }
 
 
+//classpath += rootProject.files("libs/mockito-core-0.0.1-SNAPSHOT.jar")
