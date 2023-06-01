@@ -90,10 +90,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: build
-          key: $ {{ steps.cache-build-artifacts.outputs.cache-primary-key }}
+          key: java-11-build-artifacts
 
       - name: CACHE-MISS
-        if: steps.cache-build-artifacts.outputs.cache-hit != 'true'
+        if: ${{ steps.cache-build-artifacts.outputs.cache-hit != 'true' }}
         run: |
           ./gradlew build \
           -x test \
