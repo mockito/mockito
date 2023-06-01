@@ -95,6 +95,11 @@ jobs:
 
       - name: CACHE-MISS
         if: steps.cache-build-artifacts.outputs.cache-hit != 'true'
+        run: |
+          ./gradlew build
+          -x test
+          -x jar -x sourcesJar -x javadocJar
+          idea --scan
 
       - name: 3. Set up Java ${{ matrix.java }}
         uses: actions/setup-java@v3
