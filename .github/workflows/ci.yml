@@ -51,10 +51,9 @@ jobs:
 
       - name: 6. Build on Java 11
         run: |
-          ./gradlew build
+          ./gradlew build idea --scan
           -x test
           -x jar -x sourcesJar -x javadocJar
-          idea --scan
 
       - name: 7. Cache build artifacts
         id: cache-build-artifacts
