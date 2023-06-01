@@ -72,8 +72,10 @@ jobs:
       - name: 7. Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-main-project-build-artifact
-          path: build
+          name: ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-main-project-build-artifacts
+          path: |
+            build
+            subprojects/*/build
 
   #
   # Main test job
@@ -106,7 +108,7 @@ jobs:
           path: build
 
       - name: List all files
-        run: ls -r
+        run: ls -R
 
       - name: 3. Set up Java ${{ matrix.java }}
         uses: actions/setup-java@v3
