@@ -27,6 +27,15 @@ jobs:
     runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
+    strategy:
+        entry:
+          - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
+          - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
+          - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-module' }
+          - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-reflection' }
+          - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-reflection' }
+
+
     # All build steps
     steps:
       - name: 1. Check out code
@@ -54,6 +63,10 @@ jobs:
           ./gradlew build idea --scan \
           -x test \
           -x jar -x sourcesJar -x javadocJar
+        env:
+          MOCK_MAKER: ${{ matrix.entry.mock-maker }}
+          MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
+
 
       - name: 7. Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -108,9 +121,6 @@ jobs:
           -x compileKotlin -x compileTestKotlin \
           -x compileOtherBundleJava  -x processOtherBundleResources \
           -x jar
-        env:
-          MOCK_MAKER: ${{ matrix.entry.mock-maker }}
-          MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
       - name: 5. Upload coverage report
         run: |
