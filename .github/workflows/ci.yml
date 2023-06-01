@@ -91,6 +91,9 @@ jobs:
           name: build
           path: build
 
+      - name: List all files
+        run: ls -r
+
       - name: 3. Set up Java ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
