@@ -55,12 +55,11 @@ jobs:
           -x test \
           -x jar -x sourcesJar -x javadocJar
 
-      - name: 7. Cache build artifacts
-        id: cache-build-artifacts
-        uses: actions/cache@v3
+      - name: 7. Upload build artifacts
+        uses: actions/upload-artifact@v3
         with:
+          name: build
           path: build
-          key: java-11-build-artifacts
 
   #
   # Main test job
@@ -86,11 +85,11 @@ jobs:
       - name: 1. Checkout out test code
         uses: actions/checkout@v3
 
-      - name: 2. Retrieve build artifacts built on Java 11
-        uses: actions/cache@v3
+      - name: 7. Download build artifacts
+        uses: actions/download-artifact@v3
         with:
+          name: build
           path: build
-          key: java-11-build-artifacts
 
       - name: CACHE-MISS
         if: ${{ steps.cache-build-artifacts.outputs.cache-hit != 'true' }}
