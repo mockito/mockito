@@ -89,7 +89,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build
-          path: .
+          path: build
 
       - name: 3. Set up Java ${{ matrix.java }}
         uses: actions/setup-java@v3
