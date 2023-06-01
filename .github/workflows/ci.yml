@@ -28,6 +28,7 @@ jobs:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
     strategy:
+      matrix:
         entry:
           - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
           - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
