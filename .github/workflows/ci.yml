@@ -51,8 +51,8 @@ jobs:
 
       - name: 6. Build on Java 11
         run: |
-          ./gradlew build idea --scan
-          -x test
+          ./gradlew build idea --scan \
+          -x test \
           -x jar -x sourcesJar -x javadocJar
 
       - name: 7. Cache build artifacts
@@ -95,9 +95,9 @@ jobs:
       - name: CACHE-MISS
         if: steps.cache-build-artifacts.outputs.cache-hit != 'true'
         run: |
-          ./gradlew build
-          -x test
-          -x jar -x sourcesJar -x javadocJar
+          ./gradlew build \
+          -x test \
+          -x jar -x sourcesJar -x javadocJar \
           idea --scan
 
       - name: 3. Set up Java ${{ matrix.java }}
@@ -108,11 +108,11 @@ jobs:
 
       - name: 4. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
         run:  |
-          ./gradlew test -x classes -x testClasses
-          -x compileJava -x compileTestJava
-          -x compileGroovy -x compileTestGroovy
-          -x compileKotlin -x compileTestKotlin
-          -x compileOtherBundleJava  -x processOtherBundleResources
+          ./gradlew test -x classes -x testClasses \
+          -x compileJava -x compileTestJava \
+          -x compileGroovy -x compileTestGroovy \
+          -x compileKotlin -x compileTestKotlin \
+          -x compileOtherBundleJava  -x processOtherBundleResources \
           -x jar
         env:
           MOCK_MAKER: ${{ matrix.entry.mock-maker }}
