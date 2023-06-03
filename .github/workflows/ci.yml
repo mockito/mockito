@@ -126,7 +126,7 @@ jobs:
           -x compileGroovy -x compileTestGroovy \
           -x compileKotlin -x compileTestKotlin \
           -x compileOtherBundleJava  -x processOtherBundleResources \
-          -x jar
+          -x jar -x publishJavaLibraryPublicationToMavenLocal
 
       - name: 5. Upload coverage report
         run: |
