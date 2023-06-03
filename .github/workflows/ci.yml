@@ -53,15 +53,15 @@ jobs:
           java-version: 11
 
       - name: 3. Validate Gradle wrapper (single job only)
-        if: matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
+      #  if: matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
         uses: gradle/wrapper-validation-action@v1.0.6 # https://github.com/gradle/wrapper-validation-action
 
       - name: 4. Build and check reproducibility of artifacts (single job only)
-        if: matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
+       # if: matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
         run: ./check_reproducibility.sh
 
       - name: 5. Spotless check (single job only). Run './gradlew spotlessApply' locally if this job fails.
-        if: matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
+       # if: matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
         run: ./gradlew spotlessCheck
 
       - name: 6. Build on Java 11 with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
