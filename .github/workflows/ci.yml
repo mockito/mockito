@@ -68,7 +68,8 @@ jobs:
         run: |
           ./gradlew build idea --scan \
           -x test \
-          -x jar -x sourcesJar -x javadocJar
+          -x jar -x sourcesJar -x javadocJar \
+          -x publishJavaLibraryPublicationToMavenLocal
         env:
           MOCK_MAKER: ${{ matrix.entry.mock-maker }}
           MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
@@ -126,7 +127,7 @@ jobs:
           -x compileGroovy -x compileTestGroovy \
           -x compileKotlin -x compileTestKotlin \
           -x compileOtherBundleJava  -x processOtherBundleResources \
-          -x jar -x publishJavaLibraryPublicationToMavenLocal
+          -x jar
 
       - name: 5. Upload coverage report
         run: |
