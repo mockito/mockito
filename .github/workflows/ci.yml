@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   build-mock-maker-default-member-accessor-default:
-    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    uses: ellaella12/mockito/.github/workflows/build.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-default'
       member-accessor: 'member-accessor-default'
