@@ -67,7 +67,7 @@ jobs:
       - name: 6. Build on Java 11 with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
         run: |
           ./gradlew build idea --scan \
-          -x test -x testClasses\
+          -x test -x testClasses \
           -x jar -x sourcesJar -x javadocJar \
           -x publishJavaLibraryPublicationToMavenLocal
         env:
