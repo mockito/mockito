@@ -68,7 +68,7 @@ jobs:
         run: |
           ./gradlew build idea --scan \
           -x test -x testClasses \
-          -x jar -x sourcesJar -x javadocJar \
+          -x sourcesJar -x javadocJar \
           -x publishJavaLibraryPublicationToMavenLocal
         env:
           MOCK_MAKER: ${{ matrix.entry.mock-maker }}
