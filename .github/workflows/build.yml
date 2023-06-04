@@ -19,7 +19,7 @@ jobs:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
     # All build steps
-    # SINGLE-MATRIX-JOB means that the step
+    # SINGLE-JOB means that the step is only performed when default mock maker environment is used
     steps:
       - name: 1. Check out code
         uses: actions/checkout@v3 # https://github.com/actions/checkout
@@ -33,21 +33,21 @@ jobs:
           java-version: 11
 
       - name: 3. Validate Gradle wrapper (single job only)
-        if: inputs.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
+        if: inputs.mock-maker == 'mock-maker-default' # SINGLE-JOB
         uses: gradle/wrapper-validation-action@v1.0.6 # https://github.com/gradle/wrapper-validation-action
 
       - name: 4. Build and check reproducibility of artifacts (single job only)
-        if: inputs.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
+        if: inputs.mock-maker == 'mock-maker-default' # SINGLE-JOB
         run: ./check_reproducibility.sh
 
       - name: 5. Spotless check (single job only). Run './gradlew spotlessApply' locally if this job fails.
-        if: inputs.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
+        if: inputs.mock-maker == 'mock-maker-default' # SINGLE-JOB
         run: ./gradlew spotlessCheck
 
       - name: 6. Build on Java 11 with ${{ inputs.mock-maker }} and ${{ inputs.member-accessor }}
         run: |
           ./gradlew build idea --scan \
-          -x test \
+       #   -x test \
           -x sourcesJar -x javadocJar \
           -x publishJavaLibraryPublicationToMavenLocal
         env:
@@ -61,4 +61,21 @@ jobs:
           path: |
             build
             subprojects/*/build
+
+
+      - name: 5. Upload coverage report
+        run: |
+          ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml
+          curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
+
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+
+          gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+          shasum -a 256 -c codecov.SHA256SUM
+
+          chmod +x codecov
+          ./codecov
+
 
