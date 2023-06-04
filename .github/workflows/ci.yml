@@ -32,10 +32,10 @@ jobs:
       matrix:
         entry:
           - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
-#          - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
-#          - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-module' }
-#          - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-reflection' }
-#          - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-reflection' }
+          - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
+          - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-module' }
+          - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-reflection' }
+          - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-reflection' }
 
 
     # All build steps
@@ -86,7 +86,7 @@ jobs:
   # Main test job
   #
   test:
-    needs: ${{ matrxi.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts
+    needs: x
     runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
