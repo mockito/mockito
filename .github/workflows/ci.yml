@@ -20,17 +20,48 @@ permissions:
   contents: read
 
 jobs:
+  build-mock-maker-default-member-accessor-default:
+    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    with:
+      mock-maker: 'mock-maker-default'
+      member-accessor: 'member-accessor-default'
+
+  build-mock-maker-inline-member-accessor-module:
+    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    with:
+      mock-maker: 'mock-maker-inline'
+      member-accessor: 'member-accessor-module'
+
+  build-mock-maker-subclass-member-accessor-module:
+    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    with:
+      mock-maker: 'mock-maker-subclass'
+      member-accessor: 'member-accessor-module'
+
+  build-mock-maker-subclass-member-accessor-reflection:
+    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    with:
+      mock-maker: 'mock-maker-subclass'
+      member-accessor: 'member-accessor-reflection'
+
+  build-mock-maker-inline-member-accessor-reflection:
+    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    with:
+      mock-maker: 'mock-maker-inline'
+      member-accessor: 'member-accessor-reflection'
 
   #
-  # Main build job
+  # Main test job
   #
-  build:
+  test:
+    needs: build-${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}
     runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
-    # Definition of the build matrix
+    # Definition of the test matrix
     strategy:
       matrix:
+        java: [ 11, 17 ]
         entry:
           - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
           - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
@@ -38,56 +69,54 @@ jobs:
           - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-reflection' }
           - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-reflection' }
 
-
-    # All build steps
-    # SINGLE-MATRIX-JOB means that the step does not need to be executed on every job in the matrix
+    # All test steps
     steps:
-      - name: 1. Check out code
-        uses: actions/checkout@v3 # https://github.com/actions/checkout
-        with:
-          fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
+      - name: 1. Checkout out test code
+        uses: actions/checkout@v3
 
-      - name: 2. Set up Java 11
+      - name: 2. Download build artifacts with name ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts
+
+      - name: 3. Set up Java ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 11
+          java-version: ${{ matrix.java }}
 
-      - name: 3. Validate Gradle wrapper (single job only)
-        if: matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
-        uses: gradle/wrapper-validation-action@v1.0.6 # https://github.com/gradle/wrapper-validation-action
+      - name: 4. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
+        run:  |
+          ./gradlew test -x testClasses \
+          -x compileTestJava -x compileTestGroovy -x compileTestKotlin -x compileTestBundleJava \
+          -x processTestResources \
+          -x classes -x compileJava -x compileGroovy -x compileKotlin -x compileOtherBundleJava \
+          -x processResources -x processOtherBundleResources \
+          -x preBuild -x preDebugBuild \
+          -x jar
 
-      - name: 4. Build and check reproducibility of artifacts (single job only)
-        if: matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
-        run: ./check_reproducibility.sh
+#          ./gradlew test -x classes -x testClasses \
+#          -x compileJava -x compileTestJava \
+#          -x compileGroovy -x compileTestGroovy \
+#          -x compileKotlin -x compileTestKotlin \
+#          -x compileOtherBundleJava -x compileTestBundleJava -x processOtherBundleResources \
+#          -x preBuild -x preDebugBuild \
+#          -x jar
 
-      - name: 5. Spotless check (single job only). Run './gradlew spotlessApply' locally if this job fails.
-        if: matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
-        run: ./gradlew spotlessCheck
-
-      - name: 6. Build on Java 11 with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
+      - name: 5. Upload coverage report
         run: |
-          ./gradlew build idea --scan \
-          -x test \
-          -x sourcesJar -x javadocJar \
-          -x publishJavaLibraryPublicationToMavenLocal
-        env:
-          MOCK_MAKER: ${{ matrix.entry.mock-maker }}
-          MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
+          ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml
+          curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
 
-      - name: 7. Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts
-          path: |
-            build
-            subprojects/*/build
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
 
-      - name: 8. Test build
-        uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
-        with:
-          mock-maker: ${{ matrix.entry.mock-maker }}
-          member-accessor: ${{ matrix.entry.member-accessor }}
+          gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+          shasum -a 256 -c codecov.SHA256SUM
+
+          chmod +x codecov
+          ./codecov
 
   #
   # Android build job
