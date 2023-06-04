@@ -20,22 +20,16 @@ jobs:
     strategy:
       matrix:
         java: [ 11, 17 ]
-        entry:
-          - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
-          - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
-          - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-module' }
-          - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-reflection' }
-          - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-reflection' }
 
     # All test steps
     steps:
       - name: 1. Checkout out test code
         uses: actions/checkout@v3
 
-      - name: 2. Download build artifacts with name ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts
+      - name: 2. Download build artifacts with name ${{ inputs.mock-maker }}-${{ inputs.member-accessor }} -build-artifacts
         uses: actions/download-artifact@v3
         with:
-          name: ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts
+          name: ${{ inputs.mock-maker }}-${{ inputs.member-accessor }}-build-artifacts
 
       - name: 3. Set up Java ${{ matrix.java }}
         uses: actions/setup-java@v3
@@ -43,7 +37,7 @@ jobs:
           distribution: 'zulu'
           java-version: ${{ matrix.java }}
 
-      - name: 4. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
+      - name: 4. Test on Java ${{ matrix.java }} with ${{ inputs.mock-maker }} and ${{ inputs.member-accessor }}
         run: |
           ./gradlew test -x testClasses \
           -x compileTestJava -x compileTestGroovy -x compileTestKotlin -x compileTestBundleJava \
