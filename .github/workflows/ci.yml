@@ -82,6 +82,12 @@ jobs:
             build
             subprojects/*/build
 
+      - name: Set output
+          run: |
+            echo \
+            "${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts-uploaded=true" \
+            >> $GITHUB_OUTPUT
+            echo "${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts-uploaded=true"
   #
   # Main test job
   #
