@@ -13,7 +13,6 @@ on:
     tags: [v*]
   pull_request:
     branches: ['**']
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -67,7 +66,6 @@ jobs:
       - name: 6. Build on Java 11 with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
         run: |
           ./gradlew build idea --scan \
-          -x test \
           -x sourcesJar -x javadocJar \
           -x publishJavaLibraryPublicationToMavenLocal
         env:
@@ -82,6 +80,21 @@ jobs:
             build
             subprojects/*/build
 
+      - name: 8. Upload coverage report
+        run: |
+          ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml
+          curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
+
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+
+          gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+          shasum -a 256 -c codecov.SHA256SUM
+
+          chmod +x codecov
+          ./codecov
+
   #
   # Main test job
   #
@@ -93,7 +106,7 @@ jobs:
     # Definition of the test matrix
     strategy:
       matrix:
-        java: [ 11, 17 ]
+        java: [ 17 ]
         entry:
           - { mock-maker: 'mock-maker-default', member-accessor: 'member-accessor-default' }
           - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-module' }
@@ -122,13 +135,21 @@ jobs:
 
       - name: 4. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
         run:  |
-          ./gradlew test -x classes -x testClasses \
-          -x compileJava -x compileTestJava \
-          -x compileGroovy -x compileTestGroovy \
-          -x compileKotlin -x compileTestKotlin \
-          -x compileOtherBundleJava -x compileTestBundleJava -x processOtherBundleResources \
+          ./gradlew test -x testClasses \
+          -x compileTestJava -x compileTestGroovy -x compileTestKotlin -x compileTestBundleJava \
+          -x processTestResources \
+          -x classes -x compileJava -x compileGroovy -x compileKotlin -x compileOtherBundleJava \
+          -x processResources -x processOtherBundleResources \
           -x preBuild -x preDebugBuild \
           -x jar
+
+#          ./gradlew test -x classes -x testClasses \
+#          -x compileJava -x compileTestJava \
+#          -x compileGroovy -x compileTestGroovy \
+#          -x compileKotlin -x compileTestKotlin \
+#          -x compileOtherBundleJava -x compileTestBundleJava -x processOtherBundleResources \
+#          -x preBuild -x preDebugBuild \
+#          -x jar
 
       - name: 5. Upload coverage report
         run: |
