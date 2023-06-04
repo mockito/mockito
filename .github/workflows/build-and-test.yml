@@ -35,6 +35,7 @@ jobs:
       member-accessor: 'member-accessor-reflection'
 
   test-java11-mock-maker-default-member-accessor-default:
+    needs: build-mock-maker-default-member-accessor-default
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-default'
@@ -42,6 +43,7 @@ jobs:
       java: 11
 
   test-java17-mock-maker-default-member-accessor-default:
+    needs: build-mock-maker-default-member-accessor-default
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-default'
@@ -49,6 +51,7 @@ jobs:
       java: 17
 
   test-java11-mock-maker-inline-member-accessor-module:
+    needs: build-mock-maker-inline-member-accessor-module
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-inline'
@@ -56,6 +59,7 @@ jobs:
       java: 11
 
   test-java17-mock-maker-inline-member-accessor-module:
+    needs: build-mock-maker-inline-member-accessor-module
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-inline'
@@ -63,6 +67,7 @@ jobs:
       java: 17
 
   test-java11-mock-maker-subclass-member-accessor-module:
+    needs: build-mock-maker-subclass-member-accessor-module
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-subclass'
@@ -70,6 +75,7 @@ jobs:
       java: 11
 
   test-java17-mock-maker-subclass-member-accessor-module:
+    needs: build-mock-maker-subclass-member-accessor-module
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-subclass'
@@ -77,6 +83,7 @@ jobs:
       java: 17
 
   test-java11-mock-maker-subclass-member-accessor-reflection:
+    needs: build-mock-maker-subclass-member-accessor-reflection
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-subclass'
@@ -84,6 +91,7 @@ jobs:
       java: 11
 
   test-java17-mock-maker-subclass-member-accessor-reflection:
+    needs: build-mock-maker-subclass-member-accessor-reflection
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-subclass'
@@ -91,6 +99,7 @@ jobs:
       java: 17
 
   test-java11-mock-maker-inline-member-accessor-reflection:
+    needs: build-mock-maker-inline-member-accessor-reflection
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-inline'
@@ -98,6 +107,7 @@ jobs:
       java: 11
 
   test-java17-mock-maker-inline-member-accessor-reflection:
+    needs: build-mock-maker-inline-member-accessor-reflection
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
       mock-maker: 'mock-maker-inline'
