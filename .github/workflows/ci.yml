@@ -134,13 +134,13 @@ jobs:
           -x preBuild -x preDebugBuild \
           -x jar
 
-#          ./gradlew test -x classes -x testClasses \
-#          -x compileJava -x compileTestJava \
-#          -x compileGroovy -x compileTestGroovy \
-#          -x compileKotlin -x compileTestKotlin \
-#          -x compileOtherBundleJava -x compileTestBundleJava -x processOtherBundleResources \
-#          -x preBuild -x preDebugBuild \
-#          -x jar
+      #          ./gradlew test -x classes -x testClasses \
+      #          -x compileJava -x compileTestJava \
+      #          -x compileGroovy -x compileTestGroovy \
+      #          -x compileKotlin -x compileTestKotlin \
+      #          -x compileOtherBundleJava -x compileTestBundleJava -x processOtherBundleResources \
+      #          -x preBuild -x preDebugBuild \
+      #          -x jar
 
       - name: 5. Upload coverage report
         run: |
