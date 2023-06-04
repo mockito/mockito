@@ -106,10 +106,10 @@ jobs:
       - name: 1. Checkout out test code
         uses: actions/checkout@v3
 
-#      - name: 2. Download build artifacts with name ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts
+      - name: 2. Download build artifacts with name ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.entry.mock-maker }}-${{ matrix.entry.member-accessor }}-build-artifacts
 
       - name: List all files
         run: ls -R
