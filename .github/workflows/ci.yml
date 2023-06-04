@@ -103,9 +103,6 @@ jobs:
 
     # All test steps
     steps:
-      - name: Print current job ID
-          run: echo '${{ github.job }}'
-
       - name: 1. Checkout out test code
         uses: actions/checkout@v3
 
