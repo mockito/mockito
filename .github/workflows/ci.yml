@@ -20,8 +20,8 @@ permissions:
   contents: read
 
 jobs:
-  build-and-test:
-   uses: ellaella12/mockito/.github/workflows/build-and-test.yml@feature/build-once-test-all
+#  build-and-test:
+#   uses: ellaella12/mockito/.github/workflows/build-and-test.yml@feature/build-once-test-all
 
   #
   # Android build job
