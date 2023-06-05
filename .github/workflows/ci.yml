@@ -13,7 +13,6 @@ on:
     tags: [v*]
   pull_request:
     branches: ['**']
-  workflow_dispatch:
 
 
 permissions:
@@ -21,7 +20,7 @@ permissions:
 
 jobs:
   build-and-test:
-   uses: ellaella12/mockito/.github/workflows/build-and-test.yml@feature/build-once-test-all
+   uses: mockito/mockito/.github/workflows/build-and-test.yml@feature/build-once-test-all
 
   #
   # Android build job
