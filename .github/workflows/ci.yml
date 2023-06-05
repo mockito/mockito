@@ -39,70 +39,70 @@ jobs:
 
     # All build steps
     steps:
-      - name: 1. Check out code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
+    - name: 1. Check out code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
-      - name: 2. Set up Java 11
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 11
+    - name: 2. Set up Java 11
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: 11
 
-      - name: 3. Run Android tests on Android API level ${{ matrix.android-api }}
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          arch: x86_64
-          api-level: ${{ matrix.android-api }}
-          # Workaround for https://issuetracker.google.com/issues/267458959
-          target: ${{ matrix.android-api >= 32 && 'google_apis' || 'default' }}
-          # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/160, but newer version.
-          emulator-build: 9322596 # 31.3.14.0 got it via `emulator -version`
-          # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
-          # See emulator manual for reference: https://developer.android.com/studio/run/emulator-commandline
-          emulator-options: >
-            -no-window
-            -gpu swiftshader_indirect
-            -no-snapshot
-            -noaudio
-            -no-boot-anim
-            -camera-back none
-            -camera-front none
-          # See logcat manual for reference: https://developer.android.com/studio/command-line/logcat
-          script: |
-            # Capture logcat output from "Launch Emulator" to a file.
-            adb logcat -d > emulator-startup.log
-            # Shorten the logcat output, by truncating at this point, the relevant part is yet to come.
-            # Best effort, could fail with "failed to clear the 'main' log",
-            # because something is locking logcat, so try a few times, and ignore errors each time.
-            adb logcat --clear || true
-            adb logcat --clear || true
-            adb logcat --clear || true
-            # Capture full logcat output to a file.
-            adb logcat > emulator.log & echo $! > logcat_file.pid
-            # Output instrumentation test logs to the GitHub Actions output.
-            adb logcat "*:S MonitoringInstr:V AndroidJUnitRunner:V TestRequestBuilder:V TestExecutor:V TestRunner:V" --format=color & echo $! > logcat_console.pid
+    - name: 3. Run Android tests on Android API level ${{ matrix.android-api }}
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        arch: x86_64
+        api-level: ${{ matrix.android-api }}
+        # Workaround for https://issuetracker.google.com/issues/267458959
+        target: ${{ matrix.android-api >= 32 && 'google_apis' || 'default' }}
+        # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/160, but newer version.
+        emulator-build: 9322596 # 31.3.14.0 got it via `emulator -version`
+        # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
+        # See emulator manual for reference: https://developer.android.com/studio/run/emulator-commandline
+        emulator-options: >
+          -no-window
+          -gpu swiftshader_indirect
+          -no-snapshot
+          -noaudio
+          -no-boot-anim
+          -camera-back none
+          -camera-front none
+        # See logcat manual for reference: https://developer.android.com/studio/command-line/logcat
+        script: |
+          # Capture logcat output from "Launch Emulator" to a file.
+          adb logcat -d > emulator-startup.log
+          # Shorten the logcat output, by truncating at this point, the relevant part is yet to come.
+          # Best effort, could fail with "failed to clear the 'main' log",
+          # because something is locking logcat, so try a few times, and ignore errors each time.
+          adb logcat --clear || true
+          adb logcat --clear || true
+          adb logcat --clear || true
+          # Capture full logcat output to a file.
+          adb logcat > emulator.log & echo $! > logcat_file.pid
+          # Output instrumentation test logs to the GitHub Actions output.
+          adb logcat "*:S MonitoringInstr:V AndroidJUnitRunner:V TestRequestBuilder:V TestExecutor:V TestRunner:V" --format=color & echo $! > logcat_console.pid
 
-            echo 0 > gradle.exit # Set a default exit code.
-            # Run the actual tests (suppress build failures by saving the exit code).
-            ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache || echo $? > gradle.exit
+          echo 0 > gradle.exit # Set a default exit code.
+          # Run the actual tests (suppress build failures by saving the exit code).
+          ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache || echo $? > gradle.exit
 
-            # Stop capturing logcat output.
-            kill $(cat logcat_file.pid)    || echo "::warning file=.github/workflows/ci.yml::Logcat process $(cat logcat_file.pid) didn't exist."
-            kill $(cat logcat_console.pid) || echo "::warning file=.github/workflows/ci.yml::Logcat process $(cat logcat_console.pid) didn't exist."
-            # Make sure the step fails if the tests failed.
-            exit $(cat gradle.exit)
+          # Stop capturing logcat output.
+          kill $(cat logcat_file.pid)    || echo "::warning file=.github/workflows/ci.yml::Logcat process $(cat logcat_file.pid) didn't exist."
+          kill $(cat logcat_console.pid) || echo "::warning file=.github/workflows/ci.yml::Logcat process $(cat logcat_console.pid) didn't exist."
+          # Make sure the step fails if the tests failed.
+          exit $(cat gradle.exit)
 
-      - name: 4. Upload artifact "androidTest-results-${{ matrix.android-api }}"
-        if: success() || failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: androidTest-results-${{ matrix.android-api }}
-          path: |
-            ${{ github.workspace }}/subprojects/androidTest/build/reports/androidTests/connected/**
-            ${{ github.workspace }}/emulator.log
-            ${{ github.workspace }}/emulator-startup.log
+    - name: 4. Upload artifact "androidTest-results-${{ matrix.android-api }}"
+      if: success() || failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: androidTest-results-${{ matrix.android-api }}
+        path: |
+          ${{ github.workspace }}/subprojects/androidTest/build/reports/androidTests/connected/**
+          ${{ github.workspace }}/emulator.log
+          ${{ github.workspace }}/emulator-startup.log
 
   #
   # Release job, only for pushes to the main development branch
@@ -111,12 +111,12 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    needs: [ build ] # build job must pass before we can release
+    needs: [build-and-test] # build job must pass before we can release
 
     if: github.event_name == 'push'
-      && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
-      && github.repository == 'mockito/mockito'
-      && !contains(toJSON(github.event.commits.*.message), '[skip release]')
+        && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+        && github.repository == 'mockito/mockito'
+        && !contains(toJSON(github.event.commits.*.message), '[skip release]')
 
     steps:
 
