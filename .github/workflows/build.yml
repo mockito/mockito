@@ -50,7 +50,7 @@ jobs:
           -x test \
           -x sourcesJar -x javadocJar \
           -x publishJavaLibraryPublicationToMavenLocal
-          ./gradlew :android:test
+          ./gradlew :android:build
         env:
           MOCK_MAKER: ${{ inputs.mock-maker }}
           MEMBER_ACCESSOR: ${{ inputs.member-accessor }}
