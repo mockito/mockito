@@ -33,14 +33,14 @@ jobs:
     with:
       mock-maker: 'mock-maker-inline'
       member-accessor: 'member-accessor-reflection'
-#
-#  test-1.1:
-#    needs: build-mock-maker-default-member-accessor-default
-#    uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
-#    with:
-#      mock-maker: 'mock-maker-default'
-#      member-accessor: 'member-accessor-default'
-#      java: 11
+
+  test-1a:
+    needs: build-mock-maker-default-member-accessor-default
+    uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    with:
+      mock-maker: 'mock-maker-default'
+      member-accessor: 'member-accessor-default'
+      java: 11
 
   test-1b:
     needs: build-1
@@ -50,13 +50,13 @@ jobs:
       member-accessor: 'member-accessor-default'
       java: 17
 
-#  test-2.1:
-#    needs: build-mock-maker-inline-member-accessor-module
-#    uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
-#    with:
-#      mock-maker: 'mock-maker-inline'
-#      member-accessor: 'member-accessor-module'
-#      java: 11
+  test-2a:
+    needs: build-mock-maker-inline-member-accessor-module
+    uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    with:
+      mock-maker: 'mock-maker-inline'
+      member-accessor: 'member-accessor-module'
+      java: 11
 
   test-2b:
     needs: build-2
@@ -66,13 +66,13 @@ jobs:
       member-accessor: 'member-accessor-module'
       java: 17
 
-#  test-3.1:
-#    needs: build-mock-maker-subclass-member-accessor-module
-#    uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
-#    with:
-#      mock-maker: 'mock-maker-subclass'
-#      member-accessor: 'member-accessor-module'
-#      java: 11
+  test-3a:
+    needs: build-mock-maker-subclass-member-accessor-module
+    uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    with:
+      mock-maker: 'mock-maker-subclass'
+      member-accessor: 'member-accessor-module'
+      java: 11
 
   test-3b:
     needs: build-3
@@ -82,13 +82,13 @@ jobs:
       member-accessor: 'member-accessor-module'
       java: 17
 
-#  test-4.1:
-#    needs: build-mock-maker-subclass-member-accessor-reflection
-#    uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
-#    with:
-#      mock-maker: 'mock-maker-subclass'
-#      member-accessor: 'member-accessor-reflection'
-#      java: 11
+  test-4a:
+    needs: build-mock-maker-subclass-member-accessor-reflection
+    uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    with:
+      mock-maker: 'mock-maker-subclass'
+      member-accessor: 'member-accessor-reflection'
+      java: 11
 
   test-4b:
     needs: build-4
@@ -98,13 +98,13 @@ jobs:
       member-accessor: 'member-accessor-reflection'
       java: 17
 
-#  test-5.1:
-#    needs: build-mock-maker-inline-member-accessor-reflection
-#    uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
-#    with:
-#      mock-maker: 'mock-maker-inline'
-#      member-accessor: 'member-accessor-reflection'
-#      java: 11
+  test-5a:
+    needs: build-mock-maker-inline-member-accessor-reflection
+    uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    with:
+      mock-maker: 'mock-maker-inline'
+      member-accessor: 'member-accessor-reflection'
+      java: 11
 
   test-5b:
     needs: build-5
