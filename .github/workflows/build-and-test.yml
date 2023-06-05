@@ -42,7 +42,7 @@ jobs:
 #      member-accessor: 'member-accessor-default'
 #      java: 11
 
-  test-1.2:
+  test-1b:
     needs: build-mock-maker-default-member-accessor-default
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
@@ -58,7 +58,7 @@ jobs:
 #      member-accessor: 'member-accessor-module'
 #      java: 11
 
-  test-2.2:
+  test-2b:
     needs: build-mock-maker-inline-member-accessor-module
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
@@ -74,7 +74,7 @@ jobs:
 #      member-accessor: 'member-accessor-module'
 #      java: 11
 
-  test-3.2:
+  test-3b:
     needs: build-mock-maker-subclass-member-accessor-module
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
@@ -90,7 +90,7 @@ jobs:
 #      member-accessor: 'member-accessor-reflection'
 #      java: 11
 
-  test-4.2:
+  test-4b:
     needs: build-mock-maker-subclass-member-accessor-reflection
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
@@ -106,7 +106,7 @@ jobs:
 #      member-accessor: 'member-accessor-reflection'
 #      java: 11
 
-  test-5.2:
+  test-5b:
     needs: build-mock-maker-inline-member-accessor-reflection
     uses: ellaella12/mockito/.github/workflows/test.yml@feature/build-once-test-all
     with:
