@@ -1,0 +1,66 @@
+name: Main Build Job
+
+on:
+  workflow_call:
+    inputs:
+      mock-maker:
+        required: true
+        type: string
+      member-accessor:
+        required: true
+        type: string
+
+jobs:
+  #
+  # Main build job
+  #
+  build:
+    runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
+
+    # All build steps
+    # SINGLE-JOB means that the step is only performed when default mock maker environment is used
+    steps:
+      - name: 1. Check out code
+        uses: actions/checkout@v3 # https://github.com/actions/checkout
+        with:
+          fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
+
+      - name: 2. Set up Java 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: 11
+
+      - name: 3. Validate Gradle wrapper (single job only)
+        if: inputs.mock-maker == 'mock-maker-default' # SINGLE-JOB
+        uses: gradle/wrapper-validation-action@v1.0.6 # https://github.com/gradle/wrapper-validation-action
+
+      - name: 4. Build and check reproducibility of artifacts (single job only)
+        if: inputs.mock-maker == 'mock-maker-default' # SINGLE-JOB
+        run: ./check_reproducibility.sh
+
+      - name: 5. Spotless check (single job only). Run './gradlew spotlessApply' locally if this job fails.
+        if: inputs.mock-maker == 'mock-maker-default' # SINGLE-JOB
+        run: ./gradlew spotlessCheck
+
+      - name: 6. Build on Java 11 with ${{ inputs.mock-maker }} and ${{ inputs.member-accessor }}
+        run: |
+          ./gradlew build idea --scan \
+          -x test \
+          -x sourcesJar -x javadocJar \
+          -x publishJavaLibraryPublicationToMavenLocal
+          ./gradlew :android:build
+        env:
+          MOCK_MAKER: ${{ inputs.mock-maker }}
+          MEMBER_ACCESSOR: ${{ inputs.member-accessor }}
+
+      - name: 7. Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.mock-maker }}-${{ inputs.member-accessor }}-build-artifacts
+          path: |
+            build
+            subprojects/*/build
+
+

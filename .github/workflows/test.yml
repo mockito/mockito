@@ -1,0 +1,63 @@
+name: Main Test Job
+
+on:
+  workflow_call:
+    inputs:
+      mock-maker:
+        required: true
+        type: string
+      member-accessor:
+        required: true
+        type: string
+      java:
+        required: true
+        type: number
+
+jobs:
+  #
+  # Main test job
+  #
+  test:
+    runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
+
+    # All test steps
+    steps:
+      - name: 1. Checkout out test code
+        uses: actions/checkout@v3
+
+      - name: 2. Download build artifacts with name ${{ inputs.mock-maker }}-${{ inputs.member-accessor }}-build-artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.mock-maker }}-${{ inputs.member-accessor }}-build-artifacts
+
+      - name: 3. Set up Java ${{ inputs.java }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: ${{ inputs.java }}
+
+      - name: 4. Test on Java ${{ inputs.java }} with ${{ inputs.mock-maker }} and ${{ inputs.member-accessor }}
+        run: |
+          ./gradlew test -x testClasses \
+          -x compileTestJava -x compileTestGroovy -x compileTestKotlin -x compileTestBundleJava \
+          -x processTestResources \
+          -x classes -x compileJava -x compileGroovy -x compileKotlin -x compileOtherBundleJava \
+          -x processResources -x processOtherBundleResources \
+          -x preBuild -x preDebugBuild \
+          -x jar
+
+      - name: 5. Upload coverage report
+        run: |
+          ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml
+          curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
+
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+          curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+
+          gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+          shasum -a 256 -c codecov.SHA256SUM
+
+          chmod +x codecov
+          ./codecov
