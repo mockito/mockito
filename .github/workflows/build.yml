@@ -47,8 +47,10 @@ jobs:
       - name: 6. Build on Java 11 with ${{ inputs.mock-maker }} and ${{ inputs.member-accessor }}
         run: |
           ./gradlew build idea --scan \
+          -x test \
           -x sourcesJar -x javadocJar \
           -x publishJavaLibraryPublicationToMavenLocal
+          ./gradlew :androidTest
         env:
           MOCK_MAKER: ${{ inputs.mock-maker }}
           MEMBER_ACCESSOR: ${{ inputs.member-accessor }}
