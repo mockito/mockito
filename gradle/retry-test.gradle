@@ -64,13 +64,3 @@ test {
         }
     }
 }
-
-task jarTest(type: Test) {
-    description = "Runs test on pre-built Jar"
-
-    testClassesDirs = test.testClassesDirs
-
-    classpath += configurations.testRuntimeClasspath
-    classpath += files(jar.archiveFile)
-    classpath += project.sourceSets.test.output
-}
