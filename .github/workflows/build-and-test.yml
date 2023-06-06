@@ -5,38 +5,38 @@ on:
 
 jobs:
   build-1:
-    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    uses: ./.github/workflows/build.yml
     with:
       mock-maker: 'mock-maker-default'
       member-accessor: 'member-accessor-default'
 
   build-2:
-    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    uses: ./.github/workflows/build.yml
     with:
       mock-maker: 'mock-maker-inline'
       member-accessor: 'member-accessor-module'
 
   build-3:
-    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    uses: ./.github/workflows/build.yml
     with:
       mock-maker: 'mock-maker-subclass'
       member-accessor: 'member-accessor-module'
 
   build-4:
-    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    uses: ./.github/workflows/build.yml
     with:
       mock-maker: 'mock-maker-subclass'
       member-accessor: 'member-accessor-reflection'
 
   build-5:
-    uses: mockito/mockito/.github/workflows/build.yml@feature/build-once-test-all
+    uses: ./.github/workflows/build.yml
     with:
       mock-maker: 'mock-maker-inline'
       member-accessor: 'member-accessor-reflection'
 
   test-1a:
     needs: build-1
-    uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    uses: ./.github/workflows/test.yml
     with:
       mock-maker: 'mock-maker-default'
       member-accessor: 'member-accessor-default'
@@ -44,7 +44,7 @@ jobs:
 
   test-1b:
     needs: build-1
-    uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    uses: ./.github/workflows/test.yml
     with:
       mock-maker: 'mock-maker-default'
       member-accessor: 'member-accessor-default'
@@ -52,7 +52,7 @@ jobs:
 
   test-2a:
     needs: build-2
-    uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    uses: ./.github/workflows/test.yml
     with:
       mock-maker: 'mock-maker-inline'
       member-accessor: 'member-accessor-module'
@@ -60,7 +60,7 @@ jobs:
 
   test-2b:
     needs: build-2
-    uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    uses: ./.github/workflows/test.yml
     with:
       mock-maker: 'mock-maker-inline'
       member-accessor: 'member-accessor-module'
@@ -68,7 +68,7 @@ jobs:
 
   test-3a:
     needs: build-3
-    uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    uses: ./.github/workflows/test.yml
     with:
       mock-maker: 'mock-maker-subclass'
       member-accessor: 'member-accessor-module'
@@ -76,7 +76,7 @@ jobs:
 
   test-3b:
     needs: build-3
-    uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    uses: ./.github/workflows/test.yml
     with:
       mock-maker: 'mock-maker-subclass'
       member-accessor: 'member-accessor-module'
@@ -84,7 +84,7 @@ jobs:
 
   test-4a:
     needs: build-4
-    uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    uses: ./.github/workflows/test.yml
     with:
       mock-maker: 'mock-maker-subclass'
       member-accessor: 'member-accessor-reflection'
@@ -92,7 +92,7 @@ jobs:
 
   test-4b:
     needs: build-4
-    uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    uses: ./.github/workflows/test.yml
     with:
       mock-maker: 'mock-maker-subclass'
       member-accessor: 'member-accessor-reflection'
@@ -100,7 +100,7 @@ jobs:
 
   test-5a:
     needs: build-5
-    uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    uses: ./.github/workflows/test.yml
     with:
       mock-maker: 'mock-maker-inline'
       member-accessor: 'member-accessor-reflection'
@@ -108,7 +108,7 @@ jobs:
 
   test-5b:
     needs: build-5
-    uses: mockito/mockito/.github/workflows/test.yml@feature/build-once-test-all
+    uses: ./.github/workflows/test.yml
     with:
       mock-maker: 'mock-maker-inline'
       member-accessor: 'member-accessor-reflection'

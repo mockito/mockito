@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   build-and-test:
-   uses: mockito/mockito/.github/workflows/build-and-test.yml@feature/build-once-test-all
+   uses: ./.github/workflows/build-and-test.yml
 
   #
   # Android build job
