@@ -54,9 +54,6 @@ jobs:
           -x sourcesJar -x javadocJar \
           -x publishJavaLibraryPublicationToMavenLocal
           ./gradlew :android:build
-        env:
-          MOCK_MAKER: ${{ matrix.entry.mock-maker }}
-          MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
       - name: 7. Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -109,6 +106,9 @@ jobs:
           -x processResources -x processOtherBundleResources \
           -x preBuild -x preDebugBuild \
           -x jar
+        env:
+          MOCK_MAKER: ${{ matrix.entry.mock-maker }}
+          MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
       - name: 5. Upload coverage report
         run: |
