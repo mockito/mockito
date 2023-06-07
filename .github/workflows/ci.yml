@@ -103,7 +103,7 @@ jobs:
 
       - name: 4. Test on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
         run: |
-          ./gradlew test -x testClasses \
+          ./gradlew test \
           -x compileTestJava -x compileTestGroovy -x compileTestKotlin -x compileTestBundleJava \
           -x classes -x compileJava -x compileGroovy -x compileKotlin -x compileOtherBundleJava \
           -x processResources -x processOtherBundleResources \
