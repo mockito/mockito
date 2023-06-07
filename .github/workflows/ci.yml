@@ -49,7 +49,8 @@ jobs:
         run: ./gradlew spotlessCheck
 
       - name: 6. Build on Java 11
-        run: ./gradlew build idea --scan \
+        run: |
+          ./gradlew build idea --scan \
           -x test \
           -x sourcesJar -x javadocJar \
           -x publishJavaLibraryPublicationToMavenLocal
