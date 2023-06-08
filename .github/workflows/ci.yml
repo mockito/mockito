@@ -50,7 +50,11 @@ jobs:
 
       - name: 6. Build on Java 11
         run: |
-          ./gradlew build idea --scan
+          ./gradlew build idea --scan \
+          -x test \
+          -x sourcesJar -x javadocJar \
+          -x publishJavaLibraryPublicationToMavenLocal
+          ./gradlew :android:build
 
       - name: 7. Upload build artifacts
         uses: actions/upload-artifact@v3
