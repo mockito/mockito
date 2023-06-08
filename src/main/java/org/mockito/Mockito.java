@@ -162,7 +162,8 @@ import java.util.function.Function;
  * }
  * </code></pre>
  *
- * Be aware that this artifact may be abolished when the inline mock making feature is integrated into the default mock maker.
+ * Be aware that starting from 5.0.0 the <a href="#39">inline mock maker</a> became the default mock maker and this
+ * artifact may be abolished in future versions.
  *
  * <p>
  * For more information about inline mock making, see <a href="#39">section 39</a>.
@@ -1329,12 +1330,11 @@ import java.util.function.Function;
  *
  * <h3 id="39">39. <a class="meaningful_link" href="#Mocking_Final" name="Mocking_Final">Mocking final types, enums and final methods</a> (Since 2.1.0)</h3>
  *
- * Mockito now offers an {@link Incubating}, optional support for mocking final classes and methods.
+ * Mockito now offers support for mocking final classes and methods by default.
  * This is a fantastic improvement that demonstrates Mockito's everlasting quest for improving testing experience.
  * Our ambition is that Mockito "just works" with final classes and methods.
  * Previously they were considered <em>unmockable</em>, preventing the user from mocking.
- * We already started discussing how to make this feature enabled by default.
- * Currently, the feature is still optional as we wait for more feedback from the community.
+ * Since 5.0.0, this feature is enabled by default.
  *
  * <p>
  * This alternative mock maker which uses
@@ -1342,10 +1342,10 @@ import java.util.function.Function;
  * a mock. This way, it becomes possible to mock final types and methods.
  *
  * <p>
- * This mock maker is <strong>turned off by default</strong> because it is based on completely different mocking mechanism
- * that requires more feedback from the community. It can be activated explicitly by the mockito extension mechanism,
- * just create in the classpath a file <code>/mockito-extensions/org.mockito.plugins.MockMaker</code>
- * containing the value <code>mock-maker-inline</code>.
+ * In versions preceding 5.0.0, this mock maker is <strong>turned off by default</strong> because it is based on
+ * completely different mocking mechanism that required more feedback from the community. It can be activated
+ * explicitly by the mockito extension mechanism, just create in the classpath a file
+ * <code>/mockito-extensions/org.mockito.plugins.MockMaker</code> containing the value <code>mock-maker-inline</code>.
  *
  * <p>
  * As a convenience, the Mockito team provides an artifact where this mock maker is preconfigured. Instead of using the
@@ -1634,7 +1634,6 @@ import java.util.function.Function;
  *  Specifying mock maker for individual mocks</a> (Since 4.8.0)</h3>
  *
  * You may encounter situations where you want to use a different mock maker for a specific test only.
- * For example, you might want to migrate to the <a href="#0.2">inline mock maker</a>, but a few test do not work right away.
  * In such case, you can (temporarily) use {@link MockSettings#mockMaker(String)} and {@link Mock#mockMaker()}
  * to specify the mock maker for a specific mock which is causing the problem.
  *
