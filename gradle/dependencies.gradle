@@ -24,7 +24,7 @@ libraries.bytebuddyandroid = "net.bytebuddy:byte-buddy-android:${versions.bytebu
 libraries.errorprone = "com.google.errorprone:error_prone_core:${versions.errorprone}"
 libraries.errorproneTestApi = "com.google.errorprone:error_prone_test_helpers:${versions.errorprone}"
 
-libraries.autoservice = "com.google.auto.service:auto-service:1.1.0"
+libraries.autoservice = "com.google.auto.service:auto-service:1.1.1"
 
 libraries.objenesis = 'org.objenesis:objenesis:3.3'
 
