@@ -711,7 +711,8 @@ public class Reporter {
                 join(
                         "No argument value was captured!",
                         "You might have forgotten to use argument.capture() in verify()...",
-                        "...or you used capture() in stubbing but stubbed method was not called.",
+                        "...or you used capture() in stubbing but stubbed method was not called,",
+                        "...or you used capture.getValue() in the thenReturn() instead of thenAnswer()."
                         "Be aware that it is recommended to use capture() only with verify()",
                         "",
                         "Examples of correct argument capturing:",
