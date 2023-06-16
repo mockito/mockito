@@ -45,23 +45,12 @@ public class InjectingAnnotationEngine implements AnnotationEngine {
     public AutoCloseable process(Class<?> clazz, Object testInstance) {
         List<AutoCloseable> closeables = new ArrayList<>();
         closeables.addAll(processIndependentAnnotations(testInstance.getClass(), testInstance));
-        closeables.addAll(processInjectMocks(testInstance.getClass(), testInstance));
+        closeables.add(injectCloseableMocks(testInstance));
         return () -> {
             for (AutoCloseable closeable : closeables) {
                 closeable.close();
             }
         };
-    }
-
-    private List<AutoCloseable> processInjectMocks(
-            final Class<?> clazz, final Object testInstance) {
-        List<AutoCloseable> closeables = new ArrayList<>();
-        Class<?> classContext = clazz;
-        while (classContext != Object.class) {
-            closeables.add(injectCloseableMocks(testInstance));
-            classContext = classContext.getSuperclass();
-        }
-        return closeables;
     }
 
     private List<AutoCloseable> processIndependentAnnotations(
