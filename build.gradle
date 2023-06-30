@@ -30,7 +30,7 @@ plugins {
 description = 'Mockito mock objects library core API and implementation'
 
 apply plugin: 'base'
-archivesBaseName = 'mockito-core'
+base.archivesBaseName = 'mockito-core'
 
 apply from: 'gradle/shipkit.gradle'
 
