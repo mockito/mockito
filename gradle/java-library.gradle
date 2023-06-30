@@ -1,8 +1,8 @@
 apply plugin: "java"
 apply plugin: "java-library"
 
-if (!archivesBaseName.startsWith("mockito-")) {
-    archivesBaseName = "mockito-" + project.name
+if (!base.archivesBaseName.startsWith("mockito-")) {
+    base.archivesBaseName = "mockito-" + project.name
 }
 
 apply from: "$rootDir/gradle/java-publication.gradle"
