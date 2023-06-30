@@ -55,6 +55,6 @@ class RuntimeBundlesProvider implements CommandLineArgumentProvider {
     @Override
     Iterable<String> asArguments() {
         String[] absolutePaths = files.stream().map {it.absolutePath}.toArray()
-        ["-DtestRuntimeBundles=${CollectionUtils.join(File.pathSeparator, absolutePaths)}".toString()]
+        ["-DtestRuntimeBundles=${absolutePaths.join(File.pathSeparator)}".toString()]
     }
 }
