@@ -8,7 +8,7 @@ allprojects { project ->
 }
 
 def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoCoverage ->
-    allprojects { currentProject ->
+    allprojects { Project currentProject ->
         plugins.withId("jacoco") {
             mockitoCoverage.sourceSets currentProject.sourceSets.main
             Test test = currentProject.tasks.test
