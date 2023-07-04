@@ -10,8 +10,8 @@ apply from: "$rootDir/gradle/java-publication.gradle"
 generatePomFileForJavaLibraryPublication.doLast {
     //validates the the pom has correct artifact id to avoid issues like #1444
     def pom = new groovy.xml.XmlSlurper().parse(destination)
-    assert pom.artifactId == archivesBaseName
-    assert pom.name == archivesBaseName
+    assert pom.artifactId == base.archivesBaseName
+    assert pom.name == base.archivesBaseName
 }
 
 java {
