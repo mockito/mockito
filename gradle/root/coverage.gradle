@@ -19,7 +19,7 @@ def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoC
     reports {
         xml.required = true
         html.required = true
-        html.outputLocation = file("${buildDir}/jacocoHtml")
+        html.outputLocation = rootProject.layout.buildDirectory.dir("jacocoHtml")
     }
 
     doLast {
