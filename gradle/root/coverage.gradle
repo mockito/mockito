@@ -8,9 +8,8 @@ allprojects { project ->
 }
 
 task mockitoCoverage(type: JacocoReport) {
-
     allprojects { currentProject ->
-        plugins.withId("java") {
+        plugins.withId("jacoco") {
             mockitoCoverage.sourceSets currentProject.sourceSets.main
             mockitoCoverage.executionData(files(test.jacoco.destinationFile).builtBy(test))
         }
