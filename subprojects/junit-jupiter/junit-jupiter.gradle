@@ -40,7 +40,7 @@ jar {
 def osgiProperties = tasks.register('osgiProperties', WriteProperties) {
   destinationFile = layout.buildDirectory.file("verifyOSGiProperties.bndrun")
   property('-standalone', true)
-  property('-runee', "JavaSE-${targetCompatibility}")
+  property('-runee', "JavaSE-${java.targetCompatibility}")
   property('-runrequires', 'osgi.identity;filter:="(osgi.identity=org.mockito.junit-jupiter)"')
 }
 
