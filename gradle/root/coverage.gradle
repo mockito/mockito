@@ -1,21 +1,18 @@
+allprojects { project ->
+    plugins.withId("java") {
+        project.apply plugin: "jacoco"
+        project.jacoco {
+            toolVersion = '0.8.8'
+        }
+    }
+}
+
 task mockitoCoverage(type: JacocoReport) {
 
     allprojects { currentProject ->
-        // These tests do not have a `test` task.
-        if (currentProject.name in ['android']) {
-            return
-        }
         plugins.withId("java") {
             mockitoCoverage.sourceSets currentProject.sourceSets.main
-
-            apply plugin: "jacoco"
-
             jacoco {
-                toolVersion = '0.8.8'
-
-                if (currentProject != rootProject) {   //already automatically enhanced in mockito main project as "java" plugin was applied before
-                    applyTo test
-                }
                 test.jacoco.destinationFile = file("${currentProject.buildDir}/jacoco/test.exec")
             }
 
