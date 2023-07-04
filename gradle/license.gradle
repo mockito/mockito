@@ -11,6 +11,12 @@ allprojects {
             java = 'SLASHSTAR_STYLE'
             groovy = 'SLASHSTAR_STYLE'
         }
+
+        exclude "junit-platform.properties"
+        exclude "mockito-extensions/org.mockito.plugins.*"
+        exclude "META-INF/services/org.junit.jupiter.api.extension.Extension"
+        exclude "org/mockito/internal/util/concurrent/README.md"
+        exclude "org/mockito/internal/util/concurrent/LICENSE"
         ext.year = Calendar.getInstance().get(Calendar.YEAR)
     }
 }
