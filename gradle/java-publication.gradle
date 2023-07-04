@@ -48,7 +48,7 @@ publishing {
                 from components.javaPlatform
             }
 
-            artifactId = project.base.archivesBaseName
+            artifactId = project.base.archivesName.get()
 
             pom {
                 name = artifactId

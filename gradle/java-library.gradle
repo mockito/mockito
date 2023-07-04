@@ -1,8 +1,8 @@
 apply plugin: "java"
 apply plugin: "java-library"
 
-if (!base.archivesBaseName.startsWith("mockito-")) {
-    base.archivesBaseName = "mockito-" + project.name
+if (!base.archivesName.get().startsWith("mockito-")) {
+    base.archivesName = "mockito-" + project.name
 }
 
 apply from: "$rootDir/gradle/java-publication.gradle"
@@ -10,8 +10,8 @@ apply from: "$rootDir/gradle/java-publication.gradle"
 generatePomFileForJavaLibraryPublication.doLast {
     //validates the the pom has correct artifact id to avoid issues like #1444
     def pom = new groovy.xml.XmlSlurper().parse(destination)
-    assert pom.artifactId == base.archivesBaseName
-    assert pom.name == base.archivesBaseName
+    assert pom.artifactId == base.archivesName.get()
+    assert pom.name == base.archivesName.get()
 }
 
 java {
