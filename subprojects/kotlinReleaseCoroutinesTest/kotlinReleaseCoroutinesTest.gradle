@@ -20,8 +20,10 @@ repositories {
     maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+java {
+    sourceCompatibility = 11
+    targetCompatibility = 11
+}
 
 tasks.withType(KotlinCompile).configureEach {
     compilerOptions {
