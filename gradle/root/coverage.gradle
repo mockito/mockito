@@ -11,7 +11,8 @@ task mockitoCoverage(type: JacocoReport) {
     allprojects { currentProject ->
         plugins.withId("jacoco") {
             mockitoCoverage.sourceSets currentProject.sourceSets.main
-            mockitoCoverage.executionData(files(test.jacoco.destinationFile).builtBy(test))
+            Test test = currentProject.tasks.test
+            mockitoCoverage.executionData(currentProject.files(test.jacoco.destinationFile).builtBy(test))
         }
     }
 
