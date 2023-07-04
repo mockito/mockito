@@ -20,17 +20,6 @@ task mockitoCoverage(type: JacocoReport) {
             }
 
             mockitoCoverage.executionData(files(test.jacoco.destinationFile).builtBy(test))
-
-            afterEvaluate {
-                classDirectories.setFrom(
-                    classDirectories.files.collect {
-                        fileTree(
-                            dir: it,
-                            exclude: ["**/internal/util/concurrent/**"]
-                        )
-                    }
-                )
-            }
         }
     }
 
@@ -44,6 +33,17 @@ task mockitoCoverage(type: JacocoReport) {
         def reportFile = new File(reports.html.outputLocation.get().asFile, "index.html")
         logger.lifecycle "Jacoco HTML created: file://${reportFile.toURI().path}"
     }
+}
+
+gradle.taskGraph.whenReady {
+    mockitoCoverage.classDirectories.setFrom(
+        mockitoCoverage.classDirectories.files.collect {
+            fileTree(
+                dir: it,
+                exclude: [ "**/internal/util/concurrent/**" ]
+            )
+        }
+    )
 }
 
 task coverageReport(dependsOn: ["mockitoCoverage"]) {}
