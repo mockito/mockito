@@ -37,11 +37,12 @@ task mockitoCoverage(type: JacocoReport) {
     reports {
         xml.required = true
         html.required = true
-        html.destination file("${buildDir}/jacocoHtml")
+        html.outputLocation = file("${buildDir}/jacocoHtml")
     }
 
     doLast {
-        logger.lifecycle "Jacoco HTML created: file://${new File(reports.html.destination, "index.html").toURI().path}"
+        def reportFile = new File(reports.html.outputLocation.get().asFile, "index.html")
+        logger.lifecycle "Jacoco HTML created: file://${reportFile.toURI().path}"
     }
 }
 
