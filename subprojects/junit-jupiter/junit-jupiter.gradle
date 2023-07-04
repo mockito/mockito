@@ -18,7 +18,7 @@ tasks.withType(Test) {
 }
 
 jar {
-    bundle {
+    bundle { // this: BundleTaskExtension
         classpath = project.configurations.runtimeClasspath
         bnd(
             'Bundle-Name': 'Mockito Extension Library for JUnit 5.',

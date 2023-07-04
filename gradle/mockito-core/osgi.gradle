@@ -1,7 +1,7 @@
 apply plugin: 'biz.aQute.bnd.builder'
 
 jar {
-    bundle {
+    bundle { // this: BundleTaskExtension
         classpath = project.configurations.compileClasspath
         bnd(
             'Bundle-Name': 'Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.',
