@@ -136,21 +136,3 @@ spotless {
         targetExclude 'src/test/java/org/mockitousage/internal/junit/UnusedStubbingsFinderTest.java'
     }
 }
-
-
-//workaround for #1444, delete when Shipkit bug is fixed
-subprojects {
-	eclipse {
-		project {
-			name = rootProject.name + '-' + project.name
-		}
-	}
-
-    afterEvaluate {
-        def lib = publishing.publications.javaLibrary
-        if(lib && !lib.artifactId.startsWith("mockito-")) {
-            lib.artifactId = "mockito-" + lib.artifactId
-        }
-    }
-}
-//end workaround
