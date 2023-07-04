@@ -18,8 +18,8 @@ tasks.withType(Test) {
 }
 
 jar {
-    classpath = project.configurations.runtimeClasspath
     bundle {
+        classpath = project.configurations.runtimeClasspath
         bnd(
             'Bundle-Name': 'Mockito Extension Library for JUnit 5.',
             'Bundle-SymbolicName': 'org.mockito.junit-jupiter',
