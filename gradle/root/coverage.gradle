@@ -12,10 +12,6 @@ task mockitoCoverage(type: JacocoReport) {
     allprojects { currentProject ->
         plugins.withId("java") {
             mockitoCoverage.sourceSets currentProject.sourceSets.main
-            jacoco {
-                test.jacoco.destinationFile = file("${currentProject.buildDir}/jacoco/test.exec")
-            }
-
             mockitoCoverage.executionData(files(test.jacoco.destinationFile).builtBy(test))
         }
     }
