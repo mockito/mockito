@@ -8,6 +8,7 @@ dependencies {
     testImplementation libraries.junitJupiterApi
     testImplementation project(":junit-jupiter")
     testRuntimeOnly libraries.junitJupiterEngine
+    testRuntimeOnly libraries.junitPlatformLauncher
 }
 
 test {

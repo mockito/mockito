@@ -9,9 +9,9 @@ description = "End-to-end tests for automatic registration of MockitoExtension w
 dependencies {
     testImplementation(project(":junit-jupiter"))
     testImplementation(library("assertj"))
-    testImplementation(library("junitPlatformLauncher"))
     testImplementation(library("junitJupiterApi"))
     testRuntimeOnly(library("junitJupiterEngine"))
+    testRuntimeOnly(library("junitPlatformLauncher"))
 }
 
 tasks.named<Test>("test") {
