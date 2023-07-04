@@ -19,7 +19,7 @@ tasks.named<Test>("test") {
 }
 
 val Project.libraries
-    get() = rootProject.extra["libraries"] as Map<String, Any>
+    get() = @Suppress("UNCHECKED_CAST") (rootProject.extra["libraries"] as Map<String, Any>)
 
 fun Project.library(name: String) =
     libraries[name]!!
