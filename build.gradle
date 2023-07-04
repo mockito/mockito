@@ -2,7 +2,7 @@ buildscript {
     repositories {
         mavenLocal() //for local testing of mockito-release-tools
         google()
-        maven { url 'https://plugins.gradle.org/m2/' }
+        gradlePluginPortal()
     }
 
     dependencies {
@@ -14,7 +14,7 @@ buildscript {
         classpath 'org.shipkit:shipkit-auto-version:1.2.2'
 
         classpath 'com.google.googlejavaformat:google-java-format:1.17.0'
-        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'com.android.tools.build:gradle:7.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22"
     }
 }
@@ -30,7 +30,7 @@ plugins {
 description = 'Mockito mock objects library core API and implementation'
 
 apply plugin: 'base'
-archivesBaseName = 'mockito-core'
+base.archivesName = 'mockito-core'
 
 apply from: 'gradle/shipkit.gradle'
 
@@ -136,21 +136,3 @@ spotless {
         targetExclude 'src/test/java/org/mockitousage/internal/junit/UnusedStubbingsFinderTest.java'
     }
 }
-
-
-//workaround for #1444, delete when Shipkit bug is fixed
-subprojects {
-	eclipse {
-		project {
-			name = rootProject.name + '-' + project.name
-		}
-	}
-
-    afterEvaluate {
-        def lib = publishing.publications.javaLibrary
-        if(lib && !lib.artifactId.startsWith("mockito-")) {
-            lib.artifactId = "mockito-" + lib.artifactId
-        }
-    }
-}
-//end workaround

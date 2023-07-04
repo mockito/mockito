@@ -9,9 +9,9 @@ description = "End-to-end tests for automatic registration of MockitoExtension."
 dependencies {
     testImplementation(project(":junit-jupiter"))
     testImplementation(library("assertj"))
-    testImplementation(library("junitPlatformLauncher"))
     testImplementation(library("junitJupiterApi"))
     testRuntimeOnly(library("junitJupiterEngine"))
+    testRuntimeOnly(library("junitPlatformLauncher"))
 }
 
 tasks.named<Test>("test") {
@@ -19,7 +19,7 @@ tasks.named<Test>("test") {
 }
 
 val Project.libraries
-    get() = rootProject.extra["libraries"] as Map<String, Any>
+    get() = @Suppress("UNCHECKED_CAST") (rootProject.extra["libraries"] as Map<String, Any>)
 
 fun Project.library(name: String) =
     libraries[name]!!

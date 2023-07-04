@@ -18,8 +18,8 @@ tasks.withType(Test) {
 }
 
 jar {
-    classpath = project.configurations.runtimeClasspath
-    bundle {
+    bundle { // this: BundleTaskExtension
+        classpath = project.configurations.runtimeClasspath
         bnd(
             'Bundle-Name': 'Mockito Extension Library for JUnit 5.',
             'Bundle-SymbolicName': 'org.mockito.junit-jupiter',
@@ -38,9 +38,9 @@ jar {
 // task writes out the properties necessary for it to verify the OSGi
 // metadata.
 def osgiProperties = tasks.register('osgiProperties', WriteProperties) {
-  outputFile = layout.getBuildDirectory().file("verifyOSGiProperties.bndrun")
+  destinationFile = layout.buildDirectory.file("verifyOSGiProperties.bndrun")
   property('-standalone', true)
-  property('-runee', "JavaSE-${targetCompatibility}")
+  property('-runee', "JavaSE-${java.targetCompatibility}")
   property('-runrequires', 'osgi.identity;filter:="(osgi.identity=org.mockito.junit-jupiter)"')
 }
 
@@ -48,8 +48,8 @@ def osgiProperties = tasks.register('osgiProperties', WriteProperties) {
 // that its metadata is valid. If the metadata is invalid this task will
 // fail.
 def verifyOSGi = tasks.register('verifyOSGi', Resolve) {
-  getBndrun().fileProvider(osgiProperties.map { it.outputFile })
-  getOutputBndrun().set(layout.getBuildDirectory().file("resolvedOSGiProperties.bndrun"))
+  getBndrun().value(osgiProperties.flatMap { it.destinationFile })
+  getOutputBndrun().set(layout.buildDirectory.file("resolvedOSGiProperties.bndrun"))
   reportOptional = false
 }
 

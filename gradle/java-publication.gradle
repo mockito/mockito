@@ -8,13 +8,13 @@ plugins.withId("java") {
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
+        archiveClassifier = 'sources'
         from sourceSets.main.allSource
         with licenseSpec
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
+        archiveClassifier = 'javadoc'
         from tasks.javadoc
         with licenseSpec
     }
@@ -48,7 +48,7 @@ publishing {
                 from components.javaPlatform
             }
 
-            artifactId = project.archivesBaseName
+            artifactId = project.base.archivesName.get()
 
             pom {
                 name = artifactId

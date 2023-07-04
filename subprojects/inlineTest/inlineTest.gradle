@@ -6,8 +6,10 @@ description = "Mockito preconfigured inline mock maker (intermediate and to be s
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 
-sourceCompatibility = 11
-targetCompatibility = 11
+java {
+    sourceCompatibility = 11
+    targetCompatibility = 11
+}
 
 dependencies {
     implementation project.rootProject
@@ -18,7 +20,16 @@ dependencies {
 tasks.javadoc.enabled = false
 
 test {
-    jvmArgs '--illegal-access=deny'
+    if (JavaVersion.VERSION_17 <= JavaVersion.current()) {
+        // For Java 17: https://openjdk.org/jeps/403
+        // > Ignoring option --illegal-access=deny; support was removed in 17.0
+    } else if (JavaVersion.VERSION_16 <= JavaVersion.current()) {
+        // For Java 16: https://openjdk.org/jeps/396
+        // --illegal-access=deny is the default.
+    } else if (JavaVersion.VERSION_1_9 <= JavaVersion.current()) {
+        // For Java 9-15: https://openjdk.org/jeps/261#Relaxed-strong-encapsulation
+        jvmArgs '--illegal-access=deny'
+    }
     //required by the "StressTest.java" and "OneLinerStubStressTest.java"
     maxHeapSize '256m'
 }

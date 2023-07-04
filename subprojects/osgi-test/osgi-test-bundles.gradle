@@ -34,8 +34,10 @@ task otherBundle(type: Bundle) {
 
 tasks.withType(Bundle) {
     archiveAppendix = name
-    bnd = """
-Bundle-SymbolicName: $name
--exportcontents: *
-"""
+    bundle { // this: BundleTaskExtension
+        bnd = """
+            Bundle-SymbolicName: $name
+            -exportcontents: *
+        """.stripIndent()
+    }
 }
