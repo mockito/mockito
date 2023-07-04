@@ -38,7 +38,7 @@ jar {
 // task writes out the properties necessary for it to verify the OSGi
 // metadata.
 def osgiProperties = tasks.register('osgiProperties', WriteProperties) {
-  outputFile = layout.getBuildDirectory().file("verifyOSGiProperties.bndrun")
+  destinationFile = layout.getBuildDirectory().file("verifyOSGiProperties.bndrun")
   property('-standalone', true)
   property('-runee', "JavaSE-${targetCompatibility}")
   property('-runrequires', 'osgi.identity;filter:="(osgi.identity=org.mockito.junit-jupiter)"')
@@ -48,7 +48,7 @@ def osgiProperties = tasks.register('osgiProperties', WriteProperties) {
 // that its metadata is valid. If the metadata is invalid this task will
 // fail.
 def verifyOSGi = tasks.register('verifyOSGi', Resolve) {
-  getBndrun().fileProvider(osgiProperties.map { it.outputFile })
+  getBndrun().value(osgiProperties.flatMap { it.destinationFile })
   getOutputBndrun().set(layout.getBuildDirectory().file("resolvedOSGiProperties.bndrun"))
   reportOptional = false
 }
