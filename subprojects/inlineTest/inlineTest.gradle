@@ -6,8 +6,10 @@ description = "Mockito preconfigured inline mock maker (intermediate and to be s
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 
-sourceCompatibility = 11
-targetCompatibility = 11
+java {
+    sourceCompatibility = 11
+    targetCompatibility = 11
+}
 
 dependencies {
     implementation project.rootProject
