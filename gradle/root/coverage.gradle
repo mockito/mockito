@@ -7,7 +7,7 @@ allprojects { project ->
     }
 }
 
-task mockitoCoverage(type: JacocoReport) {
+def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoCoverage ->
     allprojects { currentProject ->
         plugins.withId("jacoco") {
             mockitoCoverage.sourceSets currentProject.sourceSets.main
@@ -29,14 +29,18 @@ task mockitoCoverage(type: JacocoReport) {
 }
 
 gradle.taskGraph.whenReady {
-    mockitoCoverage.classDirectories.setFrom(
-        mockitoCoverage.classDirectories.files.collect {
-            fileTree(
-                dir: it,
-                exclude: [ "**/internal/util/concurrent/**" ]
-            )
-        }
-    )
+    mockitoCoverage.configure {
+        classDirectories.setFrom(
+            classDirectories.files.collect {
+                fileTree(
+                    dir: it,
+                    exclude: ["**/internal/util/concurrent/**"]
+                )
+            }
+        )
+    }
 }
 
-task coverageReport(dependsOn: ["mockitoCoverage"]) {}
+tasks.register("coverageReport") {
+    dependsOn(mockitoCoverage)
+}
