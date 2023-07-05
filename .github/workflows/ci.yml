@@ -180,7 +180,7 @@ jobs:
         shasum -a 256 -c codecov.SHA256SUM
 
         chmod +x codecov
-        ./codecov -f build/reports/coverage/androidTest/debug/connected/report.xml
+        ./codecov -f subprojects/androidTest/build/reports/coverage/androidTest/debug/connected/report.xml
 
   #
   # Release job, only for pushes to the main development branch
