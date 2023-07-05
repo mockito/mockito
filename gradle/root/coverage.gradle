@@ -10,10 +10,28 @@ allprojects { project ->
 def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoCoverage ->
     allprojects { Project currentProject ->
         plugins.withId("jacoco") {
-            // JacocoReport.sourceSets() appends both sourceDirectories and classDirectories.
-            mockitoCoverage.sourceSets currentProject.sourceSets.main
-            Test test = currentProject.tasks.test
-            mockitoCoverage.executionData(currentProject.files(test.jacoco.destinationFile).builtBy(test))
+            plugins.withId("java") {
+                // JacocoReport.sourceSets() appends both sourceDirectories and classDirectories.
+                mockitoCoverage.sourceSets currentProject.sourceSets.main
+                Test test = currentProject.tasks.test
+                mockitoCoverage.executionData(currentProject.files(test.jacoco.destinationFile).builtBy(test))
+            }
+            plugins.withId("com.android.base") {
+                // The :androidTest project only contains test infrastructure, so there's no need to grab sources/classes.
+
+                def androidTest = currentProject.tasks.connectedDebugAndroidTest
+                def instrumentationCoverage = currentProject
+                    .layout.buildDirectory.dir("outputs/code_coverage/debugAndroidTest/connected")
+                    .map { it.asFileTree.matching { include "*/coverage.ec" } }
+                mockitoCoverage.executionData(currentProject.files(instrumentationCoverage))
+                mockitoCoverage.mustRunAfter(androidTest)
+
+                def unitTest = currentProject.tasks.testDebugUnitTest
+                def coverageFiles = currentProject
+                    .layout.buildDirectory.dir("outputs/unit_test_code_coverage/debugUnitTest")
+                    .map { it.asFileTree.matching { include "testDebugUnitTest.exec" } }
+                mockitoCoverage.executionData(currentProject.files(coverageFiles).builtBy(unitTest))
+            }
         }
     }
 

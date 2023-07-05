@@ -18,10 +18,18 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildTypes {
+        debug {
+            enableUnitTestCoverage true
+            enableAndroidTestCoverage true
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = '11'
     }
@@ -37,6 +45,11 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 
 dependencies {
     implementation libraries.kotlin.stdlib
+
+    // Add :android on the classpath so that AGP's jacoco setup thinks it's "production code to be tested".
+    runtimeOnly project(":android")
+    // Exclude :android from JVM tests, because otherwise it clashes with mockito-core/project(":").
+    configurations.testImplementation { exclude group: 'org.mockito', module: 'android' }
 
     testImplementation project(":")
     testImplementation libraries.junit4
