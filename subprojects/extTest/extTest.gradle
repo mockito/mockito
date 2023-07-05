@@ -16,6 +16,7 @@ dependencies {
     testImplementation libraries.junitJupiterApi
     testRuntimeOnly libraries.junitJupiterEngine
     testRuntimeOnly libraries.junitVintageEngine
+    testRuntimeOnly libraries.junitPlatformLauncher
 }
 
 tasks.withType(Test) {

@@ -6,6 +6,10 @@ tasks.named('generateChangelog') {
     previousRevision = project.ext.'shipkit-auto-version.previous-tag'
     githubToken = System.getenv('GITHUB_TOKEN')
     repository = 'mockito/mockito'
+    // Workarounds for https://github.com/shipkit/shipkit-changelog/issues/103
+    doNotTrackState("GenerateChangelogTask tracks the entire repo, which results is locking problems hashing the .gradle folder.")
+    // GenerateChangelogTask uses the entire repo as input, which means it needs to "depend on" all other tasks' outputs.
+    mustRunAfter(allprojects.collectMany { it.tasks }.grep { it.path != ":generateChangelog" && it.path != ":githubRelease" })
 }
 
 tasks.named("githubRelease") {
