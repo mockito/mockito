@@ -166,6 +166,22 @@ jobs:
           ${{ github.workspace }}/emulator.log
           ${{ github.workspace }}/emulator-startup.log
 
+    - name: 5. Upload coverage report
+      run: |
+        # :androidTest:connectedCheck (which depends on :androidTest:createDebugAndroidTestCoverageReport) already generated coverage report.
+
+        curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
+
+        curl -Os https://uploader.codecov.io/latest/linux/codecov
+        curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
+        curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
+
+        gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
+        shasum -a 256 -c codecov.SHA256SUM
+
+        chmod +x codecov
+        ./codecov -f build/reports/coverage/androidTest/debug/connected/report.xml
+
   #
   # Release job, only for pushes to the main development branch
   #
