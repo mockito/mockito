@@ -10,10 +10,23 @@ allprojects { project ->
 def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoCoverage ->
     allprojects { Project currentProject ->
         plugins.withId("jacoco") {
+            // JacocoReport.sourceSets() appends both sourceDirectories and classDirectories.
             mockitoCoverage.sourceSets currentProject.sourceSets.main
             Test test = currentProject.tasks.test
             mockitoCoverage.executionData(currentProject.files(test.jacoco.destinationFile).builtBy(test))
         }
+    }
+
+    gradle.taskGraph.whenReady { // Theoretically Gradle.projectsEvaluated, but not possible here.
+        // Run this after all projects' sourceSets have been added (which is delayed to when the jacoco plugin is applied).
+        classDirectories.setFrom(
+            classDirectories.files.collect {
+                fileTree(
+                    dir: it,
+                    exclude: ["**/internal/util/concurrent/**"]
+                )
+            }
+        )
     }
 
     reports {
@@ -25,19 +38,6 @@ def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoC
     doLast {
         def reportFile = new File(reports.html.outputLocation.get().asFile, "index.html")
         logger.lifecycle "Jacoco HTML created: file://${reportFile.toURI().path}"
-    }
-}
-
-gradle.taskGraph.whenReady {
-    mockitoCoverage.configure {
-        classDirectories.setFrom(
-            classDirectories.files.collect {
-                fileTree(
-                    dir: it,
-                    exclude: ["**/internal/util/concurrent/**"]
-                )
-            }
-        )
     }
 }
 
