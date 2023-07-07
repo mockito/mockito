@@ -78,7 +78,6 @@ jobs:
       with:
         files: build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
         fail_ci_if_error: true
-        verbose: true
 
   #
   # Android build job
@@ -167,7 +166,6 @@ jobs:
       with:
         files: subprojects/androidTest/build/reports/coverage/androidTest/debug/connected/report.xml
         fail_ci_if_error: true
-        verbose: true
 
   #
   # Release job, only for pushes to the main development branch
