@@ -30,10 +30,15 @@ android {
         tasks.createDebugAndroidTestCoverageReport { com.android.build.gradle.internal.coverage.JacocoReportTask task ->
             rootProject.allprojects { Project currentProject ->
                 plugins.withId("java") {
+                    SourceSetContainer sourceSets = currentProject.sourceSets
                     // Mimic org.gradle.testing.jacoco.tasks.JacocoReportBase.sourceSets().
                     // Not possible to set task.javaSources because it's initialized with setDisallowChanges.
-                    //task.javaSources.add({ [ currentProject.sourceSets.main.allJava.srcDirs ] })
-                    task.classFileCollection.from(currentProject.sourceSets.main.output)
+                    //task.javaSources.add({ [ sourceSets.main.allJava.srcDirs ] })
+                    task.classFileCollection.from(
+                        sourceSets.main.output.asFileTree.matching {
+                            exclude("**/internal/util/concurrent/**")
+                        }
+                    )
                 }
             }
         }
