@@ -70,20 +70,14 @@ jobs:
         MOCK_MAKER: ${{ matrix.entry.mock-maker }}
         MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
-    - name: 7. Upload coverage report
-      run: |
-        ./gradlew coverageReport -s --scan && cp build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml jacoco.xml
-        curl https://keybase.io/codecovsecurity/pgp_keys.asc | gpg --no-default-keyring --keyring trustedkeys.gpg --import # One-time step
+    - name: 7. Generate coverage report
+      run: ./gradlew coverageReport --stacktrace --scan
 
-        curl -Os https://uploader.codecov.io/latest/linux/codecov
-        curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM
-        curl -Os https://uploader.codecov.io/latest/linux/codecov.SHA256SUM.sig
-
-        gpgv codecov.SHA256SUM.sig codecov.SHA256SUM
-        shasum -a 256 -c codecov.SHA256SUM
-
-        chmod +x codecov
-        ./codecov
+    - name: 8. Upload coverage report
+      uses: codecov/codecov-action@v3
+      with:
+        files: build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
+        fail_ci_if_error: true
 
   #
   # Android build job
@@ -165,6 +159,13 @@ jobs:
           ${{ github.workspace }}/subprojects/androidTest/build/reports/androidTests/connected/**
           ${{ github.workspace }}/emulator.log
           ${{ github.workspace }}/emulator-startup.log
+
+    # :androidTest:connectedCheck (which depends on :androidTest:createDebugAndroidTestCoverageReport) already generated coverage report.
+    - name: 5. Upload coverage report
+      uses: codecov/codecov-action@v3
+      with:
+        files: subprojects/androidTest/build/reports/coverage/androidTest/debug/connected/report.xml
+        fail_ci_if_error: true
 
   #
   # Release job, only for pushes to the main development branch

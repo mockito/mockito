@@ -1,43 +1,56 @@
-task mockitoCoverage(type: JacocoReport) {
-
-    allprojects { currentProject ->
-        // These tests do not have a `test` task.
-        if (currentProject.name in ['android']) {
-            return
+allprojects { project ->
+    plugins.withId("java") {
+        project.apply plugin: "jacoco"
+        project.jacoco {
+            toolVersion = '0.8.8'
         }
-        plugins.withId("java") {
-            mockitoCoverage.sourceSets currentProject.sourceSets.main
+    }
+}
 
-            apply plugin: "jacoco"
-
-            jacoco {
-                toolVersion = '0.8.8'
-
-                if (currentProject != rootProject) {   //already automatically enhanced in mockito main project as "java" plugin was applied before
-                    applyTo test
-                }
-                test.jacoco.destinationFile = file("${currentProject.buildDir}/jacoco/test.exec")
+def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoCoverage ->
+    allprojects { Project currentProject ->
+        plugins.withId("jacoco") {
+            plugins.withId("java") {
+                // JacocoReport.sourceSets() appends both sourceDirectories and classDirectories.
+                mockitoCoverage.sourceSets currentProject.sourceSets.main
+                Test test = currentProject.tasks.test
+                mockitoCoverage.executionData(currentProject.files(test.jacoco.destinationFile).builtBy(test))
             }
+            plugins.withId("com.android.base") {
+                // The :androidTest project only contains test infrastructure, so there's no need to grab sources/classes.
 
-            mockitoCoverage.executionData(files(test.jacoco.destinationFile).builtBy(test))
+                def androidTest = currentProject.tasks.connectedDebugAndroidTest
+                def instrumentationCoverage = currentProject
+                    .layout.buildDirectory.dir("outputs/code_coverage/debugAndroidTest/connected")
+                    .map { it.asFileTree.matching { include "*/coverage.ec" } }
+                mockitoCoverage.executionData(currentProject.files(instrumentationCoverage))
+                mockitoCoverage.mustRunAfter(androidTest)
 
-            afterEvaluate {
-                classDirectories.setFrom(
-                    classDirectories.files.collect {
-                        fileTree(
-                            dir: it,
-                            exclude: ["**/internal/util/concurrent/**"]
-                        )
-                    }
+                def unitTest = currentProject.tasks.testDebugUnitTest
+                def coverageFiles = currentProject
+                    .layout.buildDirectory.dir("outputs/unit_test_code_coverage/debugUnitTest")
+                    .map { it.asFileTree.matching { include "testDebugUnitTest.exec" } }
+                mockitoCoverage.executionData(currentProject.files(coverageFiles).builtBy(unitTest))
+            }
+        }
+    }
+
+    gradle.taskGraph.whenReady { // Theoretically Gradle.projectsEvaluated, but not possible here.
+        // Run this after all projects' sourceSets have been added (which is delayed to when the jacoco plugin is applied).
+        classDirectories.setFrom(
+            classDirectories.files.collect {
+                fileTree(
+                    dir: it,
+                    exclude: ["**/internal/util/concurrent/**"]
                 )
             }
-        }
+        )
     }
 
     reports {
         xml.required = true
         html.required = true
-        html.outputLocation = file("${buildDir}/jacocoHtml")
+        html.outputLocation = rootProject.layout.buildDirectory.dir("jacocoHtml")
     }
 
     doLast {
@@ -46,4 +59,6 @@ task mockitoCoverage(type: JacocoReport) {
     }
 }
 
-task coverageReport(dependsOn: ["mockitoCoverage"]) {}
+tasks.register("coverageReport") {
+    dependsOn(mockitoCoverage)
+}
