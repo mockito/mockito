@@ -749,7 +749,7 @@ import java.util.function.Function;
  *
  * <h3 id="17">17. <a class="meaningful_link" href="#resetting_mocks" name="resetting_mocks">Resetting mocks</a> (Since 1.8.0)</h3>
  *
- * Smart Mockito users hardly use this feature because they know it could be a sign of poor tests.
+ * Using this method could be an indication of poor testing.
  * Normally, you don't need to reset your mocks, just create new mocks for each test method.
  * <p>
  * Instead of <code>reset()</code> please consider writing simple, small and focused test methods over lengthy, over-specified tests.
