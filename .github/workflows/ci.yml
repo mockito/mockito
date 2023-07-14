@@ -65,12 +65,15 @@ jobs:
       run: >
         ./gradlew
         spotlessCheck
+        --stacktrace
+        --scan
 
     - name: 6. Build on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
       run: >
         ./gradlew
         build
         idea
+        --stacktrace
         --scan
       env:
         MOCK_MAKER: ${{ matrix.entry.mock-maker }}
@@ -211,6 +214,7 @@ jobs:
           publishToSonatype
           closeAndReleaseStagingRepository
           releaseSummary
+          --stacktrace
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
