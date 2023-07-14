@@ -3,6 +3,7 @@ plugins {
 }
 
 apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Integration test for using Mockito from Groovy."
 

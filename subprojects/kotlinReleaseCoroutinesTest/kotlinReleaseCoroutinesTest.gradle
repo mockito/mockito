@@ -6,13 +6,9 @@ plugins {
 }
 
 apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Kotlin tests for Mockito."
-
-java {
-    sourceCompatibility = 11
-    targetCompatibility = 11
-}
 
 tasks.withType(KotlinCompile).configureEach {
     compilerOptions {
