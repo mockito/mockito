@@ -2,7 +2,8 @@ plugins {
     id("com.gradle.enterprise") version "3.13.4"
 }
 
-include("subclass",
+include(
+    "subclass",
     "inlineTest",
     "proxy",
     "extTest",
@@ -20,7 +21,8 @@ include("subclass",
     "osgi-test",
     "bom",
     "errorprone",
-    "programmatic-test")
+    "programmatic-test"
+)
 
 // https://developer.android.com/studio/command-line/variables#envar
 // https://developer.android.com/studio/build#properties-files
