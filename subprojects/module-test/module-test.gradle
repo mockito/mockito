@@ -8,8 +8,3 @@ dependencies {
     testImplementation libraries.junit4
     testImplementation libraries.assertj
 }
-
-java {
-    sourceCompatibility = 11
-    targetCompatibility = 11
-}

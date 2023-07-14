@@ -9,11 +9,6 @@ dependencies {
     testImplementation libraries.assertj
 }
 
-java {
-    sourceCompatibility = 11
-    targetCompatibility = 11
-}
-
 test {
   forkEvery = 1
 }
