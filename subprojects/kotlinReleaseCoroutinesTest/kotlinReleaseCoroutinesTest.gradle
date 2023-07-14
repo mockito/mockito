@@ -5,6 +5,8 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
 }
 
+apply from: "$rootDir/gradle/dependencies.gradle"
+
 description = "Kotlin tests for Mockito."
 
 java {

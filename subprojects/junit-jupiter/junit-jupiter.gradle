@@ -4,6 +4,7 @@ plugins {
     id 'biz.aQute.bnd.builder'
 }
 
+apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-library.gradle"
 
 description = "Mockito JUnit 5 support"

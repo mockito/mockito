@@ -1,3 +1,4 @@
+apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-library.gradle"
 
 description = "Mockito preconfigured proxy mock mock maker (to support interfaces without code generation)"
