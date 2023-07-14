@@ -3,10 +3,6 @@ apply from: "$rootDir/gradle/dependencies.gradle"
 apply plugin: 'java'
 description = "End-to-end tests for Mockito and its extensions."
 
-repositories {
-    mavenLocal() //we depend on locally published mockito
-}
-
 dependencies {
     testImplementation project.rootProject
     testImplementation project(":junit-jupiter")
