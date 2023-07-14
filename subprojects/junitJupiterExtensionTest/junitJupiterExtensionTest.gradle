@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+apply from: "$rootDir/gradle/dependencies.gradle"
+
+description = "End-to-end tests for automatic registration of MockitoExtension."
+
+dependencies {
+    testImplementation project(":junit-jupiter")
+    testImplementation libraries.assertj
+    testImplementation libraries.junitJupiterApi
+    testRuntimeOnly libraries.junitJupiterEngine
+    testRuntimeOnly libraries.junitPlatformLauncher
+}
+
+test {
+    useJUnitPlatform()
+}
