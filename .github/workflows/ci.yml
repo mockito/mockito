@@ -46,11 +46,11 @@ jobs:
       with:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
-    - name: 2. Set up Java ${{ matrix.java }}
+    - name: 2. Set up Java for running Gradle build
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: ${{ matrix.java }}
+        java-version: 17
 
     - name: 3. Validate Gradle wrapper
       if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
@@ -100,11 +100,11 @@ jobs:
       with:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
-    - name: 2. Set up Java 11
+    - name: 2. Set up Java for running Gradle build
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
-        java-version: 11
+        java-version: 17
 
     - name: 3. Run Android tests on Android API level ${{ matrix.android-api }}
       uses: reactivecircus/android-emulator-runner@v2
@@ -183,18 +183,18 @@ jobs:
 
     steps:
 
-      - name: Check out code
+      - name: 1. Check out code
         uses: actions/checkout@v3 # https://github.com/actions/checkout
         with:
           fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
-      - name: Set up Java 11
+      - name: 2. Set up Java for running Gradle build
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 11
+          java-version: 17
 
-      - name: Build and release
+      - name: 3. Build and release
         run: ./gradlew githubRelease publishToSonatype closeAndReleaseStagingRepository releaseSummary
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
