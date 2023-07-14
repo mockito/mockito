@@ -62,16 +62,26 @@ jobs:
 
     - name: 5. Spotless check (single job only). Run './gradlew spotlessApply' locally if this job fails.
       if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
-      run: ./gradlew spotlessCheck
+      run: >
+        ./gradlew
+        spotlessCheck
 
     - name: 6. Build on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
-      run: ./gradlew build idea --scan
+      run: >
+        ./gradlew
+        build
+        idea
+        --scan
       env:
         MOCK_MAKER: ${{ matrix.entry.mock-maker }}
         MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
     - name: 7. Generate coverage report
-      run: ./gradlew coverageReport --stacktrace --scan
+      run: >
+        ./gradlew
+        coverageReport
+        --stacktrace
+        --scan
 
     - name: 8. Upload coverage report
       uses: codecov/codecov-action@v3
@@ -195,7 +205,12 @@ jobs:
           java-version: 17
 
       - name: 3. Build and release
-        run: ./gradlew githubRelease publishToSonatype closeAndReleaseStagingRepository releaseSummary
+        run: >
+          ./gradlew
+          githubRelease
+          publishToSonatype
+          closeAndReleaseStagingRepository
+          releaseSummary
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
