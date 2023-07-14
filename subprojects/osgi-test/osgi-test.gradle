@@ -1,8 +1,5 @@
-plugins {
-    id 'java'
-}
-
 apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-test.gradle"
 apply from: "osgi-test-bundles.gradle"
 
 description = "Test suite for OSGi framework with Mockito"
@@ -14,8 +11,6 @@ dependencies {
 
     testRuntimeOnly libraries.equinox
 }
-
-tasks.javadoc.enabled = false
 
 configurations {
     testRuntimeBundles
