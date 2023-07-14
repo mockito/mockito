@@ -40,7 +40,6 @@ libraries.kotlin = [
 
     stdlib: "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}",
     coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3-native-mt',
-    gradlePlugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}",
 ]
 libraries.android = [
     runner: 'androidx.test:runner:1.5.2',
