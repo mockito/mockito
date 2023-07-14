@@ -1,5 +1,6 @@
 apply plugin: "java"
 apply plugin: "java-library"
+apply from: "$rootDir/gradle/test-launcher.gradle"
 
 if (!base.archivesName.get().startsWith("mockito-")) {
     base.archivesName = "mockito-" + project.name

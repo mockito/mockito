@@ -1,4 +1,5 @@
 apply plugin: "java"
+apply from: "$rootDir/gradle/test-launcher.gradle"
 
 // Test modules don't need to be published, so there's no need to build javadoc for them.
 // Most test modules don't have src/main, but this is here in shared configuration just in case.

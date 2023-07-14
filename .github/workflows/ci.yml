@@ -71,6 +71,7 @@ jobs:
     - name: 6. Build on Java ${{ matrix.java }} with ${{ matrix.entry.mock-maker }} and ${{ matrix.entry.member-accessor }}
       run: >
         ./gradlew
+        -Pmockito.test.java=${{ matrix.java }}
         build
         idea
         --stacktrace
@@ -82,6 +83,7 @@ jobs:
     - name: 7. Generate coverage report
       run: >
         ./gradlew
+        -Pmockito.test.java=${{ matrix.java }}
         coverageReport
         --stacktrace
         --scan
