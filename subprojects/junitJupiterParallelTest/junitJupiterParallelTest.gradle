@@ -1,8 +1,10 @@
-description = "Tests that require fine tuned parallel settings for JUnit Jupiter (bug #1630)"
+plugins {
+    id 'java'
+}
 
 apply from: "$rootDir/gradle/dependencies.gradle"
 
-apply plugin: "java"
+description = "Tests that require fine tuned parallel settings for JUnit Jupiter (bug #1630)"
 
 dependencies {
     testImplementation libraries.junitJupiterApi

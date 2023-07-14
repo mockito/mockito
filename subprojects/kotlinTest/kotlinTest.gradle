@@ -6,9 +6,9 @@ plugins {
     id 'java'
 }
 
-description = "Kotlin tests for Mockito."
-
 apply from: "$rootDir/gradle/dependencies.gradle"
+
+description = "Kotlin tests for Mockito."
 
 java {
     sourceCompatibility = 11

@@ -1,5 +1,5 @@
 plugins {
-    id('java-platform')
+    id 'java-platform'
 }
 
 description = "Mockito Bill of Materials (BOM)"

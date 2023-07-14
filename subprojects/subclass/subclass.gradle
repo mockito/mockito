@@ -1,6 +1,6 @@
-description = "Mockito preconfigured subclass mock maker"
-
 apply from: "$rootDir/gradle/java-library.gradle"
+
+description = "Mockito preconfigured subclass mock maker"
 
 dependencies {
     api project.rootProject

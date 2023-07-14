@@ -1,6 +1,9 @@
+plugins {
+    id 'java'
+}
+
 apply from: "$rootDir/gradle/dependencies.gradle"
 
-apply plugin: 'java'
 description = "End-to-end tests for Mockito and its extensions."
 
 dependencies {

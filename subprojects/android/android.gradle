@@ -1,6 +1,6 @@
-description = "Mockito for Android"
-
 apply from: "$rootDir/gradle/java-library.gradle"
+
+description = "Mockito for Android"
 
 dependencies {
     api project.rootProject

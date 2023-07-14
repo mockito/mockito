@@ -2,9 +2,9 @@ plugins {
     id 'java'
 }
 
-description = "Test suite for Java 9 modules with Mockito"
-
 apply from: "$rootDir/gradle/dependencies.gradle"
+
+description = "Test suite for Java 9 modules with Mockito"
 
 dependencies {
     implementation project.rootProject

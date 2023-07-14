@@ -1,9 +1,12 @@
 import aQute.bnd.gradle.Resolve
 
-description = "Mockito JUnit 5 support"
+plugins {
+    id 'biz.aQute.bnd.builder'
+}
 
 apply from: "$rootDir/gradle/java-library.gradle"
-apply plugin: 'biz.aQute.bnd.builder'
+
+description = "Mockito JUnit 5 support"
 
 dependencies {
     api project.rootProject

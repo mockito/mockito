@@ -2,9 +2,9 @@ plugins {
     id 'java'
 }
 
-description = "Test suite for excercising programmatic mock maker in Mockito"
-
 apply from: "$rootDir/gradle/dependencies.gradle"
+
+description = "Test suite for excercising programmatic mock maker in Mockito"
 
 dependencies {
     implementation project.rootProject

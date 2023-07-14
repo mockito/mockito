@@ -1,7 +1,7 @@
-description = "ErrorProne plugins for Mockito"
-
-apply from: "$rootDir/gradle/java-library.gradle"
 apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-library.gradle"
+
+description = "ErrorProne plugins for Mockito"
 
 dependencies {
     compileOnly libraries.autoservice

@@ -1,9 +1,10 @@
 plugins {
     id 'java'
 }
-description = "Test suite memory usage of Mockito"
 
 apply from: "$rootDir/gradle/dependencies.gradle"
+
+description = "Test suite memory usage of Mockito"
 
 dependencies {
     implementation project.rootProject

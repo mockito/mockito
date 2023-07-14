@@ -1,7 +1,9 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-apply plugin: "org.jetbrains.kotlin.jvm"
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
 
 description = "Kotlin tests for Mockito."
 
