@@ -1,23 +1,13 @@
-plugins {
-    id 'java'
-}
+apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Mockito preconfigured inline mock maker (intermediate and to be superseeded by automatic usage in a future version)"
-
-apply from: "$rootDir/gradle/dependencies.gradle"
-
-java {
-    sourceCompatibility = 11
-    targetCompatibility = 11
-}
 
 dependencies {
     implementation project.rootProject
     testImplementation libraries.junit4
     testImplementation libraries.assertj
 }
-
-tasks.javadoc.enabled = false
 
 test {
     if (JavaVersion.VERSION_17 <= JavaVersion.current()) {

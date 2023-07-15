@@ -1,8 +1,9 @@
 plugins {
-  id("com.gradle.enterprise").version("3.13.4")
+    id("com.gradle.enterprise") version "3.13.4"
 }
 
-include("subclass",
+include(
+    "subclass",
     "inlineTest",
     "proxy",
     "extTest",
@@ -20,7 +21,8 @@ include("subclass",
     "osgi-test",
     "bom",
     "errorprone",
-    "programmatic-test")
+    "programmatic-test"
+)
 
 // https://developer.android.com/studio/command-line/variables#envar
 // https://developer.android.com/studio/build#properties-files
@@ -32,18 +34,10 @@ if (System.getenv("ANDROID_HOME") != null || File("local.properties").exists()) 
 
 rootProject.name = "mockito"
 
-val koltinBuildScriptProject = hashSetOf("junitJupiterExtensionTest", "junitJupiterInlineMockMakerExtensionTest")
-
-fun buildFileExtensionFor(projectName: String) =
-    if (projectName in koltinBuildScriptProject) ".gradle.kts" else ".gradle"
-
-fun buildFileFor(projectName: String) =
-    "$projectName${buildFileExtensionFor(projectName)}"
-
 rootProject.children.forEach { project ->
     val projectDirName = "subprojects/${project.name}"
     project.projectDir = File(settingsDir, projectDirName)
-    project.buildFileName = buildFileFor(project.name)
+    project.buildFileName = "${project.name}.gradle"
     require(project.projectDir.isDirectory) {
         "Project directory ${project.projectDir} for project ${project.name} does not exist."
     }

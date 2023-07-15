@@ -7,9 +7,7 @@ buildscript {
     }
 }
 
-apply from: "$rootDir/gradle/dependencies.gradle"
-
-description = "Test bundles for OSGi tests"
+// Test bundles for OSGi tests
 
 sourceSets {
     testBundle

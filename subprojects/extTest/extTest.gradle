@@ -1,11 +1,7 @@
 apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-test.gradle"
 
-apply plugin: 'java'
 description = "End-to-end tests for Mockito and its extensions."
-
-repositories {
-    mavenLocal() //we depend on locally published mockito
-}
 
 dependencies {
     testImplementation project.rootProject

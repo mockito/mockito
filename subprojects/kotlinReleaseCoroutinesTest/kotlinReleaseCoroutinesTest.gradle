@@ -1,29 +1,14 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${libraries.kotlin.version}"
-    }
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
 }
 
-apply plugin: "org.jetbrains.kotlin.jvm"
+apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Kotlin tests for Mockito."
-
-repositories {
-    mavenCentral()
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-}
-
-java {
-    sourceCompatibility = 11
-    targetCompatibility = 11
-}
 
 tasks.withType(KotlinCompile).configureEach {
     compilerOptions {

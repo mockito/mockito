@@ -52,7 +52,9 @@ publishing {
 
             pom {
                 name = artifactId
-                description = project.description
+                afterEvaluate {
+                    description = project.description
+                }
 
                 plugins.withId("java") {
                     //Gradle does not write 'jar' packaging to the pom (unlike other packaging types).

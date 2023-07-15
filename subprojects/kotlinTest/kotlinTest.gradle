@@ -3,17 +3,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id 'org.jetbrains.kotlin.jvm'
-    id 'java'
 }
-
-description = "Kotlin tests for Mockito."
 
 apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-test.gradle"
 
-java {
-    sourceCompatibility = 11
-    targetCompatibility = 11
-}
+description = "Kotlin tests for Mockito."
 
 tasks.withType(KotlinCompile).configureEach {
     compilerOptions {

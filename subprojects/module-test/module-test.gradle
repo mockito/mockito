@@ -1,20 +1,10 @@
-plugins {
-    id 'java'
-}
+apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Test suite for Java 9 modules with Mockito"
-
-apply from: "$rootDir/gradle/dependencies.gradle"
 
 dependencies {
     implementation project.rootProject
     testImplementation libraries.junit4
     testImplementation libraries.assertj
-}
-
-tasks.javadoc.enabled = false
-
-java {
-    sourceCompatibility = 11
-    targetCompatibility = 11
 }

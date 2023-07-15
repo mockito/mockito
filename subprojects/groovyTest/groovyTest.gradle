@@ -1,8 +1,11 @@
-apply plugin: 'groovy'
-
-description = "Integration test for using Mockito from Groovy."
+plugins {
+    id 'groovy'
+}
 
 apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-test.gradle"
+
+description = "Integration test for using Mockito from Groovy."
 
 dependencies {
     testImplementation project(":")
