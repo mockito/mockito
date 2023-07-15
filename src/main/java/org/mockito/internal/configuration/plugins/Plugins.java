@@ -9,6 +9,7 @@ import java.util.List;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.InstantiatorProvider2;
+import org.mockito.plugins.LocationFactory;
 import org.mockito.plugins.MemberAccessor;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockResolver;
@@ -103,6 +104,16 @@ public final class Plugins {
      */
     public static DoNotMockEnforcer getDoNotMockEnforcer() {
         return registry.getDoNotMockEnforcer();
+    }
+
+    /**
+     * Returns the {@link LocationFactory} available for the current runtime.
+     *
+     * <p> Returns {@link org.mockito.internal.debugging.DefaultLocationFactory} if no
+     * {@link LocationFactory} extension exists or is visible in the current classpath.</p>
+     */
+    public static LocationFactory getLocationFactory() {
+        return registry.getLocationFactory();
     }
 
     private Plugins() {}

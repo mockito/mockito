@@ -6,7 +6,7 @@ package org.mockito.memorytest;
 
 import com.sun.management.ThreadMXBean;
 import org.junit.Test;
-import org.mockito.internal.debugging.LocationFactory;
+import org.mockito.internal.configuration.plugins.Plugins;
 
 import java.lang.management.ManagementFactory;
 import java.util.stream.IntStream;
@@ -27,7 +27,7 @@ public class LocationFactoryAllocationRateTest {
         // On Java 8, this will use the internal approach. On Java 9, the StackWalker approach will
         // be used.
         new Throwable().fillInStackTrace();
-        LocationFactory.create();
+        Plugins.getLocationFactory().create();
         long baseline =
             countMemoryAllocations(
                 () ->
@@ -39,7 +39,7 @@ public class LocationFactoryAllocationRateTest {
                 () ->
                     recurseAndThen(
                         RECURSION_LIMIT,
-                        repeat(() -> LocationFactory.create(false))));
+                        repeat(() -> Plugins.getLocationFactory().create(false))));
         assertThat(actual * EXPECTED_IMPROVEMENT)
             .as(
                 "stack walker approach (%d) expected to be at least %fx better than exception approach (%d)",

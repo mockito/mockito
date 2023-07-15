@@ -20,7 +20,7 @@ import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.mockito.exceptions.verification.SmartNullPointerException;
-import org.mockito.internal.debugging.LocationFactory;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.invocation.InterceptedInvocation;
 import org.mockito.internal.invocation.SerializableMethod;
 import org.mockito.internal.invocation.mockref.MockStrongReference;
@@ -146,7 +146,7 @@ public class ReturnsSmartNullsTest extends TestBase {
                         GenericFooBar.class.getMethod("methodWithArgs", int.class, Object.class)),
                 new Object[] {1, obj},
                 InterceptedInvocation.NO_OP,
-                LocationFactory.create(),
+                Plugins.getLocationFactory().create(),
                 1);
     }
 
@@ -269,7 +269,7 @@ public class ReturnsSmartNullsTest extends TestBase {
                                 "methodWithVarArgs", int.class, Object[].class)),
                 new Object[] {1, obj},
                 InterceptedInvocation.NO_OP,
-                LocationFactory.create(),
+                Plugins.getLocationFactory().create(),
                 1);
     }
 

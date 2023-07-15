@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.debugging;
 
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.invocation.Location;
 
 public class Localized<T> {
@@ -13,7 +14,7 @@ public class Localized<T> {
 
     public Localized(T object) {
         this.object = object;
-        location = LocationFactory.create();
+        location = Plugins.getLocationFactory().create();
     }
 
     public T getObject() {

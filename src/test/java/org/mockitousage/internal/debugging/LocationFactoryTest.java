@@ -5,7 +5,7 @@
 package org.mockitousage.internal.debugging;
 
 import org.junit.Test;
-import org.mockito.internal.debugging.LocationFactory;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.TestBase;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class LocationFactoryTest extends TestBase {
 
     @Test
     public void shouldLocationNotContainGetStackTraceMethod() {
-        assertThat(LocationFactory.create().toString())
+        assertThat(Plugins.getLocationFactory().create().toString())
                 .contains("shouldLocationNotContainGetStackTraceMethod");
     }
 
@@ -28,7 +28,7 @@ public class LocationFactoryTest extends TestBase {
         final List<String> files = new ArrayList<String>();
         new Runnable() { // anonymous inner class adds stress to the check
             public void run() {
-                files.add(LocationFactory.create().getSourceFile());
+                files.add(Plugins.getLocationFactory().create().getSourceFile());
             }
         }.run();
 

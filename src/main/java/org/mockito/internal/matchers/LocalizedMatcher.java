@@ -5,7 +5,7 @@
 package org.mockito.internal.matchers;
 
 import org.mockito.ArgumentMatcher;
-import org.mockito.internal.debugging.LocationFactory;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.invocation.Location;
 
 @SuppressWarnings("unchecked")
@@ -16,7 +16,7 @@ public class LocalizedMatcher {
 
     public LocalizedMatcher(ArgumentMatcher<?> matcher) {
         this.matcher = matcher;
-        this.location = LocationFactory.create();
+        this.location = Plugins.getLocationFactory().create();
     }
 
     public Location getLocation() {

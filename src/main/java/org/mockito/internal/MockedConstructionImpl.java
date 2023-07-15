@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.mockito.MockedConstruction;
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.debugging.LocationFactory;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.invocation.Location;
 import org.mockito.plugins.MockMaker;
 
@@ -21,7 +21,7 @@ public final class MockedConstructionImpl<T> implements MockedConstruction<T> {
 
     private boolean closed;
 
-    private final Location location = LocationFactory.create();
+    private final Location location = Plugins.getLocationFactory().create();
 
     protected MockedConstructionImpl(MockMaker.ConstructionMockControl<T> control) {
         this.control = control;
