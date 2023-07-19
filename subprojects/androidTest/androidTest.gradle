@@ -5,6 +5,9 @@ plugins {
     id 'kotlin-android'
 }
 
+apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/test-launcher.gradle"
+
 android {
     namespace = "org.mockitousage.androidtest"
     compileSdk = 33
@@ -61,8 +64,6 @@ androidComponents {
         enable = false
     }
 }
-
-apply from: "$rootDir/gradle/dependencies.gradle"
 
 dependencies {
     implementation libraries.kotlin.stdlib
