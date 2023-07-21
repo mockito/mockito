@@ -99,7 +99,7 @@ publishing {
     }
 
     //useful for testing - running "publish" will create artifacts/pom in a local dir
-    repositories { maven { url = "$buildDir/repo" } }
+    repositories { maven { url = layout.buildDirectory.dir("repo") } }
 }
 
 plugins.withId("java") {

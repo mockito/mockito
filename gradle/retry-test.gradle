@@ -45,7 +45,7 @@ test {
     }
     afterSuite { descriptor, result ->
         if (!descriptor.parent) { //root
-            def failuresReport = new File(buildDir, name + "-failures.txt")
+            def failuresReport = layout.buildDirectory.file(name + "-failures.txt").get().asFile
             def deletion = !failuresReport.exists() || failuresReport.delete()
             if (!deletion) {
                 throw new GradleException("Problems deleting failures file: $reportPath. Please delete manually and retry.")
