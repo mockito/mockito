@@ -9,7 +9,7 @@ javadoc {
     // see https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
 
     source = sourceSets.main.allJava
-    destinationDir = file("$buildDir/javadoc")
+    destinationDir = layout.buildDirectory.dir("javadoc").get().asFile
     title = "Mockito ${project.version} API"
 
     // The way *gradle* javadoc task works and due to *gradle exclusion* the log output triggers javadoc warning and
@@ -57,7 +57,7 @@ javadoc {
     doLast {
         copy {
             from "src/javadoc"
-            into "$buildDir/javadoc"
+            into layout.buildDirectory.dir("javadoc")
         }
     }
 }
