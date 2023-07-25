@@ -15,7 +15,7 @@ libraries.junitJupiterEngine = "org.junit.jupiter:junit-jupiter-engine:${version
 libraries.junitVintageEngine = "org.junit.vintage:junit-vintage-engine:${versions.junitJupiter}"
 libraries.assertj = 'org.assertj:assertj-core:3.24.2'
 libraries.hamcrest = 'org.hamcrest:hamcrest-core:2.2'
-libraries.opentest4j = 'org.opentest4j:opentest4j:1.2.0'
+libraries.opentest4j = 'org.opentest4j:opentest4j:1.3.0'
 
 libraries.bytebuddy = "net.bytebuddy:byte-buddy:${versions.bytebuddy}"
 libraries.bytebuddyagent = "net.bytebuddy:byte-buddy-agent:${versions.bytebuddy}"
