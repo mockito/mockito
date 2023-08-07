@@ -17,6 +17,7 @@ import static org.mockito.Mockito.withSettings;
 import java.util.List;
 
 import org.junit.Test;
+import org.mockito.MockMakers;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
@@ -463,5 +464,19 @@ public class CreatingMocksWithConstructorTest extends TestBase {
                                 .useConstructor("String", 7)
                                 .defaultAnswer(CALLS_REAL_METHODS));
         assertEquals("String", mock.getData());
+    }
+
+    @Test
+    public void constructor_with_varargs() {
+        ClassWithVarargsConstructor mock =
+                mock(
+                        ClassWithVarargsConstructor.class,
+                        withSettings()
+                                .mockMaker(MockMakers.INLINE)
+                                .useConstructor(10, new String[] {"abc"}));
+    }
+
+    private static class ClassWithVarargsConstructor {
+        public ClassWithVarargsConstructor(int x, String... y) {}
     }
 }
