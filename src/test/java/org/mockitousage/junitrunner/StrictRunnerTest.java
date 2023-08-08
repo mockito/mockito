@@ -11,9 +11,12 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.Request;
 import org.junit.runner.Result;
 import org.junit.runner.RunWith;
+import org.junit.runner.manipulation.Filter;
 import org.mockito.Mock;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.junit.MockitoJUnit;
@@ -82,6 +85,34 @@ public class StrictRunnerTest extends TestBase {
 
         // then
         JUnitResultAssert.assertThat(result).isSuccessful();
+    }
+
+    @Test
+    public void does_not_report_unused_stubs_when_test_is_filtered() {
+        // This class has two test methods; run only the test method that does not use the stubbing
+        // set up in before
+        Request request = Request.method(StubbingInBeforeUsed.class, "dummy");
+
+        // when
+        Result result = runner.run(request);
+
+        // then
+        JUnitResultAssert.assertThat(result).isSuccessful();
+    }
+
+    @Test
+    public void fails_when_stubs_were_not_used_with_noop_filter() {
+        Class[] tests = {
+            StubbingInConstructorUnused.class,
+            StubbingInBeforeUnused.class,
+            StubbingInTestUnused.class
+        };
+
+        // when
+        Result result = runner.run(Request.classes(tests).filterWith(new NoOpFilter()));
+
+        // then
+        JUnitResultAssert.assertThat(result).fails(3, UnnecessaryStubbingException.class);
     }
 
     @RunWith(MockitoJUnitRunner.class)
@@ -199,6 +230,19 @@ public class StrictRunnerTest extends TestBase {
                     };
             t.start();
             t.join();
+        }
+    }
+
+    private static class NoOpFilter extends Filter {
+
+        @Override
+        public boolean shouldRun(Description description) {
+            return true;
+        }
+
+        @Override
+        public String describe() {
+            return "No-op filter";
         }
     }
 }

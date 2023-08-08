@@ -16,7 +16,7 @@ public class StrictRunner implements InternalRunner {
 
     private final Class<?> testClass;
     private final InternalRunner runner;
-    private boolean filterRequested;
+    private boolean testsSkipped;
 
     /**
      * @param runner - the runner to wrap around
@@ -25,6 +25,7 @@ public class StrictRunner implements InternalRunner {
     public StrictRunner(InternalRunner runner, Class<?> testClass) {
         this.runner = runner;
         this.testClass = testClass;
+        this.testsSkipped = false;
     }
 
     @Override
@@ -43,9 +44,9 @@ public class StrictRunner implements InternalRunner {
             Mockito.framework().removeListener(reporter);
         }
 
-        if (!filterRequested && listener.isSuccessful()) {
+        if (!testsSkipped && listener.isSuccessful()) {
             // only report when:
-            // 1. if all tests from given test have ran (filter requested is false)
+            // 1. if all tests from given test have ran (tests skipped is false)
             //   Otherwise we would report unnecessary stubs even if the user runs just single test
             // from the class
             // 2. tests are successful (we don't want to add an extra failure on top of any existing
@@ -61,7 +62,40 @@ public class StrictRunner implements InternalRunner {
 
     @Override
     public void filter(Filter filter) throws NoTestsRemainException {
-        filterRequested = true;
-        runner.filter(filter);
+        Filter recordingFilter = new RecordingFilter(filter);
+        runner.filter(recordingFilter);
+    }
+
+    private class RecordingFilter extends Filter {
+
+        private final Filter delegate;
+
+        public RecordingFilter(Filter delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void apply(Object child) throws NoTestsRemainException {
+            delegate.apply(child);
+        }
+
+        @Override
+        public Filter intersect(Filter second) {
+            return delegate.intersect(second);
+        }
+
+        @Override
+        public boolean shouldRun(Description description) {
+            boolean result = delegate.shouldRun(description);
+            if (!result) {
+                testsSkipped = true;
+            }
+            return result;
+        }
+
+        @Override
+        public String describe() {
+            return delegate.describe();
+        }
     }
 }
