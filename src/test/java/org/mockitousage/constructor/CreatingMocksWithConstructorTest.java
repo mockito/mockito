@@ -17,7 +17,6 @@ import static org.mockito.Mockito.withSettings;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.MockMakers;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.mock.SerializableMode;
 import org.mockitousage.IMethods;
@@ -471,9 +470,7 @@ public class CreatingMocksWithConstructorTest extends TestBase {
         ClassWithVarargsConstructor mock =
                 mock(
                         ClassWithVarargsConstructor.class,
-                        withSettings()
-                                .mockMaker(MockMakers.INLINE)
-                                .useConstructor(10, new String[] {"abc"}));
+                        withSettings().useConstructor(10, new String[] {"abc"}));
     }
 
     private static class ClassWithVarargsConstructor {
