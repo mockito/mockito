@@ -20,7 +20,7 @@ Still on Mockito 1.x? See [what's new](https://github.com/mockito/mockito/wiki/W
 [Mockito 3](https://github.com/mockito/mockito/releases/tag/v3.0.0) does not introduce any breaking API changes, but now requires Java 8 over Java 6 for Mockito 2.
 [Mockito 4](https://github.com/mockito/mockito/releases/tag/v4.0.0) removes deprecated API.
 [Mockito 5](https://github.com/mockito/mockito/releases/tag/v5.0.0) switches the default mockmaker to mockito-inline, and now requires Java 11.
-
+Only one major version is supported at a time, and changes are not backported to older versions.
 
 ## Mockito for enterprise
 
