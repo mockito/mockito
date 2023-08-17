@@ -54,6 +54,10 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         MockCreationSettings<?> mockSettings = MockUtil.getMockSettings(invocation.getMock());
 
         Class<?> rawType = returnTypeGenericMetadata.rawType();
+        final var emptyValue = ReturnsEmptyValues.returnCommonEmptyValueFor(rawType);
+        if (emptyValue != null) {
+            return emptyValue;
+        }
         if (!typeMockabilityOf(rawType, mockSettings.getMockMaker()).mockable()) {
             if (invocation.getMethod().getReturnType().equals(rawType)) {
                 return delegate().answer(invocation);
