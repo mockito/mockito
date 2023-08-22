@@ -55,6 +55,7 @@ allprojects { proj ->
     }
     plugins.withId('java') {
         proj.apply from: "$rootDir/gradle/errorprone.gradle"
+        proj.apply from: "$rootDir/gradle/jfr.gradle"
     }
     tasks.withType(JavaCompile) {
         //I don't believe those warnings add value given modern IDEs
