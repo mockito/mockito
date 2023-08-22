@@ -1,6 +1,6 @@
 apply plugin: 'biz.aQute.bnd.builder'
 
-jar {
+tasks.named("jar", Jar) {
     bundle { // this: BundleTaskExtension
         classpath = project.configurations.compileClasspath
         bnd(

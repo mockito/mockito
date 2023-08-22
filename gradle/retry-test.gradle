@@ -6,7 +6,7 @@ Long term, we can evolve retry-test script plugin to a binary plugin or make it 
 
 Plugin adds 'retryTest' task that runs tests that failed during the execution of 'test' task.
 */
-task retryTest(type: Test) {
+def retryTestTask = tasks.register("retryTest", Test) {
     description = "Retries failed tests (if present)"
     enabled = false
     doFirst {
@@ -34,8 +34,8 @@ task retryTest(type: Test) {
     }
 }
 
-test {
-    finalizedBy retryTest
+tasks.named("test", Test) {
+    finalizedBy retryTestTask
     ext.failedTests = []
     afterTest { descriptor, result ->
         if (!descriptor.composite /* e.g. is not a parent */ && result.failedTestCount > 0 ) {

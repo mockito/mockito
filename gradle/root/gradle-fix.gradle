@@ -2,7 +2,7 @@
 // GradleWorkerMain ignores options available in the environment, so we have to pass them there
 
 allprojects {
-    tasks.withType(JavaForkOptions) {
+    tasks.withType(JavaForkOptions).configureEach {
         // should improve memory on a 64bit JVM
         jvmArgs "-XX:+UseCompressedOops"
 
