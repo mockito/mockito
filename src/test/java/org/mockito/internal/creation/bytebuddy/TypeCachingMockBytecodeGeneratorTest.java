@@ -13,10 +13,17 @@ import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Phaser;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -206,6 +213,134 @@ public class TypeCachingMockBytecodeGeneratorTest {
 
         // then
         assertThat(cache).isEmpty();
+    }
+
+    @Test
+    public void cacheLockingStressTest_same_hashcode_different_interface()
+            throws InterruptedException, TimeoutException {
+        Class<?>[] classes = cacheLockingInMemClassLoaderClasses();
+        Class<?> ifA = classes[0];
+        Class<?> ifB = classes[1];
+        var featA = newMockFeatures(ifA, ifB);
+        var featB = newMockFeatures(ifB, ifA);
+        cacheLockingStressTestImpl(featA, featB);
+    }
+
+    @Test
+    public void cacheLockingStressTest_same_hashcode_same_interface()
+            throws InterruptedException, TimeoutException {
+        Class<?>[] classes = cacheLockingInMemClassLoaderClasses();
+        Class<?> ifA = classes[0];
+        var featA = newMockFeatures(ifA);
+        cacheLockingStressTestImpl(featA, featA);
+    }
+
+    @Test
+    public void cacheLockingStressTest_different_hashcode()
+            throws InterruptedException, TimeoutException {
+        Class<?>[] classes = cacheLockingInMemClassLoaderClasses();
+        Class<?> ifA = classes[0];
+        Class<?> ifB = classes[1];
+        Class<?> ifC = classes[2];
+        var featA = newMockFeatures(ifA, ifB);
+        var featB = newMockFeatures(ifB, ifC);
+        cacheLockingStressTestImpl(featA, featB);
+    }
+
+    @Test
+    public void cacheLockingStressTest_unrelated_classes()
+            throws InterruptedException, TimeoutException {
+        Class<?>[] classes = cacheLockingInMemClassLoaderClasses();
+        Class<?> ifA = classes[0];
+        Class<?> ifB = classes[1];
+        var featA = newMockFeatures(ifA);
+        var featB = newMockFeatures(ifB);
+        cacheLockingStressTestImpl(featA, featB);
+    }
+
+    private void cacheLockingStressTestImpl(MockFeatures<?> featA, MockFeatures<?> featB)
+            throws InterruptedException, TimeoutException {
+        int iterations = 10_000;
+
+        TypeCachingBytecodeGenerator bytecodeGenerator =
+                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+
+        Phaser phaser = new Phaser(4);
+        Function<Runnable, CompletableFuture<Void>> runCode =
+                code ->
+                        CompletableFuture.runAsync(
+                                () -> {
+                                    phaser.arriveAndAwaitAdvance();
+                                    try {
+                                        for (int i = 0; i < iterations; i++) {
+                                            code.run();
+                                        }
+                                    } finally {
+                                        phaser.arrive();
+                                    }
+                                });
+        var mockFeatAFuture =
+                runCode.apply(
+                        () -> {
+                            Class<?> mockClass = bytecodeGenerator.mockClass(featA);
+                            assertValidMockClass(featA, mockClass);
+                        });
+
+        var mockFeatBFuture =
+                runCode.apply(
+                        () -> {
+                            Class<?> mockClass = bytecodeGenerator.mockClass(featB);
+                            assertValidMockClass(featB, mockClass);
+                        });
+        var cacheFuture = runCode.apply(bytecodeGenerator::clearAllCaches);
+        // Start test
+        phaser.arriveAndAwaitAdvance();
+        // Wait for test to end
+        int phase = phaser.arrive();
+        try {
+
+            phaser.awaitAdvanceInterruptibly(phase, 30, TimeUnit.SECONDS);
+        } finally {
+            // Collect exceptions from the futures, to make issues visible.
+            mockFeatAFuture.getNow(null);
+            mockFeatBFuture.getNow(null);
+            cacheFuture.getNow(null);
+        }
+    }
+
+    private static <T> MockFeatures<T> newMockFeatures(
+            Class<T> mockedType, Class<?>... interfaces) {
+        return MockFeatures.withMockFeatures(
+                mockedType,
+                new HashSet<>(Arrays.asList(interfaces)),
+                SerializableMode.NONE,
+                false,
+                null);
+    }
+
+    private static Class<?>[] cacheLockingInMemClassLoaderClasses() {
+        ClassLoader inMemClassLoader =
+                inMemoryClassLoader()
+                        .withClassDefinition("foo.IfA", makeMarkerInterface("foo.IfA"))
+                        .withClassDefinition("foo.IfB", makeMarkerInterface("foo.IfB"))
+                        .withClassDefinition("foo.IfC", makeMarkerInterface("foo.IfC"))
+                        .build();
+        try {
+            return new Class[] {
+                inMemClassLoader.loadClass("foo.IfA"),
+                inMemClassLoader.loadClass("foo.IfB"),
+                inMemClassLoader.loadClass("foo.IfC")
+            };
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private void assertValidMockClass(MockFeatures<?> mockFeature, Class<?> mockClass) {
+        assertThat(mockClass).isAssignableTo(mockFeature.mockedType);
+        for (Class<?> anInterface : mockFeature.interfaces) {
+            assertThat(mockClass).isAssignableTo(anInterface);
+        }
     }
 
     static class HoldingAReference {
