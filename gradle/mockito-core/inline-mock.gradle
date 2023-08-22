@@ -6,7 +6,7 @@ tasks.register('copyMockMethodDispatcher', Copy) {
 
     rename '(.+)\\.class', '$1.raw'
 }
-classes.dependsOn(copyMockMethodDispatcher)
+classes.dependsOn("copyMockMethodDispatcher")
 
 sourceSets.main {
     resources {
@@ -14,7 +14,7 @@ sourceSets.main {
     }
 }
 
-jar {
+tasks.named("jar", Jar) {
     exclude("org/mockito/internal/creation/bytebuddy/inject/package-info.class")
     exclude("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class")
 }

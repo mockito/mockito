@@ -56,19 +56,19 @@ allprojects { proj ->
     plugins.withId('java') {
         proj.apply from: "$rootDir/gradle/errorprone.gradle"
     }
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         //I don't believe those warnings add value given modern IDEs
         options.warnings = false
         options.encoding = 'UTF-8'
     }
-    tasks.withType(Javadoc) {
+    tasks.withType(Javadoc).configureEach {
         options.addStringOption('Xdoclint:none', '-quiet')
         options.addStringOption('encoding', 'UTF-8')
         options.addStringOption('charSet', 'UTF-8')
         options.setSource('11')
     }
 
-    tasks.withType(AbstractArchiveTask) {
+    tasks.withType(AbstractArchiveTask).configureEach {
         preserveFileTimestamps = false
         reproducibleFileOrder = true
         dirMode = Integer.parseInt("0755", 8)

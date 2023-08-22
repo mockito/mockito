@@ -7,30 +7,30 @@ plugins.withId("java") {
         include "LICENSE"
     }
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
+   def sourcesJarTask = tasks.register("sourcesJar", Jar) {
         archiveClassifier = 'sources'
         from sourceSets.main.allSource
         with licenseSpec
     }
 
-    task javadocJar(type: Jar, dependsOn: javadoc) {
+    def javadocJarTask = tasks.register("javadocJar", Jar) {
         archiveClassifier = 'javadoc'
         from tasks.javadoc
         with licenseSpec
     }
 
     artifacts {
-        archives sourcesJar
-        archives javadocJar
+        archives sourcesJarTask
+        archives javadocJarTask
     }
 
-    jar {
+    tasks.named("jar", Jar) {
         with licenseSpec
     }
 }
 
 
-tasks.withType(GenerateModuleMetadata) {
+tasks.withType(GenerateModuleMetadata).configureEach {
     enabled = false
 }
 
@@ -41,8 +41,8 @@ publishing {
         javaLibrary(MavenPublication) {
             plugins.withId("java") {
                 from components.java
-                artifact sourcesJar
-                artifact javadocJar
+                artifact tasks.named("sourcesJar")
+                artifact tasks.named("javadocJar")
             }
             plugins.withId("java-platform") {
                 from components.javaPlatform
@@ -103,8 +103,10 @@ publishing {
 }
 
 plugins.withId("java") {
-//fleshes out problems with Maven pom generation when building
-    tasks.build.dependsOn("publishJavaLibraryPublicationToMavenLocal")
+    //fleshes out problems with Maven pom generation when building
+    tasks.named("build") {
+        dependsOn("publishJavaLibraryPublicationToMavenLocal")
+    }
 }
 
 apply plugin: 'signing' //https://docs.gradle.org/current/userguide/signing_plugin.html
