@@ -139,14 +139,6 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return new TreeMap<>();
         } else if (type == LinkedHashMap.class) {
             return new LinkedHashMap<>();
-        } else if (type == Optional.class) {
-            return Optional.empty();
-        } else if (type == OptionalDouble.class) {
-            return OptionalDouble.empty();
-        } else if (type == OptionalInt.class) {
-            return OptionalInt.empty();
-        } else if (type == OptionalLong.class) {
-            return OptionalLong.empty();
         } else if (type == Stream.class) {
             return Stream.empty();
         } else if (type == DoubleStream.class) {
@@ -160,8 +152,27 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
         } else if (type == Period.class) {
             return Period.ZERO;
         }
-
         // Let's not care about the rest of collections.
+
+        return returnCommonEmptyValueFor(type);
+    }
+
+    /**
+     * Returns empty values for common known types, shared between {@link ReturnsEmptyValues} and {@link ReturnsDeepStubs}.
+     *
+     * @param type the type to check
+     * @return the empty value, or {@code null}
+     */
+    static Object returnCommonEmptyValueFor(Class<?> type) {
+        if (type == Optional.class) {
+            return Optional.empty();
+        } else if (type == OptionalDouble.class) {
+            return OptionalDouble.empty();
+        } else if (type == OptionalInt.class) {
+            return OptionalInt.empty();
+        } else if (type == OptionalLong.class) {
+            return OptionalLong.empty();
+        }
         return null;
     }
 }
