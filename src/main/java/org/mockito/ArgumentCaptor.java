@@ -50,8 +50,7 @@ import org.mockito.internal.matchers.CapturingMatcher;
  * Custom argument matchers via {@link ArgumentMatcher} are usually better for stubbing.
  *
  * <p>
- * This utility class <strong>*doesn't do any type checks*</strong>. The generic signatures are only there to avoid casting
- * in your code.
+ * This utility class <strong>will</strong> perform type checking on the generic type (since Mockito 5.0.0).
  * <p>
  * There is an <strong>annotation</strong> that you might find useful: &#64;{@link Captor}
  * <p>
@@ -68,7 +67,7 @@ public class ArgumentCaptor<T> {
 
     private ArgumentCaptor(Class<? extends T> clazz) {
         this.clazz = clazz;
-        this.capturingMatcher = new CapturingMatcher<T>(clazz);
+        this.capturingMatcher = new CapturingMatcher<>(clazz);
     }
 
     /**
@@ -138,9 +137,7 @@ public class ArgumentCaptor<T> {
     /**
      * Build a new <code>ArgumentCaptor</code>.
      * <p>
-     * Note that an <code>ArgumentCaptor</code> <b>*doesn't do any type checks*</b>. It is only there to avoid casting
-     * in your code. This might however change (type checks could be added) in a
-     * future major release.
+     * An <code>ArgumentCaptor</code> will perform type checks (since Mockito 5.0.0).
      *
      * @param clazz Type matching the parameter to be captured.
      * @param <S> Type of clazz
@@ -148,6 +145,6 @@ public class ArgumentCaptor<T> {
      * @return A new ArgumentCaptor
      */
     public static <U, S extends U> ArgumentCaptor<U> forClass(Class<S> clazz) {
-        return new ArgumentCaptor<U>(clazz);
+        return new ArgumentCaptor<>(clazz);
     }
 }
