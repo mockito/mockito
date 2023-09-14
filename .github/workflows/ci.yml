@@ -89,7 +89,7 @@ jobs:
         --scan
 
     - name: 8. Upload coverage report
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         files: build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
         fail_ci_if_error: true
@@ -177,7 +177,7 @@ jobs:
 
     # :androidTest:connectedCheck (which depends on :androidTest:createDebugAndroidTestCoverageReport) already generated coverage report.
     - name: 5. Upload coverage report
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       with:
         files: subprojects/androidTest/build/reports/coverage/androidTest/debug/connected/report.xml
         fail_ci_if_error: true
