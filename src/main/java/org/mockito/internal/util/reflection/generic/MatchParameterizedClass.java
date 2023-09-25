@@ -21,8 +21,9 @@ public class MatchParameterizedClass extends MatchClass implements MatchType {
     @Override
     public boolean matches(MatchType other) {
         return super.matches(other)
-            && (other instanceof MatchParameterizedClass && resolvedTypesMatch((MatchParameterizedClass) other)
-            || matchesSuperTypeOfOther(other));
+                && (other instanceof MatchParameterizedClass
+                                && resolvedTypesMatch((MatchParameterizedClass) other)
+                        || matchesSuperTypeOfOther(other));
     }
 
     private boolean matchesSuperTypeOfOther(MatchType other) {
@@ -30,7 +31,8 @@ public class MatchParameterizedClass extends MatchClass implements MatchType {
             Class<?> clazz = ((HasClass) other).getTheClass();
             Type genericSuperclass = clazz.getGenericSuperclass();
             if (genericSuperclass instanceof ParameterizedType) {
-                Optional<MatchType> matchTypeSuper = ofParameterizedType((ParameterizedType) genericSuperclass);
+                Optional<MatchType> matchTypeSuper =
+                        ofParameterizedType((ParameterizedType) genericSuperclass);
                 if (matchTypeSuper.isPresent()) {
                     return this.matches(matchTypeSuper.get());
                 }
@@ -51,20 +53,15 @@ public class MatchParameterizedClass extends MatchClass implements MatchType {
             Type nextSource = sourceIterator.next();
             if (nextTarget instanceof MatchType && nextSource instanceof MatchType) {
                 typesMatch = ((MatchType) nextTarget).matches((MatchType) nextSource);
-            }
-            else if (nextTarget instanceof MatchWildcard) {
+            } else if (nextTarget instanceof MatchWildcard) {
                 typesMatch = ((MatchWildcard) nextTarget).matches(nextSource);
-            }
-            else if (nextSource instanceof MatchWildcard) {
+            } else if (nextSource instanceof MatchWildcard) {
                 typesMatch = ((MatchWildcard) nextSource).targetMatches(nextTarget);
-            }
-            else if (nextTarget instanceof TypeVariable && nextSource instanceof Class) {
+            } else if (nextTarget instanceof TypeVariable && nextSource instanceof Class) {
                 typesMatch = checkBounds((TypeVariable<?>) nextTarget, (Class<?>) nextSource);
-            }
-            else if (nextTarget instanceof Class && nextSource instanceof Class) {
+            } else if (nextTarget instanceof Class && nextSource instanceof Class) {
                 typesMatch = nextTarget.equals(nextSource);
-            }
-            else {
+            } else {
                 typesMatch = false;
             }
         }
@@ -111,9 +108,10 @@ public class MatchParameterizedClass extends MatchClass implements MatchType {
         if (parameterizedType.getRawType() instanceof Class<?>) {
             Type[] typeArguments = parameterizedType.getActualTypeArguments();
             List<Type> resolvedTypes = Arrays.asList(typeArguments);
-            return Optional.of(new MatchParameterizedClass((Class<?>) parameterizedType.getRawType(), resolvedTypes));
-        }
-        else {
+            return Optional.of(
+                    new MatchParameterizedClass(
+                            (Class<?>) parameterizedType.getRawType(), resolvedTypes));
+        } else {
             return Optional.empty();
         }
     }

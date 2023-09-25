@@ -31,12 +31,10 @@ public class MatchWildcard implements MatchType {
                     matches = isUpperBoundAssignableFrom(upperBoundsThis[i], upperBoundsOther[i]);
                 }
                 return matches;
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -46,13 +44,12 @@ public class MatchWildcard implements MatchType {
     }
 
     MatchType makeCaptured() {
-        return this.captured
-            ? this
-            : new MatchWildcard(wildcard, true);
+        return this.captured ? this : new MatchWildcard(wildcard, true);
     }
 
     public boolean matches(Type type) {
-        return !captured && testUpperBounds(upperBound -> isUpperBoundAssignableFrom(upperBound, type));
+        return !captured
+                && testUpperBounds(upperBound -> isUpperBoundAssignableFrom(upperBound, type));
     }
 
     public boolean targetMatches(Type targetType) {
@@ -78,8 +75,11 @@ public class MatchWildcard implements MatchType {
         return testClassTypes(upperBound, type, reverse(Class::isAssignableFrom));
     }
 
-    private static boolean testClassTypes(Type upperBound, Type type, BiPredicate<Class<?>, Class<?>> biPredicate) {
-        return upperBound instanceof Class && type instanceof Class && biPredicate.test((Class<?>) upperBound, (Class<?>) type);
+    private static boolean testClassTypes(
+            Type upperBound, Type type, BiPredicate<Class<?>, Class<?>> biPredicate) {
+        return upperBound instanceof Class
+                && type instanceof Class
+                && biPredicate.test((Class<?>) upperBound, (Class<?>) type);
     }
 
     private static <T> BiPredicate<T, T> reverse(BiPredicate<T, T> biPredicate) {

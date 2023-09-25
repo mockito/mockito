@@ -14,28 +14,23 @@ public final class GenericTypeHelper {
     public static Class<?> getRawTypeOfType(Type type, VariableResolver resolver) {
         if (type instanceof Class) {
             return (Class<?>) type;
-        }
-        else if (type instanceof ParameterizedType) {
+        } else if (type instanceof ParameterizedType) {
             return (Class<?>) ((ParameterizedType) type).getRawType();
-        }
-        else if (type instanceof TypeVariable && resolver != null) {
+        } else if (type instanceof TypeVariable && resolver != null) {
             return getRawTypeOfVariable((TypeVariable<?>) type, resolver);
-        }
-        else if (type instanceof GenericArrayType) {
+        } else if (type instanceof GenericArrayType) {
             return getRawTypeOfComponentType((GenericArrayType) type, resolver);
-        }
-        else if (type instanceof WildcardType) {
+        } else if (type instanceof WildcardType) {
             return getRawTypeOfWildcard((WildcardType) type, resolver);
-        }
-        else if (type instanceof HasClass) {
-            return ((HasClass)type).getTheClass();
-        }
-        else {
+        } else if (type instanceof HasClass) {
+            return ((HasClass) type).getTheClass();
+        } else {
             return Object.class;
         }
     }
 
-    private static Class<?> getRawTypeOfVariable(TypeVariable<?> typeVariable, VariableResolver resolver) {
+    private static Class<?> getRawTypeOfVariable(
+            TypeVariable<?> typeVariable, VariableResolver resolver) {
         Optional<Type> optionalResolved = resolver.resolve(typeVariable);
         if (optionalResolved.isPresent()) {
             Type resolvedType = optionalResolved.get();
@@ -47,13 +42,13 @@ public final class GenericTypeHelper {
                 }
             }
             return rawType;
-        }
-        else {
+        } else {
             return Object.class;
         }
     }
 
-    private static Class<?> getRawTypeOfComponentType(GenericArrayType genericArrayType, VariableResolver resolver) {
+    private static Class<?> getRawTypeOfComponentType(
+            GenericArrayType genericArrayType, VariableResolver resolver) {
         Class<?> rawType = getRawTypeOfType(genericArrayType.getGenericComponentType(), resolver);
         return Array.newInstance(rawType, 0).getClass();
     }
@@ -62,8 +57,7 @@ public final class GenericTypeHelper {
         Type[] upperBounds = type.getUpperBounds();
         if (upperBounds.length > 0) {
             return getRawTypeOfType(upperBounds[0], resolver);
-        }
-        else {
+        } else {
             return Object.class;
         }
     }

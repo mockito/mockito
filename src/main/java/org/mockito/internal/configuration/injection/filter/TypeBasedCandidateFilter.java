@@ -4,7 +4,9 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
-import static org.mockito.internal.exceptions.Reporter.moreThanOneMockCandidate;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.internal.util.reflection.generic.GenericTypeMatch;
+import org.mockito.mock.MockCreationSettings;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -13,9 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.reflection.generic.GenericTypeMatch;
-import org.mockito.mock.MockCreationSettings;
+import static org.mockito.internal.exceptions.Reporter.moreThanOneMockCandidate;
 
 public class TypeBasedCandidateFilter implements MockCandidateFilter {
 
@@ -170,16 +170,19 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                 Class<?> rawMockType = mockSettings.getTypeToMock();
                 if (genericMockType != null && rawMockType != null) {
                     // be more specific if generic type information is available
-                    GenericTypeMatch targetDeclarationTypeMatch = GenericTypeMatch.ofField(injectMocksField);
+                    GenericTypeMatch targetDeclarationTypeMatch =
+                            GenericTypeMatch.ofField(injectMocksField);
                     // we need to populate generic type information from injectMockField to
                     // candidateFieldToBeInjected by stepping up the type hierarchy
                     // finding the place where it is declared
                     Optional<GenericTypeMatch> targetTypeMatch =
-                        targetDeclarationTypeMatch.findDeclaredField(candidateFieldToBeInjected);
+                            targetDeclarationTypeMatch.findDeclaredField(
+                                    candidateFieldToBeInjected);
                     if (targetTypeMatch.isPresent()) {
                         // we lost the field declared with @Mock at this place but use the
                         // information provided by MockCreationSettings instead
-                        GenericTypeMatch sourceTypeMatch = GenericTypeMatch.ofGenericAndRawType(genericMockType, rawMockType);
+                        GenericTypeMatch sourceTypeMatch =
+                                GenericTypeMatch.ofGenericAndRawType(genericMockType, rawMockType);
                         // with generic type information collected, try to match mock with candidate
                         // field
                         if (targetTypeMatch.get().matches(sourceTypeMatch)) {

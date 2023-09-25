@@ -15,13 +15,10 @@ public interface MatchType extends Type {
         TypeVariable<? extends Class<?>>[] parameters = clazz.getTypeParameters();
         if (parameters.length > 0) {
             return MatchParameterizedClass.ofClassAndResolver(clazz, resolver);
-        }
-        else if (clazz.isArray()) {
+        } else if (clazz.isArray()) {
             return MatchArrayClass.ofClassAndResolver(clazz, resolver);
-        }
-        else {
+        } else {
             return MatchClass.ofClass(clazz);
         }
     }
-
 }
