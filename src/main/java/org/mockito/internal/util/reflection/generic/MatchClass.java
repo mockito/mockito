@@ -14,7 +14,8 @@ public class MatchClass implements MatchType, HasClass {
 
     @Override
     public boolean matches(MatchType other) {
-        return other instanceof MatchClass && this.clazz.isAssignableFrom(((MatchClass)other).clazz);
+        return other instanceof MatchClass
+                && this.clazz.isAssignableFrom(((MatchClass) other).clazz);
     }
 
     static MatchType ofClass(Class<?> clazz) {

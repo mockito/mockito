@@ -15,12 +15,14 @@ public class MatchArrayClass extends MatchClass {
 
     @Override
     public boolean matches(MatchType other) {
-        return super.matches(other) && other instanceof MatchArrayClass
-            && componentMatchType.matches(((MatchArrayClass) other).componentMatchType);
+        return super.matches(other)
+                && other instanceof MatchArrayClass
+                && componentMatchType.matches(((MatchArrayClass) other).componentMatchType);
     }
 
     static MatchType ofClassAndResolver(Class<?> clazz, VariableResolver resolver) {
-        MatchType componentMatchType = MatchType.ofClassAndResolver(clazz.getComponentType(), resolver);
+        MatchType componentMatchType =
+                MatchType.ofClassAndResolver(clazz.getComponentType(), resolver);
         return new MatchArrayClass(clazz, componentMatchType);
     }
 }
