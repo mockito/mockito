@@ -23,7 +23,8 @@ include(
     "bom",
     "errorprone",
     "programmatic-test",
-    "java21-test"
+    "java21-test",
+    "inject-generics"
 )
 
 // https://developer.android.com/studio/command-line/variables#envar

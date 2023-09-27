@@ -4,25 +4,27 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
-import org.mockito.internal.util.MockUtil;
-import org.mockito.internal.util.reflection.generic.GenericTypeMatch;
-import org.mockito.mock.MockCreationSettings;
+import static org.mockito.internal.exceptions.Reporter.moreThanOneMockCandidate;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Stream;
 
-import static org.mockito.internal.exceptions.Reporter.moreThanOneMockCandidate;
+import org.mockito.internal.util.MockUtil;
 
 public class TypeBasedCandidateFilter implements MockCandidateFilter {
 
     private final MockCandidateFilter next;
 
-    public TypeBasedCandidateFilter(MockCandidateFilter next) {
-        this.next = next;
+    public TypeBasedCandidateFilter() {
+        this.next = new NameBasedCandidateFilter(new TerminalMockCandidateFilter());
     }
 
     protected boolean isCompatibleTypes(Type typeToMock, Type mockType, Field injectMocksField) {
@@ -165,31 +167,14 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
         List<Object> mockTypeMatches = new ArrayList<>();
         for (Object mock : mocks) {
             if (candidateFieldToBeInjected.getType().isAssignableFrom(mock.getClass())) {
-                MockCreationSettings<?> mockSettings = MockUtil.getMockSettings(mock);
-                Type genericMockType = mockSettings.getGenericTypeToMock();
-                Class<?> rawMockType = mockSettings.getTypeToMock();
-                if (genericMockType != null && rawMockType != null) {
+                Type mockType = MockUtil.getMockSettings(mock).getGenericTypeToMock();
+                Type typeToMock = candidateFieldToBeInjected.getGenericType();
+                boolean bothHaveTypeInfo = typeToMock != null && mockType != null;
+                if (bothHaveTypeInfo) {
                     // be more specific if generic type information is available
-                    GenericTypeMatch targetDeclarationTypeMatch =
-                            GenericTypeMatch.ofField(injectMocksField);
-                    // we need to populate generic type information from injectMockField to
-                    // candidateFieldToBeInjected by stepping up the type hierarchy
-                    // finding the place where it is declared
-                    Optional<GenericTypeMatch> targetTypeMatch =
-                            targetDeclarationTypeMatch.findDeclaredField(
-                                    candidateFieldToBeInjected);
-                    if (targetTypeMatch.isPresent()) {
-                        // we lost the field declared with @Mock at this place but use the
-                        // information provided by MockCreationSettings instead
-                        GenericTypeMatch sourceTypeMatch =
-                                GenericTypeMatch.ofGenericAndRawType(genericMockType, rawMockType);
-                        // with generic type information collected, try to match mock with candidate
-                        // field
-                        if (targetTypeMatch.get().matches(sourceTypeMatch)) {
-                            mockTypeMatches.add(mock);
-                        }
-                        // else filter out mock, as generic types don't match
-                    }
+                    if (isCompatibleTypes(typeToMock, mockType, injectMocksField)) {
+                        mockTypeMatches.add(mock);
+                    } // else filter out mock, as generic types don't match
                 } else {
                     // field is assignable from mock class, but no generic type information
                     // is available (can happen with programmatically created Mocks where no
