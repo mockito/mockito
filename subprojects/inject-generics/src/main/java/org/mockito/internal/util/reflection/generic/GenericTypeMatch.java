@@ -84,7 +84,7 @@ public class GenericTypeMatch {
                                 declaringClass.equals(rawType)
                                         ? createAncestorTypeMatch(genericType, rawType)
                                         : Optional.empty());
-        if (optionalTypeMatch.isEmpty()) {
+        if (!optionalTypeMatch.isPresent()) {
             optionalTypeMatch =
                     forEachAncestor(
                             derived,

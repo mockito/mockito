@@ -1,0 +1,21 @@
+/*
+ * Copyright (c) 2016 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-library.gradle"
+
+description = "Filter @InjectMocks according to Java's assignment rules for generics"
+
+dependencies {
+    api project.rootProject
+    testImplementation project(':junit-jupiter')
+    testImplementation libraries.junitJupiterApi
+    testImplementation libraries.junitJupiterParams
+    testRuntimeOnly libraries.junitJupiterEngine
+    testRuntimeOnly libraries.junitPlatformLauncher
+}
+
+test {
+    useJUnitPlatform();
+}

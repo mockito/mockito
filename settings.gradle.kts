@@ -22,7 +22,8 @@ include(
     "osgi-test",
     "bom",
     "errorprone",
-    "programmatic-test"
+    "programmatic-test",
+    "inject-generics"
 )
 
 // https://developer.android.com/studio/command-line/variables#envar

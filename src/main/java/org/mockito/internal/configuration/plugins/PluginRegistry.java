@@ -5,6 +5,7 @@
 package org.mockito.internal.configuration.plugins;
 
 import java.util.List;
+import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.InstantiatorProvider2;
@@ -48,6 +49,9 @@ class PluginRegistry {
 
     private final DoNotMockEnforcer doNotMockEnforcer =
             new PluginLoader(pluginSwitch).loadPlugin(DoNotMockEnforcer.class);
+
+    private final MockCandidateFilter mockCandidateFilter =
+            new PluginLoader(pluginSwitch).loadPlugin(MockCandidateFilter.class);
 
     PluginRegistry() {
         instantiatorProvider =
@@ -130,5 +134,14 @@ class PluginRegistry {
      */
     List<MockResolver> getMockResolvers() {
         return mockResolvers;
+    }
+
+    /**
+     * Returns the filter applied for handling @InjectMocks.
+     * @return {@link org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFilter} if no
+     *         {@link MockCandidateFilter} (internal) extension exists or is visible in the current classpath.
+     */
+    MockCandidateFilter getMockCandidateFilter() {
+        return mockCandidateFilter;
     }
 }
