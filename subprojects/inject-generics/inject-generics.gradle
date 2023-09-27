@@ -4,6 +4,7 @@
  */
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-library.gradle"
+apply from: "$rootDir/gradle/root/coverage.gradle"
 
 description = "Filter @InjectMocks according to Java's assignment rules for generics"
 
