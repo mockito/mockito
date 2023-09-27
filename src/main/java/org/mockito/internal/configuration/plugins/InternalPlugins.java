@@ -10,7 +10,9 @@ import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
  * Plugins that can hook into <code>mockito-core</code> but its interfaces are not well suited to be
  * exposed as public API.
  */
-public class InternalPlugins {
+public final class InternalPlugins {
+
+    private InternalPlugins() {}
 
     private static final PluginRegistry pluginRegistry = Plugins.getRegistry();
 
