@@ -65,7 +65,8 @@ public class DefaultMockitoPlugins implements MockitoPlugins {
         DEFAULT_PLUGINS.put(
                 DoNotMockEnforcer.class.getName(),
                 "org.mockito.internal.configuration.DefaultDoNotMockEnforcer");
-        DEFAULT_PLUGINS.put(MockCandidateFilter.class.getName(), TypeBasedCandidateFilter.class.getName());
+        DEFAULT_PLUGINS.put(
+                MockCandidateFilter.class.getName(), TypeBasedCandidateFilter.class.getName());
 
         MOCK_MAKER_ALIASES.add(INLINE_ALIAS);
         MOCK_MAKER_ALIASES.add(PROXY_ALIAS);

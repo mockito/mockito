@@ -60,7 +60,8 @@ import org.mockito.internal.util.reflection.FieldInitializer;
  */
 public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
-    private final MockCandidateFilter mockCandidateFilter = InternalPlugins.getMockCandidateFilter();
+    private final MockCandidateFilter mockCandidateFilter =
+            InternalPlugins.getMockCandidateFilter();
 
     @Override
     public boolean processInjection(
