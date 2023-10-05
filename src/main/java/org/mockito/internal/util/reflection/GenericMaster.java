@@ -5,6 +5,7 @@
 package org.mockito.internal.util.reflection;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -17,6 +18,19 @@ public class GenericMaster {
      */
     public Class<?> getGenericType(Field field) {
         Type generic = field.getGenericType();
+        return getaClass(generic);
+    }
+
+    /**
+     * Resolves the type (parametrized type) of the parameter. If the field is not generic it returns Object.class.
+     *
+     * @param parameter the parameter to inspect
+     */
+    public Class<?> getGenericType(Parameter parameter) {
+        return getaClass(parameter.getType());
+    }
+
+    private Class<?> getaClass(Type generic) {
         if (generic instanceof ParameterizedType) {
             Type actual = ((ParameterizedType) generic).getActualTypeArguments()[0];
             if (actual instanceof Class) {
