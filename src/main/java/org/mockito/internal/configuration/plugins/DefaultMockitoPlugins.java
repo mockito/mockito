@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.mockito.MockMakers;
+import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
+import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFilter;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.InstantiatorProvider2;
@@ -63,6 +65,8 @@ public class DefaultMockitoPlugins implements MockitoPlugins {
         DEFAULT_PLUGINS.put(
                 DoNotMockEnforcer.class.getName(),
                 "org.mockito.internal.configuration.DefaultDoNotMockEnforcer");
+        DEFAULT_PLUGINS.put(
+                MockCandidateFilter.class.getName(), TypeBasedCandidateFilter.class.getName());
 
         MOCK_MAKER_ALIASES.add(INLINE_ALIAS);
         MOCK_MAKER_ALIASES.add(PROXY_ALIAS);

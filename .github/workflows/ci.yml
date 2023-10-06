@@ -91,7 +91,8 @@ jobs:
     - name: 8. Upload coverage report
       uses: codecov/codecov-action@v3
       with:
-        files: build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
+        files: build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml,
+          subprojects/inject-generics/build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
         fail_ci_if_error: true
 
   #
