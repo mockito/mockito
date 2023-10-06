@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.mockito.MockMakers;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.InstantiatorProvider2;
@@ -113,5 +114,10 @@ public class DefaultMockitoPlugins implements MockitoPlugins {
     @Override
     public MockMaker getInlineMockMaker() {
         return create(MockMaker.class, DEFAULT_PLUGINS.get(INLINE_ALIAS));
+    }
+
+    @Override
+    public MockMaker getMockMaker(String mockMaker) {
+        return MockUtil.getMockMaker(mockMaker);
     }
 }
