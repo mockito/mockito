@@ -7,7 +7,6 @@ package org.mockito.junit.jupiter;
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
-import java.lang.reflect.Parameter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -20,14 +19,15 @@ import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.ScopedMock;
-import org.mockito.internal.configuration.MockAnnotationProcessor;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.session.MockitoSessionLoggerAdapter;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.resolver.CaptorParameterResolver;
+import org.mockito.junit.jupiter.resolver.CompositeParameterResolver;
+import org.mockito.junit.jupiter.resolver.MockParameterResolver;
 import org.mockito.quality.Strictness;
 
 /**
@@ -123,6 +123,8 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
 
     private final Strictness strictness;
 
+    private final ParameterResolver parameterResolver;
+
     // This constructor is invoked by JUnit Jupiter via reflection or ServiceLoader
     @SuppressWarnings("unused")
     public MockitoExtension() {
@@ -131,6 +133,10 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
 
     private MockitoExtension(Strictness strictness) {
         this.strictness = strictness;
+        this.parameterResolver = new CompositeParameterResolver(
+            new MockParameterResolver(),
+            new CaptorParameterResolver()
+        );
     }
 
     /**
@@ -163,12 +169,12 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
         do {
             annotation = findAnnotation(currentContext.getElement(), MockitoSettings.class);
 
-            if (!currentContext.getParent().isPresent()) {
+            if (currentContext.getParent().isEmpty()) {
                 break;
             }
 
             currentContext = currentContext.getParent().get();
-        } while (!annotation.isPresent() && currentContext != context.getRoot());
+        } while (annotation.isEmpty() && currentContext != context.getRoot());
 
         return annotation;
     }
@@ -188,21 +194,16 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext context) throws ParameterResolutionException {
-        return parameterContext.isAnnotated(Mock.class);
+        return parameterResolver.supportsParameter(parameterContext, context);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public Object resolveParameter(ParameterContext parameterContext, ExtensionContext context) throws ParameterResolutionException {
-        final Parameter parameter = parameterContext.getParameter();
-        Object mock = MockAnnotationProcessor.processAnnotationForMock(
-            parameterContext.findAnnotation(Mock.class).get(),
-            parameter.getType(),
-            parameter::getParameterizedType,
-            parameter.getName());
-        if (mock instanceof ScopedMock) {
-            context.getStore(MOCKITO).get(MOCKS, Set.class).add(mock);
+        Object resolvedParameter = parameterResolver.resolveParameter(parameterContext, context);
+        if (resolvedParameter instanceof ScopedMock) {
+            context.getStore(MOCKITO).get(MOCKS, Set.class).add(resolvedParameter);
         }
-        return mock;
+        return resolvedParameter;
     }
 }
