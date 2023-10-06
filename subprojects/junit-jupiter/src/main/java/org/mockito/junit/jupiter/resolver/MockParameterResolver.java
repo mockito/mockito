@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2018 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.junit.jupiter.resolver;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -5,11 +9,9 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.mockito.Mock;
-import org.mockito.ScopedMock;
 import org.mockito.internal.configuration.MockAnnotationProcessor;
 
 import java.lang.reflect.Parameter;
-import java.util.Set;
 
 public class MockParameterResolver implements ParameterResolver {
 
