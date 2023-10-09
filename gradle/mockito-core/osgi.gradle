@@ -8,6 +8,8 @@ tasks.named("jar", Jar) {
             'Bundle-SymbolicName': 'org.mockito.mockito-core',
             'Bundle-Version': "\${version_cleanup;${project.version}}",
             '-versionpolicy': '[${version;==;${@}},${version;+;${@}})',
+            "Can-Retransform-Classes": "true",
+            "Premain-Class": "org.mockito.internal.MockitoAgent",
             'Export-Package': "org.mockito.internal.*;status=INTERNAL;mandatory:=status;version=${archiveVersion.get()},org.mockito.*;version=${archiveVersion.get()}",
             'Import-Package': [
                     'net.bytebuddy.*;version="[1.6.0,2.0)"',

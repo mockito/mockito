@@ -11,6 +11,7 @@ import org.mockito.creation.instance.Instantiator;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
+import org.mockito.internal.MockitoAgent;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
@@ -112,7 +113,10 @@ class InlineDelegateByteBuddyMockMaker
         Throwable initializationError = null;
         try {
             try {
-                instrumentation = ByteBuddyAgent.install();
+                instrumentation = MockitoAgent.getInstrumentation();
+                if (instrumentation == null) {
+                    instrumentation = ByteBuddyAgent.install();
+                }
                 if (!instrumentation.isRetransformClassesSupported()) {
                     throw new IllegalStateException(
                             join(

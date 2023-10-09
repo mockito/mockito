@@ -9,6 +9,7 @@ import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.MethodCall;
 import org.mockito.exceptions.base.MockitoInitializationException;
+import org.mockito.internal.MockitoAgent;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.plugins.MemberAccessor;
 
@@ -46,7 +47,10 @@ class InstrumentationMemberAccessor implements MemberAccessor {
         Dispatcher dispatcher;
         Throwable throwable;
         try {
-            instrumentation = ByteBuddyAgent.install();
+            instrumentation = MockitoAgent.getInstrumentation();
+            if (instrumentation == null) {
+                instrumentation = ByteBuddyAgent.install();
+            }
             // We need to generate a dispatcher instance that is located in a distinguished class
             // loader to create a unique (unnamed) module to which we can open other packages to.
             // This way, we assure that classes within Mockito's module (which might be a shared,
