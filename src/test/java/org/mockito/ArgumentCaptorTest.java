@@ -36,11 +36,9 @@ public class ArgumentCaptorTest {
 
     @Test
     public void getCaptorType_returns_captor_type() throws Exception {
-        class Foo {
-        }
+        class Foo {}
 
-        class Bar {
-        }
+        class Bar {}
 
         ArgumentCaptor<Foo> fooCaptor = ArgumentCaptor.forClass(Foo.class);
         ArgumentCaptor<Bar> barCaptor = ArgumentCaptor.forClass(Bar.class);
