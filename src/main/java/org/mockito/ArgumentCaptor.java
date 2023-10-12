@@ -147,4 +147,66 @@ public class ArgumentCaptor<T> {
     public static <U, S extends U> ArgumentCaptor<U> forClass(Class<S> clazz) {
         return new ArgumentCaptor<>(clazz);
     }
+
+    /**
+     * Build a new <code>ArgumentCaptor</code> by inferring the class type.
+     * <p>
+     * This enables inferring the generic type of an argument captor without
+     * providing a raw class reference, which enables working around generic
+     * limitations of the Java compiler without producing compile-time warnings
+     * unlike {@link #forClass} which would require explicit casting or warning
+     * suppression.
+     * <p>
+     * Example usage:
+     *
+     * <pre class="code"><code class="java">
+     *   // Given
+     *   UserRepository repository = mock();
+     *   UserService service = new UserService(repository);
+     *
+     *   Map&lt;String, User&gt; expectedUsers = Map.of(
+     *       "12345", new User("12345", "Bob"),
+     *       "45678", new User("45678", "Dave")
+     *   );
+     *
+     *   ArgumentCaptor&lt;Map&lt;String, User&gt;&gt; captor = ArgumentCaptor.captor();
+     *
+     *   doNothing().when(repository).storeUsers(captor.capture());
+     *
+     *   // When
+     *   service.createUsers(List.of(
+     *       new User("12345", "Bob"),
+     *       new User("45678", "Dave")
+     *   ));
+     *
+     *   // Then
+     *   Map&lt;String, User&gt; actualUsers = captor.getValue();
+     *
+     *   assertThat(expectedUsers).isEqualTo(actualUsers);
+     * </code></pre>
+     *
+     * @param reified do not pass any value here. This is used to trick the compiler
+     *     into reifying the return type without needing casts.
+     * @param <U> the type of argument to be captured by this captor.
+     * @return A new ArgumentCaptor.
+     * @throws IllegalArgumentException if any arguments are passed to this method.
+     */
+    @SafeVarargs
+    @SuppressWarnings({"varargs", "unchecked"})
+    public static <U> ArgumentCaptor<U> captor(U... reified) {
+        if (reified == null || reified.length > 0) {
+            throw new IllegalArgumentException("Do not provide any arguments to the 'captor' call");
+        }
+
+        return forClass((Class<U>) reified.getClass().getComponentType());
+    }
+
+    /**
+     * Get the raw class being captured.
+     *
+     * @return the raw class that is being captured by this captor.
+     */
+    Class<? extends T> getCaptorType() {
+        return clazz;
+    }
 }
