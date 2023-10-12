@@ -135,15 +135,6 @@ public class ArgumentCaptor<T> {
     }
 
     /**
-     * Get the raw class being captured.
-     *
-     * @return the raw class that is being captured by this captor.
-     */
-    public Class<? extends T> getCaptorType() {
-        return clazz;
-    }
-
-    /**
      * Build a new <code>ArgumentCaptor</code>.
      * <p>
      * An <code>ArgumentCaptor</code> will perform type checks (since Mockito 5.0.0).
@@ -208,5 +199,14 @@ public class ArgumentCaptor<T> {
         }
 
         return forClass((Class<U>) reified.getClass().getComponentType());
+    }
+
+    /**
+     * Get the raw class being captured.
+     *
+     * @return the raw class that is being captured by this captor.
+     */
+    Class<? extends T> getCaptorType() {
+        return clazz;
     }
 }
