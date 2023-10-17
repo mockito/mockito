@@ -27,6 +27,11 @@ tasks.named("test", Test) {
         exceptionFormat 'full'
         showCauses true
     }
+
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)
+        && 'member-accessor-reflection' == System.getenv('MEMBER_ACCESSOR')) {
+        jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
+    }
 }
 
 apply from: "$rootDir/gradle/retry-test.gradle"

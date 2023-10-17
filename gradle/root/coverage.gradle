@@ -2,7 +2,7 @@ allprojects { project ->
     plugins.withId("java") {
         project.apply plugin: "jacoco"
         project.jacoco {
-            toolVersion = '0.8.8'
+            toolVersion = '0.8.11'
         }
     }
 }
