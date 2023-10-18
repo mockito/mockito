@@ -36,6 +36,7 @@ jobs:
           - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-module' }
           - { mock-maker: 'mock-maker-subclass', member-accessor: 'member-accessor-reflection' }
           - { mock-maker: 'mock-maker-inline', member-accessor: 'member-accessor-reflection' }
+      fail-fast: false
 
     # All build steps
     # SINGLE-MATRIX-JOB means that the step does not need to be executed on every job in the matrix
