@@ -62,6 +62,10 @@ public class UnusedStubbingsTest extends TestBase {
                         "[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):\n"
                                 + // Java 9
                                 "[MockitoHint] 1. Unused -> at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n"
-                                + "[MockitoHint] 2. Unused -> at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n");
+                                + "[MockitoHint] 2. Unused -> at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n",
+                        "[MockitoHint] MyTest.myTestMethod (see javadoc for MockitoHint):\n"
+                                + // Java 21
+                                "[MockitoHint] 1. Unused -> at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:0)\n"
+                                + "[MockitoHint] 2. Unused -> at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:0)\n");
     }
 }

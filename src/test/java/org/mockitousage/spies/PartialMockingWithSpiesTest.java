@@ -4,6 +4,7 @@
  */
 package org.mockitousage.spies;
 
+import static net.bytebuddy.ClassFileVersion.JAVA_V21;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
@@ -14,6 +15,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockitoutil.Conditions.methodsInStackTrace;
 
+import net.bytebuddy.ClassFileVersion;
 import org.assertj.core.api.Assertions;
 import org.junit.Assume;
 import org.junit.Before;
@@ -129,9 +131,10 @@ public class PartialMockingWithSpiesTest extends TestBase {
     }
 
     @Test
-    public void shouldStackTraceGetFilteredOnUserExceptionsReflection() {
+    public void shouldStackTraceGetFilteredOnUserExceptionsReflectionForJavaOfVersionLessThan21() {
         Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineByteBuddyMockMaker.class));
         Assume.assumeThat(Plugins.getMemberAccessor(), instanceOf(ReflectionMemberAccessor.class));
+        Assume.assumeTrue(ClassFileVersion.ofThisVm().isLessThan(JAVA_V21));
 
         try {
             // when
@@ -148,7 +151,30 @@ public class PartialMockingWithSpiesTest extends TestBase {
                                     "invoke",
                                     "invoke",
                                     "getNameButDelegateToMethodThatThrows",
-                                    "shouldStackTraceGetFilteredOnUserExceptionsReflection"));
+                                    "shouldStackTraceGetFilteredOnUserExceptionsReflectionForJavaOfVersionLessThan21"));
+        }
+    }
+
+    @Test
+    public void shouldStackTraceGetFilteredOnUserExceptionsReflectionForJava21AndHigher() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineByteBuddyMockMaker.class));
+        Assume.assumeThat(Plugins.getMemberAccessor(), instanceOf(ReflectionMemberAccessor.class));
+        Assume.assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(JAVA_V21));
+
+        try {
+            // when
+            spy.getNameButDelegateToMethodThatThrows();
+            fail();
+        } catch (Throwable t) {
+            // then
+            Assertions.assertThat(t)
+                    .has(
+                            methodsInStackTrace(
+                                    "throwSomeException",
+                                    "invoke",
+                                    "invoke",
+                                    "getNameButDelegateToMethodThatThrows",
+                                    "shouldStackTraceGetFilteredOnUserExceptionsReflectionForJava21AndHigher"));
         }
     }
 
