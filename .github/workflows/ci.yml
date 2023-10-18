@@ -93,6 +93,7 @@ jobs:
       with:
         files: build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
         fail_ci_if_error: true
+        token: ${{secrets.CODECOV_TOKEN}}
 
   #
   # Android build job
