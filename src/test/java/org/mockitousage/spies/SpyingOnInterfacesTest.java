@@ -5,7 +5,6 @@
 package org.mockitousage.spies;
 
 import static org.junit.Assert.fail;
-import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -14,7 +13,6 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.FixedValue;
@@ -62,10 +60,6 @@ public class SpyingOnInterfacesTest extends TestBase {
 
     @Test
     public void shouldAllowDelegatingToDefaultMethod() throws Exception {
-        assumeTrue(
-                "Test can only be executed on Java 8 capable VMs",
-                ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
-
         Class<?> type =
                 new ByteBuddy()
                         .makeInterface()
@@ -86,10 +80,6 @@ public class SpyingOnInterfacesTest extends TestBase {
 
     @Test
     public void shouldAllowSpyingOnDefaultMethod() throws Exception {
-        assumeTrue(
-                "Test can only be executed on Java 8 capable VMs",
-                ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V8));
-
         Class<?> iFace =
                 new ByteBuddy()
                         .makeInterface()
