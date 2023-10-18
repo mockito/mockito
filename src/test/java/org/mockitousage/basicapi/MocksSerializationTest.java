@@ -5,7 +5,6 @@
 package org.mockitousage.basicapi;
 
 import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.*;
 import static org.mockitoutil.SimpleSerializationUtil.*;
 
@@ -16,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 
-import net.bytebuddy.ClassFileVersion;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -396,8 +394,6 @@ public class MocksSerializationTest extends TestBase implements Serializable {
 
     @Test
     public void BUG_ISSUE_399_try_some_mocks_with_current_answers() throws Exception {
-        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V7));
-
         IMethods iMethods =
                 mock(
                         IMethods.class,

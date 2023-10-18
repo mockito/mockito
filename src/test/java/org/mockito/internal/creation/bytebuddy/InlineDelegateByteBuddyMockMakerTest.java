@@ -4,13 +4,10 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import static net.bytebuddy.ClassFileVersion.JAVA_V11;
-import static net.bytebuddy.ClassFileVersion.JAVA_V8;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
 
 import java.io.IOException;
 import java.util.*;
@@ -19,7 +16,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.implementation.FixedValue;
@@ -443,8 +439,6 @@ public class InlineDelegateByteBuddyMockMakerTest
 
     @Test
     public void test_parameters_retention() throws Exception {
-        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(JAVA_V8));
-
         Class<?> typeWithParameters =
                 new ByteBuddy()
                         .subclass(Object.class)
@@ -473,8 +467,6 @@ public class InlineDelegateByteBuddyMockMakerTest
 
     @Test
     public void test_constant_dynamic_compatibility() throws Exception {
-        assumeTrue(ClassFileVersion.ofThisVm().isAtLeast(JAVA_V11));
-
         Class<?> typeWithCondy =
                 new ByteBuddy()
                         .subclass(Callable.class)
