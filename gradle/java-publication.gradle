@@ -67,7 +67,7 @@ publishing {
                 licenses {
                     license {
                         name = 'MIT'
-                        url = 'https://github.com/mockito/mockito/blob/main/LICENSE'
+                        url = 'https://opensource.org/licenses/MIT'
                         distribution = 'repo'
                     }
                 }
