@@ -8,9 +8,9 @@ import static org.mockito.internal.exceptions.Reporter.fieldInitialisationThrewE
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
@@ -43,9 +43,9 @@ public class ConstructorInjection extends MockInjectionStrategy {
     public boolean processInjection(Field field, Object fieldOwner, Set<Object> mockCandidates) {
         try {
             SimpleArgumentResolver simpleArgumentResolver =
-                    new SimpleArgumentResolver(mockCandidates);
+                new SimpleArgumentResolver(mockCandidates);
             FieldInitializationReport report =
-                    new FieldInitializer(fieldOwner, field, simpleArgumentResolver).initialize();
+                new FieldInitializer(fieldOwner, field, simpleArgumentResolver).initialize();
 
             return report.fieldWasInitializedUsingContructorArgs();
         } catch (MockitoException e) {
@@ -67,6 +67,21 @@ public class ConstructorInjection extends MockInjectionStrategy {
         public SimpleArgumentResolver(Set<Object> objects) {
             this.objects = objects;
         }
+        /**
+         * types -> actual constructor types
+         * argTypes -> fake constructor types
+         * hashMap -> mocks
+         */
+        @Override
+        public Object[] resolveTypeInstancesGeneric(HashMap<String, Type> hashMap, Type[] types) {
+            // list of mocks not constructors
+            List<Object> argumentInstances = new ArrayList<>(types.length);
+            for (Type parameterType: types) {
+                argumentInstances.add(objectThatIsAssignableFromGeneric(hashMap,parameterType));
+            }
+            return argumentInstances.toArray();
+
+        }
 
         @Override
         public Object[] resolveTypeInstances(Class<?>... argTypes) {
@@ -81,6 +96,27 @@ public class ConstructorInjection extends MockInjectionStrategy {
             for (Object object : objects) {
                 if (argType.isAssignableFrom(object.getClass())) {
                     return object;
+                }
+            }
+            return null;
+        }
+
+        private Object objectThatIsAssignableFromGeneric(HashMap<String, Type> hashMap, Type parameterType) {
+            Class<?> typeclass = null;
+            // converts parameter Type into Class
+            if (parameterType instanceof Class) {
+                typeclass = (Class<?>) parameterType;
+            } else if (parameterType instanceof ParameterizedType) {
+                ParameterizedType parameterizedType = (ParameterizedType) parameterType;
+                typeclass = (Class<?>) parameterizedType.getRawType();
+            }
+            assert typeclass != null;
+            // for each mock object
+            for (Object object : objects) {
+                if (typeclass.isAssignableFrom(object.getClass())) {
+                    // if mock object class(including parameterized classes) matches class of constructor class
+                    if (hashMap.get(object.toString()) == null) continue;
+                    if (hashMap.get(object.toString()).equals(parameterType)) return object;
                 }
             }
             return null;

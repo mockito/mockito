@@ -165,6 +165,7 @@ public class FieldInitializer {
          * @return The argument instances to be given to the constructor, should not be null.
          */
         Object[] resolveTypeInstances(Class<?>... argTypes);
+        Object[] resolveTypeInstancesGeneric(HashMap<String, Type> hashMap, Type[] types);
     }
 
     private interface ConstructorInstantiator {
@@ -284,9 +285,17 @@ public class FieldInitializer {
 
         @Override
         public FieldInitializationReport instantiate() {
+            Field[] fields = testClass.getClass().getDeclaredFields();
+            HashMap<String, Type> hashmap = new HashMap<>();
+
+            for (Field field : fields) {
+                hashmap.put(field.getName(), field.getGenericType());
+            }
             final MemberAccessor accessor = Plugins.getMemberAccessor();
             Constructor<?> constructor = biggestConstructor(field.getType());
-            final Object[] args = argResolver.resolveTypeInstances(constructor.getParameterTypes());
+            final Object[] args = argResolver.resolveTypeInstancesGeneric(
+                hashmap, constructor.getGenericParameterTypes());
+           //final Object[] args = argResolver.resolveTypeInstances(constructor.getParameterTypes());
             try {
                 Object newFieldInstance = accessor.newInstance(constructor, args);
                 accessor.set(field, testClass, newFieldInstance);
