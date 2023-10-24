@@ -207,9 +207,7 @@ class InlineDelegateByteBuddyMockMaker
     InlineDelegateByteBuddyMockMaker() {
         if (INITIALIZATION_ERROR != null) {
             String detail;
-            if (System.getProperty("java.specification.vendor", "")
-                    .toLowerCase()
-                    .contains("android")) {
+            if (PlatformUtils.isAndroidPlatform() || PlatformUtils.isProbablyTermuxEnvironment()) {
                 detail =
                         "It appears as if you are trying to run this mock maker on Android which does not support the instrumentation API.";
             } else {

@@ -96,6 +96,8 @@ dependencies {
     implementation libraries.objenesis
 
     testImplementation libraries.assertj
+    testImplementation libraries.junitJupiterApi
+    testImplementation libraries.junitJupiterParams
 
     testUtil sourceSets.test.output
 
