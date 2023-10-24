@@ -207,9 +207,17 @@ class InlineDelegateByteBuddyMockMaker
     InlineDelegateByteBuddyMockMaker() {
         if (INITIALIZATION_ERROR != null) {
             String detail;
-            if (System.getProperty("java.specification.vendor", "")
+
+            boolean isNativeAndroid = System.getProperty("java.specification.vendor", "")
                     .toLowerCase()
-                    .contains("android")) {
+                    .contains("android");
+
+            // Termux can run any JVM, such as Oracle, but may still fail to instrument the
+            // JVM correctly, so it is worth detecting this as well.
+            boolean isTermuxAndroid = System.getProperty("java.home", "")
+                    .contains("/com.termux/");
+            
+            if (isNativeAndroid || isTermuxAndroid) {
                 detail =
                         "It appears as if you are trying to run this mock maker on Android which does not support the instrumentation API.";
             } else {
