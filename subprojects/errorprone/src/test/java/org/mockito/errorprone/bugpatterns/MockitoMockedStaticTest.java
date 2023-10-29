@@ -28,6 +28,7 @@ public class MockitoMockedStaticTest {
                 "input.java",
                 "import org.mockito.Mock;",
                 "import org.mockito.MockedStatic;",
+                "import org.mockito.Mockito",
                 "class Test {",
                 "  @Mock",
                 "  private Object mock;",
@@ -47,6 +48,7 @@ public class MockitoMockedStaticTest {
                 "input.java",
                 "import org.mockito.Mock;",
                 "import org.mockito.MockedStatic;",
+                "import org.mockito.Mockito",
                 "class Test {",
                 "  public void test(@Mock Object mock) {",
                 "    try (MockedStatic<Object> mockedStatic = Mockito.mockStatic(Object.class)) {",
@@ -63,6 +65,7 @@ public class MockitoMockedStaticTest {
             .addSourceLines(
                 "input.java",
                 "import org.mockito.MockedStatic;",
+                "import org.mockito.Mockito",
                 "class Test {",
                 "  public void test() {",
                 "    try (MockedStatic<Object> mockedStatic = Mockito.mockStatic(Object.class)) {",
