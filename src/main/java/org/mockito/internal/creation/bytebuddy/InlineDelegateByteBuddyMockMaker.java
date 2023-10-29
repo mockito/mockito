@@ -110,6 +110,24 @@ class InlineDelegateByteBuddyMockMaker
     static {
         Instrumentation instrumentation;
         Throwable initializationError = null;
+
+        // ByteBuddy internally may attempt to fork a subprocess. In Java 11 and Java 19, the Java
+        // process class observes the os.name system property to determine the OS and thus determine
+        // how to fork a new process. If the user is stubbing System properties, they may clear
+        // the existing System properties, which will cause this to fail. This is very much an
+        // implementation detail, but it will result in Mockito failing to load with an error that
+        // is not overly clear, so let's attempt to detect this issue ahead of time instead.
+        if (System.getProperty("os.name") == null) {
+            throw new IllegalStateException(
+                    join(
+                            "The Byte Buddy agent cannot be loaded.",
+                            "",
+                            "To initialise the Byte Buddy agent, a subprocess may need to be created. To do this, the JVM requires "
+                                    + "knowledge of the 'os.name' System property in most JRE implementations. This property is not present, "
+                                    + "which means this operation will fail to complete. Please first make sure you are not clearing this "
+                                    + "property anywhere, and failing that, raise a bug with your JVM vendor."));
+        }
+
         try {
             try {
                 instrumentation = ByteBuddyAgent.install();
