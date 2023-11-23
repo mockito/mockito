@@ -24,25 +24,8 @@ public class LenientCopyTool {
 
     private <T> void copy(T from, T to, Class<?> fromClazz) {
         while (fromClazz != Object.class) {
-            copyValues(from, to, fromClazz);
+            accessor.copyValues(from, to, fromClazz);
             fromClazz = fromClazz.getSuperclass();
-        }
-    }
-
-    private <T> void copyValues(T from, T mock, Class<?> classFrom) {
-        Field[] fields = classFrom.getDeclaredFields();
-
-        for (Field field : fields) {
-            // ignore static fields
-            if (Modifier.isStatic(field.getModifiers())) {
-                continue;
-            }
-            try {
-                Object value = accessor.get(field, from);
-                accessor.set(field, mock, value);
-            } catch (Throwable t) {
-                // Ignore - be lenient - if some field cannot be copied then let's be it
-            }
         }
     }
 }
