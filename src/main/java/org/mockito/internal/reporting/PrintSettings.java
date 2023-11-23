@@ -55,15 +55,18 @@ public class PrintSettings {
 
     public String print(List<ArgumentMatcher> matchers, Invocation invocation) {
         MatchersPrinter matchersPrinter = new MatchersPrinter();
-        String qualifiedName =
-                MockUtil.getMockName(invocation.getMock()) + "." + invocation.getMethod().getName();
+        String qualifiedName = MockUtil.getMockName(invocation.getMock()) + "." + invocation.getMethod().getName();
         String invocationString = qualifiedName + matchersPrinter.getArgumentsLine(matchers, this);
-        if (isMultiline() || (!matchers.isEmpty() && invocationString.length() > MAX_LINE_LENGTH)) {
+
+        boolean shouldPrintArgumentsBlock = isMultiline() || (!matchers.isEmpty() && invocationString.length() > MAX_LINE_LENGTH);
+
+        if (shouldPrintArgumentsBlock) {
             return qualifiedName + matchersPrinter.getArgumentsBlock(matchers, this);
         } else {
             return invocationString;
         }
     }
+
 
     public String print(Invocation invocation) {
         return print(invocation.getArgumentsAsMatchers(), invocation);

@@ -63,19 +63,31 @@ public class NameBasedCandidateFilter implements MockCandidateFilter {
      * whenever we find a field that does match its name with the mock
      * name, we should take that field instead.
      */
+    private boolean isSameTypeAndName(
+        Field fieldA, Field fieldB, String mockName) {
+        return fieldA.getType().equals(fieldB.getType()) &&
+            fieldA.getName().equals(mockName);
+    }
+
+    private boolean isCandidateMatch(
+        Field candidateFieldToBeInjected, Field otherCandidateField, String mockName) {
+        return !otherCandidateField.equals(candidateFieldToBeInjected) &&
+            isSameTypeAndName(otherCandidateField, candidateFieldToBeInjected, mockName);
+    }
+
     private boolean anotherCandidateMatchesMockName(
-            final Collection<Object> mocks,
-            final Field candidateFieldToBeInjected,
-            final List<Field> allRemainingCandidateFields) {
+        final Collection<Object> mocks,
+        final Field candidateFieldToBeInjected,
+        final List<Field> allRemainingCandidateFields) {
         String mockName = getMockName(mocks.iterator().next()).toString();
 
         for (Field otherCandidateField : allRemainingCandidateFields) {
-            if (!otherCandidateField.equals(candidateFieldToBeInjected)
-                    && otherCandidateField.getType().equals(candidateFieldToBeInjected.getType())
-                    && otherCandidateField.getName().equals(mockName)) {
+            if (isCandidateMatch(candidateFieldToBeInjected, otherCandidateField, mockName)) {
                 return true;
             }
         }
         return false;
     }
+
+
 }

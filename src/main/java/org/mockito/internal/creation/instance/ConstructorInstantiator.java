@@ -179,11 +179,27 @@ public class ConstructorInstantiator implements Instantiator {
      * @param constructor The constructor to be evaluated against this list
      */
     private void evaluateConstructor(
-            List<Constructor<?>> matchingConstructors, Constructor<?> constructor) {
-        boolean newHasBetterParam = false;
-        boolean existingHasBetterParam = false;
+        List<Constructor<?>> matchingConstructors, Constructor<?> constructor) {
 
         Class<?>[] paramTypes = constructor.getParameterTypes();
+        boolean[] listOfValues = {};
+
+        listOfValues = identifyBetterParametersInConstructors(paramTypes, matchingConstructors);
+        boolean existingHasBetterParam = listOfValues[0];
+        boolean newHasBetterParam = listOfValues[1];
+
+        if (!existingHasBetterParam) {
+            matchingConstructors.clear();
+        }
+        if (newHasBetterParam || !existingHasBetterParam) {
+            matchingConstructors.add(constructor);
+        }
+    }
+
+    private boolean[] identifyBetterParametersInConstructors(Class<?>[] paramTypes, List<Constructor<?>> matchingConstructors)
+    {
+        boolean newHasBetterParam = false;
+        boolean existingHasBetterParam = false;
         for (int i = 0; i < paramTypes.length; ++i) {
             Class<?> paramType = paramTypes[i];
             if (!paramType.isPrimitive()) {
@@ -199,11 +215,6 @@ public class ConstructorInstantiator implements Instantiator {
                 }
             }
         }
-        if (!existingHasBetterParam) {
-            matchingConstructors.clear();
-        }
-        if (newHasBetterParam || !existingHasBetterParam) {
-            matchingConstructors.add(constructor);
-        }
+        return new boolean[]{existingHasBetterParam, newHasBetterParam};
     }
 }
