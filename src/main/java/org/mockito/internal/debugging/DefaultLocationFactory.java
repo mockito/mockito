@@ -5,17 +5,16 @@
 package org.mockito.internal.debugging;
 
 import org.mockito.invocation.Location;
+import org.mockito.plugins.LocationFactory;
 
-public final class LocationFactory {
-    private static final Factory factory = createLocationFactory();
+public final class DefaultLocationFactory implements LocationFactory {
+    private final Factory factory = createLocationFactory();
 
-    private LocationFactory() {}
-
-    public static Location create() {
+    public Location create() {
         return create(false);
     }
 
-    public static Location create(boolean inline) {
+    public Location create(boolean inline) {
         return factory.create(inline);
     }
 
@@ -29,7 +28,7 @@ public final class LocationFactory {
             // available, in this case we have to fallback to Java 8 style of stack
             // traversing.
             Class.forName("java.lang.StackWalker");
-            return new DefaultLocationFactory();
+            return new StackWalkerLocationFactory();
         } catch (ClassNotFoundException e) {
             return new Java8LocationFactory();
         }
@@ -42,7 +41,7 @@ public final class LocationFactory {
         }
     }
 
-    private static final class DefaultLocationFactory implements Factory {
+    private static final class StackWalkerLocationFactory implements Factory {
         @Override
         public Location create(boolean inline) {
             return new LocationImpl(inline);

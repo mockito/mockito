@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.StateMaster;
 import org.mockito.internal.MockitoCore;
 import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockito.internal.debugging.LocationFactory;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.invocation.InterceptedInvocation;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -84,7 +84,7 @@ public class TestBase {
                 new SerializableMethod(type.getMethod(methodName, types)),
                 args,
                 InterceptedInvocation.NO_OP,
-                LocationFactory.create(),
+                Plugins.getLocationFactory().create(),
                 1);
     }
 

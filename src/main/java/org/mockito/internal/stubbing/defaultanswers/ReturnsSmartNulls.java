@@ -12,9 +12,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.mockito.Mockito;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.bytebuddy.MockAccess;
-import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.invocation.Location;
@@ -65,7 +65,8 @@ public class ReturnsSmartNulls implements Answer<Object>, Serializable {
                         MockCreationSettings<?> mockSettings =
                                 MockUtil.getMockSettings(invocation.getMock());
                         Answer<?> defaultAnswer =
-                                new ThrowsSmartNullPointer(invocation, LocationFactory.create());
+                                new ThrowsSmartNullPointer(
+                                        invocation, Plugins.getLocationFactory().create());
 
                         return Mockito.mock(
                                 type,

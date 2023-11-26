@@ -51,7 +51,6 @@ import net.bytebuddy.utility.OpenedClassReader;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
-import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.invocation.SerializableMethod;
@@ -132,7 +131,11 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         }
         return new ReturnValueWrapper(
                 interceptor.doIntercept(
-                        instance, origin, arguments, realMethod, LocationFactory.create(true)));
+                        instance,
+                        origin,
+                        arguments,
+                        realMethod,
+                        Plugins.getLocationFactory().create(true)));
     }
 
     @Override
@@ -150,7 +153,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                                 origin,
                                 arguments,
                                 new StaticMethodCall(selfCallInfo, type, origin, arguments),
-                                LocationFactory.create(true)));
+                                Plugins.getLocationFactory().create(true)));
     }
 
     @Override

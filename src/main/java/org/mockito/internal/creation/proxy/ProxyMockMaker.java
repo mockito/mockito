@@ -5,7 +5,7 @@
 package org.mockito.internal.creation.proxy;
 
 import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.debugging.LocationFactory;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.util.Platform;
 import org.mockito.invocation.MockHandler;
@@ -158,7 +158,7 @@ public class ProxyMockMaker implements MockMaker {
                                     args,
                                     realMethod,
                                     settings,
-                                    LocationFactory.create()));
+                                    Plugins.getLocationFactory().create()));
         }
     }
 

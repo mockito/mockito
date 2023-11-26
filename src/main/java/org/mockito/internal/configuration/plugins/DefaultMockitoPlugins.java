@@ -14,6 +14,7 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.InstantiatorProvider2;
+import org.mockito.plugins.LocationFactory;
 import org.mockito.plugins.MemberAccessor;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockitoLogger;
@@ -64,6 +65,9 @@ public class DefaultMockitoPlugins implements MockitoPlugins {
         DEFAULT_PLUGINS.put(
                 DoNotMockEnforcer.class.getName(),
                 "org.mockito.internal.configuration.DefaultDoNotMockEnforcer");
+        DEFAULT_PLUGINS.put(
+                LocationFactory.class.getName(),
+                "org.mockito.internal.debugging.DefaultLocationFactory");
 
         MOCK_MAKER_ALIASES.add(INLINE_ALIAS);
         MOCK_MAKER_ALIASES.add(PROXY_ALIAS);
