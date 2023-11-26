@@ -4,14 +4,14 @@ ext {
 
 def versions = [:]
 
-versions.bytebuddy = '1.14.9'
-versions.junitJupiter = '5.10.0'
+versions.bytebuddy = '1.14.10'
+versions.junitJupiter = '5.10.1'
 versions.errorprone = '2.23.0'
 
 libraries.junit4 = 'junit:junit:4.13.2'
 libraries.junitJupiterApi = "org.junit.jupiter:junit-jupiter-api:${versions.junitJupiter}"
 libraries.junitJupiterParams = "org.junit.jupiter:junit-jupiter-params:${versions.junitJupiter}"
-libraries.junitPlatformLauncher = 'org.junit.platform:junit-platform-launcher:1.10.0'
+libraries.junitPlatformLauncher = 'org.junit.platform:junit-platform-launcher:1.10.1'
 libraries.junitJupiterEngine = "org.junit.jupiter:junit-jupiter-engine:${versions.junitJupiter}"
 libraries.junitVintageEngine = "org.junit.vintage:junit-vintage-engine:${versions.junitJupiter}"
 libraries.assertj = 'org.assertj:assertj-core:3.24.2'
@@ -35,7 +35,7 @@ libraries.bndGradle =  'biz.aQute.bnd:biz.aQute.bnd.gradle:6.4.0'
 
 libraries.groovy = 'org.codehaus.groovy:groovy:3.0.19'
 
-def kotlinVersion = '1.9.20'
+def kotlinVersion = '1.9.21'
 libraries.kotlin = [
     version: kotlinVersion,
 

@@ -16,14 +16,14 @@ buildscript {
 
         classpath 'com.google.googlejavaformat:google-java-format:1.18.1'
         classpath 'com.android.tools.build:gradle:7.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.21"
     }
 }
 
 plugins {
     id 'com.diffplug.spotless' version '6.22.0'
     id 'eclipse'
-    id 'com.github.ben-manes.versions' version '0.49.0'
+    id 'com.github.ben-manes.versions' version '0.50.0'
     id 'biz.aQute.bnd.builder' version '7.0.0'
     id 'ru.vyarus.animalsniffer' version '1.7.1'
 }
