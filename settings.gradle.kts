@@ -22,7 +22,8 @@ include(
     "osgi-test",
     "bom",
     "errorprone",
-    "programmatic-test"
+    "programmatic-test",
+    "java21"
 )
 
 // https://developer.android.com/studio/command-line/variables#envar

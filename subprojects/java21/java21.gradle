@@ -1,0 +1,24 @@
+apply from: "$rootDir/gradle/dependencies.gradle"
+apply from: "$rootDir/gradle/java-test.gradle"
+
+description = "Test suite for Java 21 Mockito"
+
+dependencies {
+    implementation project.rootProject
+    testImplementation libraries.junit4
+    testImplementation libraries.assertj
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.named('test') {
+    if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
+        enabled = false
+    }
+}
