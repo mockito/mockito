@@ -218,7 +218,7 @@ class InlineDelegateByteBuddyMockMaker
     private final DetachedThreadLocal<Map<Class<?>, BiConsumer<Object, MockedConstruction.Context>>>
             mockedConstruction = new DetachedThreadLocal<>(DetachedThreadLocal.Cleaner.MANUAL);
 
-    private final ThreadLocal<Boolean> mockitoConstruction = ThreadLocal.withInitial(() -> false);
+    private final ThreadLocal<Class<?>> currentMocking = ThreadLocal.withInitial(() -> null);
 
     private final ThreadLocal<Object> currentSpied = new ThreadLocal<>();
 
@@ -272,7 +272,9 @@ class InlineDelegateByteBuddyMockMaker
                 type -> {
                     if (isSuspended.get()) {
                         return false;
-                    } else if (mockitoConstruction.get() || currentConstruction.get() != null) {
+                    } else if ((currentMocking.get() != null
+                                    && type.isAssignableFrom(currentMocking.get()))
+                            || currentConstruction.get() != null) {
                         return true;
                     }
                     Map<Class<?>, ?> interceptors = mockedConstruction.get();
@@ -290,7 +292,7 @@ class InlineDelegateByteBuddyMockMaker
                 };
         ConstructionCallback onConstruction =
                 (type, object, arguments, parameterTypeNames) -> {
-                    if (mockitoConstruction.get()) {
+                    if (currentMocking.get() != null) {
                         Object spy = currentSpied.get();
                         if (spy == null) {
                             return null;
@@ -647,11 +649,11 @@ class InlineDelegateByteBuddyMockMaker
                     accessor.newInstance(
                             selected,
                             callback -> {
-                                mockitoConstruction.set(true);
+                                currentMocking.set(cls);
                                 try {
                                     return callback.newInstance();
                                 } finally {
-                                    mockitoConstruction.set(false);
+                                    currentMocking.remove();
                                 }
                             },
                             arguments);
