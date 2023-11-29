@@ -425,15 +425,15 @@ class InlineDelegateByteBuddyMockMaker
 
     private <T> RuntimeException prettifyFailure(
             MockCreationSettings<T> mockFeatures, Exception generationFailed) {
-        if (mockFeatures.getTypeToMock().isArray()) {
+        Class<T> typeToMock = mockFeatures.getTypeToMock();
+        if (typeToMock.isArray()) {
             throw new MockitoException(
-                    join("Arrays cannot be mocked: " + mockFeatures.getTypeToMock() + ".", ""),
-                    generationFailed);
+                    join("Arrays cannot be mocked: " + typeToMock + ".", ""), generationFailed);
         }
-        if (Modifier.isFinal(mockFeatures.getTypeToMock().getModifiers())) {
+        if (Modifier.isFinal(typeToMock.getModifiers())) {
             throw new MockitoException(
                     join(
-                            "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
+                            "Mockito cannot mock this class: " + typeToMock + ".",
                             "Can not mock final classes with the following settings :",
                             " - explicit serialization (e.g. withSettings().serializable())",
                             " - extra interfaces (e.g. withSettings().extraInterfaces(...))",
@@ -444,10 +444,18 @@ class InlineDelegateByteBuddyMockMaker
                             "Underlying exception : " + generationFailed),
                     generationFailed);
         }
-        if (Modifier.isPrivate(mockFeatures.getTypeToMock().getModifiers())) {
+        if (TypeSupport.INSTANCE.isSealed(typeToMock) && typeToMock.isEnum()) {
             throw new MockitoException(
                     join(
-                            "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
+                            "Mockito cannot mock this class: " + typeToMock + ".",
+                            "Sealed abstract enums can't be mocked. Since Java 15 abstract enums are declared sealed, which prevents mocking.",
+                            "You can still return an existing enum literal from a stubbed method call."),
+                    generationFailed);
+        }
+        if (Modifier.isPrivate(typeToMock.getModifiers())) {
+            throw new MockitoException(
+                    join(
+                            "Mockito cannot mock this class: " + typeToMock + ".",
                             "Most likely it is a private class that is not visible by Mockito",
                             "",
                             "You are seeing this disclaimer because Mockito is configured to create inlined mocks.",
@@ -457,7 +465,7 @@ class InlineDelegateByteBuddyMockMaker
         }
         throw new MockitoException(
                 join(
-                        "Mockito cannot mock this class: " + mockFeatures.getTypeToMock() + ".",
+                        "Mockito cannot mock this class: " + typeToMock + ".",
                         "",
                         "If you're not sure why you're getting this error, please open an issue on GitHub.",
                         "",
