@@ -56,6 +56,7 @@ allprojects { proj ->
     plugins.withId('java') {
         proj.apply from: "$rootDir/gradle/errorprone.gradle"
         proj.apply from: "$rootDir/gradle/jfr.gradle"
+        proj.apply from: "$rootDir/gradle/spotless.gradle"
     }
     tasks.withType(JavaCompile).configureEach {
         //I don't believe those warnings add value given modern IDEs
@@ -117,26 +118,4 @@ animalsniffer {
         'java.lang.StackWalker$StackFrame',
         'java.lang.StackWalker$Option'
     ]
-}
-
-spotless {
-    // We run the check separately on CI, so don't run this by default
-    enforceCheck = false
-
-    java {
-        licenseHeaderFile rootProject.file('config/spotless/spotless.header')
-
-        custom 'google-java-format', { source ->
-            com.google.googlejavaformat.java.JavaFormatterOptions options = new com.google.googlejavaformat.java.AutoValue_JavaFormatterOptions.Builder()
-                    .style(com.google.googlejavaformat.java.JavaFormatterOptions.Style.AOSP)
-                    .formatJavadoc(false)
-                    .reorderModifiers(true)
-                    .build()
-            com.google.googlejavaformat.java.Formatter formatter = new com.google.googlejavaformat.java.Formatter(options)
-            return formatter.formatSource(source)
-        }
-
-        // This test contains emulation of same-line stubbings. The formatter would put them on a separate line.
-        targetExclude 'src/test/java/org/mockitousage/internal/junit/UnusedStubbingsFinderTest.java'
-    }
 }
