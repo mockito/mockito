@@ -15,11 +15,9 @@ import static junit.framework.TestCase.*;
 
 public final class ConstructionMockRuleTest {
 
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    @Mock
-    private MockedConstruction<Dummy> dummy;
+    @Mock private MockedConstruction<Dummy> dummy;
 
     @Test
     public void testConstructionMockSimple() {

@@ -17,13 +17,13 @@ public class InstantiatorProviderTest {
     @SuppressWarnings("CheckReturnValue")
     @Test
     public void uses_custom_instantiator_provider() {
-        //given mocking works:
+        // given mocking works:
         mock(List.class);
 
-        //when
+        // when
         MyInstantiatorProvider2.explosive.set(true);
 
-        //then
+        // then
         try {
             mock(List.class);
             fail();

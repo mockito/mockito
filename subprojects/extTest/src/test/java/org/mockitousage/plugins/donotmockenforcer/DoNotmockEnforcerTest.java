@@ -15,9 +15,11 @@ public class DoNotmockEnforcerTest {
 
     @Test
     public void uses_custom_enforcer_disallows_mocks_of_types_in_this_package() {
-        assertThatThrownBy(() -> {
-            NotMockable notMockable = mock(NotMockable.class);
-        }).isInstanceOf(DoNotMockException.class);
+        assertThatThrownBy(
+                        () -> {
+                            NotMockable notMockable = mock(NotMockable.class);
+                        })
+                .isInstanceOf(DoNotMockException.class);
     }
 
     @Test
@@ -27,17 +29,16 @@ public class DoNotmockEnforcerTest {
 
     @Test
     public void uses_custom_enforcer_has_custom_message() {
-        assertThatThrownBy(() -> {
-            NotMockable notMockable = mock(NotMockable.class);
-        }).isInstanceOf(DoNotMockException.class).hasMessage("Custom message!");
+        assertThatThrownBy(
+                        () -> {
+                            NotMockable notMockable = mock(NotMockable.class);
+                        })
+                .isInstanceOf(DoNotMockException.class)
+                .hasMessage("Custom message!");
     }
 
-    static class NotMockable {
-
-    }
+    static class NotMockable {}
 
     @DoNotMock
-    static class NotMockableButSpecialCased {
-
-    }
+    static class NotMockableButSpecialCased {}
 }

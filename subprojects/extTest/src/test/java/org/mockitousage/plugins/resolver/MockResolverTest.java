@@ -47,5 +47,4 @@ class MockResolverTest {
             return mock.doIt();
         }
     }
-
 }

@@ -4,7 +4,6 @@
  */
 package org.mockitousage;
 
-
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -14,8 +13,7 @@ import static org.mockito.Mockito.when;
 
 class NoExtendsTest {
 
-    @Mock
-    private List<String> mock;
+    @Mock private List<String> mock;
 
     @Test
     void runs() {

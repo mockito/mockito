@@ -15,11 +15,9 @@ import static junit.framework.TestCase.*;
 
 public final class StaticMockRuleTest {
 
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    @Mock
-    private MockedStatic<Dummy> dummy;
+    @Mock private MockedStatic<Dummy> dummy;
 
     @Test
     public void testStaticMockSimple() {

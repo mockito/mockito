@@ -16,19 +16,21 @@ import java.lang.reflect.Parameter;
 public class MockParameterResolver implements ParameterResolver {
 
     @Override
-    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext context) throws ParameterResolutionException {
+    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext context)
+            throws ParameterResolutionException {
         return parameterContext.isAnnotated(Mock.class);
     }
 
     @Override
     @SuppressWarnings("OptionalGetWithoutIsPresent")
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext context) throws ParameterResolutionException {
+    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext context)
+            throws ParameterResolutionException {
         final Parameter parameter = parameterContext.getParameter();
 
         return MockAnnotationProcessor.processAnnotationForMock(
-            parameterContext.findAnnotation(Mock.class).get(),
-            parameter.getType(),
-            parameter::getParameterizedType,
-            parameter.getName());
+                parameterContext.findAnnotation(Mock.class).get(),
+                parameter.getType(),
+                parameter::getParameterizedType,
+                parameter.getName());
     }
 }

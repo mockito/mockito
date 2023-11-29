@@ -20,7 +20,7 @@ public class StressTest {
 
     @Test
     public void call_a_lot_of_mocks() {
-        //This requires smaller heap set for the test process, see "inline.gradle"
+        // This requires smaller heap set for the test process, see "inline.gradle"
         for (int i = 0; i < 40000; i++) {
             TestClass mock = mock(TestClass.class);
             when(mock.getStuff()).thenReturn("B");

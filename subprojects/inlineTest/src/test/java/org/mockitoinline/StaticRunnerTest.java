@@ -17,8 +17,7 @@ import static junit.framework.TestCase.assertEquals;
 @RunWith(MockitoJUnitRunner.class)
 public final class StaticRunnerTest {
 
-    @Mock
-    private MockedStatic<UUID> mock;
+    @Mock private MockedStatic<UUID> mock;
 
     @Test
     public void runs() {

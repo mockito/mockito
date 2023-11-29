@@ -30,10 +30,14 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 
 public class ModuleUtil {
 
-    public static Path modularJar(boolean isPublic, boolean isExported, boolean isOpened) throws IOException {
+    public static Path modularJar(boolean isPublic, boolean isExported, boolean isOpened)
+            throws IOException {
         return modularJar(isPublic, isExported, isOpened, false);
     }
-    public static Path modularJar(boolean isPublic, boolean isExported, boolean isOpened, boolean addField) throws IOException {
+
+    public static Path modularJar(
+            boolean isPublic, boolean isExported, boolean isOpened, boolean addField)
+            throws IOException {
         Path jar = Files.createTempFile("sample-module", ".jar");
         try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jar))) {
             out.putNextEntry(new JarEntry("module-info.class"));
@@ -47,19 +51,21 @@ public class ModuleUtil {
     }
 
     private static byte[] type(boolean isPublic, boolean addField) {
-        DynamicType.Builder<?> typeBuilder = new ByteBuddy()
-            .subclass(Callable.class)
-            .name("sample.MyCallable")
-            .merge(isPublic ? Visibility.PUBLIC : Visibility.PACKAGE_PRIVATE);
+        DynamicType.Builder<?> typeBuilder =
+                new ByteBuddy()
+                        .subclass(Callable.class)
+                        .name("sample.MyCallable")
+                        .merge(isPublic ? Visibility.PUBLIC : Visibility.PACKAGE_PRIVATE);
         if (addField) {
-            typeBuilder = typeBuilder
-                .defineField("runnable", Runnable.class, Opcodes.ACC_PRIVATE | Opcodes.ACC_FINAL);
+            typeBuilder =
+                    typeBuilder.defineField(
+                            "runnable", Runnable.class, Opcodes.ACC_PRIVATE | Opcodes.ACC_FINAL);
         }
         return typeBuilder
-            .method(named("call"))
-            .intercept(FixedValue.value("foo"))
-            .make()
-            .getBytes();
+                .method(named("call"))
+                .intercept(FixedValue.value("foo"))
+                .make()
+                .getBytes();
     }
 
     private static byte[] moduleInfo(boolean isExported, boolean isOpened) {
@@ -79,7 +85,8 @@ public class ModuleUtil {
         return classWriter.toByteArray();
     }
 
-    public static ModuleLayer layer(Path jar, boolean canRead, boolean namedModules) throws MalformedURLException {
+    public static ModuleLayer layer(Path jar, boolean canRead, boolean namedModules)
+            throws MalformedURLException {
         Set<String> modules = new HashSet<>();
         modules.add("mockito.test");
         ModuleFinder moduleFinder = ModuleFinder.of(jar);
@@ -87,60 +94,71 @@ public class ModuleUtil {
             modules.add("org.mockito");
             modules.add("net.bytebuddy");
             modules.add("net.bytebuddy.agent");
-            // We do not list all packages but only roots and packages that interact with the mock where
-            // we attempt to validate an interaction of two modules. This is of course a bit hacky as those
-            // libraries would normally be entirely encapsulated in an automatic module with all their classes
+            // We do not list all packages but only roots and packages that interact with the mock
+            // where
+            // we attempt to validate an interaction of two modules. This is of course a bit hacky
+            // as those
+            // libraries would normally be entirely encapsulated in an automatic module with all
+            // their classes
             // but it is sufficient for the test and saves us a significant amount of code.
-            moduleFinder = ModuleFinder.compose(moduleFinder,
-                automaticModule("org.mockito", "org.mockito", "org.mockito.internal.creation.bytebuddy"),
-                automaticModule("net.bytebuddy", "net.bytebuddy"),
-                automaticModule("net.bytebuddy.agent", "net.bytebuddy.agent"));
+            moduleFinder =
+                    ModuleFinder.compose(
+                            moduleFinder,
+                            automaticModule(
+                                    "org.mockito",
+                                    "org.mockito",
+                                    "org.mockito.internal.creation.bytebuddy"),
+                            automaticModule("net.bytebuddy", "net.bytebuddy"),
+                            automaticModule("net.bytebuddy.agent", "net.bytebuddy.agent"));
         }
-        Configuration configuration = Configuration.resolve(
-            moduleFinder,
-            Collections.singletonList(ModuleLayer.boot().configuration()),
-            ModuleFinder.of(),
-            modules
-        );
+        Configuration configuration =
+                Configuration.resolve(
+                        moduleFinder,
+                        Collections.singletonList(ModuleLayer.boot().configuration()),
+                        ModuleFinder.of(),
+                        modules);
         ClassLoader classLoader = new ReplicatingClassLoader(jar);
-        ModuleLayer.Controller controller = ModuleLayer.defineModules(
-            configuration,
-            Collections.singletonList(ModuleLayer.boot()),
-            module -> classLoader
-        );
+        ModuleLayer.Controller controller =
+                ModuleLayer.defineModules(
+                        configuration,
+                        Collections.singletonList(ModuleLayer.boot()),
+                        module -> classLoader);
         if (canRead) {
             controller.addReads(
-                controller.layer().findModule("mockito.test").orElseThrow(IllegalStateException::new),
-                Mockito.class.getModule()
-            );
+                    controller
+                            .layer()
+                            .findModule("mockito.test")
+                            .orElseThrow(IllegalStateException::new),
+                    Mockito.class.getModule());
         }
         return controller.layer();
     }
 
     private static ModuleFinder automaticModule(String moduleName, String... packages) {
-        ModuleDescriptor descriptor = ModuleDescriptor.newAutomaticModule(moduleName)
-            .packages(new HashSet<>(Arrays.asList(packages)))
-            .build();
-        ModuleReference reference = new ModuleReference(descriptor, null) {
-            @Override
-            public ModuleReader open() {
-                return new ModuleReader() {
+        ModuleDescriptor descriptor =
+                ModuleDescriptor.newAutomaticModule(moduleName)
+                        .packages(new HashSet<>(Arrays.asList(packages)))
+                        .build();
+        ModuleReference reference =
+                new ModuleReference(descriptor, null) {
                     @Override
-                    public Optional<URI> find(String name) {
-                        return Optional.empty();
-                    }
+                    public ModuleReader open() {
+                        return new ModuleReader() {
+                            @Override
+                            public Optional<URI> find(String name) {
+                                return Optional.empty();
+                            }
 
-                    @Override
-                    public Stream<String> list() {
-                        return Stream.empty();
-                    }
+                            @Override
+                            public Stream<String> list() {
+                                return Stream.empty();
+                            }
 
-                    @Override
-                    public void close() {
+                            @Override
+                            public void close() {}
+                        };
                     }
                 };
-            }
-        };
         return new ModuleFinder() {
             @Override
             public Optional<ModuleReference> find(String name) {

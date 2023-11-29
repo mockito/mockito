@@ -15,8 +15,5 @@ public class FinalClassMockingTest {
         Mockito.mock(FinalClass.class);
     }
 
-    private static final class FinalClass {
-
-    }
-
+    private static final class FinalClass {}
 }

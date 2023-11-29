@@ -43,9 +43,9 @@ public final class StaticMockTest {
     public void testStaticMockWithVerificationFailed() {
         try (MockedStatic<Dummy> dummy = Mockito.mockStatic(Dummy.class)) {
             assertThatThrownBy(
-                    () -> {
-                        dummy.verify(Dummy::foo);
-                    })
+                            () -> {
+                                dummy.verify(Dummy::foo);
+                            })
                     .isInstanceOf(WantedButNotInvoked.class)
                     .hasMessageContaining("there were zero interactions with this mock");
         }
@@ -65,9 +65,9 @@ public final class StaticMockTest {
             dummy.when(Dummy::foo).thenReturn("bar");
             assertEquals("bar", Dummy.foo());
             assertThatThrownBy(
-                    () -> {
-                        dummy.verifyNoInteractions();
-                    })
+                            () -> {
+                                dummy.verifyNoInteractions();
+                            })
                     .isInstanceOf(NoInteractionsWanted.class)
                     .hasMessageContaining("No interactions wanted here")
                     .hasMessageContaining("above is the only interaction with this mock.");
@@ -90,9 +90,9 @@ public final class StaticMockTest {
             dummy.when(Dummy::foo).thenReturn("bar");
             assertEquals("bar", Dummy.foo());
             assertThatThrownBy(
-                    () -> {
-                        dummy.verifyNoInteractions();
-                    })
+                            () -> {
+                                dummy.verifyNoInteractions();
+                            })
                     .isInstanceOf(NoInteractionsWanted.class)
                     .hasMessageContaining("No interactions wanted here")
                     .hasMessageContaining("above is the only interaction with this mock.");
@@ -159,12 +159,14 @@ public final class StaticMockTest {
             assertEquals("bar", Dummy.foo());
             dummy.verify(Dummy::foo);
             AtomicReference<String> reference = new AtomicReference<>();
-            Thread thread = new Thread(() -> {
-                try (MockedStatic<Dummy> dummy2 = Mockito.mockStatic(Dummy.class)) {
-                    dummy2.when(Dummy::foo).thenReturn("qux");
-                    reference.set(Dummy.foo());
-                }
-            });
+            Thread thread =
+                    new Thread(
+                            () -> {
+                                try (MockedStatic<Dummy> dummy2 = Mockito.mockStatic(Dummy.class)) {
+                                    dummy2.when(Dummy::foo).thenReturn("qux");
+                                    reference.set(Dummy.foo());
+                                }
+                            });
             thread.start();
             thread.join();
             assertEquals("qux", reference.get());
@@ -177,13 +179,11 @@ public final class StaticMockTest {
     @Test
     public void testStaticMockMustBeExclusiveInScopeWithinThread() {
         assertThatThrownBy(
-                () -> {
-                    try (
-                            MockedStatic<Dummy> dummy = Mockito.mockStatic(Dummy.class);
-                            MockedStatic<Dummy> duplicate = Mockito.mockStatic(Dummy.class)
-                    ) {
-                    }
-                })
+                        () -> {
+                            try (MockedStatic<Dummy> dummy = Mockito.mockStatic(Dummy.class);
+                                    MockedStatic<Dummy> duplicate =
+                                            Mockito.mockStatic(Dummy.class)) {}
+                        })
                 .isInstanceOf(MockitoException.class)
                 .hasMessageContaining("static mocking is already registered in the current thread");
     }
@@ -203,10 +203,12 @@ public final class StaticMockTest {
     public void testStaticMockMustUseValidMatchers() {
         try (MockedStatic<Dummy> mockedClass = Mockito.mockStatic(Dummy.class)) {
             assertThatThrownBy(
-                    () -> {
-                        mockedClass.when(() -> Dummy.fooVoid("foo", any())).thenReturn(null);
-                    })
-                .hasMessageContaining("Invalid use of argument matchers!");
+                            () -> {
+                                mockedClass
+                                        .when(() -> Dummy.fooVoid("foo", any()))
+                                        .thenReturn(null);
+                            })
+                    .hasMessageContaining("Invalid use of argument matchers!");
 
             Dummy.fooVoid("foo", "bar");
         }

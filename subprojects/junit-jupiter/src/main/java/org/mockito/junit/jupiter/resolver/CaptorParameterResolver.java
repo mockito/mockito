@@ -14,12 +14,16 @@ import org.mockito.internal.configuration.CaptorAnnotationProcessor;
 public class CaptorParameterResolver implements ParameterResolver {
 
     @Override
-    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+    public boolean supportsParameter(
+            ParameterContext parameterContext, ExtensionContext extensionContext)
+            throws ParameterResolutionException {
         return parameterContext.isAnnotated(Captor.class);
     }
 
     @Override
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+    public Object resolveParameter(
+            ParameterContext parameterContext, ExtensionContext extensionContext)
+            throws ParameterResolutionException {
         return CaptorAnnotationProcessor.process(parameterContext.getParameter());
     }
 }
