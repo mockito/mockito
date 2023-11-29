@@ -12,11 +12,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class NestedParallelTest {
 
-    @Mock
-    private SomeService someService;
+    @Mock private SomeService someService;
 
-    @InjectMocks
-    private AnotherService anotherService;
+    @InjectMocks private AnotherService anotherService;
 
     @Nested
     class NestedTest {
@@ -79,7 +77,6 @@ class NestedParallelTest {
 
     static class SomeService {
 
-        void doSomething() {
-        }
+        void doSomething() {}
     }
 }

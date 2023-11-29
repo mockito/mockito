@@ -34,12 +34,11 @@ class MockitoLoggerTest {
     @AfterAll
     static void tearDown() {
         final List<Object> loggedItems = MyMockitoLogger.getLoggedItems();
-        assertThat(loggedItems)
-            .hasSize(1);
+        assertThat(loggedItems).hasSize(1);
         assertThat(loggedItems.get(0).toString())
-            .contains("[MockitoHint]")
-            .contains("org.mockitousage.plugins.logger.MockitoLoggerTest")
-            .contains("Unused");
+                .contains("[MockitoHint]")
+                .contains("org.mockitousage.plugins.logger.MockitoLoggerTest")
+                .contains("Unused");
 
         MyMockitoLogger.clear();
     }

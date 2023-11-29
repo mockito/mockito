@@ -40,9 +40,11 @@ public class ModuleAccessTest {
             Class<?> moduleMemberAccessor = loader.loadClass(ModuleMemberAccessor.class.getName());
             Object instance = moduleMemberAccessor.getConstructor().newInstance();
             @SuppressWarnings("unchecked")
-            Callable<String> mock = (Callable<String>) moduleMemberAccessor
-                .getMethod("newInstance", Constructor.class, Object[].class)
-                .invoke(instance, type.getConstructor(), new Object[0]);
+            Callable<String> mock =
+                    (Callable<String>)
+                            moduleMemberAccessor
+                                    .getMethod("newInstance", Constructor.class, Object[].class)
+                                    .invoke(instance, type.getConstructor(), new Object[0]);
             assertThat(mock.call()).isEqualTo("foo");
         } finally {
             Thread.currentThread().setContextClassLoader(contextLoader);
@@ -60,12 +62,13 @@ public class ModuleAccessTest {
         ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(loader);
         try {
-            Class<?> moduleMemberAccessor = loader.loadClass(ReflectionMemberAccessor.class.getName());
+            Class<?> moduleMemberAccessor =
+                    loader.loadClass(ReflectionMemberAccessor.class.getName());
             try {
                 Object instance = moduleMemberAccessor.getConstructor().newInstance();
                 moduleMemberAccessor
-                    .getMethod("newInstance", Constructor.class, Object[].class)
-                    .invoke(instance, type.getConstructor(), new Object[0]);
+                        .getMethod("newInstance", Constructor.class, Object[].class)
+                        .invoke(instance, type.getConstructor(), new Object[0]);
                 fail();
             } catch (InvocationTargetException e) {
                 assertThat(e.getCause()).isInstanceOf(IllegalAccessException.class);
@@ -86,11 +89,10 @@ public class ModuleAccessTest {
         Class<?> type = loader.loadClass("sample.MyCallable");
 
         @SuppressWarnings("unchecked")
-        Callable<String> testInstance = (Callable<String>) type.getDeclaredConstructor().newInstance();
+        Callable<String> testInstance =
+                (Callable<String>) type.getDeclaredConstructor().newInstance();
         try {
-            Mockito.mockitoSession()
-                .initMocks(testInstance)
-                .startMocking();
+            Mockito.mockitoSession().initMocks(testInstance).startMocking();
             fail("Expected MockitoException caused by IllegalAccessException");
         } catch (MockitoException ex) {
             assertThat(ex.getCause()).isInstanceOf(IllegalAccessException.class);
@@ -108,10 +110,9 @@ public class ModuleAccessTest {
         Class<?> type = loader.loadClass("sample.MyCallable");
 
         @SuppressWarnings("unchecked")
-        Callable<String> testInstance = (Callable<String>) type.getDeclaredConstructor().newInstance();
+        Callable<String> testInstance =
+                (Callable<String>) type.getDeclaredConstructor().newInstance();
 
-        Mockito.mockitoSession()
-            .initMocks(testInstance)
-            .startMocking();
+        Mockito.mockitoSession().initMocks(testInstance).startMocking();
     }
 }

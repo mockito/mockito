@@ -2,7 +2,6 @@
  * Copyright (c) 2023 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -50,20 +49,17 @@ public class GenericTypeMockMultipleMatchesTest {
             List<String> stringList;
         }
 
-        @Mock
-        List<String> stringList1;
+        @Mock List<String> stringList1;
 
-        @Mock
-        List<String> stringList2;
+        @Mock List<String> stringList2;
 
         @InjectMocks
-        UnderTestWithMultipleCandidatesByType underTestWithMultipleCandidates = new UnderTestWithMultipleCandidatesByType();
+        UnderTestWithMultipleCandidatesByType underTestWithMultipleCandidates =
+                new UnderTestWithMultipleCandidatesByType();
 
         @Test
         void testMultipleCandidatesByTypes() {
             assertThrows(MockitoException.class, () -> startMocking(this));
         }
     }
-
-
 }

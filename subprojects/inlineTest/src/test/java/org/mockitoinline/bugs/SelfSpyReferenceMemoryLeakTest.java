@@ -10,7 +10,7 @@ import static org.mockito.Mockito.framework;
 import static org.mockito.Mockito.spy;
 
 public class SelfSpyReferenceMemoryLeakTest {
-    private static final int ARRAY_LENGTH = 1 << 20;  // 4 MB
+    private static final int ARRAY_LENGTH = 1 << 20; // 4 MB
 
     @Test
     public void no_memory_leak_when_spy_holds_reference_to_self() {

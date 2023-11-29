@@ -11,7 +11,7 @@ import java.util.List;
 
 class AndroidTempFileLocator {
 
-    final static File target;
+    static final File target;
 
     static {
         File t = null;
@@ -23,7 +23,9 @@ class AndroidTempFileLocator {
         } catch (Throwable ignored) {
         }
         if (t == null) {
-            t = getCacheDirFromInstrumentationRegistry("android.support.test.InstrumentationRegistry");
+            t =
+                    getCacheDirFromInstrumentationRegistry(
+                            "android.support.test.InstrumentationRegistry");
         }
         if (t == null) {
             t = getCacheDirFromInstrumentationRegistry("androidx.test.InstrumentationRegistry");
@@ -33,7 +35,8 @@ class AndroidTempFileLocator {
                 Class<?> clazz = Class.forName("dalvik.system.PathClassLoader");
                 Field pathField = clazz.getDeclaredField("path");
                 pathField.setAccessible(true);
-                String pathFromThisClassLoader = (String) pathField.get(AndroidTempFileLocator.class.getClassLoader());
+                String pathFromThisClassLoader =
+                        (String) pathField.get(AndroidTempFileLocator.class.getClassLoader());
                 File[] results = guessPath(pathFromThisClassLoader);
                 if (results.length > 0) {
                     t = results[0];

@@ -13,11 +13,9 @@ import static org.assertj.core.api.Assertions.*;
 
 class NoExtendsTest {
 
-    @Mock
-    private MockedStatic<Dummy> staticMethod;
+    @Mock private MockedStatic<Dummy> staticMethod;
 
-    @Mock
-    private MockedConstruction<Dummy> construction;
+    @Mock private MockedConstruction<Dummy> construction;
 
     @Test
     void runsStaticMethods() {

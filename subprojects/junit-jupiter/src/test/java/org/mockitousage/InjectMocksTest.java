@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ToBeMockedInTestSuperClass{
+class ToBeMockedInTestSuperClass {
     int identifier;
 
     public ToBeMockedInTestSuperClass(int identifier) {
@@ -20,7 +20,7 @@ class ToBeMockedInTestSuperClass{
     }
 }
 
-class ToBeMocked{
+class ToBeMocked {
     int identifier;
 
     public ToBeMocked(int identifier) {
@@ -31,17 +31,19 @@ class ToBeMocked{
 class TestClassToBeInitiatedViaConstructorInSuperClass {
     ToBeMockedInTestSuperClass toBeMockedInTestSuperClass;
 
-    public TestClassToBeInitiatedViaConstructorInSuperClass(ToBeMockedInTestSuperClass toBeMockedInTestSuperClass) {
+    public TestClassToBeInitiatedViaConstructorInSuperClass(
+            ToBeMockedInTestSuperClass toBeMockedInTestSuperClass) {
         assertThat(toBeMockedInTestSuperClass).isNotNull();
         this.toBeMockedInTestSuperClass = new ToBeMockedInTestSuperClass(42);
     }
 }
 
-class TestClassToBeInitiatedViaConstructor{
+class TestClassToBeInitiatedViaConstructor {
     ToBeMockedInTestSuperClass toBeMockedInTestSuperClass;
     ToBeMocked toBeMocked;
 
-    public TestClassToBeInitiatedViaConstructor(ToBeMocked toBeMocked, ToBeMockedInTestSuperClass toBeMockedInTestSuperClass) {
+    public TestClassToBeInitiatedViaConstructor(
+            ToBeMocked toBeMocked, ToBeMockedInTestSuperClass toBeMockedInTestSuperClass) {
         assertThat(toBeMocked).isNotNull();
         assertThat(toBeMockedInTestSuperClass).isNotNull();
         this.toBeMocked = new ToBeMocked(42);
@@ -50,38 +52,32 @@ class TestClassToBeInitiatedViaConstructor{
 }
 
 class SuperTestClass {
-    @Mock
-    ToBeMockedInTestSuperClass toBeMockedInTestSuperClass;
+    @Mock ToBeMockedInTestSuperClass toBeMockedInTestSuperClass;
 
     @InjectMocks
-    TestClassToBeInitiatedViaConstructorInSuperClass testClassToBeInitiatedViaConstructorInSuperClass;
-
+    TestClassToBeInitiatedViaConstructorInSuperClass
+            testClassToBeInitiatedViaConstructorInSuperClass;
 }
 
 @ExtendWith(MockitoExtension.class)
 class InjectMocksTest extends SuperTestClass {
 
-    @Mock
-    ToBeMocked toBeMocked;
+    @Mock ToBeMocked toBeMocked;
 
-    @InjectMocks
-    TestClassToBeInitiatedViaConstructor testClassToBeInitiatedViaConstructor;
+    @InjectMocks TestClassToBeInitiatedViaConstructor testClassToBeInitiatedViaConstructor;
 
     /**
      * Checks that {@link #testClassToBeInitiatedViaConstructor} holds instances that have identifier 42.
      * It being 42 is proof that constructor injection was used over field injection.
      */
     @Test
-    void given_instanceToBeInitializedByMockito_when_mocksRequestedByConstructorAreInTestAndSuperClass_should_useConstructorInjection() {
+    void
+            given_instanceToBeInitializedByMockito_when_mocksRequestedByConstructorAreInTestAndSuperClass_should_useConstructorInjection() {
         assertThat(testClassToBeInitiatedViaConstructor)
-            .extracting(
-                testInstance-> testInstance.toBeMocked.identifier,
-                testInstance-> testInstance.toBeMockedInTestSuperClass.identifier
-            )
-            .containsExactly(
-                42,
-                42
-            );
+                .extracting(
+                        testInstance -> testInstance.toBeMocked.identifier,
+                        testInstance -> testInstance.toBeMockedInTestSuperClass.identifier)
+                .containsExactly(42, 42);
     }
 
     /**
@@ -89,10 +85,11 @@ class InjectMocksTest extends SuperTestClass {
      * It being 42 is proof that constructor injection was used over field injection.
      */
     @Test
-    public void given_instanceInSuperClassToBeInitializedByMockito_when_mocksRequestedAreInSuperClass_should_useConstructorInjection(){
+    public void
+            given_instanceInSuperClassToBeInitializedByMockito_when_mocksRequestedAreInSuperClass_should_useConstructorInjection() {
         assertThat(testClassToBeInitiatedViaConstructorInSuperClass)
-            .extracting(yetAnotherClas1 -> yetAnotherClas1.toBeMockedInTestSuperClass.identifier)
-            .isEqualTo(42);
+                .extracting(
+                        yetAnotherClas1 -> yetAnotherClas1.toBeMockedInTestSuperClass.identifier)
+                .isEqualTo(42);
     }
-
 }

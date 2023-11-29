@@ -19,8 +19,7 @@ public class LocationFactoryAllocationRateTest {
     private static final double EXPECTED_IMPROVEMENT = expectedImprovement();
 
     private static final ThreadMXBean memoryBean =
-        (ThreadMXBean) ManagementFactory.getThreadMXBean();
-
+            (ThreadMXBean) ManagementFactory.getThreadMXBean();
 
     @Test
     public void shouldAllocateMuchLessMemoryThanThrowable() {
@@ -29,22 +28,22 @@ public class LocationFactoryAllocationRateTest {
         new Throwable().fillInStackTrace();
         LocationFactory.create();
         long baseline =
-            countMemoryAllocations(
-                () ->
-                    recurseAndThen(
-                        RECURSION_LIMIT,
-                        repeat(() -> new Throwable().fillInStackTrace())));
+                countMemoryAllocations(
+                        () ->
+                                recurseAndThen(
+                                        RECURSION_LIMIT,
+                                        repeat(() -> new Throwable().fillInStackTrace())));
         long actual =
-            countMemoryAllocations(
-                () ->
-                    recurseAndThen(
-                        RECURSION_LIMIT,
-                        repeat(() -> LocationFactory.create(false))));
+                countMemoryAllocations(
+                        () ->
+                                recurseAndThen(
+                                        RECURSION_LIMIT,
+                                        repeat(() -> LocationFactory.create(false))));
         assertThat(actual * EXPECTED_IMPROVEMENT)
-            .as(
-                "stack walker approach (%d) expected to be at least %fx better than exception approach (%d)",
-                actual, EXPECTED_IMPROVEMENT, baseline)
-            .isLessThan(baseline);
+                .as(
+                        "stack walker approach (%d) expected to be at least %fx better than exception approach (%d)",
+                        actual, EXPECTED_IMPROVEMENT, baseline)
+                .isLessThan(baseline);
     }
 
     private static long countMemoryAllocations(Runnable someTask) {

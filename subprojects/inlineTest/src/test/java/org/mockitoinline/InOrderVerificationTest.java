@@ -71,7 +71,8 @@ public class InOrderVerificationTest {
 
             // then
             inOrder.verify(mockedStatic, StaticContext::firstMethod, times(2));
-            inOrder.verify(mockedStatic, () -> StaticContext.secondMethod(0), timeout(100).atLeastOnce());
+            inOrder.verify(
+                    mockedStatic, () -> StaticContext.secondMethod(0), timeout(100).atLeastOnce());
         }
     }
 
@@ -79,16 +80,20 @@ public class InOrderVerificationTest {
     public void shouldThrowExceptionWhenModeIsUnsupported() {
         try (MockedStatic<StaticContext> mockedStatic = mockStatic(StaticContext.class)) {
             // given
-            VerificationMode unsupportedMode = data -> { };
+            VerificationMode unsupportedMode = data -> {};
             InOrder inOrder = inOrder(StaticContext.class);
 
             // when
             StaticContext.firstMethod();
 
             // then
-            assertThatThrownBy(() ->
-                inOrder.verify(mockedStatic, StaticContext::firstMethod, unsupportedMode)
-            ).isInstanceOf(MockitoException.class);
+            assertThatThrownBy(
+                            () ->
+                                    inOrder.verify(
+                                            mockedStatic,
+                                            StaticContext::firstMethod,
+                                            unsupportedMode))
+                    .isInstanceOf(MockitoException.class);
         }
     }
 
@@ -103,10 +108,12 @@ public class InOrderVerificationTest {
             StaticContext.secondMethod(0);
 
             // then
-            assertThatThrownBy(() -> {
-                inOrder.verify(mockedStatic, () -> StaticContext.secondMethod(0));
-                inOrder.verify(mockedStatic, StaticContext::firstMethod);
-            }).isInstanceOf(VerificationInOrderFailure.class);
+            assertThatThrownBy(
+                            () -> {
+                                inOrder.verify(mockedStatic, () -> StaticContext.secondMethod(0));
+                                inOrder.verify(mockedStatic, StaticContext::firstMethod);
+                            })
+                    .isInstanceOf(VerificationInOrderFailure.class);
         }
     }
 
@@ -123,7 +130,7 @@ public class InOrderVerificationTest {
             // then
             inOrder.verify(mockedStatic, StaticContext::firstMethod);
             assertThatThrownBy(inOrder::verifyNoMoreInteractions)
-                .isInstanceOf(VerificationInOrderFailure.class);
+                    .isInstanceOf(VerificationInOrderFailure.class);
         }
     }
 
@@ -141,15 +148,14 @@ public class InOrderVerificationTest {
             // then
             inOrder.verify(mocked).instanceMethod();
             assertThatThrownBy(inOrder::verifyNoMoreInteractions)
-                .isInstanceOf(VerificationInOrderFailure.class);
+                    .isInstanceOf(VerificationInOrderFailure.class);
         }
     }
 
     @Test
     public void shouldThrowExceptionWhenClassIsNotMocked() {
-        assertThatThrownBy(
-            () -> inOrder(StaticContext.class)
-        ).isInstanceOf(NotAMockException.class);
+        assertThatThrownBy(() -> inOrder(StaticContext.class))
+                .isInstanceOf(NotAMockException.class);
     }
 
     @Test
@@ -173,20 +179,25 @@ public class InOrderVerificationTest {
     @Test
     public void shouldThrowExceptionWhenVerifyUsingInOrderWithoutValidClass() {
         try (MockedStatic<StaticContext> mockedStaticContext = mockStatic(StaticContext.class)) {
-            try (MockedStatic<AnotherStaticContext> mockedAnotherStaticContext = mockStatic(AnotherStaticContext.class)) {
+            try (MockedStatic<AnotherStaticContext> mockedAnotherStaticContext =
+                    mockStatic(AnotherStaticContext.class)) {
                 // given
                 InOrder inOrder = inOrder(AnotherStaticContext.class);
 
                 // when
-                mockedAnotherStaticContext.when(AnotherStaticContext::otherMethod).thenReturn("mocked value");
+                mockedAnotherStaticContext
+                        .when(AnotherStaticContext::otherMethod)
+                        .thenReturn("mocked value");
                 StaticContext.firstMethod();
 
                 // then
-                assertThat(AnotherStaticContext.otherMethod())
-                    .isEqualTo("mocked value");
+                assertThat(AnotherStaticContext.otherMethod()).isEqualTo("mocked value");
                 inOrder.verify(mockedAnotherStaticContext, AnotherStaticContext::otherMethod);
-                assertThatThrownBy(() -> inOrder.verify(mockedStaticContext, StaticContext::firstMethod))
-                    .isInstanceOf(VerificationInOrderFailure.class);
+                assertThatThrownBy(
+                                () ->
+                                        inOrder.verify(
+                                                mockedStaticContext, StaticContext::firstMethod))
+                        .isInstanceOf(VerificationInOrderFailure.class);
             }
         }
     }

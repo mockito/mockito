@@ -15,8 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class MultiLevelNestedTest {
 
-    @Mock
-    private Runnable level1Mock;
+    @Mock private Runnable level1Mock;
 
     @Nested
     class Level2Class {

@@ -73,28 +73,31 @@ public class MocksTest {
 
     @Test
     public void can_create_mock_different_class_loader() throws Exception {
-        ClassLoader loader = new ClassLoader(null) {
-            @Override
-            public Class<?> findClass(String name) throws ClassNotFoundException {
-                if (name.startsWith(MocksTest.class.getPackage().getName())) {
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    try (InputStream inputStream = MocksTest.class.getClassLoader()
-                        .getResourceAsStream(name.replace('.', '/') + ".class")) {
-                        int length;
-                        byte[] buffer = new byte[1024];
-                        while ((length = inputStream.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, length);
+        ClassLoader loader =
+                new ClassLoader(null) {
+                    @Override
+                    public Class<?> findClass(String name) throws ClassNotFoundException {
+                        if (name.startsWith(MocksTest.class.getPackage().getName())) {
+                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                            try (InputStream inputStream =
+                                    MocksTest.class
+                                            .getClassLoader()
+                                            .getResourceAsStream(
+                                                    name.replace('.', '/') + ".class")) {
+                                int length;
+                                byte[] buffer = new byte[1024];
+                                while ((length = inputStream.read(buffer)) != -1) {
+                                    outputStream.write(buffer, 0, length);
+                                }
+                            } catch (IOException e) {
+                                throw new AssertionError(e);
+                            }
+                            byte[] classFile = outputStream.toByteArray();
+                            return defineClass(name, classFile, 0, classFile.length);
                         }
-                    } catch (IOException e) {
-                        throw new AssertionError(e);
+                        return super.loadClass(name);
                     }
-                    byte[] classFile = outputStream.toByteArray();
-                    return defineClass(name, classFile, 0, classFile.length);
-                }
-                return super.loadClass(name);
-            }
-        };
-
+                };
 
         Object mock = Mockito.mock(Class.forName(SomeInterface.class.getName(), true, loader));
         assertThat(mock, instanceOf(Proxy.class));
@@ -107,9 +110,9 @@ public class MocksTest {
     @Test
     public void cannot_create_mock_of_non_object_class() {
         assertThatThrownBy(
-                () -> {
-                    Number number = Mockito.mock(Number.class);
-                })
+                        () -> {
+                            Number number = Mockito.mock(Number.class);
+                        })
                 .isInstanceOf(MockitoException.class)
                 .hasMessageContainingAll(
                         "Cannot mock/spy class",

@@ -38,9 +38,7 @@ public class PluginStackTraceFilteringTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             String trace = getStackTrace(e);
-            assertThat(trace)
-                    .contains("verifyMock_x")
-                    .doesNotContain("verify_excludeMe_x");
+            assertThat(trace).contains("verifyMock_x").doesNotContain("verify_excludeMe_x");
         }
     }
 
@@ -52,9 +50,7 @@ public class PluginStackTraceFilteringTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             String trace = getStackTrace(e);
-            assertThat(trace)
-                    .contains("verifyMock_x")
-                    .contains("verify_excludeMe_x");
+            assertThat(trace).contains("verifyMock_x").contains("verify_excludeMe_x");
         }
     }
 

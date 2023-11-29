@@ -27,7 +27,7 @@ public class OngoingStubShiftTest {
     @Test
     public void keep_ongoing_stub_when_spy() {
         try (MockedStatic<StaticInt> mockInt = mockStatic(StaticInt.class);
-             MockedStatic<StaticStr> mockStr = mockStatic(StaticStr.class, CALLS_REAL_METHODS)) {
+                MockedStatic<StaticStr> mockStr = mockStatic(StaticStr.class, CALLS_REAL_METHODS)) {
 
             mockStr.when(StaticStr::getStr).thenReturn("1");
             assertEquals("1", StaticStr.getStr());
@@ -46,7 +46,8 @@ public class OngoingStubShiftTest {
 
     @Test
     public void keep_ongoing_stub_when_exception() {
-        try (MockedStatic<StaticWithException> mock = mockStatic(StaticWithException.class, CALLS_REAL_METHODS)) {
+        try (MockedStatic<StaticWithException> mock =
+                mockStatic(StaticWithException.class, CALLS_REAL_METHODS)) {
             mock.when(StaticWithException::getString).thenReturn("1");
             assertEquals("1", StaticWithException.getString());
         }

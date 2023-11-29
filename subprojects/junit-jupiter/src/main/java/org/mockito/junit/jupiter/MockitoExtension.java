@@ -117,9 +117,9 @@ import org.mockito.quality.Strictness;
  */
 public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
-    private final static Namespace MOCKITO = create("org.mockito");
+    private static final Namespace MOCKITO = create("org.mockito");
 
-    private final static String SESSION = "session", MOCKS = "mocks";
+    private static final String SESSION = "session", MOCKS = "mocks";
 
     private final Strictness strictness;
 
@@ -133,10 +133,9 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
 
     private MockitoExtension(Strictness strictness) {
         this.strictness = strictness;
-        this.parameterResolver = new CompositeParameterResolver(
-            new MockParameterResolver(),
-            new CaptorParameterResolver()
-        );
+        this.parameterResolver =
+                new CompositeParameterResolver(
+                        new MockParameterResolver(), new CaptorParameterResolver());
     }
 
     /**
@@ -148,21 +147,24 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
     public void beforeEach(final ExtensionContext context) {
         List<Object> testInstances = context.getRequiredTestInstances().getAllInstances();
 
-        Strictness actualStrictness = this.retrieveAnnotationFromTestClasses(context)
-            .map(MockitoSettings::strictness)
-            .orElse(strictness);
+        Strictness actualStrictness =
+                this.retrieveAnnotationFromTestClasses(context)
+                        .map(MockitoSettings::strictness)
+                        .orElse(strictness);
 
-        MockitoSession session = Mockito.mockitoSession()
-            .initMocks(testInstances.toArray())
-            .strictness(actualStrictness)
-            .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
-            .startMocking();
+        MockitoSession session =
+                Mockito.mockitoSession()
+                        .initMocks(testInstances.toArray())
+                        .strictness(actualStrictness)
+                        .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
+                        .startMocking();
 
         context.getStore(MOCKITO).put(MOCKS, new HashSet<>());
         context.getStore(MOCKITO).put(SESSION, session);
     }
 
-    private Optional<MockitoSettings> retrieveAnnotationFromTestClasses(final ExtensionContext context) {
+    private Optional<MockitoSettings> retrieveAnnotationFromTestClasses(
+            final ExtensionContext context) {
         ExtensionContext currentContext = context;
         Optional<MockitoSettings> annotation;
 
@@ -187,19 +189,24 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
     @Override
     @SuppressWarnings("unchecked")
     public void afterEach(ExtensionContext context) {
-        context.getStore(MOCKITO).remove(MOCKS, Set.class).forEach(mock -> ((ScopedMock) mock).closeOnDemand());
-        context.getStore(MOCKITO).remove(SESSION, MockitoSession.class)
+        context.getStore(MOCKITO)
+                .remove(MOCKS, Set.class)
+                .forEach(mock -> ((ScopedMock) mock).closeOnDemand());
+        context.getStore(MOCKITO)
+                .remove(SESSION, MockitoSession.class)
                 .finishMocking(context.getExecutionException().orElse(null));
     }
 
     @Override
-    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext context) throws ParameterResolutionException {
+    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext context)
+            throws ParameterResolutionException {
         return parameterResolver.supportsParameter(parameterContext, context);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext context) throws ParameterResolutionException {
+    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext context)
+            throws ParameterResolutionException {
         Object resolvedParameter = parameterResolver.resolveParameter(parameterContext, context);
         if (resolvedParameter instanceof ScopedMock) {
             context.getStore(MOCKITO).get(MOCKS, Set.class).add(resolvedParameter);

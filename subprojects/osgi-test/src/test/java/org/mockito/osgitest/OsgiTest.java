@@ -31,11 +31,14 @@ import static org.junit.Assert.fail;
 @RunWith(OsgiTest.class)
 public class OsgiTest extends Suite {
 
-    private static final FrameworkFactory frameworkFactory = ServiceLoader.load(FrameworkFactory.class).iterator().next();
+    private static final FrameworkFactory frameworkFactory =
+            ServiceLoader.load(FrameworkFactory.class).iterator().next();
     private static final String STORAGE_TEMPDIR_NAME = "osgi-test-storage";
-    private static final List<String> EXTRA_SYSTEMPACKAGES = Arrays.asList("org.junit", "sun.misc", "sun.reflect");
+    private static final List<String> EXTRA_SYSTEMPACKAGES =
+            Arrays.asList("org.junit", "sun.misc", "sun.reflect");
 
-    private static final List<Path> TEST_RUNTIME_BUNDLES = splitPaths(System.getProperty("testRuntimeBundles"));
+    private static final List<Path> TEST_RUNTIME_BUNDLES =
+            splitPaths(System.getProperty("testRuntimeBundles"));
     private static final String TEST_BUNDLE_SYMBOLIC_NAME = "testBundle";
 
     private static final long STOP_TIMEOUT_MS = 10000;
@@ -52,11 +55,14 @@ public class OsgiTest extends Suite {
         frameworkStorage = Files.createTempDirectory(STORAGE_TEMPDIR_NAME);
         Map<String, String> configuration = new HashMap<>();
         configuration.put(Constants.FRAMEWORK_STORAGE, frameworkStorage.toString());
-        configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, String.join(",", EXTRA_SYSTEMPACKAGES));
+        configuration.put(
+                Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, String.join(",", EXTRA_SYSTEMPACKAGES));
         // When inline mock macker is used, the new 'mockitoboot.jar' is created on the fly
         // and added to boot classloader (by instrumentation). As such, the following
         // packages have to be explicitly delegated to boot classloader.
-        configuration.put(Constants.FRAMEWORK_BOOTDELEGATION, "org.mockito.internal.creation.bytebuddy.inject");
+        configuration.put(
+                Constants.FRAMEWORK_BOOTDELEGATION,
+                "org.mockito.internal.creation.bytebuddy.inject");
         framework = frameworkFactory.newFramework(configuration);
         framework.init();
         BundleContext bundleContext = framework.getBundleContext();
@@ -65,7 +71,8 @@ public class OsgiTest extends Suite {
             try {
                 installedBundle = bundleContext.installBundle(dependencyPath.toUri().toString());
             } catch (BundleException e) {
-                throw new IllegalStateException("Failed to install bundle: " + dependencyPath.getFileName(), e);
+                throw new IllegalStateException(
+                        "Failed to install bundle: " + dependencyPath.getFileName(), e);
             }
             if (TEST_BUNDLE_SYMBOLIC_NAME.equals(installedBundle.getSymbolicName())) {
                 testBundle = installedBundle;
@@ -122,24 +129,27 @@ public class OsgiTest extends Suite {
 
     private static List<Path> splitPaths(String paths) {
         return Stream.of(paths.split(Pattern.quote(File.pathSeparator)))
-            .map(p -> Paths.get(p))
-            .collect(Collectors.toList());
+                .map(p -> Paths.get(p))
+                .collect(Collectors.toList());
     }
 
     private static void deleteRecursively(Path pathToDelete) throws IOException {
-        Files.walkFileTree(pathToDelete,
-            new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-                    Files.delete(dir);
-                    return FileVisitResult.CONTINUE;
-                }
+        Files.walkFileTree(
+                pathToDelete,
+                new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult postVisitDirectory(Path dir, IOException exc)
+                            throws IOException {
+                        Files.delete(dir);
+                        return FileVisitResult.CONTINUE;
+                    }
 
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    Files.delete(file);
-                    return FileVisitResult.CONTINUE;
-                }
-            });
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                            throws IOException {
+                        Files.delete(file);
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
     }
 }

@@ -20,8 +20,10 @@ public class StubbingLocationTest {
     public void stubbing_location_should_be_the_correct_point() {
         ConcreteClass mock = mock(ConcreteClass.class);
         String frame;
-        // Initializing 'frame' at the method parameter point is to gain the exact line number of the stubbing point.
-        when(mock.concreteMethod(frame = Thread.currentThread().getStackTrace()[1].toString())).thenReturn("");
+        // Initializing 'frame' at the method parameter point is to gain the exact line number of
+        // the stubbing point.
+        when(mock.concreteMethod(frame = Thread.currentThread().getStackTrace()[1].toString()))
+                .thenReturn("");
         mock.concreteMethod(frame);
         Set<Stubbing> stubbings = AllInvocationsFinder.findStubbings(Collections.singleton(mock));
         assertEquals(1, stubbings.size());
@@ -34,5 +36,4 @@ public class StubbingLocationTest {
             throw new RuntimeException(s);
         }
     }
-
 }

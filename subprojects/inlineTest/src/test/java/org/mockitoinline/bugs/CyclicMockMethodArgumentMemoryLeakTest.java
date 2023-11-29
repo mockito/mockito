@@ -10,7 +10,7 @@ import static org.mockito.Mockito.framework;
 import static org.mockito.Mockito.mock;
 
 public class CyclicMockMethodArgumentMemoryLeakTest {
-    private static final int ARRAY_LENGTH = 1 << 20;  // 4 MB
+    private static final int ARRAY_LENGTH = 1 << 20; // 4 MB
 
     @Test
     public void no_memory_leak_when_cyclically_calling_method_with_mocks() {

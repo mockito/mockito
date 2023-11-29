@@ -15,7 +15,8 @@ public class MockNonPublicClassFailsTest {
 
     @Test(expected = MockitoException.class)
     public void test() {
-            // Expected: The type is not public and its mock class is loaded by a different class loader.
-            NonPublicClass nonPublicClass = mock(NonPublicClass.class);
+        // Expected: The type is not public and its mock class is loaded by a different class
+        // loader.
+        NonPublicClass nonPublicClass = mock(NonPublicClass.class);
     }
 }

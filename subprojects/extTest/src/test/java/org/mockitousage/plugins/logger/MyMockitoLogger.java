@@ -11,18 +11,20 @@ import org.mockito.internal.util.ConsoleMockitoLogger;
 import org.mockito.plugins.MockitoLogger;
 
 public class MyMockitoLogger implements MockitoLogger {
-    private static final ThreadLocal<Boolean> enabled = new ThreadLocal<Boolean>() {
-        @Override
-        protected Boolean initialValue() {
-            return false;
-        }
-    };
-    private static final ThreadLocal<List<Object>> loggedItems = new ThreadLocal<List<Object>>() {
-        @Override
-        protected List<Object> initialValue() {
-            return new ArrayList<Object>();
-        }
-    };
+    private static final ThreadLocal<Boolean> enabled =
+            new ThreadLocal<Boolean>() {
+                @Override
+                protected Boolean initialValue() {
+                    return false;
+                }
+            };
+    private static final ThreadLocal<List<Object>> loggedItems =
+            new ThreadLocal<List<Object>>() {
+                @Override
+                protected List<Object> initialValue() {
+                    return new ArrayList<Object>();
+                }
+            };
 
     private final MockitoLogger defaultLogger = new ConsoleMockitoLogger();
 

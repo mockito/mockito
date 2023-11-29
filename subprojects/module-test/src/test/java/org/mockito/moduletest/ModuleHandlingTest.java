@@ -33,9 +33,7 @@ public class ModuleHandlingTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-            {true}, {false}
-        });
+        return Arrays.asList(new Object[][] {{true}, {false}});
     }
 
     private final boolean namedModules;
@@ -59,9 +57,12 @@ public class ModuleHandlingTest {
         try {
             Class<?> mockito = loader.loadClass(Mockito.class.getName());
             @SuppressWarnings("unchecked")
-            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Callable<String> mock =
+                    (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
             Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
-            loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
+            loader.loadClass(OngoingStubbing.class.getName())
+                    .getMethod("thenCallRealMethod")
+                    .invoke(stubbing);
 
             assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
             assertThat(mock.call()).isEqualTo("foo");
@@ -87,10 +88,17 @@ public class ModuleHandlingTest {
             @SuppressWarnings("unchecked")
             Lock mock = (Lock) mockito.getMethod("mock", Class.class).invoke(null, type);
             Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.tryLock());
-            loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenReturn", Object.class).invoke(stubbing, true);
+            loader.loadClass(OngoingStubbing.class.getName())
+                    .getMethod("thenReturn", Object.class)
+                    .invoke(stubbing, true);
 
-            boolean relocated = !Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable();
-            String prefix = relocated ? "org.mockito.codegen.Lock$MockitoMock$" : "java.util.concurrent.locks.Lock$MockitoMock$";
+            boolean relocated =
+                    !Boolean.getBoolean("org.mockito.internal.noUnsafeInjection")
+                            && ClassInjector.UsingReflection.isAvailable();
+            String prefix =
+                    relocated
+                            ? "org.mockito.codegen.Lock$MockitoMock$"
+                            : "java.util.concurrent.locks.Lock$MockitoMock$";
             assertThat(mock.getClass().getName()).startsWith(prefix);
             assertThat(mock.tryLock()).isEqualTo(true);
         } finally {
@@ -110,9 +118,12 @@ public class ModuleHandlingTest {
 
         Class<?> mockito = loader.loadClass(Mockito.class.getName());
         @SuppressWarnings("unchecked")
-        Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+        Callable<String> mock =
+                (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
         Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
-        loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
+        loader.loadClass(OngoingStubbing.class.getName())
+                .getMethod("thenCallRealMethod")
+                .invoke(stubbing);
 
         assertThat(mock.getClass().getName()).isEqualTo("sample.MyCallable");
         assertThat(mock.call()).isEqualTo("foo");
@@ -133,9 +144,12 @@ public class ModuleHandlingTest {
         try {
             Class<?> mockito = loader.loadClass(Mockito.class.getName());
             @SuppressWarnings("unchecked")
-            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Callable<String> mock =
+                    (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
             Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
-            loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
+            loader.loadClass(OngoingStubbing.class.getName())
+                    .getMethod("thenCallRealMethod")
+                    .invoke(stubbing);
 
             assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
             assertThat(mock.call()).isEqualTo("foo");
@@ -159,9 +173,12 @@ public class ModuleHandlingTest {
         try {
             Class<?> mockito = loader.loadClass(Mockito.class.getName());
             @SuppressWarnings("unchecked")
-            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Callable<String> mock =
+                    (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
             Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
-            loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
+            loader.loadClass(OngoingStubbing.class.getName())
+                    .getMethod("thenCallRealMethod")
+                    .invoke(stubbing);
 
             assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
             assertThat(mock.call()).isEqualTo("foo");
@@ -185,9 +202,12 @@ public class ModuleHandlingTest {
         try {
             Class<?> mockito = loader.loadClass(Mockito.class.getName());
             @SuppressWarnings("unchecked")
-            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Callable<String> mock =
+                    (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
             Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
-            loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
+            loader.loadClass(OngoingStubbing.class.getName())
+                    .getMethod("thenCallRealMethod")
+                    .invoke(stubbing);
 
             assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
             assertThat(mock.call()).isEqualTo("foo");
@@ -211,12 +231,20 @@ public class ModuleHandlingTest {
         try {
             Class<?> mockito = loader.loadClass(Mockito.class.getName());
             @SuppressWarnings("unchecked")
-            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Callable<String> mock =
+                    (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
             Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
-            loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
+            loader.loadClass(OngoingStubbing.class.getName())
+                    .getMethod("thenCallRealMethod")
+                    .invoke(stubbing);
 
-            boolean relocated = !Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable();
-            String prefix = relocated ? "sample.MyCallable$MockitoMock$" : "org.mockito.codegen.MyCallable$MockitoMock$";
+            boolean relocated =
+                    !Boolean.getBoolean("org.mockito.internal.noUnsafeInjection")
+                            && ClassInjector.UsingReflection.isAvailable();
+            String prefix =
+                    relocated
+                            ? "sample.MyCallable$MockitoMock$"
+                            : "org.mockito.codegen.MyCallable$MockitoMock$";
             assertThat(mock.getClass().getName()).startsWith(prefix);
             assertThat(mock.call()).isEqualTo("foo");
         } finally {
@@ -225,9 +253,13 @@ public class ModuleHandlingTest {
     }
 
     @Test
-    public void cannot_define_class_in_non_opened_non_exported_module_if_lookup_injection() throws Exception {
+    public void cannot_define_class_in_non_opened_non_exported_module_if_lookup_injection()
+            throws Exception {
         assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
-        assumeThat(!Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable(), is(true));
+        assumeThat(
+                !Boolean.getBoolean("org.mockito.internal.noUnsafeInjection")
+                        && ClassInjector.UsingReflection.isAvailable(),
+                is(true));
 
         Path jar = modularJar(false, false, false);
         ModuleLayer layer = layer(jar, false, namedModules);
@@ -240,9 +272,12 @@ public class ModuleHandlingTest {
         try {
             Class<?> mockito = loader.loadClass(Mockito.class.getName());
             @SuppressWarnings("unchecked")
-            Callable<String> mock = (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
+            Callable<String> mock =
+                    (Callable<String>) mockito.getMethod("mock", Class.class).invoke(null, type);
             Object stubbing = mockito.getMethod("when", Object.class).invoke(null, mock.call());
-            loader.loadClass(OngoingStubbing.class.getName()).getMethod("thenCallRealMethod").invoke(stubbing);
+            loader.loadClass(OngoingStubbing.class.getName())
+                    .getMethod("thenCallRealMethod")
+                    .invoke(stubbing);
 
             assertThat(mock.getClass().getName()).startsWith("sample.MyCallable$MockitoMock$");
             assertThat(mock.call()).isEqualTo("foo");
@@ -252,9 +287,13 @@ public class ModuleHandlingTest {
     }
 
     @Test
-    public void can_define_class_in_non_opened_non_exported_module_if_unsafe_injection() throws Exception {
+    public void can_define_class_in_non_opened_non_exported_module_if_unsafe_injection()
+            throws Exception {
         assumeThat(Plugins.getMockMaker() instanceof InlineByteBuddyMockMaker, is(false));
-        assumeThat(!Boolean.getBoolean("org.mockito.internal.noUnsafeInjection") && ClassInjector.UsingReflection.isAvailable(), is(false));
+        assumeThat(
+                !Boolean.getBoolean("org.mockito.internal.noUnsafeInjection")
+                        && ClassInjector.UsingReflection.isAvailable(),
+                is(false));
 
         Path jar = modularJar(false, false, false);
         ModuleLayer layer = layer(jar, false, namedModules);
@@ -270,7 +309,8 @@ public class ModuleHandlingTest {
                 mockito.getMethod("mock", Class.class).invoke(null, type);
                 fail("Expected mocking to fail");
             } catch (InvocationTargetException e) {
-                assertThat(e.getTargetException()).isInstanceOf(loader.loadClass(MockitoException.class.getName()));
+                assertThat(e.getTargetException())
+                        .isInstanceOf(loader.loadClass(MockitoException.class.getName()));
             }
         } finally {
             Thread.currentThread().setContextClassLoader(contextLoader);

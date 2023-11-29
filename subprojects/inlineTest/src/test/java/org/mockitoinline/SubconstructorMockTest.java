@@ -15,7 +15,7 @@ public class SubconstructorMockTest {
 
     @Test
     public void does_not_mock_subclass_constructor_for_superclass_mock() {
-        try (MockedConstruction<SubClass> mocked = Mockito.mockConstruction(SubClass.class)) { }
+        try (MockedConstruction<SubClass> mocked = Mockito.mockConstruction(SubClass.class)) {}
         try (MockedConstruction<SuperClass> mocked = Mockito.mockConstruction(SuperClass.class)) {
             SubClass value = new SubClass();
             assertTrue(value.sup());
@@ -25,7 +25,7 @@ public class SubconstructorMockTest {
 
     @Test
     public void does_mock_superclass_constructor_for_subclass_mock() {
-        try (MockedConstruction<SuperClass> mocked = Mockito.mockConstruction(SuperClass.class)) { }
+        try (MockedConstruction<SuperClass> mocked = Mockito.mockConstruction(SuperClass.class)) {}
         try (MockedConstruction<SubClass> mocked = Mockito.mockConstruction(SubClass.class)) {
             SubClass value = new SubClass();
             assertFalse(value.sup());

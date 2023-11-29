@@ -2,7 +2,6 @@
  * Copyright (c) 2023 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,16 +44,15 @@ public class GenericTypeMockTest {
             List<Integer> intList;
         }
 
-        @Mock
-        private List<String> stringListMock;
+        @Mock private List<String> stringListMock;
 
-        @Mock
-        private List<Integer> intListMock;
+        @Mock private List<Integer> intListMock;
 
         // must construct non-static inner class ourselves here
         // (making it public static classes doesn't work either)
         @InjectMocks
-        private UnderTestWithSingleTypeParam underTestWithSingleTypeParam = new UnderTestWithSingleTypeParam();
+        private UnderTestWithSingleTypeParam underTestWithSingleTypeParam =
+                new UnderTestWithSingleTypeParam();
 
         @Test
         void testSingleTypeParam() {
@@ -77,14 +75,11 @@ public class GenericTypeMockTest {
             Set<? extends Number> numberSet;
         }
 
-        @Mock
-        Set<Time> timeSetMock; // java.sql.Time extends Date
+        @Mock Set<Time> timeSetMock; // java.sql.Time extends Date
 
-        @Mock
-        Set<Integer> integerSetMock;
+        @Mock Set<Integer> integerSetMock;
 
-        @InjectMocks
-        UnderTestWithWildcard underTestWithWildcard = new UnderTestWithWildcard();
+        @InjectMocks UnderTestWithWildcard underTestWithWildcard = new UnderTestWithWildcard();
 
         @Test
         void testWildcard() {
@@ -98,7 +93,6 @@ public class GenericTypeMockTest {
         }
     }
 
-
     @Nested
     public class NestedTypeParametersTest {
         public class UnderTestWithNestedTypeParameters {
@@ -106,22 +100,25 @@ public class GenericTypeMockTest {
             Map<Integer, Collection<Integer>> intoToIntCollectionMap;
         }
 
-        @Mock
-        Map<Integer, Collection<String>> intToStringCollectionMapMock;
+        @Mock Map<Integer, Collection<String>> intToStringCollectionMapMock;
 
-        @Mock
-        Map<Integer, Collection<Integer>> intToIntCollectionMapMock;
+        @Mock Map<Integer, Collection<Integer>> intToIntCollectionMapMock;
 
         @InjectMocks
-        UnderTestWithNestedTypeParameters underTestWithNestedTypeParameters = new UnderTestWithNestedTypeParameters();
+        UnderTestWithNestedTypeParameters underTestWithNestedTypeParameters =
+                new UnderTestWithNestedTypeParameters();
 
         @Test
         void testNestedTypeParameters() {
             assertNotNull(intToStringCollectionMapMock);
             assertNotNull(intToIntCollectionMapMock);
 
-            assertEquals(intToStringCollectionMapMock, underTestWithNestedTypeParameters.intToStringCollectionMap);
-            assertEquals(intToIntCollectionMapMock, underTestWithNestedTypeParameters.intoToIntCollectionMap);
+            assertEquals(
+                    intToStringCollectionMapMock,
+                    underTestWithNestedTypeParameters.intToStringCollectionMap);
+            assertEquals(
+                    intToIntCollectionMapMock,
+                    underTestWithNestedTypeParameters.intoToIntCollectionMap);
         }
     }
 
@@ -132,14 +129,13 @@ public class GenericTypeMockTest {
             Set<Integer> intSet;
         }
 
-        @Mock
-        TreeSet<String> stringTreeSetMock;
+        @Mock TreeSet<String> stringTreeSetMock;
 
-        @Mock
-        HashSet<Integer> intHashSetMock;
+        @Mock HashSet<Integer> intHashSetMock;
 
         @InjectMocks
-        UnderTestWithGenericSubclass underTestWithGenericSubclass = new UnderTestWithGenericSubclass();
+        UnderTestWithGenericSubclass underTestWithGenericSubclass =
+                new UnderTestWithGenericSubclass();
 
         @Test
         void testGenericSubclass() {
@@ -157,18 +153,18 @@ public class GenericTypeMockTest {
             List<String> stringList;
         }
 
-        @Mock
-        List<String> stringList;
+        @Mock List<String> stringList;
 
-        @Mock
-        List<String> stringListMock;
+        @Mock List<String> stringListMock;
 
         @InjectMocks
-        UnderTestWithMultipleCandidatesOneByName underTestWithMultipleCandidatesOneByName = new UnderTestWithMultipleCandidatesOneByName();
+        UnderTestWithMultipleCandidatesOneByName underTestWithMultipleCandidatesOneByName =
+                new UnderTestWithMultipleCandidatesOneByName();
 
         @Test
         void testMultipleCandidatesOneByName() {
-            // verify that when multiple mock candidates exist by type, and one of them matches by field name, that one is injected
+            // verify that when multiple mock candidates exist by type, and one of them matches by
+            // field name, that one is injected
             assertNotNull(underTestWithMultipleCandidatesOneByName.stringList);
             assertEquals(stringList, underTestWithMultipleCandidatesOneByName.stringList);
         }
@@ -180,11 +176,9 @@ public class GenericTypeMockTest {
             List<Integer> intList;
         }
 
-        @Mock
-        List<String> stringList;
+        @Mock List<String> stringList;
 
-        @InjectMocks
-        UnderTestWithNoMatches underTestWithNoMatches = new UnderTestWithNoMatches();
+        @InjectMocks UnderTestWithNoMatches underTestWithNoMatches = new UnderTestWithNoMatches();
 
         @Test
         void testNoneMatchByTypeParameter() {
@@ -201,8 +195,7 @@ public class GenericTypeMockTest {
             List<Integer> intList;
         }
 
-        @Mock
-        Set<Integer> intSet;
+        @Mock Set<Integer> intSet;
 
         @InjectMocks
         UnderTestWithNoMatches underTestWithNoMatchesByRawType = new UnderTestWithNoMatches();
@@ -216,24 +209,24 @@ public class GenericTypeMockTest {
         }
     }
 
-
     @Nested
     public class ClassWithTypeParameterNoMatchTest {
         public class UnderTestWithTypeParameter<T> {
             List<T> tList;
         }
 
-        @Mock
-        List<Integer> intList;
+        @Mock List<Integer> intList;
 
         @InjectMocks
-        UnderTestWithTypeParameter<String> underTestWithTypeParameterNoMatch = new UnderTestWithTypeParameter<String>();
+        UnderTestWithTypeParameter<String> underTestWithTypeParameterNoMatch =
+                new UnderTestWithTypeParameter<String>();
 
         @Test
         void testWithTypeParameterNoMatch() {
             assertNotNull(intList);
 
-            // verify that when no candidate matches by type parameter of class under test, none is injected
+            // verify that when no candidate matches by type parameter of class under test, none is
+            // injected
             assertNull(underTestWithTypeParameterNoMatch.tList);
         }
     }
@@ -245,14 +238,13 @@ public class GenericTypeMockTest {
             List<T2> t2List;
         }
 
-        @Mock
-        List<String> stringList;
+        @Mock List<String> stringList;
 
-        @Mock
-        List<Integer> intList;
+        @Mock List<Integer> intList;
 
         @InjectMocks
-        UnderTestWithTypeParameters<String, Integer> underTestWithTypeParameters = new UnderTestWithTypeParameters<String, Integer>();
+        UnderTestWithTypeParameters<String, Integer> underTestWithTypeParameters =
+                new UnderTestWithTypeParameters<String, Integer>();
 
         @Test
         void testWithTypeParameters() {
@@ -273,11 +265,11 @@ public class GenericTypeMockTest {
 
         public class ConcreteStringList extends ArrayList<String> {}
 
-        @Mock
-        ConcreteStringList concreteStringList;
+        @Mock ConcreteStringList concreteStringList;
 
         @InjectMocks
-        UnderTestWithTypeParameter<String> underTestWithTypeParameters = new UnderTestWithTypeParameter<String>();
+        UnderTestWithTypeParameter<String> underTestWithTypeParameters =
+                new UnderTestWithTypeParameter<String>();
 
         @Test
         void testWithTypeParameters() {
@@ -296,11 +288,11 @@ public class GenericTypeMockTest {
 
         public class ConcreteStringList extends ArrayList<String> {}
 
-        @Mock
-        ConcreteStringList concreteStringList;
+        @Mock ConcreteStringList concreteStringList;
 
         @InjectMocks
-        UnderTestWithTypeParameter<Integer> underTestWithTypeParameters = new UnderTestWithTypeParameter<Integer>();
+        UnderTestWithTypeParameter<Integer> underTestWithTypeParameters =
+                new UnderTestWithTypeParameter<Integer>();
 
         @Test
         void testWithTypeParameters() {
@@ -320,21 +312,16 @@ public class GenericTypeMockTest {
             UnderTestInstance<A> instance;
         }
 
-        public class UnderTestInstance<I extends AbstractUnderTest<I>> {
-        }
+        public class UnderTestInstance<I extends AbstractUnderTest<I>> {}
 
-        public class ConcreteUnderTest extends AbstractUnderTest<ConcreteUnderTest> {
-        }
+        public class ConcreteUnderTest extends AbstractUnderTest<ConcreteUnderTest> {}
 
-        @Mock
-        UnderTestInstance<ConcreteUnderTest> instanceMock;
+        @Mock UnderTestInstance<ConcreteUnderTest> instanceMock;
 
-        @InjectMocks
-        protected ConcreteUnderTest concreteUnderTest = new ConcreteUnderTest();
+        @InjectMocks protected ConcreteUnderTest concreteUnderTest = new ConcreteUnderTest();
 
         @BeforeEach
-        public void initMocks()
-        {
+        public void initMocks() {
             openMocks(this);
         }
 
@@ -343,8 +330,6 @@ public class GenericTypeMockTest {
             assertNotNull(instanceMock);
             assertEquals(instanceMock, concreteUnderTest.instance);
         }
-
-
     }
 
     /**
@@ -353,8 +338,10 @@ public class GenericTypeMockTest {
     @Nested
     public class RegressionNpe {
         public abstract class Change {}
+
         public class ChangeCollection<TChange extends Change> implements Iterable<TChange> {
             private List<TChange> changes = new ArrayList<TChange>();
+
             @Override
             public Iterator<TChange> iterator() {
                 return null;
@@ -364,13 +351,13 @@ public class GenericTypeMockTest {
         @Mock Change change0;
 
         @InjectMocks ChangeCollection spiedImpl = new ChangeCollection();
-        @Mock(name = "changes") List<Change> innerList;
+
+        @Mock(name = "changes")
+        List<Change> innerList;
 
         @Test
         public void testNoNpe() {
             assertSame(innerList, spiedImpl.changes);
         }
-
     }
 }
-

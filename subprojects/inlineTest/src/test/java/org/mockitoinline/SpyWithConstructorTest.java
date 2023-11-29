@@ -16,9 +16,10 @@ public class SpyWithConstructorTest {
 
     @Before
     public void setUp() {
-        somethingAbstract = mock(SomethingAbstract.class, withSettings()
-            .useConstructor("foo")
-            .defaultAnswer(CALLS_REAL_METHODS));
+        somethingAbstract =
+                mock(
+                        SomethingAbstract.class,
+                        withSettings().useConstructor("foo").defaultAnswer(CALLS_REAL_METHODS));
     }
 
     @Test
@@ -26,7 +27,7 @@ public class SpyWithConstructorTest {
         assertEquals("foo", somethingAbstract.getValue());
     }
 
-    static abstract class SomethingAbstract {
+    abstract static class SomethingAbstract {
 
         private final String value;
 

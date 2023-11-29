@@ -24,14 +24,11 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class JunitJupiterTest {
 
-    @Mock
-    private Function<Integer, String> rootMock;
+    @Mock private Function<Integer, String> rootMock;
 
-    @Captor
-    private ArgumentCaptor<String> rootCaptor;
+    @Captor private ArgumentCaptor<String> rootCaptor;
 
-    @InjectMocks
-    private ClassWithDependency classWithDependency;
+    @InjectMocks private ClassWithDependency classWithDependency;
 
     @Test
     void ensure_mock_creation_works() {
@@ -55,8 +52,8 @@ class JunitJupiterTest {
     }
 
     @Test
-    void initializes_parameters(@Mock Function<String, String> localMock,
-                                @Captor ArgumentCaptor<String> localCaptor) {
+    void initializes_parameters(
+            @Mock Function<String, String> localMock, @Captor ArgumentCaptor<String> localCaptor) {
         Mockito.when(localMock.apply("Para")).thenReturn("Meter");
         assertThat(localMock.apply("Para")).isEqualTo("Meter");
 
@@ -64,7 +61,8 @@ class JunitJupiterTest {
     }
 
     @Test
-    void initializes_parameters_with_custom_configuration(@Mock(name = "overriddenName") Function<String, String> localMock) {
+    void initializes_parameters_with_custom_configuration(
+            @Mock(name = "overriddenName") Function<String, String> localMock) {
         assertThat(MockUtil.getMockName(localMock).toString()).isEqualTo("overriddenName");
     }
 
@@ -73,8 +71,9 @@ class JunitJupiterTest {
         private final Function<Integer, String> constructorMock;
         private final ArgumentCaptor<String> constructorCaptor;
 
-        NestedTestWithConstructorParameter(@Mock Function<Integer, String> constructorMock,
-                                           @Captor ArgumentCaptor<String> constructorCaptor) {
+        NestedTestWithConstructorParameter(
+                @Mock Function<Integer, String> constructorMock,
+                @Captor ArgumentCaptor<String> constructorCaptor) {
             this.constructorMock = constructorMock;
             this.constructorCaptor = constructorCaptor;
         }
@@ -104,7 +103,7 @@ class JunitJupiterTest {
     }
 
     @Nested
-    class NestedClassWithExtraCaptor{
+    class NestedClassWithExtraCaptor {
         @Captor ArgumentCaptor<Integer> nestedCaptor;
 
         @Test
@@ -120,15 +119,13 @@ class JunitJupiterTest {
 
     @Nested
     @ExtendWith(MockitoExtension.class)
-        // ^^ duplicate registration should be ignored by JUnit
-        // see https://junit.org/junit5/docs/current/user-guide/#extensions-registration-inheritance
+    // ^^ duplicate registration should be ignored by JUnit
+    // see https://junit.org/junit5/docs/current/user-guide/#extensions-registration-inheritance
     class DuplicateExtensionOnNestedTest {
 
-        @Mock
-        Object nestedMock;
+        @Mock Object nestedMock;
 
-        @Mock
-        ArgumentCaptor<String> nestedCaptor;
+        @Mock ArgumentCaptor<String> nestedCaptor;
 
         @Test
         void ensure_mocks_are_created_for_nested_tests() {
@@ -144,7 +141,7 @@ class JunitJupiterTest {
     @Nested
     class NestedWithoutExtraMock {
         @Test
-            // mock is initialized by mockito session
+        // mock is initialized by mockito session
         void shouldWeCreateMocksInTheParentContext() {
             assertThat(rootMock).isNotNull();
         }
@@ -164,7 +161,7 @@ class JunitJupiterTest {
     }
 
     @SuppressWarnings("unchecked")
-    private static void assertCaptor(ArgumentCaptor<String> captor){
+    private static void assertCaptor(ArgumentCaptor<String> captor) {
         Predicate<String> mock = Mockito.mock(Predicate.class);
         ProductionCode.simpleMethod(mock, "parameter");
         verify(mock).test(captor.capture());

@@ -17,7 +17,7 @@ import java.nio.file.Path;
 public class ReplicatingClassLoader extends URLClassLoader {
 
     public ReplicatingClassLoader(Path path) throws MalformedURLException {
-        super(new URL[]{path.toUri().toURL()}, null);
+        super(new URL[] {path.toUri().toURL()}, null);
     }
 
     @Override
@@ -25,7 +25,10 @@ public class ReplicatingClassLoader extends URLClassLoader {
         try {
             return super.loadClass(name);
         } catch (ClassNotFoundException e) {
-            InputStream in = Mockito.class.getClassLoader().getResourceAsStream(name.replace('.', '/') + ".class");
+            InputStream in =
+                    Mockito.class
+                            .getClassLoader()
+                            .getResourceAsStream(name.replace('.', '/') + ".class");
             if (in == null) {
                 throw e;
             } else {

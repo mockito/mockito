@@ -14,11 +14,11 @@ import org.junit.Test;
 public class RecordTest {
 
     @Test
-    public void given_list_is_already_spied__when_spying_record__then_record_fields_are_correctly_populated() {
+    public void
+            given_list_is_already_spied__when_spying_record__then_record_fields_are_correctly_populated() {
         var ignored = spy(List.of());
 
-        record MyRecord(String name) {
-        }
+        record MyRecord(String name) {}
         MyRecord spiedRecord = spy(new MyRecord("something"));
 
         assertThat(spiedRecord.name()).isEqualTo("something");

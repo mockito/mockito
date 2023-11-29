@@ -45,14 +45,17 @@ public final class ConstructionMockTest {
 
     @Test
     public void testConstructionMockDefaultAnswer() {
-        try (MockedConstruction<Dummy> ignored = Mockito.mockConstructionWithAnswer(Dummy.class, invocation -> "bar")) {
+        try (MockedConstruction<Dummy> ignored =
+                Mockito.mockConstructionWithAnswer(Dummy.class, invocation -> "bar")) {
             assertEquals("bar", new Dummy().foo());
         }
     }
 
     @Test
     public void testConstructionMockDefaultAnswerMultiple() {
-        try (MockedConstruction<Dummy> ignored = Mockito.mockConstructionWithAnswer(Dummy.class, invocation -> "bar", invocation -> "qux")) {
+        try (MockedConstruction<Dummy> ignored =
+                Mockito.mockConstructionWithAnswer(
+                        Dummy.class, invocation -> "bar", invocation -> "qux")) {
             assertEquals("bar", new Dummy().foo());
             assertEquals("qux", new Dummy().foo());
             assertEquals("qux", new Dummy().foo());
@@ -64,7 +67,12 @@ public final class ConstructionMockTest {
      */
     @Test
     public void testConstructionMockDefaultAnswerMultipleMoreThanTwo() {
-        try (MockedConstruction<Dummy> ignored = Mockito.mockConstructionWithAnswer(Dummy.class, invocation -> "bar", invocation -> "qux", invocation -> "baz")) {
+        try (MockedConstruction<Dummy> ignored =
+                Mockito.mockConstructionWithAnswer(
+                        Dummy.class,
+                        invocation -> "bar",
+                        invocation -> "qux",
+                        invocation -> "baz")) {
             assertEquals("bar", new Dummy().foo());
             assertEquals("qux", new Dummy().foo());
             assertEquals("baz", new Dummy().foo());
@@ -74,20 +82,26 @@ public final class ConstructionMockTest {
 
     @Test
     public void testConstructionMockPrepared() {
-        try (MockedConstruction<Dummy> ignored = Mockito.mockConstruction(Dummy.class, (mock, context) -> when(mock.foo()).thenReturn("bar"))) {
+        try (MockedConstruction<Dummy> ignored =
+                Mockito.mockConstruction(
+                        Dummy.class, (mock, context) -> when(mock.foo()).thenReturn("bar"))) {
             assertEquals("bar", new Dummy().foo());
         }
     }
 
-
     @Test
     public void testConstructionMockContext() {
-        try (MockedConstruction<Dummy> ignored = Mockito.mockConstruction(Dummy.class, (mock, context) -> {
-            assertEquals(1, context.getCount());
-            assertEquals(Collections.singletonList("foobar"), context.arguments());
-            assertEquals(mock.getClass().getDeclaredConstructor(String.class), context.constructor());
-            when(mock.foo()).thenReturn("bar");
-        })) {
+        try (MockedConstruction<Dummy> ignored =
+                Mockito.mockConstruction(
+                        Dummy.class,
+                        (mock, context) -> {
+                            assertEquals(1, context.getCount());
+                            assertEquals(Collections.singletonList("foobar"), context.arguments());
+                            assertEquals(
+                                    mock.getClass().getDeclaredConstructor(String.class),
+                                    context.constructor());
+                            when(mock.foo()).thenReturn("bar");
+                        })) {
             assertEquals("bar", new Dummy("foobar").foo());
         }
     }
@@ -111,20 +125,24 @@ public final class ConstructionMockTest {
     }
 
     @Test
-    public void testConstructionMockCanCoexistWithMockInDifferentThread() throws InterruptedException {
+    public void testConstructionMockCanCoexistWithMockInDifferentThread()
+            throws InterruptedException {
         try (MockedConstruction<Dummy> ignored = Mockito.mockConstruction(Dummy.class)) {
             Dummy dummy = new Dummy();
             when(dummy.foo()).thenReturn("bar");
             assertEquals("bar", dummy.foo());
             verify(dummy).foo();
             AtomicReference<String> reference = new AtomicReference<>();
-            Thread thread = new Thread(() -> {
-                try (MockedConstruction<Dummy> ignored2 = Mockito.mockConstruction(Dummy.class)) {
-                    Dummy other = new Dummy();
-                    when(other.foo()).thenReturn("qux");
-                    reference.set(other.foo());
-                }
-            });
+            Thread thread =
+                    new Thread(
+                            () -> {
+                                try (MockedConstruction<Dummy> ignored2 =
+                                        Mockito.mockConstruction(Dummy.class)) {
+                                    Dummy other = new Dummy();
+                                    when(other.foo()).thenReturn("qux");
+                                    reference.set(other.foo());
+                                }
+                            });
             thread.start();
             thread.join();
             assertEquals("qux", reference.get());
@@ -136,12 +154,12 @@ public final class ConstructionMockTest {
     @Test
     public void testConstructionMockMustBeExclusiveInScopeWithinThread() {
         assertThatThrownBy(
-                () -> {
-                    try (
-                            MockedConstruction<Dummy> dummy = Mockito.mockConstruction(Dummy.class);
-                            MockedConstruction<Dummy> duplicate = Mockito.mockConstruction(Dummy.class)) {
-                    }
-                })
+                        () -> {
+                            try (MockedConstruction<Dummy> dummy =
+                                            Mockito.mockConstruction(Dummy.class);
+                                    MockedConstruction<Dummy> duplicate =
+                                            Mockito.mockConstruction(Dummy.class)) {}
+                        })
                 .isInstanceOf(MockitoException.class)
                 .hasMessageContaining("static mocking is already registered in the current thread");
     }
@@ -149,36 +167,34 @@ public final class ConstructionMockTest {
     @Test
     public void testConstructionMockMustNotTargetAbstractClass() {
         assertThatThrownBy(
-                () -> {
-                    Mockito.mockConstruction(Runnable.class).close();
-                })
+                        () -> {
+                            Mockito.mockConstruction(Runnable.class).close();
+                        })
                 .isInstanceOf(MockitoException.class)
-                .hasMessageContaining("It is not possible to construct primitive types or abstract types");
+                .hasMessageContaining(
+                        "It is not possible to construct primitive types or abstract types");
     }
 
     @Test
     public void testConstructionMocksMustNotUseCustomMockMaker() {
         assertThatThrownBy(
-            () -> {
-                try (MockedConstruction<Dummy> ignored = Mockito.mockConstruction(
-                    Dummy.class,
-                    withSettings().mockMaker(MockMakers.INLINE))
-                ) {
-                    new Dummy();
-                }
-            })
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("you cannot override the MockMaker for construction mocks");
+                        () -> {
+                            try (MockedConstruction<Dummy> ignored =
+                                    Mockito.mockConstruction(
+                                            Dummy.class,
+                                            withSettings().mockMaker(MockMakers.INLINE))) {
+                                new Dummy();
+                            }
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("you cannot override the MockMaker for construction mocks");
     }
 
     static class Dummy {
 
+        public Dummy() {}
 
-        public Dummy() {
-        }
-
-        public Dummy(String value) {
-        }
+        public Dummy(String value) {}
 
         String foo() {
             return "foo";

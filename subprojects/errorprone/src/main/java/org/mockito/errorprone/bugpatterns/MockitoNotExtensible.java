@@ -19,23 +19,26 @@ import com.sun.source.tree.ClassTree;
 /** Finds subclasses of @NotExtensible interfaces. */
 @AutoService(BugChecker.class)
 @BugPattern(
-    name = "MockitoNotExtensible",
-    summary = "Some types that are a part of Mockito public API are not intended to be extended.",
-    explanation =
-        "Some types that are a part of Mockito public API are not intended to be extended."
-            + " It's because Mockito team needs to be able to add new methods to some types"
-            + " without breaking compatibility contract. Any type that is not intended"
-            + " to be extended is annotated with @NotExtensible.",
-    severity = SeverityLevel.ERROR)
+        name = "MockitoNotExtensible",
+        summary =
+                "Some types that are a part of Mockito public API are not intended to be extended.",
+        explanation =
+                "Some types that are a part of Mockito public API are not intended to be extended."
+                        + " It's because Mockito team needs to be able to add new methods to some types"
+                        + " without breaking compatibility contract. Any type that is not intended"
+                        + " to be extended is annotated with @NotExtensible.",
+        severity = SeverityLevel.ERROR)
 public class MockitoNotExtensible extends BugChecker implements ClassTreeMatcher {
 
     @Override
     public Description matchClass(ClassTree tree, VisitorState state) {
         if (tree.getImplementsClause().stream()
-            .anyMatch(
-                implementing ->
-                    ASTHelpers.hasAnnotation(
-                        ASTHelpers.getSymbol(implementing), "org.mockito.NotExtensible", state))) {
+                .anyMatch(
+                        implementing ->
+                                ASTHelpers.hasAnnotation(
+                                        ASTHelpers.getSymbol(implementing),
+                                        "org.mockito.NotExtensible",
+                                        state))) {
             return describeMatch(tree);
         }
 

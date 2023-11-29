@@ -17,11 +17,9 @@ import static junit.framework.TestCase.assertEquals;
 
 public final class StaticRuleTest {
 
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    @Mock
-    private MockedStatic<UUID> mock;
+    @Mock private MockedStatic<UUID> mock;
 
     @Test
     public void runs() {

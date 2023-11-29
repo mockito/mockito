@@ -23,8 +23,7 @@ public class HierarchyPreInitializationTest {
         MyClass INSTANCE = new MyClass().probe();
     }
 
-    public interface TestSubInterface extends TestInterface {
-    }
+    public interface TestSubInterface extends TestInterface {}
 
     public static class MyClass {
 

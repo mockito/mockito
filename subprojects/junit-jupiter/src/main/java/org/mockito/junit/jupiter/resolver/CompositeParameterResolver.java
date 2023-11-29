@@ -21,23 +21,25 @@ public class CompositeParameterResolver implements ParameterResolver {
     }
 
     @Override
-    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+    public boolean supportsParameter(
+            ParameterContext parameterContext, ExtensionContext extensionContext)
+            throws ParameterResolutionException {
         return findDelegate(parameterContext, extensionContext).isPresent();
     }
 
     @Override
     @SuppressWarnings("OptionalGetWithoutIsPresent")
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+    public Object resolveParameter(
+            ParameterContext parameterContext, ExtensionContext extensionContext)
+            throws ParameterResolutionException {
         final ParameterResolver delegate = findDelegate(parameterContext, extensionContext).get();
         return delegate.resolveParameter(parameterContext, extensionContext);
     }
 
     private Optional<ParameterResolver> findDelegate(
-        final ParameterContext parameterContext,
-        final ExtensionContext extensionContext
-    ) {
+            final ParameterContext parameterContext, final ExtensionContext extensionContext) {
         return delegates.stream()
-            .filter(delegate -> delegate.supportsParameter(parameterContext, extensionContext))
-            .findFirst();
+                .filter(delegate -> delegate.supportsParameter(parameterContext, extensionContext))
+                .findFirst();
     }
 }

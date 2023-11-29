@@ -29,12 +29,14 @@ public class OneLinerStubStressTest {
 
     @Test
     public void call_a_lot_of_mocks_using_one_line_stubbing() {
-        //This requires smaller heap set for the test process, see "inline.gradle"
+        // This requires smaller heap set for the test process, see "inline.gradle"
         final String returnValue = generateLargeString();
         for (int i = 0; i < 50000; i++) {
             // make sure that mock object does not get cleaned up prematurely
             final OneLinerStubTestClass mock =
-                when(mock(OneLinerStubTestClass.class).getStuff()).thenReturn(returnValue).getMock();
+                    when(mock(OneLinerStubTestClass.class).getStuff())
+                            .thenReturn(returnValue)
+                            .getMock();
             assertEquals(returnValue, mock.getStuff());
         }
     }

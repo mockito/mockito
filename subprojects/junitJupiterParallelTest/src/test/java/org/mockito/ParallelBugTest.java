@@ -14,11 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ParallelBugTest {
 
-    @Mock
-    private SomeService someService;
+    @Mock private SomeService someService;
 
-    @InjectMocks
-    private AnotherService anotherService;
+    @InjectMocks private AnotherService anotherService;
 
     @Test
     void test() {
@@ -77,7 +75,6 @@ class ParallelBugTest {
 
     static class SomeService {
 
-        void doSomething() {
-        }
+        void doSomething() {}
     }
 }

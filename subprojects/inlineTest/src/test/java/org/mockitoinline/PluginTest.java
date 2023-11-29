@@ -22,5 +22,4 @@ public class PluginTest {
     public void member_accessor_should_be_module() throws Exception {
         assertTrue(Plugins.getMemberAccessor() instanceof ModuleMemberAccessor);
     }
-
 }

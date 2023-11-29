@@ -25,20 +25,23 @@ public class PluginSwitchTest {
     @Test
     public void plugin_switcher_is_used() {
         mock(List.class);
-        assertThat(MyPluginSwitch.invokedFor).hasSameElementsAs(asList(MyMockMaker.class.getName(),
-            MyStackTraceCleanerProvider.class.getName(),
-            MyMockitoLogger.class.getName(),
-            MyDoNotMockEnforcer.class.getName(),
-            MyMockResolver.class.getName(),
-            MyInstantiatorProvider2.class.getName()));
+        assertThat(MyPluginSwitch.invokedFor)
+                .hasSameElementsAs(
+                        asList(
+                                MyMockMaker.class.getName(),
+                                MyStackTraceCleanerProvider.class.getName(),
+                                MyMockitoLogger.class.getName(),
+                                MyDoNotMockEnforcer.class.getName(),
+                                MyMockResolver.class.getName(),
+                                MyInstantiatorProvider2.class.getName()));
     }
 
     @Test
     public void uses_custom_mock_maker() {
-        //when
+        // when
         MyMockMaker.explosive.set(new Object());
 
-        //when
+        // when
         try {
             mock(List.class);
             fail();
