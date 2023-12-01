@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.MockitoAnnotations.*;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -358,6 +359,71 @@ public class GenericTypeMockTest {
         @Test
         public void testNoNpe() {
             assertSame(innerList, spiedImpl.changes);
+        }
+    }
+
+    /* cannot define interface in nested test class RegressionArrayIndexOutOfBoundsExcepton ,
+     * because interface cannot be defined in a non-static inner class,
+     * and nested test class must be non-static in order for JUnit 5 to be able to run it */
+    public interface BaseRepository<E, I extends Serializable> {
+        E findById(I id);
+
+        E save(E entity);
+    }
+
+    /**
+     * Verify regression https://github.com/mockito/mockito/issues/3000 is fixed.
+     */
+    @Nested
+    public class RegressionArrayIndexOutOfBoundsException {
+
+        public class BaseService<E, I extends Serializable> {
+            private BaseRepository<E, I> repository;
+        }
+
+        public class OneRepository implements BaseRepository<Map<String, String>, String> {
+            public Map<String, String> findById(String id) {
+                return Map.of();
+            }
+
+            public Map<String, String> save(Map<String, String> entity) {
+                return entity;
+            }
+        }
+
+        public class TwoRepository implements BaseRepository<Map<Integer, String>, String> {
+            public Map<Integer, String> findById(String id) {
+                return Map.of();
+            }
+
+            public Map<Integer, String> save(Map<Integer, String> entity) {
+                return entity;
+            }
+        }
+
+        public class One {}
+        ;
+
+        public class Two implements Serializable {
+            private static final long serialVersionUID = 1L;
+        }
+
+        public class UnderTest extends BaseService<One, Two> {
+            private OneRepository oneRepository;
+            private TwoRepository twoRepository;
+        }
+
+        @Mock OneRepository oneRepository;
+
+        @Mock TwoRepository twoRepository;
+
+        @InjectMocks UnderTest underTest = new UnderTest();
+
+        @Test
+        public void testNoAioobe() {
+            assertNotNull(oneRepository);
+            assertNotNull(twoRepository);
+            assertNotNull(underTest);
         }
     }
 }
