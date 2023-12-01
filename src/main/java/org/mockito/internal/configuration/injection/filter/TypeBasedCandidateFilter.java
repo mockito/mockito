@@ -45,11 +45,17 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                     ParameterizedType genericMockType = (ParameterizedType) mockType;
                     Type[] actualTypeArguments = genericTypeToMock.getActualTypeArguments();
                     Type[] actualTypeArguments2 = genericMockType.getActualTypeArguments();
-                    // Recurse on type parameters, so we properly test whether e.g. Wildcard bounds
-                    // have a match
-                    result =
-                            recurseOnTypeArguments(
-                                    injectMocksField, actualTypeArguments, actualTypeArguments2);
+                    if (actualTypeArguments.length == actualTypeArguments2.length) {
+	                    // Recurse on type parameters, so we properly test whether e.g. Wildcard bounds
+	                    // have a match
+	                    result =
+	                            recurseOnTypeArguments(
+	                                    injectMocksField, actualTypeArguments, actualTypeArguments2);
+                    } else {
+                    	// the two ParameterizedTypes cannot match because they have unequal
+                    	// number of type arguments
+                    	result = false;
+                    }
                 }
             } else {
                 // mockType is a non-parameterized Class, i.e. a concrete class.
