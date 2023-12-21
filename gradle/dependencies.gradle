@@ -35,7 +35,7 @@ libraries.bndGradle =  'biz.aQute.bnd:biz.aQute.bnd.gradle:6.4.0'
 
 libraries.groovy = 'org.codehaus.groovy:groovy:3.0.19'
 
-def kotlinVersion = '1.9.21'
+def kotlinVersion = '1.9.22'
 libraries.kotlin = [
     version: kotlinVersion,
 
