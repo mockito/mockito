@@ -190,6 +190,7 @@ public class ArgumentCaptor<T> {
      * @param <U> the type of argument to be captured by this captor.
      * @return A new ArgumentCaptor.
      * @throws IllegalArgumentException if any arguments are passed to this method.
+     * @since 5.7.0
      */
     @SafeVarargs
     @SuppressWarnings({"varargs", "unchecked"})

@@ -113,7 +113,7 @@ import java.util.function.Function;
  *      <a href="#51">51. New API for marking classes as unmockable (Since 4.1.0)</a><br/>
  *      <a href="#52">52. New strictness attribute for @Mock annotation and <code>MockSettings.strictness()</code> methods (Since 4.6.0)</a><br/>
  *      <a href="#53">53. Specifying mock maker for individual mocks (Since 4.8.0)</a><br/>
- *      <a href="#54">54. Mocking/spying without specifying class (Since 4.9.0)</a><br/>
+ *      <a href="#54">54. Mocking/spying without specifying class (Since 4.10.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1646,7 +1646,7 @@ import java.util.function.Function;
  * </code></pre>
  *
  * <h3 id="54">54. <a class="meaningful_link" href="#mock_without_class" name="mock_without_class">
- *  Mocking/spying without specifying class</a> (Since 4.9.0)</h3>
+ *  Mocking/spying without specifying class</a> (Since 4.10.0)</h3>
  *
  * Instead of calling method {@link Mockito#mock(Class)} or {@link Mockito#spy(Class)} with Class parameter, you can
  * now call method {@code mock()} or {@code spy()} <strong>without parameters</strong>:
@@ -1947,7 +1947,7 @@ public class Mockito extends ArgumentMatchers {
      * @param reified don't pass any values to it. It's a trick to detect the class/interface you
      *                want to mock.
      * @return the mock object.
-     * @since 4.9.0
+     * @since 4.10.0
      */
     @SafeVarargs
     public static <T> T mock(T... reified) {
@@ -1963,6 +1963,7 @@ public class Mockito extends ArgumentMatchers {
      * @param reified       don't pass any values to it. It's a trick to detect the class/interface you
      *                      want to mock.
      * @return the mock object.
+     * @since 5.1.0
      */
     @SafeVarargs
     public static <T> T mock(@SuppressWarnings("rawtypes") Answer defaultAnswer, T... reified) {
@@ -1978,6 +1979,7 @@ public class Mockito extends ArgumentMatchers {
      * @param reified  don't pass any values to it. It's a trick to detect the class/interface you
      *                 want to mock.
      * @return the mock object.
+     * @since 5.1.0
      */
     @SafeVarargs
     public static <T> T mock(String name, T... reified) {
@@ -1993,6 +1995,7 @@ public class Mockito extends ArgumentMatchers {
      * @param reified  don't pass any values to it. It's a trick to detect the class/interface you
      *                 want to mock.
      * @return the mock object.
+     * @since 5.1.0
      */
     @SafeVarargs
     public static <T> T mock(MockSettings settings, T... reified) {
@@ -2227,7 +2230,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * @param reified don't pass any values to it. It's a trick to detect the class/interface you want to mock.
      * @return spy object
-     * @since 4.9.0
+     * @since 4.10.0
      */
     @SafeVarargs
     public static <T> T spy(T... reified) {
