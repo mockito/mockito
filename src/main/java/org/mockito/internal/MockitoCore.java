@@ -215,13 +215,13 @@ public class MockitoCore {
         }
     }
 
-    public <T> void clearInvocations(T... mocks) {
+    public void clearInvocations(final Object... mocks) {
         MockingProgress mockingProgress = mockingProgress();
         mockingProgress.validateState();
         mockingProgress.reset();
         mockingProgress.resetOngoingStubbing();
 
-        for (T m : mocks) {
+        for (final Object m : mocks) {
             getInvocationContainer(m).clearInvocations();
         }
     }
