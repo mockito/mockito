@@ -1,6 +1,6 @@
 //It seems the gradle javadoc task works file by file and as such disable some features of javadoc tool
 //such as link to packages, https://groups.google.com/d/msg/gradle-dev/R83dy_6PHMc/bgw0cUTMFAAJ
-def javaDocsDir = 'gradle/mockito-core/java-docs'
+def javaDocsDir = 'gradle/java-docs'
 
 tasks.named("javadoc", Javadoc) {
     inputs.dir("src/main/javadoc")
@@ -27,26 +27,26 @@ tasks.named("javadoc", Javadoc) {
     // for this reason the javadoc output is suppressed and can be reactivated with --info option.
     exclude 'org/mockito/internal'
 
-    options.docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
-    options.windowTitle = "Mockito ${project.version} API"
-    options.group("Main package", ["org.mockito"])
-    options.memberLevel = JavadocMemberLevel.PROTECTED
-    options.outputLevel = JavadocOutputLevel.QUIET
-    options.charSet = 'UTF-8'
-    options.encoding = 'UTF-8'
-    options.docEncoding = 'UTF-8'
-    options.use = true
-    options.splitIndex = true
-    options.links('https://junit.org/junit4/javadoc/4.13.2/')
-    options.linksOffline('https://docs.oracle.com/en/java/javase/11/docs/api/', javaDocsDir)
+    options.addBooleanOption('-allow-script-in-comments', true)
+    options.addFileOption('-add-stylesheet', rootProject.file("src/main/javadoc/mockito-theme.css"))
+    options.addStringOption('Xwerror', '-quiet')
     options.bottom("""
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/obsidian.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script>
     """.replaceAll(/\r|\n|[ ]{8}/, ""))
-    options.addFileOption('-add-stylesheet', rootProject.file("src/main/javadoc/mockito-theme.css"))
-    options.addStringOption('Xwerror', '-quiet')
-    options.addBooleanOption('-allow-script-in-comments', true)
+    options.charSet = 'UTF-8'
+    options.docEncoding = 'UTF-8'
+    options.docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
+    options.encoding = 'UTF-8'
+    options.group("Main package", ["org.mockito"])
+    options.links('https://junit.org/junit4/javadoc/4.13.2/')
+    options.linksOffline('https://docs.oracle.com/en/java/javase/11/docs/api/', javaDocsDir)
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    options.outputLevel = JavadocOutputLevel.QUIET
+    options.splitIndex = true
+    options.use = true
+    options.windowTitle = "Mockito ${project.version} API"
 
     doLast {
         copy {

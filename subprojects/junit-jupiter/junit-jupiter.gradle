@@ -7,6 +7,8 @@ plugins {
 apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-library.gradle"
 
+apply from: "$rootDir/gradle/mockito-junit-jupiter/javadoc.gradle"
+
 description = "Mockito JUnit 5 support"
 
 dependencies {
