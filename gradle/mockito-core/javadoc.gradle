@@ -1,12 +1,14 @@
 //It seems the gradle javadoc task works file by file and as such disable some features of javadoc tool
 //such as link to packages, https://groups.google.com/d/msg/gradle-dev/R83dy_6PHMc/bgw0cUTMFAAJ
-def javaDocsDir = 'gradle/mockito-core/java-docs'
+def javaDocsDir = 'gradle/java-docs'
 
 tasks.named("javadoc", Javadoc) {
+    inputs.dir("src/main/javadoc")
+
     description "Creates javadoc html for Mockito API."
 
     // For more details on the format
-    // see https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
+    // see https://docs.oracle.com/en/java/javase/21/javadoc/javadoc.html
 
     source = sourceSets.main.allJava
     destinationDir = layout.buildDirectory.dir("javadoc").get().asFile
@@ -25,38 +27,30 @@ tasks.named("javadoc", Javadoc) {
     // for this reason the javadoc output is suppressed and can be reactivated with --info option.
     exclude 'org/mockito/internal'
 
-    options.docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
-    options.windowTitle = "Mockito ${project.version} API"
-    options.group("Main package", ["org.mockito"])
-    options.memberLevel = JavadocMemberLevel.PROTECTED
-    options.outputLevel = JavadocOutputLevel.QUIET
+    options.addBooleanOption('-allow-script-in-comments', true)
+    options.addFileOption('-add-stylesheet', rootProject.file("src/main/javadoc/mockito-theme.css"))
+    options.addStringOption('Xwerror', '-quiet')
+    options.bottom("""
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/obsidian.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+    """.replaceAll(/\r|\n|[ ]{8}/, ""))
     options.charSet = 'UTF-8'
-    options.encoding = 'UTF-8'
     options.docEncoding = 'UTF-8'
-    options.use = true
-    options.splitIndex = true
-    options.noDeprecated = false
-    options.noDeprecatedList = false
-    options.noIndex = false
-    options.noNavBar = false
-    options.noTree = false
+    options.docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
+    options.encoding = 'UTF-8'
+    options.group("Main package", ["org.mockito"])
     options.links('https://junit.org/junit4/javadoc/4.13.2/')
     options.linksOffline('https://docs.oracle.com/en/java/javase/11/docs/api/', javaDocsDir)
-    options.bottom("""
-        <script type="text/javascript" src="{@docRoot}/js/jdk6-project-version-insert.min.js"></script>
-        <script type="text/javascript" src="{@docRoot}/js/jquery-1.7.min.js"></script>
-        <script type="text/javascript" src="{@docRoot}/js/highlight-8.6-java/highlight.pack.js"></script>
-
-        <link rel="stylesheet" type="text/css" href="{@docRoot}/js/highlight-8.6-java/styles/obsidian.css"/>
-        <script type="text/javascript" src="{@docRoot}/js/index.js" async defer></script>
-    """.replaceAll(/\r|\n|[ ]{8}/, ""))
-    options.stylesheetFile rootProject.file("src/javadoc/stylesheet.css")
-    options.addStringOption('Xwerror', '-quiet')
-    options.addBooleanOption('-allow-script-in-comments', true)
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    options.outputLevel = JavadocOutputLevel.QUIET
+    options.splitIndex = true
+    options.use = true
+    options.windowTitle = "Mockito ${project.version} API"
 
     doLast {
         copy {
-            from "src/javadoc"
+            from "src/main/javadoc"
             into layout.buildDirectory.dir("javadoc")
         }
     }

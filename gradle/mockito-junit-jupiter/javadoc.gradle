@@ -1,0 +1,43 @@
+//It seems the gradle javadoc task works file by file and as such disable some features of javadoc tool
+//such as link to packages, https://groups.google.com/d/msg/gradle-dev/R83dy_6PHMc/bgw0cUTMFAAJ
+def javaDocsDir = "$rootDir/gradle/java-docs"
+
+tasks.named("javadoc", Javadoc) {
+    inputs.dir("$rootDir/src/main/javadoc")
+
+    description "Creates javadoc html for Mockito JUnit Jupiter."
+
+    // For more details on the format
+    // see https://docs.oracle.com/en/java/javase/21/javadoc/javadoc.html
+
+    source = sourceSets.main.allJava
+    destinationDir = layout.buildDirectory.dir("javadoc").get().asFile
+    title = "Mockito JUnit Jupiter ${project.version} API"
+
+    options.addBooleanOption('-allow-script-in-comments', true)
+    options.addFileOption('-add-stylesheet', rootProject.file("$rootDir/src/main/javadoc/mockito-theme.css"))
+    options.addStringOption('Xwerror', '-quiet')
+    options.bottom("""
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/obsidian.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+    """.replaceAll(/\r|\n|[ ]{8}/, ""))
+    options.charSet = 'UTF-8'
+    options.docEncoding = 'UTF-8'
+    options.docTitle = """<h1>Mockito JUnit Jupiter ${project.version} API.</h1>"""
+    options.encoding = 'UTF-8'
+    options.group("Main package", ["org.mockito.junit.jupiter"])
+    options.linksOffline('https://docs.oracle.com/en/java/javase/11/docs/api/', javaDocsDir)
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    options.outputLevel = JavadocOutputLevel.QUIET
+    options.splitIndex = true
+    options.use = true
+    options.windowTitle = "Mockito JUnit Jupiter ${project.version} API"
+
+    doLast {
+        copy {
+            from "$rootDir/src/main/javadoc"
+            into layout.buildDirectory.dir("javadoc")
+        }
+    }
+}
