@@ -5,8 +5,10 @@
 package org.mockito.internal.configuration.plugins;
 
 import java.util.List;
+
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.DoNotMockEnforcer;
+import org.mockito.plugins.DoNotMockEnforcerWithType;
 import org.mockito.plugins.InstantiatorProvider2;
 import org.mockito.plugins.MemberAccessor;
 import org.mockito.plugins.MockMaker;
@@ -46,8 +48,10 @@ class PluginRegistry {
     private final List<MockResolver> mockResolvers =
             new PluginLoader(pluginSwitch).loadPlugins(MockResolver.class);
 
-    private final DoNotMockEnforcer doNotMockEnforcer =
-            new PluginLoader(pluginSwitch).loadPlugin(DoNotMockEnforcer.class);
+    private final DoNotMockEnforcerWithType doNotMockEnforcer =
+            (DoNotMockEnforcerWithType)
+                    (new PluginLoader(pluginSwitch)
+                            .loadPlugin(DoNotMockEnforcerWithType.class, DoNotMockEnforcer.class));
 
     PluginRegistry() {
         instantiatorProvider =
@@ -119,7 +123,7 @@ class PluginRegistry {
      * <p> Returns {@link org.mockito.internal.configuration.DefaultDoNotMockEnforcer} if no
      * {@link DoNotMockEnforcer} extension exists or is visible in the current classpath.</p>
      */
-    DoNotMockEnforcer getDoNotMockEnforcer() {
+    DoNotMockEnforcerWithType getDoNotMockEnforcer() {
         return doNotMockEnforcer;
     }
 

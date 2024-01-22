@@ -6,10 +6,12 @@ package org.mockitousage.annotation;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 
 import org.junit.Test;
 import org.mockito.DoNotMock;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.mockito.exceptions.misusing.DoNotMockException;
 
@@ -20,6 +22,15 @@ public class DoNotMockTest {
         assertThatThrownBy(
                         () -> {
                             NotMockable notMockable = mock(NotMockable.class);
+                        })
+                .isInstanceOf(DoNotMockException.class);
+    }
+
+    @Test
+    public void can_not_statically_mock_class_annotated_with_donotmock() {
+        assertThatThrownBy(
+                        () -> {
+                            MockedStatic<NotMockable> notMockable = mockStatic(NotMockable.class);
                         })
                 .isInstanceOf(DoNotMockException.class);
     }
@@ -44,11 +55,31 @@ public class DoNotMockTest {
     }
 
     @Test
+    public void can_not_statically_mock_class_with_interface_annotated_with_donotmock() {
+        assertThatThrownBy(
+                        () -> {
+                            MockedStatic<SubclassOfNotMockableInterface> notMockable =
+                                    mockStatic(SubclassOfNotMockableInterface.class);
+                        })
+                .isInstanceOf(DoNotMockException.class);
+    }
+
+    @Test
     public void can_not_mock_subclass_with_unmockable_interface() {
         assertThatThrownBy(
                         () -> {
                             DoubleSubclassOfInterface notMockable =
                                     mock(DoubleSubclassOfInterface.class);
+                        })
+                .isInstanceOf(DoNotMockException.class);
+    }
+
+    @Test
+    public void can_not_statically_mock_subclass_with_unmockable_interface() {
+        assertThatThrownBy(
+                        () -> {
+                            MockedStatic<DoubleSubclassOfInterface> notMockable =
+                                    mockStatic(DoubleSubclassOfInterface.class);
                         })
                 .isInstanceOf(DoNotMockException.class);
     }
@@ -64,12 +95,33 @@ public class DoNotMockTest {
     }
 
     @Test
+    public void can_not_statically_mock_subclass_with_unmockable_superclass() {
+        assertThatThrownBy(
+                        () -> {
+                            MockedStatic<SubclassOfNotMockableSuperclass> notMockable =
+                                    mockStatic(SubclassOfNotMockableSuperclass.class);
+                        })
+                .isInstanceOf(DoNotMockException.class);
+    }
+
+    @Test
     public void
             can_not_mock_subclass_with_unmockable_interface_that_extends_non_mockable_interface() {
         assertThatThrownBy(
                         () -> {
                             SubclassOfSubInterfaceOfNotMockableInterface notMockable =
                                     mock(SubclassOfSubInterfaceOfNotMockableInterface.class);
+                        })
+                .isInstanceOf(DoNotMockException.class);
+    }
+
+    @Test
+    public void
+            can_not_statically_mock_subclass_with_unmockable_interface_that_extends_non_mockable_interface() {
+        assertThatThrownBy(
+                        () -> {
+                            MockedStatic<SubclassOfSubInterfaceOfNotMockableInterface> notMockable =
+                                    mockStatic(SubclassOfSubInterfaceOfNotMockableInterface.class);
                         })
                 .isInstanceOf(DoNotMockException.class);
     }
@@ -95,11 +147,32 @@ public class DoNotMockTest {
     }
 
     @Test
+    public void thrown_exception_includes_special_non_mockable_reason_static() {
+        assertThatThrownBy(
+                        () -> {
+                            MockedStatic<NotMockableWithReason> notMockable =
+                                    mockStatic(NotMockableWithReason.class);
+                        })
+                .isInstanceOf(DoNotMockException.class)
+                .hasMessageContaining("Special reason");
+    }
+
+    @Test
     public void can_not_mock_class_with_custom_donotmock_annotation() {
         assertThatThrownBy(
                         () -> {
                             NotMockableWithDifferentAnnotation notMockable =
                                     mock(NotMockableWithDifferentAnnotation.class);
+                        })
+                .isInstanceOf(DoNotMockException.class);
+    }
+
+    @Test
+    public void can_not_statically_mock_class_with_custom_donotmock_annotation() {
+        assertThatThrownBy(
+                        () -> {
+                            MockedStatic<NotMockableWithDifferentAnnotation> notMockable =
+                                    mockStatic(NotMockableWithDifferentAnnotation.class);
                         })
                 .isInstanceOf(DoNotMockException.class);
     }
