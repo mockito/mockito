@@ -49,9 +49,8 @@ class PluginRegistry {
             new PluginLoader(pluginSwitch).loadPlugins(MockResolver.class);
 
     private final DoNotMockEnforcerWithType doNotMockEnforcer =
-            (DoNotMockEnforcerWithType)
-                    (new PluginLoader(pluginSwitch)
-                            .loadPlugin(DoNotMockEnforcerWithType.class, DoNotMockEnforcer.class));
+            new PluginLoader(pluginSwitch)
+                    .loadPlugin(DoNotMockEnforcerWithType.class, DoNotMockEnforcer.class);
 
     PluginRegistry() {
         instantiatorProvider =
