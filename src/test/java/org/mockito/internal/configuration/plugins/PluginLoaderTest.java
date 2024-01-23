@@ -4,9 +4,10 @@
  */
 package org.mockito.internal.configuration.plugins;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.assertj.core.api.Assertions;
@@ -29,13 +30,27 @@ public class PluginLoaderTest {
 
     @Test
     public void loads_plugin() {
-        when(initializer.loadImpl(FooPlugin.class)).thenReturn(new FooPlugin());
+        FooPlugin expected = new FooPlugin();
+        when(initializer.loadImpl(FooPlugin.class)).thenReturn(expected);
 
         // when
         FooPlugin plugin = loader.loadPlugin(FooPlugin.class);
 
         // then
-        assertNotNull(plugin);
+        assertSame(expected, plugin);
+    }
+
+    @Test
+    public void loads_preferred_plugin() {
+        FooPlugin expected = new FooPlugin();
+        willReturn(expected).given(initializer).loadImpl(FooPlugin.class);
+
+        // when
+        Object plugin = loader.loadPlugin(FooPlugin.class, BarPlugin.class);
+
+        // then
+        assertSame(expected, plugin);
+        verify(initializer, never()).loadImpl(BarPlugin.class);
     }
 
     @Test
@@ -48,7 +63,7 @@ public class PluginLoaderTest {
         Object plugin = loader.loadPlugin(FooPlugin.class, BarPlugin.class);
 
         // then
-        assertSame(plugin, expected);
+        assertSame(expected, plugin);
     }
 
     @Test
@@ -62,7 +77,7 @@ public class PluginLoaderTest {
         Object plugin = loader.loadPlugin(FooPlugin.class, BarPlugin.class);
 
         // then
-        assertSame(plugin, expected);
+        assertSame(expected, plugin);
     }
 
     @Test
@@ -87,9 +102,141 @@ public class PluginLoaderTest {
                 .hasCause(cause);
     }
 
+    @Test
+    public void loads_preferred_plugin_inheritance() {
+        FooChildPlugin expected = new FooChildPlugin();
+        willReturn(expected).given(initializer).loadImpl(Foo.class);
+
+        // when
+        Foo plugin = loader.loadPlugin(Foo.class, FooChildPlugin.class);
+
+        // then
+        assertSame(expected, plugin);
+        verify(initializer, never()).loadImpl(FooChildPlugin.class);
+    }
+
+    @Test
+    public void loads_alternative_plugin_inheritance() {
+        willReturn(null).given(initializer).loadImpl(Bar.class);
+        BarChildPlugin expected = new BarChildPlugin();
+        willReturn(expected).given(initializer).loadImpl(BarChildPlugin.class);
+
+        // when
+        Bar plugin = loader.loadPlugin(Bar.class, BarChildPlugin.class);
+
+        // then
+        assertSame(expected, plugin);
+    }
+
+    @Test
+    public void loads_default_plugin_inheritance() {
+        willReturn(null).given(initializer).loadImpl(Foo.class);
+        willReturn(null).given(initializer).loadImpl(FooChildPlugin.class);
+        FooChildPlugin expected = new FooChildPlugin();
+        willReturn(expected).given(plugins).getDefaultPlugin(Foo.class);
+
+        // when
+        Foo plugin = loader.loadPlugin(Foo.class, FooChildPlugin.class);
+
+        // then
+        assertSame(expected, plugin);
+    }
+
+    @Test
+    public void loads_preferred_plugin_inheritance_reversed() {
+        FooChildPlugin expected = new FooChildPlugin();
+        willReturn(expected).given(initializer).loadImpl(FooChildPlugin.class);
+
+        // when
+        Foo plugin = loader.loadPlugin(FooChildPlugin.class, Foo.class);
+
+        // then
+        assertSame(expected, plugin);
+        verify(initializer, never()).loadImpl(Foo.class);
+    }
+
+    @Test
+    public void loads_alternative_plugin_inheritance_reversed() {
+        willReturn(null).given(initializer).loadImpl(BarChildPlugin.class);
+        BarChildPlugin expected = new BarChildPlugin();
+        willReturn(expected).given(initializer).loadImpl(Bar.class);
+
+        // when
+        Bar plugin = loader.loadPlugin(BarChildPlugin.class, Bar.class);
+
+        // then
+        assertSame(expected, plugin);
+    }
+
+    @Test
+    public void loads_default_plugin_inheritance_reversed() {
+        willReturn(null).given(initializer).loadImpl(Foo.class);
+        willReturn(null).given(initializer).loadImpl(FooChildPlugin.class);
+        FooChildPlugin expected = new FooChildPlugin();
+        willReturn(expected).given(plugins).getDefaultPlugin(FooChildPlugin.class);
+
+        // when
+        Foo plugin = loader.loadPlugin(FooChildPlugin.class, Foo.class);
+
+        // then
+        assertSame(expected, plugin);
+    }
+
+    @Test
+    public void loads_preferred_plugin_inheritance_lowest_common_denominator() {
+        FooBarChildPlugin1 expected = new FooBarChildPlugin1();
+        willReturn(expected).given(initializer).loadImpl(FooBarChildPlugin1.class);
+
+        // when
+        FooBar plugin = loader.loadPlugin(FooBarChildPlugin1.class, FooBarChildPlugin2.class);
+
+        // then
+        assertSame(expected, plugin);
+        verify(initializer, never()).loadImpl(FooBarChildPlugin2.class);
+    }
+
+    @Test
+    public void loads_alternative_plugin_inheritance_lowest_common_denominator() {
+        willReturn(null).given(initializer).loadImpl(FooBarChildPlugin1.class);
+        FooBarChildPlugin2 expected = new FooBarChildPlugin2();
+        willReturn(expected).given(initializer).loadImpl(FooBarChildPlugin2.class);
+
+        // when
+        FooBar plugin = loader.loadPlugin(FooBarChildPlugin1.class, FooBarChildPlugin2.class);
+
+        // then
+        assertSame(expected, plugin);
+    }
+
+    @Test
+    public void loads_default_plugin_inheritance_lowest_common_denominator() {
+        willReturn(null).given(initializer).loadImpl(FooBarChildPlugin1.class);
+        willReturn(null).given(initializer).loadImpl(FooBarChildPlugin2.class);
+        FooBarChildPlugin1 expected = new FooBarChildPlugin1();
+        willReturn(expected).given(plugins).getDefaultPlugin(FooBarChildPlugin1.class);
+
+        // when
+        FooBar plugin = loader.loadPlugin(FooBarChildPlugin1.class, FooBarChildPlugin2.class);
+
+        // then
+        assertSame(expected, plugin);
+    }
+
     static class FooPlugin {}
 
     static class BarPlugin {}
 
-    static interface Foo {}
+    interface Foo {}
+
+    interface Bar {}
+
+    static class BarChildPlugin implements Bar {}
+
+    static class FooChildPlugin implements Foo {}
+
+    interface FooBar {}
+
+    static class FooBarChildPlugin1 implements FooBar {}
+
+    static class FooBarChildPlugin2 implements FooBar {}
 }

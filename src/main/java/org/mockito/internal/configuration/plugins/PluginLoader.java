@@ -45,9 +45,8 @@ class PluginLoader {
     /**
      * Scans the classpath for given pluginType. If not found, default class is used.
      */
-    @SuppressWarnings("unchecked")
     <T> T loadPlugin(final Class<T> pluginType) {
-        return (T) loadPlugin(pluginType, null);
+        return loadPlugin(pluginType, null);
     }
 
     /**
@@ -55,10 +54,11 @@ class PluginLoader {
      * alternatePluginType}. If neither a preferred or alternate plugin is found, default to default
      * class of {@code preferredPluginType}.
      *
-     * @return An object of either {@code preferredPluginType} or {@code alternatePluginType}
+     * @return An object of either {@code preferredPluginType} or {@code alternatePluginType},
+     * cast to the lowest common denominator in the chain of inheritance
      */
     @SuppressWarnings("unchecked")
-    <PreferredT, AlternateType> Object loadPlugin(
+    <ReturnT, PreferredT extends ReturnT, AlternateType extends ReturnT> ReturnT loadPlugin(
             final Class<PreferredT> preferredPluginType,
             final Class<AlternateType> alternatePluginType) {
         try {
@@ -74,22 +74,23 @@ class PluginLoader {
 
             return plugins.getDefaultPlugin(preferredPluginType);
         } catch (final Throwable t) {
-            return Proxy.newProxyInstance(
-                    preferredPluginType.getClassLoader(),
-                    new Class<?>[] {preferredPluginType},
-                    new InvocationHandler() {
-                        @Override
-                        public Object invoke(Object proxy, Method method, Object[] args)
-                                throws Throwable {
-                            throw new IllegalStateException(
-                                    "Could not initialize plugin: "
-                                            + preferredPluginType
-                                            + " (alternate: "
-                                            + alternatePluginType
-                                            + ")",
-                                    t);
-                        }
-                    });
+            return (ReturnT)
+                    Proxy.newProxyInstance(
+                            preferredPluginType.getClassLoader(),
+                            new Class<?>[] {preferredPluginType},
+                            new InvocationHandler() {
+                                @Override
+                                public Object invoke(Object proxy, Method method, Object[] args)
+                                        throws Throwable {
+                                    throw new IllegalStateException(
+                                            "Could not initialize plugin: "
+                                                    + preferredPluginType
+                                                    + " (alternate: "
+                                                    + alternatePluginType
+                                                    + ")",
+                                            t);
+                                }
+                            });
         }
     }
 
