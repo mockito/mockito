@@ -105,11 +105,9 @@ jobs:
 
     # Definition of the build matrix
     strategy:
-      fail-fast: false
       matrix:
         # Minimum supported and maximum available.
         android-api: [ 26, 33 ]
-        stress-test: [ 1,2,3,4,5,6,7,8,9,10 ]
 
     # All build steps
     steps:
@@ -175,7 +173,7 @@ jobs:
       if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
-        name: androidTest-results-${{ matrix.android-api }}-${{ matrix.stress-test }}
+        name: androidTest-results-${{ matrix.android-api }}
         path: |
           ${{ github.workspace }}/subprojects/androidTest/build/reports/androidTests/connected/**
           ${{ github.workspace }}/emulator.log
