@@ -122,13 +122,13 @@ jobs:
         distribution: 'zulu'
         java-version: 17
 
-    - name: "Enable KVM."
+    - name: 3. Enable KVM.
       run: |
         echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
         sudo udevadm control --reload-rules
         sudo udevadm trigger --name-match=kvm
 
-    - name: 3. Run Android tests on Android API level ${{ matrix.android-api }}
+    - name: 4. Run Android tests on Android API level ${{ matrix.android-api }}
       uses: reactivecircus/android-emulator-runner@v2
       with:
         arch: x86_64
@@ -172,7 +172,7 @@ jobs:
           # Make sure the step fails if the tests failed.
           exit $(cat gradle.exit)
 
-    - name: 4. Upload artifact "androidTest-results-${{ matrix.android-api }}"
+    - name: 5. Upload artifact "androidTest-results-${{ matrix.android-api }}"
       if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
@@ -183,7 +183,7 @@ jobs:
           ${{ github.workspace }}/emulator-startup.log
 
     # :androidTest:connectedCheck (which depends on :androidTest:createDebugAndroidTestCoverageReport) already generated coverage report.
-    - name: 5. Upload coverage report
+    - name: 6. Upload coverage report
       uses: codecov/codecov-action@v3
       with:
         files: subprojects/androidTest/build/reports/coverage/androidTest/debug/connected/report.xml
