@@ -133,7 +133,6 @@ jobs:
       with:
         arch: x86_64
         api-level: ${{ matrix.android-api }}
-        target: default
         # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
         # See emulator manual for reference: https://developer.android.com/studio/run/emulator-commandline
         emulator-options: >
