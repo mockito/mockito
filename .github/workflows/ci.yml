@@ -99,7 +99,7 @@ jobs:
   # Android build job
   #
   android:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     timeout-minutes: 30
 
@@ -121,6 +121,12 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: 17
+
+    - name: "Enable KVM."
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
 
     - name: 3. Run Android tests on Android API level ${{ matrix.android-api }}
       uses: reactivecircus/android-emulator-runner@v2
