@@ -23,7 +23,7 @@ include(
     "bom",
     "errorprone",
     "programmatic-test",
-    "java21"
+    "java21-test"
 )
 
 // https://developer.android.com/studio/command-line/variables#envar
