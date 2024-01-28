@@ -15,7 +15,7 @@ dependencies {
         api(project.rootProject)
         project.rootProject.subprojects.forEach { subproject ->
             if (!subproject.name.endsWith("Test") &&
-                !subproject.name.endsWith("java21-test") &&
+                !subproject.name.endsWith("-test") &&
                 subproject.name != "bom") {
                 api(subproject)
             }
