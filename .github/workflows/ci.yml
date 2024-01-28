@@ -99,7 +99,7 @@ jobs:
   # Android build job
   #
   android:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
     timeout-minutes: 30
 
@@ -122,15 +122,17 @@ jobs:
         distribution: 'zulu'
         java-version: 17
 
-    - name: 3. Run Android tests on Android API level ${{ matrix.android-api }}
+    - name: 3. Enable KVM.
+      run: |
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+
+    - name: 4. Run Android tests on Android API level ${{ matrix.android-api }}
       uses: reactivecircus/android-emulator-runner@v2
       with:
         arch: x86_64
         api-level: ${{ matrix.android-api }}
-        # Workaround for https://issuetracker.google.com/issues/267458959
-        target: ${{ matrix.android-api >= 32 && 'google_apis' || 'default' }}
-        # Workaround for https://github.com/ReactiveCircus/android-emulator-runner/issues/160, but newer version.
-        emulator-build: 9322596 # 31.3.14.0 got it via `emulator -version`
         # Override default "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
         # See emulator manual for reference: https://developer.android.com/studio/run/emulator-commandline
         emulator-options: >
@@ -166,7 +168,7 @@ jobs:
           # Make sure the step fails if the tests failed.
           exit $(cat gradle.exit)
 
-    - name: 4. Upload artifact "androidTest-results-${{ matrix.android-api }}"
+    - name: 5. Upload artifact "androidTest-results-${{ matrix.android-api }}"
       if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
@@ -177,7 +179,7 @@ jobs:
           ${{ github.workspace }}/emulator-startup.log
 
     # :androidTest:connectedCheck (which depends on :androidTest:createDebugAndroidTestCoverageReport) already generated coverage report.
-    - name: 5. Upload coverage report
+    - name: 6. Upload coverage report
       uses: codecov/codecov-action@v3
       with:
         files: subprojects/androidTest/build/reports/coverage/androidTest/debug/connected/report.xml
