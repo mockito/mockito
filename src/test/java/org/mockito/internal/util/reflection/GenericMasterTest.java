@@ -7,6 +7,8 @@ package org.mockito.internal.util.reflection;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -64,7 +66,24 @@ public class GenericMasterTest {
         assertEquals(Set.class, m.getGenericType(field("multiNested")));
     }
 
+    @Test
+    public void should_detect_generics() throws NoSuchMethodException {
+        // Given
+        Method method = ClassWithParameter.class.getMethod("process", List.class);
+        Parameter parameter = method.getParameters()[0];
+
+        // When
+        Class<?> genericType = m.getGenericType(parameter);
+
+        // Then
+        assertEquals(Integer.class, genericType);
+    }
+
     private Field field(String fieldName) throws SecurityException, NoSuchFieldException {
         return this.getClass().getDeclaredField(fieldName);
+    }
+
+    private static class ClassWithParameter {
+        public void process(List<Integer> integers) {}
     }
 }

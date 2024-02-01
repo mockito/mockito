@@ -27,7 +27,7 @@ public class GenericMaster {
      * @param parameter the parameter to inspect
      */
     public Class<?> getGenericType(Parameter parameter) {
-        return getaClass(parameter.getType());
+        return getaClass(parameter.getParameterizedType());
     }
 
     private Class<?> getaClass(Type generic) {
