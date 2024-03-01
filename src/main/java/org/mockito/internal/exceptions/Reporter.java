@@ -123,7 +123,7 @@ public class Reporter {
                         "    when(mock.getArticles()).thenReturn(articles);",
                         "",
                         "Also, this error might show up because:",
-                        "1. you stub either of: final/private/equals()/hashCode() methods.",
+                        "1. you stub either of: final/private/native/equals()/hashCode() methods.",
                         "   Those methods *cannot* be stubbed/verified.",
                         "   " + NON_PUBLIC_PARENT,
                         "2. inside when() you don't call method on mock but on some other object.",
