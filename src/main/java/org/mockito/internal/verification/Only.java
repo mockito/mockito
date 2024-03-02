@@ -26,6 +26,7 @@ public class Only implements VerificationMode {
         List<Invocation> invocations = data.getAllInvocations();
         List<Invocation> chunk = findInvocations(invocations, target);
         if (invocations.size() != 1 && !chunk.isEmpty()) {
+            markVerified(chunk.get(0), target);
             Invocation unverified = findFirstUnverified(invocations);
             throw noMoreInteractionsWanted(unverified, (List) invocations);
         }
