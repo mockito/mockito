@@ -25,7 +25,7 @@ public class Only implements VerificationMode {
         MatchableInvocation target = data.getTarget();
         List<Invocation> invocations = data.getAllInvocations();
         List<Invocation> chunk = findInvocations(invocations, target);
-        if(!chunk.isEmpty()) {
+        if (!chunk.isEmpty()) {
             markVerified(chunk.get(0), target);
         }
         if (invocations.size() != 1 && !chunk.isEmpty()) {

@@ -23,8 +23,7 @@ import org.mockitoutil.TestBase;
 
 public class OnlyTest extends TestBase {
 
-    @Mock
-    IMethods mock;
+    @Mock IMethods mock;
 
     Only only = new Only();
 
