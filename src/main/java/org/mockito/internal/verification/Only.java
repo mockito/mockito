@@ -25,6 +25,9 @@ public class Only implements VerificationMode {
         MatchableInvocation target = data.getTarget();
         List<Invocation> invocations = data.getAllInvocations();
         List<Invocation> chunk = findInvocations(invocations, target);
+        if (!chunk.isEmpty()) {
+            markVerified(chunk.get(0), target);
+        }
         if (invocations.size() != 1 && !chunk.isEmpty()) {
             Invocation unverified = findFirstUnverified(invocations);
             throw noMoreInteractionsWanted(unverified, (List) invocations);
@@ -32,7 +35,6 @@ public class Only implements VerificationMode {
         if (invocations.size() != 1 || chunk.isEmpty()) {
             throw wantedButNotInvoked(target);
         }
-        markVerified(chunk.get(0), target);
     }
 
     @Override

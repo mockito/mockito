@@ -10,28 +10,34 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.mockito.exceptions.base.MockitoAssertionError;
+import org.mockito.Mock;
+import org.mockito.exceptions.verification.NoInteractionsWanted;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.MatchableInvocation;
+import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase;
 
-public class OnlyTest {
+public class OnlyTest extends TestBase {
+
+    @Mock IMethods mock;
 
     Only only = new Only();
 
-    public class VerificationDataStub implements VerificationData {
-        private final Invocation invocation;
+    public static class VerificationDataStub implements VerificationData {
+        private final Invocation[] invocations;
         private final InvocationMatcher wanted;
 
-        public VerificationDataStub(InvocationMatcher wanted, Invocation invocation) {
-            this.invocation = invocation;
+        public VerificationDataStub(InvocationMatcher wanted, Invocation... invocations) {
+            this.invocations = invocations;
             this.wanted = wanted;
         }
 
         public List<Invocation> getAllInvocations() {
-            return Arrays.asList(invocation);
+            return Arrays.asList(invocations);
         }
 
         @Override
@@ -45,7 +51,7 @@ public class OnlyTest {
     }
 
     @Test
-    public void shouldMarkAsVerified() {
+    public void shouldMarkAsVerifiedWhenAssertionSucceded() {
         // given
         Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
@@ -58,7 +64,7 @@ public class OnlyTest {
     }
 
     @Test
-    public void shouldNotMarkAsVerifiedWhenAssertionFailed() {
+    public void shouldNotMarkAsVerifiedWhenWantedButNotInvoked() {
         // given
         Invocation invocation = new InvocationBuilder().toInvocation();
         assertFalse(invocation.isVerified());
@@ -69,10 +75,32 @@ public class OnlyTest {
                     new VerificationDataStub(
                             new InvocationBuilder().toInvocationMatcher(), invocation));
             fail();
-        } catch (MockitoAssertionError e) {
+        } catch (WantedButNotInvoked e) {
         }
 
         // then
         assertFalse(invocation.isVerified());
+    }
+
+    @Test
+    public void shouldMarkWantedOnlyAsVerified() {
+
+        // given
+        InvocationBuilder invocationBuilder = new InvocationBuilder();
+        Invocation wanted = invocationBuilder.mock(mock).simpleMethod().toInvocation();
+        Invocation different = new InvocationBuilder().mock(mock).differentMethod().toInvocation();
+
+        // when
+        try {
+            only.verify(
+                    new VerificationDataStub(
+                            invocationBuilder.toInvocationMatcher(), wanted, different));
+            fail();
+        } catch (NoInteractionsWanted e) {
+        }
+
+        // then
+        assertTrue(wanted.isVerified());
+        assertFalse(different.isVerified());
     }
 }
