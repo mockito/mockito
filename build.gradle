@@ -13,7 +13,7 @@ buildscript {
         classpath 'org.shipkit:shipkit-changelog:2.0.1'
         classpath 'org.shipkit:shipkit-auto-version:2.0.4'
 
-        classpath 'com.google.googlejavaformat:google-java-format:1.20.0'
+        classpath 'com.google.googlejavaformat:google-java-format:1.21.0'
         classpath 'com.android.tools.build:gradle:7.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
     }
