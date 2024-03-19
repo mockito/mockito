@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import java.util.Objects;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.MockitoCore;
@@ -2629,11 +2630,16 @@ public class Mockito extends ArgumentMatchers {
      * </ul>
      *
      * <b>Try to avoid this method at all costs. Only clear invocations if you are unable to efficiently test your program.</b>
-     * @param <T> The type of the mocks
-     * @param mocks The mocks to clear the invocations for
+     * @param mock a mock to clear the invocations for
+     * @param otherMocks other mocks to clear the invocation for
      */
-    public static <T> void clearInvocations(T... mocks) {
-        MOCKITO_CORE.clearInvocations(mocks);
+    public static void clearInvocations(final Object mock, final Object... otherMocks) {
+        Objects.requireNonNull(mock, "mock is null");
+        Objects.requireNonNull(otherMocks, "otherMocks is null");
+        MOCKITO_CORE.clearInvocations(mock);
+        for (final var otherMock: otherMocks) {
+            MOCKITO_CORE.clearInvocations(otherMock);
+        }
     }
 
     /**

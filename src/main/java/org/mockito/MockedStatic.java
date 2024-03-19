@@ -48,7 +48,7 @@ public interface MockedStatic<T> extends ScopedMock {
     void reset();
 
     /**
-     * See {@link Mockito#clearInvocations(Object[])}.
+     * See {@link Mockito#clearInvocations(Object, Object...)}.
      */
     void clearInvocations();
 
