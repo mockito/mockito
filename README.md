@@ -1,6 +1,6 @@
 <a href="https://site.mockito.org">
-<img src="https://raw.githubusercontent.com/mockito/mockito/main/src/javadoc/org/mockito/logo.png"
-     srcset="https://raw.githubusercontent.com/mockito/mockito/main/src/javadoc/org/mockito/logo@2x.png 2x"
+<img src="https://raw.githubusercontent.com/mockito/mockito/main/src/main/javadoc/org/mockito/logo.png"
+     srcset="https://raw.githubusercontent.com/mockito/mockito/main/src/main/javadoc/org/mockito/logo@2x.png 2x"
      alt="Mockito" />
 </a>
 
