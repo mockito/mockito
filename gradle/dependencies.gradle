@@ -4,7 +4,7 @@ ext {
 
 def versions = [:]
 
-versions.bytebuddy = '1.14.12'
+versions.bytebuddy = '1.14.13'
 versions.junitJupiter = '5.10.2'
 versions.errorprone = '2.23.0'
 
