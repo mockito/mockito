@@ -242,38 +242,42 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         } else {
             annotationsOnType = new Annotation[0];
         }
-        DynamicType.Builder<T> builder =
-                byteBuddy
-                        .subclass(target)
-                        .name(name)
-                        .ignoreAlso(BytecodeGenerator.isGroovyMethod(false))
-                        .annotateType(annotationsOnType)
-                        .implement(
-                                new ArrayList<>(
-                                        GraalImageCode.getCurrent().isDefined()
-                                                ? sortedSerializable(
-                                                        features.interfaces,
-                                                        GraalImageCode.getCurrent().isDefined()
-                                                                        && features.mockedType
-                                                                                .isInterface()
-                                                                ? features.mockedType
-                                                                : void.class)
-                                                : features.interfaces))
-                        .method(matcher)
-                        .intercept(dispatcher)
-                        .transform(withModifiers(SynchronizationState.PLAIN))
-                        .attribute(
-                                features.stripAnnotations
-                                        ? MethodAttributeAppender.NoOp.INSTANCE
-                                        : INCLUDING_RECEIVER)
-                        .serialVersionUid(42L)
-                        .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
-                        .implement(MockAccess.class)
-                        .intercept(FieldAccessor.ofBeanProperty())
-                        .method(isHashCode())
-                        .intercept(hashCode)
-                        .method(isEquals())
-                        .intercept(equals);
+        ElementMatcher<MethodDescription> isGroovyMethodIgnored = BytecodeGenerator.isGroovyMethod(false);
+        List<Class<?>> interfaceImplementations;
+
+        GraalImageCode currentGraalImageCode = GraalImageCode.getCurrent();
+        boolean isCurrentGraalImageCodeDefined = currentGraalImageCode.isDefined();
+
+        if (isCurrentGraalImageCodeDefined) {
+            Class<?> implementationClass = features.mockedType.isInterface() ? features.mockedType : void.class;
+            interfaceImplementations = (List<Class<?>>) sortedSerializable(features.interfaces, implementationClass);
+        } else {
+            interfaceImplementations = (List<Class<?>>) features.interfaces;
+        }
+
+        MethodAttributeAppender attributeAppender = features.stripAnnotations
+            ? MethodAttributeAppender.NoOp.INSTANCE
+            : INCLUDING_RECEIVER;
+
+        DynamicType.Builder<T> builder = byteBuddy
+            .subclass(target)
+            .name(name)
+            .ignoreAlso(isGroovyMethodIgnored)
+            .annotateType(annotationsOnType)
+            .implement(new ArrayList<>(interfaceImplementations))
+            .method(matcher)
+            .intercept(dispatcher)
+            .transform(withModifiers(SynchronizationState.PLAIN))
+            .attribute((MethodAttributeAppender.Factory) attributeAppender)
+            .serialVersionUid(42L)
+            .defineField("mockitoInterceptor", MockMethodInterceptor.class, PRIVATE)
+            .implement(MockAccess.class)
+            .intercept(FieldAccessor.ofBeanProperty())
+            .method(isHashCode())
+            .intercept(hashCode)
+            .method(isEquals())
+            .intercept(equals);
+
         if (features.serializableMode == SerializableMode.ACROSS_CLASSLOADERS) {
             builder =
                     builder.implement(CrossClassLoaderSerializableMock.class)
