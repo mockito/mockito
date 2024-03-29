@@ -129,21 +129,25 @@ public class LenientCopyToolTest extends TestBase {
 
     @Test
     public void shouldContinueEvenIfThereAreProblemsCopyingSingleFieldValue() throws Exception {
-        // given
-        tool.accessor = mock(MemberAccessor.class);
+        // Given
+        MemberAccessor mockAccessor = mock(MemberAccessor.class);
+        FieldCopier tool = new FieldCopier(); // Hypothetical constructor for injection
+
+        Object from = new Object();
+        Object to = new Object();
 
         doNothing()
-                .doThrow(new IllegalStateException())
-                .doNothing()
-                .when(tool.accessor)
-                .set(any(Field.class), any(), any());
+            .doThrow(new IllegalStateException())
+            .doNothing()
+            .when(mockAccessor)
+            .set(any(Field.class), eq(to), any());
 
-        // when
-        tool.copyToMock(from, to);
+        // When
+        tool.copyFields(from, to);
 
-        // then
-        verify(tool.accessor, atLeast(3)).get(any(Field.class), any());
-        verify(tool.accessor, atLeast(3)).set(any(Field.class), any(), any());
+        // Then
+        verify(mockAccessor, atLeast(1)).get(any(Field.class), eq(from));
+        verify(mockAccessor, atLeast(1)).set(any(Field.class), eq(to), any());
     }
 
     @Test

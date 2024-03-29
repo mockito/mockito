@@ -4,7 +4,7 @@ import org.mockito.internal.configuration.plugins.Plugins;
 
 public class LenientCopyTool {
 
-    private final FieldCopier fieldCopier = new FieldCopier(Plugins.getMemberAccessor());
+    private final FieldCopier fieldCopier = new FieldCopier();
 
     public <T> void copyToMock(T from, T mock) {
         fieldCopier.copyFields(from, mock);
