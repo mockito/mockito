@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2020 Mockito contributors
- * This program is made available under the terms of the MIT License.
- */
 package org.mockito.internal.util.reflection;
 
 import net.bytebuddy.ClassFileVersion;
@@ -17,41 +13,35 @@ public class ModuleMemberAccessor implements MemberAccessor {
     private final MemberAccessor delegate;
 
     public ModuleMemberAccessor() {
-        MemberAccessor delegate;
-        try {
-            delegate = delegate();
-        } catch (Throwable ignored) {
-            // Fallback in case Byte Buddy is not used as a mock maker and not available on the
-            // class loader.
-            delegate = new ReflectionMemberAccessor();
-        }
-        this.delegate = delegate;
+        // Determine and use the appropriate factory based on JVM version
+        MemberAccessorFactory factory = determineFactory();
+        this.delegate = factory.create();
     }
 
-    private static MemberAccessor delegate() {
+    private MemberAccessorFactory determineFactory() {
+        // This logic now decides which factory to use
         if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V9)) {
-            return new InstrumentationMemberAccessor();
+            return new InstrumentationMemberAccessorFactory();
         } else {
-            return new ReflectionMemberAccessor();
+            return new ReflectionMemberAccessorFactory();
         }
     }
 
     @Override
     public Object newInstance(Constructor<?> constructor, Object... arguments)
-            throws InstantiationException, InvocationTargetException, IllegalAccessException {
+        throws InstantiationException, InvocationTargetException, IllegalAccessException {
         return delegate.newInstance(constructor, arguments);
     }
 
     @Override
-    public Object newInstance(
-            Constructor<?> constructor, OnConstruction onConstruction, Object... arguments)
-            throws InstantiationException, InvocationTargetException, IllegalAccessException {
+    public Object newInstance(Constructor<?> constructor, OnConstruction onConstruction, Object... arguments)
+        throws InstantiationException, InvocationTargetException, IllegalAccessException {
         return delegate.newInstance(constructor, onConstruction, arguments);
     }
 
     @Override
     public Object invoke(Method method, Object target, Object... arguments)
-            throws InvocationTargetException, IllegalAccessException {
+        throws InvocationTargetException, IllegalAccessException {
         return delegate.invoke(method, target, arguments);
     }
 
