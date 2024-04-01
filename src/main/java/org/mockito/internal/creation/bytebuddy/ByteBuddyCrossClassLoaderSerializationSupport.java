@@ -60,7 +60,7 @@ import org.mockito.plugins.MemberAccessor;
 class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
     private static final long serialVersionUID = 7411152578314420778L;
     private static final String MOCKITO_PROXY_MARKER = "ByteBuddyMockitoProxyMarker";
-    private boolean instanceLocalCurrentlySerializingFlag = false;
+    private boolean isSerializing = false;
     private final Lock mutex = new ReentrantLock();
 
     /**
@@ -138,15 +138,15 @@ class ByteBuddyCrossClassLoaderSerializationSupport implements Serializable {
     }
 
     private void mockReplacementCompleted() {
-        instanceLocalCurrentlySerializingFlag = false;
+        isSerializing = false;
     }
 
     private void mockReplacementStarted() {
-        instanceLocalCurrentlySerializingFlag = true;
+        isSerializing = true;
     }
 
     private boolean mockIsCurrentlyBeingReplaced() {
-        return instanceLocalCurrentlySerializingFlag;
+        return isSerializing;
     }
 
     /**
