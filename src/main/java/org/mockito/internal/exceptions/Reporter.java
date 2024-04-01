@@ -335,11 +335,15 @@ public class Reporter {
             String wanted,
             List<String> actualCalls,
             List<Location> actualLocations) {
-        if (actualCalls == null
-                || actualLocations == null
-                || actualCalls.size() != actualLocations.size()) {
-            throw new IllegalArgumentException("actualCalls and actualLocations list must match");
+        boolean actualCallsIsNull = actualCalls == null;
+        boolean actualLocationsIsNull = actualLocations == null;
+        boolean sizesDontMatch = actualCalls != null && actualLocations != null && actualCalls.size() != actualLocations.size();
+
+        if (actualCallsIsNull || actualLocationsIsNull)
+            if(sizesDontMatch) {
+                throw new IllegalArgumentException("actualCalls and actualLocations lists must match in size and not be null");
         }
+
 
         StringBuilder actualBuilder = new StringBuilder();
         StringBuilder messageBuilder = new StringBuilder();
