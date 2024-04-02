@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2017 Mockito contributors
- * This program is made available under the terms of the MIT License.
- */
 package org.mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,29 +23,18 @@ import org.mockito.invocation.InvocationFactory;
 import org.mockito.invocation.MockHandler;
 import org.mockitoutil.TestBase;
 
-/**
- * This test is an experimental use of Mockito API to simulate static mocking.
- * Other frameworks can use it to build good support for static mocking.
- * Keep in mind that clean code never needs to mock static methods.
- * This test is a documentation how it can be done using current public API of Mockito.
- * This test is not only an experiment it also provides coverage for
- * some of the advanced public API exposed for framework integrators.
- * <p>
- * For more rationale behind this experimental test
- * <a href="https://www.linkedin.com/pulse/mockito-vs-powermock-opinionated-dogmatic-static-mocking-faber">see the article</a>.
- */
 public class StaticMockingExperimentTest extends TestBase {
 
     Foo mock = Mockito.mock(Foo.class);
     MockHandler handler = Mockito.mockingDetails(mock).getMockHandler();
     Method staticMethod;
     InvocationFactory.RealMethodBehavior realMethod =
-            new InvocationFactory.RealMethodBehavior() {
-                @Override
-                public Object call() throws Throwable {
-                    return null;
-                }
-            };
+        new InvocationFactory.RealMethodBehavior() {
+            @Override
+            public Object call() throws Throwable {
+                return null;
+            }
+        };
 
     @Before
     public void before() throws Throwable {
@@ -314,24 +299,6 @@ public class StaticMockingExperimentTest extends TestBase {
             fail();
         } catch (WantedButNotInvoked e) {
             assertThat(e.getMessage()).contains("matching arg").contains("different arg");
-        }
-    }
-
-    static class Foo {
-
-        private final String arg;
-
-        public Foo(String arg) {
-            this.arg = arg;
-        }
-
-        public static String staticMethod(String arg) {
-            return "";
-        }
-
-        @Override
-        public String toString() {
-            return "foo:" + arg;
         }
     }
 
