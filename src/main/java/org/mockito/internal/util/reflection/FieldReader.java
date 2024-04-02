@@ -27,7 +27,7 @@ public class FieldReader {
 
     public Object read() {
         try {
-            return accessor.get(field, target);
+            return MemberAccessorProvider.getAccessor().get(field, target);
         } catch (Exception e) {
             throw new MockitoException(
                     "Cannot read state from field: " + field + ", on instance: " + target, e);
