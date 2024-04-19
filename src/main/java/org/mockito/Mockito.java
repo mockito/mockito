@@ -1966,7 +1966,8 @@ public class Mockito extends ArgumentMatchers {
      * @since 5.1.0
      */
     @SafeVarargs
-    public static <T> T mock(@SuppressWarnings("rawtypes") Answer defaultAnswer, @Deprecated T... reified) {
+    public static <T> T mock(
+            @SuppressWarnings("rawtypes") Answer defaultAnswer, @Deprecated T... reified) {
         return mock(withSettings().defaultAnswer(defaultAnswer), reified);
     }
 
