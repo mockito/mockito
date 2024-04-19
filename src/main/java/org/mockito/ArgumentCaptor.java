@@ -194,7 +194,7 @@ public class ArgumentCaptor<T> {
      */
     @SafeVarargs
     @SuppressWarnings({"varargs", "unchecked"})
-    public static <U> ArgumentCaptor<U> captor(U... reified) {
+    public static <U> ArgumentCaptor<U> captor(@Deprecated U... reified) {
         if (reified == null || reified.length > 0) {
             throw new IllegalArgumentException("Do not provide any arguments to the 'captor' call");
         }

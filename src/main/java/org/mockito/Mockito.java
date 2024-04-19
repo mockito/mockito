@@ -1950,7 +1950,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 4.10.0
      */
     @SafeVarargs
-    public static <T> T mock(T... reified) {
+    public static <T> T mock(@Deprecated T... reified) {
         return mock(withSettings(), reified);
     }
 
@@ -1966,7 +1966,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 5.1.0
      */
     @SafeVarargs
-    public static <T> T mock(@SuppressWarnings("rawtypes") Answer defaultAnswer, T... reified) {
+    public static <T> T mock(@SuppressWarnings("rawtypes") Answer defaultAnswer, @Deprecated T... reified) {
         return mock(withSettings().defaultAnswer(defaultAnswer), reified);
     }
 
@@ -1982,7 +1982,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 5.1.0
      */
     @SafeVarargs
-    public static <T> T mock(String name, T... reified) {
+    public static <T> T mock(String name, @Deprecated T... reified) {
         return mock(withSettings().name(name).defaultAnswer(RETURNS_DEFAULTS), reified);
     }
 
@@ -1998,7 +1998,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 5.1.0
      */
     @SafeVarargs
-    public static <T> T mock(MockSettings settings, T... reified) {
+    public static <T> T mock(MockSettings settings, @Deprecated T... reified) {
         if (reified == null || reified.length > 0) {
             throw new IllegalArgumentException(
                     "Please don't pass any values here. Java will detect class automagically.");
@@ -2233,7 +2233,7 @@ public class Mockito extends ArgumentMatchers {
      * @since 4.10.0
      */
     @SafeVarargs
-    public static <T> T spy(T... reified) {
+    public static <T> T spy(@Deprecated T... reified) {
         if (reified.length > 0) {
             throw new IllegalArgumentException(
                     "Please don't pass any values here. Java will detect class automagically.");
