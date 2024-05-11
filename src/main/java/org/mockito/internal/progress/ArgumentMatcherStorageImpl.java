@@ -42,8 +42,8 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     public void reportAnd() {
         assertStateFor("And(?)", TWO_SUB_MATCHERS);
 
-        ArgumentMatcher<?> m1 = popMatcher();
         ArgumentMatcher<?> m2 = popMatcher();
+        ArgumentMatcher<?> m1 = popMatcher();
 
         reportMatcher(new And(m1, m2));
     }
@@ -52,8 +52,8 @@ public class ArgumentMatcherStorageImpl implements ArgumentMatcherStorage {
     public void reportOr() {
         assertStateFor("Or(?)", TWO_SUB_MATCHERS);
 
-        ArgumentMatcher<?> m1 = popMatcher();
         ArgumentMatcher<?> m2 = popMatcher();
+        ArgumentMatcher<?> m1 = popMatcher();
 
         reportMatcher(new Or(m1, m2));
     }
