@@ -103,4 +103,34 @@ public class OnlyTest extends TestBase {
         assertTrue(wanted.isVerified());
         assertFalse(different.isVerified());
     }
+
+    @Test
+    public void shouldMarkMultipleInvocationAsVerified() {
+
+        // given
+        InvocationBuilder invocationBuilder = new InvocationBuilder();
+        Invocation wanted = invocationBuilder.mock(mock).simpleMethod().toInvocation();
+        Invocation different = invocationBuilder.mock(mock).differentMethod().toInvocation();
+
+        // when
+        try {
+            only.verify(
+                    new VerificationDataStub(
+                            invocationBuilder.toInvocationMatcher(), wanted, different));
+            fail();
+        } catch (NoInteractionsWanted e) {
+        }
+
+        try {
+            only.verify(
+                    new VerificationDataStub(
+                            invocationBuilder.toInvocationMatcher(), different, wanted));
+            fail();
+        } catch (WantedButNotInvoked e) {
+        }
+
+        // then
+        assertTrue(wanted.isVerified());
+        assertTrue(different.isVerified());
+    }
 }
