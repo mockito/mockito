@@ -15,7 +15,7 @@ buildscript {
 
         classpath 'com.google.googlejavaformat:google-java-format:1.22.0'
         classpath 'com.android.tools.build:gradle:7.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0"
     }
 }
 
