@@ -6,9 +6,24 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
+charset = utf-8
 
 [{*.yml,*.yaml}]
 indent_size = 2
 ij_continuation_indent_size = 2
 ij_yaml_keep_indents_on_empty_lines = false
 ij_yaml_keep_line_breaks = true
+
+[*.java]
+ij_java_align_multiline_throws_list = true
+ij_java_align_multiline_annotation_parameters = true
+ij_java_annotation_parameter_wrap = off
+ij_java_blank_lines_after_imports = 1
+ij_java_blank_lines_before_imports = 1
+ij_java_class_count_to_use_import_on_demand = 100
+ij_java_names_count_to_use_import_on_demand = 100
+ij_java_imports_layout = static java.**,static javax.**,$*,|,java.**,javax.**,*
+ij_java_insert_inner_class_imports = true
+ij_java_layout_static_imports_separately = true
+ij_java_method_call_chain_wrap = off
+ij_java_throws_list_wrap = off
