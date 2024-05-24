@@ -30,7 +30,9 @@ public class Only implements VerificationMode {
         }
         if (invocations.size() != 1 && !chunk.isEmpty()) {
             Invocation unverified = findFirstUnverified(invocations);
-            throw noMoreInteractionsWanted(unverified, (List) invocations);
+            if (unverified != null) {
+                throw noMoreInteractionsWanted(unverified, (List) invocations);
+            }
         }
         if (invocations.size() != 1 || chunk.isEmpty()) {
             throw wantedButNotInvoked(target);
