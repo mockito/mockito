@@ -35,9 +35,7 @@ abstract class ModuleHandler {
 
     abstract Class<?> injectionBase(ClassLoader classLoader, String tyoeName);
 
-    void adjustModuleGraph(Class<?> source, Class<?> target, boolean export, boolean read) {
-
-    }
+    abstract void adjustModuleGraph(Class<?> source, Class<?> target, boolean export, boolean read);
 
     static ModuleHandler make(ByteBuddy byteBuddy, SubclassLoader loader) {
         try {
@@ -323,5 +321,9 @@ abstract class ModuleHandler {
             return InjectionBase.class;
         }
 
+        @Override
+        void adjustModuleGraph(Class<?> source, Class<?> target, boolean export, boolean read) {
+            // empty
+        }
     }
 }
