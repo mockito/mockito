@@ -17,6 +17,8 @@ import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
+import java.util.HashMap;
 
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -198,7 +200,7 @@ public class FieldInitializerTest {
         ConstructorArgumentResolver resolver =
                 given(
                                 mock(ConstructorArgumentResolver.class)
-                                        .resolveTypeInstances(any(Class.class)))
+                                        .resolveTypeInstancesGeneric(any(HashMap.class), any(Type[].class)))
                         .willReturn(new Object[] {null})
                         .getMock();
 
