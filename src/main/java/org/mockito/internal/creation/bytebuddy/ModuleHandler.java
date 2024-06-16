@@ -35,7 +35,9 @@ abstract class ModuleHandler {
 
     abstract Class<?> injectionBase(ClassLoader classLoader, String tyoeName);
 
-    abstract void adjustModuleGraph(Class<?> source, Class<?> target, boolean export, boolean read);
+    void adjustModuleGraph(Class<?> source, Class<?> target, boolean export, boolean read) {
+
+    }
 
     static ModuleHandler make(ByteBuddy byteBuddy, SubclassLoader loader) {
         try {
@@ -64,10 +66,9 @@ abstract class ModuleHandler {
         private ModuleSystemFound(ByteBuddy byteBuddy, SubclassLoader loader) throws Exception {
             this.byteBuddy = byteBuddy;
             this.loader = loader;
-            injectonBaseSuffix =
-                    GraalImageCode.getCurrent().isDefined()
-                            ? 0
-                            : Math.abs(Mockito.class.hashCode());
+            injectonBaseSuffix = GraalImageCode.getCurrent().isDefined()
+                    ? 0
+                    : Math.abs(Mockito.class.hashCode());
             Class<?> moduleType = Class.forName("java.lang.Module");
             getModule = Class.class.getMethod("getModule");
             isOpen = moduleType.getMethod("isOpen", String.class, moduleType);
@@ -84,12 +85,11 @@ abstract class ModuleHandler {
             if (source.getPackage() == null) {
                 return true;
             }
-            return (Boolean)
-                    invoke(
-                            isOpen,
-                            invoke(getModule, source),
-                            source.getPackage().getName(),
-                            invoke(getModule, target));
+            return (Boolean) invoke(
+                    isOpen,
+                    invoke(getModule, source),
+                    source.getPackage().getName(),
+                    invoke(getModule, target));
         }
 
         @Override
@@ -102,11 +102,10 @@ abstract class ModuleHandler {
             if (source.getPackage() == null) {
                 return true;
             }
-            return (Boolean)
-                    invoke(
-                            isExportedUnqualified,
-                            invoke(getModule, source),
-                            source.getPackage().getName());
+            return (Boolean) invoke(
+                    isExportedUnqualified,
+                    invoke(getModule, source),
+                    source.getPackage().getName());
         }
 
         @Override
@@ -114,12 +113,11 @@ abstract class ModuleHandler {
             if (source.getPackage() == null) {
                 return true;
             }
-            return (Boolean)
-                    invoke(
-                            isExported,
-                            invoke(getModule, source),
-                            source.getPackage().getName(),
-                            invoke(getModule, target));
+            return (Boolean) invoke(
+                    isExported,
+                    invoke(getModule, source),
+                    source.getPackage().getName(),
+                    invoke(getModule, target));
         }
 
         @Override
@@ -133,12 +131,11 @@ abstract class ModuleHandler {
                     String name;
                     int suffix = injectonBaseSuffix;
                     do {
-                        name =
-                                packageName
-                                        + "."
-                                        + InjectionBase.class.getSimpleName()
-                                        + "$"
-                                        + suffix++;
+                        name = packageName
+                                + "."
+                                + InjectionBase.class.getSimpleName()
+                                + "$"
+                                + suffix++;
                         try {
                             Class<?> type = Class.forName(name, false, classLoader);
                             // The injected type must be defined in the class loader that is target
@@ -192,38 +189,36 @@ abstract class ModuleHandler {
             MethodCall targetLookup;
             Implementation.Composable implementation;
             if (targetVisible) {
-                targetLookup =
-                        MethodCall.invoke(getModule)
-                                .onMethodCall(MethodCall.invoke(forName).with(target.getName()));
+                targetLookup = MethodCall.invoke(getModule)
+                        .onMethodCall(MethodCall.invoke(forName).with(target.getName()));
                 implementation = StubMethod.INSTANCE;
             } else {
                 Class<?> intermediate;
                 Field field;
                 try {
-                    intermediate =
-                            byteBuddy
-                                    .subclass(
-                                            Object.class,
-                                            ConstructorStrategy.Default.NO_CONSTRUCTORS)
-                                    .name(
-                                            String.format(
-                                                    "%s$%s%s",
-                                                    "org.mockito.codegen.MockitoTypeCarrier",
-                                                    RandomString.hashOf(
-                                                            source.getName().hashCode()),
-                                                    RandomString.hashOf(
-                                                            target.getName().hashCode())))
-                                    .defineField(
-                                            "mockitoType",
-                                            Class.class,
-                                            Visibility.PUBLIC,
-                                            Ownership.STATIC)
-                                    .make()
-                                    .load(
-                                            source.getClassLoader(),
-                                            loader.resolveStrategy(
-                                                    source, source.getClassLoader(), false))
-                                    .getLoaded();
+                    intermediate = byteBuddy
+                            .subclass(
+                                    Object.class,
+                                    ConstructorStrategy.Default.NO_CONSTRUCTORS)
+                            .name(
+                                    String.format(
+                                            "%s$%s%s",
+                                            "org.mockito.codegen.MockitoTypeCarrier",
+                                            RandomString.hashOf(
+                                                    source.getName().hashCode()),
+                                            RandomString.hashOf(
+                                                    target.getName().hashCode())))
+                            .defineField(
+                                    "mockitoType",
+                                    Class.class,
+                                    Visibility.PUBLIC,
+                                    Ownership.STATIC)
+                            .make()
+                            .load(
+                                    source.getClassLoader(),
+                                    loader.resolveStrategy(
+                                            source, source.getClassLoader(), false))
+                            .getLoaded();
                     field = intermediate.getField("mockitoType");
                     field.set(null, target);
                 } catch (Exception e) {
@@ -236,28 +231,24 @@ abstract class ModuleHandler {
                             e);
                 }
                 targetLookup = MethodCall.invoke(getModule).onField(field);
-                implementation =
-                        MethodCall.invoke(getModule)
-                                .onMethodCall(
-                                        MethodCall.invoke(forName).with(intermediate.getName()));
+                implementation = MethodCall.invoke(getModule)
+                        .onMethodCall(
+                                MethodCall.invoke(forName).with(intermediate.getName()));
             }
-            MethodCall sourceLookup =
-                    MethodCall.invoke(getModule)
-                            .onMethodCall(MethodCall.invoke(forName).with(source.getName()));
+            MethodCall sourceLookup = MethodCall.invoke(getModule)
+                    .onMethodCall(MethodCall.invoke(forName).with(source.getName()));
             if (needsExport) {
-                implementation =
-                        implementation.andThen(
-                                MethodCall.invoke(addExports)
-                                        .onMethodCall(sourceLookup)
-                                        .with(target.getPackage().getName())
-                                        .withMethodCall(targetLookup));
+                implementation = implementation.andThen(
+                        MethodCall.invoke(addExports)
+                                .onMethodCall(sourceLookup)
+                                .with(target.getPackage().getName())
+                                .withMethodCall(targetLookup));
             }
             if (needsRead) {
-                implementation =
-                        implementation.andThen(
-                                MethodCall.invoke(addReads)
-                                        .onMethodCall(sourceLookup)
-                                        .withMethodCall(targetLookup));
+                implementation = implementation.andThen(
+                        MethodCall.invoke(addReads)
+                                .onMethodCall(sourceLookup)
+                                .withMethodCall(targetLookup));
             }
             try {
                 Class.forName(
@@ -332,9 +323,5 @@ abstract class ModuleHandler {
             return InjectionBase.class;
         }
 
-        @Override
-        void adjustModuleGraph(Class<?> source, Class<?> target, boolean export, boolean read) {
-            // empty
-        }
     }
 }
