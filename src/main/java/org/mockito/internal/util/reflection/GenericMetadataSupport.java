@@ -48,7 +48,7 @@ import org.mockito.internal.util.Checks;
  * <p>
  * For now this code support the following kind of generic declarations :
  * <pre class="code"><code class="java">
- * interface GenericsNest&lt;K extends Comparable&lt;K&gt; & Cloneable&gt; extends Map&lt;K, Set&lt;Number&gt;&gt; {
+ * interface GenericsNest&lt;K extends Comparable&lt;K&gt; &amp; Cloneable&gt; extends Map&lt;K, Set&lt;Number&gt;&gt; {
  *     Set&lt;Number&gt; remove(Object key); // override with fixed ParameterizedType
  *     List&lt;? super Integer&gt; returning_wildcard_with_class_lower_bound();
  *     List&lt;? super K&gt; returning_wildcard_with_typeVar_lower_bound();
@@ -611,7 +611,7 @@ public abstract class GenericMetadataSupport {
      * <p>
      * i.e. <code>SomeClass</code>.
      * <pre class="code"><code class="java">
-     *     interface UpperBoundedTypeWithClass<E extends Comparable<E> & Cloneable> {
+     *     interface UpperBoundedTypeWithClass&lt;E extends Comparable<E> &amp; Cloneable> {
      *         E get();
      *     }
      *     // will return Comparable type
@@ -636,10 +636,10 @@ public abstract class GenericMetadataSupport {
         }
 
         /**
-         * On a Type Variable (typeVar extends C_0 & I_1 & I_2 & etc), will return an array
+         * On a Type Variable (typeVar extends C_0 &amp; I_1 &amp; I_2 &amp; etc), will return an array
          * containing I_1 and I_2.
          *
-         * @return other bounds for this type, these bounds can only be only interfaces as the JLS says,
+         * @return other bounds for this type, these bounds can only be interfaces as the JLS says,
          * empty array if no other bound declared.
          */
         @Override

@@ -30,7 +30,7 @@ import org.mockito.stubbing.Answer;
  * <p>Supports nested generic information, with this answer you can write code like this :
  *
  * <pre class="code"><code class="java">
- *     interface GenericsNest&lt;K extends Comparable&lt;K&gt; & Cloneable&gt; extends Map&lt;K, Set&lt;Number&gt;&gt; {}
+ *     interface GenericsNest&lt;K extends Comparable&lt;K&gt; &amp; Cloneable&gt; extends Map&lt;K, Set&lt;Number&gt;&gt; {}
  *
  *     GenericsNest&lt;?&gt; mock = mock(GenericsNest.class, new ReturnsGenericDeepStubs());
  *     Number number = mock.entrySet().iterator().next().getValue().iterator().next();
