@@ -43,6 +43,6 @@ libraries.kotlin = [
     coroutines: 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3-native-mt',
 ]
 libraries.android = [
-    runner: 'androidx.test:runner:1.5.2',
+    runner: 'androidx.test:runner:1.6.0',
     junit: 'androidx.test.ext:junit:1.1.5',
 ]
