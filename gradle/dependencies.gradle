@@ -44,5 +44,5 @@ libraries.kotlin = [
 ]
 libraries.android = [
     runner: 'androidx.test:runner:1.6.0',
-    junit: 'androidx.test.ext:junit:1.1.5',
+    junit: 'androidx.test.ext:junit:1.2.0',
 ]
