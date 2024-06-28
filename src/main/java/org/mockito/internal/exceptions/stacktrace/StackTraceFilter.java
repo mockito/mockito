@@ -59,10 +59,10 @@ public class StackTraceFilter implements Serializable {
 
     /**
      * This filtering strategy makes use of a fast-path computation to retrieve stackTraceElements
-     * from a Stacktrace of a Throwable. It does so, by taking advantage of {@link
-     * sun.misc.SharedSecrets} and {@link sun.misc.JavaLangAccess}.
+     * from a Stacktrace of a Throwable. It does so, by taking advantage of {@see
+     * sun.misc.SharedSecrets} and {@see sun.misc.JavaLangAccess}.
      *
-     * <p>The {@link sun.misc.SharedSecrets} provides a method to obtain an instance of an {@link
+     * <p>The {@see sun.misc.SharedSecrets} provides a method to obtain an instance of an {@see
      * sun.misc.JavaLangAccess}. The latter class has a method to fast-path into {@link
      * Throwable#getStackTrace()} and retrieve a single {@link StackTraceElement}. This prevents the
      * JVM from having to generate a full stacktrace, which could potentially be expensive if

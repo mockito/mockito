@@ -14,19 +14,6 @@ tasks.named("javadoc", Javadoc) {
     destinationDir = layout.buildDirectory.dir("javadoc").get().asFile
     title = "Mockito ${project.version} API"
 
-    // The way *gradle* javadoc task works and due to *gradle exclusion* the log output triggers javadoc warning and
-    // errors on internal classes that are not found, non-exhaustive list :
-    //
-    // * import org.mockito.internal.Internal <- error: package org.mockito.internal does not exists
-    // * import org.mockito.internal.Internal.util <- error: static import only from classes and interfaces
-    // * class Public extends Internal <- cannot find symbol
-    // * warning - Tag @linkplain: reference not found: org.mockito.internal.Internal internal stuff
-    // * warning - Tag @link: reference not found: org.mockito.stubbing
-    //
-    // While there's errors the javadoc is still generated without those symbols or links ;
-    // for this reason the javadoc output is suppressed and can be reactivated with --info option.
-    exclude 'org/mockito/internal'
-
     options.addBooleanOption('-allow-script-in-comments', true)
     options.addFileOption('-add-stylesheet', rootProject.file("src/main/javadoc/mockito-theme.css"))
     options.addStringOption('Xwerror', '-quiet')
