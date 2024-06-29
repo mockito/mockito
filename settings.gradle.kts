@@ -24,7 +24,7 @@ include(
     "errorprone",
     "programmatic-test",
     "java21-test",
-    "inject-generics"
+    "inject-mocks"
 )
 
 // https://developer.android.com/studio/command-line/variables#envar
