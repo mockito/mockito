@@ -2,7 +2,6 @@
  * Copyright (c) 2023 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockitousage.regression;
 
 import org.junit.jupiter.api.Nested;
@@ -41,10 +40,8 @@ public class GenericTypeMockTest {
     @Nested
     public class RegressionClassCastExceptionWithWildcards {
 
-        @InjectMocks
-        protected Regression3005Classes.ConcreteJob job;
-        @Mock
-        Regression3005Classes.JobInstance<?> instance;
+        @InjectMocks protected Regression3005Classes.ConcreteJob job;
+        @Mock Regression3005Classes.JobInstance<?> instance;
 
         @Test
         public void testNoClassCastException() {
@@ -52,7 +49,8 @@ public class GenericTypeMockTest {
             assertNotNull(instance);
             assertTrue(MockUtil.isMock(instance));
             // instance cannot (or should not) be assigned to job.instance according to compiler:
-            // Incompatible types. Found: 'JobInstance<capture<?>>', required: 'JobInstance<ConcreteJob>'
+            // Incompatible types. Found: 'JobInstance<capture<?>>', required:
+            // 'JobInstance<ConcreteJob>'
             assertNull(job.instance);
         }
     }
@@ -62,12 +60,12 @@ public class GenericTypeMockTest {
         interface JobData {}
 
         static class AbstractJob<D extends JobData, A extends AbstractJob<D, A>> {
-            JobInstance<D,A> instance;
+            JobInstance<D, A> instance;
         }
 
         static class JobInstance<D extends JobData, J extends AbstractJob<D, J>> {}
 
-        static class ConcreteJob<D extends JobData> extends AbstractJob<D,ConcreteJob<D>> {}
+        static class ConcreteJob<D extends JobData> extends AbstractJob<D, ConcreteJob<D>> {}
     }
 
     /**
@@ -76,14 +74,13 @@ public class GenericTypeMockTest {
     @Nested
     public class Regression3006ArrayIndexOutOfBounds {
 
-        @InjectMocks
-        protected Regression3006Classes.ConcreteJob<Regression3006Classes.JobData> job;
+        @InjectMocks protected Regression3006Classes.ConcreteJob<Regression3006Classes.JobData> job;
 
         @Mock
         Regression3006Classes.JobInstance<
-            Regression3006Classes.JobData,
-            Regression3006Classes.ConcreteJob<Regression3006Classes.JobData>
-            > instance;
+                        Regression3006Classes.JobData,
+                        Regression3006Classes.ConcreteJob<Regression3006Classes.JobData>>
+                instance;
 
         @Test
         public void testMockExistsAndUsed() {
@@ -129,10 +126,10 @@ public class GenericTypeMockTest {
     public class Regression3019MissingInjection {
 
         @Mock
-        private Regression3019Classes.ParameterizedInjectedObject<Regression3019Classes.Something> injected;
+        private Regression3019Classes.ParameterizedInjectedObject<Regression3019Classes.Something>
+                injected;
 
-        @InjectMocks
-        private Regression3019Classes.EntryPoint subject;
+        @InjectMocks private Regression3019Classes.EntryPoint subject;
 
         @Test
         public void testSuccessfullyInjected() {
@@ -145,6 +142,4 @@ public class GenericTypeMockTest {
             Mockito.verify(injected).init();
         }
     }
-
 }
-

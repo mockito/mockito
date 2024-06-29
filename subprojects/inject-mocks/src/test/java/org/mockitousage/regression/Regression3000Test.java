@@ -22,59 +22,45 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SuppressWarnings({ "unused", "rawtypes" })
+@SuppressWarnings({"unused", "rawtypes"})
 public class Regression3000Test {
 
     @Target(ElementType.TYPE)
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface Dependent {
-    }
+    public @interface Dependent {}
 
     @Target(ElementType.FIELD)
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface Inject {
-    }
+    public @interface Inject {}
 
     public interface Instance<T> {
         T get();
     }
 
-    public interface ObjectMapper {
-    }
+    public interface ObjectMapper {}
 
-    public interface EntityManager {
-    }
+    public interface EntityManager {}
 
-    public interface Storable<T> {
-    }
+    public interface Storable<T> {}
 
-    public interface StorageMessage {
-    }
+    public interface StorageMessage {}
 
-    public interface AbstractEntityController<T, U> {
-    }
+    public interface AbstractEntityController<T, U> {}
 
-    public static class MessageControllerBase<T extends StorageMessage, U extends Storable> {
-    }
+    public static class MessageControllerBase<T extends StorageMessage, U extends Storable> {}
 
     @Dependent
-    public static class StorageMessageBaseController extends MessageControllerBase<StorageMessage, Storable> {
+    public static class StorageMessageBaseController
+            extends MessageControllerBase<StorageMessage, Storable> {
 
-        @Inject
-        Instance<AbstractEntityController<? extends Storable, ?>> controllerInstance;
-        @Inject
-        Instance<Storable<?>> storableInstance;
-        @Inject
-        ObjectMapper objectMapper;
+        @Inject Instance<AbstractEntityController<? extends Storable, ?>> controllerInstance;
+        @Inject Instance<Storable<?>> storableInstance;
+        @Inject ObjectMapper objectMapper;
     }
 
-    @Mock
-    Instance<Storable<?>> storableInstance;
-    @Mock
-    EntityManager em;
-    @Spy
-    @InjectMocks
-    StorageMessageBaseController testee;
+    @Mock Instance<Storable<?>> storableInstance;
+    @Mock EntityManager em;
+    @Spy @InjectMocks StorageMessageBaseController testee;
 
     /**
      * Verify regression <a href="https://github.com/mockito/mockito/issues/3000">issue #3000</a> is fixed.

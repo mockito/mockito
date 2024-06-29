@@ -37,14 +37,14 @@ public class GenericTypeMatchTest {
             "integer  ,string   ,false",
             "string   ,integer  ,false"
         })
-        public void testSimpleTypes(String sourceFieldName, String targetFieldName, boolean matches) throws NoSuchFieldException {
+        public void testSimpleTypes(String sourceFieldName, String targetFieldName, boolean matches)
+                throws NoSuchFieldException {
             Field sourceField = SimpleTypesTest.class.getDeclaredField(sourceFieldName);
             Field targetField = SimpleTypesTest.class.getDeclaredField(targetFieldName);
             GenericTypeMatch sourceMatch = GenericTypeMatch.ofField(sourceField);
             GenericTypeMatch targetMatch = GenericTypeMatch.ofField(targetField);
             assertEquals(matches, targetMatch.matches(sourceMatch));
         }
-
     }
 
     @Nested
@@ -75,7 +75,6 @@ public class GenericTypeMatchTest {
             "wildcardListInteger  ,wildcardListInteger  ,true",
             "wildcardListInteger  ,wildcardList         ,true",
             "wildcardList         ,wildcardListInteger  ,false",
-
             "mapStringInteger         ,mapStringInteger         ,true",
             "wildcardMap              ,mapStringInteger         ,false",
             "wildcardMapStringNumber  ,mapStringInteger         ,false",
@@ -86,7 +85,9 @@ public class GenericTypeMatchTest {
             "wildcardMapStringNumber  ,wildcardMapStringNumber  ,true",
             "wildcardMap              ,wildcardMapStringNumber  ,false",
         })
-        public void testParameterizedTypes(String sourceFieldName, String targetFieldName, boolean matches) throws NoSuchFieldException {
+        public void testParameterizedTypes(
+                String sourceFieldName, String targetFieldName, boolean matches)
+                throws NoSuchFieldException {
             Field sourceField = ParameterizedTypesTest.class.getDeclaredField(sourceFieldName);
             Field targetField = ParameterizedTypesTest.class.getDeclaredField(targetFieldName);
             GenericTypeMatch sourceMatch = GenericTypeMatch.ofField(sourceField);
@@ -114,7 +115,8 @@ public class GenericTypeMatchTest {
             "stringArray   ,objectArray   ,true",
             "integerArray  ,objectArray   ,true",
         })
-        public void testArrayTypes(String sourceFieldName, String targetFieldName, boolean matches) throws NoSuchFieldException {
+        public void testArrayTypes(String sourceFieldName, String targetFieldName, boolean matches)
+                throws NoSuchFieldException {
             Field sourceField = ArrayTypesTest.class.getDeclaredField(sourceFieldName);
             Field targetField = ArrayTypesTest.class.getDeclaredField(targetFieldName);
             GenericTypeMatch sourceMatch = GenericTypeMatch.ofField(sourceField);
@@ -135,7 +137,7 @@ public class GenericTypeMatchTest {
 
     static class SubOfConcrete extends ConcreteSubOfBox {}
 
-    static abstract class Change {}
+    abstract static class Change {}
 
     static class ChangeCollection<T extends Change> {
         private List<T> changes;
@@ -147,6 +149,7 @@ public class GenericTypeMatchTest {
         private CollectionBox<Integer> integerCollectionBox;
         private CollectionBox<String> stringCollectionBox;
         private CollectionBox<?> wildcardCollectionBox;
+
         @SuppressWarnings("rawtypes")
         private CollectionBox rawCollectionBox;
 
@@ -175,30 +178,27 @@ public class GenericTypeMatchTest {
             "integerList         ,stringCollectionBox    ,CollectionBox  ,collection  ,false",
             "integerList         ,wildcardCollectionBox  ,CollectionBox  ,collection  ,false",
             "wildcardCollection  ,wildcardCollectionBox  ,CollectionBox  ,collection  ,false",
-
             "integerList         ,integerSubOfBox        ,CollectionBox  ,collection  ,true",
             "integerList         ,stringSubOfBox         ,CollectionBox  ,collection  ,false",
             "integerList         ,wildcardSubOfBox       ,CollectionBox  ,collection  ,false",
             "wildcardCollection  ,wildcardSubOfBox       ,CollectionBox  ,collection  ,false",
-
             "integerList         ,concreteSubOfBox       ,CollectionBox  ,collection  ,true",
             "stringList          ,concreteSubOfBox       ,CollectionBox  ,collection  ,false",
             "integerList         ,subOfConcrete          ,CollectionBox  ,collection  ,true",
-
             "integerList         ,integerSubOfSubOfBox   ,CollectionBox  ,collection  ,true",
             "integerList         ,stringSubOfSubOfBox    ,CollectionBox  ,collection  ,false",
-
             "integerList         ,rawCollectionBox       ,CollectionBox  ,collection  ,true",
             "stringList          ,rawCollectionBox       ,CollectionBox  ,collection  ,true",
-
             "changeList          ,changesTargetRaw       ,ChangeCollection  ,changes  ,true",
             "integerList         ,changesTargetRaw       ,ChangeCollection  ,changes  ,false",
         })
-        public void testNestedFields(String sourceFieldName,
-                                     String containingFieldName,
-                                     String targetClassName,
-                                     String targetFieldName,
-                                     boolean matches) throws NoSuchFieldException, ClassNotFoundException {
+        public void testNestedFields(
+                String sourceFieldName,
+                String containingFieldName,
+                String targetClassName,
+                String targetFieldName,
+                boolean matches)
+                throws NoSuchFieldException, ClassNotFoundException {
             Field sourceField = NestedFieldTest.class.getDeclaredField(sourceFieldName);
             Field containingField = NestedFieldTest.class.getDeclaredField(containingFieldName);
             String className = STATIC_CLASS_PREFIX + targetClassName;
@@ -206,7 +206,8 @@ public class GenericTypeMatchTest {
             Field targetField = targetClass.getDeclaredField(targetFieldName);
             GenericTypeMatch sourceMatch = GenericTypeMatch.ofField(sourceField);
             GenericTypeMatch containingMatch = GenericTypeMatch.ofField(containingField);
-            Optional<GenericTypeMatch> optTargetMatch = containingMatch.findDeclaredField(targetField);
+            Optional<GenericTypeMatch> optTargetMatch =
+                    containingMatch.findDeclaredField(targetField);
             assertTrue(optTargetMatch.isPresent());
             assertEquals(matches, optTargetMatch.get().matches(sourceMatch));
         }
@@ -231,7 +232,9 @@ public class GenericTypeMatchTest {
     }
 
     static class ArgToArray<T> extends WithBox<T[]> {}
+
     static class ArgToArrayTwoDim<T> extends WithBox<T[][]> {}
+
     static class ArgToArrayWithArray<T> extends WithBoxArray<T[]> {}
 
     @Nested
@@ -260,11 +263,9 @@ public class GenericTypeMatchTest {
             "stringBoxArray         ,withStringBoxArray         ,WithBoxArray        ,boxArray        ,true",
             "integerBoxArray        ,withStringBoxArray         ,WithBoxArray        ,boxArray        ,false",
             "stringBoxArrayTwoDim   ,withStringBoxArray         ,WithBoxArray        ,boxArray        ,false",
-
             "stringBoxArrayTwoDim   ,withStringBoxArrayTwoDim   ,WithBoxArrayTwoDim  ,boxArrayTwoDim  ,true",
             "integerBoxArrayTwoDim  ,withStringBoxArrayTwoDim   ,WithBoxArrayTwoDim  ,boxArrayTwoDim  ,false",
             "stringBoxArray         ,withStringBoxArrayTwoDim   ,WithBoxArrayTwoDim  ,boxArrayTwoDim  ,false",
-
             "stringArrayBox         ,stringArgToArray           ,WithBox             ,box             ,true",
             "integerArrayBox        ,stringArgToArray           ,WithBox             ,box             ,false",
             "wildcardBox            ,stringArgToArray           ,WithBox             ,box             ,false",
@@ -273,27 +274,29 @@ public class GenericTypeMatchTest {
             "wildcardBox            ,wildcardArgToArray         ,WithBox             ,box             ,false",
             "stringArrayBoxTwoDim   ,stringArgToArrayTwoDim     ,WithBox             ,box             ,true",
             "stringArrayBox         ,stringArgToArrayTwoDim     ,WithBox             ,box             ,false",
-
             "stringArrayBox         ,withStringArrayBox         ,WithArrayBox        ,arrayBox        ,true",
             "integerArrayBox        ,withStringArrayBox         ,WithArrayBox        ,arrayBox        ,false",
-
             "stringArrayBoxArray    ,stringArgToArrayWithArray  ,WithBoxArray        ,boxArray        ,true",
             "stringArrayBox         ,stringArgToArrayWithArray  ,WithBoxArray        ,boxArray        ,false",
             "stringBoxArray         ,stringArgToArrayWithArray  ,WithBoxArray        ,boxArray        ,false",
         })
-        public void testGenericArrayTypes(String sourceFieldName,
-                                          String containingFieldName,
-                                          String targetClassName,
-                                          String targetFieldName,
-                                          boolean matches) throws NoSuchFieldException, ClassNotFoundException {
+        public void testGenericArrayTypes(
+                String sourceFieldName,
+                String containingFieldName,
+                String targetClassName,
+                String targetFieldName,
+                boolean matches)
+                throws NoSuchFieldException, ClassNotFoundException {
             Field sourceField = GenericArrayTypesTest.class.getDeclaredField(sourceFieldName);
-            Field containingField = GenericArrayTypesTest.class.getDeclaredField(containingFieldName);
+            Field containingField =
+                    GenericArrayTypesTest.class.getDeclaredField(containingFieldName);
             String className = STATIC_CLASS_PREFIX + targetClassName;
             Class<?> targetClass = Class.forName(className);
             Field targetField = targetClass.getDeclaredField(targetFieldName);
             GenericTypeMatch sourceMatch = GenericTypeMatch.ofField(sourceField);
             GenericTypeMatch containingMatch = GenericTypeMatch.ofField(containingField);
-            Optional<GenericTypeMatch> optTargetMatch = containingMatch.findDeclaredField(targetField);
+            Optional<GenericTypeMatch> optTargetMatch =
+                    containingMatch.findDeclaredField(targetField);
             assertTrue(optTargetMatch.isPresent());
             assertEquals(matches, optTargetMatch.get().matches(sourceMatch));
         }
@@ -306,27 +309,35 @@ public class GenericTypeMatchTest {
     interface Interface1<P1, P2 extends Interface1<P1, P2>> extends Interface0<P2> {
         @Override
         P2 getParamInterface0();
+
         P1 getParamInterface1();
     }
 
     interface Interface2<P3 extends Interface2<P3, P4>, P4> extends Interface1<P4, P3> {}
 
-    interface Interface3<P5 extends Interface3<P5, P6, P7>, P6 extends Interface1<P7, P6> & Interface2<P6, P7>, P7>
-        extends Interface1<P7, P6>, Interface2<P6, P7> {
+    interface Interface3<
+                    P5 extends Interface3<P5, P6, P7>,
+                    P6 extends Interface1<P7, P6> & Interface2<P6, P7>,
+                    P7>
+            extends Interface1<P7, P6>, Interface2<P6, P7> {
         @Override
         P6 getParamInterface0();
+
         @Override
         P7 getParamInterface1();
+
         P5 getParamInterface3();
     }
 
-    interface Interface4<P8 extends Interface4<P8>> extends Interface3<P8, P8, P8>, Interface1<P8, P8> {
+    interface Interface4<P8 extends Interface4<P8>>
+            extends Interface3<P8, P8, P8>, Interface1<P8, P8> {
         @Override
         P8 getParamInterface0();
     }
 
     static class Usage1 implements Interface4<Usage1> {
         private final Usage1 usage1Field = this;
+
         @Override
         public Usage1 getParamInterface0() {
             return usage1Field;
@@ -345,10 +356,12 @@ public class GenericTypeMatchTest {
 
     static class Usage2<T> implements Interface4<Usage2<T>> {
         private final Usage2<T> usage2Field = this;
+
         @Override
         public Usage2<T> getParamInterface0() {
             return usage2Field;
         }
+
         @Override
         public Usage2<T> getParamInterface1() {
             return usage2Field;
@@ -364,14 +377,17 @@ public class GenericTypeMatchTest {
         private T usage3FieldT;
         private U usage3FieldU;
         private V usage3FieldV;
+
         @Override
         public U getParamInterface0() {
             return usage3FieldU;
         }
+
         @Override
         public V getParamInterface1() {
             return usage3FieldV;
         }
+
         @Override
         public T getParamInterface3() {
             return usage3FieldU;
@@ -401,19 +417,27 @@ public class GenericTypeMatchTest {
             "usage4  ,usage4Invalid  ,super  ,usage3FieldU  ,false",
             "usage1  ,usage4Invalid  ,super  ,usage3FieldV  ,true",
         })
-        public void textExtensiveGenerics(String sourceFieldName,
-                                          String targetInstanceName,
-                                          String fieldOfBaseOrSuper,
-                                          String targetFieldName,
-                                          boolean expectedMatch) throws ReflectiveOperationException {
+        public void textExtensiveGenerics(
+                String sourceFieldName,
+                String targetInstanceName,
+                String fieldOfBaseOrSuper,
+                String targetFieldName,
+                boolean expectedMatch)
+                throws ReflectiveOperationException {
             Field sourceField = ExtensiveGenericsTest.class.getDeclaredField(sourceFieldName);
-            Field containingField = ExtensiveGenericsTest.class.getDeclaredField(targetInstanceName);
-            Field targetField = "base".equals(fieldOfBaseOrSuper)
-                ? containingField.getType().getDeclaredField(targetFieldName)
-                : containingField.getType().getSuperclass().getDeclaredField(targetFieldName);
+            Field containingField =
+                    ExtensiveGenericsTest.class.getDeclaredField(targetInstanceName);
+            Field targetField =
+                    "base".equals(fieldOfBaseOrSuper)
+                            ? containingField.getType().getDeclaredField(targetFieldName)
+                            : containingField
+                                    .getType()
+                                    .getSuperclass()
+                                    .getDeclaredField(targetFieldName);
             GenericTypeMatch sourceMatch = GenericTypeMatch.ofField(sourceField);
             GenericTypeMatch containingMatch = GenericTypeMatch.ofField(containingField);
-            Optional<GenericTypeMatch> optTargetMatch = containingMatch.findDeclaredField(targetField);
+            Optional<GenericTypeMatch> optTargetMatch =
+                    containingMatch.findDeclaredField(targetField);
             assertTrue(optTargetMatch.isPresent());
             assertEquals(expectedMatch, optTargetMatch.get().matches(sourceMatch));
         }
