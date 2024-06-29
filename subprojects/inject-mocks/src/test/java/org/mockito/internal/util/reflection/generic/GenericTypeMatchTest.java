@@ -65,8 +65,8 @@ public class GenericTypeMatchTest {
             "integerList          ,integerCollection    ,true",
             "integerCollection    ,integerList          ,false",
             "integerList          ,stringList           ,false",
+            "integerList          ,wildcardListInteger  ,true",
             "stringList           ,integerList          ,false",
-
             "stringList           ,wildcardList         ,true",
             "wildcardList         ,stringList           ,false",
             "wildcardList         ,wildcardList         ,true",
