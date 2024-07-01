@@ -1,4 +1,4 @@
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     javaLauncher = javaToolchains.launcherFor {
         languageVersion = providers
             .gradleProperty("mockito.test.java")
