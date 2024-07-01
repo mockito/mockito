@@ -110,5 +110,13 @@ public final class Plugins {
         return registry.getDoNotMockEnforcer();
     }
 
+    /**
+     * Shares the plugin registry with {@link InternalPlugins}.
+     * @return the instance of the plugin registry.
+     */
+    static PluginRegistry getRegistry() {
+        return registry;
+    }
+
     private Plugins() {}
 }

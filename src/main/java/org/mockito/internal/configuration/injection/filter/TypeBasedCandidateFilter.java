@@ -23,8 +23,8 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
 
     private final MockCandidateFilter next;
 
-    public TypeBasedCandidateFilter(MockCandidateFilter next) {
-        this.next = next;
+    public TypeBasedCandidateFilter() {
+        this.next = new NameBasedCandidateFilter(new TerminalMockCandidateFilter());
     }
 
     protected boolean isCompatibleTypes(Type typeToMock, Type mockType, Field injectMocksField) {

@@ -20,9 +20,7 @@ import java.util.stream.Collectors;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.injection.filter.MockCandidateFilter;
-import org.mockito.internal.configuration.injection.filter.NameBasedCandidateFilter;
-import org.mockito.internal.configuration.injection.filter.TerminalMockCandidateFilter;
-import org.mockito.internal.configuration.injection.filter.TypeBasedCandidateFilter;
+import org.mockito.internal.configuration.plugins.InternalPlugins;
 import org.mockito.internal.util.reflection.FieldInitializationReport;
 import org.mockito.internal.util.reflection.FieldInitializer;
 
@@ -63,8 +61,7 @@ import org.mockito.internal.util.reflection.FieldInitializer;
 public class PropertyAndSetterInjection extends MockInjectionStrategy {
 
     private final MockCandidateFilter mockCandidateFilter =
-            new TypeBasedCandidateFilter(
-                    new NameBasedCandidateFilter(new TerminalMockCandidateFilter()));
+            InternalPlugins.getMockCandidateFilter();
 
     @Override
     public boolean processInjection(
