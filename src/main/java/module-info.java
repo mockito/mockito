@@ -26,7 +26,6 @@ module org.mockito {
     exports org.mockito.stubbing;
     exports org.mockito.verification;
 
-
     opens org.mockito;
     opens org.mockito.codegen;
     opens org.mockito.configuration;
@@ -47,8 +46,12 @@ module org.mockito {
     opens org.mockito.stubbing;
     opens org.mockito.verification;
 
+    exports org.mockito.internal.configuration.plugins;
+    exports org.mockito.internal.util.reflection;
+    exports org.mockito.internal.creation.bytebuddy;
+
     // TODO: Remove in future version
-    // TODO: Remove in future version
+    /*
     exports org.mockito.internal.configuration;
     exports org.mockito.internal.configuration.injection;
     exports org.mockito.internal.configuration.injection.filter;
@@ -124,4 +127,6 @@ module org.mockito {
     opens org.mockito.internal.verification.api;
     opens org.mockito.internal.verification.argumentmatching;
     opens org.mockito.internal.verification.checkers;
+
+     */
 }
