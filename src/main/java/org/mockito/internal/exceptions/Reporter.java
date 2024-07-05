@@ -925,6 +925,12 @@ public class Reporter {
         return details.getCause().getMessage();
     }
 
+    /**
+     * Exception is no longer required. To mock with a delegate of a different type, use delgatesTo().
+     *
+     * @deprecated
+     */
+    @Deprecated
     public static MockitoException mockedTypeIsInconsistentWithDelegatedInstanceType(
             Class<?> mockedType, Object delegatedInstance) {
         return new MockitoException(
