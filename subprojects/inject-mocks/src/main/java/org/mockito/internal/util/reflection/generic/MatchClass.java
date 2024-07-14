@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.util.reflection.generic;
 
+import java.lang.reflect.Type;
+
 public class MatchClass implements MatchType, HasClass {
 
     private final Class<?> clazz;
@@ -13,7 +15,7 @@ public class MatchClass implements MatchType, HasClass {
     }
 
     @Override
-    public boolean matches(MatchType other) {
+    public boolean matchesSource(MatchType other) {
         return other instanceof MatchClass
                 && this.clazz.isAssignableFrom(((MatchClass) other).clazz);
     }
@@ -24,6 +26,11 @@ public class MatchClass implements MatchType, HasClass {
 
     @Override
     public Class<?> getTheClass() {
+        return clazz;
+    }
+
+    @Override
+    public Type getOriginalType() {
         return clazz;
     }
 }

@@ -4,21 +4,32 @@
  */
 package org.mockito.internal.util.reflection.generic;
 
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 public interface MatchType extends Type {
 
-    boolean matches(MatchType other);
+    boolean matchesSource(MatchType other);
 
-    static MatchType ofClassAndResolver(Class<?> clazz, VariableResolver resolver) {
+    static MatchType ofGenericAndRawTypeAndResolver(
+            Type genericType, Class<?> clazz, VariableResolver resolver) {
+        if (genericType instanceof ParameterizedType) {
+            return MatchParameterizedClass.ofParameterizedType(
+                            (ParameterizedType) genericType, resolver)
+                    .get();
+        }
         TypeVariable<? extends Class<?>>[] parameters = clazz.getTypeParameters();
         if (parameters.length > 0) {
             return MatchParameterizedClass.ofClassAndResolver(clazz, resolver);
-        } else if (clazz.isArray()) {
-            return MatchArrayClass.ofClassAndResolver(clazz, resolver);
+        } else if (clazz.isArray() && genericType instanceof GenericArrayType) {
+            return MatchArrayClass.ofClassAndResolver(
+                    (GenericArrayType) genericType, clazz, resolver);
         } else {
             return MatchClass.ofClass(clazz);
         }
     }
+
+    Type getOriginalType();
 }

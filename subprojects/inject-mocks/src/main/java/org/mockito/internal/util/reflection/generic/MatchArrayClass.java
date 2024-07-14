@@ -4,6 +4,9 @@
  */
 package org.mockito.internal.util.reflection.generic;
 
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.Type;
+
 public class MatchArrayClass extends MatchClass {
 
     private final MatchType componentMatchType;
@@ -14,15 +17,17 @@ public class MatchArrayClass extends MatchClass {
     }
 
     @Override
-    public boolean matches(MatchType other) {
-        return super.matches(other)
+    public boolean matchesSource(MatchType other) {
+        return super.matchesSource(other)
                 && other instanceof MatchArrayClass
-                && componentMatchType.matches(((MatchArrayClass) other).componentMatchType);
+                && componentMatchType.matchesSource(((MatchArrayClass) other).componentMatchType);
     }
 
-    static MatchType ofClassAndResolver(Class<?> clazz, VariableResolver resolver) {
+    static MatchType ofClassAndResolver(
+            GenericArrayType genericType, Class<?> clazz, VariableResolver resolver) {
         MatchType componentMatchType =
-                MatchType.ofClassAndResolver(clazz.getComponentType(), resolver);
+                MatchType.ofGenericAndRawTypeAndResolver(
+                        genericType.getGenericComponentType(), clazz.getComponentType(), resolver);
         return new MatchArrayClass(clazz, componentMatchType);
     }
 }

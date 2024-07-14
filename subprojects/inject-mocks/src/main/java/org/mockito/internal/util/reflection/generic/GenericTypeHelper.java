@@ -61,4 +61,34 @@ public final class GenericTypeHelper {
             return Object.class;
         }
     }
+
+    public static Optional<Type> remapType(Type type, VariableResolver remapResolver) {
+        Type replacement = null;
+        if (type instanceof WildcardType) {
+            replacement = MatchWildcard.ofWildcardType((WildcardType) type);
+        } else if (type instanceof TypeVariable && remapResolver != null) {
+            Optional<Type> optReplacement = remapResolver.resolve((TypeVariable<?>) type);
+            if (optReplacement.isPresent()) {
+                replacement = optReplacement.get();
+            }
+        } else if (type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            if (remapResolver != null
+                    && !remapResolver.isEmpty()
+                    && parameterizedType.getRawType() instanceof Class) {
+                replacement =
+                        MatchParameterizedClass.ofClassAndResolver(
+                                (Class<?>) parameterizedType.getRawType(), remapResolver);
+            } else {
+                Optional<MatchType> optMatchType =
+                        MatchParameterizedClass.ofParameterizedType(parameterizedType, null);
+                if (optMatchType.isPresent()) {
+                    replacement = optMatchType.get();
+                }
+            }
+        } else if (type instanceof GenericArrayType) {
+            replacement = GenericTypeHelper.getRawTypeOfType(type, remapResolver);
+        }
+        return Optional.ofNullable(replacement);
+    }
 }

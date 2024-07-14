@@ -9,18 +9,22 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.*;
 
+import static org.mockito.internal.util.reflection.generic.GenericTypeHelper.remapType;
+
 public class MatchParameterizedClass extends MatchClass implements MatchType {
 
+    private Type originalType;
     private final List<Type> resolvedTypes;
 
-    protected MatchParameterizedClass(Class<?> clazz, List<Type> resolvedTypes) {
+    protected MatchParameterizedClass(Class<?> clazz, List<Type> resolvedTypes, Type originalType) {
         super(clazz);
         this.resolvedTypes = resolvedTypes;
+        this.originalType = originalType;
     }
 
     @Override
-    public boolean matches(MatchType other) {
-        return super.matches(other)
+    public boolean matchesSource(MatchType other) {
+        return super.matchesSource(other)
                 && (other instanceof MatchParameterizedClass
                                 && resolvedTypesMatch((MatchParameterizedClass) other)
                         || matchesSuperTypeOfOther(other));
@@ -32,9 +36,9 @@ public class MatchParameterizedClass extends MatchClass implements MatchType {
             Type genericSuperclass = clazz.getGenericSuperclass();
             if (genericSuperclass instanceof ParameterizedType) {
                 Optional<MatchType> matchTypeSuper =
-                        ofParameterizedType((ParameterizedType) genericSuperclass);
+                        ofParameterizedType((ParameterizedType) genericSuperclass, null);
                 if (matchTypeSuper.isPresent()) {
-                    return this.matches(matchTypeSuper.get());
+                    return this.matchesSource(matchTypeSuper.get());
                 }
             }
         }
@@ -52,7 +56,7 @@ public class MatchParameterizedClass extends MatchClass implements MatchType {
             Type nextTarget = targetIterator.next();
             Type nextSource = sourceIterator.next();
             if (nextTarget instanceof MatchType && nextSource instanceof MatchType) {
-                typesMatch = ((MatchType) nextTarget).matches((MatchType) nextSource);
+                typesMatch = ((MatchType) nextTarget).matchesSource((MatchType) nextSource);
             } else if (nextTarget instanceof MatchWildcard) {
                 typesMatch = ((MatchWildcard) nextTarget).sourceMatches(nextSource);
             } else if (nextSource instanceof MatchWildcard) {
@@ -101,18 +105,35 @@ public class MatchParameterizedClass extends MatchClass implements MatchType {
             Optional<Type> optionalResolved = resolver.resolve(parameter);
             optionalResolved.ifPresent(resolvedTypes::add);
         }
-        return new MatchParameterizedClass(clazz, resolvedTypes);
+        return new MatchParameterizedClass(clazz, resolvedTypes, clazz);
     }
 
-    static Optional<MatchType> ofParameterizedType(ParameterizedType parameterizedType) {
+    static Optional<MatchType> ofParameterizedType(
+            ParameterizedType parameterizedType, VariableResolver remapResolver) {
         if (parameterizedType.getRawType() instanceof Class<?>) {
             Type[] typeArguments = parameterizedType.getActualTypeArguments();
-            List<Type> resolvedTypes = Arrays.asList(typeArguments);
+            List<Type> resolvedTypes = new ArrayList<>(typeArguments.length);
+            for (Type type : typeArguments) {
+                Optional<Type> remappedType = remapType(type, remapResolver);
+                if (remappedType.isPresent()) {
+                    resolvedTypes.add(remappedType.get());
+                } else {
+                    resolvedTypes.add(type);
+                }
+            }
+
             return Optional.of(
                     new MatchParameterizedClass(
-                            (Class<?>) parameterizedType.getRawType(), resolvedTypes));
+                            (Class<?>) parameterizedType.getRawType(),
+                            resolvedTypes,
+                            parameterizedType));
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public Type getOriginalType() {
+        return originalType;
     }
 }

@@ -22,13 +22,11 @@ public class GenericTypeMatch {
     }
 
     public boolean matches(GenericTypeMatch other) {
-        return matchType.matches(other.matchType);
+        return matchType.matchesSource(other.matchType);
     }
 
     public static GenericTypeMatch ofField(Field field) {
-        VariableResolver resolver = VariableResolver.ofField(field);
-        MatchType matchType = MatchType.ofClassAndResolver(field.getType(), resolver);
-        return new GenericTypeMatch(matchType, resolver);
+        return ofGenericAndRawType(field.getGenericType(), field.getType());
     }
 
     public static GenericTypeMatch ofGenericAndRawType(Type genericType, Class<?> rawType) {
@@ -37,7 +35,8 @@ public class GenericTypeMatch {
                         ? VariableResolver.ofParameterizedAndRawType(
                                 (ParameterizedType) genericType, rawType, null)
                         : VariableResolver.empty();
-        MatchType matchType = MatchType.ofClassAndResolver(rawType, resolver);
+        MatchType matchType =
+                MatchType.ofGenericAndRawTypeAndResolver(genericType, rawType, resolver);
         return new GenericTypeMatch(matchType, resolver);
     }
 
@@ -46,16 +45,16 @@ public class GenericTypeMatch {
             Class<?> clazz = ((HasClass) this.matchType).getTheClass();
             Class<?> declaringClass = field.getDeclaringClass();
             if (declaringClass.equals(clazz)) {
-                return createFieldTypeMatch(field);
+                return Optional.of(createFieldTypeMatch(field));
             } else {
                 return findAncestor(clazz, declaringClass)
-                        .flatMap(typeMatch -> typeMatch.createFieldTypeMatch(field));
+                        .flatMap(typeMatch -> Optional.of(typeMatch.createFieldTypeMatch(field)));
             }
         }
         return Optional.empty();
     }
 
-    private Optional<GenericTypeMatch> createFieldTypeMatch(Field field) {
+    private GenericTypeMatch createFieldTypeMatch(Field field) {
         if (field.getGenericType() instanceof TypeVariable && this.resolver != null) {
             Optional<Type> resolved =
                     this.resolver.resolve((TypeVariable<?>) field.getGenericType());
@@ -64,16 +63,18 @@ public class GenericTypeMatch {
             }
         }
         VariableResolver resolver = VariableResolver.ofFieldAndResolver(field, this.resolver);
-        MatchType matchType = MatchType.ofClassAndResolver(field.getType(), resolver);
-        return Optional.of(new GenericTypeMatch(matchType, resolver));
+        MatchType matchType =
+                MatchType.ofGenericAndRawTypeAndResolver(
+                        field.getGenericType(), field.getType(), resolver);
+        return new GenericTypeMatch(matchType, resolver);
     }
 
-    private static Optional<GenericTypeMatch> createFieldTypeMatchForVariable(MatchType matchType) {
+    private static GenericTypeMatch createFieldTypeMatchForVariable(MatchType matchType) {
         VariableResolver resolver =
                 matchType instanceof MatchParameterizedClass
                         ? ((MatchParameterizedClass) matchType).toResolver()
                         : VariableResolver.empty();
-        return Optional.of(new GenericTypeMatch(matchType, resolver));
+        return new GenericTypeMatch(matchType, resolver);
     }
 
     private Optional<GenericTypeMatch> findAncestor(Class<?> derived, Class<?> declaringClass) {
@@ -130,7 +131,9 @@ public class GenericTypeMatch {
         } else {
             resolver = VariableResolver.empty();
         }
-        MatchType matchType = MatchType.ofClassAndResolver(rawAncectorClass, resolver);
+        MatchType matchType =
+                MatchType.ofGenericAndRawTypeAndResolver(
+                        genericAncestorType, rawAncectorClass, resolver);
         return Optional.of(new GenericTypeMatch(matchType, resolver));
     }
 }

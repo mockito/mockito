@@ -9,16 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.mockito.internal.util.reflection.generic.GenericTypeHelper.remapType;
+
 public interface VariableResolver {
 
     Optional<Type> resolve(TypeVariable<?> variable);
 
     default boolean isEmpty() {
         return false;
-    }
-
-    static VariableResolver ofField(Field field) {
-        return Factory.ofField(field);
     }
 
     static VariableResolver ofFieldAndResolver(Field field, VariableResolver remapResolver) {
@@ -48,10 +46,6 @@ public interface VariableResolver {
                         return true;
                     }
                 };
-
-        private static VariableResolver ofField(Field field) {
-            return ofFieldAndResolver(field, null);
-        }
 
         private static VariableResolver ofFieldAndResolver(
                 Field field, VariableResolver remapResolver) {
@@ -94,35 +88,8 @@ public interface VariableResolver {
             for (Map.Entry<TypeVariable<?>, Type> entry : typeOfArguments.entrySet()) {
                 TypeVariable<?> key = entry.getKey();
                 Type value = entry.getValue();
-                Type replacement = null;
-                if (value instanceof WildcardType) {
-                    replacement = MatchWildcard.ofWildcardType((WildcardType) value);
-                } else if (value instanceof TypeVariable && remapResolver != null) {
-                    Optional<Type> optReplacement = remapResolver.resolve((TypeVariable<?>) value);
-                    if (optReplacement.isPresent()) {
-                        replacement = optReplacement.get();
-                    }
-                } else if (value instanceof ParameterizedType) {
-                    ParameterizedType parameterizedType = (ParameterizedType) value;
-                    if (remapResolver != null
-                            && !remapResolver.isEmpty()
-                            && parameterizedType.getRawType() instanceof Class) {
-                        replacement =
-                                MatchParameterizedClass.ofClassAndResolver(
-                                        (Class<?>) parameterizedType.getRawType(), remapResolver);
-                    } else {
-                        Optional<MatchType> optMatchType =
-                                MatchParameterizedClass.ofParameterizedType(parameterizedType);
-                        if (optMatchType.isPresent()) {
-                            replacement = optMatchType.get();
-                        }
-                    }
-                } else if (value instanceof GenericArrayType) {
-                    replacement = GenericTypeHelper.getRawTypeOfType(value, remapResolver);
-                }
-                if (replacement != null) {
-                    typeOfArguments.put(key, replacement);
-                }
+                Optional<Type> remappedType = remapType(value, remapResolver);
+                remappedType.ifPresent(type -> typeOfArguments.put(key, type));
             }
         }
 

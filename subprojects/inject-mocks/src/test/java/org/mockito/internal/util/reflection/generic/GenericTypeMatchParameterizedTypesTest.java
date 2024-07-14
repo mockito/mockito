@@ -18,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GenericTypeMatchParameterizedTypesTest {
 
     private List<Integer> integerList;
+    private List<List<Integer>> integerListList;
+    private List<List<?>> wildcardListList;
     private Collection<Integer> integerCollection;
     private List<String> stringList;
     private List<?> wildcardList;
@@ -28,29 +30,32 @@ public class GenericTypeMatchParameterizedTypesTest {
 
     @ParameterizedTest
     @CsvSource({
-        "integerList          ,integerList          ,true",
-        "integerList          ,integerCollection    ,true",
-        "integerCollection    ,integerList          ,false",
-        "integerList          ,stringList           ,false",
-        "integerList          ,wildcardListInteger  ,true",
-        "stringList           ,integerList          ,false",
-        "stringList           ,wildcardList         ,true",
-        "wildcardList         ,stringList           ,true",
-        "wildcardList         ,wildcardList         ,true",
-        "wildcardListInteger  ,integerList          ,true",
-        "wildcardListInteger  ,stringList           ,true",
-        "wildcardListInteger  ,wildcardListInteger  ,true",
-        "wildcardListInteger  ,wildcardList         ,true",
-        "wildcardList         ,wildcardListInteger  ,false",
-        "mapStringInteger         ,mapStringInteger         ,true",
-        "wildcardMap              ,mapStringInteger         ,true",
-        "wildcardMapStringNumber  ,mapStringInteger         ,true",
-        "mapStringInteger         ,wildcardMap              ,true",
-        "wildcardMap              ,wildcardMap              ,true",
-        "wildcardMapStringNumber  ,wildcardMap              ,true",
-        "mapStringInteger         ,wildcardMapStringNumber  ,true",
-        "wildcardMapStringNumber  ,wildcardMapStringNumber  ,true",
-        "wildcardMap              ,wildcardMapStringNumber  ,false",
+        "integerList                ,integerList                ,true",
+        "integerList                ,integerCollection          ,true",
+        "integerCollection          ,integerList                ,false",
+        "integerList                ,stringList                 ,false",
+        "integerList                ,wildcardListInteger        ,true",
+        "stringList                 ,integerList                ,false",
+        "stringList                 ,wildcardList               ,true",
+        "integerListList            ,integerListList            ,true",
+        "integerListList            ,wildcardListList           ,true",
+        "integerListList            ,wildcardList               ,true",
+        "wildcardList               ,stringList                 ,true",
+        "wildcardList               ,wildcardList               ,true",
+        "wildcardListInteger        ,integerList                ,true",
+        "wildcardListInteger        ,stringList                 ,true",
+        "wildcardListInteger        ,wildcardListInteger        ,true",
+        "wildcardListInteger        ,wildcardList               ,true",
+        "wildcardList               ,wildcardListInteger        ,false",
+        "mapStringInteger           ,mapStringInteger           ,true",
+        "wildcardMap                ,mapStringInteger           ,true",
+        "wildcardMapStringNumber    ,mapStringInteger           ,true",
+        "mapStringInteger           ,wildcardMap                ,true",
+        "wildcardMap                ,wildcardMap                ,true",
+        "wildcardMapStringNumber    ,wildcardMap                ,true",
+        "mapStringInteger           ,wildcardMapStringNumber    ,true",
+        "wildcardMapStringNumber    ,wildcardMapStringNumber    ,true",
+        "wildcardMap                ,wildcardMapStringNumber    ,false",
     })
     public void testParameterizedTypes(
             String sourceFieldName, String targetFieldName, boolean matches)
