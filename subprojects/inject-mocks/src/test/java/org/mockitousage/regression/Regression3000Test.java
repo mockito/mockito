@@ -20,6 +20,9 @@ import java.lang.annotation.Target;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Verify regression <a href="https://github.com/mockito/mockito/issues/3000">issue #3000</a> is fixed.
+ */
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SuppressWarnings({"unused", "rawtypes"})
@@ -62,9 +65,6 @@ public class Regression3000Test {
     @Mock EntityManager em;
     @Spy @InjectMocks StorageMessageBaseController testee;
 
-    /**
-     * Verify regression <a href="https://github.com/mockito/mockito/issues/3000">issue #3000</a> is fixed.
-     */
     @Test
     public void testNoArrayIndexOutOfBoundsExceptionAndMockInjected() {
         assertNotNull(testee);

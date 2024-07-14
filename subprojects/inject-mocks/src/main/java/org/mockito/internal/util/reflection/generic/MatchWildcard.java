@@ -12,23 +12,21 @@ import java.util.function.Predicate;
 public class MatchWildcard implements MatchType {
 
     private final WildcardType wildcard;
-    private final boolean captured;
 
-    protected MatchWildcard(WildcardType wildcard, boolean captured) {
+    protected MatchWildcard(WildcardType wildcard) {
         this.wildcard = wildcard;
-        this.captured = captured;
     }
 
     @Override
     public boolean matches(MatchType other) {
-        if (!captured && other instanceof MatchWildcard) {
+        if (other instanceof MatchWildcard) {
             MatchWildcard matchWildcardOther = (MatchWildcard) other;
             Type[] upperBoundsThis = this.wildcard.getUpperBounds();
             Type[] upperBoundsOther = matchWildcardOther.wildcard.getUpperBounds();
             if (upperBoundsOther.length == upperBoundsThis.length) {
                 boolean matches = true;
                 for (int i = 0; i < upperBoundsThis.length && matches; i++) {
-                    matches = isUpperBoundAssignableFrom(upperBoundsThis[i], upperBoundsOther[i]);
+                    matches = isClassAssignableFrom(upperBoundsThis[i], upperBoundsOther[i]);
                 }
                 return matches;
             } else {
@@ -40,26 +38,24 @@ public class MatchWildcard implements MatchType {
     }
 
     static MatchType ofWildcardType(WildcardType wildcardType) {
-        return new MatchWildcard(wildcardType, false);
+        return new MatchWildcard(wildcardType);
     }
 
-    MatchType makeCaptured() {
-        return this.captured ? this : new MatchWildcard(wildcard, true);
-    }
-
-    public boolean matches(Type type) {
-        return !captured
-                && testUpperBounds(upperBound -> isUpperBoundAssignableFrom(upperBound, type));
+    public boolean sourceMatches(Type type) {
+        return testBounds(
+                wildcard.getUpperBounds(), upperBound -> isClassAssignableFrom(upperBound, type));
     }
 
     public boolean targetMatches(Type targetType) {
-        return testUpperBounds(upperBound -> isUpperBoundAssignableTo(upperBound, targetType));
+        return testBounds(
+                wildcard.getLowerBounds(),
+                lowerBound -> isClassAssignableFrom(targetType, lowerBound));
     }
 
-    private boolean testUpperBounds(Predicate<Type> predicate) {
+    private boolean testBounds(Type[] bounds, Predicate<Type> predicate) {
         boolean success = true;
-        for (Type upperBound : wildcard.getUpperBounds()) {
-            success = predicate.test(upperBound);
+        for (Type bound : bounds) {
+            success = predicate.test(bound);
             if (!success) {
                 break;
             }
@@ -67,22 +63,14 @@ public class MatchWildcard implements MatchType {
         return success;
     }
 
-    private static boolean isUpperBoundAssignableFrom(Type upperBound, Type type) {
-        return testClassTypes(upperBound, type, Class::isAssignableFrom);
-    }
-
-    private static boolean isUpperBoundAssignableTo(Type upperBound, Type type) {
-        return testClassTypes(upperBound, type, reverse(Class::isAssignableFrom));
+    private static boolean isClassAssignableFrom(Type bound, Type type) {
+        return testClassTypes(bound, type, Class::isAssignableFrom);
     }
 
     private static boolean testClassTypes(
-            Type upperBound, Type type, BiPredicate<Class<?>, Class<?>> biPredicate) {
-        return upperBound instanceof Class
-                && type instanceof Class
-                && biPredicate.test((Class<?>) upperBound, (Class<?>) type);
-    }
-
-    private static <T> BiPredicate<T, T> reverse(BiPredicate<T, T> biPredicate) {
-        return (t1, t2) -> biPredicate.test(t2, t1);
+            Type type1, Type type2, BiPredicate<Class<?>, Class<?>> biPredicate) {
+        return type1 instanceof Class
+                && type2 instanceof Class
+                && biPredicate.test((Class<?>) type1, (Class<?>) type2);
     }
 }

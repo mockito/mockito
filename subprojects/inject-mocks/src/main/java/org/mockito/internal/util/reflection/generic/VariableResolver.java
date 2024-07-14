@@ -101,9 +101,6 @@ public interface VariableResolver {
                     Optional<Type> optReplacement = remapResolver.resolve((TypeVariable<?>) value);
                     if (optReplacement.isPresent()) {
                         replacement = optReplacement.get();
-                        if (replacement instanceof MatchWildcard) {
-                            replacement = ((MatchWildcard) replacement).makeCaptured();
-                        }
                     }
                 } else if (value instanceof ParameterizedType) {
                     ParameterizedType parameterizedType = (ParameterizedType) value;

@@ -54,7 +54,7 @@ public class MatchParameterizedClass extends MatchClass implements MatchType {
             if (nextTarget instanceof MatchType && nextSource instanceof MatchType) {
                 typesMatch = ((MatchType) nextTarget).matches((MatchType) nextSource);
             } else if (nextTarget instanceof MatchWildcard) {
-                typesMatch = ((MatchWildcard) nextTarget).matches(nextSource);
+                typesMatch = ((MatchWildcard) nextTarget).sourceMatches(nextSource);
             } else if (nextSource instanceof MatchWildcard) {
                 typesMatch = ((MatchWildcard) nextSource).targetMatches(nextTarget);
             } else if (nextTarget instanceof TypeVariable && nextSource instanceof Class) {
