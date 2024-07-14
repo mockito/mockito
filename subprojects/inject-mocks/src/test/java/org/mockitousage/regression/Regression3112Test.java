@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
- * Verify regression https://github.com/mockito/mockito/issues/3012 is fixed.
+ * <a href="https://github.com/mockito/mockito/issues/3012">Issue #3012</a>
  */
 @ExtendWith(MockitoExtension.class)
 public class Regression3112Test {
@@ -31,6 +31,7 @@ public class Regression3112Test {
         assertSame(mock, d.member);
     }
 
+    @SuppressWarnings("unused")
     private interface InterfaceA<R> {}
 
     private static class ClassA<R> {

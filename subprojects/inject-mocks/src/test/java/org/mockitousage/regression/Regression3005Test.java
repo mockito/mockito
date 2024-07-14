@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Verify regression https://github.com/mockito/mockito/issues/3005 is fixed.
+ * <a href="https://github.com/mockito/mockito/issues/3005">Issue #3005</a>
  */
 @ExtendWith(MockitoExtension.class)
 public class Regression3005Test {
