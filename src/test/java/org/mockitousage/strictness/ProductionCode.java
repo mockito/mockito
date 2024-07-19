@@ -19,4 +19,8 @@ public class ProductionCode {
     public static void simpleMethod(IMethods mock, int argument) {
         mock.simpleMethod(argument);
     }
+
+    public static void differentMethod(IMethods mock, String argument) {
+        mock.differentMethod(argument);
+    }
 }
