@@ -65,6 +65,7 @@ import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
 
+
 @SuppressSignatureCheck
 public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTransformer {
 
