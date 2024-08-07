@@ -7,4 +7,5 @@ dependencies {
     implementation project.rootProject
     testImplementation libraries.junit4
     testImplementation libraries.assertj
+    testImplementation libraries.hamcrest
 }
