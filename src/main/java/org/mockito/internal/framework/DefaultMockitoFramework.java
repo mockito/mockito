@@ -56,6 +56,14 @@ public class DefaultMockitoFramework implements MockitoFramework {
     }
 
     @Override
+    public void disableInlineMocks(String errorMessage) {
+        InlineMockMaker mockMaker = getInlineMockMaker();
+        if (mockMaker != null) {
+            mockMaker.disableAllMocks(errorMessage);
+        }
+    }
+
+    @Override
     public void clearInlineMock(Object mock) {
         InlineMockMaker mockMaker = getInlineMockMaker();
         if (mockMaker != null) {

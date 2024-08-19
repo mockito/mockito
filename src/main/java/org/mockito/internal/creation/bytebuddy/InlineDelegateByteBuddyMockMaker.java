@@ -14,9 +14,12 @@ import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
+import org.mockito.internal.framework.DisabledMockException;
 import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.InlineMockMaker;
@@ -30,6 +33,7 @@ import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -546,6 +550,32 @@ class InlineDelegateByteBuddyMockMaker
     public void clearAllMocks() {
         mockedStatics.getBackingMap().clear();
         mocks.clear();
+    }
+
+    @Override
+    public void disableAllMocks(String errorMessage) {
+        mockedStatics.getBackingMap().clear();
+
+        MockHandler disableHandler = new MockHandler() {
+            @Override
+            public Object handle(Invocation invocation) throws Throwable {
+                throw new DisabledMockException(errorMessage);
+            }
+
+            @Override
+            public MockCreationSettings getMockSettings() {
+                return null;
+            }
+
+            @Override
+            public InvocationContainer getInvocationContainer() {
+                return null;
+            }
+        };
+        for (Entry<Object, MockMethodInterceptor> entry : mocks) {
+            MockCreationSettings settings = entry.getValue().getMockHandler().getMockSettings();
+            entry.setValue(new MockMethodInterceptor(disableHandler, settings));
+        }
     }
 
     @Override

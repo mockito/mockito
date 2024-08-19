@@ -30,3 +30,4 @@ classes
 
 # Used to check reproducibility of Mockito jars
 checksums/
+local.properties

@@ -137,4 +137,16 @@ public interface MockitoFramework {
      * @see #clearInlineMocks()
      */
     void clearInlineMock(Object mock);
+
+    /**
+     * Cleans up internal state for all existing mocks. Attempts to interact with mocks after this
+     * is called will throw {@link org.mockito.internal.framework.DisabledMockException} with the
+     * given message.
+     * <p>
+     * This is an alternate solution for the problem that motivated {@link #clearInlineMocks()}, but
+     * also handles the issue of
+     * <a href="https://github.com/mockito/mockito/issues/3419">Issue 3419</a>
+     */
+    void disableInlineMocks(String errorMessage);
+
 }
