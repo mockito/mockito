@@ -29,7 +29,7 @@ import org.mockito.junit.MockitoJUnitRunner;
  *     <li><strong>Constructor injection</strong>; the biggest constructor is chosen,
  *     then arguments are resolved with mocks declared in the test only. If the object is successfully created
  *     with the constructor, then <strong>Mockito won't try the other strategies</strong>. Mockito has decided to no
- *     corrupt an object if it has a parametered constructor.
+ *     corrupt an object if it has a parameterized constructor.
  *     <p><u>Note:</u> If arguments can not be found, then null is passed.
  *     If non-mockable types are wanted, then constructor injection won't happen.
  *     In these cases, you will have to satisfy dependencies yourself.</p></li>
