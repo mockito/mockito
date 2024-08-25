@@ -34,6 +34,12 @@ tasks.named("javadoc", Javadoc) {
     options.use = true
     options.windowTitle = "Mockito JUnit Jupiter ${project.version} API"
 
+    // https://bugs.openjdk.org/browse/JDK-8274639
+    if (JavaVersion.current() >= JavaVersion.VERSION_18) {
+        options.addStringOption('-link-modularity-mismatch', 'info')
+        options.links("https://junit.org/junit5/docs/5.11.0/api/")
+    }
+
     doLast {
         copy {
             from "$rootDir/src/main/javadoc"
