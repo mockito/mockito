@@ -37,7 +37,7 @@ tasks.named("javadoc", Javadoc) {
     // https://bugs.openjdk.org/browse/JDK-8274639
     if (JavaVersion.current() >= JavaVersion.VERSION_18) {
         options.addStringOption('-link-modularity-mismatch', 'info')
-        options.links("https://junit.org/junit5/docs/5.11.0/api/")
+        options.links("https://junit.org/junit5/docs/${libs.versions.junit.jupiter.get()}/api/")
     }
 
     doLast {

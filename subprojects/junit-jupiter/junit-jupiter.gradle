@@ -4,7 +4,6 @@ plugins {
     id 'biz.aQute.bnd.builder'
 }
 
-apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-library.gradle"
 
 apply from: "$rootDir/gradle/mockito-junit-jupiter/javadoc.gradle"
@@ -13,10 +12,10 @@ description = "Mockito JUnit 5 support"
 
 dependencies {
     api project.rootProject
-    implementation libraries.junitJupiterApi
-    testImplementation libraries.assertj
-    testImplementation libraries.junitPlatformLauncher
-    testRuntimeOnly libraries.junitJupiterEngine
+    implementation libs.junit.jupiter.api
+    testImplementation libs.assertj
+    testImplementation libs.junit.platform.launcher
+    testRuntimeOnly libs.junit.jupiter.engine
 }
 
 tasks.withType(Test).configureEach {

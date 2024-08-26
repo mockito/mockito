@@ -1,12 +1,11 @@
-apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-library.gradle"
 
 description = "Mockito preconfigured subclass mock maker"
 
 dependencies {
     api project.rootProject
-    testImplementation libraries.junit4
-    testImplementation libraries.assertj
+    testImplementation libs.junit4
+    testImplementation libs.assertj
 }
 
 tasks.javadoc.enabled = false

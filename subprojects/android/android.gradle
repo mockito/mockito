@@ -1,11 +1,10 @@
-apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-library.gradle"
 
 description = "Mockito for Android"
 
 dependencies {
     api project.rootProject
-    implementation libraries.bytebuddyandroid
+    implementation libs.bytebuddy.android
 }
 
 tasks.javadoc.enabled = false

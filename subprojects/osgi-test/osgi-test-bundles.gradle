@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath libraries.bndGradle
+        classpath libs.bnd.gradle
     }
 }
 
@@ -16,7 +16,7 @@ sourceSets {
 
 dependencies {
     testBundleImplementation project.rootProject
-    testBundleImplementation libraries.junit4
+    testBundleImplementation libs.junit4
     testBundleImplementation sourceSets.otherBundle.output
 }
 

@@ -1,13 +1,12 @@
-apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Tests that require fine tuned parallel settings for JUnit Jupiter (bug #1630)"
 
 dependencies {
-    testImplementation libraries.junitJupiterApi
+    testImplementation libs.junit.jupiter.api
     testImplementation project(":junit-jupiter")
-    testRuntimeOnly libraries.junitJupiterEngine
-    testRuntimeOnly libraries.junitPlatformLauncher
+    testRuntimeOnly libs.junit.jupiter.engine
+    testRuntimeOnly libs.junit.platform.launcher
 }
 
 test {

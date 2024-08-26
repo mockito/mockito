@@ -1,17 +1,16 @@
-apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-library.gradle"
 
 description = "ErrorProne plugins for Mockito"
 
 dependencies {
-    compileOnly libraries.autoservice
-    annotationProcessor libraries.autoservice
+    compileOnly libs.autoservice
+    annotationProcessor libs.autoservice
 
     implementation project.rootProject
-    implementation libraries.errorprone
+    implementation libs.errorprone
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation libraries.errorproneTestApi
+    testImplementation libs.errorprone.test.api
 }
 
 test {
