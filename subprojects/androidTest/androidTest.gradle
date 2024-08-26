@@ -5,7 +5,6 @@ plugins {
     id 'kotlin-android'
 }
 
-apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/test-launcher.gradle"
 
 android {
@@ -66,7 +65,7 @@ androidComponents {
 }
 
 dependencies {
-    implementation libraries.kotlin.stdlib
+    implementation libs.kotlin.stdlib
 
     // Add :android on the classpath so that AGP's jacoco setup thinks it's "production code to be tested".
     // Essentially a way to say: tasks.createDebugAndroidTestCoverageReport.classFileCollection.from(project(":android"))
@@ -75,11 +74,11 @@ dependencies {
     configurations.testImplementation { exclude group: 'org.mockito', module: 'android' }
 
     testImplementation project(":")
-    testImplementation libraries.junit4
-    testImplementation libraries.junitJupiterApi
-    testImplementation libraries.junitJupiterEngine
+    testImplementation libs.junit4
+    testImplementation libs.junit.jupiter.api
+    testImplementation libs.junit.jupiter.engine
 
-    androidTestImplementation libraries.android.runner
-    androidTestImplementation libraries.android.junit
+    androidTestImplementation libs.android.runner
+    androidTestImplementation libs.android.junit
     androidTestImplementation project(":android")
 }

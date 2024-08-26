@@ -1,12 +1,11 @@
-apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Mockito preconfigured inline mock maker (intermediate and to be superseeded by automatic usage in a future version)"
 
 dependencies {
     implementation project.rootProject
-    testImplementation libraries.junit4
-    testImplementation libraries.assertj
+    testImplementation libs.junit4
+    testImplementation libs.assertj
 }
 
 test {

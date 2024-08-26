@@ -1,4 +1,3 @@
-apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-test.gradle"
 apply from: "osgi-test-bundles.gradle"
 
@@ -6,10 +5,10 @@ description = "Test suite for OSGi framework with Mockito"
 
 dependencies {
     testImplementation project.rootProject
-    testImplementation libraries.junit4
-    testImplementation libraries.osgi
+    testImplementation libs.junit4
+    testImplementation libs.osgi
 
-    testRuntimeOnly libraries.equinox
+    testRuntimeOnly libs.equinox
 }
 
 configurations {
@@ -18,8 +17,8 @@ configurations {
 
 dependencies {
     testRuntimeBundles project.rootProject
-    testRuntimeBundles libraries.bytebuddy
-    testRuntimeBundles libraries.objenesis
+    testRuntimeBundles libs.bytebuddy
+    testRuntimeBundles libs.objenesis
     testRuntimeBundles tasks.testBundle.outputs.files
     testRuntimeBundles tasks.otherBundle.outputs.files
 }

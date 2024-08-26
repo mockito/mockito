@@ -45,8 +45,6 @@ apply from: 'gradle/mockito-core/osgi.gradle'
 apply from: 'gradle/mockito-core/javadoc.gradle'
 apply from: 'gradle/mockito-core/testing.gradle'
 
-apply from: 'gradle/dependencies.gradle'
-
 allprojects { proj ->
     repositories {
         mavenCentral()
@@ -90,14 +88,14 @@ configurations {
 }
 
 dependencies {
-    api libraries.bytebuddy, libraries.bytebuddyagent
+    api libs.bytebuddy, libs.bytebuddy.agent
 
-    compileOnly libraries.junit4, libraries.hamcrest, libraries.opentest4j
-    implementation libraries.objenesis
+    compileOnly libs.junit4, libs.hamcrest, libs.opentest4j
+    implementation libs.objenesis
 
-    testImplementation libraries.assertj
-    testImplementation libraries.junitJupiterApi
-    testImplementation libraries.junitJupiterParams
+    testImplementation libs.assertj
+    testImplementation libs.junit.jupiter.api
+    testImplementation libs.junit.jupiter.params
 
     testUtil sourceSets.test.output
 

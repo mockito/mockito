@@ -1,4 +1,3 @@
-apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "End-to-end tests for Mockito and its extensions."
@@ -7,12 +6,12 @@ dependencies {
     testImplementation project.rootProject
     testImplementation project(":junit-jupiter")
     testImplementation project(path: ':', configuration: 'testUtil')
-    testImplementation libraries.junit4
-    testImplementation libraries.assertj
-    testImplementation libraries.junitJupiterApi
-    testRuntimeOnly libraries.junitJupiterEngine
-    testRuntimeOnly libraries.junitVintageEngine
-    testRuntimeOnly libraries.junitPlatformLauncher
+    testImplementation libs.junit4
+    testImplementation libs.assertj
+    testImplementation libs.junit.jupiter.api
+    testRuntimeOnly libs.junit.jupiter.engine
+    testRuntimeOnly libs.junit.vintage.engine
+    testRuntimeOnly libs.junit.platform.launcher
 }
 
 tasks.withType(Test).configureEach {

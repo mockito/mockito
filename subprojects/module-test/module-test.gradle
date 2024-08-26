@@ -1,10 +1,9 @@
-apply from: "$rootDir/gradle/dependencies.gradle"
 apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Test suite for Java 9 modules with Mockito"
 
 dependencies {
     implementation project.rootProject
-    testImplementation libraries.junit4
-    testImplementation libraries.assertj
+    testImplementation libs.junit4
+    testImplementation libs.assertj
 }
