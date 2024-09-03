@@ -549,32 +549,10 @@ class InlineDelegateByteBuddyMockMaker
     @Override
     public void clearAllMocks() {
         mockedStatics.getBackingMap().clear();
-        mocks.clear();
-    }
 
-    @Override
-    public void disableAllMocks(String errorMessage) {
-        mockedStatics.getBackingMap().clear();
-
-        MockHandler disableHandler = new MockHandler() {
-            @Override
-            public Object handle(Invocation invocation) throws Throwable {
-                throw new DisabledMockException(errorMessage);
-            }
-
-            @Override
-            public MockCreationSettings getMockSettings() {
-                return null;
-            }
-
-            @Override
-            public InvocationContainer getInvocationContainer() {
-                return null;
-            }
-        };
         for (Entry<Object, MockMethodInterceptor> entry : mocks) {
             MockCreationSettings settings = entry.getValue().getMockHandler().getMockSettings();
-            entry.setValue(new MockMethodInterceptor(disableHandler, settings));
+            entry.setValue(new MockMethodInterceptor(DisabledMockException.HANDLER, settings));
         }
     }
 

@@ -174,27 +174,8 @@ public class DefaultMockitoFrameworkTest extends TestBase {
     }
 
     @Test
-    public void clears_all_mocks() {
+    public void behavior_after_clear_inline_mocks() {
         // clearing mocks only works with inline mocking
-        assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
-
-        // given
-        List list1 = mock(List.class);
-        assertTrue(mockingDetails(list1).isMock());
-        List list2 = mock(List.class);
-        assertTrue(mockingDetails(list2).isMock());
-
-        // when
-        framework.clearInlineMocks();
-
-        // then
-        assertFalse(mockingDetails(list1).isMock());
-        assertFalse(mockingDetails(list2).isMock());
-    }
-
-    @Test
-    public void disable_inline_mocks_sets_error_message() {
-        // disabling mocks only works with inline mocking
         assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
 
         PersonWithName obj = mock(PersonWithName.class);
@@ -202,19 +183,18 @@ public class DefaultMockitoFrameworkTest extends TestBase {
         assertEquals("Bob", obj.getMyName());
         assertTrue(mockingDetails(obj).isMock());
 
-        framework.disableInlineMocks("disableInlineMocksSetsErrorMessage");
+        framework.clearInlineMocks();
 
         try {
             obj.getMyName();
         } catch (DisabledMockException e) {
-            assertEquals("disableInlineMocksSetsErrorMessage", e.getMessage());
             return;
         }
         Assert.fail("Should have thrown DisabledMockException");
     }
 
     @Test
-    public void disable_inline_mocks_clears_static_mocks() {
+    public void clear_inline_mocks_clears_static_mocks() {
         // disabling mocks only works with inline mocking
         assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
         assertEquals("static name", HasStatic.staticName());
@@ -225,7 +205,7 @@ public class DefaultMockitoFrameworkTest extends TestBase {
         mocked.when(HasStatic::staticName).thenReturn("hacked name");
         assertEquals("hacked name", HasStatic.staticName());
 
-        framework.disableInlineMocks("disableInlineMocksClearsStaticMocks");
+        framework.clearInlineMocks();
 
         assertEquals("static name", HasStatic.staticName());
     }

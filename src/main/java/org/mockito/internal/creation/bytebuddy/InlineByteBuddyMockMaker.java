@@ -52,11 +52,6 @@ public class InlineByteBuddyMockMaker
     }
 
     @Override
-    public void disableAllMocks(String errorMessage) {
-        inlineDelegateByteBuddyMockMaker.disableAllMocks(errorMessage);
-    }
-
-    @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
         return inlineDelegateByteBuddyMockMaker.createMock(settings, handler);
     }

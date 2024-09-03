@@ -27,6 +27,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.creation.bytebuddy.sample.DifferentPackage;
 import org.mockito.internal.creation.settings.CreationSettings;
+import org.mockito.internal.framework.DisabledMockException;
 import org.mockito.internal.handler.MockHandlerImpl;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.util.collections.Sets;
@@ -513,8 +514,8 @@ public class InlineDelegateByteBuddyMockMakerTest
         mockMaker.clearAllMocks();
 
         // then
-        assertThat(mockMaker.getHandler(proxy1)).isNull();
-        assertThat(mockMaker.getHandler(proxy2)).isNull();
+        assertThat(mockMaker.getHandler(proxy1)).isEqualTo(DisabledMockException.HANDLER);
+        assertThat(mockMaker.getHandler(proxy2)).isEqualTo(DisabledMockException.HANDLER);
     }
 
     protected static <T> MockCreationSettings<T> settingsFor(

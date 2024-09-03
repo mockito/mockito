@@ -37,17 +37,10 @@ public interface InlineMockMaker extends MockMaker {
     void clearMock(Object mock);
 
     /**
-     * Cleans up internal state for all existing mocks. You may assume there won't be any interaction to mocks created
-     * previously after this is called.
+     * Cleans up internal state for all existing mocks. Attempts to interact with mocks after this
+     * is called will throw {@link org.mockito.internal.framework.DisabledMockException}
      *
      * @since 2.25.0
      */
     void clearAllMocks();
-
-    /**
-     * Cleans up internal state for all existing mocks. Attempts to interact with mocks after this
-     * is called will throw {@link org.mockito.internal.framework.DisabledMockException} with the
-     * given message.
-     */
-    void disableAllMocks(String errorMessage);
 }

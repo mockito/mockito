@@ -90,7 +90,9 @@ public interface MockitoFramework {
     InvocationFactory getInvocationFactory();
 
     /**
-     * Clears up internal state of all inline mocks.
+     * Clears up internal state of all inline mocks.  Attempts to interact with mocks after this
+     * is called will throw {@link org.mockito.internal.framework.DisabledMockException}.
+     * <p>
      * This method is only meaningful if inline mock maker is in use.
      * For all other intents and purposes, this method is a no-op and need not be used.
      * <p>
@@ -137,16 +139,4 @@ public interface MockitoFramework {
      * @see #clearInlineMocks()
      */
     void clearInlineMock(Object mock);
-
-    /**
-     * Cleans up internal state for all existing mocks. Attempts to interact with mocks after this
-     * is called will throw {@link org.mockito.internal.framework.DisabledMockException} with the
-     * given message.
-     * <p>
-     * This is an alternate solution for the problem that motivated {@link #clearInlineMocks()}, but
-     * also handles the issue of
-     * <a href="https://github.com/mockito/mockito/issues/3419">Issue 3419</a>
-     */
-    void disableInlineMocks(String errorMessage);
-
 }
