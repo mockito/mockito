@@ -169,7 +169,7 @@ import java.util.function.Function;
  * <p>
  * For more information about inline mock making, see <a href="#39">section 39</a>.
  *
- * <h3 id="0.2">0.2. <a class="meaningful_link" href="#mockito-instrumentation" name="mockito-instrumentation">Explicitly setting up instrumentation for inline mocking (Java 21+)</a></h3>
+ * <h3 id="0.3">0.3. <a class="meaningful_link" href="#mockito-instrumentation" name="mockito-instrumentation">Explicitly setting up instrumentation for inline mocking (Java 21+)</a></h3>
  *
  * Starting from Java 21, the <a href="https://openjdk.org/jeps/451">JDK restricts the ability of libraries
  * to attach a Java agent to their own JVM</a>. As a result, the inline-mock-maker might not be able

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import org.mockito.MockedConstruction;
 import org.mockito.creation.instance.InstantiationException;
@@ -136,6 +137,13 @@ class InlineDelegateByteBuddyMockMaker
             try {
                 instrumentation = PremainAttach.getInstrumentation();
                 if (instrumentation == null) {
+                    if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V21)) {
+                        System.out.println(
+                                "Mockito is currently self-attaching to enable the inline-mock-maker. This "
+                                        + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
+                                        + "build what is described in Mockito's documentation: "
+                                        + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
+                    }
                     instrumentation = ByteBuddyAgent.install();
                 }
                 if (!instrumentation.isRetransformClassesSupported()) {
