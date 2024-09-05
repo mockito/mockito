@@ -180,7 +180,7 @@ import java.util.function.Function;
  * as an argument to the executing JVM. To enable this in Gradle, the following example adds Mockito to all test
  * tasks:
  *
- * <pre class="code"><code<code class="kotlin">
+ * <pre class="code"><code class="kotlin">
  * val mockitoAgent = configurations.create("mockitoAgent")
  * dependencies {
  *     mockitoAgent(libs.mockito)
