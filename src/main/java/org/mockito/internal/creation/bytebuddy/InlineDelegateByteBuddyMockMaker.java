@@ -173,8 +173,6 @@ class InlineDelegateByteBuddyMockMaker
                         while ((length = inputStream.read(buffer)) != -1) {
                             outputStream.write(buffer, 0, length);
                         }
-                    } finally {
-                        inputStream.close();
                     }
                     outputStream.closeEntry();
                 }
