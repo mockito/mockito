@@ -14,12 +14,10 @@ import org.mockito.exceptions.misusing.MockitoConfigurationException;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
-import org.mockito.internal.framework.DisabledMockException;
+import org.mockito.internal.framework.DisabledMockHandler;
 import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
-import org.mockito.invocation.Invocation;
-import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.InlineMockMaker;
@@ -552,7 +550,7 @@ class InlineDelegateByteBuddyMockMaker
 
         for (Entry<Object, MockMethodInterceptor> entry : mocks) {
             MockCreationSettings settings = entry.getValue().getMockHandler().getMockSettings();
-            entry.setValue(new MockMethodInterceptor(DisabledMockException.HANDLER, settings));
+            entry.setValue(new MockMethodInterceptor(DisabledMockHandler.HANDLER, settings));
         }
     }
 

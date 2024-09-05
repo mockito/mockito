@@ -33,6 +33,7 @@ import org.mockito.MockedStatic;
 import org.mockito.StateMaster;
 import org.mockito.exceptions.misusing.RedundantListenerException;
 import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.framework.DisabledMockHandler.DisabledMockException;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.listeners.MockCreationListener;
 import org.mockito.listeners.MockitoListener;
