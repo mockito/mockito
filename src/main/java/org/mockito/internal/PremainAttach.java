@@ -10,7 +10,7 @@ import java.lang.instrument.Instrumentation;
  * Allows users to specify Mockito as a Java agent where the {@link Instrumentation}
  * instance is stored for use by the inline mock maker.
  *
- * The <a href="https://openjdk.org/jeps/451">JET 451</a>, delivered with JDK 21,
+ * The <a href="https://openjdk.org/jeps/451">JEP 451</a>, delivered with JDK 21,
  * is the first milestone to disallow dynamic loading of by default which will happen
  * in a future version of the JDK.
  */

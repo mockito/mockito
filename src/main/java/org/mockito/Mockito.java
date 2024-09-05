@@ -171,9 +171,9 @@ import java.util.function.Function;
  *
  * <h3 id="0.2">0.2. <a class="meaningful_link" href="#mockito-instrumentation" name="mockito-instrumentation">Explicitly setting up instrumentation for inline mocking (Java 21+)</a></h3>
  *
- * Starting from Java 21, the JDK restricts the ability of libraries to attach a Java agent to their own JVM.
- * As a result, the inline-mock-maker might not be able to function without an explicit setup to enable
- * instrumentation, and the JVM will always display a warning.
+ * Starting from Java 21, the <a href="https://openjdk.org/jeps/451">JDK restricts the ability of libraries
+ * to attach a Java agent to their own JVM</a>. As a result, the inline-mock-maker might not be able
+ * to function without an explicit setup to enable instrumentation, and the JVM will always display a warning.
  *
  * <p>
  * To explicitly attach Mockito during test execution, the library's jar file needs to be specified as `-javaagent`
