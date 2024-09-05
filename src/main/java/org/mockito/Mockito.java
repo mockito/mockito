@@ -194,7 +194,7 @@ import java.util.function.Function;
  *
  * To add Mockito as an agent to Maven's surefire plugin, the following configuration is needed:
  *
- * <pre class="code"><code>
+ * <pre class="code"><code class="xml">
  * &lt;plugin&gt;
  *     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
  *     &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
