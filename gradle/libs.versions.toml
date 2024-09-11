@@ -14,7 +14,7 @@ bnd-gradle = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version = "6.4.0" 
 bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }
 bytebuddy-agent = { module = "net.bytebuddy:byte-buddy-agent", version.ref = "bytebuddy" }
 bytebuddy-android = { module = "net.bytebuddy:byte-buddy-android", version.ref = "bytebuddy" }
-equinox = { module = "org.eclipse.platform:org.eclipse.osgi", version = "3.20.0" }
+equinox = { module = "org.eclipse.platform:org.eclipse.osgi", version = "3.21.0" }
 errorprone = { module = "com.google.errorprone:error_prone_core", version.ref = "errorprone" }
 errorprone-test-api = { module = "com.google.errorprone:error_prone_test_helpers", version.ref = "errorprone" }
 groovy = { module = "org.codehaus.groovy:groovy", version = "3.0.22" }
