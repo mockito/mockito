@@ -60,6 +60,7 @@ import java.util.function.Function;
  *      <a href="#0">0. Migrating to Mockito 2</a><br/>
  *      <a href="#0.1">0.1 Mockito Android support</a><br/>
  *      <a href="#0.2">0.2 Configuration-free inline mock making</a><br/>
+ *      <a href="#0.3">0.3 Explicitly enabling instrumentation for inline mocking (Java 21+)</a><br/>
  *      <a href="#1">1. Let's verify some behaviour! </a><br/>
  *      <a href="#2">2. How about some stubbing? </a><br/>
  *      <a href="#3">3. Argument matchers </a><br/>
@@ -167,6 +168,52 @@ import java.util.function.Function;
  *
  * <p>
  * For more information about inline mock making, see <a href="#39">section 39</a>.
+ *
+ * <h3 id="0.3">0.3. <a class="meaningful_link" href="#mockito-instrumentation" name="mockito-instrumentation">Explicitly setting up instrumentation for inline mocking (Java 21+)</a></h3>
+ *
+ * Starting from Java 21, the <a href="https://openjdk.org/jeps/451">JDK restricts the ability of libraries
+ * to attach a Java agent to their own JVM</a>. As a result, the inline-mock-maker might not be able
+ * to function without an explicit setup to enable instrumentation, and the JVM will always display a warning.
+ *
+ * <p>
+ * To explicitly attach Mockito during test execution, the library's jar file needs to be specified as `-javaagent`
+ * as an argument to the executing JVM. To enable this in Gradle, the following example adds Mockito to all test
+ * tasks:
+ *
+ * <pre class="code"><code class="kotlin">
+ * val mockitoAgent = configurations.create("mockitoAgent")
+ * dependencies {
+ *     mockitoAgent(libs.mockito)
+ * }
+ * tasks {
+ *     test {
+ *         jvmArgs("-javaagent:${mockitoAgent.asPath}")
+ *     }
+ * }
+ * </code></pre>
+ *
+ * To add Mockito as an agent to Maven's surefire plugin, the following configuration is needed:
+ *
+ * <pre class="code"><code class="xml">
+ * &lt;plugin&gt;
+ *     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+ *     &lt;artifactId&gt;maven-dependency-plugin&lt;/artifactId&gt;
+ *     &lt;executions&gt;
+ *         &lt;execution&gt;
+ *             &lt;goals&gt;
+ *                 &lt;goal&gt;properties&lt;/goal&gt;
+ *             &lt;/goals&gt;
+ *         &lt;/execution&gt;
+ *     &lt;/executions&gt;
+ * &lt;/plugin&gt;
+ * &lt;plugin&gt;
+ *     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+ *     &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+ *     &lt;configuration&gt;
+ *         &lt;argLine&gt;@{argLine} -javaagent:${org.mockito:mockito-core:jar}&lt;/argLine&gt;
+ *     &lt;/configuration&gt;
+ * &lt;/plugin&gt;
+ * </code></pre>
  *
  * <h3 id="1">1. <a class="meaningful_link" href="#verification" name="verification">Let's verify some behaviour!</a></h3>
  *

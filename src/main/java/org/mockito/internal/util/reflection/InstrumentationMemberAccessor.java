@@ -5,10 +5,12 @@
 package org.mockito.internal.util.reflection;
 
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.MethodCall;
 import org.mockito.exceptions.base.MockitoInitializationException;
+import org.mockito.internal.PremainAttach;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.plugins.MemberAccessor;
 
@@ -46,7 +48,24 @@ class InstrumentationMemberAccessor implements MemberAccessor {
         Dispatcher dispatcher;
         Throwable throwable;
         try {
-            instrumentation = ByteBuddyAgent.install();
+            instrumentation = PremainAttach.getInstrumentation();
+            if (instrumentation == null) {
+                if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V21)) {
+                    System.out.println(
+                            "Mockito is currently self-attaching to enable the inline-mock-maker. This "
+                                    + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
+                                    + "build what is described in Mockito's documentation: "
+                                    + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
+                }
+                instrumentation = ByteBuddyAgent.install();
+            }
+            if (!instrumentation.isRetransformClassesSupported()) {
+                throw new IllegalStateException(
+                        join(
+                                "Mockito requires retransformation for creating inline mocks. This feature is unavailable on the current VM.",
+                                "",
+                                "You cannot use this mock maker on this VM"));
+            }
             // We need to generate a dispatcher instance that is located in a distinguished class
             // loader to create a unique (unnamed) module to which we can open other packages to.
             // This way, we assure that classes within Mockito's module (which might be a shared,

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import org.mockito.MockedConstruction;
 import org.mockito.creation.instance.InstantiationException;
@@ -11,6 +12,7 @@ import org.mockito.creation.instance.Instantiator;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
+import org.mockito.internal.PremainAttach;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
@@ -111,11 +113,14 @@ class InlineDelegateByteBuddyMockMaker
         Instrumentation instrumentation;
         Throwable initializationError = null;
 
-        // ByteBuddy internally may attempt to fork a subprocess. In Java 11 and Java 19, the Java
-        // process class observes the os.name system property to determine the OS and thus determine
+        // ByteBuddy internally may attempt to fork a subprocess. In Java 11 and Java 19, the
+        // Java
+        // process class observes the os.name system property to determine the OS and thus
+        // determine
         // how to fork a new process. If the user is stubbing System properties, they may clear
         // the existing System properties, which will cause this to fail. This is very much an
-        // implementation detail, but it will result in Mockito failing to load with an error that
+        // implementation detail, but it will result in Mockito failing to load with an error
+        // that
         // is not overly clear, so let's attempt to detect this issue ahead of time instead.
         if (System.getProperty("os.name") == null) {
             throw new IllegalStateException(
@@ -130,18 +135,28 @@ class InlineDelegateByteBuddyMockMaker
 
         try {
             try {
-                instrumentation = ByteBuddyAgent.install();
+                instrumentation = PremainAttach.getInstrumentation();
+                if (instrumentation == null) {
+                    if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V21)) {
+                        System.out.println(
+                                "Mockito is currently self-attaching to enable the inline-mock-maker. This "
+                                        + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
+                                        + "build what is described in Mockito's documentation: "
+                                        + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
+                    }
+                    instrumentation = ByteBuddyAgent.install();
+                }
                 if (!instrumentation.isRetransformClassesSupported()) {
                     throw new IllegalStateException(
                             join(
-                                    "Byte Buddy requires retransformation for creating inline mocks. This feature is unavailable on the current VM.",
+                                    "Mockito requires retransformation for creating inline mocks. This feature is unavailable on the current VM.",
                                     "",
                                     "You cannot use this mock maker on this VM"));
                 }
                 File boot = File.createTempFile("mockitoboot", ".jar");
                 boot.deleteOnExit();
-                JarOutputStream outputStream = new JarOutputStream(new FileOutputStream(boot));
-                try {
+                try (JarOutputStream outputStream =
+                        new JarOutputStream(new FileOutputStream(boot))) {
                     String source =
                             "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher";
                     InputStream inputStream =
@@ -159,19 +174,15 @@ class InlineDelegateByteBuddyMockMaker
                                                 + InlineDelegateByteBuddyMockMaker.class
                                                         .getClassLoader()));
                     }
-                    outputStream.putNextEntry(new JarEntry(source + ".class"));
-                    try {
+                    try (inputStream) {
+                        outputStream.putNextEntry(new JarEntry(source + ".class"));
                         int length;
                         byte[] buffer = new byte[1024];
                         while ((length = inputStream.read(buffer)) != -1) {
                             outputStream.write(buffer, 0, length);
                         }
-                    } finally {
-                        inputStream.close();
                     }
                     outputStream.closeEntry();
-                } finally {
-                    outputStream.close();
                 }
                 try (JarFile jarfile = new JarFile(boot)) {
                     instrumentation.appendToBootstrapClassLoaderSearch(jarfile);

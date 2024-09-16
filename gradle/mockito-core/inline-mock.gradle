@@ -17,4 +17,8 @@ sourceSets.main {
 tasks.named("jar", Jar) {
     exclude("org/mockito/internal/creation/bytebuddy/inject/package-info.class")
     exclude("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class")
+    manifest {
+        attributes 'Premain-Class': 'org.mockito.internal.PremainAttach'
+        attributes 'Can-Retransform-Classes': 'true'
+    }
 }
