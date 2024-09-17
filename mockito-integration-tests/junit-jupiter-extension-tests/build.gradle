@@ -3,7 +3,7 @@ apply from: "$rootDir/gradle/java-test.gradle"
 description = "End-to-end tests for automatic registration of MockitoExtension."
 
 dependencies {
-    testImplementation project(":junit-jupiter")
+    testImplementation project(":mockito-extensions:junit-jupiter")
     testImplementation libs.assertj
     testImplementation libs.junit.jupiter.api
     testRuntimeOnly libs.junit.jupiter.engine

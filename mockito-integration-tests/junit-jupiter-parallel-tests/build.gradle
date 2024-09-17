@@ -1,11 +1,10 @@
 apply from: "$rootDir/gradle/java-test.gradle"
 
-description = "End-to-end tests for automatic registration of MockitoExtension with the inline mock maker."
+description = "Tests that require fine tuned parallel settings for JUnit Jupiter (bug #1630)"
 
 dependencies {
-    testImplementation project(":junit-jupiter")
-    testImplementation libs.assertj
     testImplementation libs.junit.jupiter.api
+    testImplementation project(":mockito-extensions:junit-jupiter")
     testRuntimeOnly libs.junit.jupiter.engine
     testRuntimeOnly libs.junit.platform.launcher
 }
