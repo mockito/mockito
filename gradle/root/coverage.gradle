@@ -1,4 +1,4 @@
-allprojects { project ->
+allprojects { Project project ->
     plugins.withId("java") {
         project.apply plugin: "jacoco"
         project.jacoco {
@@ -8,13 +8,13 @@ allprojects { project ->
 }
 
 def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoCoverage ->
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
     allprojects { Project currentProject ->
         plugins.withId("jacoco") {
             plugins.withId("java") {
                 // JacocoReport.sourceSets() appends both sourceDirectories and classDirectories.
                 mockitoCoverage.sourceSets currentProject.sourceSets.main
-                Test test = currentProject.tasks.test
-                mockitoCoverage.executionData(currentProject.files(test.jacoco.destinationFile).builtBy(test))
+                mockitoCoverage.executionData(currentProject.tasks.test)
             }
             plugins.withId("com.android.base") {
                 // The :androidTest project only contains test infrastructure, so there's no need to grab sources/classes.
@@ -60,5 +60,6 @@ def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoC
 }
 
 tasks.register("coverageReport") {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
     dependsOn(mockitoCoverage)
 }
