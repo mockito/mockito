@@ -88,7 +88,7 @@ public class ArgumentCaptor<T> {
     /**
      * Returns the captured value of the argument. When capturing varargs use {@link #getAllValues()}.
      * <p>
-     * If verified method was called multiple times then this method it returns the latest captured value.
+     * If verified method was called multiple times then this method returns the latest captured value.
      * <p>
      * See examples in javadoc for {@link ArgumentCaptor} class.
      *
