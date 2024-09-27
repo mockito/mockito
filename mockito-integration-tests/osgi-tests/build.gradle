@@ -4,7 +4,7 @@ apply from: "osgi-test-bundles.gradle"
 description = "Test suite for OSGi framework with Mockito"
 
 dependencies {
-    testImplementation project.rootProject
+    testImplementation project(":mockito-core")
     testImplementation libs.junit4
     testImplementation libs.osgi
 
@@ -16,7 +16,7 @@ configurations {
 }
 
 dependencies {
-    testRuntimeBundles project.rootProject
+    testRuntimeBundles project(":mockito-core")
     testRuntimeBundles libs.bytebuddy
     testRuntimeBundles libs.objenesis
     testRuntimeBundles tasks.testBundle.outputs.files

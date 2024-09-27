@@ -3,7 +3,7 @@ apply from: "$rootDir/gradle/java-test.gradle"
 description = "Test suite for excercising programmatic mock maker in Mockito"
 
 dependencies {
-    implementation project.rootProject
+    implementation project(":mockito-core")
     testImplementation libs.junit4
     testImplementation libs.assertj
 }
