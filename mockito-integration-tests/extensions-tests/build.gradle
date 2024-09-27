@@ -4,7 +4,7 @@ description = "End-to-end tests for Mockito and its extensions."
 
 dependencies {
     testImplementation project.rootProject
-    testImplementation project(":junit-jupiter")
+    testImplementation project(":mockito-extensions:junit-jupiter")
     testImplementation project(path: ':', configuration: 'testUtil')
     testImplementation libs.junit4
     testImplementation libs.assertj

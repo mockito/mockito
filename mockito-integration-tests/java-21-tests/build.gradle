@@ -16,8 +16,12 @@ java {
     }
 }
 
-tasks.named('test') {
+tasks.named('test', Test) {
     if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
         enabled = false
+    } else {
+        dependsOn(':jar')
+        jvmArgs('-javaagent:' + rootProject.tasks.jar.outputs.files.singleFile)
+//        jvmArgs('-Djdk.instrument.traceUsage')
     }
 }
