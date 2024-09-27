@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.mockito.exceptions.misusing.DisabledMockException;
 import org.mockito.exceptions.misusing.RedundantListenerException;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationFactory;
@@ -90,7 +91,9 @@ public interface MockitoFramework {
     InvocationFactory getInvocationFactory();
 
     /**
-     * Clears up internal state of all inline mocks.
+     * Clears up internal state of all inline mocks.  Attempts to interact with mocks after this
+     * is called will throw {@link DisabledMockException}.
+     * <p>
      * This method is only meaningful if inline mock maker is in use.
      * For all other intents and purposes, this method is a no-op and need not be used.
      * <p>

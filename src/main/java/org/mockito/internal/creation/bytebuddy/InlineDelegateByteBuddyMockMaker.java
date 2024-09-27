@@ -16,6 +16,7 @@ import org.mockito.internal.PremainAttach;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
+import org.mockito.internal.framework.DisabledMockHandler;
 import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
@@ -32,6 +33,7 @@ import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -556,7 +558,11 @@ class InlineDelegateByteBuddyMockMaker
     @Override
     public void clearAllMocks() {
         mockedStatics.getBackingMap().clear();
-        mocks.clear();
+
+        for (Entry<Object, MockMethodInterceptor> entry : mocks) {
+            MockCreationSettings settings = entry.getValue().getMockHandler().getMockSettings();
+            entry.setValue(new MockMethodInterceptor(DisabledMockHandler.HANDLER, settings));
+        }
     }
 
     @Override
