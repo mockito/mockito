@@ -7,7 +7,7 @@ apply from: "$rootDir/gradle/java-test.gradle"
 description = "Integration test for using mockito-inline with Groovy."
 
 dependencies {
-    testImplementation project(":")
+    testImplementation project(":mockito-core")
     testImplementation libs.groovy
     testImplementation libs.junit4
 }

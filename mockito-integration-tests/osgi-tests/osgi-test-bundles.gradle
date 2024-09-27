@@ -15,7 +15,7 @@ sourceSets {
 }
 
 dependencies {
-    testBundleImplementation project.rootProject
+    testBundleImplementation project(":mockito-core")
     testBundleImplementation libs.junit4
     testBundleImplementation sourceSets.otherBundle.output
 }

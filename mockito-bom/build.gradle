@@ -12,7 +12,7 @@ apply from: "$rootDir/gradle/java-publication.gradle"
 
 dependencies {
     constraints {
-        api(project.rootProject)
+        api(project(":mockito-core"))
 
         project(":mockito-extensions").subprojects.forEach {
             api(it)

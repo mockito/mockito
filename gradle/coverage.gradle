@@ -1,4 +1,4 @@
-allprojects { Project project ->
+rootProject.subprojects { Project project ->
     plugins.withId("java") {
         project.apply plugin: "jacoco"
         project.jacoco {
@@ -9,7 +9,7 @@ allprojects { Project project ->
 
 def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoCoverage ->
     group = LifecycleBasePlugin.VERIFICATION_GROUP
-    allprojects { Project currentProject ->
+    rootProject.subprojects { Project currentProject ->
         plugins.withId("jacoco") {
             plugins.withId("java") {
                 // JacocoReport.sourceSets() appends both sourceDirectories and classDirectories.

@@ -3,7 +3,7 @@ apply from: "$rootDir/gradle/java-library.gradle"
 description = "Mockito preconfigured subclass mock maker"
 
 dependencies {
-    api project.rootProject
+    api project(":mockito-core")
     testImplementation libs.junit4
     testImplementation libs.assertj
 }
