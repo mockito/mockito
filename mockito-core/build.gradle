@@ -1,0 +1,54 @@
+
+plugins {
+    id 'base'
+    id 'biz.aQute.bnd.builder' version '7.0.0'
+    id 'ru.vyarus.animalsniffer' version '1.7.1'
+}
+
+description = 'Mockito mock objects library core API and implementation'
+base.archivesName = 'mockito-core'
+
+
+apply from: "$rootDir/gradle/java-library.gradle"
+apply from: "$rootDir/gradle/coverage.gradle"
+apply from: "$rootDir/gradle/mockito-core/inline-mock.gradle"
+apply from: "$rootDir/gradle/mockito-core/osgi.gradle"
+apply from: "$rootDir/gradle/mockito-core/javadoc.gradle"
+apply from: "$rootDir/gradle/mockito-core/testing.gradle"
+
+configurations {
+    testUtil //TODO move to separate project
+    // Putting 'provided' dependencies on test compile and runtime classpath.
+    testCompileOnly.extendsFrom(compileOnly)
+    testRuntimeOnly.extendsFrom(compileOnly)
+}
+
+dependencies {
+    api libs.bytebuddy, libs.bytebuddy.agent
+
+    compileOnly libs.junit4, libs.hamcrest, libs.opentest4j
+    implementation libs.objenesis
+
+    testImplementation libs.assertj
+    testImplementation libs.junit.jupiter.api
+    testImplementation libs.junit.jupiter.params
+
+    testUtil sourceSets.test.output
+
+    signature 'org.codehaus.mojo.signature:java18:1.0@signature'
+    signature 'net.sf.androidscents.signature:android-api-level-26:8.0.0_r2@signature'
+}
+
+animalsniffer {
+    sourceSets = [sourceSets.main]
+    annotation = 'org.mockito.internal.SuppressSignatureCheck'
+    // See please https://github.com/mojohaus/animal-sniffer/issues/172
+    ignore += [
+        'java.lang.instrument.Instrumentation',
+        'java.lang.invoke.MethodHandle',
+        'java.lang.invoke.MethodHandles$Lookup',
+        'java.lang.StackWalker',
+        'java.lang.StackWalker$StackFrame',
+        'java.lang.StackWalker$Option'
+    ]
+}

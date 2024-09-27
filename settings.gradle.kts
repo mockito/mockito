@@ -1,8 +1,15 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
 plugins {
     id("com.gradle.develocity") version "3.18.1"
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
+include("mockito-core")
 // BOM project
 include("mockito-bom")
 // extensions

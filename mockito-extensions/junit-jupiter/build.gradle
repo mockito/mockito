@@ -1,7 +1,7 @@
 import aQute.bnd.gradle.Resolve
 
 plugins {
-    id 'biz.aQute.bnd.builder'
+    id 'biz.aQute.bnd.builder' version '7.0.0'
 }
 
 apply from: "$rootDir/gradle/java-library.gradle"
@@ -11,7 +11,7 @@ apply from: "$rootDir/gradle/mockito-junit-jupiter/javadoc.gradle"
 description = "Mockito JUnit 5 support"
 
 dependencies {
-    api project.rootProject
+    api project(":mockito-core")
     implementation libs.junit.jupiter.api
     testImplementation libs.assertj
     testImplementation libs.junit.platform.launcher

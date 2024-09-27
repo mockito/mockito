@@ -6,7 +6,7 @@ dependencies {
     compileOnly libs.autoservice
     annotationProcessor libs.autoservice
 
-    implementation project.rootProject
+    implementation project(":mockito-core")
     implementation libs.errorprone
 
     testImplementation 'junit:junit:4.13.2'
