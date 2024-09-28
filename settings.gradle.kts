@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradle.enterprise") version "3.18.1"
+    id("com.gradle.develocity") version "3.18.1"
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
@@ -42,10 +42,10 @@ if (System.getenv("ANDROID_HOME") != null || File("local.properties").exists()) 
 rootProject.name = "mockito"
 
 //Posting Build scans to https://scans.gradle.com
-gradleEnterprise {
+develocity {
     buildScan {
-        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
+        termsOfUseUrl = "https://gradle.com/terms-of-service"
+        termsOfUseAgree = "yes"
     }
 }
 
