@@ -176,20 +176,31 @@ import java.util.function.Function;
  * to function without an explicit setup to enable instrumentation, and the JVM will always display a warning.
  *
  * <p>
- * To explicitly attach Mockito during test execution, the library's jar file needs to be specified as `-javaagent`
+ * To explicitly attach Mockito during test execution, the library's jar file needs to be specified as <code>-javaagent</code>
  * as an argument to the executing JVM. To enable this in Gradle, the following example adds Mockito to all test
  * tasks:
  *
  * <pre class="code"><code class="kotlin">
  * val mockitoAgent = configurations.create("mockitoAgent")
  * dependencies {
- *     mockitoAgent(libs.mockito)
+ *     testImplementation(libs.mockito)
+ *     mockitoAgent(libs.mockito) { isTransitive = false }
  * }
  * tasks {
  *     test {
  *         jvmArgs("-javaagent:${mockitoAgent.asPath}")
  *     }
  * }
+ * </code></pre>
+ *
+ * Supposing <code>Mockito</code> is declared in the version catalog as the following
+ *
+ * <pre class="code"><code class="toml">
+ * [versions]
+ * mockito = "5.14.0"
+ *
+ * [libraries]
+ * mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }
  * </code></pre>
  *
  * To add Mockito as an agent to Maven's surefire plugin, the following configuration is needed:
