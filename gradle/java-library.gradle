@@ -3,6 +3,7 @@ apply plugin: "java-library"
 apply from: "$rootDir/gradle/test-launcher.gradle"
 
 if (!base.archivesName.get().startsWith("mockito-")) {
+    logger.warn("Project module should be prefixed with `mockito-` : ${project.projectDir})")
     base.archivesName = "mockito-" + project.name
 }
 
