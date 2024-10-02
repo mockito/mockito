@@ -416,6 +416,48 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                 if (current != null) {
                     final MethodDescription.InDefinedShape selected = current;
                     return new MethodVisitor(OpenedClassReader.ASM_API, methodVisitor) {
+                        visitcode();
+                        @Override
+                        public void visitMaxs(int maxStack, int maxLocals) {
+                            int prequel = Math.max(5, selected.getStackSize());
+                            for (ParameterDescription parameter :
+                                    instrumentedMethod.getParameters()) {
+                                prequel =
+                                        Math.max(
+                                                prequel,
+                                                6 + parameter.getType().getStackSize().getSize());
+                                prequel = Math.max(prequel, 8);
+                            }
+                            super.visitMaxs(Math.max(maxStack, prequel), maxLocals);
+                        }
+                    };
+                }
+            }
+            return methodVisitor;
+        }
+                        
+
+                        @Override
+                        public void fors(){
+                            for (TypeDescription type :
+                                    selected.getParameters().asTypeList().asErasures()) {
+                                if (type.represents(boolean.class)
+                                        || type.represents(byte.class)
+                                        || type.represents(short.class)
+                                        || type.represents(char.class)
+                                        || type.represents(int.class)) {
+                                    super.visitInsn(Opcodes.ICONST_0);
+                                } else if (type.represents(long.class)) {
+                                    super.visitInsn(Opcodes.LCONST_0);
+                                } else if (type.represents(float.class)) {
+                                    super.visitInsn(Opcodes.FCONST_0);
+                                } else if (type.represents(double.class)) {
+                                    super.visitInsn(Opcodes.DCONST_0);
+                                } else {
+                                    super.visitInsn(Opcodes.ACONST_NULL);
+                                }
+                            }
+                        }
                         @Override
                         public void visitCode() {
                             super.visitCode();
@@ -467,24 +509,7 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                             super.visitInsn(Opcodes.ICONST_0);
                             super.visitJumpInsn(Opcodes.IF_ICMPEQ, label);
                             super.visitVarInsn(Opcodes.ALOAD, 0);
-                            for (TypeDescription type :
-                                    selected.getParameters().asTypeList().asErasures()) {
-                                if (type.represents(boolean.class)
-                                        || type.represents(byte.class)
-                                        || type.represents(short.class)
-                                        || type.represents(char.class)
-                                        || type.represents(int.class)) {
-                                    super.visitInsn(Opcodes.ICONST_0);
-                                } else if (type.represents(long.class)) {
-                                    super.visitInsn(Opcodes.LCONST_0);
-                                } else if (type.represents(float.class)) {
-                                    super.visitInsn(Opcodes.FCONST_0);
-                                } else if (type.represents(double.class)) {
-                                    super.visitInsn(Opcodes.DCONST_0);
-                                } else {
-                                    super.visitInsn(Opcodes.ACONST_NULL);
-                                }
-                            }
+                            fors();
                             super.visitMethodInsn(
                                     Opcodes.INVOKESPECIAL,
                                     selected.getDeclaringType().getInternalName(),
@@ -622,25 +647,6 @@ public class MockMethodAdvice extends MockMethodDispatcher {
                                         Opcodes.F_FULL, locals.length, locals, 0, new Object[0]);
                             }
                         }
-
-                        @Override
-                        public void visitMaxs(int maxStack, int maxLocals) {
-                            int prequel = Math.max(5, selected.getStackSize());
-                            for (ParameterDescription parameter :
-                                    instrumentedMethod.getParameters()) {
-                                prequel =
-                                        Math.max(
-                                                prequel,
-                                                6 + parameter.getType().getStackSize().getSize());
-                                prequel = Math.max(prequel, 8);
-                            }
-                            super.visitMaxs(Math.max(maxStack, prequel), maxLocals);
-                        }
-                    };
-                }
-            }
-            return methodVisitor;
-        }
 
         private static Object[] toFrames(Object self, List<TypeDescription> types) {
             Object[] frames = new Object[1 + types.size()];
