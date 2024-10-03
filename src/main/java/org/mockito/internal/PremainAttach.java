@@ -4,7 +4,7 @@
  */
 package org.mockito.internal;
 
-import net.bytebuddy.agent.ByteBuddyAgent;
+import net.bytebuddy.agent.Installer;
 import java.lang.instrument.Instrumentation;
 
 /**
@@ -27,37 +27,6 @@ public class PremainAttach {
     }
 
     public static Instrumentation getInstrumentation() {
-        // A Java agent is always added to the system class loader. If Mockito is executed from a
-        // different class loader we need to make sure to resolve the instrumentation instance
-        // from there, or fail the resolution, if this class does not exist on the system class
-        // loader.
-        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-        Instrumentation instrumentation;
-        if (PremainAttach.class.getClassLoader() == systemClassLoader) {
-            instrumentation = PremainAttach.instrumentation;
-        } else {
-            try {
-                instrumentation =
-                        (Instrumentation)
-                                Class.forName(
-                                                PremainAttach.class.getName(),
-                                                true,
-                                                systemClassLoader)
-                                        .getMethod("getInstrumentation")
-                                        .invoke(null);
-            } catch (Exception ignored) {
-                instrumentation = null;
-            }
-        }
-        if (instrumentation == null) {
-            try {
-                // At this point, we do not want to attempt dynamic attach but check the Byte Buddy
-                // agent
-                // as a fallback if the Mockito agent is not attached.
-                instrumentation = ByteBuddyAgent.getInstrumentation();
-            } catch (IllegalStateException ignored) {
-            }
-        }
         return instrumentation;
     }
 }
