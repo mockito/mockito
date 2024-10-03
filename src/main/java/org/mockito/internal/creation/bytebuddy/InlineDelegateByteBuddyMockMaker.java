@@ -4,15 +4,12 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import net.bytebuddy.ClassFileVersion;
-import net.bytebuddy.agent.ByteBuddyAgent;
 import org.mockito.MockedConstruction;
 import org.mockito.creation.instance.InstantiationException;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
-import org.mockito.internal.PremainAttach;
 import org.mockito.internal.PremainAttachAccess;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;

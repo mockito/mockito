@@ -5,12 +5,9 @@
 package org.mockito.internal.util.reflection;
 
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.ClassFileVersion;
-import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.MethodCall;
 import org.mockito.exceptions.base.MockitoInitializationException;
-import org.mockito.internal.PremainAttach;
 import org.mockito.internal.PremainAttachAccess;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.plugins.MemberAccessor;

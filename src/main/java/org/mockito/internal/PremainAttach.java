@@ -4,7 +4,6 @@
  */
 package org.mockito.internal;
 
-import net.bytebuddy.agent.Installer;
 import java.lang.instrument.Instrumentation;
 
 /**
