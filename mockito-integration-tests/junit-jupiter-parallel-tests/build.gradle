@@ -4,7 +4,7 @@ description = "Tests that require fine tuned parallel settings for JUnit Jupiter
 
 dependencies {
     testImplementation libs.junit.jupiter.api
-    testImplementation project(":mockito-extensions:junit-jupiter")
+    testImplementation project(":mockito-extensions:mockito-junit-jupiter")
     testRuntimeOnly libs.junit.jupiter.engine
     testRuntimeOnly libs.junit.platform.launcher
 }

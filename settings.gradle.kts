@@ -14,11 +14,11 @@ include("mockito-core")
 include("mockito-bom")
 // extensions
 include(
-    "mockito-extensions:android",
-    "mockito-extensions:errorprone",
-    "mockito-extensions:junit-jupiter",
-    "mockito-extensions:proxy",
-    "mockito-extensions:subclass",
+    "mockito-extensions:mockito-android",
+    "mockito-extensions:mockito-errorprone",
+    "mockito-extensions:mockito-junit-jupiter",
+    "mockito-extensions:mockito-proxy",
+    "mockito-extensions:mockito-subclass",
 )
 // integration tests
 include(
