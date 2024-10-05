@@ -2,10 +2,14 @@ apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Test suite for Java 21 Mockito"
 
+def bytebuddyAgentConf = configurations.create("bytebuddyAgent")
+
 dependencies {
     implementation project.rootProject
     testImplementation libs.junit4
     testImplementation libs.assertj
+    testImplementation project(path: ':', configuration: 'testUtil')
+    bytebuddyAgent(libs.bytebuddy.agent) { setTransitive(false) }
 }
 
 java {
@@ -16,12 +20,69 @@ java {
     }
 }
 
-tasks.named('test', Test) {
+tasks.register("test-with-bytebuddy-agent", Test) {
     if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
         enabled = false
     } else {
-        dependsOn(':jar')
-        jvmArgs('-javaagent:' + rootProject.tasks.jar.outputs.files.singleFile)
-//        jvmArgs('-Djdk.instrument.traceUsage')
+        jvmArgs(
+            "-javaagent:${bytebuddyAgentConf.asPath}",
+            "-Djdk.instrument.traceUsage",
+        )
+    }
+}
+
+tasks.register("test-with-mockito-agent", Test) {
+    dependsOn(':jar')
+    if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
+        enabled = false
+    } else {
+        jvmArgs(
+            "-javaagent:${rootProject.tasks.jar.outputs.files.singleFile}",
+            "-Djdk.instrument.traceUsage",
+        )
+    }
+    failIfStdErrWarningOnDynamicallyLoadedAgent(it)
+}
+
+tasks.named('test', Test) {
+    dependsOn(
+        "test-with-bytebuddy-agent",
+        "test-with-mockito-agent",
+    )
+    enabled JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)
+
+    expectStdOutWhenDynamicallyLoadedAgent(it)
+}
+
+private static void failIfStdErrWarningOnDynamicallyLoadedAgent(Test testTask) {
+    def stderrMessages = new ArrayList<String>()
+    testTask.addTestOutputListener { descriptor, event ->
+        if (event.destination == TestOutputEvent.Destination.StdErr) {
+            stderrMessages.add(event.message)
+        }
+    }
+    testTask.doLast {
+        def stderrText = stderrMessages.join '\n'
+        if (stderrText.contains("A Java agent has been loaded dynamically")
+            && stderrText.contains("net.bytebuddy/byte-buddy-agent")
+            && stderrText.contains("If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning")
+        ) {
+            throw new GradleException("JDK should no emit warning when mockito is set as agent and -XX:+EnableDynamicAgentLoading is not set")
+        }
+    }
+}
+
+private static void expectStdOutWhenDynamicallyLoadedAgent(Test testTask) {
+    def stdoutMessages = new ArrayList<String>()
+    testTask.addTestOutputListener { descriptor, event ->
+        if (event.destination == TestOutputEvent.Destination.StdOut) {
+            stdoutMessages.add(event.message)
+        }
+    }
+    testTask.doLast {
+        def stdoutText = stdoutMessages.join '\n'
+        if (!stdoutText.contains("Mockito is currently self-attaching to enable the inline-mock-maker.")) {
+            throw new GradleException("Mockito should emit a message when self-attaching")
+        }
     }
 }
