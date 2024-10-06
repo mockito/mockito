@@ -16,7 +16,7 @@ tasks.withType(KotlinCompile).configureEach {
 }
 
 dependencies {
-    testImplementation project(":")
+    testImplementation project(":mockito-core")
     testImplementation libs.junit4
 
     testImplementation libs.kotlin.stdlib

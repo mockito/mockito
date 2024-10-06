@@ -5,7 +5,7 @@ description = "Test suite for Java 21 Mockito"
 def bytebuddyAgentConf = configurations.create("bytebuddyAgent")
 
 dependencies {
-    implementation project.rootProject
+    implementation project(":mockito-core")
     testImplementation libs.junit4
     testImplementation libs.assertj
     testImplementation project(path: ':', configuration: 'testUtil')
@@ -45,12 +45,13 @@ tasks.register("test-with-mockito-agent", Test) {
 }
 
 tasks.named('test', Test) {
-    dependsOn(
-        "test-with-bytebuddy-agent",
-        "test-with-mockito-agent",
-    )
-    enabled JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)
-
+    if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
+        enabled = false
+    } else {
+        dependsOn(':mockito-core:jar')
+        jvmArgs('-javaagent:' + project(":mockito-core").tasks.jar.outputs.files.singleFile)
+//        jvmArgs('-Djdk.instrument.traceUsage')
+    }
     expectStdOutWhenDynamicallyLoadedAgent(it)
 }
 

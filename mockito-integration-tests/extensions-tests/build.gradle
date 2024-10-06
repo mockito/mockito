@@ -3,9 +3,9 @@ apply from: "$rootDir/gradle/java-test.gradle"
 description = "End-to-end tests for Mockito and its extensions."
 
 dependencies {
-    testImplementation project.rootProject
-    testImplementation project(":mockito-extensions:junit-jupiter")
-    testImplementation project(path: ':', configuration: 'testUtil')
+    testImplementation project(":mockito-core")
+    testImplementation project(":mockito-extensions:mockito-junit-jupiter")
+    testImplementation project(path: ':mockito-core', configuration: 'testUtil')
     testImplementation libs.junit4
     testImplementation libs.assertj
     testImplementation libs.junit.jupiter.api
