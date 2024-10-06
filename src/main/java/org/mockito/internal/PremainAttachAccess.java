@@ -8,6 +8,8 @@ import java.lang.instrument.Instrumentation;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.Installer;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.plugins.MockitoLogger;
 
 import static org.mockito.internal.util.StringUtil.join;
 
@@ -33,11 +35,12 @@ public class PremainAttachAccess {
         }
         if (instrumentation == null) {
             if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V21)) {
-                System.out.println(
-                        "Mockito is currently self-attaching to enable the inline-mock-maker. This "
-                                + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
-                                + "build what is described in Mockito's documentation: "
-                                + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
+                Plugins.getMockitoLogger()
+                        .warn(
+                                "Mockito is currently self-attaching to enable the inline-mock-maker. This "
+                                        + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
+                                        + "build what is described in Mockito's documentation: "
+                                        + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
             }
             // Attempt to dynamically attach, as a last resort.
             instrumentation = ByteBuddyAgent.install();
