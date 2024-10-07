@@ -1,7 +1,7 @@
 import aQute.bnd.gradle.Resolve
 
 plugins {
-    id 'biz.aQute.bnd.builder' version '7.0.0'
+    id 'biz.aQute.bnd.builder'
 }
 
 apply from: "$rootDir/gradle/java-library.gradle"
