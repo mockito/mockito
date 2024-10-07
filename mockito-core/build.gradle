@@ -1,6 +1,6 @@
 plugins {
+    id("mockito.library-conventions")
     id("mockito.java-backward-compatibility-checks-conventions")
-    id 'biz.aQute.bnd.builder' version '7.0.0'
 }
 
 description = 'Mockito mock objects library core API and implementation'
@@ -10,7 +10,6 @@ base.archivesName = 'mockito-core'
 apply from: "$rootDir/gradle/java-library.gradle"
 apply from: "$rootDir/gradle/coverage.gradle"
 apply from: "$rootDir/gradle/mockito-core/inline-mock.gradle"
-apply from: "$rootDir/gradle/mockito-core/osgi.gradle"
 apply from: "$rootDir/gradle/mockito-core/javadoc.gradle"
 apply from: "$rootDir/gradle/mockito-core/testing.gradle"
 
@@ -32,4 +31,29 @@ dependencies {
     testImplementation libs.junit.jupiter.params
 
     testUtil sourceSets.test.output
+}
+
+tasks.named("jar", Jar) {
+    bundle { // this: BundleTaskExtension
+        classpath = project.configurations.compileClasspath
+        bnd(
+            'Bundle-Name': 'Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.',
+            'Bundle-SymbolicName': 'org.mockito.mockito-core',
+            'Bundle-Version': "\${version_cleanup;${project.version}}",
+            '-versionpolicy': '[${version;==;${@}},${version;+;${@}})',
+            'Export-Package': "org.mockito.internal.*;status=INTERNAL;mandatory:=status;version=${archiveVersion.get()},org.mockito.*;version=${archiveVersion.get()}",
+            'Import-Package': [
+                'net.bytebuddy.*;version="[1.6.0,2.0)"',
+                'junit.*;resolution:=optional',
+                'org.junit.*;resolution:=optional',
+                'org.hamcrest;resolution:=optional',
+                'org.objenesis;version="[3.1,4.0)"',
+                'org.opentest4j.*;resolution:=optional',
+                'org.mockito.*'
+            ].join(','),
+            '-removeheaders': 'Private-Package',
+            'Automatic-Module-Name': 'org.mockito',
+            '-noextraheaders': 'true'
+        )
+    }
 }

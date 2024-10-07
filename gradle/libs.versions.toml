@@ -6,6 +6,7 @@ junit-platform = "1.11.1"
 kotlin = "2.0.20"
 
 animal-sniffer = "1.7.1"
+aQute-bnd = "7.0.0"
 
 [libraries]
 android-junit = { module = "androidx.test.ext:junit", version = "1.2.1" }
@@ -35,6 +36,7 @@ osgi = { module = "org.osgi:osgi.core", version = "8.0.0" }
 
 # For buildSrc logic
 gradleplugin-animalSniffer = { module = "ru.vyarus:gradle-animalsniffer-plugin", version.ref = "animal-sniffer" }
+gradleplugin-bnd = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref = "aQute-bnd" }
 
 # animal sniffer compatibility signatures
 animalSniffer-android-apiLevel26 = { module = "net.sf.androidscents.signature:android-api-level-26", version = "8.0.0_r2" }
