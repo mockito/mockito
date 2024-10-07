@@ -1,10 +1,14 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
-    java
+    `jvm-toolchains`
 }
 
 tasks {
+    /**
+     * Configure the main test task
+     */
+    // use the named `test` task, to be able to configure it for both `java` and `com.android.application` projects
     named<Test>("test") {
         include("**/*Test.class")
 
@@ -20,6 +24,10 @@ tasks {
     }
 
 
+
+    /**
+     * Apply the CI test launcher configuration to any test tasks.
+     */
     withType<Test> {
         javaLauncher = javaToolchains.launcherFor {
             languageVersion = providers

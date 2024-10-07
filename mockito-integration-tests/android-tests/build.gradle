@@ -1,11 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+    id("com.android.application")
+    id("kotlin-android")
+    id("mockito.test-conventions")
 }
-
-apply from: "$rootDir/gradle/test-launcher.gradle"
 
 android {
     namespace = "org.mockitousage.androidtest"
