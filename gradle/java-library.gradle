@@ -1,11 +1,5 @@
 apply plugin: "java"
 apply plugin: "java-library"
-apply from: "$rootDir/gradle/test-launcher.gradle"
-
-if (!base.archivesName.get().startsWith("mockito-")) {
-    logger.warn("Project module should be prefixed with `mockito-` : ${project.projectDir})")
-    base.archivesName = "mockito-" + project.name
-}
 
 apply from: "$rootDir/gradle/java-publication.gradle"
 
@@ -16,31 +10,5 @@ generatePomFileForJavaLibraryPublication.doLast {
     assert pom.name == base.archivesName.get()
 }
 
-java {
-    sourceCompatibility = 11
-    targetCompatibility = 11
-}
-
-tasks.named("test", Test) {
-    include "**/*Test.class"
-
-    testLogging {
-        exceptionFormat 'full'
-        showCauses true
-    }
-
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)
-        && 'member-accessor-reflection' == System.getenv('MEMBER_ACCESSOR')) {
-        jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
-    }
-}
-
 apply from: "$rootDir/gradle/retry-test.gradle"
 
-tasks.withType(Checkstyle).configureEach {
-    reports {
-        xml.required = false
-        html.required = true
-        html.stylesheet resources.text.fromFile("$rootDir/config/checkstyle/checkstyle.xsl")
-    }
-}

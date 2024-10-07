@@ -1,7 +1,7 @@
 import aQute.bnd.gradle.Resolve
 
 plugins {
-    id 'biz.aQute.bnd.builder'
+    id("mockito.library-conventions")
 }
 
 apply from: "$rootDir/gradle/java-library.gradle"
