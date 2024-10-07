@@ -8,7 +8,7 @@ dependencies {
     implementation project(":mockito-core")
     testImplementation libs.junit4
     testImplementation libs.assertj
-    testImplementation project(path: ':', configuration: 'testUtil')
+    testImplementation project(path: ':mockito-core', configuration: 'testUtil')
     bytebuddyAgent(libs.bytebuddy.agent) { setTransitive(false) }
 }
 
@@ -26,33 +26,32 @@ tasks.register("test-with-bytebuddy-agent", Test) {
     } else {
         jvmArgs(
             "-javaagent:${bytebuddyAgentConf.asPath}",
-            "-Djdk.instrument.traceUsage",
+//            "-Djdk.instrument.traceUsage",
         )
     }
 }
 
 tasks.register("test-with-mockito-agent", Test) {
-    dependsOn(':jar')
+    dependsOn(':mockito-core:jar')
     if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
         enabled = false
     } else {
         jvmArgs(
-            "-javaagent:${rootProject.tasks.jar.outputs.files.singleFile}",
-            "-Djdk.instrument.traceUsage",
+            "-javaagent:${project(":mockito-core").tasks.jar.outputs.files.singleFile}",
+//            "-Djdk.instrument.traceUsage",
         )
     }
     failIfStdErrWarningOnDynamicallyLoadedAgent(it)
 }
 
 tasks.named('test', Test) {
-    if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
-        enabled = false
-    } else {
-        dependsOn(':mockito-core:jar')
-        jvmArgs('-javaagent:' + project(":mockito-core").tasks.jar.outputs.files.singleFile)
-//        jvmArgs('-Djdk.instrument.traceUsage')
-    }
-    expectStdOutWhenDynamicallyLoadedAgent(it)
+//    dependsOn(
+//        "test-with-bytebuddy-agent",
+//        "test-with-mockito-agent",
+//    )
+    enabled JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)
+
+    expectStdErrWhenDynamicallyLoadedAgent(it)
 }
 
 private static void failIfStdErrWarningOnDynamicallyLoadedAgent(Test testTask) {
@@ -73,15 +72,15 @@ private static void failIfStdErrWarningOnDynamicallyLoadedAgent(Test testTask) {
     }
 }
 
-private static void expectStdOutWhenDynamicallyLoadedAgent(Test testTask) {
-    def stdoutMessages = new ArrayList<String>()
+private static void expectStdErrWhenDynamicallyLoadedAgent(Test testTask) {
+    def stderrMessages = new ArrayList<String>()
     testTask.addTestOutputListener { descriptor, event ->
-        if (event.destination == TestOutputEvent.Destination.StdOut) {
-            stdoutMessages.add(event.message)
+        if (event.destination == TestOutputEvent.Destination.StdErr) {
+            stderrMessages.add(event.message)
         }
     }
     testTask.doLast {
-        def stdoutText = stdoutMessages.join '\n'
+        def stdoutText = stderrMessages.join '\n'
         if (!stdoutText.contains("Mockito is currently self-attaching to enable the inline-mock-maker.")) {
             throw new GradleException("Mockito should emit a message when self-attaching")
         }
