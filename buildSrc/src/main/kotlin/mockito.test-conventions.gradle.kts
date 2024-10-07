@@ -1,7 +1,13 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import com.adarshr.gradle.testlogger.theme.ThemeType
 
 plugins {
     `jvm-toolchains`
+    id("com.adarshr.test-logger")
+}
+
+testlogger {
+    theme = ThemeType.MOCHA_PARALLEL
+    isShowPassed = false
 }
 
 tasks {
@@ -10,11 +16,6 @@ tasks {
         named<Test>("test") {
             // This ignores classes with JUnit annotations not ending with "Test"
             include("**/*Test.class")
-
-            testLogging {
-                exceptionFormat = TestExceptionFormat.FULL
-                showCauses = true
-            }
 
             if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)
                 && System.getenv("MEMBER_ACCESSOR") == "member-accessor-reflection") {
