@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    implementation(libs.gradleplugin.testLogger)
     implementation(libs.gradleplugin.animalSniffer)
     implementation(libs.gradleplugin.bnd)
 
