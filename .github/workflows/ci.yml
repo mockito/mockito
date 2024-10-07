@@ -55,7 +55,7 @@ jobs:
 
     - name: 3. Validate Gradle wrapper
       if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
-      uses: gradle/wrapper-validation-action@v3.5.0 # https://github.com/gradle/wrapper-validation-action
+      uses: gradle/actions/wrapper-validation@v4 # https://github.com/gradle/wrapper-validation-action
 
     - name: 4. Build and check reproducibility of artifacts (single job only)
       if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
