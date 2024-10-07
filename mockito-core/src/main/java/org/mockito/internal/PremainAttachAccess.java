@@ -4,12 +4,11 @@
  */
 package org.mockito.internal;
 
-import java.lang.instrument.Instrumentation;
 import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.Installer;
-import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.plugins.MockitoLogger;
+
+import java.lang.instrument.Instrumentation;
 
 import static org.mockito.internal.util.StringUtil.join;
 
@@ -35,12 +34,16 @@ public class PremainAttachAccess {
         }
         if (instrumentation == null) {
             if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V21)) {
-                Plugins.getMockitoLogger()
-                        .warn(
-                                "Mockito is currently self-attaching to enable the inline-mock-maker. This "
-                                        + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
-                                        + "build what is described in Mockito's documentation: "
-                                        + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
+                // Cannot use `Plugins.getMockitoLogger().warn(...)` at this time due to a circular
+                // dependency on `Plugins.registry`.
+                // The `PluginRegistry` is not yet fully initialized (in `Plugins`), because it is
+                // currently initializing the `MockMaker` which is a InlineByteBuddyMockMaker, and
+                // it is later calling this method to access the instrumentation.
+                System.err.println(
+                        "Mockito is currently self-attaching to enable the inline-mock-maker. This "
+                                + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
+                                + "build what is described in Mockito's documentation: "
+                                + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
             }
             // Attempt to dynamically attach, as a last resort.
             instrumentation = ByteBuddyAgent.install();
