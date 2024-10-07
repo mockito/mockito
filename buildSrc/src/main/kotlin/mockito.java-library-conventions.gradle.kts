@@ -1,6 +1,7 @@
 plugins {
     `java-library`
     id("mockito.test-conventions")
+    id("mockito.test-retry-conventions")
 }
 
 afterEvaluate {
