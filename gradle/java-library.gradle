@@ -9,6 +9,3 @@ generatePomFileForJavaLibraryPublication.doLast {
     assert pom.artifactId == base.archivesName.get()
     assert pom.name == base.archivesName.get()
 }
-
-apply from: "$rootDir/gradle/retry-test.gradle"
-
