@@ -1,8 +1,6 @@
 plugins {
-    id("mockito.java-library-conventions")
+    id("mockito.library-conventions")
 }
-
-apply from: "$rootDir/gradle/java-library.gradle"
 
 description = "Mockito preconfigured proxy mock mock maker (to support interfaces without code generation)"
 
