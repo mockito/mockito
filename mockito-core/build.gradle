@@ -6,8 +6,6 @@ plugins {
 description = 'Mockito mock objects library core API and implementation'
 base.archivesName = 'mockito-core'
 
-
-apply from: "$rootDir/gradle/java-library.gradle"
 apply from: "$rootDir/gradle/coverage.gradle"
 apply from: "$rootDir/gradle/mockito-core/inline-mock.gradle"
 apply from: "$rootDir/gradle/mockito-core/javadoc.gradle"
