@@ -5,30 +5,26 @@ plugins {
 }
 
 tasks {
-    /**
-     * Configure the main test task
-     */
-    // use the named `test` task, to be able to configure it for both `java` and `com.android.application` projects
-    named<Test>("test") {
-        include("**/*Test.class")
+    // Configure the main "test" task for `java` only projects.
+    plugins.withType(JavaPlugin::class) {
+        named<Test>("test") {
+            // This ignores classes with JUnit annotations not ending with "Test"
+            include("**/*Test.class")
 
-        testLogging {
-            exceptionFormat = TestExceptionFormat.FULL
-            showCauses = true
-        }
+            testLogging {
+                exceptionFormat = TestExceptionFormat.FULL
+                showCauses = true
+            }
 
-        if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)
-            && System.getenv("MEMBER_ACCESSOR") == "member-accessor-reflection") {
-            jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+            if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)
+                && System.getenv("MEMBER_ACCESSOR") == "member-accessor-reflection") {
+                jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+            }
         }
     }
 
-
-
-    /**
-     * Apply the CI test launcher configuration to any test tasks.
-     */
     withType<Test> {
+        // Apply the CI test launcher configuration to any test tasks.
         javaLauncher = javaToolchains.launcherFor {
             languageVersion = providers
                 .gradleProperty("mockito.test.java")
