@@ -8,8 +8,8 @@ description = 'Mockito mock objects library core API and implementation'
 base.archivesName = 'mockito-core'
 
 apply from: "$rootDir/gradle/coverage.gradle"
-apply from: "$rootDir/gradle/mockito-core/inline-mock.gradle"
-apply from: "$rootDir/gradle/mockito-core/testing.gradle"
+apply from: "inline-mock.gradle"
+apply from: "testing.gradle"
 
 configurations {
     testUtil //TODO move to separate project
