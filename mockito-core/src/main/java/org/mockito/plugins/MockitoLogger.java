@@ -40,4 +40,13 @@ public interface MockitoLogger {
      * @param what to be logged
      */
     void log(Object what);
+
+    /**
+     * Log specified object as a warning, if supported.
+     *
+     * @param what to be logged.
+     */
+    default void warn(Object what) {
+        log(what);
+    }
 }

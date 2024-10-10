@@ -26,22 +26,6 @@ public class PremainAttach {
     }
 
     public static Instrumentation getInstrumentation() {
-        // A Java agent is always added to the system class loader. If Mockito is executed from a
-        // different class loader we need to make sure to resolve the instrumentation instance
-        // from there, or fail the resolution, if this class does not exist on the system class
-        // loader.
-        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-        if (PremainAttach.class.getClassLoader() == systemClassLoader) {
-            return instrumentation;
-        } else {
-            try {
-                return (Instrumentation)
-                        Class.forName(PremainAttach.class.getName(), true, systemClassLoader)
-                                .getMethod("getInstrumentation")
-                                .invoke(null);
-            } catch (Exception ignored) {
-                return null;
-            }
-        }
+        return instrumentation;
     }
 }

@@ -4,15 +4,13 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import net.bytebuddy.ClassFileVersion;
-import net.bytebuddy.agent.ByteBuddyAgent;
 import org.mockito.MockedConstruction;
 import org.mockito.creation.instance.InstantiationException;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.exceptions.misusing.MockitoConfigurationException;
-import org.mockito.internal.PremainAttach;
+import org.mockito.internal.PremainAttachAccess;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
@@ -137,24 +135,7 @@ class InlineDelegateByteBuddyMockMaker
 
         try {
             try {
-                instrumentation = PremainAttach.getInstrumentation();
-                if (instrumentation == null) {
-                    if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V21)) {
-                        System.out.println(
-                                "Mockito is currently self-attaching to enable the inline-mock-maker. This "
-                                        + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
-                                        + "build what is described in Mockito's documentation: "
-                                        + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
-                    }
-                    instrumentation = ByteBuddyAgent.install();
-                }
-                if (!instrumentation.isRetransformClassesSupported()) {
-                    throw new IllegalStateException(
-                            join(
-                                    "Mockito requires retransformation for creating inline mocks. This feature is unavailable on the current VM.",
-                                    "",
-                                    "You cannot use this mock maker on this VM"));
-                }
+                instrumentation = PremainAttachAccess.getInstrumentation();
                 File boot = File.createTempFile("mockitoboot", ".jar");
                 boot.deleteOnExit();
                 try (JarOutputStream outputStream =
