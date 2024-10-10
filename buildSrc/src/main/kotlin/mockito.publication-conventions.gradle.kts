@@ -89,8 +89,7 @@ plugins.withType<JavaPlugin>().configureEach {
 
     val sourcesJar by tasks.registering(Jar::class) {
         archiveClassifier.set("sources")
-        val sourceSets: SourceSetContainer by project
-        from(sourceSets["main"].allSource)
+        from(project.sourceSets["main"].allSource)
         with(licenseSpec)
     }
 
