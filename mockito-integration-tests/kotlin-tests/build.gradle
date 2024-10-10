@@ -2,10 +2,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm'
+    id("org.jetbrains.kotlin.jvm")
+    id("mockito.test-conventions")
 }
-
-apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Kotlin tests for Mockito."
 

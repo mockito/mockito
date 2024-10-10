@@ -1,6 +1,9 @@
-apply from: "$rootDir/gradle/java-test.gradle"
+plugins {
+    id("java")
+    id("mockito.test-conventions")
+}
 
-description = "Test suite for excercising programmatic mock maker in Mockito"
+description = "Test suite for exercising programmatic mock maker in Mockito"
 
 dependencies {
     implementation project(":mockito-core")
