@@ -74,7 +74,6 @@ jobs:
         ./gradlew
         -Pmockito.test.java=${{ matrix.java }}
         build
-        idea
         --stacktrace
         --scan
       env:
