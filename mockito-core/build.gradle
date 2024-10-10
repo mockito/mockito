@@ -1,6 +1,7 @@
 plugins {
     id("mockito.library-conventions")
     id("mockito.java-backward-compatibility-checks-conventions")
+    id("mockito.javadoc-conventions")
 }
 
 description = 'Mockito mock objects library core API and implementation'
@@ -8,7 +9,6 @@ base.archivesName = 'mockito-core'
 
 apply from: "$rootDir/gradle/coverage.gradle"
 apply from: "$rootDir/gradle/mockito-core/inline-mock.gradle"
-apply from: "$rootDir/gradle/mockito-core/javadoc.gradle"
 apply from: "$rootDir/gradle/mockito-core/testing.gradle"
 
 configurations {
@@ -29,6 +29,11 @@ dependencies {
     testImplementation libs.junit.jupiter.params
 
     testUtil sourceSets.test.output
+}
+
+mockitoJavadoc {
+    title = "Mockito ${project.version} API"
+    docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
 }
 
 tasks.named("jar", Jar) {
