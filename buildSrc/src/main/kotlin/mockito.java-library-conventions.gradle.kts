@@ -1,7 +1,9 @@
 plugins {
     `java-library`
+    id("mockito.java-conventions")
     id("mockito.test-conventions")
     id("mockito.test-retry-conventions")
+    id("mockito.test-launcher-conventions")
 }
 
 afterEvaluate {
@@ -10,11 +12,6 @@ afterEvaluate {
         logger.warn("Project module should be prefixed with `mockito-` : ${project.projectDir})")
         base.archivesName = "mockito-" + project.name
     }
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
 }
 
 tasks.withType<Checkstyle>().configureEach {

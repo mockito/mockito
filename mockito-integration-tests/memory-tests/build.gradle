@@ -1,4 +1,7 @@
-apply from: "$rootDir/gradle/java-test.gradle"
+plugins {
+    id("java")
+    id("mockito.test-conventions")
+}
 
 description = "Test suite memory usage of Mockito"
 

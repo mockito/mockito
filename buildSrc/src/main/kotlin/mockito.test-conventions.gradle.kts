@@ -1,7 +1,7 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
 
 plugins {
-    `jvm-toolchains`
+    id("mockito.java-conventions")
     id("com.adarshr.test-logger")
 }
 
@@ -21,21 +21,6 @@ tasks {
                 && System.getenv("MEMBER_ACCESSOR") == "member-accessor-reflection") {
                 jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
             }
-        }
-    }
-
-    withType<Test> {
-        // Apply the CI test launcher configuration to any test tasks.
-        javaLauncher = javaToolchains.launcherFor {
-            languageVersion = providers
-                .gradleProperty("mockito.test.java")
-                .map {
-                    if (it == "auto") {
-                        JavaLanguageVersion.of(JavaVersion.current().majorVersion)
-                    } else {
-                        JavaLanguageVersion.of(it)
-                    }
-                }
         }
     }
 }
