@@ -4,6 +4,7 @@ plugins {
     id("mockito.test-conventions")
     id("mockito.test-retry-conventions")
     id("mockito.test-launcher-conventions")
+    id("net.ltgt.errorprone")
 }
 
 afterEvaluate {
@@ -14,10 +15,26 @@ afterEvaluate {
     }
 }
 
-tasks.withType<Checkstyle>().configureEach {
-    reports {
-        xml.required.set(false)
-        html.required.set(true)
-        html.stylesheet = resources.text.fromFile("$rootDir/config/checkstyle/checkstyle.xsl")
+repositories {
+    mavenCentral()
+    google()
+}
+
+dependencies {
+    errorprone(libs.errorprone)
+}
+
+tasks {
+    withType<AbstractArchiveTask>().configureEach {
+        isPreserveFileTimestamps = false
+        isReproducibleFileOrder = true
+        // dirMode = Integer.parseInt("0755", 8)
+        dirPermissions {
+            unix("rwxr-xr-x") // 0755
+        }
+        // fileMode = Integer.parseInt("0644", 8)
+        filePermissions {
+            unix("rw-r--r--") // 0644
+        }
     }
 }

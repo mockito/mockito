@@ -7,7 +7,6 @@ buildscript {
 
     dependencies {
         classpath 'gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.16.1'
-        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:4.0.1'
 
         classpath "io.github.gradle-nexus:publish-plugin:2.0.0-rc-1"
         classpath 'org.shipkit:shipkit-changelog:2.0.1'
@@ -29,36 +28,7 @@ apply from: "$rootDir/gradle/root/ide.gradle"
 apply from: "$rootDir/gradle/license.gradle"
 
 subprojects { proj ->
-    repositories {
-        mavenCentral()
-        google()
-    }
     plugins.withId('java') {
-        proj.apply from: "$rootDir/gradle/errorprone.gradle"
-        proj.apply from: "$rootDir/gradle/jfr.gradle"
         proj.apply from: "$rootDir/gradle/spotless.gradle"
-    }
-    tasks.withType(JavaCompile).configureEach {
-        //I don't believe those warnings add value given modern IDEs
-        options.warnings = false
-        options.encoding = 'UTF-8'
-    }
-    tasks.withType(Javadoc).configureEach {
-        options.addStringOption('Xdoclint:none', '-quiet')
-        options.addStringOption('encoding', 'UTF-8')
-        options.addStringOption('charSet', 'UTF-8')
-        options.setSource('11')
-    }
-
-    tasks.withType(AbstractArchiveTask).configureEach {
-        preserveFileTimestamps = false
-        reproducibleFileOrder = true
-        dirMode = Integer.parseInt("0755", 8)
-        fileMode = Integer.parseInt("0644", 8)
-    }
-
-    apply plugin: 'checkstyle'
-    checkstyle {
-       configFile = rootProject.file('config/checkstyle/checkstyle.xml')
     }
 }

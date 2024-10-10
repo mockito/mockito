@@ -7,6 +7,7 @@ dependencies {
     implementation(libs.gradleplugin.testLogger)
     implementation(libs.gradleplugin.animalSniffer)
     implementation(libs.gradleplugin.bnd)
+    implementation(libs.gradleplugin.errorprone)
 
     // https://github.com/gradle/gradle/issues/15383
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
