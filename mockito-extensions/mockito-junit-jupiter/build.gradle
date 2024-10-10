@@ -2,9 +2,8 @@ import aQute.bnd.gradle.Resolve
 
 plugins {
     id("mockito.library-conventions")
+    id("mockito.javadoc-conventions")
 }
-
-apply from: "$rootDir/gradle/mockito-junit-jupiter/javadoc.gradle"
 
 description = "Mockito JUnit 5 support"
 
@@ -18,6 +17,11 @@ dependencies {
 
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
+}
+
+mockitoJavadoc {
+    title = "Mockito JUnit Jupiter ${project.version} API"
+    docTitle = """<h1>Mockito JUnit Jupiter ${project.version} API.</h1>"""
 }
 
 jar {
@@ -58,4 +62,15 @@ def verifyOSGi = tasks.register('verifyOSGi', Resolve) {
 
 tasks.named('check') {
   dependsOn(verifyOSGi)
+}
+
+tasks.named("javadoc", Javadoc) {
+    // Handle https://bugs.openjdk.org/browse/JDK-8274639
+    // Note : Might be solved by a toolchain launcher for the javadoc.
+    if (JavaVersion.current() >= JavaVersion.VERSION_18) {
+        options.addStringOption("-link-modularity-mismatch", "info")
+        options.links("https://junit.org/junit5/docs/${libs.versions.junit.jupiter.get()}/api/")
+    } else {
+        logger.info("Javadoc tool below 18, links to JUnit Jupiter javadocs was not added.")
+    }
 }
