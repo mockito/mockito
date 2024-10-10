@@ -5,6 +5,11 @@ plugins {
     id("com.adarshr.test-logger")
 }
 
+repositories {
+    mavenCentral()
+    google()
+}
+
 testlogger {
     theme = ThemeType.MOCHA_PARALLEL
     isShowPassed = false

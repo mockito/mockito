@@ -17,6 +17,18 @@ plugins.withType(JavaPlugin::class) {
             options.isWarnings = false
             options.encoding = "UTF-8"
         }
+
+        withType<Javadoc>().configureEach {
+            options {
+                encoding = "UTF-8"
+                source = javaReleaseVersion.toString()
+
+                if (this is StandardJavadocDocletOptions) {
+                    addStringOption("Xdoclint:none", "-quiet")
+                    addStringOption("charSet", "UTF-8")
+                }
+            }
+        }
     }
 }
 
