@@ -1,4 +1,8 @@
-apply from: "$rootDir/gradle/java-test.gradle"
+plugins {
+    id("java")
+    id("mockito.test-conventions")
+}
+
 apply from: "osgi-test-bundles.gradle"
 
 description = "Test suite for OSGi framework with Mockito"

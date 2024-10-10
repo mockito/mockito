@@ -1,8 +1,8 @@
 plugins {
-    id 'groovy'
+    id("groovy")
+    id("mockito.test-conventions")
 }
 
-apply from: "$rootDir/gradle/java-test.gradle"
 
 description = "Integration test for using mockito-inline with Groovy."
 

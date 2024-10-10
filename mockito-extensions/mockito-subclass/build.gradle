@@ -1,4 +1,6 @@
-apply from: "$rootDir/gradle/java-library.gradle"
+plugins {
+    id("mockito.library-conventions")
+}
 
 description = "Mockito preconfigured subclass mock maker"
 

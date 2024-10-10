@@ -1,4 +1,7 @@
-apply from: "$rootDir/gradle/java-library.gradle"
+plugins {
+    id("mockito.java-library-conventions")
+    id("mockito.publication-conventions")
+}
 
 description = "Mockito for Android"
 
