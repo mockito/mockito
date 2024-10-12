@@ -10,7 +10,7 @@ android-junit = { module = "androidx.test.ext:junit", version = "1.2.1" }
 android-runner = { module = "androidx.test:runner", version = "1.6.2" }
 assertj = { module = "org.assertj:assertj-core", version = "3.26.3" }
 autoservice = { module = "com.google.auto.service:auto-service", version = "1.1.1" }
-bnd-gradle = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version = "6.4.0" }
+bnd-gradle = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version = "7.0.0" }
 bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }
 bytebuddy-agent = { module = "net.bytebuddy:byte-buddy-agent", version.ref = "bytebuddy" }
 bytebuddy-android = { module = "net.bytebuddy:byte-buddy-android", version.ref = "bytebuddy" }
