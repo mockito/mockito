@@ -1,5 +1,3 @@
-import gradle.kotlin.dsl.accessors._2a0859b2b1624a8c1f98b2dbe4a3b98d.javadoc
-import org.gradle.api.plugins.JavaPlugin
 import org.gradle.kotlin.dsl.`maven-publish`
 import org.gradle.kotlin.dsl.withType
 
@@ -18,9 +16,7 @@ publishing {
             pom {
                 artifactId = project.base.archivesName.get()
                 name = artifactId
-                afterEvaluate {
-                    description = project.description
-                }
+                description = providers.provider { project.description }
                 url = "https://github.com/mockito/mockito"
                 licenses {
                     license {
@@ -80,7 +76,7 @@ plugins.withType(JavaPlatformPlugin::class) {
 }
 
 // Java library publication conventions
-plugins.withType<JavaPlugin>().configureEach {
+plugins.withType<JavaLibraryPlugin>().configureEach {
     // Sources/javadoc artifacts required by Maven module publications
     val licenseSpec = copySpec {
         from(project.rootDir)
@@ -94,7 +90,7 @@ plugins.withType<JavaPlugin>().configureEach {
     }
 
     val javadocJar by tasks.registering(Jar::class) {
-        onlyIf { tasks.javadoc.get().isEnabled }
+        onlyIf { tasks.named<Javadoc>("javadoc").get().isEnabled }
         archiveClassifier.set("javadoc")
         from(tasks.named("javadoc"))
         with(licenseSpec)
