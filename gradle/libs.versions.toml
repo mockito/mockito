@@ -3,7 +3,7 @@ bytebuddy = "1.15.4"
 errorprone = "2.23.0"
 junit-jupiter = "5.11.2"
 junit-platform = "1.11.1"
-kotlin = "2.0.20"
+kotlin = "2.0.21"
 
 [libraries]
 android-junit = { module = "androidx.test.ext:junit", version = "1.2.1" }
