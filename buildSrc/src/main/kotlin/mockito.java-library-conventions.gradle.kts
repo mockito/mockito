@@ -7,12 +7,8 @@ plugins {
     id("net.ltgt.errorprone")
 }
 
-afterEvaluate {
-    if (!base.archivesName.get().startsWith("mockito-")) {
-        // TODO throw GradleException("Project module should be prefixed with `mockito-` : ${project.projectDir})")
-        logger.warn("Project module should be prefixed with `mockito-` : ${project.projectDir})")
-        base.archivesName = "mockito-" + project.name
-    }
+if (!project.name.startsWith("mockito-")) {
+    throw GradleException("Published project module should be prefixed with `mockito-` : ${project.projectDir})")
 }
 
 repositories {
