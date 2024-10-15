@@ -2,7 +2,7 @@
 bytebuddy = "1.15.4"
 errorprone = "2.23.0"
 junit-jupiter = "5.11.2"
-junit-platform = "1.11.1"
+junit-platform = "1.11.2"
 kotlin = "2.0.21"
 
 [libraries]
