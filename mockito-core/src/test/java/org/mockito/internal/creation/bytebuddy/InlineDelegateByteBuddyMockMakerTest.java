@@ -495,7 +495,7 @@ public class InlineDelegateByteBuddyMockMakerTest
         mockMaker.clearMock(proxy);
 
         // then
-        assertThat(mockMaker.getHandler(proxy)).isNull();
+        assertThat(mockMaker.getHandler(proxy)).isEqualTo(DisabledMockHandler.HANDLER);
     }
 
     @Test
