@@ -19,6 +19,9 @@ tasks.named("githubRelease") {
 
 apply plugin: 'io.github.gradle-nexus.publish-plugin'
 nexusPublishing {
+    packageGroup = "org.mockito"
+    repositoryDescription = provider { "Mockito " + project.version }
+
     repositories {
         if (System.getenv('NEXUS_TOKEN_PWD')) {
             sonatype {
