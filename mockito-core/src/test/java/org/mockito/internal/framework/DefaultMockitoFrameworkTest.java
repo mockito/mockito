@@ -6,7 +6,7 @@ package org.mockito.internal.framework;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 import static org.mockito.Mockito.any;
@@ -211,6 +211,26 @@ public class DefaultMockitoFrameworkTest extends TestBase {
     }
 
     @Test
+    public void behavior_after_clear_inline_mocks_is_mock() {
+        // clearing mocks only works with inline mocking
+        assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
+
+        PersonWithName obj = mock(PersonWithName.class);
+        when(obj.getMyName()).thenReturn("Bob");
+        assertEquals("Bob", obj.getMyName());
+        assertTrue(mockingDetails(obj).isMock());
+
+        framework.clearInlineMocks();
+
+        try {
+            mockingDetails(obj).isMock();
+        } catch (DisabledMockException e) {
+            return;
+        }
+        Assert.fail("Should have thrown DisabledMockException");
+    }
+
+    @Test
     public void clears_mock() {
         // clearing mocks only works with inline mocking
         assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
@@ -225,8 +245,26 @@ public class DefaultMockitoFrameworkTest extends TestBase {
         framework.clearInlineMock(list1);
 
         // then
-        assertFalse(mockingDetails(list1).isMock());
+        assertThrows(DisabledMockException.class, () -> mockingDetails(list1).isMock());
         assertTrue(mockingDetails(list2).isMock());
+    }
+
+    @Test
+    public void clears_mocks() {
+        // clearing mocks only works with inline mocking
+        assumeTrue(Plugins.getMockMaker() instanceof InlineMockMaker);
+
+        // given
+        List list1 = mock(List.class);
+        assertTrue(mockingDetails(list1).isMock());
+        List list2 = mock(List.class);
+        assertTrue(mockingDetails(list2).isMock());
+
+        framework.clearInlineMocks();
+
+        // then
+        assertThrows(DisabledMockException.class, () -> mockingDetails(list1).isMock());
+        assertThrows(DisabledMockException.class, () -> mockingDetails(list2).isMock());
     }
 
     private static class MyListener implements MockitoListener {}

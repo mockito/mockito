@@ -532,7 +532,11 @@ class InlineDelegateByteBuddyMockMaker
                 entry.remove(mock);
             }
         } else {
-            mocks.remove(mock);
+            mocks.put(
+                    mock,
+                    new MockMethodInterceptor(
+                            DisabledMockHandler.HANDLER,
+                            DisabledMockHandler.HANDLER.getMockSettings()));
         }
     }
 
@@ -541,8 +545,7 @@ class InlineDelegateByteBuddyMockMaker
         mockedStatics.getBackingMap().clear();
 
         for (Entry<Object, MockMethodInterceptor> entry : mocks) {
-            MockCreationSettings settings = entry.getValue().getMockHandler().getMockSettings();
-            entry.setValue(new MockMethodInterceptor(DisabledMockHandler.HANDLER, settings));
+            clearMock(entry.getKey());
         }
     }
 
