@@ -431,9 +431,17 @@ public abstract class ClassLoaders {
     URL obtainCurrentClassPathOf(String className) {
         String path = className.replace('.', '/') + ".class";
         String url = ClassLoaders.class.getClassLoader().getResource(path).toExternalForm();
+        String location;
+        if (url.startsWith("jar:")) { // multi-release jar file location
+            location = url.substring(4, url.lastIndexOf(".jar!") + 4);
+        } else if (url.endsWith(path)) {
+            location = url.substring(0, url.length() - path.length());
+        } else {
+            throw new IllegalStateException("Unknown URL format for class location: " + url);
+        }
 
         try {
-            return new URL(url.substring(0, url.length() - path.length()));
+            return new URL(location);
         } catch (MalformedURLException e) {
             throw new RuntimeException("Classloader couldn't obtain a proper classpath URL", e);
         }
