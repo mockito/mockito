@@ -9,7 +9,7 @@ kotlin = "2.0.21"
 gradleplugin-test-logger = "4.0.0"
 gradleplugin-animal-sniffer = "1.7.1"
 gradleplugin-aQute-bnd = "7.0.0"
-gradleplugin-errorprone = "4.0.1"
+gradleplugin-errorprone = "4.1.0"
 
 [libraries]
 android-junit = { module = "androidx.test.ext:junit", version = "1.2.1" }
