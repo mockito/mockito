@@ -33,7 +33,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
         Object mock = Mockito.mock(ObjectMethodsOverridden.class);
         Object otherMock = Mockito.mock(ObjectMethodsOverridden.class);
 
-        assertThat(mock).isEqualTo(mock);
+        assertThat(mock.equals(mock)).isTrue();
         assertThat(mock).isNotEqualTo(otherMock);
         assertThat(mock.hashCode()).isNotEqualTo(otherMock.hashCode());
 
@@ -45,7 +45,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
         Object mock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
         Object otherMock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
 
-        assertThat(mock).isEqualTo(mock);
+        assertThat(mock.equals(mock)).isTrue();
         assertThat(mock).isNotEqualTo(otherMock);
         assertThat(mock.hashCode()).isNotEqualTo(otherMock.hashCode());
 
