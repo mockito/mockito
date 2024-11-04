@@ -133,7 +133,7 @@ public class HashCodeAndEqualsSafeSetTest {
     @Test
     public void isEqualToItself() {
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
-        assertThat(set).isEqualTo(set);
+        assertThat(set.equals(set)).isTrue();
     }
 
     @Test
