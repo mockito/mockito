@@ -1,9 +1,10 @@
 import com.android.build.gradle.internal.coverage.JacocoReportTask
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Module-level android configuration.
+// https://developer.android.com/build/migrate-to-catalogs
 
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
     id("kotlin-android")
     id("mockito.test-conventions")
 }
