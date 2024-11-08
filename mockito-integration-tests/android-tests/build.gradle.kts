@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.coverage.JacocoReportTask
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 plugins {
@@ -16,29 +18,29 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         debug {
-            enableUnitTestCoverage true
-            enableAndroidTestCoverage true
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
         }
     }
     afterEvaluate {
         // Enable coverage of mockito classes which are not part of this module.
         // Without these added classFileCollection dependencies the coverage data/report is empty.
-        tasks.createDebugAndroidTestCoverageReport { com.android.build.gradle.internal.coverage.JacocoReportTask task ->
+        tasks.named<JacocoReportTask>("createDebugAndroidTestCoverageReport") jacocoTask@{
             // Clear the production code of this module: src/main/java, it has no mockito-user-visible code.
-            task.classFileCollection.setFrom()
-            rootProject.allprojects { Project currentProject ->
+            classFileCollection.setFrom()
+            rootProject.allprojects currentProject@{
                 plugins.withId("java") {
-                    SourceSetContainer sourceSets = currentProject.sourceSets
+                    val sourceSets = this@currentProject.sourceSets
                     // Mimic org.gradle.testing.jacoco.tasks.JacocoReportBase.sourceSets().
                     // Not possible to set task.javaSources because it's initialized with setDisallowChanges.
                     //task.javaSources.add({ [ sourceSets.main.allJava.srcDirs ] })
-                    task.classFileCollection.from(
-                        sourceSets.main.output.asFileTree.matching {
+                    this@jacocoTask.classFileCollection.from(
+                        sourceSets.named("main").get().output.asFileTree.matching {
                             exclude("**/internal/util/concurrent/**")
                         }
                     )
@@ -48,39 +50,39 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = "11"
     }
 }
 
 androidComponents {
     beforeVariants(selector().withBuildType("release")) {
-        enable = false
+        it.enable = false
     }
 }
 
+// Exclude mockito-android from JVM tests, because otherwise it clashes with :mockito-core.
+configurations.testImplementation {
+    exclude (group = "org.mockito", module = "mockito-android")
+}
+
 dependencies {
-    implementation libs.kotlin.stdlib
+    implementation(libs.kotlin.stdlib)
 
     // Add :android on the classpath so that AGP's jacoco setup thinks it's "production code to be tested".
     // Essentially a way to say: tasks.createDebugAndroidTestCoverageReport.classFileCollection.from(project(":android"))
-    runtimeOnly project(":mockito-extensions:mockito-android")
+    runtimeOnly(project(":mockito-extensions:mockito-android"))
 
-    // Exclude mockito-android from JVM tests, because otherwise it clashes with :mockito-core.
-    configurations.testImplementation {
-        exclude group: 'org.mockito', module: 'mockito-android'
-    }
+    testImplementation(project(":mockito-core"))
+    testImplementation(libs.junit4)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.engine)
 
-    testImplementation project(":mockito-core")
-    testImplementation libs.junit4
-    testImplementation libs.junit.jupiter.api
-    testImplementation libs.junit.jupiter.engine
-
-    androidTestImplementation libs.android.runner
-    androidTestImplementation libs.android.junit
-    androidTestImplementation project(":mockito-extensions:mockito-android")
+    androidTestImplementation(libs.android.runner)
+    androidTestImplementation(libs.android.junit)
+    androidTestImplementation(project(":mockito-extensions:mockito-android"))
 }
