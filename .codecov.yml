@@ -1,0 +1,22 @@
+coverage:
+  status:
+    project: yes
+    patch: yes
+    changes: yes
+
+comment:
+  layout: "reach, tree, diff, flags, files"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes
+  branches: null
+
+flags:
+  unit-tests:
+    paths:
+      - "mockito-core/**"
+      - "mockito-extensions/**"
+  integration-tests:
+    paths:
+      - "mockito-integration-tests/**"
