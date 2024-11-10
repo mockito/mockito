@@ -23,7 +23,7 @@ bytebuddy-android = { module = "net.bytebuddy:byte-buddy-android", version.ref =
 equinox = { module = "org.eclipse.platform:org.eclipse.osgi", version = "3.21.0" }
 errorprone = { module = "com.google.errorprone:error_prone_core", version.ref = "errorprone" }
 errorprone-test-api = { module = "com.google.errorprone:error_prone_test_helpers", version.ref = "errorprone" }
-groovy = { module = "org.codehaus.groovy:groovy", version = "3.0.22" }
+groovy = { module = "org.codehaus.groovy:groovy", version = "3.0.23" }
 hamcrest = { module = "org.hamcrest:hamcrest-core", version = "3.0" }
 junit4 = { module = "junit:junit", version.ref = "junit4" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
