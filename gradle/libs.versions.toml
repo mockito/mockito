@@ -1,6 +1,6 @@
 [versions]
 bytebuddy = "1.15.10"
-errorprone = "2.23.0"
+errorprone = "2.35.1"
 junit4 = "4.13.2"
 junit-jupiter = "5.11.3"
 junit-platform = "1.11.3"
