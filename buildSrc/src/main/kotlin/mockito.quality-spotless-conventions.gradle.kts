@@ -23,6 +23,8 @@ configure<SpotlessExtension> {
 
             Formatter(formatterOptions).formatSource(it)
         }
+
+        toggleOffOn()
     }
 
     format("misc") {

@@ -60,12 +60,3 @@ tasks.named("jar", Jar) {
         )
     }
 }
-
-spotless {
-    java {
-        targetExclude(
-            // This test contains emulation of same-line stubbings. The formatter would put them on a separate line.
-            "src/test/java/org/mockitousage/internal/junit/UnusedStubbingsFinderTest.java"
-        )
-    }
-}
