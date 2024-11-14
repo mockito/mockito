@@ -83,7 +83,11 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     Object answerTo(Invocation invocation) throws Throwable {
-        return findAnswerFor(invocation).answer(invocation);
+        StubbedInvocationMatcher matcher = findAnswerFor(invocation);
+        if (matcher == null) {
+            throw new NullPointerException("No answer found for: " + invocation);
+        }
+        return matcher.answer(invocation);
     }
 
     public StubbedInvocationMatcher findAnswerFor(Invocation invocation) {
