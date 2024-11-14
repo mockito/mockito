@@ -10,6 +10,7 @@ gradleplugin-test-logger = "4.0.0"
 gradleplugin-animal-sniffer = "1.7.1"
 gradleplugin-aQute-bnd = "7.0.0"
 gradleplugin-errorprone = "4.1.0"
+gradleplugin-spotless = "6.25.0"
 
 gradleplugin-android = "7.4.2"
 
@@ -44,6 +45,9 @@ gradleplugin-testLogger = { module = "com.adarshr:gradle-test-logger-plugin", ve
 gradleplugin-animalSniffer = { module = "ru.vyarus:gradle-animalsniffer-plugin", version.ref = "gradleplugin-animal-sniffer" }
 gradleplugin-bnd = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref = "gradleplugin-aQute-bnd" }
 gradleplugin-errorprone = { module = "net.ltgt.gradle:gradle-errorprone-plugin", version.ref = "gradleplugin-errorprone" }
+gradleplugin-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "gradleplugin-spotless" }
+gradleplugin-spotless-googleJavaFormat = { module = "com.google.googlejavaformat:google-java-format", version = "1.24.0" }
+
 
 # animal sniffer compatibility signatures
 animalSniffer-android-apiLevel26 = { module = "net.sf.androidscents.signature:android-api-level-26", version = "8.0.0_r2" }
