@@ -60,6 +60,7 @@ import org.mockito.internal.invocation.mockref.MockWeakReference;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.plugins.MemberAccessor;
+import java.util.Optional;
 
 public class MockMethodAdvice extends MockMethodDispatcher {
 
@@ -119,20 +120,18 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     }
 
     @Override
-    public Callable<?> handle(Object instance, Method origin, Object[] arguments) throws Throwable {
+    public Optional<Callable<?>> handle(Object instance, Method origin, Object[] arguments) throws Throwable {
         MockMethodInterceptor interceptor = interceptors.get(instance);
         if (interceptor == null) {
-            return null;
+            return Optional.empty();
         }
-        RealMethod realMethod;
-        if (instance instanceof Serializable) {
-            realMethod = new SerializableRealMethodCall(identifier, origin, instance, arguments);
-        } else {
-            realMethod = new RealMethodCall(selfCallInfo, origin, instance, arguments);
-        }
-        return new ReturnValueWrapper(
-                interceptor.doIntercept(
-                        instance, origin, arguments, realMethod, LocationFactory.create(true)));
+        RealMethod realMethod = (instance instanceof Serializable)
+            ? new SerializableRealMethodCall(identifier, origin, instance, arguments)
+            : new RealMethodCall(selfCallInfo, origin, instance, arguments);
+        
+        return Optional.of(new ReturnValueWrapper(
+            interceptor.doIntercept(instance, origin, arguments, realMethod, LocationFactory.create(true))
+        ));
     }
 
     @Override
