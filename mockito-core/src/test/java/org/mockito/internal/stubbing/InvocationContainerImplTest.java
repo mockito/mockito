@@ -6,11 +6,11 @@ package org.mockito.internal.stubbing;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.LinkedList;
 import java.util.concurrent.CountDownLatch;
-
 import org.junit.Test;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
@@ -113,5 +113,33 @@ public class InvocationContainerImplTest {
 
         containerStubOnly.addAnswer(new ReturnsEmptyValues(), null);
         assertFalse(containerStubOnly.hasInvocationForPotentialStubbing());
+    }
+
+
+    @Test
+    public void should_return_answer_when_answer_exists() throws Throwable {
+        // Given: set an invocation for stubbing and add a matching answer
+        container.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
+        container.addAnswer(new Returns("Expected Answer"), null);
+
+        // When: invoking answerTo should return the answer
+        Object result = container.answerTo(invocation);
+
+        // Then: verify the expected answer is returned
+        assertEquals("Expected Answer", result);
+    }
+
+    @Test
+    public void should_throw_null_pointer_exception_when_no_answer_found() {
+        // Given: no answer added for the invocation
+        Invocation unmatchedInvocation = new InvocationBuilder().toInvocation();
+
+        // When and Then: invoking answerTo should throw NullPointerException
+        NullPointerException exception = assertThrows(NullPointerException.class, () -> {
+            container.answerTo(unmatchedInvocation);
+        });
+
+        // Verify the exception message
+        assertTrue(exception.getMessage().contains("No answer found for: " + unmatchedInvocation));
     }
 }
