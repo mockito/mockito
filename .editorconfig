@@ -13,6 +13,9 @@ indent_size = 2
 ij_continuation_indent_size = 2
 ij_yaml_keep_indents_on_empty_lines = false
 ij_yaml_keep_line_breaks = true
+ij_any_block_comment_at_first_column = false
+ij_java_line_comment_at_first_column = false
+ij_java_line_comment_add_space = true
 
 [*.java]
 ij_java_align_multiline_throws_list = true
@@ -27,3 +30,17 @@ ij_java_insert_inner_class_imports = true
 ij_java_layout_static_imports_separately = true
 ij_java_method_call_chain_wrap = off
 ij_java_throws_list_wrap = off
+ij_java_block_comment_at_first_column = false
+ij_java_line_comment_at_first_column = false
+ij_java_line_comment_add_space = true
+
+[{*.kt,*.kts}]
+ij_kotlin_block_comment_at_first_column = false
+ij_kotlin_line_comment_at_first_column = false
+ij_kotlin_line_comment_add_space = true
+
+[*.gradle]
+ij_groovy_block_comment_at_first_column = false
+ij_groovy_line_comment_at_first_column = false
+ij_groovy_line_comment_add_space = true
+
