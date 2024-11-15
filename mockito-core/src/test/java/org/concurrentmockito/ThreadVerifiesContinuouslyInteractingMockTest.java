@@ -1,4 +1,9 @@
-import java.util.concurrent.locks.ReentrantLock;
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+package org.concurrentmockito;
+
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
@@ -7,6 +12,7 @@ import org.mockito.Mock;
 import org.mockitousage.IMethods;
 import org.mockitoutil.TestBase;
 
+// this test exposes the problem most of the time
 public class ThreadVerifiesContinuouslyInteractingMockTest extends TestBase {
 
     @Mock private IMethods mock;
@@ -30,7 +36,10 @@ public class ThreadVerifiesContinuouslyInteractingMockTest extends TestBase {
         final Thread[] listeners = new Thread[2];
         for (int i = 0; i < listeners.length; i++) {
             final int x = i;
-            listeners[i] = new Thread(() -> {
+            listeners[i] =
+                    new Thread() {
+                        @Override
+                        public void run() {
                 try {
                     Thread.sleep(x * 10);
                     lock.lock();
@@ -42,7 +51,9 @@ public class ThreadVerifiesContinuouslyInteractingMockTest extends TestBase {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-            });
+                            mock.simpleMethod();
+                        }
+                    };
             listeners[i].start();
         }
 
