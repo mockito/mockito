@@ -1,10 +1,5 @@
-/*
- * Copyright (c) 2017 Mockito contributors
- * This program is made available under the terms of the MIT License.
- */
-package org.mockito.android.internal.creation;
-
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +13,12 @@ class AndroidTempFileLocator {
         try {
             String user = System.getProperty("org.mockito.android.target");
             if (user != null) {
-                t = new File(user);
+                t = getSecureFile(user);
             }
         } catch (Throwable ignored) {
         }
         if (t == null) {
-            t =
-                    getCacheDirFromInstrumentationRegistry(
-                            "android.support.test.InstrumentationRegistry");
+            t = getCacheDirFromInstrumentationRegistry("android.support.test.InstrumentationRegistry");
         }
         if (t == null) {
             t = getCacheDirFromInstrumentationRegistry("androidx.test.InstrumentationRegistry");
@@ -35,8 +28,7 @@ class AndroidTempFileLocator {
                 Class<?> clazz = Class.forName("dalvik.system.PathClassLoader");
                 Field pathField = clazz.getDeclaredField("path");
                 pathField.setAccessible(true);
-                String pathFromThisClassLoader =
-                        (String) pathField.get(AndroidTempFileLocator.class.getClassLoader());
+                String pathFromThisClassLoader = (String) pathField.get(AndroidTempFileLocator.class.getClassLoader());
                 File[] results = guessPath(pathFromThisClassLoader);
                 if (results.length > 0) {
                     t = results[0];
@@ -47,18 +39,27 @@ class AndroidTempFileLocator {
         target = t;
     }
 
+    private static File getSecureFile(String path) throws IOException {
+        File baseDir = new File("/secure/base/directory");
+        File file = new File(baseDir, path);
+        if (!file.getCanonicalPath().startsWith(baseDir.getCanonicalPath())) {
+            throw new SecurityException("Access to this file is not allowed");
+        }
+        return file;
+    }
+
     private static File getCacheDirFromInstrumentationRegistry(String className) {
         try {
             Class<?> clazz = Class.forName(className);
             Object context = clazz.getDeclaredMethod("getTargetContext").invoke(clazz);
-            return (File) context.getClass().getMethod("getCacheDir").invoke(context);
+            return getSecureFile(((File) context.getClass().getMethod("getCacheDir").invoke(context)).getPath());
         } catch (Throwable ignored) {
         }
         return null;
     }
 
     private static File[] guessPath(String input) {
-        List<File> results = new ArrayList<File>();
+        List<File> results = new ArrayList<>();
         for (String potential : splitPathList(input)) {
             if (!potential.startsWith("/data/app/")) {
                 continue;
@@ -83,7 +84,7 @@ class AndroidTempFileLocator {
                 }
             }
         }
-        return results.toArray(new File[results.size()]);
+        return results.toArray(new File[0]);
     }
 
     private static String[] splitPathList(String input) {
