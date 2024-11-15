@@ -89,7 +89,7 @@ jobs:
         --scan
 
     - name: 8. Upload coverage report
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v4
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
@@ -182,7 +182,7 @@ jobs:
 
     # :mockito-integration-tests:android-tests:connectedCheck (which depends on :mockito-integration-tests:android-tests:createDebugAndroidTestCoverageReport) already generated coverage report.
     - name: 6. Upload coverage report
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v4
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
