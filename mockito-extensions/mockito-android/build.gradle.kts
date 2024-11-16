@@ -6,8 +6,10 @@ plugins {
 description = "Mockito for Android"
 
 dependencies {
-    api project(":mockito-core")
-    implementation libs.bytebuddy.android
+    api(project(":mockito-core"))
+    implementation(libs.bytebuddy.android)
 }
 
-tasks.javadoc.enabled = false
+tasks.javadoc {
+    isEnabled = false
+}
