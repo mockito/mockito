@@ -11,7 +11,6 @@ base.archivesName = "mockito-core"
 
 apply {
     from(rootProject.file("gradle/coverage.gradle"))
-    from("testing.gradle")
 }
 
 val testUtil: Configuration by configurations.creating //TODO move to separate project
@@ -103,4 +102,71 @@ tasks {
             """.trimIndent())
         }
     }
+
+    test {
+        val java11 = providers.environmentVariable("SIMULATE_JAVA11")
+        if (java11.isPresent) {
+            logger.info("$path - use Java11 simulation: $java11")
+            systemProperty("org.mockito.internal.noUnsafeInjection", java11.get())
+        }
+    }
+
+    // This task is used to generate Mockito extensions for testing see ci.yml build matrix.
+    val createTestResources by registering {
+        val mockitoExtConfigFiles = listOf(
+            mockitoExtensionConfigFile(project, "org.mockito.plugins.MockMaker"),
+            mockitoExtensionConfigFile(project, "org.mockito.plugins.MemberAccessor"),
+        )
+        outputs.files(mockitoExtConfigFiles)
+        doLast {
+            // Configure MockMaker from environment (if specified), otherwise use default
+            configureMockitoExtensionFromCi(project, "org.mockito.plugins.MockMaker", "MOCK_MAKER")
+
+            // Configure MemberAccessor from environment (if specified), otherwise use default
+            configureMockitoExtensionFromCi(project, "org.mockito.plugins.MemberAccessor", "MEMBER_ACCESSOR")
+        }
+    }
+    processTestResources {
+        dependsOn(createTestResources)
+    }
+
+    val removeTestResources by registering {
+        val mockitoExtConfigFiles = listOf(
+            mockitoExtensionConfigFile(project, "org.mockito.plugins.MockMaker"),
+            mockitoExtensionConfigFile(project, "org.mockito.plugins.MemberAccessor"),
+        )
+        outputs.files(mockitoExtConfigFiles)
+        doLast {
+            mockitoExtConfigFiles.forEach {
+                if (it.exists()) {
+                    it.delete()
+                }
+            }
+        }
+    }
+    test {
+        finalizedBy(removeTestResources)
+    }
 }
+
+fun Task.configureMockitoExtensionFromCi(
+    project: Project,
+    mockitoExtension: String,
+    ciMockitoExtensionEnvVarName: String,
+) {
+    val mockitoExtConfigFile = mockitoExtensionConfigFile(project, mockitoExtension)
+    val mockMaker = project.providers.environmentVariable(ciMockitoExtensionEnvVarName)
+    if (mockMaker.isPresent && !mockMaker.get().endsWith("default")) {
+        logger.info("Using $mockitoExtension ${mockMaker.get()}")
+        mockitoExtConfigFile.run {
+            parentFile.mkdirs()
+            createNewFile()
+            writeText(mockMaker.get())
+        }
+    } else {
+        logger.info("Using default $mockitoExtension")
+    }
+}
+
+fun mockitoExtensionConfigFile(project: Project, mockitoExtension: String) =
+    file("${project.sourceSets.test.get().output.resourcesDir}/mockito-extensions/$mockitoExtension")
