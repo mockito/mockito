@@ -81,12 +81,33 @@ tasks {
         bundle { // this: BundleTaskExtension
             classpath(project.configurations.compileClasspath)
             bnd("""
-                Bundle-Name: Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.
-                Bundle-SymbolicName: org.mockito.mockito-core
-                Bundle-Version: ${'$'}{version_cleanup;${project.version}}
-                -versionpolicy: [${'$'}{version;==;${'$'}{@}},${'$'}{version;+;${'$'}{@}})
-                Export-Package: org.mockito.internal.*;status=INTERNAL;mandatory:=status;version=${archiveVersion.get()},org.mockito.*;version=${archiveVersion.get()}
+                # Bnd instructions for the Mockito core bundle.
 
+                # Set a bundle name slightly different from project description.
+                Bundle-Name: Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.
+
+                # Set the Bundle-SymbolicName to "org.mockito.mockito-core".
+                # Otherwise bnd plugin will use archiveClassifier by default.
+                Bundle-SymbolicName: org.mockito.mockito-core
+
+                # Version rules for the bundle.
+                # https://bnd.bndtools.org/macros/version_cleanup.html
+                Bundle-Version: ${'$'}{version_cleanup;${project.version}}
+
+                # Set bundle license
+                Bundle-License: MIT
+
+                # Export rules for public and internal packages
+                # https://bnd.bndtools.org/heads/export_package.html
+                Export-Package: \
+                    org.mockito.internal.*;status=INTERNAL;mandatory:=status;version=${archiveVersion.get()}, \
+                    org.mockito.*;version=${archiveVersion.get()}
+
+                # General rules for package import
+                # https://bnd.bndtools.org/heads/import_package.html
+                # Override the default version policy to allow for a range of versions.
+                # https://bnd.bndtools.org/instructions/versionpolicy.html
+                -versionpolicy: [${'$'}{version;==;${'$'}{@}},${'$'}{version;+;${'$'}{@}})
                 Import-Package: \
                     net.bytebuddy.*;version="[1.6.0,2.0)", \
                     junit.*;resolution:=optional, \
@@ -96,8 +117,15 @@ tasks {
                     org.opentest4j.*;resolution:=optional, \
                     org.mockito.*
 
+                # Don't add the Private-Package header.
+                # See https://bnd.bndtools.org/instructions/removeheaders.html
                 -removeheaders: Private-Package
+
+                # Configures the automatic module name for Java 9+.
                 Automatic-Module-Name: org.mockito
+
+                # Don't add all the extra headers bnd normally adds.
+                # See https://bnd.bndtools.org/instructions/noextraheaders.html
                 -noextraheaders: true
             """.trimIndent())
         }
