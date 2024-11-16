@@ -11,11 +11,10 @@ base.archivesName = "mockito-core"
 
 apply {
     from(rootProject.file("gradle/coverage.gradle"))
-    from("inline-mock.gradle")
     from("testing.gradle")
 }
 
-val testUtil = configurations.create("testUtil") //TODO move to separate project
+val testUtil: Configuration by configurations.creating //TODO move to separate project
 configurations {
     // Putting 'provided' dependencies on test compile and runtime classpath.
     testCompileOnly.configure {
@@ -47,8 +46,39 @@ mockitoJavadoc {
     docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
 }
 
+val generatedInlineResource = layout.buildDirectory.dir("generated/resources/inline")
+sourceSets {
+    main {
+        resources {
+            output.dir(generatedInlineResource)
+        }
+    }
+}
+
 tasks {
+    val copyMockMethodDispatcher by registering(Copy::class) {
+        dependsOn(compileJava)
+
+        from(sourceSets.main.flatMap { it.java.classesDirectory }.map { it.file("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class") })
+        into(generatedInlineResource.map { it.dir("org/mockito/internal/creation/bytebuddy/inject") })
+
+        rename("(.+)\\.class", "$1.raw")
+    }
+    classes.dependsOn(copyMockMethodDispatcher)
+
+
     jar {
+        exclude(
+            "org/mockito/internal/creation/bytebuddy/inject/package-info.class",
+            "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class",
+        )
+        manifest {
+            attributes(
+                "Premain-Class" to "org.mockito.internal.PremainAttach",
+                "Can-Retransform-Classes" to "true",
+            )
+        }
+
         bundle { // this: BundleTaskExtension
             classpath(project.configurations.compileClasspath)
             bnd("""
