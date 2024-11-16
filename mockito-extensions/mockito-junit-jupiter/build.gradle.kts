@@ -29,30 +29,41 @@ tasks {
         bundle { // this: BundleTaskExtension
             classpath = project.configurations.runtimeClasspath.get()
             bnd("""
+                # Bnd instructions for the Mockito Junit Jupiter.
+
+                # Set a bundle name slightly different from project description.
                 Bundle-Name: Mockito Extension Library for JUnit 5.
+
+                # Set the Bundle-SymbolicName to "org.mockito.junit-jupiter".
+                # Otherwise bnd plugin will use archiveClassifier by default.
                 Bundle-SymbolicName: org.mockito.junit-jupiter
+
+                # Version rules for the bundle.
+                # https://bnd.bndtools.org/macros/version_cleanup.html
                 Bundle-Version: ${'$'}{version_cleanup;${project.version}}
-                -versionpolicy: [${'$'}{version;==;\${'$'}{@}},\${'$'}{version;+;\${'$'}{@}})
+
+                # Set bundle license
+                Bundle-License: MIT
+
+                # Export rules for public and internal packages
+                # https://bnd.bndtools.org/heads/export_package.html
                 Export-Package: org.mockito.junit.jupiter.*;version=${archiveVersion.get()}
+
+                # Don't add the Private-Package header.
+                # See https://bnd.bndtools.org/instructions/removeheaders.html
                 -removeheaders: Private-Package
+
+                # Configures the automatic module name for Java 9+.
                 Automatic-Module-Name: org.mockito.junit.jupiter
+
+                # Don't add all the extra headers bnd normally adds.
+                # See https://bnd.bndtools.org/instructions/noextraheaders.html
                 -noextraheaders: true
+
+                # Instruct the APIGuardianAnnotations how to operate.
+                # See https://bnd.bndtools.org/instructions/export-apiguardian.html
                 -export-apiguardian: org.mockito.internal.*
             """.trimIndent())
-
-            // bnd(
-            //     mapOf(
-            //         "Bundle-Name" to "Mockito Extension Library for JUnit 5.",
-            //         "Bundle-SymbolicName" to "org.mockito.junit-jupiter",
-            //         "Bundle-Version" to "\${version_cleanup;${project.version}}",
-            //         "-versionpolicy" to "[\${version;==;\${@}},\${version;+;\${@}})",
-            //         "Export-Package" to "org.mockito.junit.jupiter.*;version=${archiveVersion.get()}",
-            //         "-removeheaders" to "Private-Package",
-            //         "Automatic-Module-Name" to "org.mockito.junit.jupiter",
-            //         "-noextraheaders" to "true",
-            //         "-export-apiguardian" to "org.mockito.internal.*",
-            //     )
-            // )
         }
     }
 
