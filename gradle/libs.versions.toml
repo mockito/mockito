@@ -7,7 +7,7 @@ junit-platform = "1.11.3"
 kotlin = "2.0.21"
 
 gradleplugin-test-logger = "4.0.0"
-gradleplugin-animal-sniffer = "1.7.1"
+gradleplugin-animal-sniffer = "1.7.2"
 gradleplugin-aQute-bnd = "7.0.0"
 gradleplugin-errorprone = "4.1.0"
 gradleplugin-spotless = "6.25.0"
