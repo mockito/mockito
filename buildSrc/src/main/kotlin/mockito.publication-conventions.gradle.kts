@@ -153,8 +153,11 @@ tasks.withType<GenerateModuleMetadata>().configureEach {
 
 // https://docs.gradle.org/current/userguide/signing_plugin.html
 signing {
-    System.getenv("PGP_KEY")?.takeIf { it.isNotBlank() }?.let { pgpKey ->
-        useInMemoryPgpKeys(pgpKey, System.getenv("PGP_PWD"))
+    if (providers.environmentVariable("PGP_KEY").isPresent) {
+        useInMemoryPgpKeys(
+            providers.environmentVariable("PGP_KEY").orNull,
+            providers.environmentVariable("PGP_PWD").orNull
+        )
         sign(publishing.publications)
     }
 }
