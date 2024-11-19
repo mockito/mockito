@@ -11,7 +11,6 @@ dependencies {
     implementation(project(":mockito-core"))
     testImplementation(libs.junit4)
     testImplementation(libs.assertj)
-    testImplementation(project(path = ":mockito-core", configuration = "testUtil"))
     bytebuddyAgent(libs.bytebuddy.agent) { isTransitive = false }
 }
 
@@ -22,8 +21,6 @@ java {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
-
-
 
 tasks {
     val testWithBytebuddyAgent by registering(Test::class) {

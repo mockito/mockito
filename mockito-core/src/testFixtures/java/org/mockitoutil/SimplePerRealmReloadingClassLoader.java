@@ -4,6 +4,7 @@
  */
 package org.mockitoutil;
 
+import java.lang.StackWalker.StackFrame;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -13,7 +14,7 @@ import java.util.concurrent.Callable;
 
 /**
  * Custom classloader to load classes in hierarchic realm.
- *
+ * <p>
  * Each class can be reloaded in the realm if the LoadClassPredicate says so.
  */
 public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
@@ -34,15 +35,32 @@ public class SimplePerRealmReloadingClassLoader extends URLClassLoader {
 
     private static URL[] getPossibleClassPathsUrls() {
         return new URL[] {
-            obtainClassPath(),
+            obtainThisClassPath(),
+            detectCallerClassPath(),
             obtainClassPath("org.mockito.Mockito"),
             obtainClassPath("net.bytebuddy.ByteBuddy")
         };
     }
 
-    private static URL obtainClassPath() {
+    private static URL obtainThisClassPath() {
         String className = SimplePerRealmReloadingClassLoader.class.getName();
         return obtainClassPath(className);
+    }
+
+    private static URL detectCallerClassPath() {
+        StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+        // skip getPossibleClassPathsUrls, detectCallerClassPath and constructor
+        int skippedFrames = 3;
+        Class<?> aClass =
+                walker.walk(
+                                frames ->
+                                        frames.peek(System.out::println)
+                                                .skip(skippedFrames)
+                                                .findFirst())
+                        .map(StackFrame::getDeclaringClass)
+                        .orElseThrow(() -> new RuntimeException("Couldn't detect caller class"));
+
+        return obtainClassPath(aClass.getName());
     }
 
     private static URL obtainClassPath(String className) {

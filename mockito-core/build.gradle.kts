@@ -4,6 +4,7 @@ plugins {
     id("mockito.library-conventions")
     id("mockito.java-backward-compatibility-checks-conventions")
     id("mockito.javadoc-conventions")
+    id("java-test-fixtures")
 }
 
 description = "Mockito mock objects library core API and implementation"
@@ -13,7 +14,6 @@ apply {
     from(rootProject.file("gradle/coverage.gradle"))
 }
 
-val testUtil: Configuration by configurations.creating //TODO move to separate project
 configurations {
     // Putting 'provided' dependencies on test compile and runtime classpath.
     testCompileOnly.configure {
@@ -37,7 +37,9 @@ dependencies {
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junit.jupiter.params)
 
-    testUtil(sourceSets.test.get().output)
+    testFixturesImplementation(libs.assertj)
+    testFixturesImplementation(libs.objenesis)
+    testFixturesCompileOnly(libs.junit4)
 }
 
 mockitoJavadoc {
