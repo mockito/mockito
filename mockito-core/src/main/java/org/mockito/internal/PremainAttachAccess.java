@@ -9,12 +9,19 @@ import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.Installer;
 
 import java.lang.instrument.Instrumentation;
+import java.lang.management.ManagementFactory;
+import java.util.List;
 
 import static org.mockito.internal.util.StringUtil.join;
 
 public class PremainAttachAccess {
 
+    private static volatile Instrumentation inst;
+
     public static Instrumentation getInstrumentation() {
+        if (inst != null) {
+            return inst;
+        }
         // A Java agent is always added to the system class loader. If Mockito is executed from a
         // different class loader we need to make sure to resolve the instrumentation instance
         // from there, or fail the resolution, if this class does not exist on the system class
@@ -34,16 +41,20 @@ public class PremainAttachAccess {
         }
         if (instrumentation == null) {
             if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V21)) {
-                // Cannot use `Plugins.getMockitoLogger().warn(...)` at this time due to a circular
-                // dependency on `Plugins.registry`.
-                // The `PluginRegistry` is not yet fully initialized (in `Plugins`), because it is
-                // currently initializing the `MockMaker` which is a InlineByteBuddyMockMaker, and
-                // it is later calling this method to access the instrumentation.
-                System.err.println(
+                List<String> arguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
+                if (arguments.stream().noneMatch(argument -> argument.contains("-XX:+EnableDynamicAgentLoading"))) {
+                    // Cannot use `Plugins.getMockitoLogger().warn(...)` at this time due to a circular
+                    // dependency on `Plugins.registry`.
+                    // The `PluginRegistry` is not yet fully initialized (in `Plugins`), because it is
+                    // currently initializing the `MockMaker` which is a InlineByteBuddyMockMaker, and
+                    // it is later calling this method to access the instrumentation.
+                    System.err.println(
                         "Mockito is currently self-attaching to enable the inline-mock-maker. This "
-                                + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
-                                + "build what is described in Mockito's documentation: "
-                                + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
+                            + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
+                            + "build what is described in Mockito's documentation: "
+                            + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
+                }
+
             }
             // Attempt to dynamically attach, as a last resort.
             instrumentation = ByteBuddyAgent.install();
@@ -55,6 +66,7 @@ public class PremainAttachAccess {
                             "",
                             "You cannot use this mock maker on this VM"));
         }
+        inst = instrumentation;
         return instrumentation;
     }
 

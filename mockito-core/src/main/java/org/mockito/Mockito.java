@@ -226,6 +226,11 @@ import java.util.function.Function;
  * &lt;/plugin&gt;
  * </code></pre>
  *
+ * <p>
+ * To enable support for dynamic attach, it is also possible to start a JVM with
+ * <pre>-XX:+EnableDynamicAgentLoading</pre>. Do however note that, since this option is not standardized, any future
+ * release of a JDK might prohibit this behaviour.
+ *
  * <h3 id="1">1. <a class="meaningful_link" href="#verification" name="verification">Let's verify some behaviour!</a></h3>
  *
  * The following examples mock a List, because most people are familiar with the interface (such as the
