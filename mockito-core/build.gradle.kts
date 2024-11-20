@@ -44,10 +44,11 @@ dependencies {
 
 mockitoJavadoc {
     title = "Mockito ${project.version} API"
-    docTitle = """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
+    docTitle =
+        """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
 }
 
-val generatedInlineResource = layout.buildDirectory.dir("generated/resources/inline")
+val generatedInlineResource: Provider<Directory> = layout.buildDirectory.dir("generated/resources/inline")
 sourceSets {
     main {
         resources {
@@ -60,7 +61,8 @@ tasks {
     val copyMockMethodDispatcher by registering(Copy::class) {
         dependsOn(compileJava)
 
-        from(sourceSets.main.flatMap { it.java.classesDirectory }.map { it.file("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class") })
+        from(sourceSets.main.flatMap { it.java.classesDirectory }
+            .map { it.file("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class") })
         into(generatedInlineResource.map { it.dir("org/mockito/internal/creation/bytebuddy/inject") })
 
         rename("(.+)\\.class", "$1.raw")
@@ -82,7 +84,8 @@ tasks {
 
         bundle { // this: BundleTaskExtension
             classpath(project.configurations.compileClasspath)
-            bnd("""
+            bnd(
+                """
                 # Bnd instructions for the Mockito core bundle.
 
                 # Set a bundle name slightly different from project description.
@@ -129,7 +132,8 @@ tasks {
                 # Don't add all the extra headers bnd normally adds.
                 # See https://bnd.bndtools.org/instructions/noextraheaders.html
                 -noextraheaders: true
-            """.trimIndent())
+            """.trimIndent()
+            )
         }
     }
 
@@ -141,12 +145,13 @@ tasks {
         }
     }
 
+    val mockitoExtConfigFiles = listOf(
+        mockitoExtensionConfigFile(project, "org.mockito.plugins.MockMaker"),
+        mockitoExtensionConfigFile(project, "org.mockito.plugins.MemberAccessor"),
+    )
+
     // This task is used to generate Mockito extensions for testing see ci.yml build matrix.
     val createTestResources by registering {
-        val mockitoExtConfigFiles = listOf(
-            mockitoExtensionConfigFile(project, "org.mockito.plugins.MockMaker"),
-            mockitoExtensionConfigFile(project, "org.mockito.plugins.MemberAccessor"),
-        )
         outputs.files(mockitoExtConfigFiles)
         doLast {
             // Configure MockMaker from environment (if specified), otherwise use default
@@ -161,10 +166,6 @@ tasks {
     }
 
     val removeTestResources by registering {
-        val mockitoExtConfigFiles = listOf(
-            mockitoExtensionConfigFile(project, "org.mockito.plugins.MockMaker"),
-            mockitoExtensionConfigFile(project, "org.mockito.plugins.MemberAccessor"),
-        )
         outputs.files(mockitoExtConfigFiles)
         doLast {
             mockitoExtConfigFiles.forEach {
@@ -176,6 +177,13 @@ tasks {
     }
     test {
         finalizedBy(removeTestResources)
+    }
+
+    checkstyleTest {
+        // Without dependsOn, the following error occurs:
+        // Gradle detected a problem with the following location: '/home/runner/work/mockito/mockito/mockito-core/build/resources/test/mockito-extensions/org.mockito.plugins.MockMaker'.
+        // Reason: Task ':mockito-core:checkstyleTest' uses this output of task ':mockito-core:removeTestResources' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed.
+        dependsOn(removeTestResources)
     }
 }
 
