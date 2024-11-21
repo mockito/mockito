@@ -111,7 +111,12 @@ tasks {
                 # General rules for package import
                 # https://bnd.bndtools.org/heads/import_package.html
                 # Override the default version policy to allow for a range of versions.
-                # https://bnd.bndtools.org/instructions/versionpolicy.html
+                # At this point it's unclear whether `versionpolicy` is deprecated, here's
+                # some relevant pages on versions
+                # https://bnd.bndtools.org/chapters/170-versioning.html
+                # https://bnd.bndtools.org/macros/version.html
+                # https://bnd.bndtools.org/macros/versionmask.html
+                # https://bnd.bndtools.org/macros/range.html
                 -versionpolicy: [${'$'}{version;==;${'$'}{@}},${'$'}{version;+;${'$'}{@}})
                 Import-Package: \
                     net.bytebuddy.*;version="[1.6.0,2.0)", \
