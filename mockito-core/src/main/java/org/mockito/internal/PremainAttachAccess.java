@@ -42,19 +42,23 @@ public class PremainAttachAccess {
         if (instrumentation == null) {
             if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V21)) {
                 List<String> arguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
-                if (arguments.stream().noneMatch(argument -> argument.contains("-XX:+EnableDynamicAgentLoading"))) {
-                    // Cannot use `Plugins.getMockitoLogger().warn(...)` at this time due to a circular
+                if (arguments.stream()
+                        .noneMatch(
+                                argument -> argument.contains("-XX:+EnableDynamicAgentLoading"))) {
+                    // Cannot use `Plugins.getMockitoLogger().warn(...)` at this time due to a
+                    // circular
                     // dependency on `Plugins.registry`.
-                    // The `PluginRegistry` is not yet fully initialized (in `Plugins`), because it is
-                    // currently initializing the `MockMaker` which is a InlineByteBuddyMockMaker, and
+                    // The `PluginRegistry` is not yet fully initialized (in `Plugins`), because it
+                    // is
+                    // currently initializing the `MockMaker` which is a InlineByteBuddyMockMaker,
+                    // and
                     // it is later calling this method to access the instrumentation.
                     System.err.println(
-                        "Mockito is currently self-attaching to enable the inline-mock-maker. This "
-                            + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
-                            + "build what is described in Mockito's documentation: "
-                            + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
+                            "Mockito is currently self-attaching to enable the inline-mock-maker. This "
+                                    + "will no longer work in future releases of the JDK. Please add Mockito as an agent to your "
+                                    + "build what is described in Mockito's documentation: "
+                                    + "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.3");
                 }
-
             }
             // Attempt to dynamically attach, as a last resort.
             instrumentation = ByteBuddyAgent.install();
