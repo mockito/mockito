@@ -15,7 +15,7 @@ apply {
 }
 
 configurations {
-    // Putting 'provided' dependencies on test compile and runtime classpath.
+    // Putting 'provided' dependencies on testCompileOnly and testRuntimeOnly classpath.
     testCompileOnly.configure {
         extendsFrom(compileOnly.get())
     }
@@ -54,6 +54,13 @@ sourceSets {
         resources {
             output.dir(generatedInlineResource)
         }
+    }
+}
+
+val testExtensionConfigFiles: SourceSet by sourceSets.creating
+sourceSets {
+    test {
+        runtimeClasspath += testExtensionConfigFiles.output
     }
 }
 
@@ -151,8 +158,8 @@ tasks {
     }
 
     val mockitoExtConfigFiles = listOf(
-        mockitoExtensionConfigFile(project, "org.mockito.plugins.MockMaker"),
-        mockitoExtensionConfigFile(project, "org.mockito.plugins.MemberAccessor"),
+        mockitoExtensionConfigFile(testExtensionConfigFiles, "org.mockito.plugins.MockMaker"),
+        mockitoExtensionConfigFile(testExtensionConfigFiles, "org.mockito.plugins.MemberAccessor"),
     )
 
     // This task is used to generate Mockito extensions for testing see ci.yml build matrix.
@@ -171,24 +178,10 @@ tasks {
     }
 
     val removeTestResources by registering {
-        outputs.files(mockitoExtConfigFiles)
-        doLast {
-            mockitoExtConfigFiles.forEach {
-                if (it.exists()) {
-                    it.delete()
-                }
-            }
-        }
+        mockitoExtConfigFiles.forEach(destroyables::register)
     }
     test {
         finalizedBy(removeTestResources)
-    }
-
-    checkstyleTest {
-        // Without dependsOn, the following error occurs:
-        // Gradle detected a problem with the following location: '/home/runner/work/mockito/mockito/mockito-core/build/resources/test/mockito-extensions/org.mockito.plugins.MockMaker'.
-        // Reason: Task ':mockito-core:checkstyleTest' uses this output of task ':mockito-core:removeTestResources' without declaring an explicit or implicit dependency. This can lead to incorrect results being produced, depending on what order the tasks are executed.
-        dependsOn(removeTestResources)
     }
 }
 
@@ -197,7 +190,7 @@ fun Task.configureMockitoExtensionFromCi(
     mockitoExtension: String,
     ciMockitoExtensionEnvVarName: String,
 ) {
-    val mockitoExtConfigFile = mockitoExtensionConfigFile(project, mockitoExtension)
+    val mockitoExtConfigFile = mockitoExtensionConfigFile(testExtensionConfigFiles, mockitoExtension)
     val mockMaker = project.providers.environmentVariable(ciMockitoExtensionEnvVarName)
     if (mockMaker.isPresent && !mockMaker.get().endsWith("default")) {
         logger.info("Using $mockitoExtension ${mockMaker.get()}")
@@ -211,5 +204,5 @@ fun Task.configureMockitoExtensionFromCi(
     }
 }
 
-fun mockitoExtensionConfigFile(project: Project, mockitoExtension: String) =
-    file("${project.sourceSets.test.get().output.resourcesDir}/mockito-extensions/$mockitoExtension")
+fun mockitoExtensionConfigFile(extConfigSourceSet: SourceSet, mockitoExtension: String) =
+    file("${extConfigSourceSet.output.resourcesDir}/mockito-extensions/$mockitoExtension")
