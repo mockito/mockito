@@ -48,19 +48,12 @@ mockitoJavadoc {
         """<h1><a href="org/mockito/Mockito.html">Click to see examples</a>. Mockito ${project.version} API.</h1>"""
 }
 
-val generatedInlineResource: Provider<Directory> = layout.buildDirectory.dir("generated/resources/inline")
+val generatedInlineResource: Provider<Directory> = layout.buildDirectory.dir("generated/resources/inline/java")
 sourceSets {
     main {
         resources {
             output.dir(generatedInlineResource)
         }
-    }
-}
-
-val testExtensionConfigFiles: SourceSet by sourceSets.creating
-sourceSets {
-    test {
-        runtimeClasspath += testExtensionConfigFiles.output
     }
 }
 
@@ -156,32 +149,31 @@ tasks {
             systemProperty("org.mockito.internal.noUnsafeInjection", java11.get())
         }
     }
+}
 
-    val mockitoExtConfigFiles = listOf(
-        mockitoExtensionConfigFile(testExtensionConfigFiles, "org.mockito.plugins.MockMaker"),
-        mockitoExtensionConfigFile(testExtensionConfigFiles, "org.mockito.plugins.MemberAccessor"),
-    )
+//<editor-fold defaultstate="collapsed" desc="Environment-based Mockito extension configuration for tests">
+val mockitoExtConfigFiles = listOf(
+    mockitoExtensionConfigFile(project, "org.mockito.plugins.MockMaker"),
+    mockitoExtensionConfigFile(project, "org.mockito.plugins.MemberAccessor"),
+)
 
-    // This task is used to generate Mockito extensions for testing see ci.yml build matrix.
-    val createTestResources by registering {
-        outputs.files(mockitoExtConfigFiles)
-        doLast {
-            // Configure MockMaker from environment (if specified), otherwise use default
-            configureMockitoExtensionFromCi(project, "org.mockito.plugins.MockMaker", "MOCK_MAKER")
+val createTestResources by tasks.registering {
+    outputs.files(mockitoExtConfigFiles)
+    doLast {
+        // Configure MockMaker from environment (if specified), otherwise use default
+        configureMockitoExtensionFromCi(project, "org.mockito.plugins.MockMaker", "MOCK_MAKER")
 
-            // Configure MemberAccessor from environment (if specified), otherwise use default
-            configureMockitoExtensionFromCi(project, "org.mockito.plugins.MemberAccessor", "MEMBER_ACCESSOR")
-        }
+        // Configure MemberAccessor from environment (if specified), otherwise use default
+        configureMockitoExtensionFromCi(project, "org.mockito.plugins.MemberAccessor", "MEMBER_ACCESSOR")
     }
-    processTestResources {
-        dependsOn(createTestResources)
-    }
+}
 
-    val removeTestResources by registering {
-        mockitoExtConfigFiles.forEach(destroyables::register)
-    }
-    test {
-        finalizedBy(removeTestResources)
+sourceSets.test {
+    resources {
+        output.dir(
+            layout.buildDirectory.dir("generated/resources/ext-config/test"),
+            "builtBy" to createTestResources
+        )
     }
 }
 
@@ -190,19 +182,21 @@ fun Task.configureMockitoExtensionFromCi(
     mockitoExtension: String,
     ciMockitoExtensionEnvVarName: String,
 ) {
-    val mockitoExtConfigFile = mockitoExtensionConfigFile(testExtensionConfigFiles, mockitoExtension)
-    val mockMaker = project.providers.environmentVariable(ciMockitoExtensionEnvVarName)
-    if (mockMaker.isPresent && !mockMaker.get().endsWith("default")) {
-        logger.info("Using $mockitoExtension ${mockMaker.get()}")
+    val mockitoExtConfigFile = mockitoExtensionConfigFile(project, mockitoExtension)
+    val extEnvVar = project.providers.environmentVariable(ciMockitoExtensionEnvVarName)
+    if (extEnvVar.isPresent && !extEnvVar.get().endsWith("default")) {
+        logger.info("Using $mockitoExtension ${extEnvVar.get()}")
         mockitoExtConfigFile.run {
             parentFile.mkdirs()
             createNewFile()
-            writeText(mockMaker.get())
+            writeText(extEnvVar.get())
         }
     } else {
         logger.info("Using default $mockitoExtension")
     }
 }
 
-fun mockitoExtensionConfigFile(extConfigSourceSet: SourceSet, mockitoExtension: String) =
-    file("${extConfigSourceSet.output.resourcesDir}/mockito-extensions/$mockitoExtension")
+fun mockitoExtensionConfigFile(project: Project, mockitoExtension: String) =
+    file(project.layout.buildDirectory.dir("generated/resources/ext-config/test/mockito-extensions/$mockitoExtension"))
+//</editor-fold>
+
