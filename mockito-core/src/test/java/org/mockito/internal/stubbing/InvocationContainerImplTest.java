@@ -115,7 +115,6 @@ public class InvocationContainerImplTest {
         assertFalse(containerStubOnly.hasInvocationForPotentialStubbing());
     }
 
-
     @Test
     public void should_return_answer_when_answer_exists() throws Throwable {
         // Given: set an invocation for stubbing and add a matching answer
@@ -135,9 +134,12 @@ public class InvocationContainerImplTest {
         Invocation unmatchedInvocation = new InvocationBuilder().toInvocation();
 
         // When and Then: invoking answerTo should throw NullPointerException
-        NullPointerException exception = assertThrows(NullPointerException.class, () -> {
-            container.answerTo(unmatchedInvocation);
-        });
+        NullPointerException exception =
+                assertThrows(
+                        NullPointerException.class,
+                        () -> {
+                            container.answerTo(unmatchedInvocation);
+                        });
 
         // Verify the exception message
         assertTrue(exception.getMessage().contains("No answer found for: " + unmatchedInvocation));
