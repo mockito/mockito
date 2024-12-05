@@ -10,11 +10,12 @@ if (!base.archivesName.get().startsWith("mockito-")) {
     base.archivesName = "mockito-" + project.name
 }
 
+val mockitoExtensions: Set<Project> = project(":mockito-extensions").subprojects
 dependencies {
     constraints {
         api(project(":mockito-core"))
 
-        project(":mockito-extensions").subprojects.forEach {
+        mockitoExtensions.forEach {
             api(it)
         }
     }

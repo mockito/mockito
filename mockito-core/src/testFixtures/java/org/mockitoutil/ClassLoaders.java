@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.StackWalker.Option;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
@@ -208,6 +209,10 @@ public abstract class ClassLoaders {
         }
 
         public IsolatedURLClassLoaderBuilder withCurrentCodeSourceUrls() {
+            Class<?> callerClass =
+                    StackWalker.getInstance(Option.RETAIN_CLASS_REFERENCE).getCallerClass();
+
+            codeSourceUrls.add(obtainCurrentClassPathOf(callerClass.getName()));
             codeSourceUrls.add(obtainCurrentClassPathOf(ClassLoaders.class.getName()));
             return this;
         }

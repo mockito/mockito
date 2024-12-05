@@ -234,12 +234,16 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
     private static void assureInitialization(Class<?> type) {
         try {
             Class.forName(type.getName(), true, type.getClassLoader());
-        } catch (ExceptionInInitializerError e) {
+        } catch (Error error) {
+            Throwable ex = error;
+            if (ex instanceof ExceptionInInitializerError) {
+                ex = ((ExceptionInInitializerError) ex).getException();
+            }
             throw new MockitoException(
                     "Cannot instrument "
                             + type
                             + " because it or one of its supertypes could not be initialized",
-                    e.getException());
+                    ex);
         } catch (Throwable ignored) {
         }
     }
