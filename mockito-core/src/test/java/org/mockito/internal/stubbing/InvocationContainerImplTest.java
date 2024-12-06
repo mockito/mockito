@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.LinkedList;
 import java.util.concurrent.CountDownLatch;
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.InvocationBuilder;
 import org.mockito.internal.invocation.InvocationMatcher;
@@ -129,19 +130,25 @@ public class InvocationContainerImplTest {
     }
 
     @Test
-    public void should_throw_null_pointer_exception_when_no_answer_found() {
+    public void should_throw_mockito_exception_when_no_answer_found() {
         // Given: no answer added for the invocation
         Invocation unmatchedInvocation = new InvocationBuilder().toInvocation();
 
-        // When and Then: invoking answerTo should throw NullPointerException
-        NullPointerException exception =
+        // When and Then: invoking answerTo should throw MockitoException
+        MockitoException exception =
                 assertThrows(
-                        NullPointerException.class,
+                        MockitoException.class,
                         () -> {
                             container.answerTo(unmatchedInvocation);
                         });
 
         // Verify the exception message
-        assertTrue(exception.getMessage().contains("No answer found for: " + unmatchedInvocation));
+        assertTrue(
+                exception
+                        .getMessage()
+                        .contains(
+                                "Unable to find answer for: "
+                                        + unmatchedInvocation
+                                        + "Did you configure a stubbing for this method?"));
     }
 }
