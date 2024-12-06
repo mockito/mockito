@@ -6,7 +6,7 @@ plugins {
 description = "Integration test for using Mockito from Groovy."
 
 dependencies {
-    testImplementation project(":mockito-core")
-    testImplementation libs.groovy
-    testImplementation libs.junit4
+    testImplementation(project(":mockito-core"))
+    testImplementation(libs.groovy)
+    testImplementation(libs.junit4)
 }

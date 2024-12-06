@@ -48,7 +48,7 @@ include(
 
 // https://developer.android.com/studio/command-line/variables#envar
 // https://developer.android.com/studio/build#properties-files
-if (System.getenv("ANDROID_HOME") != null || File("local.properties").exists()) {
+if (providers.environmentVariable("ANDROID_HOME").isPresent || File("local.properties").exists()) {
     include("mockito-integration-tests:android-tests")
 } else {
     logger.info("Not including android test project due to missing SDK configuration")
@@ -66,6 +66,6 @@ develocity {
 
 buildCache {
     local {
-        isEnabled = !System.getenv().containsKey("CI")
+        isEnabled = !providers.environmentVariable("CI").isPresent
     }
 }
