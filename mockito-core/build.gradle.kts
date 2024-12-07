@@ -1,10 +1,14 @@
 import com.android.build.gradle.internal.tasks.factory.dependsOn
+import org.jetbrains.gradle.ext.settings
+import org.jetbrains.gradle.ext.taskTriggers
 
 plugins {
     id("mockito.library-conventions")
     id("mockito.java-backward-compatibility-checks-conventions")
     id("mockito.javadoc-conventions")
     id("java-test-fixtures")
+
+    alias(libs.plugins.ideaExt)
 }
 
 description = "Mockito mock objects library core API and implementation"
@@ -203,11 +207,11 @@ fun mockitoExtensionConfigFile(project: Project, mockitoExtension: String) =
 //<editor-fold defaultstate="collapsed" desc="Generate version class file">
 // Manifest cannot be used because Android strips the manifest from the jar.
 
-val generatedVersionClass: Provider<Directory> = layout.buildDirectory.dir("generated/sources/version/java")
+val generatedVersionClassDir: Provider<Directory> = layout.buildDirectory.dir("generated/sources/version/java")
 
 sourceSets.main {
     java {
-        srcDir(generatedVersionClass)
+        srcDir(generatedVersionClassDir)
     }
 }
 
@@ -220,7 +224,7 @@ tasks {
         }
         """.trimIndent()
 
-        val versionClass = file(generatedVersionClass.map { it.file("org/mockito/internal/util/MockitoVersion.java") })
+        val versionClass = file(generatedVersionClassDir.map { it.file("org/mockito/internal/util/MockitoVersion.java") })
 
         doLast {
             versionClass.run {
@@ -231,5 +235,15 @@ tasks {
         }
     }
     compileJava.dependsOn(generateVersionClass)
+
+    rootProject.idea {
+        project {
+            settings {
+                taskTriggers {
+                    afterSync(generateVersionClass)
+                }
+            }
+        }
+    }
 }
 //</editor-fold>

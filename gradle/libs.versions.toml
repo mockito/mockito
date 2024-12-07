@@ -11,6 +11,7 @@ gradleplugin-animal-sniffer = "1.7.2"
 gradleplugin-aQute-bnd = "7.0.0"
 gradleplugin-errorprone = "4.1.0"
 gradleplugin-spotless = "6.25.0"
+gradleplugin-ideaExt = "1.1.9"
 
 gradleplugin-android = "7.4.2"
 
@@ -55,3 +56,4 @@ animalSniffer-java = { module = "org.codehaus.mojo.signature:java18", version = 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleplugin-android" }
+ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "gradleplugin-ideaExt" }
