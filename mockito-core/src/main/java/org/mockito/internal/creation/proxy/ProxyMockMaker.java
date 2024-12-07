@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.proxy;
 
+import org.mockito.MockMakers;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.invocation.RealMethod;
@@ -30,6 +31,11 @@ public class ProxyMockMaker implements MockMaker {
     private static final Object[] EMPTY = new Object[0];
 
     private final ProxyRealMethod proxyRealMethod = ProxyRealMethod.make();
+
+    @Override
+    public String getName() {
+        return MockMakers.PROXY;
+    }
 
     @Override
     @SuppressWarnings("unchecked")

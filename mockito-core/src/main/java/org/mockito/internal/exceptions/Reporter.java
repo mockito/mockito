@@ -589,12 +589,15 @@ public class Reporter {
                         scenario));
     }
 
-    public static MockitoException cannotMockClass(Class<?> clazz, String reason) {
+    public static MockitoException cannotMockClass(
+            Class<?> clazz, String reason, String mockMaker) {
         return new MockitoException(
                 join(
                         "Cannot mock/spy " + clazz,
                         "Mockito cannot mock/spy because :",
-                        " - " + reason));
+                        " - " + reason,
+                        " - using mock maker: " + mockMaker,
+                        ""));
     }
 
     public static MockitoException cannotStubVoidMethodWithAReturnValue(String methodName) {
