@@ -115,9 +115,9 @@ public class MocksTest {
                         })
                 .isInstanceOf(MockitoException.class)
                 .hasMessageContainingAll(
-                        "Cannot mock/spy class",
-                        "Mockito cannot mock/spy because :",
-                        " - non-interface");
+                        "Mockito cannot mock/spy '" + Number.class + "' because :",
+                        " - non-interface",
+                        " - using mock maker: mock-maker-proxy");
     }
 
     public interface SomeInterface {
