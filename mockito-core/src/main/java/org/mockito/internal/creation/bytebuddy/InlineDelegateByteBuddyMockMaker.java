@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import org.mockito.MockMakers;
 import org.mockito.MockedConstruction;
 import org.mockito.creation.instance.InstantiationException;
 import org.mockito.creation.instance.Instantiator;
@@ -15,6 +16,7 @@ import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
 import org.mockito.internal.framework.DisabledMockHandler;
+import org.mockito.internal.util.MockitoInformation;
 import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
@@ -253,7 +255,8 @@ class InlineDelegateByteBuddyMockMaker
                             "Could not initialize inline Byte Buddy mock maker.",
                             "",
                             detail,
-                            Platform.describe()),
+                            Platform.describe(),
+                            MockitoInformation.describe(MockMakers.INLINE)),
                     INITIALIZATION_ERROR);
         }
 
@@ -476,6 +479,7 @@ class InlineDelegateByteBuddyMockMaker
                                 "Hotspot",
                                 ""),
                         Platform.describe(),
+                        MockitoInformation.describe(MockMakers.INLINE),
                         "",
                         "You are seeing this disclaimer because Mockito is configured to create inlined mocks.",
                         "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",

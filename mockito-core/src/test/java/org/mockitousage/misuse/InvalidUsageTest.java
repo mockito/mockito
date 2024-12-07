@@ -169,9 +169,9 @@ public class InvalidUsageTest extends TestBase {
                         })
                 .isInstanceOf(MockitoException.class)
                 .hasMessageContainingAll(
-                        "Cannot mock/spy class org.mockitousage.misuse.InvalidUsageTest$FinalClass",
-                        "Mockito cannot mock/spy because :",
-                        " - final class");
+                        "Mockito cannot mock/spy '" + FinalClass.class + "' because :",
+                        " - final class")
+                .hasMessageFindingMatch(" - using mock maker: \\w+");
     }
 
     @Test

@@ -62,8 +62,8 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private final Implementation equals = to(MockMethodInterceptor.ForEquals.class);
     private final Implementation writeReplace = to(MockMethodInterceptor.ForWriteReplace.class);
 
-    public SubclassBytecodeGenerator() {
-        this(new SubclassInjectionLoader());
+    public SubclassBytecodeGenerator(String mockMaker) {
+        this(new SubclassInjectionLoader(mockMaker));
     }
 
     public SubclassBytecodeGenerator(SubclassLoader loader) {
@@ -71,8 +71,10 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     }
 
     public SubclassBytecodeGenerator(
-            Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
-        this(new SubclassInjectionLoader(), readReplace, matcher);
+            String mockMaker,
+            Implementation readReplace,
+            ElementMatcher<? super MethodDescription> matcher) {
+        this(new SubclassInjectionLoader(mockMaker), readReplace, matcher);
     }
 
     protected SubclassBytecodeGenerator(
