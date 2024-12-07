@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.verification.DefaultRegisteredInvocations;
 import org.mockito.internal.verification.RegisteredInvocations;
@@ -83,7 +84,14 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     Object answerTo(Invocation invocation) throws Throwable {
-        return findAnswerFor(invocation).answer(invocation);
+        StubbedInvocationMatcher matcher = findAnswerFor(invocation);
+        if (matcher == null) {
+            throw new MockitoException(
+                    "Unable to find answer for: "
+                            + invocation
+                            + "Did you configure a stubbing for this method?");
+        }
+        return matcher.answer(invocation);
     }
 
     public StubbedInvocationMatcher findAnswerFor(Invocation invocation) {
