@@ -593,8 +593,7 @@ public class Reporter {
             Class<?> clazz, String reason, String mockMaker) {
         return new MockitoException(
                 join(
-                        "Cannot mock/spy " + clazz,
-                        "Mockito cannot mock/spy because :",
+                        "Mockito cannot mock/spy '" + clazz + "' because :",
                         " - " + reason,
                         " - using mock maker: " + mockMaker,
                         ""));
