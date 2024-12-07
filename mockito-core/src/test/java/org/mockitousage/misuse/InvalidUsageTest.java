@@ -189,9 +189,7 @@ public class InvalidUsageTest extends TestBase {
                         })
                 .isInstanceOf(MockitoException.class)
                 .hasMessageContainingAll(
-                        "Cannot mock/spy int",
-                        "Mockito cannot mock/spy because :",
-                        " - primitive type");
+                        "Mockito cannot mock/spy 'int' because :", " - primitive type");
     }
 
     interface ObjectLikeInterface {

@@ -561,7 +561,10 @@ class InlineDelegateByteBuddyMockMaker
         return new TypeMockability() {
             @Override
             public boolean mockable() {
-                return INSTRUMENTATION.isModifiableClass(type) && !EXCLUDES.contains(type);
+                return INSTRUMENTATION.isModifiableClass(type)
+                        && !EXCLUDES.contains(type)
+                        && !(Modifier.isAbstract(type.getModifiers())
+                                && TypeSupport.INSTANCE.isSealed(type));
             }
 
             @Override
@@ -575,6 +578,11 @@ class InlineDelegateByteBuddyMockMaker
                 if (EXCLUDES.contains(type)) {
                     return "Cannot mock wrapper types, String.class or Class.class";
                 }
+                if (Modifier.isAbstract(type.getModifiers())
+                        && TypeSupport.INSTANCE.isSealed(type)) {
+                    return "Cannot mock abstract sealed class";
+                }
+
                 return "VM does not support modification of given type";
             }
         };
