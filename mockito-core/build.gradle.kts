@@ -200,3 +200,36 @@ fun mockitoExtensionConfigFile(project: Project, mockitoExtension: String) =
     file(project.layout.buildDirectory.dir("generated/resources/ext-config/test/mockito-extensions/$mockitoExtension"))
 //</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="Generate version class file">
+// Manifest cannot be used because Android strips the manifest from the jar.
+
+val generatedVersionClass: Provider<Directory> = layout.buildDirectory.dir("generated/sources/version/java")
+
+sourceSets.main {
+    java {
+        srcDir(generatedVersionClass)
+    }
+}
+
+tasks {
+    val generateVersionClass by registering {
+        val versionClassContent = """
+        package org.mockito.internal.util;
+        class MockitoVersion {
+            public static final String VERSION = "${project.version}";
+        }
+        """.trimIndent()
+
+        val versionClass = file(generatedVersionClass.map { it.file("org/mockito/internal/util/MockitoVersion.java") })
+
+        doLast {
+            versionClass.run {
+                parentFile.mkdirs()
+                createNewFile()
+                writeText(versionClassContent)
+            }
+        }
+    }
+    compileJava.dependsOn(generateVersionClass)
+}
+//</editor-fold>

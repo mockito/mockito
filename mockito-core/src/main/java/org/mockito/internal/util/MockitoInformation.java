@@ -9,6 +9,9 @@ import static org.mockito.internal.util.StringUtil.join;
 public abstract class MockitoInformation {
     public static String describe(String currentMockMaker) {
         String mockMakerName = MockUtil.getMockMaker(currentMockMaker).getName();
-        return join("mock-maker         : " + mockMakerName);
+        return join(
+                // need to run :mockito-core:generateVersionClass
+                "mockito-version    : " + MockitoVersion.VERSION,
+                "mock-maker         : " + mockMakerName);
     }
 }
