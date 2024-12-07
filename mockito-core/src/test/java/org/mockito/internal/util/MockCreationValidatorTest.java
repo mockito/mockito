@@ -68,7 +68,9 @@ public class MockCreationValidatorTest {
         try {
             validator.validateType(long.class, null);
         } catch (MockitoException ex) {
-            assertThat(ex.getMessage()).contains("primitive");
+            assertThat(ex.getMessage())
+                    .contains("primitive")
+                    .containsPattern("mock maker: [\\w-]+");
         }
     }
 }

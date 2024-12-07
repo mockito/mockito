@@ -64,6 +64,14 @@ import static org.mockito.internal.util.StringUtil.join;
  * @since 1.9.5
  */
 public interface MockMaker {
+    /**
+     * Returns the current mock maker name.
+     *
+     * @return The name of the mock maker.
+     */
+    default String getName() {
+        return this.getClass().getName();
+    }
 
     /**
      * If you want to provide your own implementation of {@code MockMaker} this method should:

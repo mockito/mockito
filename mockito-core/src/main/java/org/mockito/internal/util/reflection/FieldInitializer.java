@@ -263,7 +263,7 @@ public class FieldInitializer {
                             // Instead of checking for mockability, I think it would be better to
                             // ask the argResolver whether it can resolve this type.
                             // Anyway, I keep it for now to avoid breaking any existing code.
-                            if (MockUtil.typeMockabilityOf(aClass, null).mockable()) {
+                            if (MockUtil.typeMockabilityOf(aClass, (String) null).mockable()) {
                                 constructorMockableParamsSize++;
                             }
                         }
