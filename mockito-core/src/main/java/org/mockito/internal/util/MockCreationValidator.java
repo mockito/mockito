@@ -13,15 +13,19 @@ import static org.mockito.internal.exceptions.Reporter.usingConstructorWithFancy
 import java.util.Collection;
 
 import org.mockito.mock.SerializableMode;
+import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockMaker.TypeMockability;
 
 @SuppressWarnings("unchecked")
 public class MockCreationValidator {
 
     public void validateType(Class<?> classToMock, String mockMaker) {
-        TypeMockability typeMockability = MockUtil.typeMockabilityOf(classToMock, mockMaker);
+        MockMaker mockMakerInstance = MockUtil.getMockMaker(mockMaker);
+        TypeMockability typeMockability =
+                MockUtil.typeMockabilityOf(classToMock, mockMakerInstance);
         if (!typeMockability.mockable()) {
-            throw cannotMockClass(classToMock, typeMockability.nonMockableReason());
+            throw cannotMockClass(
+                    classToMock, typeMockability.nonMockableReason(), mockMakerInstance.getName());
         }
     }
 
