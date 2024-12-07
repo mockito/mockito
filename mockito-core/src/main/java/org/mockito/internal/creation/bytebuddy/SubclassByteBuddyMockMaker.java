@@ -8,9 +8,11 @@ import static org.mockito.internal.util.StringUtil.join;
 
 import java.lang.reflect.Modifier;
 
+import org.mockito.MockMakers;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.util.MockitoInformation;
 import org.mockito.internal.util.Platform;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
@@ -30,7 +32,7 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
     private final BytecodeGenerator cachingMockBytecodeGenerator;
 
     public SubclassByteBuddyMockMaker() {
-        this(new SubclassInjectionLoader());
+        this(new SubclassInjectionLoader(MockMakers.SUBCLASS));
     }
 
     public SubclassByteBuddyMockMaker(SubclassLoader loader) {
@@ -124,6 +126,7 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
                                 "Hotspot",
                                 ""),
                         Platform.describe(),
+                        MockitoInformation.describe(mockFeatures.getMockMaker()),
                         "",
                         "Underlying exception : " + generationFailed),
                 generationFailed);

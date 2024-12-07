@@ -14,6 +14,7 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.utility.GraalImageCode;
 import org.mockito.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.util.MockitoInformation;
 import org.mockito.internal.util.Platform;
 
 class SubclassInjectionLoader implements SubclassLoader {
@@ -27,7 +28,7 @@ class SubclassInjectionLoader implements SubclassLoader {
 
     private final SubclassLoader loader;
 
-    SubclassInjectionLoader() {
+    SubclassInjectionLoader(String mockMaker) {
         if (!Boolean.parseBoolean(
                         System.getProperty(
                                 "org.mockito.internal.noUnsafeInjection",
@@ -37,13 +38,18 @@ class SubclassInjectionLoader implements SubclassLoader {
         } else if (GraalImageCode.getCurrent().isDefined()) {
             this.loader = new WithIsolatedLoader();
         } else if (ClassInjector.UsingLookup.isAvailable()) {
-            this.loader = tryLookup();
+            this.loader = tryLookup(mockMaker);
         } else {
-            throw new MockitoException(join(ERROR_MESSAGE, "", Platform.describe()));
+            throw new MockitoException(
+                    join(
+                            ERROR_MESSAGE,
+                            "",
+                            Platform.describe(),
+                            MockitoInformation.describe(mockMaker)));
         }
     }
 
-    private static SubclassLoader tryLookup() {
+    private static SubclassLoader tryLookup(String mockMaker) {
         try {
             Class<?> methodHandles = Class.forName("java.lang.invoke.MethodHandles");
             Object lookup = methodHandles.getMethod("lookup").invoke(null);
@@ -55,7 +61,13 @@ class SubclassInjectionLoader implements SubclassLoader {
             Object codegenLookup = privateLookupIn.invoke(null, InjectionBase.class, lookup);
             return new WithLookup(lookup, codegenLookup, privateLookupIn);
         } catch (Exception exception) {
-            throw new MockitoException(join(ERROR_MESSAGE, "", Platform.describe()), exception);
+            throw new MockitoException(
+                    join(
+                            ERROR_MESSAGE,
+                            "",
+                            Platform.describe(),
+                            MockitoInformation.describe(mockMaker)),
+                    exception);
         }
     }
 

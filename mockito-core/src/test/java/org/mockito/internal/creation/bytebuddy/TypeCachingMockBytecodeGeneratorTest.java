@@ -33,6 +33,8 @@ import org.mockitoutil.VmArgAssumptions;
 
 public class TypeCachingMockBytecodeGeneratorTest {
 
+    private String mockMaker = "";
+
     @Before
     public void ensure_disable_gc_is_activated() throws Exception {
         VmArgAssumptions.assumeVmArgNotPresent("-XX:+DisableExplicitGC");
@@ -48,7 +50,7 @@ public class TypeCachingMockBytecodeGeneratorTest {
                         .build();
 
         TypeCachingBytecodeGenerator cachingMockBytecodeGenerator =
-                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(mockMaker), true);
 
         Class<?> the_mock_type =
                 cachingMockBytecodeGenerator.mockClass(
@@ -83,7 +85,7 @@ public class TypeCachingMockBytecodeGeneratorTest {
                         .build();
 
         TypeCachingBytecodeGenerator cachingMockBytecodeGenerator =
-                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(mockMaker), true);
         Class<?> the_mock_type =
                 cachingMockBytecodeGenerator.mockClass(
                         withMockFeatures(
@@ -129,7 +131,7 @@ public class TypeCachingMockBytecodeGeneratorTest {
                         .build();
 
         TypeCachingBytecodeGenerator cachingMockBytecodeGenerator =
-                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(mockMaker), true);
         Class<?> the_mock_type =
                 cachingMockBytecodeGenerator.mockClass(
                         withMockFeatures(
@@ -160,7 +162,7 @@ public class TypeCachingMockBytecodeGeneratorTest {
                         .build();
 
         TypeCachingBytecodeGenerator cachingMockBytecodeGenerator =
-                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(mockMaker), true);
 
         Answers[] answers = Answers.values();
         Set<Class<?>> classes = Collections.newSetFromMap(new IdentityHashMap<>());
@@ -263,7 +265,7 @@ public class TypeCachingMockBytecodeGeneratorTest {
         int iterations = 10_000;
 
         TypeCachingBytecodeGenerator bytecodeGenerator =
-                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(), true);
+                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(mockMaker), true);
 
         Phaser phaser = new Phaser(4);
         Function<Runnable, CompletableFuture<Void>> runCode =
