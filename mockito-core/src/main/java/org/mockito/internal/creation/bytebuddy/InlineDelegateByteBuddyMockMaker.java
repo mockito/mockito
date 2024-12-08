@@ -552,8 +552,7 @@ class InlineDelegateByteBuddyMockMaker
             public boolean mockable() {
                 return INSTRUMENTATION.isModifiableClass(type)
                         && !EXCLUDES.contains(type)
-                        && !(Modifier.isAbstract(type.getModifiers())
-                                && TypeSupport.INSTANCE.isSealed(type));
+                        && !TypeSupport.INSTANCE.isAbstractAndSealed(type);
             }
 
             @Override
@@ -567,9 +566,7 @@ class InlineDelegateByteBuddyMockMaker
                 if (EXCLUDES.contains(type)) {
                     return "Cannot mock wrapper types, String.class or Class.class";
                 }
-                if (Modifier.isAbstract(type.getModifiers())
-                        && TypeSupport.INSTANCE.isSealed(type)) {
-
+                if (TypeSupport.INSTANCE.isAbstractAndSealed(type)) {
                     if (type.isEnum()) {
                         return "Cannot mock this enum. Since Java 15 abstract enums are declared sealed, which prevents mocking. You can still return an existing enum literal from a stubbed method call.";
                     } else {
