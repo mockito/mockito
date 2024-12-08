@@ -22,7 +22,6 @@ plugins {
 
     // Top-level android plugin declaration required for :mockito-integration-tests:android-tests to work
     alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.ideaExt)
 }
 
 apply {
