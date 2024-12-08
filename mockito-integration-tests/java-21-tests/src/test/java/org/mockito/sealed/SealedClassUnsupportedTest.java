@@ -15,7 +15,8 @@ public class SealedClassUnsupportedTest {
         Assertions.assertThatThrownBy(() -> mock(SealedClass.class))
                 .hasMessageContaining(
                         "Mockito cannot mock/spy '" + SealedClass.class + "' because :")
-                .hasMessageContaining("Cannot mock abstract sealed class");
+                .hasMessageContaining(
+                        "Sealed interfaces or abstract classes can't be mocked. Interfaces cannot be instantiated and cannot be subclassed for mocking purposes. Instead of mocking a sealed interface or an abstract class, a non-abstract class can be mocked and used to represent the interface.");
     }
 }
 
