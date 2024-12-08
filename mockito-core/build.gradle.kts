@@ -1,14 +1,11 @@
 import com.android.build.gradle.internal.tasks.factory.dependsOn
-import org.jetbrains.gradle.ext.settings
-import org.jetbrains.gradle.ext.taskTriggers
+import com.diffplug.gradle.spotless.SpotlessExtension
 
 plugins {
     id("mockito.library-conventions")
     id("mockito.java-backward-compatibility-checks-conventions")
     id("mockito.javadoc-conventions")
     id("java-test-fixtures")
-
-    alias(libs.plugins.ideaExt)
 }
 
 description = "Mockito mock objects library core API and implementation"
@@ -207,43 +204,50 @@ fun mockitoExtensionConfigFile(project: Project, mockitoExtension: String) =
 //<editor-fold defaultstate="collapsed" desc="Generate version class file">
 // Manifest cannot be used because Android strips the manifest from the jar.
 
-val generatedVersionClassDir: Provider<Directory> = layout.buildDirectory.dir("generated/sources/version/java")
+val generateVersionClass by tasks.registering(GenerateVersionClass::class)
 
 sourceSets.main {
     java {
-        srcDir(generatedVersionClassDir)
+        srcDir(generateVersionClass)
     }
 }
 
-tasks {
-    val generateVersionClass by registering {
-        val versionClassContent = """
-        package org.mockito.internal.util;
-        class MockitoVersion {
-            public static final String VERSION = "${project.version}";
-        }
-        """.trimIndent()
+tasks.withType<Checkstyle> {
+    exclude("org/mockito/internal/util/MockitoVersion.java")
+}
 
-        val versionClass = file(generatedVersionClassDir.map { it.file("org/mockito/internal/util/MockitoVersion.java") })
+configure<SpotlessExtension> {
+    java {
+        targetExclude(relativePath(generateVersionClass.get().generatedVersionClassDir) + "/**")
+    }
+}
 
-        doLast {
-            versionClass.run {
+abstract class GenerateVersionClass : DefaultTask() {
+    @OutputDirectory
+    val generatedVersionClassDir: DirectoryProperty = project.objects.directoryProperty()
+        .convention(project.layout.buildDirectory.dir("generated/sources/version/java"))
+
+    @Input
+    val version: Property<String> = project.objects.property(String::class.java)
+        .convention(project.version.toString())
+
+    @TaskAction
+    fun generate() {
+        generatedVersionClassDir.file("org/mockito/internal/util/MockitoVersion.java").get()
+            .asFile
+            .run {
                 parentFile.mkdirs()
                 createNewFile()
-                writeText(versionClassContent)
+                writeText(
+                    // language=Java
+                    """
+                    package org.mockito.internal.util;
+                    class MockitoVersion {
+                        public static final String VERSION = "${version.get()}";
+                    }
+                    """.trimIndent()
+                )
             }
-        }
-    }
-    compileJava.dependsOn(generateVersionClass)
-
-    rootProject.idea {
-        project {
-            settings {
-                taskTriggers {
-                    afterSync(generateVersionClass)
-                }
-            }
-        }
     }
 }
 //</editor-fold>
