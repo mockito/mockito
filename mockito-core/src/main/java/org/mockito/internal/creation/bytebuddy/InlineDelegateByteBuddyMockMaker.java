@@ -441,14 +441,6 @@ class InlineDelegateByteBuddyMockMaker
                             "Underlying exception : " + generationFailed),
                     generationFailed);
         }
-        if (TypeSupport.INSTANCE.isSealed(typeToMock) && typeToMock.isEnum()) {
-            throw new MockitoException(
-                    join(
-                            "Mockito cannot mock this class: " + typeToMock + ".",
-                            "Sealed abstract enums can't be mocked. Since Java 15 abstract enums are declared sealed, which prevents mocking.",
-                            "You can still return an existing enum literal from a stubbed method call."),
-                    generationFailed);
-        }
         if (Modifier.isPrivate(typeToMock.getModifiers())) {
             throw new MockitoException(
                     join(
@@ -577,7 +569,12 @@ class InlineDelegateByteBuddyMockMaker
                 }
                 if (Modifier.isAbstract(type.getModifiers())
                         && TypeSupport.INSTANCE.isSealed(type)) {
-                    return "Cannot mock abstract sealed class";
+
+                    if (type.isEnum()) {
+                        return "Cannot mock this enum. Since Java 15 abstract enums are declared sealed, which prevents mocking. You can still return an existing enum literal from a stubbed method call.";
+                    } else {
+                        return "Cannot mock abstract sealed class";
+                    }
                 }
 
                 return "VM does not support modification of given type";

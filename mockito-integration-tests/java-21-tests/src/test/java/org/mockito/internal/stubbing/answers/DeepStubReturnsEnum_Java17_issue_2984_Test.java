@@ -11,44 +11,53 @@ import static org.mockito.Mockito.*;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 
-public class DeepStubReturnsEnumJava21Test {
+/*
+ * Sealed classes were
+ * * introduced in Java 15 as a preview JEP-360 https://openjdk.org/jeps/360
+ * * followed by a second preview in Java 16 JEP-397 https://openjdk.org/jeps/397
+ * * finalized in Java 17 JEP-409 https://openjdk.org/jeps/409
+ *
+ *
+ */
+@SuppressWarnings("NewClassNamingConvention")
+public class DeepStubReturnsEnum_Java17_issue_2984_Test {
 
     @Test
-    public void cant_mock_enum_class_in_Java21_Issue_2984() {
+    public void cant_mock_enum_class() {
         assertThatThrownBy(
                         () -> {
                             mock(TestEnum.class);
                         })
                 .isInstanceOf(MockitoException.class)
-                .hasMessageContaining("Sealed abstract enums can't be mocked.")
-                .hasCauseInstanceOf(MockitoException.class);
+                .hasMessageContaining(
+                        "Cannot mock this enum. Since Java 15 abstract enums are declared sealed, which prevents mocking.");
     }
 
     @Test
-    public void cant_mock_enum_class_as_deep_stub_in_Java21_Issue_2984() {
+    public void cant_mock_enum_class_as_deep_stub() {
         assertThatThrownBy(
                         () -> {
                             mock(TestEnum.class, RETURNS_DEEP_STUBS);
                         })
                 .isInstanceOf(MockitoException.class)
-                .hasMessageContaining("Sealed abstract enums can't be mocked.")
-                .hasCauseInstanceOf(MockitoException.class);
+                .hasMessageContaining(
+                        "Cannot mock this enum. Since Java 15 abstract enums are declared sealed, which prevents mocking.");
     }
 
     @Test
-    public void deep_stub_cant_mock_enum_with_abstract_method_in_Java21_Issue_2984() {
+    public void deep_stub_cant_mock_enum_with_abstract_method() {
         final var mock = mock(TestClass.class, RETURNS_DEEP_STUBS);
         assertThatThrownBy(
                         () -> {
                             mock.getTestEnum();
                         })
                 .isInstanceOf(MockitoException.class)
-                .hasMessageContaining("Sealed abstract enums can't be mocked.")
-                .hasCauseInstanceOf(MockitoException.class);
+                .hasMessageContaining(
+                        "Cannot mock this enum. Since Java 15 abstract enums are declared sealed, which prevents mocking.");
     }
 
     @Test
-    public void deep_stub_can_override_mock_enum_with_abstract_method_in_Java21_Issue_2984() {
+    public void deep_stub_can_override_mock_enum_with_abstract_method() {
         final var mock = mock(TestClass.class, RETURNS_DEEP_STUBS);
         // We need the doReturn() because when calling when(mock.getTestEnum()) it will already
         // throw an exception.
@@ -61,7 +70,7 @@ public class DeepStubReturnsEnumJava21Test {
     }
 
     @Test
-    public void deep_stub_can_mock_enum_without_method_in_Java21_Issue_2984() {
+    public void deep_stub_can_mock_enum_without_method() {
         final var mock = mock(TestClass.class, RETURNS_DEEP_STUBS);
         assertThat(mock.getTestNonAbstractEnum()).isNotNull();
 
@@ -71,7 +80,7 @@ public class DeepStubReturnsEnumJava21Test {
     }
 
     @Test
-    public void deep_stub_can_mock_enum_without_abstract_method_in_Java21_Issue_2984() {
+    public void deep_stub_can_mock_enum_without_abstract_method() {
         final var mock = mock(TestClass.class, RETURNS_DEEP_STUBS);
         assertThat(mock.getTestNonAbstractEnumWithMethod()).isNotNull();
         assertThat(mock.getTestNonAbstractEnumWithMethod().getValue()).isNull();
@@ -86,7 +95,7 @@ public class DeepStubReturnsEnumJava21Test {
     }
 
     @Test
-    public void mock_mocking_enum_getter_Issue_2984() {
+    public void mock_mocking_enum_getter() {
         final var mock = mock(TestClass.class);
         when(mock.getTestEnum()).thenReturn(TestEnum.B);
         assertThat(mock.getTestEnum()).isEqualTo(TestEnum.B);
