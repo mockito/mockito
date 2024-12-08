@@ -4,6 +4,7 @@ plugins {
     id("mockito.java-conventions")
     id("com.adarshr.test-logger")
     id("mockito.quality-spotless-conventions")
+    id("mockito.license-conventions")
 }
 
 repositories {

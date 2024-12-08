@@ -6,8 +6,6 @@ buildscript {
     }
 
     dependencies {
-        classpath("gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin:0.16.1")
-
         classpath("io.github.gradle-nexus:publish-plugin:2.0.0-rc-1")
         classpath("org.shipkit:shipkit-changelog:2.0.1")
         classpath("org.shipkit:shipkit-auto-version:2.1.0")
@@ -26,6 +24,5 @@ plugins {
 
 apply {
     from(rootProject.file("gradle/shipkit.gradle"))
-    from(rootProject.file("gradle/license.gradle"))
 }
 
