@@ -10,6 +10,7 @@ dependencies {
     implementation(libs.gradleplugin.errorprone)
     implementation(libs.gradleplugin.spotless)
     implementation(libs.gradleplugin.spotless.googleJavaFormat)
+    implementation(libs.gradleplugin.license)
 
     // https://github.com/gradle/gradle/issues/15383
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
