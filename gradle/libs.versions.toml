@@ -11,6 +11,9 @@ gradleplugin-animal-sniffer = "1.7.2"
 gradleplugin-aQute-bnd = "7.0.0"
 gradleplugin-errorprone = "4.1.0"
 gradleplugin-spotless = "6.25.0"
+gradleplugin-nexusPublish = "2.0.0-rc-1"
+gradleplugin-shipkit-changelog = "2.0.1"
+gradleplugin-shipkit-autoVersion = "2.1.0"
 
 gradleplugin-android = "7.4.2"
 
@@ -47,7 +50,9 @@ gradleplugin-bnd = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref 
 gradleplugin-errorprone = { module = "net.ltgt.gradle:gradle-errorprone-plugin", version.ref = "gradleplugin-errorprone" }
 gradleplugin-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "gradleplugin-spotless" }
 gradleplugin-spotless-googleJavaFormat = { module = "com.google.googlejavaformat:google-java-format", version = "1.25.0" }
-
+gradleplugin-nexusPublish = { module = "io.github.gradle-nexus:publish-plugin", version.ref = "gradleplugin-nexusPublish" }
+gradleplugin-shipkit-changelog = { module = "org.shipkit:shipkit-changelog", version.ref = "gradleplugin-shipkit-changelog" }
+gradleplugin-shipkit-autoVersion = { module = "org.shipkit:shipkit-auto-version", version.ref = "gradleplugin-shipkit-autoVersion" }
 
 # animal sniffer compatibility signatures
 animalSniffer-android-apiLevel26 = { module = "net.sf.androidscents.signature:android-api-level-26", version = "8.0.0_r2" }
