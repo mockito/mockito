@@ -24,6 +24,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.pool.TypePool;
 import net.bytebuddy.utility.OpenedClassReader;
 import net.bytebuddy.utility.RandomString;
+import org.mockito.MockMakers;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
@@ -100,6 +101,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         subclassEngine =
                 new TypeCachingBytecodeGenerator(
                         new SubclassBytecodeGenerator(
+                                MockMakers.INLINE,
                                 withDefaultConfiguration()
                                         .withBinders(
                                                 of(MockMethodAdvice.Identifier.class, identifier))
