@@ -36,9 +36,10 @@ tasks {
             override fun afterSuite(descriptor: TestDescriptor, result: TestResult) {
                 descriptor.parent ?: return  // root
                 if (result.failedTestCount > 0) {
-                    logger.lifecycle("\n[retryTest] retried ${filter.includePatterns.size} test(s), $result.failedTestCount still failed.")
+                    logger.lifecycle("[retryTest] retried ${filter.includePatterns.size} test(s), ${result.failedTestCount} still failed.")
                 } else {
-                    logger.lifecycle("\n[retryTest] ${filter.includePatterns.size} test(s) were retried successfully:\n  ${filter.includePatterns.joinToString("\n  ")}")
+                    logger.info("[retryTest] ${filter.includePatterns.size} test(s) were retried successfully.")
+                    filter.includePatterns.forEach { logger.debug("[retryTest]  $it") }
                 }
             }
         })
