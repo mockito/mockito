@@ -9,7 +9,6 @@ import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.agent.Installer;
 
 import java.lang.instrument.Instrumentation;
-import java.lang.management.ManagementFactory;
 import java.util.List;
 
 import static org.mockito.internal.util.StringUtil.join;
@@ -41,10 +40,29 @@ public class PremainAttachAccess {
         }
         if (instrumentation == null) {
             if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V21)) {
-                List<String> arguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
-                if (arguments.stream()
-                        .noneMatch(
-                                argument -> argument.contains("-XX:+EnableDynamicAgentLoading"))) {
+                boolean noDynamicAgentLoading;
+                try {
+                    Object runtimeMXBean =
+                            Class.forName("java.lang.management.ManagementFactory")
+                                    .getMethod("getRuntimeMXBean")
+                                    .invoke(null);
+                    @SuppressWarnings("unchecked")
+                    List<String> arguments =
+                            (List<String>)
+                                    runtimeMXBean
+                                            .getClass()
+                                            .getMethod("getInputArguments")
+                                            .invoke(runtimeMXBean);
+                    noDynamicAgentLoading =
+                            arguments.stream()
+                                    .noneMatch(
+                                            argument ->
+                                                    argument.contains(
+                                                            "-XX:+EnableDynamicAgentLoading"));
+                } catch (Exception ignored) {
+                    noDynamicAgentLoading = false;
+                }
+                if (!noDynamicAgentLoading) {
                     // Cannot use `Plugins.getMockitoLogger().warn(...)` at this time due to a
                     // circular dependency on `Plugins.registry`.
                     // The `PluginRegistry` is not yet fully initialized (in `Plugins`), because it
