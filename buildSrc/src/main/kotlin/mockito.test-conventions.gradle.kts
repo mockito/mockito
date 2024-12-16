@@ -4,6 +4,7 @@ plugins {
     id("mockito.java-conventions")
     id("com.adarshr.test-logger")
     id("mockito.quality-spotless-conventions")
+    id("mockito.license-conventions")
 }
 
 repositories {
@@ -24,7 +25,7 @@ tasks {
             include("**/*Test.class")
 
             if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)
-                && System.getenv("MEMBER_ACCESSOR") == "member-accessor-reflection") {
+                && providers.environmentVariable("MEMBER_ACCESSOR").orNull == "member-accessor-reflection") {
                 jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
             }
         }

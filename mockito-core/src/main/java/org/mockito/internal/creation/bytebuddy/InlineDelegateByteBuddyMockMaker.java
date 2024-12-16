@@ -114,14 +114,12 @@ class InlineDelegateByteBuddyMockMaker
         Throwable initializationError = null;
 
         // ByteBuddy internally may attempt to fork a subprocess. In Java 11 and Java 19, the
-        // Java
-        // process class observes the os.name system property to determine the OS and thus
-        // determine
-        // how to fork a new process. If the user is stubbing System properties, they may clear
-        // the existing System properties, which will cause this to fail. This is very much an
-        // implementation detail, but it will result in Mockito failing to load with an error
-        // that
-        // is not overly clear, so let's attempt to detect this issue ahead of time instead.
+        // Java process class observes the os.name system property to determine the OS and
+        // thus determine how to fork a new process. If the user is stubbing System
+        // properties, they may clear the existing System properties, which will cause this
+        // to fail. This is very much an implementation detail, but it will result in Mockito
+        // failing to load with an error that is not overly clear, so let's attempt to detect
+        // this issue ahead of time instead.
         if (System.getProperty("os.name") == null) {
             throw new IllegalStateException(
                     join(
@@ -444,6 +442,15 @@ class InlineDelegateByteBuddyMockMaker
                             "Mockito cannot mock this class: " + typeToMock + ".",
                             "Sealed abstract enums can't be mocked. Since Java 15 abstract enums are declared sealed, which prevents mocking.",
                             "You can still return an existing enum literal from a stubbed method call."),
+                    generationFailed);
+        }
+        if (TypeSupport.INSTANCE.isSealed(typeToMock)
+                && Modifier.isAbstract(typeToMock.getModifiers())) {
+            throw new MockitoException(
+                    join(
+                            "Mockito cannot mock this class: " + typeToMock + ".",
+                            "Sealed interfaces or abstract classes can't be mocked. Interfaces cannot be instantiated and cannot be subclassed for mocking purposes.",
+                            "Instead of mocking a sealed interface or an abstract class, a non-abstract class can be mocked and used to represent the interface."),
                     generationFailed);
         }
         if (Modifier.isPrivate(typeToMock.getModifiers())) {
