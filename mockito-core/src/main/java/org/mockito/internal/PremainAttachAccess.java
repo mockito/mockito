@@ -40,7 +40,7 @@ public class PremainAttachAccess {
         }
         if (instrumentation == null) {
             if (ClassFileVersion.ofThisVm().isAtLeast(ClassFileVersion.JAVA_V21)) {
-                boolean noDynamicAgentLoading;
+                boolean dynamicAgentLoading;
                 try {
                     Object runtimeMXBean =
                             Class.forName("java.lang.management.ManagementFactory")
@@ -53,16 +53,16 @@ public class PremainAttachAccess {
                                             .getClass()
                                             .getMethod("getInputArguments")
                                             .invoke(runtimeMXBean);
-                    noDynamicAgentLoading =
+                    dynamicAgentLoading =
                             arguments.stream()
-                                    .noneMatch(
+                                    .anyMatch(
                                             argument ->
                                                     argument.contains(
                                                             "-XX:+EnableDynamicAgentLoading"));
                 } catch (Exception ignored) {
-                    noDynamicAgentLoading = false;
+                    dynamicAgentLoading = false;
                 }
-                if (!noDynamicAgentLoading) {
+                if (!dynamicAgentLoading) {
                     // Cannot use `Plugins.getMockitoLogger().warn(...)` at this time due to a
                     // circular dependency on `Plugins.registry`.
                     // The `PluginRegistry` is not yet fully initialized (in `Plugins`), because it
