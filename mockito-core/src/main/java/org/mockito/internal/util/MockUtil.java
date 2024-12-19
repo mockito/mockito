@@ -75,7 +75,11 @@ public class MockUtil {
     }
 
     public static TypeMockability typeMockabilityOf(Class<?> type, String mockMaker) {
-        return getMockMaker(mockMaker).isTypeMockable(type);
+        return typeMockabilityOf(type, getMockMaker(mockMaker));
+    }
+
+    public static TypeMockability typeMockabilityOf(Class<?> type, MockMaker mockMaker) {
+        return mockMaker.isTypeMockable(type);
     }
 
     public static <T> T createMock(MockCreationSettings<T> settings) {
