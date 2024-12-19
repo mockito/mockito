@@ -32,6 +32,7 @@ tasks {
                 // "-Djdk.instrument.traceUsage",
             )
         }
+        failIfStdErrWarningOnDynamicallyLoadedAgent(this)
     }
 
     val testWithMockitoAgent by registering(Test::class) {
@@ -51,10 +52,23 @@ tasks {
         failIfStdErrWarningOnDynamicallyLoadedAgent(this)
     }
 
+    val testWithEnableDynamicAgentLoading by registering(Test::class) {
+        if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
+            enabled = false
+        } else {
+            jvmArgs(
+                "-XX:+EnableDynamicAgentLoading",
+                // "-Djdk.instrument.traceUsage",
+            )
+        }
+        failIfStdErrWarningOnDynamicallyLoadedAgent(this)
+    }
+
     named<Test>("test") {
         dependsOn(
             testWithMockitoAgent,
             testWithBytebuddyAgent,
+            testWithEnableDynamicAgentLoading,
         )
         isEnabled = JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)
 
