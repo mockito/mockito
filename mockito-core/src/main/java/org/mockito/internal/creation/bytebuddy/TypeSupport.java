@@ -7,6 +7,7 @@ package org.mockito.internal.creation.bytebuddy;
 import org.mockito.exceptions.base.MockitoException;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 class TypeSupport {
 
@@ -38,5 +39,9 @@ class TypeSupport {
             throw new MockitoException(
                     "Failed to check if type is sealed using handle " + isSealed, t);
         }
+    }
+
+    boolean isAbstractAndSealed(Class<?> type) {
+        return Modifier.isAbstract(type.getModifiers()) && isSealed(type);
     }
 }
