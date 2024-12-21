@@ -7,19 +7,23 @@ plugins {
 }
 
 val isSnapshot = version.toString().endsWith("SNAPSHOT")
+val githubTokenProvider = providers.environmentVariable("GITHUB_TOKEN")
+val githubShaProvider = providers.environmentVariable("GITHUB_SHA")
+val mockitoRepository = "mockito/mockito"
+
 tasks {
     generateChangelog {
-        githubToken = providers.environmentVariable("GITHUB_TOKEN").get()
+        githubToken = githubTokenProvider.get()
         previousRevision = project.ext["shipkit-auto-version.previous-tag"].toString()
-        repository = "mockito/mockito"
+        repository = mockitoRepository
     }
 
     githubRelease {
         enabled = !isSnapshot
         dependsOn(generateChangelog)
-        githubToken = providers.environmentVariable("GITHUB_TOKEN").get()
-        newTagRevision = providers.environmentVariable("GITHUB_SHA").get()
-        repository = generateChangelog.get().repository
+        githubToken = githubTokenProvider.get()
+        newTagRevision = githubShaProvider.get()
+        repository = mockitoRepository
         changelog = generateChangelog.get().outputFile
     }
 
@@ -30,7 +34,7 @@ tasks {
     val releaseSummary by registering {
         doLast {
             if (isSnapshot) {
-                println(
+                logger.lifecycle(
                     """
                     RELEASE SUMMARY
                       SNAPSHOTS released to: https://s01.oss.sonatype.org/content/repositories/snapshots/org/mockito/mockito-core
@@ -39,7 +43,7 @@ tasks {
                     """.trimIndent()
                 )
             } else {
-                println(
+                logger.lifecycle(
                     """
                     RELEASE SUMMARY
                       Release to Maven Central (available in few hours): https://repo1.maven.org/maven2/org/mockito/mockito-core/
