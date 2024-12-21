@@ -27,7 +27,7 @@ tasks {
         changelog = generateChangelog.get().outputFile
     }
 
-    closeAndReleaseStagingRepository {
+    closeAndReleaseStagingRepositories {
         enabled = !isSnapshot
     }
 
