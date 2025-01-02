@@ -24,6 +24,13 @@ configurations {
     }
 }
 
+// Disables publishing test fixtures:
+// https://docs.gradle.org/current/userguide/java_testing.html#ex-disable-publishing-of-test-fixtures-variants
+with(components["java"] as AdhocComponentWithVariants) {
+    withVariantsFromConfiguration(configurations.testFixturesApiElements.get()) { skip() }
+    withVariantsFromConfiguration(configurations.testFixturesRuntimeElements.get()) { skip() }
+}
+
 dependencies {
     api(libs.bytebuddy)
     api(libs.bytebuddy.agent)
