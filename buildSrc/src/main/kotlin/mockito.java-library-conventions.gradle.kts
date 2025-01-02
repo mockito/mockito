@@ -2,7 +2,7 @@ plugins {
     `java-library`
     id("mockito.java-conventions")
     id("mockito.test-conventions")
-    id("mockito.test-retry-conventions")
+    // id("mockito.test-retry-conventions")
     id("mockito.test-launcher-conventions")
     id("net.ltgt.errorprone")
 }

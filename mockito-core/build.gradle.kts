@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.tasks.factory.dependsOn
+import com.diffplug.gradle.spotless.SpotlessExtension
 
 plugins {
     id("mockito.library-conventions")
@@ -207,3 +208,53 @@ fun mockitoExtensionConfigFile(project: Project, mockitoExtension: String) =
     file(project.layout.buildDirectory.dir("generated/resources/ext-config/test/mockito-extensions/$mockitoExtension"))
 //</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="Generate version class file">
+// Manifest cannot be used because Android strips the manifest from the jar.
+
+val generateVersionClass by tasks.registering(GenerateVersionClass::class)
+
+sourceSets.main {
+    java {
+        srcDir(generateVersionClass)
+    }
+}
+
+tasks.withType<Checkstyle> {
+    exclude("org/mockito/internal/util/MockitoVersion.java")
+}
+
+configure<SpotlessExtension> {
+    java {
+        targetExclude(relativePath(generateVersionClass.get().generatedVersionClassDir) + "/**")
+    }
+}
+
+abstract class GenerateVersionClass : DefaultTask() {
+    @OutputDirectory
+    val generatedVersionClassDir: DirectoryProperty = project.objects.directoryProperty()
+        .convention(project.layout.buildDirectory.dir("generated/sources/version/java"))
+
+    @Input
+    val version: Property<String> = project.objects.property(String::class.java)
+        .convention(project.version.toString())
+
+    @TaskAction
+    fun generate() {
+        generatedVersionClassDir.file("org/mockito/internal/util/MockitoVersion.java").get()
+            .asFile
+            .run {
+                parentFile.mkdirs()
+                createNewFile()
+                writeText(
+                    // language=Java
+                    """
+                    package org.mockito.internal.util;
+                    class MockitoVersion {
+                        public static final String VERSION = "${version.get()}";
+                    }
+                    """.trimIndent()
+                )
+            }
+    }
+}
+//</editor-fold>
