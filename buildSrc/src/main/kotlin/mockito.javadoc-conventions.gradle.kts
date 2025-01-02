@@ -17,17 +17,13 @@ tasks.named<Javadoc>("javadoc") {
 
     // For more details on the format
     // see https://docs.oracle.com/en/java/javase/21/javadoc/javadoc.html
-
-    source = project.sourceSets["main"].allJava
-
     options {
         title = mockitoJavadocExtension.title.get()
-        destinationDirectory = project.layout.buildDirectory.dir("javadoc").get().asFile
         encoding = "UTF-8"
 
         if (this is StandardJavadocDocletOptions) {
             addBooleanOption("-allow-script-in-comments", true)
-            addFileOption("-add-stylesheet", file("$javadocConfigDir/resources/mockito-theme.css"))
+            addFileOption("-add-stylesheet", project.file("$javadocConfigDir/resources/mockito-theme.css"))
             addStringOption("Xwerror", "-quiet")
             charSet = "UTF-8"
             docEncoding = "UTF-8"
@@ -56,12 +52,12 @@ tasks.named<Javadoc>("javadoc") {
         }
         memberLevel = JavadocMemberLevel.PROTECTED
         outputLevel = JavadocOutputLevel.QUIET
+    }
 
-        doLast {
-            copy {
-                from("$javadocConfigDir/resources")
-                into(project.layout.buildDirectory.dir("javadoc"))
-            }
+    doLast {
+        copy {
+            from("$javadocConfigDir/resources")
+            into(destinationDir!!)
         }
     }
 }
