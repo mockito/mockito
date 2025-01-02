@@ -9,6 +9,8 @@ plugins {
 // enforce the same group for all published artifacts
 group = "org.mockito"
 
+val localRepoForTesting = rootProject.layout.buildDirectory.dir("repo")
+
 // generic publication conventions
 publishing {
     publications {
@@ -58,9 +60,15 @@ publishing {
 
     //useful for testing - running "publish" will create artifacts/pom in a local dir
     repositories {
-        maven(uri(rootProject.layout.buildDirectory.dir("repo"))) {
+        maven(uri(localRepoForTesting)) {
             name = "local"
         }
+    }
+}
+
+tasks.clean {
+    doLast {
+        delete(localRepoForTesting)
     }
 }
 
