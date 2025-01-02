@@ -98,7 +98,6 @@ plugins.withType<JavaLibraryPlugin>().configureEach {
     }
 
     val javadocJar by tasks.registering(Jar::class) {
-        onlyIf { tasks.named<Javadoc>("javadoc").get().isEnabled }
         archiveClassifier.set("javadoc")
         from(tasks.named("javadoc"))
         with(licenseSpec)
@@ -106,9 +105,7 @@ plugins.withType<JavaLibraryPlugin>().configureEach {
 
     project.artifacts {
         archives(sourcesJar)
-        if (javadocJar.get().isEnabled) {
-            archives(javadocJar)
-        }
+        archives(javadocJar)
     }
 
     tasks.named("jar", Jar::class) {
@@ -121,9 +118,7 @@ plugins.withType<JavaLibraryPlugin>().configureEach {
             register<MavenPublication>("mockitoLibrary") {
                 from(components["java"])
                 artifact(sourcesJar)
-                if (javadocJar.get().didWork) {
-                    artifact(javadocJar)
-                }
+                artifact(javadocJar)
 
                 pom {
                     // Gradle does not write 'jar' packaging to the pom (unlike other packaging types).
