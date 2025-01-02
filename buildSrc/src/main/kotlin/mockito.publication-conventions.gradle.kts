@@ -9,6 +9,8 @@ plugins {
 // enforce the same group for all published artifacts
 group = "org.mockito"
 
+val localRepoForTesting = rootProject.layout.buildDirectory.dir("repo")
+
 // generic publication conventions
 publishing {
     publications {
@@ -58,9 +60,15 @@ publishing {
 
     //useful for testing - running "publish" will create artifacts/pom in a local dir
     repositories {
-        maven(uri(rootProject.layout.buildDirectory.dir("repo"))) {
+        maven(uri(localRepoForTesting)) {
             name = "local"
         }
+    }
+}
+
+tasks.clean {
+    doLast {
+        delete(localRepoForTesting)
     }
 }
 
@@ -90,7 +98,6 @@ plugins.withType<JavaLibraryPlugin>().configureEach {
     }
 
     val javadocJar by tasks.registering(Jar::class) {
-        onlyIf { tasks.named<Javadoc>("javadoc").get().isEnabled }
         archiveClassifier.set("javadoc")
         from(tasks.named("javadoc"))
         with(licenseSpec)
@@ -98,9 +105,7 @@ plugins.withType<JavaLibraryPlugin>().configureEach {
 
     project.artifacts {
         archives(sourcesJar)
-        if (javadocJar.get().isEnabled) {
-            archives(javadocJar)
-        }
+        archives(javadocJar)
     }
 
     tasks.named("jar", Jar::class) {
@@ -113,9 +118,7 @@ plugins.withType<JavaLibraryPlugin>().configureEach {
             register<MavenPublication>("mockitoLibrary") {
                 from(components["java"])
                 artifact(sourcesJar)
-                if (javadocJar.get().didWork) {
-                    artifact(javadocJar)
-                }
+                artifact(javadocJar)
 
                 pom {
                     // Gradle does not write 'jar' packaging to the pom (unlike other packaging types).
