@@ -7,8 +7,8 @@ plugins {
 }
 
 val isSnapshot = version.toString().endsWith("SNAPSHOT")
-val githubTokenProvider = providers.environmentVariable("GITHUB_TOKEN")
-val githubShaProvider = providers.environmentVariable("GITHUB_SHA")
+val githubTokenProvider = providers.environmentVariable("GITHUB_TOKEN").orElse("")
+val githubShaProvider = providers.environmentVariable("GITHUB_SHA").orElse("")
 val mockitoRepository = "mockito/mockito"
 
 tasks {
