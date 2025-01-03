@@ -197,7 +197,9 @@ import java.util.function.Function;
  *
  * <pre class="code"><code class="groovy">
  * configurations {
- *     mockitoAgent
+ *     mockitoAgent {
+ *         extendsFrom testImplementation
+ *     }
  * }
  * dependencies {
  *     mockitoAgent(libs.mockito) {
