@@ -222,7 +222,7 @@ jobs:
           ./gradlew
           githubRelease
           publishToSonatype
-          closeAndReleaseStagingRepository
+          closeAndReleaseStagingRepositories
           releaseSummary
           --stacktrace
         env:
