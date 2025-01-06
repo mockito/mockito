@@ -175,6 +175,9 @@ import java.util.function.Function;
  * to attach a Java agent to their own JVM</a>. As a result, the inline-mock-maker might not be able
  * to function without an explicit setup to enable instrumentation, and the JVM will always display a warning.
  *
+ * The following are examples about how to set up mockito-core as a Java agent, and it may be more appropriate to choose
+ * a different approach depending on your project constraints.
+ *
  * <p>
  * To explicitly attach Mockito during test execution, the library's jar file needs to be specified as <code>-javaagent</code>
  * as an argument to the executing JVM. To enable this in Gradle, the following example adds Mockito to all test
@@ -244,9 +247,18 @@ import java.util.function.Function;
  * &lt;/plugin&gt;
  * </code></pre>
  *
+ * <blockquote>
+ * Note however, that <code>@{argLine}</code> needs to exist when surefire performs its
+ * <a href="https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#argLine">late replacement</a> otherwise
+ * it will just use the value verbatim which will crash the VM,
+ * <code>The forked VM terminated without properly saying goodbye. VM crash or System.exit called.</code>, in this case,
+ * you may need to adapt your maven configuration, for example by adding an empty <code>&lt;argLine/&gt;</code> property
+ * to the POM file.
+ * </blockquote>
+ *
  * <p>
- * To enable support for dynamic attach, it is also possible to start a JVM with
- * <pre>-XX:+EnableDynamicAgentLoading</pre>. Do however note that, since this option is not standardized, any future
+ * Alternatively, to enable support for dynamic attach, it is also possible to start a JVM with
+ * <code>-XX:+EnableDynamicAgentLoading</code> flag. Do however note that, since this option is not standardized, any future
  * release of a JDK might prohibit this behaviour.
  *
  * <h3 id="1">1. <a class="meaningful_link" href="#verification" name="verification">Let's verify some behaviour!</a></h3>
