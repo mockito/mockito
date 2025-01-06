@@ -224,6 +224,7 @@ jobs:
           publishToSonatype
           closeAndReleaseStagingRepositories
           releaseSummary
+          --info
           --stacktrace
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
