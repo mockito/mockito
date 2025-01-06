@@ -46,11 +46,11 @@ public class PremainAttachAccess {
                             Class.forName("java.lang.management.ManagementFactory")
                                     .getMethod("getRuntimeMXBean")
                                     .invoke(null);
+
                     @SuppressWarnings("unchecked")
                     List<String> arguments =
                             (List<String>)
-                                    runtimeMXBean
-                                            .getClass()
+                                    Class.forName("java.lang.management.RuntimeMXBean")
                                             .getMethod("getInputArguments")
                                             .invoke(runtimeMXBean);
                     dynamicAgentLoading =
