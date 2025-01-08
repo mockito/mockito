@@ -1,6 +1,8 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
+import com.diffplug.spotless.FormatterFunc
 import com.google.googlejavaformat.java.Formatter
 import com.google.googlejavaformat.java.JavaFormatterOptions
+import java.io.Serializable
 
 plugins {
     id("com.diffplug.spotless")
@@ -13,16 +15,20 @@ configure<SpotlessExtension> {
     java {
         licenseHeaderFile(rootProject.file("config/spotless/spotless.header"))
 
-        // not using stock googleJavaFormat due to missing options like reorderModifiers
-        custom("google-java-format") {
-            val formatterOptions = JavaFormatterOptions.builder()
-                .style(JavaFormatterOptions.Style.AOSP)
-                .reorderModifiers(true)
-                .formatJavadoc(false)
-                .build()
+        // Not using stock googleJavaFormat due to missing options like reorderModifiers
+        // Also, using the Serializable interface to work around bug in spotless 7.0.0
+        // https://github.com/diffplug/spotless/issues/2387
+        custom("google-java-format", object : Serializable, FormatterFunc {
+            override fun apply(input: String): String {
+                val formatterOptions = JavaFormatterOptions.builder()
+                    .style(JavaFormatterOptions.Style.AOSP)
+                    .reorderModifiers(true)
+                    .formatJavadoc(false)
+                    .build()
 
-            Formatter(formatterOptions).formatSource(it)
-        }
+                return Formatter(formatterOptions).formatSource(input)
+            }
+        })
 
         toggleOffOn()
     }
