@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import org.mockito.MockMakers;
 import org.mockito.MockedConstruction;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.internal.exceptions.Reporter;
@@ -29,6 +30,11 @@ public class InlineByteBuddyMockMaker
 
     InlineByteBuddyMockMaker(InlineDelegateByteBuddyMockMaker inlineDelegateByteBuddyMockMaker) {
         this.inlineDelegateByteBuddyMockMaker = inlineDelegateByteBuddyMockMaker;
+    }
+
+    @Override
+    public String getName() {
+        return MockMakers.INLINE;
     }
 
     @Override

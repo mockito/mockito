@@ -100,12 +100,13 @@ public class MockUtilTest extends TestBase {
 
     @Test
     public void should_know_if_type_is_mockable() throws Exception {
-        Assertions.assertThat(MockUtil.typeMockabilityOf(FinalClass.class, null).mockable())
+        Assertions.assertThat(
+                        MockUtil.typeMockabilityOf(FinalClass.class, (String) null).mockable())
                 .isEqualTo(Plugins.getMockMaker().isTypeMockable(FinalClass.class).mockable());
 
-        assertFalse(MockUtil.typeMockabilityOf(int.class, null).mockable());
+        assertFalse(MockUtil.typeMockabilityOf(int.class, (String) null).mockable());
 
-        assertTrue(MockUtil.typeMockabilityOf(SomeClass.class, null).mockable());
-        assertTrue(MockUtil.typeMockabilityOf(SomeInterface.class, null).mockable());
+        assertTrue(MockUtil.typeMockabilityOf(SomeClass.class, (String) null).mockable());
+        assertTrue(MockUtil.typeMockabilityOf(SomeInterface.class, (String) null).mockable());
     }
 }
