@@ -191,7 +191,7 @@ import java.util.function.Function;
  * }
  * tasks {
  *     test {
- *         jvmArgs("-javaagent:${mockitoAgent.asPath}")
+ *         jvmArgs.add("-javaagent:${mockitoAgent.asPath}")
  *     }
  * }
  * </code></pre>
