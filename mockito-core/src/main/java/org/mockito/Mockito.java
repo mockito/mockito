@@ -2286,6 +2286,7 @@ public class Mockito extends ArgumentMatchers {
      * @param object to spy on
      * @param mockSettings additional mock settings
      * @return a spy of the real object
+     * @since 5.16.0
      */
     public static <T> T spy(T object, MockSettings mockSettings) {
         if (MockUtil.isMock(object)) {
