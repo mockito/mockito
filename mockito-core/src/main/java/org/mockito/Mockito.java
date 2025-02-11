@@ -2277,13 +2277,24 @@ public class Mockito extends ArgumentMatchers {
      * @return a spy of the real object
      */
     public static <T> T spy(T object) {
+        return spy(object, withSettings());
+    }
+
+    /**
+     * Please refer to the documentation of {@link #spy(Object)}.
+     *
+     * @param object to spy on
+     * @param mockSettings additional mock settings
+     * @return a spy of the real object
+     */
+    public static <T> T spy(T object, MockSettings mockSettings) {
         if (MockUtil.isMock(object)) {
             throw new IllegalArgumentException(
                     "Please don't pass mock here. Spy is not allowed on mock.");
         }
         return MOCKITO_CORE.mock(
                 (Class<T>) object.getClass(),
-                withSettings().spiedInstance(object).defaultAnswer(CALLS_REAL_METHODS));
+                mockSettings.spiedInstance(object).defaultAnswer(CALLS_REAL_METHODS));
     }
 
     /**
