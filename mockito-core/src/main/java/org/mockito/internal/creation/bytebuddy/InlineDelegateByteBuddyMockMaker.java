@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import org.mockito.MockMakers;
 import org.mockito.MockedConstruction;
 import org.mockito.creation.instance.InstantiationException;
 import org.mockito.creation.instance.Instantiator;
@@ -15,6 +16,7 @@ import org.mockito.internal.SuppressSignatureCheck;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
 import org.mockito.internal.framework.DisabledMockHandler;
+import org.mockito.internal.util.MockitoInformation;
 import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
@@ -253,7 +255,8 @@ class InlineDelegateByteBuddyMockMaker
                             "Could not initialize inline Byte Buddy mock maker.",
                             "",
                             detail,
-                            Platform.describe()),
+                            Platform.describe(),
+                            MockitoInformation.describe(MockMakers.INLINE)),
                     INITIALIZATION_ERROR);
         }
 
@@ -436,23 +439,6 @@ class InlineDelegateByteBuddyMockMaker
                             "Underlying exception : " + generationFailed),
                     generationFailed);
         }
-        if (TypeSupport.INSTANCE.isSealed(typeToMock) && typeToMock.isEnum()) {
-            throw new MockitoException(
-                    join(
-                            "Mockito cannot mock this class: " + typeToMock + ".",
-                            "Sealed abstract enums can't be mocked. Since Java 15 abstract enums are declared sealed, which prevents mocking.",
-                            "You can still return an existing enum literal from a stubbed method call."),
-                    generationFailed);
-        }
-        if (TypeSupport.INSTANCE.isSealed(typeToMock)
-                && Modifier.isAbstract(typeToMock.getModifiers())) {
-            throw new MockitoException(
-                    join(
-                            "Mockito cannot mock this class: " + typeToMock + ".",
-                            "Sealed interfaces or abstract classes can't be mocked. Interfaces cannot be instantiated and cannot be subclassed for mocking purposes.",
-                            "Instead of mocking a sealed interface or an abstract class, a non-abstract class can be mocked and used to represent the interface."),
-                    generationFailed);
-        }
         if (Modifier.isPrivate(typeToMock.getModifiers())) {
             throw new MockitoException(
                     join(
@@ -476,6 +462,7 @@ class InlineDelegateByteBuddyMockMaker
                                 "Hotspot",
                                 ""),
                         Platform.describe(),
+                        MockitoInformation.describe(MockMakers.INLINE),
                         "",
                         "You are seeing this disclaimer because Mockito is configured to create inlined mocks.",
                         "You can learn about inline mocks and their limitations under item #39 of the Mockito class javadoc.",
@@ -561,7 +548,10 @@ class InlineDelegateByteBuddyMockMaker
         return new TypeMockability() {
             @Override
             public boolean mockable() {
-                return INSTRUMENTATION.isModifiableClass(type) && !EXCLUDES.contains(type);
+                return INSTRUMENTATION.isModifiableClass(type)
+                        && !EXCLUDES.contains(type)
+                        && !(Modifier.isAbstract(type.getModifiers())
+                                && TypeSupport.INSTANCE.isSealed(type));
             }
 
             @Override
@@ -575,6 +565,15 @@ class InlineDelegateByteBuddyMockMaker
                 if (EXCLUDES.contains(type)) {
                     return "Cannot mock wrapper types, String.class or Class.class";
                 }
+                if (Modifier.isAbstract(type.getModifiers())
+                        && TypeSupport.INSTANCE.isSealed(type)) {
+                    if (type.isEnum()) {
+                        return "Sealed abstract enums can't be mocked. Since Java 15 abstract enums are declared sealed, which prevents mocking. You can still return an existing enum literal from a stubbed method call.";
+                    } else {
+                        return "Sealed interfaces or abstract classes can't be mocked. Interfaces cannot be instantiated and cannot be subclassed for mocking purposes. Instead of mocking a sealed interface or an abstract class, a non-abstract class can be mocked and used to represent the interface.";
+                    }
+                }
+
                 return "VM does not support modification of given type";
             }
         };

@@ -4,9 +4,11 @@
  */
 package org.mockito.internal.creation.proxy;
 
+import org.mockito.MockMakers;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.invocation.RealMethod;
+import org.mockito.internal.util.MockitoInformation;
 import org.mockito.internal.util.Platform;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
@@ -30,6 +32,11 @@ public class ProxyMockMaker implements MockMaker {
     private static final Object[] EMPTY = new Object[0];
 
     private final ProxyRealMethod proxyRealMethod = ProxyRealMethod.make();
+
+    @Override
+    public String getName() {
+        return MockMakers.PROXY;
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -141,7 +148,8 @@ public class ProxyMockMaker implements MockMaker {
                                                 + method
                                                 + " was not expected to be declared. Either your JVM build offers "
                                                 + "non-official API or the current functionality is not supported",
-                                        Platform.describe()));
+                                        Platform.describe(),
+                                        MockitoInformation.describe(MockMakers.PROXY)));
                 }
             }
             RealMethod realMethod;

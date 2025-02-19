@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import org.mockito.MockMakers;
 import org.mockito.MockedConstruction;
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.MockHandler;
@@ -34,6 +35,11 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
 
     ByteBuddyMockMaker(SubclassByteBuddyMockMaker subclassByteBuddyMockMaker) {
         this.subclassByteBuddyMockMaker = subclassByteBuddyMockMaker;
+    }
+
+    @Override
+    public String getName() {
+        return MockMakers.SUBCLASS;
     }
 
     @Override

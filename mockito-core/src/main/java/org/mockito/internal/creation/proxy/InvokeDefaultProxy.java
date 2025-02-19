@@ -4,9 +4,11 @@
  */
 package org.mockito.internal.creation.proxy;
 
+import org.mockito.MockMakers;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.RealMethod;
 import org.mockito.internal.invocation.SerializableMethod;
+import org.mockito.internal.util.MockitoInformation;
 import org.mockito.internal.util.Platform;
 
 import java.io.Serializable;
@@ -64,7 +66,8 @@ class InvokeDefaultProxy implements ProxyRealMethod {
                                 "Method "
                                         + serializableMethod.getJavaMethod()
                                         + " could not be delegated, this is not supposed to happen",
-                                Platform.describe()),
+                                Platform.describe(),
+                                MockitoInformation.describe(MockMakers.PROXY)),
                         e);
             }
         }

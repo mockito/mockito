@@ -5,6 +5,7 @@
 package org.mockito.internal.stubbing.defaultanswers;
 
 import static org.mockito.Mockito.withSettings;
+import static org.mockito.internal.exceptions.Reporter.cannotMockClass;
 import static org.mockito.internal.util.MockUtil.typeMockabilityOf;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.mock.MockCreationSettings;
+import org.mockito.plugins.MockMaker.TypeMockability;
 import org.mockito.stubbing.Answer;
 
 /**
@@ -58,7 +60,17 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
         if (emptyValue != null) {
             return emptyValue;
         }
-        if (!typeMockabilityOf(rawType, mockSettings.getMockMaker()).mockable()) {
+
+        String mockMaker = mockSettings.getMockMaker();
+        TypeMockability typeMockability = typeMockabilityOf(rawType, mockMaker);
+        if (!typeMockability.mockable()) {
+            if (rawType.isEnum()) {
+                throw cannotMockClass(
+                        rawType,
+                        typeMockability.nonMockableReason(),
+                        MockUtil.getMockMaker(mockMaker).getName());
+            }
+
             if (invocation.getMethod().getReturnType().equals(rawType)) {
                 return delegate().answer(invocation);
             } else {
