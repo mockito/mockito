@@ -22,6 +22,8 @@ import org.mockitoutil.TestBase;
  */
 public class EqualsBuilderTest extends TestBase {
 
+
+
     @Test
     public void testname() throws Exception {}
 
@@ -370,6 +372,33 @@ public class EqualsBuilderTest extends TestBase {
         assertTrue(new EqualsBuilder().append((Object) null, (Object) null).isEquals());
     }
 
+    @Test
+    public void testAppend_BigDecimalComparison() {
+        EqualsBuilder builder = new EqualsBuilder();
+
+        BigDecimal val1 = new BigDecimal("10.0");
+        BigDecimal val2 = new BigDecimal("10.0");
+        BigDecimal val3 = new BigDecimal("20.0");
+
+        // BigDecimal comparison should return true
+        builder.append(val1, val2);
+        assertTrue(builder.isEquals());
+
+        builder.setEquals(true); // Reset state
+        builder.append(val1, val3);
+        assertFalse(builder.isEquals());
+    }
+    
+    @Test
+    public void testAppend_BigDecimalComparison_LhsTrue_RhsFalse() {
+        EqualsBuilder builder = new EqualsBuilder();
+        BigDecimal lhs = new BigDecimal("1.0");
+        Integer rhs = 1; // Not an instance of BigDecimal
+    
+        builder.append(lhs, rhs);
+        assertFalse(builder.isEquals());
+    }
+    
     @Test
     public void testLong() {
         long o1 = 1L;
