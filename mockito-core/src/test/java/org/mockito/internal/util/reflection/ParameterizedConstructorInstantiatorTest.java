@@ -11,6 +11,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.Observer;
@@ -73,7 +74,7 @@ public class ParameterizedConstructorInstantiatorTest {
     public void should_instantiate_type_if_resolver_provide_matching_types() throws Exception {
         Observer observer = mock(Observer.class);
         Map map = mock(Map.class);
-        given(resolver.resolveTypeInstances(ArgumentMatchers.any(Class[].class)))
+        given(resolver.resolveTypeInstances(ArgumentMatchers.any(Constructor.class)))
                 .willReturn(new Object[] {observer, map});
 
         new ParameterizedConstructorInstantiator(this, field("withMultipleConstructor"), resolver)
@@ -89,7 +90,7 @@ public class ParameterizedConstructorInstantiatorTest {
             throws Exception {
         Observer observer = mock(Observer.class);
         Set<?> wrongArg = mock(Set.class);
-        given(resolver.resolveTypeInstances(ArgumentMatchers.<Class<?>[]>any()))
+        given(resolver.resolveTypeInstances(ArgumentMatchers.any()))
                 .willReturn(new Object[] {observer, wrongArg});
 
         try {
@@ -104,7 +105,7 @@ public class ParameterizedConstructorInstantiatorTest {
 
     @Test
     public void should_report_failure_if_constructor_throws_exception() throws Exception {
-        given(resolver.resolveTypeInstances(ArgumentMatchers.<Class<?>[]>any()))
+        given(resolver.resolveTypeInstances(ArgumentMatchers.any()))
                 .willReturn(new Object[] {null});
 
         try {
@@ -120,7 +121,7 @@ public class ParameterizedConstructorInstantiatorTest {
     @Test
     public void should_instantiate_type_with_vararg_constructor() throws Exception {
         Observer[] vararg = new Observer[] {};
-        given(resolver.resolveTypeInstances(ArgumentMatchers.any(Class[].class)))
+        given(resolver.resolveTypeInstances(ArgumentMatchers.any(Constructor.class)))
                 .willReturn(new Object[] {"", vararg});
 
         new ParameterizedConstructorInstantiator(this, field("withVarargConstructor"), resolver)
