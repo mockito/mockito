@@ -5,6 +5,7 @@ module org.mockito {
     requires net.bytebuddy;
     requires net.bytebuddy.agent;
 
+    requires static junit;
     requires static org.hamcrest;
     requires static org.opentest4j;
 
