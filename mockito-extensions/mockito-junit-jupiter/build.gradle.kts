@@ -53,9 +53,6 @@ tasks {
                 # See https://bnd.bndtools.org/instructions/removeheaders.html
                 -removeheaders: Private-Package
 
-                # Configures the automatic module name for Java 9+.
-                Automatic-Module-Name: org.mockito.junit.jupiter
-
                 # Don't add all the extra headers bnd normally adds.
                 # See https://bnd.bndtools.org/instructions/noextraheaders.html
                 -noextraheaders: true

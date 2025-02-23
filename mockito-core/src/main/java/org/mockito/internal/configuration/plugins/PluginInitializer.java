@@ -5,6 +5,7 @@
 package org.mockito.internal.configuration.plugins;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -48,7 +49,7 @@ class PluginInitializer {
                     classOrAlias = DefaultMockitoPlugins.getDefaultPluginClass(classOrAlias);
                 }
                 Class<?> pluginClass = loader.loadClass(classOrAlias);
-                PluginInitializer.class.getModule().addReads(pluginClass.getModule());
+                addReads(pluginClass);
                 Object plugin = pluginClass.getDeclaredConstructor().newInstance();
                 return service.cast(plugin);
             }
@@ -81,7 +82,7 @@ class PluginInitializer {
                     classOrAlias = DefaultMockitoPlugins.getDefaultPluginClass(classOrAlias);
                 }
                 Class<?> pluginClass = loader.loadClass(classOrAlias);
-                PluginInitializer.class.getModule().addReads(pluginClass.getModule());
+                addReads(pluginClass);
                 Object plugin = pluginClass.getDeclaredConstructor().newInstance();
                 impls.add(service.cast(plugin));
             }
@@ -89,6 +90,19 @@ class PluginInitializer {
         } catch (Exception e) {
             throw new IllegalStateException(
                     "Failed to load " + service + " implementation declared in " + resources, e);
+        }
+    }
+
+    private static void addReads(Class<?> pluginClass) {
+        try {
+            Method getModule = Class.class.getMethod("getModule");
+            Method addReads =
+                    getModule.getReturnType().getMethod("addReads", getModule.getReturnType());
+            addReads.invoke(
+                    getModule.invoke(PluginInitializer.class), getModule.invoke(pluginClass));
+        } catch (NoSuchMethodException ignored) {
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 }

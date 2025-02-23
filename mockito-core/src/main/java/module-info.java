@@ -25,4 +25,12 @@ module org.mockito {
     exports org.mockito.session;
     exports org.mockito.stubbing;
     exports org.mockito.verification;
+    exports org.mockito.internal.configuration to
+            org.mockito.junit.jupiter;
+    exports org.mockito.internal.session to
+            org.mockito.junit.jupiter;
+    exports org.mockito.internal.configuration.plugins to
+            org.mockito.junit.jupiter;
+    exports org.mockito.internal.util to
+            org.mockito.junit.jupiter;
 }
