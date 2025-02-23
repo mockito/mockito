@@ -1,0 +1,65 @@
+rootProject.subprojects { Project project ->
+    plugins.withId("java") {
+        project.apply plugin: "jacoco"
+        project.jacoco {
+            toolVersion = '0.8.11'
+        }
+    }
+}
+
+def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoCoverage ->
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    rootProject.subprojects { Project currentProject ->
+        plugins.withId("jacoco") {
+            plugins.withId("java") {
+                // JacocoReport.sourceSets() appends both sourceDirectories and classDirectories.
+                mockitoCoverage.sourceSets currentProject.sourceSets.main
+                mockitoCoverage.executionData(currentProject.tasks.test)
+            }
+            plugins.withId("com.android.base") {
+                // The :androidTest project only contains test infrastructure, so there's no need to grab sources/classes.
+
+                def androidTest = currentProject.tasks.connectedDebugAndroidTest
+                def instrumentationCoverage = currentProject
+                    .layout.buildDirectory.dir("outputs/code_coverage/debugAndroidTest/connected")
+                    .map { it.asFileTree.matching { include "*/coverage.ec" } }
+                mockitoCoverage.executionData(currentProject.files(instrumentationCoverage))
+                mockitoCoverage.mustRunAfter(androidTest)
+
+                def unitTest = currentProject.tasks.testDebugUnitTest
+                def coverageFiles = currentProject
+                    .layout.buildDirectory.dir("outputs/unit_test_code_coverage/debugUnitTest")
+                    .map { it.asFileTree.matching { include "testDebugUnitTest.exec" } }
+                mockitoCoverage.executionData(currentProject.files(coverageFiles).builtBy(unitTest))
+            }
+        }
+    }
+
+    gradle.taskGraph.whenReady { // Theoretically Gradle.projectsEvaluated, but not possible here.
+        // Run this after all projects' sourceSets have been added (which is delayed to when the jacoco plugin is applied).
+        classDirectories.setFrom(
+            classDirectories.files.collect {
+                fileTree(
+                    dir: it,
+                    exclude: ["**/internal/util/concurrent/**"]
+                )
+            }
+        )
+    }
+
+    reports {
+        xml.required = true
+        html.required = true
+        html.outputLocation = rootProject.layout.buildDirectory.dir("jacocoHtml")
+    }
+
+    doLast {
+        def reportFile = new File(reports.html.outputLocation.get().asFile, "index.html")
+        logger.lifecycle "Jacoco HTML created: file://${reportFile.toURI().path}"
+    }
+}
+
+tasks.register("coverageReport") {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    dependsOn(mockitoCoverage)
+}

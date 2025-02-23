@@ -55,7 +55,7 @@ jobs:
 
     - name: 3. Validate Gradle wrapper
       if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
-      uses: gradle/wrapper-validation-action@v3.5.0 # https://github.com/gradle/wrapper-validation-action
+      uses: gradle/actions/wrapper-validation@v4 # https://github.com/gradle/wrapper-validation-action
 
     - name: 4. Build and check reproducibility of artifacts (single job only)
       if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
@@ -74,7 +74,6 @@ jobs:
         ./gradlew
         -Pmockito.test.java=${{ matrix.java }}
         build
-        idea
         --stacktrace
         --scan
       env:
@@ -90,11 +89,11 @@ jobs:
         --scan
 
     - name: 8. Upload coverage report
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
-        files: build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
+        files: mockito-core/build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
         fail_ci_if_error: true
 
   #
@@ -163,7 +162,7 @@ jobs:
 
           echo 0 > gradle.exit # Set a default exit code.
           # Run the actual tests (suppress build failures by saving the exit code).
-          ./gradlew :androidTest:connectedCheck --no-daemon --no-build-cache || echo $? > gradle.exit
+          ./gradlew :mockito-integration-tests:android-tests:connectedCheck --no-daemon --no-build-cache || echo $? > gradle.exit
 
           # Stop capturing logcat output.
           kill $(cat logcat_file.pid)    || echo "::warning file=.github/workflows/ci.yml::Logcat process $(cat logcat_file.pid) didn't exist."
@@ -171,23 +170,23 @@ jobs:
           # Make sure the step fails if the tests failed.
           exit $(cat gradle.exit)
 
-    - name: 5. Upload artifact "androidTest-results-${{ matrix.android-api }}"
+    - name: 5. Upload artifact "android-tests-results-${{ matrix.android-api }}"
       if: success() || failure()
       uses: actions/upload-artifact@v4
       with:
         name: androidTest-results-${{ matrix.android-api }}
         path: |
-          ${{ github.workspace }}/subprojects/androidTest/build/reports/androidTests/connected/**
+          ${{ github.workspace }}/mockito-integration-tests/android-tests/build/reports/android-tests/connected/**
           ${{ github.workspace }}/emulator.log
           ${{ github.workspace }}/emulator-startup.log
 
-    # :androidTest:connectedCheck (which depends on :androidTest:createDebugAndroidTestCoverageReport) already generated coverage report.
+    # :mockito-integration-tests:android-tests:connectedCheck (which depends on :mockito-integration-tests:android-tests:createDebugAndroidTestCoverageReport) already generated coverage report.
     - name: 6. Upload coverage report
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
-        files: subprojects/androidTest/build/reports/coverage/androidTest/debug/connected/report.xml
+        files: mockito-integration-tests/android-tests/build/reports/coverage/android-tests/debug/connected/report.xml
         fail_ci_if_error: true
 
   #
@@ -223,8 +222,9 @@ jobs:
           ./gradlew
           githubRelease
           publishToSonatype
-          closeAndReleaseStagingRepository
+          closeAndReleaseStagingRepositories
           releaseSummary
+          --info
           --stacktrace
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

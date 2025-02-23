@@ -1,0 +1,60 @@
+[versions]
+bytebuddy = "1.15.11"
+errorprone = "2.23.0"
+junit4 = "4.13.2"
+junit-jupiter = "5.11.4"
+junit-platform = "1.11.4"
+kotlin = "2.0.21"
+
+gradleplugin-test-logger = "4.0.0"
+gradleplugin-animal-sniffer = "1.7.2"
+gradleplugin-aQute-bnd = "7.1.0"
+gradleplugin-errorprone = "4.1.0"
+gradleplugin-spotless = "7.0.2"
+
+gradleplugin-android = "7.4.2"
+
+[libraries]
+android-junit = { module = "androidx.test.ext:junit", version = "1.2.1" }
+android-runner = { module = "androidx.test:runner", version = "1.6.2" }
+assertj = { module = "org.assertj:assertj-core", version = "3.27.3" }
+autoservice = { module = "com.google.auto.service:auto-service", version = "1.1.1" }
+bnd-gradle = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref = "gradleplugin-aQute-bnd" }
+bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }
+bytebuddy-agent = { module = "net.bytebuddy:byte-buddy-agent", version.ref = "bytebuddy" }
+bytebuddy-android = { module = "net.bytebuddy:byte-buddy-android", version.ref = "bytebuddy" }
+equinox = { module = "org.eclipse.platform:org.eclipse.osgi", version = "3.22.0" }
+errorprone = { module = "com.google.errorprone:error_prone_core", version.ref = "errorprone" }
+errorprone-test-api = { module = "com.google.errorprone:error_prone_test_helpers", version.ref = "errorprone" }
+groovy = { module = "org.codehaus.groovy:groovy", version = "3.0.23" }
+hamcrest = { module = "org.hamcrest:hamcrest-core", version = "3.0" }
+junit4 = { module = "junit:junit", version.ref = "junit4" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
+junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit-jupiter" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.6.3-native-mt" }
+objenesis = { module = "org.objenesis:objenesis", version = "3.3" }
+opentest4j = { module = "org.opentest4j:opentest4j", version = "1.3.0" }
+osgi = { module = "org.osgi:osgi.core", version = "8.0.0" }
+
+# For buildSrc logic
+gradleplugin-testLogger = { module = "com.adarshr:gradle-test-logger-plugin", version.ref = "gradleplugin-test-logger" }
+gradleplugin-animalSniffer = { module = "ru.vyarus:gradle-animalsniffer-plugin", version.ref = "gradleplugin-animal-sniffer" }
+gradleplugin-bnd = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref = "gradleplugin-aQute-bnd" }
+gradleplugin-errorprone = { module = "net.ltgt.gradle:gradle-errorprone-plugin", version.ref = "gradleplugin-errorprone" }
+gradleplugin-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "gradleplugin-spotless" }
+gradleplugin-spotless-googleJavaFormat = { module = "com.google.googlejavaformat:google-java-format", version = "1.25.2" }
+gradleplugin-license = { module = "com.github.hierynomus.license:com.github.hierynomus.license.gradle.plugin", version = "0.16.1" }
+gradleplugin-nexusPublish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
+gradleplugin-shipkit-changelog = { module = "org.shipkit:shipkit-changelog", version = "2.0.1" }
+gradleplugin-shipkit-autoVersion = { module = "org.shipkit:shipkit-auto-version", version = "2.1.0" }
+
+# animal sniffer compatibility signatures
+animalSniffer-android-apiLevel26 = { module = "net.sf.androidscents.signature:android-api-level-26", version = "8.0.0_r2" }
+animalSniffer-java = { module = "org.codehaus.mojo.signature:java18", version = "1.0" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "gradleplugin-android" }

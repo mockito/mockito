@@ -34,8 +34,8 @@ reduce risk, and improve code health, while paying the maintainers of the exact 
 ## Development
 
 Mockito publishes every change as a `-SNAPSHOT` version to a public Sonatype repository. Roughly once a month, we
-publish a new minor or patch version to Maven Central. For release automation we use Shipkit
-library (http://shipkit.org), Gradle Nexus [Publish Plugin](https://github.com/gradle-nexus/publish-plugin).
+publish a new minor or patch version to Maven Central. For release automation we use
+[Shipkit library](http://shipkit.org), [Gradle Nexus Publish Plugin](https://github.com/gradle-nexus/publish-plugin).
 Fully automated releases are awesome, and you should do that for your libraries, too!
 See the [latest release notes](https://github.com/mockito/mockito/releases/)
 and [latest documentation](https://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html). Docs in
@@ -64,25 +64,22 @@ Enjoy Mockito!
 
 To build locally:
 
-     ./gradlew build
-
-To develop in IntelliJ IDEA you can use built-in Gradle import wizard in IDEA. Alternatively generate the importable
-IDEA metadata files using:
-
-     ./gradlew idea
-
-Then, _open_ the generated *.ipr file in IDEA.
+```shell
+./gradlew build
+```
+You can open in any IDE that support Gradle, e.g. IntelliJ IDEA, or Fleet.
+For Eclipse, one may need to run `./gradlew eclipse` before importing the project.
 
 ## How to release new version?
 
 1. Every change on the main development branch is released as `-SNAPSHOT` version to Sonatype snapshot repo
    at https://s01.oss.sonatype.org/content/repositories/snapshots/org/mockito/mockito-core.
-2. In order to release a non-snapshot version to Maven Central push an annotated tag, for example:
+2. To release a non-snapshot version to Maven Central push an annotated tag, for example:
 
-```
-git tag -a -m "Release 3.4.5" v3.4.5
-git push origin v3.4.5
-```
+    ```shell
+    git tag -a -m "Release 3.4.5" v3.4.5
+    git push origin v3.4.5
+    ```
 
 3. At the moment, you **may not create releases from GitHub Web UI**. Doing so will make the CI build fail because the
    CI creates the changelog and posts to GitHub releases. We'll support this in the future.
