@@ -48,6 +48,7 @@ class PluginInitializer {
                     classOrAlias = DefaultMockitoPlugins.getDefaultPluginClass(classOrAlias);
                 }
                 Class<?> pluginClass = loader.loadClass(classOrAlias);
+                PluginInitializer.class.getModule().addReads(pluginClass.getModule());
                 Object plugin = pluginClass.getDeclaredConstructor().newInstance();
                 return service.cast(plugin);
             }
@@ -80,6 +81,7 @@ class PluginInitializer {
                     classOrAlias = DefaultMockitoPlugins.getDefaultPluginClass(classOrAlias);
                 }
                 Class<?> pluginClass = loader.loadClass(classOrAlias);
+                PluginInitializer.class.getModule().addReads(pluginClass.getModule());
                 Object plugin = pluginClass.getDeclaredConstructor().newInstance();
                 impls.add(service.cast(plugin));
             }
