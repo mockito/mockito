@@ -169,10 +169,12 @@ class InlineDelegateByteBuddyMockMaker
                     instrumentation.appendToBootstrapClassLoaderSearch(jarfile);
                 }
                 try {
-                    Class.forName(
+                    Class<?> dispatcher = Class.forName(
                             "org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher",
                             false,
                             null);
+                    InlineDelegateByteBuddyMockMaker.class.getModule().addReads(dispatcher.getModule());
+
                 } catch (ClassNotFoundException cnfe) {
                     throw new IllegalStateException(
                             join(
