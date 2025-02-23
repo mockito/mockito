@@ -1,10 +1,8 @@
 module org.mockito {
-
     requires java.instrument;
     requires jdk.attach;
     requires net.bytebuddy;
     requires net.bytebuddy.agent;
-
     requires static junit;
     requires static org.hamcrest;
     requires static org.opentest4j;
