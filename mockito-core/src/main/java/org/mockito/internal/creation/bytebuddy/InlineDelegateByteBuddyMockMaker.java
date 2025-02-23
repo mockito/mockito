@@ -138,25 +138,28 @@ class InlineDelegateByteBuddyMockMaker
                 boot.deleteOnExit();
                 try (JarOutputStream outputStream =
                         new JarOutputStream(new FileOutputStream(boot))) {
-                    String source =
-                            "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher";
                     InputStream inputStream =
-                            InlineDelegateByteBuddyMockMaker.class
-                                    .getClassLoader()
-                                    .getResourceAsStream(source + ".raw");
+                            InlineDelegateByteBuddyMockMaker.class.getResourceAsStream(
+                                    "inject/MockMethodDispatcher.raw");
                     if (inputStream == null) {
                         throw new IllegalStateException(
                                 join(
                                         "The MockMethodDispatcher class file is not locatable: "
-                                                + source
-                                                + ".raw",
+                                                + "inject/MockMethodDispatcher.raw"
+                                                + " in context of "
+                                                + InlineDelegateByteBuddyMockMaker.class.getName(),
                                         "",
                                         "The class loader responsible for looking up the resource: "
                                                 + InlineDelegateByteBuddyMockMaker.class
                                                         .getClassLoader()));
                     }
                     try (inputStream) {
-                        outputStream.putNextEntry(new JarEntry(source + ".class"));
+                        outputStream.putNextEntry(
+                                new JarEntry(
+                                        InlineDelegateByteBuddyMockMaker.class
+                                                        .getPackageName()
+                                                        .replace('.', '/')
+                                                + "/inject/MockMethodDispatcher.class"));
                         int length;
                         byte[] buffer = new byte[1024];
                         while ((length = inputStream.read(buffer)) != -1) {
