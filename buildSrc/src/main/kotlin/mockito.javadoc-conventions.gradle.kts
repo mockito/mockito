@@ -15,8 +15,6 @@ tasks.named<Javadoc>("javadoc") {
     inputs.dir(javadocConfigDir)
     description = "Creates javadoc html for ${project.name}."
 
-    exclude("**/internal/**")
-
     // For more details on the format
     // see https://docs.oracle.com/en/java/javase/21/javadoc/javadoc.html
     options {
