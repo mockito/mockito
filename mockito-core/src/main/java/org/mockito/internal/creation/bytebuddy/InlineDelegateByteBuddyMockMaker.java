@@ -171,15 +171,13 @@ class InlineDelegateByteBuddyMockMaker
                 try (JarFile jarfile = new JarFile(boot)) {
                     instrumentation.appendToBootstrapClassLoaderSearch(jarfile);
                 }
+                Class<?> dispatcher;
                 try {
-                    Class<?> dispatcher =
+                    dispatcher =
                             Class.forName(
                                     "org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher",
                                     false,
                                     null);
-                    InlineDelegateByteBuddyMockMaker.class
-                            .getModule()
-                            .addReads(dispatcher.getModule());
                 } catch (ClassNotFoundException cnfe) {
                     throw new IllegalStateException(
                             join(
@@ -187,6 +185,21 @@ class InlineDelegateByteBuddyMockMaker
                                     "",
                                     "It seems like your current VM does not support the instrumentation API correctly."),
                             cnfe);
+                }
+                try {
+                    InlineDelegateByteBuddyMockMaker.class
+                            .getModule()
+                            .addReads(dispatcher.getModule());
+                } catch (Exception e) {
+                    throw new IllegalStateException(
+                            join(
+                                    "Mockito failed to adjust the module graph to read the dispatcher module",
+                                    "",
+                                    "Dispatcher: "
+                                            + dispatcher
+                                            + " is loaded by "
+                                            + dispatcher.getClassLoader()),
+                            e);
                 }
             } catch (IOException ioe) {
                 throw new IllegalStateException(
