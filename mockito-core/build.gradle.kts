@@ -1,4 +1,9 @@
 import com.android.build.gradle.internal.tasks.factory.dependsOn
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.ModuleVisitor
+import org.objectweb.asm.Opcodes
 
 plugins {
     id("mockito.library-conventions")
@@ -73,6 +78,24 @@ tasks {
         into(generatedInlineResource.map { it.dir("org/mockito/internal/creation/bytebuddy/inject") })
 
         rename("(.+)\\.class", "$1.raw")
+
+        /*TODO: How to do this?
+        val reader = ClassReader("module-info.class")
+        val writer = ClassWriter(reader, 0)
+        reader.accept(object : ClassVisitor(Opcodes.ASM9, writer) {
+            override fun visitModule(name: String?, access: Int, version: String?): ModuleVisitor {
+                return object : ModuleVisitor(
+                    Opcodes.ASM9,
+                    super.visitModule(name, access, version)
+                ) {
+                    override fun visitPackage(packaze: String) {
+                        if (packaze != "org/mockito/internal/creation/bytebuddy/inject") {
+                            super.visitPackage(packaze)
+                        }
+                    }
+                }
+            }
+        }, 0)*/
     }
     classes.dependsOn(copyMockMethodDispatcher)
 
