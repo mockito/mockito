@@ -78,9 +78,14 @@ tasks {
         into(generatedInlineResource.map { it.dir("org/mockito/internal/creation/bytebuddy/inject") })
 
         rename("(.+)\\.class", "$1.raw")
+    }
 
-        /*TODO: How to do this?
-        val reader = ClassReader("module-info.class")
+    val removeInjectionPackageFromModuleInfo by registering(DefaultTask::class) {
+        dependsOn(compileJava)
+
+        val moduleInfo = sourceSets.main.get().output.classesDirs.first().resolve("module-info.class")
+
+        val reader = ClassReader(moduleInfo.readBytes())
         val writer = ClassWriter(reader, 0)
         reader.accept(object : ClassVisitor(Opcodes.ASM9, writer) {
             override fun visitModule(name: String?, access: Int, version: String?): ModuleVisitor {
@@ -95,9 +100,13 @@ tasks {
                     }
                 }
             }
-        }, 0)*/
+        }, 0)
+
+        moduleInfo.writeBytes(writer.toByteArray())
     }
+
     classes.dependsOn(copyMockMethodDispatcher)
+    classes.dependsOn(removeInjectionPackageFromModuleInfo)
 
 
     jar {
