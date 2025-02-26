@@ -533,7 +533,7 @@ public class InlineDelegateByteBuddyMockMakerTest
                         InlineByteBuddyMockMaker.class
                                 .getClassLoader()
                                 .getResource(
-                                        "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.raw"))
+                                        "org/mockito/internal/creation/bytebuddy/inject-MockMethodDispatcher.raw"))
                 .isNotNull();
     }
 

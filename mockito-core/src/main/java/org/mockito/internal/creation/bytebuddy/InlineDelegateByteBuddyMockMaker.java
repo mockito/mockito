@@ -140,12 +140,12 @@ class InlineDelegateByteBuddyMockMaker
                         new JarOutputStream(new FileOutputStream(boot))) {
                     InputStream inputStream =
                             InlineDelegateByteBuddyMockMaker.class.getResourceAsStream(
-                                    "inject/MockMethodDispatcher.raw");
+                                    "inject-MockMethodDispatcher.raw");
                     if (inputStream == null) {
                         throw new IllegalStateException(
                                 join(
                                         "The MockMethodDispatcher class file is not locatable: "
-                                                + "inject/MockMethodDispatcher.raw"
+                                                + "inject-MockMethodDispatcher.raw"
                                                 + " in context of "
                                                 + InlineDelegateByteBuddyMockMaker.class.getName(),
                                         "",
