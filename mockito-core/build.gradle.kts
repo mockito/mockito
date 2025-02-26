@@ -83,26 +83,28 @@ tasks {
     val removeInjectionPackageFromModuleInfo by registering(DefaultTask::class) {
         dependsOn(compileJava)
 
-        val moduleInfo = sourceSets.main.get().output.classesDirs.first().resolve("module-info.class")
+        doLast {
+            val moduleInfo = sourceSets.main.get().output.classesDirs.first().resolve("module-info.class")
 
-        val reader = ClassReader(moduleInfo.readBytes())
-        val writer = ClassWriter(reader, 0)
-        reader.accept(object : ClassVisitor(Opcodes.ASM9, writer) {
-            override fun visitModule(name: String?, access: Int, version: String?): ModuleVisitor {
-                return object : ModuleVisitor(
-                    Opcodes.ASM9,
-                    super.visitModule(name, access, version)
-                ) {
-                    override fun visitPackage(packaze: String) {
-                        if (packaze != "org/mockito/internal/creation/bytebuddy/inject") {
-                            super.visitPackage(packaze)
+            val reader = ClassReader(moduleInfo.readBytes())
+            val writer = ClassWriter(reader, 0)
+            reader.accept(object : ClassVisitor(Opcodes.ASM9, writer) {
+                override fun visitModule(name: String?, access: Int, version: String?): ModuleVisitor {
+                    return object : ModuleVisitor(
+                        Opcodes.ASM9,
+                        super.visitModule(name, access, version)
+                    ) {
+                        override fun visitPackage(packaze: String) {
+                            if (packaze != "org/mockito/internal/creation/bytebuddy/inject") {
+                                super.visitPackage(packaze)
+                            }
                         }
                     }
                 }
-            }
-        }, 0)
+            }, 0)
 
-        moduleInfo.writeBytes(writer.toByteArray())
+            moduleInfo.writeBytes(writer.toByteArray())
+        }
     }
 
     classes.dependsOn(copyMockMethodDispatcher)
