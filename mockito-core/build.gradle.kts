@@ -1,4 +1,9 @@
 import com.android.build.gradle.internal.tasks.factory.dependsOn
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.ModuleVisitor
+import org.objectweb.asm.Opcodes
 
 plugins {
     id("mockito.library-conventions")
@@ -70,11 +75,40 @@ tasks {
 
         from(sourceSets.main.flatMap { it.java.classesDirectory }
             .map { it.file("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class") })
-        into(generatedInlineResource.map { it.dir("org/mockito/internal/creation/bytebuddy/inject") })
+        into(generatedInlineResource.map { it.dir("org/mockito/internal/creation/bytebuddy") })
 
-        rename("(.+)\\.class", "$1.raw")
+        rename(".*", "inject-MockMethodDispatcher.raw")
     }
+
+    val removeInjectionPackageFromModuleInfo by registering(DefaultTask::class) {
+        dependsOn(compileJava)
+
+        doLast {
+            val moduleInfo = sourceSets.main.get().output.classesDirs.first().resolve("module-info.class")
+
+            val reader = ClassReader(moduleInfo.readBytes())
+            val writer = ClassWriter(reader, 0)
+            reader.accept(object : ClassVisitor(Opcodes.ASM9, writer) {
+                override fun visitModule(name: String?, access: Int, version: String?): ModuleVisitor {
+                    return object : ModuleVisitor(
+                        Opcodes.ASM9,
+                        super.visitModule(name, access, version)
+                    ) {
+                        override fun visitPackage(packaze: String) {
+                            if (packaze != "org/mockito/internal/creation/bytebuddy/inject") {
+                                super.visitPackage(packaze)
+                            }
+                        }
+                    }
+                }
+            }, 0)
+
+            moduleInfo.writeBytes(writer.toByteArray())
+        }
+    }
+
     classes.dependsOn(copyMockMethodDispatcher)
+    classes.dependsOn(removeInjectionPackageFromModuleInfo)
 
 
     jar {
@@ -137,9 +171,6 @@ tasks {
                 # Don't add the Private-Package header.
                 # See https://bnd.bndtools.org/instructions/removeheaders.html
                 -removeheaders: Private-Package
-
-                # Configures the automatic module name for Java 9+.
-                Automatic-Module-Name: org.mockito
 
                 # Don't add all the extra headers bnd normally adds.
                 # See https://bnd.bndtools.org/instructions/noextraheaders.html
