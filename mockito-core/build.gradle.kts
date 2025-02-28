@@ -77,7 +77,7 @@ tasks {
             .map { it.file("org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class") })
         into(generatedInlineResource.map { it.dir("org/mockito/internal/creation/bytebuddy") })
 
-        rename("inject/(.+)\\.class", "inject-$1.raw")
+        rename(".*", "inject-MockMethodDispatcher.raw")
     }
 
     val removeInjectionPackageFromModuleInfo by registering(DefaultTask::class) {
