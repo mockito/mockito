@@ -6,6 +6,7 @@ module org.mockito {
     requires static junit;
     requires static org.hamcrest;
     requires static org.opentest4j;
+    requires static jdk.unsupported;
 
     exports org.mockito;
     exports org.mockito.configuration;
