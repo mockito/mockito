@@ -146,8 +146,8 @@ tasks {
                 # Export rules for public and internal packages
                 # https://bnd.bndtools.org/heads/export_package.html
                 Export-Package: \
-                    org.mockito.internal.*;status=INTERNAL;mandatory:=status;version=${archiveVersion.get()}, \
-                    org.mockito.*;version=${archiveVersion.get()}
+                    !org.mockito.internal.creation.bytebuddy.inject,org.mockito.internal.*;status=INTERNAL;mandatory:=status;version=${archiveVersion.get()}, \
+                    !org.mockito.internal.creation.bytebuddy.inject,org.mockito.*;version=${archiveVersion.get()}
 
                 # General rules for package import
                 # https://bnd.bndtools.org/heads/import_package.html
@@ -166,7 +166,7 @@ tasks {
                     org.hamcrest;resolution:=optional, \
                     org.objenesis;version="[3.1,4.0)", \
                     org.opentest4j.*;resolution:=optional, \
-                    org.mockito.*
+                    !org.mockito.internal.creation.bytebuddy.inject,org.mockito.*
 
                 # Don't add the Private-Package header.
                 # See https://bnd.bndtools.org/instructions/removeheaders.html
