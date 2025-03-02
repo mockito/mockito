@@ -5,7 +5,9 @@
 package org.mockito.internal.util.reflection;
 
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.loading.ByteArrayClassLoader;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import net.bytebuddy.implementation.MethodCall;
 import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.internal.PremainAttachAccess;
@@ -45,6 +47,14 @@ class InstrumentationMemberAccessor implements MemberAccessor {
         Instrumentation instrumentation;
         Dispatcher dispatcher;
         Throwable throwable;
+        /*
+        superinterface check failed: class org.mockito.internal.util.reflection.InstrumentationMemberAccessor$Dispatcher$ByteBuddy$XlCbRQzd
+        (in unnamed module @0x54a2d96e)
+        cannot access class org.mockito.internal.util.reflection.InstrumentationMemberAccessor$Dispatcher
+        (in module org.mockito) because module org.mockito does not export org.mockito.internal.util.reflection
+        to unnamed module @0x54a2d96e
+         */
+
         try {
             instrumentation = PremainAttachAccess.getInstrumentation();
             // We need to generate a dispatcher instance that is located in a distinguished class
@@ -52,6 +62,19 @@ class InstrumentationMemberAccessor implements MemberAccessor {
             // This way, we assure that classes within Mockito's module (which might be a shared,
             // unnamed module) do not face escalated privileges where tests might pass that would
             // otherwise fail without Mockito's opening.
+            InjectionClassLoader classLoader =
+                    new ByteArrayClassLoader(
+                            InstrumentationMemberAccessor.class.getClassLoader(),
+                            Collections.emptyMap());
+            instrumentation.redefineModule(
+                    Dispatcher.class.getModule(),
+                    Collections.emptySet(),
+                    Collections.singletonMap(
+                            Dispatcher.class.getPackageName(),
+                            Collections.singleton(classLoader.getUnnamedModule())),
+                    Collections.emptyMap(),
+                    Collections.emptySet(),
+                    Collections.emptyMap());
             dispatcher =
                     new ByteBuddy()
                             .subclass(Dispatcher.class)
@@ -78,12 +101,11 @@ class InstrumentationMemberAccessor implements MemberAccessor {
                                             .onArgument(0)
                                             .withArgument(1))
                             .make()
-                            .load(
-                                    InstrumentationMemberAccessor.class.getClassLoader(),
-                                    ClassLoadingStrategy.Default.WRAPPER)
+                            .load(classLoader, InjectionClassLoader.Strategy.INSTANCE)
                             .getLoaded()
                             .getConstructor()
                             .newInstance();
+            classLoader.seal();
             throwable = null;
         } catch (Throwable t) {
             instrumentation = null;
