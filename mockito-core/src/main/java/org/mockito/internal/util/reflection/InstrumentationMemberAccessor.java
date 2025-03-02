@@ -6,7 +6,6 @@ package org.mockito.internal.util.reflection;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.loading.ByteArrayClassLoader;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import net.bytebuddy.implementation.MethodCall;
 import org.mockito.exceptions.base.MockitoInitializationException;
@@ -65,6 +64,7 @@ class InstrumentationMemberAccessor implements MemberAccessor {
             InjectionClassLoader classLoader =
                     new ByteArrayClassLoader(
                             InstrumentationMemberAccessor.class.getClassLoader(),
+                            false,
                             Collections.emptyMap());
             instrumentation.redefineModule(
                     Dispatcher.class.getModule(),
