@@ -46,14 +46,6 @@ class InstrumentationMemberAccessor implements MemberAccessor {
         Instrumentation instrumentation;
         Dispatcher dispatcher;
         Throwable throwable;
-        /*
-        superinterface check failed: class org.mockito.internal.util.reflection.InstrumentationMemberAccessor$Dispatcher$ByteBuddy$XlCbRQzd
-        (in unnamed module @0x54a2d96e)
-        cannot access class org.mockito.internal.util.reflection.InstrumentationMemberAccessor$Dispatcher
-        (in module org.mockito) because module org.mockito does not export org.mockito.internal.util.reflection
-        to unnamed module @0x54a2d96e
-         */
-
         try {
             instrumentation = PremainAttachAccess.getInstrumentation();
             // We need to generate a dispatcher instance that is located in a distinguished class
