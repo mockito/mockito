@@ -1,4 +1,3 @@
-import gradle.kotlin.dsl.accessors._2a0859b2b1624a8c1f98b2dbe4a3b98d.main
 import org.gradle.api.tasks.javadoc.Javadoc
 
 plugins {
