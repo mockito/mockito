@@ -151,7 +151,11 @@ class InlineDelegateByteBuddyMockMaker
                                         "",
                                         "The class loader responsible for looking up the resource: "
                                                 + InlineDelegateByteBuddyMockMaker.class
-                                                        .getClassLoader()));
+                                                        .getClassLoader(),
+                                        "",
+                                        "The module responsible for looking up the resource: "
+                                                + InlineDelegateByteBuddyMockMaker.class
+                                                        .getModule()));
                     }
                     try (inputStream) {
                         outputStream.putNextEntry(
