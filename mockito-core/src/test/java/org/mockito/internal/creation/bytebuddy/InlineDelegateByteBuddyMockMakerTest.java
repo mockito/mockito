@@ -528,13 +528,20 @@ public class InlineDelegateByteBuddyMockMakerTest
     }
 
     @Test
-    public void testMockDispatcherIsRelocated() throws Exception {
+    public void testMockDispatcherIsRelocated() {
         assertThat(
                         InlineByteBuddyMockMaker.class
                                 .getClassLoader()
                                 .getResource(
-                                        "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.raw"))
+                                        "org/mockito/internal/creation/bytebuddy/inject-MockMethodDispatcher.raw"))
                 .isNotNull();
+
+        assertThat(
+                        InlineByteBuddyMockMaker.class
+                                .getClassLoader()
+                                .getResource(
+                                        "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class"))
+                .isNull();
     }
 
     private static final class FinalClass {

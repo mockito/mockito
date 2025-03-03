@@ -138,25 +138,29 @@ class InlineDelegateByteBuddyMockMaker
                 boot.deleteOnExit();
                 try (JarOutputStream outputStream =
                         new JarOutputStream(new FileOutputStream(boot))) {
-                    String source =
-                            "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher";
                     InputStream inputStream =
-                            InlineDelegateByteBuddyMockMaker.class
-                                    .getClassLoader()
-                                    .getResourceAsStream(source + ".raw");
+                            InlineDelegateByteBuddyMockMaker.class.getResourceAsStream(
+                                    "inject-MockMethodDispatcher.raw");
                     if (inputStream == null) {
                         throw new IllegalStateException(
                                 join(
                                         "The MockMethodDispatcher class file is not locatable: "
-                                                + source
-                                                + ".raw",
+                                                + "inject-MockMethodDispatcher.raw"
+                                                + " in context of "
+                                                + InlineDelegateByteBuddyMockMaker.class.getName(),
                                         "",
                                         "The class loader responsible for looking up the resource: "
                                                 + InlineDelegateByteBuddyMockMaker.class
-                                                        .getClassLoader()));
+                                                        .getClassLoader(),
+                                        "",
+                                        "The module responsible for looking up the resource: "
+                                                + InlineDelegateByteBuddyMockMaker.class
+                                                        .getModule()));
                     }
                     try (inputStream) {
-                        outputStream.putNextEntry(new JarEntry(source + ".class"));
+                        outputStream.putNextEntry(
+                                new JarEntry(
+                                        "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class"));
                         int length;
                         byte[] buffer = new byte[1024];
                         while ((length = inputStream.read(buffer)) != -1) {
@@ -168,11 +172,13 @@ class InlineDelegateByteBuddyMockMaker
                 try (JarFile jarfile = new JarFile(boot)) {
                     instrumentation.appendToBootstrapClassLoaderSearch(jarfile);
                 }
+                Class<?> dispatcher;
                 try {
-                    Class.forName(
-                            "org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher",
-                            false,
-                            null);
+                    dispatcher =
+                            Class.forName(
+                                    "org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher",
+                                    false,
+                                    null);
                 } catch (ClassNotFoundException cnfe) {
                     throw new IllegalStateException(
                             join(
@@ -180,6 +186,21 @@ class InlineDelegateByteBuddyMockMaker
                                     "",
                                     "It seems like your current VM does not support the instrumentation API correctly."),
                             cnfe);
+                }
+                try {
+                    InlineDelegateByteBuddyMockMaker.class
+                            .getModule()
+                            .addReads(dispatcher.getModule());
+                } catch (Exception e) {
+                    throw new IllegalStateException(
+                            join(
+                                    "Mockito failed to adjust the module graph to read the dispatcher module",
+                                    "",
+                                    "Dispatcher: "
+                                            + dispatcher
+                                            + " is loaded by "
+                                            + dispatcher.getClassLoader()),
+                            e);
                 }
             } catch (IOException ioe) {
                 throw new IllegalStateException(

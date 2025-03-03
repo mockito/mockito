@@ -15,6 +15,10 @@ tasks.named<Javadoc>("javadoc") {
     inputs.dir(javadocConfigDir)
     description = "Creates javadoc html for ${project.name}."
 
+    // Work-around as suggested in https://github.com/gradle/gradle/issues/19726
+    val sourceSetDirectories = sourceSets.main.get().java.sourceDirectories.joinToString(":")
+    val coreOptions = options as CoreJavadocOptions
+    coreOptions.addStringOption("-source-path", sourceSetDirectories)
     exclude("**/internal/**")
 
     // For more details on the format
