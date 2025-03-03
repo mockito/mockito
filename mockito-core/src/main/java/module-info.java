@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2025 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 module org.mockito {
     requires java.instrument;
     requires jdk.attach;

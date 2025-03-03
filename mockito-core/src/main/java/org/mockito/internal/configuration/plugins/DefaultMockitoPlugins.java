@@ -112,7 +112,6 @@ public class DefaultMockitoPlugins implements MockitoPlugins {
     }
 
     @Override
-    @Deprecated(since = "5.6.0", forRemoval = true)
     public MockMaker getInlineMockMaker() {
         return create(MockMaker.class, DEFAULT_PLUGINS.get(INLINE_ALIAS));
     }

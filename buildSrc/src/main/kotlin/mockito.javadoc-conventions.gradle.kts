@@ -1,3 +1,4 @@
+import gradle.kotlin.dsl.accessors._2a0859b2b1624a8c1f98b2dbe4a3b98d.main
 import org.gradle.api.tasks.javadoc.Javadoc
 
 plugins {
@@ -14,6 +15,12 @@ val javadocConfigDir = "$rootDir/config/javadoc"
 tasks.named<Javadoc>("javadoc") {
     inputs.dir(javadocConfigDir)
     description = "Creates javadoc html for ${project.name}."
+
+    // Woraround as suggested in https://github.com/gradle/gradle/issues/19726
+    val sourceSetDirectories = sourceSets.main.get().java.sourceDirectories.joinToString(":")
+    val coreOptions = options as CoreJavadocOptions
+    coreOptions.addStringOption("-source-path", sourceSetDirectories)
+    exclude("**/internal/**")
 
     // For more details on the format
     // see https://docs.oracle.com/en/java/javase/21/javadoc/javadoc.html
