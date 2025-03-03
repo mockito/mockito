@@ -156,10 +156,7 @@ class InlineDelegateByteBuddyMockMaker
                     try (inputStream) {
                         outputStream.putNextEntry(
                                 new JarEntry(
-                                        InlineDelegateByteBuddyMockMaker.class
-                                                        .getPackageName()
-                                                        .replace('.', '/')
-                                                + "/inject/MockMethodDispatcher.class"));
+                                        "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class"));
                         int length;
                         byte[] buffer = new byte[1024];
                         while ((length = inputStream.read(buffer)) != -1) {
