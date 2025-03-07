@@ -181,7 +181,7 @@ import java.util.function.Function;
  * <p>
  * To explicitly attach Mockito during test execution, the library's jar file needs to be specified as <code>-javaagent</code>
  * as an argument to the executing JVM. To enable this in Gradle, the following example adds Mockito to all test
- * tasks using <strong>Kotlin DSL</strong>:
+ * tasks using <strong>Kotlin DSL</strong>. Using a <code>CommandLineArgumentProvider</code> ensures task relocatability as recommended <a href="https://docs.gradle.org/current/userguide/caching_java_projects.html#dealing_with_file_paths">there</a>:
  *
  * <pre class="code"><code class="kotlin">
  * val mockitoAgent = configurations.create("mockitoAgent")
@@ -191,8 +191,18 @@ import java.util.function.Function;
  * }
  * tasks {
  *     test {
- *         jvmArgs.add("-javaagent:${mockitoAgent.asPath}")
+ *         jvmArgumentProviders.add(
+ *             objects.newInstance&lt;JavaAgentArgumentProvider&gt;().apply {
+ *                 classpath.from(mockitoAgent)
+ *             }
+ *         )
  *     }
+ * }
+ * abstract class JavaAgentArgumentProvider : CommandLineArgumentProvider {
+ *     {@literal @}get:Classpath
+ *     abstract val classpath: ConfigurableFileCollection
+ *
+ *     override fun asArguments() = listOf("-javaagent:${classpath.singleFile.absolutePath}")
  * }
  * </code></pre>
  *
@@ -203,13 +213,28 @@ import java.util.function.Function;
  *     mockitoAgent
  * }
  * dependencies {
+ *     testImplementation(libs.mockito)
  *     mockitoAgent(libs.mockito) {
  *         transitive = false
  *     }
  * }
  * tasks {
  *     test {
- *         jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+ *         jvmArgumentProviders.add(
+ *             objects.newInstance(JavaAgentArgumentProvider).tap {
+ *                 classpath.from(configurations.mockitoAgent)
+ *             }
+ *         )
+ *     }
+ * }
+ *
+ * abstract class JavaAgentArgumentProvider implements CommandLineArgumentProvider {
+ *     {@literal @}Classpath
+ *     abstract ConfigurableFileCollection getClasspath()
+ *
+ *     {@literal @}Override
+ *     Iterable&lt;String&gt; asArguments() {
+ *         ["-javaagent:${classpath.singleFile.absolutePath}"]
  *     }
  * }
  * </code></pre>
