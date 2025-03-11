@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2025 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
@@ -43,23 +47,23 @@ public abstract class ModuleHandler {
             @Override
             void exportFromTo(Module source, Module target, String packageName) {
                 inst.redefineModule(
-                    source,
-                    Set.of(),
-                    Map.of(packageName, Set.of(target)),
-                    Map.of(),
-                    Set.of(),
-                    Map.of());
+                        source,
+                        Set.of(),
+                        Map.of(packageName, Set.of(target)),
+                        Map.of(),
+                        Set.of(),
+                        Map.of());
             }
 
             @Override
             void openFromToRaw(Module source, Module target, String packageName) {
                 inst.redefineModule(
-                    source,
-                    Set.of(),
-                    Map.of(),
-                    Map.of(packageName, Set.of(target)),
-                    Set.of(),
-                    Map.of());
+                        source,
+                        Set.of(),
+                        Map.of(),
+                        Map.of(packageName, Set.of(target)),
+                        Set.of(),
+                        Map.of());
             }
         };
     }
@@ -92,7 +96,6 @@ public abstract class ModuleHandler {
         Object toCodegenModule(ClassLoader classLoader) {
             return null;
         }
-
 
         @Override
         ClassLoadingStrategy<ClassLoader> classLoadingStrategy(Class<?> type) {
@@ -156,9 +159,11 @@ public abstract class ModuleHandler {
                 Mockito.class.getModule().addReads(type.getModule());
             }
             try {
-                return ClassLoadingStrategy.UsingLookup.of(MethodHandles.privateLookupIn(type, lookup));
+                return ClassLoadingStrategy.UsingLookup.of(
+                        MethodHandles.privateLookupIn(type, lookup));
             } catch (IllegalAccessException e) {
-                throw new MockitoException("Could not resolve private lookup for " + type.getTypeName(), e);
+                throw new MockitoException(
+                        "Could not resolve private lookup for " + type.getTypeName(), e);
             }
         }
     }

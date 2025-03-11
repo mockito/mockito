@@ -36,7 +36,7 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
 
     public SubclassByteBuddyMockMaker(ModuleHandler handler) {
         cachingMockBytecodeGenerator =
-            new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(handler), false);
+                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(handler), false);
     }
 
     @Override

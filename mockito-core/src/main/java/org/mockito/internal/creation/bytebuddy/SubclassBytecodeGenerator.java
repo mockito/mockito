@@ -50,7 +50,7 @@ import org.mockito.mock.SerializableMode;
 
 class SubclassBytecodeGenerator implements BytecodeGenerator {
 
-    private static final String CODEGEN_PACKAGE = "org.mockito.codegen2.";
+    private static final String CODEGEN_PACKAGE = "org.mockito.codegen.";
 
     private final ModuleHandler handler;
     private final ByteBuddy byteBuddy;
@@ -163,8 +163,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         if (localMock && !isComingFromJDK(features.mockedType)) {
             typeName = features.mockedType.getName();
         } else {
-            typeName =
-                    CODEGEN_PACKAGE + features.mockedType.getSimpleName();
+            typeName = CODEGEN_PACKAGE + features.mockedType.getSimpleName();
         }
         String name =
                 String.format(
@@ -271,9 +270,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         } else {
             strategy = handler.classLoadingStrategy();
         }
-        return builder.make()
-                .load(classLoader, strategy)
-                .getLoaded();
+        return builder.make().load(classLoader, strategy).getLoaded();
     }
 
     private static CharSequence suffix(MockFeatures<?> features) {
