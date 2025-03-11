@@ -5,10 +5,12 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy.Default;
 import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
-import java.lang.instrument.Instrumentation;
-import java.lang.invoke.MethodHandles;
+
+import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,43 +31,78 @@ public abstract class ModuleHandler {
     abstract ClassLoadingStrategy<ClassLoader> classLoadingStrategy(Class<?> type);
 
     static ModuleHandler make() {
-        return new ModuleSystemFound() {
-            @Override
-            void exportFromTo(Module source, Module target, String packageName) {
-                throw new UnsupportedOperationException();
-            }
+        try {
+            return new ModuleSystemFound() {
+                @Override
+                void exportFromTo(Object source, Object target, String packageName) {
+                    throw new UnsupportedOperationException();
+                }
 
-            @Override
-            void openFromToRaw(Module source, Module target, String packageName) {
-                throw new UnsupportedOperationException();
-            }
-        };
+                @Override
+                void openFromToRaw(Object source, Object target, String packageName) {
+                    throw new UnsupportedOperationException();
+                }
+            };
+        } catch (Exception ignored) {
+            return new NoModuleSystemFound() {
+                @Override
+                public ClassLoadingStrategy<ClassLoader> classLoadingStrategy() {
+                    return Default.INJECTION;
+                }
+            };
+        }
     }
 
-    static ModuleHandler make(Instrumentation inst) {
-        return new ModuleSystemFound() {
-            @Override
-            void exportFromTo(Module source, Module target, String packageName) {
-                inst.redefineModule(
-                        source,
-                        Set.of(),
-                        Map.of(packageName, Set.of(target)),
-                        Map.of(),
-                        Set.of(),
-                        Map.of());
-            }
+    static ModuleHandler make(Object inst) {
+        try {
+            Method redefineModule =
+                    Class.forName("java.lang.instrument.Instrumentation")
+                            .getMethod(
+                                    "redefineModule",
+                                    Module.class,
+                                    Set.class,
+                                    Map.class,
+                                    Map.class,
+                                    Set.class,
+                                    Map.class);
+            return new ModuleSystemFound() {
+                @Override
+                void exportFromTo(Object source, Object target, String packageName) {
+                    try {
+                        redefineModule.invoke(
+                                inst,
+                                source,
+                                Collections.emptySet(),
+                                Collections.singletonMap(
+                                        packageName, Collections.singleton(target)),
+                                Collections.emptyMap(),
+                                Collections.emptySet(),
+                                Collections.emptyMap());
+                    } catch (Exception e) {
+                        throw new IllegalStateException(e);
+                    }
+                }
 
-            @Override
-            void openFromToRaw(Module source, Module target, String packageName) {
-                inst.redefineModule(
-                        source,
-                        Set.of(),
-                        Map.of(),
-                        Map.of(packageName, Set.of(target)),
-                        Set.of(),
-                        Map.of());
-            }
-        };
+                @Override
+                void openFromToRaw(Object source, Object target, String packageName) {
+                    try {
+                        redefineModule.invoke(
+                                inst,
+                                source,
+                                Collections.emptySet(),
+                                Collections.emptyMap(),
+                                Collections.singletonMap(
+                                        packageName, Collections.singleton(target)),
+                                Collections.emptySet(),
+                                Collections.emptyMap());
+                    } catch (Exception e) {
+                        throw new IllegalStateException(e);
+                    }
+                }
+            };
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     public abstract static class NoModuleSystemFound extends ModuleHandler {
@@ -105,25 +142,107 @@ public abstract class ModuleHandler {
 
     abstract static class ModuleSystemFound extends ModuleHandler {
 
-        private final MethodHandles.Lookup lookup = MethodHandles.lookup();
+        private final Object lookup;
+        private final Method privateLookupIn,
+                getModule,
+                isExported,
+                isOpen,
+                canRead,
+                addExports,
+                addOpens,
+                addReads;
+
+        public ModuleSystemFound() throws Exception {
+            Class<?> methodHandles = Class.forName("java.lang.invoke.MethodHandles");
+            lookup = methodHandles.getMethod("lookup").invoke(null);
+            privateLookupIn =
+                    methodHandles.getMethod(
+                            "privateLookupIn",
+                            Class.class,
+                            Class.forName("java.lang.invoke.MethodHandles$Lookup"));
+            getModule = Class.class.getMethod("getModule");
+            Class<?> module = Class.forName("java.lang.Module");
+            isExported = module.getMethod("isExported", String.class, module);
+            isOpen = module.getMethod("isOpen", String.class, module);
+            canRead = module.getMethod("canRead", module);
+            addExports = module.getMethod("addExports", String.class, module);
+            addOpens = module.getMethod("addOpens", String.class, module);
+            addReads = module.getMethod("addReads", module);
+        }
+
+        private Object getModule(Class<?> type) {
+            try {
+                return getModule.invoke(type);
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
+        private boolean isExported(Object module, String packageName, Object target) {
+            try {
+                return (Boolean) isExported.invoke(module, packageName, target);
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
+        private boolean isOpen(Object module, String packageName, Object target) {
+            try {
+                return (Boolean) isOpen.invoke(module, packageName, target);
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
+        private boolean canRead(Object module, Object target) {
+            try {
+                return (Boolean) canRead.invoke(module, target);
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
+        private void addExports(Object module, String packageName, Object target) {
+            try {
+                addExports.invoke(module, packageName, target);
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
+        private void addOpens(Object module, String packageName, Object target) {
+            try {
+                addOpens.invoke(module, packageName, target);
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
+
+        private void addReads(Object module, Object target) {
+            try {
+                addReads.invoke(module, target);
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
+        }
 
         @Override
         void exportFromTo(Class<?> source, Class<?> target) {
-            exportFromToRaw(source, target.getModule());
+            exportFromToRaw(source, getModule(target));
         }
 
         @Override
         void exportFromToRaw(Class<?> source, Object target) {
-            if (!source.getModule().isExported(source.getPackageName(), (Module) target)) {
-                if (source.getModule() == ModuleHandler.class.getModule()) {
-                    source.getModule().addExports(source.getPackageName(), (Module) target);
+            if (!isExported(getModule(source), source.getPackageName(), target)) {
+                if (getModule(source) == getModule(ModuleHandler.class)) {
+                    addExports(getModule(source), source.getPackageName(), target);
                 } else {
-                    exportFromTo(source.getModule(), (Module) target, source.getPackageName());
+                    exportFromTo(getModule(source), target, source.getPackageName());
                 }
             }
         }
 
-        abstract void exportFromTo(Module source, Module target, String packageName);
+        abstract void exportFromTo(Object source, Object target, String packageName);
 
         @Override
         void openFromTo(Class<?> source, Class<?> target) {
@@ -132,16 +251,16 @@ public abstract class ModuleHandler {
 
         @Override
         void openFromToRaw(Class<?> source, Object target) {
-            if (!source.getModule().isOpen(source.getPackageName(), (Module) target)) {
-                if (source.getModule() == ModuleHandler.class.getModule()) {
-                    source.getModule().addOpens(source.getPackageName(), (Module) target);
+            if (!isOpen(source.getModule(), source.getPackageName(), target)) {
+                if (getModule(source) == getModule(ModuleHandler.class)) {
+                    addOpens(getModule(source), source.getPackageName(), target);
                 } else {
-                    openFromToRaw(source.getModule(), (Module) target, source.getPackageName());
+                    openFromToRaw(source.getModule(), target, source.getPackageName());
                 }
             }
         }
 
-        abstract void openFromToRaw(Module source, Module target, String packageName);
+        abstract void openFromToRaw(Object source, Object target, String packageName);
 
         @Override
         Object toCodegenModule(ClassLoader classLoader) {
@@ -155,13 +274,13 @@ public abstract class ModuleHandler {
 
         @Override
         ClassLoadingStrategy<ClassLoader> classLoadingStrategy(Class<?> type) {
-            if (!Mockito.class.getModule().canRead(type.getModule())) {
-                Mockito.class.getModule().addReads(type.getModule());
+            if (!canRead(getModule(Mockito.class), getModule(type))) {
+                addReads(getModule(Mockito.class), type.getModule());
             }
             try {
                 return ClassLoadingStrategy.UsingLookup.of(
-                        MethodHandles.privateLookupIn(type, lookup));
-            } catch (IllegalAccessException e) {
+                        privateLookupIn.invoke(null, type, lookup));
+            } catch (Exception e) {
                 throw new MockitoException(
                         "Could not resolve private lookup for " + type.getTypeName(), e);
             }
