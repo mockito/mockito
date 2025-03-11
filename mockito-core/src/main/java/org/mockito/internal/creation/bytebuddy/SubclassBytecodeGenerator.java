@@ -33,6 +33,7 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.modifier.SynchronizationState;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.MultipleParentClassLoader;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.FieldAccessor;
@@ -41,7 +42,6 @@ import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.utility.GraalImageCode;
 import net.bytebuddy.utility.RandomString;
-import org.mockito.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.DispatcherDefaultingToRealMethod;
@@ -50,10 +50,9 @@ import org.mockito.mock.SerializableMode;
 
 class SubclassBytecodeGenerator implements BytecodeGenerator {
 
-    private static final String CODEGEN_PACKAGE = "org.mockito.codegen.";
+    private static final String CODEGEN_PACKAGE = "org.mockito.codegen2.";
 
-    private final SubclassLoader loader;
-    //private final ModuleHandler handler;
+    private final ModuleHandler handler;
     private final ByteBuddy byteBuddy;
     private final Implementation readReplace;
     private final ElementMatcher<? super MethodDescription> matcher;
@@ -64,27 +63,21 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private final Implementation writeReplace = to(MockMethodInterceptor.ForWriteReplace.class);
 
     public SubclassBytecodeGenerator() {
-        this(new SubclassInjectionLoader());
+        this(ModuleHandler.make());
     }
 
-    public SubclassBytecodeGenerator(SubclassLoader loader) {
-        this(loader, null, any());
-    }
-
-    SubclassBytecodeGenerator(
-            Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
-        this(new SubclassInjectionLoader(), readReplace, matcher);
+    public SubclassBytecodeGenerator(ModuleHandler handler) {
+        this(handler, null, any());
     }
 
     SubclassBytecodeGenerator(
-            SubclassLoader loader,
+            ModuleHandler handler,
             Implementation readReplace,
             ElementMatcher<? super MethodDescription> matcher) {
-        this.loader = loader;
+        this.handler = handler;
         this.readReplace = readReplace;
         this.matcher = matcher;
         byteBuddy = new ByteBuddy().with(TypeValidation.DISABLED);
-        //handler = ModuleHandler.make(byteBuddy, loader);
     }
 
     private static boolean needsSamePackageClassLoader(MockFeatures<?> features) {
@@ -167,15 +160,11 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                         && !isComingFromJDK(features.mockedType)
                         && !GraalImageCode.getCurrent().isDefined();
         String typeName;
-        if (localMock
-                || (loader instanceof MultipleParentClassLoader
-                        && !isComingFromJDK(features.mockedType))) {
+        if (localMock && !isComingFromJDK(features.mockedType)) {
             typeName = features.mockedType.getName();
         } else {
             typeName =
-                    InjectionBase.class.getPackage().getName()
-                            + "."
-                            + features.mockedType.getSimpleName();
+                    CODEGEN_PACKAGE + features.mockedType.getSimpleName();
         }
         String name =
                 String.format(
@@ -187,33 +176,21 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                                 : RandomString.make());
 
         if (localMock) {
-            //handler.adjustModuleGraph(features.mockedType, MockAccess.class, false, true);
+            handler.openFromTo(features.mockedType, MockAccess.class);
+            handler.exportFromTo(MockAccess.class, features.mockedType);
             for (Class<?> iFace : features.interfaces) {
-                //handler.adjustModuleGraph(iFace, features.mockedType, true, false);
-                //handler.adjustModuleGraph(features.mockedType, iFace, false, true);
+                handler.exportFromTo(iFace, features.mockedType);
             }
         } else {
-            boolean exported = true; //handler.isExported(features.mockedType);
-            Iterator<Class<?>> it = features.interfaces.iterator();
-            /*while (exported && it.hasNext()) {
-                exported = handler.isExported(it.next());
-            }*/
-            // We check if all mocked types are exported without qualification to avoid generating a
-            // hook type, unless this is necessary. We expect this to be the case for most mocked
-            // types what makes this a worthy performance optimization.
-            if (exported) {
-                assertVisibility(features.mockedType);
-                for (Class<?> iFace : features.interfaces) {
-                    assertVisibility(iFace);
-                }
-            } else {
-                // Class<?> hook = handler.injectionBase(classLoader, typeName);
-                // assertVisibility(features.mockedType);
-                // handler.adjustModuleGraph(features.mockedType, hook, true, false);
-                // for (Class<?> iFace : features.interfaces) {
-                //     assertVisibility(iFace);
-                //     handler.adjustModuleGraph(iFace, hook, true, false);
-                // }
+            assertVisibility(features.mockedType);
+            for (Class<?> iFace : features.interfaces) {
+                assertVisibility(iFace);
+            }
+            Object module = handler.toCodegenModule(classLoader);
+            handler.exportFromToRaw(MockAccess.class, module);
+            handler.openFromToRaw(features.mockedType, module);
+            for (Class<?> iFace : features.interfaces) {
+                handler.openFromToRaw(iFace, module);
             }
         }
         // Graal requires that the byte code of classes is identical what requires that interfaces
@@ -288,10 +265,14 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                                     .or(returns(isPackagePrivate()))
                                     .or(hasParameters(whereAny(hasType(isPackagePrivate())))));
         }
+        ClassLoadingStrategy<ClassLoader> strategy;
+        if (localMock) {
+            strategy = handler.classLoadingStrategy(features.mockedType);
+        } else {
+            strategy = handler.classLoadingStrategy();
+        }
         return builder.make()
-                .load(
-                        classLoader,
-                        loader.resolveStrategy(features.mockedType, classLoader, localMock))
+                .load(classLoader, strategy)
                 .getLoaded();
     }
 

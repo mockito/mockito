@@ -1,340 +1,165 @@
-/*
- * Copyright (c) 2016 Mockito contributors
- * This program is made available under the terms of the MIT License.
- */
 package org.mockito.internal.creation.bytebuddy;
 
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.modifier.Ownership;
-import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
-import net.bytebuddy.implementation.Implementation;
-import net.bytebuddy.implementation.MethodCall;
-import net.bytebuddy.implementation.StubMethod;
-import net.bytebuddy.utility.GraalImageCode;
-import net.bytebuddy.utility.RandomString;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import org.mockito.Mockito;
-import org.mockito.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
+import java.lang.instrument.Instrumentation;
+import java.lang.invoke.MethodHandles;
+import java.util.Map;
+import java.util.Set;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+public abstract class ModuleHandler {
 
-import static net.bytebuddy.matcher.ElementMatchers.isTypeInitializer;
-import static org.mockito.internal.util.StringUtil.join;
+    abstract void exportFromTo(Class<?> source, Class<?> target);
 
-abstract class ModuleHandler {
+    abstract void exportFromToRaw(Class<?> source, Object target);
 
-    abstract boolean isOpened(Class<?> source, Class<?> target);
+    abstract void openFromTo(Class<?> source, Class<?> target);
 
-    abstract boolean canRead(Class<?> source, Class<?> target);
+    abstract void openFromToRaw(Class<?> source, Object target);
 
-    abstract boolean isExported(Class<?> source);
+    abstract Object toCodegenModule(ClassLoader classLoader);
 
-    abstract boolean isExported(Class<?> source, Class<?> target);
+    public abstract ClassLoadingStrategy<ClassLoader> classLoadingStrategy();
 
-    abstract Class<?> injectionBase(ClassLoader classLoader, String tyoeName);
+    abstract ClassLoadingStrategy<ClassLoader> classLoadingStrategy(Class<?> type);
 
-    abstract void adjustModuleGraph(Class<?> source, Class<?> target, boolean export, boolean read);
+    static ModuleHandler make() {
+        return new ModuleSystemFound() {
+            @Override
+            void exportFromTo(Module source, Module target, String packageName) {
+                throw new UnsupportedOperationException();
+            }
 
-    static ModuleHandler make(ByteBuddy byteBuddy, SubclassLoader loader) {
-        try {
-            return new ModuleSystemFound(byteBuddy, loader);
-        } catch (Exception ignored) {
-            return new NoModuleSystemFound();
-        }
+            @Override
+            void openFromToRaw(Module source, Module target, String packageName) {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 
-    private static class ModuleSystemFound extends ModuleHandler {
+    static ModuleHandler make(Instrumentation inst) {
+        return new ModuleSystemFound() {
+            @Override
+            void exportFromTo(Module source, Module target, String packageName) {
+                inst.redefineModule(
+                    source,
+                    Set.of(),
+                    Map.of(packageName, Set.of(target)),
+                    Map.of(),
+                    Set.of(),
+                    Map.of());
+            }
 
-        private final ByteBuddy byteBuddy;
-        private final SubclassLoader loader;
-
-        private final int injectonBaseSuffix;
-
-        private final Method getModule,
-                isOpen,
-                isExported,
-                isExportedUnqualified,
-                canRead,
-                addExports,
-                addReads,
-                forName;
-
-        private ModuleSystemFound(ByteBuddy byteBuddy, SubclassLoader loader) throws Exception {
-            this.byteBuddy = byteBuddy;
-            this.loader = loader;
-            injectonBaseSuffix =
-                    GraalImageCode.getCurrent().isDefined()
-                            ? 0
-                            : Math.abs(Mockito.class.hashCode());
-            Class<?> moduleType = Class.forName("java.lang.Module");
-            getModule = Class.class.getMethod("getModule");
-            isOpen = moduleType.getMethod("isOpen", String.class, moduleType);
-            isExported = moduleType.getMethod("isExported", String.class, moduleType);
-            isExportedUnqualified = moduleType.getMethod("isExported", String.class);
-            canRead = moduleType.getMethod("canRead", moduleType);
-            addExports = moduleType.getMethod("addExports", String.class, moduleType);
-            addReads = moduleType.getMethod("addReads", moduleType);
-            forName = Class.class.getMethod("forName", String.class);
-        }
-
-        @Override
-        boolean isOpened(Class<?> source, Class<?> target) {
-            if (source.getPackage() == null) {
-                return true;
+            @Override
+            void openFromToRaw(Module source, Module target, String packageName) {
+                inst.redefineModule(
+                    source,
+                    Set.of(),
+                    Map.of(),
+                    Map.of(packageName, Set.of(target)),
+                    Set.of(),
+                    Map.of());
             }
-            return (Boolean)
-                    invoke(
-                            isOpen,
-                            invoke(getModule, source),
-                            source.getPackage().getName(),
-                            invoke(getModule, target));
-        }
-
-        @Override
-        boolean canRead(Class<?> source, Class<?> target) {
-            return (Boolean) invoke(canRead, invoke(getModule, source), invoke(getModule, target));
-        }
-
-        @Override
-        boolean isExported(Class<?> source) {
-            if (source.getPackage() == null) {
-                return true;
-            }
-            return (Boolean)
-                    invoke(
-                            isExportedUnqualified,
-                            invoke(getModule, source),
-                            source.getPackage().getName());
-        }
-
-        @Override
-        boolean isExported(Class<?> source, Class<?> target) {
-            if (source.getPackage() == null) {
-                return true;
-            }
-            return (Boolean)
-                    invoke(
-                            isExported,
-                            invoke(getModule, source),
-                            source.getPackage().getName(),
-                            invoke(getModule, target));
-        }
-
-        @Override
-        Class<?> injectionBase(ClassLoader classLoader, String typeName) {
-            String packageName = typeName.substring(0, typeName.lastIndexOf('.'));
-            if (classLoader == InjectionBase.class.getClassLoader()
-                    && InjectionBase.class.getPackage().getName().equals(packageName)) {
-                return InjectionBase.class;
-            } else {
-                synchronized (this) {
-                    String name;
-                    int suffix = injectonBaseSuffix;
-                    do {
-                        name =
-                                packageName
-                                        + "."
-                                        + InjectionBase.class.getSimpleName()
-                                        + "$"
-                                        + suffix++;
-                        try {
-                            Class<?> type = Class.forName(name, false, classLoader);
-                            // The injected type must be defined in the class loader that is target
-                            // of the injection. Otherwise,
-                            // the class's unnamed module would differ from the intended module. To
-                            // avoid conflicts, we increment
-                            // the suffix until we hit a class with a known name and generate one if
-                            // it does not exist.
-                            if (type.getClassLoader() == classLoader) {
-                                return type;
-                            }
-                        } catch (ClassNotFoundException ignored) {
-                            break;
-                        }
-                    } while (true);
-                    return byteBuddy
-                            .subclass(Object.class, ConstructorStrategy.Default.NO_CONSTRUCTORS)
-                            .name(name)
-                            .make()
-                            .load(
-                                    classLoader,
-                                    loader.resolveStrategy(InjectionBase.class, classLoader, false))
-                            .getLoaded();
-                }
-            }
-        }
-
-        @Override
-        void adjustModuleGraph(Class<?> source, Class<?> target, boolean export, boolean read) {
-            boolean needsExport = export && !isExported(source, target);
-            boolean needsRead = read && !canRead(source, target);
-            if (!needsExport && !needsRead) {
-                return;
-            }
-            ClassLoader classLoader = source.getClassLoader();
-            if (classLoader == null) {
-                throw new MockitoException(
-                        join(
-                                "Cannot adjust module graph for modules in the bootstrap loader",
-                                "",
-                                source
-                                        + " is declared by the bootstrap loader and cannot be adjusted",
-                                "Requires package export to " + target + ": " + needsExport,
-                                "Requires adjusted reading of " + target + ": " + needsRead));
-            }
-            boolean targetVisible = classLoader == target.getClassLoader();
-            while (!targetVisible && classLoader != null) {
-                classLoader = classLoader.getParent();
-                targetVisible = classLoader == target.getClassLoader();
-            }
-            MethodCall targetLookup;
-            Implementation.Composable implementation;
-            if (targetVisible) {
-                targetLookup =
-                        MethodCall.invoke(getModule)
-                                .onMethodCall(MethodCall.invoke(forName).with(target.getName()));
-                implementation = StubMethod.INSTANCE;
-            } else {
-                Class<?> intermediate;
-                Field field;
-                try {
-                    intermediate =
-                            byteBuddy
-                                    .subclass(
-                                            Object.class,
-                                            ConstructorStrategy.Default.NO_CONSTRUCTORS)
-                                    .name(
-                                            String.format(
-                                                    "%s$%s%s",
-                                                    "org.mockito.codegen.MockitoTypeCarrier",
-                                                    RandomString.hashOf(
-                                                            source.getName().hashCode()),
-                                                    RandomString.hashOf(
-                                                            target.getName().hashCode())))
-                                    .defineField(
-                                            "mockitoType",
-                                            Class.class,
-                                            Visibility.PUBLIC,
-                                            Ownership.STATIC)
-                                    .make()
-                                    .load(
-                                            source.getClassLoader(),
-                                            loader.resolveStrategy(
-                                                    source, source.getClassLoader(), false))
-                                    .getLoaded();
-                    field = intermediate.getField("mockitoType");
-                    field.set(null, target);
-                } catch (Exception e) {
-                    throw new MockitoException(
-                            join(
-                                    "Could not create a carrier for making the Mockito type visible to "
-                                            + source,
-                                    "",
-                                    "This is required to adjust the module graph to enable mock creation"),
-                            e);
-                }
-                targetLookup = MethodCall.invoke(getModule).onField(field);
-                implementation =
-                        MethodCall.invoke(getModule)
-                                .onMethodCall(
-                                        MethodCall.invoke(forName).with(intermediate.getName()));
-            }
-            MethodCall sourceLookup =
-                    MethodCall.invoke(getModule)
-                            .onMethodCall(MethodCall.invoke(forName).with(source.getName()));
-            if (needsExport) {
-                implementation =
-                        implementation.andThen(
-                                MethodCall.invoke(addExports)
-                                        .onMethodCall(sourceLookup)
-                                        .with(target.getPackage().getName())
-                                        .withMethodCall(targetLookup));
-            }
-            if (needsRead) {
-                implementation =
-                        implementation.andThen(
-                                MethodCall.invoke(addReads)
-                                        .onMethodCall(sourceLookup)
-                                        .withMethodCall(targetLookup));
-            }
-            try {
-                Class.forName(
-                        byteBuddy
-                                .subclass(Object.class)
-                                .name(
-                                        String.format(
-                                                "%s$%s$%s%s",
-                                                source.getName(),
-                                                "MockitoModuleProbe",
-                                                RandomString.hashOf(source.getName().hashCode()),
-                                                RandomString.hashOf(target.getName().hashCode())))
-                                .invokable(isTypeInitializer())
-                                .intercept(implementation)
-                                .make()
-                                .load(
-                                        source.getClassLoader(),
-                                        loader.resolveStrategy(
-                                                source, source.getClassLoader(), false))
-                                .getLoaded()
-                                .getName(),
-                        true,
-                        source.getClassLoader());
-            } catch (Exception e) {
-                throw new MockitoException(
-                        join(
-                                "Could not force module adjustment of the module of " + source,
-                                "",
-                                "This is required to adjust the module graph to enable mock creation"),
-                        e);
-            }
-        }
-
-        private static Object invoke(Method method, Object target, Object... args) {
-            try {
-                return method.invoke(target, args);
-            } catch (Exception e) {
-                throw new MockitoException(
-                        join(
-                                "Could not invoke " + method + " using reflection",
-                                "",
-                                "Mockito attempted to interact with the Java module system but an unexpected method behavior was encountered"),
-                        e);
-            }
-        }
+        };
     }
 
-    private static class NoModuleSystemFound extends ModuleHandler {
+    public abstract static class NoModuleSystemFound extends ModuleHandler {
 
         @Override
-        boolean isOpened(Class<?> source, Class<?> target) {
-            return true;
-        }
-
-        @Override
-        boolean canRead(Class<?> source, Class<?> target) {
-            return true;
-        }
-
-        @Override
-        boolean isExported(Class<?> source) {
-            return true;
-        }
-
-        @Override
-        boolean isExported(Class<?> source, Class<?> target) {
-            return true;
-        }
-
-        @Override
-        Class<?> injectionBase(ClassLoader classLoader, String tyoeName) {
-            return InjectionBase.class;
-        }
-
-        @Override
-        void adjustModuleGraph(Class<?> source, Class<?> target, boolean export, boolean read) {
+        void exportFromTo(Class<?> source, Class<?> target) {
             // empty
+        }
+
+        @Override
+        void exportFromToRaw(Class<?> source, Object target) {
+            // empty
+
+        }
+
+        @Override
+        void openFromTo(Class<?> source, Class<?> target) {
+            // empty
+
+        }
+
+        @Override
+        void openFromToRaw(Class<?> source, Object target) {
+            // empty
+        }
+
+        @Override
+        Object toCodegenModule(ClassLoader classLoader) {
+            return null;
+        }
+
+
+        @Override
+        ClassLoadingStrategy<ClassLoader> classLoadingStrategy(Class<?> type) {
+            return classLoadingStrategy();
+        }
+    }
+
+    abstract static class ModuleSystemFound extends ModuleHandler {
+
+        private final MethodHandles.Lookup lookup = MethodHandles.lookup();
+
+        @Override
+        void exportFromTo(Class<?> source, Class<?> target) {
+            exportFromToRaw(source, target.getModule());
+        }
+
+        @Override
+        void exportFromToRaw(Class<?> source, Object target) {
+            if (!source.getModule().isExported(source.getPackageName(), (Module) target)) {
+                if (source.getModule() == ModuleHandler.class.getModule()) {
+                    source.getModule().addExports(source.getPackageName(), (Module) target);
+                } else {
+                    exportFromTo(source.getModule(), (Module) target, source.getPackageName());
+                }
+            }
+        }
+
+        abstract void exportFromTo(Module source, Module target, String packageName);
+
+        @Override
+        void openFromTo(Class<?> source, Class<?> target) {
+            openFromToRaw(source, target.getModule());
+        }
+
+        @Override
+        void openFromToRaw(Class<?> source, Object target) {
+            if (!source.getModule().isOpen(source.getPackageName(), (Module) target)) {
+                if (source.getModule() == ModuleHandler.class.getModule()) {
+                    source.getModule().addOpens(source.getPackageName(), (Module) target);
+                } else {
+                    openFromToRaw(source.getModule(), (Module) target, source.getPackageName());
+                }
+            }
+        }
+
+        abstract void openFromToRaw(Module source, Module target, String packageName);
+
+        @Override
+        Object toCodegenModule(ClassLoader classLoader) {
+            return classLoader.getUnnamedModule();
+        }
+
+        @Override
+        public ClassLoadingStrategy<ClassLoader> classLoadingStrategy() {
+            return ClassLoadingStrategy.UsingLookup.of(lookup);
+        }
+
+        @Override
+        ClassLoadingStrategy<ClassLoader> classLoadingStrategy(Class<?> type) {
+            if (!Mockito.class.getModule().canRead(type.getModule())) {
+                Mockito.class.getModule().addReads(type.getModule());
+            }
+            try {
+                return ClassLoadingStrategy.UsingLookup.of(MethodHandles.privateLookupIn(type, lookup));
+            } catch (IllegalAccessException e) {
+                throw new MockitoException("Could not resolve private lookup for " + type.getTypeName(), e);
+            }
         }
     }
 }

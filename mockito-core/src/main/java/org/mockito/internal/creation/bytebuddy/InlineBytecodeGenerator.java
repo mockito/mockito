@@ -100,6 +100,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         subclassEngine =
                 new TypeCachingBytecodeGenerator(
                         new SubclassBytecodeGenerator(
+                            ModuleHandler.make(instrumentation),
                                 withDefaultConfiguration()
                                         .withBinders(
                                                 of(MockMethodAdvice.Identifier.class, identifier))

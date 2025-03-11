@@ -31,12 +31,12 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
     private final BytecodeGenerator cachingMockBytecodeGenerator;
 
     public SubclassByteBuddyMockMaker() {
-        this(new SubclassInjectionLoader());
+        this(ModuleHandler.make());
     }
 
-    public SubclassByteBuddyMockMaker(SubclassLoader loader) {
+    public SubclassByteBuddyMockMaker(ModuleHandler handler) {
         cachingMockBytecodeGenerator =
-                new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(loader), false);
+            new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(handler), false);
     }
 
     @Override

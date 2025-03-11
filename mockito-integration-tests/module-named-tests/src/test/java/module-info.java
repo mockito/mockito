@@ -5,6 +5,4 @@ module org.mockito.test {
 
     exports org.mockito.modulenamedtest to
             junit;
-
-    opens org.mockito.modulenamedtest;
 }

@@ -38,5 +38,4 @@ module org.mockito {
             org.mockito.junit.jupiter;
     exports org.mockito.internal.util to
             org.mockito.junit.jupiter;
-    opens org.mockito.internal.creation.bytebuddy.access;
 }
