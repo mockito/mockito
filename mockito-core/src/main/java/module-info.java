@@ -13,6 +13,7 @@ module org.mockito {
     requires static jdk.unsupported;
 
     exports org.mockito;
+    exports org.mockito.codegen;
     exports org.mockito.configuration;
     exports org.mockito.creation.instance;
     exports org.mockito.exceptions.base;
@@ -30,6 +31,7 @@ module org.mockito {
     exports org.mockito.session;
     exports org.mockito.stubbing;
     exports org.mockito.verification;
+    exports org.mockito.internal.creation.bytebuddy.access;
     exports org.mockito.internal.configuration to
             org.mockito.junit.jupiter;
     exports org.mockito.internal.session to

@@ -19,7 +19,21 @@ public class ModuleUseTest {
         assertThat(foo.value()).isEqualTo("foo");
     }
 
+    @Test
+    public void can_mock_with_named_module_subclass() {
+        Bar bar = mock(Bar.class);
+        when(bar.value()).thenReturn("bar");
+        assertThat(bar.value()).isEqualTo("bar");
+    }
+
     public static class Foo {
+
+        public String value() {
+            return null;
+        }
+    }
+
+    public abstract static class Bar {
 
         public String value() {
             return null;
