@@ -54,6 +54,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
 
     private final SubclassLoader loader;
     private final ModuleHandler handler;
+    private final ModuleOpener opener;
     private final ByteBuddy byteBuddy;
     private final Implementation readReplace;
     private final ElementMatcher<? super MethodDescription> matcher;
@@ -68,19 +69,21 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     }
 
     public SubclassBytecodeGenerator(SubclassLoader loader) {
-        this(loader, null, any());
+        this(loader, ModuleOpener.make(), null, any());
     }
 
-    public SubclassBytecodeGenerator(
-            Implementation readReplace, ElementMatcher<? super MethodDescription> matcher) {
-        this(new SubclassInjectionLoader(), readReplace, matcher);
+    SubclassBytecodeGenerator(
+            Implementation readReplace, ModuleOpener opener, ElementMatcher<? super MethodDescription> matcher) {
+        this(new SubclassInjectionLoader(), opener, readReplace, matcher);
     }
 
-    protected SubclassBytecodeGenerator(
+    SubclassBytecodeGenerator(
             SubclassLoader loader,
+            ModuleOpener opener,
             Implementation readReplace,
             ElementMatcher<? super MethodDescription> matcher) {
         this.loader = loader;
+        this.opener = opener;
         this.readReplace = readReplace;
         this.matcher = matcher;
         byteBuddy = new ByteBuddy().with(TypeValidation.DISABLED);
@@ -155,6 +158,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             loaderBuilder = loaderBuilder.appendMostSpecific(contextLoader);
         }
         ClassLoader classLoader = loaderBuilder.build();
+        opener.adjust(features.mockedType);
 
         // If Mockito does not need to create a new class loader and if a mock is not based on a JDK
         // type, we attempt
