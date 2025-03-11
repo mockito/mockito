@@ -26,7 +26,6 @@ import net.bytebuddy.utility.OpenedClassReader;
 import net.bytebuddy.utility.RandomString;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.SuppressSignatureCheck;
-import org.mockito.internal.creation.bytebuddy.ModuleOpener.InstrumentationBased;
 import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
@@ -105,7 +104,6 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                                         .withBinders(
                                                 of(MockMethodAdvice.Identifier.class, identifier))
                                         .to(MockMethodAdvice.ForReadObject.class),
-                                new InstrumentationBased(instrumentation),
                                 isAbstract().or(isNative()).or(isToString())),
                         false);
         mockTransformer =
