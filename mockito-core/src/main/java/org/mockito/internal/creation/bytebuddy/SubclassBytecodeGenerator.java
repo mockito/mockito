@@ -53,7 +53,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private static final String CODEGEN_PACKAGE = "org.mockito.codegen.";
 
     private final SubclassLoader loader;
-    private final ModuleHandler handler;
+    //private final ModuleHandler handler;
     private final ByteBuddy byteBuddy;
     private final Implementation readReplace;
     private final ElementMatcher<? super MethodDescription> matcher;
@@ -84,7 +84,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         this.readReplace = readReplace;
         this.matcher = matcher;
         byteBuddy = new ByteBuddy().with(TypeValidation.DISABLED);
-        handler = ModuleHandler.make(byteBuddy, loader);
+        //handler = ModuleHandler.make(byteBuddy, loader);
     }
 
     private static boolean needsSamePackageClassLoader(MockFeatures<?> features) {
@@ -165,8 +165,6 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 classLoader == features.mockedType.getClassLoader()
                         && features.serializableMode != SerializableMode.ACROSS_CLASSLOADERS
                         && !isComingFromJDK(features.mockedType)
-                        && (loader.isDisrespectingOpenness()
-                                || handler.isOpened(features.mockedType, MockAccess.class))
                         && !GraalImageCode.getCurrent().isDefined();
         String typeName;
         if (localMock
@@ -189,35 +187,33 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                                 : RandomString.make());
 
         if (localMock) {
-            handler.adjustModuleGraph(features.mockedType, MockAccess.class, false, true);
+            //handler.adjustModuleGraph(features.mockedType, MockAccess.class, false, true);
             for (Class<?> iFace : features.interfaces) {
-                handler.adjustModuleGraph(iFace, features.mockedType, true, false);
-                handler.adjustModuleGraph(features.mockedType, iFace, false, true);
+                //handler.adjustModuleGraph(iFace, features.mockedType, true, false);
+                //handler.adjustModuleGraph(features.mockedType, iFace, false, true);
             }
         } else {
-            boolean exported = handler.isExported(features.mockedType);
+            boolean exported = true; //handler.isExported(features.mockedType);
             Iterator<Class<?>> it = features.interfaces.iterator();
-            while (exported && it.hasNext()) {
+            /*while (exported && it.hasNext()) {
                 exported = handler.isExported(it.next());
-            }
+            }*/
             // We check if all mocked types are exported without qualification to avoid generating a
-            // hook type.
-            // unless this is necessary. We expect this to be the case for most mocked types what
-            // makes this a
-            // worthy performance optimization.
+            // hook type, unless this is necessary. We expect this to be the case for most mocked
+            // types what makes this a worthy performance optimization.
             if (exported) {
                 assertVisibility(features.mockedType);
                 for (Class<?> iFace : features.interfaces) {
                     assertVisibility(iFace);
                 }
             } else {
-                Class<?> hook = handler.injectionBase(classLoader, typeName);
-                assertVisibility(features.mockedType);
-                handler.adjustModuleGraph(features.mockedType, hook, true, false);
-                for (Class<?> iFace : features.interfaces) {
-                    assertVisibility(iFace);
-                    handler.adjustModuleGraph(iFace, hook, true, false);
-                }
+                // Class<?> hook = handler.injectionBase(classLoader, typeName);
+                // assertVisibility(features.mockedType);
+                // handler.adjustModuleGraph(features.mockedType, hook, true, false);
+                // for (Class<?> iFace : features.interfaces) {
+                //     assertVisibility(iFace);
+                //     handler.adjustModuleGraph(iFace, hook, true, false);
+                // }
             }
         }
         // Graal requires that the byte code of classes is identical what requires that interfaces
