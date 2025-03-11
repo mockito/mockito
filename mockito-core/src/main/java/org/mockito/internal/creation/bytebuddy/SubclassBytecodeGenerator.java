@@ -160,7 +160,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                         && !isComingFromJDK(features.mockedType)
                         && !GraalImageCode.getCurrent().isDefined();
         String typeName;
-        if (localMock && !isComingFromJDK(features.mockedType)) {
+        if (localMock) {
             typeName = features.mockedType.getName();
         } else {
             typeName = CODEGEN_PACKAGE + features.mockedType.getSimpleName();
