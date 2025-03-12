@@ -508,7 +508,7 @@ class InlineDelegateByteBuddyMockMaker
     }
 
     @Override
-    public MockHandler getHandler(Object mock) {
+    public MockHandler<?> getHandler(Object mock) {
         MockMethodInterceptor interceptor;
         if (mock instanceof Class<?>) {
             Map<Class<?>, MockMethodInterceptor> interceptors = mockedStatics.get();
@@ -519,7 +519,7 @@ class InlineDelegateByteBuddyMockMaker
         if (interceptor == null) {
             return null;
         } else {
-            return interceptor.handler;
+            return interceptor.getMockHandler();
         }
     }
 
@@ -731,13 +731,13 @@ class InlineDelegateByteBuddyMockMaker
 
         private final MockCreationSettings<T> settings;
 
-        private final MockHandler handler;
+        private final MockHandler<?> handler;
 
         private InlineStaticMockControl(
                 Class<T> type,
                 Map<Class<?>, MockMethodInterceptor> interceptors,
                 MockCreationSettings<T> settings,
-                MockHandler handler) {
+                MockHandler<?> handler) {
             this.type = type;
             this.interceptors = interceptors;
             this.settings = settings;

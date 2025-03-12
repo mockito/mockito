@@ -57,7 +57,7 @@ public class MockMethodInterceptor implements Serializable {
         return doIntercept(mock, invokedMethod, arguments, realMethod, LocationFactory.create());
     }
 
-    Object doIntercept(
+    public Object doIntercept(
             Object mock,
             Method invokedMethod,
             Object[] arguments,
@@ -93,7 +93,7 @@ public class MockMethodInterceptor implements Serializable {
         }
     }
 
-    public MockHandler getMockHandler() {
+    public MockHandler<?> getMockHandler() {
         return handler;
     }
 
