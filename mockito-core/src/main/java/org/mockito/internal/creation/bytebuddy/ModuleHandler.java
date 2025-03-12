@@ -12,14 +12,12 @@ import org.mockito.Mockito;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.access.MockAccess;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 public abstract class ModuleHandler {
 
@@ -175,8 +173,6 @@ public abstract class ModuleHandler {
                 getPackageName,
                 getUnnamedModule;
 
-        private final Map<ClassLoader, WeakReference<ClassLoader>> loaders = new WeakHashMap<>();
-
         public ModuleSystemFound() throws Exception {
             Class<?> methodHandles = Class.forName("java.lang.invoke.MethodHandles");
             lookup = methodHandles.getMethod("lookup").invoke(null);
@@ -318,18 +314,7 @@ public abstract class ModuleHandler {
             if (classLoader == MockAccess.class.getClassLoader()) {
                 return classLoader;
             }
-            ClassLoader wrapped = null;
-            synchronized (loaders) {
-                WeakReference<ClassLoader> reference = loaders.get(classLoader);
-                if (reference != null) {
-                    wrapped = reference.get();
-                }
-                if (wrapped == null) {
-                    wrapped = new MockitoMockClassLoader(classLoader);
-                    loaders.put(classLoader, new WeakReference<>(wrapped));
-                }
-            }
-            return wrapped;
+            return new MockitoMockClassLoader(classLoader);
         }
 
         @Override
