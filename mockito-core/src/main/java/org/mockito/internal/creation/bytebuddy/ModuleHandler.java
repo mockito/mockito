@@ -30,6 +30,8 @@ public abstract class ModuleHandler {
 
     abstract ClassLoadingStrategy<ClassLoader> classLoadingStrategy(Class<?> type);
 
+    abstract boolean canOpen(Class<?> type);
+
     static ModuleHandler make() {
         try {
             return new ModuleSystemFound() {
@@ -99,6 +101,11 @@ public abstract class ModuleHandler {
                         throw new IllegalStateException(e);
                     }
                 }
+
+                @Override
+                boolean canOpen(Class<?> type) {
+                    return true;
+                }
             };
         } catch (Exception e) {
             throw new IllegalStateException(e);
@@ -137,6 +144,11 @@ public abstract class ModuleHandler {
         @Override
         ClassLoadingStrategy<ClassLoader> classLoadingStrategy(Class<?> type) {
             return classLoadingStrategy();
+        }
+
+        @Override
+        boolean canOpen(Class<?> type) {
+            return true;
         }
     }
 
@@ -285,7 +297,7 @@ public abstract class ModuleHandler {
 
         @Override
         public ClassLoadingStrategy<ClassLoader> classLoadingStrategy() {
-            return ClassLoadingStrategy.UsingLookup.of(lookup);
+            return Default.WRAPPER;
         }
 
         @Override
@@ -300,6 +312,11 @@ public abstract class ModuleHandler {
                 throw new MockitoException(
                         "Could not resolve private lookup for " + type.getTypeName(), e);
             }
+        }
+
+        @Override
+        boolean canOpen(Class<?> type) {
+            return getModule(type) == getModule(Mockito.class);
         }
     }
 }
