@@ -42,7 +42,7 @@ import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
 import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.utility.GraalImageCode;
 import net.bytebuddy.utility.RandomString;
-import org.mockito.codegen.InjectionBase;
+import org.mockito.internal.creation.bytebuddy.codegen.InjectionBase;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport.CrossClassLoaderSerializableMock;
 import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor.DispatcherDefaultingToRealMethod;
@@ -51,7 +51,7 @@ import org.mockito.mock.SerializableMode;
 
 class SubclassBytecodeGenerator implements BytecodeGenerator {
 
-    private static final String CODEGEN_PACKAGE = "org.mockito.codegen."; // TODO: move to internal package?
+    private static final String CODEGEN_PACKAGE = "org.mockito.internal.creation.bytebuddy.codegen."; // TODO: move to internal package?
 
     private final ModuleHandler handler;
     private final ByteBuddy byteBuddy;

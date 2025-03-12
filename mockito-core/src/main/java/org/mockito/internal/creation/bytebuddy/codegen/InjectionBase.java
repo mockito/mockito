@@ -2,7 +2,7 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.codegen;
+package org.mockito.internal.creation.bytebuddy.codegen;
 
 /**
  * This class is required to resolve a method handle lookup for the {@code org.mockito.codegen} package what requires a preexisting class for the package.
