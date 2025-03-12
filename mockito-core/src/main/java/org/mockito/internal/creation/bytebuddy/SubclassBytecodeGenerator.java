@@ -51,7 +51,7 @@ import org.mockito.mock.SerializableMode;
 
 class SubclassBytecodeGenerator implements BytecodeGenerator {
 
-    private static final String CODEGEN_PACKAGE = "org.mockito.codegen.";
+    private static final String CODEGEN_PACKAGE = "org.mockito.codegen."; // TODO: move to internal package?
 
     private final ModuleHandler handler;
     private final ByteBuddy byteBuddy;
@@ -159,11 +159,9 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 classLoader == features.mockedType.getClassLoader()
                         && features.serializableMode != SerializableMode.ACROSS_CLASSLOADERS
                         && !isComingFromJDK(features.mockedType)
-                        && !GraalImageCode.getCurrent().isDefined();
+                        && !GraalImageCode.getCurrent().isDefined()
+                        && handler.canOpen(features.mockedType);
         String typeName;
-        if (localMock) {
-            localMock = handler.canOpen(features.mockedType);
-        }
         if (localMock) {
             typeName = features.mockedType.getName();
         } else {

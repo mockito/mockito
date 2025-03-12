@@ -316,7 +316,7 @@ public abstract class ModuleHandler {
 
         @Override
         boolean canOpen(Class<?> type) {
-            return getModule(type) == getModule(Mockito.class);
+            return isOpen(getModule(type), type.getPackageName(), getModule(Mockito.class));
         }
     }
 }
