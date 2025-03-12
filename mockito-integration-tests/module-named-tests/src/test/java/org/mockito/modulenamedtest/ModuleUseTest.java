@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
+import java.util.concurrent.Callable;
 
 public class ModuleUseTest {
 
@@ -24,6 +25,14 @@ public class ModuleUseTest {
         Bar bar = mock(Bar.class);
         when(bar.value()).thenReturn("bar");
         assertThat(bar.value()).isEqualTo("bar");
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void can_mock_jdk_type() throws Exception {
+        Callable<String> callable = mock(Callable.class);
+        when(callable.call()).thenReturn("foo");
+        assertThat(callable.call()).isEqualTo("foo");
     }
 
     public static class Foo {
