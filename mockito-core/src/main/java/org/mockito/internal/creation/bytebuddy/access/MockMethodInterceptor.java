@@ -41,7 +41,8 @@ public class MockMethodInterceptor implements Serializable {
 
     private transient ThreadLocal<Object> weakReferenceHatch = new ThreadLocal<>();
 
-    public MockMethodInterceptor(MockHandler<?> handler, MockCreationSettings<?> mockCreationSettings) {
+    public MockMethodInterceptor(
+            MockHandler<?> handler, MockCreationSettings<?> mockCreationSettings) {
         this.handler = handler;
         this.mockCreationSettings = mockCreationSettings;
         serializationSupport = new ByteBuddyCrossClassLoaderSerializationSupport();
