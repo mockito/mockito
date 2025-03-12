@@ -51,7 +51,8 @@ import org.mockito.mock.SerializableMode;
 
 class SubclassBytecodeGenerator implements BytecodeGenerator {
 
-    private static final String CODEGEN_PACKAGE = "org.mockito.internal.creation.bytebuddy.codegen."; // TODO: move to internal package?
+    private static final String CODEGEN_PACKAGE =
+            "org.mockito.internal.creation.bytebuddy.codegen."; // TODO: move to internal package?
 
     private final ModuleHandler handler;
     private final ByteBuddy byteBuddy;
@@ -188,11 +189,11 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
             for (Class<?> iFace : features.interfaces) {
                 assertVisibility(iFace);
             }
-            Object module = handler.toCodegenModule(classLoader);
-            handler.exportFromToRaw(MockAccess.class, module);
-            handler.exportFromToRaw(features.mockedType, module);
+            classLoader = handler.toCodegenLoader(classLoader);
+            handler.exportFromTo(MockAccess.class, classLoader);
+            handler.exportFromTo(features.mockedType, classLoader);
             for (Class<?> iFace : features.interfaces) {
-                handler.exportFromToRaw(iFace, module);
+                handler.exportFromTo(iFace, classLoader);
             }
         }
         // Graal requires that the byte code of classes is identical what requires that interfaces
