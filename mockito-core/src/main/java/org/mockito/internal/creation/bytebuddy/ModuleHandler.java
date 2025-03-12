@@ -5,7 +5,6 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.dynamic.loading.ByteArrayClassLoader;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy.Default;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy.UsingLookup;
