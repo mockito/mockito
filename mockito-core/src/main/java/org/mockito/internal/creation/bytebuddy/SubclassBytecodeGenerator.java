@@ -52,7 +52,7 @@ import org.mockito.mock.SerializableMode;
 class SubclassBytecodeGenerator implements BytecodeGenerator {
 
     private static final String CODEGEN_PACKAGE =
-            "org.mockito.internal.creation.bytebuddy.codegen."; // TODO: move to internal package?
+            "org.mockito.internal.creation.bytebuddy.codegen.";
 
     private final ModuleHandler handler;
     private final ByteBuddy byteBuddy;
