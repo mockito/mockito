@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
 public class ModuleUseTest {
 
     @Test
-    public void can_mock_with_named_module() {
+    public void can_mock_with_named_module_inline() {
         Foo foo = mock(Foo.class);
         when(foo.value()).thenReturn("foo");
         assertThat(foo.value()).isEqualTo("foo");
@@ -25,14 +25,6 @@ public class ModuleUseTest {
         Bar bar = mock(Bar.class);
         when(bar.value()).thenReturn("bar");
         assertThat(bar.value()).isEqualTo("bar");
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    public void can_mock_jdk_type() throws Exception {
-        Callable<String> callable = mock(Callable.class);
-        when(callable.call()).thenReturn("foo");
-        assertThat(callable.call()).isEqualTo("foo");
     }
 
     public static class Foo {

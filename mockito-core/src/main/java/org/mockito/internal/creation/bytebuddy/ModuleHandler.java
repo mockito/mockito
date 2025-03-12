@@ -35,12 +35,12 @@ public abstract class ModuleHandler {
             return new ModuleSystemFound() {
                 @Override
                 void exportFromTo(Object source, Object target, String packageName) {
-                    throw new UnsupportedOperationException();
+                    throw new UnsupportedOperationException("Cannot export " + packageName + " of " + source + " to " + target);
                 }
 
                 @Override
                 void openFromToRaw(Object source, Object target, String packageName) {
-                    throw new UnsupportedOperationException();
+                    throw new UnsupportedOperationException("Cannot open " + packageName + " of " + source + " to " + target);
                 }
             };
         } catch (Exception ignored) {
