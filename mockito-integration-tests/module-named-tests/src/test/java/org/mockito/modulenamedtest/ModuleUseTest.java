@@ -7,6 +7,7 @@ package org.mockito.modulenamedtest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 import org.junit.Test;
 import java.util.concurrent.Callable;
@@ -27,6 +28,20 @@ public class ModuleUseTest {
         assertThat(bar.value()).isEqualTo("bar");
     }
 
+    @Test
+    public void can_mock_with_named_module_subclass_with_interface() {
+        Qux qux = mock(Qux.class, withSettings().extraInterfaces(Runnable.class));
+        when(qux.value()).thenReturn("qux");
+        assertThat(qux.value()).isEqualTo("qux");
+    }
+
+    @Test
+    public void can_mock_with_named_module_subclass_with_serialization() {
+        Baz baz = mock(Baz.class, withSettings().serializable());
+        when(baz.value()).thenReturn("baz");
+        assertThat(baz.value()).isEqualTo("baz");
+    }
+
     public static class Foo {
 
         public String value() {
@@ -35,6 +50,20 @@ public class ModuleUseTest {
     }
 
     public abstract static class Bar {
+
+        public String value() {
+            return null;
+        }
+    }
+
+    public static class Qux {
+
+        public String value() {
+            return null;
+        }
+    }
+
+    public static class Baz {
 
         public String value() {
             return null;
