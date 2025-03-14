@@ -30,6 +30,8 @@ module org.mockito {
     exports org.mockito.session;
     exports org.mockito.stubbing;
     exports org.mockito.verification;
+    exports org.mockito.internal to
+            java.instrument;
     exports org.mockito.internal.configuration to
             org.mockito.junit.jupiter;
     exports org.mockito.internal.session to
