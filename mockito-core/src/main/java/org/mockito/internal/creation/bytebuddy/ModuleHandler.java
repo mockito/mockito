@@ -29,6 +29,10 @@ public abstract class ModuleHandler {
 
     abstract void openFromTo(Class<?> source, ClassLoader classLoader);
 
+    abstract void readFromTo(Class<?> source, Class<?> target);
+
+    abstract void readFromTo(Class<?> source, ClassLoader classLoader);
+
     abstract ClassLoader toCodegenLoader(ClassLoader classLoader);
 
     public abstract ClassLoadingStrategy<ClassLoader> classLoadingStrategy();
@@ -36,6 +40,8 @@ public abstract class ModuleHandler {
     abstract ClassLoadingStrategy<ClassLoader> classLoadingStrategy(Class<?> type);
 
     abstract boolean canOpen(Class<?> type);
+
+    abstract boolean canAddRead(Class<?> type);
 
     static ModuleHandler make() {
         try {
@@ -50,6 +56,12 @@ public abstract class ModuleHandler {
                 void openFromToRaw(Object source, Object target, String packageName) {
                     throw new UnsupportedOperationException(
                             "Cannot open " + packageName + " of " + source + " to " + target);
+                }
+
+                @Override
+                void addReadsFromToRaw(Object source, Object target) {
+                    throw new UnsupportedOperationException(
+                            "Cannot add reading of " + source + " to " + target);
                 }
             };
         } catch (Exception ignored) {
@@ -110,7 +122,28 @@ public abstract class ModuleHandler {
                 }
 
                 @Override
+                void addReadsFromToRaw(Object source, Object target) {
+                    try {
+                        redefineModule.invoke(
+                                inst,
+                                source,
+                                Collections.singleton(target),
+                                Collections.emptyMap(),
+                                Collections.emptyMap(),
+                                Collections.emptySet(),
+                                Collections.emptyMap());
+                    } catch (Exception e) {
+                        throw new IllegalStateException(e);
+                    }
+                }
+
+                @Override
                 boolean canOpen(Class<?> type) {
+                    return true;
+                }
+
+                @Override
+                boolean canAddRead(Class<?> type) {
                     return true;
                 }
             };
@@ -144,6 +177,16 @@ public abstract class ModuleHandler {
         }
 
         @Override
+        void readFromTo(Class<?> source, Class<?> target) {
+            // empty
+        }
+
+        @Override
+        void readFromTo(Class<?> source, ClassLoader classLoader) {
+            // empty
+        }
+
+        @Override
         ClassLoader toCodegenLoader(ClassLoader classLoader) {
             return classLoader;
         }
@@ -155,6 +198,11 @@ public abstract class ModuleHandler {
 
         @Override
         boolean canOpen(Class<?> type) {
+            return true;
+        }
+
+        @Override
+        boolean canAddRead(Class<?> type) {
             return true;
         }
     }
@@ -310,6 +358,28 @@ public abstract class ModuleHandler {
         abstract void openFromToRaw(Object source, Object target, String packageName);
 
         @Override
+        void readFromTo(Class<?> source, Class<?> target) {
+            readFromTo(source, getModule(target));
+        }
+
+        @Override
+        void readFromTo(Class<?> source, ClassLoader classLoader) {
+            readFromTo(source, getUnnamedModule(classLoader));
+        }
+
+        private void readFromTo(Class<?> source, Object target) {
+            if (!canRead(getModule(source), target)) {
+                if (getModule(source) == getModule(ModuleHandler.class)) {
+                    addReads(getModule(source), target);
+                } else {
+                    addReadsFromToRaw(getModule(source), target);
+                }
+            }
+        }
+
+        abstract void addReadsFromToRaw(Object source, Object target);
+
+        @Override
         ClassLoader toCodegenLoader(ClassLoader classLoader) {
             if (classLoader == MockAccess.class.getClassLoader()) {
                 return classLoader;
@@ -346,6 +416,11 @@ public abstract class ModuleHandler {
         @Override
         boolean canOpen(Class<?> type) {
             return isOpen(getModule(type), getPackageName(type), getModule(Mockito.class));
+        }
+
+        @Override
+        boolean canAddRead(Class<?> type) {
+            return canRead(getModule(type), getModule(Mockito.class));
         }
     }
 

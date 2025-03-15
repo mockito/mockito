@@ -162,7 +162,8 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                         && features.serializableMode != SerializableMode.ACROSS_CLASSLOADERS
                         && !isComingFromJDK(features.mockedType)
                         && !GraalImageCode.getCurrent().isDefined()
-                        && handler.canOpen(features.mockedType);
+                        && handler.canOpen(features.mockedType)
+                        && handler.canAddRead(features.mockedType);
         String typeName;
         if (localMock) {
             typeName = features.mockedType.getName();
@@ -180,6 +181,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
 
         if (localMock) {
             handler.openFromTo(features.mockedType, MockAccess.class);
+            handler.readFromTo(features.mockedType, MockAccess.class);
             handler.exportFromTo(features.mockedType, MockAccess.class);
             handler.exportFromTo(MockAccess.class, features.mockedType);
             for (Class<?> iFace : features.interfaces) {
@@ -191,6 +193,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 assertVisibility(iFace);
             }
             classLoader = handler.toCodegenLoader(classLoader);
+            handler.readFromTo(features.mockedType, MockAccess.class);
             handler.exportFromTo(MockAccess.class, classLoader);
             handler.exportFromTo(features.mockedType, classLoader);
             for (Class<?> iFace : features.interfaces) {

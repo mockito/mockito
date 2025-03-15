@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.withSettings;
 
 import org.junit.Test;
-import java.util.concurrent.Callable;
 
 public class ModuleUseTest {
 
