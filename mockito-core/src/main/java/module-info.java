@@ -9,6 +9,7 @@ module org.mockito {
     requires net.bytebuddy.agent;
     requires static junit;
     requires static org.hamcrest;
+    requires static org.objenesis;
     requires static org.opentest4j;
     requires static jdk.unsupported;
 
