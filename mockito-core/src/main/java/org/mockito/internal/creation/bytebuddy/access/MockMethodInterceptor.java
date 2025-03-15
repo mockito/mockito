@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-package org.mockito.internal.creation.bytebuddy;
+package org.mockito.internal.creation.bytebuddy.access;
 
 import static org.mockito.internal.invocation.DefaultInvocationFactory.createInvocation;
 
@@ -22,6 +22,7 @@ import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.StubValue;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
 import net.bytebuddy.implementation.bind.annotation.This;
+import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport;
 import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.invocation.RealMethod;
 import org.mockito.invocation.Location;
@@ -32,15 +33,16 @@ public class MockMethodInterceptor implements Serializable {
 
     private static final long serialVersionUID = 7152947254057253027L;
 
-    final MockHandler handler;
+    private final MockHandler<?> handler;
 
-    private final MockCreationSettings mockCreationSettings;
+    private final MockCreationSettings<?> mockCreationSettings;
 
     private final ByteBuddyCrossClassLoaderSerializationSupport serializationSupport;
 
     private transient ThreadLocal<Object> weakReferenceHatch = new ThreadLocal<>();
 
-    public MockMethodInterceptor(MockHandler handler, MockCreationSettings mockCreationSettings) {
+    public MockMethodInterceptor(
+            MockHandler<?> handler, MockCreationSettings<?> mockCreationSettings) {
         this.handler = handler;
         this.mockCreationSettings = mockCreationSettings;
         serializationSupport = new ByteBuddyCrossClassLoaderSerializationSupport();
@@ -56,7 +58,7 @@ public class MockMethodInterceptor implements Serializable {
         return doIntercept(mock, invokedMethod, arguments, realMethod, LocationFactory.create());
     }
 
-    Object doIntercept(
+    public Object doIntercept(
             Object mock,
             Method invokedMethod,
             Object[] arguments,
@@ -92,7 +94,7 @@ public class MockMethodInterceptor implements Serializable {
         }
     }
 
-    public MockHandler getMockHandler() {
+    public MockHandler<?> getMockHandler() {
         return handler;
     }
 
