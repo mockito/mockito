@@ -27,11 +27,7 @@ public abstract class ModuleHandler {
 
     abstract void openFromTo(Class<?> source, Class<?> target);
 
-    abstract void openFromTo(Class<?> source, ClassLoader classLoader);
-
     abstract void readFromTo(Class<?> source, Class<?> target);
-
-    abstract void readFromTo(Class<?> source, ClassLoader classLoader);
 
     abstract ClassLoader toCodegenLoader(ClassLoader classLoader);
 
@@ -172,17 +168,7 @@ public abstract class ModuleHandler {
         }
 
         @Override
-        void openFromTo(Class<?> source, ClassLoader classLoader) {
-            // empty
-        }
-
-        @Override
         void readFromTo(Class<?> source, Class<?> target) {
-            // empty
-        }
-
-        @Override
-        void readFromTo(Class<?> source, ClassLoader classLoader) {
             // empty
         }
 
@@ -340,11 +326,6 @@ public abstract class ModuleHandler {
             openFromTo(source, getModule(target));
         }
 
-        @Override
-        void openFromTo(Class<?> source, ClassLoader classLoader) {
-            openFromTo(source, getUnnamedModule(classLoader));
-        }
-
         private void openFromTo(Class<?> source, Object target) {
             if (!isOpen(getModule(source), getPackageName(source), target)) {
                 if (getModule(source) == getModule(ModuleHandler.class)) {
@@ -360,11 +341,6 @@ public abstract class ModuleHandler {
         @Override
         void readFromTo(Class<?> source, Class<?> target) {
             readFromTo(source, getModule(target));
-        }
-
-        @Override
-        void readFromTo(Class<?> source, ClassLoader classLoader) {
-            readFromTo(source, getUnnamedModule(classLoader));
         }
 
         private void readFromTo(Class<?> source, Object target) {
