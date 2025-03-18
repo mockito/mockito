@@ -38,7 +38,7 @@ publish a new minor or patch version to Maven Central. For release automation we
 [Shipkit library](http://shipkit.org), [Gradle Nexus Publish Plugin](https://github.com/gradle-nexus/publish-plugin).
 Fully automated releases are awesome, and you should do that for your libraries, too!
 See the [latest release notes](https://github.com/mockito/mockito/releases/)
-and [latest documentation](https://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html). Docs in
+and [latest documentation](https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html). Docs in
 javadoc.io are available 24h after release. Read also
 about [semantic versioning in Mockito](https://github.com/mockito/mockito/wiki/Semantic-Versioning).
 

@@ -30,7 +30,7 @@ public class AndroidByteBuddyMockMaker implements MockMaker {
                                     "The Android mock maker was disabled. You should only include the latter in your 'androidTestCompile' configuration",
                                     "If disabling was a mistake, you can set the 'org.mockito.mock.android' property to 'true' to override this detection.",
                                     "",
-                                    "Visit https://javadoc.io/page/org.mockito/mockito-core/latest/org/mockito/Mockito.html#0.1 for more information"));
+                                    "Visit https://javadoc.io/page/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.1 for more information"));
             delegate = new SubclassByteBuddyMockMaker();
         }
     }
