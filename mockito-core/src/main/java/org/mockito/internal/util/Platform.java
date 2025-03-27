@@ -64,21 +64,19 @@ public abstract class Platform {
 
     public static String warnForVM(
             String vmName1, String warnMessage1, String vmName2, String warnMessage2) {
-        return warnForVM(JVM_NAME, vmName1, warnMessage1, vmName2, warnMessage2);
+        return warnForVM(JVM_NAME,
+            new VMNameContainsStrategy(vmName1, warnMessage1),
+            new VMNameContainsStrategy(vmName2, warnMessage2));
+
     }
 
-    static String warnForVM(
-            String current,
-            String vmName1,
-            String warnMessage1,
-            String vmName2,
-            String warnMessage2) {
-        if (vmName1 != null && current.contains(vmName1)) {
-            return warnMessage1;
-        }
-        if (vmName2 != null && current.contains(vmName2)) {
-            return warnMessage2;
+    static String warnForVM(String currentVM, VMWarningStrategy... strategies) {
+        for (VMWarningStrategy strategy : strategies) {
+            if (strategy.matches(currentVM)) {
+                return strategy.getWarningMessage();
+            }
         }
         return "";
     }
+
 }
