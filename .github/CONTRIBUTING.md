@@ -14,7 +14,7 @@
 
 ## Pull request criteria
 
-* **At least one commit message** in the PR starts with `Fixes #id : ` where `id` is an [issue tracker](https://github.com/mockito/mockito/issues) id. This allows automated release notes generation. Also GitHub will track the issue and [close it](https://github.com/blog/1386-closing-issues-via-commit-messages) when the PR is merged.
+* **At least one commit message** in the PR ends with `Fixes #id` where `id` is an [issue tracker](https://github.com/mockito/mockito/issues) id. This allows automated release notes generation. Also GitHub will track the issue and [close it](https://github.com/blog/1386-closing-issues-via-commit-messages) when the PR is merged.
 * Use `@since` tags for new public APIs
 * Include tests
 * Document public APIs with examples
@@ -42,13 +42,25 @@ Things we pay attention in a PR :
 * On pull requests, please document the change, what it brings, what is the benefit.
 * **Clean commit history** in the topic branch in your fork of the repository, even during review. That means that commits are _rebased_ and _squashed_ if necessary, so that each commit clearly changes one things and there are no extraneous fix-ups.
 
-  For that matter it's possible to commit [_semantic_ changes](https://lemike-de.tumblr.com/post/79041908218/semantic-commits). _Tests are an asset, so is history_.
+  _Tests are an asset, so is history_.
 
-  _Example gratia_:
+  _Example gratia_ (based on https://cbea.ms/git-commit/):
 
   ```
-  Fixes #73 : The new feature
-  Fixes #73 : Refactors this part of Mockito to make feature possible
+  Enable feature X to do Y
+
+  Include some background information here.
+
+  Fixes #73
+  ```
+
+  ```
+  Fix bug B with feature A
+
+  Include some background information here.
+  Add example scenario/context.
+
+  Fixes #73
   ```
 
 * In the code, always test your feature / change, in unit tests and in our `acceptance test suite` located in `org.mockitousage`. Older tests will be migrated when a test is modified.
