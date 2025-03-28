@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.debugging;
 
+import org.mockito.internal.util.AndroidPlatform;
+import org.mockito.internal.util.Platform;
 import org.mockito.invocation.Location;
 
 public final class LocationFactory {
@@ -24,6 +26,9 @@ public final class LocationFactory {
     }
 
     private static Factory createLocationFactory() {
+        if (Platform.isAndroid() && !AndroidPlatform.isStackWalkerUsable()) {
+            return new Java8LocationFactory();
+        }
         try {
             // On some platforms, like Android, the StackWalker APIs may not be
             // available, in this case we have to fallback to Java 8 style of stack
