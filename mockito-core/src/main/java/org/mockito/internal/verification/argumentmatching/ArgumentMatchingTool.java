@@ -26,24 +26,33 @@ public class ArgumentMatchingTool {
      * Suspiciously not matching arguments are those that don't match, the toString() representation is the same but types are different.
      */
     public static Integer[] getSuspiciouslyNotMatchingArgsIndexes(
-            List<ArgumentMatcher> matchers, Object[] arguments) {
+        List<ArgumentMatcher> matchers, Object[] arguments) {
         if (matchers.size() != arguments.length) {
             return new Integer[0];
         }
 
         List<Integer> suspicious = new LinkedList<>();
-        int i = 0;
-        for (ArgumentMatcher m : matchers) {
-            if (m instanceof ContainsExtraTypeInfo
-                    && !safelyMatches(m, arguments[i])
-                    && toStringEquals(m, arguments[i])
-                    && !((ContainsExtraTypeInfo) m).typeMatches(arguments[i])) {
-                suspicious.add(i);
+        int index = 0;
+
+        for (ArgumentMatcher matcher : matchers) {
+            boolean hasExtraTypeInfo = matcher instanceof ContainsExtraTypeInfo;
+            boolean doesNotMatch = !safelyMatches(matcher, arguments[index]);
+            boolean sameToString = toStringEquals(matcher, arguments[index]);
+            boolean typeMismatch = false;
+            if (matcher instanceof ContainsExtraTypeInfo) {
+                typeMismatch = !((ContainsExtraTypeInfo) matcher).typeMatches(arguments[index]);
             }
-            i++;
+
+
+            if (hasExtraTypeInfo && doesNotMatch && sameToString && typeMismatch) {
+                suspicious.add(index);
+            }
+            index++;
         }
+
         return suspicious.toArray(new Integer[0]);
     }
+
 
     /**
      * Returns indexes of arguments not matching the provided matchers.

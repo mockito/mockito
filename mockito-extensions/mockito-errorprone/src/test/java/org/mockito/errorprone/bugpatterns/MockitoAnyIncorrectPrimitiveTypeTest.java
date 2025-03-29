@@ -34,32 +34,34 @@ public class MockitoAnyIncorrectPrimitiveTypeTest {
 
     @Test
     public void testPositiveCases() {
-        compilationHelper
-                .addSourceLines(
-                        "Test.java",
-                        "package org.mockito;",
-                        "import static org.mockito.ArgumentMatchers.any;",
-                        "import static org.mockito.ArgumentMatchers.anyInt;",
-                        "import static org.mockito.Mockito.mock;",
-                        "import static org.mockito.Mockito.when;",
-                        "class Test {",
-                        "  public void test() {",
-                        "    Foo foo = mock(Foo.class);",
-                        "    // BUG: Diagnostic contains:",
-                        "    when(foo.run(anyInt())).thenReturn(5);",
-                        "    // BUG: Diagnostic contains:",
-                        "    when(foo.runWithBoth(any(String.class), anyInt())).thenReturn(5);",
-                        "  }",
-                        "  static class Foo {",
-                        "    int run(long arg) {",
-                        "      return 42;",
-                        "    }",
-                        "    int runWithBoth(String arg1, long arg2) {",
-                        "      return 42;",
-                        "    }",
-                        "  }",
-                        "}")
-                .doTest();
+        compilationHelper.addSourceLines("Test.java", getPositiveTestSource()).doTest();
+    }
+
+    private String[] getPositiveTestSource() {
+        return new String[] {
+            "package org.mockito;",
+            "import static org.mockito.ArgumentMatchers.any;",
+            "import static org.mockito.ArgumentMatchers.anyInt;",
+            "import static org.mockito.Mockito.mock;",
+            "import static org.mockito.Mockito.when;",
+            "class Test {",
+            "  public void test() {",
+            "    Foo foo = mock(Foo.class);",
+            "    // BUG: Diagnostic contains:",
+            "    when(foo.run(anyInt())).thenReturn(5);",
+            "    // BUG: Diagnostic contains:",
+            "    when(foo.runWithBoth(any(String.class), anyInt())).thenReturn(5);",
+            "  }",
+            "  static class Foo {",
+            "    int run(long arg) {",
+            "      return 42;",
+            "    }",
+            "    int runWithBoth(String arg1, long arg2) {",
+            "      return 42;",
+            "    }",
+            "  }",
+            "}"
+        };
     }
 
     @Test
