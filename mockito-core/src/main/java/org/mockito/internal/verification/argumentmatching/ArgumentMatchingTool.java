@@ -26,7 +26,7 @@ public class ArgumentMatchingTool {
      * Suspiciously not matching arguments are those that don't match, the toString() representation is the same but types are different.
      */
     public static Integer[] getSuspiciouslyNotMatchingArgsIndexes(
-        List<ArgumentMatcher> matchers, Object[] arguments) {
+            List<ArgumentMatcher> matchers, Object[] arguments) {
         if (matchers.size() != arguments.length) {
             return new Integer[0];
         }
@@ -43,7 +43,6 @@ public class ArgumentMatchingTool {
                 typeMismatch = !((ContainsExtraTypeInfo) matcher).typeMatches(arguments[index]);
             }
 
-
             if (hasExtraTypeInfo && doesNotMatch && sameToString && typeMismatch) {
                 suspicious.add(index);
             }
@@ -52,7 +51,6 @@ public class ArgumentMatchingTool {
 
         return suspicious.toArray(new Integer[0]);
     }
-
 
     /**
      * Returns indexes of arguments not matching the provided matchers.

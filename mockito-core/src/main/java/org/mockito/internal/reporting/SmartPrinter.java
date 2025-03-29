@@ -17,27 +17,28 @@ public class SmartPrinter {
     private final List<String> actuals;
 
     public SmartPrinter(
-        MatchableInvocation wanted,
-        Invocation actual,
-        Integer... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
+            MatchableInvocation wanted,
+            Invocation actual,
+            Integer... indexesOfMatchersToBeDescribedWithExtraTypeInfo) {
         this(
-            wanted,
-            Collections.singletonList(actual),
-            indexesOfMatchersToBeDescribedWithExtraTypeInfo,
-            Collections.emptySet());
+                wanted,
+                Collections.singletonList(actual),
+                indexesOfMatchersToBeDescribedWithExtraTypeInfo,
+                Collections.emptySet());
     }
 
     public SmartPrinter(
-        MatchableInvocation wanted,
-        List<Invocation> allActualInvocations,
-        Integer[] indexesOfMatchersToBeDescribedWithExtraTypeInfo,
-        Set<String> classNamesToBeDescribedWithFullName) {
+            MatchableInvocation wanted,
+            List<Invocation> allActualInvocations,
+            Integer[] indexesOfMatchersToBeDescribedWithExtraTypeInfo,
+            Set<String> classNamesToBeDescribedWithFullName) {
 
-        SmartTypeFormatter formatter = new SmartTypeFormatter(
-            indexesOfMatchersToBeDescribedWithExtraTypeInfo,
-            classNamesToBeDescribedWithFullName,
-            wanted,
-            allActualInvocations);
+        SmartTypeFormatter formatter =
+                new SmartTypeFormatter(
+                        indexesOfMatchersToBeDescribedWithExtraTypeInfo,
+                        classNamesToBeDescribedWithFullName,
+                        wanted,
+                        allActualInvocations);
 
         this.wanted = formatter.formatWanted(wanted);
         this.actuals = formatter.formatActuals(allActualInvocations);

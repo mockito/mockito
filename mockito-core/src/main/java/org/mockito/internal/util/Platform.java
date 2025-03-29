@@ -64,10 +64,10 @@ public abstract class Platform {
 
     public static String warnForVM(
             String vmName1, String warnMessage1, String vmName2, String warnMessage2) {
-        return warnForVM(JVM_NAME,
-            new VMNameContainsStrategy(vmName1, warnMessage1),
-            new VMNameContainsStrategy(vmName2, warnMessage2));
-
+        return warnForVM(
+                JVM_NAME,
+                new VMNameContainsStrategy(vmName1, warnMessage1),
+                new VMNameContainsStrategy(vmName2, warnMessage2));
     }
 
     static String warnForVM(String currentVM, VMWarningStrategy... strategies) {
@@ -78,5 +78,4 @@ public abstract class Platform {
         }
         return "";
     }
-
 }

@@ -42,25 +42,25 @@ public class PlatformTest {
     @Test
     public void should_warn_for_jvm() throws Exception {
         assertThat(
-            Platform.warnForVM(
-                "Java HotSpot(TM) 64-Bit Server VM",
-                new VMNameContainsStrategy("HotSpot", "hotspot warning"),
-                new VMNameContainsStrategy("IBM", "ibm warning")))
-            .isEqualTo("hotspot warning");
+                        Platform.warnForVM(
+                                "Java HotSpot(TM) 64-Bit Server VM",
+                                new VMNameContainsStrategy("HotSpot", "hotspot warning"),
+                                new VMNameContainsStrategy("IBM", "ibm warning")))
+                .isEqualTo("hotspot warning");
 
         assertThat(
-            Platform.warnForVM(
-                "IBM J9 VM",
-                new VMNameContainsStrategy("HotSpot", "hotspot warning"),
-                new VMNameContainsStrategy("IBM", "ibm warning")))
-            .isEqualTo("ibm warning");
+                        Platform.warnForVM(
+                                "IBM J9 VM",
+                                new VMNameContainsStrategy("HotSpot", "hotspot warning"),
+                                new VMNameContainsStrategy("IBM", "ibm warning")))
+                .isEqualTo("ibm warning");
 
         assertThat(
-            Platform.warnForVM(
-                "whatever",
-                new VMNameContainsStrategy(null, "should not be returned"),
-                new VMNameContainsStrategy(null, "should not be returned")))
-            .isEqualTo("");
+                        Platform.warnForVM(
+                                "whatever",
+                                new VMNameContainsStrategy(null, "should not be returned"),
+                                new VMNameContainsStrategy(null, "should not be returned")))
+                .isEqualTo("");
     }
 
     @Test

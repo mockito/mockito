@@ -2,7 +2,6 @@
  * Copyright (c) 2007 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
-
 package org.mockito.internal.reporting;
 
 import org.mockito.invocation.Invocation;
@@ -17,15 +16,18 @@ class SmartTypeFormatter {
 
     private final PrintSettings printSettings;
 
-    SmartTypeFormatter(Integer[] indexesOfMatchersToBeDescribedWithExtraTypeInfo,
-                       Set<String> classNamesToBeDescribedWithFullName,
-                       MatchableInvocation wanted,
-                       List<Invocation> actuals) {
+    SmartTypeFormatter(
+            Integer[] indexesOfMatchersToBeDescribedWithExtraTypeInfo,
+            Set<String> classNamesToBeDescribedWithFullName,
+            MatchableInvocation wanted,
+            List<Invocation> actuals) {
 
         this.printSettings = new PrintSettings();
         this.printSettings.setMultiline(isMultiLine(wanted, actuals));
-        this.printSettings.setMatchersToBeDescribedWithExtraTypeInfo(indexesOfMatchersToBeDescribedWithExtraTypeInfo);
-        this.printSettings.setMatchersToBeDescribedWithFullName(classNamesToBeDescribedWithFullName);
+        this.printSettings.setMatchersToBeDescribedWithExtraTypeInfo(
+                indexesOfMatchersToBeDescribedWithExtraTypeInfo);
+        this.printSettings.setMatchersToBeDescribedWithFullName(
+                classNamesToBeDescribedWithFullName);
     }
 
     String formatWanted(MatchableInvocation wanted) {
