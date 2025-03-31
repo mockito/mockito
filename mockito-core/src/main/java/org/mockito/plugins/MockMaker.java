@@ -171,9 +171,8 @@ public interface MockMaker {
                                 + getClass().getSimpleName()
                                 + " does not support the creation of static mocks",
                         "",
-                        "Mockito's inline mock maker supports static mocks based on the Instrumentation API.",
-                        "You can simply enable this mock mode, by placing the 'mockito-inline' artifact where you are currently using 'mockito-core'.",
-                        "Note that Mockito's inline mock maker is not supported on Android."));
+                        "Ensure your MockMaker implementation supports this feature.",
+                        "Note that static mocks maker is not supported on Android."));
     }
 
     /**
@@ -203,9 +202,8 @@ public interface MockMaker {
                                 + getClass().getSimpleName()
                                 + " does not support the creation of construction mocks",
                         "",
-                        "Mockito's inline mock maker supports construction mocks based on the Instrumentation API.",
-                        "You can simply enable this mock mode, by placing the 'mockito-inline' artifact where you are currently using 'mockito-core'.",
-                        "Note that Mockito's inline mock maker is not supported on Android."));
+                        "Ensure your MockMaker implementation supports this feature.",
+                        "Note that construction mocks maker is not supported on Android."));
     }
 
     /**
