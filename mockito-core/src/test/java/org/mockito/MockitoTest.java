@@ -104,7 +104,7 @@ public class MockitoTest {
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
-    public void shouldGiveExplanationOnStaticMockingWithoutInlineMockMaker() {
+    public void shouldGiveExplanationOnStaticMockingMockMaker() {
         Assume.assumeThat(Plugins.getMockMaker(), not(instanceOf(InlineMockMaker.class)));
 
         assertThatThrownBy(
@@ -114,14 +114,13 @@ public class MockitoTest {
                 .isInstanceOf(MockitoException.class)
                 .hasMessageContainingAll(
                         "The used MockMaker SubclassByteBuddyMockMaker does not support the creation of static mocks",
-                        "Mockito's inline mock maker supports static mocks based on the Instrumentation API.",
-                        "You can simply enable this mock mode, by placing the 'mockito-inline' artifact where you are currently using 'mockito-core'.",
+                        "Ensure your MockMaker implementation supports this feature.",
                         "Note that Mockito's inline mock maker is not supported on Android.");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
-    public void shouldGiveExplanationOnConstructionMockingWithoutInlineMockMaker() {
+    public void shouldGiveExplanationOnConstructionMockingMockMaker() {
         Assume.assumeThat(Plugins.getMockMaker(), not(instanceOf(InlineMockMaker.class)));
 
         assertThatThrownBy(
@@ -131,8 +130,7 @@ public class MockitoTest {
                 .isInstanceOf(MockitoException.class)
                 .hasMessageContainingAll(
                         "The used MockMaker SubclassByteBuddyMockMaker does not support the creation of construction mocks",
-                        "Mockito's inline mock maker supports construction mocks based on the Instrumentation API.",
-                        "You can simply enable this mock mode, by placing the 'mockito-inline' artifact where you are currently using 'mockito-core'.",
+                        "Ensure your MockMaker implementation supports this feature.",
                         "Note that Mockito's inline mock maker is not supported on Android.");
     }
 
