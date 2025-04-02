@@ -115,7 +115,7 @@ public class MockitoTest {
                 .hasMessageContainingAll(
                         "The used MockMaker SubclassByteBuddyMockMaker does not support the creation of static mocks",
                         "Ensure your MockMaker implementation supports this feature.",
-                        "Note that Mockito's inline mock maker is not supported on Android.");
+                        "Note that static mocks maker is not supported on Android.");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
@@ -131,7 +131,7 @@ public class MockitoTest {
                 .hasMessageContainingAll(
                         "The used MockMaker SubclassByteBuddyMockMaker does not support the creation of construction mocks",
                         "Ensure your MockMaker implementation supports this feature.",
-                        "Note that Mockito's inline mock maker is not supported on Android.");
+                        "Note that construction mocks maker is not supported on Android.");
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
