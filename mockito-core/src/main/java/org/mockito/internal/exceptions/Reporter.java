@@ -98,7 +98,7 @@ public class Reporter {
                         "Hints:",
                         " 1. missing thenReturn()",
                         " 2. you are trying to stub a final method, which is not supported",
-                        " 3. you are stubbing the behaviour of another mock inside before 'thenReturn' instruction is completed",
+                        " 3. you are stubbing the behaviour of another mock inside before 'thenReturn' instruction is completed, possibly on another thread",
                         ""));
     }
 
