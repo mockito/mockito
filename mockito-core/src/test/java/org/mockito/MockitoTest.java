@@ -238,4 +238,20 @@ public class MockitoTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageStartingWith("Please don't pass any values here");
     }
+
+    @Test
+    public void spyMethodWithSettingsAppliesTheSettings() {
+        InvocationListener invocationListener = Mockito.mock(InvocationListener.class);
+
+        Object spy =
+                Mockito.spy(
+                        new Object(),
+                        Mockito.withSettings()
+                                .invocationListeners(invocationListener));
+
+        Mockito.doReturn("my string representation").when(spy).toString();
+        assertThat(spy).hasToString("my string representation");
+        Mockito.verify(invocationListener, times(2)).reportInvocation(ArgumentMatchers.any());
+    }
+
 }
