@@ -4,7 +4,7 @@ errorprone = "2.23.0"
 junit4 = "4.13.2"
 junit-jupiter = "5.11.4"
 junit-platform = "1.11.4"
-kotlin = "2.0.21"
+kotlin = "2.1.21"
 
 gradleplugin-test-logger = "4.0.0"
 gradleplugin-animal-sniffer = "1.7.2"
