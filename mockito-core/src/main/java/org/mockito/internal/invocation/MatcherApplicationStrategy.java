@@ -4,7 +4,9 @@
  */
 package org.mockito.internal.invocation;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.mockito.ArgumentMatcher;
 import org.mockito.internal.matchers.CapturingMatcher;
@@ -55,16 +57,33 @@ public class MatcherApplicationStrategy {
      *         </ul>
      */
     public boolean forEachMatcherAndArgument(ArgumentMatcherAction action) {
-        final boolean maybeVararg =
+        final boolean isJavaVarargs =
                 invocation.getMethod().isVarArgs()
-                        && invocation.getRawArguments().length == matchers.size();
+                        && lastMatcherType().stream()
+                                .anyMatch(
+                                        matcherType ->
+                                                lastParameterType().isAssignableFrom(matcherType));
 
-        if (maybeVararg) {
-            final Class<?> matcherType = lastMatcherType();
-            final Class<?> paramType = lastParameterType();
-            if (paramType.isAssignableFrom(matcherType)) {
-                return argsMatch(invocation.getRawArguments(), matchers, action);
-            }
+        // For mockito-scala,
+        // we can consider this to be a vararg only if the number of raw arguments is different
+        // from the number of arguments and any parameter type is a scala Seq, as Scala represents
+        // varargs as Seq and a Scala method can have several parameter lists, which means vararg
+        // parameter can be in any position.
+        final boolean isScalaVararg =
+                invocation.getRawArguments().length != invocation.getArguments().length
+                        && optionalClass("scala.collection.Seq").stream()
+                                .anyMatch(
+                                        seqClass ->
+                                                Arrays.stream(
+                                                                invocation
+                                                                        .getMethod()
+                                                                        .getParameterTypes())
+                                                        .anyMatch(seqClass::isAssignableFrom));
+
+        final boolean isVararg = isJavaVarargs || isScalaVararg;
+
+        if (invocation.getRawArguments().length == matchers.size() && isVararg) {
+            return argsMatch(invocation.getRawArguments(), matchers, action);
         }
 
         if (invocation.getArguments().length == matchers.size()) {
@@ -89,12 +108,22 @@ public class MatcherApplicationStrategy {
         return true;
     }
 
-    private Class<?> lastMatcherType() {
-        return matchers.get(matchers.size() - 1).type();
+    private Optional<Class<?>> lastMatcherType() {
+        return matchers.isEmpty()
+                ? Optional.empty()
+                : Optional.of(matchers.get(matchers.size() - 1).type());
     }
 
     private Class<?> lastParameterType() {
         final Class<?>[] parameterTypes = invocation.getMethod().getParameterTypes();
         return parameterTypes[parameterTypes.length - 1];
+    }
+
+    private Optional<Class<?>> optionalClass(String className) {
+        try {
+            return Optional.of(Class.forName(className));
+        } catch (ClassNotFoundException e) {
+            return Optional.empty();
+        }
     }
 }
