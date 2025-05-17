@@ -59,10 +59,11 @@ public class MatcherApplicationStrategy {
     public boolean forEachMatcherAndArgument(ArgumentMatcherAction action) {
         final boolean isJavaVarargs =
                 invocation.getMethod().isVarArgs()
-                        && lastMatcherType().stream()
-                                .anyMatch(
+                        && lastMatcherType()
+                                .map(
                                         matcherType ->
-                                                lastParameterType().isAssignableFrom(matcherType));
+                                                lastParameterType().isAssignableFrom(matcherType))
+                                .orElse(false);
 
         // For mockito-scala,
         // we can consider this to be a vararg only if the number of raw arguments is different
@@ -71,14 +72,15 @@ public class MatcherApplicationStrategy {
         // parameter can be in any position.
         final boolean isScalaVararg =
                 invocation.getRawArguments().length != invocation.getArguments().length
-                        && optionalClass("scala.collection.Seq").stream()
-                                .anyMatch(
+                        && optionalClass("scala.collection.Seq")
+                                .map(
                                         seqClass ->
                                                 Arrays.stream(
                                                                 invocation
                                                                         .getMethod()
                                                                         .getParameterTypes())
-                                                        .anyMatch(seqClass::isAssignableFrom));
+                                                        .anyMatch(seqClass::isAssignableFrom))
+                                .orElse(false);
 
         final boolean isVararg = isJavaVarargs || isScalaVararg;
 
