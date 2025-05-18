@@ -7,13 +7,21 @@ package org.mockito.internal.invocation;
 import static java.util.Arrays.asList;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 import static org.mockito.internal.invocation.MatcherApplicationStrategy.getMatcherApplicationStrategyFor;
 import static org.mockito.internal.matchers.Any.ANY;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -116,6 +124,21 @@ public class MatcherApplicationStrategyTest extends TestBase {
 
         // then
         assertTrue(match);
+    }
+
+    @Test
+    public void shouldNotMatchVarargsWithNoMatchers() {
+        // given
+        invocation = varargs("1", "2");
+        matchers = asList();
+        // when
+        boolean match =
+                getMatcherApplicationStrategyFor(invocation, matchers)
+                        .forEachMatcherAndArgument(recordAction);
+
+        // then
+        assertFalse("Should not match when matchers list is empty", match);
+        recordAction.assertIsEmpty();
     }
 
     @Test
@@ -237,6 +260,72 @@ public class MatcherApplicationStrategyTest extends TestBase {
 
         // then
         recordAction.assertContainsExactly(any);
+    }
+
+    // Helper interface to mock Scala Seq
+    private interface MockScalaSeq {}
+
+    @Test
+    public void shouldDetectScalaVarargsProperly() throws Exception {
+        // Create a mock Invocation that simulates Scala varargs behavior
+        Invocation mockInvocation = mock(Invocation.class);
+
+        // Create a mock method with our fake Scala Seq parameter in the middle,
+        // corresponding to `def method(a: String)(b: String*)(c: String)`
+        Method mockMethod = mock(Method.class);
+        when(mockMethod.getParameterTypes())
+                .thenReturn(new Class<?>[] {String.class, MockScalaSeq.class, String.class});
+        when(mockMethod.getParameterCount()).thenReturn(3);
+        when(mockMethod.getGenericParameterTypes())
+                .thenReturn(
+                        new java.lang.reflect.Type[] {
+                            String.class, MockScalaSeq.class, String.class
+                        });
+        when(mockMethod.getName()).thenReturn("mockMethod");
+        when(mockMethod.isVarArgs()).thenReturn(false); // Scala varargs are not Java varargs
+
+        // Set up the invocation to return different lengths for raw vs processed arguments
+        when(mockInvocation.getMethod()).thenReturn(mockMethod);
+        when(mockInvocation.getRawArguments()).thenReturn(new Object[] {new Object[] {"1", "2"}});
+        when(mockInvocation.getArguments()).thenReturn(new Object[] {"1", "2"}); // Different length
+
+        // Set up matchers
+        List<ArgumentMatcher<?>> matchers = asList(new Equals("1"), new Equals("2"));
+
+        // Create a strategy with spied optionalClass method to force Scala detection
+        MatcherApplicationStrategy spyStrategy =
+                spy(getMatcherApplicationStrategyFor(mockInvocation, matchers));
+
+        // Mock the optionalClass method behavior to simulate Scala presence
+        doReturn(Optional.of(MockScalaSeq.class))
+                .when(spyStrategy)
+                .optionalClass(eq("scala.collection.Seq"));
+
+        // When: Test the strategy
+        boolean match = spyStrategy.forEachMatcherAndArgument(recordAction);
+
+        // Then: Assert the match was successful
+        assertTrue("Failed to match Scala varargs pattern", match);
+        recordAction.assertContainsExactly(new Equals("1"), new Equals("2"));
+    }
+
+    @Test
+    public void shouldLoadExistingClasses() {
+        MatcherApplicationStrategy strategy =
+                getMatcherApplicationStrategyFor(varargs("1"), List.of(new Equals("1")));
+
+        Optional<?> result = strategy.optionalClass("java.lang.String");
+        assertTrue(result.isPresent());
+        assertEquals(String.class, result.get());
+    }
+
+    @Test
+    public void shouldReturnEmptyLoadingNonExistingClasses() {
+        MatcherApplicationStrategy strategy =
+                getMatcherApplicationStrategyFor(varargs("1"), List.of(new Equals("1")));
+
+        Optional<?> result = strategy.optionalClass("non.existing.ClassClass");
+        assertFalse(result.isPresent());
     }
 
     private static class IntMatcher extends BaseMatcher<Integer> {

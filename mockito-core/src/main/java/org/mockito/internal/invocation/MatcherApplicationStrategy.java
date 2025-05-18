@@ -121,7 +121,7 @@ public class MatcherApplicationStrategy {
         return parameterTypes[parameterTypes.length - 1];
     }
 
-    private Optional<Class<?>> optionalClass(String className) {
+    Optional<Class<?>> optionalClass(String className) {
         try {
             return Optional.of(Class.forName(className));
         } catch (ClassNotFoundException e) {
