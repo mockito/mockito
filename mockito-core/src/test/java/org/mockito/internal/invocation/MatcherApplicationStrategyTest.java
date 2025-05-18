@@ -265,27 +265,24 @@ public class MatcherApplicationStrategyTest extends TestBase {
     // Helper interface to mock Scala Seq
     private interface MockScalaSeq {}
 
+    private static class TestScalaClass {
+        @SuppressWarnings("unused")
+        // corresponds to Scala method like `def testMethod(a: String)(b: String*)(c: String)`
+        public void testMethod(String a, MockScalaSeq b, String c) {}
+    }
+
     @Test
     public void shouldDetectScalaVarargsProperly() throws Exception {
         // Create a mock Invocation that simulates Scala varargs behavior
         Invocation mockInvocation = mock(Invocation.class);
 
-        // Create a mock method with our fake Scala Seq parameter in the middle,
-        // corresponding to `def method(a: String)(b: String*)(c: String)`
-        Method mockMethod = mock(Method.class);
-        when(mockMethod.getParameterTypes())
-                .thenReturn(new Class<?>[] {String.class, MockScalaSeq.class, String.class});
-        when(mockMethod.getParameterCount()).thenReturn(3);
-        when(mockMethod.getGenericParameterTypes())
-                .thenReturn(
-                        new java.lang.reflect.Type[] {
-                            String.class, MockScalaSeq.class, String.class
-                        });
-        when(mockMethod.getName()).thenReturn("mockMethod");
-        when(mockMethod.isVarArgs()).thenReturn(false); // Scala varargs are not Java varargs
+        // The method to be tested
+        Method testMethod =
+                TestScalaClass.class.getDeclaredMethod(
+                        "testMethod", String.class, MockScalaSeq.class, String.class);
 
         // Set up the invocation to return different lengths for raw vs processed arguments
-        when(mockInvocation.getMethod()).thenReturn(mockMethod);
+        when(mockInvocation.getMethod()).thenReturn(testMethod);
         when(mockInvocation.getRawArguments()).thenReturn(new Object[] {new Object[] {"1", "2"}});
         when(mockInvocation.getArguments()).thenReturn(new Object[] {"1", "2"}); // Different length
 
