@@ -30,7 +30,8 @@ def mockitoCoverage = tasks.register("mockitoCoverage", JacocoReport) { mockitoC
                 def coverageFiles = currentProject
                     .layout.buildDirectory.dir("outputs/unit_test_code_coverage/debugUnitTest")
                     .map { it.asFileTree.matching { include "testDebugUnitTest.exec" } }
-                mockitoCoverage.executionData(currentProject.files(coverageFiles).builtBy(unitTest))
+                mockitoCoverage.executionData(currentProject.files(coverageFiles))
+                mockitoCoverage.dependsOn(unitTest)
             }
         }
     }
