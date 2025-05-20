@@ -58,6 +58,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    testCoverage {
+        jacocoVersion = libs.versions.jacoco.get()
+    }
 }
 
 androidComponents {
