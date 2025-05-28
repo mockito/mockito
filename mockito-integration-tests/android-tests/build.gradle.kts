@@ -28,27 +28,6 @@ android {
             enableAndroidTestCoverage = true
         }
     }
-    afterEvaluate {
-        // Enable coverage of mockito classes which are not part of this module.
-        // Without these added classFileCollection dependencies the coverage data/report is empty.
-        tasks.named<JacocoReportTask>("createDebugAndroidTestCoverageReport") jacocoTask@{
-            // Clear the production code of this module: src/main/java, it has no mockito-user-visible code.
-            classFileCollection.setFrom()
-            rootProject.allprojects currentProject@{
-                plugins.withId("java") {
-                    val sourceSets = this@currentProject.sourceSets
-                    // Mimic org.gradle.testing.jacoco.tasks.JacocoReportBase.sourceSets().
-                    // Not possible to set task.javaSources because it's initialized with setDisallowChanges.
-                    //task.javaSources.add({ [ sourceSets.main.allJava.srcDirs ] })
-                    this@jacocoTask.classFileCollection.from(
-                        sourceSets.named("main").get().output.asFileTree.matching {
-                            exclude("**/internal/util/concurrent/**")
-                        }
-                    )
-                }
-            }
-        }
-    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
