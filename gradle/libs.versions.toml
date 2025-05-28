@@ -5,7 +5,7 @@ jacoco = "0.8.13"
 junit4 = "4.13.2"
 junit-jupiter = "5.12.2"
 junit-platform = "1.12.2"
-kotlin = "2.0.21"
+kotlin = "2.1.21"
 
 gradleplugin-test-logger = "4.0.0"
 gradleplugin-animal-sniffer = "2.0.1"
