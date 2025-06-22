@@ -43,6 +43,11 @@ android {
     }
 }
 
+tasks.named<JacocoReportTask>("createDebugAndroidTestCoverageReport") {
+    getSourceFolders().from(File(project(":mockito-core").getProjectDir(), "src/main/java"))
+    getSourceFolders().from(File(project(":mockito-extensions:mockito-android").getProjectDir(), "src/main/java"))
+}
+
 androidComponents {
     beforeVariants(selector().withBuildType("release")) {
         it.enable = false
