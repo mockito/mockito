@@ -93,7 +93,7 @@ tasks {
         if (JavaVersion.current() >= JavaVersion.VERSION_18) {
             javadocDocletOptions {
                 addStringOption("-link-modularity-mismatch", "info")
-                links("https://junit.org/junit5/docs/${libs.versions.junit.jupiter.get()}/api/")
+                links("https://docs.junit.org/${libs.versions.junit.jupiter.get()}/api/")
             }
         } else {
             logger.info("Javadoc tool below 18, links to JUnit Jupiter javadocs was not added.")
