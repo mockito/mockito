@@ -29,6 +29,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
     }
 
     @Test
+    @SuppressWarnings("SelfAssertion") // https://github.com/google/error-prone/issues/5131
     public void shouldReplaceObjectMethods() {
         Object mock = Mockito.mock(ObjectMethodsOverridden.class);
         Object otherMock = Mockito.mock(ObjectMethodsOverridden.class);
@@ -41,6 +42,7 @@ public class ReplacingObjectMethodsTest extends TestBase {
     }
 
     @Test
+    @SuppressWarnings("SelfAssertion") // https://github.com/google/error-prone/issues/5131
     public void shouldReplaceObjectMethodsWhenOverridden() {
         Object mock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);
         Object otherMock = Mockito.mock(ObjectMethodsOverriddenSubclass.class);

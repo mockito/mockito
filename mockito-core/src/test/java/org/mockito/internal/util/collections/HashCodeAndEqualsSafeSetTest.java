@@ -131,6 +131,7 @@ public class HashCodeAndEqualsSafeSetTest {
     }
 
     @Test
+    @SuppressWarnings("SelfAssertion") // https://github.com/google/error-prone/issues/5131
     public void isEqualToItself() {
         HashCodeAndEqualsSafeSet set = HashCodeAndEqualsSafeSet.of(mock1);
         assertThat(set).isEqualTo(set);
