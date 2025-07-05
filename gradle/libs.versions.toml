@@ -59,3 +59,4 @@ animalSniffer-java = { module = "org.codehaus.mojo.signature:java18", version = 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleplugin-android" }
+kotlin = { id = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}
