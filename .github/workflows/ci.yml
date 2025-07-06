@@ -18,11 +18,10 @@ permissions:
   contents: read
 
 jobs:
-
   #
   # Main build job
   #
-  build:
+  java:
     runs-on: ubuntu-latest
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
@@ -196,7 +195,7 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    needs: [build] # build job must pass before we can release
+    needs: [java, android] # both build jobs must pass before we can release
 
     if: github.event_name == 'push'
         && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
