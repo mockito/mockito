@@ -62,9 +62,8 @@ nexusPublishing {
     repositories {
         if (!providers.environmentVariable("NEXUS_TOKEN_PWD").orNull.isNullOrBlank()) {
             sonatype {
-                // Publishing to: https://s01.oss.sonatype.org (faster instance)
-                nexusUrl = uri("https://s01.oss.sonatype.org/service/local/")
-                snapshotRepositoryUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+                nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+                snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
 
                 username = providers.environmentVariable("NEXUS_TOKEN_USER")
                 password = providers.environmentVariable("NEXUS_TOKEN_PWD")
