@@ -11,7 +11,7 @@ gradleplugin-test-logger = "4.0.0"
 gradleplugin-animal-sniffer = "2.0.1"
 gradleplugin-aQute-bnd = "7.1.0"
 gradleplugin-errorprone = "4.3.0"
-gradleplugin-spotless = "7.0.2"
+gradleplugin-spotless = "7.0.4"
 
 gradleplugin-android = "7.4.2"
 
