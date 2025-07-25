@@ -178,11 +178,6 @@ public class PartialMockingWithSpiesTest extends TestBase {
         }
     }
 
-    //    @Test //manual verification
-    public void verifyTheStackTrace() {
-        spy.getNameButDelegateToMethodThatThrows();
-    }
-
     @Test
     public void shouldVerify() {
         // when
