@@ -22,6 +22,7 @@ import static net.bytebuddy.matcher.ElementMatchers.not;
 import java.lang.instrument.ClassFileTransformer;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import net.bytebuddy.ByteBuddy;
@@ -46,14 +47,15 @@ import net.bytebuddy.utility.OpenedClassReader;
 
 public class InlineClassFileTransformer implements ClassFileTransformer {
 
+    public static final boolean MOCKITO_AOT = Boolean.getBoolean("org.mockito.aot");
+
     private final ByteBuddy byteBuddy;
     private final AsmVisitorWrapper mockTransformer;
 
     protected volatile Throwable lastException;
 
-    @SuppressWarnings("unchecked")
     static final Set<Class<?>> EXCLUDES =
-            new HashSet<Class<?>>(
+            new HashSet<>(
                     Arrays.asList(
                             Class.class,
                             Boolean.class,
@@ -123,35 +125,52 @@ public class InlineClassFileTransformer implements ClassFileTransformer {
         if (classBeingRedefined == null || EXCLUDES.contains(classBeingRedefined)) {
             return null;
         } else {
-            try {
-                return byteBuddy
-                        .redefine(
-                                classBeingRedefined,
-                                //        new ClassFileLocator.Compound(
-                                ClassFileLocator.Simple.of(
-                                        classBeingRedefined.getName(), classfileBuffer)
-                                //            ,ClassFileLocator.ForClassLoader.ofSystemLoader()
-                                //        )
-                                )
-                        // Note: The VM erases parameter meta data from the provided class file
-                        // (bug). We just add this information manually.
-                        .visit(new ParameterWritingVisitorWrapper(classBeingRedefined))
-                        .visit(mockTransformer)
-                        .make()
-                        .getBytes();
-            } catch (Throwable throwable) {
-                lastException = throwable;
-                return null;
-            }
+            return doTransform(
+                    TypeDescription.ForLoadedType.of(classBeingRedefined), classfileBuffer, false);
+        }
+    }
+
+    public byte[] transform(String className, byte[] classfileBuffer) {
+        TypePool typePool =
+                TypePool.Default.WithLazyResolution.of(
+                        ClassFileLocator.Simple.of(className, classfileBuffer));
+        return doTransform(typePool.describe(className).resolve(), classfileBuffer, true);
+    }
+
+    private byte[] doTransform(
+            TypeDescription classBeingRedefined, byte[] classfileBuffer, boolean annotate) {
+        try {
+            return byteBuddy
+                    .redefine(
+                            classBeingRedefined,
+                            //        new ClassFileLocator.Compound(
+                            ClassFileLocator.Simple.of(
+                                    classBeingRedefined.getName(), classfileBuffer)
+                            //            ,ClassFileLocator.ForClassLoader.ofSystemLoader()
+                            //        )
+                            )
+                    .annotateType(
+                            annotate
+                                    ? Collections.singletonList(InlineMockMarker.DESCRIPTION)
+                                    : Collections.emptyList())
+                    // Note: The VM erases parameter meta data from the provided class file
+                    // (bug). We just add this information manually.
+                    .visit(new ParameterWritingVisitorWrapper(classBeingRedefined))
+                    .visit(mockTransformer)
+                    .make()
+                    .getBytes();
+        } catch (Throwable throwable) {
+            lastException = throwable;
+            return null;
         }
     }
 
     private static class ParameterWritingVisitorWrapper extends AsmVisitorWrapper.AbstractBase {
 
-        private final Class<?> type;
+        private final TypeDescription typeDescription;
 
-        private ParameterWritingVisitorWrapper(Class<?> type) {
-            this.type = type;
+        private ParameterWritingVisitorWrapper(TypeDescription typeDescription) {
+            this.typeDescription = typeDescription;
         }
 
         @Override
@@ -165,8 +184,7 @@ public class InlineClassFileTransformer implements ClassFileTransformer {
                 int writerFlags,
                 int readerFlags) {
             return implementationContext.getClassFileVersion().isAtLeast(ClassFileVersion.JAVA_V8)
-                    ? new ParameterAddingClassVisitor(
-                            classVisitor, new TypeDescription.ForLoadedType(type))
+                    ? new ParameterAddingClassVisitor(classVisitor, typeDescription)
                     : classVisitor;
         }
 

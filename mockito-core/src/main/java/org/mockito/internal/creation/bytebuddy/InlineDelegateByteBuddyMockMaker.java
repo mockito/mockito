@@ -238,7 +238,7 @@ class InlineDelegateByteBuddyMockMaker
     private final ThreadLocal<Object> currentSpied = new ThreadLocal<>();
 
     InlineDelegateByteBuddyMockMaker() {
-        if (INITIALIZATION_ERROR != null) {
+        if (INITIALIZATION_ERROR != null && !InlineClassFileTransformer.MOCKITO_AOT) {
             String detail;
             if (PlatformUtils.isAndroidPlatform() || PlatformUtils.isProbablyTermuxEnvironment()) {
                 detail =

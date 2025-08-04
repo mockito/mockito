@@ -4,48 +4,35 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
-import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.ClassFileVersion;
-import net.bytebuddy.asm.Advice;
-import net.bytebuddy.asm.AsmVisitorWrapper;
-import net.bytebuddy.description.field.FieldDescription;
-import net.bytebuddy.description.field.FieldList;
-import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.description.method.MethodList;
-import net.bytebuddy.description.method.ParameterDescription;
-import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.dynamic.ClassFileLocator;
-import net.bytebuddy.dynamic.scaffold.MethodGraph;
-import net.bytebuddy.dynamic.scaffold.TypeValidation;
-import net.bytebuddy.implementation.Implementation;
-import net.bytebuddy.jar.asm.ClassVisitor;
-import net.bytebuddy.jar.asm.MethodVisitor;
-import net.bytebuddy.matcher.ElementMatchers;
-import net.bytebuddy.pool.TypePool;
-import net.bytebuddy.utility.OpenedClassReader;
+import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
+import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
+import static net.bytebuddy.matcher.ElementMatchers.isAbstract;
+import static net.bytebuddy.matcher.ElementMatchers.isNative;
+import static net.bytebuddy.matcher.ElementMatchers.isToString;
+import static org.mockito.internal.util.StringUtil.join;
+
+import java.lang.instrument.Instrumentation;
+import java.lang.instrument.UnmodifiableClassException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.security.ProtectionDomain;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy.Default;
 import net.bytebuddy.utility.RandomString;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.SuppressSignatureCheck;
+import org.mockito.internal.creation.bytebuddy.ModuleHandler.NoModuleSystemFound;
 import org.mockito.internal.creation.bytebuddy.access.MockMethodInterceptor;
 import org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.internal.util.concurrent.WeakConcurrentSet;
 import org.mockito.mock.SerializableMode;
-
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.Instrumentation;
-import java.lang.instrument.UnmodifiableClassException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.security.ProtectionDomain;
-import java.util.*;
-import java.util.function.Predicate;
-
-import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
-import static net.bytebuddy.implementation.bind.annotation.TargetMethodAnnotationDrivenBinder.ParameterBinder.ForFixedValue.OfConstant.of;
-import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.mockito.internal.util.StringUtil.join;
 
 @SuppressSignatureCheck
 public class InlineBytecodeGenerator extends InlineClassFileTransformer
@@ -68,7 +55,7 @@ public class InlineBytecodeGenerator extends InlineClassFileTransformer
             Predicate<Class<?>> isMockConstruction,
             ConstructionCallback onConstruction) {
         this(
-                RandomString.make(),
+                MOCKITO_AOT ? "AOTMockitoMock" : RandomString.make(),
                 instrumentation,
                 mocks,
                 mockedStatics,
@@ -91,7 +78,15 @@ public class InlineBytecodeGenerator extends InlineClassFileTransformer
         subclassEngine =
                 new TypeCachingBytecodeGenerator(
                         new SubclassBytecodeGenerator(
-                                ModuleHandler.make(instrumentation),
+                                MOCKITO_AOT
+                                        ? new NoModuleSystemFound() {
+                                            @Override
+                                            public ClassLoadingStrategy<ClassLoader>
+                                                    classLoadingStrategy() {
+                                                return Default.INJECTION;
+                                            }
+                                        }
+                                        : ModuleHandler.make(instrumentation),
                                 withDefaultConfiguration()
                                         .withBinders(
                                                 of(MockMethodAdvice.Identifier.class, identifier))
@@ -123,7 +118,9 @@ public class InlineBytecodeGenerator extends InlineClassFileTransformer
                 identifier,
                 new MockMethodAdvice(
                         mocks, mockedStatics, identifier, isMockConstruction, onConstruction));
-        instrumentation.addTransformer(this, true);
+        if (!MOCKITO_AOT) {
+            instrumentation.addTransformer(this, true);
+        }
     }
 
     /**
@@ -202,8 +199,36 @@ public class InlineBytecodeGenerator extends InlineClassFileTransformer
         }
     }
 
-    private <T> void triggerRetransformation(Set<Class<?>> types, boolean flat) {
+    private void triggerRetransformation(Set<Class<?>> types, boolean flat) {
         Set<Class<?>> targets = new HashSet<Class<?>>();
+
+        if (MOCKITO_AOT) {
+            for (Class<?> type : types) {
+                if (flat) {
+                    if (!mocked.contains(type) && flatMocked.add(type)) {
+                        assureInitialization(type);
+                        targets.add(type);
+                    }
+                } else {
+                    do {
+                        if (mocked.add(type)) {
+                            if (!flatMocked.remove(type)) {
+                                assureInitialization(type);
+                                targets.add(type);
+                            }
+                            addInterfaces(targets, type.getInterfaces());
+                        }
+                        type = type.getSuperclass();
+                    } while (type != null);
+                }
+            }
+            for (Class<?> type : targets) {
+                if (!type.isAnnotationPresent(InlineMockMarker.class)) {
+                    throw new MockitoException("Did not prepare class: " + type.getName());
+                }
+            }
+            return;
+        }
 
         try {
             for (Class<?> type : types) {
