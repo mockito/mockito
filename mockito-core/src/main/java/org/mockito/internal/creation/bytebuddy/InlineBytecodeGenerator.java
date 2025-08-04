@@ -48,38 +48,18 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 import static org.mockito.internal.util.StringUtil.join;
 
 @SuppressSignatureCheck
-public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTransformer {
+public class InlineBytecodeGenerator extends InlineClassFileTransformer
+        implements BytecodeGenerator {
 
     private static final String PRELOAD = "org.mockito.inline.preload";
 
-    @SuppressWarnings("unchecked")
-    static final Set<Class<?>> EXCLUDES =
-            new HashSet<Class<?>>(
-                    Arrays.asList(
-                            Class.class,
-                            Boolean.class,
-                            Byte.class,
-                            Short.class,
-                            Character.class,
-                            Integer.class,
-                            Long.class,
-                            Float.class,
-                            Double.class,
-                            String.class));
-
     private final Instrumentation instrumentation;
-
-    private final ByteBuddy byteBuddy;
 
     private final WeakConcurrentSet<Class<?>> mocked, flatMocked;
 
     private final BytecodeGenerator subclassEngine;
 
-    private final AsmVisitorWrapper mockTransformer;
-
     private final Method getModule, canRead, redefineModule;
-
-    private volatile Throwable lastException;
 
     public InlineBytecodeGenerator(
             Instrumentation instrumentation,
@@ -87,17 +67,27 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics,
             Predicate<Class<?>> isMockConstruction,
             ConstructionCallback onConstruction) {
+        this(
+                RandomString.make(),
+                instrumentation,
+                mocks,
+                mockedStatics,
+                isMockConstruction,
+                onConstruction);
+    }
+
+    private InlineBytecodeGenerator(
+            String identifier,
+            Instrumentation instrumentation,
+            WeakConcurrentMap<Object, MockMethodInterceptor> mocks,
+            DetachedThreadLocal<Map<Class<?>, MockMethodInterceptor>> mockedStatics,
+            Predicate<Class<?>> isMockConstruction,
+            ConstructionCallback onConstruction) {
+        super(identifier);
         preload();
         this.instrumentation = instrumentation;
-        byteBuddy =
-                new ByteBuddy()
-                        .with(TypeValidation.DISABLED)
-                        .with(Implementation.Context.Disabled.Factory.INSTANCE)
-                        .with(MethodGraph.Compiler.ForDeclaredMethods.INSTANCE)
-                        .ignore(isSynthetic().and(not(isConstructor())).or(isDefaultFinalizer()));
         mocked = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.MANUAL);
         flatMocked = new WeakConcurrentSet<>(WeakConcurrentSet.Cleaner.MANUAL);
-        String identifier = RandomString.make();
         subclassEngine =
                 new TypeCachingBytecodeGenerator(
                         new SubclassBytecodeGenerator(
@@ -108,44 +98,6 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                                         .to(MockMethodAdvice.ForReadObject.class),
                                 isAbstract().or(isNative()).or(isToString())),
                         false);
-        mockTransformer =
-                new AsmVisitorWrapper.ForDeclaredMethods()
-                        .method(
-                                isVirtual()
-                                        .and(
-                                                not(
-                                                        isBridge()
-                                                                .or(isHashCode())
-                                                                .or(isEquals())
-                                                                .or(isDefaultFinalizer())))
-                                        .and(
-                                                not(isDeclaredBy(nameStartsWith("java."))
-                                                                .<MethodDescription>and(
-                                                                        isPackagePrivate()))
-                                                        .and(
-                                                                not(
-                                                                        BytecodeGenerator
-                                                                                .isGroovyMethod(
-                                                                                        true)))),
-                                Advice.withCustomMapping()
-                                        .bind(MockMethodAdvice.Identifier.class, identifier)
-                                        .to(MockMethodAdvice.class))
-                        .method(
-                                isStatic().and(not(BytecodeGenerator.isGroovyMethod(true))),
-                                Advice.withCustomMapping()
-                                        .bind(MockMethodAdvice.Identifier.class, identifier)
-                                        .to(MockMethodAdvice.ForStatic.class))
-                        .constructor(any(), new MockMethodAdvice.ConstructorShortcut(identifier))
-                        .method(
-                                isHashCode(),
-                                Advice.withCustomMapping()
-                                        .bind(MockMethodAdvice.Identifier.class, identifier)
-                                        .to(MockMethodAdvice.ForHashCode.class))
-                        .method(
-                                isEquals(),
-                                Advice.withCustomMapping()
-                                        .bind(MockMethodAdvice.Identifier.class, identifier)
-                                        .to(MockMethodAdvice.ForEquals.class));
         Method getModule, canRead, redefineModule;
         try {
             getModule = Class.class.getMethod("getModule");
@@ -387,30 +339,11 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             byte[] classfileBuffer) {
         if (classBeingRedefined == null
                 || !mocked.contains(classBeingRedefined)
-                        && !flatMocked.contains(classBeingRedefined)
-                || EXCLUDES.contains(classBeingRedefined)) {
+                        && !flatMocked.contains(classBeingRedefined)) {
             return null;
         } else {
-            try {
-                return byteBuddy
-                        .redefine(
-                                classBeingRedefined,
-                                //        new ClassFileLocator.Compound(
-                                ClassFileLocator.Simple.of(
-                                        classBeingRedefined.getName(), classfileBuffer)
-                                //            ,ClassFileLocator.ForClassLoader.ofSystemLoader()
-                                //        )
-                                )
-                        // Note: The VM erases parameter meta data from the provided class file
-                        // (bug). We just add this information manually.
-                        .visit(new ParameterWritingVisitorWrapper(classBeingRedefined))
-                        .visit(mockTransformer)
-                        .make()
-                        .getBytes();
-            } catch (Throwable throwable) {
-                lastException = throwable;
-                return null;
-            }
+            return super.transform(
+                    loader, className, classBeingRedefined, protectionDomain, classfileBuffer);
         }
     }
 
@@ -434,81 +367,6 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             "This should not influence the working of Mockito.",
                             "But if the reset intends to remove mocking code to improve performance, it is still impacted."),
                     e);
-        }
-    }
-
-    private static class ParameterWritingVisitorWrapper extends AsmVisitorWrapper.AbstractBase {
-
-        private final Class<?> type;
-
-        private ParameterWritingVisitorWrapper(Class<?> type) {
-            this.type = type;
-        }
-
-        @Override
-        public ClassVisitor wrap(
-                TypeDescription instrumentedType,
-                ClassVisitor classVisitor,
-                Implementation.Context implementationContext,
-                TypePool typePool,
-                FieldList<FieldDescription.InDefinedShape> fields,
-                MethodList<?> methods,
-                int writerFlags,
-                int readerFlags) {
-            return implementationContext.getClassFileVersion().isAtLeast(ClassFileVersion.JAVA_V8)
-                    ? new ParameterAddingClassVisitor(
-                            classVisitor, new TypeDescription.ForLoadedType(type))
-                    : classVisitor;
-        }
-
-        private static class ParameterAddingClassVisitor extends ClassVisitor {
-
-            private final TypeDescription typeDescription;
-
-            private ParameterAddingClassVisitor(ClassVisitor cv, TypeDescription typeDescription) {
-                super(OpenedClassReader.ASM_API, cv);
-                this.typeDescription = typeDescription;
-            }
-
-            @Override
-            public MethodVisitor visitMethod(
-                    int access, String name, String desc, String signature, String[] exceptions) {
-                MethodVisitor methodVisitor =
-                        super.visitMethod(access, name, desc, signature, exceptions);
-                MethodList<?> methodList =
-                        typeDescription
-                                .getDeclaredMethods()
-                                .filter(
-                                        (name.equals(MethodDescription.CONSTRUCTOR_INTERNAL_NAME)
-                                                        ? isConstructor()
-                                                        : ElementMatchers.<MethodDescription>named(
-                                                                name))
-                                                .and(hasDescriptor(desc)));
-                if (methodList.size() == 1
-                        && methodList.getOnly().getParameters().hasExplicitMetaData()) {
-                    for (ParameterDescription parameterDescription :
-                            methodList.getOnly().getParameters()) {
-                        methodVisitor.visitParameter(
-                                parameterDescription.getName(),
-                                parameterDescription.getModifiers());
-                    }
-                    return new MethodParameterStrippingMethodVisitor(methodVisitor);
-                } else {
-                    return methodVisitor;
-                }
-            }
-        }
-
-        private static class MethodParameterStrippingMethodVisitor extends MethodVisitor {
-
-            public MethodParameterStrippingMethodVisitor(MethodVisitor mv) {
-                super(OpenedClassReader.ASM_API, mv);
-            }
-
-            @Override
-            public void visitParameter(String name, int access) {
-                // suppress to avoid additional writing of the parameter if retained.
-            }
         }
     }
 }
