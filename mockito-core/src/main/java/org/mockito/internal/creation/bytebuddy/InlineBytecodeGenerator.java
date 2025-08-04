@@ -55,7 +55,7 @@ public class InlineBytecodeGenerator extends InlineClassFileTransformer
             Predicate<Class<?>> isMockConstruction,
             ConstructionCallback onConstruction) {
         this(
-                MOCKITO_AOT ? "AOTMockitoMock" : RandomString.make(),
+                MOCKITO_AOT ? MOCKITO_AOT_SUFFIX : RandomString.make(),
                 instrumentation,
                 mocks,
                 mockedStatics,

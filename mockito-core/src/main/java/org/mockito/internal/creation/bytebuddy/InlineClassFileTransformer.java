@@ -48,6 +48,7 @@ import net.bytebuddy.utility.OpenedClassReader;
 public class InlineClassFileTransformer implements ClassFileTransformer {
 
     public static final boolean MOCKITO_AOT = Boolean.getBoolean("org.mockito.aot");
+    static final String MOCKITO_AOT_SUFFIX = "AOTMockitoMock";
 
     private final ByteBuddy byteBuddy;
     private final AsmVisitorWrapper mockTransformer;
@@ -67,6 +68,10 @@ public class InlineClassFileTransformer implements ClassFileTransformer {
                             Float.class,
                             Double.class,
                             String.class));
+
+    public InlineClassFileTransformer() {
+        this(MOCKITO_AOT_SUFFIX);
+    }
 
     public InlineClassFileTransformer(String identifier) {
         byteBuddy =
