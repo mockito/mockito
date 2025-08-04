@@ -383,7 +383,9 @@ public class InlineBytecodeGenerator extends InlineClassFileTransformer
         flatMocked.clear();
         subclassEngine.clearAllCaches();
         try {
-            instrumentation.retransformClasses(types.toArray(new Class<?>[0]));
+            if (!MOCKITO_AOT) {
+                instrumentation.retransformClasses(types.toArray(new Class<?>[0]));
+            }
         } catch (UnmodifiableClassException e) {
             throw new MockitoException(
                     join(

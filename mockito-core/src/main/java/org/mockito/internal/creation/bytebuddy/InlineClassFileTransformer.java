@@ -73,7 +73,7 @@ public class InlineClassFileTransformer implements ClassFileTransformer {
         this(MOCKITO_AOT_SUFFIX);
     }
 
-    public InlineClassFileTransformer(String identifier) {
+    protected InlineClassFileTransformer(String identifier) {
         byteBuddy =
                 new ByteBuddy()
                         .with(TypeValidation.DISABLED)

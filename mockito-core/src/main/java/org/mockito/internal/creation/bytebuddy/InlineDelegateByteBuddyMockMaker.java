@@ -43,6 +43,7 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
 import static org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.EXCLUDES;
+import static org.mockito.internal.creation.bytebuddy.InlineClassFileTransformer.MOCKITO_AOT;
 import static org.mockito.internal.util.StringUtil.join;
 
 /**
@@ -114,109 +115,113 @@ class InlineDelegateByteBuddyMockMaker
     static {
         Instrumentation instrumentation;
         Throwable initializationError = null;
-
-        // ByteBuddy internally may attempt to fork a subprocess. In Java 11 and Java 19, the
-        // Java process class observes the os.name system property to determine the OS and
-        // thus determine how to fork a new process. If the user is stubbing System
-        // properties, they may clear the existing System properties, which will cause this
-        // to fail. This is very much an implementation detail, but it will result in Mockito
-        // failing to load with an error that is not overly clear, so let's attempt to detect
-        // this issue ahead of time instead.
-        if (System.getProperty("os.name") == null) {
-            throw new IllegalStateException(
-                    join(
-                            "The Byte Buddy agent cannot be loaded.",
-                            "",
-                            "To initialise the Byte Buddy agent, a subprocess may need to be created. To do this, the JVM requires "
-                                    + "knowledge of the 'os.name' System property in most JRE implementations. This property is not present, "
-                                    + "which means this operation will fail to complete. Please first make sure you are not clearing this "
-                                    + "property anywhere, and failing that, raise a bug with your JVM vendor."));
-        }
-
-        try {
-            try {
-                instrumentation = PremainAttachAccess.getInstrumentation();
-                File boot = File.createTempFile("mockitoboot", ".jar");
-                boot.deleteOnExit();
-                try (JarOutputStream outputStream =
-                        new JarOutputStream(new FileOutputStream(boot))) {
-                    InputStream inputStream =
-                            InlineDelegateByteBuddyMockMaker.class.getResourceAsStream(
-                                    "inject-MockMethodDispatcher.raw");
-                    if (inputStream == null) {
-                        throw new IllegalStateException(
-                                join(
-                                        "The MockMethodDispatcher class file is not locatable: "
-                                                + "inject-MockMethodDispatcher.raw"
-                                                + " in context of "
-                                                + InlineDelegateByteBuddyMockMaker.class.getName(),
-                                        "",
-                                        "The class loader responsible for looking up the resource: "
-                                                + InlineDelegateByteBuddyMockMaker.class
-                                                        .getClassLoader(),
-                                        "",
-                                        "The module responsible for looking up the resource: "
-                                                + InlineDelegateByteBuddyMockMaker.class
-                                                        .getModule()));
-                    }
-                    try (inputStream) {
-                        outputStream.putNextEntry(
-                                new JarEntry(
-                                        "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class"));
-                        int length;
-                        byte[] buffer = new byte[1024];
-                        while ((length = inputStream.read(buffer)) != -1) {
-                            outputStream.write(buffer, 0, length);
-                        }
-                    }
-                    outputStream.closeEntry();
-                }
-                try (JarFile jarfile = new JarFile(boot)) {
-                    instrumentation.appendToBootstrapClassLoaderSearch(jarfile);
-                }
-                Class<?> dispatcher;
-                try {
-                    dispatcher =
-                            Class.forName(
-                                    "org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher",
-                                    false,
-                                    null);
-                } catch (ClassNotFoundException cnfe) {
-                    throw new IllegalStateException(
-                            join(
-                                    "Mockito failed to inject the MockMethodDispatcher class into the bootstrap class loader",
-                                    "",
-                                    "It seems like your current VM does not support the instrumentation API correctly."),
-                            cnfe);
-                }
-                try {
-                    InlineDelegateByteBuddyMockMaker.class
-                            .getModule()
-                            .addReads(dispatcher.getModule());
-                } catch (Exception e) {
-                    throw new IllegalStateException(
-                            join(
-                                    "Mockito failed to adjust the module graph to read the dispatcher module",
-                                    "",
-                                    "Dispatcher: "
-                                            + dispatcher
-                                            + " is loaded by "
-                                            + dispatcher.getClassLoader()),
-                            e);
-                }
-            } catch (IOException ioe) {
+        if (MOCKITO_AOT) {
+            instrumentation = null;
+        } else {
+            // ByteBuddy internally may attempt to fork a subprocess. In Java 11 and Java 19, the
+            // Java process class observes the os.name system property to determine the OS and
+            // thus determine how to fork a new process. If the user is stubbing System
+            // properties, they may clear the existing System properties, which will cause this
+            // to fail. This is very much an implementation detail, but it will result in Mockito
+            // failing to load with an error that is not overly clear, so let's attempt to detect
+            // this issue ahead of time instead.
+            if (System.getProperty("os.name") == null) {
                 throw new IllegalStateException(
                         join(
-                                "Mockito could not self-attach a Java agent to the current VM. This feature is required for inline mocking.",
-                                "This error occured due to an I/O error during the creation of this agent: "
-                                        + ioe,
+                                "The Byte Buddy agent cannot be loaded.",
                                 "",
-                                "Potentially, the current VM does not support the instrumentation API correctly"),
-                        ioe);
+                                "To initialise the Byte Buddy agent, a subprocess may need to be created. To do this, the JVM requires "
+                                        + "knowledge of the 'os.name' System property in most JRE implementations. This property is not present, "
+                                        + "which means this operation will fail to complete. Please first make sure you are not clearing this "
+                                        + "property anywhere, and failing that, raise a bug with your JVM vendor."));
             }
-        } catch (Throwable throwable) {
-            instrumentation = null;
-            initializationError = throwable;
+
+            try {
+                try {
+                    instrumentation = PremainAttachAccess.getInstrumentation();
+                    File boot = File.createTempFile("mockitoboot", ".jar");
+                    boot.deleteOnExit();
+                    try (JarOutputStream outputStream =
+                            new JarOutputStream(new FileOutputStream(boot))) {
+                        InputStream inputStream =
+                                InlineDelegateByteBuddyMockMaker.class.getResourceAsStream(
+                                        "inject-MockMethodDispatcher.raw");
+                        if (inputStream == null) {
+                            throw new IllegalStateException(
+                                    join(
+                                            "The MockMethodDispatcher class file is not locatable: "
+                                                    + "inject-MockMethodDispatcher.raw"
+                                                    + " in context of "
+                                                    + InlineDelegateByteBuddyMockMaker.class
+                                                            .getName(),
+                                            "",
+                                            "The class loader responsible for looking up the resource: "
+                                                    + InlineDelegateByteBuddyMockMaker.class
+                                                            .getClassLoader(),
+                                            "",
+                                            "The module responsible for looking up the resource: "
+                                                    + InlineDelegateByteBuddyMockMaker.class
+                                                            .getModule()));
+                        }
+                        try (inputStream) {
+                            outputStream.putNextEntry(
+                                    new JarEntry(
+                                            "org/mockito/internal/creation/bytebuddy/inject/MockMethodDispatcher.class"));
+                            int length;
+                            byte[] buffer = new byte[1024];
+                            while ((length = inputStream.read(buffer)) != -1) {
+                                outputStream.write(buffer, 0, length);
+                            }
+                        }
+                        outputStream.closeEntry();
+                    }
+                    try (JarFile jarfile = new JarFile(boot)) {
+                        instrumentation.appendToBootstrapClassLoaderSearch(jarfile);
+                    }
+                    Class<?> dispatcher;
+                    try {
+                        dispatcher =
+                                Class.forName(
+                                        "org.mockito.internal.creation.bytebuddy.inject.MockMethodDispatcher",
+                                        false,
+                                        null);
+                    } catch (ClassNotFoundException cnfe) {
+                        throw new IllegalStateException(
+                                join(
+                                        "Mockito failed to inject the MockMethodDispatcher class into the bootstrap class loader",
+                                        "",
+                                        "It seems like your current VM does not support the instrumentation API correctly."),
+                                cnfe);
+                    }
+                    try {
+                        InlineDelegateByteBuddyMockMaker.class
+                                .getModule()
+                                .addReads(dispatcher.getModule());
+                    } catch (Exception e) {
+                        throw new IllegalStateException(
+                                join(
+                                        "Mockito failed to adjust the module graph to read the dispatcher module",
+                                        "",
+                                        "Dispatcher: "
+                                                + dispatcher
+                                                + " is loaded by "
+                                                + dispatcher.getClassLoader()),
+                                e);
+                    }
+                } catch (IOException ioe) {
+                    throw new IllegalStateException(
+                            join(
+                                    "Mockito could not self-attach a Java agent to the current VM. This feature is required for inline mocking.",
+                                    "This error occured due to an I/O error during the creation of this agent: "
+                                            + ioe,
+                                    "",
+                                    "Potentially, the current VM does not support the instrumentation API correctly"),
+                            ioe);
+                }
+            } catch (Throwable throwable) {
+                instrumentation = null;
+                initializationError = throwable;
+            }
         }
         INSTRUMENTATION = instrumentation;
         INITIALIZATION_ERROR = initializationError;
@@ -238,7 +243,7 @@ class InlineDelegateByteBuddyMockMaker
     private final ThreadLocal<Object> currentSpied = new ThreadLocal<>();
 
     InlineDelegateByteBuddyMockMaker() {
-        if (INITIALIZATION_ERROR != null && !InlineClassFileTransformer.MOCKITO_AOT) {
+        if (INITIALIZATION_ERROR != null) {
             String detail;
             if (PlatformUtils.isAndroidPlatform() || PlatformUtils.isProbablyTermuxEnvironment()) {
                 detail =
@@ -584,7 +589,11 @@ class InlineDelegateByteBuddyMockMaker
         return new TypeMockability() {
             @Override
             public boolean mockable() {
-                return INSTRUMENTATION.isModifiableClass(type) && !EXCLUDES.contains(type);
+                if (MOCKITO_AOT) {
+                    return type.isAnnotationPresent(InlineMockMarker.class);
+                } else {
+                    return INSTRUMENTATION.isModifiableClass(type) && !EXCLUDES.contains(type);
+                }
             }
 
             @Override
