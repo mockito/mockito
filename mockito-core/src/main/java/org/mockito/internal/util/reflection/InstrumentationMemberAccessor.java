@@ -11,17 +11,20 @@ import net.bytebuddy.implementation.MethodCall;
 import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.internal.PremainAttachAccess;
 import org.mockito.internal.SuppressSignatureCheck;
+import org.mockito.internal.creation.bytebuddy.InlineClassFileTransformer;
 import org.mockito.plugins.MemberAccessor;
 
 import java.lang.instrument.Instrumentation;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
+import static org.mockito.internal.creation.bytebuddy.InlineClassFileTransformer.MOCKITO_AOT;
 import static org.mockito.internal.util.StringUtil.join;
 
 @SuppressSignatureCheck
@@ -46,63 +49,96 @@ class InstrumentationMemberAccessor implements MemberAccessor {
         Instrumentation instrumentation;
         Dispatcher dispatcher;
         Throwable throwable;
-        try {
-            instrumentation = PremainAttachAccess.getInstrumentation();
-            // We need to generate a dispatcher instance that is located in a distinguished class
-            // loader to create a unique (unnamed) module to which we can open other packages to.
-            // This way, we assure that classes within Mockito's module (which might be a shared,
-            // unnamed module) do not face escalated privileges where tests might pass that would
-            // otherwise fail without Mockito's opening.
-            InjectionClassLoader classLoader =
-                    new ByteArrayClassLoader(
-                            InstrumentationMemberAccessor.class.getClassLoader(),
-                            false,
-                            Collections.emptyMap());
-            instrumentation.redefineModule(
-                    Dispatcher.class.getModule(),
-                    Collections.emptySet(),
-                    Collections.singletonMap(
-                            Dispatcher.class.getPackageName(),
-                            Collections.singleton(classLoader.getUnnamedModule())),
-                    Collections.emptyMap(),
-                    Collections.emptySet(),
-                    Collections.emptyMap());
-            dispatcher =
-                    new ByteBuddy()
-                            .subclass(Dispatcher.class)
-                            .method(named("getLookup"))
-                            .intercept(MethodCall.invoke(MethodHandles.class.getMethod("lookup")))
-                            .method(named("getModule"))
-                            .intercept(
-                                    MethodCall.invoke(Class.class.getMethod("getModule"))
-                                            .onMethodCall(
-                                                    MethodCall.invoke(
-                                                            Object.class.getMethod("getClass"))))
-                            .method(named("setAccessible"))
-                            .intercept(
-                                    MethodCall.invoke(
-                                                    AccessibleObject.class.getMethod(
-                                                            "setAccessible", boolean.class))
-                                            .onArgument(0)
-                                            .withArgument(1))
-                            .method(named("invokeWithArguments"))
-                            .intercept(
-                                    MethodCall.invoke(
-                                                    MethodHandle.class.getMethod(
-                                                            "invokeWithArguments", Object[].class))
-                                            .onArgument(0)
-                                            .withArgument(1))
-                            .make()
-                            .load(classLoader, InjectionClassLoader.Strategy.INSTANCE)
-                            .getLoaded()
-                            .getConstructor()
-                            .newInstance();
-            classLoader.seal();
-            throwable = null;
-        } catch (Throwable t) {
+        if (MOCKITO_AOT) {
             instrumentation = null;
-            dispatcher = null;
-            throwable = t;
+            dispatcher =
+                    new Dispatcher() {
+                        @Override
+                        public Lookup getLookup() {
+                            return null;
+                        }
+
+                        @Override
+                        public Object getModule() {
+                            return null;
+                        }
+
+                        @Override
+                        public void setAccessible(AccessibleObject target, boolean value) {}
+
+                        @Override
+                        public Object invokeWithArguments(MethodHandle handle, Object... arguments)
+                                throws Throwable {
+                            return handle.invokeWithArguments(arguments);
+                        }
+                    };
+            throwable = null;
+        } else {
+            try {
+                instrumentation = PremainAttachAccess.getInstrumentation();
+                // We need to generate a dispatcher instance that is located in a distinguished
+                // class
+                // loader to create a unique (unnamed) module to which we can open other packages
+                // to.
+                // This way, we assure that classes within Mockito's module (which might be a
+                // shared,
+                // unnamed module) do not face escalated privileges where tests might pass that
+                // would
+                // otherwise fail without Mockito's opening.
+                InjectionClassLoader classLoader =
+                        new ByteArrayClassLoader(
+                                InstrumentationMemberAccessor.class.getClassLoader(),
+                                false,
+                                Collections.emptyMap());
+                instrumentation.redefineModule(
+                        Dispatcher.class.getModule(),
+                        Collections.emptySet(),
+                        Collections.singletonMap(
+                                Dispatcher.class.getPackageName(),
+                                Collections.singleton(classLoader.getUnnamedModule())),
+                        Collections.emptyMap(),
+                        Collections.emptySet(),
+                        Collections.emptyMap());
+                dispatcher =
+                        new ByteBuddy()
+                                .subclass(Dispatcher.class)
+                                .method(named("getLookup"))
+                                .intercept(
+                                        MethodCall.invoke(MethodHandles.class.getMethod("lookup")))
+                                .method(named("getModule"))
+                                .intercept(
+                                        MethodCall.invoke(Class.class.getMethod("getModule"))
+                                                .onMethodCall(
+                                                        MethodCall.invoke(
+                                                                Object.class.getMethod(
+                                                                        "getClass"))))
+                                .method(named("setAccessible"))
+                                .intercept(
+                                        MethodCall.invoke(
+                                                        AccessibleObject.class.getMethod(
+                                                                "setAccessible", boolean.class))
+                                                .onArgument(0)
+                                                .withArgument(1))
+                                .method(named("invokeWithArguments"))
+                                .intercept(
+                                        MethodCall.invoke(
+                                                        MethodHandle.class.getMethod(
+                                                                "invokeWithArguments",
+                                                                Object[].class))
+                                                .onArgument(0)
+                                                .withArgument(1))
+                                .make()
+                                .load(classLoader, InjectionClassLoader.Strategy.INSTANCE)
+                                .getLoaded()
+                                .getConstructor()
+                                .newInstance();
+                classLoader.seal();
+                throwable = null;
+            } catch (Throwable t) {
+                instrumentation = null;
+                dispatcher = null;
+                throwable = t;
+            }
         }
         INSTRUMENTATION = instrumentation;
         DISPATCHER = dispatcher;
@@ -366,6 +402,9 @@ class InstrumentationMemberAccessor implements MemberAccessor {
     }
 
     private void assureOpen(Object module, String packageName) throws Throwable {
+        if (InlineClassFileTransformer.MOCKITO_AOT) {
+            return;
+        }
         // It would be more reliable to check if a module's package already is opened to
         // the dispatcher module from before. Unfortunately, there is no reliable check
         // for doing so since the isOpen(String, Module) method always returns true
