@@ -6,11 +6,11 @@ package org.mockito.internal.junit;
 
 import org.mockito.mock.MockCreationSettings;
 
-public class NoOpTestListener implements MockitoTestListener {
+public class NoOpTestListener<T> implements MockitoTestListener<T> {
 
     @Override
     public void testFinished(TestFinishedEvent event) {}
 
     @Override
-    public void onMockCreated(Object mock, MockCreationSettings settings) {}
+    public void onMockCreated(Object mock, MockCreationSettings<T> settings) {}
 }

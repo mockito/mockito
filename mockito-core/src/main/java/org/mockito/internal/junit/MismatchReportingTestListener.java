@@ -14,7 +14,7 @@ import org.mockito.plugins.MockitoLogger;
 /**
  * Reports stubbing argument mismatches to the supplied logger
  */
-public class MismatchReportingTestListener implements MockitoTestListener {
+public class MismatchReportingTestListener<T> implements MockitoTestListener<T> {
 
     private final MockitoLogger logger;
     private List<Object> mocks = new LinkedList<>();
@@ -36,13 +36,13 @@ public class MismatchReportingTestListener implements MockitoTestListener {
             // print unused stubbings only when test succeeds to avoid reporting multiple problems
             // and confusing users
             new ArgMismatchFinder()
-                    .getStubbingArgMismatches(createdMocks)
-                    .format(event.getTestName(), logger);
+                .getStubbingArgMismatches(createdMocks)
+                .format(event.getTestName(), logger);
         }
     }
 
     @Override
-    public void onMockCreated(Object mock, MockCreationSettings settings) {
+    public void onMockCreated(Object mock, MockCreationSettings<T> settings) {
         this.mocks.add(mock);
     }
 }
