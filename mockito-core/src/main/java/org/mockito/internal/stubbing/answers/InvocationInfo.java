@@ -90,14 +90,11 @@ public class InvocationInfo implements AbstractAwareMethod {
      * E.g:  {@code void foo()} or {@code Void bar()}
      */
     public boolean isVoid() {
-        final MockCreationSettings mockSettings =
-                MockUtil.getMockHandler(invocation.getMock()).getMockSettings();
-        Class<?> returnType =
-                GenericMetadataSupport.inferFrom(mockSettings.getTypeToMock())
-                        .resolveGenericReturnType(this.method)
-                        .rawType();
-        return returnType == Void.TYPE || returnType == Void.class;
-    }
+    // We don't need generic resolution to know if the method returns void.
+    Class<?> returnType = this.method.getReturnType();
+    return returnType == Void.TYPE || returnType == Void.class;
+}
+
 
     public String printMethodReturnType() {
         return method.getReturnType().getSimpleName();
