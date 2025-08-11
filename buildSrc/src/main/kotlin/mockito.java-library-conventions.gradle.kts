@@ -33,4 +33,14 @@ tasks {
             unix("rw-r--r--") // 0644
         }
     }
+
+    withType<Jar>().configureEach {
+        manifest {
+            val createdByProperty = project.findProperty("manifest.createdBy") as? String
+            attributes(
+                "Created-By" to (createdByProperty
+                    ?: "${System.getProperty("java.version")} (${System.getProperty("java.vendor")})")
+            )
+        }
+    }
 }
