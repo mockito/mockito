@@ -19,6 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -50,6 +51,9 @@ import org.mockito.stubbing.Answer;
  * </li>
  * <li>
  * Returns empty collection for collection-returning methods (works for most commonly used collection types)
+ * </li>
+ * <li>
+ * Returns empty sequenced collections for Java 21+ SequencedCollection, SequencedSet, and SequencedMap interfaces
  * </li>
  * <li>
  * Returns description of mock for toString() method
@@ -104,6 +108,12 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
     }
 
     Object returnValueFor(Class<?> type) {
+        Object sequencedCollection = returnValueForSequencedCollection(type);
+
+        if (sequencedCollection != null) {
+            return sequencedCollection;
+        }
+
         if (Primitives.isPrimitiveOrWrapper(type)) {
             return Primitives.defaultValue(type);
             // new instances are used instead of Collections.emptyList(), etc.
@@ -155,6 +165,20 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
         // Let's not care about the rest of collections.
 
         return returnCommonEmptyValueFor(type);
+    }
+
+    private Object returnValueForSequencedCollection(Class<?> type) {
+        String typeName = type.getName();
+
+        if (Objects.equals("java.util.SequencedCollection", typeName)) {
+            return new ArrayList<>();
+        } else if (Objects.equals("java.util.SequencedSet", typeName)) {
+            return new LinkedHashSet<>();
+        } else if (Objects.equals("java.util.SequencedMap", typeName)) {
+            return new LinkedHashMap<>();
+        }
+
+        return null;
     }
 
     /**
