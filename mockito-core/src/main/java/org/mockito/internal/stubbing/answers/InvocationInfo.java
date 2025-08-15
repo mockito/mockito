@@ -11,11 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.mockito.internal.invocation.AbstractAwareMethod;
-import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
-import org.mockito.internal.util.reflection.GenericMetadataSupport;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.mock.MockCreationSettings;
 
 public class InvocationInfo implements AbstractAwareMethod {
 
@@ -90,11 +87,10 @@ public class InvocationInfo implements AbstractAwareMethod {
      * E.g:  {@code void foo()} or {@code Void bar()}
      */
     public boolean isVoid() {
-    // We don't need generic resolution to know if the method returns void.
-    Class<?> returnType = this.method.getReturnType();
-    return returnType == Void.TYPE || returnType == Void.class;
-}
-
+        // We don't need generic resolution to know if the method returns void.
+        Class<?> returnType = this.method.getReturnType();
+        return returnType == Void.TYPE || returnType == Void.class;
+    }
 
     public String printMethodReturnType() {
         return method.getReturnType().getSimpleName();
