@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2025 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
 package org.mockito.bugs;
 
 import org.junit.Test;
@@ -23,8 +27,7 @@ public class GenericArrayMockingTest {
 
     public static class HttpDaServiceImpl extends HttpDaService<Object, Object> {}
 
-    @Mock
-    HttpDaServiceImpl daService;
+    @Mock HttpDaServiceImpl daService;
 
     public GenericArrayMockingTest() {
         MockitoAnnotations.openMocks(this); // Initializes @Mock
@@ -37,4 +40,3 @@ public class GenericArrayMockingTest {
         assertEquals(4, result.length);
     }
 }
-
