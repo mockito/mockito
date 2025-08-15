@@ -176,6 +176,33 @@ public class ReturnsEmptyValuesTest extends TestBase {
         assertEquals("seconds of empty " + fqcn, 0L, seconds);
     }
 
+    @Test
+    public void should_return_empty_sequenced_collection_on_java21() throws Exception {
+        Class<?> sequencedCollectionClass = getClassOrSkipTest("java.util.SequencedCollection");
+        Object result = values.returnValueFor(sequencedCollectionClass);
+        assertNotNull("SequencedCollection should return non-null value", result);
+        assertTrue("Should return empty collection", ((Collection<?>) result).isEmpty());
+        assertTrue("Should return ArrayList instance", result instanceof ArrayList);
+    }
+
+    @Test
+    public void should_return_empty_sequenced_set_on_java21() throws Exception {
+        Class<?> sequencedSetClass = getClassOrSkipTest("java.util.SequencedSet");
+        Object result = values.returnValueFor(sequencedSetClass);
+        assertNotNull("SequencedSet should return non-null value", result);
+        assertTrue("Should return empty set", ((Set<?>) result).isEmpty());
+        assertTrue("Should return LinkedHashSet instance", result instanceof LinkedHashSet);
+    }
+
+    @Test
+    public void should_return_empty_sequenced_map_on_java21() throws Exception {
+        Class<?> sequencedMapClass = getClassOrSkipTest("java.util.SequencedMap");
+        Object result = values.returnValueFor(sequencedMapClass);
+        assertNotNull("SequencedMap should return non-null value", result);
+        assertTrue("Should return empty map", ((Map<?, ?>) result).isEmpty());
+        assertTrue("Should return LinkedHashMap instance", result instanceof LinkedHashMap);
+    }
+
     /**
      * Tries to load the given class. If the class is not found, the complete test is skipped.
      */
