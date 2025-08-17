@@ -34,6 +34,7 @@ import net.bytebuddy.description.modifier.SynchronizationState;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy.Default;
 import net.bytebuddy.dynamic.loading.MultipleParentClassLoader;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.FieldAccessor;
@@ -272,7 +273,9 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                                     .or(hasParameters(whereAny(hasType(isPackagePrivate())))));
         }
         ClassLoadingStrategy<ClassLoader> strategy;
-        if (localMock) {
+        if (GraalImageCode.getCurrent().isDefined()) {
+            strategy = Default.WRAPPER;
+        } else if (localMock) {
             strategy = handler.classLoadingStrategy(features.mockedType);
         } else if (classLoader == MockAccess.class.getClassLoader()) {
             strategy = handler.classLoadingStrategy(InjectionBase.class);
