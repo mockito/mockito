@@ -4,7 +4,9 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeThat;
 import static org.mockito.Mockito.mock;
 
 import java.util.*;
@@ -177,8 +179,19 @@ public class ReturnsEmptyValuesTest extends TestBase {
     }
 
     @Test
-    public void should_return_empty_sequenced_collection_on_java21() throws Exception {
-        Class<?> sequencedCollectionClass = getClassOrSkipTest("java.util.SequencedCollection");
+    public void should_return_empty_sequenced_collection() throws Exception {
+        Class<?> sequencedCollectionClass;
+        try {
+            sequencedCollectionClass = Class.forName("java.util.SequencedCollection");
+        } catch (ClassNotFoundException e) {
+            sequencedCollectionClass = null;
+        }
+
+        assumeThat(
+                "SequencedCollection not available on this JVM",
+                sequencedCollectionClass,
+                notNullValue());
+
         Object result = values.returnValueFor(sequencedCollectionClass);
         assertNotNull("SequencedCollection should return non-null value", result);
         assertTrue("Should return empty collection", ((Collection<?>) result).isEmpty());
@@ -186,8 +199,16 @@ public class ReturnsEmptyValuesTest extends TestBase {
     }
 
     @Test
-    public void should_return_empty_sequenced_set_on_java21() throws Exception {
-        Class<?> sequencedSetClass = getClassOrSkipTest("java.util.SequencedSet");
+    public void should_return_empty_sequenced_set() throws Exception {
+        Class<?> sequencedSetClass;
+        try {
+            sequencedSetClass = Class.forName("java.util.SequencedSet");
+        } catch (ClassNotFoundException e) {
+            sequencedSetClass = null;
+        }
+
+        assumeThat("SequencedSet not available on this JVM", sequencedSetClass, notNullValue());
+
         Object result = values.returnValueFor(sequencedSetClass);
         assertNotNull("SequencedSet should return non-null value", result);
         assertTrue("Should return empty set", ((Set<?>) result).isEmpty());
@@ -195,8 +216,16 @@ public class ReturnsEmptyValuesTest extends TestBase {
     }
 
     @Test
-    public void should_return_empty_sequenced_map_on_java21() throws Exception {
-        Class<?> sequencedMapClass = getClassOrSkipTest("java.util.SequencedMap");
+    public void should_return_empty_sequenced_map() throws Exception {
+        Class<?> sequencedMapClass;
+        try {
+            sequencedMapClass = Class.forName("java.util.SequencedMap");
+        } catch (ClassNotFoundException e) {
+            sequencedMapClass = null;
+        }
+
+        assumeThat("SequencedMap not available on this JVM", sequencedMapClass, notNullValue());
+
         Object result = values.returnValueFor(sequencedMapClass);
         assertNotNull("SequencedMap should return non-null value", result);
         assertTrue("Should return empty map", ((Map<?, ?>) result).isEmpty());
