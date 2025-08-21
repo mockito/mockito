@@ -208,8 +208,11 @@ jobs:
         distribution: "graalvm"
         cache: gradle
 
-    - name: 3. Run GraalVM native tests
-      run: ./gradlew :mockito-integration-tests:graalvm-tests:nativeTest --stacktrace --scan
+    - name: 3. Run GraalVM native tests with metadata
+      run: ./gradlew :mockito-integration-tests:graalvm-tests:nativeTestWithMetadata --stacktrace --scan
+
+    - name: 4. Verify GraalVM metadata generation
+      run: test -f mockito-integration-tests/graalvm-tests/src/test/resources/META-INF/native-image/org.mockito/graalvm-tests/reflect-config.json
 
   #
   # Release job, only for pushes to the main development branch
