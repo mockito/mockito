@@ -28,8 +28,7 @@ graalvmNative {
     }
 
     agent {
-        // Only enable the tracing agent when the JVM vendor is GraalVM
-        enabled = System.getProperty("java.vendor", "").contains("GraalVM")
+        enabled = project.hasProperty("enableGraalTracingAgent")
         defaultMode = "standard"
 
         metadataCopy {
@@ -43,19 +42,8 @@ graalvmNative {
 tasks {
     test {
         forkEvery = 1
-    }
-
-    register("generateMetadata") {
-        group = "graalvm"
-        description = "Generate GraalVM metadata files by running tests with agent"
-        dependsOn("test")
-        finalizedBy("metadataCopy")
-    }
-
-    register("nativeTestWithMetadata") {
-        group = "graalvm"
-        description = "Run native tests using generated metadata"
-        dependsOn("generateMetadata")
-        finalizedBy("nativeTest")
+        if (project.hasProperty("enableGraalTracingAgent")) {
+            finalizedBy("metadataCopy")
+        }
     }
 }
