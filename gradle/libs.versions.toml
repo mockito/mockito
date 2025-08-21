@@ -1,5 +1,5 @@
 [versions]
-bytebuddy = "1.17.6"
+bytebuddy = "1.17.7"
 errorprone = "2.41.0"
 jacoco = "0.8.13"
 junit4 = "4.13.2"

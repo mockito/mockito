@@ -13,7 +13,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.develocity") version "4.1"
+    id("com.gradle.develocity") version "4.1.1"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
@@ -45,6 +45,7 @@ include(
     "mockito-integration-tests:osgi-tests",
     "mockito-integration-tests:programmatic-tests",
     "mockito-integration-tests:java-21-tests",
+    "mockito-integration-tests:graalvm-tests",
 )
 
 // https://developer.android.com/studio/command-line/variables#envar
