@@ -8,8 +8,4 @@ public class DummyObject {
     public String getValue() {
         return "original";
     }
-
-    public String processValue(String input) {
-        return "original-" + input;
-    }
 }
