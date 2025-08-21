@@ -214,43 +214,43 @@ jobs:
   #
   # Release job, only for pushes to the main development branch
   #
-  release:
-    permissions:
-      contents: write
-    runs-on: ubuntu-latest
-    needs: [java, android, graalvm] # all build jobs must pass before we can release
+  # release:
+  #   permissions:
+  #     contents: write
+  #   runs-on: ubuntu-latest
+  #   needs: [java, android, graalvm] # all build jobs must pass before we can release
 
-    if: github.event_name == 'push'
-        && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
-        && github.repository == 'mockito/mockito'
-        && !contains(toJSON(github.event.commits.*.message), '[skip release]')
+  #   if: github.event_name == 'push'
+  #       && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+  #       && github.repository == 'mockito/mockito'
+  #       && !contains(toJSON(github.event.commits.*.message), '[skip release]')
 
-    steps:
+  #   steps:
 
-      - name: 1. Check out code
-        uses: actions/checkout@v5 # https://github.com/actions/checkout
-        with:
-          fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
+  #     - name: 1. Check out code
+  #       uses: actions/checkout@v5 # https://github.com/actions/checkout
+  #       with:
+  #         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
-      - name: 2. Set up Java for running Gradle build
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 21
-          cache: 'gradle'
+  #     - name: 2. Set up Java for running Gradle build
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         distribution: 'zulu'
+  #         java-version: 21
+  #         cache: 'gradle'
 
-      - name: 3. Build and release
-        run: >
-          ./gradlew
-          githubRelease
-          publishToSonatype
-          closeAndReleaseStagingRepositories
-          releaseSummary
-          --info
-          --stacktrace
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
-          NEXUS_TOKEN_PWD: ${{secrets.NEXUS_TOKEN_PWD}}
-          PGP_KEY: ${{secrets.PGP_KEY}}
-          PGP_PWD: ${{secrets.PGP_PWD}}
+  #     - name: 3. Build and release
+  #       run: >
+  #         ./gradlew
+  #         githubRelease
+  #         publishToSonatype
+  #         closeAndReleaseStagingRepositories
+  #         releaseSummary
+  #         --info
+  #         --stacktrace
+  #       env:
+  #         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  #         NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
+  #         NEXUS_TOKEN_PWD: ${{secrets.NEXUS_TOKEN_PWD}}
+  #         PGP_KEY: ${{secrets.PGP_KEY}}
+  #         PGP_PWD: ${{secrets.PGP_PWD}}
