@@ -209,7 +209,7 @@ jobs:
         cache: gradle
 
     - name: 3. Run GraalVM native tests with metadata
-      run: ./gradlew :mockito-integration-tests:graalvm-tests:nativeTestWithMetadata --stacktrace --scan
+      run: ./gradlew :mockito-integration-tests:graalvm-tests:nativeTest -PenableGraalTracingAgent --stacktrace --scan
 
     - name: 4. Verify GraalVM metadata generation
       run: |
