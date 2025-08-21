@@ -28,7 +28,8 @@ graalvmNative {
     }
 
     agent {
-        enabled = true
+        // Only enable the tracing agent when the JVM vendor is GraalVM
+        enabled = System.getProperty("java.vendor", "").contains("GraalVM")
         defaultMode = "standard"
 
         metadataCopy {
