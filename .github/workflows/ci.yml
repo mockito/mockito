@@ -212,7 +212,16 @@ jobs:
       run: ./gradlew :mockito-integration-tests:graalvm-tests:nativeTestWithMetadata --stacktrace --scan
 
     - name: 4. Verify GraalVM metadata generation
-      run: test -f mockito-integration-tests/graalvm-tests/src/test/resources/META-INF/native-image/org.mockito/graalvm-tests/reflect-config.json
+      run: |
+        REFLECT_CONFIG="mockito-integration-tests/graalvm-tests/src/test/resources/META-INF/native-image/org.mockito/graalvm-tests/reflect-config.json"
+        test -f "$REFLECT_CONFIG" || {
+          echo "reflect-config.json not found at $REFLECT_CONFIG"
+          exit 1
+        }
+        grep -q "org\.mockito\.internal\.creation\.bytebuddy\.codegen\.DummyObject\$MockitoMock" "$REFLECT_CONFIG" || {
+          echo "DummyObject mock not found in reflect-config.json"
+          exit 1
+        }
 
   #
   # Release job, only for pushes to the main development branch
