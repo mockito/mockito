@@ -202,14 +202,14 @@ jobs:
         fetch-depth: '0'
 
     - name: 2. Setup GraalVM
-      uses: graalvm/setup-graalvm@7f488cf82a3629ee755e4e97342c01d6bed318fa
+      uses: graalvm/setup-graalvm@v1.3.5
       with:
         java-version: "21"
         distribution: "graalvm"
         cache: gradle
 
     - name: 3. Run GraalVM native tests with metadata
-      run: ./gradlew :mockito-integration-tests:graalvm-tests:nativeTest -PenableGraalTracingAgent --stacktrace --scan
+      run: ./gradlew :mockito-integration-tests:graalvm-tests:nativeTest -PenableGraalTracingAgent --scan
 
     - name: 4. Verify GraalVM metadata generation
       run: |
