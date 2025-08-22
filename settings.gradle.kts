@@ -45,6 +45,7 @@ include(
     "mockito-integration-tests:osgi-tests",
     "mockito-integration-tests:programmatic-tests",
     "mockito-integration-tests:java-21-tests",
+    "mockito-integration-tests:graalvm-tests",
 )
 
 // https://developer.android.com/studio/command-line/variables#envar
