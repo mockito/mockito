@@ -4,12 +4,13 @@
  */
 package org.mockito.internal.stubbing.defaultanswers;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeThat;
 import static org.mockito.Mockito.mock;
 
 import java.util.*;
 
-import org.junit.Assume;
 import org.junit.Test;
 import org.mockito.invocation.Invocation;
 import org.mockitoutil.TestBase;
@@ -111,9 +112,11 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
     private void verify_empty_Optional_is_returned(String streamFqcn, String optionalFqcn)
             throws Exception {
-        Class<?> streamType = getClassOrSkipTest(streamFqcn);
-
         // given
+        assumeThat("JDK 8+ required for Optional", isJavaVersionAtLeast(8), is(true));
+
+        Class<?> streamType = Class.forName(streamFqcn);
+
         Object stream = mock(streamType);
         Object optional = streamType.getMethod("findAny").invoke(stream);
         assertNotNull(optional);
@@ -150,7 +153,9 @@ public class ReturnsEmptyValuesTest extends TestBase {
 
     private void verify_empty_Stream_is_returned(String streamFqcn) throws Exception {
         // given
-        Class<?> streamType = getClassOrSkipTest(streamFqcn);
+        assumeThat("JDK 8+ required for Stream", isJavaVersionAtLeast(8), is(true));
+
+        Class<?> streamType = Class.forName(streamFqcn);
 
         // when
         Object stream = values.returnValueFor(streamType);
@@ -163,8 +168,9 @@ public class ReturnsEmptyValuesTest extends TestBase {
     @Test
     public void should_return_empty_duration() throws Exception {
         // given
+        assumeThat("JDK 8+ required for Duration", isJavaVersionAtLeast(8), is(true));
         final String fqcn = "java.time.Duration";
-        final Class<?> durationClass = getClassOrSkipTest(fqcn);
+        Class<?> durationClass = Class.forName(fqcn);
 
         // when
         final Object duration = values.returnValueFor(durationClass);
@@ -177,8 +183,11 @@ public class ReturnsEmptyValuesTest extends TestBase {
     }
 
     @Test
-    public void should_return_empty_sequenced_collection_on_java21() throws Exception {
-        Class<?> sequencedCollectionClass = getClassOrSkipTest("java.util.SequencedCollection");
+    public void should_return_empty_sequenced_collection() throws Exception {
+        assumeThat("JDK 21+ required for SequencedCollection", isJavaVersionAtLeast(21), is(true));
+
+        Class<?> sequencedCollectionClass = Class.forName("java.util.SequencedCollection");
+
         Object result = values.returnValueFor(sequencedCollectionClass);
         assertNotNull("SequencedCollection should return non-null value", result);
         assertTrue("Should return empty collection", ((Collection<?>) result).isEmpty());
@@ -186,8 +195,11 @@ public class ReturnsEmptyValuesTest extends TestBase {
     }
 
     @Test
-    public void should_return_empty_sequenced_set_on_java21() throws Exception {
-        Class<?> sequencedSetClass = getClassOrSkipTest("java.util.SequencedSet");
+    public void should_return_empty_sequenced_set() throws Exception {
+        assumeThat("JDK 21+ required for SequencedSet", isJavaVersionAtLeast(21), is(true));
+
+        Class<?> sequencedSetClass = Class.forName("java.util.SequencedSet");
+
         Object result = values.returnValueFor(sequencedSetClass);
         assertNotNull("SequencedSet should return non-null value", result);
         assertTrue("Should return empty set", ((Set<?>) result).isEmpty());
@@ -195,8 +207,11 @@ public class ReturnsEmptyValuesTest extends TestBase {
     }
 
     @Test
-    public void should_return_empty_sequenced_map_on_java21() throws Exception {
-        Class<?> sequencedMapClass = getClassOrSkipTest("java.util.SequencedMap");
+    public void should_return_empty_sequenced_map() throws Exception {
+        assumeThat("JDK 21+ required for SequencedMap", isJavaVersionAtLeast(21), is(true));
+
+        Class<?> sequencedMapClass = Class.forName("java.util.SequencedMap");
+
         Object result = values.returnValueFor(sequencedMapClass);
         assertNotNull("SequencedMap should return non-null value", result);
         assertTrue("Should return empty map", ((Map<?, ?>) result).isEmpty());
@@ -204,14 +219,12 @@ public class ReturnsEmptyValuesTest extends TestBase {
     }
 
     /**
-     * Tries to load the given class. If the class is not found, the complete test is skipped.
+     * Checks if the current Java version is at least the specified version.
      */
-    private Class<?> getClassOrSkipTest(String className) {
-        try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            Assume.assumeNoException("JVM does not support " + className, e);
-            return null;
-        }
+    private boolean isJavaVersionAtLeast(int majorVersion) {
+        String javaVersion = System.getProperty("java.version");
+        String[] versionParts = javaVersion.split("\\.");
+        int currentMajorVersion = Integer.parseInt(versionParts[0]);
+        return currentMajorVersion >= majorVersion;
     }
 }
