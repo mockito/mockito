@@ -11,6 +11,6 @@ import org.mockito.listeners.MockCreationListener;
  * If we ever want to expose this type publicly, it should not extend MockCreationListener
  * because we want our listeners to be single-method interfaces for easier use and evolution.
  */
-public interface MockitoTestListener extends MockCreationListener {
+public interface MockitoTestListener<T> extends MockCreationListener<T> {
     void testFinished(TestFinishedEvent event);
 }

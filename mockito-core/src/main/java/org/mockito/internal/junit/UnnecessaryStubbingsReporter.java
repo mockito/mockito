@@ -19,28 +19,28 @@ import org.mockito.mock.MockCreationSettings;
 /**
  * Reports unnecessary stubbings
  */
-public class UnnecessaryStubbingsReporter implements MockCreationListener {
+public class UnnecessaryStubbingsReporter<T> implements MockCreationListener<T> {
 
-    private final List<Object> mocks = new LinkedList<Object>();
+    private final List<Object> mocks = new LinkedList<>();
 
     public void validateUnusedStubs(Class<?> testClass, RunNotifier notifier) {
         Collection<Invocation> unused =
-                new UnusedStubbingsFinder().getUnusedStubbingsByLocation(mocks);
+            new UnusedStubbingsFinder().getUnusedStubbingsByLocation(mocks);
         if (unused.isEmpty()) {
             return; // whoa!!! All stubbings were used!
         }
 
         // Oups, there are unused stubbings
         Description unnecessaryStubbings =
-                Description.createTestDescription(testClass, "unnecessary Mockito stubbings");
+            Description.createTestDescription(testClass, "unnecessary Mockito stubbings");
         notifier.fireTestFailure(
-                new Failure(
-                        unnecessaryStubbings,
-                        Reporter.formatUnncessaryStubbingException(testClass, unused)));
+            new Failure(
+                unnecessaryStubbings,
+                Reporter.formatUnncessaryStubbingException(testClass, unused)));
     }
 
     @Override
-    public void onMockCreated(Object mock, MockCreationSettings settings) {
+    public void onMockCreated(Object mock, MockCreationSettings<T> settings) {
         mocks.add(mock);
     }
 }
