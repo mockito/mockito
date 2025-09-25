@@ -13,7 +13,7 @@ gradleplugin-aQute-bnd = "7.1.0"
 gradleplugin-errorprone = "4.3.0"
 gradleplugin-spotless = "8.0.0"
 
-gradleplugin-android = "7.4.2"
+gradleplugin-android = "8.10.0"
 
 [libraries]
 android-junit = { module = "androidx.test.ext:junit", version = "1.2.1" }
