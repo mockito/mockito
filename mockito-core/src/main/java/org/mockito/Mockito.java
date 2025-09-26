@@ -2423,6 +2423,107 @@ public class Mockito extends ArgumentMatchers {
     }
 
     /**
+     * Creates a thread-local mock controller for all static methods of the given class or interface.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
+     * classes used by custom class loaders used to execute the block with the mocked class. A mock
+     * maker might forbid mocking static methods of know classes that are known to cause problems.
+     * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
+     * explicitly forbidden.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return mock controller
+     * @since 5.21.0
+     */
+    @SafeVarargs
+    public static <T> MockedStatic<T> mockStatic(T... reified) {
+        return mockStatic(withSettings(), reified);
+    }
+
+    /**
+     * Creates a thread-local mock controller for all static methods of the given class or interface.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
+     * classes used by custom class loaders used to execute the block with the mocked class. A mock
+     * maker might forbid mocking static methods of know classes that are known to cause problems.
+     * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
+     * explicitly forbidden.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param defaultAnswer the default answer when invoking static methods.
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return mock controller
+     * @since 5.21.0
+     */
+    @SafeVarargs
+    public static <T> MockedStatic<T> mockStatic(
+            @SuppressWarnings("rawtypes") Answer defaultAnswer, T... reified) {
+        return mockStatic(withSettings().defaultAnswer(defaultAnswer), reified);
+    }
+
+    /**
+     * Creates a thread-local mock controller for all static methods of the given class or interface.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
+     * classes used by custom class loaders used to execute the block with the mocked class. A mock
+     * maker might forbid mocking static methods of know classes that are known to cause problems.
+     * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
+     * explicitly forbidden.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param name the name of the mock to use in error messages.
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return mock controller
+     * @since 5.21.0
+     */
+    @SafeVarargs
+    public static <T> MockedStatic<T> mockStatic(String name, T... reified) {
+        return mockStatic(withSettings().name(name).defaultAnswer(RETURNS_DEFAULTS), reified);
+    }
+
+    /**
+     * Creates a thread-local mock controller for all static methods of the given class or interface.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * <b>Note</b>: We recommend against mocking static methods of classes in the standard library or
+     * classes used by custom class loaders used to execute the block with the mocked class. A mock
+     * maker might forbid mocking static methods of know classes that are known to cause problems.
+     * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
+     * explicitly forbidden.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param mockSettings the settings to use where only name and default answer are considered.
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return mock controller
+     * @since 5.21.0
+     */
+    @SafeVarargs
+    public static <T> MockedStatic<T> mockStatic(MockSettings mockSettings, T... reified) {
+        if (reified == null || reified.length > 0) {
+            throw new IllegalArgumentException(
+                    "Please don't pass any values here. Java will detect class automagically.");
+        }
+
+        return mockStatic(getClassOf(reified), mockSettings);
+    }
+
+    /**
      * Creates a thread-local mock controller for all constructions of the given class.
      * The returned object's {@link MockedConstruction#close()} method must be called upon completing the
      * test or the mock will remain active on the current thread.
@@ -2552,6 +2653,129 @@ public class Mockito extends ArgumentMatchers {
             Function<MockedConstruction.Context, MockSettings> mockSettingsFactory,
             MockedConstruction.MockInitializer<T> mockInitializer) {
         return MOCKITO_CORE.mockConstruction(classToMock, mockSettingsFactory, mockInitializer);
+    }
+
+    /**
+     * Creates a thread-local mock controller for all constructions of the given class.
+     * The returned object's {@link MockedConstruction#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return mock controller
+     * @since 5.21.0
+     */
+    @SafeVarargs
+    public static <T> MockedConstruction<T> mockConstruction(T... reified) {
+        return mockConstruction(index -> withSettings(), (mock, context) -> {}, reified);
+    }
+
+    /**
+     * Creates a thread-local mock controller for all constructions of the given class.
+     * The returned object's {@link MockedConstruction#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param mockInitializer a callback to prepare the methods on a mock after its instantiation.
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return mock controller
+     * @since 5.21.0
+     */
+    @SafeVarargs
+    public static <T> MockedConstruction<T> mockConstruction(
+            MockedConstruction.MockInitializer<T> mockInitializer, T... reified) {
+        return mockConstruction(withSettings(), mockInitializer, reified);
+    }
+
+    /**
+     * Creates a thread-local mock controller for all constructions of the given class.
+     * The returned object's {@link MockedConstruction#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param mockSettings the mock settings to use.
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return mock controller
+     * @since 5.21.0
+     */
+    @SafeVarargs
+    public static <T> MockedConstruction<T> mockConstruction(
+            MockSettings mockSettings, T... reified) {
+        return mockConstruction(context -> mockSettings, reified);
+    }
+
+    /**
+     * Creates a thread-local mock controller for all constructions of the given class.
+     * The returned object's {@link MockedConstruction#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param mockSettingsFactory the mock settings to use.
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return mock controller
+     * @since 5.21.0
+     */
+    @SafeVarargs
+    public static <T> MockedConstruction<T> mockConstruction(
+            Function<MockedConstruction.Context, MockSettings> mockSettingsFactory, T... reified) {
+        return mockConstruction(mockSettingsFactory, (mock, context) -> {}, reified);
+    }
+
+    /**
+     * Creates a thread-local mock controller for all constructions of the given class.
+     * The returned object's {@link MockedConstruction#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param mockSettings the settings to use.
+     * @param mockInitializer a callback to prepare the methods on a mock after its instantiation.
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return mock controller
+     * @since 5.21.0
+     */
+    @SafeVarargs
+    public static <T> MockedConstruction<T> mockConstruction(
+            MockSettings mockSettings,
+            MockedConstruction.MockInitializer<T> mockInitializer,
+            T... reified) {
+        return mockConstruction(index -> mockSettings, mockInitializer, reified);
+    }
+
+    /**
+     * Creates a thread-local mock controller for all constructions of the given class.
+     * The returned object's {@link MockedConstruction#close()} method must be called upon completing the
+     * test or the mock will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param mockSettingsFactory a function to create settings to use.
+     * @param mockInitializer a callback to prepare the methods on a mock after its instantiation.
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to mock.
+     * @return mock controller
+     * @since 5.21.0
+     */
+    @SafeVarargs
+    public static <T> MockedConstruction<T> mockConstruction(
+            Function<MockedConstruction.Context, MockSettings> mockSettingsFactory,
+            MockedConstruction.MockInitializer<T> mockInitializer,
+            T... reified) {
+        if (reified == null || reified.length > 0) {
+            throw new IllegalArgumentException(
+                    "Please don't pass any values here. Java will detect class automagically.");
+        }
+
+        return mockConstruction(getClassOf(reified), mockSettingsFactory, mockInitializer);
     }
 
     /**
