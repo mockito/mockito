@@ -29,6 +29,9 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Future;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -161,7 +164,12 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             return Duration.ZERO;
         } else if (type == Period.class) {
             return Period.ZERO;
+        } else if (type == CompletableFuture.class
+                || type == CompletionStage.class
+                || type == Future.class) {
+            return CompletableFuture.completedFuture(null);
         }
+
         // Let's not care about the rest of collections.
 
         return returnCommonEmptyValueFor(type);
