@@ -1,6 +1,6 @@
 [versions]
 bytebuddy = "1.17.7"
-errorprone = "2.41.0"
+errorprone = "2.42.0"
 jacoco = "0.8.13"
 junit4 = "4.13.2"
 junit-jupiter = "5.13.4"
@@ -11,14 +11,14 @@ gradleplugin-test-logger = "4.0.0"
 gradleplugin-animal-sniffer = "2.0.1"
 gradleplugin-aQute-bnd = "7.1.0"
 gradleplugin-errorprone = "4.3.0"
-gradleplugin-spotless = "7.2.1"
+gradleplugin-spotless = "8.0.0"
 
 gradleplugin-android = "7.4.2"
 
 [libraries]
 android-junit = { module = "androidx.test.ext:junit", version = "1.2.1" }
 android-runner = { module = "androidx.test:runner", version = "1.7.0" }
-assertj = { module = "org.assertj:assertj-core", version = "3.27.4" }
+assertj = { module = "org.assertj:assertj-core", version = "3.27.6" }
 autoservice = { module = "com.google.auto.service:auto-service", version = "1.1.1" }
 bnd-gradle = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref = "gradleplugin-aQute-bnd" }
 bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }

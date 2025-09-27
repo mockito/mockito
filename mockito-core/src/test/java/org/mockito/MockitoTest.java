@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
@@ -237,5 +238,197 @@ public class MockitoTest {
                         })
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageStartingWith("Please don't pass any values here");
+    }
+
+    @Test
+    public void ensure_reified_mocked_static_can_be_called_without_parameters() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+
+        try (MockedStatic<Dummy> mockedStatic = Mockito.mockStatic()) {
+            mockedStatic.when(Dummy::getValue).thenReturn("stub");
+            assertEquals("stub", Dummy.getValue());
+        }
+    }
+
+    @Test
+    public void ensure_reified_mocked_static_can_be_called_with_default_answer() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+
+        try (MockedStatic<Dummy> ignored = Mockito.mockStatic(Answers.CALLS_REAL_METHODS)) {
+            assertEquals("value", Dummy.getValue());
+        }
+    }
+
+    @Test
+    public void ensure_reified_mocked_static_can_be_called_with_name() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+
+        try (MockedStatic<Dummy> mockedStatic = Mockito.mockStatic("name")) {
+            assertThatThrownBy(() -> mockedStatic.verify(Dummy::getValue))
+                    .hasMessageContaining("name.getValue()");
+        }
+    }
+
+    @Test
+    public void ensure_reified_mocked_static_can_be_called_with_settings() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+        MockSettingsImpl<Dummy> settings = (MockSettingsImpl<Dummy>) Mockito.withSettings();
+
+        try (MockedStatic<Dummy> mockedStatic = Mockito.mockStatic(settings)) {
+            mockedStatic.when(Dummy::getValue).thenReturn("stub");
+            assertEquals("stub", Dummy.getValue());
+        }
+    }
+
+    @Test
+    @SuppressWarnings({"resource", "DataFlowIssue"})
+    public void ensure_reified_mocked_static_should_not_be_called_with_null() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+        MockSettingsImpl<Dummy> settings = (MockSettingsImpl<Dummy>) Mockito.withSettings();
+
+        assertThatThrownBy(() -> Mockito.mockStatic(settings, (Dummy[]) null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageStartingWith("Please don't pass any values here");
+    }
+
+    @Test
+    @SuppressWarnings({"resource"})
+    public void ensure_reified_mocked_static_should_not_be_called_with_parameters() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+        MockSettingsImpl<Dummy> settings = (MockSettingsImpl<Dummy>) Mockito.withSettings();
+
+        assertThatThrownBy(() -> Mockito.mockStatic(settings, new Dummy[] {new Dummy()}))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageStartingWith("Please don't pass any values here");
+    }
+
+    @Test
+    public void ensure_reified_mocked_construction_can_be_called_without_parameters() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+
+        try (MockedConstruction<Dummy> mockedConstruction = Mockito.mockConstruction()) {
+            final Dummy dummy = new Dummy();
+            final Dummy constructed = mockedConstruction.constructed().get(0);
+
+            Mockito.when(constructed.getAnswer()).thenReturn(1);
+            assertEquals(1, dummy.getAnswer());
+        }
+    }
+
+    @Test
+    public void ensure_reified_mocked_construction_can_be_called_with_initializer() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+
+        try (MockedConstruction<Dummy> ignored =
+                Mockito.mockConstruction(
+                        (mock, context) -> Mockito.when(mock.getAnswer()).thenReturn(1))) {
+            final Dummy dummy = new Dummy();
+
+            assertEquals(1, dummy.getAnswer());
+        }
+    }
+
+    @Test
+    public void ensure_reified_mocked_construction_can_be_called_with_settings() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+        MockSettingsImpl<Dummy> settings = (MockSettingsImpl<Dummy>) Mockito.withSettings();
+
+        try (MockedConstruction<Dummy> mockedConstruction = Mockito.mockConstruction(settings)) {
+            final Dummy dummy = new Dummy();
+            final Dummy constructed = mockedConstruction.constructed().get(0);
+
+            Mockito.when(constructed.getAnswer()).thenReturn(1);
+            assertEquals(1, dummy.getAnswer());
+        }
+    }
+
+    @Test
+    public void ensure_reified_mocked_construction_can_be_called_with_settings_factory() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+        MockSettingsImpl<Dummy> settings = (MockSettingsImpl<Dummy>) Mockito.withSettings();
+
+        try (MockedConstruction<Dummy> mockedConstruction =
+                Mockito.mockConstruction(context -> settings)) {
+            final Dummy dummy = new Dummy();
+            final Dummy constructed = mockedConstruction.constructed().get(0);
+
+            Mockito.when(constructed.getAnswer()).thenReturn(1);
+            assertEquals(1, dummy.getAnswer());
+        }
+    }
+
+    @Test
+    public void ensure_reified_mocked_construction_can_be_called_with_settings_and_initializer() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+        MockSettingsImpl<Dummy> settings = (MockSettingsImpl<Dummy>) Mockito.withSettings();
+
+        try (MockedConstruction<Dummy> ignored =
+                Mockito.mockConstruction(
+                        settings,
+                        (mock, context) -> Mockito.when(mock.getAnswer()).thenReturn(1))) {
+            final Dummy dummy = new Dummy();
+
+            assertEquals(1, dummy.getAnswer());
+        }
+    }
+
+    @Test
+    public void ensure_reified_mocked_construction_can_be_called_with_factory_and_initializer() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+        MockSettingsImpl<Dummy> settings = (MockSettingsImpl<Dummy>) Mockito.withSettings();
+
+        try (MockedConstruction<Dummy> ignored =
+                Mockito.mockConstruction(
+                        context -> settings,
+                        (mock, context) -> Mockito.when(mock.getAnswer()).thenReturn(1))) {
+            final Dummy dummy = new Dummy();
+
+            assertEquals(1, dummy.getAnswer());
+        }
+    }
+
+    @Test
+    @SuppressWarnings({"resource", "DataFlowIssue"})
+    public void ensure_reified_mocked_construction_should_not_be_called_with_null() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+        MockSettingsImpl<Dummy> settings = (MockSettingsImpl<Dummy>) Mockito.withSettings();
+
+        assertThatThrownBy(
+                        () ->
+                                Mockito.mockConstruction(
+                                        context -> settings,
+                                        (mock, context) ->
+                                                Mockito.when(mock.getAnswer()).thenReturn(1),
+                                        (Dummy[]) null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageStartingWith("Please don't pass any values here");
+    }
+
+    @Test
+    @SuppressWarnings({"resource"})
+    public void ensure_reified_mocked_construction_should_not_be_called_with_parameters() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineMockMaker.class));
+        MockSettingsImpl<Dummy> settings = (MockSettingsImpl<Dummy>) Mockito.withSettings();
+
+        assertThatThrownBy(
+                        () ->
+                                Mockito.mockConstruction(
+                                        context -> settings,
+                                        (mock, context) ->
+                                                Mockito.when(mock.getAnswer()).thenReturn(1),
+                                        new Dummy[] {new Dummy()}))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageStartingWith("Please don't pass any values here");
+    }
+
+    private static final class Dummy {
+
+        public static String getValue() {
+            return "value";
+        }
+
+        public int getAnswer() {
+            return 42;
+        }
     }
 }

@@ -84,11 +84,20 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type[] arguments = parameterizedType.getActualTypeArguments();
-            if (arguments.length == 1) {
-                if (arguments[0] instanceof Class<?>) {
-                    return (Class<?>) arguments[0];
-                }
+            if (arguments.length != 1) {
+                throw new IllegalArgumentException(
+                        "Incorrect number of type arguments for "
+                                + name
+                                + " of type "
+                                + sort
+                                + ": expected 1 but received "
+                                + arguments.length);
             }
+
+            return (Class<?>)
+                    (arguments[0] instanceof Class<?>
+                            ? arguments[0]
+                            : ((ParameterizedType) arguments[0]).getRawType());
         }
         throw new MockitoException(
                 join(
@@ -99,6 +108,6 @@ public class MockAnnotationProcessor implements FieldAnnotationProcessor<Mock> {
                         "",
                         "@Mock " + sort + "<Sample>",
                         "",
-                        "as the type parameter. If the type is itself parameterized, it should be specified as raw type."));
+                        "as the type parameter."));
     }
 }
