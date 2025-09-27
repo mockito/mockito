@@ -17,9 +17,17 @@ import static org.mockito.Mockito.mock;
 
 public class ReturnsEmptyValuesFutureTest {
 
-    interface ReturnFuture { Future<String> f(); }
-    interface ReturnCompletableFuture { CompletableFuture<Void> v(); }
-    interface ReturnCompletionStage { CompletionStage<Integer> s(); }
+    interface ReturnFuture {
+        Future<String> f();
+    }
+
+    interface ReturnCompletableFuture {
+        CompletableFuture<Void> v();
+    }
+
+    interface ReturnCompletionStage {
+        CompletionStage<Integer> s();
+    }
 
     @Test
     public void returnsCompletedFuture_forFuture() throws Exception {

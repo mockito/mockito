@@ -165,8 +165,8 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
         } else if (type == Period.class) {
             return Period.ZERO;
         } else if (type == CompletableFuture.class
-            || type == CompletionStage.class
-            || type == Future.class) {
+                || type == CompletionStage.class
+                || type == Future.class) {
             return CompletableFuture.completedFuture(null);
         }
 
