@@ -7,9 +7,13 @@ package org.mockito.internal.stubbing.defaultanswers;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.mock;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Future;
 
 import org.junit.Test;
 import org.mockito.invocation.Invocation;
@@ -226,5 +230,44 @@ public class ReturnsEmptyValuesTest extends TestBase {
         String[] versionParts = javaVersion.split("\\.");
         int currentMajorVersion = Integer.parseInt(versionParts[0]);
         return currentMajorVersion >= majorVersion;
+    }
+
+    interface ReturnFuture {
+        Future<String> f();
+    }
+
+    interface ReturnCompletableFuture {
+        CompletableFuture<Void> v();
+    }
+
+    interface ReturnCompletionStage {
+        CompletionStage<Integer> s();
+    }
+
+    @Test
+    public void returnsCompletedFuture_forFuture() throws Exception {
+        ReturnFuture m = mock(ReturnFuture.class);
+        Future<String> fut = m.f();
+        assertNotNull(fut);
+        assertTrue(fut.isDone());
+        assertNull(fut.get());
+    }
+
+    @Test
+    public void returnsCompletedFuture_forCompletableFuture() {
+        ReturnCompletableFuture m = mock(ReturnCompletableFuture.class);
+        CompletableFuture<Void> fut = m.v();
+        assertNotNull(fut);
+        assertTrue(fut.isDone());
+        assertDoesNotThrow(fut::join);
+    }
+
+    @Test
+    public void returnsCompletedFuture_forCompletionStage() {
+        ReturnCompletionStage m = mock(ReturnCompletionStage.class);
+        CompletionStage<Integer> st = m.s();
+        assertNotNull(st);
+        assertTrue(st.toCompletableFuture().isDone());
+        assertNull(st.toCompletableFuture().join());
     }
 }
