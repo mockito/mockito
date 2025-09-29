@@ -58,24 +58,38 @@ class AndroidTempFileLocator {
     }
 
     private static File[] guessPath(String input) {
+        // We'll store matching directories in this list
         List<File> results = new ArrayList<File>();
+
+        // Split the input into separate paths and loop through each one
         for (String potential : splitPathList(input)) {
+
+            // Only proceed if the path starts with "/data/app/"
             if (!potential.startsWith("/data/app/")) {
                 continue;
             }
             int start = "/data/app/".length();
             int end = potential.lastIndexOf(".apk");
+
+            // If the file doesn't end exactly with ".apk", skip this path
             if (end != potential.length() - 4) {
                 continue;
             }
+
+            // Some paths have a dash before ".apk" (e.g. "com.example-1.apk");
+            // if there's a dash, we set 'end' to that dash index instead
             int dash = potential.indexOf("-");
             if (dash != -1) {
                 end = dash;
             }
             String packageName = potential.substring(start, end);
             File dataDir = new File("/data/data/" + packageName);
+
             if (isWritableDirectory(dataDir)) {
                 File cacheDir = new File(dataDir, "cache");
+
+                // If the cache directory exists or can be created,
+                // and is also writable, then add it to the results
                 if (fileOrDirExists(cacheDir) || cacheDir.mkdir()) {
                     if (isWritableDirectory(cacheDir)) {
                         results.add(cacheDir);
@@ -83,6 +97,8 @@ class AndroidTempFileLocator {
                 }
             }
         }
+
+        // Convert our list of matching directories to an array and return
         return results.toArray(new File[results.size()]);
     }
 
