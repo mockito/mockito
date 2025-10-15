@@ -1,0 +1,13 @@
+:root {
+    /* Text colors for body and block elements */
+    --body-text-color: #333333;
+    /* Colors for navigation bar and table captions */
+    --navbar-background-color: #474747;
+    /* Background and text colors for selected tabs and navigation items */
+    --selected-background-color: #EAF9DD;
+    /* Text color for page title */
+    --title-color: #333333;
+    /* Text colors for links */
+    --link-color: #333333;
+    --link-color-active: #82a54d;
+}
