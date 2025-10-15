@@ -16,6 +16,9 @@
 
      See also https://github.com/mockito/mockito/issues/903
      -->
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value="module\-info\.java$" />
+    </module>
     <module name="NewlineAtEndOfFile"/>
     <module name="RegexpSingleline">
         <!-- \s matches whitespace character, $ matches end of line. -->
@@ -32,4 +35,3 @@
         <property name="fileExtensions" value="java"/>
     </module>
 </module>
-
