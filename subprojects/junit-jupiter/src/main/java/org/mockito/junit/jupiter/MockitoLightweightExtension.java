@@ -26,59 +26,64 @@ import org.mockito.quality.Strictness;
 
 public class MockitoLightweightExtension implements BeforeEachCallback, AfterEachCallback {
     private static final ExtensionContext.Namespace MOCKITO = create("org.mockito");
-
-    private static final String SESSION = "session", MOCKS = "mocks";
-
-    @SuppressWarnings("rawtypes")
-    private static final MockSettingsImpl SETTING = new MockSettingsImpl();
-
-    private static final Field field;
-
-    static {
-        try {
-            field = DefaultMockitoSession.class.getDeclaredField("listener");
-            field.setAccessible(true);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final String SESSION = "session";
+    private static final String MOCKS = "mocks";
+    private static final String LISTENER = "listener";
+    private static final MockSettingsImpl<?> SETTING = new MockSettingsImpl<>();
+    private static final Field listenerField = makeListenerAccessible();
 
     @Override
     public void beforeEach(final ExtensionContext context) throws Exception {
-        var session =
-                Mockito.mockitoSession()
-                        .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
-                        .strictness(Strictness.STRICT_STUBS)
-                        .startMocking();
+        var session = Mockito.mockitoSession()
+                .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
+                .strictness(Strictness.STRICT_STUBS)
+                .startMocking();
 
-        var listener = (UniversalTestListener) field.get(session);
+        var listener = (UniversalTestListener) listenerField.get(session);
         for (var instance : context.getRequiredTestInstances().getAllInstances()) {
             listen(instance, listener);
         }
 
-        context.getStore(MOCKITO).put(MOCKS, new HashSet<>());
-        context.getStore(MOCKITO).put(SESSION, session);
+        var store = context.getStore(MOCKITO);
+        store.put(MOCKS, new HashSet<>());
+        store.put(SESSION, session);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void afterEach(ExtensionContext context) {
-        context.getStore(MOCKITO)
-                .remove(MOCKS, Set.class)
-                .forEach(mock -> ((ScopedMock) mock).closeOnDemand());
-        context.getStore(MOCKITO)
-                .remove(SESSION, MockitoSession.class)
+        var store = context.getStore(MOCKITO);
+        store.remove(MOCKS, Set.class).forEach(mock -> ((ScopedMock) mock).closeOnDemand());
+        store.remove(SESSION, MockitoSession.class)
                 .finishMocking(context.getExecutionException().orElse(null));
     }
 
-    private void listen(Object instance, UniversalTestListener listener)
-            throws IllegalAccessException {
+    @SuppressWarnings("java:S3011")
+    private void listen(Object instance, UniversalTestListener listener) throws IllegalAccessException {
         for (var field : instance.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             var maybeMock = field.get(instance);
             if (MockUtil.isMock((maybeMock))) {
                 listener.onMockCreated(maybeMock, SETTING);
             }
+        }
+    }
+
+    /**
+     * This is unfortunately the only way to retrieve the listener.
+     *
+     */
+    @SuppressWarnings("java:S3011")
+    private static Field makeListenerAccessible() {
+        try {
+            var listener = DefaultMockitoSession.class.getDeclaredField(LISTENER);
+            listener.setAccessible(true);
+            return listener;
+        } catch (Exception e) {
+            throw new IllegalStateException(
+                    "Unable to retrieve %s %s field from %s"
+                            .formatted(UniversalTestListener.class, LISTENER, DefaultMockitoSession.class),
+                    e);
         }
     }
 }
