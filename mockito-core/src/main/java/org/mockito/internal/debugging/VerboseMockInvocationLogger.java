@@ -9,6 +9,7 @@ import java.io.PrintStream;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
+import org.mockito.internal.verification.VerificationPhase;
 
 /**
  * Logs all invocations to standard output.
@@ -32,6 +33,9 @@ public class VerboseMockInvocationLogger implements InvocationListener {
 
     @Override
     public void reportInvocation(MethodInvocationReport methodInvocationReport) {
+        if (VerificationPhase.isActive()) {
+            return;
+        }
         printHeader();
         printStubInfo(methodInvocationReport);
         printInvocation(methodInvocationReport.getInvocation());
@@ -85,5 +89,18 @@ public class VerboseMockInvocationLogger implements InvocationListener {
 
     private void printlnIndented(String message) {
         printStream.println("   " + message);
+    }
+
+    private static boolean isVerificationCallbackContext() {
+        if (!VerificationPhase.isActive()) {
+            return false;
+        }
+        for (StackTraceElement e : new Throwable().getStackTrace()) {
+            String cn = e.getClassName();
+            if (cn.startsWith("org.mockito.internal.verification")) {
+                return true;
+            }
+        }
+        return false;
     }
 }
