@@ -11,6 +11,8 @@ import org.mockito.listeners.VerificationListener;
 import org.mockito.verification.VerificationEvent;
 import org.mockito.verification.VerificationMode;
 
+import org.mockito.internal.verification.VerificationPhase;
+
 public class MockAwareVerificationMode implements VerificationMode {
 
     private final Object mock;
@@ -32,6 +34,8 @@ public class MockAwareVerificationMode implements VerificationMode {
         } catch (RuntimeException | Error e) {
             notifyListeners(new VerificationEventImpl(mock, mode, data, e));
             throw e;
+        } finally {
+            VerificationPhase.exit();
         }
     }
 

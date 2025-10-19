@@ -14,6 +14,8 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockCreationSettings;
 
+import org.mockito.internal.verification.VerificationPhase;
+
 /**
  * Handler, that call all listeners wanted for this mock, before delegating it
  * to the parameterized handler.
@@ -30,6 +32,10 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
 
     @Override
     public Object handle(Invocation invocation) throws Throwable {
+        if (VerificationPhase.isActive()) {
+            return mockHandler.handle(invocation);
+        }
+
         try {
             Object returnedValue = mockHandler.handle(invocation);
             notifyMethodCall(invocation, returnedValue);
@@ -41,6 +47,9 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
     }
 
     private void notifyMethodCall(Invocation invocation, Object returnValue) {
+        if (VerificationPhase.isActive()) {
+            return;
+        }
         for (InvocationListener listener : invocationListeners) {
             try {
                 listener.reportInvocation(
@@ -52,6 +61,9 @@ class InvocationNotifierHandler<T> implements MockHandler<T> {
     }
 
     private void notifyMethodCallException(Invocation invocation, Throwable exception) {
+        if (VerificationPhase.isActive()) {
+            return;
+        }
         for (InvocationListener listener : invocationListeners) {
             try {
                 listener.reportInvocation(

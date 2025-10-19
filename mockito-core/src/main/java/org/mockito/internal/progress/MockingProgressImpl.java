@@ -26,6 +26,8 @@ import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.verification.VerificationMode;
 import org.mockito.verification.VerificationStrategy;
 
+import org.mockito.internal.verification.VerificationPhase;
+
 @SuppressWarnings("unchecked")
 public class MockingProgressImpl implements MockingProgress {
 
@@ -77,6 +79,7 @@ public class MockingProgressImpl implements MockingProgress {
 
     @Override
     public void verificationStarted(VerificationMode verify) {
+        VerificationPhase.enter();
         validateState();
         resetOngoingStubbing();
         verificationMode = new Localized(verify);
@@ -155,6 +158,7 @@ public class MockingProgressImpl implements MockingProgress {
         stubbingInProgress = null;
         verificationMode = null;
         getArgumentMatcherStorage().reset();
+        VerificationPhase.clear();
     }
 
     @Override
