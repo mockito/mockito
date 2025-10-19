@@ -7,8 +7,8 @@ plugins.withType(JavaPlugin::class) {
     val javaReleaseVersion = 11
 
     configure<JavaPluginExtension> {
+        // Keep explicit source level for IDEs, but rely on --release for compilation
         sourceCompatibility = JavaVersion.toVersion(javaReleaseVersion)
-        targetCompatibility = JavaVersion.toVersion(javaReleaseVersion)
     }
 
     tasks {
@@ -16,6 +16,8 @@ plugins.withType(JavaPlugin::class) {
             // I don't believe those warnings add value given modern IDEs
             options.isWarnings = false
             options.encoding = "UTF-8"
+            // Use javac --release to ensure proper API targeting
+            options.release.set(javaReleaseVersion)
         }
 
         withType<Javadoc>().configureEach {

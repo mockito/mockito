@@ -70,7 +70,8 @@ tasks {
     val osgiProperties by registering(WriteProperties::class) {
         destinationFile.set(layout.buildDirectory.file("verifyOSGiProperties.bndrun"))
         property("-standalone", true)
-        property("-runee", "JavaSE-${java.targetCompatibility}")
+        // Use the configured source level (release) as runtime EE
+        property("-runee", "JavaSE-${java.sourceCompatibility}")
         property("-runrequires", "osgi.identity;filter:=\"(osgi.identity=org.mockito.junit-jupiter)\"")
     }
 
