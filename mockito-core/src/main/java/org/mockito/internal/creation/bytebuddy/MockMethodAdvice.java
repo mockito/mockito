@@ -90,6 +90,22 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         this.identifier = identifier;
         this.isMockConstruction = isMockConstruction;
     }
+    @RuntimeType
+    public static Object intercept(@This Object mock,
+                                   @Origin Method method,
+                                   @AllArguments Object[] arguments,
+                                   @SuperCall Callable<?> superCall) throws Throwable {
+
+        if (method.getName().equals("<init>")) {
+            MockHandler handler = getMockHandler(mock);
+            if (handler != null && handler.hasConstructorException()) {
+
+                throw handler.getConstructorException();
+            }
+        }
+
+        return proceedOrIntercept(mock, method, arguments, superCall);
+    }
 
     @SuppressWarnings("unused")
     @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)

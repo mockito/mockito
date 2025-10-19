@@ -41,11 +41,22 @@ public class MockMethodInterceptor implements Serializable {
 
     private transient ThreadLocal<Object> weakReferenceHatch = new ThreadLocal<>();
 
+    private final Throwable constructorException;
+
     public MockMethodInterceptor(
             MockHandler<?> handler, MockCreationSettings<?> mockCreationSettings) {
         this.handler = handler;
+        this.constructorException = constructorException;
         this.mockCreationSettings = mockCreationSettings;
         serializationSupport = new ByteBuddyCrossClassLoaderSerializationSupport();
+    }
+
+    public boolean hasConstructorException() {
+        return constructorException != null;
+    }
+
+    public Throwable getConstructorException() {
+        return constructorException;
     }
 
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
@@ -79,6 +90,9 @@ public class MockMethodInterceptor implements Serializable {
         //
         // When dropping support for Java 8, instead of this hatch we should use an explicit fence
         // https://docs.oracle.com/javase/9/docs/api/java/lang/ref/Reference.html#reachabilityFence-java.lang.Object-
+        if (isConstructor(method) && hasConstructorException()) {
+            throw prepareException(constructorException);
+        }
         weakReferenceHatch.set(mock);
         try {
             return handler.handle(
@@ -92,6 +106,7 @@ public class MockMethodInterceptor implements Serializable {
         } finally {
             weakReferenceHatch.remove();
         }
+        return handler.handle(mock, method, arguments, superCall);
     }
 
     public MockHandler<?> getMockHandler() {
@@ -127,6 +142,21 @@ public class MockMethodInterceptor implements Serializable {
         }
 
         private ForWriteReplace() {}
+    }
+    private boolean isConstructor(Method method) {
+        return method.getName().equals("<init>");
+    }
+
+    private Throwable prepareException(Throwable original) {
+        // 确保异常堆栈信息正确
+        if (original instanceof RuntimeException) {
+            return original;
+        } else if (original instanceof Error) {
+            return original;
+        } else {
+            // 对于受检异常，可能需要包装
+            return new MockitoException("Constructor threw checked exception", original);
+        }
     }
 
     public static class DispatcherDefaultingToRealMethod {

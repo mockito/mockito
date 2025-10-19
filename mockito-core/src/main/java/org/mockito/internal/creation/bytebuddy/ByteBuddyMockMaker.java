@@ -38,6 +38,10 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
 
     @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+        Throwable constructorException = null;
+        if (settings instanceof MockSettingsImpl) {
+            constructorException = ((MockSettingsImpl) settings).getConstructorException();
+        }
         return subclassByteBuddyMockMaker.createMock(settings, handler);
     }
 
