@@ -14,6 +14,9 @@ public final class Primitives {
     private static final Map<Class<?>, Object> PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES =
             new HashMap<>();
 
+    /** Older JVM environments do not have {@link Class#descriptorString()}, so build our own mapping. */
+    private static final Map<Class<?>, Character> PRIMITIVE_DESCRIPTORS = new HashMap<>();
+
     /**
      * Returns the primitive type of the given class.
      * <p/>
@@ -61,6 +64,11 @@ public final class Primitives {
         return (T) PRIMITIVE_OR_WRAPPER_DEFAULT_VALUES.get(primitiveOrWrapperType);
     }
 
+    /** Returns the code corresponding to the given primitive type according to JVMS 4.3.2. */
+    public static char getPrimitiveDescriptor(Class<?> primitiveType) {
+        return PRIMITIVE_DESCRIPTORS.get(primitiveType);
+    }
+
     static {
         PRIMITIVE_TYPES.put(Boolean.class, Boolean.TYPE);
         PRIMITIVE_TYPES.put(Character.class, Character.TYPE);
@@ -70,6 +78,15 @@ public final class Primitives {
         PRIMITIVE_TYPES.put(Long.class, Long.TYPE);
         PRIMITIVE_TYPES.put(Float.class, Float.TYPE);
         PRIMITIVE_TYPES.put(Double.class, Double.TYPE);
+
+        PRIMITIVE_DESCRIPTORS.put(boolean.class, 'Z');
+        PRIMITIVE_DESCRIPTORS.put(char.class, 'C');
+        PRIMITIVE_DESCRIPTORS.put(byte.class, 'B');
+        PRIMITIVE_DESCRIPTORS.put(short.class, 'S');
+        PRIMITIVE_DESCRIPTORS.put(int.class, 'I');
+        PRIMITIVE_DESCRIPTORS.put(long.class, 'J');
+        PRIMITIVE_DESCRIPTORS.put(float.class, 'F');
+        PRIMITIVE_DESCRIPTORS.put(double.class, 'D');
     }
 
     static {

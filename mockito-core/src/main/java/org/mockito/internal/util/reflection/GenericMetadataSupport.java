@@ -23,6 +23,7 @@ import java.util.Queue;
 import java.util.Set;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.Checks;
+import org.mockito.internal.util.Primitives;
 
 /**
  * This class can retrieve generic meta-data that the compiler stores on classes
@@ -273,6 +274,8 @@ public abstract class GenericMetadataSupport {
      * @return {@link GenericMetadataSupport} representing this generic return type.
      */
     public GenericMetadataSupport resolveGenericReturnType(Method method) {
+        // Note for primitive arrays, some JVMs return a Class (e.g. byte[].class) while some
+        // (notably Android) return GenericArrayType for this.
         Type genericReturnType = method.getGenericReturnType();
         // logger.log("Method '" + method.toGenericString() + "' has return type : " +
         // genericReturnType.getClass().getInterfaces()[0].getSimpleName() + " : " +
@@ -552,15 +555,14 @@ public abstract class GenericMetadataSupport {
             for (int i = 0; i < arity; i++) {
                 stringBuilder.append("[");
             }
+            if (rawComponentType.isPrimitive()) {
+                stringBuilder.append(Primitives.getPrimitiveDescriptor(rawComponentType));
+            } else {
+                stringBuilder.append("L").append(rawComponentType.getName()).append(";");
+            }
             try {
                 return Class.forName(
-                        stringBuilder
-                                .append("L")
-                                .append(rawComponentType.getName())
-                                .append(";")
-                                .toString(),
-                        false,
-                        rawComponentType.getClassLoader());
+                        stringBuilder.toString(), false, rawComponentType.getClassLoader());
             } catch (ClassNotFoundException e) {
                 throw new IllegalStateException("This was not supposed to happen.", e);
             }
