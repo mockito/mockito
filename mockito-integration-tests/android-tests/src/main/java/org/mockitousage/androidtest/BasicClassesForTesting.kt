@@ -33,3 +33,9 @@ class BasicInterfaceReceiver(private val basicInterface: BasicInterface) {
         basicInterface.interfaceMethod()
     }
 }
+
+interface HasArrayOfPrimitivesReturnType {
+
+    // Issue #3752 is reproducible only when method has a generic parameter
+    fun getData(args: List<String>): ByteArray
+}
