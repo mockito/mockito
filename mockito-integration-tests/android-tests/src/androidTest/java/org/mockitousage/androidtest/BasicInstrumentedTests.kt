@@ -2,13 +2,16 @@ package org.mockitousage.androidtest
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.After
+import org.junit.Assert.assertArrayEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyList
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 
 @RunWith(AndroidJUnit4::class)
 class BasicInstrumentedTests {
@@ -73,5 +76,17 @@ class BasicInstrumentedTests {
         val receiver = BasicInterfaceReceiver(basicInterface)
         receiver.callInterfaceMethod()
         verify(basicInterface).interfaceMethod()
+    }
+
+//Regression test for issue #3752
+
+    @Test
+    fun mockMethodWithArrayOfPrimitiveReturnType() {
+        val mock = mock(HasArrayOfPrimitivesReturnType::class.java)
+        `when`(mock.getData(anyList())).thenReturn(byteArrayOf(1, 2, 3))
+
+        val actual = mock.getData(emptyList())
+
+        assertArrayEquals(byteArrayOf(1, 2, 3), actual)
     }
 }
