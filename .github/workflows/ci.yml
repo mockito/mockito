@@ -171,7 +171,7 @@ jobs:
 
     - name: 5. Upload artifact "android-tests-results-${{ matrix.android-api }}"
       if: success() || failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: androidTest-results-${{ matrix.android-api }}
         path: |
