@@ -596,7 +596,7 @@ class InlineDelegateByteBuddyMockMaker
                     return "primitive type";
                 }
                 if (EXCLUDES.contains(type)) {
-                    return "Cannot mock wrapper types, String.class or Class.class";
+                    return "Cannot mock primitive wrapper types, String, Class, or WeakReference";
                 }
                 return "VM does not support modification of given type";
             }

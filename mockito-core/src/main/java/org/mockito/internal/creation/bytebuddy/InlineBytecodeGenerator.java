@@ -36,6 +36,7 @@ import org.mockito.mock.SerializableMode;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.instrument.UnmodifiableClassException;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
@@ -65,7 +66,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             Long.class,
                             Float.class,
                             Double.class,
-                            String.class));
+                            String.class,
+                            WeakReference.class));
 
     private final Instrumentation instrumentation;
 
