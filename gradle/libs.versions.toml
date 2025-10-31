@@ -3,7 +3,7 @@ bytebuddy = "1.17.7"
 errorprone = "2.42.0"
 jacoco = "0.8.13"
 junit4 = "4.13.2"
-junit-jupiter = "5.13.4"
+junit-jupiter = "6.0.0"
 junit-platform = "1.13.4"
 kotlin = "2.2.0"
 
