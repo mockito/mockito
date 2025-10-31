@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.regex.Pattern;
@@ -369,7 +370,7 @@ public class InlineDelegateByteBuddyMockMakerTest
     public void should_provide_reason_for_wrapper_class() {
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(Integer.class);
         assertThat(mockable.nonMockableReason())
-                .isEqualTo("Cannot mock wrapper types, String.class or Class.class");
+                .isEqualTo("Cannot mock primitive wrapper types, String, Class, or WeakReference");
     }
 
     @Test
@@ -394,7 +395,7 @@ public class InlineDelegateByteBuddyMockMakerTest
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(String.class);
         assertThat(mockable.mockable()).isFalse();
         assertThat(mockable.nonMockableReason())
-                .contains("Cannot mock wrapper types, String.class or Class.class");
+                .contains("Cannot mock primitive wrapper types, String, Class, or WeakReference");
     }
 
     @Test
@@ -402,7 +403,15 @@ public class InlineDelegateByteBuddyMockMakerTest
         MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(Class.class);
         assertThat(mockable.mockable()).isFalse();
         assertThat(mockable.nonMockableReason())
-                .contains("Cannot mock wrapper types, String.class or Class.class");
+                .contains("Cannot mock primitive wrapper types, String, Class, or WeakReference");
+    }
+
+    @Test
+    public void is_type_mockable_excludes_WeakReference() {
+        MockMaker.TypeMockability mockable = mockMaker.isTypeMockable(WeakReference.class);
+        assertThat(mockable.mockable()).isFalse();
+        assertThat(mockable.nonMockableReason())
+                .contains("Cannot mock primitive wrapper types, String, Class, or WeakReference");
     }
 
     @Test
