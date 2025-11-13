@@ -56,6 +56,7 @@ import org.mockito.invocation.MatchableInvocation;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.mock.MockName;
 import org.mockito.mock.SerializableMode;
+import org.mockito.stubbing.Stubbing;
 
 /**
  * Reports verification and misusing errors.
@@ -1150,12 +1151,12 @@ public class Reporter {
     }
 
     public static void potentialStubbingProblem(
-            Invocation actualInvocation, Collection<Invocation> argMismatchStubbings) {
+            Invocation actualInvocation, Collection<Stubbing> argMismatchStubbings) {
         StringBuilder stubbings = new StringBuilder();
         int count = 1;
-        for (Invocation s : argMismatchStubbings) {
+        for (Stubbing s : argMismatchStubbings) {
             stubbings.append("    ").append(count++).append(". ").append(s);
-            stubbings.append("\n      ").append(s.getLocation()).append("\n");
+            stubbings.append("\n      ").append(s.getInvocation().getLocation()).append("\n");
         }
         stubbings.deleteCharAt(stubbings.length() - 1); // remove trailing end of line
 

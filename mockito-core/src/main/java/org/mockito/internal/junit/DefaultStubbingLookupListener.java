@@ -49,7 +49,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener, Serializa
             // If stubbing was not found for invocation it means that either the mock invocation was
             // not stubbed or
             // we have a stubbing arg mismatch.
-            List<Invocation> argMismatchStubbings =
+            List<Stubbing> argMismatchStubbings =
                     potentialArgMismatches(event.getInvocation(), event.getAllStubbings());
             if (!argMismatchStubbings.isEmpty()) {
                 mismatchesReported = true;
@@ -64,9 +64,9 @@ class DefaultStubbingLookupListener implements StubbingLookupListener, Serializa
         }
     }
 
-    private static List<Invocation> potentialArgMismatches(
+    private static List<Stubbing> potentialArgMismatches(
             Invocation invocation, Collection<Stubbing> stubbings) {
-        List<Invocation> matchingStubbings = new LinkedList<>();
+        List<Stubbing> matchingStubbings = new LinkedList<>();
         for (Stubbing s : stubbings) {
             if (UnusedStubbingReporting.shouldBeReported(s)
                     && Objects.equals(
@@ -78,7 +78,7 @@ class DefaultStubbingLookupListener implements StubbingLookupListener, Serializa
                     && !Objects.equals(
                             s.getInvocation().getLocation().getSourceFile(),
                             invocation.getLocation().getSourceFile())) {
-                matchingStubbings.add(s.getInvocation());
+                matchingStubbings.add(s);
             }
         }
         return matchingStubbings;
