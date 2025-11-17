@@ -124,6 +124,9 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     public Callable<?> handle(Object instance, Method origin, Object[] arguments) throws Throwable {
         MockMethodInterceptor interceptor = interceptors.get(instance);
         if (interceptor == null) {
+            interceptor = getStaticMockInterceptorForInstanceStubbing(instance.getClass());
+        }
+        if (interceptor == null) {
             return null;
         }
         RealMethod realMethod;
@@ -170,7 +173,9 @@ public class MockMethodAdvice extends MockMethodDispatcher {
 
     @Override
     public boolean isMocked(Object instance) {
-        return isMock(instance) && selfCallInfo.checkSelfCall(instance);
+        return (isMock(instance)
+                        || getStaticMockInterceptorForInstanceStubbing(instance.getClass()) != null)
+                && selfCallInfo.checkSelfCall(instance);
     }
 
     @Override
@@ -180,6 +185,23 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         }
         Map<Class<?>, ?> interceptors = mockedStatics.get();
         return interceptors != null && interceptors.containsKey(type);
+    }
+
+    private MockMethodInterceptor getStaticMockInterceptorForInstanceStubbing(Class<?> type) {
+        if (type == interceptors.target.getClass()) {
+            // Avoid recursive check
+            return null;
+        }
+        Map<Class<?>, MockMethodInterceptor> staticInterceptors = mockedStatics.get();
+        if (staticInterceptors == null) {
+            return null;
+        }
+        MockMethodInterceptor interceptor = staticInterceptors.get(type);
+        if (interceptor != null && StaticMockUtils.isStubbingInstanceMethods(interceptor)) {
+            return interceptor;
+        } else {
+            return null;
+        }
     }
 
     @Override

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.mockito.MockSettings;
+import org.mockito.StaticMockSettings;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.debugging.VerboseMockInvocationLogger;
@@ -268,8 +269,18 @@ public class MockSettingsImpl<T> extends CreationSettings<T>
         return this;
     }
 
+    @Override
+    public MockSettings staticMockSettings(StaticMockSettings staticMockSettings) {
+        this.staticMockSettings = staticMockSettings;
+        return this;
+    }
+
     private static <T> CreationSettings<T> validatedSettings(
             Class<T> typeToMock, CreationSettings<T> source) {
+        if (source.getStaticMockSettings() != null) {
+            throw new MockitoException("Cannot use StaticMockSettings with regular mock");
+        }
+
         MockCreationValidator validator = new MockCreationValidator();
 
         validator.validateType(typeToMock, source.getMockMaker());
