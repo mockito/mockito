@@ -156,7 +156,7 @@ public class ConstructorInstantiator implements Instantiator {
     }
 
     /**
-     * Evalutes {@code constructor} against the currently found {@code matchingConstructors} and determines if
+     * Evaluates {@code constructor} against the currently found {@code matchingConstructors} and determines if
      * it's a better match to the given arguments, a worse match, or an equivalently good match.
      * <p>
      * This method tries to emulate the behavior specified in
