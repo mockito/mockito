@@ -5,6 +5,7 @@
 package org.mockito.internal.framework;
 
 import org.mockito.MockitoFramework;
+import org.mockito.StaticMockSettings;
 import org.mockito.exceptions.misusing.DisabledMockException;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationContainer;
@@ -154,6 +155,11 @@ public class DisabledMockHandler implements MockHandler {
 
         @Override
         public MockType getMockType() {
+            throw new DisabledMockException();
+        }
+
+        @Override
+        public StaticMockSettings getStaticMockSettings() {
             throw new DisabledMockException();
         }
     }

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.mockito.StaticMockSettings;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.listeners.VerificationStartedListener;
@@ -51,6 +52,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     protected Strictness strictness = null;
     protected String mockMaker;
     protected MockType mockType;
+    protected StaticMockSettings staticMockSettings;
 
     public CreationSettings() {}
 
@@ -76,6 +78,7 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
         this.stripAnnotations = copy.stripAnnotations;
         this.mockMaker = copy.mockMaker;
         this.mockType = copy.mockType;
+        this.staticMockSettings = copy.staticMockSettings;
     }
 
     @Override
@@ -205,6 +208,11 @@ public class CreationSettings<T> implements MockCreationSettings<T>, Serializabl
     @Override
     public MockType getMockType() {
         return mockType;
+    }
+
+    @Override
+    public StaticMockSettings getStaticMockSettings() {
+        return staticMockSettings;
     }
 
     public void setMockType(MockType mockType) {
