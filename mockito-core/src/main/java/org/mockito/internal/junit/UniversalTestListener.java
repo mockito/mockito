@@ -6,7 +6,6 @@ package org.mockito.internal.junit;
 
 import java.util.Collection;
 import java.util.IdentityHashMap;
-import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.listeners.AutoCleanableListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockitoLogger;
@@ -17,12 +16,12 @@ import org.mockito.quality.Strictness;
  * Will come handy when we offer tweaking strictness at the method level with annotation.
  * Should be relatively easy to improve and offer tweaking strictness per mock.
  */
-public class UniversalTestListener implements MockitoTestListener, AutoCleanableListener {
+public class UniversalTestListener<T> implements MockitoTestListener<T>, AutoCleanableListener {
 
     private Strictness currentStrictness;
     private final MockitoLogger logger;
 
-    private IdentityHashMap mocks = new IdentityHashMap<Object, MockCreationSettings>();
+    private IdentityHashMap<Object, MockCreationSettings<T>> mocks = new IdentityHashMap<>();
     private final DefaultStubbingLookupListener stubbingLookupListener;
     private boolean listenerDirty;
 
@@ -70,32 +69,26 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
     }
 
     private static void emitWarnings(
-            MockitoLogger logger, TestFinishedEvent event, Collection<Object> mocks) {
+        MockitoLogger logger, TestFinishedEvent event, Collection<Object> mocks) {
         if (event.getFailure() != null) {
             // print stubbing mismatches only when there is a test failure
             // to avoid false negatives. Give hint only when test fails.
             new ArgMismatchFinder()
-                    .getStubbingArgMismatches(mocks)
-                    .format(event.getTestName(), logger);
+                .getStubbingArgMismatches(mocks)
+                .format(event.getTestName(), logger);
         } else {
             // print unused stubbings only when test succeeds to avoid reporting multiple problems
             // and confusing users
             new UnusedStubbingsFinder()
-                    .getUnusedStubbings(mocks)
-                    .format(event.getTestName(), logger);
+                .getUnusedStubbings(mocks)
+                .format(event.getTestName(), logger);
         }
     }
 
     @Override
-    public void onMockCreated(Object mock, MockCreationSettings settings) {
+    public void onMockCreated(Object mock, MockCreationSettings<T> settings) {
         this.mocks.put(mock, settings);
-
-        // It is not ideal that we modify the state of MockCreationSettings object
-        // MockCreationSettings is intended to be an immutable view of the creation settings
-        // In future, we should start passing MockSettings object to the creation listener
-        // TODO #793 - when completed, we should be able to get rid of the CreationSettings casting
-        // below
-        ((CreationSettings) settings).getStubbingLookupListeners().add(stubbingLookupListener);
+        settings.getStubbingLookupListeners().add(stubbingLookupListener);
     }
 
     public void setStrictness(Strictness strictness) {
