@@ -1830,6 +1830,10 @@ public class Mockito extends ArgumentMatchers {
      * ReturnsMocks first tries to return ordinary values (zeros, empty collections, empty string, etc.)
      * then it tries to return mocks. If the return type cannot be mocked (e.g. is final) then plain <code>null</code> is returned.
      * <p>
+     * <strong>Note:</strong> Since Java 15, abstract enums are declared sealed, which prevents mocking.
+     * Attempting to return a mock for such types will throw a {@link org.mockito.exceptions.base.MockitoException}
+     * instead of returning <code>null</code>. You can still return an existing enum literal from a stubbed method call.
+     * <p>
      */
     public static final Answer<Object> RETURNS_MOCKS = Answers.RETURNS_MOCKS;
 
