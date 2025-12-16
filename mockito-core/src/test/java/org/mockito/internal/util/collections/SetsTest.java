@@ -14,6 +14,10 @@ import java.util.Set;
 
 import org.junit.Test;
 
+/**
+ * Tests for {@link Sets} utility class which provides factory methods
+ * for creating mock-safe hash sets and regular sets.
+ */
 public class SetsTest {
 
     interface TestInterface {
@@ -70,6 +74,8 @@ public class SetsTest {
         Set<Object> result = Sets.newMockSafeHashSet(mocks);
 
         assertThat(result).hasSize(2);
+        // Explicit type casting is required for AssertJ's contains() method
+        // when checking for null values to avoid NullPointerException
         assertThat(result).contains((Object) null);
     }
 
@@ -79,7 +85,7 @@ public class SetsTest {
 
         Set<Object> result = Sets.newMockSafeHashSet(mock, mock);
 
-        // Mock 객체는 동일한 인스턴스이므로 Set에는 하나만 포함
+        // Since mock objects are the same instance, only one is included in the Set
         assertThat(result).hasSize(1);
         assertThat(result).contains(mock);
     }
@@ -109,7 +115,7 @@ public class SetsTest {
     public void should_preserve_order_in_new_set() {
         Set<Integer> result = Sets.newSet(3, 1, 2);
 
-        // LinkedHashSet은 삽입 순서를 유지
+        // LinkedHashSet preserves insertion order
         assertThat(result).containsExactly(3, 1, 2);
     }
 
@@ -117,7 +123,7 @@ public class SetsTest {
     public void should_handle_duplicate_elements_in_new_set() {
         Set<String> result = Sets.newSet("a", "b", "a", "c");
 
-        // LinkedHashSet은 중복을 제거하지만 순서는 유지
+        // LinkedHashSet removes duplicates but preserves order
         assertThat(result).containsExactly("a", "b", "c");
     }
 
@@ -132,6 +138,8 @@ public class SetsTest {
     public void should_handle_null_elements_in_new_set() {
         Set<String> result = Sets.newSet("a", null, "b");
 
+        // Explicit type casting is required for AssertJ's containsExactly() method
+        // when checking for null values to avoid NullPointerException
         assertThat(result).containsExactly("a", (String) null, "b");
     }
 
