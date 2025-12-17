@@ -6,7 +6,6 @@ package org.mockito;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
-
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.invocation.InvocationFactory;
@@ -411,4 +410,7 @@ public interface MockSettings extends Serializable {
      * @return
      */
     MockSettings genericTypeToMock(Type genericTypeToMock);
+
+    /** Settings specific for mocks created via {@link Mockito#mockStatic(Class)} */
+    MockSettings staticMockSettings(StaticMockSettings staticMockSettings);
 }
