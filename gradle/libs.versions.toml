@@ -6,6 +6,7 @@ jacoco = "0.8.13"
 junit4 = "4.13.2"
 junit-jupiter = "5.13.4"
 junit-platform = "1.13.4"
+junit6 = "6.0.1"
 kotlin = "2.2.0"
 
 gradleplugin-test-logger = "4.0.0"
@@ -37,6 +38,9 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
 junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit-jupiter" }
+junit6-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit6" }
+junit6-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit6" }
+junit6-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit6" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.6.3-native-mt" }
 objenesis = { module = "org.objenesis:objenesis", version = "3.3" }

@@ -1,18 +1,61 @@
 import aQute.bnd.gradle.Resolve
+import libs
+import org.gradle.api.JavaVersion
+import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.api.tasks.testing.Test
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 plugins {
     id("mockito.library-conventions")
     id("mockito.javadoc-conventions")
 }
 
-description = "Mockito JUnit 5 support"
+description = "Mockito JUnit 6 support"
+
+val minJavaVersion = 17 // JUnit 6 requires Java 17+
+val requestedJavaVersion = providers
+    .gradleProperty("mockito.test.java")
+    .orElse("auto")
+    .map { v ->
+        if (v == "auto") {
+            JavaVersion.current().majorVersion.toInt()
+        } else {
+            v.toInt()
+        }
+    }
+val effectiveJavaVersion = requestedJavaVersion.map { requested ->
+    maxOf(requested, minJavaVersion)
+}
+
+val logJavaOverride by tasks.registering {
+    doLast {
+        val requested = requestedJavaVersion.get()
+        if (requested < minJavaVersion) {
+            logger.lifecycle(
+                "mockito-junit-jupiter requires Java $minJavaVersion+. " +
+                        "mockito.test.java=$requested, overriding to $minJavaVersion."
+            )
+        }
+    }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    dependsOn(logJavaOverride)
+    options.release = effectiveJavaVersion
+}
+
+java {
+    toolchain {
+        languageVersion = effectiveJavaVersion.map(JavaLanguageVersion::of)
+    }
+}
 
 dependencies {
     api(project(":mockito-core"))
-    implementation(libs.junit.jupiter.api)
+    implementation(libs.junit6.jupiter.api)
     testImplementation(libs.assertj)
-    testImplementation(libs.junit.platform.launcher)
-    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit6.platform.launcher)
+    testRuntimeOnly(libs.junit6.jupiter.engine)
 }
 
 mockitoJavadoc {
@@ -20,11 +63,15 @@ mockitoJavadoc {
     docTitle = """<h1>Mockito JUnit Jupiter ${project.version} API.</h1>"""
 }
 
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
+tasks.withType<Test>().configureEach {
+    dependsOn(logJavaOverride)
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = effectiveJavaVersion.map(JavaLanguageVersion::of)
     }
+    useJUnitPlatform()
+}
 
+tasks {
     jar {
         bundle { // this: BundleTaskExtension
             classpath = project.configurations.runtimeClasspath.get()
@@ -60,7 +107,8 @@ tasks {
                 # Instruct the APIGuardianAnnotations how to operate.
                 # See https://bnd.bndtools.org/instructions/export-apiguardian.html
                 -export-apiguardian: org.mockito.internal.*
-            """.trimIndent())
+                """.trimIndent()
+            )
         }
     }
 
@@ -68,9 +116,12 @@ tasks {
     // task writes out the properties necessary for it to verify the OSGi
     // metadata.
     val osgiProperties by registering(WriteProperties::class) {
+        dependsOn(logJavaOverride)
+
         destinationFile.set(layout.buildDirectory.file("verifyOSGiProperties.bndrun"))
         property("-standalone", true)
-        property("-runee", "JavaSE-${java.targetCompatibility}")
+        property("-runee", effectiveJavaVersion.map { "JavaSE-$it" })
+
         property("-runrequires", "osgi.identity;filter:=\"(osgi.identity=org.mockito.junit-jupiter)\"")
     }
 
@@ -93,7 +144,7 @@ tasks {
         if (JavaVersion.current() >= JavaVersion.VERSION_18) {
             javadocDocletOptions {
                 addStringOption("-link-modularity-mismatch", "info")
-                links("https://docs.junit.org/${libs.versions.junit.jupiter.get()}/api/")
+                links("https://docs.junit.org/${libs.versions.junit6.get()}/api/")
             }
         } else {
             logger.info("Javadoc tool below 18, links to JUnit Jupiter javadocs was not added.")
