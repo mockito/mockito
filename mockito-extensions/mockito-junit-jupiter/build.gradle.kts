@@ -1,53 +1,20 @@
 import aQute.bnd.gradle.Resolve
 import libs
 import org.gradle.api.JavaVersion
-import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
-import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 plugins {
     id("mockito.library-conventions")
     id("mockito.javadoc-conventions")
+    id("mockito.test-conventions-java-17")
 }
 
 description = "Mockito JUnit 6 support"
 
-val minJavaVersion = 17 // JUnit 6 requires Java 17+
-val requestedJavaVersion = providers
-    .gradleProperty("mockito.test.java")
-    .orElse("auto")
-    .map { v ->
-        if (v == "auto") {
-            JavaVersion.current().majorVersion.toInt()
-        } else {
-            v.toInt()
-        }
-    }
-val effectiveJavaVersion = requestedJavaVersion.map { requested ->
+// Despite the use of mockito.test-conventions-java-17, we still need an effective Java version for OSGi -runee.
+val minJavaVersion = 17
+val effectiveJavaVersion = providers.requestedJavaVersion().map { requested ->
     maxOf(requested, minJavaVersion)
-}
-
-val logJavaOverride by tasks.registering {
-    doLast {
-        val requested = requestedJavaVersion.get()
-        if (requested < minJavaVersion) {
-            logger.lifecycle(
-                "mockito-junit-jupiter requires Java $minJavaVersion+. " +
-                        "mockito.test.java=$requested, overriding to $minJavaVersion."
-            )
-        }
-    }
-}
-
-tasks.withType<JavaCompile>().configureEach {
-    dependsOn(logJavaOverride)
-    options.release = effectiveJavaVersion
-}
-
-java {
-    toolchain {
-        languageVersion = effectiveJavaVersion.map(JavaLanguageVersion::of)
-    }
 }
 
 dependencies {
@@ -64,10 +31,6 @@ mockitoJavadoc {
 }
 
 tasks.withType<Test>().configureEach {
-    dependsOn(logJavaOverride)
-    javaLauncher = javaToolchains.launcherFor {
-        languageVersion = effectiveJavaVersion.map(JavaLanguageVersion::of)
-    }
     useJUnitPlatform()
 }
 
@@ -116,12 +79,9 @@ tasks {
     // task writes out the properties necessary for it to verify the OSGi
     // metadata.
     val osgiProperties by registering(WriteProperties::class) {
-        dependsOn(logJavaOverride)
-
         destinationFile.set(layout.buildDirectory.file("verifyOSGiProperties.bndrun"))
         property("-standalone", true)
         property("-runee", effectiveJavaVersion.map { "JavaSE-$it" })
-
         property("-runrequires", "osgi.identity;filter:=\"(osgi.identity=org.mockito.junit-jupiter)\"")
     }
 
