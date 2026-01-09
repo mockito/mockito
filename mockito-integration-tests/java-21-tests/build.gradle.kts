@@ -1,15 +1,13 @@
-import org.gradle.api.JavaVersion
 import org.gradle.api.GradleException
 import org.gradle.api.artifacts.Configuration
-import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
 import org.gradle.api.tasks.testing.TestOutputEvent
-import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.process.CommandLineArgumentProvider
 
 plugins {
     id("java")
     id("mockito.test-conventions")
+    id("mockito.test-conventions-java-21")
 }
 
 description = "Test suite for Java 21 Mockito"
@@ -21,47 +19,6 @@ dependencies {
     testImplementation(libs.junit4)
     testImplementation(libs.assertj)
     bytebuddyAgent(libs.bytebuddy.agent) { isTransitive = false }
-}
-
-val requiredJavaVersion = 21
-
-// These tests are only meaningful when the build is explicitly running tests on Java 21.
-val requestedJava = providers.gradleProperty("mockito.test.java").orElse("auto")
-val shouldRun = requestedJava.map { it == requiredJavaVersion.toString() }
-
-val logJavaSkip by tasks.registering {
-    doLast {
-        val v = requestedJava.get()
-        if (v != requiredJavaVersion.toString()) {
-            logger.lifecycle(
-                "java21-tests run only with -Pmockito.test.java=$requiredJavaVersion. " +
-                        "mockito.test.java was set to $v, skipping these tests."
-            )
-        }
-    }
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-tasks.withType<JavaCompile>().configureEach {
-    dependsOn(logJavaSkip)
-    onlyIf { shouldRun.get() }
-    options.release = 21
-}
-
-tasks.withType<Test>().configureEach {
-    dependsOn(logJavaSkip)
-    onlyIf { shouldRun.get() }
-
-    javaLauncher = javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
 }
 
 tasks {
@@ -100,9 +57,6 @@ tasks {
             testWithBytebuddyAgent,
             testWithEnableDynamicAgentLoading,
         )
-
-        // Aggregator task should also be skipped unless mockito.test.java=21.
-        onlyIf { shouldRun.get() }
 
         expectStdErrWhenDynamicallyLoadedAgent(this)
     }
