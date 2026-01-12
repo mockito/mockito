@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.jspecify.annotations.Nullable;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
 import org.mockito.internal.MockitoCore;
@@ -2895,7 +2896,7 @@ public class Mockito extends ArgumentMatchers {
      * @return OngoingStubbing object used to stub fluently.
      *         <strong>Do not</strong> create a reference to this returned object.
      */
-    public static <T> OngoingStubbing<T> when(T methodCall) {
+    public static <T> OngoingStubbing<T> when(@Nullable T methodCall) {
         return MOCKITO_CORE.when(methodCall);
     }
 
