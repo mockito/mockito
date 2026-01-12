@@ -4,6 +4,7 @@
  */
 package org.mockito.stubbing;
 
+import org.jspecify.annotations.Nullable;
 import org.mockito.Mockito;
 import org.mockito.NotExtensible;
 
@@ -47,7 +48,7 @@ public interface OngoingStubbing<T> {
      *
      * @return object that allows stubbing consecutive calls
      */
-    OngoingStubbing<T> thenReturn(T value);
+    OngoingStubbing<T> thenReturn(@Nullable T value);
 
     /**
      * Sets consecutive return values to be returned when the method is called. E.g:
@@ -67,7 +68,7 @@ public interface OngoingStubbing<T> {
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array
     // creation warnings (on call site)
     @SuppressWarnings({"unchecked", "varargs"})
-    OngoingStubbing<T> thenReturn(T value, T... values);
+    OngoingStubbing<T> thenReturn(@Nullable  T value, @Nullable  T... values);
 
     /**
      * Sets Throwable objects to be thrown when the method is called. E.g:

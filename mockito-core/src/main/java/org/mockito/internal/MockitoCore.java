@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+import org.jspecify.annotations.Nullable;
 import org.mockito.InOrder;
 import org.mockito.MockSettings;
 import org.mockito.MockedConstruction;
@@ -141,7 +142,7 @@ public class MockitoCore {
         return new MockedConstructionImpl<>(control);
     }
 
-    public <T> OngoingStubbing<T> when(T methodCall) {
+    public <T> OngoingStubbing<T> when(@Nullable T methodCall) {
         MockingProgress mockingProgress = mockingProgress();
         mockingProgress.stubbingStarted();
         @SuppressWarnings("unchecked")
