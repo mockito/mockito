@@ -12,7 +12,7 @@ module org.mockito {
     requires static org.objenesis;
     requires static org.opentest4j;
     requires static jdk.unsupported;
-    requires org.jspecify;
+    requires static org.jspecify;
 
     exports org.mockito;
     exports org.mockito.configuration;

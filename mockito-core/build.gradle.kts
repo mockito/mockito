@@ -43,8 +43,8 @@ dependencies {
     compileOnly(libs.junit4)
     compileOnly(libs.hamcrest)
     compileOnly(libs.opentest4j)
+    compileOnly(libs.jspecify)
     implementation(libs.objenesis)
-    implementation(libs.jspecify)
 
     testImplementation(libs.assertj)
     testImplementation(libs.junit.jupiter.api)
