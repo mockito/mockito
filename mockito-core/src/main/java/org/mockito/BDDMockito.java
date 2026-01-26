@@ -4,6 +4,7 @@
  */
 package org.mockito;
 
+import org.jspecify.annotations.Nullable;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
 import org.mockito.stubbing.Stubber;
@@ -102,14 +103,14 @@ public class BDDMockito extends Mockito {
          * See original {@link OngoingStubbing#thenReturn(Object)}
          * @since 1.8.0
          */
-        BDDMyOngoingStubbing<T> willReturn(T value);
+        BDDMyOngoingStubbing<T> willReturn(@Nullable T value);
 
         /**
          * See original {@link OngoingStubbing#thenReturn(Object, Object[])}
          * @since 1.8.0
          */
         @SuppressWarnings({"unchecked", "varargs"})
-        BDDMyOngoingStubbing<T> willReturn(T value, T... values);
+        BDDMyOngoingStubbing<T> willReturn(@Nullable T value, @Nullable T... values);
 
         /**
          * See original {@link OngoingStubbing#thenThrow(Throwable...)}
@@ -163,11 +164,11 @@ public class BDDMockito extends Mockito {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.then(answer));
         }
 
-        public BDDMyOngoingStubbing<T> willReturn(T value) {
+        public BDDMyOngoingStubbing<T> willReturn(@Nullable T value) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenReturn(value));
         }
 
-        public BDDMyOngoingStubbing<T> willReturn(T value, T... values) {
+        public BDDMyOngoingStubbing<T> willReturn(@Nullable T value, @Nullable T... values) {
             return new BDDOngoingStubbingImpl<T>(mockitoOngoingStubbing.thenReturn(value, values));
         }
 
@@ -199,7 +200,7 @@ public class BDDMockito extends Mockito {
      * see original {@link Mockito#when(Object)}
      * @since 1.8.0
      */
-    public static <T> BDDMyOngoingStubbing<T> given(T methodCall) {
+    public static <T> BDDMyOngoingStubbing<T> given(@Nullable T methodCall) {
         return new BDDOngoingStubbingImpl<T>(Mockito.when(methodCall));
     }
 
