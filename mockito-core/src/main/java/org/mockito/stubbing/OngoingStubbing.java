@@ -68,7 +68,7 @@ public interface OngoingStubbing<T> {
     // Additional method helps users of JDK7+ to hide heap pollution / unchecked generics array
     // creation warnings (on call site)
     @SuppressWarnings({"unchecked", "varargs"})
-    OngoingStubbing<T> thenReturn(@Nullable  T value, @Nullable  T... values);
+    OngoingStubbing<T> thenReturn(@Nullable T value, @Nullable T... values);
 
     /**
      * Sets Throwable objects to be thrown when the method is called. E.g:
