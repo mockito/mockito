@@ -19,6 +19,7 @@ class BasicInstrumentedTests {
     private var closeable: AutoCloseable? = null
 
     @Mock private lateinit var mockedViaAnnotationBasicOpenClass: BasicOpenClass
+    @Mock private lateinit var mockedViaAnnotationBasicClosedClass: BasicClosedClass
     @Mock private lateinit var mockedViaAnnotationBasicInterface: BasicInterface
 
     @Before
@@ -52,6 +53,28 @@ class BasicInstrumentedTests {
         val basicClass = BasicOpenClassReceiver(mockedViaAnnotationBasicOpenClass)
         basicClass.callDependencyMethod()
         verify(mockedViaAnnotationBasicOpenClass).emptyMethod()
+    }
+
+//Closed (final) class
+
+    @Test
+    fun mockAndUseBasicClosedClassUsingAnnotatedMock() {
+        val receiver = BasicClosedClassReceiver(mockedViaAnnotationBasicClosedClass)
+        receiver.callDependencyMethod()
+    }
+
+    @Test
+    fun mockAndUseBasicClosedClassUsingLocalMock() {
+        val basicClosedClass = mock(BasicClosedClass::class.java)
+        val receiver = BasicClosedClassReceiver(basicClosedClass)
+        receiver.callDependencyMethod()
+    }
+
+    @Test
+    fun mockAndUseBasicClosedClassWithVerify() {
+        val receiver = BasicClosedClassReceiver(mockedViaAnnotationBasicClosedClass)
+        receiver.callDependencyMethod()
+        verify(mockedViaAnnotationBasicClosedClass).emptyMethod()
     }
 
 //Interface

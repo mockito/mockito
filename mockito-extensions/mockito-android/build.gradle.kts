@@ -1,15 +1,20 @@
 plugins {
-    id("mockito.java-library-conventions")
+    id("com.android.library")
     id("mockito.publication-conventions")
 }
 
 description = "Mockito for Android"
 
-dependencies {
-    api(project(":mockito-core"))
-    implementation(libs.bytebuddy.android)
+android {
+    namespace = "org.mockito.android"
+    compileSdk = 33
+
+    defaultConfig {
+        minSdk = 21
+    }
 }
 
-tasks.javadoc {
-    isEnabled = false
+dependencies {
+    api(project(":mockito-core"))
+    implementation(libs.dexmaker.mockito.inline)
 }

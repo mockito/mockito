@@ -1,5 +1,6 @@
 [versions]
 bytebuddy = "1.17.7"
+dexmaker = "2.28.6"
 errorprone = "2.42.0"
 jacoco = "0.8.13"
 junit4 = "4.13.2"
@@ -23,7 +24,7 @@ autoservice = { module = "com.google.auto.service:auto-service", version = "1.1.
 bnd-gradle = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref = "gradleplugin-aQute-bnd" }
 bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }
 bytebuddy-agent = { module = "net.bytebuddy:byte-buddy-agent", version.ref = "bytebuddy" }
-bytebuddy-android = { module = "net.bytebuddy:byte-buddy-android", version.ref = "bytebuddy" }
+dexmaker-mockito-inline = { module = "com.linkedin.dexmaker:dexmaker-mockito-inline", version.ref = "dexmaker" }
 equinox = { module = "org.eclipse.platform:org.eclipse.osgi", version = "3.23.200" }
 errorprone = { module = "com.google.errorprone:error_prone_core", version.ref = "errorprone" }
 errorprone-test-api = { module = "com.google.errorprone:error_prone_test_helpers", version.ref = "errorprone" }
@@ -47,6 +48,7 @@ gradleplugin-animalSniffer = { module = "ru.vyarus:gradle-animalsniffer-plugin",
 gradleplugin-bnd = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref = "gradleplugin-aQute-bnd" }
 gradleplugin-errorprone = { module = "net.ltgt.gradle:gradle-errorprone-plugin", version.ref = "gradleplugin-errorprone" }
 gradleplugin-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "gradleplugin-spotless" }
+gradleplugin-android = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin-android" }
 gradleplugin-spotless-googleJavaFormat = { module = "com.google.googlejavaformat:google-java-format", version = "1.28.0" }
 gradleplugin-license = { module = "com.github.hierynomus.license:com.github.hierynomus.license.gradle.plugin", version = "0.16.1" }
 gradleplugin-nexusPublish = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
@@ -59,4 +61,5 @@ animalSniffer-java = { module = "org.codehaus.mojo.signature:java18", version = 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleplugin-android" }
+android-library = { id = "com.android.library", version.ref = "gradleplugin-android" }
 kotlin = { id = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin"}

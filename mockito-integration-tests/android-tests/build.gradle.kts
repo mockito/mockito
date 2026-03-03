@@ -4,7 +4,7 @@ import com.android.build.gradle.internal.coverage.JacocoReportTask
 // https://developer.android.com/build/migrate-to-catalogs
 
 plugins {
-    alias(libs.plugins.android.application)
+    id("com.android.application")
     id("kotlin-android")
     id("mockito.test-conventions")
 }
@@ -55,8 +55,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
 
     testCoverage {

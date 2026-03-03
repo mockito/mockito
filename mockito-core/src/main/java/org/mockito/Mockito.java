@@ -133,23 +133,41 @@ import java.util.function.Function;
  *
  * With Mockito version 2.6.1 we ship "native" Android support. To enable Android support, add the `mockito-android` library as dependency
  * to your project. This artifact is published to the same Mockito organization and can be imported for Android as follows:
+ * <p>
+ * Version catalog:
+ * <pre class="code"><code class="toml">
+ * [versions]
+ * mockito = "5.23.0"
  *
- * <pre class="code"><code>
- * repositories {
- *   mavenCentral()
- * }
+ * [libraries]
+ * mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+ * mockito-android = { module = "org.mockito:mockito-android", version.ref = "mockito" }
+ * </code></pre>
+ * App Gradle file:
+ * <pre class="code"><code class="kotlin">
  * dependencies {
- *   testCompile "org.mockito:mockito-core:+"
- *   androidTestCompile "org.mockito:mockito-android:+"
+ *   testImplementation(libs.mockito)
+ *   androidTestImplementation(libs.mockito.android)
  * }
  * </code></pre>
+ * <p>
+ * <b>New in Mockito 5.23.0 - Kotlin support!</b> The `mockito-android` artifact now uses
+ * <a href="https://github.com/linkedin/dexmaker">dexmaker-mockito-inline</a> under the hood to provide inline mocking on Android,
+ * which supports mocking of final classes and methods. This means it can mock Kotlin classes without having to mark them as {@code open}.
  *
- * You can continue to run the same unit tests on a regular VM by using the `mockito-core` artifact in your "testCompile" scope as shown
- * above. Be aware that you cannot use the <a href="#39">inline mock maker</a> on Android due to limitations in the Android VM.
+ * <p>
+ * Note this requires Android API 28 (Android P) or higher at runtime. Apps with a lower
+ * {@code minSdk} will still compile, but tests will fail if run on an emulator or device with an API level below 28.
  *
- * If you encounter issues with mocking on Android, please open an issue
- * <a href="https://github.com/mockito/mockito/issues/new">on the official issue tracker</a>.
- * Do provide the version of Android you are working on and dependencies of your project.
+ * <p>
+ * Note you must set {@code android:extractNativeLibs="true"} in your {@code androidTest/AndroidManifest.xml} for the
+ * dexmaker native library to be accessible:
+ *
+ * <pre class="code"><code>
+ * &lt;application android:extractNativeLibs="true" /&gt;
+ * </code></pre>
+ *
+ * Using `mockito-android` in a non-Android environment is unsupported. For JVM tests, use `mockito-core` directly.
  *
  * <h3 id="0.2">0.2. <a class="meaningful_link" href="#mockito-inline" name="mockito-inline">Configuration-free inline mock making</a></h3>
  *
@@ -1142,8 +1160,6 @@ import java.util.function.Function;
  * <p>Driven by requirements and patches from Google Android guys Mockito now offers an extension point
  *   that allows replacing the proxy generation engine. By default, Mockito uses <a href="https://github.com/raphw/byte-buddy">Byte Buddy</a>
  *   to create dynamic proxies.
- * <p>The extension point is for advanced users that want to extend Mockito. For example, it is now possible
- *   to use Mockito for Android testing with a help of <a href="https://github.com/crittercism/dexmaker">dexmaker</a>.
  * <p>For more details, motivations and examples please refer to
  * the docs for {@link org.mockito.plugins.MockMaker}.
  *
