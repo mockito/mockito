@@ -942,7 +942,7 @@ class InlineDelegateByteBuddyMockMaker
                         join(
                                 "The singleton instance "
                                         + instance.getClass().getName()
-                                        + " is already registered as a mock",
+                                        + " is already registered as a mock in the current thread",
                                 "",
                                 "To create a new mock, the existing mock registration must be deregistered"));
             }
