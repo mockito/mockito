@@ -18,6 +18,7 @@ import org.mockito.internal.creation.bytebuddy.access.MockMethodInterceptor;
 import org.mockito.internal.creation.instance.ConstructorInstantiator;
 import org.mockito.internal.framework.DisabledMockHandler;
 import org.mockito.internal.util.Platform;
+import org.mockito.internal.util.collections.WeakIdentityMap;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
 import org.mockito.invocation.MockHandler;
@@ -695,7 +696,7 @@ class InlineDelegateByteBuddyMockMaker
 
         Map<Object, MockMethodInterceptor> singletons = mockedSingletons.get();
         if (singletons == null) {
-            singletons = new WeakHashMap<>();
+            singletons = new WeakIdentityMap<>();
             mockedSingletons.set(singletons);
         }
         mockedSingletons.getBackingMap().expungeStaleEntries();
@@ -941,7 +942,7 @@ class InlineDelegateByteBuddyMockMaker
                         join(
                                 "The singleton instance "
                                         + instance.getClass().getName()
-                                        + " is already registered as a mock",
+                                        + " is already registered as a mock in the current thread",
                                 "",
                                 "To create a new mock, the existing mock registration must be deregistered"));
             }
