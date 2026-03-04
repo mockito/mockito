@@ -25,10 +25,6 @@ public abstract class Platform {
         return System.getProperty("java.vendor", "").toLowerCase(Locale.US).contains("android");
     }
 
-    public static boolean isAndroidMockMakerRequired() {
-        return Boolean.getBoolean("org.mockito.mock.android");
-    }
-
     public static String describe() {
         String description =
                 String.format(

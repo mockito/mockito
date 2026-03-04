@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.gradleplugin.spotless.googleJavaFormat)
     implementation(libs.gradleplugin.license)
 
+    implementation(libs.gradleplugin.android)
     implementation(libs.gradleplugin.nexusPublish)
     implementation(libs.gradleplugin.shipkit.changelog)
     implementation(libs.gradleplugin.shipkit.autoVersion)

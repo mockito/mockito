@@ -150,6 +150,50 @@ plugins.withType<JavaLibraryPlugin>().configureEach {
     }
 }
 
+// Android library publication conventions
+plugins.withType<com.android.build.gradle.LibraryPlugin>().configureEach {
+    val licenseSpec = copySpec {
+        from(project.rootDir)
+        include("LICENSE")
+    }
+
+    afterEvaluate {
+        val androidExtension = extensions.getByType<com.android.build.gradle.LibraryExtension>()
+
+        val sourcesJar by tasks.registering(Jar::class) {
+            archiveClassifier.set("sources")
+            from(androidExtension.sourceSets.getByName("main").java.srcDirs)
+            with(licenseSpec)
+        }
+
+        publishing {
+            publications {
+                register<MavenPublication>("mockitoLibrary") {
+                    from(components["release"])
+                    artifact(sourcesJar)
+                }
+            }
+        }
+
+        tasks.named<GenerateMavenPom>("generatePomFileForMockitoLibraryPublication") {
+            doLast {
+                destination.readText().let { pomContent ->
+                    require(pomContent.contains("<artifactId>${project.base.archivesName.get()}</artifactId>")) {
+                        "POM file does not contain the correct artifactId: ${project.base.archivesName.get()}"
+                    }
+                    require(pomContent.contains("<name>${project.base.archivesName.get()}</name>")) {
+                        "POM file does not contain the correct name: ${project.base.archivesName.get()}"
+                    }
+                }
+            }
+        }
+
+        tasks.build {
+            dependsOn("publishAllPublicationsToLocalRepository")
+        }
+    }
+}
+
 tasks.withType<GenerateModuleMetadata>().configureEach {
     enabled = false
 }

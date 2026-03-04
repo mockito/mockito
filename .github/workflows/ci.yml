@@ -107,7 +107,7 @@ jobs:
     strategy:
       matrix:
         # Minimum supported and maximum available.
-        android-api: [ 26, 33 ]
+        android-api: [ 28, 33 ]
 
     # All build steps
     steps:
