@@ -118,6 +118,7 @@ import java.util.function.Function;
  *      <a href="#54">54. Mocking/spying without specifying class (Since 4.10.0)</a><br/>
  *      <a href="#55">55. Verification with assertions (Since 5.3.0)</a><br/>
  *      <a href="#56">56. Mocking singletons (like Java enums) (Since 5.22.0)</a><br/>
+ *      <a href="#57">57. Spying on static methods (Since 5.23.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1802,6 +1803,26 @@ import java.util.function.Function;
  *       assertEquals("bar", MyEnum.A.method());
  *   }
  * </code></pre>
+ *
+ * <h3 id="57">57. <a class="meaningful_link" href="#spy_static" name="spy_static">
+ *  Spying on static methods</a> (Since 5.23.0)</h3>
+ *
+ * Similar to how {@link Mockito#spy(Object)} creates a partial mock that calls real methods by default,
+ * {@link Mockito#spyStatic(Class)} creates a static spy where real static methods are called unless
+ * explicitly stubbed. This is the static equivalent of {@code spy()}.
+ *
+ * <pre class="code"><code class="java">
+ *   assertEquals("foo", Foo.method());
+ *   try (MockedStatic&lt;Foo&gt; spied = spyStatic(Foo.class)) {
+ *       // Real method is called by default
+ *       assertEquals("foo", Foo.method());
+ *       // Stub specific static methods
+ *       spied.when(Foo::method).thenReturn("bar");
+ *       assertEquals("bar", Foo.method());
+ *   }
+ *   // Original behavior is restored
+ *   assertEquals("foo", Foo.method());
+ * </code></pre>
  */
 @CheckReturnValue
 @SuppressWarnings("unchecked")
@@ -2576,6 +2597,143 @@ public class Mockito extends ArgumentMatchers {
      */
     public static <T> MockedSingleton<T> mockSingleton(T instance) {
         return mockSingleton(instance, withSettings());
+    }
+
+    /**
+     * Creates a thread-local spy controller for all static methods of the given class or interface.
+     * Real static methods are called by default unless explicitly stubbed.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the spy will remain active on the current thread.
+     * <p>
+     * This is the static equivalent of {@link #spy(Object)} - it uses {@link Answers#CALLS_REAL_METHODS}
+     * as the default answer.
+     * <p>
+     * <b>Note</b>: We recommend against spying on static methods of classes in the standard library or
+     * classes used by custom class loaders used to execute the block with the spied class. A mock
+     * maker might forbid mocking static methods of known classes that are known to cause problems.
+     * Also, if a static method is a JVM-intrinsic, it cannot typically be mocked even if not
+     * explicitly forbidden.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param classToSpy class or interface of which static methods should be spied on.
+     * @param <T> the type of the class to spy on.
+     * @return spy controller
+     * @since 5.23.0
+     */
+    public static <T> MockedStatic<T> spyStatic(Class<T> classToSpy) {
+        return mockStatic(classToSpy, withSettings().defaultAnswer(CALLS_REAL_METHODS));
+    }
+
+    /**
+     * Creates a thread-local spy controller for all static methods of the given class or interface.
+     * Real static methods are called by default unless explicitly stubbed.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the spy will remain active on the current thread.
+     * <p>
+     * This is the static equivalent of {@link #spy(Object)} - it uses {@link Answers#CALLS_REAL_METHODS}
+     * as the default answer.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param classToSpy class or interface of which static methods should be spied on.
+     * @param name the name of the spy to use in error messages.
+     * @param <T> the type of the class to spy on.
+     * @return spy controller
+     * @since 5.23.0
+     */
+    public static <T> MockedStatic<T> spyStatic(Class<T> classToSpy, String name) {
+        return mockStatic(classToSpy, withSettings().name(name).defaultAnswer(CALLS_REAL_METHODS));
+    }
+
+    /**
+     * Creates a thread-local spy controller for all static methods of the given class or interface.
+     * Real static methods are called by default unless explicitly stubbed.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the spy will remain active on the current thread.
+     * <p>
+     * <b>Note</b>: The default answer will always be overridden to {@link Answers#CALLS_REAL_METHODS},
+     * regardless of any default answer configured in the provided settings.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param classToSpy class or interface of which static methods should be spied on.
+     * @param mockSettings the settings to use where only name is considered (default answer is forced
+     *                     to {@link Answers#CALLS_REAL_METHODS}).
+     * @param <T> the type of the class to spy on.
+     * @return spy controller
+     * @since 5.23.0
+     */
+    public static <T> MockedStatic<T> spyStatic(Class<T> classToSpy, MockSettings mockSettings) {
+        return mockStatic(classToSpy, mockSettings.defaultAnswer(CALLS_REAL_METHODS));
+    }
+
+    /**
+     * Creates a thread-local spy controller for all static methods of the given class or interface.
+     * Real static methods are called by default unless explicitly stubbed.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the spy will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to spy on.
+     * @param <T> the type of the class to spy on.
+     * @return spy controller
+     * @since 5.23.0
+     */
+    @SafeVarargs
+    public static <T> MockedStatic<T> spyStatic(T... reified) {
+        return spyStatic(withSettings(), reified);
+    }
+
+    /**
+     * Creates a thread-local spy controller for all static methods of the given class or interface.
+     * Real static methods are called by default unless explicitly stubbed.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the spy will remain active on the current thread.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param name the name of the spy to use in error messages.
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to spy on.
+     * @param <T> the type of the class to spy on.
+     * @return spy controller
+     * @since 5.23.0
+     */
+    @SafeVarargs
+    public static <T> MockedStatic<T> spyStatic(String name, T... reified) {
+        return spyStatic(withSettings().name(name), reified);
+    }
+
+    /**
+     * Creates a thread-local spy controller for all static methods of the given class or interface.
+     * Real static methods are called by default unless explicitly stubbed.
+     * The returned object's {@link MockedStatic#close()} method must be called upon completing the
+     * test or the spy will remain active on the current thread.
+     * <p>
+     * <b>Note</b>: The default answer will always be overridden to {@link Answers#CALLS_REAL_METHODS},
+     * regardless of any default answer configured in the provided settings.
+     * <p>
+     * See examples in javadoc for {@link Mockito} class
+     *
+     * @param mockSettings the settings to use where only name is considered (default answer is forced
+     *                     to {@link Answers#CALLS_REAL_METHODS}).
+     * @param reified don't pass any values to it. It's a trick to detect the class/interface you
+     *                want to spy on.
+     * @param <T> the type of the class to spy on.
+     * @return spy controller
+     * @since 5.23.0
+     */
+    @SafeVarargs
+    public static <T> MockedStatic<T> spyStatic(MockSettings mockSettings, T... reified) {
+        if (reified == null || reified.length > 0) {
+            throw new IllegalArgumentException(
+                    "Please don't pass any values here. Java will detect class automagically.");
+        }
+
+        return spyStatic(getClassOf(reified), mockSettings);
     }
 
     /**
