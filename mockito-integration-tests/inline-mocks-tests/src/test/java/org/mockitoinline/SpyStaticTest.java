@@ -217,6 +217,26 @@ public final class SpyStaticTest {
     }
 
     @Test
+    public void testStaticSpyReifiedWithMockSettingsRejectsExplicitValues() {
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.spyStatic(withSettings().name("bad"), new Dummy());
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Please don't pass any values here");
+    }
+
+    @Test
+    public void testStaticSpyReifiedWithMockSettingsRejectsNull() {
+        assertThatThrownBy(
+                        () -> {
+                            Mockito.spyStatic(withSettings().name("bad"), (Dummy[]) null);
+                        })
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("Please don't pass any values here");
+    }
+
+    @Test
     public void testStaticSpyMustBeExclusiveInScopeWithinThread() {
         assertThatThrownBy(
                         () -> {
