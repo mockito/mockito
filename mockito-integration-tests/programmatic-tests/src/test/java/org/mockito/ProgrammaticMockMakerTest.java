@@ -157,6 +157,17 @@ public final class ProgrammaticMockMakerTest {
                 .hasMessageContaining(InvalidMockMaker.class.getName());
     }
 
+    @Test
+    public void test_interface_after_subclass_mock_maker() {
+        NonFinalClass subClassMock = Mockito.mock(NonFinalClass.class, Mockito.withSettings().mockMaker(MockMakers.SUBCLASS));
+        Mockito.when(subClassMock.someMethod()).thenReturn("1");
+        assertEquals("1", subClassMock.someMethod());
+
+        SomeInterface interfaceMock = Mockito.mock(SomeInterface.class);
+        Mockito.when(interfaceMock.someMethod()).thenReturn("2");
+        assertEquals("2", interfaceMock.someMethod());
+    }
+
     private static final class FinalClass {
         String someMethod() {
             return "ORIGINAL";
@@ -190,6 +201,16 @@ public final class ProgrammaticMockMakerTest {
         Container subContainer() {
             return new Container();
         }
+    }
+
+    private static class NonFinalClass {
+        String someMethod() {
+            return "ORIGINAL";
+        }
+    }
+
+    private interface SomeInterface {
+        String someMethod();
     }
 
     public static class CustomMockMaker extends SubclassByteBuddyMockMaker {

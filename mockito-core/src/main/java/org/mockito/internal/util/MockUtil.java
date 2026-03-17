@@ -157,8 +157,10 @@ public class MockUtil {
         for (MockMaker mockMaker : mockMakers.values()) {
             MockHandler<?> handler = mockMaker.getHandler(mock);
             if (handler != null) {
-                assert getMockMaker(handler.getMockSettings().getMockMaker()) == mockMaker;
-                return handler;
+                String mockMakerName = handler.getMockSettings().getMockMaker();
+                if (getMockMaker(mockMakerName) == mockMaker) {
+                    return handler;
+                }
             }
         }
         return null;
