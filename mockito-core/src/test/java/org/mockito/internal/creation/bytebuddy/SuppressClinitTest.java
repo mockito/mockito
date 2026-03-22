@@ -5,10 +5,13 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.instanceOf;
 
+import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 
@@ -22,6 +25,8 @@ import net.bytebuddy.jar.asm.MethodVisitor;
 import net.bytebuddy.utility.OpenedClassReader;
 import org.junit.Assume;
 import org.junit.Test;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.PremainAttachAccess;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.plugins.MockMaker;
 
@@ -219,6 +224,45 @@ public class SuppressClinitTest {
         ((BytecodeGenerator) inlineBytecodeGenerator)
                 .removeSuppressedClasses(Collections.singletonList(testClass));
         assertThat(suppressedClassNames).doesNotContain(testClass);
+    }
+
+    @Test
+    public void validate_not_already_loaded_throws_for_loaded_class() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineByteBuddyMockMaker.class));
+        Instrumentation instrumentation = PremainAttachAccess.getInstrumentation();
+
+        assertThatThrownBy(
+                        () ->
+                                InlineDelegateByteBuddyMockMaker.validateNotAlreadyLoaded(
+                                        instrumentation,
+                                        Collections.singletonList("java.lang.String")))
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("already loaded");
+    }
+
+    @Test
+    public void validate_not_already_loaded_succeeds_for_unloaded_class() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineByteBuddyMockMaker.class));
+        Instrumentation instrumentation = PremainAttachAccess.getInstrumentation();
+
+        // Should not throw for a class that is not loaded
+        InlineDelegateByteBuddyMockMaker.validateNotAlreadyLoaded(
+                instrumentation, Collections.singletonList("com.example.NonExistentClass"));
+    }
+
+    @Test
+    public void validate_not_already_loaded_checks_all_class_names() {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineByteBuddyMockMaker.class));
+        Instrumentation instrumentation = PremainAttachAccess.getInstrumentation();
+
+        assertThatThrownBy(
+                        () ->
+                                InlineDelegateByteBuddyMockMaker.validateNotAlreadyLoaded(
+                                        instrumentation,
+                                        Arrays.asList(
+                                                "com.example.NonExistent", "java.lang.String")))
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("java.lang.String");
     }
 
     /**

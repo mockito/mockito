@@ -578,8 +578,20 @@ class InlineDelegateByteBuddyMockMaker
                             "",
                             "Add -javaagent:mockito-core.jar to your JVM arguments."));
         }
+        validateNotAlreadyLoaded(INSTRUMENTATION, classNames);
+    }
+
+    /**
+     * Validates that none of the given class names are already loaded by the JVM.
+     *
+     * @param instrumentation the instrumentation instance to query for loaded classes
+     * @param classNames the class names to check
+     * @throws MockitoException if any of the classes are already loaded
+     */
+    static void validateNotAlreadyLoaded(
+            Instrumentation instrumentation, Collection<String> classNames) {
         for (String name : classNames) {
-            for (Class<?> loaded : INSTRUMENTATION.getAllLoadedClasses()) {
+            for (Class<?> loaded : instrumentation.getAllLoadedClasses()) {
                 if (loaded.getName().equals(name)) {
                     throw new MockitoException(
                             "Cannot suppress static initialization for '"
@@ -588,7 +600,6 @@ class InlineDelegateByteBuddyMockMaker
                 }
             }
         }
-        bytecodeGenerator.addSuppressedClasses(classNames);
     }
 
     @Override

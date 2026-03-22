@@ -368,6 +368,19 @@ public class TypeCachingMockBytecodeGeneratorTest {
         assertThat(inner.removedSuppressedClasses).isEqualTo(classNames);
     }
 
+    @Test
+    public void default_addSuppressedClasses_does_not_throw() {
+        SubclassBytecodeGenerator generator = new SubclassBytecodeGenerator();
+        // SubclassBytecodeGenerator inherits the default no-op methods from BytecodeGenerator
+        generator.addSuppressedClasses(Arrays.asList("com.example.Foo", "com.example.Bar"));
+    }
+
+    @Test
+    public void default_removeSuppressedClasses_does_not_throw() {
+        SubclassBytecodeGenerator generator = new SubclassBytecodeGenerator();
+        generator.removeSuppressedClasses(Collections.singletonList("com.example.Foo"));
+    }
+
     private static class RecordingBytecodeGenerator implements BytecodeGenerator {
         Collection<String> addedSuppressedClasses;
         Collection<String> removedSuppressedClasses;

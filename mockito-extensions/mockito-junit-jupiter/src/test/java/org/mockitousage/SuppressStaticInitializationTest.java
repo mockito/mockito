@@ -6,9 +6,18 @@ package org.mockitousage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
@@ -16,9 +25,12 @@ import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
+import org.mockito.MockedStatic;
 import org.mockito.SuppressStaticInitializationFor;
 import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.plugins.MockMaker;
 
 /**
  * Tests the {@link SuppressStaticInitializationFor} annotation integration with {@link
@@ -111,6 +123,36 @@ class SuppressStaticInitializationTest {
 
         assertThat(annotation).isNotNull();
         assertThat(annotation.value()).containsExactly("some.Class");
+    }
+
+    @Test
+    void beforeAll_stores_and_afterAll_restores_suppressed_classes() throws Exception {
+        // Create all mocks BEFORE mocking Plugins to avoid circular dependency
+        ExtensionContext context = mock(ExtensionContext.class);
+        ExtensionContext.Store store = mock(ExtensionContext.Store.class);
+        MockMaker mockMaker = mock(MockMaker.class);
+
+        List<String> classNames = Arrays.asList("org.mockitousage.SomeNonExistentClass");
+
+        when(context.getRequiredTestClass()).thenReturn((Class) SuppressWithoutPremain.class);
+        when(context.getStore(any())).thenReturn(store);
+        // afterAll calls store.remove which should return what beforeAll stored
+        when(store.remove("suppressedClasses")).thenReturn(classNames);
+
+        MockitoExtension extension = new MockitoExtension();
+
+        try (MockedStatic<Plugins> plugins = mockStatic(Plugins.class)) {
+            plugins.when(Plugins::getMockMaker).thenReturn(mockMaker);
+
+            extension.beforeAll(context);
+
+            verify(mockMaker).suppressStaticInitializationFor(classNames);
+            verify(store).put("suppressedClasses", classNames);
+
+            extension.afterAll(context);
+
+            verify(mockMaker).restoreStaticInitializationFor(classNames);
+        }
     }
 
     private TestExecutionResult invokeTestClassAndRetrieveMethodResult(Class<?> clazz) {
