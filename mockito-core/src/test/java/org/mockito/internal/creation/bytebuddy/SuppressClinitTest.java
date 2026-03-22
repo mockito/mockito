@@ -5,6 +5,7 @@
 package org.mockito.internal.creation.bytebuddy;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.instanceOf;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -19,6 +20,7 @@ import net.bytebuddy.jar.asm.ClassReader;
 import net.bytebuddy.jar.asm.ClassVisitor;
 import net.bytebuddy.jar.asm.MethodVisitor;
 import net.bytebuddy.utility.OpenedClassReader;
+import org.junit.Assume;
 import org.junit.Test;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.plugins.MockMaker;
@@ -111,6 +113,7 @@ public class SuppressClinitTest {
 
     @Test
     public void transform_intercepts_suppressed_class_on_initial_load() throws Exception {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineByteBuddyMockMaker.class));
         // Get the InlineBytecodeGenerator that's registered as a ClassFileTransformer
         Object inlineBytecodeGenerator = getInlineBytecodeGenerator();
 
@@ -164,6 +167,7 @@ public class SuppressClinitTest {
 
     @Test
     public void transform_returns_null_for_non_suppressed_class_on_initial_load() throws Exception {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineByteBuddyMockMaker.class));
         Object inlineBytecodeGenerator = getInlineBytecodeGenerator();
 
         byte[] originalBytecode =
@@ -197,6 +201,7 @@ public class SuppressClinitTest {
 
     @Test
     public void add_and_remove_suppressed_classes_modifies_set() throws Exception {
+        Assume.assumeThat(Plugins.getMockMaker(), instanceOf(InlineByteBuddyMockMaker.class));
         Object inlineBytecodeGenerator = getInlineBytecodeGenerator();
 
         Field field = InlineBytecodeGenerator.class.getDeclaredField("suppressedClassNames");
