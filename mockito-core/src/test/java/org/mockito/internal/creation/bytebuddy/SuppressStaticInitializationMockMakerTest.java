@@ -61,9 +61,7 @@ public class SuppressStaticInitializationMockMakerTest {
      */
     private static class UnsupportedMockMaker implements MockMaker {
         @Override
-        public <T> T createMock(
-                MockCreationSettings<T> settings,
-                MockHandler handler) {
+        public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
             throw new UnsupportedOperationException();
         }
 
@@ -73,10 +71,7 @@ public class SuppressStaticInitializationMockMakerTest {
         }
 
         @Override
-        public void resetMock(
-                Object mock,
-                MockHandler newHandler,
-                MockCreationSettings settings) {
+        public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
             throw new UnsupportedOperationException();
         }
 
