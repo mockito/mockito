@@ -11,6 +11,7 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.InlineMockMaker;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -97,6 +98,16 @@ public class InlineByteBuddyMockMaker
     public <T> SingletonMockControl<T> createSingletonMock(
             T instance, MockCreationSettings<T> settings, MockHandler handler) {
         return inlineDelegateByteBuddyMockMaker.createSingletonMock(instance, settings, handler);
+    }
+
+    @Override
+    public void suppressStaticInitializationFor(Collection<String> classNames) {
+        inlineDelegateByteBuddyMockMaker.suppressStaticInitializationFor(classNames);
+    }
+
+    @Override
+    public void restoreStaticInitializationFor(Collection<String> classNames) {
+        inlineDelegateByteBuddyMockMaker.restoreStaticInitializationFor(classNames);
     }
 
     @Override

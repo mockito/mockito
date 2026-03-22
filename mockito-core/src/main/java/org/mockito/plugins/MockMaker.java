@@ -10,6 +10,7 @@ import org.mockito.exceptions.base.MockitoException;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -227,6 +228,48 @@ public interface MockMaker {
                         "",
                         "Ensure your MockMaker implementation supports this feature.",
                         "Note that singleton mocks are not supported on Android."));
+    }
+
+    /**
+     * Suppresses the static initializer ({@code <clinit>}) of the specified classes so that
+     * when they are first loaded, the initializer is replaced with an empty method. All static
+     * fields will retain their JVM zero-value defaults ({@code null}, {@code 0}, {@code false}).
+     *
+     * <p>This requires Mockito to be loaded as a {@code -javaagent} so that the
+     * {@link java.lang.instrument.ClassFileTransformer} can intercept classes during initial load.
+     *
+     * @param classNames fully-qualified class names whose static initializers should be suppressed
+     * @throws MockitoException if the mock maker does not support this feature
+     * @since 5.24.0
+     */
+    default void suppressStaticInitializationFor(Collection<String> classNames) {
+        throw new MockitoException(
+                join(
+                        "The used MockMaker "
+                                + getClass().getSimpleName()
+                                + " does not support suppression of static initialization",
+                        "",
+                        "Use the inline mock maker with -javaagent."));
+    }
+
+    /**
+     * Removes the specified class names from the suppression set so that future loads of those
+     * classes (from different classloaders) will not have their static initializers suppressed.
+     *
+     * <p>Note: classes already loaded with a suppressed {@code <clinit>} cannot be re-initialized.
+     *
+     * @param classNames fully-qualified class names to stop suppressing
+     * @throws MockitoException if the mock maker does not support this feature
+     * @since 5.24.0
+     */
+    default void restoreStaticInitializationFor(Collection<String> classNames) {
+        throw new MockitoException(
+                join(
+                        "The used MockMaker "
+                                + getClass().getSimpleName()
+                                + " does not support suppression of static initialization",
+                        "",
+                        "Use the inline mock maker with -javaagent."));
     }
 
     /**

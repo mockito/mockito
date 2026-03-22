@@ -34,6 +34,7 @@ import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.Collection;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
@@ -566,6 +567,33 @@ class InlineDelegateByteBuddyMockMaker
             }
             mocks.expungeStaleEntries();
         }
+    }
+
+    @Override
+    public void suppressStaticInitializationFor(Collection<String> classNames) {
+        if (!PremainAttachAccess.isPremainAttached()) {
+            throw new MockitoException(
+                    join(
+                            "Suppressing static initialization requires Mockito to be loaded as a -javaagent.",
+                            "",
+                            "Add -javaagent:mockito-core.jar to your JVM arguments."));
+        }
+        for (String name : classNames) {
+            for (Class<?> loaded : INSTRUMENTATION.getAllLoadedClasses()) {
+                if (loaded.getName().equals(name)) {
+                    throw new MockitoException(
+                            "Cannot suppress static initialization for '"
+                                    + name
+                                    + "' because it is already loaded.");
+                }
+            }
+        }
+        bytecodeGenerator.addSuppressedClasses(classNames);
+    }
+
+    @Override
+    public void restoreStaticInitializationFor(Collection<String> classNames) {
+        bytecodeGenerator.removeSuppressedClasses(classNames);
     }
 
     @Override

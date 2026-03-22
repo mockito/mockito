@@ -7,12 +7,15 @@ package org.mockito.junit.jupiter;
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
@@ -22,6 +25,7 @@ import org.junit.jupiter.api.extension.ParameterResolver;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.ScopedMock;
+import org.mockito.SuppressStaticInitializationFor;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.session.MockitoSessionLoggerAdapter;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -115,11 +119,18 @@ import org.mockito.quality.Strictness;
  * }
  * </code></pre>
  */
-public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
+public class MockitoExtension
+        implements BeforeAllCallback,
+                AfterAllCallback,
+                BeforeEachCallback,
+                AfterEachCallback,
+                ParameterResolver {
 
     private static final Namespace MOCKITO = create("org.mockito");
 
-    private static final String SESSION = "session", MOCKS = "mocks";
+    private static final String SESSION = "session",
+            MOCKS = "mocks",
+            SUPPRESSED_CLASSES = "suppressedClasses";
 
     private final Strictness strictness;
 
@@ -136,6 +147,38 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
         this.parameterResolver =
                 new CompositeParameterResolver(
                         new MockParameterResolver(), new CaptorParameterResolver());
+    }
+
+    /**
+     * Callback that is invoked once <em>before</em> all tests in the current container.
+     *
+     * @param context the current extension context; never {@code null}
+     */
+    @Override
+    public void beforeAll(ExtensionContext context) {
+        Class<?> testClass = context.getRequiredTestClass();
+        SuppressStaticInitializationFor annotation =
+                testClass.getAnnotation(SuppressStaticInitializationFor.class);
+        if (annotation != null && annotation.value().length > 0) {
+            List<String> classNames = Arrays.asList(annotation.value());
+            Plugins.getMockMaker().suppressStaticInitializationFor(classNames);
+            context.getStore(MOCKITO).put(SUPPRESSED_CLASSES, classNames);
+        }
+    }
+
+    /**
+     * Callback that is invoked once <em>after</em> all tests in the current container.
+     *
+     * @param context the current extension context; never {@code null}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public void afterAll(ExtensionContext context) {
+        List<String> classNames =
+                (List<String>) context.getStore(MOCKITO).remove(SUPPRESSED_CLASSES);
+        if (classNames != null) {
+            Plugins.getMockMaker().restoreStaticInitializationFor(classNames);
+        }
     }
 
     /**

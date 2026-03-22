@@ -90,6 +90,27 @@ public class PremainAttachAccess {
         return instrumentation;
     }
 
+    /**
+     * Returns {@code true} if Mockito was loaded as a {@code -javaagent} (premain), meaning
+     * the {@link java.lang.instrument.ClassFileTransformer} can intercept classes during their initial load.
+     *
+     * @return {@code true} if premain-based instrumentation is available
+     * @since 5.24.0
+     */
+    public static boolean isPremainAttached() {
+        try {
+            return Class.forName(
+                                    "org.mockito.internal.PremainAttach",
+                                    true,
+                                    ClassLoader.getSystemClassLoader())
+                            .getMethod("getInstrumentation")
+                            .invoke(null)
+                    != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private static Instrumentation doGetInstrumentation(
             Class<?> type, String method, ClassLoader systemClassLoader) {
         try {

@@ -18,7 +18,9 @@ import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import net.bytebuddy.implementation.Implementation;
+import net.bytebuddy.jar.asm.ClassReader;
 import net.bytebuddy.jar.asm.ClassVisitor;
+import net.bytebuddy.jar.asm.ClassWriter;
 import net.bytebuddy.jar.asm.MethodVisitor;
 import net.bytebuddy.matcher.ElementMatchers;
 import net.bytebuddy.pool.TypePool;
@@ -41,6 +43,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.ProtectionDomain;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 import static net.bytebuddy.implementation.MethodDelegation.withDefaultConfiguration;
@@ -80,6 +83,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
     private final AsmVisitorWrapper mockTransformer;
 
     private final Method getModule, canRead, redefineModule;
+
+    private final Set<String> suppressedClassNames =
+            Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     private volatile Throwable lastException;
 
@@ -404,6 +410,13 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             Class<?> classBeingRedefined,
             ProtectionDomain protectionDomain,
             byte[] classfileBuffer) {
+        if (classBeingRedefined == null && className != null) {
+            String dotName = className.replace('/', '.');
+            if (suppressedClassNames.contains(dotName)) {
+                return suppressClinit(classfileBuffer);
+            }
+            return null;
+        }
         if (classBeingRedefined == null
                 || !mocked.contains(classBeingRedefined)
                         && !flatMocked.contains(classBeingRedefined)
@@ -454,6 +467,62 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             "But if the reset intends to remove mocking code to improve performance, it is still impacted."),
                     e);
         }
+    }
+
+    @Override
+    public void addSuppressedClasses(Collection<String> classNames) {
+        suppressedClassNames.addAll(classNames);
+    }
+
+    @Override
+    public void removeSuppressedClasses(Collection<String> classNames) {
+        suppressedClassNames.removeAll(classNames);
+    }
+
+    /**
+     * Replaces the {@code <clinit>} method of a class with an empty method that only contains
+     * a {@code RETURN} instruction. This leaves all static fields at their JVM zero-value defaults.
+     */
+    private static byte[] suppressClinit(byte[] classfileBuffer) {
+        ClassReader reader = new ClassReader(classfileBuffer);
+        ClassWriter writer = new ClassWriter(reader, 0);
+        reader.accept(
+                new ClassVisitor(OpenedClassReader.ASM_API, writer) {
+                    @Override
+                    public MethodVisitor visitMethod(
+                            int access,
+                            String name,
+                            String descriptor,
+                            String signature,
+                            String[] exceptions) {
+                        if ("<clinit>".equals(name)) {
+                            // Drop the original <clinit> by returning null
+                            return null;
+                        }
+                        return super.visitMethod(access, name, descriptor, signature, exceptions);
+                    }
+
+                    @Override
+                    public void visitEnd() {
+                        // Emit an empty <clinit> that just returns
+                        MethodVisitor mv =
+                                super.visitMethod(
+                                        net.bytebuddy.jar.asm.Opcodes.ACC_STATIC,
+                                        "<clinit>",
+                                        "()V",
+                                        null,
+                                        null);
+                        if (mv != null) {
+                            mv.visitCode();
+                            mv.visitInsn(net.bytebuddy.jar.asm.Opcodes.RETURN);
+                            mv.visitMaxs(0, 0);
+                            mv.visitEnd();
+                        }
+                        super.visitEnd();
+                    }
+                },
+                0);
+        return writer.toByteArray();
     }
 
     private static class ParameterWritingVisitorWrapper extends AsmVisitorWrapper.AbstractBase {

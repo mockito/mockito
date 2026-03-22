@@ -4,13 +4,17 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static org.mockito.Mockito.verify;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.handler.MockHandlerImpl;
 import org.mockitoutil.TestBase;
-
-import static org.mockito.Mockito.verify;
 
 public class InlineByteBuddyMockMakerTest extends TestBase {
 
@@ -44,5 +48,25 @@ public class InlineByteBuddyMockMakerTest extends TestBase {
         verify(delegate).clearMock(this);
         verify(delegate).clearAllMocks();
         verify(delegate).clearAllCaches();
+    }
+
+    @Test
+    public void should_delegate_suppress_static_initialization() {
+        InlineByteBuddyMockMaker mockMaker = new InlineByteBuddyMockMaker(delegate);
+
+        List<String> classNames = Arrays.asList("com.example.Foo", "com.example.Bar");
+        mockMaker.suppressStaticInitializationFor(classNames);
+
+        verify(delegate).suppressStaticInitializationFor(classNames);
+    }
+
+    @Test
+    public void should_delegate_restore_static_initialization() {
+        InlineByteBuddyMockMaker mockMaker = new InlineByteBuddyMockMaker(delegate);
+
+        List<String> classNames = Collections.singletonList("com.example.Foo");
+        mockMaker.restoreStaticInitializationFor(classNames);
+
+        verify(delegate).restoreStaticInitializationFor(classNames);
     }
 }

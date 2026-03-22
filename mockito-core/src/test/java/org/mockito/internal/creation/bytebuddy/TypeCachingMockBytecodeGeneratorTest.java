@@ -13,10 +13,13 @@ import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
@@ -340,6 +343,54 @@ public class TypeCachingMockBytecodeGeneratorTest {
         assertThat(mockClass).isAssignableTo(mockFeature.mockedType);
         for (Class<?> anInterface : mockFeature.interfaces) {
             assertThat(mockClass).isAssignableTo(anInterface);
+        }
+    }
+
+    @Test
+    public void delegates_addSuppressedClasses_to_inner_generator() {
+        RecordingBytecodeGenerator inner = new RecordingBytecodeGenerator();
+        TypeCachingBytecodeGenerator caching = new TypeCachingBytecodeGenerator(inner, true);
+
+        List<String> classNames = Arrays.asList("com.example.Foo", "com.example.Bar");
+        caching.addSuppressedClasses(classNames);
+
+        assertThat(inner.addedSuppressedClasses).isEqualTo(classNames);
+    }
+
+    @Test
+    public void delegates_removeSuppressedClasses_to_inner_generator() {
+        RecordingBytecodeGenerator inner = new RecordingBytecodeGenerator();
+        TypeCachingBytecodeGenerator caching = new TypeCachingBytecodeGenerator(inner, true);
+
+        List<String> classNames = Collections.singletonList("com.example.Foo");
+        caching.removeSuppressedClasses(classNames);
+
+        assertThat(inner.removedSuppressedClasses).isEqualTo(classNames);
+    }
+
+    private static class RecordingBytecodeGenerator implements BytecodeGenerator {
+        Collection<String> addedSuppressedClasses;
+        Collection<String> removedSuppressedClasses;
+
+        @Override
+        public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void mockClassConstruction(Class<?> type) {}
+
+        @Override
+        public void mockClassStatic(Class<?> type) {}
+
+        @Override
+        public void addSuppressedClasses(Collection<String> classNames) {
+            this.addedSuppressedClasses = new ArrayList<>(classNames);
+        }
+
+        @Override
+        public void removeSuppressedClasses(Collection<String> classNames) {
+            this.removedSuppressedClasses = new ArrayList<>(classNames);
         }
     }
 

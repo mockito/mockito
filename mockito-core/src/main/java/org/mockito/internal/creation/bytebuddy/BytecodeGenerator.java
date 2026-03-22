@@ -20,6 +20,10 @@ public interface BytecodeGenerator {
 
     default void clearAllCaches() {}
 
+    default void addSuppressedClasses(java.util.Collection<String> classNames) {}
+
+    default void removeSuppressedClasses(java.util.Collection<String> classNames) {}
+
     static ElementMatcher<MethodDescription> isGroovyMethod(boolean inline) {
         ElementMatcher.Junction<MethodDescription> matcher =
                 isDeclaredBy(named("groovy.lang.GroovyObjectSupport"))

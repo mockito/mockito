@@ -114,6 +114,16 @@ class TypeCachingBytecodeGenerator extends ReferenceQueue<ClassLoader>
     }
 
     @Override
+    public void addSuppressedClasses(java.util.Collection<String> classNames) {
+        bytecodeGenerator.addSuppressedClasses(classNames);
+    }
+
+    @Override
+    public void removeSuppressedClasses(java.util.Collection<String> classNames) {
+        bytecodeGenerator.removeSuppressedClasses(classNames);
+    }
+
+    @Override
     public void clearAllCaches() {
         lock.writeLock().lock();
         try {

@@ -6,6 +6,7 @@ package org.mockito.internal.creation.bytebuddy;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.Assert.*;
 
@@ -534,6 +535,36 @@ public class InlineDelegateByteBuddyMockMakerTest
         mockSettings.defaultAnswer(new Returns("bar"));
         if (extraInterfaces.length > 0) mockSettings.extraInterfaces(extraInterfaces);
         return mockSettings;
+    }
+
+    @Test
+    public void suppress_static_initialization_throws_when_premain_not_attached() {
+        assertThatThrownBy(
+                        () ->
+                                mockMaker.suppressStaticInitializationFor(
+                                        Collections.singletonList("some.NonExistentClass")))
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("javaagent");
+    }
+
+    @Test
+    public void suppress_static_initialization_throws_for_empty_list_when_premain_not_attached() {
+        assertThatThrownBy(() -> mockMaker.suppressStaticInitializationFor(Collections.emptyList()))
+                .isInstanceOf(MockitoException.class)
+                .hasMessageContaining("javaagent");
+    }
+
+    @Test
+    public void restore_static_initialization_does_not_throw() {
+        // restoreStaticInitializationFor does not require premain — it just removes
+        // class names from the suppression set, which is always safe
+        mockMaker.restoreStaticInitializationFor(
+                Collections.singletonList("some.NonExistentClass"));
+    }
+
+    @Test
+    public void restore_static_initialization_with_empty_list_does_not_throw() {
+        mockMaker.restoreStaticInitializationFor(Collections.emptyList());
     }
 
     @Test
