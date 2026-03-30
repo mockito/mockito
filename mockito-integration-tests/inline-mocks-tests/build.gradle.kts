@@ -10,6 +10,24 @@ dependencies {
     testImplementation(libs.junit4)
     testImplementation(libs.assertj)
 }
+val premainClinitSuppressionTest by tasks.registering(Test::class) {
+    description = "Runs PremainClinitSuppressionTest with -javaagent and clinit suppression"
+    group = "verification"
+    testClassesDirs = sourceSets.test.get().output.classesDirs
+    classpath = sourceSets.test.get().runtimeClasspath
+    include("**/PremainClinitSuppressionTest.class")
+
+    val mockitoJar = project(":mockito-core").tasks.named<Jar>("jar").flatMap { it.archiveFile }
+    dependsOn(mockitoJar)
+    jvmArgumentProviders.add(CommandLineArgumentProvider {
+        val jar = mockitoJar.get().asFile
+        listOf(
+            "-javaagent:$jar",
+            "-Dmockito.suppress.clinit=org.mockitoinline.PremainClinitSuppressionTest\$ClassWithStaticInit"
+        )
+    })
+}
+
 tasks {
     test {
         if (JavaVersion.VERSION_17 <= JavaVersion.current()) {
@@ -24,5 +42,10 @@ tasks {
         }
         //required by the "StressTest.java" and "OneLinerStubStressTest.java"
         maxHeapSize = "256m"
+        // Exclude premain tests from the default test task
+        exclude("**/PremainClinitSuppressionTest.class")
+    }
+    check {
+        dependsOn(premainClinitSuppressionTest)
     }
 }
