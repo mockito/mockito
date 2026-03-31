@@ -8,7 +8,6 @@ import net.bytebuddy.jar.asm.ClassReader;
 import net.bytebuddy.jar.asm.ClassVisitor;
 import net.bytebuddy.jar.asm.ClassWriter;
 import net.bytebuddy.jar.asm.MethodVisitor;
-import net.bytebuddy.jar.asm.Opcodes;
 import net.bytebuddy.utility.OpenedClassReader;
 
 import java.lang.instrument.ClassFileTransformer;
@@ -20,7 +19,7 @@ import java.util.Set;
  * specified classes at class-load time.
  *
  * <p>When a class is first loaded (not retransformed) and its fully-qualified name appears in the
- * configured set, the transformer replaces the {@code <clinit>} method with an empty method body.
+ * configured set, the transformer removes the {@code <clinit>} method entirely.
  * This causes all static fields to retain their JVM zero-value defaults ({@code null},
  * {@code 0}, {@code false}, etc.).
  *
@@ -63,15 +62,15 @@ public class ClinitSuppressionTransformer implements ClassFileTransformer {
     }
 
     /**
-     * Replaces the {@code <clinit>} method in the given class bytecode with an empty method body.
-     * If the class has no {@code <clinit>}, the bytecode is returned unchanged.
+     * Removes the {@code <clinit>} method from the given class bytecode entirely.
+     * If the class has no {@code <clinit>}, the bytecode is returned as-is.
      *
      * <p>The transformation uses ASM (shaded inside ByteBuddy) to visit all methods. When
-     * {@code <clinit>} is encountered, a new empty method body containing only a {@code RETURN}
-     * instruction is emitted. All other methods and class structure are preserved as-is.
+     * {@code <clinit>} is encountered, it is omitted from the output. All other methods and
+     * class structure are preserved as-is.
      *
      * @param classfileBuffer the original class bytecode
-     * @return the transformed bytecode with an empty {@code <clinit>}, or {@code null}
+     * @return the transformed bytecode without {@code <clinit>}, or {@code null}
      *     if no {@code <clinit>} was found
      */
     static byte[] suppressClinit(byte[] classfileBuffer) {
@@ -96,12 +95,6 @@ public class ClinitSuppressionTransformer implements ClassFileTransformer {
                 int access, String name, String descriptor, String signature, String[] exceptions) {
             if ("<clinit>".equals(name)) {
                 found = true;
-                MethodVisitor mv =
-                        super.visitMethod(access, name, descriptor, signature, exceptions);
-                mv.visitCode();
-                mv.visitInsn(Opcodes.RETURN);
-                mv.visitMaxs(0, 0);
-                mv.visitEnd();
                 return null;
             }
             return super.visitMethod(access, name, descriptor, signature, exceptions);

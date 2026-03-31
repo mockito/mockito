@@ -58,10 +58,9 @@ public class ClinitSuppressionTransformerTest {
         assertThat(hasClinit(original)).isTrue();
 
         byte[] transformed = ClinitSuppressionTransformer.suppressClinit(original);
-        assertThat(hasClinit(transformed)).isTrue();
+        assertThat(hasClinit(transformed)).isFalse();
 
-        // The clinit should now be empty (just RETURN), verify by checking the bytecode is
-        // different
+        // The clinit should be removed, verify by checking the bytecode is different
         assertThat(transformed).isNotEqualTo(original);
     }
 
@@ -83,7 +82,9 @@ public class ClinitSuppressionTransformerTest {
         Set<String> originalMethods = collectMethodNames(original);
         Set<String> transformedMethods = collectMethodNames(transformed);
 
+        originalMethods.remove("<clinit>");
         assertThat(transformedMethods).containsAll(originalMethods);
+        assertThat(transformedMethods).doesNotContain("<clinit>");
     }
 
     @Test
