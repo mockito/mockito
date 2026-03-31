@@ -27,8 +27,6 @@ import java.util.Set;
  * <p>This transformer is registered at premain time when the system property
  * {@code mockito.suppress.clinit} is set. See {@link org.mockito.internal.PremainAttach} for
  * details.
- *
- * @since 5.+
  */
 public class ClinitSuppressionTransformer implements ClassFileTransformer {
 
@@ -73,7 +71,7 @@ public class ClinitSuppressionTransformer implements ClassFileTransformer {
      * instruction is emitted. All other methods and class structure are preserved as-is.
      *
      * @param classfileBuffer the original class bytecode
-     * @return the transformed bytecode with an empty {@code <clinit>}, or the original bytecode
+     * @return the transformed bytecode with an empty {@code <clinit>}, or {@code null}
      *     if no {@code <clinit>} was found
      */
     static byte[] suppressClinit(byte[] classfileBuffer) {
@@ -83,7 +81,7 @@ public class ClinitSuppressionTransformer implements ClassFileTransformer {
 
         reader.accept(classVisitor, 0);
 
-        return classVisitor.found ? writer.toByteArray() : classfileBuffer;
+        return classVisitor.found ? writer.toByteArray() : null;
     }
 
     private static class ClinitSuppressionClassVisitor extends ClassVisitor {

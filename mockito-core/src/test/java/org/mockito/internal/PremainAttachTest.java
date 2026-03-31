@@ -33,6 +33,15 @@ public class PremainAttachTest {
     }
 
     @Test
+    public void parse_suppress_clinit_property_with_one_empty_class() {
+        Set<String> result =
+                PremainAttach.parseSuppressClinitProperty(
+                        " com.example.ClassA , , com.example.ClassB ");
+
+        assertThat(result).containsExactlyInAnyOrder("com.example.ClassA", "com.example.ClassB");
+    }
+
+    @Test
     public void parse_suppress_clinit_property_returns_empty_when_null() {
         Set<String> result = PremainAttach.parseSuppressClinitProperty(null);
 

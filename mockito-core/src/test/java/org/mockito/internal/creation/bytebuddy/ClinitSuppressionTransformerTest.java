@@ -71,8 +71,8 @@ public class ClinitSuppressionTransformerTest {
         assertThat(hasClinit(original)).isFalse();
 
         byte[] result = ClinitSuppressionTransformer.suppressClinit(original);
-        // Should return the original buffer unchanged
-        assertThat(result).isSameAs(original);
+        // Should return null when no clinit is found
+        assertThat(result).isNull();
     }
 
     @Test
