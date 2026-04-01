@@ -96,6 +96,9 @@ public class ClinitSuppressionTransformer implements ClassFileTransformer {
                 int access, String name, String descriptor, String signature, String[] exceptions) {
             if ("<clinit>".equals(name)) {
                 found = true;
+                // The <clinit> method is stubbed (replaced with an immediate RETURN), rather
+                // than deleted, to retain the implicit serialization UID. Removing it would break
+                // the serialization.
                 MethodVisitor mv =
                         super.visitMethod(access, name, descriptor, signature, exceptions);
                 mv.visitCode();
