@@ -10,8 +10,14 @@ import net.bytebuddy.jar.asm.MethodVisitor;
 import net.bytebuddy.utility.OpenedClassReader;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ClinitSuppressionTransformerTest {
 
     // Test target class with a static initializer
-    static class WithClinit {
+    static class WithClinit implements Serializable {
         static String value = "initialized";
         static int number = 42;
 
@@ -94,16 +100,7 @@ public class ClinitSuppressionTransformerTest {
         // Load the transformed class with a custom classloader
         String className = WithClinit.class.getName();
         ClassLoader customLoader =
-                new ClassLoader(getClass().getClassLoader()) {
-                    @Override
-                    protected Class<?> loadClass(String name, boolean resolve)
-                            throws ClassNotFoundException {
-                        if (name.equals(className)) {
-                            return defineClass(name, transformed, 0, transformed.length);
-                        }
-                        return super.loadClass(name, resolve);
-                    }
-                };
+                new ClassOverridingLoader(getClass().getClassLoader(), className, transformed);
 
         Class<?> loaded = customLoader.loadClass(className);
         Field valueField = loaded.getDeclaredField("value");
@@ -113,6 +110,28 @@ public class ClinitSuppressionTransformerTest {
         Field numberField = loaded.getDeclaredField("number");
         numberField.setAccessible(true);
         assertThat(numberField.get(null)).isEqualTo(0);
+    }
+
+    @Test
+    public void suppress_clinit_preserves_implicit_serialVersionUID() throws Exception {
+        String className = WithClinit.class.getName();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
+            objectOutputStream.writeObject(new WithClinit());
+        }
+        byte[] serializedBytes = outputStream.toByteArray();
+        byte[] transformed =
+                ClinitSuppressionTransformer.suppressClinit(readClassBytes(WithClinit.class));
+
+        assertThat(transformed).isNotNull();
+        ClassLoader customLoader =
+                new ClassOverridingLoader(getClass().getClassLoader(), className, transformed);
+
+        try (ObjectInputStream inputStream =
+                getInputStream(serializedBytes, className, customLoader)) {
+            Object deserialized = inputStream.readObject();
+            assertThat(deserialized.getClass().getName()).isEqualTo(className);
+        }
     }
 
     @Test
@@ -213,5 +232,38 @@ public class ClinitSuppressionTransformerTest {
                         },
                         0);
         return names;
+    }
+
+    private static ObjectInputStream getInputStream(
+            byte[] serializedBytes, String className, ClassLoader customLoader) throws IOException {
+        return new ObjectInputStream(new ByteArrayInputStream(serializedBytes)) {
+            @Override
+            protected Class<?> resolveClass(ObjectStreamClass clazz)
+                    throws IOException, ClassNotFoundException {
+                if (className.equals(clazz.getName())) {
+                    return customLoader.loadClass(className);
+                }
+                return super.resolveClass(clazz);
+            }
+        };
+    }
+
+    private static class ClassOverridingLoader extends ClassLoader {
+        final String target;
+        final byte[] bytecode;
+
+        ClassOverridingLoader(ClassLoader parent, String target, byte[] bytecode) {
+            super(parent);
+            this.target = target;
+            this.bytecode = bytecode;
+        }
+
+        @Override
+        protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+            if (name.equals(target)) {
+                return defineClass(name, bytecode, 0, bytecode.length);
+            }
+            return super.loadClass(name, resolve);
+        }
     }
 }
