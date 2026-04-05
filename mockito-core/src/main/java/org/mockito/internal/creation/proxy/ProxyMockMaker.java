@@ -33,7 +33,7 @@ public class ProxyMockMaker implements MockMaker {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+    public <T> T createMock(MockCreationSettings<T> settings, MockHandler<T> handler) {
         boolean object = settings.getTypeToMock() == Object.class;
         Class<?>[] ifaces = new Class<?>[settings.getExtraInterfaces().size() + (object ? 0 : 1)];
         int index = 0;
@@ -77,7 +77,7 @@ public class ProxyMockMaker implements MockMaker {
     }
 
     @Override
-    public MockHandler getHandler(Object mock) {
+    public MockHandler<?> getHandler(Object mock) {
         if (!Proxy.isProxyClass(mock.getClass())) {
             return null;
         }
@@ -89,7 +89,8 @@ public class ProxyMockMaker implements MockMaker {
     }
 
     @Override
-    public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
+    public void resetMock(
+            Object mock, MockHandler<?> newHandler, MockCreationSettings<?> settings) {
         ((MockInvocationHandler) Proxy.getInvocationHandler(mock)).handler.set(newHandler);
     }
 

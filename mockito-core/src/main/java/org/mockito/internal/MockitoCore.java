@@ -158,7 +158,7 @@ public class MockitoCore {
             throw notAMockPassedToVerify(mock.getClass());
         }
         assertNotStubOnlyMock(mock);
-        MockHandler handler = mockingDetails.getMockHandler();
+        MockHandler<?> handler = mockingDetails.getMockHandler();
         mock =
                 (T)
                         VerificationStartedNotifier.notifyVerificationStarted(

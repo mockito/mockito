@@ -37,13 +37,13 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
     }
 
     @Override
-    public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+    public <T> T createMock(MockCreationSettings<T> settings, MockHandler<T> handler) {
         return subclassByteBuddyMockMaker.createMock(settings, handler);
     }
 
     @Override
     public <T> Optional<T> createSpy(
-            MockCreationSettings<T> settings, MockHandler handler, T object) {
+            MockCreationSettings<T> settings, MockHandler<T> handler, T object) {
         return subclassByteBuddyMockMaker.createSpy(settings, handler, object);
     }
 
@@ -53,12 +53,13 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
     }
 
     @Override
-    public MockHandler getHandler(Object mock) {
+    public MockHandler<?> getHandler(Object mock) {
         return subclassByteBuddyMockMaker.getHandler(mock);
     }
 
     @Override
-    public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
+    public void resetMock(
+            Object mock, MockHandler<?> newHandler, MockCreationSettings<?> settings) {
         subclassByteBuddyMockMaker.resetMock(mock, newHandler, settings);
     }
 
@@ -69,7 +70,7 @@ public class ByteBuddyMockMaker implements ClassCreatingMockMaker {
 
     @Override
     public <T> StaticMockControl<T> createStaticMock(
-            Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
+            Class<T> type, MockCreationSettings<T> settings, MockHandler<T> handler) {
         return subclassByteBuddyMockMaker.createStaticMock(type, settings, handler);
     }
 

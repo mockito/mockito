@@ -34,7 +34,7 @@ public interface RealMethod extends Serializable {
     class FromCallable extends FromBehavior implements RealMethod {
         public FromCallable(final Callable<?> callable) {
             super(
-                    new InvocationFactory.RealMethodBehavior() {
+                    new InvocationFactory.RealMethodBehavior<Object>() {
                         @Override
                         public Object call() throws Throwable {
                             return callable.call();

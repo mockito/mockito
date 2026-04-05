@@ -80,7 +80,7 @@ public class MockUtil {
 
     public static <T> T createMock(MockCreationSettings<T> settings) {
         MockMaker mockMaker = getMockMaker(settings.getMockMaker());
-        MockHandler mockHandler = createMockHandler(settings);
+        MockHandler<T> mockHandler = createMockHandler(settings);
 
         Object spiedInstance = settings.getSpiedInstance();
 
@@ -103,16 +103,16 @@ public class MockUtil {
     }
 
     public static void resetMock(Object mock) {
-        MockHandler oldHandler = getMockHandler(mock);
-        MockCreationSettings settings = oldHandler.getMockSettings();
-        MockHandler newHandler = createMockHandler(settings);
+        MockHandler<?> oldHandler = getMockHandler(mock);
+        MockCreationSettings<?> settings = oldHandler.getMockSettings();
+        MockHandler<?> newHandler = createMockHandler(settings);
 
         mock = resolve(mock);
         getMockMaker(settings.getMockMaker()).resetMock(mock, newHandler, settings);
     }
 
     public static MockHandler<?> getMockHandler(Object mock) {
-        MockHandler handler = getMockHandlerOrNull(mock);
+        MockHandler<?> handler = getMockHandlerOrNull(mock);
         if (handler != null) {
             return handler;
         } else {
@@ -187,13 +187,13 @@ public class MockUtil {
     public static void maybeRedefineMockName(Object mock, String newName) {
         MockName mockName = getMockName(mock);
         // TODO SF hacky...
-        MockCreationSettings mockSettings = getMockHandler(mock).getMockSettings();
+        MockCreationSettings<?> mockSettings = getMockHandler(mock).getMockSettings();
         if (mockName.isDefault() && mockSettings instanceof CreationSettings) {
             ((CreationSettings) mockSettings).setMockName(new MockNameImpl(newName));
         }
     }
 
-    public static MockCreationSettings getMockSettings(Object mock) {
+    public static MockCreationSettings<?> getMockSettings(Object mock) {
         return getMockHandler(mock).getMockSettings();
     }
 

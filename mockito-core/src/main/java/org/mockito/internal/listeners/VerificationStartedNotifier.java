@@ -5,7 +5,6 @@
 package org.mockito.internal.listeners;
 
 import java.util.List;
-import java.util.Set;
 
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
@@ -53,7 +52,7 @@ public final class VerificationStartedNotifier {
                                 + ValuePrinter.print(mock)
                                 + ".\n ");
             }
-            MockCreationSettings originalMockSettings =
+            MockCreationSettings<?> originalMockSettings =
                     this.originalMockingDetails.getMockCreationSettings();
             assertCompatibleTypes(mock, originalMockSettings);
             this.mock = mock;
@@ -65,8 +64,8 @@ public final class VerificationStartedNotifier {
         }
     }
 
-    static void assertCompatibleTypes(Object mock, MockCreationSettings originalSettings) {
-        Class originalType = originalSettings.getTypeToMock();
+    static void assertCompatibleTypes(Object mock, MockCreationSettings<?> originalSettings) {
+        Class<?> originalType = originalSettings.getTypeToMock();
         if (!originalType.isInstance(mock)) {
             throw Reporter.methodDoesNotAcceptParameter(
                     "VerificationStartedEvent.setMock",
@@ -79,7 +78,7 @@ public final class VerificationStartedNotifier {
                             + ".\n ");
         }
 
-        for (Class iface : (Set<Class>) originalSettings.getExtraInterfaces()) {
+        for (Class<?> iface : originalSettings.getExtraInterfaces()) {
             if (!iface.isInstance(mock)) {
                 throw Reporter.methodDoesNotAcceptParameter(
                         "VerificationStartedEvent.setMock",

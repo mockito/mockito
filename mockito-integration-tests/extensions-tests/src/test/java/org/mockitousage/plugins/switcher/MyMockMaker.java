@@ -12,18 +12,19 @@ public class MyMockMaker extends SubclassByteBuddyMockMaker {
 
     static ThreadLocal<Object> explosive = new ThreadLocal<Object>();
 
-    public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+    public <T> T createMock(MockCreationSettings<T> settings, MockHandler<T> handler) {
         if (explosive.get() != null) {
             throw new RuntimeException(MyMockMaker.class.getName());
         }
         return super.createMock(settings, handler);
     }
 
-    public MockHandler getHandler(Object mock) {
+    public MockHandler<?> getHandler(Object mock) {
         return super.getHandler(mock);
     }
 
-    public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
+    public void resetMock(
+            Object mock, MockHandler<?> newHandler, MockCreationSettings<?> settings) {
         super.resetMock(mock, newHandler, settings);
     }
 

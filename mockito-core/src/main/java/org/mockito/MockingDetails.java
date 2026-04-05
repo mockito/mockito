@@ -117,7 +117,7 @@ public interface MockingDetails {
      * @return mock handler instance of this mock
      * @since 2.10.0
      */
-    MockHandler getMockHandler();
+    MockHandler<?> getMockHandler();
 
     /**
      * Returns the mock object which is associated with this this instance of {@link MockingDetails}.

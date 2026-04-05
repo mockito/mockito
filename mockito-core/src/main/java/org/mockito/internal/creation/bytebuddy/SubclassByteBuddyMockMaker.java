@@ -41,7 +41,7 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
     }
 
     @Override
-    public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+    public <T> T createMock(MockCreationSettings<T> settings, MockHandler<T> handler) {
         Class<? extends T> mockedProxyType = createMockType(settings);
 
         Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(settings);
@@ -146,7 +146,7 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
     }
 
     @Override
-    public MockHandler getHandler(Object mock) {
+    public MockHandler<?> getHandler(Object mock) {
         if (!(mock instanceof MockAccess)) {
             return null;
         }
@@ -154,7 +154,8 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
     }
 
     @Override
-    public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
+    public void resetMock(
+            Object mock, MockHandler<?> newHandler, MockCreationSettings<?> settings) {
         ((MockAccess) mock).setMockitoInterceptor(new MockMethodInterceptor(newHandler, settings));
     }
 

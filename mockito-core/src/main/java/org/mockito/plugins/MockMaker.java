@@ -85,7 +85,7 @@ public interface MockMaker {
      * @return The mock instance.
      * @since 1.9.5
      */
-    <T> T createMock(MockCreationSettings<T> settings, MockHandler handler);
+    <T> T createMock(MockCreationSettings<T> settings, MockHandler<T> handler);
 
     /**
      * By implementing this method, a mock maker can optionally support the creation of spies where all fields
@@ -102,7 +102,7 @@ public interface MockMaker {
      * @since 3.5.0
      */
     default <T> Optional<T> createSpy(
-            MockCreationSettings<T> settings, MockHandler handler, T instance) {
+            MockCreationSettings<T> settings, MockHandler<T> handler, T instance) {
         return Optional.empty();
     }
 
@@ -116,7 +116,7 @@ public interface MockMaker {
      *   This means the passed object is not really a Mockito mock.
      * @since 1.9.5
      */
-    MockHandler getHandler(Object mock);
+    MockHandler<?> getHandler(Object mock);
 
     /**
      * Replaces the existing handler on {@code mock} with {@code newHandler}.
@@ -132,7 +132,7 @@ public interface MockMaker {
      * @param settings The mock settings - should you need to access some of the mock creation details.
      * @since 1.9.5
      */
-    void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings);
+    void resetMock(Object mock, MockHandler<?> newHandler, MockCreationSettings<?> settings);
 
     /**
      * Indicates if the given type can be mocked by this mockmaker.
@@ -164,7 +164,7 @@ public interface MockMaker {
      * @since 3.4.0
      */
     default <T> StaticMockControl<T> createStaticMock(
-            Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
+            Class<T> type, MockCreationSettings<T> settings, MockHandler<T> handler) {
         throw new MockitoException(
                 join(
                         "The used MockMaker "
@@ -218,7 +218,7 @@ public interface MockMaker {
      * @since 5.22.0
      */
     default <T> SingletonMockControl<T> createSingletonMock(
-            T instance, MockCreationSettings<T> settings, MockHandler handler) {
+            T instance, MockCreationSettings<T> settings, MockHandler<T> handler) {
         throw new MockitoException(
                 join(
                         "The used MockMaker "

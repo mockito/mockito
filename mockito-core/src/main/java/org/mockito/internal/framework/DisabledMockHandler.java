@@ -27,8 +27,8 @@ import java.util.Set;
  * Throws {@link DisabledMockException} when a mock is accessed after it has been disabled by
  * {@link MockitoFramework#clearInlineMocks()}.
  */
-public class DisabledMockHandler implements MockHandler {
-    public static MockHandler HANDLER = new DisabledMockHandler();
+public class DisabledMockHandler implements MockHandler<Object> {
+    public static MockHandler<Object> HANDLER = new DisabledMockHandler();
 
     private DisabledMockHandler() {
         // private, use HANDLER instead
@@ -40,7 +40,7 @@ public class DisabledMockHandler implements MockHandler {
     }
 
     @Override
-    public MockCreationSettings getMockSettings() {
+    public MockCreationSettings<Object> getMockSettings() {
         return DisabledMockCreationSettings.INSTANCE;
     }
 
@@ -50,7 +50,7 @@ public class DisabledMockHandler implements MockHandler {
     }
 
     private static class DisabledMockCreationSettings
-            implements Serializable, MockCreationSettings {
+            implements Serializable, MockCreationSettings<Object> {
         private static DisabledMockCreationSettings INSTANCE = new DisabledMockCreationSettings();
 
         private DisabledMockCreationSettings() {
@@ -58,7 +58,7 @@ public class DisabledMockHandler implements MockHandler {
         }
 
         @Override
-        public Class getTypeToMock() {
+        public Class<Object> getTypeToMock() {
             throw new DisabledMockException();
         }
 

@@ -41,9 +41,9 @@ public interface MockingProgress {
 
     ArgumentMatcherStorage getArgumentMatcherStorage();
 
-    void mockingStarted(Object mock, MockCreationSettings settings);
+    void mockingStarted(Object mock, MockCreationSettings<?> settings);
 
-    void mockingStarted(Class<?> mock, MockCreationSettings settings);
+    void mockingStarted(Class<?> mock, MockCreationSettings<?> settings);
 
     void addListener(MockitoListener listener);
 

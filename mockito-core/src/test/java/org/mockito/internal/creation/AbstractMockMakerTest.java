@@ -35,8 +35,8 @@ public abstract class AbstractMockMakerTest<MM extends MockMaker, C> {
         C mockOne = mockMaker.createMock(settingsFor(target), dummyHandler());
         C mockTwo = mockMaker.createMock(settingsFor(target), dummyHandler());
 
-        MockHandler handlerOne = mockMaker.getHandler(mockOne);
-        MockHandler handlerTwo = mockMaker.getHandler(mockTwo);
+        MockHandler<?> handlerOne = mockMaker.getHandler(mockOne);
+        MockHandler<?> handlerTwo = mockMaker.getHandler(mockTwo);
 
         assertThat(handlerOne).isNotSameAs(handlerTwo);
     }
@@ -80,8 +80,9 @@ public abstract class AbstractMockMakerTest<MM extends MockMaker, C> {
         return mockSettings;
     }
 
-    protected static MockHandler dummyHandler() {
-        return new DummyMockHandler();
+    @SuppressWarnings("unchecked")
+    protected static <T> MockHandler<T> dummyHandler() {
+        return (MockHandler<T>) new DummyMockHandler();
     }
 
     private static class DummyMockHandler implements MockHandler<Object> {

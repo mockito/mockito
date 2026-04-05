@@ -163,7 +163,7 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     @Override
-    public void mockingStarted(Object mock, MockCreationSettings settings) {
+    public void mockingStarted(Object mock, MockCreationSettings<?> settings) {
         for (MockitoListener listener : listeners) {
             if (listener instanceof MockCreationListener) {
                 ((MockCreationListener) listener).onMockCreated(mock, settings);
@@ -173,7 +173,7 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     @Override
-    public void mockingStarted(Class<?> mock, MockCreationSettings settings) {
+    public void mockingStarted(Class<?> mock, MockCreationSettings<?> settings) {
         for (MockitoListener listener : listeners) {
             if (listener instanceof MockCreationListener) {
                 ((MockCreationListener) listener).onStaticMockCreated(mock, settings);
