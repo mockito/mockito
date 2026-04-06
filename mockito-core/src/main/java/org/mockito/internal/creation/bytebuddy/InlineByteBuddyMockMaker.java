@@ -52,13 +52,13 @@ public class InlineByteBuddyMockMaker
     }
 
     @Override
-    public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+    public <T> T createMock(MockCreationSettings<T> settings, MockHandler<T> handler) {
         return inlineDelegateByteBuddyMockMaker.createMock(settings, handler);
     }
 
     @Override
     public <T> Optional<T> createSpy(
-            MockCreationSettings<T> settings, MockHandler handler, T instance) {
+            MockCreationSettings<T> settings, MockHandler<T> handler, T instance) {
         return inlineDelegateByteBuddyMockMaker.createSpy(settings, handler, instance);
     }
 
@@ -68,7 +68,8 @@ public class InlineByteBuddyMockMaker
     }
 
     @Override
-    public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
+    public void resetMock(
+            Object mock, MockHandler<?> newHandler, MockCreationSettings<?> settings) {
         inlineDelegateByteBuddyMockMaker.resetMock(mock, newHandler, settings);
     }
 
@@ -79,7 +80,7 @@ public class InlineByteBuddyMockMaker
 
     @Override
     public <T> StaticMockControl<T> createStaticMock(
-            Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
+            Class<T> type, MockCreationSettings<T> settings, MockHandler<T> handler) {
         return inlineDelegateByteBuddyMockMaker.createStaticMock(type, settings, handler);
     }
 
@@ -95,7 +96,7 @@ public class InlineByteBuddyMockMaker
 
     @Override
     public <T> SingletonMockControl<T> createSingletonMock(
-            T instance, MockCreationSettings<T> settings, MockHandler handler) {
+            T instance, MockCreationSettings<T> settings, MockHandler<T> handler) {
         return inlineDelegateByteBuddyMockMaker.createSingletonMock(instance, settings, handler);
     }
 

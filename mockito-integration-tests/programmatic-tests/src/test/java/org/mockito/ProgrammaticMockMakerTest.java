@@ -159,7 +159,9 @@ public final class ProgrammaticMockMakerTest {
 
     @Test
     public void test_interface_after_subclass_mock_maker() {
-        NonFinalClass subClassMock = Mockito.mock(NonFinalClass.class, Mockito.withSettings().mockMaker(MockMakers.SUBCLASS));
+        NonFinalClass subClassMock =
+                Mockito.mock(
+                        NonFinalClass.class, Mockito.withSettings().mockMaker(MockMakers.SUBCLASS));
         Mockito.when(subClassMock.someMethod()).thenReturn("1");
         assertEquals("1", subClassMock.someMethod());
 
@@ -215,7 +217,7 @@ public final class ProgrammaticMockMakerTest {
 
     public static class CustomMockMaker extends SubclassByteBuddyMockMaker {
         @Override
-        public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+        public <T> T createMock(MockCreationSettings<T> settings, MockHandler<T> handler) {
             throw new RuntimeException("CUSTOM MOCK MAKER");
         }
     }

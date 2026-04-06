@@ -36,13 +36,13 @@ public final class StubbingLookupNotifier {
         private final Invocation invocation;
         private final Stubbing stubbing;
         private final Collection<Stubbing> allStubbings;
-        private final MockCreationSettings mockSettings;
+        private final MockCreationSettings<?> mockSettings;
 
         public Event(
                 Invocation invocation,
                 Stubbing stubbing,
                 Collection<Stubbing> allStubbings,
-                MockCreationSettings mockSettings) {
+                MockCreationSettings<?> mockSettings) {
             this.invocation = invocation;
             this.stubbing = stubbing;
             this.allStubbings = allStubbings;
@@ -65,7 +65,7 @@ public final class StubbingLookupNotifier {
         }
 
         @Override
-        public MockCreationSettings getMockSettings() {
+        public MockCreationSettings<?> getMockSettings() {
             return mockSettings;
         }
     }

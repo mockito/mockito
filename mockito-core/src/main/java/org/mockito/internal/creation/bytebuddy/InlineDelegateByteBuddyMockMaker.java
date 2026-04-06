@@ -368,13 +368,13 @@ class InlineDelegateByteBuddyMockMaker
     }
 
     @Override
-    public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+    public <T> T createMock(MockCreationSettings<T> settings, MockHandler<T> handler) {
         return doCreateMock(settings, handler, false);
     }
 
     @Override
     public <T> Optional<T> createSpy(
-            MockCreationSettings<T> settings, MockHandler handler, T object) {
+            MockCreationSettings<T> settings, MockHandler<T> handler, T object) {
         if (object == null) {
             throw new MockitoConfigurationException("Spy instance must not be null");
         }
@@ -388,7 +388,7 @@ class InlineDelegateByteBuddyMockMaker
 
     private <T> T doCreateMock(
             MockCreationSettings<T> settings,
-            MockHandler handler,
+            MockHandler<T> handler,
             boolean nullOnNonInlineConstruction) {
         Class<? extends T> type = createMockType(settings);
 
@@ -536,7 +536,8 @@ class InlineDelegateByteBuddyMockMaker
     }
 
     @Override
-    public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
+    public void resetMock(
+            Object mock, MockHandler<?> newHandler, MockCreationSettings<?> settings) {
         MockMethodInterceptor mockMethodInterceptor =
                 new MockMethodInterceptor(newHandler, settings);
         if (mock instanceof Class<?>) {
@@ -624,7 +625,7 @@ class InlineDelegateByteBuddyMockMaker
 
     @Override
     public <T> StaticMockControl<T> createStaticMock(
-            Class<T> type, MockCreationSettings<T> settings, MockHandler handler) {
+            Class<T> type, MockCreationSettings<T> settings, MockHandler<T> handler) {
         if (type == ConcurrentHashMap.class) {
             throw new MockitoException(
                     "It is not possible to mock static methods of ConcurrentHashMap "
@@ -684,7 +685,7 @@ class InlineDelegateByteBuddyMockMaker
     @Override
     @SuppressWarnings("unchecked")
     public <T> SingletonMockControl<T> createSingletonMock(
-            T instance, MockCreationSettings<T> settings, MockHandler handler) {
+            T instance, MockCreationSettings<T> settings, MockHandler<T> handler) {
         if (instance.getClass() == ConcurrentHashMap.class) {
             throw new MockitoException(
                     "It is not possible to create a singleton mock of ConcurrentHashMap "

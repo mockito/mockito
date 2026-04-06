@@ -61,7 +61,7 @@ public final class MockedStaticImpl<T> extends ScopedMockImpl<MockMaker.StaticMo
         assertNotClosed();
 
         MockingDetails mockingDetails = Mockito.mockingDetails(control.getType());
-        MockHandler handler = mockingDetails.getMockHandler();
+        MockHandler<?> handler = mockingDetails.getMockHandler();
 
         VerificationStartedNotifier.notifyVerificationStarted(
                 handler.getMockSettings().getVerificationStartedListeners(), mockingDetails);

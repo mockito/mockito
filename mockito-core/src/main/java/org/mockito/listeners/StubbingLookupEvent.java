@@ -39,5 +39,5 @@ public interface StubbingLookupEvent {
      * @return Settings of the mock object that we are invoking
      * @since 2.24.6
      */
-    MockCreationSettings getMockSettings();
+    MockCreationSettings<?> getMockSettings();
 }

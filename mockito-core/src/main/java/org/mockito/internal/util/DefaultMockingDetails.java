@@ -64,7 +64,7 @@ public class DefaultMockingDetails implements MockingDetails {
     }
 
     @Override
-    public MockHandler getMockHandler() {
+    public MockHandler<?> getMockHandler() {
         return mockHandler();
     }
 

@@ -64,17 +64,18 @@ public class DeferMockMakersClassLoadingTest {
 
     public static class CustomMockMaker implements MockMaker {
         @Override
-        public <T> T createMock(MockCreationSettings<T> settings, MockHandler handler) {
+        public <T> T createMock(MockCreationSettings<T> settings, MockHandler<T> handler) {
             return settings.getTypeToMock().cast(MY_MOCK);
         }
 
         @Override
-        public MockHandler getHandler(Object mock) {
+        public MockHandler<?> getHandler(Object mock) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public void resetMock(Object mock, MockHandler newHandler, MockCreationSettings settings) {
+        public void resetMock(
+                Object mock, MockHandler<?> newHandler, MockCreationSettings<?> settings) {
             throw new UnsupportedOperationException();
         }
 

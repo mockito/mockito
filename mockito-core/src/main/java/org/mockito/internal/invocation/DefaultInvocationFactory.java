@@ -20,9 +20,9 @@ public class DefaultInvocationFactory implements InvocationFactory {
 
     public Invocation createInvocation(
             Object target,
-            MockCreationSettings settings,
+            MockCreationSettings<?> settings,
             Method method,
-            final Callable realMethod,
+            final Callable<?> realMethod,
             Object... args) {
         RealMethod superMethod = new RealMethod.FromCallable(realMethod);
         return createInvocation(target, settings, method, superMethod, args);
@@ -31,9 +31,9 @@ public class DefaultInvocationFactory implements InvocationFactory {
     @Override
     public Invocation createInvocation(
             Object target,
-            MockCreationSettings settings,
+            MockCreationSettings<?> settings,
             Method method,
-            RealMethodBehavior realMethod,
+            RealMethodBehavior<?> realMethod,
             Object... args) {
         RealMethod superMethod = new RealMethod.FromBehavior(realMethod);
         return createInvocation(target, settings, method, superMethod, args);
@@ -41,7 +41,7 @@ public class DefaultInvocationFactory implements InvocationFactory {
 
     private Invocation createInvocation(
             Object target,
-            MockCreationSettings settings,
+            MockCreationSettings<?> settings,
             Method method,
             RealMethod superMethod,
             Object[] args) {
@@ -53,7 +53,7 @@ public class DefaultInvocationFactory implements InvocationFactory {
             Method invokedMethod,
             Object[] arguments,
             RealMethod realMethod,
-            MockCreationSettings settings,
+            MockCreationSettings<?> settings,
             Location location) {
         return new InterceptedInvocation(
                 new MockWeakReference<Object>(mock),
@@ -69,12 +69,13 @@ public class DefaultInvocationFactory implements InvocationFactory {
             Method invokedMethod,
             Object[] arguments,
             RealMethod realMethod,
-            MockCreationSettings settings) {
+            MockCreationSettings<?> settings) {
         return createInvocation(
                 mock, invokedMethod, arguments, realMethod, settings, LocationFactory.create());
     }
 
-    private static MockitoMethod createMockitoMethod(Method method, MockCreationSettings settings) {
+    private static MockitoMethod createMockitoMethod(
+            Method method, MockCreationSettings<?> settings) {
         if (settings.isSerializable()) {
             return new SerializableMethod(method);
         } else {

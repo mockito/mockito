@@ -49,8 +49,8 @@ public interface InvocationFactory {
      */
     Invocation createInvocation(
             Object target,
-            MockCreationSettings settings,
+            MockCreationSettings<?> settings,
             Method method,
-            RealMethodBehavior realMethod,
+            RealMethodBehavior<?> realMethod,
             Object... args);
 }
