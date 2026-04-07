@@ -21,6 +21,12 @@ dependencies {
 }
 
 tasks {
+    withType<JavaCompile>().configureEach {
+        if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
+            options.compilerArgs.add("-XDaddTypeAnnotationsToSymbol=true")
+        }
+    }
+
     withType<AbstractArchiveTask>().configureEach {
         isPreserveFileTimestamps = false
         isReproducibleFileOrder = true
