@@ -119,6 +119,7 @@ import java.util.function.Function;
  *      <a href="#55">55. Verification with assertions (Since 5.3.0)</a><br/>
  *      <a href="#56">56. Mocking singletons (like Java enums) (Since 5.22.0)</a><br/>
  *      <a href="#57">57. Spying on static methods (Since 5.23.0)</a><br/>
+ *      <a href="#58">58. Suppressing static initializers (Since 5.24.0)</a><br/>
  * </b>
  *
  * <h3 id="0">0. <a class="meaningful_link" href="#mockito2" name="mockito2">Migrating to Mockito 2</a></h3>
@@ -1822,6 +1823,34 @@ import java.util.function.Function;
  *   }
  *   // Original behavior is restored
  *   assertEquals("foo", Foo.method());
+ * </code></pre>
+ *
+ * <h3 id="58">58. <a class="meaningful_link" href="#suppress_clinit" name="suppress_clinit">
+ *  Suppressing static initializers</a></h3>
+ *
+ * When Mockito is used as a Java agent ({@code -javaagent}), you can suppress static initializers
+ * ({@code <clinit>}) of specific classes via the system property {@code mockito.suppress.clinit}.
+ * This causes all static fields in those classes to retain their JVM zero-value defaults
+ * ({@code null}, {@code 0}, {@code false}, etc.) instead of running the static initialization block.
+ *
+ * <p>This is useful when a class static initializer performs expensive or environment-dependent
+ * operations (e.g. loading native libraries, connecting to databases) that are undesirable in tests.
+ *
+ * <p>Because suppression is configured once per JVM at agent startup, it is consistent across all
+ * tests, which means <b>tests can safely run in parallel</b>.
+ *
+ * <p><b>Maven configuration:</b>
+ * <pre class="code"><code class="xml">
+ * &lt;plugin&gt;
+ *     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+ *     &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+ *     &lt;configuration&gt;
+ *         &lt;argLine&gt;
+ *             -javaagent:${org.mockito:mockito-core:jar}
+ *             -Dmockito.suppress.clinit=com.example.ClassA,com.example.ClassB
+ *         &lt;/argLine&gt;
+ *     &lt;/configuration&gt;
+ * &lt;/plugin&gt;
  * </code></pre>
  */
 @CheckReturnValue
