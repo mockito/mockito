@@ -27,6 +27,7 @@ out
 classes
 .gradletasknamecache
 *.log
+local.properties
 
 # Used to check reproducibility of Mockito jars
 checksums/

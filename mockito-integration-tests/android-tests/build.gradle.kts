@@ -1,5 +1,3 @@
-import com.android.build.gradle.internal.coverage.JacocoReportTask
-
 // Module-level android configuration.
 // https://developer.android.com/build/migrate-to-catalogs
 
@@ -26,27 +24,6 @@ android {
         debug {
             enableUnitTestCoverage = true
             enableAndroidTestCoverage = true
-        }
-    }
-    afterEvaluate {
-        // Enable coverage of mockito classes which are not part of this module.
-        // Without these added classFileCollection dependencies the coverage data/report is empty.
-        tasks.named<JacocoReportTask>("createDebugAndroidTestCoverageReport") jacocoTask@{
-            // Clear the production code of this module: src/main/java, it has no mockito-user-visible code.
-            classFileCollection.setFrom()
-            rootProject.allprojects currentProject@{
-                plugins.withId("java") {
-                    val sourceSets = this@currentProject.sourceSets
-                    // Mimic org.gradle.testing.jacoco.tasks.JacocoReportBase.sourceSets().
-                    // Not possible to set task.javaSources because it's initialized with setDisallowChanges.
-                    //task.javaSources.add({ [ sourceSets.main.allJava.srcDirs ] })
-                    this@jacocoTask.classFileCollection.from(
-                        sourceSets.named("main").get().output.asFileTree.matching {
-                            exclude("**/internal/util/concurrent/**")
-                        }
-                    )
-                }
-            }
         }
     }
 
@@ -80,8 +57,6 @@ configurations.testImplementation {
 dependencies {
     implementation(libs.kotlin.stdlib)
 
-    // Add :android on the classpath so that AGP's jacoco setup thinks it's "production code to be tested".
-    // Essentially a way to say: tasks.createDebugAndroidTestCoverageReport.classFileCollection.from(project(":android"))
     runtimeOnly(project(":mockito-extensions:mockito-android"))
 
     testImplementation(project(":mockito-core"))
@@ -92,4 +67,40 @@ dependencies {
     androidTestImplementation(libs.android.runner)
     androidTestImplementation(libs.android.junit)
     androidTestImplementation(project(":mockito-extensions:mockito-android"))
+}
+
+// Coverage report that includes mockito-core classes (not just this module's classes).
+// AGP 8+ finalizes JacocoReportTask.classFileCollection, so we use a standard Gradle
+// JacocoReport task instead of modifying the AGP-internal task.
+tasks.register<JacocoReport>("createMockitoCoverageReport") {
+    dependsOn("createDebugAndroidTestCoverageReport")
+    group = "verification"
+    description = "Generates a Jacoco coverage report including mockito-core classes."
+
+    // Use coverage data produced by connected tests
+    executionData.setFrom(
+        fileTree(layout.buildDirectory.dir("outputs/code_coverage/debugAndroidTest/connected")) {
+            include("**/*.ec")
+        }
+    )
+
+    // Include compiled classes from all Java subprojects (mockito-core, etc.)
+    classDirectories.setFrom(
+        rootProject.allprojects.filter { it.plugins.hasPlugin("java") }.map { proj ->
+            proj.sourceSets["main"].output.asFileTree.matching {
+                exclude("**/internal/util/concurrent/**")
+            }
+        }
+    )
+
+    sourceDirectories.setFrom(
+        rootProject.allprojects.filter { it.plugins.hasPlugin("java") }.flatMap { proj ->
+            proj.sourceSets["main"].allJava.srcDirs
+        }
+    )
+
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
 }
