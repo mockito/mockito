@@ -7,7 +7,12 @@ import org.gradle.process.CommandLineArgumentProvider
 plugins {
     id("java")
     id("mockito.test-conventions")
-    id("mockito.test-conventions-java-21")
+    id("mockito.test-jvm-conventions")
+}
+
+testJvm {
+    minJvm.set(21)
+    maxJvm.set(21)
 }
 
 description = "Test suite for Java 21 Mockito"

@@ -4,8 +4,8 @@ dexmaker = "2.28.6"
 errorprone = "2.42.0"
 jacoco = "0.8.13"
 junit4 = "4.13.2"
-junit-jupiter = "5.13.4"
-junit-platform = "1.13.4"
+junit5-jupiter = "5.13.4"
+junit5-platform = "1.13.4"
 junit6 = "6.0.1"
 kotlin = "2.2.0"
 
@@ -33,11 +33,11 @@ groovy = { module = "org.codehaus.groovy:groovy", version = "3.0.25" }
 hamcrest = { module = "org.hamcrest:hamcrest-core", version = "3.0" }
 junit4 = { module = "junit:junit", version.ref = "junit4" }
 jspecify = { module = "org.jspecify:jspecify", version = "1.0.0" }
-junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
-junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
-junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit-jupiter" }
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
-junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit-jupiter" }
+junit5-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5-jupiter" }
+junit5-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5-jupiter" }
+junit5-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5-jupiter" }
+junit5-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit5-platform" }
+junit5-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5-jupiter" }
 junit6-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit6" }
 junit6-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit6" }
 junit6-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit6" }

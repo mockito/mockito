@@ -6,15 +6,13 @@ import org.gradle.api.tasks.testing.Test
 plugins {
     id("mockito.library-conventions")
     id("mockito.javadoc-conventions")
-    id("mockito.test-conventions-java-17")
+    id("mockito.test-jvm-conventions")
 }
 
 description = "Mockito JUnit 6 support"
 
-// Despite the use of mockito.test-conventions-java-17, we still need an effective Java version for OSGi -runee.
-val minJavaVersion = 17
-val effectiveJavaVersion = providers.requestedJavaVersion().map { requested ->
-    maxOf(requested, minJavaVersion)
+testJvm {
+    minJvm.set(17)
 }
 
 dependencies {
@@ -81,7 +79,7 @@ tasks {
     val osgiProperties by registering(WriteProperties::class) {
         destinationFile.set(layout.buildDirectory.file("verifyOSGiProperties.bndrun"))
         property("-standalone", true)
-        property("-runee", effectiveJavaVersion.map { "JavaSE-$it" })
+        property("-runee", testJvm.effectiveJavaVersion.map { "JavaSE-$it" })
         property("-runrequires", "osgi.identity;filter:=\"(osgi.identity=org.mockito.junit-jupiter)\"")
     }
 
