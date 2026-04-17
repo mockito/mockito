@@ -47,8 +47,8 @@ dependencies {
     implementation(libs.objenesis)
 
     testImplementation(libs.assertj)
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.junit5.jupiter.api)
+    testImplementation(libs.junit5.jupiter.params)
 
     testFixturesImplementation(libs.assertj)
     testFixturesImplementation(libs.objenesis)
@@ -238,4 +238,3 @@ fun Task.configureMockitoExtensionFromCi(
 fun mockitoExtensionConfigFile(project: Project, mockitoExtension: String) =
     file(project.layout.buildDirectory.dir("generated/resources/ext-config/test/mockito-extensions/$mockitoExtension"))
 //</editor-fold>
-

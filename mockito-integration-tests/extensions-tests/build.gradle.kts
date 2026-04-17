@@ -1,6 +1,13 @@
+import org.gradle.api.tasks.testing.Test
+
 plugins {
     id("java")
     id("mockito.test-conventions")
+    id("mockito.test-jvm-conventions")
+}
+
+testJvm {
+    minJvm.set(17)
 }
 
 description = "End-to-end tests for Mockito and its extensions."
@@ -11,16 +18,14 @@ dependencies {
     testImplementation(testFixtures(project(":mockito-core")))
     testImplementation(libs.junit4)
     testImplementation(libs.assertj)
-    testImplementation(libs.junit.jupiter.api)
-    testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.junit.vintage.engine)
-    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.junit6.jupiter.api)
+    testRuntimeOnly(libs.junit6.jupiter.engine)
+    testRuntimeOnly(libs.junit5.vintage.engine)
+    testRuntimeOnly(libs.junit6.platform.launcher)
 }
 
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
-    }
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 configurations.configureEach {
