@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.util.collections;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.internal.util.MockUtil;
 
 /**
@@ -24,6 +25,7 @@ import org.mockito.internal.util.MockUtil;
  *
  * @see HashCodeAndEqualsSafeSet
  */
+@CheckReturnValue
 public class HashCodeAndEqualsMockWrapper {
 
     private final Object mockInstance;

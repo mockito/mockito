@@ -79,6 +79,7 @@ import org.mockito.verification.VerificationMode;
  * @since 1.8.0
  */
 @SuppressWarnings("unchecked")
+@CanIgnoreReturnValue
 public class BDDMockito extends Mockito {
 
     /**

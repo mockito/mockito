@@ -6,4 +6,5 @@
 /**
  * Verification logic.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.verification;

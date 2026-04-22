@@ -6,4 +6,5 @@
 /**
  * Mockito injection internals.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.configuration.injection;

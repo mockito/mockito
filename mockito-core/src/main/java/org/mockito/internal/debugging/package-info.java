@@ -6,4 +6,5 @@
 /**
  * Whatever helps in debugging failed tests.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.debugging;

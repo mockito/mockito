@@ -10,8 +10,10 @@ import static org.mockito.internal.util.StringUtil.decamelizeMatcherName;
 import java.lang.reflect.Method;
 
 import org.mockito.ArgumentMatcher;
+import org.mockito.CheckReturnValue;
 
 /** Provides better toString() text for matcher that don't have toString() method declared. */
+@CheckReturnValue
 final class MatcherToString {
 
     /**

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.matchers.text;
 
+import org.mockito.CheckReturnValue;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Map;
  * Prints a Java object value in a way humans can read it neatly.
  * Inspired on hamcrest. Used for printing arguments in verification errors.
  */
+@CheckReturnValue
 public class ValuePrinter {
 
     private ValuePrinter() {}

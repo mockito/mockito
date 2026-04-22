@@ -8,7 +8,8 @@ import static java.util.Collections.emptyList;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.mockito.CanIgnoreReturnValue;
+import org.mockito.CheckReturnValue;
 import org.mockito.MockitoSession;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.framework.DefaultMockitoSession;
@@ -17,6 +18,7 @@ import org.mockito.quality.Strictness;
 import org.mockito.session.MockitoSessionBuilder;
 import org.mockito.session.MockitoSessionLogger;
 
+@CheckReturnValue
 public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
 
     private final List<Object> testClassInstances = new ArrayList<Object>();
@@ -25,6 +27,7 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     private MockitoSessionLogger logger;
 
     @Override
+    @CanIgnoreReturnValue
     public MockitoSessionBuilder initMocks(Object testClassInstance) {
         if (testClassInstance != null) {
             this.testClassInstances.add(testClassInstance);
@@ -33,6 +36,7 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     }
 
     @Override
+    @CanIgnoreReturnValue
     public MockitoSessionBuilder initMocks(Object... testClassInstances) {
         if (testClassInstances != null) {
             for (Object instance : testClassInstances) {
@@ -43,18 +47,21 @@ public class DefaultMockitoSessionBuilder implements MockitoSessionBuilder {
     }
 
     @Override
+    @CanIgnoreReturnValue
     public MockitoSessionBuilder name(String name) {
         this.name = name;
         return this;
     }
 
     @Override
+    @CanIgnoreReturnValue
     public MockitoSessionBuilder strictness(Strictness strictness) {
         this.strictness = strictness;
         return this;
     }
 
     @Override
+    @CanIgnoreReturnValue
     public MockitoSessionBuilder logger(MockitoSessionLogger logger) {
         this.logger = logger;
         return this;

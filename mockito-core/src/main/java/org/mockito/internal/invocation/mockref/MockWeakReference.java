@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.invocation.mockref;
 
+import org.mockito.CheckReturnValue;
 import java.io.ObjectStreamException;
 import java.lang.ref.WeakReference;
 
@@ -11,6 +12,7 @@ import java.lang.ref.WeakReference;
  * A weak reference that is converted into a strong reference when serialized.
  * See {@link MockReference}.
  */
+@CheckReturnValue
 public class MockWeakReference<T> implements MockReference<T> {
 
     private final WeakReference<T> ref;

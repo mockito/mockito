@@ -6,4 +6,5 @@
 /**
  * Deals with nicely printing verification errors.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.reporting;

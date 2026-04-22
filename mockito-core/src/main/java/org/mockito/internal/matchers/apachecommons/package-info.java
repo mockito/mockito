@@ -6,4 +6,5 @@
 /**
  * Argument matchers that use Apache Commons Lang reflection-equality.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.matchers.apachecommons;

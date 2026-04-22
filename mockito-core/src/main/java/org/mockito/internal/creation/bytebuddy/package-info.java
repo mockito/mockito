@@ -6,4 +6,5 @@
 /**
  * ByteBuddy related stuff.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.creation.bytebuddy;

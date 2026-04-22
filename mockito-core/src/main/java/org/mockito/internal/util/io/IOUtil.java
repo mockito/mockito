@@ -16,12 +16,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import org.mockito.CheckReturnValue;
 import org.mockito.exceptions.base.MockitoException;
 
 /**
  * IO utils. A bit of reinventing the wheel but we don't want extra dependencies at this stage and
  * we want to be java.
  */
+@CheckReturnValue
 public final class IOUtil {
 
     /**

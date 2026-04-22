@@ -6,4 +6,5 @@
 /**
  * Mockito JUnit integration ; rule and runners.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.junit;

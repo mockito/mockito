@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.mockito.ArgumentMatcher;
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.internal.matchers.CapturingMatcher;
 import org.mockito.invocation.Invocation;
 
@@ -56,6 +57,7 @@ public class MatcherApplicationStrategy {
      *         because too many or to few matchers are available.
      *         </ul>
      */
+    @CanIgnoreReturnValue
     public boolean forEachMatcherAndArgument(ArgumentMatcherAction action) {
         final boolean isJavaVarargs =
                 invocation.getMethod().isVarArgs()

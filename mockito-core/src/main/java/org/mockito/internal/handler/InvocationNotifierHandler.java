@@ -7,7 +7,7 @@ package org.mockito.internal.handler;
 import static org.mockito.internal.exceptions.Reporter.invocationListenerThrewException;
 
 import java.util.List;
-
+import org.mockito.CheckReturnValue;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
@@ -18,6 +18,7 @@ import org.mockito.mock.MockCreationSettings;
  * Handler, that call all listeners wanted for this mock, before delegating it
  * to the parameterized handler.
  */
+@CheckReturnValue
 class InvocationNotifierHandler<T> implements MockHandler<T> {
 
     private final List<InvocationListener> invocationListeners;

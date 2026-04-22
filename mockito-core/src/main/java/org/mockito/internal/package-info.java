@@ -8,4 +8,5 @@
  *
  * Subject to change at any time without notice.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal;

@@ -8,6 +8,7 @@ import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingPro
 
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.progress.MockingProgressImpl;
 import org.mockito.internal.verification.api.VerificationData;
@@ -62,6 +63,7 @@ public class VerificationCollectorImpl implements VerificationCollector {
     }
 
     @Override
+    @CanIgnoreReturnValue
     public VerificationCollector assertLazily() {
         mockingProgress()
                 .setVerificationStrategy(

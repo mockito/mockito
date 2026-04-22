@@ -5,6 +5,7 @@
 package org.mockito.junit;
 
 import org.junit.rules.TestRule;
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.quality.Strictness;
 
 /**
@@ -27,5 +28,6 @@ public interface MockitoTestRule extends TestRule {
      *
      * @since 3.3.0
      */
+    @CanIgnoreReturnValue
     MockitoTestRule strictness(Strictness strictness);
 }

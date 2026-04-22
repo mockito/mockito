@@ -4,10 +4,12 @@
  */
 package org.mockito.internal.creation.instance;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.InstantiatorProvider2;
 
+@CheckReturnValue
 public class DefaultInstantiatorProvider implements InstantiatorProvider2 {
 
     private static final Instantiator INSTANCE = new ObjenesisInstantiator();

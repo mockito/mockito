@@ -6,4 +6,5 @@
 /**
  * Answers for stubbed calls.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.stubbing.answers;

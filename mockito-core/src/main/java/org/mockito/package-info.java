@@ -8,4 +8,5 @@
  *
  * @see org.mockito.Mockito
  */
+@org.mockito.CheckReturnValue
 package org.mockito;

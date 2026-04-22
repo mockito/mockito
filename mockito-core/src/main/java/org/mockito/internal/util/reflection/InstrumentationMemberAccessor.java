@@ -8,6 +8,7 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.loading.ByteArrayClassLoader;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import net.bytebuddy.implementation.MethodCall;
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.exceptions.base.MockitoInitializationException;
 import org.mockito.internal.PremainAttachAccess;
 import org.mockito.internal.SuppressSignatureCheck;
@@ -449,6 +450,7 @@ class InstrumentationMemberAccessor implements MemberAccessor {
         // Used to avoid invoke/invokeExact being exposed to Android where this class should
         // never be loaded. Since the invocation happens from the generated code, the Android
         // build pipeline does not fail.
+        @CanIgnoreReturnValue
         Object invokeWithArguments(MethodHandle handle, Object... arguments) throws Throwable;
     }
 }

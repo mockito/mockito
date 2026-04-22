@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.base.MockitoInitializationException;
@@ -69,6 +70,7 @@ import org.mockito.stubbing.Stubbing;
  * Generally, exception messages are full of line breaks to make them easy to
  * read (xunit plugins take only fraction of screen on modern IDEs).
  */
+@CheckReturnValue
 public class Reporter {
 
     private static final String NON_PUBLIC_PARENT =
