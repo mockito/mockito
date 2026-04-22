@@ -169,7 +169,7 @@ public class InlineDelegateByteBuddyMockMakerTest
     public void should_throw_exception_redefining_unmodifiable_class() {
         MockCreationSettings settings = settingsFor(int.class);
         try {
-            mockMaker.createMock(settings, new MockHandlerImpl(settings));
+            Object mock = mockMaker.createMock(settings, new MockHandlerImpl(settings));
             fail("Expected a MockitoException");
         } catch (MockitoException e) {
             e.printStackTrace();
@@ -183,7 +183,7 @@ public class InlineDelegateByteBuddyMockMakerTest
         int[] array = new int[5];
         MockCreationSettings<? extends int[]> settings = settingsFor(array.getClass());
         try {
-            mockMaker.createMock(settings, new MockHandlerImpl(settings));
+            int[] mock = mockMaker.createMock(settings, new MockHandlerImpl(settings));
             fail("Expected a MockitoException");
         } catch (MockitoException e) {
             assertThat(e).hasMessageContaining("Arrays cannot be mocked");
@@ -206,7 +206,8 @@ public class InlineDelegateByteBuddyMockMakerTest
                         .setSerializableMode(SerializableMode.BASIC);
 
         try {
-            mockMaker.createMock(settings, new MockHandlerImpl<FinalClass>(settings));
+            FinalClass mock =
+                    mockMaker.createMock(settings, new MockHandlerImpl<FinalClass>(settings));
             fail("Expected a MockitoException");
         } catch (MockitoException e) {
             assertThat(e)
@@ -225,7 +226,8 @@ public class InlineDelegateByteBuddyMockMakerTest
                         .setExtraInterfaces(Sets.<Class<?>>newSet(List.class));
 
         try {
-            mockMaker.createMock(settings, new MockHandlerImpl<FinalClass>(settings));
+            FinalClass mock =
+                    mockMaker.createMock(settings, new MockHandlerImpl<FinalClass>(settings));
             fail("Expected a MockitoException");
         } catch (MockitoException e) {
             assertThat(e)

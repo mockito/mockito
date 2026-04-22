@@ -6,4 +6,5 @@
 /**
  * Static utils
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.util;

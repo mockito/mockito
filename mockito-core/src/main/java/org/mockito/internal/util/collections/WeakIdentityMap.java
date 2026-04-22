@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.util.collections;
 
+import org.mockito.CanIgnoreReturnValue;
+import org.mockito.CheckReturnValue;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -18,6 +20,7 @@ import java.util.*;
  * lookups. Hash collisions (distinct objects sharing an identity hash code) are resolved by
  * linear scan within the bucket using {@code ==}. Lookups do not allocate.
  */
+@CheckReturnValue
 public class WeakIdentityMap<V> extends AbstractMap<Object, V> {
 
     private final Map<Integer, List<WeakEntry<V>>> delegate = new HashMap<>();
@@ -69,6 +72,7 @@ public class WeakIdentityMap<V> extends AbstractMap<Object, V> {
     }
 
     @Override
+    @CanIgnoreReturnValue
     public V put(Object key, V value) {
         expungeStaleEntries();
         int hash = System.identityHashCode(key);
@@ -91,6 +95,7 @@ public class WeakIdentityMap<V> extends AbstractMap<Object, V> {
     }
 
     @Override
+    @CanIgnoreReturnValue
     public V remove(Object key) {
         expungeStaleEntries();
         int hash = System.identityHashCode(key);

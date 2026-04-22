@@ -6,4 +6,5 @@
 /**
  * Verification related classes.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.verification;

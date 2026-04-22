@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.framework;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.MockitoFramework;
 import org.mockito.exceptions.misusing.DisabledMockException;
 import org.mockito.invocation.Invocation;
@@ -27,6 +28,7 @@ import java.util.Set;
  * Throws {@link DisabledMockException} when a mock is accessed after it has been disabled by
  * {@link MockitoFramework#clearInlineMocks()}.
  */
+@CheckReturnValue
 public class DisabledMockHandler implements MockHandler<Object> {
     public static MockHandler<Object> HANDLER = new DisabledMockHandler();
 

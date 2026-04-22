@@ -6,6 +6,7 @@ package org.mockito.internal.handler;
 
 import static org.mockito.internal.util.Primitives.defaultValue;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.invocation.Invocation;
 import org.mockito.invocation.InvocationContainer;
 import org.mockito.invocation.MockHandler;
@@ -16,6 +17,7 @@ import org.mockito.mock.MockCreationSettings;
  *
  * by Szczepan Faber, created at: 5/22/12
  */
+@CheckReturnValue
 class NullResultGuardian<T> implements MockHandler<T> {
 
     private final MockHandler<T> delegate;

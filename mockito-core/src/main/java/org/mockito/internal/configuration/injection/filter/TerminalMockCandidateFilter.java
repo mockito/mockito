@@ -10,6 +10,7 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.reflection.BeanPropertySetter;
 import org.mockito.plugins.MemberAccessor;
@@ -22,6 +23,7 @@ import org.mockito.plugins.MemberAccessor;
  * <li>an {@link OngoingInjector} that will try to inject the candidate trying first the property setter then if not possible try the field access</li>
  * </ul>
  */
+@CheckReturnValue
 public class TerminalMockCandidateFilter implements MockCandidateFilter {
     @Override
     public OngoingInjector filterCandidate(

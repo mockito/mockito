@@ -202,7 +202,8 @@ public class FieldInitializerTest {
                         .willReturn(new Object[] {null})
                         .getMock();
 
-        new FieldInitializer(this, field("noDefaultConstructor"), resolver).initialize();
+        FieldInitializationReport ignored =
+                new FieldInitializer(this, field("noDefaultConstructor"), resolver).initialize();
 
         assertNotNull(noDefaultConstructor);
     }

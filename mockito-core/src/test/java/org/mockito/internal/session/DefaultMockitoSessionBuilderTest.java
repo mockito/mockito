@@ -113,12 +113,14 @@ public class DefaultMockitoSessionBuilderTest {
 
     @Test
     public void requires_finish_mocking() {
-        new DefaultMockitoSessionBuilder().startMocking();
+        MockitoSession mockitoSession = new DefaultMockitoSessionBuilder().startMocking();
 
+        assertNotNull(mockitoSession);
         ThrowableAssert.assertThat(
                         new Runnable() {
                             public void run() {
-                                new DefaultMockitoSessionBuilder().startMocking();
+                                MockitoSession unused =
+                                        new DefaultMockitoSessionBuilder().startMocking();
                             }
                         })
                 .throwsException(UnfinishedMockingSessionException.class);
@@ -126,12 +128,13 @@ public class DefaultMockitoSessionBuilderTest {
 
     @Test
     public void auto_cleans_dirty_listeners() {
-        new DefaultMockitoSessionBuilder().startMocking();
+        MockitoSession mockitoSession = new DefaultMockitoSessionBuilder().startMocking();
 
         ThrowableAssert.assertThat(
                         new Runnable() {
                             public void run() {
-                                new DefaultMockitoSessionBuilder().startMocking();
+                                MockitoSession unused =
+                                        new DefaultMockitoSessionBuilder().startMocking();
                             }
                         })
                 .throwsException(UnfinishedMockingSessionException.class);

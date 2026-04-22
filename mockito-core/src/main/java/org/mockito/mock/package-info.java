@@ -6,4 +6,5 @@
 /**
  * Mock settings related classes.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.mock;

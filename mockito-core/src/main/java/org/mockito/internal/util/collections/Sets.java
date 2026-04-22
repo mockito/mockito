@@ -4,11 +4,14 @@
  */
 package org.mockito.internal.util.collections;
 
+import org.mockito.CheckReturnValue;
+
 import static java.util.Arrays.asList;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@CheckReturnValue
 public abstract class Sets {
     public static Set<Object> newMockSafeHashSet(Iterable<Object> mocks) {
         return HashCodeAndEqualsSafeSet.of(mocks);

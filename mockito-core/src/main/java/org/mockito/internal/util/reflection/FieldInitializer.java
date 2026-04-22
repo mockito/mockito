@@ -4,10 +4,7 @@
  */
 package org.mockito.internal.util.reflection;
 
-import org.mockito.exceptions.base.MockitoException;
-import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.internal.util.MockUtil;
-import org.mockito.plugins.MemberAccessor;
+import static java.lang.reflect.Modifier.isStatic;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -17,8 +14,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import static java.lang.reflect.Modifier.isStatic;
+import org.mockito.CanIgnoreReturnValue;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.util.MockUtil;
+import org.mockito.plugins.MemberAccessor;
 
 /**
  * Initialize a field with type instance if a default constructor can be found.
@@ -45,6 +45,7 @@ public class FieldInitializer {
      * @param fieldOwner Instance of the test.
      * @param field Field to be initialize.
      */
+    @CanIgnoreReturnValue
     public FieldInitializer(Object fieldOwner, Field field) {
         this(fieldOwner, field, new NoArgConstructorInstantiator(fieldOwner, field));
     }
@@ -275,6 +276,7 @@ public class FieldInitializer {
          * Internal, checks are done by FieldInitializer.
          * Fields are assumed to be accessible.
          */
+        @CanIgnoreReturnValue
         ParameterizedConstructorInstantiator(
                 Object testClass, Field field, ConstructorArgumentResolver argumentResolver) {
             this.testClass = testClass;

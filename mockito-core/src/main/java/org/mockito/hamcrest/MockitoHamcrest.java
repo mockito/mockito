@@ -10,6 +10,7 @@ import static org.mockito.internal.util.Primitives.defaultValue;
 
 import org.hamcrest.Matcher;
 import org.mockito.ArgumentMatcher;
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 
 /**
@@ -74,6 +75,7 @@ public final class MockitoHamcrest {
      * @return <code>null</code> or default value for primitive (0, false, etc.)
      * @since 2.1.0
      */
+    @CanIgnoreReturnValue
     @SuppressWarnings("unchecked")
     public static <T> T argThat(Matcher<T> matcher) {
         reportMatcher(matcher);

@@ -12,12 +12,14 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.creation.instance.InstantiationException;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.util.Primitives;
 import org.mockito.plugins.MemberAccessor;
 
+@CheckReturnValue
 public class ConstructorInstantiator implements Instantiator {
 
     /**

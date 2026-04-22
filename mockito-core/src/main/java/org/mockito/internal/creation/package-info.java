@@ -6,4 +6,5 @@
 /**
  * Mock object creation.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.creation;

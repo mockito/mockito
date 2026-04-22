@@ -47,6 +47,7 @@ import org.mockito.stubbing.Answer;
  * Secondly, to enable combining different mock settings without introducing zillions of overloaded mock() methods.
  */
 @NotExtensible
+@CanIgnoreReturnValue
 public interface MockSettings extends Serializable {
 
     /**

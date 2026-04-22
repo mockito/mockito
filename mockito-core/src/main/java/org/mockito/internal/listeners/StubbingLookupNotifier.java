@@ -7,6 +7,7 @@ package org.mockito.internal.listeners;
 import java.util.Collection;
 import java.util.List;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.StubbingLookupEvent;
@@ -14,6 +15,7 @@ import org.mockito.listeners.StubbingLookupListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.stubbing.Stubbing;
 
+@CheckReturnValue
 public final class StubbingLookupNotifier {
 
     public static void notifyStubbedAnswerLookup(

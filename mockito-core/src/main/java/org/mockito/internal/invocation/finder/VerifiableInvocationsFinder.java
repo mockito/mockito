@@ -7,11 +7,13 @@ package org.mockito.internal.invocation.finder;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.invocation.Invocation;
 
 /**
  * Author: Szczepan Faber, created at: 4/3/11
  */
+@CheckReturnValue
 public class VerifiableInvocationsFinder {
 
     private VerifiableInvocationsFinder() {}

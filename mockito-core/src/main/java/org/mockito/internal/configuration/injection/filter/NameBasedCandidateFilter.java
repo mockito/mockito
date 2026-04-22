@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.configuration.injection.filter;
 
+import org.mockito.CheckReturnValue;
+
 import static org.mockito.internal.util.MockUtil.getMockName;
 
 import java.lang.reflect.Field;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@CheckReturnValue
 public class NameBasedCandidateFilter implements MockCandidateFilter {
     private final MockCandidateFilter next;
 

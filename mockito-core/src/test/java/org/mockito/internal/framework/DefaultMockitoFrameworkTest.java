@@ -221,13 +221,10 @@ public class DefaultMockitoFrameworkTest extends TestBase {
         assertTrue(mockingDetails(obj).isMock());
 
         framework.clearInlineMocks();
-
-        try {
-            mockingDetails(obj).isMock();
-        } catch (DisabledMockException e) {
-            return;
-        }
-        Assert.fail("Should have thrown DisabledMockException");
+        Assert.assertThrows(
+                "Should have thrown DisabledMockException",
+                DisabledMockException.class,
+                () -> mockingDetails(obj).isMock());
     }
 
     @Test

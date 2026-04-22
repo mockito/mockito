@@ -6,4 +6,5 @@
 /**
  * Mockito Hamcrest matcher integration.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.hamcrest;

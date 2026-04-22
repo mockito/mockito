@@ -70,6 +70,7 @@ public final class MockitoAnnotations {
      *
      * @return A closable to close when completing any tests in {@code testClass}.
      */
+    @CanIgnoreReturnValue
     public static AutoCloseable openMocks(Object testClass) {
         if (testClass == null) {
             throw new MockitoException(

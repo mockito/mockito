@@ -6,4 +6,5 @@
 /**
  * Mocking progress stateful classes.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.progress;

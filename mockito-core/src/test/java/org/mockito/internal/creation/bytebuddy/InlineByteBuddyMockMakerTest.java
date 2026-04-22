@@ -8,8 +8,13 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.handler.MockHandlerImpl;
+import org.mockito.invocation.MockHandler;
+import org.mockito.plugins.MockMaker.ConstructionMockControl;
+import org.mockito.plugins.MockMaker.StaticMockControl;
+import org.mockito.plugins.MockMaker.TypeMockability;
 import org.mockitoutil.TestBase;
 
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 
 public class InlineByteBuddyMockMakerTest extends TestBase {
@@ -23,17 +28,25 @@ public class InlineByteBuddyMockMakerTest extends TestBase {
         CreationSettings<Object> creationSettings = new CreationSettings<Object>();
         MockHandlerImpl<Object> handler = new MockHandlerImpl<Object>(creationSettings);
 
-        mockMaker.createMockType(creationSettings);
-        mockMaker.createMock(creationSettings, handler);
-        mockMaker.createStaticMock(Object.class, creationSettings, handler);
-        mockMaker.createConstructionMock(Object.class, null, null, null);
-        mockMaker.getHandler(this);
-        mockMaker.isTypeMockable(Object.class);
+        Class<?> mockType = mockMaker.createMockType(creationSettings);
+        Object mock = mockMaker.createMock(creationSettings, handler);
+        StaticMockControl<Object> staticMock =
+                mockMaker.createStaticMock(Object.class, creationSettings, handler);
+        ConstructionMockControl<Object> constructionMock =
+                mockMaker.createConstructionMock(Object.class, null, null, null);
+        MockHandler createdHandler = mockMaker.getHandler(this);
+        TypeMockability isTypeMockable = mockMaker.isTypeMockable(Object.class);
         mockMaker.resetMock(this, handler, creationSettings);
         mockMaker.clearMock(this);
         mockMaker.clearAllMocks();
         mockMaker.clearAllCaches();
 
+        assertNull(mockType);
+        assertNull(mock);
+        assertNull(staticMock);
+        assertNull(constructionMock);
+        assertNull(createdHandler);
+        assertNull(isTypeMockable);
         verify(delegate).createMock(creationSettings, handler);
         verify(delegate).createStaticMock(Object.class, creationSettings, handler);
         verify(delegate).createConstructionMock(Object.class, null, null, null);
