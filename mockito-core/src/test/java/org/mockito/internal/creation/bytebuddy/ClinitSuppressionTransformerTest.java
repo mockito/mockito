@@ -19,9 +19,9 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectStreamClass;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -136,8 +136,8 @@ public class ClinitSuppressionTransformerTest {
 
     @Test
     public void transformer_returns_null_for_non_matching_class() throws IOException {
-        Set<String> names = Collections.singleton("com.example.OtherClass");
-        ClinitSuppressionTransformer transformer = new ClinitSuppressionTransformer(names);
+        Predicate<String> matcher = "com.example.OtherClass"::equals;
+        ClinitSuppressionTransformer transformer = new ClinitSuppressionTransformer(matcher);
 
         byte[] result =
                 transformer.transform(
@@ -152,8 +152,8 @@ public class ClinitSuppressionTransformerTest {
 
     @Test
     public void transformer_returns_null_for_retransformation() throws IOException {
-        Set<String> names = Collections.singleton(WithClinit.class.getName());
-        ClinitSuppressionTransformer transformer = new ClinitSuppressionTransformer(names);
+        Predicate<String> matcher = WithClinit.class.getName()::equals;
+        ClinitSuppressionTransformer transformer = new ClinitSuppressionTransformer(matcher);
 
         byte[] result =
                 transformer.transform(
@@ -168,8 +168,27 @@ public class ClinitSuppressionTransformerTest {
 
     @Test
     public void transformer_suppresses_matching_class_on_initial_load() throws IOException {
-        Set<String> names = Collections.singleton(WithClinit.class.getName());
-        ClinitSuppressionTransformer transformer = new ClinitSuppressionTransformer(names);
+        Predicate<String> matcher = WithClinit.class.getName()::equals;
+        ClinitSuppressionTransformer transformer = new ClinitSuppressionTransformer(matcher);
+
+        byte[] original = readClassBytes(WithClinit.class);
+        byte[] result =
+                transformer.transform(
+                        getClass().getClassLoader(),
+                        WithClinit.class.getName().replace('.', '/'),
+                        null,
+                        null,
+                        original);
+
+        assertThat(result).isNotNull();
+        assertThat(result).isNotEqualTo(original);
+    }
+
+    @Test
+    public void transformer_suppresses_class_matched_by_package_predicate() throws IOException {
+        String packagePrefix = WithClinit.class.getPackage().getName() + ".";
+        Predicate<String> matcher = name -> name.startsWith(packagePrefix);
+        ClinitSuppressionTransformer transformer = new ClinitSuppressionTransformer(matcher);
 
         byte[] original = readClassBytes(WithClinit.class);
         byte[] result =

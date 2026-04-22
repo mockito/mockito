@@ -13,16 +13,16 @@ import net.bytebuddy.utility.OpenedClassReader;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.security.ProtectionDomain;
-import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * A {@link ClassFileTransformer} that suppresses static initializers ({@code <clinit>}) for
- * specified classes at class-load time.
+ * classes selected by a predicate at class-load time.
  *
- * <p>When a class is first loaded (not retransformed) and its fully-qualified name appears in the
- * configured set, the transformer replaces the {@code <clinit>} method with an empty method body.
- * This causes all static fields to retain their JVM zero-value defaults ({@code null},
- * {@code 0}, {@code false}, etc.).
+ * <p>When a class is first loaded (not retransformed) and its fully-qualified name is accepted
+ * by the configured {@link Predicate}, the transformer replaces the {@code <clinit>} method
+ * with an empty method body. This causes all static fields to retain their JVM zero-value
+ * defaults ({@code null}, {@code 0}, {@code false}, etc.).
  *
  * <p>This transformer is registered at premain time when the system property
  * {@code mockito.suppress.clinit} is set. See {@link org.mockito.internal.PremainAttach} for
@@ -30,16 +30,16 @@ import java.util.Set;
  */
 public class ClinitSuppressionTransformer implements ClassFileTransformer {
 
-    private final Set<String> classNames;
+    private final Predicate<String> shouldSuppress;
 
     /**
      * Creates a new transformer.
      *
-     * @param classNames fully-qualified class names whose static initializers should be suppressed
-     *     (e.g. {@code "com.example.MyClass"})
+     * @param shouldSuppress predicate that returns {@code true} for fully-qualified class names
+     *     whose static initializers should be suppressed
      */
-    public ClinitSuppressionTransformer(Set<String> classNames) {
-        this.classNames = classNames;
+    public ClinitSuppressionTransformer(Predicate<String> shouldSuppress) {
+        this.shouldSuppress = shouldSuppress;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ClinitSuppressionTransformer implements ClassFileTransformer {
             return null;
         }
         String dotName = className.replace('/', '.');
-        if (!classNames.contains(dotName)) {
+        if (!shouldSuppress.test(dotName)) {
             return null;
         }
         return suppressClinit(classfileBuffer);
