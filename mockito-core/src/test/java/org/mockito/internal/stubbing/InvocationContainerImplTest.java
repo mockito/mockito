@@ -58,7 +58,7 @@ public class InvocationContainerImplTest {
                             }
                             c.setInvocationForPotentialStubbing(new InvocationMatcher(invocation));
                             c.addAnswer(new Returns("foo"), null);
-                            c.findAnswerFor(invocation);
+                            StubbedInvocationMatcher ignored = c.findAnswerFor(invocation);
                         }
                     };
             t[i].setUncaughtExceptionHandler(

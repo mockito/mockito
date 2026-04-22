@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.configuration.plugins;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.never;
@@ -71,13 +72,14 @@ public class PluginLoaderTest {
         willReturn(null).given(initializer).loadImpl(FooPlugin.class);
         willReturn(null).given(initializer).loadImpl(BarPlugin.class);
         FooPlugin expected = new FooPlugin();
-        willReturn(expected).given(plugins).getDefaultPlugin(FooPlugin.class);
+        FooPlugin unused = willReturn(expected).given(plugins).getDefaultPlugin(FooPlugin.class);
 
         // when
         Object plugin = loader.loadPlugin(FooPlugin.class, BarPlugin.class);
 
         // then
         assertSame(expected, plugin);
+        assertNull(unused);
     }
 
     @Test
@@ -133,13 +135,14 @@ public class PluginLoaderTest {
         willReturn(null).given(initializer).loadImpl(Foo.class);
         willReturn(null).given(initializer).loadImpl(FooChildPlugin.class);
         FooChildPlugin expected = new FooChildPlugin();
-        willReturn(expected).given(plugins).getDefaultPlugin(Foo.class);
+        Foo unused = willReturn(expected).given(plugins).getDefaultPlugin(Foo.class);
 
         // when
         Foo plugin = loader.loadPlugin(Foo.class, FooChildPlugin.class);
 
         // then
         assertSame(expected, plugin);
+        assertNull(unused);
     }
 
     @Test
@@ -173,13 +176,15 @@ public class PluginLoaderTest {
         willReturn(null).given(initializer).loadImpl(Foo.class);
         willReturn(null).given(initializer).loadImpl(FooChildPlugin.class);
         FooChildPlugin expected = new FooChildPlugin();
-        willReturn(expected).given(plugins).getDefaultPlugin(FooChildPlugin.class);
+        FooChildPlugin unused =
+                willReturn(expected).given(plugins).getDefaultPlugin(FooChildPlugin.class);
 
         // when
         Foo plugin = loader.loadPlugin(FooChildPlugin.class, Foo.class);
 
         // then
         assertSame(expected, plugin);
+        assertNull(unused);
     }
 
     @Test
@@ -213,13 +218,15 @@ public class PluginLoaderTest {
         willReturn(null).given(initializer).loadImpl(FooBarChildPlugin1.class);
         willReturn(null).given(initializer).loadImpl(FooBarChildPlugin2.class);
         FooBarChildPlugin1 expected = new FooBarChildPlugin1();
-        willReturn(expected).given(plugins).getDefaultPlugin(FooBarChildPlugin1.class);
+        FooBarChildPlugin1 unused =
+                willReturn(expected).given(plugins).getDefaultPlugin(FooBarChildPlugin1.class);
 
         // when
         FooBar plugin = loader.loadPlugin(FooBarChildPlugin1.class, FooBarChildPlugin2.class);
 
         // then
         assertSame(expected, plugin);
+        assertNull(unused);
     }
 
     static class FooPlugin {}

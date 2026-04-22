@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.progress;
 
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.internal.verification.Times;
 import org.mockito.internal.verification.VerificationModeFactory;
 
@@ -15,6 +16,7 @@ public class VerificationModeBuilder {
         return VerificationModeFactory.times(times);
     }
 
+    @CanIgnoreReturnValue
     public VerificationModeBuilder times(int times) {
         this.times = times;
         return this;
