@@ -7,9 +7,9 @@ package org.mockito.internal;
 import org.mockito.internal.creation.bytebuddy.ClinitSuppressionTransformer;
 
 import java.lang.instrument.Instrumentation;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Allows users to specify Mockito as a Java agent where the {@link Instrumentation}
@@ -28,10 +28,10 @@ public class PremainAttach {
         if (PremainAttach.instrumentation != null) {
             return;
         }
-        Set<String> classes =
-                parseSuppressClinitProperty(System.getProperty(SUPPRESS_CLINIT_PROPERTY));
-        if (!classes.isEmpty()) {
-            instrumentation.addTransformer(new ClinitSuppressionTransformer(classes), false);
+        Predicate<String> shouldSuppress =
+                buildClinitPredicate(System.getProperty(SUPPRESS_CLINIT_PROPERTY));
+        if (shouldSuppress != null) {
+            instrumentation.addTransformer(new ClinitSuppressionTransformer(shouldSuppress), false);
         }
         PremainAttach.instrumentation = instrumentation;
     }
@@ -41,23 +41,47 @@ public class PremainAttach {
     }
 
     /**
-     * Parses a comma-separated list of class names into a set, trimming whitespace from each
-     * entry and ignoring empty entries.
+     * Parses the {@code mockito.suppress.clinit} property value into a predicate over
+     * fully-qualified class names. The property is a comma-separated list; each entry is
+     * either an exact class name ({@code com.example.MyClass}) or a package wildcard ending
+     * in {@code .*} ({@code com.example.*}) that matches the package and all sub-packages.
+     * Whitespace is trimmed; empty entries are ignored.
      *
      * @param property the property value, may be {@code null}
-     * @return an unmodifiable set of class names
+     * @return the predicate, or {@code null} if no entries are configured
      */
-    static Set<String> parseSuppressClinitProperty(String property) {
+    static Predicate<String> buildClinitPredicate(String property) {
         if (property == null || property.trim().isEmpty()) {
-            return Collections.emptySet();
+            return null;
         }
-        Set<String> result = new HashSet<>();
+        Set<String> classes = new HashSet<>();
+        Set<String> packages = new HashSet<>();
         for (String name : property.split(",")) {
             String trimmed = name.trim();
-            if (!trimmed.isEmpty()) {
-                result.add(trimmed);
+            if (trimmed.isEmpty()) {
+                continue;
+            }
+            if (trimmed.endsWith(".*")) {
+                // Drop only the trailing '*' and keep the preceding '.' so that
+                // "com.example." correctly rejects "com.examples.Foo".
+                packages.add(trimmed.substring(0, trimmed.length() - 1));
+            } else {
+                classes.add(trimmed);
             }
         }
-        return Collections.unmodifiableSet(result);
+        if (classes.isEmpty() && packages.isEmpty()) {
+            return null;
+        }
+        return name -> {
+            if (classes.contains(name)) {
+                return true;
+            }
+            for (String prefix : packages) {
+                if (name.startsWith(prefix)) {
+                    return true;
+                }
+            }
+            return false;
+        };
     }
 }
