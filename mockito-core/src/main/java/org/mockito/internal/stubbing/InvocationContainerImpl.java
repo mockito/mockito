@@ -34,7 +34,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     private final RegisteredInvocations registeredInvocations;
     private final Strictness mockStrictness;
 
-    private MatchableInvocation invocationForStubbing;
+    private volatile MatchableInvocation invocationForStubbing;
 
     public InvocationContainerImpl(MockCreationSettings<?> mockSettings) {
         this.registeredInvocations = createRegisteredInvocations(mockSettings);
