@@ -1830,6 +1830,11 @@ import java.util.function.Function;
  *
  * When Mockito is used as a Java agent ({@code -javaagent}), you can suppress static initializers
  * ({@code <clinit>}) of specific classes via the system property {@code mockito.suppress.clinit}.
+ * The value is a comma-separated list where each entry is either an exact fully-qualified class name
+ * (e.g. {@code com.example.MyClass}) or a package wildcard ending in {@code .*}
+ * (e.g. {@code com.example.*}) that matches the package and all sub-packages.
+ * Only trailing {@code .*} wildcards are supported; middle wildcards like {@code com.*.bar.*} are
+ * <b>not</b> supported.
  * This causes all static fields in those classes to retain their JVM zero-value defaults
  * ({@code null}, {@code 0}, {@code false}, etc.) instead of running the static initialization block.
  *
