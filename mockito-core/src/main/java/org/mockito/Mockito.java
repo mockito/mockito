@@ -204,7 +204,7 @@ import java.util.function.Function;
  * <p>
  * To explicitly attach Mockito during test execution, the library's jar file needs to be specified as <code>-javaagent</code>
  * as an argument to the executing JVM. To enable this in Gradle, the following example adds Mockito to all test
- * tasks using <strong>Kotlin DSL</strong>. Although omitted for simplicity, using a <code>CommandLineArgumentProvider</code> is recommended by Gradle to ensure task relocatability (<a href="https://docs.gradle.org/current/userguide/caching_java_projects.html#dealing_with_file_paths">documentation</a>):
+ * tasks using <strong>Kotlin DSL</strong>. Using a <code>CommandLineArgumentProvider</code> is recommended by Gradle to ensure task relocatability (<a href="https://docs.gradle.org/current/userguide/caching_java_projects.html#dealing_with_file_paths">documentation</a>):
  *
  * <pre class="code"><code class="kotlin">
  * val mockitoAgent = configurations.create("mockitoAgent")
@@ -233,7 +233,16 @@ import java.util.function.Function;
  * }
  * tasks {
  *     test {
- *         jvmArgs += "-javaagent:${configurations.mockitoAgent.asPath}"
+ *         jvmArgumentProviders.add(new CommandLineArgumentProvider() {
+ *             @InputFiles
+ *             @PathSensitive(PathSensitivity.RELATIVE)
+ *             FileCollection mockitoAgent = configurations.mockitoAgent
+ *
+ *             @Override
+ *             Iterable<String> asArguments() {
+ *                 ["-javaagent:${mockitoAgent.asPath}"]
+ *             }
+ *         })
  *     }
  * }
  * </code></pre>
