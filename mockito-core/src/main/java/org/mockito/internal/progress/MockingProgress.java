@@ -45,6 +45,8 @@ public interface MockingProgress {
 
     void mockingStarted(Class<?> mock, MockCreationSettings<?> settings);
 
+    void singletonMockingStarted(Object mock, MockCreationSettings<?> settings);
+
     void addListener(MockitoListener listener);
 
     void removeListener(MockitoListener listener);

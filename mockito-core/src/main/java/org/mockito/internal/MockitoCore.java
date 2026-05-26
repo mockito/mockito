@@ -102,7 +102,7 @@ public class MockitoCore {
         checkDoNotMockAnnotation(creationSettings);
         MockMaker.SingletonMockControl<T> control = createSingletonMock(instance, creationSettings);
         control.enable();
-        mockingProgress().mockingStarted(instance, creationSettings);
+        mockingProgress().singletonMockingStarted(instance, creationSettings);
         return new MockedSingletonImpl<>(control);
     }
 

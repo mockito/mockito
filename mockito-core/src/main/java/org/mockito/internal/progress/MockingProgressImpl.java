@@ -183,6 +183,16 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     @Override
+    public void singletonMockingStarted(Object mock, MockCreationSettings<?> settings) {
+        for (MockitoListener listener : listeners) {
+            if (listener instanceof MockCreationListener) {
+                ((MockCreationListener) listener).onSingletonMockCreated(mock, settings);
+            }
+        }
+        validateMostStuff();
+    }
+
+    @Override
     public void addListener(MockitoListener listener) {
         addListener(listener, listeners);
     }
