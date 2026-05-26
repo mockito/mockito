@@ -27,4 +27,12 @@ public interface MockCreationListener extends MockitoListener {
      * @param settings the settings used for creation
      */
     default void onStaticMockCreated(Class<?> mock, MockCreationSettings<?> settings) {}
+
+    /**
+     * Singleton mock was just created.
+     *
+     * @param mock the singleton instance being mocked
+     * @param settings the settings used for creation
+     */
+    default void onSingletonMockCreated(Object mock, MockCreationSettings<?> settings) {}
 }
