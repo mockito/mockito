@@ -581,6 +581,10 @@ class InlineDelegateByteBuddyMockMaker
             for (Map<Class<?>, ?> entry : mockedStatics.getBackingMap().target.values()) {
                 entry.remove(mock);
             }
+        } else if (isRegisteredSingleton(mock)) {
+            for (Map<Object, ?> entry : mockedSingletons.getBackingMap().target.values()) {
+                entry.remove(mock);
+            }
         } else {
             mocks.put(
                     mock,
@@ -590,9 +594,19 @@ class InlineDelegateByteBuddyMockMaker
         }
     }
 
+    private boolean isRegisteredSingleton(Object mock) {
+        for (Map<Object, ?> entry : mockedSingletons.getBackingMap().target.values()) {
+            if (entry.containsKey(mock)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void clearAllMocks() {
         mockedStatics.getBackingMap().clear();
+        mockedSingletons.getBackingMap().clear();
 
         for (Entry<Object, MockMethodInterceptor> entry : mocks) {
             clearMock(entry.getKey());
