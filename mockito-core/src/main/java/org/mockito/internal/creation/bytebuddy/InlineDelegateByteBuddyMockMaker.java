@@ -593,6 +593,7 @@ class InlineDelegateByteBuddyMockMaker
     @Override
     public void clearAllMocks() {
         mockedStatics.getBackingMap().clear();
+        mockedSingletons.getBackingMap().clear();
 
         for (Entry<Object, MockMethodInterceptor> entry : mocks) {
             clearMock(entry.getKey());

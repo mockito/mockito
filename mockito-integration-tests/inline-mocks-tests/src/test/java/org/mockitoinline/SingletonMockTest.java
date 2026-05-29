@@ -6,7 +6,6 @@ package org.mockitoinline;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
@@ -80,6 +79,25 @@ public final class SingletonMockTest {
 
             reset(singleton);
 
+            assertNull(singleton.foo());
+        }
+    }
+
+    @Test
+    public void testSingletonMockDeregisteredByClearInlineMocks() {
+        MyEnum singleton = MyEnum.A;
+
+        // Intentionally do not close the MockedSingleton to simulate a leak.
+        Mockito.mockSingleton(singleton);
+        when(singleton.foo()).thenReturn("bar");
+        assertEquals("bar", singleton.foo());
+
+        Mockito.framework().clearInlineMocks();
+
+        // After clearing, the singleton must no longer be mocked
+        assertEquals("foo", singleton.foo());
+        // and re-mocking the same instance must not throw "already registered".
+        try (MockedSingleton<MyEnum> ignored = Mockito.mockSingleton(singleton)) {
             assertNull(singleton.foo());
         }
     }
