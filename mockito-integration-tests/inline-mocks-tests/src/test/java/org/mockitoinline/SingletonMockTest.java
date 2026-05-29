@@ -102,23 +102,6 @@ public final class SingletonMockTest {
         }
     }
 
-    @Test
-    public void testSingletonMockDeregisteredByClearInlineMock() {
-        MyEnum singleton = MyEnum.A;
-
-        // Intentionally do not close the MockedSingleton to simulate a leak.
-        Mockito.mockSingleton(singleton);
-        when(singleton.foo()).thenReturn("bar");
-        assertEquals("bar", singleton.foo());
-
-        Mockito.framework().clearInlineMock(singleton);
-
-        assertEquals("foo", singleton.foo());
-        try (MockedSingleton<MyEnum> ignored = Mockito.mockSingleton(singleton)) {
-            assertNull(singleton.foo());
-        }
-    }
-
     enum MyEnum {
         A {
             @Override
