@@ -6,7 +6,8 @@ package org.mockito.invocation;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-
+import java.util.Arrays;
+import org.mockito.Mockito;
 import org.mockito.NotExtensible;
 
 /**
@@ -95,4 +96,51 @@ public interface InvocationOnMock extends Serializable {
      * @throws Throwable in case real method throws
      */
     Object callRealMethod() throws Throwable;
+
+    /**
+     * Returns the number of times this method has been invoked on this mock with the
+     * same arguments, including the current invocation.
+     *
+     * <p>
+     * This is useful when an {@link org.mockito.stubbing.Answer} needs to behave
+     * differently depending on how many times it has been called. For example, to fail
+     * the first few calls and then return a value:
+     *
+     * <pre class="code"><code class="java">
+     * when(mock.get("foo")).thenAnswer(invocation -&gt; {
+     *     if (invocation.getInvocationCount() &lt;= 2) {
+     *         throw new RuntimeException("not ready yet");
+     *     }
+     *     return 200;
+     * });
+     * </code></pre>
+     *
+     * <p>
+     * Counts are scoped to the same mock, the same method, and the same arguments
+     * (compared with {@link java.util.Arrays#deepEquals(Object[], Object[])}). Calls to
+     * other methods, other mocks, or the same method with different arguments are not
+     * included.
+     *
+     * <p>
+     * The current invocation is included in the count, so the first call returns
+     * {@code 1}.
+     *
+     * @return the 1-based count of matching invocations on this mock, including this one
+     * @since 5.x.x
+     */
+    default int getInvocationCount() {
+        return (int)
+                Mockito.mockingDetails(getMock()).getInvocations().stream()
+                        .filter(this::sameMethod)
+                        .filter(this::sameArguments)
+                        .count();
+    }
+
+    private boolean sameMethod(Invocation invocation) {
+        return invocation.getMethod().equals(getMethod());
+    }
+
+    private boolean sameArguments(Invocation invocation) {
+        return Arrays.deepEquals(invocation.getArguments(), getArguments());
+    }
 }
