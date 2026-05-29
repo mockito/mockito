@@ -6,4 +6,5 @@
 /**
  * Argument matchers for verification and stubbing.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.matchers;

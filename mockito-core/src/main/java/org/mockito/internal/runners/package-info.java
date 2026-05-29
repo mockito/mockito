@@ -6,4 +6,5 @@
 /**
  * Internal classes for runners implementations.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.runners;

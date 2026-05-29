@@ -6,6 +6,7 @@ package org.mockito.internal.handler;
 
 import static org.mockito.internal.matchers.Equality.areEqual;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.MethodInvocationReport;
@@ -13,6 +14,7 @@ import org.mockito.listeners.MethodInvocationReport;
 /**
  * Report on a method call
  */
+@CheckReturnValue
 public class NotifiedMethodInvocationReport implements MethodInvocationReport {
     private final Invocation invocation;
     private final Object returnedValue;

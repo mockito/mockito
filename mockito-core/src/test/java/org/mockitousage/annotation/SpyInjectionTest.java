@@ -27,7 +27,7 @@ public class SpyInjectionTest extends TestBase {
     }
 
     @Test
-    public void shouldDoStuff() throws Exception {
-        MockUtil.isMock(hasSpy.spy);
+    public void shouldDoStuff() {
+        boolean ignored = MockUtil.isMock(hasSpy.spy);
     }
 }

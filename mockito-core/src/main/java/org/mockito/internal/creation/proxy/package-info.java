@@ -6,4 +6,5 @@
 /**
  * Mock makers based on the {@link java.lang.reflect.Proxy} utility.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.creation.proxy;

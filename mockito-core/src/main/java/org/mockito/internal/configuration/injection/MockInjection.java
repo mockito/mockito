@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.configuration.injection;
 
+import org.mockito.CanIgnoreReturnValue;
+
 import static org.mockito.internal.util.Checks.checkItemsNotNull;
 import static org.mockito.internal.util.Checks.checkNotNull;
 import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
@@ -63,21 +65,25 @@ public final class MockInjection {
             this.fields.addAll(checkItemsNotNull(fields, "fields"));
         }
 
+        @CanIgnoreReturnValue
         public OngoingMockInjection withMocks(Set<Object> mocks) {
             this.mocks.addAll(checkNotNull(mocks, "mocks"));
             return this;
         }
 
+        @CanIgnoreReturnValue
         public OngoingMockInjection tryConstructorInjection() {
             injectionStrategies.thenTry(new ConstructorInjection());
             return this;
         }
 
+        @CanIgnoreReturnValue
         public OngoingMockInjection tryPropertyOrFieldInjection() {
             injectionStrategies.thenTry(new PropertyAndSetterInjection());
             return this;
         }
 
+        @CanIgnoreReturnValue
         public OngoingMockInjection handleSpyAnnotation() {
             postInjectionStrategies.thenTry(new SpyOnInjectedFieldsHandler());
             return this;

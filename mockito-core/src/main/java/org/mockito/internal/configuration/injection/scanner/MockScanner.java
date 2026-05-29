@@ -9,6 +9,7 @@ import static org.mockito.internal.util.collections.Sets.newMockSafeHashSet;
 import java.lang.reflect.Field;
 import java.util.Set;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.internal.util.MockUtil;
@@ -17,6 +18,7 @@ import org.mockito.internal.util.reflection.FieldReader;
 /**
  * Scan mocks, and prepare them if needed.
  */
+@CheckReturnValue
 public class MockScanner {
     private final Object instance;
     private final Class<?> clazz;

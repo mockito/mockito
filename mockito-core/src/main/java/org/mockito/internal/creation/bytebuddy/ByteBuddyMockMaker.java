@@ -4,13 +4,12 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import java.util.Optional;
+import java.util.function.Function;
 import org.mockito.MockedConstruction;
 import org.mockito.internal.exceptions.Reporter;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
-
-import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * ByteBuddy MockMaker.

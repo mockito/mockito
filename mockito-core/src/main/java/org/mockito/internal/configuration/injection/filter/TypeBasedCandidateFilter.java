@@ -17,8 +17,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.internal.util.MockUtil;
 
+@CheckReturnValue
 public class TypeBasedCandidateFilter implements MockCandidateFilter {
 
     private final MockCandidateFilter next;

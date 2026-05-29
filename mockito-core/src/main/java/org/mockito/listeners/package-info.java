@@ -6,4 +6,5 @@
 /**
  * Public classes relative to the listener APIs.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.listeners;

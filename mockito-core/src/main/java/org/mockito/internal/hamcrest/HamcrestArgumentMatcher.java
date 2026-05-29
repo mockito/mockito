@@ -7,9 +7,11 @@ package org.mockito.internal.hamcrest;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.mockito.ArgumentMatcher;
+import org.mockito.CheckReturnValue;
 
 import static java.util.Objects.requireNonNull;
 
+@CheckReturnValue
 public class HamcrestArgumentMatcher<T> implements ArgumentMatcher<T> {
 
     private final Matcher<T> matcher;

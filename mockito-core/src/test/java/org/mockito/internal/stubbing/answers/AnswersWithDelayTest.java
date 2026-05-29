@@ -9,7 +9,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.within;
 
 import java.util.Date;
-
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationBuilder;
@@ -60,7 +59,9 @@ public class AnswersWithDelayTest {
         final AnswersWithDelay testSubject = new AnswersWithDelay(sleepyTime, new Returns("value"));
 
         final Date before = new Date();
-        testSubject.answer(new InvocationBuilder().method("oneArg").arg("A").toInvocation());
+        Object ignored =
+                testSubject.answer(
+                        new InvocationBuilder().method("oneArg").arg("A").toInvocation());
         final Date after = new Date();
 
         final long timePassed = after.getTime() - before.getTime();

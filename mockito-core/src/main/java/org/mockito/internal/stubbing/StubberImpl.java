@@ -14,6 +14,7 @@ import static org.mockito.internal.util.MockUtil.isMock;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.internal.stubbing.answers.CallsRealMethods;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.internal.stubbing.answers.ThrowsException;
@@ -72,6 +73,7 @@ public class StubberImpl implements Stubber {
     }
 
     @Override
+    @CanIgnoreReturnValue
     public Stubber doThrow(Throwable... toBeThrown) {
         if (toBeThrown == null) {
             answers.add(new ThrowsException(null));
@@ -109,18 +111,21 @@ public class StubberImpl implements Stubber {
     }
 
     @Override
+    @CanIgnoreReturnValue
     public Stubber doNothing() {
         answers.add(doesNothing());
         return this;
     }
 
     @Override
+    @CanIgnoreReturnValue
     public Stubber doAnswer(Answer answer) {
         answers.add(answer);
         return this;
     }
 
     @Override
+    @CanIgnoreReturnValue
     public Stubber doCallRealMethod() {
         answers.add(new CallsRealMethods());
         return this;

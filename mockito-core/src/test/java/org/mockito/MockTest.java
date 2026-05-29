@@ -4,13 +4,13 @@
  */
 package org.mockito;
 
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assume.assumeThat;
+
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assume.assumeThat;
 
 @RunWith(Enclosed.class)
 public class MockTest {
