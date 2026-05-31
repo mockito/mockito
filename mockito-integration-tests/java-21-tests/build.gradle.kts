@@ -1,6 +1,18 @@
+import org.gradle.api.GradleException
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.tasks.testing.Test
+import org.gradle.api.tasks.testing.TestOutputEvent
+import org.gradle.process.CommandLineArgumentProvider
+
 plugins {
     id("java")
     id("mockito.test-conventions")
+    id("mockito.test-jvm-conventions")
+}
+
+testJvm {
+    minJvm.set(21)
+    maxJvm.set(21)
 }
 
 description = "Test suite for Java 21 Mockito"
@@ -14,53 +26,33 @@ dependencies {
     bytebuddyAgent(libs.bytebuddy.agent) { isTransitive = false }
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
 tasks {
     val testWithBytebuddyAgent by registering(Test::class) {
-        if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
-            enabled = false
-        } else {
-            jvmArgs(
-                "-javaagent:${bytebuddyAgent.asPath}",
-                // "-Djdk.instrument.traceUsage",
-            )
-        }
+        jvmArgs(
+            "-javaagent:${bytebuddyAgent.asPath}",
+            // "-Djdk.instrument.traceUsage",
+        )
         failIfStdErrWarningOnDynamicallyLoadedAgent(this)
     }
 
     val testWithMockitoAgent by registering(Test::class) {
         dependsOn(":mockito-core:jar")
-        if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
-            enabled = false
-        } else {
-            jvmArgumentProviders.add(
-                CommandLineArgumentProvider {
-                    listOf(
-                        "-javaagent:${project(":mockito-core").tasks.jar.get().archiveFile.get()}"
-                        // "-Djdk.instrument.traceUsage",
-                    )
-                }
-            )
-        }
+        jvmArgumentProviders.add(
+            CommandLineArgumentProvider {
+                listOf(
+                    "-javaagent:${project(":mockito-core").tasks.jar.get().outputs.files.singleFile}"
+                    // "-Djdk.instrument.traceUsage",
+                )
+            }
+        )
         failIfStdErrWarningOnDynamicallyLoadedAgent(this)
     }
 
     val testWithEnableDynamicAgentLoading by registering(Test::class) {
-        if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
-            enabled = false
-        } else {
-            jvmArgs(
-                "-XX:+EnableDynamicAgentLoading",
-                // "-Djdk.instrument.traceUsage",
-            )
-        }
+        jvmArgs(
+            "-XX:+EnableDynamicAgentLoading",
+            // "-Djdk.instrument.traceUsage",
+        )
         failIfStdErrWarningOnDynamicallyLoadedAgent(this)
     }
 
@@ -70,7 +62,6 @@ tasks {
             testWithBytebuddyAgent,
             testWithEnableDynamicAgentLoading,
         )
-        isEnabled = JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)
 
         expectStdErrWhenDynamicallyLoadedAgent(this)
     }
