@@ -88,7 +88,7 @@ jobs:
         --scan
 
     - name: 8. Upload coverage report
-      uses: codecov/codecov-action@v6
+      uses: codecov/codecov-action@v7
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
@@ -180,7 +180,7 @@ jobs:
           ${{ github.workspace }}/emulator-startup.log
 
     - name: 6. Upload coverage report
-      uses: codecov/codecov-action@v6
+      uses: codecov/codecov-action@v7
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
