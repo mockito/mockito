@@ -94,7 +94,11 @@ public class SerializableMethod implements Serializable, MockitoMethod {
 
     @Override
     public int hashCode() {
-        return 1;
+        int result = declaringClass == null ? 0 : declaringClass.hashCode();
+        result = 31 * result + (methodName == null ? 0 : methodName.hashCode());
+        result = 31 * result + Arrays.hashCode(parameterTypes);
+        result = 31 * result + (returnType == null ? 0 : returnType.hashCode());
+        return result;
     }
 
     @Override
