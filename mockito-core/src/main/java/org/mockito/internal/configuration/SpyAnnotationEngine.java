@@ -23,7 +23,6 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.internal.util.MockUtil;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.MemberAccessor;
 
@@ -59,15 +58,10 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                 Object instance;
                 try {
                     instance = accessor.get(field, testInstance);
-                    if (MockUtil.isMock(instance)) {
-                        // instance has been spied earlier
-                        // for example happens when MockitoAnnotations.openMocks is called two
-                        // times.
-                        Mockito.reset(instance);
-                    } else if (instance != null) {
-                        accessor.set(field, testInstance, spyInstance(field, instance));
-                    } else {
+                    if (instance == null) {
                         accessor.set(field, testInstance, spyNewInstance(testInstance, field));
+                    } else {
+                        SpyAnnotationUtil.resetOrCreateSpy(field, instance, accessor, testInstance);
                     }
                 } catch (Exception e) {
                     throw new MockitoException(
@@ -82,25 +76,14 @@ public class SpyAnnotationEngine implements AnnotationEngine {
         return new NoAction();
     }
 
-    private static Object spyInstance(Field field, Object instance) {
-        // TODO: Add mockMaker option for @Spy annotation (#2740)
-        return Mockito.mock(
-                instance.getClass(),
-                withSettings()
-                        .genericTypeToMock(field.getGenericType())
-                        .spiedInstance(instance)
-                        .defaultAnswer(CALLS_REAL_METHODS)
-                        .name(field.getName()));
-    }
-
     private static Object spyNewInstance(Object testInstance, Field field)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
-        // TODO: Add mockMaker option for @Spy annotation (#2740)
         MockSettings settings =
                 withSettings()
                         .genericTypeToMock(field.getGenericType())
                         .defaultAnswer(CALLS_REAL_METHODS)
                         .name(field.getName());
+        SpyAnnotationUtil.applyMockMaker(field, settings);
         Class<?> type = field.getType();
         if (type.isInterface()) {
             return Mockito.mock(type, settings.useConstructor());

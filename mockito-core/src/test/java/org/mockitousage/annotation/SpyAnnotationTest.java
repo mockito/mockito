@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,7 +29,9 @@ import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockMakers;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -282,6 +285,77 @@ public class SpyAnnotationTest extends TestBase {
 
         // You can verify with varargs of matchers.
         verify(translator).translate(eq("hello"));
+    }
+
+    @Test
+    public void should_create_spy_with_specified_mock_maker_for_provided_instance()
+            throws Exception {
+        WithMockMakerSpies holder = new WithMockMakerSpies();
+
+        try (AutoCloseable ignored = MockitoAnnotations.openMocks(holder)) {
+            assertThat(mockingDetails(holder.instanceSpy).getMockCreationSettings().getMockMaker())
+                    .isEqualTo(MockMakers.SUBCLASS);
+
+            // spy is still functional
+            doReturn(10).when(holder.instanceSpy).size();
+            assertEquals(10, holder.instanceSpy.size());
+        }
+    }
+
+    @Test
+    public void should_create_spy_with_specified_mock_maker_for_auto_created_instance()
+            throws Exception {
+        WithMockMakerSpies holder = new WithMockMakerSpies();
+
+        try (AutoCloseable ignored = MockitoAnnotations.openMocks(holder)) {
+            assertThat(
+                            mockingDetails(holder.autoCreatedSpy)
+                                    .getMockCreationSettings()
+                                    .getMockMaker())
+                    .isEqualTo(MockMakers.SUBCLASS);
+        }
+    }
+
+    @Test
+    public void should_not_set_mock_maker_when_unspecified() throws Exception {
+        WithMockMakerSpies holder = new WithMockMakerSpies();
+
+        try (AutoCloseable ignored = MockitoAnnotations.openMocks(holder)) {
+            assertThat(mockingDetails(holder.defaultSpy).getMockCreationSettings().getMockMaker())
+                    .isNull();
+        }
+    }
+
+    @Test
+    public void should_create_spy_with_specified_mock_maker_for_injected_field() throws Exception {
+        WithInjectedMockMakerSpy holder = new WithInjectedMockMakerSpy();
+
+        try (AutoCloseable ignored = MockitoAnnotations.openMocks(holder)) {
+            assertThat(mockingDetails(holder.service).getMockCreationSettings().getMockMaker())
+                    .isEqualTo(MockMakers.SUBCLASS);
+        }
+    }
+
+    static class WithMockMakerSpies {
+        @Spy(mockMaker = MockMakers.SUBCLASS)
+        List<String> instanceSpy = new ArrayList<String>();
+
+        @Spy(mockMaker = MockMakers.SUBCLASS)
+        InnerStaticClassWithNoArgConstructor autoCreatedSpy;
+
+        @Spy List<String> defaultSpy = new ArrayList<String>();
+    }
+
+    static class WithInjectedMockMakerSpy {
+        @Mock List<String> dependency;
+
+        @InjectMocks
+        @Spy(mockMaker = MockMakers.SUBCLASS)
+        HasDependency service = new HasDependency();
+    }
+
+    static class HasDependency {
+        List<String> dependency;
     }
 
     static class WithInnerPrivateStaticAbstract {
