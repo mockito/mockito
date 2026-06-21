@@ -12,6 +12,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.plugins.MockMaker;
 
 /**
  * Allows shorthand wrapping of field instances in a spy object.
@@ -89,6 +90,25 @@ import org.mockito.junit.MockitoJUnitRunner;
  * </ol>
  *
  * <p>
+ * You can choose the {@link org.mockito.plugins.MockMaker} used to create the spy with the
+ * {@link #mockMaker()} option, mirroring {@link Mock#mockMaker()}. This is useful when the default
+ * mock maker is not suitable for a particular field:
+ *
+ * <pre class="code"><code class="java">
+ * &#064;Spy(mockMaker = MockMakers.SUBCLASS) Foo spyOnFoo = new Foo("argument");
+ * </code></pre>
+ *
+ * Same as doing:
+ *
+ * <pre class="code"><code class="java">
+ * Foo spyOnFoo = Mockito.mock(Foo.class, withSettings()
+ *     .spiedInstance(new Foo("argument"))
+ *     .defaultAnswer(CALLS_REAL_METHODS)
+ *     .mockMaker(MockMakers.SUBCLASS));
+ * </code></pre>
+ * </p>
+ *
+ * <p>
  * <strong>One last warning :</strong> if you call <code>MockitoAnnotations.openMocks(this)</code> in a
  * super class <strong>constructor</strong> then this will not work. It is because fields
  * in subclass are only instantiated after super class constructor has returned.
@@ -111,4 +131,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 @Retention(RUNTIME)
 @Target(FIELD)
 @Documented
-public @interface Spy {}
+public @interface Spy {
+
+    /**
+     * Spy will be created by the given {@link MockMaker}, see {@link MockSettings#mockMaker(String)}.
+     *
+     * @since 5.24.0
+     */
+    String mockMaker() default "";
+}
