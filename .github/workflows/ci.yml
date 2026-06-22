@@ -41,7 +41,7 @@ jobs:
     steps:
 
     - name: 1. Check out code
-      uses: actions/checkout@v6 # https://github.com/actions/checkout
+      uses: actions/checkout@v7 # https://github.com/actions/checkout
       with:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
@@ -112,7 +112,7 @@ jobs:
     # All build steps
     steps:
     - name: 1. Check out code
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
@@ -196,7 +196,7 @@ jobs:
 
     steps:
     - name: 1. Check out code
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
         fetch-depth: '0'
 
@@ -239,7 +239,7 @@ jobs:
     steps:
 
       - name: 1. Check out code
-        uses: actions/checkout@v6 # https://github.com/actions/checkout
+        uses: actions/checkout@v7 # https://github.com/actions/checkout
         with:
           fetch-depth: '0' # https://github.com/shipkit/shipkit-changelog#fetch-depth-on-ci
 
