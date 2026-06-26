@@ -1,18 +1,26 @@
 import aQute.bnd.gradle.Resolve
+import libs
+import org.gradle.api.JavaVersion
+import org.gradle.api.tasks.testing.Test
 
 plugins {
     id("mockito.library-conventions")
     id("mockito.javadoc-conventions")
+    id("mockito.test-jvm-conventions")
 }
 
-description = "Mockito JUnit 5 support"
+description = "Mockito JUnit 6 support"
+
+testJvm {
+    minJvm.set(17)
+}
 
 dependencies {
     api(project(":mockito-core"))
-    implementation(libs.junit.jupiter.api)
+    implementation(libs.junit6.jupiter.api)
     testImplementation(libs.assertj)
-    testImplementation(libs.junit.platform.launcher)
-    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit6.platform.launcher)
+    testRuntimeOnly(libs.junit6.jupiter.engine)
 }
 
 mockitoJavadoc {
@@ -20,11 +28,11 @@ mockitoJavadoc {
     docTitle = """<h1>Mockito JUnit Jupiter ${project.version} API.</h1>"""
 }
 
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
-    }
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}
 
+tasks {
     jar {
         bundle { // this: BundleTaskExtension
             classpath = project.configurations.runtimeClasspath.get()
@@ -60,7 +68,8 @@ tasks {
                 # Instruct the APIGuardianAnnotations how to operate.
                 # See https://bnd.bndtools.org/instructions/export-apiguardian.html
                 -export-apiguardian: org.mockito.internal.*
-            """.trimIndent())
+                """.trimIndent()
+            )
         }
     }
 
@@ -70,7 +79,7 @@ tasks {
     val osgiProperties by registering(WriteProperties::class) {
         destinationFile.set(layout.buildDirectory.file("verifyOSGiProperties.bndrun"))
         property("-standalone", true)
-        property("-runee", "JavaSE-${java.targetCompatibility}")
+        property("-runee", testJvm.effectiveJavaVersion.map { "JavaSE-$it" })
         property("-runrequires", "osgi.identity;filter:=\"(osgi.identity=org.mockito.junit-jupiter)\"")
     }
 
@@ -93,7 +102,7 @@ tasks {
         if (JavaVersion.current() >= JavaVersion.VERSION_18) {
             javadocDocletOptions {
                 addStringOption("-link-modularity-mismatch", "info")
-                links("https://docs.junit.org/${libs.versions.junit.jupiter.get()}/api/")
+                links("https://docs.junit.org/${libs.versions.junit6.get()}/api/")
             }
         } else {
             logger.info("Javadoc tool below 18, links to JUnit Jupiter javadocs was not added.")
