@@ -9,12 +9,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import org.mockito.CheckReturnValue;
 import org.mockito.internal.invocation.InvocationComparator;
 import org.mockito.internal.stubbing.StubbingComparator;
 import org.mockito.internal.util.DefaultMockingDetails;
 import org.mockito.invocation.Invocation;
 import org.mockito.stubbing.Stubbing;
 
+@CheckReturnValue
 public class AllInvocationsFinder {
 
     private AllInvocationsFinder() {}

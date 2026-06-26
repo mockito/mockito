@@ -4,6 +4,7 @@
  */
 package org.mockito.quality;
 
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.MockitoSession;
 import org.mockito.exceptions.misusing.PotentialStubbingProblem;
 import org.mockito.exceptions.misusing.UnnecessaryStubbingException;
@@ -37,6 +38,7 @@ import org.mockito.junit.MockitoRule;
  *
  * @since 2.3.0
  */
+@CanIgnoreReturnValue
 public enum Strictness {
 
     /**

@@ -4,10 +4,13 @@
  */
 package org.mockito.internal.matchers.text;
 
+import org.mockito.CheckReturnValue;
+
 /**
  * Contains text that has already been formatted
  * and hence it does not need any formatting (like quotes around string, etc.)
  */
+@CheckReturnValue
 class FormattedText {
 
     private final String text;

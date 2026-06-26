@@ -4,12 +4,14 @@
  */
 package org.mockito.internal.util.collections;
 
+import org.mockito.CheckReturnValue;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
 /** Utilities for Iterables */
+@CheckReturnValue
 public final class Iterables {
 
     /**

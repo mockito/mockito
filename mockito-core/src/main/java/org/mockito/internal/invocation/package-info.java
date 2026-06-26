@@ -6,4 +6,5 @@
 /**
  * Invocation machinery and related classes.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.invocation;

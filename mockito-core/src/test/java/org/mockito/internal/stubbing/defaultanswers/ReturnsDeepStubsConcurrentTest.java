@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 
 import org.junit.Test;
 import org.mockito.Answers;
+import org.mockito.CanIgnoreReturnValue;
 
 public class ReturnsDeepStubsConcurrentTest {
 
@@ -23,6 +24,7 @@ public class ReturnsDeepStubsConcurrentTest {
         }
     }
 
+    @CanIgnoreReturnValue
     interface Service {
         List<String> doSomething();
     }

@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.configuration.injection;
 
+import org.mockito.CanIgnoreReturnValue;
 import java.lang.reflect.Field;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ public abstract class MockInjectionStrategy {
      * @param strategy Queued strategy.
      * @return The passed strategy instance to allow chaining.
      */
+    @CanIgnoreReturnValue
     public MockInjectionStrategy thenTry(MockInjectionStrategy strategy) {
         if (nextStrategy != null) {
             nextStrategy.thenTry(strategy);
@@ -64,6 +66,7 @@ public abstract class MockInjectionStrategy {
      * @param mockCandidates A set of mock candidate, that might be injected.
      * @return <code>true</code> if successful, <code>false</code> otherwise.
      */
+    @CanIgnoreReturnValue
     public boolean process(Field onField, Object fieldOwnedBy, Set<Object> mockCandidates) {
         if (processInjection(onField, fieldOwnedBy, mockCandidates)) {
             return true;

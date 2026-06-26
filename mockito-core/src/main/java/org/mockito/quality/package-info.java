@@ -6,4 +6,5 @@
 /**
  * Mocking quality related classes.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.quality;

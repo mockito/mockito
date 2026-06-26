@@ -76,8 +76,10 @@ public class ParameterizedConstructorInstantiatorTest {
         given(resolver.resolveTypeInstances(ArgumentMatchers.any(Class[].class)))
                 .willReturn(new Object[] {observer, map});
 
-        new ParameterizedConstructorInstantiator(this, field("withMultipleConstructor"), resolver)
-                .instantiate();
+        FieldInitializationReport ignored =
+                new ParameterizedConstructorInstantiator(
+                                this, field("withMultipleConstructor"), resolver)
+                        .instantiate();
 
         assertNotNull(withMultipleConstructor);
         assertNotNull(withMultipleConstructor.observer);
@@ -123,8 +125,10 @@ public class ParameterizedConstructorInstantiatorTest {
         given(resolver.resolveTypeInstances(ArgumentMatchers.any(Class[].class)))
                 .willReturn(new Object[] {"", vararg});
 
-        new ParameterizedConstructorInstantiator(this, field("withVarargConstructor"), resolver)
-                .instantiate();
+        FieldInitializationReport ignored =
+                new ParameterizedConstructorInstantiator(
+                                this, field("withVarargConstructor"), resolver)
+                        .instantiate();
 
         assertNotNull(withVarargConstructor);
     }

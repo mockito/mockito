@@ -4,6 +4,33 @@
  */
 package org.mockito.internal.creation.bytebuddy;
 
+import static org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.EXCLUDES;
+import static org.mockito.internal.util.StringUtil.join;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.instrument.Instrumentation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.MockedConstruction;
 import org.mockito.creation.instance.InstantiationException;
 import org.mockito.creation.instance.Instantiator;
@@ -25,26 +52,6 @@ import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.InlineMockMaker;
 import org.mockito.plugins.MemberAccessor;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.instrument.Instrumentation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.JarOutputStream;
-
-import static org.mockito.internal.creation.bytebuddy.InlineBytecodeGenerator.EXCLUDES;
-import static org.mockito.internal.util.StringUtil.join;
 
 /**
  * Agent and subclass based mock maker.
@@ -429,6 +436,7 @@ class InlineDelegateByteBuddyMockMaker
     }
 
     @Override
+    @CanIgnoreReturnValue
     public <T> Class<? extends T> createMockType(MockCreationSettings<T> settings) {
         try {
             return bytecodeGenerator.mockClass(

@@ -7,12 +7,14 @@ package org.mockito.internal.matchers;
 import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
+import org.mockito.CanIgnoreReturnValue;
 
 public class Any implements ArgumentMatcher<Object>, Serializable {
 
     public static final Any ANY = new Any();
 
     @Override
+    @CanIgnoreReturnValue
     public boolean matches(Object actual) {
         return true;
     }

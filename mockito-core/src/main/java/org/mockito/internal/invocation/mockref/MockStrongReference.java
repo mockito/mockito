@@ -4,8 +4,10 @@
  */
 package org.mockito.internal.invocation.mockref;
 
+import org.mockito.CheckReturnValue;
 import java.io.ObjectStreamException;
 
+@CheckReturnValue
 public class MockStrongReference<T> implements MockReference<T> {
 
     private final T ref;

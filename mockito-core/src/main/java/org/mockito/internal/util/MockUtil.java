@@ -4,6 +4,12 @@
  */
 package org.mockito.internal.util;
 
+import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 import org.mockito.exceptions.misusing.NotAMockException;
@@ -18,13 +24,6 @@ import org.mockito.mock.MockName;
 import org.mockito.plugins.MockMaker;
 import org.mockito.plugins.MockMaker.TypeMockability;
 import org.mockito.plugins.MockResolver;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-
-import static org.mockito.internal.handler.MockHandlerFactory.createMockHandler;
 
 @SuppressWarnings("unchecked")
 public class MockUtil {

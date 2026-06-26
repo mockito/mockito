@@ -6,4 +6,5 @@
 /**
  * Stuff that does not have a good package yet.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.creation.util;

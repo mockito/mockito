@@ -6,6 +6,7 @@ package org.mockito.internal.junit;
 
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.junit.MockitoTestRule;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
@@ -31,6 +32,7 @@ public final class JUnitTestRule implements MockitoTestRule {
     }
 
     @Override
+    @CanIgnoreReturnValue
     public MockitoTestRule strictness(Strictness strictness) {
         sessionStore.setStrictness(strictness);
         return this;

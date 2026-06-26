@@ -6,4 +6,5 @@
 /**
  * Reflection utilities.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.util.reflection;

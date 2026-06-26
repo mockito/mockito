@@ -6,4 +6,5 @@
 /**
  * Mockito configuration utilities.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.configuration;

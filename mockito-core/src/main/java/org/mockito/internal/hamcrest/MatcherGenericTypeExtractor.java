@@ -8,8 +8,10 @@ import static org.mockito.internal.util.reflection.GenericTypeExtractor.genericT
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Matcher;
+import org.mockito.CheckReturnValue;
 
 /** Extracts generic type of matcher */
+@CheckReturnValue
 public final class MatcherGenericTypeExtractor {
 
     /**

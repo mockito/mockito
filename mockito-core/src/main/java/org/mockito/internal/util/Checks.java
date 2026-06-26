@@ -4,13 +4,17 @@
  */
 package org.mockito.internal.util;
 
+import org.mockito.CanIgnoreReturnValue;
+
 /** Pre-made preconditions */
 public final class Checks {
 
+    @CanIgnoreReturnValue
     public static <T> T checkNotNull(T value, String checkedValue) {
         return checkNotNull(value, checkedValue, null);
     }
 
+    @CanIgnoreReturnValue
     public static <T> T checkNotNull(T value, String checkedValue, String additionalMessage) {
         if (value == null) {
             String message = checkedValue + " should not be null";

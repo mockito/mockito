@@ -12,12 +12,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.mockito.Captor;
+import org.mockito.CheckReturnValue;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 /**
  * Scan field for injection.
  */
+@CheckReturnValue
 public class InjectMocksScanner {
     private final Class<?> clazz;
 

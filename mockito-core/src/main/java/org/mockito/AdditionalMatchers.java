@@ -38,6 +38,7 @@ import org.mockito.internal.matchers.LessThan;
  * Scroll down to see all methods - full list of matchers.
  */
 @SuppressWarnings("ALL")
+@CanIgnoreReturnValue
 public final class AdditionalMatchers {
 
     /**

@@ -139,6 +139,7 @@ public @interface Mock {
      */
     boolean withoutAnnotations() default false;
 
+    @CanIgnoreReturnValue
     enum Strictness {
 
         /**

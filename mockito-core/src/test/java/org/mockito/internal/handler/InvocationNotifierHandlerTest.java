@@ -6,6 +6,7 @@ package org.mockito.internal.handler;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
@@ -16,6 +17,7 @@ import static org.mockito.Mockito.verify;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,7 @@ import org.mockito.Spy;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.invocation.Invocation;
+import org.mockito.invocation.InvocationContainer;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.listeners.InvocationListener;
 import org.mockito.listeners.MethodInvocationReport;
@@ -63,13 +66,14 @@ public class InvocationNotifierHandlerTest {
         given(mockHandler.handle(invocation)).willReturn("returned value");
 
         // when
-        notifier.handle(invocation);
+        Object returnedValue = notifier.handle(invocation);
 
         // then
         verify(listener1)
                 .reportInvocation(new NotifiedMethodInvocationReport(invocation, "returned value"));
         verify(listener2)
                 .reportInvocation(new NotifiedMethodInvocationReport(invocation, "returned value"));
+        Assert.assertEquals("returned value", returnedValue);
     }
 
     @Test
@@ -80,7 +84,7 @@ public class InvocationNotifierHandlerTest {
         given(mockHandler.handle(invocation)).willReturn(computedException);
 
         // when
-        notifier.handle(invocation);
+        Object thrownException = notifier.handle(invocation);
 
         // then
         verify(listener1)
@@ -89,6 +93,8 @@ public class InvocationNotifierHandlerTest {
         verify(listener2)
                 .reportInvocation(
                         new NotifiedMethodInvocationReport(invocation, (Object) computedException));
+        Assert.assertNotNull(thrownException);
+        Assert.assertEquals(Exception.class, thrownException.getClass());
     }
 
     @Test
@@ -134,9 +140,11 @@ public class InvocationNotifierHandlerTest {
 
     @Test
     public void should_delegate_all_MockHandlerInterface_to_the_parameterized_MockHandler() {
-        notifier.getInvocationContainer();
-        notifier.getMockSettings();
+        InvocationContainer invocationContainer = notifier.getInvocationContainer();
+        MockCreationSettings<ArrayList<Answer<?>>> mockSettings = notifier.getMockSettings();
 
+        assertNull(invocationContainer);
+        assertNull(mockSettings);
         verify(mockHandler).getInvocationContainer();
         verify(mockHandler).getMockSettings();
     }
