@@ -4,30 +4,38 @@
  */
 package org.mockitousage.plugins.stacktrace;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
-
-import static org.junit.Assert.fail;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.verify;
 
-public class PluginStackTraceFilteringTest extends TestBase {
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.StateMaster;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
+import org.mockito.internal.configuration.ConfigurationAccess;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockitousage.IMethods;
+
+@ExtendWith(MockitoExtension.class)
+public class PluginStackTraceFilteringTest {
 
     @Mock private IMethods mock;
 
-    @After
-    public void resetState() {
-        super.resetState();
+    @BeforeEach
+    public void setup() {
+        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
     }
 
-    @Before
-    public void setup() {
-        super.makeStackTracesClean();
+    @AfterEach
+    public void resetState() {
+        ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
+        new StateMaster().reset();
     }
 
     @Test
@@ -52,6 +60,12 @@ public class PluginStackTraceFilteringTest extends TestBase {
             String trace = getStackTrace(e);
             assertThat(trace).contains("verifyMock_x").contains("verify_excludeMe_x");
         }
+    }
+
+    private String getStackTrace(Throwable e) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        e.printStackTrace(new PrintStream(out));
+        return out.toString();
     }
 
     private void verify_excludeMe_x() {

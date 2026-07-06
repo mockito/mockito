@@ -9,11 +9,9 @@ dependencies {
     testImplementation(project(":mockito-core"))
     testImplementation(project(":mockito-extensions:mockito-junit-jupiter"))
     testImplementation(testFixtures(project(":mockito-core")))
-    testImplementation(libs.junit4)
     testImplementation(libs.assertj)
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.junit.vintage.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 
@@ -24,7 +22,6 @@ tasks {
 }
 
 configurations.configureEach {
-    //TODO SF enable when #154 is implemented
-    //let's make those tests not use hamcrest
-    //exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    // Ensure these tests do not depend on hamcrest (see #154).
+    exclude(group = "org.hamcrest", module = "hamcrest-core")
 }
