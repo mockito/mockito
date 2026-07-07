@@ -20,8 +20,3 @@ tasks {
         useJUnitPlatform()
     }
 }
-
-configurations.configureEach {
-    // Ensure these tests do not depend on hamcrest (see #154).
-    exclude(group = "org.hamcrest", module = "hamcrest-core")
-}
