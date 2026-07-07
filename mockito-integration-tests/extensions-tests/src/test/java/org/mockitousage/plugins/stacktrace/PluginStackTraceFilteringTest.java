@@ -8,34 +8,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.verify;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.StateMaster;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
-import org.mockito.internal.configuration.ConfigurationAccess;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockitousage.IMethods;
+import org.mockitoutil.TestBase5;
 
-@ExtendWith(MockitoExtension.class)
-public class PluginStackTraceFilteringTest {
+public class PluginStackTraceFilteringTest extends TestBase5 {
 
     @Mock private IMethods mock;
 
-    @BeforeEach
-    public void setup() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(true);
-    }
-
     @AfterEach
     public void resetState() {
-        ConfigurationAccess.getConfig().overrideCleansStackTrace(false);
-        new StateMaster().reset();
+        super.resetState();
+    }
+
+    @BeforeEach
+    public void setup() {
+        makeStackTracesClean();
     }
 
     @Test
@@ -60,12 +52,6 @@ public class PluginStackTraceFilteringTest {
             String trace = getStackTrace(e);
             assertThat(trace).contains("verifyMock_x").contains("verify_excludeMe_x");
         }
-    }
-
-    private String getStackTrace(Throwable e) {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        e.printStackTrace(new PrintStream(out));
-        return out.toString();
     }
 
     private void verify_excludeMe_x() {

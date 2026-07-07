@@ -53,6 +53,7 @@ dependencies {
     testFixturesImplementation(libs.assertj)
     testFixturesImplementation(libs.objenesis)
     testFixturesCompileOnly(libs.junit4)
+    testFixturesCompileOnly(libs.junit.jupiter.api)
 }
 
 mockitoJavadoc {
