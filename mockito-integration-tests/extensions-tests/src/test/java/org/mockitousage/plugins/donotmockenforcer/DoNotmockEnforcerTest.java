@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.DoNotMock;
 import org.mockito.MockedStatic;
 import org.mockito.exceptions.base.MockitoException;

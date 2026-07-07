@@ -4,30 +4,30 @@
  */
 package org.mockitousage.plugins.stacktrace;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockitousage.IMethods;
-import org.mockitoutil.TestBase;
+import org.mockitoutil.TestBase5;
 
-import static org.junit.Assert.fail;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-
-public class PluginStackTraceFilteringTest extends TestBase {
+public class PluginStackTraceFilteringTest extends TestBase5 {
 
     @Mock private IMethods mock;
 
-    @After
+    @AfterEach
     public void resetState() {
         super.resetState();
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
-        super.makeStackTracesClean();
+        makeStackTracesClean();
     }
 
     @Test
