@@ -18,7 +18,10 @@ dependencies {
 
 val testRuntimeBundles: Configuration by configurations.creating
 
-val (otherBundle, otherBundleTask) = configureOsgiBundle(project, "otherBundle")
+val (depBundle, depBundleTask) = configureOsgiBundle(project, "depBundle")
+val (otherBundle, otherBundleTask) = configureOsgiBundle(project, "otherBundle") {
+    add("otherBundleImplementation", depBundle.output)
+}
 val (testBundle, testBundleTask) = configureOsgiBundle(project, "testBundle") {
     add("testBundleImplementation", project(":mockito-core"))
     add("testBundleImplementation", project.libs.junit4)
@@ -32,6 +35,7 @@ dependencies {
 
     testRuntimeBundles(testBundleTask.map { it.outputs.files })
     testRuntimeBundles(otherBundleTask.map { it.outputs.files })
+    testRuntimeBundles(depBundleTask.map { it.outputs.files })
 }
 
 tasks {
@@ -46,6 +50,10 @@ tasks {
         inputs.files(otherBundle.allSource)
             .withPathSensitivity(PathSensitivity.RELATIVE)
             .withPropertyName("otherBundleSources")
+
+        inputs.files(depBundle.allSource)
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+            .withPropertyName("depBundleSources")
         useJUnit()
     }
 }

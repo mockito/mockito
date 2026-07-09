@@ -98,13 +98,15 @@ public class OsgiTest extends Suite {
             return new Class<?>[] {
                 loadTestClass("SimpleMockTest"),
                 loadTestClass("MockNonPublicClassTest"),
-                loadTestClass("MockClassInOtherBundleTest")
+                loadTestClass("MockClassInOtherBundleTest"),
+                loadTestClass("MockSubclassAcrossBundlesTest")
             };
         } else {
             return new Class<?>[] {
                 loadTestClass("SimpleMockTest"),
                 loadTestClass("MockNonPublicClassFailsTest"),
-                loadTestClass("MockClassInOtherBundleTest")
+                loadTestClass("MockClassInOtherBundleTest"),
+                loadTestClass("MockSubclassAcrossBundlesTest")
             };
         }
     }

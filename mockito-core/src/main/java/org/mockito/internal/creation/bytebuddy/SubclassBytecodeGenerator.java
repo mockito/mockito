@@ -120,11 +120,25 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         return false;
     }
 
+    private static Collection<Class<?>> getAllTypes(Class<?> type) {
+        // Include the mocked type and all of its superclasses so that the generated mock is
+        // defined by a class loader that can reach the defining loader of every supertype. If a
+        // superclass lives in a different class loader than the mocked type (for example, in a
+        // separate OSGi bundle) and references a type only that loader can see, omitting it makes
+        // the mock fail to load with a NoClassDefFoundError. When all supertypes share one class
+        // loader, appendMostSpecific collapses them back to it, so this is free in the common case.
+        Collection<Class<?>> types = new LinkedHashSet<>();
+        for (Class<?> superType = type; superType != null; superType = superType.getSuperclass()) {
+            types.add(superType);
+        }
+        return types;
+    }
+
     @Override
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
         MultipleParentClassLoader.Builder loaderBuilder =
                 new MultipleParentClassLoader.Builder()
-                        .appendMostSpecific(features.mockedType)
+                        .appendMostSpecific(getAllTypes(features.mockedType))
                         .appendMostSpecific(features.interfaces)
                         .appendMostSpecific(
                                 MockAccess.class, DispatcherDefaultingToRealMethod.class)
