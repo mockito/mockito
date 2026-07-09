@@ -4,11 +4,13 @@
  */
 package org.mockito.internal.creation.bytebuddy.inject;
 
+import org.mockito.CheckReturnValue;
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+@CheckReturnValue
 public abstract class MockMethodDispatcher {
 
     static {

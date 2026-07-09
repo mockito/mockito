@@ -4,9 +4,11 @@
  */
 package org.mockito.internal.util.collections;
 
+import org.mockito.CheckReturnValue;
 import java.util.LinkedList;
 
 @SuppressWarnings("unchecked")
+@CheckReturnValue
 public class IdentitySet {
 
     private final LinkedList list = new LinkedList();

@@ -6,4 +6,5 @@
 /**
  * Deals with matching arguments.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.verification.argumentmatching;

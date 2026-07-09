@@ -4,6 +4,8 @@
  */
 package org.mockito.internal.util.concurrent;
 
+import org.mockito.CheckReturnValue;
+
 /**
  * <p>
  * A detached local that allows for explicit control of setting and removing values from a thread-local
@@ -11,6 +13,7 @@ package org.mockito.internal.util.concurrent;
  * </p>
  * Instances of this class are non-blocking and fully thread safe.
  */
+@CheckReturnValue
 public class DetachedThreadLocal<T> implements Runnable {
 
     final WeakConcurrentMap<Thread, T> map;

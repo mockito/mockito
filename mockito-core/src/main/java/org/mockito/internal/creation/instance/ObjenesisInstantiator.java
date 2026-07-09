@@ -4,10 +4,12 @@
  */
 package org.mockito.internal.creation.instance;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.creation.instance.Instantiator;
 import org.mockito.internal.configuration.GlobalConfiguration;
 import org.objenesis.ObjenesisStd;
 
+@CheckReturnValue
 class ObjenesisInstantiator implements Instantiator {
 
     // TODO: in order to provide decent exception message when objenesis is not found,

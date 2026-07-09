@@ -6,4 +6,5 @@
 /**
  * Mockito exceptions utilities
  */
+@org.mockito.CheckReturnValue
 package org.mockito.exceptions;

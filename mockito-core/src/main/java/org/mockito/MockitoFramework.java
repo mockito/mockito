@@ -21,6 +21,7 @@ import org.mockito.plugins.MockitoPlugins;
  * @since 2.1.0
  */
 @NotExtensible
+@CanIgnoreReturnValue
 public interface MockitoFramework {
 
     /**

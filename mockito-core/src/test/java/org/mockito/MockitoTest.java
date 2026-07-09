@@ -421,6 +421,7 @@ public class MockitoTest {
                 .hasMessageStartingWith("Please don't pass any values here");
     }
 
+    @CanIgnoreReturnValue
     private static final class Dummy {
 
         public static String getValue() {

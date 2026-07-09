@@ -5,7 +5,8 @@
 package org.mockito.internal.listeners;
 
 import java.util.List;
-
+import org.mockito.CanIgnoreReturnValue;
+import org.mockito.CheckReturnValue;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 import org.mockito.internal.exceptions.Reporter;
@@ -14,8 +15,10 @@ import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
 
+@CheckReturnValue
 public final class VerificationStartedNotifier {
 
+    @CanIgnoreReturnValue
     public static Object notifyVerificationStarted(
             List<VerificationStartedListener> listeners, MockingDetails originalMockingDetails) {
         if (listeners.isEmpty()) {

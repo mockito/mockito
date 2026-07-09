@@ -5,6 +5,7 @@
 package org.mockito.junit;
 
 import org.junit.rules.MethodRule;
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -145,5 +146,6 @@ public interface MockitoRule extends MethodRule {
      *
      * @since 2.3.0
      */
+    @CanIgnoreReturnValue
     MockitoRule strictness(Strictness strictness);
 }

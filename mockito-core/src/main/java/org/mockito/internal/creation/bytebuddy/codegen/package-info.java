@@ -6,4 +6,5 @@
 /**
  * ByteBuddy package for generated types.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.creation.bytebuddy.codegen;

@@ -6,4 +6,5 @@
 /**
  * Mockito plugins configuration machinery.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.configuration.plugins;

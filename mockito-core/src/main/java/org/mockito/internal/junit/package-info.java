@@ -6,4 +6,5 @@
 /**
  * JUnit integration support classes.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.junit;

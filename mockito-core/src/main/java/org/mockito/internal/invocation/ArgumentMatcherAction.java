@@ -5,7 +5,9 @@
 package org.mockito.internal.invocation;
 
 import org.mockito.ArgumentMatcher;
+import org.mockito.CanIgnoreReturnValue;
 
+@CanIgnoreReturnValue
 public interface ArgumentMatcherAction {
     /**
      * Implementations must apply the given matcher to the argument and return

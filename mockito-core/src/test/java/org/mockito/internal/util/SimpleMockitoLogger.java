@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.util;
 
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.plugins.MockitoLogger;
 
 public class SimpleMockitoLogger implements MockitoLogger {
@@ -22,6 +23,7 @@ public class SimpleMockitoLogger implements MockitoLogger {
         return loggedInfo.length() == 0;
     }
 
+    @CanIgnoreReturnValue
     public SimpleMockitoLogger clear() {
         loggedInfo = new StringBuilder();
         return this;

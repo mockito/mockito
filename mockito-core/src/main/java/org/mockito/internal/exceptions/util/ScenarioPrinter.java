@@ -6,8 +6,10 @@ package org.mockito.internal.exceptions.util;
 
 import java.util.List;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.internal.exceptions.VerificationAwareInvocation;
 
+@CheckReturnValue
 public class ScenarioPrinter {
 
     public String print(List<VerificationAwareInvocation> invocations) {

@@ -7,6 +7,7 @@ package org.mockito.internal.stubbing.answers;
 import static org.mockito.internal.exceptions.Reporter.cannotStubWithNullThrowable;
 import static org.mockito.internal.exceptions.Reporter.checkedExceptionInvalid;
 
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.internal.exceptions.stacktrace.ConditionalStackTraceFilter;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.invocation.InvocationOnMock;
@@ -20,6 +21,7 @@ public abstract class AbstractThrowsException implements Answer<Object>, Validab
     protected abstract Throwable getThrowable();
 
     @Override
+    @CanIgnoreReturnValue
     public Object answer(InvocationOnMock invocation) throws Throwable {
         Throwable throwable = getThrowable();
         if (throwable == null) {

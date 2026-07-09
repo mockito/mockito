@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
+import org.mockito.CanIgnoreReturnValue;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.verification.DefaultRegisteredInvocations;
@@ -57,6 +57,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     /** Adds new stubbed answer and returns the invocation matcher the answer was added to. */
+    @CanIgnoreReturnValue
     public StubbedInvocationMatcher addAnswer(
             Answer<?> answer, boolean isConsecutive, Strictness stubbingStrictness) {
         Invocation invocation = invocationForStubbing.getInvocation();

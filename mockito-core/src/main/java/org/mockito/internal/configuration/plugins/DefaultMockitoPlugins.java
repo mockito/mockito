@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
 import org.mockito.MockMakers;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.plugins.AnnotationEngine;

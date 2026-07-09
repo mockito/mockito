@@ -6,4 +6,5 @@
 /**
  * Implementations of default Answers.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.stubbing.defaultanswers;

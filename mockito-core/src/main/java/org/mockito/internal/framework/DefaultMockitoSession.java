@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.framework;
 
+import org.mockito.CheckReturnValue;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
@@ -18,6 +19,7 @@ import org.mockito.quality.Strictness;
 import java.util.ArrayList;
 import java.util.List;
 
+@CheckReturnValue
 public class DefaultMockitoSession implements MockitoSession {
 
     private final String name;

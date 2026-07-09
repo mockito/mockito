@@ -6,4 +6,5 @@
 /**
  * Stubbing logic.
  */
+@org.mockito.CheckReturnValue
 package org.mockito.internal.stubbing;
