@@ -73,10 +73,10 @@ public class ReflectionMatchersTest extends TestBase {
                 .hasMessageContainingAll(
                         "Argument(s) are different! Wanted:",
                         "mockMe.run(",
-                        "    refEq(org.mockitousage.matchers.ReflectionMatchersTest",
+                        "    refEq(Child[childFieldOne=2, childFieldTwo=bar XXX, parentField=1, protectedParentField=foo])",
                         "Actual invocations have different arguments:",
                         "mockMe.run(",
-                        "    org.mockitousage.matchers.ReflectionMatchersTest");
+                        "    Child[childFieldOne=2, childFieldTwo=bar, parentField=1, protectedParentField=foo]");
     }
 
     @Test
@@ -90,10 +90,10 @@ public class ReflectionMatchersTest extends TestBase {
                 .hasMessageContainingAll(
                         "Argument(s) are different! Wanted:",
                         "mockMe.run(",
-                        "    refEq(org.mockitousage.matchers.ReflectionMatchersTest",
+                        "    refEq(Child[childFieldOne=999, childFieldTwo=bar, parentField=1, protectedParentField=foo])",
                         "Actual invocations have different arguments:",
                         "mockMe.run(",
-                        "    org.mockitousage.matchers.ReflectionMatchersTest");
+                        "    Child[childFieldOne=2, childFieldTwo=bar, parentField=1, protectedParentField=foo]");
     }
 
     @Test
@@ -107,10 +107,10 @@ public class ReflectionMatchersTest extends TestBase {
                 .hasMessageContainingAll(
                         "Argument(s) are different! Wanted:",
                         "mockMe.run(",
-                        "    refEq(org.mockitousage.matchers.ReflectionMatchersTest",
+                        "    refEq(Child[childFieldOne=2, childFieldTwo=bar, parentField=1, protectedParentField=XXXXX])",
                         "Actual invocations have different arguments:",
                         "mockMe.run(",
-                        "    org.mockitousage.matchers.ReflectionMatchersTest");
+                        "    Child[childFieldOne=2, childFieldTwo=bar, parentField=1, protectedParentField=foo]");
     }
 
     @Test
@@ -124,10 +124,10 @@ public class ReflectionMatchersTest extends TestBase {
                 .hasMessageContainingAll(
                         "Argument(s) are different! Wanted:",
                         "mockMe.run(",
-                        "    refEq(org.mockitousage.matchers.ReflectionMatchersTest",
+                        "    refEq(Child[childFieldOne=2, childFieldTwo=bar, parentField=234234, protectedParentField=foo])",
                         "Actual invocations have different arguments:",
                         "mockMe.run(",
-                        "    org.mockitousage.matchers.ReflectionMatchersTest");
+                        "    Child[childFieldOne=2, childFieldTwo=bar, parentField=1, protectedParentField=foo]");
     }
 
     @Test
@@ -154,9 +154,9 @@ public class ReflectionMatchersTest extends TestBase {
                 .hasMessageContainingAll(
                         "Argument(s) are different! Wanted:",
                         "mockMe.run(",
-                        "    refEq(org.mockitousage.matchers.ReflectionMatchersTest",
+                        "    refEq(Child[childFieldOne=2, childFieldTwo=excluded, parentField=234234, protectedParentField=foo])",
                         "Actual invocations have different arguments:",
                         "mockMe.run(",
-                        "    org.mockitousage.matchers.ReflectionMatchersTest");
+                        "    Child[childFieldOne=2, childFieldTwo=bar, parentField=1, protectedParentField=foo]");
     }
 }
