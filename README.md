@@ -73,7 +73,7 @@ For Eclipse, one may need to run `./gradlew eclipse` before importing the projec
 ## How to release new version?
 
 1. Every change on the main development branch is released as `-SNAPSHOT` version to Sonatype snapshot repo
-   at https://s01.oss.sonatype.org/content/repositories/snapshots/org/mockito/mockito-core.
+   at https://central.sonatype.com/repository/maven-snapshots/org/mockito/mockito-core.
 2. To release a non-snapshot version to Maven Central push an annotated tag, for example:
 
     ```shell
