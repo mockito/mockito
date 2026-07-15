@@ -37,7 +37,7 @@ tasks {
                 logger.lifecycle(
                     """
                     RELEASE SUMMARY
-                      SNAPSHOTS released to: https://s01.oss.sonatype.org/content/repositories/snapshots/org/mockito/mockito-core
+                      SNAPSHOTS released to: https://central.sonatype.com/repository/maven-snapshots/org/mockito/mockito-core
                       Release to Maven Central: SKIPPED FOR SNAPSHOTS
                       Github releases: SKIPPED FOR SNAPSHOTS
                     """.trimIndent()
