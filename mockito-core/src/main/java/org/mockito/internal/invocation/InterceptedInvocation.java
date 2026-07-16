@@ -168,9 +168,10 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
 
     @Override
     public int hashCode() {
-        // TODO SF we need to provide hash code implementation so that there are no unexpected,
-        // slight perf issues
-        return 1;
+        int result = mockRef.get().hashCode();
+        result = 31 * result + mockitoMethod.hashCode();
+        result = 31 * result + Arrays.hashCode(arguments);
+        return result;
     }
 
     @Override
