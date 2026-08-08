@@ -141,6 +141,18 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     @Override
+    public Location suspendStubbingInProgress() {
+        Location previous = stubbingInProgress;
+        stubbingInProgress = null;
+        return previous;
+    }
+
+    @Override
+    public void resumeStubbingInProgress(Location location) {
+        stubbingInProgress = location;
+    }
+
+    @Override
     public String toString() {
         return "ongoingStubbing: "
                 + ongoingStubbing
