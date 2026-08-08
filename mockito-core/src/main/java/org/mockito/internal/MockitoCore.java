@@ -273,7 +273,7 @@ public class MockitoCore {
 
     public Stubber stubber(Strictness strictness) {
         MockingProgress mockingProgress = mockingProgress();
-        mockingProgress.stubbingStarted();
+        mockingProgress.stubbingStartedForDoStyle();
         mockingProgress.resetOngoingStubbing();
         return new StubberImpl(strictness);
     }

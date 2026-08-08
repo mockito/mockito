@@ -35,19 +35,23 @@ public class StubberImpl implements Stubber {
 
     @Override
     public <T> T when(T mock) {
-        if (mock == null) {
-            mockingProgress().reset();
-            throw nullPassedToWhenMethod();
+        try {
+            if (mock == null) {
+                mockingProgress().reset();
+                throw nullPassedToWhenMethod();
+            }
+
+            if (!isMock(mock)) {
+                mockingProgress().reset();
+                throw notAMockPassedToWhenMethod();
+            }
+
+            MockUtil.getInvocationContainer(mock).setAnswersForStubbing(answers, strictness);
+
+            return mock;
+        } finally {
+            mockingProgress().doStyleStubbingCompleted();
         }
-
-        if (!isMock(mock)) {
-            mockingProgress().reset();
-            throw notAMockPassedToWhenMethod();
-        }
-
-        MockUtil.getInvocationContainer(mock).setAnswersForStubbing(answers, strictness);
-
-        return mock;
     }
 
     @Override
