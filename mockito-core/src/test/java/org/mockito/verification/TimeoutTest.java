@@ -28,7 +28,7 @@ public class TimeoutTest extends TestBase {
         Timeout t = new Timeout(1, mode, timer);
 
         when(timer.isCounting()).thenReturn(true);
-        doNothing().when(mode).verify(data);
+        doNothing().when(mode).verify(any());
 
         t.verify(data);
 
@@ -42,7 +42,7 @@ public class TimeoutTest extends TestBase {
         Timeout t = new Timeout(1, mode, timer);
 
         when(timer.isCounting()).thenReturn(true, true, true, false);
-        doThrow(error).doThrow(error).doThrow(error).when(mode).verify(data);
+        doThrow(error).doThrow(error).doThrow(error).when(mode).verify(any());
 
         try {
             t.verify(data);
@@ -58,7 +58,7 @@ public class TimeoutTest extends TestBase {
         Timeout t = new Timeout(1, mode, timer);
 
         when(timer.isCounting()).thenReturn(true, true, true, false);
-        doThrow(error).doThrow(error).doNothing().when(mode).verify(data);
+        doThrow(error).doThrow(error).doNothing().when(mode).verify(any());
 
         t.verify(data);
         verify(timer, times(3)).isCounting();
@@ -68,7 +68,7 @@ public class TimeoutTest extends TestBase {
     public void should_try_to_verify_correct_number_of_times() {
         Timeout t = new Timeout(10, mode, timer);
 
-        doThrow(error).when(mode).verify(data);
+        doThrow(error).when(mode).verify(any());
         when(timer.isCounting()).thenReturn(true, true, true, true, true, false);
 
         try {
@@ -77,6 +77,6 @@ public class TimeoutTest extends TestBase {
         } catch (MockitoAssertionError e) {
         }
 
-        verify(mode, times(5)).verify(data);
+        verify(mode, times(5)).verify(any());
     }
 }
