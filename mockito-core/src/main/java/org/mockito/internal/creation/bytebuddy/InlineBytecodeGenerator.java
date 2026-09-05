@@ -75,7 +75,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
     private final WeakConcurrentSet<Class<?>> mocked, flatMocked;
 
-    private volatile Set<Class<?>> clearing = Collections.emptySet();
+    private final ThreadLocal<Set<Class<?>>> clearing =
+            ThreadLocal.withInitial(Collections::emptySet);
 
     private final BytecodeGenerator subclassEngine;
 
@@ -406,7 +407,8 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             Class<?> classBeingRedefined,
             ProtectionDomain protectionDomain,
             byte[] classfileBuffer) {
-        boolean isClearing = classBeingRedefined != null && clearing.contains(classBeingRedefined);
+        boolean isClearing =
+                classBeingRedefined != null && clearing.get().contains(classBeingRedefined);
         if (classBeingRedefined == null
                 || !mocked.contains(classBeingRedefined)
                         && !flatMocked.contains(classBeingRedefined)
@@ -445,7 +447,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         if (types.isEmpty()) {
             return;
         }
-        clearing = types;
+        clearing.set(types);
         try {
             mocked.clear();
             flatMocked.clear();
@@ -464,7 +466,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             "But if the reset intends to remove mocking code to improve performance, it is still impacted."),
                     e);
         } finally {
-            clearing = Collections.emptySet();
+            clearing.remove();
             lastException = null;
         }
     }
