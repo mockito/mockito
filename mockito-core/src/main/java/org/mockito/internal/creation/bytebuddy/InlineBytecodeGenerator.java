@@ -78,6 +78,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
     private final ThreadLocal<Set<Class<?>>> clearing =
             ThreadLocal.withInitial(Collections::emptySet);
 
+    private final ThreadLocal<Throwable> clearingException = new ThreadLocal<>();
     private final BytecodeGenerator subclassEngine;
 
     private final AsmVisitorWrapper mockTransformer;
@@ -305,6 +306,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
         if (!targets.isEmpty()) {
             try {
+                lastException = null;
                 assureCanReadMockito(targets);
                 instrumentation.retransformClasses(targets.toArray(new Class<?>[targets.size()]));
                 Throwable throwable = lastException;
@@ -434,7 +436,11 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                         .make()
                         .getBytes();
             } catch (Throwable throwable) {
-                lastException = throwable;
+                if (isClearing) {
+                    clearingException.set(throwable);
+                } else {
+                    lastException = throwable;
+                }
                 return null;
             }
         }
@@ -453,7 +459,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             flatMocked.clear();
             subclassEngine.clearAllCaches();
             instrumentation.retransformClasses(types.toArray(new Class<?>[0]));
-            Throwable throwable = lastException;
+            Throwable throwable = clearingException.get();
             if (throwable != null) {
                 throw new MockitoException("Could not reset all classes " + types, throwable);
             }
@@ -467,7 +473,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                     e);
         } finally {
             clearing.remove();
-            lastException = null;
+            clearingException.remove();
         }
     }
 
