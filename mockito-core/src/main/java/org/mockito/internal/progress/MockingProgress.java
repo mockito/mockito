@@ -6,6 +6,8 @@ package org.mockito.internal.progress;
 
 import java.util.Set;
 
+import org.mockito.invocation.Location;
+
 import org.mockito.listeners.MockitoListener;
 import org.mockito.listeners.VerificationListener;
 import org.mockito.mock.MockCreationSettings;
@@ -30,6 +32,24 @@ public interface MockingProgress {
     void stubbingCompleted();
 
     void validateState();
+
+    /**
+     * Temporarily clears unfinished-stubbing tracking and returns the previous location.
+     *
+     * <p>Used so deep-stub path evaluation can run inside {@code doXxx().when(mock.path())}
+     * without tripping unfinished-stubbing validation, while still restoring the flag so
+     * misuse detection keeps working afterwards.
+     *
+     * @return previous stubbing location, or {@code null} when stubbing was not in progress
+     */
+    Location suspendStubbingInProgress();
+
+    /**
+     * Restores unfinished-stubbing tracking after {@link #suspendStubbingInProgress()}.
+     *
+     * @param location value returned by {@link #suspendStubbingInProgress()}, may be {@code null}
+     */
+    void resumeStubbingInProgress(Location location);
 
     void reset();
 
