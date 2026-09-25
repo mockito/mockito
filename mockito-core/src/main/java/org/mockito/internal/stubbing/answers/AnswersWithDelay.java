@@ -33,7 +33,12 @@ public class AnswersWithDelay implements Answer<Object>, ValidableAnswer, Serial
 
     @Override
     public Object answer(final InvocationOnMock invocation) throws Throwable {
-        MILLISECONDS.sleep(sleepyTime);
+        try {
+            MILLISECONDS.sleep(sleepyTime);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw e;
+        }
         return answer.answer(invocation);
     }
 
