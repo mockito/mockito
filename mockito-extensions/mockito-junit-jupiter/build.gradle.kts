@@ -49,6 +49,17 @@ tasks {
                 # https://bnd.bndtools.org/heads/export_package.html
                 Export-Package: org.mockito.junit.jupiter.*;version=${archiveVersion.get()}
 
+                # The version policy derives these ranges from the JUnit 5
+                # compile dependency, giving [5.13,6) and [1.13,2). JUnit 6
+                # renumbered Jupiter to 6.x and the Platform from 1.x to 6.x,
+                # which would lock this bundle out of JUnit 6 even though the
+                # APIs it uses are binary compatible across both. Only the
+                # ceilings are raised; the trailing * keeps the derived imports.
+                Import-Package: \
+                    org.junit.jupiter.api.extension;version="[5.13,7)", \
+                    org.junit.platform.commons.support;version="[1.13,7)", \
+                    *
+
                 # Don't add the Private-Package header.
                 # See https://bnd.bndtools.org/instructions/removeheaders.html
                 -removeheaders: Private-Package
