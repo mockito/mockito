@@ -21,6 +21,7 @@ import org.mockito.internal.util.Platform;
 import org.mockito.internal.util.collections.WeakIdentityMap;
 import org.mockito.internal.util.concurrent.DetachedThreadLocal;
 import org.mockito.internal.util.concurrent.WeakConcurrentMap;
+import org.mockito.internal.util.reflection.LenientCopyTool;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.InlineMockMaker;
@@ -861,10 +862,31 @@ class InlineDelegateByteBuddyMockMaker
                             type,
                             (object, context) -> {
                                 ((InlineConstructionMockContext) context).count = ++count;
+                                MockCreationSettings<T> settings = settingsFactory.apply(context);
+                                // Construction mocks skip the real constructor body by design.
+                                // When useConstructor is requested, build a real temporary instance
+                                // (isSuspended is true here so construction is not re-intercepted)
+                                // and copy its state onto the intercepted mock, including finals.
+                                if (settings.isUsingConstructor()) {
+                                    try {
+                                        T constructed =
+                                                new ConstructorInstantiator(
+                                                                settings.getOuterClassInstance()
+                                                                        != null,
+                                                                settings.getConstructorArgs())
+                                                        .newInstance(type);
+                                        @SuppressWarnings("unchecked")
+                                        T cast = (T) object;
+                                        new LenientCopyTool().copyToMock(constructed, cast);
+                                    } catch (Exception e) {
+                                        throw new MockitoException(
+                                                "Could not initialize mocked construction using constructor",
+                                                e);
+                                    }
+                                }
                                 MockMethodInterceptor interceptor =
                                         new MockMethodInterceptor(
-                                                handlerFactory.apply(context),
-                                                settingsFactory.apply(context));
+                                                handlerFactory.apply(context), settings);
                                 mocks.put(object, interceptor);
                                 try {
                                     @SuppressWarnings("unchecked")
