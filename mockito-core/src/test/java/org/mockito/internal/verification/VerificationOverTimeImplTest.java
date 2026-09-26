@@ -5,6 +5,7 @@
 package org.mockito.internal.verification;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -14,10 +15,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.verification.opentest4j.ArgumentsAreDifferent;
+import org.mockito.internal.verification.api.VerificationData;
 import org.mockito.verification.VerificationMode;
 
 public class VerificationOverTimeImplTest {
     @Mock private VerificationMode delegate;
+    @Mock private VerificationData data;
     private VerificationOverTimeImpl impl;
 
     @Before
@@ -28,18 +31,18 @@ public class VerificationOverTimeImplTest {
 
     @Test
     public void should_return_on_success() {
-        impl.verify(null);
-        verify(delegate).verify(null);
+        impl.verify(data);
+        verify(delegate).verify(any());
     }
 
     @Test
     public void should_throw_mockito_assertion_error() {
         MockitoAssertionError toBeThrown = new MockitoAssertionError("message");
 
-        doThrow(toBeThrown).when(delegate).verify(null);
+        doThrow(toBeThrown).when(delegate).verify(any());
         assertThatThrownBy(
                         () -> {
-                            impl.verify(null);
+                            impl.verify(data);
                         })
                 .isEqualTo(toBeThrown);
     }
@@ -48,10 +51,10 @@ public class VerificationOverTimeImplTest {
     public void should_deal_with_junit_assertion_error() {
         ArgumentsAreDifferent toBeThrown = new ArgumentsAreDifferent("message", "wanted", "actual");
 
-        doThrow(toBeThrown).when(delegate).verify(null);
+        doThrow(toBeThrown).when(delegate).verify(any());
         assertThatThrownBy(
                         () -> {
-                            impl.verify(null);
+                            impl.verify(data);
                         })
                 .isEqualTo(toBeThrown);
     }
@@ -60,10 +63,10 @@ public class VerificationOverTimeImplTest {
     public void should_not_wrap_other_exceptions() {
         RuntimeException toBeThrown = new RuntimeException();
 
-        doThrow(toBeThrown).when(delegate).verify(null);
+        doThrow(toBeThrown).when(delegate).verify(any());
         assertThatThrownBy(
                         () -> {
-                            impl.verify(null);
+                            impl.verify(data);
                         })
                 .isEqualTo(toBeThrown);
     }
