@@ -176,11 +176,26 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     public Answer<?> findStubbedAnswer() {
         synchronized (stubbed) {
             for (StubbedInvocationMatcher s : stubbed) {
-                if (invocationForStubbing.matches(s.getInvocation())) {
+                if (invocationForStubbing.matches(s.getInvocation())
+                        || hasSameMatchers(invocationForStubbing, s)) {
                     return s;
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * An argument matcher does not pass the value the user asked for to the mock, it passes the
+     * default value of the argument type, so <code>eq("a")</code> arrives as <code>null</code>.
+     * A stubbing recorded that way keeps those defaults as its arguments, and checking the
+     * matchers of a later identical call against them fails. Comparing the matchers themselves
+     * spots that the same call is being made again. See issue #330.
+     */
+    private static boolean hasSameMatchers(
+            MatchableInvocation invocation, StubbedInvocationMatcher stubbing) {
+        return invocation.getInvocation().getMock() == stubbing.getInvocation().getMock()
+                && invocation.hasSameMethod(stubbing.getInvocation())
+                && invocation.getMatchers().equals(stubbing.getMatchers());
     }
 }

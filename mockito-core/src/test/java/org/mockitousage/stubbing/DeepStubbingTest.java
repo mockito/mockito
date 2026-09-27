@@ -7,6 +7,7 @@ package org.mockitousage.stubbing;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
@@ -293,6 +294,29 @@ public class DeepStubbingTest extends TestBase {
         assertSame(
                 person.getAddress("111 Mock Lane").getStreet(),
                 person.getAddress("the docks").getStreet());
+    }
+
+    @Test
+    public void deep_stub_return_same_mock_instance_for_a_repeated_eq_matcher() {
+        assertSame(
+                person.getAddress(eq("the docks")).getStreet(),
+                person.getAddress(eq("the docks")).getStreet());
+    }
+
+    @Test
+    public void deep_stub_return_different_mock_instances_for_different_eq_matchers() {
+        assertNotSame(
+                person.getAddress(eq("the docks")).getStreet(),
+                person.getAddress(eq("111 Mock Lane")).getStreet());
+    }
+
+    @Test
+    public void stubbing_twice_behind_the_same_eq_matcher_keeps_both_stubbings() {
+        when(person.getAddress(eq("the docks")).getStreet().getName()).thenReturn("short");
+        when(person.getAddress(eq("the docks")).getStreet().getLongName()).thenReturn("long");
+
+        assertEquals("short", person.getAddress("the docks").getStreet().getName());
+        assertEquals("long", person.getAddress("the docks").getStreet().getLongName());
     }
 
     @Test
