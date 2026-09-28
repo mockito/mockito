@@ -188,6 +188,16 @@ public class DefaultMockitoFrameworkTest extends TestBase {
         try {
             obj.getMyName();
         } catch (DisabledMockException e) {
+            String message = e.getMessage();
+            Assert.assertTrue(
+                    message,
+                    message.contains("Mocked type: org.mockito.internal.framework.PersonWithName"));
+            Assert.assertTrue(
+                    message,
+                    message.contains(
+                            "Invocation: public java.lang.String "
+                                    + "org.mockito.internal.framework.PersonWithName.getMyName()"));
+            Assert.assertTrue(message, message.contains("Location: "));
             return;
         }
         Assert.fail("Should have thrown DisabledMockException");
