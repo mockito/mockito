@@ -7,6 +7,7 @@ package org.mockito.junit.jupiter;
 import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.create;
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -19,15 +20,21 @@ import org.junit.jupiter.api.extension.ExtensionContext.Namespace;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoSession;
 import org.mockito.ScopedMock;
+import org.mockito.Spy;
 import org.mockito.internal.configuration.plugins.Plugins;
+import org.mockito.internal.framework.DefaultMockitoSession;
+import org.mockito.internal.junit.UniversalTestListener;
 import org.mockito.internal.session.MockitoSessionLoggerAdapter;
+import org.mockito.internal.util.MockUtil;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.resolver.CaptorParameterResolver;
 import org.mockito.junit.jupiter.resolver.CompositeParameterResolver;
 import org.mockito.junit.jupiter.resolver.MockParameterResolver;
+import org.mockito.mock.MockCreationSettings;
 import org.mockito.quality.Strictness;
 
 /**
@@ -114,6 +121,27 @@ import org.mockito.quality.Strictness;
  *      }
  * }
  * </code></pre>
+ *
+ * <h2>Tracking manually-instantiated mocks</h2>
+ *
+ * By default the extension only tracks mocks created from {@link Mock @Mock} / {@link Spy @Spy}
+ * annotations or parameters. To also enforce strictness on mocks instantiated directly via
+ * {@link Mockito#mock(Class)} (typically assigned to {@code final} fields), set
+ * {@link MockitoSettings#mockTracking()} to {@link MockTracking#ANNOTATED_AND_INSTANTIATED}:
+ *
+ * <pre class="code"><code class="java">
+ * <b>&#064;MockitoSettings(mockTracking = MockTracking.ANNOTATED_AND_INSTANTIATED)</b>
+ * public class ExampleTest {
+ *
+ *     private final Service service = Mockito.mock(Service.class);
+ *     private final Api api = new Api(service);
+ *
+ *     &#064;Test
+ *     public void shouldDoSomething() {
+ *         // over-stubbing on `service` will now be reported by the session
+ *     }
+ * }
+ * </code></pre>
  */
 public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, ParameterResolver {
 
@@ -121,18 +149,23 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
 
     private static final String SESSION = "session", MOCKS = "mocks";
 
+    private static final Field SESSION_LISTENER_FIELD = resolveSessionListenerField();
+
     private final Strictness strictness;
+
+    private final MockTracking mockTracking;
 
     private final ParameterResolver parameterResolver;
 
     // This constructor is invoked by JUnit Jupiter via reflection or ServiceLoader
     @SuppressWarnings("unused")
     public MockitoExtension() {
-        this(Strictness.STRICT_STUBS);
+        this(Strictness.STRICT_STUBS, MockTracking.ANNOTATED);
     }
 
-    private MockitoExtension(Strictness strictness) {
+    private MockitoExtension(Strictness strictness, MockTracking mockTracking) {
         this.strictness = strictness;
+        this.mockTracking = mockTracking;
         this.parameterResolver =
                 new CompositeParameterResolver(
                         new MockParameterResolver(), new CaptorParameterResolver());
@@ -147,10 +180,10 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
     public void beforeEach(final ExtensionContext context) {
         List<Object> testInstances = context.getRequiredTestInstances().getAllInstances();
 
-        Strictness actualStrictness =
-                this.retrieveAnnotationFromTestClasses(context)
-                        .map(MockitoSettings::strictness)
-                        .orElse(strictness);
+        Optional<MockitoSettings> settings = this.retrieveAnnotationFromTestClasses(context);
+        Strictness actualStrictness = settings.map(MockitoSettings::strictness).orElse(strictness);
+        MockTracking actualTracking =
+                settings.map(MockitoSettings::mockTracking).orElse(mockTracking);
 
         MockitoSession session =
                 Mockito.mockitoSession()
@@ -158,6 +191,10 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
                         .strictness(actualStrictness)
                         .logger(new MockitoSessionLoggerAdapter(Plugins.getMockitoLogger()))
                         .startMocking();
+
+        if (actualTracking == MockTracking.ANNOTATED_AND_INSTANTIATED) {
+            registerInstantiatedMocks(session, testInstances);
+        }
 
         context.getStore(MOCKITO).put(MOCKS, new HashSet<>());
         context.getStore(MOCKITO).put(SESSION, session);
@@ -179,6 +216,66 @@ public class MockitoExtension implements BeforeEachCallback, AfterEachCallback, 
         } while (annotation.isEmpty() && currentContext != context.getRoot());
 
         return annotation;
+    }
+
+    /**
+     * Scans every test instance (and its superclasses up to {@link Object}) for fields whose
+     * value is a Mockito mock, and registers them with the session's listener so that strictness
+     * checks (e.g. detecting unused stubbings) apply to them. Fields annotated with
+     * {@link Mock @Mock} or {@link Spy @Spy} are skipped — they were already registered when
+     * the session called {@code initMocks}.
+     */
+    private static void registerInstantiatedMocks(
+            MockitoSession session, List<Object> testInstances) {
+        UniversalTestListener listener = sessionListener(session);
+        for (Object instance : testInstances) {
+            Class<?> currentClass = instance.getClass();
+            while (currentClass != null && currentClass != Object.class) {
+                for (Field field : currentClass.getDeclaredFields()) {
+                    if (field.isAnnotationPresent(Mock.class)
+                            || field.isAnnotationPresent(Spy.class)) {
+                        continue;
+                    }
+                    Object value = readFieldValue(field, instance);
+                    if (MockUtil.isMock(value)) {
+                        MockCreationSettings<?> mockSettings = MockUtil.getMockSettings(value);
+                        listener.onMockCreated(value, mockSettings);
+                    }
+                }
+                currentClass = currentClass.getSuperclass();
+            }
+        }
+    }
+
+    private static Object readFieldValue(Field field, Object instance) {
+        try {
+            field.setAccessible(true);
+            return field.get(instance);
+        } catch (ReflectiveOperationException e) {
+            return null;
+        }
+    }
+
+    private static UniversalTestListener sessionListener(MockitoSession session) {
+        try {
+            return (UniversalTestListener) SESSION_LISTENER_FIELD.get(session);
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException(
+                    "Unable to read listener from MockitoSession; Mockito internals have changed.",
+                    e);
+        }
+    }
+
+    private static Field resolveSessionListenerField() {
+        try {
+            Field field = DefaultMockitoSession.class.getDeclaredField("listener");
+            field.setAccessible(true);
+            return field;
+        } catch (NoSuchFieldException e) {
+            throw new IllegalStateException(
+                    "Unable to locate DefaultMockitoSession.listener; Mockito internals have changed.",
+                    e);
+        }
     }
 
     /**

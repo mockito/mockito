@@ -25,4 +25,13 @@ public @interface MockitoSettings {
      * @return The strictness to configure, by default {@link Strictness#STRICT_STUBS}
      */
     Strictness strictness() default Strictness.STRICT_STUBS;
+
+    /**
+     * Controls which mocks the extension attaches to the session for strictness reporting.
+     * Defaults to {@link MockTracking#ANNOTATED} for backward compatibility.
+     *
+     * @return The mock tracking mode, by default {@link MockTracking#ANNOTATED}
+     * @since 5.21.0
+     */
+    MockTracking mockTracking() default MockTracking.ANNOTATED;
 }

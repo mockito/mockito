@@ -38,6 +38,10 @@ module org.mockito {
             org.mockito.junit.jupiter;
     exports org.mockito.internal.configuration.plugins to
             org.mockito.junit.jupiter;
+    exports org.mockito.internal.framework to
+            org.mockito.junit.jupiter;
+    exports org.mockito.internal.junit to
+            org.mockito.junit.jupiter;
     exports org.mockito.internal.session to
             org.mockito.junit.jupiter;
     exports org.mockito.internal.util to
