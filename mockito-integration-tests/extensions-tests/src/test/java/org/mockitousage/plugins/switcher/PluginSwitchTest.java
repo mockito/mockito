@@ -10,6 +10,8 @@ import org.mockitousage.plugins.instantiator.MyInstantiatorProvider2;
 import org.mockitousage.plugins.logger.MyMockitoLogger;
 import org.mockitousage.plugins.resolver.MyMockResolver;
 import org.mockitousage.plugins.stacktrace.MyStackTraceCleanerProvider;
+import org.mockitousage.plugins.valuerenderer.MyAnnotationValueRenderer;
+import org.mockitousage.plugins.valuerenderer.MyDebugValueRenderer;
 
 import java.util.List;
 
@@ -33,7 +35,9 @@ public class PluginSwitchTest {
                                 MyMockitoLogger.class.getName(),
                                 MyDoNotMockEnforcer.class.getName(),
                                 MyMockResolver.class.getName(),
-                                MyInstantiatorProvider2.class.getName()));
+                                MyInstantiatorProvider2.class.getName(),
+                                MyAnnotationValueRenderer.class.getName(),
+                                MyDebugValueRenderer.class.getName()));
     }
 
     @Test

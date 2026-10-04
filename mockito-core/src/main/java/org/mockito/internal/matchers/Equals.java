@@ -7,7 +7,7 @@ package org.mockito.internal.matchers;
 import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
-import org.mockito.internal.matchers.text.ValuePrinter;
+import org.mockito.internal.matchers.text.ValuePrinters;
 
 public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, Serializable {
 
@@ -33,7 +33,7 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
     }
 
     private String describe(Object object) {
-        return ValuePrinter.print(object);
+        return ValuePrinters.print(object);
     }
 
     @Override

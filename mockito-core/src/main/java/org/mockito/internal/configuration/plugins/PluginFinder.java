@@ -7,7 +7,9 @@ package org.mockito.internal.configuration.plugins;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.util.io.IOUtil;
@@ -47,21 +49,24 @@ class PluginFinder {
     }
 
     List<String> findPluginClasses(Iterable<URL> resources) {
-        List<String> pluginClassNames = new ArrayList<>();
+        Set<String> pluginClassNames = new LinkedHashSet<>();
         for (URL resource : resources) {
             InputStream s = null;
             try {
                 s = resource.openStream();
-                String pluginClassName = new PluginFileReader().readPluginClass(s);
-                if (pluginClassName == null) {
+                // TODO: does this count as an api change?  Previously: multiple meta-inf-like files
+                //  could each contain multiple classes, but only the first class from each file would be
+                //  loaded.  Now all classes from each file will be loaded.  This could either be a break
+                //  or a fix.
+                //  This currently only impacts the MockResolver plugin, which this code was originally for.
+                List<String> pluginClassNamesFromFile = new PluginFileReader().readPluginClasses(s);
+                if (pluginClassNamesFromFile.isEmpty()) {
                     // For backwards compatibility
                     // If the resource does not have plugin class name we're ignoring it
                     continue;
                 }
-                if (!pluginSwitch.isEnabled(pluginClassName)) {
-                    continue;
-                }
-                pluginClassNames.add(pluginClassName);
+                pluginClassNamesFromFile.removeIf(name -> !pluginSwitch.isEnabled(name));
+                pluginClassNames.addAll(pluginClassNamesFromFile);
             } catch (Exception e) {
                 throw new MockitoException(
                         "Problems reading plugin implementation from: " + resource, e);
@@ -69,6 +74,6 @@ class PluginFinder {
                 IOUtil.closeQuietly(s);
             }
         }
-        return pluginClassNames;
+        return new ArrayList<>(pluginClassNames);
     }
 }

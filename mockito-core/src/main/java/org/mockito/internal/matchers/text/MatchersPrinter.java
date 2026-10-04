@@ -17,12 +17,12 @@ public class MatchersPrinter {
 
     public String getArgumentsLine(List<ArgumentMatcher> matchers, PrintSettings printSettings) {
         Iterator args = applyPrintSettings(matchers, printSettings);
-        return ValuePrinter.printValues("(", ", ", ");", args);
+        return ValuePrinters.printValues("(", ", ", ");", args);
     }
 
     public String getArgumentsBlock(List<ArgumentMatcher> matchers, PrintSettings printSettings) {
         Iterator args = applyPrintSettings(matchers, printSettings);
-        return ValuePrinter.printValues("(\n    ", ",\n    ", "\n);", args);
+        return ValuePrinters.printValues("(\n    ", ",\n    ", "\n);", args);
     }
 
     private Iterator<FormattedText> applyPrintSettings(

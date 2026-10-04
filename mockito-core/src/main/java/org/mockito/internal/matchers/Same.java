@@ -7,7 +7,7 @@ package org.mockito.internal.matchers;
 import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
-import org.mockito.internal.matchers.text.ValuePrinter;
+import org.mockito.internal.matchers.text.ValuePrinters;
 
 public class Same implements ArgumentMatcher<Object>, Serializable {
 
@@ -29,6 +29,6 @@ public class Same implements ArgumentMatcher<Object>, Serializable {
 
     @Override
     public String toString() {
-        return "same(" + ValuePrinter.print(wanted) + ")";
+        return "same(" + ValuePrinters.print(wanted) + ")";
     }
 }

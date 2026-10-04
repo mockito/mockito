@@ -4,19 +4,19 @@
  */
 package org.mockito.internal.matchers.text;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.internal.matchers.text.ValuePrinter.print;
-import static org.mockito.internal.matchers.text.ValuePrinter.printValues;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import org.junit.Test;
 
-public class ValuePrinterTest {
+public class DefaultValueRendererTest {
+
+    private static String print(Object value) {
+        return DefaultValueRenderer.INSTANCE.print(value);
+    }
 
     @Test
     public void prints_values() {
@@ -80,12 +80,6 @@ public class ValuePrinterTest {
         assertThat(print('"')).isEqualTo("'\\\"'");
     }
 
-    @Test
-    public void printValues_withDefaultSeparator() {
-        List<Integer> values = asList(111, 222, 333);
-
-        assertThat(printValues(null, null, null, values.iterator())).isEqualTo("(111,222,333)");
-    }
 
     static class ToString {
         public String toString() {

@@ -13,22 +13,34 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.plugins.MemberAccessor;
+import org.mockito.plugins.ValueRenderer;
 
 /**
  * Prints a Java object value in a way humans can read it neatly.
  * Inspired on hamcrest. Used for printing arguments in verification errors.
  */
-public class ValuePrinter {
+public class DefaultValueRenderer implements ValueRenderer {
 
-    private ValuePrinter() {}
+    static final DefaultValueRenderer INSTANCE = new DefaultValueRenderer();
+
+    private DefaultValueRenderer() {}
+
+    @Override
+    public int getPluginPriority() {
+        return Integer.MIN_VALUE;
+    }
 
     /**
      * Prints given value so that it is neatly readable by humans.
-     * Handles explosive toString() implementations.
+     * Handles explosive {@code toString()} implementations.
+     * Will always return a non-null string, so can be used as a backstop for the plugin chain.
      */
-    public static String print(final Object value) {
+    @Override
+    public @NonNull String print(@Nullable final Object value) {
         if (value == null) {
             return "null";
         }
@@ -57,7 +69,7 @@ public class ValuePrinter {
             return printMap((Map<?, ?>) value);
         }
         if (value.getClass().isArray()) {
-            return printValues(
+            return ValuePrinters.printValues(
                     "[",
                     ", ",
                     "]",
@@ -91,7 +103,7 @@ public class ValuePrinter {
         Iterator<? extends Map.Entry<?, ?>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<?, ?> entry = iterator.next();
-            result.append(print(entry.getKey())).append(" = ").append(print(entry.getValue()));
+            result.append(ValuePrinters.print(entry.getKey())).append(" = ").append(ValuePrinters.print(entry.getValue()));
             if (iterator.hasNext()) {
                 result.append(", ");
             }
@@ -99,37 +111,6 @@ public class ValuePrinter {
         return "{" + result + "}";
     }
 
-    /**
-     * Print values in a nice format, e.g. (1, 2, 3)
-     *
-     * @param start the beginning of the values, e.g. "("
-     * @param separator the separator of values, e.g. ", "
-     * @param end the end of the values, e.g. ")"
-     * @param values the values to print
-     *
-     * @return neatly formatted value list
-     */
-    public static String printValues(
-            String start, String separator, String end, Iterator<?> values) {
-        if (start == null) {
-            start = "(";
-        }
-        if (separator == null) {
-            separator = ",";
-        }
-        if (end == null) {
-            end = ")";
-        }
-
-        StringBuilder sb = new StringBuilder(start);
-        while (values.hasNext()) {
-            sb.append(print(values.next()));
-            if (values.hasNext()) {
-                sb.append(separator);
-            }
-        }
-        return sb.append(end).toString();
-    }
 
     private static String printChar(char value) {
         StringBuilder sb = new StringBuilder();

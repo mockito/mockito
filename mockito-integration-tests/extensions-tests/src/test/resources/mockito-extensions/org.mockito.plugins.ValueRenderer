@@ -1,0 +1,2 @@
+org.mockitousage.plugins.valuerenderer.MyAnnotationValueRenderer
+org.mockitousage.plugins.valuerenderer.MyDebugValueRenderer

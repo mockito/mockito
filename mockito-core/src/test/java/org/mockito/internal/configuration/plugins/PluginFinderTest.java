@@ -9,11 +9,13 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.net.URL;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -134,5 +136,65 @@ public class PluginFinderTest extends TestBase {
             assertThat(e).hasMessageContaining(fileName);
             assertThat(e.getCause()).hasMessage("Boo!");
         }
+    }
+
+    @Test
+    public void multiple_implementations_all_discovered() throws Exception {
+        File f1 = tmp.newFile();
+        File f2 = tmp.newFile();
+        when(switcher.isEnabled(anyString())).thenReturn(true);
+
+        // when
+        IOUtil.writeText("foo.Foo", f1);
+        IOUtil.writeText("bar.Bar\nbaz.Baz", f2);
+
+        // then
+        List<String> foundClasses = finder.findPluginClasses(asList(f1.toURI().toURL(), f2.toURI().toURL()));
+        assertThat(foundClasses)
+                .as("Returned in the order they were seen")
+                .containsExactly(
+                        "foo.Foo",
+                        "bar.Bar",
+                        "baz.Baz");
+    }
+
+    @Test
+    public void multiple_implementations_duplicates_are_removed() throws Exception {
+        File f1 = tmp.newFile();
+        File f2 = tmp.newFile();
+        when(switcher.isEnabled(anyString())).thenReturn(true);
+
+        // when
+        IOUtil.writeText("foo.Foo\nbaz.Baz", f1);
+        IOUtil.writeText("bar.Bar\nfoo.Foo\nbaz.Baz", f2);
+
+        // then
+        List<String> foundClasses = finder.findPluginClasses(asList(f1.toURI().toURL(), f2.toURI().toURL()));
+        assertThat(foundClasses)
+                .as("Returned in the order they were seen, with no duplicates")
+                .containsExactly(
+                        "foo.Foo",
+                        "baz.Baz",
+                        "bar.Bar");
+    }
+
+    @Test
+    public void multiple_implementations_some_not_enabled() throws Exception {
+        File f1 = tmp.newFile();
+        File f2 = tmp.newFile();
+        when(switcher.isEnabled(anyString())).thenReturn(true);
+        when(switcher.isEnabled(eq("foo.Foo"))).thenReturn(false);
+
+        // when
+        IOUtil.writeText("foo.Foo\nbaz.Baz", f1);
+        IOUtil.writeText("bar.Bar\nfoo.Foo\nbaz.Baz", f2);
+
+        // then
+        List<String> foundClasses = finder.findPluginClasses(asList(f1.toURI().toURL(), f2.toURI().toURL()));
+        assertThat(foundClasses)
+                .as("Returned in the order they were seen, with no duplicates, excluding disabled classes")
+                .containsExactly(
+                        "baz.Baz",
+                        "bar.Bar");
     }
 }
