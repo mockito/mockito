@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockitoutil.TestBase;
 
@@ -44,5 +45,20 @@ public class PluginFileReaderTest extends TestBase {
         assertEquals(
                 "foo.Foo", reader.readPluginClass(impl(" #my class\n  foo.Foo \n #other class ")));
         assertEquals("foo.Foo", reader.readPluginClass(impl("foo.Foo  # cool class")));
+    }
+
+    @Test
+    public void reads_multiple_class_names() {
+        Assertions.assertThat(reader.readPluginClasses(impl("# foo\n # foo.Bar"))).isEmpty();
+        Assertions.assertThat(reader.readPluginClasses(impl(""))).isEmpty();
+        Assertions.assertThat(reader.readPluginClasses(impl("foo.Foo\njava.lang.String")))
+                .containsExactly(
+                        "foo.Foo",
+                        "java.lang.String");
+        Assertions.assertThat(reader.readPluginClasses(impl("foo.Foo\n bar.Bar \nbaz.Baz # class.Class")))
+                .containsExactly(
+                        "foo.Foo",
+                        "bar.Bar",
+                        "baz.Baz");
     }
 }
