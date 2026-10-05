@@ -117,4 +117,10 @@ public class MatchersToStringTest extends TestBase {
         assertEquals("matches(\"\\\\s+\")", new Matches("\\s+").toString());
         assertEquals("matches(\"\\\\s+\")", new Matches(Pattern.compile("\\s+")).toString());
     }
+
+    @Test
+    public void arrayEqualsToString() {
+        assertEquals("[1, 2, 3]", new ArrayEquals(new int[] {1,2,3}).toString());
+        assertEquals("[\"abc\", \"def\", \"ghi\"]", new ArrayEquals(new String[] {"abc", "def", "ghi"}).toString());
+    }
 }

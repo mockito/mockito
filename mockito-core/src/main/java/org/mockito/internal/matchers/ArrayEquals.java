@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.matchers;
 
+import org.mockito.internal.matchers.text.ValuePrinters;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
@@ -43,23 +44,14 @@ public class ArrayEquals extends Equals {
     @Override
     public String toString() {
         if (getWanted() != null && getWanted().getClass().isArray()) {
-            return appendArray(createObjectArray(getWanted()));
+            return printArray(createObjectArray(getWanted()));
         } else {
             return super.toString();
         }
     }
 
-    private String appendArray(Object[] array) {
-        // TODO SF overlap with ValuePrinter
-        StringBuilder out = new StringBuilder("[");
-        for (int i = 0; i < array.length; i++) {
-            out.append(new Equals(array[i]));
-            if (i != array.length - 1) {
-                out.append(", ");
-            }
-        }
-        out.append("]");
-        return out.toString();
+    private String printArray(Object[] array) {
+        return ValuePrinters.printValues("[", ", ", "]", Arrays.stream(array).iterator());
     }
 
     public static Object[] createObjectArray(Object array) {
