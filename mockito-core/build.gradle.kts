@@ -9,15 +9,12 @@ plugins {
     id("mockito.library-conventions")
     id("mockito.java-backward-compatibility-checks-conventions")
     id("mockito.javadoc-conventions")
+    id("mockito.coverage-aggregation-conventions")
     id("java-test-fixtures")
 }
 
 description = "Mockito mock objects library core API and implementation"
 base.archivesName = "mockito-core"
-
-apply {
-    from(rootProject.file("gradle/coverage.gradle"))
-}
 
 configurations {
     // Putting 'provided' dependencies on testCompileOnly and testRuntimeOnly classpath.
