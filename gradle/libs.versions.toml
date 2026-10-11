@@ -9,6 +9,7 @@ junit-platform = "1.13.4"
 kotlin = "2.2.0"
 
 gradleplugin-test-logger = "4.0.0"
+gradleplugin-test-retry = "1.6.6"
 gradleplugin-animal-sniffer = "2.0.1"
 gradleplugin-aQute-bnd = "7.1.0"
 gradleplugin-errorprone = "4.3.0"
@@ -45,6 +46,7 @@ osgi = { module = "org.osgi:osgi.core", version = "8.0.0" }
 
 # For buildSrc logic
 gradleplugin-testLogger = { module = "com.adarshr:gradle-test-logger-plugin", version.ref = "gradleplugin-test-logger" }
+gradleplugin-testRetry = { module = "org.gradle.test-retry:org.gradle.test-retry.gradle.plugin", version.ref = "gradleplugin-test-retry" }
 gradleplugin-animalSniffer = { module = "ru.vyarus:gradle-animalsniffer-plugin", version.ref = "gradleplugin-animal-sniffer" }
 gradleplugin-bnd = { module = "biz.aQute.bnd:biz.aQute.bnd.gradle", version.ref = "gradleplugin-aQute-bnd" }
 gradleplugin-errorprone = { module = "net.ltgt.gradle:gradle-errorprone-plugin", version.ref = "gradleplugin-errorprone" }
