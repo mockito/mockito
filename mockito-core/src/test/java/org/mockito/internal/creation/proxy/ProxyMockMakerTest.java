@@ -41,6 +41,22 @@ public class ProxyMockMakerTest
     }
 
     @Test
+    public void should_not_find_handler_for_non_proxy_object() {
+        assertThat(mockMaker.getHandler(new Object())).isNull();
+    }
+
+    @Test
+    public void should_not_find_handler_for_non_mockito_proxy() {
+        Object proxy =
+                Proxy.newProxyInstance(
+                        SomeInterface.class.getClassLoader(),
+                        new Class<?>[] {SomeInterface.class},
+                        (ignoredProxy, method, args) -> null);
+
+        assertThat(mockMaker.getHandler(proxy)).isNull();
+    }
+
+    @Test
     public void should_discover_mockable_input() {
         assertThat(mockMaker.isTypeMockable(Number.class).mockable()).isFalse();
         assertThat(mockMaker.isTypeMockable(Number.class).nonMockableReason())
