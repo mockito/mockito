@@ -83,7 +83,7 @@ jobs:
       run: >
         ./gradlew
         -Pmockito.test.java=${{ matrix.java }}
-        coverageReport
+        :coverageReport
         --stacktrace
         --scan
       env:
@@ -95,7 +95,7 @@ jobs:
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
-        files: mockito-core/build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
+        files: build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
         fail_ci_if_error: true
 
   #

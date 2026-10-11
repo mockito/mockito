@@ -54,10 +54,7 @@ val mockitoCoverage = reporting.reports.create<JacocoCoverageReport>("mockitoCov
 rootProject.subprojects.forEach {
     it.pluginManager.withPlugin("mockito.coverage-conventions") {
         it.pluginManager.withPlugin("java") {
-            // Don't add **this** project's report twice to jacocoAggregation.
-            if (it.path != path) {
-                dependencies.add("jacocoAggregation", project(it.path))
-            }
+            dependencies.add("jacocoAggregation", project(it.path))
         }
     }
 

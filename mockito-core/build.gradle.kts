@@ -9,7 +9,6 @@ plugins {
     id("mockito.library-conventions")
     id("mockito.java-backward-compatibility-checks-conventions")
     id("mockito.javadoc-conventions")
-    id("mockito.coverage-aggregation-conventions")
     id("java-test-fixtures")
 }
 
