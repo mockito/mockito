@@ -86,6 +86,9 @@ jobs:
         coverageReport
         --stacktrace
         --scan
+      env:
+        MOCK_MAKER: ${{ matrix.entry.mock-maker }}
+        MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
     - name: 8. Upload coverage report
       uses: codecov/codecov-action@v7
