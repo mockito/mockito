@@ -2,6 +2,8 @@
 
 ## Renewing the release signing key
 
+*AI disclosure: agent generated.*
+
 The signing key expires on **2030-10-11**. Renew the existing key to preserve verification of old releases.
 CI uses the organization secrets `PGP_KEY_RENEWED` and `PGP_PWD_RENEWED`.
 
