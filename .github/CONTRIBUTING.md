@@ -12,6 +12,8 @@
 
 # Contributing to Mockito
 
+For signing-key renewal, see the [maintainer procedures](MAINTENANCE.md).
+
 ## Pull request criteria
 
 * **At least one commit message** in the PR ends with `Fixes #id` where `id` is an [issue tracker](https://github.com/mockito/mockito/issues) id. This allows automated release notes generation. Also GitHub will track the issue and [close it](https://github.com/blog/1386-closing-issues-via-commit-messages) when the PR is merged.
