@@ -35,7 +35,7 @@ public class VerificationOverTimeImplTest {
     }
 
     @Test
-    public void after_should_poll_about_once_per_period_once_delegate_succeeds() {
+    public void should_not_busy_spin_when_return_on_success_is_false() {
         AtomicInteger polls = new AtomicInteger();
         VerificationMode counting =
                 data -> {
