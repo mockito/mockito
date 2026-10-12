@@ -11,21 +11,25 @@ jobs:
     timeout-minutes: 5
     steps:
       # No checkout or third-party actions: only inspect the configured secret.
-      # Importing/listing does not require the passphrase or unlock the key.
-      - name: Inspect signing-key metadata
+      - name: Inspect and verify renewed signing key
         shell: bash
         env:
-          PGP_KEY: ${{ secrets.PGP_KEY }}
+          PGP_KEY: ${{ secrets.PGP_KEY_RENEWED }}
+          PGP_PWD: ${{ secrets.PGP_PWD_RENEWED }}
         run: |
           python3 - <<'PY'
           import datetime
           import os
+          import pathlib
           import subprocess
           import tempfile
 
           key = os.environ.pop("PGP_KEY", "")
+          password = os.environ.pop("PGP_PWD", "")
           if not key.strip():
               raise SystemExit("PGP_KEY is unavailable to this workflow.")
+          if not password:
+              raise SystemExit("PGP_PWD is unavailable to this workflow.")
 
           def run_gpg(home, *args, input=None):
               result = subprocess.run(
@@ -34,7 +38,7 @@ jobs:
               )
               if result.returncode:
                   # Never echo GPG output: it may include secret-supplied data.
-                  raise SystemExit("GPG could not import or inspect PGP_KEY; raw output suppressed.")
+                  raise SystemExit("GPG key validation failed; raw output suppressed.")
               return result.stdout
 
           def date(value):
@@ -72,6 +76,17 @@ jobs:
                           pending = None
                   if not rows:
                       raise SystemExit("No secret-key records found in PGP_KEY.")
+                  # Sign only a fixed diagnostic message, never a release artifact.
+                  # The passphrase is passed over stdin, not through process arguments.
+                  fingerprint = "147B691A19097624902F4EA9689CBE64F4BC997F"
+                  message = pathlib.Path(home, "validation.txt")
+                  signature = pathlib.Path(home, "validation.sig")
+                  message.write_text("Mockito renewed signing key validation\n")
+                  run_gpg(home, "--pinentry-mode", "loopback", "--passphrase-fd", "0",
+                          "--local-user", fingerprint + "!", "--output", str(signature),
+                          "--detach-sign", str(message), input=password + "\n")
+                  del password
+                  run_gpg(home, "--verify", str(signature), str(message))
                   report = "\n".join([
                       "## Signing-key metadata",
                       "",
@@ -79,9 +94,9 @@ jobs:
                       "| --- | --- | --- | --- | --- |",
                       *rows,
                       "",
-                      "No passphrase was accessed and no signing or renewal was attempted.",
+                      "Successfully signed and verified a fixed test message with PGP_KEY_RENEWED and PGP_PWD_RENEWED.",
+                      "No release was published and no keys or secrets were changed.",
                       "Compare the primary fingerprint with the affected release's signing key.",
-                      "Local primary secret material is needed for renewal; this check does not prove it can be unlocked.",
                   ])
                   print(report)
                   with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
