@@ -4,11 +4,13 @@
  */
 package org.mockito.internal.verification;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.openMocks;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -30,6 +32,24 @@ public class VerificationOverTimeImplTest {
     public void should_return_on_success() {
         impl.verify(null);
         verify(delegate).verify(null);
+    }
+
+    @Test
+    public void after_should_poll_about_once_per_period_once_delegate_succeeds() {
+        AtomicInteger polls = new AtomicInteger();
+        VerificationMode counting =
+                data -> {
+                    polls.incrementAndGet();
+                };
+        // after(): returnOnSuccess=false, 50 ms period, 200 ms duration → ~4 polls, not millions
+        VerificationOverTimeImpl after =
+                new VerificationOverTimeImpl(50, 200, counting, false);
+
+        after.verify(null);
+
+        assertThat(polls.get())
+                .as("after() must sleep between successful polls instead of busy-spinning")
+                .isBetween(2, 8);
     }
 
     @Test

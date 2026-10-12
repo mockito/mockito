@@ -88,9 +88,11 @@ public class VerificationOverTimeImpl implements VerificationMode {
 
                 if (returnOnSuccess) {
                     return;
-                } else {
-                    error = null;
                 }
+                // after(): keep polling until the duration elapses, but sleep between
+                // successful polls so we do not busy-spin once the delegate is satisfied.
+                error = null;
+                sleep(pollingPeriodMillis);
             } catch (AssertionError e) {
                 error = handleVerifyException(e);
             }
