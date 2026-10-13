@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 import org.mockito.plugins.ValueRenderer;
 
-public class MyDebugValueRenderer implements ValueRenderer {
+public class MyDebugValueRenderer2 implements ValueRenderer {
     @Override
     public int getPluginPriority() {
         return DEFAULT_PRIORITY + 2;
@@ -19,6 +19,7 @@ public class MyDebugValueRenderer implements ValueRenderer {
         if (value == null) {
             return null;
         }
+        // This works on any class, not just those with 'Debug' in their class name
         for (Method it : value.getClass().getMethods()) {
             if (it.getName().equals("toDebugString")) {
                 return value.getClass().getSimpleName() + ": Rendered by " + getClass().getSimpleName() + " with priority " + getPluginPriority();

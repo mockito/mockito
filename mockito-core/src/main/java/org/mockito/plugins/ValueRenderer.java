@@ -21,8 +21,7 @@ public interface ValueRenderer {
      * Determines the order in which renders will be tried, if multiple renderers are available.
      * A higher number will be tried first.  Renderers with the same priority will be ordered be classname.
      * <p>
-     * The default renderer {@link org.mockito.internal.matchers.text.DefaultValueRenderer} will always be
-     * tried last, as it can always render any object.
+     * An internal fallback renderer will always be tried last, which can always render any object.
      *
      * @return a number indicating the priority of this renderer.
      */
@@ -38,7 +37,4 @@ public interface ValueRenderer {
      * @return A string rendering of {@code value}, or {@code null} if the current renderer does not support this type of value.
      */
     @Nullable String print(@Nullable final Object value);
-    // TODO: @Nullable is from jspecify - putting it on a plugin forces jspecify to be
-    //  an api dependency - is this desirable / is there a better way of annotating
-    //  this nullability?
 }

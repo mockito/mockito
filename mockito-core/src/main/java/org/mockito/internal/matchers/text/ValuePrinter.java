@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2026 Mockito contributors
+ * Copyright (c) 2016 Mockito contributors
  * This program is made available under the terms of the MIT License.
  */
 package org.mockito.internal.matchers.text;
@@ -21,7 +21,9 @@ public final class ValuePrinter {
 
     static {
         ArrayList<ValueRenderer> renderers = new ArrayList<>(Plugins.getValueRenderers());
-        renderers.sort(Comparator.comparingInt(ValueRenderer::getPluginPriority).reversed());
+        renderers.sort(Comparator
+            .comparingInt(ValueRenderer::getPluginPriority).reversed()
+            .thenComparing(it -> it.getClass().getSimpleName()));
         renderers.removeIf(it -> it instanceof DefaultValueRenderer);
         // The default renderer should always be last because it will always successfully render any input, so no renderer can follow it.
         // There is an argument this could be pulled from `DefaultMockitoPlugins`, but that would require `PluginLoader`
@@ -42,7 +44,6 @@ public final class ValuePrinter {
             return ((FormattedText) value).getText();
         }
         for (ValueRenderer valueRenderer : RENDERERS) {
-            // TODO: given this is calling user-written code, should it be within a try-catch?  What would the failure look like other than just rethrowing?
             String output = valueRenderer.print(value);
             if (output != null) {
                 return output;

@@ -54,11 +54,6 @@ class PluginFinder {
             InputStream s = null;
             try {
                 s = resource.openStream();
-                // TODO: does this count as an api change?  Previously: multiple meta-inf-like files
-                //  could each contain multiple classes, but only the first class from each file would be
-                //  loaded.  Now all classes from each file will be loaded.  This could either be a break
-                //  or a fix.
-                //  This currently only impacts the MockResolver plugin, which this code was originally for.
                 List<String> pluginClassNamesFromFile = new PluginFileReader().readPluginClasses(s);
                 if (pluginClassNamesFromFile.isEmpty()) {
                     // For backwards compatibility
