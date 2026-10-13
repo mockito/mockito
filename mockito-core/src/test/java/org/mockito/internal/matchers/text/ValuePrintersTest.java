@@ -15,16 +15,16 @@ public class ValuePrintersTest {
 
     @Test
     public void values_are_passed_to_the_default_renderer_for_printing() {
-        assertThat(ValuePrinters.print(null)).isNotNull().isEqualTo("null");
-        assertThat(ValuePrinters.print("some string")).isEqualTo("\"some string\"");
-        assertThat(ValuePrinters.print(new FormattedText("formatted"))).isEqualTo("formatted");
-        assertThat(ValuePrinters.print(new int[]{1, 2})).isEqualTo("[1, 2]");
-        assertThat(ValuePrinters.print(Map.of("foo", 2L))).isEqualTo("{\"foo\" = 2L}");
+        assertThat(ValuePrinter.print(null)).isNotNull().isEqualTo("null");
+        assertThat(ValuePrinter.print("some string")).isEqualTo("\"some string\"");
+        assertThat(ValuePrinter.print(new FormattedText("formatted"))).isEqualTo("formatted");
+        assertThat(ValuePrinter.print(new int[]{1, 2})).isEqualTo("[1, 2]");
+        assertThat(ValuePrinter.print(Map.of("foo", 2L))).isEqualTo("{\"foo\" = 2L}");
     }
 
     @Test
     public void printValues_withDefaultSeparator() {
         List<Integer> values = asList(111, 222, 333);
-        assertThat(ValuePrinters.printValues(null, null, null, values.iterator())).isEqualTo("(111,222,333)");
+        assertThat(ValuePrinter.printValues(null, null, null, values.iterator())).isEqualTo("(111,222,333)");
     }
 }

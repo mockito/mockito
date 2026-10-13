@@ -9,7 +9,7 @@ import java.util.List;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 import org.mockito.internal.exceptions.Reporter;
-import org.mockito.internal.matchers.text.ValuePrinters;
+import org.mockito.internal.matchers.text.ValuePrinter;
 import org.mockito.listeners.VerificationStartedEvent;
 import org.mockito.listeners.VerificationStartedListener;
 import org.mockito.mock.MockCreationSettings;
@@ -49,7 +49,7 @@ public final class VerificationStartedNotifier {
                         "VerificationStartedEvent.setMock",
                         "parameter which is not a Mockito mock.\n"
                                 + "  Received parameter: "
-                                + ValuePrinters.print(mock)
+                                + ValuePrinter.print(mock)
                                 + ".\n ");
             }
             MockCreationSettings<?> originalMockSettings =
@@ -74,7 +74,7 @@ public final class VerificationStartedNotifier {
                             + originalType.getName()
                             + "\n"
                             + "  Received parameter: "
-                            + ValuePrinters.print(mock)
+                            + ValuePrinter.print(mock)
                             + ".\n ");
         }
 
@@ -90,7 +90,7 @@ public final class VerificationStartedNotifier {
                                 + iface.getName()
                                 + "\n"
                                 + "  Received parameter: "
-                                + ValuePrinters.print(mock)
+                                + ValuePrinter.print(mock)
                                 + ".\n ");
             }
         }

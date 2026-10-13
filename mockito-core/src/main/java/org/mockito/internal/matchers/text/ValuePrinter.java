@@ -16,7 +16,7 @@ import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.plugins.ValueRenderer;
 
 @NullMarked
-public final class ValuePrinters {
+public final class ValuePrinter {
     private static final List<? extends ValueRenderer> RENDERERS;
 
     static {

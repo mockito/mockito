@@ -69,7 +69,7 @@ public class DefaultValueRenderer implements ValueRenderer {
             return printMap((Map<?, ?>) value);
         }
         if (value.getClass().isArray()) {
-            return ValuePrinters.printValues(
+            return ValuePrinter.printValues(
                     "[",
                     ", ",
                     "]",
@@ -103,7 +103,7 @@ public class DefaultValueRenderer implements ValueRenderer {
         Iterator<? extends Map.Entry<?, ?>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<?, ?> entry = iterator.next();
-            result.append(ValuePrinters.print(entry.getKey())).append(" = ").append(ValuePrinters.print(entry.getValue()));
+            result.append(ValuePrinter.print(entry.getKey())).append(" = ").append(ValuePrinter.print(entry.getValue()));
             if (iterator.hasNext()) {
                 result.append(", ");
             }

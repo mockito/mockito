@@ -4,7 +4,7 @@
  */
 package org.mockito.internal.matchers;
 
-import org.mockito.internal.matchers.text.ValuePrinters;
+import org.mockito.internal.matchers.text.ValuePrinter;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
@@ -51,7 +51,7 @@ public class ArrayEquals extends Equals {
     }
 
     private String printArray(Object[] array) {
-        return ValuePrinters.printValues("[", ", ", "]", Arrays.stream(array).iterator());
+        return ValuePrinter.printValues("[", ", ", "]", Arrays.stream(array).iterator());
     }
 
     public static Object[] createObjectArray(Object array) {

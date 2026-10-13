@@ -7,7 +7,7 @@ package org.mockito.internal.matchers.apachecommons;
 import java.io.Serializable;
 
 import org.mockito.ArgumentMatcher;
-import org.mockito.internal.matchers.text.ValuePrinters;
+import org.mockito.internal.matchers.text.ValuePrinter;
 
 public class ReflectionEquals implements ArgumentMatcher<Object>, Serializable {
 
@@ -26,6 +26,6 @@ public class ReflectionEquals implements ArgumentMatcher<Object>, Serializable {
 
     @Override
     public String toString() {
-        return "refEq(" + ValuePrinters.print(wanted) + ")";
+        return "refEq(" + ValuePrinter.print(wanted) + ")";
     }
 }
