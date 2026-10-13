@@ -12,7 +12,7 @@ import org.mockitousage.plugins.resolver.MyMockResolver;
 import org.mockitousage.plugins.stacktrace.MyStackTraceCleanerProvider;
 import org.mockitousage.plugins.valuerenderer.MyAnnotationValueRenderer;
 import org.mockitousage.plugins.valuerenderer.MyDebugValueRenderer1;
-
+import org.mockitousage.plugins.valuerenderer.MyDebugValueRenderer2;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +37,8 @@ public class PluginSwitchTest {
                                 MyMockResolver.class.getName(),
                                 MyInstantiatorProvider2.class.getName(),
                                 MyAnnotationValueRenderer.class.getName(),
-                                MyDebugValueRenderer1.class.getName()));
+                                MyDebugValueRenderer1.class.getName(),
+                                MyDebugValueRenderer2.class.getName()));
     }
 
     @Test
