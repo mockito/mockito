@@ -144,6 +144,13 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
                     mockingProgress().reportOngoingStubbing(ongoingStubbing);
                 }
             }
+        } catch (Throwable failure) {
+            if (stubbingSuspended) {
+                mockingProgress().reset();
+                mockingProgress().resetOngoingStubbing();
+                stubbingSuspended = false;
+            }
+            throw failure;
         } finally {
             if (stubbingSuspended) {
                 mockingProgress().resumeStubbingInProgress(suspendedStubbing);

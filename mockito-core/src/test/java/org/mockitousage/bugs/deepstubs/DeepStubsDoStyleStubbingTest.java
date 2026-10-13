@@ -17,6 +17,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 
 /**
@@ -104,6 +105,100 @@ public class DeepStubsDoStyleStubbingTest {
             holder.closeable();
             fail("An unfinished do-style stubbing must be rejected");
         } catch (UnfinishedStubbingException expected) {
+        }
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void unfinished_stubbing_inside_deep_stub_answer_is_rejected() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Holder other = mock(Holder.class);
+        Closeable closeable = mock(Closeable.class);
+        when(holder.closeable())
+                .thenAnswer(
+                        invocation -> {
+                            when(other.closeable());
+                            return closeable;
+                        });
+
+        try {
+            doNothing().when(holder.closeable()).close();
+            fail("Unfinished stubbing inside the answer must be rejected");
+        } catch (UnfinishedStubbingException expected) {
+        }
+
+        try {
+            when(null);
+            fail("A nested unfinished stubbing must not leave an ongoing stubbing");
+        } catch (MissingMethodInvocationException expected) {
+        }
+
+        assertThat(other.closeable()).isNull();
+    }
+
+    @Test
+    public void completed_stubbing_inside_answer_preserves_multi_level_path() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Holder nested = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Holder other = mock(Holder.class);
+        Closeable closeable = mock(Closeable.class);
+        when(holder.nested())
+                .thenAnswer(
+                        invocation -> {
+                            when(other.closeable()).thenReturn(closeable);
+                            return nested;
+                        });
+
+        doNothing().when(holder.nested().closeable()).close();
+
+        assertThat(other.closeable()).isSameAs(closeable);
+        nested.closeable().close();
+        verify(nested.closeable()).close();
+    }
+
+    @Test
+    public void reported_error_inside_deep_stub_answer_clears_stubbing_state() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Holder other = mock(Holder.class);
+        Closeable closeable = mock(Closeable.class);
+        when(holder.closeable())
+                .thenAnswer(
+                        invocation -> {
+                            when(other.closeable()).thenReturn(other.closeable());
+                            return closeable;
+                        });
+
+        try {
+            doNothing().when(holder.closeable()).close();
+            fail("Nested mock calls during thenReturn must be rejected");
+        } catch (UnfinishedStubbingException expected) {
+        }
+
+        assertThat(other.closeable()).isNull();
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void answer_failure_does_not_leave_ongoing_stubbing() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        AssertionError failure = new AssertionError("answer failure");
+        when(holder.closeable())
+                .thenAnswer(
+                        invocation -> {
+                            throw failure;
+                        });
+
+        try {
+            doNothing().when(holder.closeable()).close();
+            fail("The answer failure must be propagated");
+        } catch (AssertionError expected) {
+            assertThat(expected).isSameAs(failure);
+        }
+
+        try {
+            when(null);
+            fail("A failed deep-stub answer must not leave an ongoing stubbing");
+        } catch (MissingMethodInvocationException expected) {
         }
     }
 }

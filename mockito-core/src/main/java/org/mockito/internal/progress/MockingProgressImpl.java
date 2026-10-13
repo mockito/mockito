@@ -35,7 +35,6 @@ public class MockingProgressImpl implements MockingProgress {
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
     private boolean doStyleStubbing;
-    private int stubbingInProgressSuspensionDepth;
     private VerificationStrategy verificationStrategy;
     private final Set<MockitoListener> listeners = new LinkedHashSet<>();
 
@@ -109,7 +108,6 @@ public class MockingProgressImpl implements MockingProgress {
         validateState();
         stubbingInProgress = LocationFactory.create();
         doStyleStubbing = false;
-        stubbingInProgressSuspensionDepth = 0;
     }
 
     @Override
@@ -127,7 +125,6 @@ public class MockingProgressImpl implements MockingProgress {
             Location temp = stubbingInProgress;
             stubbingInProgress = null;
             doStyleStubbing = false;
-            stubbingInProgressSuspensionDepth = 0;
             throw unfinishedStubbing(temp);
         }
     }
@@ -150,9 +147,7 @@ public class MockingProgressImpl implements MockingProgress {
     @Override
     public void stubbingCompleted() {
         stubbingInProgress = null;
-        if (stubbingInProgressSuspensionDepth == 0) {
-            doStyleStubbing = false;
-        }
+        doStyleStubbing = false;
     }
 
     @Override
@@ -169,14 +164,21 @@ public class MockingProgressImpl implements MockingProgress {
     public Location suspendStubbingInProgress() {
         Location previous = stubbingInProgress;
         stubbingInProgress = null;
-        stubbingInProgressSuspensionDepth++;
+        doStyleStubbing = false;
         return previous;
     }
 
     @Override
     public void resumeStubbingInProgress(Location location) {
+        try {
+            validateState();
+        } catch (RuntimeException failure) {
+            reset();
+            resetOngoingStubbing();
+            throw failure;
+        }
         stubbingInProgress = location;
-        stubbingInProgressSuspensionDepth--;
+        doStyleStubbing = location != null;
     }
 
     @Override
@@ -193,7 +195,6 @@ public class MockingProgressImpl implements MockingProgress {
     public void reset() {
         stubbingInProgress = null;
         doStyleStubbing = false;
-        stubbingInProgressSuspensionDepth = 0;
         verificationMode = null;
         getArgumentMatcherStorage().reset();
     }
