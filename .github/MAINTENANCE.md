@@ -7,10 +7,11 @@
 The signing key expires on **2030-10-11**. Renew the existing key to preserve verification of old releases.
 CI uses the organization secrets `PGP_KEY_RENEWED` and `PGP_PWD_RENEWED`.
 
-1. Obtain the private key and passphrase from a secure backup. If only Actions has them, use a temporary
+1. Obtain the private key and passphrase from a secure backup. To recover the private key from Actions, use a temporary
    recovery workflow ([example](https://github.com/mockito/mockito/pull/3883)) with a **fresh local recovery key**;
-   upload only encrypted artifacts. Replace the example's recipient and use the current secret names. GitHub cannot display secret values;
-   a workflow with access to both secrets can recover them securely for an authorized maintainer.
+   replace the example's recipient and use the current secret names. The example recovers only the private key.
+   Obtain the passphrase from a secure backup, or adapt the workflow to recover it using the same encryption method.
+   Never expose plaintext secrets in artifacts or logs.
 2. Import locally, then extend the primary key and encryption subkey (enter the signing-key passphrase when prompted):
 
    ```sh
@@ -34,6 +35,21 @@ CI uses the organization secrets `PGP_KEY_RENEWED` and `PGP_PWD_RENEWED`.
    ```sh
    gpg --keyserver hkps://keyserver.ubuntu.com --send-keys 147B691A19097624902F4EA9689CBE64F4BC997F
    ```
+
+   Fetch it into a fresh keyring so local renewal metadata cannot hide a stale server copy:
+
+   ```sh
+   (
+     set -e
+     verification_home=$(mktemp -d)
+     trap 'gpgconf --homedir "$verification_home" --kill all; rm -rf -- "$verification_home"' EXIT
+     gpg --homedir "$verification_home" --keyserver hkps://keyserver.ubuntu.com --recv-keys 147B691A19097624902F4EA9689CBE64F4BC997F
+     gpg --homedir "$verification_home" --list-options show-unusable-subkeys --with-subkey-fingerprint --list-keys 147B691A19097624902F4EA9689CBE64F4BC997F
+   )
+   ```
+
+   Confirm both fingerprints and expiration dates match the local renewed key. If the server still returns the old
+   dates, retry later; publication is not verified until they match.
 
    Consumers must refresh cached public keys. Keep an encrypted backup of the renewed private key and its passphrase,
    update the expiration date above, and remove temporary recovery/validation workflows and artifacts.
