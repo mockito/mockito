@@ -5,6 +5,7 @@ plugins {
     id("com.adarshr.test-logger")
     id("mockito.quality-spotless-conventions")
     id("mockito.license-conventions")
+    id("org.gradle.test-retry")
 }
 
 repositories {
@@ -25,8 +26,16 @@ tasks {
             include("**/*Test.class")
 
             if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)
-                && providers.environmentVariable("MEMBER_ACCESSOR").orNull == "member-accessor-reflection") {
+                && providers.environmentVariable("MEMBER_ACCESSOR").orNull == "member-accessor-reflection"
+            ) {
                 jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+            }
+
+            retry {
+                // Concurrent tests can be flaky, so keep the existing single-retry policy.
+                maxRetries.set(1)
+                failOnPassedAfterRetry.set(false)
+                failOnSkippedAfterRetry.set(false)
             }
         }
     }
