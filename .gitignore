@@ -28,6 +28,7 @@ classes
 .gradletasknamecache
 *.log
 local.properties
+.kotlin
 
 # Used to check reproducibility of Mockito jars
 checksums/

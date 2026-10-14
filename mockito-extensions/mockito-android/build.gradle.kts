@@ -16,6 +16,8 @@ android {
     publishing {
         singleVariant("release")
     }
+
+    enableKotlin = false
 }
 
 dependencies {

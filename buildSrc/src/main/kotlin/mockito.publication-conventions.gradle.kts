@@ -158,11 +158,12 @@ plugins.withType<com.android.build.gradle.LibraryPlugin>().configureEach {
     }
 
     afterEvaluate {
-        val androidExtension = extensions.getByType<com.android.build.gradle.LibraryExtension>()
+        val androidExtension =
+            extensions.getByType<com.android.build.api.dsl.LibraryExtension>()
 
         val sourcesJar by tasks.registering(Jar::class) {
             archiveClassifier.set("sources")
-            from(androidExtension.sourceSets.getByName("main").java.srcDirs)
+            from(androidExtension.sourceSets.getByName("main").java.directories)
             with(licenseSpec)
         }
 
