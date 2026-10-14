@@ -53,7 +53,7 @@ public class Equals implements ArgumentMatcher<Object>, ContainsExtraTypeInfo, S
 
     @Override
     public int hashCode() {
-        return 1;
+        return wanted == null ? 0 : wanted.hashCode();
     }
 
     @Override
