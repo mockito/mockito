@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.progress;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
@@ -45,6 +46,15 @@ public class MockingProgressImplTest extends TestBase {
         assertSame(mode, mockingProgress.pullVerificationMode());
 
         assertNull(mockingProgress.pullVerificationMode());
+    }
+
+    @Test
+    public void should_restore_without_a_stubbing_location() {
+        assertNull(mockingProgress.suspendStubbingInProgress());
+
+        mockingProgress.resumeStubbingInProgress(null);
+
+        assertFalse(mockingProgress.isDoStyleStubbing());
     }
 
     @Test
