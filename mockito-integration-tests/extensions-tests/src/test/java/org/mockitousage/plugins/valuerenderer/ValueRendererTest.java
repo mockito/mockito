@@ -14,9 +14,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockitousage.IMethods;
 import org.mockitousage.plugins.valuerenderer.MyAnnotationValueRenderer.SomeAnnotation;
-import org.mockitoutil.TestBase;
+import org.mockitoutil.TestBase5;
 
-public class ValueRendererTest extends TestBase {
+public class ValueRendererTest extends TestBase5 {
 
     @Mock private IMethods mock;
 
