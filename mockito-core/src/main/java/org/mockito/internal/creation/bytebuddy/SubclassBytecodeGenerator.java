@@ -60,6 +60,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     private final ByteBuddy byteBuddy;
     private final Implementation readReplace;
     private final ElementMatcher<? super MethodDescription> matcher;
+    private final boolean includeSuperclassLoaders;
 
     private final Implementation dispatcher = to(DispatcherDefaultingToRealMethod.class);
     private final Implementation hashCode = to(MockMethodInterceptor.ForHashCode.class);
@@ -71,16 +72,29 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
     }
 
     public SubclassBytecodeGenerator(ModuleHandler handler) {
-        this(handler, null, any());
+        this(handler, false);
+    }
+
+    SubclassBytecodeGenerator(ModuleHandler handler, boolean includeSuperclassLoaders) {
+        this(handler, null, any(), includeSuperclassLoaders);
     }
 
     SubclassBytecodeGenerator(
             ModuleHandler handler,
             Implementation readReplace,
             ElementMatcher<? super MethodDescription> matcher) {
+        this(handler, readReplace, matcher, false);
+    }
+
+    private SubclassBytecodeGenerator(
+            ModuleHandler handler,
+            Implementation readReplace,
+            ElementMatcher<? super MethodDescription> matcher,
+            boolean includeSuperclassLoaders) {
         this.handler = handler;
         this.readReplace = readReplace;
         this.matcher = matcher;
+        this.includeSuperclassLoaders = includeSuperclassLoaders;
         byteBuddy = new ByteBuddy().with(TypeValidation.DISABLED);
     }
 
@@ -120,6 +134,53 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
         return false;
     }
 
+    private static MultipleParentClassLoader.Builder appendSuperclassLoaders(
+            MultipleParentClassLoader.Builder builder, Class<?> mockedType) {
+        for (Class<?> superclass = mockedType.getSuperclass();
+                superclass != null;
+                superclass = superclass.getSuperclass()) {
+            builder = builder.appendMostSpecific(superclass);
+        }
+        return builder;
+    }
+
+    /**
+     * Returns {@code true} if any superclass of {@code mockedType} is defined by a class
+     * loader that the fallback strategy would actually add: a loader that is neither the
+     * mocked type's own loader nor an ancestor of it (ancestors are dropped by {@code
+     * appendMostSpecific} anyway, and bootstrap types are visible from every loader).
+     * Used to decide whether retrying mock creation with superclass loaders included
+     * has any chance of succeeding.
+     */
+    static boolean hasDistinctSuperclassLoaders(Class<?> mockedType) {
+        ClassLoader typeLoader = mockedType.getClassLoader();
+        for (Class<?> superclass = mockedType.getSuperclass();
+                superclass != null;
+                superclass = superclass.getSuperclass()) {
+            ClassLoader superclassLoader = superclass.getClassLoader();
+            if (superclassLoader != null
+                    && superclassLoader != typeLoader
+                    && !isAncestor(superclassLoader, typeLoader)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isAncestor(ClassLoader candidate, ClassLoader loader) {
+        if (loader == null) {
+            return false;
+        }
+        for (ClassLoader parent = loader.getParent();
+                parent != null;
+                parent = parent.getParent()) {
+            if (parent == candidate) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public <T> Class<? extends T> mockClass(MockFeatures<T> features) {
         MultipleParentClassLoader.Builder loaderBuilder =
@@ -132,6 +193,13 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                                 MockMethodInterceptor.class,
                                 MockMethodInterceptor.ForHashCode.class,
                                 MockMethodInterceptor.ForEquals.class);
+        if (includeSuperclassLoaders) {
+            // In environments with several class loaders (e.g. OSGi), a superclass of
+            // the mocked type can be defined by a class loader that cannot be seen from
+            // the mocked type's own loader. Since the generated mock redeclares
+            // inherited methods, those loaders must be visible to the mock's loader.
+            loaderBuilder = appendSuperclassLoaders(loaderBuilder, features.mockedType);
+        }
         ClassLoader contextLoader = currentThread().getContextClassLoader();
         boolean shouldIncludeContextLoader = true;
         if (needsSamePackageClassLoader(features)) {
