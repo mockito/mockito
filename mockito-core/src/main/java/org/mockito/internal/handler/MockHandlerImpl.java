@@ -130,15 +130,12 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
                     return ret;
                 } finally {
                     // Mockito uses it to redo setting invocation for potential stubbing in case of
-                    // partial
-                    // mocks / spies.
+                    // partial mocks / spies.
                     // Without it, the real method inside 'when' might have delegated to other self
-                    // method
-                    // and overwrite the intended stubbed method with a different one.
+                    // method and overwrite the intended stubbed method with a different one.
                     // This means we would be stubbing a wrong method.
                     // Typically this would led to runtime exception that validates return type with
-                    // stubbed
-                    // method signature.
+                    // stubbed method signature.
                     invocationContainer.resetInvocationForPotentialStubbing(invocationMatcher);
                     mockingProgress().reportOngoingStubbing(ongoingStubbing);
                 }
