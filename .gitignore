@@ -24,6 +24,7 @@ build-cache
 target
 out
 .gradle
+.kotlin
 classes
 .gradletasknamecache
 *.log
