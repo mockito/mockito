@@ -61,10 +61,6 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         }
         VerificationMode verificationMode = mockingProgress().pullVerificationMode();
 
-        InvocationMatcher invocationMatcher =
-                matchersBinder.bindMatchers(
-                        mockingProgress().getArgumentMatcherStorage(), invocation);
-
         // doXxx().when(deepStub.path()).method() evaluates the deep-stub path while
         // stubbing is already marked in progress. Suspend unfinished-stubbing detection for
         // that path so intermediate deep-stub invocations do not throw (#1636).
@@ -77,6 +73,9 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
             stubbingSuspended = true;
         }
         try {
+            InvocationMatcher invocationMatcher =
+                    matchersBinder.bindMatchers(
+                            mockingProgress().getArgumentMatcherStorage(), invocation);
             mockingProgress().validateState();
 
             // if verificationMode is not null then someone is doing verify()

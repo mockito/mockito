@@ -7,6 +7,7 @@ package org.mockitousage.bugs.deepstubs;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -17,6 +18,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 
@@ -30,6 +32,10 @@ public class DeepStubsDoStyleStubbingTest {
         abstract Closeable closeable();
 
         abstract Holder nested();
+    }
+
+    abstract static class ParameterizedHolder {
+        abstract Closeable closeable(String value);
     }
 
     @Test
@@ -134,6 +140,40 @@ public class DeepStubsDoStyleStubbingTest {
         }
 
         assertThat(other.closeable()).isNull();
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void successful_deep_stub_do_style_stubbing_does_not_leave_stubbing_state()
+            throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+
+        doNothing().when(holder.closeable()).close();
+
+        try {
+            when(null);
+            fail("Successful deep-stub do-style stubbing must not leave unfinished state");
+        } catch (MissingMethodInvocationException expected) {
+        }
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void failed_matcher_binding_during_deep_stub_path_does_not_leave_stubbing_state()
+            throws IOException {
+        ParameterizedHolder holder = mock(ParameterizedHolder.class, RETURNS_DEEP_STUBS);
+
+        try {
+            doNothing().when(holder.closeable(anyString() + anyString())).close();
+            fail("Invalid matcher usage must be rejected");
+        } catch (InvalidUseOfMatchersException expected) {
+        }
+
+        try {
+            when(null);
+            fail("Failed matcher binding must not leave unfinished state");
+        } catch (MissingMethodInvocationException expected) {
+        }
     }
 
     @Test

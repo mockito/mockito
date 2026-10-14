@@ -135,6 +135,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
                     doAnswerStyleStubbing.getStubbingStrictness());
         }
         doAnswerStyleStubbing.clear();
+        mockingProgress().resetOngoingStubbing();
     }
 
     @Override
