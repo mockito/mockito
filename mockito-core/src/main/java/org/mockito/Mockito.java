@@ -1950,6 +1950,16 @@ public class Mockito extends ArgumentMatchers {
      * </p>
      *
      * <p>
+     * The {@code do*} family can also stub methods on a deep-stub path, including void methods:
+     * <pre class="code"><code class="java">
+     *   SocketFactory factory = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+     *   doThrow(new IOException()).when(factory.createSocket().getOutputStream()).close();
+     * </code></pre>
+     * Intermediate calls such as {@code factory.createSocket()} are evaluated to select the target mock,
+     * and their configured answers still run.
+     * </p>
+     *
+     * <p>
      * <strong>WARNING: </strong>
      * This feature should rarely be required for regular clean code! Leave it for legacy code.
      * Mocking a mock to return a mock, to return a mock, (...), to return something meaningful

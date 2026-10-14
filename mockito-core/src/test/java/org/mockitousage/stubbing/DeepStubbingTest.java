@@ -9,11 +9,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.List;
@@ -190,6 +192,39 @@ public class DeepStubbingTest extends TestBase {
         assertSame(out1, sf.createSocket("google.com", 80).getOutputStream());
         assertSame(out2, sf.createSocket("google.com", 8080).getOutputStream());
         assertSame(out1, sf.createSocket("stackoverflow.com", 80).getOutputStream());
+    }
+
+    @Test
+    public void do_throw_on_deep_stub_path_with_argument_matchers() throws Exception {
+        SocketFactory socketFactory = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+        IOException failure = new IOException("write failure");
+
+        doThrow(failure)
+                .when(socketFactory.createSocket(anyString(), eq(80)).getOutputStream())
+                .write(anyInt());
+
+        assertSame(
+                failure,
+                assertThrows(
+                        IOException.class,
+                        () ->
+                                socketFactory
+                                        .createSocket("example.com", 80)
+                                        .getOutputStream()
+                                        .write(1)));
+        socketFactory.createSocket("example.com", 8080).getOutputStream().write(1);
+        verify(socketFactory.createSocket("example.com", 80).getOutputStream()).write(1);
+    }
+
+    @Test
+    public void do_return_can_replace_a_throwing_answer_on_a_deep_stub_path() {
+        when(person.getAddress(anyString()).getStreet().getName())
+                .thenThrow(new IllegalStateException("original answer"));
+
+        doReturn("deep").when(person.getAddress(anyString()).getStreet()).getName();
+
+        assertEquals("deep", person.getAddress("the docks").getStreet().getName());
+        verify(person.getAddress("the docks").getStreet()).getName();
     }
 
     /**
