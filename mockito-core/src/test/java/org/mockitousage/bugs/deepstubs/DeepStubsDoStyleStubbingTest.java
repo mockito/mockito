@@ -5,6 +5,7 @@
 package org.mockitousage.bugs.deepstubs;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.anyString;
@@ -18,6 +19,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.mockito.exceptions.misusing.CannotStubVoidMethodWithReturnValue;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
@@ -240,5 +242,19 @@ public class DeepStubsDoStyleStubbingTest {
             fail("A failed deep-stub answer must not leave an ongoing stubbing");
         } catch (MissingMethodInvocationException expected) {
         }
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void rejected_answer_on_deep_stub_target_clears_ongoing_stubbing() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+
+        assertThrows(
+                CannotStubVoidMethodWithReturnValue.class,
+                () -> doReturn("invalid").when(holder.closeable()).close());
+
+        assertThrows(MissingMethodInvocationException.class, () -> when(null));
+
+        holder.closeable().close();
     }
 }

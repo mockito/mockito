@@ -128,14 +128,17 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     public void setMethodForStubbing(MatchableInvocation invocation) {
         invocationForStubbing = invocation;
         assert hasAnswersForStubbing();
-        for (int i = 0; i < doAnswerStyleStubbing.getAnswers().size(); i++) {
-            addAnswer(
-                    doAnswerStyleStubbing.getAnswers().get(i),
-                    i != 0,
-                    doAnswerStyleStubbing.getStubbingStrictness());
+        try {
+            for (int i = 0; i < doAnswerStyleStubbing.getAnswers().size(); i++) {
+                addAnswer(
+                        doAnswerStyleStubbing.getAnswers().get(i),
+                        i != 0,
+                        doAnswerStyleStubbing.getStubbingStrictness());
+            }
+        } finally {
+            doAnswerStyleStubbing.clear();
+            mockingProgress().resetOngoingStubbing();
         }
-        doAnswerStyleStubbing.clear();
-        mockingProgress().resetOngoingStubbing();
     }
 
     @Override
