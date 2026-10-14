@@ -21,13 +21,15 @@ public final class ValuePrinter {
 
     static {
         ArrayList<ValueRenderer> renderers = new ArrayList<>(Plugins.getValueRenderers());
-        renderers.sort(Comparator
-            .comparingInt(ValueRenderer::getPluginPriority).reversed()
-            .thenComparing(it -> it.getClass().getSimpleName()));
+        renderers.sort(
+                Comparator.comparingInt(ValueRenderer::getPluginPriority)
+                        .reversed()
+                        .thenComparing(it -> it.getClass().getSimpleName()));
         renderers.removeIf(it -> it instanceof DefaultValueRenderer);
-        // The default renderer should always be last because it will always successfully render any input, so no renderer can follow it.
-        // There is an argument this could be pulled from `DefaultMockitoPlugins`, but that would require `PluginLoader`
-        // to be able to source a list of loaded plugins _and_ a default, which it currently does not do.
+        // The default renderer should always be last because it will always successfully render any
+        // input, so no renderer can follow it.  There is an argument this could be pulled from
+        // `DefaultMockitoPlugins`, but that would require `PluginLoader` to be able to source a
+        // list of loaded plugins _and_ a default, which it currently does not do.
         renderers.add(DefaultValueRenderer.INSTANCE);
         RENDERERS = Collections.unmodifiableList(renderers);
     }
@@ -49,7 +51,8 @@ public final class ValuePrinter {
                 return output;
             }
         }
-        throw new IllegalStateException("No value printer returned a value.  This should never happen as the DefaultValuePrinter is always included in the list of renderers.");
+        throw new IllegalStateException(
+                "No value printer returned a value.  This should never happen as the DefaultValuePrinter is always included in the list of renderers.");
     }
 
     /**
@@ -62,7 +65,11 @@ public final class ValuePrinter {
      *
      * @return neatly formatted value list
      */
-    public static String printValues(@Nullable String start, @Nullable String separator, @Nullable String end, Iterator<? extends @Nullable Object> values) {
+    public static String printValues(
+            @Nullable String start,
+            @Nullable String separator,
+            @Nullable String end,
+            Iterator<? extends @Nullable Object> values) {
         if (start == null) {
             start = "(";
         }

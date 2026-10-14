@@ -11,8 +11,7 @@ import org.mockito.plugins.ValueRenderer;
 
 public class MyAnnotationValueRenderer implements ValueRenderer {
     @Retention(RetentionPolicy.RUNTIME)
-    @interface SomeAnnotation {
-    }
+    @interface SomeAnnotation {}
 
     @Override
     public int getPluginPriority() {
@@ -27,6 +26,10 @@ public class MyAnnotationValueRenderer implements ValueRenderer {
         if (!value.getClass().isAnnotationPresent(SomeAnnotation.class)) {
             return null;
         }
-        return value.getClass().getSimpleName() + ": Rendered by " + getClass().getSimpleName() + " with priority " + getPluginPriority();
+        return value.getClass().getSimpleName()
+                + ": Rendered by "
+                + getClass().getSimpleName()
+                + " with priority "
+                + getPluginPriority();
     }
 }

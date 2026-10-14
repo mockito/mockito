@@ -52,13 +52,9 @@ public class PluginFileReaderTest extends TestBase {
         Assertions.assertThat(reader.readPluginClasses(impl("# foo\n # foo.Bar"))).isEmpty();
         Assertions.assertThat(reader.readPluginClasses(impl(""))).isEmpty();
         Assertions.assertThat(reader.readPluginClasses(impl("foo.Foo\njava.lang.String")))
-                .containsExactly(
-                        "foo.Foo",
-                        "java.lang.String");
-        Assertions.assertThat(reader.readPluginClasses(impl("foo.Foo\n bar.Bar \nbaz.Baz # class.Class")))
-                .containsExactly(
-                        "foo.Foo",
-                        "bar.Bar",
-                        "baz.Baz");
+                .containsExactly("foo.Foo", "java.lang.String");
+        Assertions.assertThat(
+                        reader.readPluginClasses(impl("foo.Foo\n bar.Bar \nbaz.Baz # class.Class")))
+                .containsExactly("foo.Foo", "bar.Bar", "baz.Baz");
     }
 }

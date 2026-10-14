@@ -149,13 +149,11 @@ public class PluginFinderTest extends TestBase {
         IOUtil.writeText("bar.Bar\nbaz.Baz", f2);
 
         // then
-        List<String> foundClasses = finder.findPluginClasses(asList(f1.toURI().toURL(), f2.toURI().toURL()));
+        List<String> foundClasses =
+                finder.findPluginClasses(asList(f1.toURI().toURL(), f2.toURI().toURL()));
         assertThat(foundClasses)
                 .as("Returned in the order they were seen")
-                .containsExactly(
-                        "foo.Foo",
-                        "bar.Bar",
-                        "baz.Baz");
+                .containsExactly("foo.Foo", "bar.Bar", "baz.Baz");
     }
 
     @Test
@@ -169,13 +167,11 @@ public class PluginFinderTest extends TestBase {
         IOUtil.writeText("bar.Bar\nfoo.Foo\nbaz.Baz", f2);
 
         // then
-        List<String> foundClasses = finder.findPluginClasses(asList(f1.toURI().toURL(), f2.toURI().toURL()));
+        List<String> foundClasses =
+                finder.findPluginClasses(asList(f1.toURI().toURL(), f2.toURI().toURL()));
         assertThat(foundClasses)
                 .as("Returned in the order they were seen, with no duplicates")
-                .containsExactly(
-                        "foo.Foo",
-                        "baz.Baz",
-                        "bar.Bar");
+                .containsExactly("foo.Foo", "baz.Baz", "bar.Bar");
     }
 
     @Test
@@ -190,11 +186,11 @@ public class PluginFinderTest extends TestBase {
         IOUtil.writeText("bar.Bar\nfoo.Foo\nbaz.Baz", f2);
 
         // then
-        List<String> foundClasses = finder.findPluginClasses(asList(f1.toURI().toURL(), f2.toURI().toURL()));
+        List<String> foundClasses =
+                finder.findPluginClasses(asList(f1.toURI().toURL(), f2.toURI().toURL()));
         assertThat(foundClasses)
-                .as("Returned in the order they were seen, with no duplicates, excluding disabled classes")
-                .containsExactly(
-                        "baz.Baz",
-                        "bar.Bar");
+                .as(
+                        "Returned in the order they were seen, with no duplicates, excluding disabled classes")
+                .containsExactly("baz.Baz", "bar.Bar");
     }
 }

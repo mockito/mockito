@@ -14,12 +14,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockitousage.IMethods;
 import org.mockitousage.plugins.valuerenderer.MyAnnotationValueRenderer.SomeAnnotation;
-import org.mockitoutil.TestBase5;
+import org.mockitoutil.TestBase;
 
-public class ValueRendererTest extends TestBase5 {
+public class ValueRendererTest extends TestBase {
 
-    @Mock
-    private IMethods mock;
+    @Mock private IMethods mock;
 
     @Test
     public void objects_meeting_no_renderer_criteria_are_handled_by_default_renderer() {
@@ -34,13 +33,16 @@ public class ValueRendererTest extends TestBase5 {
         Mockito.doReturn("return value").when(mock).forObject(any());
 
         mock.forObject(value);
-        Throwable t = Assertions.catchThrowable(() -> Mockito.verify(mock).forObject(argThat(it -> false)));
+        Throwable t =
+                Assertions.catchThrowable(
+                        () -> Mockito.verify(mock).forObject(argThat(it -> false)));
 
         assertThat(t).hasMessageContaining("SomeClass[someField=some string]");
     }
 
     @Test
-    public void objects_meeting_only_requirements_of_lowest_priority_custom_renderer_use_lowest_priority_renderer() {
+    public void
+            objects_meeting_only_requirements_of_lowest_priority_custom_renderer_use_lowest_priority_renderer() {
         @SomeAnnotation
         class SomeAnnotatedClass {
             final String someField;
@@ -54,13 +56,18 @@ public class ValueRendererTest extends TestBase5 {
         Mockito.doReturn("return value").when(mock).forObject(any());
 
         mock.forObject(value);
-        Throwable t = Assertions.catchThrowable(() -> Mockito.verify(mock).forObject(argThat(it -> false)));
+        Throwable t =
+                Assertions.catchThrowable(
+                        () -> Mockito.verify(mock).forObject(argThat(it -> false)));
 
-        assertThat(t).hasMessageContaining("SomeAnnotatedClass: Rendered by MyAnnotationValueRenderer with priority 1");
+        assertThat(t)
+                .hasMessageContaining(
+                        "SomeAnnotatedClass: Rendered by MyAnnotationValueRenderer with priority 1");
     }
 
     @Test
-    public void objects_meeting_requirements_of_highest_priority_renderer_are_rendered_with_highest_priority_renderer() {
+    public void
+            objects_meeting_requirements_of_highest_priority_renderer_are_rendered_with_highest_priority_renderer() {
         class SomeDebugClass {
             final String someField;
 
@@ -78,18 +85,24 @@ public class ValueRendererTest extends TestBase5 {
         Mockito.doReturn("return value").when(mock).forObject(any());
 
         mock.forObject(value);
-        Throwable t = Assertions.catchThrowable(() -> Mockito.verify(mock).forObject(argThat(it -> false)));
+        Throwable t =
+                Assertions.catchThrowable(
+                        () -> Mockito.verify(mock).forObject(argThat(it -> false)));
 
         assertThat(t)
-            .as("There are two renderers that can handle this, both with the same priority.  The 'renderer 1' is chosen as it its class name is lexicographically smaller.")
-            .hasMessageContaining("SomeDebugClass: Rendered by MyDebugValueRenderer1 with priority 2")
-            .as("The 'renderer 2' is never chosen despite being available")
-            .hasMessageNotContaining("MyDebugValueRenderer2");
+                .as(
+                        "There are two renderers that can handle this, both with the same priority.  The 'renderer 1' is chosen as it its class name is lexicographically smaller.")
+                .hasMessageContaining(
+                        "SomeDebugClass: Rendered by MyDebugValueRenderer1 with priority 2")
+                .as("The 'renderer 2' is never chosen despite being available")
+                .hasMessageNotContaining("MyDebugValueRenderer2");
     }
 
     @Test
-    public void objects_meeting_requirements_of_multiple_renderers_of_equal_priority_are_rendered_in_lexicographical_order_of_classname() {
-        class SomeDebugClass { // name contains 'Debug' so should be rendered with MyDebugValueRenderer1
+    public void
+            objects_meeting_requirements_of_multiple_renderers_of_equal_priority_are_rendered_in_lexicographical_order_of_classname() {
+        class SomeDebugClass { // name contains 'Debug' so should be rendered with
+            // MyDebugValueRenderer1
             final String someField;
 
             SomeDebugClass(String someField) {
@@ -100,7 +113,9 @@ public class ValueRendererTest extends TestBase5 {
                 return "debug string 1";
             }
         }
-        class SomeOtherClass { // name does not contain 'Debug' so should be rendered with MyDebugValueRenderer2, and MyDebugValueRenderer1 will be tried first
+        class SomeOtherClass { // name does not contain 'Debug' so should be rendered with
+            // MyDebugValueRenderer2, and MyDebugValueRenderer1 will be tried
+            // first
             final String someField;
 
             SomeOtherClass(String someField) {
@@ -120,17 +135,26 @@ public class ValueRendererTest extends TestBase5 {
         Mockito.doReturn("return value").when(mock).forObject(any());
 
         mock.forObject(value1);
-        Throwable t1 = Assertions.catchThrowable(() -> Mockito.verify(mock).forObject(argThat(it -> false)));
-        assertThat(t1).hasMessageContaining("SomeDebugClass: Rendered by MyDebugValueRenderer1 with priority 2");
+        Throwable t1 =
+                Assertions.catchThrowable(
+                        () -> Mockito.verify(mock).forObject(argThat(it -> false)));
+        assertThat(t1)
+                .hasMessageContaining(
+                        "SomeDebugClass: Rendered by MyDebugValueRenderer1 with priority 2");
 
         Mockito.clearInvocations(mock);
         mock.forObject(value2);
-        Throwable t2 = Assertions.catchThrowable(() -> Mockito.verify(mock).forObject(argThat(it -> false)));
-        assertThat(t2).hasMessageContaining("SomeOtherClass: Rendered by MyDebugValueRenderer2 with priority 2");
+        Throwable t2 =
+                Assertions.catchThrowable(
+                        () -> Mockito.verify(mock).forObject(argThat(it -> false)));
+        assertThat(t2)
+                .hasMessageContaining(
+                        "SomeOtherClass: Rendered by MyDebugValueRenderer2 with priority 2");
     }
 
     @Test
-    public void objects_meeting_requirements_of_multiple_renderers_are_rendered_with_the_highest_priority_renderer() {
+    public void
+            objects_meeting_requirements_of_multiple_renderers_are_rendered_with_the_highest_priority_renderer() {
         @SomeAnnotation
         class SomeAnnotatedDebugClass {
             final String someField;
@@ -150,8 +174,12 @@ public class ValueRendererTest extends TestBase5 {
         Mockito.doReturn("return value").when(mock).forObject(any());
 
         mock.forObject(value);
-        Throwable t = Assertions.catchThrowable(() -> Mockito.verify(mock).forObject(argThat(it -> false)));
+        Throwable t =
+                Assertions.catchThrowable(
+                        () -> Mockito.verify(mock).forObject(argThat(it -> false)));
 
-        assertThat(t).hasMessageContaining("SomeAnnotatedDebugClass: Rendered by MyDebugValueRenderer1 with priority 2");
+        assertThat(t)
+                .hasMessageContaining(
+                        "SomeAnnotatedDebugClass: Rendered by MyDebugValueRenderer1 with priority 2");
     }
 }

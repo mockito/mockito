@@ -103,14 +103,15 @@ public class DefaultValueRenderer implements ValueRenderer {
         Iterator<? extends Map.Entry<?, ?>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<?, ?> entry = iterator.next();
-            result.append(ValuePrinter.print(entry.getKey())).append(" = ").append(ValuePrinter.print(entry.getValue()));
+            result.append(ValuePrinter.print(entry.getKey()))
+                    .append(" = ")
+                    .append(ValuePrinter.print(entry.getValue()));
             if (iterator.hasNext()) {
                 result.append(", ");
             }
         }
         return "{" + result + "}";
     }
-
 
     private static String printChar(char value) {
         StringBuilder sb = new StringBuilder();

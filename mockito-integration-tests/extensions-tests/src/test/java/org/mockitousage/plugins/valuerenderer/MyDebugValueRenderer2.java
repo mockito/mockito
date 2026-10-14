@@ -22,7 +22,11 @@ public class MyDebugValueRenderer2 implements ValueRenderer {
         // This works on any class, not just those with 'Debug' in their class name
         for (Method it : value.getClass().getMethods()) {
             if (it.getName().equals("toDebugString")) {
-                return value.getClass().getSimpleName() + ": Rendered by " + getClass().getSimpleName() + " with priority " + getPluginPriority();
+                return value.getClass().getSimpleName()
+                        + ": Rendered by "
+                        + getClass().getSimpleName()
+                        + " with priority "
+                        + getPluginPriority();
             }
         }
         return null;

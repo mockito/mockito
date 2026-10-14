@@ -25,7 +25,11 @@ public class MyDebugValueRenderer1 implements ValueRenderer {
         }
         for (Method it : value.getClass().getMethods()) {
             if (it.getName().equals("toDebugString")) {
-                return value.getClass().getSimpleName() + ": Rendered by " + getClass().getSimpleName() + " with priority " + getPluginPriority();
+                return value.getClass().getSimpleName()
+                        + ": Rendered by "
+                        + getClass().getSimpleName()
+                        + " with priority "
+                        + getPluginPriority();
             }
         }
         return null;

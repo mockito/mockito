@@ -120,7 +120,9 @@ public class MatchersToStringTest extends TestBase {
 
     @Test
     public void arrayEqualsToString() {
-        assertEquals("[1, 2, 3]", new ArrayEquals(new int[] {1,2,3}).toString());
-        assertEquals("[\"abc\", \"def\", \"ghi\"]", new ArrayEquals(new String[] {"abc", "def", "ghi"}).toString());
+        assertEquals("[1, 2, 3]", new ArrayEquals(new int[] {1, 2, 3}).toString());
+        assertEquals(
+                "[\"abc\", \"def\", \"ghi\"]",
+                new ArrayEquals(new String[] {"abc", "def", "ghi"}).toString());
     }
 }

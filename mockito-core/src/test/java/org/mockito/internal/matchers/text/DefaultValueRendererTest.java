@@ -80,7 +80,6 @@ public class DefaultValueRendererTest {
         assertThat(print('"')).isEqualTo("'\\\"'");
     }
 
-
     static class ToString {
         public String toString() {
             return "ToString";
