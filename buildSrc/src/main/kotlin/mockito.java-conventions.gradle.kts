@@ -3,7 +3,9 @@ import org.gradle.api.plugins.JavaPluginExtension
 
 // only apply to Java projects
 // i.e., do nothing when applied to Android projects
-plugins.withType(JavaPlugin::class) {
+plugins.withType<JavaPlugin> {
+    pluginManager.apply("mockito.coverage-conventions")
+
     val javaReleaseVersion = 11
 
     configure<JavaPluginExtension> {

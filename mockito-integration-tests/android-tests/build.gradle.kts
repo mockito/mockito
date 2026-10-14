@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("mockito.test-conventions")
+    id("mockito.android-coverage-conventions")
 }
 
 android {

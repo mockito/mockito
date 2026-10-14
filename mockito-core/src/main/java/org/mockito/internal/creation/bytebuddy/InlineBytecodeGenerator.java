@@ -75,6 +75,10 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
     private final WeakConcurrentSet<Class<?>> mocked, flatMocked;
 
+    private final ThreadLocal<Set<Class<?>>> clearing =
+            ThreadLocal.withInitial(Collections::emptySet);
+
+    private final ThreadLocal<Throwable> clearingException = new ThreadLocal<>();
     private final BytecodeGenerator subclassEngine;
 
     private final AsmVisitorWrapper mockTransformer;
@@ -302,6 +306,7 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
 
         if (!targets.isEmpty()) {
             try {
+                lastException = null;
                 assureCanReadMockito(targets);
                 instrumentation.retransformClasses(targets.toArray(new Class<?>[targets.size()]));
                 Throwable throwable = lastException;
@@ -404,9 +409,12 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
             Class<?> classBeingRedefined,
             ProtectionDomain protectionDomain,
             byte[] classfileBuffer) {
+        boolean isClearing =
+                classBeingRedefined != null && clearing.get().contains(classBeingRedefined);
         if (classBeingRedefined == null
                 || !mocked.contains(classBeingRedefined)
                         && !flatMocked.contains(classBeingRedefined)
+                        && !isClearing
                 || EXCLUDES.contains(classBeingRedefined)) {
             return null;
         } else {
@@ -423,11 +431,16 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                         // Note: The VM erases parameter meta data from the provided class file
                         // (bug). We just add this information manually.
                         .visit(new ParameterWritingVisitorWrapper(classBeingRedefined))
-                        .visit(mockTransformer)
+                        // Do not reapply the mock transformer when removing instrumentation.
+                        .visit(isClearing ? AsmVisitorWrapper.NoOp.INSTANCE : mockTransformer)
                         .make()
                         .getBytes();
             } catch (Throwable throwable) {
-                lastException = throwable;
+                if (isClearing) {
+                    clearingException.set(throwable);
+                } else {
+                    lastException = throwable;
+                }
                 return null;
             }
         }
@@ -440,11 +453,16 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
         if (types.isEmpty()) {
             return;
         }
-        mocked.clear();
-        flatMocked.clear();
-        subclassEngine.clearAllCaches();
+        clearing.set(types);
         try {
+            mocked.clear();
+            flatMocked.clear();
+            subclassEngine.clearAllCaches();
             instrumentation.retransformClasses(types.toArray(new Class<?>[0]));
+            Throwable throwable = clearingException.get();
+            if (throwable != null) {
+                throw new MockitoException("Could not reset all classes " + types, throwable);
+            }
         } catch (UnmodifiableClassException e) {
             throw new MockitoException(
                     join(
@@ -453,6 +471,9 @@ public class InlineBytecodeGenerator implements BytecodeGenerator, ClassFileTran
                             "This should not influence the working of Mockito.",
                             "But if the reset intends to remove mocking code to improve performance, it is still impacted."),
                     e);
+        } finally {
+            clearing.remove();
+            clearingException.remove();
         }
     }
 

@@ -212,9 +212,21 @@ import java.util.function.Function;
  *     testImplementation(libs.mockito)
  *     mockitoAgent(libs.mockito) { isTransitive = false }
  * }
+ *
+ * abstract class MockitoAgentProvider : CommandLineArgumentProvider {
+ *     &#64;get:InputFiles
+ *     &#64;get:PathSensitive(PathSensitivity.RELATIVE)
+ *     abstract val agentJar: ConfigurableFileCollection
+ *
+ *     override fun asArguments(): Iterable&lt;String&gt; =
+ *         listOf("-javaagent:${agentJar.asPath}")
+ * }
+ *
  * tasks {
  *     test {
- *         jvmArgs.add("-javaagent:${mockitoAgent.asPath}")
+ *         jvmArgumentProviders.add(objects.newInstance&lt;MockitoAgentProvider&gt;().apply {
+ *             agentJar.from(mockitoAgent)
+ *         })
  *     }
  * }
  * </code></pre>
@@ -231,17 +243,22 @@ import java.util.function.Function;
  *         transitive = false
  *     }
  * }
+ *
+ * abstract class MockitoAgentProvider implements CommandLineArgumentProvider {
+ *     &#64;InputFiles
+ *     &#64;PathSensitive(PathSensitivity.RELATIVE)
+ *     abstract ConfigurableFileCollection getAgentJar()
+ *
+ *     &#64;Override
+ *     Iterable&lt;String&gt; asArguments() {
+ *         ["-javaagent:${agentJar.asPath}"]
+ *     }
+ * }
+ *
  * tasks {
  *     test {
- *         jvmArgumentProviders.add(new CommandLineArgumentProvider() {
- *             @InputFiles
- *             @PathSensitive(PathSensitivity.RELATIVE)
- *             FileCollection mockitoAgent = configurations.mockitoAgent
- *
- *             @Override
- *             Iterable<String> asArguments() {
- *                 ["-javaagent:${mockitoAgent.asPath}"]
- *             }
+ *         jvmArgumentProviders.add(objects.newInstance(MockitoAgentProvider).tap {
+ *             agentJar.from(configurations.mockitoAgent)
  *         })
  *     }
  * }

@@ -54,7 +54,7 @@ jobs:
 
     - name: 3. Validate Gradle wrapper
       if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
-      uses: gradle/actions/wrapper-validation@v6.2.0 # https://github.com/gradle/wrapper-validation-action
+      uses: gradle/actions/wrapper-validation@v6.3.0 # https://github.com/gradle/wrapper-validation-action
 
     - name: 4. Build and check reproducibility of artifacts (single job only)
       if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
@@ -83,16 +83,19 @@ jobs:
       run: >
         ./gradlew
         -Pmockito.test.java=${{ matrix.java }}
-        coverageReport
+        :coverageReport
         --stacktrace
         --scan
+      env:
+        MOCK_MAKER: ${{ matrix.entry.mock-maker }}
+        MEMBER_ACCESSOR: ${{ matrix.entry.member-accessor }}
 
     - name: 8. Upload coverage report
       uses: codecov/codecov-action@v7
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
-        files: mockito-core/build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
+        files: build/reports/jacoco/mockitoCoverage/mockitoCoverage.xml
         fail_ci_if_error: true
 
   #
@@ -201,7 +204,7 @@ jobs:
         fetch-depth: '0'
 
     - name: 2. Setup GraalVM
-      uses: graalvm/setup-graalvm@v1.6.3
+      uses: graalvm/setup-graalvm@v1.6.6
       with:
         java-version: "21"
         distribution: "graalvm"
@@ -263,5 +266,5 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           NEXUS_TOKEN_USER: ${{secrets.NEXUS_TOKEN_USER}}
           NEXUS_TOKEN_PWD: ${{secrets.NEXUS_TOKEN_PWD}}
-          PGP_KEY: ${{secrets.PGP_KEY}}
-          PGP_PWD: ${{secrets.PGP_PWD}}
+          PGP_KEY: ${{secrets.PGP_KEY_RENEWED}}
+          PGP_PWD: ${{secrets.PGP_PWD_RENEWED}}
