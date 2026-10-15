@@ -6,6 +6,7 @@ package org.mockito.internal.progress;
 
 import static org.mockito.internal.exceptions.Reporter.unfinishedStubbing;
 import static org.mockito.internal.exceptions.Reporter.unfinishedVerificationException;
+import static org.mockito.internal.progress.StubbingStyle.ANSWER_FIRST;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -34,7 +35,7 @@ public class MockingProgressImpl implements MockingProgress {
     private OngoingStubbing<?> ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
-    private boolean doStyleStubbing;
+    private boolean awaitingStubbingTarget;
     private VerificationStrategy verificationStrategy;
     private final Set<MockitoListener> listeners = new LinkedHashSet<>();
 
@@ -104,16 +105,10 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     @Override
-    public void stubbingStarted() {
+    public void stubbingStarted(StubbingStyle style) {
         validateState();
         stubbingInProgress = LocationFactory.create();
-        doStyleStubbing = false;
-    }
-
-    @Override
-    public void stubbingStartedForDoStyle() {
-        stubbingStarted();
-        doStyleStubbing = true;
+        awaitingStubbingTarget = style == ANSWER_FIRST;
     }
 
     @Override
@@ -124,7 +119,7 @@ public class MockingProgressImpl implements MockingProgress {
         if (stubbingInProgress != null) {
             Location temp = stubbingInProgress;
             stubbingInProgress = null;
-            doStyleStubbing = false;
+            awaitingStubbingTarget = false;
             throw unfinishedStubbing(temp);
         }
     }
@@ -147,24 +142,24 @@ public class MockingProgressImpl implements MockingProgress {
     @Override
     public void stubbingCompleted() {
         stubbingInProgress = null;
-        doStyleStubbing = false;
+        awaitingStubbingTarget = false;
     }
 
     @Override
-    public boolean isDoStyleStubbing() {
-        return doStyleStubbing;
+    public boolean isAwaitingStubbingTarget() {
+        return awaitingStubbingTarget;
     }
 
     @Override
-    public void doStyleStubbingCompleted() {
-        doStyleStubbing = false;
+    public void stubbingTargetSelectionCompleted() {
+        awaitingStubbingTarget = false;
     }
 
     @Override
     public Location suspendStubbingInProgress() {
         Location previous = stubbingInProgress;
         stubbingInProgress = null;
-        doStyleStubbing = false;
+        awaitingStubbingTarget = false;
         return previous;
     }
 
@@ -178,7 +173,7 @@ public class MockingProgressImpl implements MockingProgress {
             throw failure;
         }
         stubbingInProgress = location;
-        doStyleStubbing = location != null;
+        awaitingStubbingTarget = location != null;
     }
 
     @Override
@@ -194,7 +189,7 @@ public class MockingProgressImpl implements MockingProgress {
     @Override
     public void reset() {
         stubbingInProgress = null;
-        doStyleStubbing = false;
+        awaitingStubbingTarget = false;
         verificationMode = null;
         getArgumentMatcherStorage().reset();
     }

@@ -7,9 +7,12 @@ package org.mockito.internal.progress;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.internal.progress.StubbingStyle.ANSWER_FIRST;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.exceptions.misusing.RedundantListenerException;
+import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 import org.mockito.internal.listeners.AutoCleanableListener;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.listeners.MockitoListener;
@@ -56,8 +60,31 @@ public class MockingProgressImplTest extends TestBase {
         // when resuming without a saved stubbing location
         mockingProgress.resumeStubbingInProgress(null);
 
-        // then do-style stubbing must remain inactive
-        assertFalse(mockingProgress.isDoStyleStubbing());
+        // then target selection remains inactive and no unfinished stubbing is restored
+        assertFalse(mockingProgress.isAwaitingStubbingTarget());
+        mockingProgress.validateState();
+    }
+
+    @Test
+    public void should_keep_stubbing_unfinished_after_target_selection() {
+        mockingProgress.stubbingStarted(ANSWER_FIRST);
+        assertTrue(mockingProgress.isAwaitingStubbingTarget());
+
+        mockingProgress.stubbingTargetSelectionCompleted();
+
+        assertFalse(mockingProgress.isAwaitingStubbingTarget());
+        assertThrows(UnfinishedStubbingException.class, mockingProgress::validateState);
+    }
+
+    @Test
+    public void should_keep_stubbing_inactive_when_target_selection_finishes_after_reset() {
+        mockingProgress.stubbingStarted(ANSWER_FIRST);
+        mockingProgress.reset();
+
+        mockingProgress.stubbingTargetSelectionCompleted();
+
+        assertFalse(mockingProgress.isAwaitingStubbingTarget());
+        mockingProgress.validateState();
     }
 
     @Test

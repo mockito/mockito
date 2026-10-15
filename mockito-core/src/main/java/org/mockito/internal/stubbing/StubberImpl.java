@@ -50,7 +50,7 @@ public class StubberImpl implements Stubber {
 
             return mock;
         } finally {
-            mockingProgress().doStyleStubbingCompleted();
+            mockingProgress().stubbingTargetSelectionCompleted();
         }
     }
 

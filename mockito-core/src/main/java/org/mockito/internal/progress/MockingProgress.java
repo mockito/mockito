@@ -27,31 +27,30 @@ public interface MockingProgress {
 
     VerificationMode pullVerificationMode();
 
-    void stubbingStarted();
-
-    void stubbingStartedForDoStyle();
+    void stubbingStarted(StubbingStyle style);
 
     void stubbingCompleted();
 
     void validateState();
 
-    boolean isDoStyleStubbing();
+    boolean isAwaitingStubbingTarget();
 
-    void doStyleStubbingCompleted();
+    /** Ends target selection while leaving the stubbing unfinished until the method is supplied. */
+    void stubbingTargetSelectionCompleted();
 
     /**
      * Temporarily clears unfinished-stubbing tracking and returns the previous location.
      *
-     * <p>Used so deep-stub path evaluation can run inside {@code doXxx().when(mock.path())}
-     * without tripping unfinished-stubbing validation, while still restoring the flag so
-     * misuse detection keeps working afterwards.
+     * <p>Used during target selection so deep-stub invocations can run without triggering
+     * unfinished-stubbing validation.
      *
      * @return previous stubbing location, or {@code null} when stubbing was not in progress
      */
     Location suspendStubbingInProgress();
 
     /**
-     * Restores unfinished-stubbing tracking after {@link #suspendStubbingInProgress()}.
+     * Restores target selection and unfinished-stubbing tracking after
+     * {@link #suspendStubbingInProgress()}.
      *
      * @param location value returned by {@link #suspendStubbingInProgress()}, may be {@code null}
      */

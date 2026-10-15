@@ -5,6 +5,7 @@
 package org.mockito.internal;
 
 import static org.mockito.internal.exceptions.Reporter.missingMethodInvocation;
+import static org.mockito.internal.progress.StubbingStyle.INVOCATION_FIRST;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.MockUtil.getInvocationContainer;
 import static org.mockito.internal.util.MockUtil.resetMock;
@@ -46,7 +47,7 @@ public final class MockedStaticImpl<T> extends ScopedMockImpl<MockMaker.StaticMo
         }
 
         MockingProgress mockingProgress = mockingProgress();
-        mockingProgress.stubbingStarted();
+        mockingProgress.stubbingStarted(INVOCATION_FIRST);
         @SuppressWarnings("unchecked")
         OngoingStubbing<S> stubbing = (OngoingStubbing<S>) mockingProgress.pullOngoingStubbing();
         if (stubbing == null) {

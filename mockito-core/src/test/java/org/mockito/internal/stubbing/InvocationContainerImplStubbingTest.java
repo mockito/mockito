@@ -6,6 +6,7 @@ package org.mockito.internal.stubbing;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.internal.progress.StubbingStyle.INVOCATION_FIRST;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import org.junit.Before;
@@ -45,7 +46,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
 
     @Test
     public void should_finish_stubbing_when_wrong_throwable_is_set() throws Exception {
-        state.stubbingStarted();
+        state.stubbingStarted(INVOCATION_FIRST);
         try {
             invocationContainerImpl.addAnswer(new ThrowsException(new Exception()), null);
             fail();
@@ -56,7 +57,7 @@ public class InvocationContainerImplStubbingTest extends TestBase {
 
     @Test
     public void should_finish_stubbing_on_adding_return_value() throws Exception {
-        state.stubbingStarted();
+        state.stubbingStarted(INVOCATION_FIRST);
         invocationContainerImpl.addAnswer(new Returns("test"), null);
         state.validateState();
     }

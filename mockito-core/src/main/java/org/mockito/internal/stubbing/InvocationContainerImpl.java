@@ -111,7 +111,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     /**
-     * Sets the answers declared with 'doAnswer' style.
+     * Sets the answers declared using answer-first stubbing.
      */
     public void setAnswersForStubbing(List<Answer<?>> answers, Strictness strictness) {
         doAnswerStyleStubbing.setAnswers(answers, strictness);

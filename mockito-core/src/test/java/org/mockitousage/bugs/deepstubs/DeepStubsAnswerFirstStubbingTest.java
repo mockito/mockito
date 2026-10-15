@@ -24,10 +24,11 @@ import org.mockito.exceptions.misusing.MissingMethodInvocationException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 
 /**
- * Regression for #1636: do* stubbing must accept a deep-stub path as the
- * target of {@code when(...)} without raising {@code UnfinishedStubbingException}.
+ * Regression for #1636: answer-first stubbing must accept a deep-stub path as the
+ * target of {@code when(...)} or {@code given(...)} without raising
+ * {@code UnfinishedStubbingException}.
  */
-public class DeepStubsDoStyleStubbingTest {
+public class DeepStubsAnswerFirstStubbingTest {
 
     abstract static class Holder {
         abstract Closeable closeable();
@@ -59,7 +60,7 @@ public class DeepStubsDoStyleStubbingTest {
     }
 
     @Test
-    public void extracting_deep_stub_before_do_style_still_works() throws IOException {
+    public void extracting_deep_stub_before_answer_first_stubbing_still_works() throws IOException {
         Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
         Closeable closeable = holder.closeable();
 
@@ -102,13 +103,13 @@ public class DeepStubsDoStyleStubbingTest {
     }
 
     @Test
-    public void do_style_stubbing_without_a_method_is_still_rejected() {
+    public void answer_first_stubbing_without_a_method_is_still_rejected() {
         Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
 
         Closeable ignored = doNothing().when(holder.closeable());
 
         assertThrows(
-                "An unfinished do-style stubbing must be rejected",
+                "An unfinished answer-first stubbing must be rejected",
                 UnfinishedStubbingException.class,
                 () -> holder.closeable());
     }
@@ -141,14 +142,14 @@ public class DeepStubsDoStyleStubbingTest {
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
     @Test
-    public void successful_deep_stub_do_style_stubbing_does_not_leave_stubbing_state()
+    public void successful_deep_stub_answer_first_stubbing_does_not_leave_stubbing_state()
             throws IOException {
         Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
 
         doNothing().when(holder.closeable()).close();
 
         assertThrows(
-                "Successful deep-stub do-style stubbing must not leave unfinished state",
+                "Successful answer-first stubbing with deep stubs must not leave unfinished state",
                 MissingMethodInvocationException.class,
                 () -> when(null));
     }

@@ -1967,7 +1967,9 @@ public class Mockito extends ArgumentMatchers {
      * </p>
      *
      * <p>
-     * The {@code do*} family can also stub methods on a deep-stub path, including void methods:
+     * Answer-first stubbing also supports deep-stub paths, including void methods.
+     * This includes the {@code do*().when(...)} form and the equivalent
+     * {@code will*().given(...)} form in {@link BDDMockito}:
      * <pre class="code"><code class="java">
      *   SocketFactory factory = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
      *   doThrow(new IOException()).when(factory.createSocket().getOutputStream()).close();

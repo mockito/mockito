@@ -52,7 +52,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
     @Override
     public Object handle(Invocation invocation) throws Throwable {
         if (invocationContainer.hasAnswersForStubbing()) {
-            // stubbing voids with doThrow() or doAnswer() style
+            // Bind answers supplied before the method invocation.
             InvocationMatcher invocationMatcher =
                     matchersBinder.bindMatchers(
                             mockingProgress().getArgumentMatcherStorage(), invocation);
@@ -61,13 +61,13 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         }
         VerificationMode verificationMode = mockingProgress().pullVerificationMode();
 
-        // doXxx().when(deepStub.path()).method() evaluates the deep-stub path while
-        // stubbing is already marked in progress. Suspend unfinished-stubbing detection for
-        // that path so intermediate deep-stub invocations do not throw (#1636).
+        // Answer-first stubbing, e.g. doReturn(value).when(deepStub.path()).method(),
+        // evaluates the path while stubbing is already in progress. Suspend unfinished-stubbing
+        // detection for intermediate deep-stub invocations (#1636).
         Location suspendedStubbing = null;
         boolean stubbingSuspended = false;
         if (verificationMode == null
-                && mockingProgress().isDoStyleStubbing()
+                && mockingProgress().isAwaitingStubbingTarget()
                 && isDeepStubsAnswer(mockSettings.getDefaultAnswer())) {
             suspendedStubbing = mockingProgress().suspendStubbingInProgress();
             stubbingSuspended = true;

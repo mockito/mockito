@@ -14,6 +14,8 @@ import static org.mockito.internal.exceptions.Reporter.nullPassedToVerify;
 import static org.mockito.internal.exceptions.Reporter.nullPassedToVerifyNoMoreInteractions;
 import static org.mockito.internal.exceptions.Reporter.nullPassedWhenCreatingInOrder;
 import static org.mockito.internal.exceptions.Reporter.stubPassedToVerify;
+import static org.mockito.internal.progress.StubbingStyle.INVOCATION_FIRST;
+import static org.mockito.internal.progress.StubbingStyle.ANSWER_FIRST;
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 import static org.mockito.internal.util.MockUtil.createConstructionMock;
 import static org.mockito.internal.util.MockUtil.createMock;
@@ -139,7 +141,7 @@ public class MockitoCore {
 
     public <T> OngoingStubbing<T> when(@Nullable T methodCall) {
         MockingProgress mockingProgress = mockingProgress();
-        mockingProgress.stubbingStarted();
+        mockingProgress.stubbingStarted(INVOCATION_FIRST);
         @SuppressWarnings("unchecked")
         OngoingStubbing<T> stubbing = (OngoingStubbing<T>) mockingProgress.pullOngoingStubbing();
         if (stubbing == null) {
@@ -273,7 +275,7 @@ public class MockitoCore {
 
     public Stubber stubber(Strictness strictness) {
         MockingProgress mockingProgress = mockingProgress();
-        mockingProgress.stubbingStartedForDoStyle();
+        mockingProgress.stubbingStarted(ANSWER_FIRST);
         mockingProgress.resetOngoingStubbing();
         return new StubberImpl(strictness);
     }
