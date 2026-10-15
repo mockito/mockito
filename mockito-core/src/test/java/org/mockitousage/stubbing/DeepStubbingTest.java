@@ -203,13 +203,14 @@ public class DeepStubbingTest extends TestBase {
                 .when(socketFactory.createSocket(anyString(), eq(80)).getOutputStream())
                 .write(anyInt());
 
-        IOException actual = assertThrows(
-            IOException.class,
-            () ->
-                socketFactory
-                    .createSocket("example.com", 80)
-                    .getOutputStream()
-                    .write(1));
+        IOException actual =
+                assertThrows(
+                        IOException.class,
+                        () ->
+                                socketFactory
+                                        .createSocket("example.com", 80)
+                                        .getOutputStream()
+                                        .write(1));
         assertSame(failure, actual);
         socketFactory.createSocket("example.com", 8080).getOutputStream().write(1);
         verify(socketFactory.createSocket("example.com", 80).getOutputStream()).write(1);
