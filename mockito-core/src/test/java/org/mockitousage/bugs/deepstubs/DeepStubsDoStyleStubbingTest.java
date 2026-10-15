@@ -6,7 +6,6 @@ package org.mockitousage.bugs.deepstubs;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -96,11 +95,10 @@ public class DeepStubsDoStyleStubbingTest {
         Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
         Holder other = mock(Holder.class);
 
-        try {
-            when(other.closeable()).thenReturn(holder.closeable());
-            fail("A deep-stub invocation during thenReturn must be rejected");
-        } catch (UnfinishedStubbingException expected) {
-        }
+        assertThrows(
+                "A deep-stub invocation during thenReturn must be rejected",
+                UnfinishedStubbingException.class,
+                () -> when(other.closeable()).thenReturn(holder.closeable()));
     }
 
     @Test
@@ -109,11 +107,10 @@ public class DeepStubsDoStyleStubbingTest {
 
         Closeable ignored = doNothing().when(holder.closeable());
 
-        try {
-            holder.closeable();
-            fail("An unfinished do-style stubbing must be rejected");
-        } catch (UnfinishedStubbingException expected) {
-        }
+        assertThrows(
+                "An unfinished do-style stubbing must be rejected",
+                UnfinishedStubbingException.class,
+                () -> holder.closeable());
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
@@ -129,17 +126,15 @@ public class DeepStubsDoStyleStubbingTest {
                             return closeable;
                         });
 
-        try {
-            doNothing().when(holder.closeable()).close();
-            fail("Unfinished stubbing inside the answer must be rejected");
-        } catch (UnfinishedStubbingException expected) {
-        }
+        assertThrows(
+                "Unfinished stubbing inside the answer must be rejected",
+                UnfinishedStubbingException.class,
+                () -> doNothing().when(holder.closeable()).close());
 
-        try {
-            when(null);
-            fail("A nested unfinished stubbing must not leave an ongoing stubbing");
-        } catch (MissingMethodInvocationException expected) {
-        }
+        assertThrows(
+                "A nested unfinished stubbing must not leave an ongoing stubbing",
+                MissingMethodInvocationException.class,
+                () -> when(null));
 
         assertThat(other.closeable()).isNull();
     }
@@ -152,11 +147,10 @@ public class DeepStubsDoStyleStubbingTest {
 
         doNothing().when(holder.closeable()).close();
 
-        try {
-            when(null);
-            fail("Successful deep-stub do-style stubbing must not leave unfinished state");
-        } catch (MissingMethodInvocationException expected) {
-        }
+        assertThrows(
+                "Successful deep-stub do-style stubbing must not leave unfinished state",
+                MissingMethodInvocationException.class,
+                () -> when(null));
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
@@ -165,17 +159,15 @@ public class DeepStubsDoStyleStubbingTest {
             throws IOException {
         ParameterizedHolder holder = mock(ParameterizedHolder.class, RETURNS_DEEP_STUBS);
 
-        try {
-            doNothing().when(holder.closeable(anyString() + anyString())).close();
-            fail("Invalid matcher usage must be rejected");
-        } catch (InvalidUseOfMatchersException expected) {
-        }
+        assertThrows(
+                "Invalid matcher usage must be rejected",
+                InvalidUseOfMatchersException.class,
+                () -> doNothing().when(holder.closeable(anyString() + anyString())).close());
 
-        try {
-            when(null);
-            fail("Failed matcher binding must not leave unfinished state");
-        } catch (MissingMethodInvocationException expected) {
-        }
+        assertThrows(
+                "Failed matcher binding must not leave unfinished state",
+                MissingMethodInvocationException.class,
+                () -> when(null));
     }
 
     @Test
@@ -210,11 +202,10 @@ public class DeepStubsDoStyleStubbingTest {
                             return closeable;
                         });
 
-        try {
-            doNothing().when(holder.closeable()).close();
-            fail("Nested mock calls during thenReturn must be rejected");
-        } catch (UnfinishedStubbingException expected) {
-        }
+        assertThrows(
+                "Nested mock calls during thenReturn must be rejected",
+                UnfinishedStubbingException.class,
+                () -> doNothing().when(holder.closeable()).close());
 
         assertThat(other.closeable()).isNull();
     }
@@ -230,18 +221,17 @@ public class DeepStubsDoStyleStubbingTest {
                             throw failure;
                         });
 
-        try {
-            doNothing().when(holder.closeable()).close();
-            fail("The answer failure must be propagated");
-        } catch (AssertionError expected) {
-            assertThat(expected).isSameAs(failure);
-        }
+        AssertionError actual =
+                assertThrows(
+                        "The answer failure must be propagated",
+                        AssertionError.class,
+                        () -> doNothing().when(holder.closeable()).close());
+        assertThat(actual).isSameAs(failure);
 
-        try {
-            when(null);
-            fail("A failed deep-stub answer must not leave an ongoing stubbing");
-        } catch (MissingMethodInvocationException expected) {
-        }
+        assertThrows(
+                "A failed deep-stub answer must not leave an ongoing stubbing",
+                MissingMethodInvocationException.class,
+                () -> when(null));
     }
 
     @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})

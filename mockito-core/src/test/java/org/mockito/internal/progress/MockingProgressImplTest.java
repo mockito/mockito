@@ -50,10 +50,13 @@ public class MockingProgressImplTest extends TestBase {
 
     @Test
     public void should_restore_without_a_stubbing_location() {
+        // given no stubbing is in progress, suspension has no location to save
         assertNull(mockingProgress.suspendStubbingInProgress());
 
+        // when resuming without a saved stubbing location
         mockingProgress.resumeStubbingInProgress(null);
 
+        // then do-style stubbing must remain inactive
         assertFalse(mockingProgress.isDoStyleStubbing());
     }
 
