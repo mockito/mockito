@@ -8,7 +8,6 @@ import static org.mockito.internal.listeners.StubbingLookupNotifier.notifyStubbe
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import org.mockito.Answers;
-import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
@@ -62,8 +61,8 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
         VerificationMode verificationMode = mockingProgress().pullVerificationMode();
 
         // Answer-first stubbing, e.g. doReturn(value).when(deepStub.path()).method(),
-        // evaluates the path while stubbing is already in progress. Suspend unfinished-stubbing
-        // detection for intermediate deep-stub invocations (#1636).
+        // evaluates the path while stubbing is already in progress.
+        // Suspend unfinished-stubbing detection for intermediate deep-stub invocations.
         Location suspendedStubbing = null;
         boolean stubbingSuspended = false;
         if (verificationMode == null
@@ -105,12 +104,11 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
 
             // look for existing answer for this invocation
             StubbedInvocationMatcher stubbing = invocationContainer.findAnswerFor(invocation);
-            // TODO #793 - when completed, we should be able to get rid of the casting below
             notifyStubbedAnswerLookup(
                     invocation,
                     stubbing,
                     invocationContainer.getStubbingsAscending(),
-                    (CreationSettings) mockSettings);
+                    mockSettings);
 
             if (stubbing != null) {
                 stubbing.captureArgumentsFrom(invocation);

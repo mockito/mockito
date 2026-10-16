@@ -6,7 +6,6 @@ package org.mockito.internal.junit;
 
 import java.util.Collection;
 import java.util.IdentityHashMap;
-import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.listeners.AutoCleanableListener;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.plugins.MockitoLogger;
@@ -93,9 +92,8 @@ public class UniversalTestListener implements MockitoTestListener, AutoCleanable
         // It is not ideal that we modify the state of MockCreationSettings object
         // MockCreationSettings is intended to be an immutable view of the creation settings
         // In future, we should start passing MockSettings object to the creation listener
-        // TODO #793 - when completed, we should be able to get rid of the CreationSettings casting
         // below
-        ((CreationSettings) settings).getStubbingLookupListeners().add(stubbingLookupListener);
+        settings.getStubbingLookupListeners().add(stubbingLookupListener);
     }
 
     public void setStrictness(Strictness strictness) {
