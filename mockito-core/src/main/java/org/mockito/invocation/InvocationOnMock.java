@@ -6,9 +6,9 @@ package org.mockito.invocation;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import org.mockito.Mockito;
+
 import org.mockito.NotExtensible;
+import org.mockito.internal.invocation.StubInfoImpl;
 
 /**
  * An invocation on a mock.
@@ -98,8 +98,8 @@ public interface InvocationOnMock extends Serializable {
     Object callRealMethod() throws Throwable;
 
     /**
-     * Returns the number of times this method has been invoked on this mock with the
-     * same arguments, including the current invocation.
+     * Returns the number of times the stubbing that answered this invocation has
+     * already answered, including the current invocation.
      *
      * <p>
      * This is useful when an {@link org.mockito.stubbing.Answer} needs to behave
@@ -107,7 +107,7 @@ public interface InvocationOnMock extends Serializable {
      * the first few calls and then return a value:
      *
      * <pre class="code"><code class="java">
-     * when(mock.get("foo")).thenAnswer(invocation -&gt; {
+     * when(mock.get(anyString())).thenAnswer(invocation -&gt; {
      *     if (invocation.getInvocationCount() &lt;= 2) {
      *         throw new RuntimeException("not ready yet");
      *     }
@@ -116,31 +116,26 @@ public interface InvocationOnMock extends Serializable {
      * </code></pre>
      *
      * <p>
-     * Counts are scoped to the same mock, the same method, and the same arguments
-     * (compared with {@link java.util.Arrays#deepEquals(Object[], Object[])}). Calls to
-     * other methods, other mocks, or the same method with different arguments are not
-     * included.
+     * The count follows the stubbing's argument matchers, not argument equality: calls
+     * matched by the same {@code when(...)} share one counter, regardless of the actual
+     * arguments. Invocations not matched by any stubbing return {@code 0}.
      *
      * <p>
      * The current invocation is included in the count, so the first call returns
      * {@code 1}.
      *
-     * @return the 1-based count of matching invocations on this mock, including this one
-     * @since 5.x.x
+     * @return the 1-based count of invocations matched by this stubbing, including this
+     *         one, or {@code 0} if no stubbing matched this invocation
+     * @since 5.25.0
      */
     default int getInvocationCount() {
-        return (int)
-                Mockito.mockingDetails(getMock()).getInvocations().stream()
-                        .filter(this::sameMethod)
-                        .filter(this::sameArguments)
-                        .count();
-    }
-
-    private boolean sameMethod(Invocation invocation) {
-        return invocation.getMethod().equals(getMethod());
-    }
-
-    private boolean sameArguments(Invocation invocation) {
-        return Arrays.deepEquals(invocation.getArguments(), getArguments());
+        if (!(this instanceof Invocation)) {
+            return 0;
+        }
+        StubInfo stubInfo = ((Invocation) this).stubInfo();
+        if (!(stubInfo instanceof StubInfoImpl)) {
+            return 0;
+        }
+        return ((StubInfoImpl) stubInfo).getInvocationCount();
     }
 }

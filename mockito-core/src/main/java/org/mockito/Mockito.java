@@ -680,11 +680,11 @@ import java.util.function.Function;
  * <p>
  * {@link org.mockito.invocation.InvocationOnMock} also exposes
  * {@link org.mockito.invocation.InvocationOnMock#getInvocationCount()}, which is useful when the
- * answer should depend on how many times the same call has already happened &mdash; for example,
- * failing the first few calls and then returning a value:
+ * answer should depend on how many times the matching stubbing has already answered &mdash; for
+ * example, failing the first few calls and then returning a value:
  *
  * <pre class="code"><code class="java">
- * when(mock.get("foo")).thenAnswer(invocation -&gt; {
+ * when(mock.get(anyString())).thenAnswer(invocation -&gt; {
  *     if (invocation.getInvocationCount() &lt;= 2) {
  *         throw new RuntimeException("not ready yet");
  *     }

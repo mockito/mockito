@@ -6,7 +6,10 @@ package org.mockitousage.invocation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -112,5 +115,46 @@ public class InvocationOnMockTest {
 
         assertThat(mock.toArray(new String[0])).containsExactly("1");
         assertThat(mock.toArray(new String[0])).containsExactly("2");
+    }
+
+    @Test
+    public void ensure_that_count_follows_matchers_not_argument_equality() {
+        Map<String, Integer> mock = mock();
+        when(mock.get(anyString())).thenAnswer(InvocationOnMock::getInvocationCount);
+
+        assertThat(mock.get("a")).isEqualTo(1);
+        assertThat(mock.get("b")).isEqualTo(2);
+        assertThat(mock.get("a")).isEqualTo(3);
+    }
+
+    @Test
+    public void ensure_that_consecutive_answers_share_one_counter() {
+        Map<String, Integer> mock = mock();
+        when(mock.get("foo"))
+                .thenAnswer(InvocationOnMock::getInvocationCount)
+                .thenAnswer(inv -> inv.getInvocationCount() * 10);
+
+        assertThat(mock.get("foo")).isEqualTo(1);
+        assertThat(mock.get("foo")).isEqualTo(20);
+        assertThat(mock.get("foo")).isEqualTo(30);
+    }
+
+    @Test
+    public void ensure_that_count_works_on_stub_only_mocks() {
+        Map<String, Integer> mock = mock(withSettings().stubOnly());
+        when(mock.get("foo")).thenAnswer(InvocationOnMock::getInvocationCount);
+
+        assertThat(mock.get("foo")).isEqualTo(1);
+        assertThat(mock.get("foo")).isEqualTo(2);
+    }
+
+    @Test
+    public void ensure_that_clear_invocations_does_not_reset_count() {
+        Map<String, Integer> mock = mock();
+        when(mock.get("foo")).thenAnswer(InvocationOnMock::getInvocationCount);
+
+        assertThat(mock.get("foo")).isEqualTo(1);
+        clearInvocations(mock);
+        assertThat(mock.get("foo")).isEqualTo(2);
     }
 }

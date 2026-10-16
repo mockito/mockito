@@ -6,6 +6,7 @@ package org.mockito.internal.invocation;
 
 import java.io.Serializable;
 
+import org.mockito.internal.stubbing.StubbedInvocationMatcher;
 import org.mockito.invocation.DescribedInvocation;
 import org.mockito.invocation.Location;
 import org.mockito.invocation.StubInfo;
@@ -21,5 +22,12 @@ public class StubInfoImpl implements StubInfo, Serializable {
     @Override
     public Location stubbedAt() {
         return stubbedAt.getLocation();
+    }
+
+    public int getInvocationCount() {
+        if (stubbedAt instanceof StubbedInvocationMatcher) {
+            return ((StubbedInvocationMatcher) stubbedAt).getInvocationCount();
+        }
+        return 0;
     }
 }
