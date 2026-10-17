@@ -24,6 +24,7 @@ public class StubInfoImpl implements StubInfo, Serializable {
         return stubbedAt.getLocation();
     }
 
+    @Override
     public int getInvocationCount() {
         if (stubbedAt instanceof StubbedInvocationMatcher) {
             return ((StubbedInvocationMatcher) stubbedAt).getInvocationCount();

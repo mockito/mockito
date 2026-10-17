@@ -154,7 +154,9 @@ public class InvocationOnMockTest {
         when(mock.get("foo")).thenAnswer(InvocationOnMock::getInvocationCount);
 
         assertThat(mock.get("foo")).isEqualTo(1);
-        clearInvocations(mock);
         assertThat(mock.get("foo")).isEqualTo(2);
+        clearInvocations(mock);
+        assertThat(mock.get("foo")).isEqualTo(3);
+        assertThat(mock.get("foo")).isEqualTo(4);
     }
 }

@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 
 import org.mockito.NotExtensible;
-import org.mockito.internal.invocation.StubInfoImpl;
 
 /**
  * An invocation on a mock.
@@ -116,9 +115,13 @@ public interface InvocationOnMock extends Serializable {
      * </code></pre>
      *
      * <p>
-     * The count follows the stubbing's argument matchers, not argument equality: calls
-     * matched by the same {@code when(...)} share one counter, regardless of the actual
-     * arguments. Invocations not matched by any stubbing return {@code 0}.
+     * The count follows the stubbing's argument matchers, not argument equality.
+     * Each distinct {@code when(...)} registration has its own counter:
+     * {@code when(mock.get("foo"))} and {@code when(mock.get("bar"))} are two
+     * stubbings and are counted independently. A single stubbing that uses a
+     * matcher like {@code anyString()} collapses multiple argument values into one
+     * counter, so calls with {@code "a"}, {@code "b"}, {@code "a"} count as
+     * {@code 1, 2, 3}. Invocations not matched by any stubbing return {@code 0}.
      *
      * <p>
      * The current invocation is included in the count, so the first call returns
@@ -133,9 +136,6 @@ public interface InvocationOnMock extends Serializable {
             return 0;
         }
         StubInfo stubInfo = ((Invocation) this).stubInfo();
-        if (!(stubInfo instanceof StubInfoImpl)) {
-            return 0;
-        }
-        return ((StubInfoImpl) stubInfo).getInvocationCount();
+        return stubInfo == null ? 0 : stubInfo.getInvocationCount();
     }
 }
