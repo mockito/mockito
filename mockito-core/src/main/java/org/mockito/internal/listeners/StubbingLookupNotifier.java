@@ -7,7 +7,6 @@ package org.mockito.internal.listeners;
 import java.util.Collection;
 import java.util.List;
 
-import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.invocation.Invocation;
 import org.mockito.listeners.StubbingLookupEvent;
 import org.mockito.listeners.StubbingLookupListener;
@@ -20,7 +19,7 @@ public final class StubbingLookupNotifier {
             Invocation invocation,
             Stubbing stubbingFound,
             Collection<Stubbing> allStubbings,
-            CreationSettings creationSettings) {
+            MockCreationSettings creationSettings) {
         List<StubbingLookupListener> listeners = creationSettings.getStubbingLookupListeners();
         if (listeners.isEmpty()) {
             return;

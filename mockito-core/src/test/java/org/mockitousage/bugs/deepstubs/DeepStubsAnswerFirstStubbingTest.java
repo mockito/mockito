@@ -1,0 +1,290 @@
+/*
+ * Copyright (c) 2007 Mockito contributors
+ * This program is made available under the terms of the MIT License.
+ */
+package org.mockitousage.bugs.deepstubs;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.Closeable;
+import java.io.IOException;
+
+import org.junit.Test;
+import org.mockito.exceptions.misusing.CannotStubVoidMethodWithReturnValue;
+import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
+import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.misusing.NullInsteadOfMockException;
+import org.mockito.exceptions.misusing.UnfinishedStubbingException;
+
+/**
+ * Regression for #1636: answer-first stubbing must accept a deep-stub path as the
+ * target of {@code when(...)} or {@code given(...)} without raising
+ * {@code UnfinishedStubbingException}.
+ */
+public class DeepStubsAnswerFirstStubbingTest {
+
+    abstract static class Holder {
+        abstract Closeable closeable();
+
+        abstract Holder nested();
+    }
+
+    abstract static class ParameterizedHolder {
+        abstract Closeable closeable(String value);
+    }
+
+    @Test
+    public void do_nothing_when_deep_stub_path() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+
+        doNothing().when(holder.closeable()).close();
+
+        holder.closeable().close();
+        verify(holder.closeable()).close();
+    }
+
+    @Test
+    public void do_return_when_deep_stub_path() {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+
+        doReturn("xxx").when(holder.closeable()).toString();
+
+        assertThat(holder.closeable().toString()).isEqualTo("xxx");
+    }
+
+    @Test
+    public void extracting_deep_stub_before_answer_first_stubbing_still_works() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Closeable closeable = holder.closeable();
+
+        doNothing().when(closeable).close();
+
+        closeable.close();
+        verify(closeable).close();
+    }
+
+    @Test
+    public void do_nothing_when_fresh_multi_level_deep_stub_path() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+
+        doNothing().when(holder.nested().closeable()).close();
+
+        holder.nested().closeable().close();
+        verify(holder.nested().closeable()).close();
+    }
+
+    @Test
+    public void do_nothing_when_cached_multi_level_deep_stub_path() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        holder.nested().closeable();
+
+        doNothing().when(holder.nested().closeable()).close();
+
+        holder.nested().closeable().close();
+        verify(holder.nested().closeable()).close();
+    }
+
+    @Test
+    public void deep_stub_invocation_during_then_return_is_still_rejected() {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Holder other = mock(Holder.class);
+
+        assertThrows(
+                "A deep-stub invocation during thenReturn must be rejected",
+                UnfinishedStubbingException.class,
+                () -> when(other.closeable()).thenReturn(holder.closeable()));
+    }
+
+    @Test
+    public void answer_first_stubbing_without_a_method_is_still_rejected() {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+
+        Closeable ignored = doNothing().when(holder.closeable());
+
+        assertThrows(
+                "An unfinished answer-first stubbing must be rejected",
+                UnfinishedStubbingException.class,
+                () -> holder.closeable());
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void unfinished_stubbing_inside_deep_stub_answer_is_rejected() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Holder other = mock(Holder.class);
+        Closeable closeable = mock(Closeable.class);
+        when(holder.closeable())
+                .thenAnswer(
+                        invocation -> {
+                            when(other.closeable());
+                            return closeable;
+                        });
+
+        assertThrows(
+                "Unfinished stubbing inside the answer must be rejected",
+                UnfinishedStubbingException.class,
+                () -> doNothing().when(holder.closeable()).close());
+
+        // Deliberately invalid: rejecting nested stubbing must leave no invocation to reuse.
+        assertThrows(
+                "A nested unfinished stubbing must not leave an ongoing stubbing",
+                MissingMethodInvocationException.class,
+                () -> when(null));
+
+        assertThat(other.closeable()).isNull();
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void successful_deep_stub_answer_first_stubbing_does_not_leave_stubbing_state()
+            throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+
+        doNothing().when(holder.closeable()).close();
+
+        // Deliberately invalid: successful stubbing must leave no invocation to reuse.
+        assertThrows(
+                "Successful answer-first stubbing with deep stubs must not leave unfinished state",
+                MissingMethodInvocationException.class,
+                () -> when(null));
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void failed_matcher_binding_during_deep_stub_path_does_not_leave_stubbing_state()
+            throws IOException {
+        ParameterizedHolder holder = mock(ParameterizedHolder.class, RETURNS_DEEP_STUBS);
+
+        assertThrows(
+                "Invalid matcher usage must be rejected",
+                InvalidUseOfMatchersException.class,
+                () -> doNothing().when(holder.closeable(anyString() + anyString())).close());
+
+        // Deliberately invalid: failed matcher binding must leave no invocation to reuse.
+        assertThrows(
+                "Failed matcher binding must not leave unfinished state",
+                MissingMethodInvocationException.class,
+                () -> when(null));
+    }
+
+    @Test
+    public void completed_stubbing_inside_answer_preserves_multi_level_path() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Holder nested = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Holder other = mock(Holder.class);
+        Closeable closeable = mock(Closeable.class);
+        when(holder.nested())
+                .thenAnswer(
+                        invocation -> {
+                            when(other.closeable()).thenReturn(closeable);
+                            return nested;
+                        });
+
+        doNothing().when(holder.nested().closeable()).close();
+
+        assertThat(other.closeable()).isSameAs(closeable);
+        nested.closeable().close();
+        verify(nested.closeable()).close();
+    }
+
+    @Test
+    public void reported_error_inside_deep_stub_answer_clears_stubbing_state() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Holder other = mock(Holder.class);
+        Closeable closeable = mock(Closeable.class);
+        when(holder.closeable())
+                .thenAnswer(
+                        invocation -> {
+                            when(other.closeable()).thenReturn(other.closeable());
+                            return closeable;
+                        });
+
+        assertThrows(
+                "Nested mock calls during thenReturn must be rejected",
+                UnfinishedStubbingException.class,
+                () -> doNothing().when(holder.closeable()).close());
+
+        assertThat(other.closeable()).isNull();
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void answer_failure_does_not_leave_ongoing_stubbing() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        AssertionError failure = new AssertionError("answer failure");
+        when(holder.closeable())
+                .thenAnswer(
+                        invocation -> {
+                            throw failure;
+                        });
+
+        AssertionError actual =
+                assertThrows(
+                        "The answer failure must be propagated",
+                        AssertionError.class,
+                        () -> doNothing().when(holder.closeable()).close());
+        assertThat(actual).isSameAs(failure);
+
+        // Deliberately invalid: a failed answer must leave no invocation for when(null) to reuse.
+        assertThrows(
+                "A failed deep-stub answer must not leave an ongoing stubbing",
+                MissingMethodInvocationException.class,
+                () -> when(null));
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void rejected_answer_on_deep_stub_target_clears_ongoing_stubbing() throws IOException {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+
+        assertThrows(
+                CannotStubVoidMethodWithReturnValue.class,
+                () -> doReturn("invalid").when(holder.closeable()).close());
+
+        // Deliberately invalid: a rejected answer must leave no invocation to reuse.
+        assertThrows(MissingMethodInvocationException.class, () -> when(null));
+
+        holder.closeable().close();
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void null_deep_stub_target_clears_ongoing_stubbing() {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        when(holder.closeable()).thenReturn(null);
+
+        assertThatThrownBy(() -> doNothing().when(holder.closeable()).close())
+                .isInstanceOf(NullInsteadOfMockException.class);
+
+        // Deliberately invalid: rejection must leave no invocation for when(null) to reuse.
+        assertThatThrownBy(() -> when(null).thenReturn(null))
+                .isInstanceOf(MissingMethodInvocationException.class);
+        assertThat(holder.closeable()).isNull();
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void non_mock_deep_stub_target_clears_ongoing_stubbing() {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Closeable closeable = () -> {};
+        when(holder.closeable()).thenReturn(closeable);
+
+        assertThatThrownBy(() -> doNothing().when(holder.closeable()).close())
+                .isInstanceOf(NotAMockException.class);
+
+        // Deliberately invalid: rejection must leave no invocation for when(null) to reuse.
+        assertThatThrownBy(() -> when(null).thenReturn(null))
+                .isInstanceOf(MissingMethodInvocationException.class);
+        assertThat(holder.closeable()).isSameAs(closeable);
+    }
+}

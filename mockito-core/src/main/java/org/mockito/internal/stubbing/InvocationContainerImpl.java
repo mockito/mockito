@@ -111,7 +111,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     }
 
     /**
-     * Sets the answers declared with 'doAnswer' style.
+     * Sets the answers declared using answer-first stubbing.
      */
     public void setAnswersForStubbing(List<Answer<?>> answers, Strictness strictness) {
         doAnswerStyleStubbing.setAnswers(answers, strictness);
@@ -128,13 +128,17 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
     public void setMethodForStubbing(MatchableInvocation invocation) {
         invocationForStubbing = invocation;
         assert hasAnswersForStubbing();
-        for (int i = 0; i < doAnswerStyleStubbing.getAnswers().size(); i++) {
-            addAnswer(
-                    doAnswerStyleStubbing.getAnswers().get(i),
-                    i != 0,
-                    doAnswerStyleStubbing.getStubbingStrictness());
+        try {
+            for (int i = 0; i < doAnswerStyleStubbing.getAnswers().size(); i++) {
+                addAnswer(
+                        doAnswerStyleStubbing.getAnswers().get(i),
+                        i != 0,
+                        doAnswerStyleStubbing.getStubbingStrictness());
+            }
+        } finally {
+            doAnswerStyleStubbing.clear();
+            mockingProgress().resetOngoingStubbing();
         }
-        doAnswerStyleStubbing.clear();
     }
 
     @Override

@@ -6,6 +6,7 @@ package org.mockito.internal.progress;
 
 import static org.mockito.internal.exceptions.Reporter.unfinishedStubbing;
 import static org.mockito.internal.exceptions.Reporter.unfinishedVerificationException;
+import static org.mockito.internal.progress.StubbingStyle.ANSWER_FIRST;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -34,6 +35,7 @@ public class MockingProgressImpl implements MockingProgress {
     private OngoingStubbing<?> ongoingStubbing;
     private Localized<VerificationMode> verificationMode;
     private Location stubbingInProgress = null;
+    private boolean awaitingStubbingTarget;
     private VerificationStrategy verificationStrategy;
     private final Set<MockitoListener> listeners = new LinkedHashSet<>();
 
@@ -103,9 +105,10 @@ public class MockingProgressImpl implements MockingProgress {
     }
 
     @Override
-    public void stubbingStarted() {
+    public void stubbingStarted(StubbingStyle style) {
         validateState();
         stubbingInProgress = LocationFactory.create();
+        awaitingStubbingTarget = style == ANSWER_FIRST;
     }
 
     @Override
@@ -116,6 +119,7 @@ public class MockingProgressImpl implements MockingProgress {
         if (stubbingInProgress != null) {
             Location temp = stubbingInProgress;
             stubbingInProgress = null;
+            awaitingStubbingTarget = false;
             throw unfinishedStubbing(temp);
         }
     }
@@ -138,6 +142,38 @@ public class MockingProgressImpl implements MockingProgress {
     @Override
     public void stubbingCompleted() {
         stubbingInProgress = null;
+        awaitingStubbingTarget = false;
+    }
+
+    @Override
+    public boolean isAwaitingStubbingTarget() {
+        return awaitingStubbingTarget;
+    }
+
+    @Override
+    public void stubbingTargetSelectionCompleted() {
+        awaitingStubbingTarget = false;
+    }
+
+    @Override
+    public Location suspendStubbingInProgress() {
+        Location previous = stubbingInProgress;
+        stubbingInProgress = null;
+        awaitingStubbingTarget = false;
+        return previous;
+    }
+
+    @Override
+    public void resumeStubbingInProgress(Location location) {
+        try {
+            validateState();
+        } catch (RuntimeException failure) {
+            reset();
+            resetOngoingStubbing();
+            throw failure;
+        }
+        stubbingInProgress = location;
+        awaitingStubbingTarget = location != null;
     }
 
     @Override
@@ -153,6 +189,7 @@ public class MockingProgressImpl implements MockingProgress {
     @Override
     public void reset() {
         stubbingInProgress = null;
+        awaitingStubbingTarget = false;
         verificationMode = null;
         getArgumentMatcherStorage().reset();
     }

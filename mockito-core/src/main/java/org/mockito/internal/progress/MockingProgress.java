@@ -6,6 +6,8 @@ package org.mockito.internal.progress;
 
 import java.util.Set;
 
+import org.mockito.invocation.Location;
+
 import org.mockito.listeners.MockitoListener;
 import org.mockito.listeners.VerificationListener;
 import org.mockito.mock.MockCreationSettings;
@@ -25,11 +27,34 @@ public interface MockingProgress {
 
     VerificationMode pullVerificationMode();
 
-    void stubbingStarted();
+    void stubbingStarted(StubbingStyle style);
 
     void stubbingCompleted();
 
     void validateState();
+
+    boolean isAwaitingStubbingTarget();
+
+    /** Ends target selection while leaving the stubbing unfinished until the method is supplied. */
+    void stubbingTargetSelectionCompleted();
+
+    /**
+     * Temporarily clears unfinished-stubbing tracking and returns the previous location.
+     *
+     * <p>Used during target selection so deep-stub invocations can run without triggering
+     * unfinished-stubbing validation.
+     *
+     * @return previous stubbing location, or {@code null} when stubbing was not in progress
+     */
+    Location suspendStubbingInProgress();
+
+    /**
+     * Restores target selection and unfinished-stubbing tracking after
+     * {@link #suspendStubbingInProgress()}.
+     *
+     * @param location value returned by {@link #suspendStubbingInProgress()}, may be {@code null}
+     */
+    void resumeStubbingInProgress(Location location);
 
     void reset();
 

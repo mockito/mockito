@@ -1967,6 +1967,18 @@ public class Mockito extends ArgumentMatchers {
      * </p>
      *
      * <p>
+     * Answer-first stubbing also supports deep-stub paths, including void methods.
+     * This includes the {@code do*().when(...)} form and the equivalent
+     * {@code will*().given(...)} form in {@link BDDMockito}:
+     * <pre class="code"><code class="java">
+     *   SocketFactory factory = mock(SocketFactory.class, RETURNS_DEEP_STUBS);
+     *   doThrow(new IOException()).when(factory.createSocket().getOutputStream()).close();
+     * </code></pre>
+     * Intermediate calls such as {@code factory.createSocket()} are evaluated to select the target mock,
+     * and their configured answers still run.
+     * </p>
+     *
+     * <p>
      * <strong>WARNING: </strong>
      * This feature should rarely be required for regular clean code! Leave it for legacy code.
      * Mocking a mock to return a mock, to return a mock, (...), to return something meaningful
