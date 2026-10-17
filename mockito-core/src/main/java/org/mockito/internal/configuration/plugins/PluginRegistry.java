@@ -16,6 +16,7 @@ import org.mockito.plugins.MockResolver;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.plugins.PluginSwitch;
 import org.mockito.plugins.StackTraceCleanerProvider;
+import org.mockito.plugins.ValueRenderer;
 
 class PluginRegistry {
 
@@ -51,6 +52,9 @@ class PluginRegistry {
     private final DoNotMockEnforcerWithType doNotMockEnforcer =
             new PluginLoader(pluginSwitch)
                     .loadPlugin(DoNotMockEnforcerWithType.class, DoNotMockEnforcer.class);
+
+    private final List<ValueRenderer> valueRenderers =
+            new PluginLoader(pluginSwitch).loadPlugins(ValueRenderer.class);
 
     PluginRegistry() {
         instantiatorProvider =
@@ -133,5 +137,16 @@ class PluginRegistry {
      */
     List<MockResolver> getMockResolvers() {
         return mockResolvers;
+    }
+
+    /**
+     * Returns a list of available value renderers, excluding the default renderer
+     * {@link org.mockito.internal.matchers.text.DefaultValueRenderer}.
+     *
+     * @return A list of available value renderers, in the order they were loaded (not necessarily
+     * the order they should be tried).
+     */
+    List<ValueRenderer> getValueRenderers() {
+        return valueRenderers;
     }
 }

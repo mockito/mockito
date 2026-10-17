@@ -5,6 +5,8 @@
 package org.mockito.internal.configuration.plugins;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.mockito.internal.util.io.IOUtil;
 
@@ -18,6 +20,17 @@ class PluginFileReader {
             }
         }
         return null;
+    }
+
+    List<String> readPluginClasses(InputStream input) {
+        List<String> result = new ArrayList<>();
+        for (String line : IOUtil.readLines(input)) {
+            String stripped = stripCommentAndWhitespace(line);
+            if (!stripped.isEmpty()) {
+                result.add(stripped);
+            }
+        }
+        return result;
     }
 
     private static String stripCommentAndWhitespace(String line) {

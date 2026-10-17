@@ -1,0 +1,10 @@
+# Priority 1 (lowest priority, will be tried third
+org.mockitousage.plugins.valuerenderer.MyAnnotationValueRenderer
+
+# Priority 2 (higher priority, so will be tried second)
+org.mockitousage.plugins.valuerenderer.MyDebugValueRenderer2
+
+# Priority 2 also (equal priority to above, but class name is lexicographically earlier, so will be tried first despite being later in the loader list)
+org.mockitousage.plugins.valuerenderer.MyDebugValueRenderer1
+
+# Implied that the internal DefaultValueRenderer implementation is always tried last as a fallback

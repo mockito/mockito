@@ -7,6 +7,7 @@ package org.mockito.internal.configuration.plugins;
 import java.util.List;
 
 import org.mockito.DoNotMock;
+import org.mockito.plugins.ValueRenderer;
 import org.mockito.plugins.AnnotationEngine;
 import org.mockito.plugins.DoNotMockEnforcer;
 import org.mockito.plugins.DoNotMockEnforcerWithType;
@@ -108,6 +109,17 @@ public final class Plugins {
      */
     public static DoNotMockEnforcerWithType getDoNotMockEnforcer() {
         return registry.getDoNotMockEnforcer();
+    }
+
+    /**
+     * Returns a list of available value renderers, excluding the default renderer
+     * {@link org.mockito.internal.matchers.text.DefaultValueRenderer}.
+     *
+     * @return A list of available value renderers, in the order they were loaded (not necessarily
+     * the order they should be tried).
+     */
+    public static List<ValueRenderer> getValueRenderers() {
+        return registry.getValueRenderers();
     }
 
     private Plugins() {}
