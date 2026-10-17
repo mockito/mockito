@@ -5,6 +5,7 @@
 package org.mockitousage.bugs.deepstubs;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.anyString;
@@ -21,6 +22,8 @@ import org.junit.Test;
 import org.mockito.exceptions.misusing.CannotStubVoidMethodWithReturnValue;
 import org.mockito.exceptions.misusing.InvalidUseOfMatchersException;
 import org.mockito.exceptions.misusing.MissingMethodInvocationException;
+import org.mockito.exceptions.misusing.NotAMockException;
+import org.mockito.exceptions.misusing.NullInsteadOfMockException;
 import org.mockito.exceptions.misusing.UnfinishedStubbingException;
 
 /**
@@ -132,6 +135,7 @@ public class DeepStubsAnswerFirstStubbingTest {
                 UnfinishedStubbingException.class,
                 () -> doNothing().when(holder.closeable()).close());
 
+        // Deliberately invalid: rejecting nested stubbing must leave no invocation to reuse.
         assertThrows(
                 "A nested unfinished stubbing must not leave an ongoing stubbing",
                 MissingMethodInvocationException.class,
@@ -148,6 +152,7 @@ public class DeepStubsAnswerFirstStubbingTest {
 
         doNothing().when(holder.closeable()).close();
 
+        // Deliberately invalid: successful stubbing must leave no invocation to reuse.
         assertThrows(
                 "Successful answer-first stubbing with deep stubs must not leave unfinished state",
                 MissingMethodInvocationException.class,
@@ -165,6 +170,7 @@ public class DeepStubsAnswerFirstStubbingTest {
                 InvalidUseOfMatchersException.class,
                 () -> doNothing().when(holder.closeable(anyString() + anyString())).close());
 
+        // Deliberately invalid: failed matcher binding must leave no invocation to reuse.
         assertThrows(
                 "Failed matcher binding must not leave unfinished state",
                 MissingMethodInvocationException.class,
@@ -229,6 +235,7 @@ public class DeepStubsAnswerFirstStubbingTest {
                         () -> doNothing().when(holder.closeable()).close());
         assertThat(actual).isSameAs(failure);
 
+        // Deliberately invalid: a failed answer must leave no invocation for when(null) to reuse.
         assertThrows(
                 "A failed deep-stub answer must not leave an ongoing stubbing",
                 MissingMethodInvocationException.class,
@@ -244,8 +251,40 @@ public class DeepStubsAnswerFirstStubbingTest {
                 CannotStubVoidMethodWithReturnValue.class,
                 () -> doReturn("invalid").when(holder.closeable()).close());
 
+        // Deliberately invalid: a rejected answer must leave no invocation to reuse.
         assertThrows(MissingMethodInvocationException.class, () -> when(null));
 
         holder.closeable().close();
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void null_deep_stub_target_clears_ongoing_stubbing() {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        when(holder.closeable()).thenReturn(null);
+
+        assertThatThrownBy(() -> doNothing().when(holder.closeable()).close())
+                .isInstanceOf(NullInsteadOfMockException.class);
+
+        // Deliberately invalid: rejection must leave no invocation for when(null) to reuse.
+        assertThatThrownBy(() -> when(null).thenReturn(null))
+                .isInstanceOf(MissingMethodInvocationException.class);
+        assertThat(holder.closeable()).isNull();
+    }
+
+    @SuppressWarnings({"CheckReturnValue", "MockitoUsage"})
+    @Test
+    public void non_mock_deep_stub_target_clears_ongoing_stubbing() {
+        Holder holder = mock(Holder.class, RETURNS_DEEP_STUBS);
+        Closeable closeable = () -> {};
+        when(holder.closeable()).thenReturn(closeable);
+
+        assertThatThrownBy(() -> doNothing().when(holder.closeable()).close())
+                .isInstanceOf(NotAMockException.class);
+
+        // Deliberately invalid: rejection must leave no invocation for when(null) to reuse.
+        assertThatThrownBy(() -> when(null).thenReturn(null))
+                .isInstanceOf(MissingMethodInvocationException.class);
+        assertThat(holder.closeable()).isSameAs(closeable);
     }
 }

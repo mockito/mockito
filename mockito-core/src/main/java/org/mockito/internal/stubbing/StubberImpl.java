@@ -51,6 +51,7 @@ public class StubberImpl implements Stubber {
             return mock;
         } finally {
             mockingProgress().stubbingTargetSelectionCompleted();
+            mockingProgress().resetOngoingStubbing();
         }
     }
 
