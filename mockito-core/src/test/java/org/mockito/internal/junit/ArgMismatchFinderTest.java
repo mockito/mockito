@@ -6,7 +6,10 @@ package org.mockito.internal.junit;
 
 import static java.util.Arrays.asList;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
@@ -129,5 +132,37 @@ public class ArgMismatchFinderTest extends TestBase {
 
         // then
         assertEquals("{mock1.simpleMethod(1);=[mock1.simpleMethod(3);]}", mismatches.toString());
+    }
+
+    @Test
+    public void mismatches_on_a_spy_do_not_call_its_equals_or_hash_code() {
+        // given
+        Hostile spy = spy(new Hostile());
+        doReturn("1").when(spy).simpleMethod(1);
+        doReturn("2").when(spy).simpleMethod(2);
+        spy.simpleMethod(3);
+
+        // when
+        StubbingArgMismatches mismatches = finder.getStubbingArgMismatches(asList(spy));
+
+        // then
+        assertThat(mismatches.size()).isEqualTo(2);
+    }
+
+    public static class Hostile {
+
+        public String simpleMethod(int argument) {
+            return "real";
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            throw new UnsupportedOperationException("equals must not be called by Mockito");
+        }
+
+        @Override
+        public int hashCode() {
+            throw new UnsupportedOperationException("hashCode must not be called by Mockito");
+        }
     }
 }

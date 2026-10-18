@@ -806,6 +806,12 @@ import java.util.function.Function;
  * Mockito doesn't mock final methods so the bottom line is: when you spy on real objects + you try to stub a final method = trouble.
  * Also you won't be able to verify those method as well.
  * </li>
+ *
+ * <li>Spies use the real <code>equals()</code> and <code>hashCode()</code> methods of the spied type,
+ * so a spy is equal to an equal real object and can be found in hash based collections.
+ * Calls to these two methods are not recorded as interactions. Mocks keep identity based
+ * <code>equals()</code> and <code>hashCode()</code>.
+ * </li>
  * </ol>
  *
  *
@@ -2394,6 +2400,12 @@ public class Mockito extends ArgumentMatchers {
      * <li>Watch out for final methods.
      * Mockito doesn't mock final methods so the bottom line is: when you spy on real objects + you try to stub a final method = trouble.
      * Also you won't be able to verify those method as well.
+     * </li>
+     *
+     * <li>Spies use the real <code>equals()</code> and <code>hashCode()</code> methods of the spied type,
+     * so a spy is equal to an equal real object and can be found in hash based collections.
+     * Calls to these two methods are not recorded as interactions. Mocks keep identity based
+     * <code>equals()</code> and <code>hashCode()</code>.
      * </li>
      * </ol>
      * <p>
