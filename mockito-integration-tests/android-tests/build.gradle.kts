@@ -61,8 +61,8 @@ dependencies {
 
     testImplementation(project(":mockito-core"))
     testImplementation(libs.junit4)
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.jupiter.engine)
+    testImplementation(libs.junit5.api)
+    testImplementation(libs.junit5.engine)
 
     androidTestImplementation(libs.android.runner)
     androidTestImplementation(libs.android.junit)

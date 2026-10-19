@@ -25,9 +25,10 @@ dependencies {
     add(osgiTest.runtimeOnlyConfigurationName, libraries.findLibrary("equinox").get())
 
     add(osgiTestBundle.compileOnlyConfigurationName, libraries.findLibrary("osgi").get())
+    // dependency version will be given by the BOM via the junitCompatibility extension
     add(osgiTestBundle.implementationConfigurationName, "org.junit.jupiter:junit-jupiter-api")
-    add(osgiTestBundle.implementationConfigurationName, "org.junit.jupiter:junit-jupiter-engine")
-    add(osgiTestBundle.implementationConfigurationName, "org.junit.platform:junit-platform-launcher")
+    add(osgiTestBundle.runtimeOnlyConfigurationName, "org.junit.jupiter:junit-jupiter-engine")
+    add(osgiTestBundle.runtimeOnlyConfigurationName, "org.junit.platform:junit-platform-launcher")
 }
 
 val testBundle = tasks.register<Bundle>("osgiTestBundle") {
@@ -59,7 +60,7 @@ junitCompatibility.runtimes.all {
     }
 
     dependencies {
-        addProvider(runtimeOnly.name, runtime.bom.map { platform(it) })
+        addProvider(runtimeOnly.name, platform(runtime.bom))
     }
 
     val testTask = tasks.register<Test>("${name}Test") {
@@ -68,7 +69,11 @@ junitCompatibility.runtimes.all {
 
         // Compile against the baseline and reuse the same classes to check binary compatibility.
         testClassesDirs = files(sourceSets.test.map { it.output.classesDirs })
-        classpath = files(sourceSets.test.map { it.output }, sourceSets.main.map { it.output }, runtimeClasspath)
+        classpath = files(
+            sourceSets.test.map { it.output },
+            sourceSets.main.map { it.output },
+            runtimeClasspath
+        )
         include("**/*Test.class")
         useJUnitPlatform()
         javaLauncher = launcher

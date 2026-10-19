@@ -6,10 +6,9 @@ plugins {
 description = "Tests that require fine tuned parallel settings for JUnit Jupiter (bug #1630)"
 
 dependencies {
-    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit5.api)
     testImplementation(project(":mockito-extensions:mockito-junit-jupiter"))
-    testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.bundles.junit5.runtime)
 }
 
 tasks {

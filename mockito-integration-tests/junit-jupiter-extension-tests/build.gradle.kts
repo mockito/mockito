@@ -22,9 +22,8 @@ junitCompatibility {
 dependencies {
     testImplementation(project(":mockito-extensions:mockito-junit-jupiter"))
     testImplementation(libs.assertj)
-    testImplementation(libs.junit.jupiter.api)
-    testRuntimeOnly(libs.junit.jupiter.engine)
-    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.junit5.api)
+    testRuntimeOnly(libs.bundles.junit5.runtime)
 
     add("osgiTestBundleImplementation", project(":mockito-extensions:mockito-junit-jupiter"))
 }
