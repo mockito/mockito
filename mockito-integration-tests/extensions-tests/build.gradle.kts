@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("mockito.test-conventions")
+    id("mockito.junit-jupiter-compatibility-conventions")
 }
 
 description = "End-to-end tests for Mockito and its extensions."
