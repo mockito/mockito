@@ -46,6 +46,10 @@ val testBundle = tasks.register<Bundle>("osgiTestBundle") {
     description = "Packages the Jupiter compatibility tests as an OSGi bundle."
     archiveClassifier = "osgi-tests"
     from(osgiTestBundle.output)
+
+    val testBundleContents = osgiTestBundle.output.asFileTree
+    onlyIf("OSGi test bundle contains classes or resources") { !testBundleContents.isEmpty }
+
     bundle {
         classpath = osgiTestBundle.compileClasspath
         bnd("""

@@ -101,6 +101,9 @@ class JUnitCompatibilityTest {
 
         assertThat(result.task(":verifyRuntimes")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
+        val bundleResult = runner.withArguments("osgiTestBundle", "--stacktrace").build()
+        assertThat(bundleResult.task(":osgiTestBundle")?.outcome).isEqualTo(TaskOutcome.SKIPPED)
+
         val checkResult = runner.withArguments("check", "--dry-run", "--stacktrace").build()
         assertThat(checkResult.output).contains(
             ":junit5Test SKIPPED",
