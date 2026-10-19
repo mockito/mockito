@@ -20,6 +20,9 @@ class JUnitCompatibilityTest {
                     create("libs") {
                         library("older-bom", "example", "older-bom").version("1.0")
                         library("newer-bom", "example", "newer-bom").version("2.0")
+                        library("junit4", "example", "junit4").version("1.0")
+                        library("osgi", "example", "osgi").version("1.0")
+                        library("equinox", "example", "equinox").version("1.0")
                     }
                 }
             }
@@ -65,18 +68,34 @@ class JUnitCompatibilityTest {
                         val test = tasks.named<Test>(name + "Test").get()
                         check(test.testClassesDirs.files == baseline.get().testClassesDirs.files)
                         check(reports.add(test.reports.junitXml.outputLocation.get().asFile))
+
+                        val osgiBundles = configurations.getByName(name + "OsgiBundles")
+                        check(osgiBundles.attributes.getAttribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE) == expected.first)
+                        check(bom in osgiBundles.allDependencies)
+                        val osgiTest = tasks.named<Test>(name + "OsgiTest").get()
+                        check(osgiTest.testClassesDirs.files == sourceSets["osgiTest"].output.classesDirs.files)
+                        check(reports.add(osgiTest.reports.junitXml.outputLocation.get().asFile))
                     }
                 }
             }
             """.trimIndent()
         )
 
-        val result = GradleRunner.create()
+        val runner = GradleRunner.create()
             .withProjectDir(projectDirectory.toFile())
             .withPluginClasspath()
+        val result = runner
             .withArguments("verifyRuntimes", "--stacktrace")
             .build()
 
         assertThat(result.task(":verifyRuntimes")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+
+        val checkResult = runner.withArguments("check", "--dry-run", "--stacktrace").build()
+        assertThat(checkResult.output).contains(
+            ":olderTest SKIPPED",
+            ":newerTest SKIPPED",
+            ":olderOsgiTest SKIPPED",
+            ":newerOsgiTest SKIPPED",
+        )
     }
 }

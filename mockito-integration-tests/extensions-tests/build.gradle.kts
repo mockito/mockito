@@ -27,10 +27,12 @@ dependencies {
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
+
+    add("osgiTestBundleImplementation", project(":mockito-extensions:mockito-junit-jupiter"))
 }
 
 tasks {
-    withType<Test> {
+    test {
         useJUnitPlatform()
     }
 }
