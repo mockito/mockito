@@ -20,6 +20,8 @@ class JUnitCompatibilityTest {
                     create("libs") {
                         library("older-bom", "example", "older-bom").version("1.0")
                         library("newer-bom", "example", "newer-bom").version("2.0")
+                        library("junit5-bom", "example", "junit5-bom").version("5.0")
+                        library("junit6-bom", "example", "junit6-bom").version("6.0")
                         library("junit4", "example", "junit4").version("1.0")
                         library("osgi", "example", "osgi").version("1.0")
                         library("equinox", "example", "equinox").version("1.0")
@@ -42,6 +44,10 @@ class JUnitCompatibilityTest {
             val catalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
             junitCompatibility {
                 runtimes {
+                    named("junit6") {
+                        check(testJvmVersion.get() == 17)
+                        testJvmVersion.set(newerTestJvmVersion)
+                    }
                     register("older") {
                         bom.set(catalog.findLibrary("older-bom").get())
                         testJvmVersion.set(11)
@@ -55,7 +61,12 @@ class JUnitCompatibilityTest {
             newerTestJvmVersion.set(21)
 
             val baseline = tasks.named<Test>("test")
-            val runtimes = listOf("older" to (11 to "1.0"), "newer" to (21 to "2.0"))
+            val runtimes = listOf(
+                "junit5" to (11 to "5.0"),
+                "junit6" to (21 to "6.0"),
+                "older" to (11 to "1.0"),
+                "newer" to (21 to "2.0"),
+            )
             tasks.register("verifyRuntimes") {
                 doLast {
                     val reports = mutableSetOf(baseline.get().reports.junitXml.outputLocation.get().asFile)
@@ -92,6 +103,10 @@ class JUnitCompatibilityTest {
 
         val checkResult = runner.withArguments("check", "--dry-run", "--stacktrace").build()
         assertThat(checkResult.output).contains(
+            ":junit5Test SKIPPED",
+            ":junit6Test SKIPPED",
+            ":junit5OsgiTest SKIPPED",
+            ":junit6OsgiTest SKIPPED",
             ":olderTest SKIPPED",
             ":newerTest SKIPPED",
             ":olderOsgiTest SKIPPED",

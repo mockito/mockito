@@ -3,6 +3,7 @@ import aQute.bnd.gradle.Resolve
 plugins {
     id("mockito.library-conventions")
     id("mockito.javadoc-conventions")
+    id("mockito.junit-jupiter-compatibility-conventions")
 }
 
 description = "Mockito JUnit 5 support"

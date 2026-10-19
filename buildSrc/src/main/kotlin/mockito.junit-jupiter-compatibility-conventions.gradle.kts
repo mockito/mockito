@@ -13,6 +13,17 @@ val osgiTest = sourceSets.create("osgiTest")
 val osgiTestBundle = sourceSets.create("osgiTestBundle")
 val libraries = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
+junitCompatibility.runtimes {
+    register("junit5") {
+        bom.convention(libraries.findLibrary("junit5-bom").get())
+        testJvmVersion.convention(11)
+    }
+    register("junit6") {
+        bom.convention(libraries.findLibrary("junit6-bom").get())
+        testJvmVersion.convention(17)
+    }
+}
+
 // Compile against the existing test baseline; each runtime BOM selects the installed JUnit bundles.
 configurations.named(osgiTestBundle.compileClasspathConfigurationName) {
     extendsFrom(configurations.testImplementation.get(), configurations.testRuntimeOnly.get())
