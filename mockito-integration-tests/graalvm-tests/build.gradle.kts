@@ -20,9 +20,15 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+val graalVmLauncher = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(21)
+    nativeImageCapable = true
+}
+
 graalvmNative {
     binaries {
         named("test") {
+            javaLauncher = graalVmLauncher
             buildArgs.addAll("--verbose", "-O0")
         }
     }
@@ -43,6 +49,7 @@ tasks {
     test {
         forkEvery = 1
         if (project.hasProperty("enableGraalTracingAgent")) {
+            javaLauncher = graalVmLauncher
             finalizedBy("metadataCopy")
         }
     }
