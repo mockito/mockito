@@ -23,7 +23,6 @@ import org.assertj.core.api.AbstractListAssert;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.Condition;
 import org.assertj.core.api.ObjectAssert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -467,7 +466,6 @@ public class VarargsTest {
     }
 
     @Test
-    @Ignore("Fails due to https://github.com/mockito/mockito/issues/1593")
     public void shouldNotVerifyExactlyOneVarArg_any() {
         mock.varargs("two", "params");
 
