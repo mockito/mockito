@@ -81,7 +81,7 @@ public class SpyEqualsAndHashCodeTest extends TestBase {
 
     @Test
     public void mockito_does_not_rely_on_equals_or_hash_code_of_a_spy() {
-        Hostile spy = spy(new Hostile());
+        ThrowingEqualsAndHashCode spy = spy(new ThrowingEqualsAndHashCode());
 
         when(spy.name()).thenReturn("stubbed");
         assertThat(spy.name()).isEqualTo("stubbed");
@@ -127,7 +127,7 @@ public class SpyEqualsAndHashCodeTest extends TestBase {
         }
     }
 
-    public static class Hostile {
+    public static class ThrowingEqualsAndHashCode {
 
         public String name() {
             return "real";

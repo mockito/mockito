@@ -137,7 +137,7 @@ public class ArgMismatchFinderTest extends TestBase {
     @Test
     public void mismatches_on_a_spy_do_not_call_its_equals_or_hash_code() {
         // given
-        Hostile spy = spy(new Hostile());
+        ThrowingEqualsAndHashCode spy = spy(new ThrowingEqualsAndHashCode());
         doReturn("1").when(spy).simpleMethod(1);
         doReturn("2").when(spy).simpleMethod(2);
         spy.simpleMethod(3);
@@ -149,7 +149,7 @@ public class ArgMismatchFinderTest extends TestBase {
         assertThat(mismatches.size()).isEqualTo(2);
     }
 
-    public static class Hostile {
+    public static class ThrowingEqualsAndHashCode {
 
         public String simpleMethod(int argument) {
             return "real";

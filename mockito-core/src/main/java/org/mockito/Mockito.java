@@ -807,10 +807,7 @@ import java.util.function.Function;
  * Also you won't be able to verify those method as well.
  * </li>
  *
- * <li>Spies use the real <code>equals()</code> and <code>hashCode()</code> methods of the spied type,
- * so a spy is equal to an equal real object and can be found in hash based collections.
- * Calls to these two methods are not recorded as interactions. Mocks keep identity based
- * <code>equals()</code> and <code>hashCode()</code>.
+ * <li>Spies use the real <code>equals()</code> and <code>hashCode()</code> of the spied object.
  * </li>
  * </ol>
  *
@@ -2402,10 +2399,7 @@ public class Mockito extends ArgumentMatchers {
      * Also you won't be able to verify those method as well.
      * </li>
      *
-     * <li>Spies use the real <code>equals()</code> and <code>hashCode()</code> methods of the spied type,
-     * so a spy is equal to an equal real object and can be found in hash based collections.
-     * Calls to these two methods are not recorded as interactions. Mocks keep identity based
-     * <code>equals()</code> and <code>hashCode()</code>.
+     * <li>Spies use the real <code>equals()</code> and <code>hashCode()</code> of the spied object.
      * </li>
      * </ol>
      * <p>
