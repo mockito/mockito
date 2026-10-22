@@ -178,6 +178,7 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
         // given
         final IMethods mock = mock(IMethods.class);
         final MockCreationSettings<?> settings = mockingDetails(mock).getMockCreationSettings();
+        final int initialListeners = settings.getStubbingLookupListeners().size();
 
         List<Runnable> runnables = new LinkedList<Runnable>();
         for (int i = 0; i < 50; i++) {
@@ -197,9 +198,7 @@ public class StubbingLookupListenerCallbackTest extends TestBase {
         ConcurrentTesting.concurrently(runnables.toArray(new Runnable[runnables.size()]));
 
         // then
-        // This assertion may be flaky. If it is let's fix it or remove the test. For now, I'm
-        // keeping the test.
-        assertEquals(50, settings.getStubbingLookupListeners().size());
+        assertEquals(initialListeners + 50, settings.getStubbingLookupListeners().size());
     }
 
     private static class NoWater extends RuntimeException {}
