@@ -149,6 +149,34 @@ public class ArgumentCaptor<T> {
     }
 
     /**
+     * Static alias of {@link #forClass(Class)}.
+     * <p>
+     * Intended for use with static imports where the plain {@code forClass} name is
+     * ambiguous or insufficiently expressive. The body delegates to
+     * {@link #forClass(Class)} and behaves identically.
+     * <p>
+     * Example usage:
+     *
+     * <pre class="code"><code class="java">
+     *   import static org.mockito.ArgumentCaptor.captorForClass;
+     *
+     *   ArgumentCaptor&lt;Person&gt; argument = captorForClass(Person.class);
+     *   verify(mock).doSomething(argument.capture());
+     *   assertEquals("John", argument.getValue().getName());
+     * </code></pre>
+     *
+     * @param clazz Type matching the parameter to be captured.
+     * @param <S> Type of clazz
+     * @param <U> Type of object captured by the newly built ArgumentCaptor
+     * @return A new ArgumentCaptor
+     * @see #forClass(Class)
+     * @since 5.24.0
+     */
+    public static <U, S extends U> ArgumentCaptor<U> captorForClass(Class<S> clazz) {
+        return forClass(clazz);
+    }
+
+    /**
      * Build a new <code>ArgumentCaptor</code> by inferring the class type.
      * <p>
      * This enables inferring the generic type of an argument captor without
