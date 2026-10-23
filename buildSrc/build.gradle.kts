@@ -20,4 +20,13 @@ dependencies {
 
     // https://github.com/gradle/gradle/issues/15383
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+
+    testImplementation(gradleTestKit())
+    testImplementation(libs.assertj)
+    testImplementation(libs.junit5.api)
+    testRuntimeOnly(libs.bundles.junit5.runtime)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

@@ -43,13 +43,13 @@ dependencies {
     implementation(libs.objenesis)
 
     testImplementation(libs.assertj)
-    testImplementation(libs.junit.jupiter.api)
-    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.junit5.api)
+    testImplementation(libs.junit5.params)
 
     testFixturesImplementation(libs.assertj)
     testFixturesImplementation(libs.objenesis)
     testFixturesCompileOnly(libs.junit4)
-    testFixturesCompileOnly(libs.junit.jupiter.api)
+    testFixturesCompileOnly(libs.junit5.api)
 }
 
 mockitoJavadoc {

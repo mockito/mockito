@@ -3,16 +3,17 @@ import aQute.bnd.gradle.Resolve
 plugins {
     id("mockito.library-conventions")
     id("mockito.javadoc-conventions")
+    id("mockito.junit-jupiter-compatibility-conventions")
 }
 
 description = "Mockito JUnit 5 support"
 
 dependencies {
     api(project(":mockito-core"))
-    implementation(libs.junit.jupiter.api)
+    implementation(libs.junit5.api)
     testImplementation(libs.assertj)
-    testImplementation(libs.junit.platform.launcher)
-    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit5.launcher)
+    testRuntimeOnly(libs.junit5.engine)
 }
 
 mockitoJavadoc {
@@ -104,7 +105,7 @@ tasks {
         if (JavaVersion.current() >= JavaVersion.VERSION_18) {
             javadocDocletOptions {
                 addStringOption("-link-modularity-mismatch", "info")
-                links("https://docs.junit.org/${libs.versions.junit.jupiter.get()}/api/")
+                links("https://docs.junit.org/${libs.versions.junit5.get()}/api/")
             }
         } else {
             logger.info("Javadoc tool below 18, links to JUnit Jupiter javadocs was not added.")

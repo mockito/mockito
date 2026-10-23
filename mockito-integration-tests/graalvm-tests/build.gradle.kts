@@ -11,7 +11,8 @@ dependencies {
     implementation(project(":mockito-extensions:mockito-subclass"))
     testImplementation(libs.junit4)
     testImplementation(libs.assertj)
-    testImplementation(libs.junit.platform.launcher)
+    testImplementation(platform(libs.junit5.bom))
+    testImplementation(libs.junit5.launcher)
 }
 
 // org.graalvm.buildtools.native:0.11.0 requires Java >=17
