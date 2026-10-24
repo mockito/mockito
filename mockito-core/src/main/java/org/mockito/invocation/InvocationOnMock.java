@@ -95,4 +95,47 @@ public interface InvocationOnMock extends Serializable {
      * @throws Throwable in case real method throws
      */
     Object callRealMethod() throws Throwable;
+
+    /**
+     * Returns the number of times the stubbing that answered this invocation has
+     * already answered, including the current invocation.
+     *
+     * <p>
+     * This is useful when an {@link org.mockito.stubbing.Answer} needs to behave
+     * differently depending on how many times it has been called. For example, to fail
+     * the first few calls and then return a value:
+     *
+     * <pre class="code"><code class="java">
+     * when(mock.get(anyString())).thenAnswer(invocation -&gt; {
+     *     if (invocation.getInvocationCount() &lt;= 2) {
+     *         throw new RuntimeException("not ready yet");
+     *     }
+     *     return 200;
+     * });
+     * </code></pre>
+     *
+     * <p>
+     * The count follows the stubbing's argument matchers, not argument equality.
+     * Each distinct {@code when(...)} registration has its own counter:
+     * {@code when(mock.get("foo"))} and {@code when(mock.get("bar"))} are two
+     * stubbings and are counted independently. A single stubbing that uses a
+     * matcher like {@code anyString()} collapses multiple argument values into one
+     * counter, so calls with {@code "a"}, {@code "b"}, {@code "a"} count as
+     * {@code 1, 2, 3}. Invocations not matched by any stubbing return {@code 0}.
+     *
+     * <p>
+     * The current invocation is included in the count, so the first call returns
+     * {@code 1}.
+     *
+     * @return the 1-based count of invocations matched by this stubbing, including this
+     *         one, or {@code 0} if no stubbing matched this invocation
+     * @since 5.25.0
+     */
+    default int getInvocationCount() {
+        if (!(this instanceof Invocation)) {
+            return 0;
+        }
+        StubInfo stubInfo = ((Invocation) this).stubInfo();
+        return stubInfo == null ? 0 : stubInfo.getInvocationCount();
+    }
 }
