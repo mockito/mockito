@@ -50,11 +50,14 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: 17
-        cache: 'gradle'
 
-    - name: 3. Validate Gradle wrapper
-      if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
-      uses: gradle/actions/wrapper-validation@v6.4.0 # https://github.com/gradle/wrapper-validation-action
+    - name: 3. Set up Gradle
+      uses: gradle/actions/setup-gradle@v6.4.0
+      with:
+        gradle-home-cache-includes: |
+          caches
+          notifications
+          jdks
 
     - name: 4. Build and check reproducibility of artifacts (single job only)
       if: matrix.java == 11 && matrix.entry.mock-maker == 'mock-maker-default' # SINGLE-MATRIX-JOB
@@ -124,15 +127,22 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: 17
-        cache: 'gradle'
 
-    - name: 3. Enable KVM.
+    - name: 3. Set up Gradle
+      uses: gradle/actions/setup-gradle@v6.4.0
+      with:
+        gradle-home-cache-includes: |
+          caches
+          notifications
+          jdks
+
+    - name: 4. Enable KVM.
       run: |
         echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
         sudo udevadm control --reload-rules
         sudo udevadm trigger --name-match=kvm
 
-    - name: 4. Run Android tests on Android API level ${{ matrix.android-api }}
+    - name: 5. Run Android tests on Android API level ${{ matrix.android-api }}
       uses: reactivecircus/android-emulator-runner@v2
       with:
         arch: x86_64
@@ -172,7 +182,7 @@ jobs:
           # Make sure the step fails if the tests failed.
           exit $(cat gradle.exit)
 
-    - name: 5. Upload artifact "android-tests-results-${{ matrix.android-api }}"
+    - name: 6. Upload artifact "android-tests-results-${{ matrix.android-api }}"
       if: success() || failure()
       uses: actions/upload-artifact@v7
       with:
@@ -182,7 +192,7 @@ jobs:
           ${{ github.workspace }}/emulator.log
           ${{ github.workspace }}/emulator-startup.log
 
-    - name: 6. Upload coverage report
+    - name: 7. Upload coverage report
       uses: codecov/codecov-action@v7
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -208,12 +218,19 @@ jobs:
       with:
         java-version: "21"
         distribution: "graalvm"
-        cache: gradle
 
-    - name: 3. Run GraalVM native tests with metadata
+    - name: 3. Set up Gradle
+      uses: gradle/actions/setup-gradle@v6.4.0
+      with:
+        gradle-home-cache-includes: |
+          caches
+          notifications
+          jdks
+
+    - name: 4. Run GraalVM native tests with metadata
       run: ./gradlew :mockito-integration-tests:graalvm-tests:nativeTest -PenableGraalTracingAgent --scan
 
-    - name: 4. Verify GraalVM metadata generation
+    - name: 5. Verify GraalVM metadata generation
       run: |
         REFLECT_CONFIG="mockito-integration-tests/graalvm-tests/src/test/resources/META-INF/native-image/org.mockito/graalvm-tests/reflect-config.json"
         test -f "$REFLECT_CONFIG" || {
@@ -251,9 +268,14 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 21
-          cache: 'gradle'
 
-      - name: 3. Build and release
+      - name: 3. Set up Gradle
+        uses: gradle/actions/setup-gradle@v6.4.0
+        with:
+          # Release artifacts must be built without restored CI state.
+          cache-disabled: true
+
+      - name: 4. Build and release
         run: >
           ./gradlew
           githubRelease
