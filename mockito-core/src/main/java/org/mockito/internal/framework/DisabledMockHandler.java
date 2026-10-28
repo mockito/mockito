@@ -36,7 +36,30 @@ public class DisabledMockHandler implements MockHandler<Object> {
 
     @Override
     public Object handle(Invocation invocation) {
-        throw new DisabledMockException();
+        StringBuilder message = new StringBuilder("Mock accessed after inline mocks were cleared");
+
+        try {
+            message.append("\nMocked type: ")
+                    .append(invocation.getMethod().getDeclaringClass().getName());
+        } catch (RuntimeException ignored) {
+            // Keep the original message if the mocked type cannot be rendered.
+        }
+
+        try {
+            message.append("\nInvocation: ").append(invocation.getMethod().toGenericString());
+        } catch (RuntimeException ignored) {
+            // Keep the available details if the method cannot be rendered.
+        }
+
+        try {
+            if (invocation.getLocation() != null) {
+                message.append("\nLocation: ").append(invocation.getLocation());
+            }
+        } catch (RuntimeException ignored) {
+            // Keep the available details if the location cannot be rendered.
+        }
+
+        throw new DisabledMockException(message.toString());
     }
 
     @Override
@@ -89,7 +112,9 @@ public class DisabledMockHandler implements MockHandler<Object> {
 
         @Override
         public boolean isSerializable() {
-            throw new DisabledMockException();
+            // Invocation creation only needs to know whether to wrap the reflected method in its
+            // serializable variant. The diagnostic invocation does not escape the exception path.
+            return false;
         }
 
         @Override
