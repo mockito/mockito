@@ -1,0 +1,24 @@
+coverage:
+  status:
+    project: yes
+    patch: yes
+    changes: yes
+
+comment:
+  # https://docs.codecov.com/docs/pull-request-comments#layout
+  # https://docs.codecov.com/docs/changing-your-pr-comment-format
+  layout: "header, reach, changes, uncovered, tree, diff, flags, files, footer"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes
+  branches: null
+
+flags:
+  unit-tests:
+    paths:
+      - "mockito-core/**"
+      - "mockito-extensions/**"
+  integration-tests:
+    paths:
+      - "mockito-integration-tests/**"
