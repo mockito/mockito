@@ -5,6 +5,7 @@
 package org.mockito.internal.util;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import org.mockito.mock.MockName;
 import org.mockito.mock.MockType;
@@ -36,7 +37,7 @@ public class MockNameImpl implements MockName, Serializable {
             className = clazz.getSuperclass().getSimpleName();
         }
         // lower case first letter
-        return className.substring(0, 1).toLowerCase() + className.substring(1);
+        return className.substring(0, 1).toLowerCase(Locale.ROOT) + className.substring(1);
     }
 
     private static String toClassName(Class<?> clazz) {
