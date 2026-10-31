@@ -168,6 +168,17 @@ public class DoNotMockTest {
     }
 
     @Test
+    public void thrown_exception_includes_reason_of_custom_donotmock_annotation_with_reason() {
+        assertThatThrownBy(
+                        () -> {
+                            NotMockableWithDifferentAnnotationAndReason notMockable =
+                                    mock(NotMockableWithDifferentAnnotationAndReason.class);
+                        })
+                .isInstanceOf(DoNotMockException.class)
+                .hasMessageContaining("Custom annotation reason");
+    }
+
+    @Test
     public void can_not_statically_mock_class_with_custom_donotmock_annotation() {
         assertThatThrownBy(
                         () -> {
@@ -185,6 +196,9 @@ public class DoNotMockTest {
 
     @org.mockitousage.annotation.org.mockito.DoNotMock
     private static class NotMockableWithDifferentAnnotation {}
+
+    @org.mockitousage.annotation.org.mockito.DoNotMock(reason = "Custom annotation reason")
+    private static class NotMockableWithDifferentAnnotationAndReason {}
 
     @DoNotMock(reason = "Special reason")
     private interface NotMockableWithReason {}

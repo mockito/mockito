@@ -16,4 +16,6 @@ import java.lang.annotation.Target;
  */
 @Target({TYPE})
 @Retention(RUNTIME)
-public @interface DoNotMock {}
+public @interface DoNotMock {
+    String reason() default "";
+}
