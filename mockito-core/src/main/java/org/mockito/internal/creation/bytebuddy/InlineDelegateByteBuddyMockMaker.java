@@ -209,7 +209,7 @@ class InlineDelegateByteBuddyMockMaker
                 throw new IllegalStateException(
                         join(
                                 "Mockito could not self-attach a Java agent to the current VM. This feature is required for inline mocking.",
-                                "This error occured due to an I/O error during the creation of this agent: "
+                                "This error occurred due to an I/O error during the creation of this agent: "
                                         + ioe,
                                 "",
                                 "Potentially, the current VM does not support the instrumentation API correctly"),
