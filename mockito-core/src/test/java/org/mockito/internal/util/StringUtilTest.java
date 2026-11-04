@@ -10,6 +10,8 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import java.util.Locale;
+
 import org.junit.Test;
 
 public class StringUtilTest {
@@ -25,6 +27,19 @@ public class StringUtilTest {
                 "<Has exactly 3 elements>",
                 StringUtil.decamelizeMatcherName("HasExactly3Elements"));
         assertEquals("<custom argument matcher>", StringUtil.decamelizeMatcherName(""));
+    }
+
+    @Test
+    public void decamelizes_matcher_name_independently_of_default_locale() {
+        Locale defaultLocale = Locale.getDefault();
+        try {
+            Locale.setDefault(Locale.forLanguageTag("tr-TR"));
+            assertEquals(
+                    "<Contains item ignoring case>",
+                    StringUtil.decamelizeMatcherName("ContainsItemIgnoringCase"));
+        } finally {
+            Locale.setDefault(defaultLocale);
+        }
     }
 
     @Test

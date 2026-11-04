@@ -18,6 +18,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.junit.Test;
@@ -86,6 +87,25 @@ public class MocksCreationTest extends TestBase {
 
         // then
         assertThat(name).contains("great mockie");
+    }
+
+    @Test
+    public void should_name_mock_after_type_independently_of_default_locale() {
+        Locale defaultLocale = Locale.getDefault();
+        try {
+            // given
+            Locale.setDefault(Locale.forLanguageTag("tr-TR"));
+            IMethods mock = mock(IMethods.class);
+
+            // when
+            String name =
+                    Mockito.mockingDetails(mock).getMockCreationSettings().getMockName().toString();
+
+            // then
+            assertThat(name).isEqualTo("iMethods");
+        } finally {
+            Locale.setDefault(defaultLocale);
+        }
     }
 
     @Test

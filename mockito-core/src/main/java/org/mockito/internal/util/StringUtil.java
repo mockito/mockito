@@ -7,6 +7,7 @@ package org.mockito.internal.util;
 import static java.util.Arrays.asList;
 
 import java.util.Collection;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -83,7 +84,7 @@ public class StringUtil {
                 deCameled.append(match.group());
             } else {
                 deCameled.append(" ");
-                deCameled.append(match.group().toLowerCase());
+                deCameled.append(match.group().toLowerCase(Locale.ROOT));
             }
         }
         return deCameled.toString();
