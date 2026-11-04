@@ -4,9 +4,18 @@
  */
 package org.mockito.internal.verification;
 
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Set;
+
+import org.mockito.ArgumentMatcher;
 import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.internal.util.Timer;
 import org.mockito.internal.verification.api.VerificationData;
+import org.mockito.invocation.Invocation;
+import org.mockito.invocation.Location;
+import org.mockito.invocation.MatchableInvocation;
 import org.mockito.verification.VerificationMode;
 
 /**
@@ -75,16 +84,22 @@ public class VerificationOverTimeImpl implements VerificationMode {
      * given in the constructor. If true, this verification mode is immediately satisfied once the delegate is. If
      * false, this verification mode is not satisfied until the delegate is satisfied and the full time has passed.
      *
+     * Because the delegate is polled repeatedly, and evaluating the delegate captures arguments as a side effect,
+     * the data is wrapped so that the arguments of any given invocation are captured at most once, no matter how
+     * many times that invocation is seen by a poll.
+     *
      * @throws MockitoAssertionError if the delegate verification mode does not succeed before the timeout
      */
     @Override
     public void verify(VerificationData data) {
         AssertionError error = null;
 
+        VerificationData polledData = new CaptureOncePerInvocationData(data);
+
         timer.start();
         while (timer.isCounting()) {
             try {
-                delegate.verify(data);
+                delegate.verify(polledData);
 
                 if (returnOnSuccess) {
                     return;
@@ -142,5 +157,95 @@ public class VerificationOverTimeImpl implements VerificationMode {
 
     public VerificationMode getDelegate() {
         return delegate;
+    }
+
+    /**
+     * Verification data that hands out a target which captures the arguments of any given invocation
+     * at most once, see {@link CaptureOncePerInvocation}.
+     */
+    private static class CaptureOncePerInvocationData implements VerificationData {
+
+        private final VerificationData delegate;
+        private final MatchableInvocation target;
+
+        CaptureOncePerInvocationData(VerificationData delegate) {
+            this.delegate = delegate;
+            this.target = new CaptureOncePerInvocation(delegate.getTarget());
+        }
+
+        @Override
+        public List<Invocation> getAllInvocations() {
+            return delegate.getAllInvocations();
+        }
+
+        @Override
+        public MatchableInvocation getTarget() {
+            return target;
+        }
+    }
+
+    /**
+     * Delegates to another {@link MatchableInvocation}, but captures the arguments of any given
+     * invocation only the first time it is asked to.
+     *
+     * Verification over time polls the delegate verification mode repeatedly. Capturing arguments is a
+     * side effect of evaluating a verification mode, so without this guard an {@link org.mockito.ArgumentCaptor}
+     * would collect one copy of every argument per poll rather than one per invocation, and a long
+     * enough duration could exhaust the heap.
+     *
+     * Invocations are compared by identity: an invocation that is genuinely recorded twice is a
+     * different instance and is captured twice, as it should be.
+     */
+    private static class CaptureOncePerInvocation implements MatchableInvocation {
+
+        private final MatchableInvocation delegate;
+        private final Set<Invocation> alreadyCaptured =
+                Collections.newSetFromMap(new IdentityHashMap<>());
+
+        CaptureOncePerInvocation(MatchableInvocation delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void captureArgumentsFrom(Invocation invocation) {
+            if (alreadyCaptured.add(invocation)) {
+                delegate.captureArgumentsFrom(invocation);
+            }
+        }
+
+        @Override
+        public Invocation getInvocation() {
+            return delegate.getInvocation();
+        }
+
+        @Override
+        public List<ArgumentMatcher> getMatchers() {
+            return delegate.getMatchers();
+        }
+
+        @Override
+        public boolean matches(Invocation candidate) {
+            return delegate.matches(candidate);
+        }
+
+        @Override
+        public boolean hasSimilarMethod(Invocation candidate) {
+            return delegate.hasSimilarMethod(candidate);
+        }
+
+        @Override
+        public boolean hasSameMethod(Invocation candidate) {
+            return delegate.hasSameMethod(candidate);
+        }
+
+        @Override
+        public Location getLocation() {
+            return delegate.getLocation();
+        }
+
+        @Override
+        public String toString() {
+            return delegate.toString();
+        }
     }
 }
