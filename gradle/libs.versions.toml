@@ -41,7 +41,7 @@ junit5-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 junit5-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.6.3-native-mt" }
-objenesis = { module = "org.objenesis:objenesis", version = "3.6" }
+objenesis = { module = "org.objenesis:objenesis", version = "3.5" }
 opentest4j = { module = "org.opentest4j:opentest4j", version = "1.3.0" }
 osgi = { module = "org.osgi:osgi.core", version = "8.0.0" }
 
