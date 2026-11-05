@@ -18,6 +18,8 @@ plugins.withType<JavaPlugin> {
             // I don't believe those warnings add value given modern IDEs
             options.isWarnings = false
             options.encoding = "UTF-8"
+            // compile against the Java 11 API when building with a newer JDK
+            options.release.set(javaReleaseVersion)
         }
 
         withType<Javadoc>().configureEach {
