@@ -22,6 +22,7 @@ import net.bytebuddy.implementation.bind.annotation.RuntimeType;
 import net.bytebuddy.implementation.bind.annotation.StubValue;
 import net.bytebuddy.implementation.bind.annotation.SuperCall;
 import net.bytebuddy.implementation.bind.annotation.This;
+import org.mockito.Answers;
 import org.mockito.internal.creation.bytebuddy.ByteBuddyCrossClassLoaderSerializationSupport;
 import org.mockito.internal.debugging.LocationFactory;
 import org.mockito.internal.invocation.RealMethod;
@@ -102,10 +103,26 @@ public class MockMethodInterceptor implements Serializable {
         return serializationSupport;
     }
 
+    /**
+     * Returns {@code true} if this mock is a spy, i.e. its default answer calls the real methods.
+     * Spies use the real {@code hashCode} and {@code equals} methods while all other mocks
+     * use identity.
+     */
+    public boolean isSpy() {
+        return mockCreationSettings.getDefaultAnswer() == Answers.CALLS_REAL_METHODS;
+    }
+
     public static final class ForHashCode {
 
         @SuppressWarnings("unused")
-        public static int doIdentityHashCode(@This Object thiz) {
+        public static int doHashCode(
+                @This Object thiz,
+                @FieldValue("mockitoInterceptor") MockMethodInterceptor interceptor,
+                @SuperCall(nullIfImpossible = true) Callable<Integer> superCall)
+                throws Exception {
+            if (superCall != null && interceptor != null && interceptor.isSpy()) {
+                return superCall.call();
+            }
             return System.identityHashCode(thiz);
         }
 
@@ -115,7 +132,15 @@ public class MockMethodInterceptor implements Serializable {
     public static class ForEquals {
 
         @SuppressWarnings("unused")
-        public static boolean doIdentityEquals(@This Object thiz, @Argument(0) Object other) {
+        public static boolean doEquals(
+                @This Object thiz,
+                @Argument(0) Object other,
+                @FieldValue("mockitoInterceptor") MockMethodInterceptor interceptor,
+                @SuperCall(nullIfImpossible = true) Callable<Boolean> superCall)
+                throws Exception {
+            if (superCall != null && interceptor != null && interceptor.isSpy()) {
+                return superCall.call();
+            }
             return thiz == other;
         }
     }

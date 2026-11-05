@@ -82,6 +82,8 @@ public abstract class MockMethodDispatcher {
 
     public abstract boolean isMock(Object instance);
 
+    public abstract boolean isSpy(Object instance);
+
     public abstract boolean isMocked(Object instance);
 
     public abstract boolean isMockedStatic(Class<?> type);
