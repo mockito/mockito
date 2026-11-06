@@ -14,7 +14,12 @@ import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.mockito.internal.util.MockUtil;
@@ -165,10 +170,16 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
             final Object injectee,
             final Field injectMocksField) {
         List<Object> mockTypeMatches = new ArrayList<>();
+        // resolve type variables of superclass fields, e.g. for
+        //   class GenericType<T> { T field; }
+        //   class TypeImpl extends GenericType<InputStream> {}
+        // the field's type variable T is resolved to InputStream, based on the actual type
+        // arguments the class of the object under test supplies to its generic superclass
+        Type candidateFieldType = resolveCandidateFieldType(candidateFieldToBeInjected, injectee);
         for (Object mock : mocks) {
             if (candidateFieldToBeInjected.getType().isAssignableFrom(mock.getClass())) {
                 Type mockType = MockUtil.getMockSettings(mock).getGenericTypeToMock();
-                Type typeToMock = candidateFieldToBeInjected.getGenericType();
+                Type typeToMock = candidateFieldType;
                 boolean bothHaveTypeInfo = typeToMock != null && mockType != null;
                 if (bothHaveTypeInfo) {
                     // be more specific if generic type information is available
@@ -205,5 +216,176 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
             }
         }
         return result;
+    }
+
+    /**
+     * Resolves the type variables contained in the candidate field's generic type against the
+     * actual type arguments that the class of the object under test (the "injectee") supplies to
+     * its generic superclasses. Fields declared by a generic superclass, e.g.
+     *
+     * <pre>
+     * class GenericType&lt;T&gt; { T field; List&lt;T&gt; listField; }
+     * class TypeImpl extends GenericType&lt;InputStream&gt; {}
+     * </pre>
+     *
+     * have their type variable T replaced by InputStream, so that the field is recognized as
+     * being of type InputStream (resp. {@code List<InputStream>}). Type variables that cannot be
+     * resolved this way (e.g. type variables declared by the class under test itself, or mappings
+     * that only exist if the {@code @InjectMocks} field declares a parameterized type) are left
+     * untouched, they keep being handled by {@link #recurseOnTypeArguments}.
+     */
+    private Type resolveCandidateFieldType(Field candidateFieldToBeInjected, Object injectee) {
+        Type candidateFieldType = candidateFieldToBeInjected.getGenericType();
+        if (injectee == null) {
+            return candidateFieldType;
+        }
+        Map<TypeVariable<?>, Type> actualTypeArguments =
+                collectActualTypeArgumentsOfSuperclasses(injectee.getClass());
+        if (actualTypeArguments.isEmpty()) {
+            return candidateFieldType;
+        }
+        return resolveTypeVariables(candidateFieldType, actualTypeArguments, new HashSet<>());
+    }
+
+    /**
+     * Maps the type variables declared by every generic superclass in the given class' hierarchy
+     * to the actual type argument supplied for it, e.g. for
+     * {@code class TypeImpl extends GenericType<InputStream>} this maps GenericType's type
+     * variable T to InputStream.
+     */
+    private Map<TypeVariable<?>, Type> collectActualTypeArgumentsOfSuperclasses(Class<?> clazz) {
+        Map<TypeVariable<?>, Type> actualTypeArguments = new HashMap<>();
+        for (Class<?> current = clazz;
+                current != null && current != Object.class;
+                current = current.getSuperclass()) {
+            Type genericSuperclass = current.getGenericSuperclass();
+            if (genericSuperclass instanceof ParameterizedType) {
+                ParameterizedType parameterizedSuperclass = (ParameterizedType) genericSuperclass;
+                TypeVariable<?>[] typeVariables =
+                        ((Class<?>) parameterizedSuperclass.getRawType()).getTypeParameters();
+                Type[] actualArguments = parameterizedSuperclass.getActualTypeArguments();
+                for (int i = 0; i < typeVariables.length && i < actualArguments.length; i++) {
+                    actualTypeArguments.putIfAbsent(typeVariables[i], actualArguments[i]);
+                }
+            }
+        }
+        return actualTypeArguments;
+    }
+
+    /**
+     * Replaces type variables by their actual type argument, recursing so that a type variable
+     * mapped to another type variable is resolved transitively (e.g.
+     * {@code class Middle<U> extends GenericType<U>} with
+     * {@code class Leaf extends Middle<InputStream>} maps GenericType's T to InputStream via
+     * Middle's U). Unresolvable type variables are left as they are. The {@code resolutionPath}
+     * guards against cyclic mappings like {@code class Leaf<T> extends GenericType<T>}, which are
+     * left unresolved as well.
+     */
+    private Type resolveTypeVariables(
+            Type type,
+            Map<TypeVariable<?>, Type> actualTypeArguments,
+            Set<TypeVariable<?>> resolutionPath) {
+        if (type instanceof TypeVariable) {
+            TypeVariable<?> typeVariable = (TypeVariable<?>) type;
+            Type actualType = actualTypeArguments.get(typeVariable);
+            if (actualType == null || !resolutionPath.add(typeVariable)) {
+                // unresolvable or cyclic type variable, leave it as is
+                return type;
+            }
+            try {
+                return resolveTypeVariables(actualType, actualTypeArguments, resolutionPath);
+            } finally {
+                resolutionPath.remove(typeVariable);
+            }
+        }
+        if (type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            Type[] actualArguments = parameterizedType.getActualTypeArguments();
+            Type[] resolvedArguments = new Type[actualArguments.length];
+            boolean changed = false;
+            for (int i = 0; i < actualArguments.length; i++) {
+                resolvedArguments[i] =
+                        resolveTypeVariables(
+                                actualArguments[i], actualTypeArguments, resolutionPath);
+                changed |= resolvedArguments[i] != actualArguments[i];
+            }
+            return changed
+                    ? new ResolvedParameterizedType(parameterizedType, resolvedArguments)
+                    : type;
+        }
+        return type;
+    }
+
+    /**
+     * A parameterized type whose type arguments have been resolved, e.g. {@code List<T>} with
+     * T resolved to InputStream becomes {@code List<InputStream>}. Implements the
+     * {@link ParameterizedType#equals()} contract so that it compares equal to other
+     * ParameterizedTypes sharing the same generic type declaration and type arguments.
+     */
+    private static final class ResolvedParameterizedType implements ParameterizedType {
+
+        private final Type ownerType;
+        private final Class<?> rawType;
+        private final Type[] actualTypeArguments;
+
+        private ResolvedParameterizedType(ParameterizedType source, Type[] resolvedArguments) {
+            this.ownerType = source.getOwnerType();
+            this.rawType = (Class<?>) source.getRawType();
+            this.actualTypeArguments = resolvedArguments;
+        }
+
+        @Override
+        public Type[] getActualTypeArguments() {
+            return actualTypeArguments.clone();
+        }
+
+        @Override
+        public Type getRawType() {
+            return rawType;
+        }
+
+        @Override
+        public Type getOwnerType() {
+            return ownerType;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (!(other instanceof ParameterizedType)) {
+                return false;
+            }
+            ParameterizedType that = (ParameterizedType) other;
+            return Objects.equals(ownerType, that.getOwnerType())
+                    && rawType.equals(that.getRawType())
+                    && Arrays.equals(actualTypeArguments, that.getActualTypeArguments());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(ownerType, rawType, Arrays.hashCode(actualTypeArguments));
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder result = new StringBuilder();
+            if (ownerType != null) {
+                result.append(ownerType.getTypeName()).append('.');
+            }
+            result.append(rawType.getName());
+            if (actualTypeArguments.length > 0) {
+                result.append('<');
+                for (int i = 0; i < actualTypeArguments.length; i++) {
+                    if (i > 0) {
+                        result.append(", ");
+                    }
+                    result.append(actualTypeArguments[i].getTypeName());
+                }
+                result.append('>');
+            }
+            return result.toString();
+        }
     }
 }
