@@ -8,6 +8,8 @@ import org.junit.runners.model.Statement;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.MockitoSession;
+import org.mockito.exceptions.base.MockitoException;
+import org.mockito.exceptions.misusing.DisabledMockException;
 import org.mockito.internal.session.MockitoSessionLoggerAdapter;
 import org.mockito.plugins.MockitoLogger;
 import org.mockito.quality.Strictness;
@@ -41,7 +43,23 @@ class JUnitSessionStore {
                     closeable = MockitoAnnotations.openMocks(target);
                 }
                 Throwable testFailure = evaluateSafely(base);
-                session.finishMocking(testFailure);
+                try {
+                    session.finishMocking(testFailure);
+                } catch (DisabledMockException e) {
+                    // The user cleared the inline mocks (e.g.
+                    // Mockito.framework().clearInlineMocks()
+                    // in @After) while this rule was still holding a session. Finishing the session
+                    // inspects the mocks it created, but cleared mocks reject any access. Explain
+                    // the
+                    // situation instead of surfacing a bare DisabledMockException, see #1902.
+                    throw new MockitoException(
+                            "The JUnit rule failed to finish mocking because inline mocks were already cleared. "
+                                    + "Mockito.framework().clearInlineMocks() was likely called by @After or an outer rule, "
+                                    + "which runs before MockitoJUnit.rule() finishes the Mockito session. "
+                                    + "Call clearInlineMocks() after all tests have finished, or use MockitoAnnotations.openMocks() "
+                                    + "instead of the rule. See https://github.com/mockito/mockito/issues/1902",
+                            e);
+                }
                 if (closeable != null) {
                     closeable.close();
                 }
