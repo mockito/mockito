@@ -90,6 +90,7 @@ public class VerificationOverTimeImpl implements VerificationMode {
                     return;
                 } else {
                     error = null;
+                    sleep(pollingPeriodMillis);
                 }
             } catch (AssertionError e) {
                 error = handleVerifyException(e);
