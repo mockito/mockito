@@ -48,6 +48,15 @@ public class ArgumentCaptorTest {
     }
 
     @Test
+    public void captorForClass_returns_captor_equivalent_to_forClass() throws Exception {
+        class Foo {}
+
+        ArgumentCaptor<Foo> captor = ArgumentCaptor.captorForClass(Foo.class);
+        assertThat(captor.getCaptorType()).isEqualTo(Foo.class);
+        assertThat(captor.capture()).isNull();
+    }
+
+    @Test
     public void captor_calls_forClass_with_the_inferred_argument() throws Exception {
         ArgumentCaptor<Map<String, Object>> captor = ArgumentCaptor.captor();
         assertThat(captor.getCaptorType()).isEqualTo(Map.class);
