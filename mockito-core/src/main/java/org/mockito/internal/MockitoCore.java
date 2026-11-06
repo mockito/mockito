@@ -40,7 +40,6 @@ import org.mockito.MockedSingleton;
 import org.mockito.MockedStatic;
 import org.mockito.MockingDetails;
 import org.mockito.exceptions.misusing.DoNotMockException;
-import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
@@ -201,17 +200,16 @@ public class MockitoCore {
         assertMocksNotEmpty(mocks);
         mockingProgress().validateState();
         for (Object mock : mocks) {
-            try {
-                if (mock == null) {
-                    throw nullPassedToVerifyNoMoreInteractions();
-                }
-                InvocationContainerImpl invocations = getInvocationContainer(mock);
-                assertNotStubOnlyMock(mock);
-                VerificationDataImpl data = new VerificationDataImpl(invocations, null);
-                noMoreInteractions().verify(data);
-            } catch (NotAMockException e) {
+            if (mock == null) {
+                throw nullPassedToVerifyNoMoreInteractions();
+            }
+            if (!isMock(mock)) {
                 throw notAMockPassedToVerifyNoMoreInteractions();
             }
+            InvocationContainerImpl invocations = getInvocationContainer(mock);
+            assertNotStubOnlyMock(mock);
+            VerificationDataImpl data = new VerificationDataImpl(invocations, null);
+            noMoreInteractions().verify(data);
         }
     }
 
@@ -219,17 +217,16 @@ public class MockitoCore {
         assertMocksNotEmpty(mocks);
         mockingProgress().validateState();
         for (Object mock : mocks) {
-            try {
-                if (mock == null) {
-                    throw nullPassedToVerifyNoMoreInteractions();
-                }
-                InvocationContainerImpl invocations = getInvocationContainer(mock);
-                assertNotStubOnlyMock(mock);
-                VerificationDataImpl data = new VerificationDataImpl(invocations, null);
-                noInteractions().verify(data);
-            } catch (NotAMockException e) {
+            if (mock == null) {
+                throw nullPassedToVerifyNoMoreInteractions();
+            }
+            if (!isMock(mock)) {
                 throw notAMockPassedToVerifyNoMoreInteractions();
             }
+            InvocationContainerImpl invocations = getInvocationContainer(mock);
+            assertNotStubOnlyMock(mock);
+            VerificationDataImpl data = new VerificationDataImpl(invocations, null);
+            noInteractions().verify(data);
         }
     }
 
