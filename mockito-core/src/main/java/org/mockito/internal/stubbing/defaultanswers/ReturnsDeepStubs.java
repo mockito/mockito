@@ -132,6 +132,10 @@ public class ReturnsDeepStubs implements Answer<Object>, Serializable {
                                 .extraInterfaces(returnTypeGenericMetadata.rawExtraInterfaces())
                         : withSettings();
 
+        if (parentMockSettings.getStrictness() != null) {
+            mockSettings.strictness(parentMockSettings.getStrictness());
+        }
+
         return propagateSerializationSettings(mockSettings, parentMockSettings)
                 .defaultAnswer(returnsDeepStubsAnswerUsing(returnTypeGenericMetadata))
                 .mockMaker(parentMockSettings.getMockMaker());
