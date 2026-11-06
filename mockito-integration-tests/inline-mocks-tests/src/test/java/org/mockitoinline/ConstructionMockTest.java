@@ -8,6 +8,7 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -190,6 +191,72 @@ public final class ConstructionMockTest {
                 .hasMessageContaining("you cannot override the MockMaker for construction mocks");
     }
 
+    /**
+     * Tests issue #3811 — useConstructor initializes fields on construction mocks.
+     */
+    @Test
+    public void testConstructionMockWithUseConstructor() {
+        try (MockedConstruction<WithFinalField> ignored =
+                Mockito.mockConstruction(
+                        WithFinalField.class,
+                        withSettings()
+                                .useConstructor("initialized")
+                                .defaultAnswer(CALLS_REAL_METHODS))) {
+            // Intercepted constructor args are ignored; useConstructor args are used instead.
+            WithFinalField mock = new WithFinalField("from-new");
+            assertEquals("initialized", mock.getValue());
+        }
+    }
+
+    /**
+     * Tests issue #3811 — settings factory can forward intercepted args to useConstructor.
+     */
+    @Test
+    public void testConstructionMockWithUseConstructorFromContext() {
+        try (MockedConstruction<WithFinalField> ignored =
+                Mockito.mockConstruction(
+                        WithFinalField.class,
+                        context ->
+                                withSettings()
+                                        .useConstructor(context.arguments().get(0))
+                                        .defaultAnswer(CALLS_REAL_METHODS))) {
+            WithFinalField mock = new WithFinalField("from-new");
+            assertEquals("from-new", mock.getValue());
+        }
+    }
+
+    /**
+     * Tests issue #3811 — multi-arg useConstructor, matching the issue's MasterClient-style case.
+     */
+    @Test
+    public void testConstructionMockWithUseConstructorMultipleArgs() {
+        try (MockedConstruction<WithMultipleConstructorArgs> ignored =
+                Mockito.mockConstruction(
+                        WithMultipleConstructorArgs.class,
+                        context ->
+                                withSettings()
+                                        .useConstructor(
+                                                context.arguments().get(0),
+                                                context.arguments().get(1),
+                                                true)
+                                        .defaultAnswer(CALLS_REAL_METHODS))) {
+            WithMultipleConstructorArgs mock = new WithMultipleConstructorArgs("a", 2, false);
+            assertEquals("a", mock.getName());
+            assertEquals(2, mock.getCount());
+            assertTrue(mock.isEnabled());
+        }
+    }
+
+    @Test
+    public void testConstructionMockWithoutUseConstructorLeavesFieldsUninitialized() {
+        try (MockedConstruction<WithFinalField> ignored =
+                Mockito.mockConstruction(
+                        WithFinalField.class, withSettings().defaultAnswer(CALLS_REAL_METHODS))) {
+            WithFinalField mock = new WithFinalField("from-new");
+            assertNull(mock.getValue());
+        }
+    }
+
     static class Dummy {
 
         public Dummy() {}
@@ -198,6 +265,44 @@ public final class ConstructionMockTest {
 
         String foo() {
             return "foo";
+        }
+    }
+
+    static class WithFinalField {
+
+        private final String value;
+
+        WithFinalField(String value) {
+            this.value = value;
+        }
+
+        String getValue() {
+            return value;
+        }
+    }
+
+    static class WithMultipleConstructorArgs {
+
+        private final String name;
+        private final int count;
+        private final boolean enabled;
+
+        WithMultipleConstructorArgs(String name, int count, boolean enabled) {
+            this.name = name;
+            this.count = count;
+            this.enabled = enabled;
+        }
+
+        String getName() {
+            return name;
+        }
+
+        int getCount() {
+            return count;
+        }
+
+        boolean isEnabled() {
+            return enabled;
         }
     }
 }
