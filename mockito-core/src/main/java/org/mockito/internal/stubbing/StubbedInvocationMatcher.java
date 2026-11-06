@@ -7,6 +7,7 @@ package org.mockito.internal.stubbing;
 import java.io.Serializable;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.invocation.DescribedInvocation;
@@ -21,6 +22,7 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Seria
 
     private static final long serialVersionUID = 4919105134123672727L;
     private final Queue<Answer> answers = new ConcurrentLinkedQueue<>();
+    private final AtomicInteger invocationCount = new AtomicInteger();
     private final Strictness strictness;
     private final Object usedAtLock = new Object[0];
     private DescribedInvocation usedAt;
@@ -34,12 +36,17 @@ public class StubbedInvocationMatcher extends InvocationMatcher implements Seria
 
     @Override
     public Object answer(InvocationOnMock invocation) throws Throwable {
+        invocationCount.incrementAndGet();
         // see ThreadsShareGenerouslyStubbedMockTest
         Answer a;
         synchronized (answers) {
             a = answers.size() == 1 ? answers.peek() : answers.poll();
         }
         return a.answer(invocation);
+    }
+
+    public int getInvocationCount() {
+        return invocationCount.get();
     }
 
     public void addAnswer(Answer answer) {

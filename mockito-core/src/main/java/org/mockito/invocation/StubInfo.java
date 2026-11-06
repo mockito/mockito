@@ -13,4 +13,19 @@ public interface StubInfo {
      * @return the location where the invocation was stubbed.
      */
     Location stubbedAt();
+
+    /**
+     * Returns the number of times the stubbing that produced this {@code StubInfo}
+     * has answered, including the invocation that carries this {@code StubInfo}.
+     *
+     * <p>
+     * See {@link InvocationOnMock#getInvocationCount()} for the full contract.
+     *
+     * @return the 1-based count of invocations matched by this stubbing, or
+     *         {@code 0} if the count is not available
+     * @since 5.25.0
+     */
+    default int getInvocationCount() {
+        return 0;
+    }
 }
