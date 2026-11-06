@@ -372,7 +372,7 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
         public String toString() {
             StringBuilder result = new StringBuilder();
             if (ownerType != null) {
-                result.append(ownerType.getTypeName()).append('.');
+                result.append(describeType(ownerType)).append('.');
             }
             result.append(rawType.getName());
             if (actualTypeArguments.length > 0) {
@@ -381,11 +381,21 @@ public class TypeBasedCandidateFilter implements MockCandidateFilter {
                     if (i > 0) {
                         result.append(", ");
                     }
-                    result.append(actualTypeArguments[i].getTypeName());
+                    result.append(describeType(actualTypeArguments[i]));
                 }
                 result.append('>');
             }
             return result.toString();
+        }
+
+        /**
+         * Renders the type like {@link Type#getTypeName()} would, but without invoking the
+         * method on the {@link Type} interface, whose declaration is not part of the supported
+         * Android API level (see the AnimalSniffer signature checks). {@link Class#getTypeName()}
+         * is safe to call and renders arrays more readably than {@link Class#toString()}.
+         */
+        private static String describeType(Type type) {
+            return type instanceof Class ? ((Class<?>) type).getTypeName() : type.toString();
         }
     }
 }
