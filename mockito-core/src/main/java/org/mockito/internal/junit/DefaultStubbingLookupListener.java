@@ -23,15 +23,21 @@ import org.mockito.stubbing.Stubbing;
 /**
  * Default implementation of stubbing lookup listener.
  * Fails early if stub called with unexpected arguments, but only if current strictness is set to STRICT_STUBS.
+ *
+ * <p>Instances are added by the test listener when a session, rule or extension is active.
+ * MockitoCore additionally attaches an instance with a null test level strictness to every mock
+ * created with an explicit {@code MockSettings.strictness(Strictness.STRICT_STUBS)}, so that
+ * per-mock strictness is honored even when the mock is created outside an active session,
+ * rule or extension.
  */
-class DefaultStubbingLookupListener implements StubbingLookupListener, Serializable {
+public class DefaultStubbingLookupListener implements StubbingLookupListener, Serializable {
 
     private static final long serialVersionUID = -6789800638070123629L;
 
     private Strictness currentStrictness;
     private boolean mismatchesReported;
 
-    DefaultStubbingLookupListener(Strictness strictness) {
+    public DefaultStubbingLookupListener(Strictness strictness) {
         this.currentStrictness = strictness;
     }
 
