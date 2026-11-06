@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.junit.Test;
@@ -145,6 +146,48 @@ public class DescriptiveMessagesOnMisuseTest extends TestBase {
         assertThatThrownBy(
                         () -> {
                             verifyNoMoreInteractions(null, "blah");
+                        })
+                .isInstanceOf(NullInsteadOfMockException.class)
+                .hasMessageContainingAll(
+                        "Argument(s) passed is null!",
+                        "Examples of correct verifications:",
+                        "    verifyNoMoreInteractions(mockOne, mockTwo);",
+                        "    verifyNoInteractions(mockOne, mockTwo);");
+    }
+
+    @Test
+    public void shouldScreamWhenPlainObjectPassedToVerifyNoMoreInteractions() {
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoMoreInteractions("not a mock");
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContainingAll(
+                        "Argument(s) passed is not a mock!",
+                        "Examples of correct verifications:",
+                        "    verifyNoMoreInteractions(mockOne, mockTwo);",
+                        "    verifyNoInteractions(mockOne, mockTwo);");
+    }
+
+    @Test
+    public void shouldScreamWhenNotMockPassedToVerifyNoInteractions() {
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoInteractions("not a mock");
+                        })
+                .isInstanceOf(NotAMockException.class)
+                .hasMessageContainingAll(
+                        "Argument(s) passed is not a mock!",
+                        "Examples of correct verifications:",
+                        "    verifyNoMoreInteractions(mockOne, mockTwo);",
+                        "    verifyNoInteractions(mockOne, mockTwo);");
+    }
+
+    @Test
+    public void shouldScreamWhenNullPassedToVerifyNoInteractions() {
+        assertThatThrownBy(
+                        () -> {
+                            verifyNoInteractions(mock, null);
                         })
                 .isInstanceOf(NullInsteadOfMockException.class)
                 .hasMessageContainingAll(
