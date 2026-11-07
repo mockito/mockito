@@ -6,6 +6,8 @@ package org.mockito.internal.util;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.concurrent.TimeUnit;
+
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.exceptions.misusing.FriendlyReminderException;
@@ -37,6 +39,33 @@ public class TimerTest extends TestBase {
 
         // then
         Assertions.assertThat(timer.isCounting()).isFalse();
+    }
+
+    @Test
+    public void should_report_the_time_left() {
+        // given
+        Timer timer = new Timer(10000L);
+
+        // when
+        timer.start();
+
+        // then
+        Assertions.assertThat(timer.remainingNanos())
+                .isPositive()
+                .isLessThanOrEqualTo(TimeUnit.SECONDS.toNanos(10));
+    }
+
+    @Test
+    public void should_report_no_time_left_when_time_run_out() throws Exception {
+        // given
+        Timer timer = new Timer(0);
+        timer.start();
+
+        // when
+        oneMillisecondPasses();
+
+        // then
+        Assertions.assertThat(timer.remainingNanos()).isZero();
     }
 
     @Test
