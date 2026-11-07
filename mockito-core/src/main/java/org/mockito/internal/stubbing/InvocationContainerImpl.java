@@ -15,6 +15,7 @@ import java.util.List;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.StubInfoImpl;
 import org.mockito.internal.verification.DefaultRegisteredInvocations;
+import org.mockito.internal.verification.InvocationSignal;
 import org.mockito.internal.verification.RegisteredInvocations;
 import org.mockito.internal.verification.SingleRegisteredInvocation;
 import org.mockito.invocation.Invocation;
@@ -44,6 +45,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     public void setInvocationForPotentialStubbing(MatchableInvocation invocation) {
         registeredInvocations.add(invocation.getInvocation());
+        InvocationSignal.fire();
         this.invocationForStubbing = invocation;
     }
 
@@ -53,6 +55,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     public void addAnswer(Answer<?> answer, Strictness stubbingStrictness) {
         registeredInvocations.removeLast();
+        InvocationSignal.fire();
         addAnswer(answer, false, stubbingStrictness);
     }
 
@@ -148,6 +151,7 @@ public class InvocationContainerImpl implements InvocationContainer, Serializabl
 
     public void clearInvocations() {
         registeredInvocations.clear();
+        InvocationSignal.fire();
     }
 
     /**

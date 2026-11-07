@@ -26,21 +26,14 @@ public class Timeout extends VerificationWrapper<VerificationOverTimeImpl>
      * See javadoc for {@link VerificationWithTimeout}
      */
     public Timeout(long millis, VerificationMode delegate) {
-        this(10, millis, delegate);
+        this(new VerificationOverTimeImpl(millis, delegate, true));
     }
 
     /**
      * See the javadoc for {@link VerificationWithTimeout}
      */
-    Timeout(long pollingPeriodMillis, long millis, VerificationMode delegate) {
-        this(new VerificationOverTimeImpl(pollingPeriodMillis, millis, delegate, true));
-    }
-
-    /**
-     * See the javadoc for {@link VerificationWithTimeout}
-     */
-    Timeout(long pollingPeriodMillis, VerificationMode delegate, Timer timer) {
-        this(new VerificationOverTimeImpl(pollingPeriodMillis, delegate, true, timer));
+    Timeout(VerificationMode delegate, Timer timer) {
+        this(new VerificationOverTimeImpl(delegate, true, timer));
     }
 
     Timeout(VerificationOverTimeImpl verificationOverTime) {
