@@ -79,6 +79,52 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
+    public void can_stub_last_vararg_array_with_multiple_elements() {
+        String[] values = {"the", "var", "args"};
+        given(iMethods.mixedVarargsReturningStringArray(1, values)).will(returnsLastArg());
+
+        assertThat(iMethods.mixedVarargsReturningStringArray(1, values)).isSameAs(values);
+    }
+
+    @Test
+    public void can_stub_last_vararg_array_with_no_elements() {
+        String[] values = {};
+        given(iMethods.mixedVarargsReturningStringArray(1, values)).will(returnsLastArg());
+
+        assertThat(iMethods.mixedVarargsReturningStringArray(1, values)).isSameAs(values);
+    }
+
+    @Test
+    public void can_stub_last_vararg_array_with_one_element() {
+        String[] values = {"one"};
+        given(iMethods.mixedVarargsReturningStringArray(1, values)).will(returnsLastArg());
+
+        assertThat(iMethods.mixedVarargsReturningStringArray(1, values)).isSameAs(values);
+    }
+
+    @Test
+    public void can_stub_last_vararg_array_with_null() {
+        given(iMethods.mixedVarargsReturningStringArray(1, (String[]) null)).will(returnsLastArg());
+
+        assertThat(iMethods.mixedVarargsReturningStringArray(1, (String[]) null)).isNull();
+    }
+
+    @Test
+    public void can_stub_last_vararg_array_with_compatible_return_type() {
+        String[] values = {"the", "var", "args"};
+        given(iMethods.mixedVarargsReturningObjectArray(1, values)).will(returnsLastArg());
+
+        assertThat(iMethods.mixedVarargsReturningObjectArray(1, values)).isSameAs(values);
+    }
+
+    @Test
+    public void can_still_return_last_expanded_vararg() {
+        given(iMethods.mixedVarargsReturningString(1, "first", "last")).will(returnsLastArg());
+
+        assertThat(iMethods.mixedVarargsReturningString(1, "first", "last")).isEqualTo("last");
+    }
+
+    @Test
     public void returns_arg_at_throws_on_out_of_range_var_args() throws Exception {
         given(iMethods.mixedVarargsReturningString(eq(1), any(String[].class)))
                 .will(returnsArgAt(3));

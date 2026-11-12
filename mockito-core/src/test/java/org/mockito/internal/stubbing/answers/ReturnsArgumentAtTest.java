@@ -112,6 +112,22 @@ public class ReturnsArgumentAtTest {
     }
 
     @Test
+    public void should_validate_and_return_last_vararg_array() throws Throwable {
+        ReturnsArgumentAt answer = new ReturnsArgumentAt(ReturnsArgumentAt.LAST_ARGUMENT);
+        for (String[] values : new String[][] {{}, {"A"}, {"A", "B", "C"}, null}) {
+            Invocation invocation =
+                    new InvocationBuilder()
+                            .method("mixedVarargsReturningStringArray")
+                            .argTypes(Object.class, String[].class)
+                            .args(new Object(), values)
+                            .toInvocation();
+
+            answer.validateFor(invocation);
+            assertThat(answer.answer(invocation)).isSameAs(values);
+        }
+    }
+
+    @Test
     public void should_raise_an_exception_if_index_is_not_in_allowed_range_at_creation_time()
             throws Throwable {
         try {
