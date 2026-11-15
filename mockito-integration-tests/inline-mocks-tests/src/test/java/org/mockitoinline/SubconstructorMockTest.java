@@ -33,6 +33,35 @@ public class SubconstructorMockTest {
         }
     }
 
+    @Test
+    public void does_not_mock_subclass_constructor_when_superclass_constructor_delegates() {
+        try (MockedConstruction<DelegatingSuperClass> mocked =
+                Mockito.mockConstruction(DelegatingSuperClass.class)) {
+            DelegatingSubClass value = new DelegatingSubClass();
+            assertTrue(value.sup());
+            assertTrue(value.sub());
+            assertTrue(mocked.constructed().isEmpty());
+        }
+    }
+
+    @Test
+    public void subclass_construction_stays_unmocked_after_subclass_was_spied() {
+        try (MockedConstruction<DelegatingSuperClass> ignored =
+                Mockito.mockConstruction(DelegatingSuperClass.class)) {
+            DelegatingSubClass value = new DelegatingSubClass();
+            assertTrue(value.sup());
+            assertTrue(value.sub());
+        }
+        Mockito.spy(new DelegatingSubClass());
+        try (MockedConstruction<DelegatingSuperClass> mocked =
+                Mockito.mockConstruction(DelegatingSuperClass.class)) {
+            DelegatingSubClass value = new DelegatingSubClass();
+            assertTrue(value.sup());
+            assertTrue(value.sub());
+            assertTrue(mocked.constructed().isEmpty());
+        }
+    }
+
     public static class SuperClass {
         public boolean sup() {
             return true;
@@ -40,6 +69,26 @@ public class SubconstructorMockTest {
     }
 
     public static class SubClass extends SuperClass {
+        public boolean sub() {
+            return true;
+        }
+    }
+
+    public static class DelegatingSuperClass {
+        public DelegatingSuperClass(boolean flag) {}
+
+        public DelegatingSuperClass() {
+            this(true);
+        }
+
+        public boolean sup() {
+            return true;
+        }
+    }
+
+    public static class DelegatingSubClass extends DelegatingSuperClass {
+        public DelegatingSubClass() {}
+
         public boolean sub() {
             return true;
         }
