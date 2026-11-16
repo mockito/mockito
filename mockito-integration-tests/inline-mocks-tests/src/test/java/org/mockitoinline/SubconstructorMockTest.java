@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -62,6 +63,25 @@ public class SubconstructorMockTest {
         }
     }
 
+    @Test
+    public void does_mock_the_mocked_type_when_instantiated_through_delegating_constructor() {
+        try (MockedConstruction<DelegatingSuperClass> mocked =
+                Mockito.mockConstruction(DelegatingSuperClass.class)) {
+            DelegatingSuperClass value = new DelegatingSuperClass();
+            assertFalse(value.sup());
+            assertEquals(1, mocked.constructed().size());
+        }
+    }
+
+    @Test
+    public void does_mock_instantiation_from_an_unrelated_constructor() {
+        try (MockedConstruction<SuperClass> mocked = Mockito.mockConstruction(SuperClass.class)) {
+            Unrelated unrelated = new Unrelated();
+            assertFalse(unrelated.created.sup());
+            assertEquals(1, mocked.constructed().size());
+        }
+    }
+
     public static class SuperClass {
         public boolean sup() {
             return true;
@@ -92,5 +112,9 @@ public class SubconstructorMockTest {
         public boolean sub() {
             return true;
         }
+    }
+
+    public static class Unrelated {
+        public final SuperClass created = new SuperClass();
     }
 }
