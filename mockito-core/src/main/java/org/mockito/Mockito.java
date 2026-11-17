@@ -803,8 +803,9 @@ import java.util.function.Function;
  * </li>
  *
  * <li>Watch out for final methods.
- * Mockito doesn't mock final methods so the bottom line is: when you spy on real objects + you try to stub a final method = trouble.
- * Also you won't be able to verify those method as well.
+ * Mockito supports mocking and verifying final methods when using
+ * the inline mock maker. However, limitations may apply when using
+ * other mock makers.
  * </li>
  * </ol>
  *
