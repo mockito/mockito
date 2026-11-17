@@ -46,13 +46,18 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
         this(invocation, Collections.<ArgumentMatcher>emptyList());
     }
 
-    public static List<InvocationMatcher> createFrom(List<Invocation> invocations) {
-        LinkedList<InvocationMatcher> out = new LinkedList<>();
-        for (Invocation i : invocations) {
-            out.add(new InvocationMatcher(i));
-        }
-        return out;
+    public static List<InvocationMatcher> createFrom(
+        List<Invocation> invocations) {
+
+    List<InvocationMatcher> result =
+            new ArrayList<>(invocations.size());
+
+    for (Invocation invocation : invocations) {
+        result.add(new InvocationMatcher(invocation));
     }
+
+    return result;
+}
 
     public Method getMethod() {
         return invocation.getMethod();
@@ -85,26 +90,33 @@ public class InvocationMatcher implements MatchableInvocation, DescribedInvocati
     /**
      * similar means the same method name, same mock, unverified and: if arguments are the same cannot be overloaded
      */
-    @Override
     public boolean hasSimilarMethod(Invocation candidate) {
-        String wantedMethodName = getMethod().getName();
-        String candidateMethodName = candidate.getMethod().getName();
-
-        if (!wantedMethodName.equals(candidateMethodName)) {
-            return false;
-        }
-        if (candidate.isVerified()) {
-            return false;
-        }
-        if (getInvocation().getMock() != candidate.getMock()) {
-            return false;
-        }
-        if (hasSameMethod(candidate)) {
-            return true;
-        }
-
-        return !argumentsMatch(candidate);
+    if (!hasSameMethodName(candidate)) {
+        return false;
     }
+
+    if (candidate.isVerified()) {
+        return false;
+    }
+
+    if (!hasSameMock(candidate)) {
+        return false;
+    }
+
+    if (hasSameMethod(candidate)) {
+        return true;
+    }
+
+    return !argumentsMatch(candidate);
+}
+
+private boolean hasSameMethodName(Invocation candidate) {
+    return getMethod().getName().equals(candidate.getMethod().getName());
+}
+
+private boolean hasSameMock(Invocation candidate) {
+    return getInvocation().getMock() == candidate.getMock();
+}
 
     @Override
     public boolean hasSameMethod(Invocation candidate) {
