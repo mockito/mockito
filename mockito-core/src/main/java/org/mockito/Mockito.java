@@ -105,7 +105,7 @@ import java.util.function.Function;
  *      <a href="#41">41. Advanced public API for framework integrations (Since 2.10.+)</a><br/>
  *      <a href="#42">42. New API for integrations: listening on verification start events (Since 2.11.+)</a><br/>
  *      <a href="#43">43. New API for integrations: <code>MockitoSession</code> is usable by testing frameworks (Since 2.15.+)</a><br/>
- *      <a href="#44">44. Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. It was replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a><br/>
+ *      <a href="#44">44. Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a><br/>
  *      <a href="#45">45. New JUnit Jupiter (JUnit5+) extension</a><br/>
  *      <a href="#46">46. New <code>Mockito.lenient()</code> and <code>MockSettings.lenient()</code> methods (Since 2.20.0)</a><br/>
  *      <a href="#47">47. New API for clearing mock state in inline mocking (Since 2.25.0)</a><br/>
@@ -938,7 +938,7 @@ import java.util.function.Function;
  * <p>
  * Start learning about BDD here: <a href="https://en.wikipedia.org/wiki/Behavior-driven_development">https://en.wikipedia.org/wiki/Behavior-driven_development</a>
  * <p>
- * The problem is that current stubbing API with canonical role of <b>when</b> word does not integrate nicely with <b>//given //when //then</b> comments.
+ * The problem is that current stubbing api with canonical role of <b>when</b> word does not integrate nicely with <b>//given //when //then</b> comments.
  * It's because stubbing belongs to <b>given</b> component of the test and not to the <b>when</b> component of the test.
  * Hence {@link BDDMockito} class introduces an alias so that you stub method calls with {@link BDDMockito#given(Object)} method.
  * Now it really nicely integrates with the <b>given</b> component of a BDD style test!
@@ -1600,7 +1600,7 @@ import java.util.function.Function;
  * <h3 id="42">42. <a class="meaningful_link" href="#verifiation_started_listener" name="verifiation_started_listener">
  *       New API for integrations: listening on verification start events (Since 2.11.+)</a></h3>
  *
- * Framework integrations such as <a href="https://projects.spring.io/spring-boot">Spring Boot</a> need public API to tackle the double-proxy use case
+ * Framework integrations such as <a href="https://projects.spring.io/spring-boot">Spring Boot</a> needs public API to tackle double-proxy use case
  * (<a href="https://github.com/mockito/mockito/issues/1191">issue 1191</a>).
  * We added:
  * <ul>
@@ -1646,7 +1646,7 @@ import java.util.function.Function;
  * </ul>
  *
  * <h3 id="44">44. <a class="meaningful_link" href="#mockito_instantiator_provider_deprecation" name="mockito_instantiator_provider_deprecation">
- *       Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. It was
+ *       Deprecated <code>org.mockito.plugins.InstantiatorProvider</code> as it was leaking internal API. it was
  *       replaced by <code>org.mockito.plugins.InstantiatorProvider2 (Since 2.15.4)</code></a></h3>
  *
  * <p>org.mockito.plugins.InstantiatorProvider returned an internal API. Hence it was deprecated and replaced
@@ -2393,7 +2393,7 @@ public class Mockito extends ArgumentMatchers {
      *
      * <li>Watch out for final methods.
      * Mockito doesn't mock final methods so the bottom line is: when you spy on real objects + you try to stub a final method = trouble.
-     * You also won't be able to verify those methods.
+     * Also you won't be able to verify those method as well.
      * </li>
      * </ol>
      * <p>
