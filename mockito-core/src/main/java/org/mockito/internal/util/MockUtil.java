@@ -125,15 +125,8 @@ public class MockUtil {
     }
 
     public static boolean isSpy(Object mock) {
-        if (mock == null) {
-            return false;
-        }
-
-        MockHandler<?> handler = getMockHandlerOrNull(mock);
-
-        return handler != null
-                && handler.getMockSettings().getDefaultAnswer()
-                        == Mockito.CALLS_REAL_METHODS;
+        return isMock(mock)
+                && getMockSettings(mock).getDefaultAnswer() == Mockito.CALLS_REAL_METHODS;
     }
 
     public static boolean isMock(Object mock) {
