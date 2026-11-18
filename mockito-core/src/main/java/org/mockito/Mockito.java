@@ -2410,7 +2410,7 @@ public class Mockito extends ArgumentMatchers {
      */
     public static <T> T spy(T object) {
         if (object == null) {
-            throw new IllegalArgumentException("Cannot spy on null. Please provide an instance.");
+            throw new IllegalArgumentException("Cannot spy on null.");
         }
 
         if (MockUtil.isMock(object)) {
