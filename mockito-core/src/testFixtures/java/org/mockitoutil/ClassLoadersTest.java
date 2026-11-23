@@ -13,6 +13,7 @@ import static org.mockitoutil.ClassLoaders.excludingClassLoader;
 import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
 import static org.mockitoutil.ClassLoaders.jdkClassLoader;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -286,7 +287,10 @@ public class ClassLoadersTest {
         ClassLoader cl =
                 isolatedClassLoader()
                         .withCurrentCodeSourceUrls()
-                        .withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE, INTERFACE_NAME)
+                        .withCodeSourceUrlOf(Assertions.class)
+                        .withPrivateCopyOf("org.assertj.core")
+                        .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
+                        .without(AClass.class.getName())
                         .build();
 
         Class<?> loadedClass =
@@ -302,6 +306,18 @@ public class ClassLoadersTest {
                                     assertThat(contextLoader.loadClass(String.class.getName()))
                                             .describedAs("can load JDK type")
                                             .isSameAs(String.class);
+                                    assertThat(
+                                                    contextLoader
+                                                            .loadClass(Assertions.class.getName())
+                                                            .getClassLoader())
+                                            .describedAs("can load a private copy of AssertJ")
+                                            .isSameAs(cl);
+                                    assertThatThrownBy(
+                                                    () ->
+                                                            contextLoader.loadClass(
+                                                                    AClass.class.getName()))
+                                            .describedAs("rejects the excluded class")
+                                            .isInstanceOf(ClassNotFoundException.class);
                                     return contextLoader.loadClass(
                                             CLASS_NAME_DEPENDING_ON_INTERFACE);
                                 });

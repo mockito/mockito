@@ -9,6 +9,7 @@ import net.bytebuddy.ClassFileVersion;
 import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.description.modifier.TypeManifestation;
 import net.bytebuddy.dynamic.DynamicType;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.MockMakers;
 import org.mockito.MockSettings;
@@ -26,6 +27,8 @@ import java.util.function.IntSupplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 import static org.mockitoutil.ClassLoaders.coverageTool;
 
 public class SubclassByteBuddyMockMakerTest
@@ -65,25 +68,40 @@ public class SubclassByteBuddyMockMakerTest
                         ByteBuddy.class,
                         ByteBuddyAgent.class,
                         AbstractClassToMock.class)
+                // Naming the nested mock type links its enclosing test class.
+                .withCodeSourceUrlOf(ClassLoaders.class, Assertions.class)
                 .withCodeSourceUrlOf(coverageTool());
     }
 
     private static IntSupplier mockAbstractClass(ClassLoader classLoader, Object... constructorArgs)
             throws ReflectiveOperationException {
-        // Resolve Mockito and its settings API in the isolated loader used by the test.
-        Class<?> mockito = classLoader.loadClass(Mockito.class.getName());
-        Class<?> settingsType = classLoader.loadClass(MockSettings.class.getName());
-        Object settings = mockito.getMethod("withSettings").invoke(null);
-        settingsType.getMethod("mockMaker", String.class).invoke(settings, MockMakers.SUBCLASS);
-        if (constructorArgs.length > 0) {
-            settingsType
-                    .getMethod("useConstructor", Object[].class)
-                    .invoke(settings, (Object) constructorArgs);
-        }
-        Class<?> typeToMock = classLoader.loadClass(AbstractClassToMock.class.getName());
+        // Invoke the factory defined by the isolated loader so it resolves its own Mockito.
         return (IntSupplier)
-                mockito.getMethod("mock", Class.class, settingsType)
-                        .invoke(null, typeToMock, settings);
+                classLoader
+                        .loadClass(AbstractClassToMock.class.getName())
+                        .getMethod("createMock", Object[].class)
+                        .invoke(null, (Object) constructorArgs);
+    }
+
+    public abstract static class AbstractClassToMock implements IntSupplier {
+        private final int value;
+
+        public AbstractClassToMock(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public final int getAsInt() {
+            return value;
+        }
+
+        public static IntSupplier createMock(Object... constructorArgs) {
+            MockSettings settings = withSettings().mockMaker(MockMakers.SUBCLASS);
+            if (constructorArgs.length > 0) {
+                settings.useConstructor(constructorArgs);
+            }
+            return mock(AbstractClassToMock.class, settings);
+        }
     }
 
     @Test
